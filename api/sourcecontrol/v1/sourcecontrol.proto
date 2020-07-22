@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package clutch.sourcecontrol.v1;
+
+option go_package = "sourcecontrolv1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "validate/validate.proto";
+
+import "api/v1/annotations.proto";
+import "sourcecontrol/github/v1/github.proto";
+
+service SourceControlAPI {
+  rpc CreateRepository(CreateRepositoryRequest) returns (CreateRepositoryResponse) {
+    option (google.api.http) = {
+      post : "/v1/sourcecontrol/createRepository"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = CREATE;
+  }
+}
+
+message CreateRepositoryRequest {
+  string owner = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string description = 3;
+
+  oneof options {
+    option (validate.required) = true;
+
+    google.protobuf.Any custom_options = 4;
+    clutch.sourcecontrol.github.v1.CreateRepositoryOptions github_options = 5;
+  }
+}
+
+message CreateRepositoryResponse {
+  string url = 1;
+}

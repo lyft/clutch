@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package clutch.sourcecontrol.github.v1;
+
+option go_package = "githubv1";
+
+import "google/protobuf/wrappers.proto";
+import "validate/validate.proto";
+
+// Common parameters for GitHub repostories.
+message RepositoryParameters {
+  enum Visibility {
+    UNSPECIFIED = 0;
+    PUBLIC = 1;
+    PRIVATE = 2;
+  }
+  Visibility visibility = 1 [ (validate.rules).enum = {defined_only : true not_in : 0} ];
+  google.protobuf.BoolValue allow_merge_commit = 2;
+  google.protobuf.BoolValue allow_rebase_merge = 3;
+  google.protobuf.BoolValue allow_squash_merge = 4;
+}
+
+// Options unique to creating a repository.
+message CreateRepositoryOptions {
+  RepositoryParameters parameters = 1;
+
+  // Pass true to create an initial commit with empty README.
+  bool auto_init = 2;
+}
+
+// Options unique to updating a repository.
+message UpdateRepositoryOptions {
+  RepositoryParameters parameters = 1;
+
+  // Pass true to archive this repository. Note: You cannot unarchive repositories through the API.
+  bool archived = 2;
+}
