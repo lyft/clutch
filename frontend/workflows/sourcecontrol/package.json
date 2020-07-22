@@ -1,0 +1,41 @@
+{
+  "name": "@clutch-sh/sourcecontrol",
+  "version": "0.0.0",
+  "description": "Clutch Source Control Workflows",
+  "license": "Apache-2.0",
+  "author": "clutch@lyft.com",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn clean && yarn compile",
+    "clean": "rm -rf dist",
+    "compile": "BABEL_ENV=build babel src --out-dir dist --extensions .js,.jsx,.ts,.tsx --no-comments --ignore **/tests",
+    "compile:dev": "yarn compile --source-maps",
+    "compile:watch": "yarn run compile --watch",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "lint:fix": "yarn run lint --fix",
+    "publishAlpha": "yarn publish --new-version=\"0.0.0-$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')-$(git rev-parse --short=12 HEAD)\" --access public",
+    "test": "jest --passWithNoTests",
+    "test:coverage": "yarn run test --collect-coverage",
+    "test:watch": "yarn run test --watch"
+  },
+  "dependencies": {
+    "@clutch-sh/core": "^0.0.0",
+    "@clutch-sh/data-layout": "^0.0.0",
+    "@clutch-sh/wizard": "^0.0.0",
+    "@material-ui/core": "^4.9.1",
+    "react": "^16.8",
+    "react-dom": "^16.8.0",
+    "react-hook-form": "^5.7.2",
+    "react-is": "^16.8.0",
+    "react-router": "^6.0.0-alpha",
+    "react-router-dom": "^6.0.0-alpha.2",
+    "styled-components": "^5.0.1",
+    "yup": "^0.29.0"
+  },
+  "devDependencies": {
+    "@clutch-sh/tools": "^0.0.0"
+  }
+}
