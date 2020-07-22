@@ -1,0 +1,168 @@
+syntax = "proto3";
+
+package clutch.k8s.v1;
+
+option go_package = "k8sv1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+
+import "api/v1/annotations.proto";
+
+service K8sAPI {
+  rpc DescribePod(DescribePodRequest) returns (DescribePodResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/describePod"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
+  rpc DeletePod(DeletePodRequest) returns (DeletePodResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/deletePod"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = DELETE;
+  }
+
+  rpc ResizeHPA(ResizeHPARequest) returns (ResizeHPAResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/resizeHPA"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = UPDATE;
+  }
+}
+
+message DescribePodRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Pod",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+
+  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+}
+
+message DescribePodResponse {
+  option (clutch.api.v1.reference).fields = "pod";
+
+  Pod pod = 1;
+}
+
+// TODO(maybe): Identify with resource annotations.
+message Container {
+  string name = 1;
+  string image = 2;
+
+  // https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#containerstate-v1-core
+  enum State {
+    UNSPECIFIED = 0;
+    UNKNOWN = 1;
+    TERMINATED = 2;
+    RUNNING = 3;
+    WAITING = 4;
+  }
+  State state = 3;
+  bool ready = 4;
+}
+
+message Pod {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Pod",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string cluster = 1;
+  string namespace = 2;
+  string name = 3;
+
+  repeated Container containers = 4;
+
+  string node_ip = 5;
+  string pod_ip = 6;
+
+  // https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
+  enum State {
+    UNSPECIFIED = 0;
+    UNKNOWN = 1;
+    PENDING = 2;
+    RUNNING = 3;
+    SUCCEEDED = 4;
+    FAILED = 5;
+  }
+  State state = 7;
+
+  google.protobuf.Timestamp start_time = 8;
+
+  map<string, string> labels = 9;
+  map<string, string> annotations = 10;
+}
+
+message ListPodsOptions {
+  map<string, string> labels = 9;
+}
+
+message DeletePodRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Pod",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message DeletePodResponse {
+}
+
+message HPA {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.HPA",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string cluster = 1;
+  string namespace = 2;
+  string name = 3;
+
+  message Sizing {
+    uint32 min_replicas = 1;
+    uint32 max_replicas = 2;
+    uint32 current_replicas = 3;
+    uint32 desired_replicas = 4;
+  }
+  Sizing sizing = 4;
+
+  map<string, string> labels = 5;
+  map<string, string> annotations = 6;
+}
+
+message ResizeHPARequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.HPA",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+
+  message Sizing {
+    uint32 min = 1;
+    uint32 max = 2;
+  }
+  Sizing sizing = 5 [ (validate.rules).message = {required : true} ];
+}
+
+message ResizeHPAResponse {
+}
