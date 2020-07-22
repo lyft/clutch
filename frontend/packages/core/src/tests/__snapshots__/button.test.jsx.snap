@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Advance Button component renders correctly 1`] = `"<Button destructive={false} text=\\"test\\" />"`;
+
+exports[`Button component renders correctly 1`] = `
+"<Styled(WithStyles(ForwardRef(Button))) variant=\\"contained\\" data-destructive=\\"false\\">
+  test
+</Styled(WithStyles(ForwardRef(Button)))>"
+`;
+
+exports[`Destructive Button component renders correctly 1`] = `"<Button destructive={true} text=\\"test\\" />"`;

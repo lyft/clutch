@@ -1,0 +1,10 @@
+{
+  "projectId": "clutch",
+  "requestTimeout": 60000,
+  "responseTimeout": 60000,
+  "defaultCommandTimeout": 60000,
+  "blacklistHosts": ["*google-analytics.com", "*googletagmanager.com"],
+  "fixturesFolder": false,
+  "pluginsFile": false,
+  "video": false
+}

@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Landing component renders correctly 1`] = `
+"<Styled(WithStyles(ForwardRef(Paper))) id=\\"landing\\" elevation={0}>
+  <WithStyles(ForwardRef(Typography)) variant=\\"h5\\">
+    <strong>
+      Welcome 
+      Anonymous
+       
+    </strong>
+    <span role=\\"img\\" aria-label=\\"Hand Waving\\">
+      👋
+    </span>
+  </WithStyles(ForwardRef(Typography))>
+  <div>
+    <WithStyles(ForwardRef(Typography)) gutterBottom={true} variant=\\"body1\\" paragraph={true}>
+      Clutch will assist you in safely modifying resources outside of the normal orchestration process.
+    </WithStyles(ForwardRef(Typography))>
+  </div>
+  <styled.div>
+    <Styled(WithStyles(ForwardRef(Grid))) container={true} justify=\\"center\\">
+      <WithStyles(ForwardRef(Grid)) item={true}>
+        <Styled(GitHubIcon) fontSize=\\"small\\" />
+      </WithStyles(ForwardRef(Grid))>
+      <WithStyles(ForwardRef(Grid)) item={true}>
+        <Styled(WithStyles(ForwardRef(Link))) target=\\"_blank\\" rel=\\"noreferrer\\" href=\\"https://github.com/lyft/clutch\\" underline=\\"none\\">
+          lyft/clutch
+        </Styled(WithStyles(ForwardRef(Link)))>
+      </WithStyles(ForwardRef(Grid))>
+    </Styled(WithStyles(ForwardRef(Grid)))>
+  </styled.div>
+</Styled(WithStyles(ForwardRef(Paper)))>"
+`;

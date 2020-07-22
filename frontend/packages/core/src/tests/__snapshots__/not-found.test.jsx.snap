@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Not Found component renders correctly 1`] = `
+"<ThemeProvider theme={{...}}>
+  <NotFound>
+    <WithStyles(ForwardRef(Grid)) container={true} direction=\\"column\\" justify=\\"center\\" alignItems=\\"center\\">
+      <ForwardRef(Grid) classes={{...}} container={true} direction=\\"column\\" justify=\\"center\\" alignItems=\\"center\\">
+        <div className=\\"MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column MuiGrid-align-items-xs-center MuiGrid-justify-xs-center\\">
+          <Styled(WithStyles(ForwardRef(Grid))) item={true}>
+            <WithStyles(ForwardRef(Grid)) item={true} className=\\"sc-AxjAm fOtbrD\\">
+              <ForwardRef(Grid) classes={{...}} item={true} className=\\"sc-AxjAm fOtbrD\\">
+                <div className=\\"MuiGrid-root sc-AxjAm fOtbrD MuiGrid-item\\">
+                  <ForwardRef fontSize=\\"inherit\\">
+                    <WithStyles(ForwardRef(SvgIcon)) fontSize=\\"inherit\\">
+                      <ForwardRef(SvgIcon) classes={{...}} fontSize=\\"inherit\\">
+                        <svg className=\\"MuiSvgIcon-root MuiSvgIcon-fontSizeInherit\\" focusable=\\"false\\" viewBox=\\"0 0 24 24\\" color={[undefined]} aria-hidden=\\"true\\" role=\\"presentation\\">
+                          <path d=\\"M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z\\" />
+                        </svg>
+                      </ForwardRef(SvgIcon)>
+                    </WithStyles(ForwardRef(SvgIcon))>
+                  </ForwardRef>
+                </div>
+              </ForwardRef(Grid)>
+            </WithStyles(ForwardRef(Grid))>
+          </Styled(WithStyles(ForwardRef(Grid)))>
+          <WithStyles(ForwardRef(Grid)) item={true}>
+            <ForwardRef(Grid) classes={{...}} item={true}>
+              <div className=\\"MuiGrid-root MuiGrid-item\\">
+                <WithStyles(ForwardRef(Typography)) align=\\"center\\" color=\\"textPrimary\\" variant=\\"h3\\">
+                  <ForwardRef(Typography) classes={{...}} align=\\"center\\" color=\\"textPrimary\\" variant=\\"h3\\">
+                    <h3 className=\\"MuiTypography-root MuiTypography-h3 MuiTypography-colorTextPrimary MuiTypography-alignCenter\\">
+                      <WithStyles(ForwardRef(Grid)) item={true}>
+                        <ForwardRef(Grid) classes={{...}} item={true}>
+                          <div className=\\"MuiGrid-root MuiGrid-item\\">
+                            Whoops...
+                          </div>
+                        </ForwardRef(Grid)>
+                      </WithStyles(ForwardRef(Grid))>
+                      <WithStyles(ForwardRef(Grid)) item={true}>
+                        <ForwardRef(Grid) classes={{...}} item={true}>
+                          <div className=\\"MuiGrid-root MuiGrid-item\\">
+                            Looks like you took a wrong turn
+                          </div>
+                        </ForwardRef(Grid)>
+                      </WithStyles(ForwardRef(Grid))>
+                    </h3>
+                  </ForwardRef(Typography)>
+                </WithStyles(ForwardRef(Typography))>
+                <WithStyles(ForwardRef(Typography)) align=\\"center\\" color=\\"textPrimary\\" variant=\\"h6\\">
+                  <ForwardRef(Typography) classes={{...}} align=\\"center\\" color=\\"textPrimary\\" variant=\\"h6\\">
+                    <h6 className=\\"MuiTypography-root MuiTypography-h6 MuiTypography-colorTextPrimary MuiTypography-alignCenter\\">
+                      &lt; 404 Not Found &gt;
+                    </h6>
+                  </ForwardRef(Typography)>
+                </WithStyles(ForwardRef(Typography))>
+              </div>
+            </ForwardRef(Grid)>
+          </WithStyles(ForwardRef(Grid))>
+        </div>
+      </ForwardRef(Grid)>
+    </WithStyles(ForwardRef(Grid))>
+  </NotFound>
+</ThemeProvider>"
+`;

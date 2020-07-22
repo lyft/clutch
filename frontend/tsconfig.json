@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "declaration": true,
+    "esModuleInterop": true,
+    "importsNotUsedAsValues": "error",
+    "incremental": true,
+    "jsx": "react",
+    "lib": ["DOM", "ESNext"],
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "outDir": "dist",
+    "paths": {
+      "@clutch-sh/*": ["packages/*/src", "workflows/*/src"],
+    },
+    "preserveConstEnums": true,
+    "target": "ESNext",
+    "types": ["node"]
+  },
+}

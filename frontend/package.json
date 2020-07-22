@@ -1,0 +1,70 @@
+{
+  "name": "@clutch-sh/clutch",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Interface to handle ad-hoc infrastructure modifications",
+  "keywords": [
+    "lyft",
+    "clutch",
+    "infrastructure",
+    "infra"
+  ],
+  "homepage": "https://github.com/clutch-sh/clutch#readme",
+  "bugs": {
+    "url": "https://github.com/clutch-sh/clutch/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clutch-sh/clutch.git"
+  },
+  "license": "Apache-2.0",
+  "author": "clutch@lyft.com",
+  "workspaces": [
+    "packages/*",
+    "workflows/*"
+  ],
+  "scripts": {
+    "build": "yarn compile && yarn workspace @clutch-sh/app build",
+    "build:dev": "yarn compile:dev && yarn workspace @clutch-sh/app register-workflows",
+    "clean": "lerna run clean --parallel",
+    "compile": "lerna run compile --parallel",
+    "compile:dev": "lerna run compile:dev",
+    "compile:watch": "yarn compile:dev && lerna run compile:watch --parallel",
+    "lint": "lerna run lint --no-bail",
+    "lint:fix": "lerna run lint:fix --no-bail",
+    "lint:packages": "npx sort-package-json package.json packages/**/package.json --check",
+    "lint:packages:fix": "npx sort-package-json package.json packages/**/package.json",
+    "publishAlpha": "lerna run build && lerna run publishAlpha --no-bail -- --no-git-tag-version",
+    "start": "yarn compile:watch & yarn workspace @clutch-sh/app start",
+    "test": "lerna run test --stream --no-bail --",
+    "test:coverage": "lerna run test:coverage --stream --no-bail --",
+    "test:e2e": "lerna run test:e2e",
+    "test:licenses": "node license-linter.js",
+    "test:update": "yarn test:coverage -u",
+    "test:watch": "lerna run test:watch --parallel"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "protobufjs": "https://github.com/natiz/protobuf.js#1d626f84db4a4f339004609f654a9f24a211b716"
+  },
+  "devDependencies": {
+    "husky": "^4.2.5",
+    "lerna": "^3.20.0",
+    "license-checker": "^25.0.1",
+    "npx": "^10.2.2"
+  },
+  "engines": {
+    "node": ">=11.10.1"
+  }
+}

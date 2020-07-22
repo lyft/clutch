@@ -1,0 +1,29 @@
+{
+  "name": "@clutch-sh/app",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Clutch Application Components",
+  "license": "Apache-2.0",
+  "author": "clutch@lyft.com",
+  "scripts": {
+    "build": "yarn register-workflows && react-scripts build",
+    "clean": "rm -rf build",
+    "eject": "react-scripts eject",
+    "lint": "yarn register-workflows && eslint --ext .js,.jsx .",
+    "lint:fix": "yarn run lint --fix",
+    "register-workflows": "yarn workspace @clutch-sh/tools registerWorkflows $PWD/src",
+    "start": "yarn register-workflows && react-scripts start",
+    "test": "yarn register-workflows && jest --passWithNoTests",
+    "test:coverage": "yarn run test --collect-coverage",
+    "test:e2e": "cypress run"
+  },
+  "dependencies": {
+    "@clutch-sh/core": "^0.0.0",
+    "react": "^16.8",
+    "react-dom": "^16.8.0"
+  },
+  "devDependencies": {
+    "@clutch-sh/tools": "^0.0.0"
+  },
+  "proxy": "http://localhost:8080"
+}
