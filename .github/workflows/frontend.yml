@@ -2,10 +2,10 @@ name: frontend
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
     branches:
-    - master
+    - main
     paths:
     - 'frontend/**'
     - .github/workflows/frontend.yml
@@ -96,7 +96,7 @@ jobs:
           path: ./frontend/packages/app/cypress/screenshots
   publish:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     needs: [build, lint, test]
     steps:
       - uses: actions/checkout@v2

@@ -2,10 +2,10 @@ name: scripts
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
     branches:
-    - master
+    - main
     paths:
     - '**.sh'
     - .github/workflows/shellcheck.yml

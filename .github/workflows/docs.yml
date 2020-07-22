@@ -2,10 +2,10 @@ name: docs
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
     paths:
       - 'docs/**'
       - .github/workflows/docs.yml
@@ -41,7 +41,7 @@ jobs:
         run: yarn --cwd docs/_website build
       - name: deploy branch preview
         id: deployPreview
-        if: github.ref != 'refs/heads/master'
+        if: github.ref != 'refs/heads/main'
         run: |
           output=$(yarn --cwd docs/_website run netlify deploy --alias ${GITHUB_SHA} 2>&1)
           echo "$output"
@@ -51,7 +51,7 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       - name: post preview url to pr
-        if: github.ref != 'refs/heads/master'
+        if: github.ref != 'refs/heads/main'
         uses: actions/github-script@v2
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -65,7 +65,7 @@ jobs:
               repo: context.repo.repo,
             })
       - name: deploy to main preview site
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         run: yarn --cwd docs/_website run netlify deploy --prod
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}

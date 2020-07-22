@@ -2,10 +2,10 @@ name: api
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
     paths:
       - 'api/**'
       - 'backend/api/**'
