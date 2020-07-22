@@ -93,7 +93,7 @@ First things first, please read over our [Code of Conduct](./CODE_OF_CONDUCT.md)
 request.
 
 Want to contribute but not sure where to start? Check out the
-[`beginner issues`](https://github.com/lyft/clutch/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) for tasks specifically scoped for those with less
+[`good first issue`](https://github.com/lyft/clutch/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) for tasks specifically scoped for those with less
 familiarity.
 
 All contributions require that the author has signed the [Lyft CLA](https://oss.lyft.com/cla/clas/1.0). Login to the [Lyft CLA Service](https://oss.lyft.com/cla) with GitHub to review and sign the CLA.
