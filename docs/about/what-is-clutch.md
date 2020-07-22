@@ -35,20 +35,20 @@ Stop putting your team through an endless stream of high-friction tools and user
 - 🔍 **Built for discovery.**
   - Resources have many common names. Clutch's Resolver pattern makes it easier than ever to locate resources.
   - The Resolver provides server-generated forms with one-line of frontend code, ensuring the API and frontend are always in sync.
-- ⚛️ **Easy to develop, run, and maintain.** 
+- ⚛️ **Easy to develop, run, and maintain.**
   - Developed with Go and Typescript, plus Protobuf for generated interfaces throughout.
   - Back-end abstractions ensure loose coupling and put feature development on rails.
   - Frontend components make it simple for developers with limited frontend experience to ship features.
   - Deployable as a single binary containing both backend and frontend resources.
   - Basic auditing, authorization, stats, and logging come for free with every endpoint.
-- 🔒 **Secure and observable.** 
+- 🔒 **Secure and observable.**
   - Single sign-on support.
   - Role-based access control (RBAC) engine for granular access control beyond what vendor IAM policies support.
   - Built-in auditing with sinks for Slack and more.
   - Extensive logging and stats capabilities.
 
 ## Vision
-- 💡 **Get smart(er).** 
+- 💡 **Get smart(er).**
   - Present relevant information on the homepage based on context such as user identity, ownership, and ongoing incidents.
   - Additional core integrations with cloud-native infrastructure.
   - Fully-customizable heuristic support. Safety is based on the current context and design of the overall system.
@@ -59,7 +59,7 @@ Stop putting your team through an endless stream of high-friction tools and user
   - Command-line gateway, e.g. `clutchctl`, for those times when `grep` is just faster than anything else.
   - Code-generated SDK for polyglot automation support.
 
-For more concrete items, see the [Roadmap](/docs/roadmap).
+For more concrete items, see the [Roadmap](/docs/about/roadmap).
 
 ## Why Clutch?
 
