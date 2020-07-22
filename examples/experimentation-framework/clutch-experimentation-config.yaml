@@ -32,18 +32,18 @@ modules:
     typed_config:
       "@type": types.google.com/clutch.config.module.chaos.experimentation.rtds.v1.Config
       rtds_layer_name: foo
-      cache_refresh_interval_seconds: "60s"
+      cache_refresh_interval: "60s"
 services:
-#  - name: clutch.service.db.postgres
-#    typed_config:
-#      "@type": types.google.com/clutch.config.service.db.postgres.v1.Config
-#      connection:
-#        host: localhost
-#        port: 5432
-#        user: clutch
-#        ssl_mode: DISABLE
-#        dbname: clutch
-#        password: clutch
+  - name: clutch.service.db.postgres
+    typed_config:
+      "@type": types.google.com/clutch.config.service.db.postgres.v1.Config
+      connection:
+        host: localhost
+        port: 5432
+        user: clutch
+        ssl_mode: DISABLE
+        dbname: clutch
+        password: clutch
   - name: clutch.service.aws
     # registered_name: aws-us-east
     typed_config:
@@ -59,7 +59,7 @@ services:
   - name: clutch.service.k8s
     typed_config:
       "@type": types.google.com/clutch.config.service.k8s.v1.Config
-  - name: clutch.service.chaos.experimentation.mockstore
+  - name: clutch.service.chaos.experimentation.store
 resolvers:
   - name: clutch.resolver.aws
   - name: clutch.resolver.k8s
