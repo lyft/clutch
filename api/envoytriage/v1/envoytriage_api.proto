@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package clutch.envoytriage.v1;
+
+option go_package = "envoytriagev1";
+
+import "api/v1/annotations.proto";
+import "envoytriage/v1/output.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+service EnvoyTriageAPI {
+  rpc Read(ReadRequest) returns (ReadResponse) {
+    option (google.api.http) = {
+      post : "/v1/envoytriage/read"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
+  //  rpc Stats(StatsRequest) returns (StatsResponse) {
+  //    option (google.api.http) = {
+  //      post : "/v1/envoytriage/prometheusStats"
+  //      body: "*"
+  //    }
+  //  };
+
+  // rpc Update(UpdateRequest) returns (UpdateResponse) {
+  //   option (google.api.http) = {
+  //     post : "/v1/envoyadmin/update"
+  //     body : "*"
+  //   };
+  // }
+}
+
+message ReadRequest {
+  repeated ReadOperation operations = 1;
+}
+
+message ReadOperation {
+  Address address = 1 [ (validate.rules).message.required = true ];
+
+  message Include {
+    bool clusters = 1;
+    bool config_dump = 2;
+    bool listeners = 3;
+    bool runtime = 4;
+    bool stats = 5;
+    bool server_info = 6;
+  }
+  Include include = 2;
+}
+
+message ReadResponse {
+  repeated Result results = 1;
+}
+
+message Address {
+  string host = 1 [ (validate.rules).string.address = true ];
+  uint32 port = 2 [ (validate.rules).uint32 = {lte : 65535} ];
+}
+
+message Result {
+  Address address = 1;
+  NodeMetadata node_metadata = 2;
+
+  message Output {
+    Clusters clusters = 1;
+    ConfigDump config_dump = 2;
+    Listeners listeners = 3;
+    Runtime runtime = 4;
+    Stats stats = 5;
+    ServerInfo server_info = 6;
+  }
+  Output output = 3;
+}
+
+message NodeMetadata {
+  string service_node = 1;
+  string service_cluster = 2;
+  string service_zone = 3;
+  string version = 4;
+}

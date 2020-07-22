@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package clutch.envoytriage.v1;
+
+option go_package = "envoytriagev1";
+
+import "google/protobuf/struct.proto";
+
+message HostStatus {
+  string address = 1;
+  bool healthy = 2;
+}
+
+message ClusterStatus {
+  string name = 1;
+  repeated HostStatus host_statuses = 2;
+}
+
+message Clusters {
+  repeated ClusterStatus cluster_statuses = 1;
+}
+
+message ConfigDump {
+  google.protobuf.Value value = 1;
+}
+
+message ListenerStatus {
+  string name = 1;
+  string local_address = 2;
+}
+
+message Listeners {
+  repeated ListenerStatus listener_statuses = 1;
+}
+
+message Runtime {
+  message Entry {
+    string key = 1;
+
+    oneof type {
+      string value = 2;
+    }
+  }
+
+  repeated Entry entries = 1;
+}
+
+message ServerInfo {
+  google.protobuf.Value value = 1;
+}
+
+message Stats {
+  message Stat {
+    string key = 1;
+    uint64 value = 2;
+  }
+
+  // Counters and gauges are returned here.
+  repeated Stat stats = 1;
+
+  // TODO: add support for histograms
+}
