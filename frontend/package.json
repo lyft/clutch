@@ -29,7 +29,7 @@
     "clean": "lerna run clean --parallel",
     "compile": "lerna run compile --parallel",
     "compile:dev": "lerna run compile:dev",
-    "compile:watch": "yarn compile:dev && lerna run compile:watch --parallel",
+    "compile:watch": "lerna run compile:watch --parallel",
     "lint": "lerna run lint --no-bail",
     "lint:fix": "lerna run lint:fix --no-bail",
     "lint:packages": "npx sort-package-json package.json packages/**/package.json --check",
