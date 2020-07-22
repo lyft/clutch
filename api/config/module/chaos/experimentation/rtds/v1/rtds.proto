@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package clutch.config.module.chaos.experimentation.rtds.v1;
+
+option go_package = "rtdsv1";
+
+import "validate/validate.proto";
+import "google/protobuf/duration.proto";
+
+message Config {
+  // Name of the RTDS layer in Envoy config i.e. envoy.yaml
+  // https://www.envoyproxy.io/docs/envoy/latest/configuration/operations/runtime#config-runtime-rtds
+  string rtds_layer_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
+
+  // Interval in seconds between refreshes of RTDS data from the backing store
+  google.protobuf.Duration cache_refresh_interval = 2;
+}

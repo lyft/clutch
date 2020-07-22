@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package clutch.audit.v1;
+
+option go_package = "auditv1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "google/rpc/status.proto";
+import "validate/validate.proto";
+
+import "api/v1/annotations.proto";
+import "api/v1/schema.proto";
+
+service AuditAPI {
+  rpc GetEvents(GetEventsRequest) returns (GetEventsResponse) {
+    option (google.api.http) = {
+      post : "/v1/audit/getEvents",
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+message TimeRange {
+  google.protobuf.Timestamp start_time = 1 [ (validate.rules).timestamp.required = true ];
+  google.protobuf.Timestamp end_time = 2;
+}
+
+message GetEventsRequest {
+  oneof window {
+    TimeRange range = 1;
+    google.protobuf.Duration since = 2;
+  }
+}
+
+message Resource {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.audit.v1.Resource",
+    pattern : "{type_url}"
+  };
+
+  string type_url = 1;
+  string id = 2;
+}
+
+message RequestEvent {
+  option (clutch.api.v1.reference).fields = "resources";
+
+  // What attempted the action.
+  string username = 1 [ (validate.rules).string.min_len = 1 ];
+
+  // The service performing the operation.
+  string service_name = 2 [ (validate.rules).string.min_len = 1 ];
+
+  // The method being called.
+  string method_name = 3 [ (validate.rules).string.min_len = 1 ];
+
+  // The type of operation being performed.
+  clutch.api.v1.ActionType type = 4 [ (validate.rules).enum = {defined_only : true} ];
+
+  // The status of the overall operation.
+  google.rpc.Status status = 5;
+
+  // The resources touched during the event.
+  repeated Resource resources = 6;
+}
+
+message Event {
+  // When the event happened.
+  google.protobuf.Timestamp occurred_at = 1;
+
+  oneof event_type {
+    RequestEvent event = 2;
+  }
+}
+
+message GetEventsResponse {
+  repeated Event events = 1;
+}

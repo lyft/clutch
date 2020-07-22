@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package clutch.resolver.aws.v1;
+
+option go_package = "awsv1";
+
+import "google/protobuf/descriptor.proto";
+
+import "resolver/v1/annotations.proto";
+
+message InstanceID {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "instance ID"
+    searchable : true
+  };
+
+  string id = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "ID",
+    required : true,
+    string_field : {
+      placeholder : "i-1234567890",
+    },
+  } ];
+  string region = 2 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Region",
+    option_field : {
+      include_all_option : true,
+      include_dynamic_options : [ "regions" ]
+    },
+  } ];
+}
+
+message AutoscalingGroupName {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "name"
+    searchable : true
+  };
+
+  string name = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Name",
+    required : true,
+    string_field : {
+      placeholder : "my-autoscaling-group-name",
+    },
+  } ];
+
+  string region = 2 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Region",
+    option_field : {
+      include_all_option : true,
+      include_dynamic_options : [ "regions" ]
+    },
+  } ];
+}
+
+message KinesisStreamName {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "name"
+    searchable : true
+  };
+
+  string name = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Name",
+    required : true,
+    string_field : {
+      placeholder : "my-kinesis-stream-name",
+    },
+  } ];
+
+  string region = 2 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Region",
+    option_field : {
+      include_all_option : true,
+      include_dynamic_options : [ "regions" ]
+    },
+  } ];
+}

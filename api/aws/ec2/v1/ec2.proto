@@ -1,0 +1,174 @@
+syntax = "proto3";
+
+package clutch.aws.ec2.v1;
+
+option go_package = "ec2v1";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+import "api/v1/annotations.proto";
+
+service EC2API {
+  rpc GetInstance(GetInstanceRequest) returns (GetInstanceResponse) {
+    option (google.api.http) = {
+      post : "/v1/aws/ec2/getInstance"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
+  rpc TerminateInstance(TerminateInstanceRequest) returns (TerminateInstanceResponse) {
+    option (google.api.http) = {
+      post : "/v1/aws/ec2/terminateInstance"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = DELETE;
+  }
+
+  rpc ResizeAutoscalingGroup(ResizeAutoscalingGroupRequest) returns (ResizeAutoscalingGroupResponse) {
+    option (google.api.http) = {
+      post : "/v1/aws/ec2/resizeAutoscalingGroup"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = UPDATE;
+  }
+}
+
+message AutoscalingGroupSize {
+  uint32 min = 1;
+  uint32 max = 2;
+  uint32 desired = 3;
+}
+
+message ResizeAutoscalingGroupRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.aws.ec2.v1.AutoscalingGroup",
+    pattern : "{region}/{name}"
+  };
+
+  string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
+
+  AutoscalingGroupSize size = 3 [ (validate.rules).message = {required : true} ];
+}
+
+message ResizeAutoscalingGroupResponse {
+}
+
+message AutoscalingGroup {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.aws.ec2.v1.AutoscalingGroup",
+    pattern : "{region}/{name}"
+  };
+
+  string name = 1;
+  string region = 2;
+  // The AZs the ASG is running in.
+  repeated string zones = 3;
+
+  AutoscalingGroupSize size = 4;
+
+  enum TerminationPolicy {
+    UNSPECIFIED = 0;
+    UNKNOWN = 1;
+    OLDEST_INSTANCE = 2;
+    NEWEST_INSTANCE = 3;
+    OLDEST_LAUNCH_CONFIGURATION = 4;
+    CLOSEST_TO_NEXT_HOUR = 5;
+    DEFAULT = 6;
+    OLDEST_LAUNCH_TEMPLATE = 7;
+    ALLOCATION_STRATEGY = 8;
+  }
+  repeated TerminationPolicy termination_policies = 5;
+
+  message Instance {
+    string id = 1;
+    string zone = 2;
+    string launch_configuration_name = 3;
+    bool healthy = 4;
+
+    enum LifecycleState {
+      UNSPECIFIED = 0;
+      UNKNOWN = 1;
+      PENDING = 2;
+      PENDING_WAIT = 3;
+      PENDING_PROCEED = 4;
+      QUARANTINED = 5;
+      IN_SERVICE = 6;
+      TERMINATING = 7;
+      TERMINATING_WAIT = 8;
+      TERMINATING_PROCEED = 9;
+      TERMINATED = 10;
+      DETACHING = 11;
+      DETACHED = 12;
+      ENTERING_STANDBY = 13;
+      STANDBY = 14;
+    }
+
+    LifecycleState lifecycle_state = 5;
+  }
+
+  repeated Instance instances = 6;
+}
+
+message GetInstanceRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.aws.ec2.v1.Instance",
+    pattern : "{region}/{instance_id}"
+  };
+
+  string instance_id = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message GetInstanceResponse {
+  option (clutch.api.v1.reference).fields = "instance";
+
+  Instance instance = 1;
+}
+
+message TerminateInstanceRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.aws.ec2.v1.Instance",
+    pattern : "{region}/{instance_id}"
+  };
+
+  string instance_id = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message TerminateInstanceResponse {
+}
+
+message Instance {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.aws.ec2.v1.Instance",
+    pattern : "{region}/{instance_id}"
+  };
+
+  string instance_id = 1;
+  string region = 2;
+
+  // https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_InstanceState.html
+  enum State {
+    UNSPECIFIED = 0;
+    UNKNOWN = 1;
+    PENDING = 2;
+    RUNNING = 3;
+    STOPPING = 4;
+    STOPPED = 5;
+    SHUTTING_DOWN = 6;
+    TERMINATED = 7;
+  }
+  State state = 3;
+
+  string instance_type = 4;
+
+  string public_ip_address = 5;
+  string private_ip_address = 6;
+
+  string availability_zone = 7;
+
+  map<string, string> tags = 8;
+}

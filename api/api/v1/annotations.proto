@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package clutch.api.v1;
+
+option go_package = "apiv1";
+
+import "google/protobuf/descriptor.proto";
+
+import "api/v1/schema.proto";
+
+extend google.protobuf.MessageOptions {
+  // Use a random high number that won't conflict with annotations from other
+  // libraries.
+  Reference reference = 58901;
+  Identifier id = 58902;
+}
+
+extend google.protobuf.MethodOptions {
+  // Use a random high number that won't conflict with annotations from other
+  // libraries.
+  Action action = 58901;
+}

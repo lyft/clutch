@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package clutch.authn.v1;
+
+option go_package = "authnv1";
+
+import "google/api/annotations.proto";
+import "api/v1/annotations.proto";
+
+service AuthnAPI {
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      get : "/v1/authn/login"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
+  rpc Callback(CallbackRequest) returns (CallbackResponse) {
+    option (google.api.http) = {
+      get : "/v1/authn/callback"
+    };
+    option (clutch.api.v1.action).type = CREATE;
+  }
+}
+
+message LoginRequest {
+  string redirect_url = 1;
+}
+
+message LoginResponse {
+  string auth_url = 1;
+}
+
+// See https://www.oauth.com/oauth2-servers/authorization/the-authorization-response/ for description of the parameters.
+message CallbackRequest {
+  string code = 1;
+  string state = 2;
+  string error = 3;
+  string error_description = 4;
+}
+
+message CallbackResponse {
+  // This is the token that the user should present. Note: this response is only valid in a gRPC context. In an HTTP
+  // context the user will be redirected.
+  string token = 1;
+}

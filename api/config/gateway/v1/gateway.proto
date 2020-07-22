@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package clutch.config.gateway.v1;
+
+option go_package = "gatewayv1";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/duration.proto";
+import "validate/validate.proto";
+
+message Config {
+  GatewayOptions gateway = 1 [ (validate.rules).message = {required : true} ];
+
+  repeated Service services = 2;
+  repeated Resolver resolvers = 3;
+  repeated Module modules = 4;
+}
+
+message TCPSocket {
+  string address = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  uint32 port = 2 [ (validate.rules).uint32 = {lte : 65535} ];
+  bool secure = 3;
+}
+
+message Listener {
+  oneof socket {
+    option (validate.required) = true;
+
+    TCPSocket tcp = 1;
+  }
+}
+
+message Stats {
+
+  // Counters, gauges and histograms (i.e. everything except timers) are buffered at the specified interval.
+  google.protobuf.Duration flush_interval = 1 [ (validate.rules).duration.gte.nanos = 100000000 ];
+
+  message LogReporter {
+  }
+
+  message StatsdReporter {
+    string address = 1;
+
+    message PointTags {
+      string separator = 1 [ (validate.rules).string = {min_bytes : 1} ];
+    }
+    oneof tag_mode {
+      PointTags point_tags = 2;
+    }
+  }
+
+  // The reporter to emit stats. If none specified, then stats will not be reported.
+  oneof reporter {
+    LogReporter log_reporter = 2;
+    StatsdReporter statsd_reporter = 3;
+    //  TODO: Prometheus support.
+  }
+}
+
+message Timeouts {
+  // Default timeout to apply to all requests.
+  google.protobuf.Duration default = 1 [ (validate.rules).duration = {
+    required : true,
+    gte : {seconds : 1},
+  } ];
+
+  message Entry {
+    string service = 1;
+    string method = 2;
+    google.protobuf.Duration timeout = 3 [ (validate.rules).duration = {
+      required : true,
+      gte : {seconds : 1},
+    } ];
+  }
+  repeated Entry overrides = 2;
+}
+
+message GatewayOptions {
+  Listener listener = 1 [ (validate.rules).message = {required : true} ];
+  Listener json_grpc_loopback_listener = 2;
+
+  Logger logger = 3 [ (validate.rules).message = {required : true} ];
+  Stats stats = 4 [ (validate.rules).message = {required : true} ];
+
+  Timeouts timeouts = 5;
+
+  repeated Middleware middleware = 6;
+}
+
+message Logger {
+  enum Level {
+    UNSPECIFIED = 0;
+    DEBUG = 1;
+    INFO = 2;
+    WARN = 3;
+    ERROR = 4;
+    PANIC = 5;
+    FATAL = 6;
+  }
+  Level level = 1;
+
+  oneof format {
+    bool pretty = 2;
+  }
+}
+
+message Middleware {
+  string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  google.protobuf.Any typed_config = 2;
+}
+
+message Service {
+  string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  google.protobuf.Any typed_config = 2;
+}
+
+message Resolver {
+  string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  google.protobuf.Any typed_config = 2;
+}
+
+message Module {
+  string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  google.protobuf.Any typed_config = 2;
+}

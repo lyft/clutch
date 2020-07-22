@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package clutch.config.service.auditsink.slack.v1;
+
+option go_package = "slackv1";
+
+import "config/service/audit/v1/audit.proto";
+import "validate/validate.proto";
+
+message SlackConfig {
+  string token = 1 [ (validate.rules).string = {min_bytes : 1} ];
+
+  string channel = 2 [ (validate.rules).string = {min_bytes : 1} ];
+
+  clutch.config.service.audit.v1.Filter filter = 3;
+}

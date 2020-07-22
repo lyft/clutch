@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package clutch.api.v1;
+
+option go_package = "apiv1";
+
+enum ActionType {
+  UNSPECIFIED = 0;
+  CREATE = 1;
+  READ = 2;
+  UPDATE = 3;
+  DELETE = 4;
+}
+
+message Action {
+  // The type of action being performed.
+  ActionType type = 1;
+}
+
+message Pattern {
+  // The type URL for the resource.
+  string type_url = 1;
+
+  // A string describing the resource name in terms
+  // of message members.
+  string pattern = 2;
+}
+
+message Identifier {
+  repeated Pattern patterns = 1;
+}
+
+message Reference {
+  // The field(s) which contain nested ResourceIdentifiers to
+  // identify resources contained in the message.
+  repeated string fields = 1;
+}

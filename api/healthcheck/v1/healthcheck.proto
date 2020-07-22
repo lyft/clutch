@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package clutch.healthcheck.v1;
+
+option go_package = "healthcheckv1";
+
+import "google/api/annotations.proto";
+import "api/v1/annotations.proto";
+
+service HealthcheckAPI {
+  rpc Healthcheck(HealthcheckRequest) returns (HealthcheckResponse) {
+    option (google.api.http) = {
+      get : "/v1/healthcheck"
+
+      additional_bindings : [ {get : "/healthcheck"} ]
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+message HealthcheckRequest {
+}
+message HealthcheckResponse {
+}

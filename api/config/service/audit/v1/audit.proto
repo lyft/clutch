@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package clutch.config.service.audit.v1;
+
+option go_package = "auditv1";
+
+import "validate/validate.proto";
+
+message EventFilter {
+  // Switch to control what field the message
+  enum FilterType {
+    // Amounts to a no-op filter.
+    UNSPECIFIED = 0;
+
+    // Compare to the service performing the operation.
+    SERVICE = 1;
+
+    // Compare to the method being called.
+    METHOD = 2;
+
+    // Compare against the action type of the event.
+    TYPE = 3;
+  }
+  FilterType field = 1;
+
+  oneof value {
+    // Text to compare against the field to look for a match.
+    string text = 2;
+  }
+}
+
+message Filter {
+  // Whether to treat the list as a allowlist (default) or a denylist.
+  bool denylist = 1;
+
+  // The filter rules to apply against messages.
+  repeated EventFilter rules = 2;
+}
+
+message SinkConfig {
+  // The rule(s) to filter events between audit source and sink emission.
+  Filter filter = 1;
+}
+
+message Config {
+  // The name of the service where the auditor will persist events.
+  string db_provider = 1 [ (validate.rules).string = {min_bytes : 1} ];
+
+  // The rule to apply before between request ingress and the database.
+  Filter filter = 2;
+
+  // The registered name of sinks to fan-out events to.
+  repeated string sinks = 3;
+}

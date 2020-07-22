@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package clutch.config.service.k8s.v1;
+
+option go_package = "k8sv1";
+
+import "validate/validate.proto";
+
+message Config {
+  repeated string kubeconfigs = 1 [ (validate.rules).repeated = {unique : true} ];
+}

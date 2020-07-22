@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package clutch.config.service.authz.v1;
+
+import "api/v1/schema.proto";
+import "validate/validate.proto";
+
+option go_package = "authzv1";
+
+message Principal {
+  oneof type {
+    option (validate.required) = true;
+
+    string user = 1;
+    string group = 2;
+  }
+}
+
+message RoleBinding {
+  repeated string to = 1 [ (validate.rules).repeated = {
+    min_items : 1,
+    items {string {min_bytes : 1}}
+  } ];
+  repeated Principal principals = 2 [ (validate.rules).repeated = {
+    min_items : 1,
+    items {message {required : true}}
+  } ];
+}
+
+message Policy {
+  // For logging purposes, give the policy a defined name.
+  string policy_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
+
+  // A list of acceptable action types. If left empty, all action types are accepted.
+  repeated clutch.api.v1.ActionType action_types = 2;
+
+  // The full method in the format of a `/SERVICE/METHOD`. Wildcards are allowed, e.g. `*` or `/SERVICE/*`.
+  // If left empty, all methods are accepted.
+  string method = 3 [ (validate.rules).string = {min_bytes : 1} ];
+
+  // Resource from the id annotation on proto objects. Wildcards are allowed.
+  repeated string resources = 4;
+}
+
+message Role {
+  string role_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  repeated Policy policies = 2;
+}
+
+message Config {
+  repeated RoleBinding role_bindings = 1;
+  repeated Role roles = 2;
+}

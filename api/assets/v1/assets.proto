@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package clutch.assets.v1;
+
+option go_package = "assetsv1";
+
+import "google/api/annotations.proto";
+
+import "api/v1/annotations.proto";
+
+service AssetsAPI {
+  // Fetch is a simple endpoint that is used to execute middleware (e.g. authentication) before serving an asset.
+  rpc Fetch(FetchRequest) returns (FetchResponse) {
+    option (google.api.http) = {
+      get : "/v1/assets/fetch"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+message FetchRequest {
+}
+
+message FetchResponse {
+}

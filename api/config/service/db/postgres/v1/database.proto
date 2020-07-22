@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package clutch.config.service.db.postgres.v1;
+
+option go_package = "postgresv1";
+
+import "validate/validate.proto";
+
+message Connection {
+  string host = 1 [ (validate.rules).string.address = true ];
+  uint32 port = 2 [ (validate.rules).uint32 = {lte : 65535} ];
+  string user = 3 [ (validate.rules).string.min_len = 1 ];
+  string dbname = 4;
+
+  enum SSLMode {
+    UNSPECIFIED = 0;
+    DISABLE = 1;
+    ALLOW = 2;
+    PREFER = 3;
+    REQUIRE = 4;
+    VERIFY_CA = 5;
+    VERIFY_FULL = 6;
+  }
+  SSLMode ssl_mode = 5;
+
+  // TODO: GSSAPI, SSPI, Kerberos
+  oneof authn {
+    string password = 6 [ (validate.rules).string.min_len = 1 ];
+  }
+}
+
+// TODO: Expose more database/sql tunables.
+message Config {
+  Connection connection = 1;
+}

@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package clutch.resolver.k8s.v1;
+
+option go_package = "k8sv1";
+
+import "google/protobuf/descriptor.proto";
+
+import "resolver/v1/annotations.proto";
+
+message PodID {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "pod ID"
+    searchable : true
+  };
+
+  string name = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Name",
+    required : true,
+    string_field : {
+      placeholder : "my-pod-name",
+    },
+  } ];
+
+  string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Clientset",
+    option_field : {include_dynamic_options : [ "clientset" ]},
+  } ];
+
+  string namespace = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Namespace",
+    required : true,
+    string_field : {
+      placeholder : "my-namespace",
+    },
+  } ];
+}
+
+message IPAddress {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "IP address"
+    searchable : false
+  };
+
+  string ip_address = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "IP Address",
+    required : true,
+    string_field : {
+      placeholder : "10.0.0.1",
+    },
+  } ];
+}
+
+message HPAName {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "name"
+    searchable : true
+  };
+
+  string name = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Name",
+    required : true,
+    string_field : {
+      placeholder : "my-hpa-name",
+    },
+  } ];
+
+  string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Clientset",
+    option_field : {include_dynamic_options : [ "clientset" ]},
+  } ];
+
+  string namespace = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Namespace",
+    required : true,
+    string_field : {
+      placeholder : "my-namespace",
+    },
+  } ];
+}

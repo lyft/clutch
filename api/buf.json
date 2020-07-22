@@ -1,0 +1,13 @@
+{
+  "lint": {
+    "use": [
+      "DEFAULT"
+    ],
+    "except": [
+      "ENUM_VALUE_PREFIX",
+      "PACKAGE_DIRECTORY_MATCH"
+    ],
+    "service_suffix": "API",
+    "enum_zero_value_suffix": "UNSPECIFIED"
+  }
+}

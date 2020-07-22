@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package clutch.config.service.authn.v1;
+
+option go_package = "authnv1";
+
+import "validate/validate.proto";
+
+message OIDC {
+  string issuer = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string client_id = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string client_secret = 3 [ (validate.rules).string = {min_bytes : 1} ];
+
+  string redirect_url = 4 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message Config {
+  // Used to sign the nonce or any other JWT secrets.
+  string session_secret = 1 [ (validate.rules).string = {min_bytes : 1} ];
+
+  oneof type {
+    OIDC oidc = 2;
+  }
+}

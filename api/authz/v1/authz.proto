@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package clutch.authz.v1;
+
+option go_package = "authzv1";
+
+import "google/api/annotations.proto";
+import "api/v1/annotations.proto";
+import "api/v1/schema.proto";
+import "validate/validate.proto";
+
+service AuthzAPI {
+  rpc Check(CheckRequest) returns (CheckResponse) {
+    option (google.api.http) = {
+      post : "/v1/authz/check"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+message Subject {
+  string user = 1;
+  repeated string groups = 2;
+}
+
+message CheckRequest {
+  Subject subject = 1 [ (validate.rules).message.required = true ];
+  string method = 2;
+  clutch.api.v1.ActionType action_type = 3;
+  string resource = 4;
+}
+
+enum Decision {
+  UNSPECIFIED = 0;
+  DENY = 1;
+  ALLOW = 2;
+}
+
+message CheckResponse {
+  Decision decision = 1;
+}

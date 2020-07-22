@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package clutch.resolver.v1;
+
+option go_package = "resolverv1";
+
+import "google/protobuf/descriptor.proto";
+
+import "resolver/v1/schema.proto";
+
+extend google.protobuf.MessageOptions {
+  // Use a random high number that won't conflict with annotations from other
+  // libraries.
+  SchemaMetadata schema = 59901;
+}
+
+extend google.protobuf.FieldOptions {
+  // Use a random high number that won't conflict with annotations from other
+  // libraries.
+  FieldMetadata schema_field = 59901;
+}

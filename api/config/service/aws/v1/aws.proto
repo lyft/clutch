@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package clutch.config.service.aws.v1;
+
+option go_package = "awsv1";
+
+import "validate/validate.proto";
+
+message Config {
+  repeated string regions = 1 [ (validate.rules).repeated = {min_items : 1} ];
+}
