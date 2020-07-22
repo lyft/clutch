@@ -1,0 +1,1 @@
+This directory contains generated code from [`api/`](../../api). Do not edit the code directly.
