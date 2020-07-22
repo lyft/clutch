@@ -12,7 +12,7 @@ var ErrFailedFilters = errors.New("event did not pass auditor's filters")
 
 // Required functions to save/share events processed by Clutch.
 type Auditor interface {
-	// Check if an event passes the configured filters for this store.
+	// Check if an event passes the configured filters for this store. True if it should save the event.
 	Filter(event *auditv1.Event) bool
 
 	// Calls used by middleware to persist events during requests.

@@ -125,6 +125,49 @@ var filterTests = []struct {
 		},
 		expected: false,
 	},
+	{
+		id: "beavior with multiple allowlist",
+		filter: &configv1.Filter{
+			Rules: []*configv1.EventFilter{
+				{
+					Field: configv1.EventFilter_TYPE,
+					Value: &configv1.EventFilter_Text{Text: "CREATE"},
+				},
+				{
+					Field: configv1.EventFilter_TYPE,
+					Value: &configv1.EventFilter_Text{Text: "READ"},
+				},
+			},
+		},
+		event: &auditv1.Event{
+			EventType: &auditv1.Event_Event{Event: &auditv1.RequestEvent{
+				Type: apiv1.ActionType_READ,
+			}},
+		},
+		expected: true,
+	},
+	{
+		id: "beavior with multiple denylist",
+		filter: &configv1.Filter{
+			Denylist: true,
+			Rules: []*configv1.EventFilter{
+				{
+					Field: configv1.EventFilter_TYPE,
+					Value: &configv1.EventFilter_Text{Text: "CREATE"},
+				},
+				{
+					Field: configv1.EventFilter_TYPE,
+					Value: &configv1.EventFilter_Text{Text: "READ"},
+				},
+			},
+		},
+		event: &auditv1.Event{
+			EventType: &auditv1.Event_Event{Event: &auditv1.RequestEvent{
+				Type: apiv1.ActionType_READ,
+			}},
+		},
+		expected: false,
+	},
 }
 
 func TestFilter(t *testing.T) {
@@ -134,7 +177,6 @@ func TestFilter(t *testing.T) {
 		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
-
 			actual := Filter(tt.filter, tt.event)
 			assert.Equal(t, tt.expected, actual)
 		})

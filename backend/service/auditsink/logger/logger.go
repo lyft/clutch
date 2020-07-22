@@ -36,7 +36,7 @@ type svc struct {
 }
 
 func (s *svc) Write(event *auditv1.Event) error {
-	if !auditsink.Filter(s.filter, event) {
+	if auditsink.Filter(s.filter, event) {
 		s.logger.Info("new audit event", zap.Any("event", event))
 	}
 	return nil

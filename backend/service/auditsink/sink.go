@@ -12,6 +12,10 @@ type Sink interface {
 	Write(event *auditv1.Event) error
 }
 
+// Returns true if the filter matched the event, false if not.
+// Because of how it interprets the denylist flag, auditors or sinks
+// should check if auditsink.Filter(...) to see if the event should be passed
+// down.
 func Filter(filter *configv1.Filter, event *auditv1.Event) bool {
 	if filter == nil {
 		return true
@@ -22,15 +26,17 @@ func Filter(filter *configv1.Filter, event *auditv1.Event) bool {
 		return false
 	}
 
-	passes := true
+	// If a denylist, return false when it matches. Else, true.
+	rval := !filter.Denylist
 	for _, filter := range filter.Rules {
-		passes = passes && RunRequestFilter(filter, req)
+		if ok := RunRequestFilter(filter, req); ok {
+			return rval
+		}
 	}
 
-	if filter.Denylist {
-		passes = !passes
-	}
-	return passes
+	// The filter didn't apply, so allow it if it was a denylist and block
+	// it if it was an allowlist.
+	return filter.Denylist
 }
 
 func RunRequestFilter(filter *configv1.EventFilter, event *auditv1.RequestEvent) bool {

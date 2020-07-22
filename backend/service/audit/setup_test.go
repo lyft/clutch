@@ -33,6 +33,22 @@ func TestFilter(t *testing.T) {
 						MethodName: "Healthcheck",
 					}}},
 		},
+		{
+			id: "filter out healthcheck via allowlist for something else",
+			filter: &auditconfigv1.Filter{
+				Rules: []*auditconfigv1.EventFilter{
+					{
+						Field: auditconfigv1.EventFilter_METHOD,
+						Value: &auditconfigv1.EventFilter_Text{Text: "Readiness"},
+					},
+				},
+			},
+			event: &auditv1.Event{
+				EventType: &auditv1.Event_Event{
+					Event: &auditv1.RequestEvent{
+						MethodName: "Healthcheck",
+					}}},
+		},
 	}
 
 	for _, tt := range testCases {
