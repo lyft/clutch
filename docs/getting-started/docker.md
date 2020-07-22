@@ -25,7 +25,7 @@ Clutch provides a [`Dockerfile`](https://github.com/lyft/clutch/blob/main/Docker
 
 On every commit to the main branch, a Docker image is built and published to [Docker Hub](https://hub.docker.com/r/lyft/clutch) tagged with `latest` and the commit SHA in the form of `sha-<abcdef>`.
 
-The default configuration in [`backend/clutch-config.yaml`](https://github.com/lyft/clutch/blob/main/) is used.
+The default configuration in [`backend/clutch-config.yaml`](https://github.com/lyft/clutch/blob/main/backend/clutch-config.yaml) is used.
 If desired, use a custom configuration with the Docker image by mapping it into the container.
 
 <Tabs
