@@ -1,7 +1,6 @@
 {
   "name": "@clutch-sh/experimentation",
   "version": "0.0.0",
-  "private": true,
   "description": "Clutch Experimentation Workflows",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",

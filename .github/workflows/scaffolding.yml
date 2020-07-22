@@ -1,0 +1,32 @@
+name: scaffolding
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+env:
+  GOPATH: ${{ github.workspace }}/go
+  GOBIN: ${{ github.workspace }}/go/bin
+  PACKAGEPATH: ${{ github.workspace }}/go/src/github.com/${{ github.repository }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ${{ env.PACKAGEPATH }}
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.14.4
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: scaffold new app
+        run: yes | make scaffold-gateway
+        working-directory: ${{ env.PACKAGEPATH }}
