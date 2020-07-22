@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package {{ .RepoOwner }}.echo.v1;
+
+option go_package = "echov1";
+
+import "google/api/annotations.proto";
+
+import "validate/validate.proto";
+
+service EchoAPI {
+  rpc SayHello(SayHelloRequest) returns (SayHelloResponse) {
+    option (google.api.http) = {
+      post : "/v1/echo/sayHello"
+      body : "*"
+    };
+  }
+}
+
+message SayHelloRequest {
+  string name = 1 [(validate.rules).string = {min_bytes: 1}];
+}
+
+message SayHelloResponse {
+  string message = 1;
+}

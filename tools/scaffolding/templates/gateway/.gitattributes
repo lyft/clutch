@@ -1,0 +1,5 @@
+go.sum linguist-generated
+yarn.lock linguist-generated
+
+frontend/api/*.js linguist-generated
+frontend/api/*.ts linguist-generated

@@ -1,0 +1,52 @@
+{
+  "name": "@{{ .RepoName }}/frontend",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "build": "yarn compile && yarn register-workflows && react-scripts build",
+    "clean": "rm -rf build",
+    "compile": "lerna run compile --parallel",
+    "compile:watch": "lerna run compile:watch --parallel",
+    "eject": "react-scripts eject",
+    "lint": "eslint --ext .js,.jsx .",
+    "lint:fix": "yarn run lint --fix",
+    "register-workflows": "yarn workspace @clutch-sh/tools registerWorkflows $PWD/src",
+    "start": "yarn compile:watch & yarn register-workflows && react-scripts start",
+    "test": "lerna run test --stream --no-bail",
+    "test:coverage": "lerna run test:coverage --stream --no-bail",
+    "test:watch": "lerna run test:watch --parallel",
+    "upgrade": "yarn upgrade"
+  },
+  "dependencies": {
+    "protobufjs": "https://github.com/natiz/protobuf.js#1d626f84db4a4f339004609f654a9f24a211b716"
+  },
+  "devDependencies": {
+    "lerna": "^3.20.0",
+    "@clutch-sh/ec2": "^0.1.0",
+    "@{{ .RepoName }}/echo": "^0.1.0",
+    "@clutch-sh/core": "^0.0.0",
+    "react": "^16.8",
+    "react-dom": "^16.8.0",
+    "react-scripts": "^3.4.0",
+    "typescript": "^3.9.0-dev"
+  },
+  "workspaces": [
+    "clutch/frontend/packages/*",
+    "clutch/frontend/workflows/*",
+    "workflows/*"
+  ],
+  "proxy": "http://localhost:8080",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+

@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "esModuleInterop": true,
+    "importsNotUsedAsValues": "error",
+    "incremental": true,
+    "jsx": "react",
+    "lib": ["DOM", "ESNext"],
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "outDir": "./dist",
+    "preserveConstEnums": true,
+    "rootDir": "./src",
+    "target": "ESNext",
+    "types": ["node"]
+  },
+  "include": [
+    "src/**/*",
+  ],
+  "exclude": [
+    "node_modules",
+    "src/tests/**/*"
+  ]
+}

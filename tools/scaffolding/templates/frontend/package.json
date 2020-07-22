@@ -1,0 +1,28 @@
+{
+  "name": "@clutch-sh/{{ .PackageName }}",
+  "version": "0.1.0",
+  "private": true,
+  "description": " {{ .Description }}",
+  "license": "Apache-2.0",
+  "author": "{{ .DeveloperEmail }}",
+  "main": "dist/index.js",
+  "scripts": {
+    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
+    "compile": "tsc -b",
+    "compile:dev": "tsc --sourceMap",
+    "compile:watch": "tsc --watch --incremental",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "lint:fix": "yarn run lint --fix",
+    "test": "jest --passWithNoTests",
+    "test:coverage": "yarn run test --collect-coverage",
+    "test:watch": "yarn run test --watch"
+  },
+  "dependencies": {
+    "@clutch-sh/wizard": "^0.0.0",
+    "react": "^16.8",
+    "react-dom": "^16.8.0"
+  },
+  "devDependencies": {
+    "@clutch-sh/tools": "^0.0.0"
+  }
+}
