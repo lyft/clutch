@@ -1,0 +1,160 @@
+syntax = "proto3";
+
+package clutch.topology.v1;
+
+option go_package = "topologyv1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+import "google/rpc/status.proto";
+
+import "api/v1/annotations.proto";
+
+// TopologyAPI returns adjacent nodes in a network topology graph at varying
+// depths.
+service TopologyAPI {
+  rpc GetTopology(GetTopologyRequest) returns (GetTopologyResponse) {
+    option (google.api.http) = {
+      post : "/v1/topology/getTopology"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+message GetTopologyRequest {
+  repeated Query queries = 1;
+}
+
+message GetTopologyResponse {
+  repeated QueryResult results = 1;
+}
+
+// A query allows the user to specify multiple dimensions and the
+// corresponding desired values for the identifying features of the returned
+// nodes.
+message FeatureQuery {
+  string name = 1;
+  repeated string values = 2;
+}
+
+// A metadata constraint with an operator and a value
+message Constraint {
+  enum Operator {
+    UNSPECIFIED = 0;
+    // number operators
+    EQUAL = 1;
+    NOT_EQUAL = 2;
+    GREATER_THAN = 3;
+    GREATER_THAN_OR_EQUAL = 4;
+    LESS_THAN = 5;
+    LESS_THAN_OR_EQUAL = 6;
+    // string operators
+    CONTAINS_STRING = 7;
+    // array operators
+    CONTAINS_VALUE = 8;
+    // map operators
+    CONTAINS_KEY = 9;
+  }
+  Operator operator = 1;
+  google.protobuf.Value value = 2;
+}
+
+// Similar to FeatureQuery, rather than pre-traversal filtering,
+// MetadataQuery specifies metadata params and potential filters
+// for nodes and edges
+message MetadataQuery {
+  // name of the metadata field to populate. i.e. call_volume, service_tier,
+  // etc.
+  string name = 1;
+  // i.e. Wavefront params: google.protobuf.Struct{ ...start: <Time>, end:
+  // <Time>, Timeout: <Duration>} i.e. other params for other clients TBD
+  google.protobuf.Struct params = 2;
+  // if aggregate, then all timeseries or array metadata is aggregated into a
+  // value and returned otherwise, it will return the original array/timeseries.
+  // This is meant to reduce message size for larger queries.
+  enum Aggregation {
+    // default; no aggregation applied
+    UNSPECIFIED = 0;
+    SUM = 1;
+    AVERAGE = 2;
+    MEDIAN = 3;
+    MODE = 4;
+    MIN = 5;
+    MAX = 6;
+    COUNT = 7;
+  }
+  Aggregation aggregation = 3;
+  // a series of restrictive constraints for the value/values of a Type to pass
+  repeated Constraint constraints = 5;
+}
+
+message Query {
+  // Features represent the identifying characteristics of a node that make it
+  // unique, i.e. the resulting dimensions of the nodes in the result set.
+  //
+  // A query can specify the set of desired values or wildcard values for each
+  // feature.
+  repeated FeatureQuery features = 1;
+  // Metadata is non-identifying characteristics of a node which can be
+  // filtered upon and changed.
+  repeated MetadataQuery node_metadata = 4;
+  // Metadata query for edges.
+  repeated MetadataQuery edge_metadata = 5;
+
+  // Maximum depth to traverse in the graph upwards.
+  uint32 source_depth = 2;
+
+  // Maximum depth to traverse in the graph downwards.
+  uint32 target_depth = 3;
+}
+
+message QueryResult {
+  // Errors thats pertain to the issued query.
+  google.rpc.Status status = 1;
+
+  // Query issued in the request to yield the result.
+  Query query = 2;
+
+  // Subset of the IDs for the query-matched nodes before any traversal
+  // occurred.
+  repeated string matched_node_ids = 3;
+
+  // Map of node IDs to the node object.
+  map<string, Node> nodes = 4;
+
+  // Map of edge IDs to the edge object.
+  map<string, Edge> edges = 5;
+}
+
+message Node {
+  // Each node has an opaque ID that is used to identify the node during result
+  // processing and presentation.
+  string id = 1;
+
+  // Features represent the identifying characteristics (i.e. dimensions) of a
+  // node that make it unique.
+  //
+  // When a node is returned from a query, the set of feature fields included on
+  // the node will match those in the query.
+  map<string, string> features = 2;
+
+  // Metadata maps field names to assorted state or characteristics of the node.
+  map<string, google.protobuf.Value> metadata = 3;
+}
+
+message Edge {
+  // Each edge has an opaque ID that is used to identify the edge during result
+  // processing and presentation.
+  string id = 1;
+
+  // Node ID where the edge originates.
+  string source_node_id = 2;
+
+  // Node ID where the edge terminates.
+  string target_node_id = 3;
+
+  // Metadata maps field names to assorted state or characteristics of the
+  // edge.
+  map<string, google.protobuf.Value> metadata = 4;
+}
