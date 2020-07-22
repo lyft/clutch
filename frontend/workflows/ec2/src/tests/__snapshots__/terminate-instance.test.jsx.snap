@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Terminate Instance workflow renders correctly 1`] = `
+"<Wizard dataLayout={{...}} heading={[undefined]}>
+  <InstanceIdentifier name=\\"Lookup\\" resolverType=\\"clutch.aws.ec2.v1.Instance\\" />
+  <InstanceDetails name=\\"Modify\\" />
+  <Confirm name=\\"Confirmation\\" />
+</Wizard>"
+`;

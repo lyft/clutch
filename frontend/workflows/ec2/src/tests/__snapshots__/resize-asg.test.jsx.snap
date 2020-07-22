@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Resize Autoscaling Group workflow renders correctly 1`] = `
+"<Wizard dataLayout={{...}} heading={[undefined]}>
+  <GroupIdentifier name=\\"Lookup\\" resolverType=\\"clutch.aws.ec2.v1.AutoscalingGroup\\" />
+  <GroupDetails name=\\"Modify\\" />
+  <Confirm name=\\"Confirmation\\" notes={{...}} />
+</Wizard>"
+`;
