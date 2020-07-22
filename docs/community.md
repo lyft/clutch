@@ -42,7 +42,7 @@ To have pull requests merged, contributors must sign the [Contributor License Ag
 
 ### Core
 
-The core project, hosted in [`lyft/clutch`](https://github.com/lyft/clutch), is designed to be universal and broadly applicable to a large variety of organizations. Code that is overly-specific to a single organization will not be accepted into the core. However, Clutch was designed to allow custom code without having to fork. See [Custom Extensions](/docs/usage/extensions) for more details.
+The core project, hosted in [`lyft/clutch`](https://github.com/lyft/clutch), is designed to be universal and broadly applicable to a large variety of organizations. Code that is overly-specific to a single organization will not be accepted into the core. However, Clutch was designed to allow custom code without having to fork. See [Custom Gateway](/docs/development/custom-gateway) for more details.
 
 It's also possible to contribute features incrementally to the core. For example, you can contribute an API definition but keep the implementation private.
 
