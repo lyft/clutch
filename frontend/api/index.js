@@ -9304,6 +9304,269 @@ export const clutch = $root.clutch = (() => {
                 return chaos;
             })();
 
+            module.featureflag = (function() {
+
+                /**
+                 * Namespace featureflag.
+                 * @memberof clutch.config.module
+                 * @namespace
+                 */
+                const featureflag = {};
+
+                featureflag.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.module.featureflag
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    v1.Simple = (function() {
+
+                        /**
+                         * Properties of a Simple.
+                         * @memberof clutch.config.module.featureflag.v1
+                         * @interface ISimple
+                         * @property {Object.<string,boolean>|null} [flags] Simple flags
+                         */
+
+                        /**
+                         * Constructs a new Simple.
+                         * @memberof clutch.config.module.featureflag.v1
+                         * @classdesc Represents a Simple.
+                         * @implements ISimple
+                         * @constructor
+                         * @param {clutch.config.module.featureflag.v1.ISimple=} [properties] Properties to set
+                         */
+                        function Simple(properties) {
+                            this.flags = {};
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Simple flags.
+                         * @member {Object.<string,boolean>} flags
+                         * @memberof clutch.config.module.featureflag.v1.Simple
+                         * @instance
+                         */
+                        Simple.prototype.flags = $util.emptyObject;
+
+                        /**
+                         * Verifies a Simple message.
+                         * @function verify
+                         * @memberof clutch.config.module.featureflag.v1.Simple
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Simple.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.flags != null && message.hasOwnProperty("flags")) {
+                                if (!$util.isObject(message.flags))
+                                    return "flags: object expected";
+                                let key = Object.keys(message.flags);
+                                for (let i = 0; i < key.length; ++i)
+                                    if (typeof message.flags[key[i]] !== "boolean")
+                                        return "flags: boolean{k:string} expected";
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Simple message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.module.featureflag.v1.Simple
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.module.featureflag.v1.Simple} Simple
+                         */
+                        Simple.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.module.featureflag.v1.Simple)
+                                return object;
+                            let message = new $root.clutch.config.module.featureflag.v1.Simple();
+                            if (object.flags) {
+                                if (typeof object.flags !== "object")
+                                    throw TypeError(".clutch.config.module.featureflag.v1.Simple.flags: object expected");
+                                message.flags = {};
+                                for (let keys = Object.keys(object.flags), i = 0; i < keys.length; ++i)
+                                    message.flags[keys[i]] = Boolean(object.flags[keys[i]]);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Simple message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.module.featureflag.v1.Simple
+                         * @static
+                         * @param {clutch.config.module.featureflag.v1.Simple} message Simple
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Simple.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.objects || options.defaults)
+                                object.flags = {};
+                            let keys2;
+                            if (message.flags && (keys2 = Object.keys(message.flags)).length) {
+                                object.flags = {};
+                                for (let j = 0; j < keys2.length; ++j)
+                                    object.flags[keys2[j]] = message.flags[keys2[j]];
+                            }
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Simple to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.module.featureflag.v1.Simple
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Simple.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Simple;
+                    })();
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.module.featureflag.v1
+                         * @interface IConfig
+                         * @property {clutch.config.module.featureflag.v1.ISimple|null} [simple] Config simple
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.module.featureflag.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.module.featureflag.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Config simple.
+                         * @member {clutch.config.module.featureflag.v1.ISimple|null|undefined} simple
+                         * @memberof clutch.config.module.featureflag.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.simple = null;
+
+                        // OneOf field names bound to virtual getters and setters
+                        let $oneOfFields;
+
+                        /**
+                         * Config type.
+                         * @member {"simple"|undefined} type
+                         * @memberof clutch.config.module.featureflag.v1.Config
+                         * @instance
+                         */
+                        Object.defineProperty(Config.prototype, "type", {
+                            get: $util.oneOfGetter($oneOfFields = ["simple"]),
+                            set: $util.oneOfSetter($oneOfFields)
+                        });
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.module.featureflag.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            let properties = {};
+                            if (message.simple != null && message.hasOwnProperty("simple")) {
+                                properties.type = 1;
+                                {
+                                    let error = $root.clutch.config.module.featureflag.v1.Simple.verify(message.simple);
+                                    if (error)
+                                        return "simple." + error;
+                                }
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.module.featureflag.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.module.featureflag.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.module.featureflag.v1.Config)
+                                return object;
+                            let message = new $root.clutch.config.module.featureflag.v1.Config();
+                            if (object.simple != null) {
+                                if (typeof object.simple !== "object")
+                                    throw TypeError(".clutch.config.module.featureflag.v1.Config.simple: object expected");
+                                message.simple = $root.clutch.config.module.featureflag.v1.Simple.fromObject(object.simple);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.module.featureflag.v1.Config
+                         * @static
+                         * @param {clutch.config.module.featureflag.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (message.simple != null && message.hasOwnProperty("simple")) {
+                                object.simple = $root.clutch.config.module.featureflag.v1.Simple.toObject(message.simple, options);
+                                if (options.oneofs)
+                                    object.type = "simple";
+                            }
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.module.featureflag.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    return v1;
+                })();
+
+                return featureflag;
+            })();
+
             return module;
         })();
 

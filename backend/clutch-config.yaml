@@ -21,6 +21,12 @@ modules:
   - name: clutch.module.resolver
   - name: clutch.module.aws
   - name: clutch.module.envoytriage
+  - name: clutch.module.featureflag
+    typed_config:
+      "@type": types.google.com/clutch.config.module.featureflag.v1.Config
+      simple:
+        flags:
+          myTestFlag: true
   - name: clutch.module.k8s
   - name: clutch.module.kinesis
 services:

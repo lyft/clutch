@@ -16,6 +16,7 @@ import (
 	experimentationapi "github.com/lyft/clutch/backend/module/chaos/experimentation/api"
 	rtdsmod "github.com/lyft/clutch/backend/module/chaos/experimentation/rtds"
 	"github.com/lyft/clutch/backend/module/envoytriage"
+	"github.com/lyft/clutch/backend/module/featureflag"
 	"github.com/lyft/clutch/backend/module/healthcheck"
 	k8smod "github.com/lyft/clutch/backend/module/k8s"
 	kinesismod "github.com/lyft/clutch/backend/module/kinesis"
@@ -54,6 +55,7 @@ var Modules = module.Factory{
 	awsmod.Name:             awsmod.New,
 	envoytriage.Name:        envoytriage.New,
 	experimentationapi.Name: experimentationapi.New,
+	featureflag.Name:        featureflag.New,
 	k8smod.Name:             k8smod.New,
 	kinesismod.Name:         kinesismod.New,
 	healthcheck.Name:        healthcheck.New,

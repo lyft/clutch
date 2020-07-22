@@ -3928,6 +3928,113 @@ export namespace clutch {
                     }
                 }
             }
+
+            /** Namespace featureflag. */
+            namespace featureflag {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Properties of a Simple. */
+                    interface ISimple {
+
+                        /** Simple flags */
+                        flags?: ({ [k: string]: boolean }|null);
+                    }
+
+                    /** Represents a Simple. */
+                    class Simple implements ISimple {
+
+                        /**
+                         * Constructs a new Simple.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.module.featureflag.v1.ISimple);
+
+                        /** Simple flags. */
+                        public flags: { [k: string]: boolean };
+
+                        /**
+                         * Verifies a Simple message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Simple message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Simple
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.featureflag.v1.Simple;
+
+                        /**
+                         * Creates a plain object from a Simple message. Also converts values to other types if specified.
+                         * @param message Simple
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.module.featureflag.v1.Simple, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Simple to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+
+                        /** Config simple */
+                        simple?: (clutch.config.module.featureflag.v1.ISimple|null);
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.module.featureflag.v1.IConfig);
+
+                        /** Config simple. */
+                        public simple?: (clutch.config.module.featureflag.v1.ISimple|null);
+
+                        /** Config type. */
+                        public type?: "simple";
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.featureflag.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.module.featureflag.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
         }
 
         /** Namespace service. */
