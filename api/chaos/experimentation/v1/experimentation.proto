@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+package clutch.chaos.experimentation.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+import "api/v1/annotations.proto";
+
+option go_package = "experimentationv1";
+
+message TestSpecification {
+  oneof config {
+    AbortFault abort = 2;
+    LatencyFault latency = 3;
+  }
+}
+
+message Experiment {
+  fixed64 id = 1;
+  TestSpecification test_specification = 2;
+}
+
+// Targets requests from downstream_cluster -> upstream_cluster
+message ClusterPairTarget {
+  // The name of the downstream cluster
+  string downstream_cluster = 1 [ (validate.rules).string = {min_bytes : 1} ];
+
+  // The name of the upstream cluster
+  string upstream_cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message AbortFault {
+  oneof target {
+    ClusterPairTarget cluster_pair = 1;
+  }
+
+  // The percentage of requests that will be faulted.
+  float percent = 2 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
+
+  // The abort HTTP status that will be returned.
+  int32 http_status = 3 [ (validate.rules).int32 = {gt : 99, lt : 600} ];
+}
+
+message LatencyFault {
+  oneof target {
+    ClusterPairTarget cluster_pair = 1;
+  }
+
+  // The percentage of requests that will be slowed down.
+  float percent = 2 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
+
+  // The latency duration in milliseconds.
+  int32 duration_ms = 3 [ (validate.rules).int32.gt = 0 ];
+}
+
+message CreateExperimentsRequest {
+  repeated Experiment experiments = 1 [ (validate.rules).repeated = {min_items : 1} ];
+}
+
+message CreateExperimentsResponse {
+  repeated Experiment experiments = 1;
+}
+
+message GetExperimentsRequest {
+  repeated uint64 ids = 1;
+}
+
+message GetExperimentsResponse {
+  repeated Experiment experiments = 3;
+}
+
+message DeleteExperimentsRequest {
+  repeated uint64 ids = 1;
+}
+
+message DeleteExperimentsResponse {
+}
+
+// Simple CRUD API for experiments
+service ExperimentsAPI {
+  rpc CreateExperiments(CreateExperimentsRequest) returns (CreateExperimentsResponse) {
+    option (google.api.http) = {
+      post : "/v1/experiments/create"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = CREATE;
+  }
+  rpc GetExperiments(GetExperimentsRequest) returns (GetExperimentsResponse) {
+    option (google.api.http) = {
+      post : "/v1/experiments/get"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+  rpc DeleteExperiments(DeleteExperimentsRequest) returns (DeleteExperimentsResponse) {
+    option (google.api.http) = {
+      post : "/v1/experiments/delete"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = DELETE;
+  }
+}
