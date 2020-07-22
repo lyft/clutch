@@ -64,16 +64,9 @@
 ## Getting Started
 
 So you want to run Clutch? That's great to hear! There are several supported methods of running Clutch, all
-of which are outlined in our [Getting Started documentation](https://clutch.sh/docs/getting-started/build-guides).
+of which are outlined in our [Getting Started documentation](https://clutch.sh/docs/getting-started/build-guides) to learn how to run Clutch in Docker or build it locally.
 
-For ease of reference the following outlines how to get Clutch up and running using Docker
-with a few commands.
-
-```bash
-git clone https://github.com/lyft/clutch && cd clutch
-docker build -t clutch .
-docker run --rm -p 8080:8080 -it clutch
-```
+Clutch also has a [mock server](https://clutch.sh/docs/getting-started/mock-gateway) for testing and developing features in isolation from the systems they depend on.
 
 ## Extending Clutch
 
@@ -81,16 +74,15 @@ Clutch ships with a default configuration and some out of the box workflows to m
 as possible. However, there are lots of use cases for Clutch, some of which may not be written yet and others which are not broadly applicable.
 
 To get started developing new features or functionality within Clutch check out the
-[development guides](https://clutch.sh/docs/development/development-guide) on how to
-develop each of the different pieces. While you're there, take a few additional minutes to read through the [configuration documentation](https://clutch.sh/docs/configuration-guide). This
-allows you to override the default configuration that ships out of the box with Clutch.
+[development guides](https://clutch.sh/docs/development/guide) on how to
+develop each of the different pieces. While you're there, take a few additional minutes to read through the [configuration documentation](https://clutch.sh/docs/configuration). This allows you to override the default configuration that ships out of the box with Clutch.
 
 ## Documentation
 
-Clutch has extensive documentation that can be found on our site [clutch.sh](https://clutch.sh/docs/about/what-is-clutch).
+Clutch has extensive documentation that can be found on our site [clutch.sh](https://clutch.sh/docs/).
 
 If you're looking for the source of the hosted documentation both the content and the code
-for the website live within the [docs](docs) directory.
+for the website live within the [docs/](docs/) directory.
 
 ## Contributing
 
@@ -100,8 +92,8 @@ First things first, please read over our [Code of Conduct](./CODE_OF_CONDUCT.md)
 [guidelines](https://clutch.sh/docs/community#contributing) before opening a pull
 request.
 
-Want to contribute but are unsure of what needs to be done? Check out the
-[`beginner issues`](https://github.com/lyft/clutch-private/labels/bug) for tasks specifically scoped for those with less
+Want to contribute but not sure where to start? Check out the
+[`good first issue`](https://github.com/lyft/clutch/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) for tasks specifically scoped for those with less
 familiarity.
 
 All contributions require that the author has signed the [Lyft CLA](https://oss.lyft.com/cla/clas/1.0). Login to the [Lyft CLA Service](https://oss.lyft.com/cla) with GitHub to review and sign the CLA.
