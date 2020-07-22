@@ -14,7 +14,7 @@
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
     "compile": "yarn clean && tsc -b",
     "compile:dev": "tsc --sourceMap",
-    "compile:watch": "tsc --watch --incremental",
+    "compile:watch": "BABEL_ENV=build babel src --out-dir dist --source-maps --extensions .js,.jsx,.ts,.tsx --ignore **/tests --watch",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "publishAlpha": "yarn publish --new-version=\"0.0.0-$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')-$(git rev-parse --short=12 HEAD)\" --access public",
