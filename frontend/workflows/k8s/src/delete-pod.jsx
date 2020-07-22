@@ -83,8 +83,9 @@ const DeletePod = ({ heading, resolverType }) => {
     deletionData: {
       deps: ["resourceData", "resolverInput"],
       hydrator: (resourceData, resolverInput) => {
+        const clientset = resolverInput.clientset ?? "undefined";
         return client.post("/v1/k8s/deletePod", {
-          clientset: resolverInput.clientset,
+          clientset,
           cluster: resourceData.cluster,
           namespace: resourceData.namespace,
           name: resourceData.name,
