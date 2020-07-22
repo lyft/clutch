@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  envoy:
+    image: envoyproxy/envoy:v1.14-latest
+    expose:
+      - "9901"
+    volumes:
+      - type: bind
+        source: ./envoy-config.yaml
+        target: /etc/envoy/envoy.yaml
+  clutch:
+    depends_on:
+      - envoy
+    build: ../../.
+    ports:
+      - 8080:8080
+    volumes:
+      - type: bind
+        source: ./clutch-config.yaml
+        target: /clutch-config.yaml

@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package clutch.amiibo.v1;
+
+option go_package = "amiibov1";
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+service AmiiboAPI {
+  rpc GetAmiibo (GetAmiiboRequest) returns (GetAmiiboResponse) {
+    option (google.api.http) = {
+      post : "/v1/amiibo/getAmiibo"
+      body : "*"
+    };
+  }
+}
+
+message GetAmiiboRequest {
+  string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message GetAmiiboResponse {
+  repeated Amiibo amiibo = 1;
+}
+
+message Amiibo {
+  string character = 1;
+  string name = 2;
+  string amiibo_series = 3;
+  string image_url = 4;
+
+  enum Type {
+    UNSPECIFIED = 0;
+    CARD = 1;
+    FIGURE = 2;
+    YARN = 3;
+  }
+  Type type = 5;
+}

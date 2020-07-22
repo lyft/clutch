@@ -1,0 +1,29 @@
+{
+  "name": "@clutch-sh/amiibo",
+  "version": "0.1.0",
+  "private": true,
+  "description": " Lookup all Amiibo by name",
+  "license": "Apache-2.0",
+  "author": "hello@example.com",
+  "main": "dist/index.js",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "compile": "BABEL_ENV=build babel src --out-dir dist --source-maps --extensions .js,.jsx,.ts,.tsx --no-comments --ignore **/tests",
+    "compile:watch": "yarn run compile --watch",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "lint:fix": "yarn run lint --fix",
+    "test": "jest --passWithNoTests",
+    "test:coverage": "yarn run test --collect-coverage",
+    "test:watch": "yarn run test --watch",
+    "tsc": "tsc --outDir ./dist",
+    "upgrade": "yarn upgrade"
+  },
+  "dependencies": {
+    "@clutch/wizard": "^0.1.0",
+    "react": "^16.8",
+    "react-dom": "^16.8.0"
+  },
+  "devDependencies": {
+    "@clutch/tools": "^0.1.0"
+  }
+}

@@ -1,0 +1,26 @@
+gateway:
+  logger:
+    pretty: true
+    level: DEBUG
+  stats:
+    flush_interval: 1s
+  timeouts:
+    default: 15s
+  middleware:
+    - name: clutch.middleware.stats
+    - name: clutch.middleware.validate
+  listener:
+    tcp:
+      address: 0.0.0.0
+      port: 8080
+      secure: false
+modules:
+  - name: clutch.module.assets
+  - name: clutch.module.healthcheck
+  - name: clutch.module.envoytriage
+services:
+  - name: clutch.service.envoyadmin
+    typed_config:
+      "@type": types.google.com/clutch.config.service.envoyadmin.v1.Config
+      secure: false
+      default_remote_port: 9901
