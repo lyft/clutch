@@ -6160,6 +6160,191 @@ export namespace clutch {
         }
     }
 
+    /** Namespace featureflag. */
+    namespace featureflag {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Represents a FeatureFlagAPI */
+            class FeatureFlagAPI extends $protobuf.rpc.Service {
+
+                /**
+                 * Constructs a new FeatureFlagAPI service.
+                 * @param rpcImpl RPC implementation
+                 * @param [requestDelimited=false] Whether requests are length-delimited
+                 * @param [responseDelimited=false] Whether responses are length-delimited
+                 */
+                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                /**
+                 * Calls GetFlags.
+                 * @param request GetFlagsRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and GetFlagsResponse
+                 */
+                public getFlags(request: clutch.featureflag.v1.IGetFlagsRequest, callback: clutch.featureflag.v1.FeatureFlagAPI.GetFlagsCallback): void;
+
+                /**
+                 * Calls GetFlags.
+                 * @param request GetFlagsRequest message or plain object
+                 * @returns Promise
+                 */
+                public getFlags(request: clutch.featureflag.v1.IGetFlagsRequest): Promise<clutch.featureflag.v1.GetFlagsResponse>;
+            }
+
+            namespace FeatureFlagAPI {
+
+                /**
+                 * Callback as used by {@link clutch.featureflag.v1.FeatureFlagAPI#getFlags}.
+                 * @param error Error, if any
+                 * @param [response] GetFlagsResponse
+                 */
+                type GetFlagsCallback = (error: (Error|null), response?: clutch.featureflag.v1.GetFlagsResponse) => void;
+            }
+
+            /** Properties of a GetFlagsRequest. */
+            interface IGetFlagsRequest {
+            }
+
+            /** Represents a GetFlagsRequest. */
+            class GetFlagsRequest implements IGetFlagsRequest {
+
+                /**
+                 * Constructs a new GetFlagsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.featureflag.v1.IGetFlagsRequest);
+
+                /**
+                 * Verifies a GetFlagsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetFlagsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetFlagsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.featureflag.v1.GetFlagsRequest;
+
+                /**
+                 * Creates a plain object from a GetFlagsRequest message. Also converts values to other types if specified.
+                 * @param message GetFlagsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.featureflag.v1.GetFlagsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetFlagsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Flag. */
+            interface IFlag {
+
+                /** Flag booleanValue */
+                booleanValue?: (boolean|null);
+            }
+
+            /** Represents a Flag. */
+            class Flag implements IFlag {
+
+                /**
+                 * Constructs a new Flag.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.featureflag.v1.IFlag);
+
+                /** Flag booleanValue. */
+                public booleanValue: boolean;
+
+                /** Flag type. */
+                public type?: "booleanValue";
+
+                /**
+                 * Verifies a Flag message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Flag message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Flag
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.featureflag.v1.Flag;
+
+                /**
+                 * Creates a plain object from a Flag message. Also converts values to other types if specified.
+                 * @param message Flag
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.featureflag.v1.Flag, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Flag to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetFlagsResponse. */
+            interface IGetFlagsResponse {
+
+                /** GetFlagsResponse flags */
+                flags?: ({ [k: string]: clutch.featureflag.v1.IFlag }|null);
+            }
+
+            /** Represents a GetFlagsResponse. */
+            class GetFlagsResponse implements IGetFlagsResponse {
+
+                /**
+                 * Constructs a new GetFlagsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.featureflag.v1.IGetFlagsResponse);
+
+                /** GetFlagsResponse flags. */
+                public flags: { [k: string]: clutch.featureflag.v1.IFlag };
+
+                /**
+                 * Verifies a GetFlagsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetFlagsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetFlagsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.featureflag.v1.GetFlagsResponse;
+
+                /**
+                 * Creates a plain object from a GetFlagsResponse message. Also converts values to other types if specified.
+                 * @param message GetFlagsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.featureflag.v1.GetFlagsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetFlagsResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+        }
+    }
+
     /** Namespace healthcheck. */
     namespace healthcheck {
 

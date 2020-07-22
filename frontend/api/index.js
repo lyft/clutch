@@ -14778,6 +14778,400 @@ export const clutch = $root.clutch = (() => {
         return envoytriage;
     })();
 
+    clutch.featureflag = (function() {
+
+        /**
+         * Namespace featureflag.
+         * @memberof clutch
+         * @namespace
+         */
+        const featureflag = {};
+
+        featureflag.v1 = (function() {
+
+            /**
+             * Namespace v1.
+             * @memberof clutch.featureflag
+             * @namespace
+             */
+            const v1 = {};
+
+            v1.FeatureFlagAPI = (function() {
+
+                /**
+                 * Constructs a new FeatureFlagAPI service.
+                 * @memberof clutch.featureflag.v1
+                 * @classdesc Represents a FeatureFlagAPI
+                 * @extends $protobuf.rpc.Service
+                 * @constructor
+                 * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                 * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                 * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                 */
+                function FeatureFlagAPI(rpcImpl, requestDelimited, responseDelimited) {
+                    $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                }
+
+                (FeatureFlagAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = FeatureFlagAPI;
+
+                /**
+                 * Callback as used by {@link clutch.featureflag.v1.FeatureFlagAPI#getFlags}.
+                 * @memberof clutch.featureflag.v1.FeatureFlagAPI
+                 * @typedef GetFlagsCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.featureflag.v1.GetFlagsResponse} [response] GetFlagsResponse
+                 */
+
+                /**
+                 * Calls GetFlags.
+                 * @function getFlags
+                 * @memberof clutch.featureflag.v1.FeatureFlagAPI
+                 * @instance
+                 * @param {clutch.featureflag.v1.IGetFlagsRequest} request GetFlagsRequest message or plain object
+                 * @param {clutch.featureflag.v1.FeatureFlagAPI.GetFlagsCallback} callback Node-style callback called with the error, if any, and GetFlagsResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(FeatureFlagAPI.prototype.getFlags = function getFlags(request, callback) {
+                    return this.rpcCall(getFlags, $root.clutch.featureflag.v1.GetFlagsRequest, $root.clutch.featureflag.v1.GetFlagsResponse, request, callback);
+                }, "name", { value: "GetFlags" });
+
+                /**
+                 * Calls GetFlags.
+                 * @function getFlags
+                 * @memberof clutch.featureflag.v1.FeatureFlagAPI
+                 * @instance
+                 * @param {clutch.featureflag.v1.IGetFlagsRequest} request GetFlagsRequest message or plain object
+                 * @returns {Promise<clutch.featureflag.v1.GetFlagsResponse>} Promise
+                 * @variation 2
+                 */
+
+                return FeatureFlagAPI;
+            })();
+
+            v1.GetFlagsRequest = (function() {
+
+                /**
+                 * Properties of a GetFlagsRequest.
+                 * @memberof clutch.featureflag.v1
+                 * @interface IGetFlagsRequest
+                 */
+
+                /**
+                 * Constructs a new GetFlagsRequest.
+                 * @memberof clutch.featureflag.v1
+                 * @classdesc Represents a GetFlagsRequest.
+                 * @implements IGetFlagsRequest
+                 * @constructor
+                 * @param {clutch.featureflag.v1.IGetFlagsRequest=} [properties] Properties to set
+                 */
+                function GetFlagsRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies a GetFlagsRequest message.
+                 * @function verify
+                 * @memberof clutch.featureflag.v1.GetFlagsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetFlagsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a GetFlagsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.featureflag.v1.GetFlagsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.featureflag.v1.GetFlagsRequest} GetFlagsRequest
+                 */
+                GetFlagsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.featureflag.v1.GetFlagsRequest)
+                        return object;
+                    return new $root.clutch.featureflag.v1.GetFlagsRequest();
+                };
+
+                /**
+                 * Creates a plain object from a GetFlagsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.featureflag.v1.GetFlagsRequest
+                 * @static
+                 * @param {clutch.featureflag.v1.GetFlagsRequest} message GetFlagsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetFlagsRequest.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this GetFlagsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.featureflag.v1.GetFlagsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetFlagsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetFlagsRequest;
+            })();
+
+            v1.Flag = (function() {
+
+                /**
+                 * Properties of a Flag.
+                 * @memberof clutch.featureflag.v1
+                 * @interface IFlag
+                 * @property {boolean|null} [booleanValue] Flag booleanValue
+                 */
+
+                /**
+                 * Constructs a new Flag.
+                 * @memberof clutch.featureflag.v1
+                 * @classdesc Represents a Flag.
+                 * @implements IFlag
+                 * @constructor
+                 * @param {clutch.featureflag.v1.IFlag=} [properties] Properties to set
+                 */
+                function Flag(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Flag booleanValue.
+                 * @member {boolean} booleanValue
+                 * @memberof clutch.featureflag.v1.Flag
+                 * @instance
+                 */
+                Flag.prototype.booleanValue = false;
+
+                // OneOf field names bound to virtual getters and setters
+                let $oneOfFields;
+
+                /**
+                 * Flag type.
+                 * @member {"booleanValue"|undefined} type
+                 * @memberof clutch.featureflag.v1.Flag
+                 * @instance
+                 */
+                Object.defineProperty(Flag.prototype, "type", {
+                    get: $util.oneOfGetter($oneOfFields = ["booleanValue"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Verifies a Flag message.
+                 * @function verify
+                 * @memberof clutch.featureflag.v1.Flag
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Flag.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    let properties = {};
+                    if (message.booleanValue != null && message.hasOwnProperty("booleanValue")) {
+                        properties.type = 1;
+                        if (typeof message.booleanValue !== "boolean")
+                            return "booleanValue: boolean expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Flag message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.featureflag.v1.Flag
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.featureflag.v1.Flag} Flag
+                 */
+                Flag.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.featureflag.v1.Flag)
+                        return object;
+                    let message = new $root.clutch.featureflag.v1.Flag();
+                    if (object.booleanValue != null)
+                        message.booleanValue = Boolean(object.booleanValue);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Flag message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.featureflag.v1.Flag
+                 * @static
+                 * @param {clutch.featureflag.v1.Flag} message Flag
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Flag.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (message.booleanValue != null && message.hasOwnProperty("booleanValue")) {
+                        object.booleanValue = message.booleanValue;
+                        if (options.oneofs)
+                            object.type = "booleanValue";
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this Flag to JSON.
+                 * @function toJSON
+                 * @memberof clutch.featureflag.v1.Flag
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Flag.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Flag;
+            })();
+
+            v1.GetFlagsResponse = (function() {
+
+                /**
+                 * Properties of a GetFlagsResponse.
+                 * @memberof clutch.featureflag.v1
+                 * @interface IGetFlagsResponse
+                 * @property {Object.<string,clutch.featureflag.v1.IFlag>|null} [flags] GetFlagsResponse flags
+                 */
+
+                /**
+                 * Constructs a new GetFlagsResponse.
+                 * @memberof clutch.featureflag.v1
+                 * @classdesc Represents a GetFlagsResponse.
+                 * @implements IGetFlagsResponse
+                 * @constructor
+                 * @param {clutch.featureflag.v1.IGetFlagsResponse=} [properties] Properties to set
+                 */
+                function GetFlagsResponse(properties) {
+                    this.flags = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetFlagsResponse flags.
+                 * @member {Object.<string,clutch.featureflag.v1.IFlag>} flags
+                 * @memberof clutch.featureflag.v1.GetFlagsResponse
+                 * @instance
+                 */
+                GetFlagsResponse.prototype.flags = $util.emptyObject;
+
+                /**
+                 * Verifies a GetFlagsResponse message.
+                 * @function verify
+                 * @memberof clutch.featureflag.v1.GetFlagsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetFlagsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.flags != null && message.hasOwnProperty("flags")) {
+                        if (!$util.isObject(message.flags))
+                            return "flags: object expected";
+                        let key = Object.keys(message.flags);
+                        for (let i = 0; i < key.length; ++i) {
+                            let error = $root.clutch.featureflag.v1.Flag.verify(message.flags[key[i]]);
+                            if (error)
+                                return "flags." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a GetFlagsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.featureflag.v1.GetFlagsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.featureflag.v1.GetFlagsResponse} GetFlagsResponse
+                 */
+                GetFlagsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.featureflag.v1.GetFlagsResponse)
+                        return object;
+                    let message = new $root.clutch.featureflag.v1.GetFlagsResponse();
+                    if (object.flags) {
+                        if (typeof object.flags !== "object")
+                            throw TypeError(".clutch.featureflag.v1.GetFlagsResponse.flags: object expected");
+                        message.flags = {};
+                        for (let keys = Object.keys(object.flags), i = 0; i < keys.length; ++i) {
+                            if (typeof object.flags[keys[i]] !== "object")
+                                throw TypeError(".clutch.featureflag.v1.GetFlagsResponse.flags: object expected");
+                            message.flags[keys[i]] = $root.clutch.featureflag.v1.Flag.fromObject(object.flags[keys[i]]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetFlagsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.featureflag.v1.GetFlagsResponse
+                 * @static
+                 * @param {clutch.featureflag.v1.GetFlagsResponse} message GetFlagsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetFlagsResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults)
+                        object.flags = {};
+                    let keys2;
+                    if (message.flags && (keys2 = Object.keys(message.flags)).length) {
+                        object.flags = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.flags[keys2[j]] = $root.clutch.featureflag.v1.Flag.toObject(message.flags[keys2[j]], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this GetFlagsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.featureflag.v1.GetFlagsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetFlagsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetFlagsResponse;
+            })();
+
+            return v1;
+        })();
+
+        return featureflag;
+    })();
+
     clutch.healthcheck = (function() {
 
         /**
