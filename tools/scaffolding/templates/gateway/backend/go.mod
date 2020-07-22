@@ -6,4 +6,4 @@ require (
     github.com/lyft/clutch/backend v0.0.0
 )
 
-replace github.com/lyft/clutch/backend => ../../../../github.com/lyft/clutch-preview/backend
+replace github.com/lyft/clutch/backend => ../../../../github.com/lyft/clutch/backend
