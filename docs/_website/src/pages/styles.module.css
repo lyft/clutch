@@ -1,0 +1,189 @@
+/* stylelint-disable docusaurus/copyright-header */
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+/* Shared Styling */
+
+.buttons {
+  display: flex;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 70px;
+  min-width: 225px;
+  height: 85px;
+  margin: 2px 8px;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+.button:hover {
+  color: #2D3F50;
+}
+
+.container {
+  margin: 5%;
+  max-width: 75%;
+}
+
+.section {
+  padding: 6% 0px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  /* max-width: 1200px; */
+}
+
+.sectionHeadingDark {
+  color: #2D3F50;
+}
+
+.darkBackground {
+  background: linear-gradient(90deg,#2D3F50 17.71%,black 65%);
+}
+
+.textContainer {
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+}
+
+/* Hero Styling */
+.heroContainer {
+  width: 50%;
+}
+
+.heroSection {
+  padding: 4rem 0;
+  position: relative;
+  overflow: hidden;
+  background-color: #ffffff;
+  background: linear-gradient(3deg,#dceff5 12%,#ffffff 13%);
+  color: #02acbe;
+  /* max-width: 1200px; */
+}
+
+.heroDescription {
+  color: #2D3F50;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+}
+
+.blueBtn {
+  background-color: #02acbe;
+}
+
+.blueBtn:hover {
+  background-color: #048f9e;
+}
+
+.greenBtn {
+  background-color: #00a650;
+}
+
+.greenBtn:hover {
+  background-color: #019448;
+}
+
+.demoBtn {
+  margin: 5% 8px;
+}
+
+/* Features Section */
+.features {
+  padding: 2rem 0 0 0;
+  width: 100%;
+  background: linear-gradient(180deg,#dceff5 1%,#ffffff 20%);
+}
+
+.featureIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.featureAccent {
+  width: 25%;
+  height: 5px;
+  border-color: #02acbe;
+  background-color: #02acbe;
+}
+
+.featureImage {
+  height: 75px;
+  width: 75px;
+}
+
+.featureText {
+  margin: 0px 16%;
+}
+
+/* Demo Styling */
+.demoSection {
+  background: linear-gradient(4deg,transparent 15%,white 16%);
+  padding-top: 0;
+}
+
+.textContainer {
+  padding-top: 2.5%;
+}
+
+/* Responsive */
+@media screen and (max-width: 500px) {
+  /* Shared Styling */
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: fit-content;
+    height: 65px;
+  }
+
+  .darkBackground {
+    margin-bottom: -2px;
+    background: linear-gradient(90deg,#2D3F50 17.71%,black 65%);
+  }  
+  
+  .container {
+    margin: 0%;
+    max-width: 100%
+  }
+  
+  /* Hero Styling */
+  .heroContainer {
+    width: 100%;
+  }
+
+  .heroSection {
+    display: flex;
+    flex-flow: wrap-reverse;
+    justify-content: center;
+    padding-bottom: 25%;
+  }
+
+  /* Demo Styling */
+  .demoSection {
+    background: linear-gradient(2.25deg,transparent 5%,white 6%);
+  }
+
+  .textContainer {
+    width: 100%;
+    padding-top: 10%;
+  }
+
+  .consolidation {
+    display: inline-block;
+    justify-content: center;
+    text-align: center;
+  }
+}

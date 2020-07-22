@@ -1,0 +1,6 @@
+.idea/
+.DS_STORE
+
+build/
+
+backend/cmd/assets/generated_assets.go

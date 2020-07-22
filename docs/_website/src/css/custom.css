@@ -1,0 +1,124 @@
+/* stylelint-disable docusaurus/copyright-header */
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #02acbe;
+  --ifm-color-secondary: #ffffff;
+  --ifm-color-primary-dark: #2D3F50;
+  /* --ifm-color-primary-darker: rgb(31, 165, 136);
+  --ifm-color-primary-darkest: rgb(26, 136, 112);
+  --ifm-color-primary-light: rgb(70, 203, 174);
+  --ifm-color-primary-lighter: rgb(102, 212, 189);
+  --ifm-color-primary-lightest: rgb(146, 224, 208); */
+  --ifm-code-font-size: 95%;
+
+  --ifm-navbar-background-color: #ffffff; 
+
+  --ifm-font-family-base: "Roboto", sans-serif;
+
+  --ifm-font-size-base: 16px;
+}
+
+.admonition a {
+  color: inherit;
+
+}
+
+.admonition {
+  font-size: 0.875rem;
+  border: none;
+}
+
+.admonition-note {
+  color: var(--ifm-font-color-secondary);
+  background-color: rgb(235, 237, 240);
+}
+
+.admonition-note .admonition-icon svg {
+  fill: grey;
+}
+
+.admonition-tip {
+  color: rgb(30, 70, 32);
+  background-color: rgb(237, 247, 237);
+}
+
+.admonition-tip .admonition-icon svg {
+  fill: #4caf50;
+}
+
+.admonition-info {
+  color: rgb(13, 60, 97);
+  background-color: rgb(232, 244, 253);
+}
+
+.admonition-info .admonition-icon svg {
+  fill: #2196f3;
+}
+
+.admonition-caution {
+  color: rgb(102, 60, 0);
+  background-color: rgb(255, 244, 229);
+}
+
+.admonition-caution .admonition-icon svg {
+  fill: #ff9800;
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgb(72, 77, 91);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.navbar__title {
+  font-size: 2em;
+  color: var(--ifm-color-primary);
+}
+
+.hero__title {
+  font-size: 3rem;
+  color: var(--ifm-color-primary);
+}
+
+@media screen and (max-width: 500px) {
+  .hero__title {
+    font-size: 2rem;
+  }
+}
+
+.footer {
+  box-shadow: var(--ifm-navbar-shadow);
+  z-index: var(--ifm-z-index-fixed);
+  background: var(--ifm-color-secondary);
+  padding: 3% 6%;
+}
+
+.footer--dark {
+  background: var(--ifm-color-primary-dark);
+}
+
+/* Edit button customization. If DocItem is swizzled this can be done with a class.*/
+article + div.margin-vert--xl {
+  margin: 3rem 0 0 0 !important;
+  font-size: .8rem;
+}
+
+article + div.margin-vert--xl a {
+  padding: 0.65rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+}
+
+article + div.margin-vert--xl a:hover {
+  border-color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+

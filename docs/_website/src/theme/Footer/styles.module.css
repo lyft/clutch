@@ -1,0 +1,87 @@
+.gradient {
+  background: linear-gradient(360deg,#ffffff 88%, #2D3F50 110%);
+  padding: 3% 6%;
+}
+
+.gradientDark {
+  background: linear-gradient(0deg,#2D3F50 88%, #202c38 110%);
+}
+
+.noGradient {
+  border-top: 1px solid var(--ifm-hr-border-color);
+}
+
+.footerAdditional {
+  white-space: nowrap;
+  font-size: .9rem;
+}
+
+.navbarLogo {
+  height: 50px;
+  margin-bottom: 15px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.logoSubtext {
+  margin-left: -2px;
+  max-height: 0%;
+  font-size: x-small;
+  color: #2D3F50;
+}
+
+.lyftLogo {
+  max-height: 120%;
+  margin-bottom: -11px;
+  margin-left: -8px;
+}
+
+.navbarLink {
+  font-weight: bold;
+  color: #2D3F50;
+}
+
+.navbarHidden {
+  top: calc(var(--ifm-navbar-height) * -1) !important;
+}
+
+.footerLogoLink {
+  opacity: 0.5;
+  transition: opacity 0.15s ease-in-out;
+}
+
+.footerLogoLink:hover {
+  opacity: 1;
+}
+
+.section {
+  padding: 6px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  margin: 0 1.5%;
+  color: #2D3F50;
+  font-size: 23px;
+}
+
+.icon:hover {
+  color: #02acbe;
+}
+
+.copyright {
+  color: #2D3F50
+}
+
+/* Responsive */
+@media only screen and (max-width: 900px) {
+  .container {
+    padding-top: 10%;
+    display: inline-block;
+  }
+}

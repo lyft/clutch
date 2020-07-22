@@ -1,0 +1,32 @@
+
+.cc-container {
+    border: 1px solid var(--ifm-color-emphasis-300);
+    border-radius: var(--ifm-global-radius);
+    display: flex;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    max-width: 40em;
+}
+
+.cc-container:hover {
+    border-color: var(--ifm-color-primary);
+    text-decoration: none;
+}
+
+.cc-icon {
+    color: var(--ifm-color-primary);
+    font-size: 3rem;
+    line-height: 3rem;
+}
+
+.cc-content {
+    margin-left: 1rem;
+    margin-top: auto;
+    margin-bottom: auto;
+    vertical-align: middle;
+}
+
+.cc-content p {
+    color: var(--ifm-font-color-base);
+    margin: 0;
+}

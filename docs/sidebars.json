@@ -1,0 +1,49 @@
+{
+  "docs": [
+    {
+      "type": "category",
+      "label": "About",
+      "items": [
+        "about/what-is-clutch",
+        "about/roadmap",
+        "about/architecture",
+        "about/lyft-case-study",
+        "about/comparison"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Getting Started",
+      "items": [
+        "getting-started/build-guides",
+        "getting-started/docker",
+        "getting-started/local-build",
+        "getting-started/mock-gateway",
+        "getting-started/deployment"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Development",
+      "items": [
+        "development/guide",
+        "development/custom-gateway",
+        "development/feature",
+        "development/api",
+        "development/frontend",
+        "development/backend"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Advanced Features",
+      "items": [
+        "advanced/auth",
+        "advanced/security-auditing"
+      ]
+    },
+    "configuration",
+    "components",
+    "community"
+  ]
+}
