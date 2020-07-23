@@ -2,7 +2,6 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import {
   Button,
-  CheckboxPanel,
   client,
   Confirmation,
   MetadataTable,
@@ -14,9 +13,6 @@ import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import { MenuItem, Select } from "@material-ui/core";
 import * as yup from "yup";
 
-const REPOSITORY_OPTIONS = {
-  // Fill in later, use config to override
-};
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
   description: yup.string().required("Description is required"),
@@ -83,32 +79,6 @@ const RepositoryDetails = () => {
   );
 };
 
-const RepositorySettings = ({ options = REPOSITORY_OPTIONS }) => {
-  const { onSubmit } = useWizardContext();
-  const extraOptionsData = useDataLayout("extraOptionsData");
-
-  return (
-    <WizardStep>
-      <TextField
-        placeholder="Teams"
-        onChange={e => extraOptionsData.updateData("teams", e.target.value)}
-        onReturn={onSubmit}
-      />
-      <CheckboxPanel
-        header="Options"
-        options={options}
-        onChange={(option, checked) =>
-          extraOptionsData.updateData("applicationsOptions", {
-            ...extraOptionsData.value?.extraOptionsData,
-            [option]: checked,
-          })
-        }
-      />
-      <Button text="Create Repository" onClick={onSubmit} />
-    </WizardStep>
-  );
-};
-
 const Confirm = () => {
   const repoData = useDataLayout("repoData");
   const instance = repoData.displayValue();
@@ -121,13 +91,8 @@ const Confirm = () => {
   );
 };
 
-const CreateRepository = ({ heading, options }) => {
-  const defaultOptions = {};
-  Object.values(REPOSITORY_OPTIONS).forEach(option => {
-    defaultOptions[option] = true;
-  });
+const CreateRepository = ({ heading }) => {
   const dataLayout = {
-    extraOptionsData: {},
     resourceData: {},
     repoData: {
       deps: ["resourceData"],
@@ -145,8 +110,7 @@ const CreateRepository = ({ heading, options }) => {
 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
-      <RepositoryDetails name="Repository Details" options={options} />
-      <RepositorySettings name="Repository Settings" options={options} />
+      <RepositoryDetails name="Repository Details" />
       <Confirm name="Confirmation" />
     </Wizard>
   );

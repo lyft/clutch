@@ -342,6 +342,7 @@ The module and service must be in the component list at compile time in order fo
 package main
 
 import (
+    "github.com/lyft/clutch/backend/cmd/assets"
     "github.com/lyft/clutch/backend/gateway"
     // highlight-start
     amiibomod "github.com/lyft/clutch/backend/module/amiibo"
@@ -357,7 +358,7 @@ func main() {
     components.Services[amiiboservice.Name] = amiiboservice.New
     // highlight-end
 
-	gateway.Run(flags, components)
+	gateway.Run(flags, components, assets.VirtualFS)
 }
 ```
 

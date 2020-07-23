@@ -31,19 +31,25 @@ const InstanceDetails: React.FC<WizardChild> = () => {
   const resourceData = useDataLayout("resourceData");
   const instance = resourceData.displayValue();
 
+  const data = [
+    { name: "Instance ID", value: instance.instanceId },
+    { name: "Region", value: instance.region },
+    { name: "State", value: instance.state },
+    { name: "Instance Type", value: instance.instanceType },
+    { name: "Public IP Address", value: instance.publicIpAddress },
+    { name: "Private IP Address", value: instance.privateIpAddress },
+    { name: "Availability Zone", value: instance.availabilityZone },
+  ];
+
+  if (instance.tags) {
+    Object.keys(instance.tags).forEach(key => {
+      data.push({ name: key, value: instance.tags[key] });
+    });
+  }
+
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
-      <MetadataTable
-        data={[
-          { name: "Instance ID", value: instance.instanceId },
-          { name: "Region", value: instance.region },
-          { name: "State", value: instance.state },
-          { name: "Instance Type", value: instance.instanceType },
-          { name: "Public IP Address", value: instance.publicIpAddress },
-          { name: "Private IP Address", value: instance.privateIpAddress },
-          { name: "Availability Zone", value: instance.availabilityZone },
-        ]}
-      />
+      <MetadataTable data={data} />
       <ButtonGroup
         buttons={[
           {
