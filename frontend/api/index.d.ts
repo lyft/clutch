@@ -6346,6 +6346,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public resizeHPA(request: clutch.k8s.v1.IResizeHPARequest): Promise<clutch.k8s.v1.ResizeHPAResponse>;
+
+                /**
+                 * Calls UpdateDeployment.
+                 * @param request UpdateDeploymentRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and UpdateDeploymentResponse
+                 */
+                public updateDeployment(request: clutch.k8s.v1.IUpdateDeploymentRequest, callback: clutch.k8s.v1.K8sAPI.UpdateDeploymentCallback): void;
+
+                /**
+                 * Calls UpdateDeployment.
+                 * @param request UpdateDeploymentRequest message or plain object
+                 * @returns Promise
+                 */
+                public updateDeployment(request: clutch.k8s.v1.IUpdateDeploymentRequest): Promise<clutch.k8s.v1.UpdateDeploymentResponse>;
             }
 
             namespace K8sAPI {
@@ -6370,6 +6384,13 @@ export namespace clutch {
                  * @param [response] ResizeHPAResponse
                  */
                 type ResizeHPACallback = (error: (Error|null), response?: clutch.k8s.v1.ResizeHPAResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateDeployment}.
+                 * @param error Error, if any
+                 * @param [response] UpdateDeploymentResponse
+                 */
+                type UpdateDeploymentCallback = (error: (Error|null), response?: clutch.k8s.v1.UpdateDeploymentResponse) => void;
             }
 
             /** Properties of a DescribePodRequest. */
@@ -7154,6 +7175,198 @@ export namespace clutch {
 
                 /**
                  * Converts this ResizeHPAResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Deployment. */
+            interface IDeployment {
+
+                /** Deployment cluster */
+                cluster?: (string|null);
+
+                /** Deployment namespace */
+                namespace?: (string|null);
+
+                /** Deployment name */
+                name?: (string|null);
+
+                /** Deployment labels */
+                labels?: ({ [k: string]: string }|null);
+
+                /** Deployment annotations */
+                annotations?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a Deployment. */
+            class Deployment implements IDeployment {
+
+                /**
+                 * Constructs a new Deployment.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeployment);
+
+                /** Deployment cluster. */
+                public cluster: string;
+
+                /** Deployment namespace. */
+                public namespace: string;
+
+                /** Deployment name. */
+                public name: string;
+
+                /** Deployment labels. */
+                public labels: { [k: string]: string };
+
+                /** Deployment annotations. */
+                public annotations: { [k: string]: string };
+
+                /**
+                 * Verifies a Deployment message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Deployment message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Deployment
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment;
+
+                /**
+                 * Creates a plain object from a Deployment message. Also converts values to other types if specified.
+                 * @param message Deployment
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.Deployment, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Deployment to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an UpdateDeploymentRequest. */
+            interface IUpdateDeploymentRequest {
+
+                /** UpdateDeploymentRequest clientset */
+                clientset?: (string|null);
+
+                /** UpdateDeploymentRequest cluster */
+                cluster?: (string|null);
+
+                /** UpdateDeploymentRequest namespace */
+                namespace?: (string|null);
+
+                /** UpdateDeploymentRequest name */
+                name?: (string|null);
+
+                /** UpdateDeploymentRequest labels */
+                labels?: ({ [k: string]: string }|null);
+
+                /** UpdateDeploymentRequest annotations */
+                annotations?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents an UpdateDeploymentRequest. */
+            class UpdateDeploymentRequest implements IUpdateDeploymentRequest {
+
+                /**
+                 * Constructs a new UpdateDeploymentRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IUpdateDeploymentRequest);
+
+                /** UpdateDeploymentRequest clientset. */
+                public clientset: string;
+
+                /** UpdateDeploymentRequest cluster. */
+                public cluster: string;
+
+                /** UpdateDeploymentRequest namespace. */
+                public namespace: string;
+
+                /** UpdateDeploymentRequest name. */
+                public name: string;
+
+                /** UpdateDeploymentRequest labels. */
+                public labels: { [k: string]: string };
+
+                /** UpdateDeploymentRequest annotations. */
+                public annotations: { [k: string]: string };
+
+                /**
+                 * Verifies an UpdateDeploymentRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an UpdateDeploymentRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns UpdateDeploymentRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateDeploymentRequest;
+
+                /**
+                 * Creates a plain object from an UpdateDeploymentRequest message. Also converts values to other types if specified.
+                 * @param message UpdateDeploymentRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.UpdateDeploymentRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this UpdateDeploymentRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an UpdateDeploymentResponse. */
+            interface IUpdateDeploymentResponse {
+            }
+
+            /** Represents an UpdateDeploymentResponse. */
+            class UpdateDeploymentResponse implements IUpdateDeploymentResponse {
+
+                /**
+                 * Constructs a new UpdateDeploymentResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IUpdateDeploymentResponse);
+
+                /**
+                 * Verifies an UpdateDeploymentResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an UpdateDeploymentResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns UpdateDeploymentResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateDeploymentResponse;
+
+                /**
+                 * Creates a plain object from an UpdateDeploymentResponse message. Also converts values to other types if specified.
+                 * @param message UpdateDeploymentResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.UpdateDeploymentResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this UpdateDeploymentResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -8323,6 +8536,66 @@ export namespace clutch {
 
                     /**
                      * Converts this HPAName to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a Deployment. */
+                interface IDeployment {
+
+                    /** Deployment name */
+                    name?: (string|null);
+
+                    /** Deployment clientset */
+                    clientset?: (string|null);
+
+                    /** Deployment namespace */
+                    namespace?: (string|null);
+                }
+
+                /** Represents a Deployment. */
+                class Deployment implements IDeployment {
+
+                    /**
+                     * Constructs a new Deployment.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.k8s.v1.IDeployment);
+
+                    /** Deployment name. */
+                    public name: string;
+
+                    /** Deployment clientset. */
+                    public clientset: string;
+
+                    /** Deployment namespace. */
+                    public namespace: string;
+
+                    /**
+                     * Verifies a Deployment message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Deployment message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Deployment
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.k8s.v1.Deployment;
+
+                    /**
+                     * Creates a plain object from a Deployment message. Also converts values to other types if specified.
+                     * @param message Deployment
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.k8s.v1.Deployment, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Deployment to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
