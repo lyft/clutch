@@ -17,8 +17,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
-
-	"github.com/lyft/clutch/backend/cmd/assets"
 )
 
 var apiPattern = regexp.MustCompile(`^/v\d+/`)
@@ -109,7 +107,7 @@ func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Ma
 	runtime.DefaultHTTPProtoErrorHandler(ctx, mux, m, w, req, err)
 }
 
-func New(unaryInterceptors []grpc.UnaryServerInterceptor) *Mux {
+func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem) *Mux {
 	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(unaryInterceptors...))
 	jsonGateway := runtime.NewServeMux(
 		runtime.WithForwardResponseOption(customResponseForwarder),
@@ -128,8 +126,8 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor) *Mux {
 	httpMux := http.NewServeMux()
 	httpMux.Handle("/", &assetHandler{
 		next:       jsonGateway,
-		fileSystem: assets.VirtualFS,
-		fileServer: http.FileServer(assets.VirtualFS),
+		fileSystem: assets,
+		fileServer: http.FileServer(assets),
 	})
 
 	mux := &Mux{

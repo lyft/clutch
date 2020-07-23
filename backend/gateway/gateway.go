@@ -35,7 +35,7 @@ type ComponentFactory struct {
 	Modules    module.Factory
 }
 
-func Run(f *Flags, cf *ComponentFactory) {
+func Run(f *Flags, cf *ComponentFactory, assets http.FileSystem) {
 	// Use a temporary logger to parse the configuration and output.
 	tmpLogger := newTmpLogger().With(zap.String("filename", f.ConfigPath))
 
@@ -52,10 +52,10 @@ func Run(f *Flags, cf *ComponentFactory) {
 		os.Exit(0)
 	}
 
-	RunWithConfig(&cfg, cf)
+	RunWithConfig(&cfg, cf, assets)
 }
 
-func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory) {
+func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory, assets http.FileSystem) {
 	// Init the logger.
 	logger, err := newLogger(cfg.Gateway.Logger)
 	if err != nil {
@@ -174,7 +174,7 @@ func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory) {
 	}
 
 	// Instantiate and register modules listed in the configuration.
-	rpcMux := mux.New(interceptors)
+	rpcMux := mux.New(interceptors, assets)
 	ctx := context.TODO()
 
 	// Create a client connection for the registrar to make grpc-gateway's handlers available.
