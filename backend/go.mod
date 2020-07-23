@@ -34,7 +34,7 @@ require (
 	github.com/shurcooL/httpfs v0.0.0-20190707220628-8d4bc4ba7749 // indirect
 	github.com/shurcooL/vfsgen v0.0.0-20181202132449-6a9ea43bcacd
 	github.com/slack-go/slack v0.6.5
-	github.com/stretchr/testify v1.5.1
+	github.com/stretchr/testify v1.6.1
 	github.com/uber-go/tally v3.3.15+incompatible
 	go.uber.org/zap v1.14.1
 	golang.org/x/net v0.0.0-20200602114024-627f9648deb9
