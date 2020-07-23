@@ -15,7 +15,7 @@ Familiarizing yourself with concepts in the [Architecture Reference](/docs/about
 ### Basic
 
 <LinkCard title="Custom Gateway" description="Create a customized instance of Clutch in your own repository with private or custom extensions." to="/docs/development/custom-gateway" />
-<LinkCard title="Feature Development" description="See how to take a feature from idea to implementation across the frontend and backend." to="/docs/development/feature-development" />
+<LinkCard title="Feature Development" description="See how to take a feature from idea to implementation across the frontend and backend." to="/docs/development/feature" />
 
 ### In-depth
 
