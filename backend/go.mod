@@ -19,7 +19,7 @@ require (
 	github.com/gobwas/glob v0.2.3
 	github.com/golang/protobuf v1.3.5
 	github.com/google/go-cmp v0.4.0 // indirect
-	github.com/google/go-github/v32 v32.0.0
+	github.com/google/go-github/v32 v32.1.0
 	github.com/google/uuid v1.1.1
 	github.com/googleapis/gnostic v0.4.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
