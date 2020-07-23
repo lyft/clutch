@@ -18,8 +18,7 @@ require (
 	github.com/go-swagger/go-swagger v0.23.0
 	github.com/gobwas/glob v0.2.3
 	github.com/golang/protobuf v1.3.5
-	github.com/google/go-cmp v0.4.0 // indirect
-	github.com/google/go-github/v32 v32.1.0
+	github.com/google/go-github/v32 v32.0.0
 	github.com/google/uuid v1.1.1
 	github.com/googleapis/gnostic v0.4.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
@@ -34,15 +33,15 @@ require (
 	github.com/shurcooL/httpfs v0.0.0-20190707220628-8d4bc4ba7749 // indirect
 	github.com/shurcooL/vfsgen v0.0.0-20181202132449-6a9ea43bcacd
 	github.com/slack-go/slack v0.6.5
-	github.com/stretchr/testify v1.5.1
+	github.com/stretchr/testify v1.6.1
 	github.com/uber-go/tally v3.3.15+incompatible
-	go.uber.org/zap v1.14.1
+	go.uber.org/zap v1.15.0
 	golang.org/x/net v0.0.0-20200602114024-627f9648deb9
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
 	golang.org/x/tools v0.0.0-20200402223321-bcf690261a44 // indirect
 	google.golang.org/genproto v0.0.0-20200409111301-baae70f3302d
-	google.golang.org/grpc v1.28.1
+	google.golang.org/grpc v1.30.0
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 	k8s.io/api v0.17.0
 	k8s.io/apimachinery v0.17.0
