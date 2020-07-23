@@ -194,7 +194,7 @@ install_protobufjs() {
   if [[ ! -f "${PROTOBUFJS_DIR}/node_modules/.bin/pbjs" ]]; then
     echo "info: Downloading protobufjs to build environment"
     mkdir -p "${PROTOBUFJS_DIR}"
-    yarn --cwd "${PROTOBUFJS_DIR}" add --frozen-lockfile "${PROTOBUFJS_FORK}#${PROTOBUFJS_SHA}"
+    "${BUILD_ROOT}/bin/yarn.sh" --cwd "${PROTOBUFJS_DIR}" add --frozen-lockfile "${PROTOBUFJS_FORK}#${PROTOBUFJS_SHA}"
   fi
 }
 
