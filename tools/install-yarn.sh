@@ -18,9 +18,9 @@ if [[ ! -f "${DEST_FILE}" ]]; then
     "https://github.com/yarnpkg/yarn/releases/download/v${YARN_VERSION}/yarn-${YARN_VERSION}.js"
 fi
 
-# Install a wrapper script in build/ that executes yarn.
-WRAPPER_SCRIPT="#!/bin/bash\nnode \"${DEST_FILE}\" \"\$@\""
-if [[ ! -f "${WRAPPER_DEST}" ]]; then
-  printf "%b\n" "${WRAPPER_SCRIPT}" > "${WRAPPER_DEST}"
+# Install a wrapper script in build/ that executes yarn if it doesn't exist already.
+WRAPPER_SCRIPT="#!/bin/bash\nnode \"${DEST_FILE}\" \"\$@\"\n"
+if [[ ! -f "${WRAPPER_DEST}" || $(< "${WRAPPER_DEST}") != $(printf "%b" "${WRAPPER_SCRIPT}") ]]; then
+  printf "%b" "${WRAPPER_SCRIPT}" > "${WRAPPER_DEST}"
   chmod +x "${WRAPPER_DEST}"
 fi
