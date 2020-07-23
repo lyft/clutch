@@ -95,7 +95,7 @@ const useDataLayoutManager = (layouts: ManagerLayout): DataManager => {
         transformResponse: layout.transformResponse || defaultTransform,
         transformError: layout.transformError || defaultErrorTransform,
         deps: layout?.deps || [],
-        cache: layout.cache ?? true,
+        cache: layout.cache ?? false,
       };
     }
   });
