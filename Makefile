@@ -8,15 +8,17 @@ DOCS_DEPLOY_GIT_USER ?= git
 
 VERSION := 0.0.0
 
+YARN:=./build/bin/yarn.sh
+
 .PHONY: help # Print this help message.
  help:
 	@grep -E '^\.PHONY: [a-zA-Z_-]+ .*?# .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = "(: |#)"}; {printf "%-30s %s\n", $$2, $$3}'
 
 .PHONY: all # Generate API, Frontend, and backend assets.
-all: yarn-ensure api frontend backend-with-assets
+all: api frontend backend-with-assets
 
 .PHONY: api # Generate API assets.
-api:
+api: yarn-ensure
 	tools/compile-protos.sh
 
 .PHONY: api-lint # Lint the generated API assets.
@@ -74,27 +76,27 @@ backend-config-validation:
 
 .PHONY: frontend # Build production frontend assets.
 frontend: yarn-ensure
-	cd frontend && yarn install --frozen-lockfile && yarn build
+	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend build
 
 .PHONY: frontend-dev-build # Build development frontend assets.
 frontend-dev-build: yarn-ensure
-	cd frontend && yarn install --frozen-lockfile && yarn build:dev
+	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend build:dev
 
 .PHONY: frontend-dev # Start the frontend in development mode.
 frontend-dev: yarn-ensure
-	cd frontend && yarn install --frozen-lockfile && yarn start
+	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend start
 
 .PHONY: frontend-lint # Lint the frontend code.
 frontend-lint: yarn-ensure
-	cd frontend && yarn lint
+	$(YARN) --cwd frontend lint
 
 .PHONY: frontend-lint-fix # Lint and fix the frontend code.
 frontend-lint-fix: yarn-ensure
-	cd frontend && yarn lint:fix
+	$(YARN) --cwd frontend lint:fix
 
 .PHONY: frontend-test # Run unit tests for the frontend code.
 frontend-test: yarn-ensure
-	cd frontend && yarn test
+	$(YARN) --cwd frontend test
 
 .PHONY: frontend-e2e # Run end-to-end tests for the frontend code.
 frontend-e2e: yarn-ensure
@@ -102,19 +104,15 @@ frontend-e2e: yarn-ensure
 
 .PHONY: frontend-verify # Verify frontend packages are sorted.
 frontend-verify: yarn-ensure
-	cd frontend && yarn lint:packages
+	$(YARN) --cwd frontend lint:packages
 
 .PHONY: docs # Build all doc assets.
 docs: docs-generate
-	cd docs/_website && yarn install --frozen-lockfile && yarn build
-
-.PHONY: docs-deploy # Deploy the documentation.
-docs-deploy: docs
-	cd docs/_website && GIT_USER=$(DOCS_DEPLOY_GIT_USER) USE_SSH=$(DOCS_DEPLOY_USE_SSH) yarn deploy
+	$(YARN) --cwd docs/_website install --frozen-lockfile && $(YARN) --cwd docs/_website build
 
 .PHONY: docs-dev # Start the docs server in development mode.
 docs-dev: docs-generate
-	cd docs/_website && yarn install --frozen-lockfile && BROWSER=none yarn start
+	$(YARN) --cwd docs/_website install --frozen-lockfile && BROWSER=none $(YARN) --cwd docs/_website start
 
 .PHONY: docs-generate # Generate the documentation content.
 docs-generate:
