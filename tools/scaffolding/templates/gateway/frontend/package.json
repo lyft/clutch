@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "lerna": "^3.20.0",
-    "@clutch-sh/ec2": "^0.1.0",
+    "@clutch-sh/ec2": "^0.0.0",
     "@{{ .RepoName }}/echo": "^0.1.0",
     "@clutch-sh/core": "^0.0.0",
     "react": "^16.8",
