@@ -107,11 +107,11 @@ frontend-verify: yarn-ensure
 	$(YARN) --cwd frontend lint:packages
 
 .PHONY: docs # Build all doc assets.
-docs: docs-generate
+docs: docs-generate yarn-ensure
 	$(YARN) --cwd docs/_website install --frozen-lockfile && $(YARN) --cwd docs/_website build
 
 .PHONY: docs-dev # Start the docs server in development mode.
-docs-dev: docs-generate
+docs-dev: docs-generate yarn-ensure
 	$(YARN) --cwd docs/_website install --frozen-lockfile && BROWSER=none $(YARN) --cwd docs/_website start
 
 .PHONY: docs-generate # Generate the documentation content.
