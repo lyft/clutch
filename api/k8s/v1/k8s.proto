@@ -34,6 +34,14 @@ service K8sAPI {
     };
     option (clutch.api.v1.action).type = UPDATE;
   }
+
+  rpc UpdateDeployment(UpdateDeploymentRequest) returns (UpdateDeploymentResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/updateDeployment"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = UPDATE;
+  }
 }
 
 message DescribePodRequest {
@@ -165,4 +173,36 @@ message ResizeHPARequest {
 }
 
 message ResizeHPAResponse {
+}
+
+message Deployment {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Deployment",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string cluster = 1;
+  string namespace = 2;
+  string name = 3;
+
+  map<string, string> labels = 4;
+  map<string, string> annotations = 5;
+}
+
+message UpdateDeploymentRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Deployment",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+
+  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+  map<string, string> annotations = 6 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+}
+
+message UpdateDeploymentResponse {
 }
