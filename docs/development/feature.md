@@ -357,7 +357,7 @@ func main() {
     components.Services[amiiboservice.Name] = amiiboservice.New
     // highlight-end
 
-	gateway.Run(flags, components)
+	gateway.Run(flags, components, assets.VirtualFS)
 }
 ```
 
