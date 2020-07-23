@@ -4,6 +4,7 @@ YARN_VERSION="1.22.4"
 ROOT_DEST_DIR="$PWD/frontend"
 DEST_DIR="$ROOT_DEST_DIR/.yarn/releases"
 DEST_FILE="${DEST_DIR}/yarn-${YARN_VERSION}.js"
+WRAPPER_DEST="${PWD}/build/bin/yarn.sh"
 
 if [[ ! -d "${ROOT_DEST_DIR}" ]]; then
   echo "Could not find frontend directory. Ensure you're running this script from the root of your project."
@@ -15,4 +16,11 @@ if [[ ! -f "${DEST_FILE}" ]]; then
   mkdir -p "${DEST_DIR}"
   curl -sSL -o "${DEST_FILE}" \
     "https://github.com/yarnpkg/yarn/releases/download/v${YARN_VERSION}/yarn-${YARN_VERSION}.js"
+fi
+
+# Install a wrapper script in build/ that executes yarn.
+WRAPPER_SCRIPT="#!/bin/bash\nnode \"${DEST_FILE}\" \"\$@\""
+if [[ ! -f "${WRAPPER_DEST}" ]]; then
+  printf "%b\n" "${WRAPPER_SCRIPT}" > "${WRAPPER_DEST}"
+  chmod +x "${WRAPPER_DEST}"
 fi

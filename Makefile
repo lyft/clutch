@@ -13,7 +13,7 @@ VERSION := 0.0.0
 	@grep -E '^\.PHONY: [a-zA-Z_-]+ .*?# .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = "(: |#)"}; {printf "%-30s %s\n", $$2, $$3}'
 
 .PHONY: all # Generate API, Frontend, and backend assets.
-all: api frontend backend-with-assets
+all: yarn-ensure api frontend backend-with-assets
 
 .PHONY: api # Generate API assets.
 api:
