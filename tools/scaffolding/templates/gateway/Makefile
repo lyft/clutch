@@ -10,7 +10,7 @@ MY_ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 all: api frontend backend-with-assets
 
 .PHONY: api
-api:
+api: yarn-ensure
 	$(PRIMARY_MODULE_DIR)/../tools/compile-protos.sh $(MY_ROOT_DIR)
 
 .PHONY: backend
@@ -30,5 +30,9 @@ backend-with-assets: frontend
 	cd backend && go run cmd/assets/generate.go ../frontend/packages/app/build && go build -tags withAssets -o ../build/clutch -ldflags="-X main.version=$(VERSION)"
 
 .PHONY: frontend
-frontend:
+frontend: yarn-ensure
 	$(PRIMARY_MODULE_DIR)/../tools/frontend-gateway-linker.sh $(MY_ROOT_DIR) build
+
+.PHONY: yarn-ensure
+yarn-ensure:
+	@$(PRIMARY_MODULE_DIR)/../tools/install-yarn.sh
