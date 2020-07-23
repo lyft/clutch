@@ -19,7 +19,7 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "prepublishOnly": "yarn run build",
-    "publishAlpha": "../../../tools/publish-frontend.sh",
+    "publishAlpha": "../../../tools/publish-frontend.sh data-layout",
     "test": "jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"

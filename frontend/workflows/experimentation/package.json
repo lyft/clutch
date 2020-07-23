@@ -12,7 +12,7 @@
     "compile:watch": "yarn run compile --watch",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
-    "publishAlpha": "../../../tools/publish-frontend.sh",
+    "publishAlpha": "../../../tools/publish-frontend.sh experimentation",
     "test": "jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch",
