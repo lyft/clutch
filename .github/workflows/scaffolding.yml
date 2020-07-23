@@ -30,3 +30,6 @@ jobs:
       - name: scaffold new app
         run: yes | make scaffold-gateway
         working-directory: ${{ env.PACKAGEPATH }}
+      - name: build scaffolding
+        run: make
+        working-directory: ${{ github.workspace }}/go/src/github.com/runner/clutch-custom-gateway

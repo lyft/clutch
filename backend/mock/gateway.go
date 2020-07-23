@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/lyft/clutch/backend/cmd/assets"
 	"github.com/lyft/clutch/backend/gateway"
 	"github.com/lyft/clutch/backend/mock/service/auditmock"
 	"github.com/lyft/clutch/backend/mock/service/awsmock"
@@ -31,5 +32,5 @@ func main() {
 	// Replace core services with any available mocks.
 	cf.Services = MockServiceFactory
 
-	gateway.Run(gateway.ParseFlags(), cf)
+	gateway.Run(gateway.ParseFlags(), cf, assets.VirtualFS)
 }

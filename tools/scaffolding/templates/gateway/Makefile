@@ -27,7 +27,7 @@ backend-test:
 
 .PHONY: backend-with-assets
 backend-with-assets: frontend
-	cd backend && go run cmd/assets/generate.go ../frontend/packages/app/build && go build -tags withAssets -o ../build/clutch -ldflags="-X main.version=$(VERSION)"
+	cd backend && go run $(PRIMARY_MODULE_DIR)/cmd/assets/generate.go ../frontend/build && go build -tags withAssets -o ../build/clutch -ldflags="-X main.version=$(VERSION)"
 
 .PHONY: frontend
 frontend: yarn-ensure
