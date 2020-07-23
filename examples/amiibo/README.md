@@ -1,7 +1,7 @@
 # Amiibo Example
 
 This is an example of the final output from walking through the
-[Feature Development](/docs/development/feature-development) guide.
+[Feature Development](https://clutch.sh/docs/development/feature) guide.
 
 Included in this example are:
 - API changes within [api/](./api)
