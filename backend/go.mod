@@ -36,7 +36,7 @@ require (
 	github.com/slack-go/slack v0.6.5
 	github.com/stretchr/testify v1.5.1
 	github.com/uber-go/tally v3.3.15+incompatible
-	go.uber.org/zap v1.14.1
+	go.uber.org/zap v1.15.0
 	golang.org/x/net v0.0.0-20200602114024-627f9648deb9
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
