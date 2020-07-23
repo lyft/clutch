@@ -19,3 +19,8 @@ updates:
     directory: "/docs/_website/"
     schedule:
       interval: "daily"
+
+  - package-ecosystem: "gomod"
+    directory: "/docs/_website/generator/"
+    schedule:
+      interval: "daily"
