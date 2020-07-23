@@ -60,6 +60,10 @@ type Service interface {
 	// HPA management functions.
 	DescribeHPA(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.HPA, error)
 	ResizeHPA(ctx context.Context, clientset, cluster, namespace, name string, sizing *k8sapiv1.ResizeHPARequest_Sizing) error
+
+	// Deployment management functions.
+	DescribeDeployment(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Deployment, error)
+	UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, labels map[string]string, annotations map[string]string) error
 }
 
 type svc struct {
