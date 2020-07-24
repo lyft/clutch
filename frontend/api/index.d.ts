@@ -10617,6 +10617,9 @@ export namespace validate {
 
         /** StringRules wellKnownRegex */
         wellKnownRegex?: (validate.KnownRegex|null);
+
+        /** StringRules strict */
+        strict?: (boolean|null);
     }
 
     /** Represents a StringRules. */
@@ -10699,6 +10702,9 @@ export namespace validate {
 
         /** StringRules wellKnownRegex. */
         public wellKnownRegex: validate.KnownRegex;
+
+        /** StringRules strict. */
+        public strict: boolean;
 
         /** StringRules wellKnown. */
         public wellKnown?: ("email"|"hostname"|"ip"|"ipv4"|"ipv6"|"uri"|"uriRef"|"address"|"uuid"|"wellKnownRegex");
