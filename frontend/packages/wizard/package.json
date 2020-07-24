@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/wizard",
-  "version": "0.0.0",
+  "version": "0.0.0-beta",
   "description": "Wizard Components to drive frontend workflows",
   "homepage": "https://clutch.sh/docs/development/frontend#clutch-shwizard",
   "license": "Apache-2.0",

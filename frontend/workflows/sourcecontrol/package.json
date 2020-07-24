@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/sourcecontrol",
-  "version": "0.0.0",
+  "version": "0.0.0-beta",
   "description": "Clutch Source Control Workflows",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
