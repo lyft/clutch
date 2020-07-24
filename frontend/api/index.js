@@ -26488,6 +26488,7 @@ export const validate = $root.validate = (() => {
          * @property {boolean|null} [address] StringRules address
          * @property {boolean|null} [uuid] StringRules uuid
          * @property {validate.KnownRegex|null} [wellKnownRegex] StringRules wellKnownRegex
+         * @property {boolean|null} [strict] StringRules strict
          */
 
         /**
@@ -26699,6 +26700,14 @@ export const validate = $root.validate = (() => {
          */
         StringRules.prototype.wellKnownRegex = 0;
 
+        /**
+         * StringRules strict.
+         * @member {boolean} strict
+         * @memberof validate.StringRules
+         * @instance
+         */
+        StringRules.prototype.strict = true;
+
         // OneOf field names bound to virtual getters and setters
         let $oneOfFields;
 
@@ -26849,6 +26858,9 @@ export const validate = $root.validate = (() => {
                     break;
                 }
             }
+            if (message.strict != null && message.hasOwnProperty("strict"))
+                if (typeof message.strict !== "boolean")
+                    return "strict: boolean expected";
             return null;
         };
 
@@ -26976,6 +26988,8 @@ export const validate = $root.validate = (() => {
                 message.wellKnownRegex = 2;
                 break;
             }
+            if (object.strict != null)
+                message.strict = Boolean(object.strict);
             return message;
         };
 
@@ -27033,6 +27047,7 @@ export const validate = $root.validate = (() => {
                 } else
                     object.lenBytes = options.longs === String ? "0" : 0;
                 object.notContains = "";
+                object.strict = true;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 object["const"] = message["const"];
@@ -27136,6 +27151,8 @@ export const validate = $root.validate = (() => {
                 if (options.oneofs)
                     object.wellKnown = "wellKnownRegex";
             }
+            if (message.strict != null && message.hasOwnProperty("strict"))
+                object.strict = message.strict;
             return object;
         };
 
