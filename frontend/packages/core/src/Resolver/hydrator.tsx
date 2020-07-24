@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 
-import type { clutch } from "../../../../api";
+import type { clutch } from "@clutch-sh/api";
 import TextField from "../Input/text-field";
 
 const maxWidth = "500px";
