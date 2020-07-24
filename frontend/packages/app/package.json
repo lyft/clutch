@@ -18,12 +18,12 @@
     "test:e2e": "cypress run"
   },
   "dependencies": {
-    "@clutch-sh/core": "^0.0.0",
+    "@clutch-sh/core": "^0.0.0-beta",
     "react": "^16.8",
     "react-dom": "^16.8.0"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^0.0.0"
+    "@clutch-sh/tools": "^0.0.0-beta"
   },
   "proxy": "http://localhost:8080"
 }
