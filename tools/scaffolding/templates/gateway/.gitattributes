@@ -1,5 +1,5 @@
 go.sum linguist-generated
 yarn.lock linguist-generated
 
-frontend/src/api/*.js linguist-generated
-frontend/src/api/*.ts linguist-generated
+frontend/api/src/*.js linguist-generated
+frontend/api/src/*.ts linguist-generated
