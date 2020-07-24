@@ -38,7 +38,7 @@ func ProtoForDeployment(deployment *appsv1.Deployment) *k8sapiv1.Deployment {
 	}
 }
 
-func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, labels map[string]string, annotations map[string]string) error {
+func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error {
 	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
 	if err != nil {
 		return err
@@ -51,7 +51,7 @@ func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespac
 	}
 
 	newDeployment := oldDeployment.DeepCopy()
-	mergeLabelsAndAnnotations(newDeployment, labels, annotations)
+	mergeLabelsAndAnnotations(newDeployment, fields)
 
 	patchBytes, err := generateDeploymentStrategicPatch(oldDeployment, newDeployment)
 	if err != nil {
@@ -66,13 +66,17 @@ func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespac
 	return nil
 }
 
-func mergeLabelsAndAnnotations(deployment *appsv1.Deployment, labels map[string]string, annotations map[string]string) {
-	for k, v := range labels {
-		deployment.Labels[k] = v
+func mergeLabelsAndAnnotations(deployment *appsv1.Deployment, fields *k8sapiv1.UpdateDeploymentRequest_Fields) {
+	if len(fields.Labels) > 0 {
+		for k, v := range fields.Labels {
+			deployment.Labels[k] = v
+		}
 	}
 
-	for k, v := range annotations {
-		deployment.Annotations[k] = v
+	if len(fields.Annotations) > 0 {
+		for k, v := range fields.Annotations {
+			deployment.Annotations[k] = v
+		}
 	}
 }
 

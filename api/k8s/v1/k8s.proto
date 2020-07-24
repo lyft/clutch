@@ -200,8 +200,12 @@ message UpdateDeploymentRequest {
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
 
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
-  map<string, string> annotations = 6 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+  message Fields {
+    map<string, string> labels = 1 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+    map<string, string> annotations = 2 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+  }
+
+  Fields fields = 5 [ (validate.rules).message = {required : true} ];
 }
 
 message UpdateDeploymentResponse {

@@ -7267,11 +7267,8 @@ export namespace clutch {
                 /** UpdateDeploymentRequest name */
                 name?: (string|null);
 
-                /** UpdateDeploymentRequest labels */
-                labels?: ({ [k: string]: string }|null);
-
-                /** UpdateDeploymentRequest annotations */
-                annotations?: ({ [k: string]: string }|null);
+                /** UpdateDeploymentRequest fields */
+                fields?: (clutch.k8s.v1.UpdateDeploymentRequest.IFields|null);
             }
 
             /** Represents an UpdateDeploymentRequest. */
@@ -7295,11 +7292,8 @@ export namespace clutch {
                 /** UpdateDeploymentRequest name. */
                 public name: string;
 
-                /** UpdateDeploymentRequest labels. */
-                public labels: { [k: string]: string };
-
-                /** UpdateDeploymentRequest annotations. */
-                public annotations: { [k: string]: string };
+                /** UpdateDeploymentRequest fields. */
+                public fields?: (clutch.k8s.v1.UpdateDeploymentRequest.IFields|null);
 
                 /**
                  * Verifies an UpdateDeploymentRequest message.
@@ -7328,6 +7322,63 @@ export namespace clutch {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace UpdateDeploymentRequest {
+
+                /** Properties of a Fields. */
+                interface IFields {
+
+                    /** Fields labels */
+                    labels?: ({ [k: string]: string }|null);
+
+                    /** Fields annotations */
+                    annotations?: ({ [k: string]: string }|null);
+                }
+
+                /** Represents a Fields. */
+                class Fields implements IFields {
+
+                    /**
+                     * Constructs a new Fields.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.k8s.v1.UpdateDeploymentRequest.IFields);
+
+                    /** Fields labels. */
+                    public labels: { [k: string]: string };
+
+                    /** Fields annotations. */
+                    public annotations: { [k: string]: string };
+
+                    /**
+                     * Verifies a Fields message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Fields message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Fields
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateDeploymentRequest.Fields;
+
+                    /**
+                     * Creates a plain object from a Fields message. Also converts values to other types if specified.
+                     * @param message Fields
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.k8s.v1.UpdateDeploymentRequest.Fields, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Fields to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
             }
 
             /** Properties of an UpdateDeploymentResponse. */

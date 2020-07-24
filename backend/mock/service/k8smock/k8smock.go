@@ -91,7 +91,7 @@ func (*svc) DescribeDeployment(ctx context.Context, clientset, cluster, namespac
 	}, nil
 }
 
-func (*svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, labels map[string]string, annotations map[string]string) error {
+func (*svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sv1.UpdateDeploymentRequest_Fields) error {
 	return nil
 }
 

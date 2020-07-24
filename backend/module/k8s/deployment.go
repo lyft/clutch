@@ -7,7 +7,7 @@ import (
 )
 
 func (a *k8sAPI) UpdateDeployment(ctx context.Context, req *k8sapiv1.UpdateDeploymentRequest) (*k8sapiv1.UpdateDeploymentResponse, error) {
-	err := a.k8s.UpdateDeployment(ctx, req.Clientset, req.Cluster, req.Namespace, req.Name, req.Labels, req.Annotations)
+	err := a.k8s.UpdateDeployment(ctx, req.Clientset, req.Cluster, req.Namespace, req.Name, req.Fields)
 	if err != nil {
 		return nil, err
 	}

@@ -63,7 +63,7 @@ type Service interface {
 
 	// Deployment management functions.
 	DescribeDeployment(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Deployment, error)
-	UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, labels map[string]string, annotations map[string]string) error
+	UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error
 }
 
 type svc struct {
