@@ -1,5 +1,5 @@
 module.exports = {
-    "clutch-ec2": {
+    "@clutch-sh/ec2": {
         terminateInstance: {
             trending: true,
             componentProps: {
@@ -13,7 +13,7 @@ module.exports = {
             },
         },
     },
-    "clutch-envoy": {
+    "@clutch-sh/envoy": {
         remoteTriage: {
             trending: true,
             componentProps: {
@@ -27,7 +27,7 @@ module.exports = {
             },
         },
     },
-    "clutch-example": {
+    "@{{ .RepoName }}/echo": {
         echo: {
             trending: true,
         }

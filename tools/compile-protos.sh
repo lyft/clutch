@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+# set -euo pipefail
 
 # https://github.com/protocolbuffers/protobuf/releases
 PROTOC_RELEASE=3.11.4

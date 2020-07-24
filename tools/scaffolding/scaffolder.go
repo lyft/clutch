@@ -269,7 +269,7 @@ func main() {
 	log.Println("Using templates in", templateRoot)
 
 	// Make a tmpdir for output.
-	tmpout, err := ioutil.TempDir(os.TempDir(), "clutch-scaffolding-*")
+	tmpout, err := ioutil.TempDir(os.TempDir(), "clutch-scaffolding-")
 	if err != nil {
 		log.Fatal("could not create temp dir", err)
 	}
