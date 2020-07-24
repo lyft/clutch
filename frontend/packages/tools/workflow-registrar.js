@@ -39,7 +39,7 @@ const discoverWorkflows = () => {
     return childProcess.exec(
       `yarn list --json --depth=0 --pattern '${packagePattern}'`,
       {
-        cwd: ".",
+        cwd: `${process.argv[2]}/..`,
       },
       (err, stdout) => {
         if (err) {
