@@ -886,6 +886,259 @@ var _ interface {
 	ErrorName() string
 } = ResizeHPAResponseValidationError{}
 
+// Validate checks the field values on Deployment with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Deployment) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Cluster
+
+	// no validation rules for Namespace
+
+	// no validation rules for Name
+
+	// no validation rules for Labels
+
+	// no validation rules for Annotations
+
+	return nil
+}
+
+// DeploymentValidationError is the validation error returned by
+// Deployment.Validate if the designated constraints aren't met.
+type DeploymentValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeploymentValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeploymentValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeploymentValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeploymentValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeploymentValidationError) ErrorName() string { return "DeploymentValidationError" }
+
+// Error satisfies the builtin error interface
+func (e DeploymentValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeployment.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeploymentValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeploymentValidationError{}
+
+// Validate checks the field values on UpdateDeploymentRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpdateDeploymentRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return UpdateDeploymentRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return UpdateDeploymentRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return UpdateDeploymentRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetName()) < 1 {
+		return UpdateDeploymentRequestValidationError{
+			field:  "Name",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if m.GetFields() == nil {
+		return UpdateDeploymentRequestValidationError{
+			field:  "Fields",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetFields()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateDeploymentRequestValidationError{
+				field:  "Fields",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// UpdateDeploymentRequestValidationError is the validation error returned by
+// UpdateDeploymentRequest.Validate if the designated constraints aren't met.
+type UpdateDeploymentRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateDeploymentRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateDeploymentRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateDeploymentRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateDeploymentRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateDeploymentRequestValidationError) ErrorName() string {
+	return "UpdateDeploymentRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateDeploymentRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateDeploymentRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateDeploymentRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateDeploymentRequestValidationError{}
+
+// Validate checks the field values on UpdateDeploymentResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpdateDeploymentResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// UpdateDeploymentResponseValidationError is the validation error returned by
+// UpdateDeploymentResponse.Validate if the designated constraints aren't met.
+type UpdateDeploymentResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateDeploymentResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateDeploymentResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateDeploymentResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateDeploymentResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateDeploymentResponseValidationError) ErrorName() string {
+	return "UpdateDeploymentResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateDeploymentResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateDeploymentResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateDeploymentResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateDeploymentResponseValidationError{}
+
 // Validate checks the field values on HPA_Sizing with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *HPA_Sizing) Validate() error {
@@ -1028,3 +1281,97 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ResizeHPARequest_SizingValidationError{}
+
+// Validate checks the field values on UpdateDeploymentRequest_Fields with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpdateDeploymentRequest_Fields) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for key, val := range m.GetLabels() {
+		_ = val
+
+		if len(key) < 1 {
+			return UpdateDeploymentRequest_FieldsValidationError{
+				field:  fmt.Sprintf("Labels[%v]", key),
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+		// no validation rules for Labels[key]
+	}
+
+	for key, val := range m.GetAnnotations() {
+		_ = val
+
+		if len(key) < 1 {
+			return UpdateDeploymentRequest_FieldsValidationError{
+				field:  fmt.Sprintf("Annotations[%v]", key),
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+		// no validation rules for Annotations[key]
+	}
+
+	return nil
+}
+
+// UpdateDeploymentRequest_FieldsValidationError is the validation error
+// returned by UpdateDeploymentRequest_Fields.Validate if the designated
+// constraints aren't met.
+type UpdateDeploymentRequest_FieldsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateDeploymentRequest_FieldsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateDeploymentRequest_FieldsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateDeploymentRequest_FieldsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateDeploymentRequest_FieldsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateDeploymentRequest_FieldsValidationError) ErrorName() string {
+	return "UpdateDeploymentRequest_FieldsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateDeploymentRequest_FieldsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateDeploymentRequest_Fields.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateDeploymentRequest_FieldsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateDeploymentRequest_FieldsValidationError{}
