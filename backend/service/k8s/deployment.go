@@ -70,12 +70,24 @@ func mergeLabelsAndAnnotations(deployment *appsv1.Deployment, fields *k8sapiv1.U
 	if len(fields.Labels) > 0 {
 		for k, v := range fields.Labels {
 			deployment.Labels[k] = v
+
+			if deployment.Spec.Template.ObjectMeta.Labels == nil {
+				deployment.Spec.Template.ObjectMeta.Labels = make(map[string]string)
+			}
+
+			deployment.Spec.Template.ObjectMeta.Labels[k] = v
 		}
 	}
 
 	if len(fields.Annotations) > 0 {
 		for k, v := range fields.Annotations {
 			deployment.Annotations[k] = v
+
+			if deployment.Spec.Template.ObjectMeta.Annotations == nil {
+				deployment.Spec.Template.ObjectMeta.Annotations = make(map[string]string)
+			}
+
+			deployment.Spec.Template.ObjectMeta.Annotations[k] = v
 		}
 	}
 }
