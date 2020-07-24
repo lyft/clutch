@@ -120,6 +120,6 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
       - name: publish
-        run: yarn --cwd frontend publishAlpha
+        run: yarn --cwd frontend publishBeta
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
