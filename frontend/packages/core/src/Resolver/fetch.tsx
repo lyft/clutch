@@ -1,7 +1,7 @@
-import _ from "lodash";
-
 import type { clutch as IClutch } from "@clutch-sh/api";
 import * as $pbclutch from "@clutch-sh/api";
+import _ from "lodash";
+
 import { client, parseErrorMessage } from "../network";
 
 const fetchResourceSchemas = async (type: string): Promise<IClutch.resolver.v1.Schema[]> => {

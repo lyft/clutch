@@ -1,5 +1,4 @@
 import React from "react";
-
 import type { clutch } from "@clutch-sh/api";
 
 enum ResolverAction {
