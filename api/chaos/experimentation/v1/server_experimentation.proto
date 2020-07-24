@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package clutch.chaos.experimentation.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+import "api/v1/annotations.proto";
+
+option go_package = "experimentationv1";
+
+// Targets requests from downstream_cluster -> upstream_cluster
+message ClusterPairTarget {
+  // The name of the downstream cluster
+  string downstream_cluster = 1 [ (validate.rules).string = {min_bytes : 1} ];
+
+  // The name of the upstream cluster
+  string upstream_cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message AbortFault {
+  oneof target {
+    ClusterPairTarget cluster_pair = 1;
+  }
+
+  // The percentage of requests that will be faulted.
+  float percent = 2 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
+
+  // The abort HTTP status that will be returned.
+  int32 http_status = 3 [ (validate.rules).int32 = {gt : 99, lt : 600} ];
+}
+
+message LatencyFault {
+  oneof target {
+    ClusterPairTarget cluster_pair = 1;
+  }
+
+  // The percentage of requests that will be slowed down.
+  float percent = 2 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
+
+  // The latency duration in milliseconds.
+  int32 duration_ms = 3 [ (validate.rules).int32.gt = 0 ];
+
+
+
+Move it to a separate file/components
+Make it a part of the OSS Clutch
+Make automatic register

@@ -27,9 +27,11 @@ services:
   - name: clutch.service.aws
     typed_config:
       "@type": types.google.com/clutch.config.service.aws.v1.Config
-      regions:
-        - us-east-1
-        - us-west-2
+      models:
+        - key: 'key1'
+          author: 'author'
+          payload:
+        -key: 'key2'
   - name: clutch.service.envoyadmin
     typed_config:
       "@type": types.google.com/clutch.config.service.envoyadmin.v1.Config
