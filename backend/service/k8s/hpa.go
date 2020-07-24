@@ -56,7 +56,7 @@ func (s *svc) ResizeHPA(ctx context.Context, clientset, cluster, namespace, name
 	normalizeHPAChanges(hpa, sizing)
 
 	retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
-		_, err = cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Update(hpa)
+		_, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Update(hpa)
 		return err
 	})
 	return retryErr

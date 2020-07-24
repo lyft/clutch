@@ -60,7 +60,7 @@ func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespac
 	}
 
 	retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
-		_, err = cs.AppsV1().Deployments(cs.Namespace()).Patch(oldDeployment.Name, types.StrategicMergePatchType, patchBytes)
+		_, err := cs.AppsV1().Deployments(cs.Namespace()).Patch(oldDeployment.Name, types.StrategicMergePatchType, patchBytes)
 		return err
 	})
 	return retryErr
