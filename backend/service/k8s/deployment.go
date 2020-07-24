@@ -7,6 +7,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/strategicpatch"
+	"k8s.io/client-go/util/retry"
 
 	appsv1 "k8s.io/api/apps/v1"
 
@@ -58,12 +59,11 @@ func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespac
 		return err
 	}
 
-	_, err = cs.AppsV1().Deployments(cs.Namespace()).Patch(oldDeployment.Name, types.StrategicMergePatchType, patchBytes)
-	if err != nil {
+	retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
+		_, err = cs.AppsV1().Deployments(cs.Namespace()).Patch(oldDeployment.Name, types.StrategicMergePatchType, patchBytes)
 		return err
-	}
-
-	return nil
+	})
+	return retryErr
 }
 
 func mergeLabelsAndAnnotations(deployment *appsv1.Deployment, fields *k8sapiv1.UpdateDeploymentRequest_Fields) {
