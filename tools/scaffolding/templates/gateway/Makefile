@@ -4,6 +4,7 @@ SHELL:=/usr/bin/env bash
 MAKEFLAGS += --no-print-directory
 
 PRIMARY_MODULE_DIR := $(shell cd backend && go list -f "{{ "{{" }} .Dir {{ "}}" }}" -m "github.com/lyft/clutch/backend")
+TOOLS_MODULE_DIR := $(shell cd backend && go list -f "{{ "{{" }} .Dir {{ "}}" }}" -m "github.com/lyft/clutch/tools")
 MY_ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 .PHONY: all # Generate API, Frontend, and backend assets.
@@ -11,7 +12,7 @@ all: api frontend backend-with-assets
 
 .PHONY: api
 api: yarn-ensure
-	$(PRIMARY_MODULE_DIR)/../tools/compile-protos.sh $(MY_ROOT_DIR)
+	$(SHELL) $(TOOLS_MODULE_DIR)/compile-protos.sh $(MY_ROOT_DIR)
 
 .PHONY: backend
 backend:
@@ -31,8 +32,13 @@ backend-with-assets: frontend
 
 .PHONY: frontend
 frontend: yarn-ensure
-	$(PRIMARY_MODULE_DIR)/../tools/frontend-gateway-linker.sh $(MY_ROOT_DIR) build
+	$(SHELL) $(TOOLS_MODULE_DIR)/frontend-gateway-linker.sh $(MY_ROOT_DIR) build
+
+.PHONY: vendor
+vendor:
+	mkdir -p build/tools
+	cd backend && go get github.com/lyft/clutch/backend@latest
 
 .PHONY: yarn-ensure
 yarn-ensure:
-	@$(PRIMARY_MODULE_DIR)/../tools/install-yarn.sh
+	@$(SHELL) $(TOOLS_MODULE_DIR)/install-yarn.sh

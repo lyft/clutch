@@ -1,4 +1,4 @@
-package main
+	package main
 
 import (
 	"bufio"
@@ -149,14 +149,31 @@ func getGatewayTemplateValues() (*gatewayTemplateValues, string) {
 	return data, dest
 }
 
-func generateAPI(dest string) {
+func generateAPI(tmpFolder, dest string) {
 	// TODO: Move this to occur in tmpdir once clutch is published publicly.
-	log.Println("Generating API code from protos...")
-	log.Println("cd", dest, "&& make api")
-	if err := os.Chdir(dest); err != nil {
+	log.Println("Adding clutch dependencies to go.mod...")
+	if err := os.Chdir(filepath.Join(tmpFolder, "backend")); err != nil {
 		log.Fatal(err)
 	}
-	cmd := exec.Command("make", "api")
+	cmd := exec.Command("go", "get", "github.com/lyft/clutch/backend")
+	if out, err := cmd.CombinedOutput(); err != nil {
+		fmt.Println(string(out))
+		log.Fatal("`go get` backend in the destination dir returned the above error")
+	}
+
+	cmd = exec.Command("go", "get", "github.com/lyft/clutch/tools")
+	if out, err := cmd.CombinedOutput(); err != nil {
+		fmt.Println(string(out))
+		log.Fatal("`go get` tools in the destination dir returned the above error")
+	}
+
+	if err := os.Chdir(tmpFolder); err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("Generating API code from protos...")
+	log.Println("cd", tmpFolder, "&& make api")
+	cmd = exec.Command("make", "api")
 	if out, err := cmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
 		log.Fatal("`make api` in the destination dir returned the above error")
@@ -165,14 +182,14 @@ func generateAPI(dest string) {
 
 	fmt.Println("*** All done!")
 	fmt.Println("\n*** Try the following command to get started developing the custom gateway:")
-	fmt.Println("cd", dest, "&& make")
+	fmt.Printf("cd %s && make\n", dest)
 }
 
-func generateFrontend(dest string) {
+func generateFrontend(tmpFolder, dest string) {
 	// Update clutch.config.js for new workflow
 	log.Println("Compiling workflow, this may take a few minutes...")
-	log.Println("cd", dest, "&& yarn --frozen-lockfile && yarn tsc && yarn compile")
-	if err := os.Chdir(dest); err != nil {
+	log.Println("cd", tmpFolder, "&& yarn --frozen-lockfile && yarn tsc && yarn compile")
+	if err := os.Chdir(tmpFolder); err != nil {
 		log.Fatal(err)
 	}
 
@@ -211,7 +228,7 @@ func generateFrontend(dest string) {
 
 	fmt.Println("*** All done!")
 	fmt.Println("\n*** Try the following command to get started developing the new workflow:")
-	fmt.Println("make frontend-dev")
+	fmt.Printf("cd %s && make frontend-dev\n", dest)
 }
 
 func main() {
@@ -227,7 +244,7 @@ func main() {
 	var dest string
 	var templateRoot string
 	var data interface{}
-	var postProcessFunction func(dest string)
+	var postProcessFunction func(tmpFolder, dest string)
 
 	switch *mode {
 	case "gateway":
@@ -291,17 +308,16 @@ func main() {
 		log.Fatal(err)
 	}
 
+	postProcessFunction(tmpout, dest)
+
 	// Move tmpdir contents to destination.
-	log.Println("Moving to", dest)
 	if err := os.MkdirAll(filepath.Dir(dest), 0755); err != nil {
 		log.Fatal(err)
 	}
 	if err := os.Rename(tmpout, dest); err != nil {
 		if os.IsExist(err) {
-			log.Fatal("destination folder already exists")
+			log.Fatal(fmt.Sprintf("Failed moving %s to %s destination folder already exists", tmpout, dest))
 		}
 		log.Fatal(err)
 	}
-
-	postProcessFunction(dest)
 }
