@@ -32,9 +32,9 @@ api-lint-fix:
 .PHONY: api-verify # Verify API proto changes include generate frontend and backend assets.
 api-verify:
 	find backend/api -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} \;
-	find frontend/api -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} \;
+	find frontend/api/src -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} \;
 	$(MAKE) api
-	tools/ensure-no-diff.sh backend/api frontend/api
+	tools/ensure-no-diff.sh backend/api frontend/api/src
 
 .PHONY: backend # Build the standalone backend.
 backend:

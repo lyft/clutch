@@ -1,8 +1,8 @@
 import React from "react";
 import type { FieldValues, FormContextValues } from "react-hook-form";
+import type { clutch } from "@clutch-sh/api";
 import { MenuItem, Select } from "@material-ui/core";
 
-import type { clutch } from "../../../../api";
 import TextField from "../Input/text-field";
 
 import type { ChangeEventTarget, ResolverChangeEvent } from "./hydrator";
