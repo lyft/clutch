@@ -1,7 +1,7 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/frontend/"
+  - package-ecosystem: "docker"
+    directory: "/"
     schedule:
       interval: "daily"
 
@@ -10,8 +10,8 @@ updates:
     schedule:
       interval: "daily"
 
-  - package-ecosystem: "docker"
-    directory: "/"
+  - package-ecosystem: "gomod"
+    directory: "/backend/cmd/migrate/"
     schedule:
       interval: "daily"
 
@@ -22,5 +22,95 @@ updates:
 
   - package-ecosystem: "gomod"
     directory: "/docs/_website/generator/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/examples/amiibo/frontend/workflows/amiibo/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend/packages/app/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend/packages/core/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend/packages/data-layout/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend/packages/tools/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend/packages/wizard/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend/workflows/ec2/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend/workflows/envoy/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend/workflows/experimentation/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend/workflows/k8s/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend/workflows/kinesis/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend/workflows/sourcecontrol/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "gomod"
+    directory: "/tools/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/tools/scaffolding/templates/frontend/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "gomod"
+    directory: "/tools/scaffolding/templates/gateway/backend/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/tools/scaffolding/templates/gateway/frontend/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/tools/scaffolding/templates/gateway/frontend/workflows/echo/"
     schedule:
       interval: "daily"
