@@ -952,6 +952,11 @@ func (m *UpdateDeploymentRequest) GetFields() *UpdateDeploymentRequest_Fields {
 	return nil
 }
 
+// Fields are merged with the existing deployment object, existing
+// labels and annotations are not deleted in the update process.
+// Currently this api does not support removing Fields from the deployment object.
+// A two way strategic merge is done on the old and new deployment objects.
+// https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-a-json-merge-patch-to-update-a-deployment
 type UpdateDeploymentRequest_Fields struct {
 	Labels               map[string]string `protobuf:"bytes,1,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	Annotations          map[string]string `protobuf:"bytes,2,rep,name=annotations,proto3" json:"annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
