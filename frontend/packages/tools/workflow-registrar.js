@@ -2,6 +2,7 @@ const childProcess = require("child_process");
 const fs = require("fs");
 
 const config = require(`${process.argv[2]}/clutch.config.js`); // eslint-disable-line import/no-dynamic-require
+const rootFrontendDir = `${process.argv[2]}/..`;
 
 const WORKFLOW_MODULE_PATH = `${process.argv[2]}/workflows.jsx`;
 
@@ -39,7 +40,7 @@ const discoverWorkflows = () => {
     return childProcess.exec(
       `yarn list --json --depth=0 --pattern '${packagePattern}'`,
       {
-        cwd: `${process.argv[2]}/..`,
+        cwd: rootFrontendDir,
       },
       (err, stdout) => {
         if (err) {
