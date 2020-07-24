@@ -31,7 +31,7 @@
     "typescript": "^3.9.0-dev"
   },
   "workspaces": [
-    "clutch/frontend/api/*",
+    "clutch/frontend/api",
     "clutch/frontend/packages/*",
     "clutch/frontend/workflows/*",
     "workflows/*"
