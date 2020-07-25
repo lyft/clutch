@@ -123,5 +123,5 @@ Use the commands from the earlier step [Running the Image](#running-the-image), 
 
 - For more information on core components, see the [Components](/docs/components) reference.
 - To better understand how custom components fit into Clutch, visit the [Architecture](/docs/about/architecture) reference.
-- For documentation on developing custom components, check the [Development](/docs/usage/development) docs.
+- For documentation on developing custom components, check the [Development](/docs/development/guide) docs.
 
