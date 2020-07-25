@@ -15,7 +15,7 @@
       "@clutch-sh/*": ["api/*", "packages/*/src", "workflows/*/src"],
     },
     "preserveConstEnums": true,
-    "target": "ESNext",
+    "target": "ES2018",
     "types": ["node"]
   },
 }
