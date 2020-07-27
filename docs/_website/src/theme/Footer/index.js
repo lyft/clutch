@@ -7,6 +7,21 @@ import useLogo from '@theme/hooks/useLogo';
 
 import styles from './styles.module.css';
 
+var socialLinks = [
+  {
+    icon: 'fe fe-github',
+    href: 'https://github.com/lyft/clutch',
+  },
+  {
+    icon: 'fe fe-twitter',
+    href: 'https://twitter.com/clutchdotsh',
+  },
+  {
+    icon: 'fe fe-slack',
+    href: 'https://join.slack.com/t/lyftoss/shared_invite/zt-casz6lz4-G7gOx1OhHfeMsZKFe1emSA',
+  },
+];
+
 function FooterLink({to, href, label, prependBaseUrlToHref, ...props}) {
   const toUrl = useBaseUrl(to);
   const normalizedHref = useBaseUrl(href, true);
@@ -126,7 +141,7 @@ function Footer() {
   const {themeConfig = {}} = siteConfig;
   const {footer} = themeConfig;
 
-  const {copyright, links = [], socialLinks = []} = footer || {};
+  const {copyright, links = []} = footer || {};
 
   if (!footer) {
     return null;

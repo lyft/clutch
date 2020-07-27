@@ -17,6 +17,27 @@ import styles from './styles.module.css';
 // retrocompatible with v1
 const DefaultNavItemPosition = 'right';
 
+// items defined here instead of config so they can have an associated icon
+var items = [
+  {
+    to: 'docs/about/what-is-clutch',
+    activeBasePath: 'docs',
+    icon: "fe fe-book",
+    label: 'Docs',
+  },
+  {
+    to: 'docs/community',
+    activeBasePath: 'docs',
+    icon: "fe fe-message-square",
+    label: 'Community',
+  },
+  {
+    href: 'https://github.com/lyft/clutch',
+    icon: "fe fe-github",
+    label: 'GitHub',
+  },
+];
+
 function NavLink({
   activeBasePath,
   activeBaseRegex,
@@ -160,8 +181,8 @@ function Navbar() {
   const {
     siteConfig: {
       themeConfig: {
-        navbar: { title, links = [], hideOnScroll = false } = {},
-        disableDarkMode = false,
+        navbar: { title, hideOnScroll = false } = {},
+        colorMode: {disableSwitch: disableColorModeSwitch = false} = {},
       },
     },
     isClient,
@@ -195,7 +216,7 @@ function Navbar() {
     }
   }, [windowSize]);
 
-  const { leftLinks, rightLinks } = splitLinks(links);
+  const { leftLinks, rightLinks } = splitLinks(items);
 
   return (
     <nav
@@ -207,7 +228,7 @@ function Navbar() {
       })}>
       <div className="navbar__inner">
         <div className="navbar__items">
-          {links != null && links.length !== 0 && (
+          {items != null && items.length !== 0 && (
             <div
               aria-label="Navigation bar toggle"
               className="navbar__toggle"
@@ -256,7 +277,7 @@ function Navbar() {
           {rightLinks.map((linkItem, i) => (
             <NavItem {...linkItem} key={i} />
           ))}
-          {!disableDarkMode && (
+          {!disableColorModeSwitch && (
             <Toggle
               className={styles.displayOnlyInLargeViewport}
               aria-label="Dark mode toggle"
@@ -286,11 +307,9 @@ function Navbar() {
                 alt={logoAlt}
               />
             )}
-            {title != null && (
-              <strong className="navbar__title">{title}</strong>
-            )}
+            <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
           </Link>
-          {!disableDarkMode && sidebarShown && (
+          {!disableColorModeSwitch && sidebarShown && (
             <Toggle
               aria-label="Dark mode toggle in sidebar"
               checked={isDarkTheme}
@@ -301,7 +320,7 @@ function Navbar() {
         <div className="navbar-sidebar__items">
           <div className="menu">
             <ul className="menu__list">
-              {links.map((linkItem, i) => (
+              {items.map((linkItem, i) => (
                 <MobileNavItem {...linkItem} onClick={hideSidebar} key={i} />
               ))}
             </ul>

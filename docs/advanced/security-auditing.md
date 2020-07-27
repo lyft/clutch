@@ -30,7 +30,7 @@ These annotations let customizable data on each request be logged and reviewed.
 
 Clutch will save the the "type" of action that was performed (create, read, update, or delete or CRUD operations) for each request. The request type comes from an API annotation on each RPC.
 
-From the [`AmiiboAPI` example proto](/docs/development/feature-development#2-api-define-the-schema), to show that the `GetCharacters` endpoint is a "read" operation, an extra `option` annotation would be needed.
+From the [`AmiiboAPI` example proto](/docs/development/feature#2-api-define-the-schema), to show that the `GetCharacters` endpoint is a "read" operation, an extra `option` annotation would be needed.
 
 ```protobuf title="api/amiibo/v1/amiibo.proto"
 syntax = "proto3";

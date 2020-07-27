@@ -194,6 +194,6 @@ const InstanceIdentifier = ({ resolverType }) => {
 
 Notice that the resolver specified only three properties: a type, search limit, and a callback on resolution.
 
-  - `type`: this property denotes the type of resource the resolver will prompt the user for and pass back to the onResolve callback. For example, `clutch.aws.ec2.v1.Instance`. In the above example this value is being passed in as a prop from its parent which has it injected from the [application configuration](./configuration).
+  - `type`: this property denotes the type of resource the resolver will prompt the user for and pass back to the onResolve callback. For example, `clutch.aws.ec2.v1.Instance`. In the above example this value is being passed in as a prop from its parent which has it injected from the [application configuration](/docs/configuration).
   - `searchLimit`: allows developers to specify a threshold for the number of resources to search for. This is particularly useful when searching across multiple environments for a small number of resources as the server will respond as soon as this threshold is satisfied. This also denotes the expected number of environments to search, allowing the resolver component to warn when searches fail in specific environments.
   - `onResolve`: when the resolver completes a lookup and casts the response to a specified protobuf object it will need a way to pass the results back to a workflow. This property allows users to specify a callback that takes the results and use them in the appropriate way for that workflow.
