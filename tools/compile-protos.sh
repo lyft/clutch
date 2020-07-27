@@ -56,7 +56,7 @@ main() {
   if [[ -z "${CORE}" ]]; then
     set -x
     CORE_VERSION=$(cd "${REPO_ROOT}/backend" && go list -f "{{ .Version }}" -m github.com/lyft/clutch/backend)
-    if [[ "${CORE_VERSION}" =~ "-*-" ]]; then
+    if [[ "${CORE_VERSION}" == *-*-* ]]; then
       # if a pseudo-version
       CORE_VERSION=$(awk -F"-" '{print $NF}')
     fi
