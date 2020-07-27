@@ -24,12 +24,12 @@ SCRIPT_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
 # parse options
 ACTION="compile"
 LINT_FIX=false
-CORE=""
+CLUTCH_API_ROOT=""
 while getopts "lfc:" opt; do
   case $opt in
     l) ACTION="lint" ;;
     f) LINT_FIX=true ;;
-    c) CORE="${OPTARG}" ;;
+    c) CLUTCH_API_ROOT="${OPTARG}" ;;
     *) echo "usage: $0 [-l]" >&2
      exit 1 ;;
   esac
@@ -53,7 +53,7 @@ main() {
     REPO_ROOT="${1}"
   fi
 
-  if [[ -z "${CORE}" ]]; then
+  if [[ -z "${CLUTCH_API_ROOT}" ]]; then
     # if core is not provided then we need to use a downloaded version.
     CORE_VERSION=$(cd "${REPO_ROOT}/backend" && go list -f "{{ .Version }}" -m github.com/lyft/clutch/backend)
     if [[ "${CORE_VERSION}" == *-*-* ]]; then
@@ -62,7 +62,7 @@ main() {
     fi
     
     core_tmp_out="/tmp/clutch-${CORE_VERSION}.tar.gz"
-    core_out="${REPO_ROOT}/build/bin/clutch-${CORE_VERSION}"
+    core_out="${REPO_ROOT}/build/bin/clutch-api-${CORE_VERSION}"
     if [[ ! -d "${CORE}" ]]; then
       echo "info: downloading core APIs ${CORE_VERSION} to build environment..."
       curl -sSL -o "${core_tmp_out}" \
@@ -71,14 +71,13 @@ main() {
       mkdir -p "${core_out}"
       tar -C "${core_out}" \
         -xzf "${core_tmp_out}" \
-        --strip-components=1 --no-wildcards-match-slash \
+        --strip-components=2 --no-wildcards-match-slash \
         --wildcards 'clutch-*/api'
     fi
 
-    CORE="${core_out}"
+    CLUTCH_API_ROOT="${core_out}"
   fi
 
-  CLUTCH_API_ROOT="${SCRIPT_ROOT}/api"
   API_ROOT="${REPO_ROOT}/api"
   BUILD_ROOT="${REPO_ROOT}/build"
 
@@ -141,7 +140,7 @@ main() {
 
   # Add MFLAGS for Clutch protos when this is running for a private gateway.
   if [[ "${CLUTCH_API_ROOT}" != "${API_ROOT}" ]]; then
-    discover_clutch_protos
+    discover_core_protos
     readonly CLUTCH_PREFIX="github.com/lyft/clutch/backend/api"
     for proto in "${CLUTCH_PROTOS[@]}"; do
       relative_path="${proto/#${CLUTCH_API_ROOT}\/}"
