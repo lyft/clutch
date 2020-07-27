@@ -307,9 +307,7 @@ function Navbar() {
                 alt={logoAlt}
               />
             )}
-            {title != null && (
-              <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
-            )}
+            <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
           </Link>
           {!disableColorModeSwitch && sidebarShown && (
             <Toggle
