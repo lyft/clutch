@@ -12,7 +12,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/envoyproxy/go-control-plane v0.9.4
 	github.com/envoyproxy/protoc-gen-validate v0.4.0
-	github.com/fullstorydev/grpcurl v1.5.1
+	github.com/fullstorydev/grpcurl v1.6.1
 	github.com/go-git/go-billy/v5 v5.0.0
 	github.com/go-git/go-git/v5 v5.1.0
 	github.com/go-swagger/go-swagger v0.23.0
@@ -24,8 +24,8 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
 	github.com/grpc-ecosystem/grpc-gateway v1.14.6
 	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334
-	github.com/jhump/protoreflect v1.6.1-0.20200325015804-c1f7119c9306
-	github.com/lib/pq v1.3.0
+	github.com/jhump/protoreflect v1.6.1
+	github.com/lib/pq v1.7.1
 	github.com/lyft/protoc-gen-star v0.4.14 // indirect
 	github.com/mitchellh/hashstructure v1.0.0
 	github.com/shurcooL/githubv4 v0.0.0-20200414012201-bbc966b061dd
