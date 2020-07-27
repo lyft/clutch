@@ -308,7 +308,7 @@ function Navbar() {
               />
             )}
             {title != null && (
-              <strong className="navbar__title">{title}</strong>
+              <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
             )}
           </Link>
           {!disableColorModeSwitch && sidebarShown && (
