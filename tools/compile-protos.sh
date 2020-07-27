@@ -60,11 +60,9 @@ main() {
       # if a pseudo-version, figure out just the SHA
       CORE_VERSION=$(echo "${CORE_VERSION}" | awk -F"-" '{print $NF}')
     fi
-
-    CORE="${REPO_ROOT}/build/bin/clutch-${CORE_VERSION}"
     
     core_tmp_out="/tmp/clutch-${CORE_VERSION}.tar.gz"
-    core_out="${REPO_ROOT}/build/clutch-${CORE_VERSION}"
+    core_out="${REPO_ROOT}/build/bin/clutch-${CORE_VERSION}"
     if [[ ! -d "${CORE}" ]]; then
       echo "info: downloading core APIs ${CORE_VERSION} to build environment..."
       curl -sSL -o "${core_tmp_out}" \
@@ -76,6 +74,8 @@ main() {
         --strip-components=1 --no-wildcards-match-slash \
         --wildcards 'clutch-*/api'
     fi
+
+    CORE="${core_out}"
   fi
 
   CLUTCH_API_ROOT="${SCRIPT_ROOT}/api"
