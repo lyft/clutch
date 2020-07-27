@@ -39,5 +39,5 @@ for package in "${LINKED_PACKAGES[@]}"; do
   "${YARN}" link "${package}"
 done
 
-"${YARN}" --frozen-lockfile install
+"${YARN}" install
 "${YARN}" "${action}"

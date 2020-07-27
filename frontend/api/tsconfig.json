@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./src",
+    "rootDir": "./src"
+  },
+  "include": ["src/*"],
+  "exclude": [
+    "node_modules",
+  ]
+}

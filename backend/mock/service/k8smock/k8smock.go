@@ -81,6 +81,20 @@ func (s *svc) ListPods(_ context.Context, clientset, cluster, namespace string, 
 	return pods, nil
 }
 
+func (*svc) DescribeDeployment(ctx context.Context, clientset, cluster, namespace, name string) (*k8sv1.Deployment, error) {
+	return &k8sv1.Deployment{
+		Cluster:     cluster,
+		Namespace:   namespace,
+		Name:        "deployment1",
+		Labels:      map[string]string{"Key": "value"},
+		Annotations: map[string]string{"Key": "value"},
+	}, nil
+}
+
+func (*svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sv1.UpdateDeploymentRequest_Fields) error {
+	return nil
+}
+
 func (*svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error {
 	return nil
 }

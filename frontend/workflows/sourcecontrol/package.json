@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/sourcecontrol",
-  "version": "0.0.0",
+  "version": "0.0.0-beta",
   "description": "Clutch Source Control Workflows",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
@@ -16,26 +16,23 @@
     "compile:watch": "yarn run compile --watch",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
-    "publishAlpha": "yarn publish --new-version=\"0.0.0-$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')-$(git rev-parse --short=12 HEAD)\" --access public",
+    "publishBeta": "yarn publish --new-version=\"0.0.0-beta.$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')\" --access public",
     "test": "jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/core": "^0.0.0",
-    "@clutch-sh/data-layout": "^0.0.0",
-    "@clutch-sh/wizard": "^0.0.0",
+    "@clutch-sh/core": "^0.0.0-beta",
+    "@clutch-sh/data-layout": "^0.0.0-beta",
+    "@clutch-sh/wizard": "^0.0.0-beta",
     "@material-ui/core": "^4.9.1",
-    "react": "^16.8",
+    "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-hook-form": "^5.7.2",
     "react-is": "^16.8.0",
-    "react-router": "^6.0.0-alpha",
-    "react-router-dom": "^6.0.0-alpha.2",
-    "styled-components": "^5.0.1",
     "yup": "^0.29.0"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^0.0.0"
+    "@clutch-sh/tools": "^0.0.0-beta"
   }
 }
