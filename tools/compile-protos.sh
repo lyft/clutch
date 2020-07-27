@@ -29,7 +29,7 @@ while getopts "lfc:" opt; do
   case $opt in
     l) ACTION="lint" ;;
     f) LINT_FIX=true ;;
-    c) CORE=true ;;
+    c) CORE="${OPTARG}" ;;
     *) echo "usage: $0 [-l]" >&2
      exit 1 ;;
   esac
@@ -54,24 +54,26 @@ main() {
   fi
 
   if [[ -z "${CORE}" ]]; then
-    # if core is not provided then we need to download it.
+    # if core is not provided then we need to use a downloaded version.
     CORE_VERSION=$(cd "${REPO_ROOT}/backend" && go list -f "{{ .Version }}" -m github.com/lyft/clutch/backend)
     if [[ "${CORE_VERSION}" == *-*-* ]]; then
       # if a pseudo-version, figure out just the SHA
       CORE_VERSION=$(echo "${CORE_VERSION}" | awk -F"-" '{print $NF}')
     fi
 
-
     CORE="${REPO_ROOT}/build/clutch-${CORE_VERSION}"
+    
+    core_tmp_out="/tmp/clutch-${CORE_VERSION}.tar.gz"
+    core_out="${REPO_ROOT}/build/clutch-${CORE_VERSION}"
     if [[ ! -d "${CORE}" ]]; then
       echo "info: downloading core APIs ${CORE_VERSION} to build environment..."
-      curl -sSL -o "/tmp/clutch-${CORE_VERSION}.tar.gz" \
+      curl -sSL -o "${core_tmp_out}" \
         "https://github.com/lyft/clutch/archive/${CORE_VERSION}.tar.gz"
 
-      tar xzf "/tmp/clutch-${CORE_VERSION}.tar.gz" \
+      tar -C "${core_out}" \
+        -xzf "${core_tmp_out}" \
         --strip-components=1 --no-wildcards-match-slash \
-        --wildcards 'clutch-*/api' \
-        -C "${REPO_ROOT}/build/clutch-${CORE_VERSION}"
+        --wildcards 'clutch-*/api'
     fi
   fi
 
