@@ -108,6 +108,10 @@ func getTemplateData() *templateData {
 	}
 
 	for _, file := range files {
+		if strings.Contains(file, "node_modules") {
+			// ignore sub packages from builds.
+			continue
+		}
 		w := getWorkflowPackage(file)
 		td.WorkflowPackages = append(td.WorkflowPackages, w)
 	}
