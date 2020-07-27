@@ -43,7 +43,7 @@ require (
 	google.golang.org/grpc v1.30.0
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 	k8s.io/api v0.17.0
-	k8s.io/apimachinery v0.17.0
+	k8s.io/apimachinery v0.18.6
 	k8s.io/client-go v0.17.0
 	k8s.io/utils v0.0.0-20200603063816-c1c6865ac451 // indirect
 )
