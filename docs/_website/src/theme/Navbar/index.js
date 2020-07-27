@@ -117,9 +117,6 @@ function MobileNavigationItem({ position: _position, className, ...props }) {
   const navLinkClassNames = (extraClassName, isSubList = false) =>
     clsx(
       'menu__link',
-      {
-        'menu__link--sublist': isSubList,
-      },
       extraClassName,
     );
 
@@ -136,18 +133,6 @@ function MobileNavigationItem({ position: _position, className, ...props }) {
       <NavLink className={navLinkClassNames(className, true)} {...props}>
         {props.label}
       </NavLink>
-      <ul className="menu__list">
-        {items.map(({ className: childItemClassName, ...childItemProps }, i) => (
-          <li className="menu__list-item" key={i}>
-            <NavLink
-              activeClassName="menu__link--active"
-              className={navLinkClassNames(childItemClassName)}
-              {...childItemProps}
-              onClick={props.onClick}
-            />
-          </li>
-        ))}
-      </ul>
     </li>
   );
 }
