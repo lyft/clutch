@@ -61,7 +61,7 @@ main() {
       CORE_VERSION=$(echo "${CORE_VERSION}" | awk -F"-" '{print $NF}')
     fi
 
-    CORE="${REPO_ROOT}/build/clutch-${CORE_VERSION}"
+    CORE="${REPO_ROOT}/build/bin/clutch-${CORE_VERSION}"
     
     core_tmp_out="/tmp/clutch-${CORE_VERSION}.tar.gz"
     core_out="${REPO_ROOT}/build/clutch-${CORE_VERSION}"
@@ -70,6 +70,7 @@ main() {
       curl -sSL -o "${core_tmp_out}" \
         "https://github.com/lyft/clutch/archive/${CORE_VERSION}.tar.gz"
 
+      mkdir -p "${core_out}"
       tar -C "${core_out}" \
         -xzf "${core_tmp_out}" \
         --strip-components=1 --no-wildcards-match-slash \
