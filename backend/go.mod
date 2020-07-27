@@ -25,7 +25,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway v1.14.6
 	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334
 	github.com/jhump/protoreflect v1.6.1
-	github.com/lib/pq v1.3.0
+	github.com/lib/pq v1.7.1
 	github.com/lyft/protoc-gen-star v0.4.14 // indirect
 	github.com/mitchellh/hashstructure v1.0.0
 	github.com/shurcooL/githubv4 v0.0.0-20200414012201-bbc966b061dd
