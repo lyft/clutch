@@ -38,7 +38,7 @@ For more information on APIs in Clutch visit the [API Development](/docs/develop
 
 ### Gateway
 
-`gateway` is responsible for reading the [configuration](/docs/configuration-guide) file, instantiating the specified components, and placing them in a component registry for runtime usage.
+`gateway` is responsible for reading the [configuration](/docs/configuration) file, instantiating the specified components, and placing them in a component registry for runtime usage.
 
 The gateway also manages the JSON/gRPC server and listeners, making use of [grpc-ecosystem/grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway).
 
