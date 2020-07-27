@@ -25,7 +25,7 @@ interface CheckboxPanelProps {
     [option: string]: string;
   };
   onChange: (option: string, checked: boolean) => void;
-};
+}
 
 const CheckboxPanel: React.FC<CheckboxPanelProps> = ({ header, options, onChange }) => {
   const allOptions = {};
