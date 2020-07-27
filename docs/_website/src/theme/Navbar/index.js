@@ -14,6 +14,9 @@ import useLogo from '@theme/hooks/useLogo';
 
 import styles from './styles.module.css';
 
+// retrocompatible with v1
+const DefaultNavItemPosition = 'right';
+
 // items defined here instead of config so they can have an associated icon
 var items = [
   {
@@ -34,10 +37,6 @@ var items = [
     label: 'GitHub',
   },
 ];
-
-
-// retrocompatible with v1
-const DefaultNavItemPosition = 'right';
 
 function NavLink({
   activeBasePath,
@@ -72,7 +71,8 @@ function NavLink({
   );
 }
 
-function NavigationItem({
+function NavItem({
+  items,
   position = DefaultNavItemPosition,
   className,
   ...props
@@ -83,7 +83,6 @@ function NavigationItem({
         'navbar__item navbar__link': !isDropdownItem,
         dropdown__link: isDropdownItem,
       },
-      styles.navbarItemCustom,
       extraClassName,
     );
 
@@ -93,7 +92,7 @@ function NavigationItem({
 
   return (
     <div
-      className={clsx('navbar__item', {
+      className={clsx('navbar__item', 'dropdown', 'dropdown--hoverable', {
         'dropdown--left': position === 'left',
         'dropdown--right': position === 'right',
       })}>
@@ -108,15 +107,29 @@ function NavigationItem({
         }}>
         {props.label}
       </NavLink>
+      <ul className="dropdown__menu">
+        {items.map(({ className: childItemClassName, ...childItemProps }, i) => (
+          <li key={i}>
+            <NavLink
+              activeClassName="dropdown__link--active"
+              className={navLinkClassNames(childItemClassName, true)}
+              {...childItemProps}
+            />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
 
-function MobileNavigationItem({ position: _position, className, ...props }) {
+function MobileNavItem({ items, position: _position, className, ...props }) {
   // Need to destructure position from props so that it doesn't get passed on.
   const navLinkClassNames = (extraClassName, isSubList = false) =>
     clsx(
       'menu__link',
+      {
+        'menu__link--sublist': isSubList,
+      },
       extraClassName,
     );
 
@@ -133,6 +146,18 @@ function MobileNavigationItem({ position: _position, className, ...props }) {
       <NavLink className={navLinkClassNames(className, true)} {...props}>
         {props.label}
       </NavLink>
+      <ul className="menu__list">
+        {items.map(({ className: childItemClassName, ...childItemProps }, i) => (
+          <li className="menu__list-item" key={i}>
+            <NavLink
+              activeClassName="menu__link--active"
+              className={navLinkClassNames(childItemClassName)}
+              {...childItemProps}
+              onClick={props.onClick}
+            />
+          </li>
+        ))}
+      </ul>
     </li>
   );
 }
@@ -241,7 +266,7 @@ function Navbar() {
             <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
           </Link>
           {leftLinks.map((linkItem, i) => (
-            <NavigationItem {...linkItem} key={i} />
+            <NavItem {...linkItem} key={i} />
           ))}
         </div>
         <div className="navbar__items navbar__items--right">
@@ -250,7 +275,7 @@ function Navbar() {
             isSearchBarExpanded={isSearchBarExpanded}
           />
           {rightLinks.map((linkItem, i) => (
-            <NavigationItem {...linkItem} key={i} />
+            <NavItem {...linkItem} key={i} />
           ))}
           {!disableColorModeSwitch && (
             <Toggle
@@ -298,7 +323,7 @@ function Navbar() {
           <div className="menu">
             <ul className="menu__list">
               {items.map((linkItem, i) => (
-                <MobileNavigationItem {...linkItem} onClick={hideSidebar} key={i} />
+                <MobileNavItem {...linkItem} onClick={hideSidebar} key={i} />
               ))}
             </ul>
           </div>
