@@ -54,13 +54,25 @@ main() {
   fi
 
   if [[ -z "${CORE}" ]]; then
-    set -x
+    # if core is not provided then we need to download it.
     CORE_VERSION=$(cd "${REPO_ROOT}/backend" && go list -f "{{ .Version }}" -m github.com/lyft/clutch/backend)
     if [[ "${CORE_VERSION}" == *-*-* ]]; then
-      # if a pseudo-version
+      # if a pseudo-version, figure out just the SHA
       CORE_VERSION=$(echo "${CORE_VERSION}" | awk -F"-" '{print $NF}')
     fi
-    echo COREVER "${CORE_VERSION}"
+
+
+    CORE="${REPO_ROOT}/build/clutch-${CORE_VERSION}"
+    if [[ ! -d "${CORE}" ]]; then
+      echo "info: downloading core APIs ${CORE_VERSION} to build environment..."
+      curl -sSL -o "/tmp/clutch-${CORE_VERSION}" \
+        "https://github.com/lyft/clutch/archive/${CORE_VERSION}.tar.gz"
+
+      tar xzf "/tmp/clutch-${CORE_VERSION}.tar.gz" \
+        --strip-components=1 --no-wildcards-match-slash \
+        --wildcards 'clutch-*/api' \
+        -C "${REPO_ROOT}/build/clutch-${CORE_VERSION}"
+    fi
   fi
 
   CLUTCH_API_ROOT="${SCRIPT_ROOT}/api"
@@ -182,7 +194,7 @@ discover_protos() {
   done <  <(find "${API_ROOT}" -name '*.proto' -exec dirname {} \; | tr '\n' '\0' | sort -sdzu)
 }
 
-discover_clutch_protos() {
+discover_core_protos() {
   while IFS= read -r -d '' proto; do
     CLUTCH_PROTOS+=("${proto}")
   done <  <(find "${CLUTCH_API_ROOT}" -name '*.proto' -print0 | sort -sdzu)
