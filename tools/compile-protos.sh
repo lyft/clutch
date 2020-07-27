@@ -37,16 +37,6 @@ done
 shift "$((OPTIND-1))" # shift so that $@, $1, etc. refer to the non-option arguments
 
 main() {
-  # exit 1
-  # Find the clutch core protos.
-  # if [[ ${CORE} == true ]]; then
-  #   # If core project then they're in ../api relative to this script.
-  #   CLUTCH_API_ROOT="${REPO_ROOT}/api"
-  # else if [[ -n "${CORE_OVERRIDE}" ]]; then
-  #   echo "gack"
-  # fi
-
-
   REPO_ROOT="${SCRIPT_ROOT}"
   # Use alternate root if provided as command line argument.
   if [[ -n "${1-}" ]]; then
@@ -63,7 +53,7 @@ main() {
     
     core_tmp_out="/tmp/clutch-${CORE_VERSION}.tar.gz"
     core_out="${REPO_ROOT}/build/bin/clutch-api-${CORE_VERSION}"
-    if [[ ! -d "${CORE}" ]]; then
+    if [[ ! -d "${CLUTCH_API_ROOT}" ]]; then
       echo "info: downloading core APIs ${CORE_VERSION} to build environment..."
       curl -sSL -o "${core_tmp_out}" \
         "https://github.com/lyft/clutch/archive/${CORE_VERSION}.tar.gz"
