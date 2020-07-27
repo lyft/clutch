@@ -19,13 +19,17 @@ PROTOS=()
 PROTO_DIRS=()
 CLUTCH_PROTOS=()
 
+SCRIPT_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
+
 # parse options
 ACTION="compile"
 LINT_FIX=false
-while getopts "lf" opt; do
+CORE=""
+while getopts "lfc:" opt; do
   case $opt in
     l) ACTION="lint" ;;
     f) LINT_FIX=true ;;
+    c) CORE=true ;;
     *) echo "usage: $0 [-l]" >&2
      exit 1 ;;
   esac
@@ -33,12 +37,29 @@ done
 shift "$((OPTIND-1))" # shift so that $@, $1, etc. refer to the non-option arguments
 
 main() {
-  SCRIPT_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
+  # exit 1
+  # Find the clutch core protos.
+  # if [[ ${CORE} == true ]]; then
+  #   # If core project then they're in ../api relative to this script.
+  #   CLUTCH_API_ROOT="${REPO_ROOT}/api"
+  # else if [[ -n "${CORE_OVERRIDE}" ]]; then
+  #   echo "gack"
+  # fi
+
 
   REPO_ROOT="${SCRIPT_ROOT}"
   # Use alternate root if provided as command line argument.
   if [[ -n "${1-}" ]]; then
     REPO_ROOT="${1}"
+  fi
+
+  if [[ -z "${CORE}" ]]; then
+    CORE_VERSION=$(cd "${REPO_ROOT}" && go list -f "{{ .Version }}" -m github.com/lyft/clutch/backend)
+    if [[ "${CORE_VERSION}" =~ "-*-" ]]; then
+      # if a pseudo-version
+      CORE_VERSION=$(awk -F"-" '{print $NF}')
+    fi
+    echo COREVER "${CORE_VERSION}"
   fi
 
   CLUTCH_API_ROOT="${SCRIPT_ROOT}/api"
