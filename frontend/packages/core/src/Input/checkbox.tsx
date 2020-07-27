@@ -20,12 +20,12 @@ const Checkbox = styled(MuiCheckbox)`
 `;
 
 interface CheckboxPanelProps {
-  header: string;
+  header?: string;
   options: {
     [option: string]: string;
   };
-  onChange: (option: string, checked: boolean) => null;
-}
+  onChange: (option: string, checked: boolean) => void;
+};
 
 const CheckboxPanel: React.FC<CheckboxPanelProps> = ({ header, options, onChange }) => {
   const allOptions = {};
