@@ -9,6 +9,7 @@ DOCS_DEPLOY_GIT_USER ?= git
 VERSION := 0.0.0
 
 YARN:=./build/bin/yarn.sh
+PROJECT_ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 .PHONY: help # Print this help message.
  help:
@@ -19,15 +20,15 @@ all: api frontend backend-with-assets
 
 .PHONY: api # Generate API assets.
 api: yarn-ensure
-	tools/compile-protos.sh
+	tools/compile-protos.sh -c "$(PROJECT_ROOT_DIR)"
 
 .PHONY: api-lint # Lint the generated API assets.
 api-lint:
-	tools/compile-protos.sh -l
+	tools/compile-protos.sh -c "$(PROJECT_ROOT_DIR)" -l
 
 .PHONY: api-lint-fix # Lint and fix the generated API assets.
 api-lint-fix:
-	tools/compile-protos.sh -lf
+	tools/compile-protos.sh -c "$(PROJECT_ROOT_DIR)" -lf
 
 .PHONY: api-verify # Verify API proto changes include generate frontend and backend assets.
 api-verify:
