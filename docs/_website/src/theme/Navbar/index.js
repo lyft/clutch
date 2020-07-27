@@ -14,6 +14,28 @@ import useLogo from '@theme/hooks/useLogo';
 
 import styles from './styles.module.css';
 
+// items defined here instead of config so they can have an associated icon
+var items = [
+  {
+    to: 'docs/about/what-is-clutch',
+    activeBasePath: 'docs',
+    icon: "fe fe-book",
+    label: 'Docs',
+  },
+  {
+    to: 'docs/community',
+    activeBasePath: 'docs',
+    icon: "fe fe-message-square",
+    label: 'Community',
+  },
+  {
+    href: 'https://github.com/lyft/clutch',
+    icon: "fe fe-github",
+    label: 'GitHub',
+  },
+];
+
+
 // retrocompatible with v1
 const DefaultNavItemPosition = 'right';
 
@@ -51,7 +73,6 @@ function NavLink({
 }
 
 function NavItem({
-  items,
   position = DefaultNavItemPosition,
   className,
   ...props
@@ -101,7 +122,7 @@ function NavItem({
   );
 }
 
-function MobileNavItem({ items, position: _position, className, ...props }) {
+function MobileNavItem({ position: _position, className, ...props }) {
   // Need to destructure position from props so that it doesn't get passed on.
   const navLinkClassNames = (extraClassName, isSubList = false) =>
     clsx(
