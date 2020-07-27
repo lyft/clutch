@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@docusaurus/core": "2.0.0-alpha.58",
-    "@docusaurus/preset-classic": "2.0.0-alpha.58",
+    "@docusaurus/preset-classic": "2.0.0-alpha.59",
     "classnames": "^2.2.6",
     "prismjs": "^1.20.0",
     "react": "^16.8.4",
