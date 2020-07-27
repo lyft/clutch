@@ -72,7 +72,7 @@ function NavLink({
   );
 }
 
-function NavItem({
+function NavigationItem({
   position = DefaultNavItemPosition,
   className,
   ...props
@@ -83,6 +83,7 @@ function NavItem({
         'navbar__item navbar__link': !isDropdownItem,
         dropdown__link: isDropdownItem,
       },
+      styles.navbarItemCustom,
       extraClassName,
     );
 
@@ -92,7 +93,7 @@ function NavItem({
 
   return (
     <div
-      className={clsx('navbar__item', 'dropdown', 'dropdown--hoverable', {
+      className={clsx('navbar__item', {
         'dropdown--left': position === 'left',
         'dropdown--right': position === 'right',
       })}>
@@ -107,22 +108,11 @@ function NavItem({
         }}>
         {props.label}
       </NavLink>
-      <ul className="dropdown__menu">
-        {items.map(({ className: childItemClassName, ...childItemProps }, i) => (
-          <li key={i}>
-            <NavLink
-              activeClassName="dropdown__link--active"
-              className={navLinkClassNames(childItemClassName, true)}
-              {...childItemProps}
-            />
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
 
-function MobileNavItem({ position: _position, className, ...props }) {
+function MobileNavigationItem({ position: _position, className, ...props }) {
   // Need to destructure position from props so that it doesn't get passed on.
   const navLinkClassNames = (extraClassName, isSubList = false) =>
     clsx(
@@ -181,7 +171,7 @@ function Navbar() {
   const {
     siteConfig: {
       themeConfig: {
-        navbar: { title, links = [], hideOnScroll = false } = {},
+        navbar: { title, hideOnScroll = false } = {},
         colorMode: {disableSwitch: disableColorModeSwitch = false} = {},
       },
     },
@@ -216,7 +206,7 @@ function Navbar() {
     }
   }, [windowSize]);
 
-  const { leftLinks, rightLinks } = splitLinks(links);
+  const { leftLinks, rightLinks } = splitLinks(items);
 
   return (
     <nav
@@ -228,7 +218,7 @@ function Navbar() {
       })}>
       <div className="navbar__inner">
         <div className="navbar__items">
-          {links != null && links.length !== 0 && (
+          {items != null && items.length !== 0 && (
             <div
               aria-label="Navigation bar toggle"
               className="navbar__toggle"
@@ -266,7 +256,7 @@ function Navbar() {
             <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
           </Link>
           {leftLinks.map((linkItem, i) => (
-            <NavItem {...linkItem} key={i} />
+            <NavigationItem {...linkItem} key={i} />
           ))}
         </div>
         <div className="navbar__items navbar__items--right">
@@ -275,7 +265,7 @@ function Navbar() {
             isSearchBarExpanded={isSearchBarExpanded}
           />
           {rightLinks.map((linkItem, i) => (
-            <NavItem {...linkItem} key={i} />
+            <NavigationItem {...linkItem} key={i} />
           ))}
           {!disableColorModeSwitch && (
             <Toggle
@@ -322,8 +312,8 @@ function Navbar() {
         <div className="navbar-sidebar__items">
           <div className="menu">
             <ul className="menu__list">
-              {links.map((linkItem, i) => (
-                <MobileNavItem {...linkItem} onClick={hideSidebar} key={i} />
+              {items.map((linkItem, i) => (
+                <MobileNavigationItem {...linkItem} onClick={hideSidebar} key={i} />
               ))}
             </ul>
           </div>
