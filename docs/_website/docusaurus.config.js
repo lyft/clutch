@@ -105,7 +105,9 @@ module.exports = {
     },
   },
   themeConfig: {
-    disableDarkMode: true,
+    colorMode: {
+      disableSwitch: true,
+    },
     googleAnalytics: {
       trackingID: 'UA-170615678-4',
       anonymizeIP: true,
