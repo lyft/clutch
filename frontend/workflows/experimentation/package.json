@@ -20,8 +20,12 @@
   },
   "dependencies": {
     "@clutch-sh/core": "^0.0.0-beta",
+    "@clutch-sh/data-layout": "^0.0.0-beta",
+    "@clutch-sh/wizard": "^0.0.0-beta",
+    "@material-ui/core": "^4.9.1",
     "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react-dom": "^16.8.0",
+    "yup": "^0.29.0"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^0.0.0-beta"
