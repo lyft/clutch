@@ -149,19 +149,19 @@ func getGatewayTemplateValues() (*gatewayTemplateValues, string) {
 	return data, dest
 }
 
-func generateAPI(tmpFolder, dest string) {
+func generateAPI(args *args, tmpFolder, dest string) {
 	// TODO: Move this to occur in tmpdir once clutch is published publicly.
 	log.Println("Adding clutch dependencies to go.mod...")
 	if err := os.Chdir(filepath.Join(tmpFolder, "backend")); err != nil {
 		log.Fatal(err)
 	}
-	cmd := exec.Command("go", "get", "github.com/lyft/clutch/backend")
+	cmd := exec.Command("go", "get", fmt.Sprintf("github.com/lyft/clutch/backend@%s", args.GoPin))
 	if out, err := cmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
 		log.Fatal("`go get` backend in the destination dir returned the above error")
 	}
 
-	cmd = exec.Command("go", "get", "github.com/lyft/clutch/tools")
+	cmd = exec.Command("go", "get", fmt.Sprintf("github.com/lyft/clutch/tools@%s", args.GoPin))
 	if out, err := cmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
 		log.Fatal("`go get` tools in the destination dir returned the above error")
@@ -185,7 +185,7 @@ func generateAPI(tmpFolder, dest string) {
 	fmt.Printf("cd %s && make\n", dest)
 }
 
-func generateFrontend(tmpFolder, dest string) {
+func generateFrontend(args *args, tmpFolder, dest string) {
 	// Update clutch.config.js for new workflow
 	log.Println("Compiling workflow, this may take a few minutes...")
 	log.Println("cd", tmpFolder, "&& yarn --frozen-lockfile && yarn tsc && yarn compile")
@@ -231,22 +231,34 @@ func generateFrontend(tmpFolder, dest string) {
 	fmt.Printf("cd %s && make frontend-dev\n", dest)
 }
 
+type args struct {
+	Mode  string
+	GoPin string
+}
+
+func parseArgs() *args {
+	f := &args{}
+	flag.StringVar(&f.Mode, "m", "gateway", "oneof gateway, workflow")
+	flag.StringVar(&f.GoPin, "p", "main", "sha or other github ref to version of tools used in scaffolding")
+	flag.Parse()
+	return f
+}
+
 func main() {
 	root, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	mode := flag.String("m", "gateway", "oneof gateway, workflow")
+	flags := parseArgs()
 
-	flag.Parse()
 	// Collect info from user based on mode and determine template root.
 	var dest string
 	var templateRoot string
 	var data interface{}
-	var postProcessFunction func(tmpFolder, dest string)
+	var postProcessFunction func(flags *args, tmpFolder, dest string)
 
-	switch *mode {
+	switch flags.Mode {
 	case "gateway":
 		templateRoot = filepath.Join(root, "templates/gateway")
 		data, dest = getGatewayTemplateValues()
@@ -308,7 +320,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	postProcessFunction(tmpout, dest)
+	postProcessFunction(flags, tmpout, dest)
 
 	// Move tmpdir contents to destination.
 	if err := os.MkdirAll(filepath.Dir(dest), 0755); err != nil {
