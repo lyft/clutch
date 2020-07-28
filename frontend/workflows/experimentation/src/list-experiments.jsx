@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ButtonGroup, client, Row, Table } from "@clutch-sh/core";
 import { Container } from "@material-ui/core";
 
@@ -34,8 +35,21 @@ function renderLatencyData(experiment) {
   );
 }
 
+const render = () => {
+  ReactDOM.render(StartAbortExperiment("test"), document.getElementById("root"));
+};
+
 const ListExperiments = () => {
   const [experiments, setExperiments] = useState();
+
+  const navigate = useNavigate();
+  function handleClickStartAbortExperiment() {
+    navigate("/experimentation/startabort");
+  }
+
+  function handleClickStartLatencyExperiment() {
+    navigate("/experimentation/startlatency");
+  }
 
   if (!experiments) {
     client.post("/v1/experiments/get").then(response => {
@@ -64,11 +78,11 @@ const ListExperiments = () => {
         buttons={[
           {
             text: "Start Abort Experiment",
-            onClick: { StartAbortExperiment },
+            onClick: () => handleClickStartAbortExperiment(),
           },
           {
             text: "Start Latency Experiment",
-            onClick: { StartLatencyExperiment },
+            onClick: () => handleClickStartLatencyExperiment(),
           },
         ]}
       />
