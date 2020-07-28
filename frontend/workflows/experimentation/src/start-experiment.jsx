@@ -101,7 +101,7 @@ const LatencyExperimentDetails = () => {
             input: {
               type: "number",
               key: "percent",
-              validation: yup.number().integer().moreThan(-1).lessThan(101),
+              validation: yup.number().integer().min(0).max(100),
             },
           },
           {
