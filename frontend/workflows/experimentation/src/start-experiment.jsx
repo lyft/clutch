@@ -44,7 +44,7 @@ const ClusterPairTargetDetails = () => {
 const AbortExperimentDetails = () => {
   const { onSubmit, onBack } = useWizardContext();
   const abortExperimentData = useDataLayout("abortExperimentData");
-  const abortExperiment = abortExperimentData.displayValue();
+  const abortExperiment = abortExperimentData.value;
   const update = (key, value) => {
     abortExperimentData.updateData(key, value);
   };
