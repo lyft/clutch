@@ -135,7 +135,7 @@ lint-fix: api-lint-fix backend-lint-fix frontend-lint-fix
 
 .PHONY: scaffold-gateway # Generate a new gateway.
 scaffold-gateway:
-	cd tools/scaffolding && go run scaffolder.go -m gateway
+	cd tools/scaffolding && go run scaffolder.go -m gateway -p $(shell git rev-parse --short HEAD)
 
 .PHONY: scaffold-workflow # Generate a new Workflow package.
 scaffold-workflow:
