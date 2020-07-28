@@ -22,7 +22,6 @@ const ClusterPairTargetDetails = () => {
             name: "Downstream Cluster",
             value: clusterPair.downstreamCluster,
             input: {
-              type: "string",
               key: "downstreamCluster",
             },
           },
