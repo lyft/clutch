@@ -22,7 +22,6 @@ const ClusterPairTargetDetails = () => {
             name: "Downstream Cluster",
             value: clusterPair.downstreamCluster,
             input: {
-              type: "string",
               key: "downstreamCluster",
             },
           },
@@ -30,7 +29,6 @@ const ClusterPairTargetDetails = () => {
             name: "Upstream Cluster",
             value: clusterPair.upstreamCluster,
             input: {
-              type: "string",
               key: "upstreamCluster",
             },
           },
@@ -52,7 +50,7 @@ const ClusterPairTargetDetails = () => {
 const AbortExperimentDetails = () => {
   const { onSubmit, onBack } = useWizardContext();
   const abortExperimentData = useDataLayout("abortExperimentData");
-  const abortExperiment = abortExperimentData.displayValue();
+  const abortExperiment = abortExperimentData.value;
   const update = (key, value) => {
     abortExperimentData.updateData(key, value);
   };
@@ -82,10 +80,20 @@ const AbortExperimentDetails = () => {
           },
         ]}
       />
-      <Grid container justify="center">
-        <Button text="Back" onClick={onBack} />
-        <Button text="Next" destructive onClick={onSubmit} />
-      </Grid>
+      <ButtonGroup
+        buttons={[
+          {
+            text: "Back",
+            onClick: onBack,
+            destructive: true,
+          },
+          {
+            text: "Next",
+            onClick: onSubmit,
+            destructive: true,
+          },
+        ]}
+      />
     </WizardStep>
   );
 };
@@ -93,7 +101,7 @@ const AbortExperimentDetails = () => {
 const LatencyExperimentDetails = () => {
   const { onSubmit, onBack } = useWizardContext();
   const latencyExperimentData = useDataLayout("latencyExperimentData");
-  const latencyExperiment = latencyExperimentData.displayValue();
+  const latencyExperiment = latencyExperimentData.value;
   const update = (key, value) => {
     latencyExperimentData.updateData(key, value);
   };
@@ -109,7 +117,7 @@ const LatencyExperimentDetails = () => {
             input: {
               type: "number",
               key: "percent",
-              validation: yup.number().integer().moreThan(-1).lessThan(101),
+              validation: yup.number().integer().min(0).max(100),
             },
           },
           {
@@ -123,10 +131,21 @@ const LatencyExperimentDetails = () => {
           },
         ]}
       />
-      <Grid container justify="center">
-        <Button text="Back" onClick={onBack} />
-        <Button text="Next" destructive onClick={onSubmit} />
-      </Grid>
+      ```suggestion
+      <ButtonGroup
+        buttons={[
+          {
+            text: "Back",
+            onClick: onBack,
+            destructive: true,
+          },
+          {
+            text: "Next",
+            onClick: onSubmit,
+            destructive: true,
+          },
+        ]}
+      />
     </WizardStep>
   );
 };
