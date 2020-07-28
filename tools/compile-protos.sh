@@ -50,12 +50,13 @@ main() {
       # if a pseudo-version, figure out just the SHA
       CORE_VERSION=$(echo "${CORE_VERSION}" | awk -F"-" '{print $NF}')
     fi
-    
-    core_zip_out="/tmp/clutch-${CORE_VERSION}.tar.gz"
-    core_tmp_out="/tmp/clutch-${CORE_VERSION}"
+
     core_out="${REPO_ROOT}/build/bin/clutch-api-${CORE_VERSION}"
-    if [[ ! -d "${CLUTCH_API_ROOT}" ]]; then
+    if [[ ! -d "${core_out}" ]]; then
       echo "info: downloading core APIs ${CORE_VERSION} to build environment..."
+
+      core_zip_out="/tmp/clutch-${CORE_VERSION}.tar.gz"
+      core_tmp_out="/tmp/clutch-${CORE_VERSION}"
       curl -sSL -o "${core_zip_out}" \
         "https://github.com/lyft/clutch/archive/${CORE_VERSION}.zip"
 
