@@ -35,14 +35,14 @@ const ClusterPairTargetDetails = () => {
         ]}
       />
       <ButtonGroup
-  buttons={[
-    {
-      text: "Next",
-      onClick: onSubmit,
-      destructive: true,
-    },
-  ]}
-/>
+        buttons={[
+          {
+            text: "Next",
+            onClick: onSubmit,
+            destructive: true,
+          },
+        ]}
+      />
     </WizardStep>
   );
 };
