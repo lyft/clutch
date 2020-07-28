@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { ButtonGroup, client, Row, Table } from "@clutch-sh/core";
 import { Container } from "@material-ui/core";
 
-import { StartAbortExperiment, StartLatencyExperiment } from "./start-experiment";
-
 function renderAbortData(experiment) {
   const ts = experiment.testSpecification;
   return (
@@ -34,10 +32,6 @@ function renderLatencyData(experiment) {
     />
   );
 }
-
-const render = () => {
-  ReactDOM.render(StartAbortExperiment("test"), document.getElementById("root"));
-};
 
 const ListExperiments = () => {
   const [experiments, setExperiments] = useState();
