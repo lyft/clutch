@@ -85,7 +85,7 @@ const AbortExperimentDetails = () => {
 const LatencyExperimentDetails = () => {
   const { onSubmit, onBack } = useWizardContext();
   const latencyExperimentData = useDataLayout("latencyExperimentData");
-  const latencyExperiment = latencyExperimentData.displayValue();
+  const latencyExperiment = latencyExperimentData.value;
   const update = (key, value) => {
     latencyExperimentData.updateData(key, value);
   };
