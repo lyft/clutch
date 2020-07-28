@@ -20,7 +20,7 @@ backend:
 
 .PHONY: backend-dev
 backend-dev:
-	cd backend && go run main.go -c ../clutch-config.yaml
+	cd backend && go run main.go -c clutch-config.yaml
 
 .PHONY: backend-test
 backend-test:
