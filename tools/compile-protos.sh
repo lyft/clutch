@@ -51,18 +51,19 @@ main() {
       CORE_VERSION=$(echo "${CORE_VERSION}" | awk -F"-" '{print $NF}')
     fi
     
-    core_tmp_out="/tmp/clutch-${CORE_VERSION}.tar.gz"
+    core_zip_out="/tmp/clutch-${CORE_VERSION}.tar.gz"
+    core_tmp_out="/tmp/clutch-${CORE_VERSION}"
     core_out="${REPO_ROOT}/build/bin/clutch-api-${CORE_VERSION}"
     if [[ ! -d "${CLUTCH_API_ROOT}" ]]; then
       echo "info: downloading core APIs ${CORE_VERSION} to build environment..."
       curl -sSL -o "${core_tmp_out}" \
-        "https://github.com/lyft/clutch/archive/${CORE_VERSION}.tar.gz"
+        "https://github.com/lyft/clutch/archive/${CORE_VERSION}.zip"
+
+      mkdir -p "${core_tmp_out}"
+      unzip -q -o "${core_zip_out}" -d "${core_tmp_out}"
 
       mkdir -p "${core_out}"
-      tar -C "${core_out}" \
-        -xzf "${core_tmp_out}" \
-        --strip-components=2 --no-wildcards-match-slash \
-        --wildcards 'clutch-*/api'
+      mv "${core_tmp_out}/clutch-*/api" "${core_out}"
     fi
 
     CLUTCH_API_ROOT="${core_out}"
