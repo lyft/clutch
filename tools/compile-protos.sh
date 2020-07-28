@@ -63,7 +63,7 @@ main() {
       unzip -q -o "${core_zip_out}" -d "${core_tmp_out}"
 
       mkdir -p "${core_out}"
-      mv "${core_tmp_out}/clutch-*/api" "${core_out}"
+      mv "${core_tmp_out}"/clutch-*/api "${core_out}"
     fi
 
     CLUTCH_API_ROOT="${core_out}"
