@@ -29,7 +29,7 @@ function renderLatencyData(experiment) {
         ts.latency.clusterPair.downstreamCluster,
         ts.latency.clusterPair.upstreamCluster,
         ts.latency.percent,
-        ts.latency.httpStatus,
+        ts.latency.durationMs,
       ]}
     />
   );
