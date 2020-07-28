@@ -36,9 +36,15 @@ const ClusterPairTargetDetails = () => {
           },
         ]}
       />
-      <Grid container justify="center">
-        <Button text="Next" destructive onClick={onSubmit} />
-      </Grid>
+      <ButtonGroup
+  buttons={[
+    {
+      text: "Next",
+      onClick: onSubmit,
+      destructive: true,
+    },
+  ]}
+/>
     </WizardStep>
   );
 };
