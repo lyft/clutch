@@ -10,7 +10,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint --ext .js,.jsx .",
     "lint:fix": "yarn run lint --fix",
-    "register-workflows": "yarn workspace @clutch-sh/tools registerWorkflows $PWD/src",
+    "register-workflows": "npm explore @clutch-sh/tools -- yarn registerWorkflows $PWD/src",
     "start": "yarn compile:watch & yarn register-workflows && react-scripts start",
     "test": "lerna run test --stream --no-bail",
     "test:coverage": "lerna run test:coverage --stream --no-bail",
