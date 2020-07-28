@@ -115,10 +115,21 @@ const LatencyExperimentDetails = () => {
           },
         ]}
       />
-      <Grid container justify="center">
-        <Button text="Back" onClick={onBack} />
-        <Button text="Next" destructive onClick={onSubmit} />
-      </Grid>
+      ```suggestion
+      <ButtonGroup
+        buttons={[
+          {
+            text: "Back",
+            onClick: onBack,
+            destructive: true,
+          },
+          {
+            text: "Next",
+            onClick: onSubmit,
+            destructive: true,
+          },
+        ]}
+      />
     </WizardStep>
   );
 };
