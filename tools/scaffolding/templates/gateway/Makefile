@@ -30,11 +30,7 @@ backend-test:
 backend-with-assets: frontend
 	cd backend && go run $(PRIMARY_MODULE_DIR)/cmd/assets/generate.go ../frontend/build && go build -tags withAssets -o ../build/clutch -ldflags="-X main.version=$(VERSION)"
 
-.PHONY: vendor
-vendor:
-	mkdir -p build/tools
-	cd backend && go get github.com/lyft/clutch/backend@latest
-
+.PHONY: frontend
 frontend: yarn-install
 	yarn --cwd frontend build
 
