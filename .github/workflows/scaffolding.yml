@@ -28,8 +28,8 @@ jobs:
         with:
           node-version: '12.x'
       - name: scaffold new app
-        run: yes | go run scaffolder.go -m gateway -p ${{ github.event.pull_request.head.sha }}
-        working-directory: ${{ env.PACKAGEPATH }}/tools/scaffolding
+        run: yes | make scaffold-gateway
+        working-directory: ${{ env.PACKAGEPATH }}
       - name: build scaffolding
         run: make
         working-directory: ${{ github.workspace }}/go/src/github.com/runner/clutch-custom-gateway
