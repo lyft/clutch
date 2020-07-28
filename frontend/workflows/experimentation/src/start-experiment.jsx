@@ -1,8 +1,13 @@
 import React from "react";
-import { Button, client, Confirmation, MetadataTable, useWizardContext } from "@clutch-sh/core";
+import {
+  ButtonGroup,
+  client,
+  Confirmation,
+  MetadataTable,
+  useWizardContext,
+} from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
-import { Grid } from "@material-ui/core";
 import * as yup from "yup";
 
 const ClusterPairTargetDetails = () => {
