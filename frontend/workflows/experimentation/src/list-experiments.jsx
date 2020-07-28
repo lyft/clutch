@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { client, Row, Table } from "@clutch-sh/core";
-import { Button, Container } from "@material-ui/core";
+import { ButtonGroup, client, Row, Table } from "@clutch-sh/core";
+import { Container } from "@material-ui/core";
 
 import { StartAbortExperiment, StartLatencyExperiment } from "./start-experiment";
 
@@ -60,8 +60,18 @@ const ListExperiments = () => {
           return renderLatencyData(e);
         })}
       </Table>
-      <Button onClick={StartAbortExperiment}>Start Abort Experiment</Button>
-      <Button onClick={StartLatencyExperiment}>Start Latency Experiment</Button>
+      <ButtonGroup
+        buttons={[
+          {
+            text: "Start Abort Experiment",
+            onClick: { StartAbortExperiment },
+          },
+          {
+            text: "Start Latency Experiment",
+            onClick: { StartLatencyExperiment },
+          },
+        ]}
+      />
     </Container>
   );
 };
