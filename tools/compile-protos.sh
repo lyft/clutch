@@ -56,7 +56,7 @@ main() {
     core_out="${REPO_ROOT}/build/bin/clutch-api-${CORE_VERSION}"
     if [[ ! -d "${CLUTCH_API_ROOT}" ]]; then
       echo "info: downloading core APIs ${CORE_VERSION} to build environment..."
-      curl -sSL -o "${core_tmp_out}" \
+      curl -sSL -o "${core_zip_out}" \
         "https://github.com/lyft/clutch/archive/${CORE_VERSION}.zip"
 
       mkdir -p "${core_tmp_out}"
