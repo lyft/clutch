@@ -4,6 +4,7 @@ import (
 	"context"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/util/retry"
 
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 
@@ -53,8 +54,12 @@ func (s *svc) ResizeHPA(ctx context.Context, clientset, cluster, namespace, name
 	}
 
 	normalizeHPAChanges(hpa, sizing)
-	_, err = cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Update(hpa)
-	return err
+
+	retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
+		_, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Update(hpa)
+		return err
+	})
+	return retryErr
 }
 
 func normalizeHPAChanges(hpa *autoscalingv1.HorizontalPodAutoscaler, sizing *k8sapiv1.ResizeHPARequest_Sizing) {

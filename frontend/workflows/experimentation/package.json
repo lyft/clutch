@@ -20,17 +20,8 @@
   },
   "dependencies": {
     "@clutch-sh/core": "^0.0.0-beta",
-    "@clutch-sh/data-layout": "^0.0.0-beta",
-    "@clutch-sh/wizard": "^0.0.0-beta",
-    "@material-ui/core": "^4.9.1",
-    "lodash": "^4.17.15",
-    "react": "^16.8",
-    "react-dom": "^16.8.0",
-    "react-is": "^16.8.0",
-    "react-router": "^6.0.0-alpha",
-    "react-router-dom": "^6.0.0-alpha.2",
-    "styled-components": "^5.0.1",
-    "yup": "^0.29.0"
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^0.0.0-beta"
