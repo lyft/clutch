@@ -46,15 +46,4 @@ module.exports = {
       },
     },
   },
-  "@clutch-sh/experimentation": {
-    listExperiments: {
-      trending: true,
-    },
-    startAbortExperiment: {
-      trending: true,
-    },
-    startLatencyExperiment: {
-      trending: true,
-    },
-  },
 };
