@@ -30,7 +30,6 @@ const ClusterPairTargetDetails = () => {
             name: "Upstream Cluster",
             value: clusterPair.upstreamCluster,
             input: {
-              type: "string",
               key: "upstreamCluster",
             },
           },
