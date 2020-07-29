@@ -102,7 +102,7 @@ const OptionField = (
     onChange({
       target: {
         name: fieldName,
-        value: field.metadata.optionField.options[selectedIdx].stringValue,
+        value: field.metadata.optionField.options?.[selectedIdx]?.stringValue,
       },
       initialLoad: true,
     });
