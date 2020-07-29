@@ -7,6 +7,7 @@ import (
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
+	types "k8s.io/client-go/tools/clientcmd/api"
 )
 
 type ClientsetManager interface {
@@ -46,21 +47,17 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules) (ClientsetMa
 
 	lookup := make(map[string]*ctxClientsetImpl, len(apiConfig.Contexts))
 	for name, ctxInfo := range apiConfig.Contexts {
-		contextConfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
-			rules,
-			&clientcmd.ConfigOverrides{CurrentContext: name},
-		)
-
-		restConfig, err := contextConfig.ClientConfig()
+		clientset, err := createClientsetImpl(name, ctxInfo, rules)
 		if err != nil {
-			return nil, fmt.Errorf("could not load restconfig: %w", err)
+			return nil, err
 		}
+		lookup[name] = clientset
+	}
 
-		if restConfig == nil {
-			restConfig, err = rest.InClusterConfig()
-			if err != nil {
-				return nil, fmt.Errorf("could not load InClusterConfig: %w", err)
-			}
+	if len(lookup) == 0 {
+		restConfig, err := rest.InClusterConfig()
+		if err != nil {
+			return nil, err
 		}
 
 		clientset, err := k8s.NewForConfig(restConfig)
@@ -68,15 +65,33 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules) (ClientsetMa
 			return nil, fmt.Errorf("could not create k8s clientset from config: %w", err)
 		}
 
-		ns, _, err := contextConfig.Namespace()
-		if err != nil {
-			return nil, err
-		}
-
-		lookup[name] = &ctxClientsetImpl{Interface: clientset, namespace: ns, cluster: ctxInfo.Cluster}
+		lookup["local"] = &ctxClientsetImpl{Interface: clientset, namespace: "default", cluster: "local"}
 	}
 
 	return &managerImpl{clientsets: lookup}, nil
+}
+
+func createClientsetImpl(name string, ctxInfo *types.Context, rules *clientcmd.ClientConfigLoadingRules) (*ctxClientsetImpl, error) {
+	contextConfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
+		rules,
+		&clientcmd.ConfigOverrides{CurrentContext: name},
+	)
+
+	restConfig, err := contextConfig.ClientConfig()
+	if err != nil {
+		return nil, fmt.Errorf("could not load restconfig: %w", err)
+	}
+
+	clientset, err := k8s.NewForConfig(restConfig)
+	if err != nil {
+		return nil, fmt.Errorf("could not create k8s clientset from config: %w", err)
+	}
+
+	ns, _, err := contextConfig.Namespace()
+	if err != nil {
+		return nil, err
+	}
+	return &ctxClientsetImpl{Interface: clientset, namespace: ns, cluster: ctxInfo.Cluster}, nil
 }
 
 type managerImpl struct {
