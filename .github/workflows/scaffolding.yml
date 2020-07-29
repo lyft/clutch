@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: '12.x'
       - name: scaffold new app
-        run: yes | go run scaffolder.go -m gateway -p ${{ github.event.pull_request.head.sha || github.sha }} -o ${{ github.repository_owner }}
+        run: yes | go run scaffolder.go -m gateway -p ${{ github.event.pull_request.head.sha || github.sha }} -o ${{ github.context.repo.owner }}
         working-directory: ${{ env.PACKAGEPATH }}/tools/scaffolding
       - name: build scaffolding
         run: make
