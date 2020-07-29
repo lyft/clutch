@@ -14,19 +14,10 @@ gateway:
       address: 0.0.0.0
       port: 8080
       secure: false
-#  json_gateway_loopback_listener:
-#    tcp:
-#      address 127.0.0.1
-#      port: 8081
-#      secure: false
 modules:
   - name: clutch.module.assets
-#   - name: clutch.module.authn
   - name: clutch.module.healthcheck
   - name: clutch.module.resolver
-  - name: clutch.module.aws
-  - name: clutch.module.envoytriage
-  - name: clutch.module.k8s
   - name: clutch.module.chaos.experimentation.api
   - name: clutch.module.chaos.experimentation.rtds
     typed_config:
@@ -34,22 +25,5 @@ modules:
       rtds_layer_name: foo
       cache_refresh_interval: "60s"
 services:
-  - name: clutch.service.aws
-    # registered_name: aws-us-east
-    typed_config:
-      "@type": types.google.com/clutch.config.service.aws.v1.Config
-      regions:
-        - us-east-1
-        - us-west-2
-  - name: clutch.service.envoyadmin
-    typed_config:
-      "@type": types.google.com/clutch.config.service.envoyadmin.v1.Config
-      secure: false
-      default_remote_port: 9876
-  - name: clutch.service.k8s
-    typed_config:
-      "@type": types.google.com/clutch.config.service.k8s.v1.Config
   - name: clutch.service.chaos.experimentation.store
 resolvers:
-  - name: clutch.resolver.aws
-  - name: clutch.resolver.k8s
