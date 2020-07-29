@@ -154,13 +154,13 @@ func generateAPI(args *args, tmpFolder, dest string) {
 	if err := os.Chdir(filepath.Join(tmpFolder, "backend")); err != nil {
 		log.Fatal(err)
 	}
-	cmd := exec.Command("go", "get", fmt.Sprintf("github.com/lyft/%s/backend@%s", args.Org, args.GoPin))
+	cmd := exec.Command("go", "get", fmt.Sprintf("github.com/%s/clutch/backend@%s", args.Org, args.GoPin))
 	if out, err := cmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
 		log.Fatal("`go get` backend in the destination dir returned the above error")
 	}
 
-	cmd = exec.Command("go", "get", fmt.Sprintf("github.com/lyft/%s/tools@%s", args.Org, args.GoPin))
+	cmd = exec.Command("go", "get", fmt.Sprintf("github.com/%s/clutch/tools@%s", args.Org, args.GoPin))
 	if out, err := cmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
 		log.Fatal("`go get` tools in the destination dir returned the above error")
