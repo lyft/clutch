@@ -34,16 +34,6 @@ modules:
       rtds_layer_name: foo
       cache_refresh_interval: "60s"
 services:
-  - name: clutch.service.db.postgres
-    typed_config:
-      "@type": types.google.com/clutch.config.service.db.postgres.v1.Config
-      connection:
-        host: localhost
-        port: 5432
-        user: clutch
-        ssl_mode: DISABLE
-        dbname: clutch
-        password: clutch
   - name: clutch.service.aws
     # registered_name: aws-us-east
     typed_config:
