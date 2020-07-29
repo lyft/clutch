@@ -150,18 +150,17 @@ func getGatewayTemplateValues() (*gatewayTemplateValues, string) {
 }
 
 func generateAPI(args *args, tmpFolder, dest string) {
-	// TODO: Move this to occur in tmpdir once clutch is published publicly.
 	log.Println("Adding clutch dependencies to go.mod...")
 	if err := os.Chdir(filepath.Join(tmpFolder, "backend")); err != nil {
 		log.Fatal(err)
 	}
-	cmd := exec.Command("go", "get", fmt.Sprintf("github.com/lyft/clutch/backend@%s", args.GoPin))
+	cmd := exec.Command("go", "get", fmt.Sprintf("github.com/%s/clutch/backend@%s", args.Org, args.GoPin))
 	if out, err := cmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
 		log.Fatal("`go get` backend in the destination dir returned the above error")
 	}
 
-	cmd = exec.Command("go", "get", fmt.Sprintf("github.com/lyft/clutch/tools@%s", args.GoPin))
+	cmd = exec.Command("go", "get", fmt.Sprintf("github.com/%s/clutch/tools@%s", args.Org, args.GoPin))
 	if out, err := cmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
 		log.Fatal("`go get` tools in the destination dir returned the above error")
@@ -234,12 +233,14 @@ func generateFrontend(args *args, tmpFolder, dest string) {
 type args struct {
 	Mode  string
 	GoPin string
+	Org   string
 }
 
 func parseArgs() *args {
 	f := &args{}
 	flag.StringVar(&f.Mode, "m", "gateway", "oneof gateway, workflow")
 	flag.StringVar(&f.GoPin, "p", "main", "sha or other github ref to version of tools used in scaffolding")
+	flag.StringVar(&f.Org, "o", "lyft", "overrides the github organization (for use in fork testing)")
 	flag.Parse()
 	return f
 }
