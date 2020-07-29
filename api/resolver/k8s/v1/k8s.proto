@@ -24,6 +24,7 @@ message PodID {
 
   string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
     display_name : "Clientset",
+    required : true,
     option_field : {include_dynamic_options : [ "clientset" ]},
   } ];
 
