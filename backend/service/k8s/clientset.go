@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	k8s "k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 )
 
@@ -53,6 +54,13 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules) (ClientsetMa
 		restConfig, err := contextConfig.ClientConfig()
 		if err != nil {
 			return nil, fmt.Errorf("could not load restconfig: %w", err)
+		}
+
+		if restConfig == nil {
+			restConfig, err = rest.InClusterConfig()
+			if err != nil {
+				return nil, fmt.Errorf("could not load InClusterConfig: %w", err)
+			}
 		}
 
 		clientset, err := k8s.NewForConfig(restConfig)
