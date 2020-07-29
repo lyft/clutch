@@ -88,7 +88,7 @@ const OptionField = (
   field: clutch.resolver.v1.IField,
   onChange: (e: ResolverChangeEvent) => void
 ): React.ReactElement => {
-  const options = field.metadata.optionField.options.map(option => {
+  let options = field.metadata.optionField.options.map(option => {
     return option.displayName;
   });
   const [selectedIdx, setSelectedIdx] = React.useState(0);
@@ -108,6 +108,11 @@ const OptionField = (
     });
   }, []);
 
+  const hasError = field.metadata.required && options.length === 0;
+  if (hasError) {
+    options = ["Error: Missing options for required field"];
+  }
+
   return (
     <FormControl
       key={field.metadata.displayName || field.name}
@@ -119,6 +124,7 @@ const OptionField = (
         onChange={updateSelectedOption}
         name={field.metadata.displayName || field.name}
         inputProps={{ style: { minWidth: "100px" } }}
+        disabled={hasError || options.length === 0}
       >
         {options.map(option => (
           <MenuItem key={option} value={option}>
