@@ -55,17 +55,3 @@ If new to the project and looking for a way to contribute, check out issues mark
 We encourage you to open source your extensions, whether modules, resolvers, services, or middleware, even if they're not the right fit for the core project. Others may do the work for you to generalize them for use in core if there's enough interest.
 
 Please tag your repo with the [`#clutch-plugin`](https://github.com/topics/clutch-plugin) topic! For more details see [Github Docs: Topics](https://help.github.com/en/github/administering-a-repository/classifying-your-repository-with-topics).
-
-## Maintaining
-
-Thank you for helping maintain Clutch! Let's strive for the best experience for both contributor and maintainer.
-
-This guidance was heavily leveraged from [envoyproxy/envoy](https://github.com/envoyproxy/envoy/blob/master/CONTRIBUTING.md#pr-review-policy-for-maintainers).
-
-- We are a small team at the moment and try to turn around reviews within one to three business days.
-- See [CODEOWNERS](https://github.com/lyft/clutch/blob/main/.github/CODEOWNERS) for the current list of maintainers.
-- If there is a question on who should review a PR please discuss in [Slack](https://app.slack.com/client/TTPQ4FBPT/C015UJ6LED9).
-- Anyone is welcome to review any PR that they want, whether they are a maintainer or not.
-- Please make sure that the PR title, commit message, and description are updated if the PR changes significantly during review.
-- Please **clean up the title and body** before merging. By default, GitHub fills the squash merge title with the original title, and the commit body with every individual commit from the PR. The maintainer doing the merge should make sure the title follows the guidelines below and should overwrite the body with the original commit message from the PR (if applicable).
-  - As guidance, for commit messages we generally follow the format `<area>: <general description of change>`. For example, `docs: add maintaining section`.
