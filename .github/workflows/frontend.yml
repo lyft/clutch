@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '14.5.x'
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
       - name: Get yarn cache
@@ -39,7 +39,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '14.5.x'
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
       - name: Get yarn cache
@@ -66,7 +66,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '14.5.x'
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
       - name: Get yarn cache
@@ -103,7 +103,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '14.'
           registry-url: 'https://registry.npmjs.org'
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
