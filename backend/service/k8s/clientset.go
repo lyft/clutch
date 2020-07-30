@@ -81,7 +81,6 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, logger *zap.
 		switch err {
 		case rest.ErrNotInCluster:
 			logger.Warn("not in a kubernetes cluster, unable to configure kube clientset")
-			lookup[inCluster] = &ctxClientsetImpl{Interface: nil, namespace: "default", cluster: inCluster}
 		case nil:
 			clientset, err := k8s.NewForConfig(restConfig)
 			if err != nil {
