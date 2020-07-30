@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	inCluster = "local"
+	inCluster = "in-cluster"
 )
 
 type ClientsetManager interface {
