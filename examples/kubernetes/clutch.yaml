@@ -135,9 +135,8 @@ metadata:
   name: clutch
   namespace: clutch
 spec:
-  progressDeadlineSeconds: 600
+  serviceAccount: clutch
   replicas: 1
-  revisionHistoryLimit: 10
   selector:
     matchLabels:
       app: clutch
