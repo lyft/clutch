@@ -141,12 +141,14 @@ const Wizard: React.FC<WizardProps> = ({ heading, dataLayout, children }) => {
   const dataLayoutManager = useDataLayoutManager(dataLayout);
 
   const updateStepData = (stepName: string, data: object) => {
-    const updatedData = {
-      ...setWizardStepData?.[stepName],
-      ...data,
-    };
-    const stepData = { [stepName]: updatedData };
-    setWizardStepData({ ...wizardStepData, ...stepData });
+    setWizardStepData(prevState => {
+      const updatedData = {
+        ...prevState?.[stepName] || {},
+        ...data,
+      };
+      const stepData = { [stepName]: updatedData };
+      return {...prevState, ...stepData }
+    });
   };
 
   const handleNext = () => {
