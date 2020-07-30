@@ -118,6 +118,11 @@ spec:
   - port: 80
     protocol: TCP
     targetPort: 8080
+    name: clutch2
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+    name: clutch
   selector:
     app: clutch
 
