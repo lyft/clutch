@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '12.8.2'
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
       - name: Get yarn cache
