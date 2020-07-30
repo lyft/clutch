@@ -26,12 +26,12 @@ func (s *svc) DescribeDeployment(ctx context.Context, clientset, cluster, namesp
 		return nil, err
 	}
 
-	return ProtoForDeployment(deployment), nil
+	return ProtoForDeployment(cs.Cluster(), deployment), nil
 }
 
-func ProtoForDeployment(deployment *appsv1.Deployment) *k8sapiv1.Deployment {
+func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1.Deployment {
 	return &k8sapiv1.Deployment{
-		Cluster:     deployment.ClusterName,
+		Cluster:     cluster,
 		Namespace:   deployment.Namespace,
 		Name:        deployment.Name,
 		Labels:      deployment.Labels,

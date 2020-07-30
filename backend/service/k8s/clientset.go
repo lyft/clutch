@@ -4,8 +4,14 @@ import (
 	"errors"
 	"fmt"
 
+	"go.uber.org/zap"
 	k8s "k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
+)
+
+const (
+	inCluster = "in-cluster"
 )
 
 type ClientsetManager interface {
@@ -36,7 +42,7 @@ type ctxClientsetImpl struct {
 func (c *ctxClientsetImpl) Namespace() string { return c.namespace }
 func (c *ctxClientsetImpl) Cluster() string   { return c.cluster }
 
-func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules) (ClientsetManager, error) {
+func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, logger *zap.Logger) (ClientsetManager, error) {
 	kubeConfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(rules, &clientcmd.ConfigOverrides{})
 	apiConfig, err := kubeConfig.RawConfig()
 	if err != nil {
@@ -64,8 +70,26 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules) (ClientsetMa
 		if err != nil {
 			return nil, err
 		}
-
 		lookup[name] = &ctxClientsetImpl{Interface: clientset, namespace: ns, cluster: ctxInfo.Cluster}
+	}
+
+	// If there is no configured cluster produced fallback to InClusterConfig
+	if len(lookup) == 0 {
+		logger.Info("no kubeconfig was found, falling back to InClusterConfig")
+
+		restConfig, err := rest.InClusterConfig()
+		switch err {
+		case rest.ErrNotInCluster:
+			logger.Warn("not in a kubernetes cluster, unable to configure kube clientset")
+		case nil:
+			clientset, err := k8s.NewForConfig(restConfig)
+			if err != nil {
+				return nil, fmt.Errorf("could not create k8s InClusterConfig: %w", err)
+			}
+			lookup[inCluster] = &ctxClientsetImpl{Interface: clientset, namespace: "default", cluster: inCluster}
+		default:
+			return nil, err
+		}
 	}
 
 	return &managerImpl{clientsets: lookup}, nil
