@@ -75,7 +75,7 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, logger *zap.
 
 	// If there is no configured cluster produced fallback to InClusterConfig
 	if len(lookup) == 0 {
-		logger.Warn("no kubeconfig was found, falling back to InClusterConfig")
+		logger.Info("no kubeconfig was found, falling back to InClusterConfig")
 
 		restConfig, err := rest.InClusterConfig()
 		switch err {
