@@ -21,7 +21,7 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 	if err != nil {
 		return nil, err
 	}
-	return podDescription(pod, cluster), nil
+	return podDescription(pod, cs.Cluster()), nil
 }
 
 func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error {
@@ -56,7 +56,7 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 	var pods []*k8sapiv1.Pod
 	for _, p := range podList.Items {
 		pod := p
-		pods = append(pods, podDescription(&pod, cluster))
+		pods = append(pods, podDescription(&pod, cs.Cluster()))
 	}
 
 	return pods, nil

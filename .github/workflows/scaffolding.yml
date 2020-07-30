@@ -21,7 +21,7 @@ jobs:
           go-version: 1.14.4
       - uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '14.x'
       - name: scaffold new app
         run: yes | go run scaffolder.go -m gateway -p ${{ github.sha }} -o ${{ github.repository_owner }}
         working-directory: ${{ env.PACKAGEPATH }}/tools/scaffolding

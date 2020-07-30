@@ -121,8 +121,10 @@ func duration(p *durpb.Duration) time.Duration {
 
 func newLogger(msg *gatewayv1.Logger) (*zap.Logger, error) {
 	var c zap.Config
+	var opts []zap.Option
 	if msg.GetPretty() {
 		c = zap.NewDevelopmentConfig()
+		opts = append(opts, zap.AddStacktrace(zap.ErrorLevel))
 	} else {
 		c = zap.NewProductionConfig()
 	}
@@ -139,7 +141,7 @@ func newLogger(msg *gatewayv1.Logger) (*zap.Logger, error) {
 	}
 	c.Level = level
 
-	return c.Build()
+	return c.Build(opts...)
 }
 
 func newTmpLogger() *zap.Logger {
