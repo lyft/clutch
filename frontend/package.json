@@ -62,7 +62,6 @@
   "devDependencies": {
     "lerna": "^3.20.0",
     "license-checker": "^25.0.1",
-    "npx": "^10.2.2",
     "sort-package-json": "^1.44.0"
   },
   "engines": {
