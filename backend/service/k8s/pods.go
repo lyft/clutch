@@ -17,7 +17,7 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 		return nil, err
 	}
 	opts := metav1.GetOptions{}
-	pod, err := cs.CoreV1().Pods(namespace).Get(name, opts)
+	pod, err := cs.CoreV1().Pods(cs.Namespace()).Get(name, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 		opts.LabelSelector = k8slabels.FormatLabels(listPodsOpts.Labels)
 	}
 
-	podList, err := cs.CoreV1().Pods(namespace).List(opts)
+	podList, err := cs.CoreV1().Pods(cs.Namespace()).List(opts)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (s *svc) UpdatePodAnnotations(ctx context.Context, clientset, cluster, name
 		return err
 	}
 
-	pod, err := cs.CoreV1().Pods(namespace).Get(name, metav1.GetOptions{})
+	pod, err := cs.CoreV1().Pods(cs.Namespace()).Get(name, metav1.GetOptions{})
 	if err != nil {
 		return err
 	}
@@ -88,7 +88,7 @@ func (s *svc) UpdatePodAnnotations(ctx context.Context, clientset, cluster, name
 		}
 	}
 
-	_, err = cs.CoreV1().Pods(namespace).Update(pod)
+	_, err = cs.CoreV1().Pods(cs.Namespace()).Update(pod)
 	return err
 }
 
