@@ -135,7 +135,6 @@ metadata:
   name: clutch
   namespace: clutch
 spec:
-  serviceAccount: clutch
   replicas: 1
   selector:
     matchLabels:
@@ -150,6 +149,7 @@ spec:
       labels:
         app: clutch
     spec:
+      serviceAccount: clutch
       containers:
       - image: index.docker.io/lyft/clutch:latest
         command: ["./clutch"]

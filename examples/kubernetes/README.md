@@ -11,8 +11,7 @@ To deploy a working clutch deployment on an existing Kubernetes cluster:
     
     # OR
     # if you are working off a local copy of this repo
-    cd examples/kubernetes
-    kubectl apply -f clutch.yaml
+    kubectl apply -f examples/kubernetes/clutch.yaml
     ```
 1. Connect to your new clutch deployment. You can follow your cloud provider's documentation for configuring ingress on your cluster, or use port-forwarding: 
     ```
