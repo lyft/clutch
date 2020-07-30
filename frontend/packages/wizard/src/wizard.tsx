@@ -143,11 +143,11 @@ const Wizard: React.FC<WizardProps> = ({ heading, dataLayout, children }) => {
   const updateStepData = (stepName: string, data: object) => {
     setWizardStepData(prevState => {
       const updatedData = {
-        ...prevState?.[stepName] || {},
+        ...(prevState?.[stepName] || {}),
         ...data,
       };
       const stepData = { [stepName]: updatedData };
-      return {...prevState, ...stepData }
+      return { ...prevState, ...stepData };
     });
   };
 
