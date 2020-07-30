@@ -33,8 +33,8 @@
     "compile:watch": "lerna run compile:watch --parallel",
     "lint": "lerna run lint --no-bail",
     "lint:fix": "lerna run lint:fix --no-bail",
-    "lint:packages": "npx sort-package-json package.json packages/**/package.json --check",
-    "lint:packages:fix": "npx sort-package-json package.json packages/**/package.json",
+    "lint:packages": "sort-package-json package.json packages/**/package.json --check",
+    "lint:packages:fix": "sort-package-json package.json packages/**/package.json",
     "publishBeta": "lerna run compile && lerna run publishBeta --no-bail -- --no-git-tag-version",
     "start": "yarn compile:watch & yarn workspace @clutch-sh/app start",
     "test": "lerna run test --stream --no-bail --",
@@ -62,7 +62,8 @@
   "devDependencies": {
     "lerna": "^3.20.0",
     "license-checker": "^25.0.1",
-    "npx": "^10.2.2"
+    "npx": "^10.2.2",
+    "sort-package-json": "^1.44.0"
   },
   "engines": {
     "node": ">=12.0.0"
