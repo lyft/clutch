@@ -22,12 +22,12 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 	if err != nil {
 		return nil, err
 	}
-	return ProtoForHPA(hpa), nil
+	return ProtoForHPA(cs.Cluster(), hpa), nil
 }
 
-func ProtoForHPA(autoscaler *autoscalingv1.HorizontalPodAutoscaler) *k8sapiv1.HPA {
+func ProtoForHPA(cluster string, autoscaler *autoscalingv1.HorizontalPodAutoscaler) *k8sapiv1.HPA {
 	return &k8sapiv1.HPA{
-		Cluster:   autoscaler.ClusterName,
+		Cluster:   cluster,
 		Namespace: autoscaler.Namespace,
 		Name:      autoscaler.Name,
 		Sizing: &k8sapiv1.HPA_Sizing{
