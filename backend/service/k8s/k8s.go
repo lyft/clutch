@@ -40,7 +40,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		}
 	}
 
-	c, err := newClientsetManager(loadingRules)
+	c, err := newClientsetManager(loadingRules, logger)
 	if err != nil {
 		return nil, err
 	}
