@@ -99,6 +99,10 @@ func (*svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name s
 	return nil
 }
 
+func (s *svc) UpdatePodAnnotations(_ context.Context, clientset, cluster, namespace, name string, newAnnotations, expectedAnnotations k8sservice.Annotations) error {
+	return nil
+}
+
 func (*svc) Clientsets() []string {
 	return []string{"fake-user@fake-cluster"}
 }

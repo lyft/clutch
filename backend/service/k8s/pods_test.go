@@ -194,3 +194,81 @@ func TestListPods(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Len(t, result, 2)
 }
+
+func TestUpdatePodAnnotations(t *testing.T) {
+	t.Parallel()
+
+	cs := testPodClientset()
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "testing-namespace",
+				cluster:   "testing-cluster",
+			}},
+		},
+	}
+
+	// Not found.
+	preconditions := Annotations{}
+	newAnnotations := Annotations{"new-anotation": &k8sv1.AnnotationValue{Value: "foo"}}
+	err := s.UpdatePodAnnotations(context.Background(),
+		"testing-clientset",
+		"testing-cluster",
+		"testing-namespace",
+		"non-existent-pod-name",
+		preconditions,
+		newAnnotations,
+	)
+	assert.Error(t, err)
+
+	// Returns an error when the precondition is not met
+	preconditions = Annotations{"foo": &k8sv1.AnnotationValue{Value: "non-matching-value"}}
+	newAnnotations = Annotations{"foo": &k8sv1.AnnotationValue{Value: "new-value"}}
+	err = s.UpdatePodAnnotations(context.Background(),
+		"testing-clientset",
+		"testing-cluster",
+		"testing-namespace",
+		"testing-pod-name",
+		preconditions,
+		newAnnotations,
+	)
+	assert.Error(t, err)
+
+	// Successfully sets an annotation when the precondition is met
+	preconditions = Annotations{"baz": &k8sv1.AnnotationValue{Value: "quuz"}}
+	newAnnotations = Annotations{"baz": &k8sv1.AnnotationValue{Value: "new-value"}}
+	err = s.UpdatePodAnnotations(context.Background(),
+		"testing-clientset",
+		"testing-cluster",
+		"testing-namespace",
+		"testing-pod-name",
+		preconditions,
+		newAnnotations,
+	)
+	assert.NoError(t, err)
+
+	// Successfully removes an annotation. The precondition tests that the previous step has properly updated the annotation.
+	preconditions = Annotations{"baz": &k8sv1.AnnotationValue{Value: "new-value"}}
+	newAnnotations = Annotations{"baz": nil}
+	err = s.UpdatePodAnnotations(context.Background(),
+		"testing-clientset",
+		"testing-cluster",
+		"testing-namespace",
+		"testing-pod-name",
+		preconditions,
+		newAnnotations,
+	)
+	assert.NoError(t, err)
+
+	pod, err := s.DescribePod(context.Background(),
+		"testing-clientset",
+		"testing-cluster",
+		"testing-namespace",
+		"testing-pod-name",
+	)
+	assert.NoError(t, err)
+
+	_, annotationPresent := pod.Annotations["baz"]
+	assert.False(t, annotationPresent)
+}

@@ -6862,6 +6862,54 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of an AnnotationValue. */
+            interface IAnnotationValue {
+
+                /** AnnotationValue value */
+                value?: (string|null);
+            }
+
+            /** Represents an AnnotationValue. */
+            class AnnotationValue implements IAnnotationValue {
+
+                /**
+                 * Constructs a new AnnotationValue.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IAnnotationValue);
+
+                /** AnnotationValue value. */
+                public value: string;
+
+                /**
+                 * Verifies an AnnotationValue message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an AnnotationValue message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns AnnotationValue
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.AnnotationValue;
+
+                /**
+                 * Creates a plain object from an AnnotationValue message. Also converts values to other types if specified.
+                 * @param message AnnotationValue
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.AnnotationValue, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this AnnotationValue to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a HPA. */
             interface IHPA {
 

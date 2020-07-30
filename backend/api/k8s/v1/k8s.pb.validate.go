@@ -625,6 +625,73 @@ var _ interface {
 	ErrorName() string
 } = DeletePodResponseValidationError{}
 
+// Validate checks the field values on AnnotationValue with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *AnnotationValue) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Value
+
+	return nil
+}
+
+// AnnotationValueValidationError is the validation error returned by
+// AnnotationValue.Validate if the designated constraints aren't met.
+type AnnotationValueValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AnnotationValueValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AnnotationValueValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AnnotationValueValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AnnotationValueValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AnnotationValueValidationError) ErrorName() string { return "AnnotationValueValidationError" }
+
+// Error satisfies the builtin error interface
+func (e AnnotationValueValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAnnotationValue.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AnnotationValueValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AnnotationValueValidationError{}
+
 // Validate checks the field values on HPA with the rules defined in the proto
 // definition for this message. If any rules are violated, an error is returned.
 func (m *HPA) Validate() error {

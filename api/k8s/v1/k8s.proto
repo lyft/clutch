@@ -132,6 +132,14 @@ message DeletePodRequest {
 message DeletePodResponse {
 }
 
+// Annotation value is wrapped in the message field to make it nullable.
+// Setting AnnotationValue to nil means the annotation shouldn't exist or
+// should be deleted.
+message AnnotationValue {
+  // Value of the annotation.
+  string value = 1;
+}
+
 message HPA {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.HPA",

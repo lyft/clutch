@@ -16382,6 +16382,106 @@ export const clutch = $root.clutch = (() => {
                 return DeletePodResponse;
             })();
 
+            v1.AnnotationValue = (function() {
+
+                /**
+                 * Properties of an AnnotationValue.
+                 * @memberof clutch.k8s.v1
+                 * @interface IAnnotationValue
+                 * @property {string|null} [value] AnnotationValue value
+                 */
+
+                /**
+                 * Constructs a new AnnotationValue.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an AnnotationValue.
+                 * @implements IAnnotationValue
+                 * @constructor
+                 * @param {clutch.k8s.v1.IAnnotationValue=} [properties] Properties to set
+                 */
+                function AnnotationValue(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * AnnotationValue value.
+                 * @member {string} value
+                 * @memberof clutch.k8s.v1.AnnotationValue
+                 * @instance
+                 */
+                AnnotationValue.prototype.value = "";
+
+                /**
+                 * Verifies an AnnotationValue message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.AnnotationValue
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                AnnotationValue.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        if (!$util.isString(message.value))
+                            return "value: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an AnnotationValue message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.AnnotationValue
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.AnnotationValue} AnnotationValue
+                 */
+                AnnotationValue.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.AnnotationValue)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.AnnotationValue();
+                    if (object.value != null)
+                        message.value = String(object.value);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an AnnotationValue message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.AnnotationValue
+                 * @static
+                 * @param {clutch.k8s.v1.AnnotationValue} message AnnotationValue
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                AnnotationValue.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.value = "";
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        object.value = message.value;
+                    return object;
+                };
+
+                /**
+                 * Converts this AnnotationValue to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.AnnotationValue
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                AnnotationValue.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return AnnotationValue;
+            })();
+
             v1.HPA = (function() {
 
                 /**

@@ -62,6 +62,79 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 	return pods, nil
 }
 
+func (s *svc) UpdatePodAnnotations(ctx context.Context, clientset, cluster, namespace, name string, expectedAnnotations, newAnnotations Annotations) error {
+	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	if err != nil {
+		return err
+	}
+
+	pod, err := cs.CoreV1().Pods(namespace).Get(name, metav1.GetOptions{})
+	if err != nil {
+		return err
+	}
+
+	podAnnotations := pod.GetAnnotations()
+
+	err = checkPreconditions(expectedAnnotations, podAnnotations)
+	if err != nil {
+		return err
+	}
+
+	for newAnnotations, newValue := range newAnnotations {
+		if newValue != nil {
+			podAnnotations[newAnnotations] = newValue.GetValue()
+		} else {
+			delete(podAnnotations, newAnnotations)
+		}
+	}
+
+	_, err = cs.CoreV1().Pods(namespace).Update(pod)
+	return err
+}
+
+func checkPreconditions(expectedAnnotations Annotations, currentAnnotations map[string]string) error {
+	var mismatchedAnnotations []*mismatchedAnnotation
+
+	for expectedAnnotation, expectedValue := range expectedAnnotations {
+		// "" is a valid annotation value, so nil is used to indicate that the
+		// annotation shouldn't be set
+		annotationShouldBePresent := expectedValue != nil
+		currentValue, annotationIsPresent := currentAnnotations[expectedAnnotation]
+
+		// Existance precondition not met
+		if annotationShouldBePresent != annotationIsPresent {
+			mismatchedAnnotations = append(
+				mismatchedAnnotations,
+				&mismatchedAnnotation{
+					Annotation:    expectedAnnotation,
+					ExpectedValue: expectedValue.GetValue(),
+					CurrentValue:  currentValue,
+				},
+			)
+
+			continue
+		}
+
+		// Annotation values mismatched
+		if expectedValue.GetValue() != currentValue {
+			mismatchedAnnotations = append(
+				mismatchedAnnotations,
+				&mismatchedAnnotation{
+					Annotation:    expectedAnnotation,
+					ExpectedValue: expectedValue.GetValue(),
+					CurrentValue:  currentValue,
+				},
+			)
+		}
+	}
+
+	if len(mismatchedAnnotations) == 0 {
+		return nil
+	}
+
+	return &AnnotationsPreconditionMismatchError{MismatchedAnnotations: mismatchedAnnotations}
+}
+
 func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 	// TODO: There's a mismatch between the serialization of the timestamp here and what's expected
 	// on the frontend.
