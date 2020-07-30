@@ -20,7 +20,7 @@ all: api frontend backend-with-assets
 
 .PHONY: api # Generate API assets.
 api: yarn-ensure
-	tools/compile-protos.sh -c "$(PROJECT_ROOT_DIR)"
+	tools/compile-protos.sh -c "$(PROJECT_ROOT_DIR)/api"
 
 .PHONY: api-lint # Lint the generated API assets.
 api-lint:
