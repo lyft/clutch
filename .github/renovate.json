@@ -1,6 +1,8 @@
 {
   "extends": [
-    "config:base",
-    ":labels(dependencies)"
+    "config:base"
+  ], 
+  "labels": [
+    "dependencies"
   ]
 }

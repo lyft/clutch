@@ -19,13 +19,17 @@ PROTOS=()
 PROTO_DIRS=()
 CLUTCH_PROTOS=()
 
+SCRIPT_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
+
 # parse options
 ACTION="compile"
 LINT_FIX=false
-while getopts "lf" opt; do
+CLUTCH_API_ROOT=""
+while getopts "lfc:" opt; do
   case $opt in
     l) ACTION="lint" ;;
     f) LINT_FIX=true ;;
+    c) CLUTCH_API_ROOT="${OPTARG}" ;;
     *) echo "usage: $0 [-l]" >&2
      exit 1 ;;
   esac
@@ -33,15 +37,39 @@ done
 shift "$((OPTIND-1))" # shift so that $@, $1, etc. refer to the non-option arguments
 
 main() {
-  SCRIPT_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
-
   REPO_ROOT="${SCRIPT_ROOT}"
   # Use alternate root if provided as command line argument.
   if [[ -n "${1-}" ]]; then
     REPO_ROOT="${1}"
   fi
 
-  CLUTCH_API_ROOT="${SCRIPT_ROOT}/api"
+  if [[ -z "${CLUTCH_API_ROOT}" ]]; then
+    # if core is not provided then we need to use a downloaded version.
+    CORE_VERSION=$(cd "${REPO_ROOT}/backend" && go list -f "{{ .Version }}" -m github.com/lyft/clutch/backend)
+    if [[ "${CORE_VERSION}" == *-*-* ]]; then
+      # if a pseudo-version, figure out just the SHA
+      CORE_VERSION=$(echo "${CORE_VERSION}" | awk -F"-" '{print $NF}')
+    fi
+
+    core_out="${REPO_ROOT}/build/bin/clutch-api-${CORE_VERSION}"
+    if [[ ! -d "${core_out}" ]]; then
+      echo "info: downloading core APIs ${CORE_VERSION} to build environment..."
+
+      core_zip_out="/tmp/clutch-${CORE_VERSION}.tar.gz"
+      core_tmp_out="/tmp/clutch-${CORE_VERSION}"
+      curl -sSL -o "${core_zip_out}" \
+        "https://github.com/lyft/clutch/archive/${CORE_VERSION}.zip"
+
+      mkdir -p "${core_tmp_out}"
+      unzip -q -o "${core_zip_out}" -d "${core_tmp_out}"
+
+      mkdir -p "${core_out}"
+      mv "${core_tmp_out}"/clutch-*/api "${core_out}"
+    fi
+
+    CLUTCH_API_ROOT="${core_out}"
+  fi
+
   API_ROOT="${REPO_ROOT}/api"
   BUILD_ROOT="${REPO_ROOT}/build"
 
@@ -104,7 +132,7 @@ main() {
 
   # Add MFLAGS for Clutch protos when this is running for a private gateway.
   if [[ "${CLUTCH_API_ROOT}" != "${API_ROOT}" ]]; then
-    discover_clutch_protos
+    discover_core_protos
     readonly CLUTCH_PREFIX="github.com/lyft/clutch/backend/api"
     for proto in "${CLUTCH_PROTOS[@]}"; do
       relative_path="${proto/#${CLUTCH_API_ROOT}\/}"
@@ -160,7 +188,7 @@ discover_protos() {
   done <  <(find "${API_ROOT}" -name '*.proto' -exec dirname {} \; | tr '\n' '\0' | sort -sdzu)
 }
 
-discover_clutch_protos() {
+discover_core_protos() {
   while IFS= read -r -d '' proto; do
     CLUTCH_PROTOS+=("${proto}")
   done <  <(find "${CLUTCH_API_ROOT}" -name '*.proto' -print0 | sort -sdzu)
