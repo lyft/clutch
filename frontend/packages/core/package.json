@@ -43,7 +43,7 @@
     "react-is": "^16.8.0",
     "react-router": "^6.0.0-alpha",
     "react-router-dom": "^6.0.0-alpha",
-    "styled-components": "^5.0.1",
+    "styled-components": "^5.1.1",
     "yup": "^0.29.0"
   },
   "devDependencies": {
