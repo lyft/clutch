@@ -18,11 +18,11 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/wizard": "^0.0.0-beta",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "@clutch-sh/wizard": "0.0.0-beta.20200731125606",
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^0.0.0-beta"
+    "@clutch-sh/tools": "0.0.0-beta.20200731125606"
   }
 }

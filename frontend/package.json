@@ -60,9 +60,9 @@
     "protobufjs": "https://github.com/natiz/protobuf.js#1d626f84db4a4f339004609f654a9f24a211b716"
   },
   "devDependencies": {
-    "lerna": "^3.20.0",
-    "license-checker": "^25.0.1",
-    "sort-package-json": "^1.44.0"
+    "lerna": "3.20.2",
+    "license-checker": "25.0.1",
+    "sort-package-json": "1.44.0"
   },
   "engines": {
     "node": ">=12.0.0"

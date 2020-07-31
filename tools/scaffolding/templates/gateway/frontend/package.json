@@ -21,16 +21,16 @@
     "protobufjs": "https://github.com/natiz/protobuf.js#1d626f84db4a4f339004609f654a9f24a211b716"
   },
   "devDependencies": {
-    "lerna": "^3.20.0",
-    "@clutch-sh/ec2": "^0.0.0-beta",
+    "lerna": "3.22.1",
+    "@clutch-sh/ec2": "0.0.0-beta.20200731125606",
     "@{{ .RepoName }}/echo": "^0.0.0",
-    "@clutch-sh/core": "^0.0.0-beta",
-    "history": "^5.0.0",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
-    "react-router": "^6.0.0-alpha",
-    "react-router-dom": "^6.0.0-alpha",
-    "react-scripts": "^3.4.0"
+    "@clutch-sh/core": "0.0.0-beta.20200731125606",
+    "history": "5.0.0",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-router": "6.0.0-beta.0",
+    "react-router-dom": "6.0.0-beta.0",
+    "react-scripts": "3.4.1"
   },
   "workspaces": [
     "clutch/frontend/api",

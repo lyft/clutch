@@ -16,15 +16,15 @@
     "upgrade": "yarn upgrade"
   },
   "dependencies": {
-    "@clutch-sh/core": "^0.0.0-beta",
-    "@clutch-sh/data-layout": "^0.0.0-beta",
-    "@clutch-sh/wizard": "^0.0.0-beta",
-    "@material-ui/core": "^4.9.1",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
-    "react-is": "^16.8.0"
+    "@clutch-sh/core": "0.0.0-beta.20200731125606",
+    "@clutch-sh/data-layout": "0.0.0-beta.20200731125606",
+    "@clutch-sh/wizard": "0.0.0-beta.20200731125606",
+    "@material-ui/core": "4.11.0",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-is": "16.13.1"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^0.0.0-beta"
+    "@clutch-sh/tools": "0.0.0-beta.20200731125606"
   }
 }
