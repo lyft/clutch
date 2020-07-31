@@ -7,7 +7,7 @@ To deploy a working clutch deployment on an existing Kubernetes cluster:
 1. Run the following command to create a clutch namespace and all the necessary clutch components
 
     ```bash
-    kubectl apply -f https://github.com/lyft/clutch/tree/main/examples/kubernetes/clutch.yaml
+    kubectl apply -f https://raw.githubusercontent.com/lyft/clutch/tree/main/examples/kubernetes/clutch.yaml
     
     # OR
     # if you are working off a local copy of this repo
