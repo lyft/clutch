@@ -1,0 +1,27 @@
+name: ci
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+    paths:
+    - .github/renovate.json
+jobs:
+  renovate-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: Enforce consistent Yarn version
+        run: ./tools/install-yarn.sh
+      - name: Install renovate-config-validator
+        run: yarn install renovate
+        working-directory: build
+      - name: Validate renovate.json
+        run: yarn renovate-config-validator ../.github/renovate.json
+        working-directory: build
