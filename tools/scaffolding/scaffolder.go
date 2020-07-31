@@ -291,6 +291,9 @@ func main() {
 
 	// Walk files and template them.
 	err = filepath.Walk(templateRoot, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
 		relpath, err := filepath.Rel(templateRoot, path)
 		if err != nil {
 			return err
