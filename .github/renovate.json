@@ -4,5 +4,8 @@
   ], 
   "labels": [
     "dependencies"
+  ],
+  "postUpdateOptions": [
+    "gomodTidy"
   ]
 }
