@@ -1,6 +1,9 @@
 Kubernetes Example
 ===
 
+If you dont have a Kubernetes cluster avaiable you can use [minikube](https://minikube.sigs.k8s.io/docs/start/)
+to provision a local cluster.
+
 To deploy a working clutch deployment on an existing Kubernetes cluster:
 
 1. Install kubectl and set up `~/.kube/config` to point to your cluster.
