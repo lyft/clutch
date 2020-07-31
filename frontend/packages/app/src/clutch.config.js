@@ -46,4 +46,11 @@ module.exports = {
       },
     },
   },
+  "@clutch-sh/experimentation": {
+    listExperiments: {
+      trending: true,
+    },
+    startAbortExperiment: {},
+    startLatencyExperiment: {},
+  },
 };
