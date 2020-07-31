@@ -38,13 +38,14 @@ const ListExperiments = () => {
   }
 
   if (experiments.length === 0) {
-    client.post("/v1/experiments/get")
-    .then(response => {
-      setExperiments(response?.data?.experiments || []);
-    })
-    .catch(err => {
-      setError(err.response.statusText)
-    });
+    client
+      .post("/v1/experiments/get")
+      .then(response => {
+        setExperiments(response?.data?.experiments || []);
+      })
+      .catch(err => {
+        setError(err.response.statusText);
+      });
   }
 
   return (
@@ -54,7 +55,9 @@ const ListExperiments = () => {
         data={experiments}
         headings={["Downstream Cluster", "Upstream Cluster", "Percentage", "HTTP Status"]}
       >
-        {experiments.map(e => <ExperimentSpecificationData key={e.id} experiment={e} />)}
+        {experiments.map(e => (
+          <ExperimentSpecificationData key={e.id} experiment={e} />
+        ))}
       </Table>
       <ButtonGroup
         buttons={[

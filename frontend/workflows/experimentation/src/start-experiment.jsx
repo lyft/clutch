@@ -131,7 +131,7 @@ const LatencyExperimentDetails = () => {
         buttons={[
           {
             text: "Back",
-            onClick: onBack,  
+            onClick: onBack,
           },
           {
             text: "Next",
@@ -154,11 +154,11 @@ const Confirm = () => {
   );
 };
 
-const createExperiment = (data) => {
+const createExperiment = data => {
   return client.post("/v1/experiments/create", {
     experiments: [
       {
-        testSpecification: data
+        testSpecification: data,
       },
     ],
   });
@@ -212,7 +212,7 @@ export const StartLatencyExperiment = ({ heading }) => {
             durationMs: latencyExperimentData.durationMs,
           },
         });
-      }
+      },
     },
   };
 
