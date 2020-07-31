@@ -10,7 +10,7 @@
     ":separateMultipleMajorReleases",
     ":unpublishSafe"
   ],
-  "commitMessagePrefix": "housekeeping:"
+  "commitMessagePrefix": "housekeeping:",
   "labels": [
     "dependencies"
   ],
