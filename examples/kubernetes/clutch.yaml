@@ -84,7 +84,6 @@ data:
       - name: clutch.module.aws
       - name: clutch.module.envoytriage
       - name: clutch.module.k8s
-      - name: clutch.module.kinesis
     services:
       - name: clutch.service.aws
         typed_config:
