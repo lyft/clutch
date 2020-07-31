@@ -1,11 +1,23 @@
 {
   "extends": [
-    "config:base"
+    "config:base",
+    ":automergeLinters",
+    ":combinePatchMinorReleases",
+    ":enableVulnerabilityAlerts",
+    ":preserveSemverRanges",
+    ":rebaseStalePrs",
+    ":separateMajorReleases",
+    ":separateMultipleMajorReleases",
+    ":unpublishSafe"
   ], 
   "labels": [
     "dependencies"
   ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
   "postUpdateOptions": [
     "gomodTidy"
-  ]
+  ],
+  "yarnrc": ""
 }
