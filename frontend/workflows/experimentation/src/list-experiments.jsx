@@ -1,40 +1,32 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ButtonGroup, client, Row, Table } from "@clutch-sh/core";
+import { ButtonGroup, client, Error, Row, Table } from "@clutch-sh/core";
 import { Container } from "@material-ui/core";
+import styled from "styled-components";
 
-function renderAbortData(experiment) {
-  const ts = experiment.testSpecification;
+const ExperimentSpecificationData = ({ experiment }) => {
+  const specification = experiment.testSpecification;
+  const data = specification?.abort ? specification.abort : specification.latency;
+
   return (
     <Row
-      key={experiment.id}
       data={[
-        ts.abort.clusterPair.downstreamCluster,
-        ts.abort.clusterPair.upstreamCluster,
-        ts.abort.percent,
-        ts.abort.httpStatus,
+        data.clusterPair.downstreamCluster,
+        data.clusterPair.upstreamCluster,
+        data.percent,
+        data.httpStatus,
       ]}
     />
   );
-}
+};
 
-function renderLatencyData(experiment) {
-  const ts = experiment.testSpecification;
-  return (
-    <Row
-      key={experiment.id}
-      data={[
-        ts.latency.clusterPair.downstreamCluster,
-        ts.latency.clusterPair.upstreamCluster,
-        ts.latency.percent,
-        ts.latency.durationMs,
-      ]}
-    />
-  );
-}
+const Layout = styled(Container)`
+  padding: 5% 0;
+`;
 
 const ListExperiments = () => {
-  const [experiments, setExperiments] = useState();
+  const [experiments, setExperiments] = useState([]);
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
   function handleClickStartAbortExperiment() {
@@ -45,28 +37,24 @@ const ListExperiments = () => {
     navigate("/experimentation/startlatency");
   }
 
-  if (!experiments) {
-    client.post("/v1/experiments/get").then(response => {
+  if (experiments.length === 0) {
+    client.post("/v1/experiments/get")
+    .then(response => {
       setExperiments(response?.data?.experiments || []);
+    })
+    .catch(err => {
+      setError(err.response.statusText)
     });
-
-    return (
-      <Table headings={["Downstream Cluster", "Upstream Cluster", "Percentage", "HTTP Status"]} />
-    );
   }
 
   return (
-    <Container>
+    <Layout>
+      {error && <Error message={error} />}
       <Table
         data={experiments}
         headings={["Downstream Cluster", "Upstream Cluster", "Percentage", "HTTP Status"]}
       >
-        {experiments.map(e => {
-          if (e.testSpecification.abort) {
-            return renderAbortData(e);
-          }
-          return renderLatencyData(e);
-        })}
+        {experiments.map(e => <ExperimentSpecificationData key={e.id} experiment={e} />)}
       </Table>
       <ButtonGroup
         buttons={[
@@ -80,7 +68,7 @@ const ListExperiments = () => {
           },
         ]}
       />
-    </Container>
+    </Layout>
   );
 };
 

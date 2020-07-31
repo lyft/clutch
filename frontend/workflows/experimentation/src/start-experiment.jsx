@@ -14,20 +14,18 @@ const ClusterPairTargetDetails = () => {
   const { onSubmit } = useWizardContext();
   const clusterPairData = useDataLayout("clusterPairTargetData");
   const clusterPair = clusterPairData.displayValue();
-  const update = (key, value) => {
-    clusterPairData.updateData(key, value);
-  };
 
   return (
     <WizardStep error={clusterPairData.error}>
       <MetadataTable
-        onUpdate={update}
+        onUpdate={(key, value) => clusterPairData.updateData(key, value)}
         data={[
           {
             name: "Downstream Cluster",
             value: clusterPair.downstreamCluster,
             input: {
               key: "downstreamCluster",
+              validation: yup.string().required(),
             },
           },
           {
@@ -35,6 +33,7 @@ const ClusterPairTargetDetails = () => {
             value: clusterPair.upstreamCluster,
             input: {
               key: "upstreamCluster",
+              validation: yup.string().required(),
             },
           },
         ]}
@@ -44,7 +43,6 @@ const ClusterPairTargetDetails = () => {
           {
             text: "Next",
             onClick: onSubmit,
-            destructive: true,
           },
         ]}
       />
@@ -56,14 +54,11 @@ const AbortExperimentDetails = () => {
   const { onSubmit, onBack } = useWizardContext();
   const abortExperimentData = useDataLayout("abortExperimentData");
   const abortExperiment = abortExperimentData.value;
-  const update = (key, value) => {
-    abortExperimentData.updateData(key, value);
-  };
 
   return (
     <WizardStep error={abortExperimentData.error}>
       <MetadataTable
-        onUpdate={update}
+        onUpdate={(key, value) => abortExperimentData.updateData(key, value)}
         data={[
           {
             name: "Percent",
@@ -90,7 +85,6 @@ const AbortExperimentDetails = () => {
           {
             text: "Back",
             onClick: onBack,
-            destructive: true,
           },
           {
             text: "Next",
@@ -107,14 +101,11 @@ const LatencyExperimentDetails = () => {
   const { onSubmit, onBack } = useWizardContext();
   const latencyExperimentData = useDataLayout("latencyExperimentData");
   const latencyExperiment = latencyExperimentData.value;
-  const update = (key, value) => {
-    latencyExperimentData.updateData(key, value);
-  };
 
   return (
     <WizardStep error={latencyExperimentData.error}>
       <MetadataTable
-        onUpdate={update}
+        onUpdate={(key, value) => latencyExperimentData.updateData(key, value)}
         data={[
           {
             name: "Percent",
@@ -136,13 +127,11 @@ const LatencyExperimentDetails = () => {
           },
         ]}
       />
-      ```suggestion
       <ButtonGroup
         buttons={[
           {
             text: "Back",
-            onClick: onBack,
-            destructive: true,
+            onClick: onBack,  
           },
           {
             text: "Next",
@@ -165,6 +154,16 @@ const Confirm = () => {
   );
 };
 
+const createExperiment = (data) => {
+  return client.post("/v1/experiments/create", {
+    experiments: [
+      {
+        testSpecification: data
+      },
+    ],
+  });
+};
+
 export const StartAbortExperiment = ({ heading }) => {
   const dataLayout = {
     clusterPairTargetData: {},
@@ -173,21 +172,15 @@ export const StartAbortExperiment = ({ heading }) => {
     startData: {
       deps: ["clusterPairTargetData", "abortExperimentData"],
       hydrator: (clusterPairTargetData, abortExperimentData) => {
-        return client.post("/v1/experiments/create", {
-          experiments: [
-            {
-              testSpecification: {
-                abort: {
-                  clusterPair: {
-                    downstreamCluster: clusterPairTargetData.downstreamCluster,
-                    upstreamCluster: clusterPairTargetData.upstreamCluster,
-                  },
-                  percent: abortExperimentData.percent,
-                  httpStatus: abortExperimentData.httpStatus,
-                },
-              },
+        return createExperiment({
+          abort: {
+            clusterPair: {
+              downstreamCluster: clusterPairTargetData.downstreamCluster,
+              upstreamCluster: clusterPairTargetData.upstreamCluster,
             },
-          ],
+            percent: abortExperimentData.percent,
+            httpStatus: abortExperimentData.httpStatus,
+          },
         });
       },
     },
@@ -209,23 +202,17 @@ export const StartLatencyExperiment = ({ heading }) => {
     startData: {
       deps: ["clusterPairTargetData", "latencyExperimentData"],
       hydrator: (clusterPairTargetData, latencyExperimentData) => {
-        return client.post("/v1/experiments/create", {
-          experiments: [
-            {
-              testSpecification: {
-                latency: {
-                  clusterPair: {
-                    downstreamCluster: clusterPairTargetData.downstreamCluster,
-                    upstreamCluster: clusterPairTargetData.upstreamCluster,
-                  },
-                  percent: latencyExperimentData.percent,
-                  durationMs: latencyExperimentData.durationMs,
-                },
-              },
+        return createExperiment({
+          latency: {
+            clusterPair: {
+              downstreamCluster: clusterPairTargetData.downstreamCluster,
+              upstreamCluster: clusterPairTargetData.upstreamCluster,
             },
-          ],
+            percent: latencyExperimentData.percent,
+            durationMs: latencyExperimentData.durationMs,
+          },
         });
-      },
+      }
     },
   };
 
