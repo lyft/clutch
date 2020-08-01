@@ -8,7 +8,11 @@
     ":rebaseStalePrs",
     ":separateMajorReleases",
     ":separateMultipleMajorReleases",
-    ":unpublishSafe"
+    ":unpublishSafe",
+    "group:definitelyTyped",
+    "group:materialMonorepo",
+    "group:reactMonorepo",
+    "group:reactrouterMonorepo"
   ],
   "commitMessagePrefix": "housekeeping:",
   "labels": [
