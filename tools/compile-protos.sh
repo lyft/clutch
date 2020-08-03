@@ -67,7 +67,7 @@ main() {
       mv "${core_tmp_out}"/clutch-*/api "${core_out}"
     fi
 
-    CLUTCH_API_ROOT="${core_out}"
+    CLUTCH_API_ROOT="${core_out}/api"
   fi
 
   API_ROOT="${REPO_ROOT}/api"
