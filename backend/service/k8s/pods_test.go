@@ -34,6 +34,7 @@ func testPodClientset() k8s.Interface {
 			ObjectMeta: metav1.ObjectMeta{
 				Name:        "testing-pod-name",
 				Namespace:   "testing-namespace",
+				ClusterName: "production",
 				Labels:      map[string]string{"foo": "bar"},
 				Annotations: map[string]string{"baz": "quuz"},
 			},
@@ -50,6 +51,7 @@ func testPodClientset() k8s.Interface {
 			ObjectMeta: metav1.ObjectMeta{
 				Name:        "testing-pod-name-1",
 				Namespace:   "testing-namespace",
+				ClusterName: "staging",
 				Labels:      map[string]string{"foo": "bar"},
 				Annotations: map[string]string{"baz": "quuz"},
 			},
@@ -193,4 +195,46 @@ func TestListPods(t *testing.T) {
 	)
 	assert.NoError(t, err)
 	assert.Len(t, result, 2)
+}
+
+func TestPodDescriptionClusterName(t *testing.T) {
+	t.Parallel()
+
+	var podTestCases = []struct {
+		id                  string
+		inputClusterName    string
+		expectedClusterName string
+		pod                 *corev1.Pod
+	}{
+		{
+			id:                  "clustername already set",
+			inputClusterName:    "notprod",
+			expectedClusterName: "production",
+			pod: &corev1.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "production",
+				},
+			},
+		},
+		{
+			id:                  "custername is not set",
+			inputClusterName:    "staging",
+			expectedClusterName: "staging",
+			pod: &corev1.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "",
+				},
+			},
+		},
+	}
+
+	for _, tt := range podTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			pod := podDescription(tt.pod, tt.inputClusterName)
+			assert.Equal(t, tt.expectedClusterName, pod.Cluster)
+		})
+	}
 }
