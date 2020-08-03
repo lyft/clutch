@@ -39,7 +39,6 @@
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-cypress": "^2.10.3",
-    "eslint-plugin-flowtype": "3.x",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jest": "^23.1.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
