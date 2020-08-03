@@ -30,11 +30,12 @@ func (s *svc) DescribeDeployment(ctx context.Context, clientset, cluster, namesp
 }
 
 func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1.Deployment {
-	if deployment.ClusterName == "" {
-		deployment.ClusterName = cluster
+	clusterName := deployment.ClusterName
+	if clusterName == "" {
+		clusterName = cluster
 	}
 	return &k8sapiv1.Deployment{
-		Cluster:     deployment.ClusterName,
+		Cluster:     clusterName,
 		Namespace:   deployment.Namespace,
 		Name:        deployment.Name,
 		Labels:      deployment.Labels,
