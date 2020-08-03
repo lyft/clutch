@@ -78,7 +78,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 
 	store, ok := service.Registry[experimentstore.Name]
 	if !ok {
-		return nil, errors.New("could not find service")
+		return nil, errors.New("could not find experiment store service")
 	}
 
 	experimentStore, ok := store.(experimentstore.ExperimentStore)

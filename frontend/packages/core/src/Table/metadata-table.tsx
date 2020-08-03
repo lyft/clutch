@@ -135,7 +135,6 @@ const MetadataTable: React.FC<MetadataTableProps> = ({
 
   React.useEffect(() => {
     setOnSubmit(handleSubmit);
-    validation.triggerValidation();
   }, []);
 
   return (

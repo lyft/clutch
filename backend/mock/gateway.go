@@ -5,13 +5,14 @@ import (
 	"github.com/lyft/clutch/backend/gateway"
 	"github.com/lyft/clutch/backend/mock/service/auditmock"
 	"github.com/lyft/clutch/backend/mock/service/awsmock"
-	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstore"
+	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
 	"github.com/lyft/clutch/backend/mock/service/envoyadminmock"
 	"github.com/lyft/clutch/backend/mock/service/githubmock"
 	"github.com/lyft/clutch/backend/mock/service/k8smock"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/audit"
 	"github.com/lyft/clutch/backend/service/aws"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"github.com/lyft/clutch/backend/service/envoyadmin"
 	"github.com/lyft/clutch/backend/service/github"
 	"github.com/lyft/clutch/backend/service/k8s"
@@ -21,7 +22,7 @@ var MockServiceFactory = service.Factory{
 	aws.Name:             awsmock.NewAsService,
 	audit.Name:           auditmock.NewAsService,
 	envoyadmin.Name:      envoyadminmock.NewAsService,
-	experimentstore.Name: experimentstore.NewMock,
+	experimentstore.Name: experimentstoremock.NewMock,
 	github.Name:          githubmock.NewAsService,
 	k8s.Name:             k8smock.NewAsService,
 }
