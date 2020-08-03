@@ -12,7 +12,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/envoyproxy/go-control-plane v0.9.4
 	github.com/envoyproxy/protoc-gen-validate v0.4.0
-	github.com/fullstorydev/grpcurl v1.6.1
+	github.com/fullstorydev/grpcurl v1.7.0
 	github.com/go-git/go-billy/v5 v5.0.0
 	github.com/go-git/go-git/v5 v5.1.0
 	github.com/go-swagger/go-swagger v0.23.0
@@ -38,7 +38,7 @@ require (
 	go.uber.org/zap v1.15.0
 	golang.org/x/net v0.0.0-20200602114024-627f9648deb9
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
-	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
+	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a
 	google.golang.org/genproto v0.0.0-20200513103714-09dca8ec2884
 	google.golang.org/grpc v1.31.0
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
