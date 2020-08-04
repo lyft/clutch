@@ -69,6 +69,9 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
   React.useEffect(() => loadSchemas(type, dispatch), []);
 
   const submitHandler = () => {
+    if (Object.keys(validation.errors).length !== 0) {
+      return;
+    }
     dispatch({ type: ResolverAction.RESOLVING });
     const data = {
       ...state.queryData,
