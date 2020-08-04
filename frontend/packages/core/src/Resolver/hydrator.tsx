@@ -1,7 +1,9 @@
 import React from "react";
+import { Controller } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
 import {
   FormControl as MuiFormControl,
+  FormHelperText,
   InputLabel as MuiInputLabel,
   MenuItem,
   Select as MuiSelect,
@@ -86,7 +88,8 @@ const StringField = (
 
 const OptionField = (
   field: clutch.resolver.v1.IField,
-  onChange: (e: ResolverChangeEvent) => void
+  onChange: (e: ResolverChangeEvent) => void,
+  validation: any
 ): React.ReactElement => {
   let options = field.metadata.optionField.options.map(option => {
     return option.displayName;
@@ -108,31 +111,48 @@ const OptionField = (
     });
   }, []);
 
-  const hasError = field.metadata.required && options.length === 0;
-  if (hasError) {
-    options = ["Error: Missing options for required field"];
+  const requiredWithoutOptions = field.metadata.required && options.length === 0;
+  if (requiredWithoutOptions) {
+    options = [""];
   }
 
+  const fieldName = (field.metadata.displayName || field.name).toLowerCase();
   return (
-    <FormControl
-      key={field.metadata.displayName || field.name}
-      required={field.metadata.required || false}
-    >
-      <InputLabel color="secondary">{field.metadata.displayName || field.name}</InputLabel>
-      <Select
-        value={options[selectedIdx] || ""}
-        onChange={updateSelectedOption}
-        name={field.metadata.displayName || field.name}
-        inputProps={{ style: { minWidth: "100px" } }}
-        disabled={hasError || options.length === 0}
+    options.length !== 0 && (
+      <FormControl
+        key={field.metadata.displayName || field.name}
+        required={field.metadata.required || false}
+        error={validation.errors?.[fieldName] !== undefined || false}
       >
-        {options.map(option => (
-          <MenuItem key={option} value={option}>
-            {option}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+        <InputLabel shrink={options[selectedIdx] !== ""} color="secondary">
+          {fieldName}
+        </InputLabel>
+        <Controller
+          control={validation.control}
+          name={fieldName}
+          defaultValue=""
+          rules={{ required: field.metadata.required ? "required" : false }}
+          as={
+            <Select
+              value={options[selectedIdx] || ""}
+              onChange={updateSelectedOption}
+              inputProps={{
+                style: { minWidth: "100px" },
+              }}
+            >
+              {options.map(option => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          }
+        />
+        {validation.errors?.[fieldName] !== undefined && (
+          <FormHelperText>{validation.errors[fieldName].message}</FormHelperText>
+        )}
+      </FormControl>
+    )
   );
 };
 

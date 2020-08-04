@@ -101,9 +101,9 @@ type managerImpl struct {
 
 func (m *managerImpl) Clientsets() map[string]ContextClientset {
 	ret := make(map[string]ContextClientset)
-	for k, v := range m.clientsets {
-		ret[k] = v
-	}
+	// for k, v := range m.clientsets {
+	// 	ret[k] = v
+	// }
 	return ret
 }
 
