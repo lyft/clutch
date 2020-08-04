@@ -32,12 +32,25 @@ const experimentsTableName = "experiments"
 type ExperimentStore interface {
 	CreateExperiments(context.Context, []*experimentation.Experiment) error
 	DeleteExperiments(context.Context, []uint64) error
-	GetExperiments(context.Context) ([]*experimentation.Experiment, error)
+	GetExperiments(context.Context, bool) ([]*experimentation.Experiment, error)
+	Register(messageName string, conversion func(experiment *experimentation.Experiment) (*any.Any, error))
 	Close()
 }
 
+
+type Registry struct {
+	converters map[string]func(experiment *experimentation.Experiment) (*any.Any, error)
+}
+
+func NewRegistry() *Registry {
+	return &Registry{
+		converters: make(map[string]func(experiment *experimentation.Experiment) (*any.Any, error)),
+	}
+}
+
 type experimentStore struct {
-	db *sql.DB
+	db       *sql.DB
+	registry *Registry
 }
 
 // New returns a new NewExperimentStore instance.
@@ -54,7 +67,12 @@ func New(cfg *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
 
 	return &experimentStore{
 		client.DB(),
+		NewRegistry(),
 	}, nil
+}
+
+func (fs *experimentStore) Register(messageName string, conversion func(experiment *experimentation.Experiment) (*any.Any, error)) {
+	fs.registry.converters[messageName] = conversion
 }
 
 func (fs *experimentStore) CreateExperiments(ctx context.Context, experiments []*experimentation.Experiment) error {
@@ -64,7 +82,7 @@ func (fs *experimentStore) CreateExperiments(ctx context.Context, experiments []
 	for _, experiment := range experiments {
 		marshaler := jsonpb.Marshaler{}
 		buf := &bytes.Buffer{}
-		err := marshaler.Marshal(buf, experiment.GetTestSpecification())
+		err := marshaler.Marshal(buf, experiment.GetTestConfig())
 		if err != nil {
 			return err
 		}
@@ -103,7 +121,7 @@ func (fs *experimentStore) DeleteExperiments(ctx context.Context, ids []uint64) 
 }
 
 // GetExperiments gets all experiments
-func (fs *experimentStore) GetExperiments(ctx context.Context) ([]*experimentation.Experiment, error) {
+func (fs *experimentStore) GetExperiments(ctx context.Context, convert bool) ([]*experimentation.Experiment, error) {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 	builder := psql.Select(experimentColumns...).From(experimentsTableName)
 
@@ -129,11 +147,22 @@ func (fs *experimentStore) GetExperiments(ctx context.Context) ([]*experimentati
 			return nil, err
 		}
 
-		spec := &experimentation.TestSpecification{}
-		if nil != jsonpb.Unmarshal(strings.NewReader(details), spec) {
+		anyConfig := &any.Any{}
+		if nil != jsonpb.Unmarshal(strings.NewReader(details), anyConfig) {
 			return nil, err
 		}
-		experiment.TestSpecification = spec
+
+		experiment.TestConfig = anyConfig
+
+		typeURL := experiment.TestConfig.TypeUrl
+		if converter, ok := fs.registry.converters[typeURL]; ok && convert  {
+			newConfig, err := converter(&experiment)
+			if err != nil {
+				return nil, err
+			}
+
+			experiment.TestConfig = newConfig
+		}
 
 		experiments = append(experiments, &experiment)
 	}

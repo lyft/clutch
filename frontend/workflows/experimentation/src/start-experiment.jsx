@@ -155,10 +155,11 @@ const Confirm = () => {
 };
 
 const createExperiment = data => {
+  data["@type"] = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestSpecification";
   return client.post("/v1/experiments/create", {
     experiments: [
       {
-        testSpecification: data,
+        testConfig: data,
       },
     ],
   });

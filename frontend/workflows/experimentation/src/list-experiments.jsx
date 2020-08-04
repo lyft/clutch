@@ -4,18 +4,34 @@ import { ButtonGroup, client, Error, Row, Table } from "@clutch-sh/core";
 import { Container } from "@material-ui/core";
 import styled from "styled-components";
 
-const ExperimentSpecificationData = ({ experiment }) => {
-  const specification = experiment.testSpecification;
-  const data = specification?.abort ? specification.abort : specification.latency;
+function isFunction(functionToCheck) {
+  return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+}
+
+const ExperimentSpecificationData = ({ experiment, columns, mapping }) => {
+  const specification = experiment.testConfig;
+
+  var data = [];  
+  columns.forEach(column => {
+    var item;
+    if (column in mapping) {
+      item = experiment.testConfig[mapping[column]]
+    } else {
+      item = experiment.testConfig[column]
+    }
+
+    if (typeof item === 'undefined') {
+      data.push("Unknown")
+    } else {
+      data.push(item);
+    }
+  });
 
   return (
     <Row
-      data={[
-        data.clusterPair.downstreamCluster,
-        data.clusterPair.upstreamCluster,
-        data.percent,
-        data.httpStatus,
-      ]}
+      data={
+        data
+      }
     />
   );
 };
@@ -24,7 +40,7 @@ const Layout = styled(Container)`
   padding: 5% 0;
 `;
 
-const ListExperiments = () => {
+const ListExperiments = ({ heading, columns, mapping }) => {
   const [experiments, setExperiments] = useState([]);
   const [error, setError] = useState("");
 
@@ -39,7 +55,7 @@ const ListExperiments = () => {
 
   if (experiments.length === 0) {
     client
-      .post("/v1/experiments/get")
+      .post("/v1/experiments/get", { convert: true })
       .then(response => {
         setExperiments(response?.data?.experiments || []);
       })
@@ -48,15 +64,17 @@ const ListExperiments = () => {
       });
   }
 
+  let column_names = columns.map(name => name.toUpperCase()  );
+
   return (
     <Layout>
       {error && <Error message={error} />}
       <Table
         data={experiments}
-        headings={["Downstream Cluster", "Upstream Cluster", "Percentage", "HTTP Status"]}
+        headings={column_names}
       >
         {experiments.map(e => (
-          <ExperimentSpecificationData key={e.id} experiment={e} />
+          <ExperimentSpecificationData key={e.id} experiment={e} columns={columns} mapping={mapping} />
         ))}
       </Table>
       <ButtonGroup

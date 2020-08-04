@@ -8,11 +8,13 @@ import (
 
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
 	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache"
+	"github.com/golang/protobuf/ptypes"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/mitchellh/hashstructure"
 	"go.uber.org/zap"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
@@ -39,7 +41,7 @@ func PeriodicallyRefreshCache(s *Server) {
 
 func refreshCache(ctx context.Context, store experimentstore.ExperimentStore, snapshotCache gcpCache.SnapshotCache, rtdsLayerName string,
 	logger *zap.SugaredLogger) {
-	allExperiments, err := store.GetExperiments(ctx)
+	allExperiments, err := store.GetExperiments(ctx, false)
 	if err != nil {
 		logger.Errorw("Failed to get data from experiments store", "error", err)
 		return
@@ -48,10 +50,11 @@ func refreshCache(ctx context.Context, store experimentstore.ExperimentStore, sn
 	// Group faults by upstream cluster
 	upstreamClusterFaultMap := make(map[string][]*experimentation.Experiment)
 	for _, experiment := range allExperiments {
-		if !isFaultTest(experiment) {
+		testSpecification := &serverexperimentation.TestSpecification{}
+		if !isFaultTest(experiment, testSpecification) {
 			continue
 		}
-		clusterPair := getClusterPair(experiment)
+		clusterPair := getClusterPair(testSpecification)
 		upstreamClusterFaultMap[clusterPair.UpstreamCluster] =
 			append(upstreamClusterFaultMap[clusterPair.UpstreamCluster], experiment)
 	}
@@ -88,7 +91,11 @@ func setSnapshot(snapshotCache gcpCache.SnapshotCache, rtdsLayerName string, ups
 	// No experiments meaning clear all experiments for the given upstream cluster
 	if len(experiments) != 0 {
 		for _, experiment := range experiments {
-			percentageKey, percentageValue, faultKey, faultValue := createRuntimeKeys(experiment, logger)
+			testSpecification := &serverexperimentation.TestSpecification{}
+			if !isFaultTest(experiment, testSpecification) {
+				continue
+			}
+			percentageKey, percentageValue, faultKey, faultValue := createRuntimeKeys(testSpecification, logger)
 
 			fieldMap[percentageKey] = &pstruct.Value{
 				Kind: &pstruct.Value_NumberValue{
@@ -101,7 +108,7 @@ func setSnapshot(snapshotCache gcpCache.SnapshotCache, rtdsLayerName string, ups
 					NumberValue: float64(faultValue),
 				},
 			}
-			clusterPair := getClusterPair(experiment)
+			clusterPair := getClusterPair(testSpecification)
 			logger.Debugw("Fault details",
 				"upstream_cluster", clusterPair.UpstreamCluster,
 				"downstream_cluster", clusterPair.DownstreamCluster,
@@ -146,15 +153,15 @@ func setSnapshot(snapshotCache gcpCache.SnapshotCache, rtdsLayerName string, ups
 	return nil
 }
 
-func createRuntimeKeys(experiment *experimentation.Experiment, logger *zap.SugaredLogger) (string, float32, string, int32) {
+func createRuntimeKeys(testSpecification *serverexperimentation.TestSpecification, logger *zap.SugaredLogger) (string, float32, string, int32) {
 	var percentageKey string
 	var percentageValue float32
 	var faultKey string
 	var faultValue int32
 
-	switch experiment.GetTestSpecification().GetConfig().(type) {
-	case *experimentation.TestSpecification_Abort:
-		abort := experiment.GetTestSpecification().GetAbort()
+	switch testSpecification.GetConfig().(type) {
+	case *serverexperimentation.TestSpecification_Abort:
+		abort := testSpecification.GetAbort()
 		percentageValue = abort.Percent
 		faultValue = abort.HttpStatus
 
@@ -166,8 +173,8 @@ func createRuntimeKeys(experiment *experimentation.Experiment, logger *zap.Sugar
 			percentageKey = fmt.Sprintf(HTTPPercentageWithDownstream, target.DownstreamCluster)
 			faultKey = fmt.Sprintf(HTTPStatusWithDownstream, target.DownstreamCluster)
 		}
-	case *experimentation.TestSpecification_Latency:
-		latency := experiment.GetTestSpecification().GetLatency()
+	case *serverexperimentation.TestSpecification_Latency:
+		latency := testSpecification.GetLatency()
 		percentageValue = latency.Percent
 		faultValue = latency.DurationMs
 
@@ -180,31 +187,33 @@ func createRuntimeKeys(experiment *experimentation.Experiment, logger *zap.Sugar
 			faultKey = fmt.Sprintf(LatencyDurationWithDownstream, target.DownstreamCluster)
 		}
 	default:
-		logger.Errorw("Unknown fault type: %t", experiment)
+		logger.Errorw("Unknown fault type: %t", testSpecification)
 		panic("Unknown fault type")
 	}
 
 	return percentageKey, percentageValue, faultKey, faultValue
 }
 
-func isFaultTest(experiment *experimentation.Experiment) bool {
-	switch experiment.GetTestSpecification().GetConfig().(type) {
-	case *experimentation.TestSpecification_Abort:
+func isFaultTest(experiment *experimentation.Experiment, testSpecification *serverexperimentation.TestSpecification) bool {
+	ptypes.UnmarshalAny(experiment.GetTestConfig(), testSpecification)
+
+	switch testSpecification.GetConfig().(type) {
+	case *serverexperimentation.TestSpecification_Abort:
 		return true
-	case *experimentation.TestSpecification_Latency:
+	case *serverexperimentation.TestSpecification_Latency:
 		return true
 	default:
 		return false
 	}
 }
 
-func getClusterPair(experiment *experimentation.Experiment) *experimentation.ClusterPairTarget {
-	switch experiment.GetTestSpecification().GetConfig().(type) {
-	case *experimentation.TestSpecification_Abort:
-		abort := experiment.GetTestSpecification().GetAbort()
+func getClusterPair(testSpecification *serverexperimentation.TestSpecification) *serverexperimentation.ClusterPairTarget {
+	switch testSpecification.GetConfig().(type) {
+	case *serverexperimentation.TestSpecification_Abort:
+		abort := testSpecification.GetAbort()
 		return abort.GetClusterPair()
-	case *experimentation.TestSpecification_Latency:
-		latency := experiment.GetTestSpecification().GetLatency()
+	case *serverexperimentation.TestSpecification_Latency:
+		latency := testSpecification.GetLatency()
 		return latency.GetClusterPair()
 	}
 	panic("unknown fault type")
