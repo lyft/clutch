@@ -210,21 +210,6 @@ func generateFrontend(args *args, tmpFolder, dest string) {
 		log.Fatal("`yarn compile` returned the above error")
 	}
 
-	frontendDir := filepath.Join(os.Getenv("OLDPWD"), "frontend")
-	log.Println("Moving to", frontendDir)
-	if err := os.Chdir(frontendDir); err != nil {
-		log.Fatal(err)
-	}
-	log.Println("Registering workflow...")
-	log.Println("yarn workspace @clutch-sh/app register-workflows")
-
-	registerCmd := exec.Command("yarn", "workspace", "@clutch-sh/app", "register-workflows")
-	if out, err := registerCmd.CombinedOutput(); err != nil {
-		fmt.Println(string(out))
-		log.Fatal("yarn workspace @clutch-sh/app register-workflows")
-	}
-	log.Println("Frontend generation complete")
-
 	fmt.Println("*** All done!")
 	fmt.Println("\n*** Try the following command to get started developing the new workflow:")
 	fmt.Printf("cd %s && make frontend-dev\n", dest)

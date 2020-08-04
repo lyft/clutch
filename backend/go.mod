@@ -5,7 +5,7 @@ go 1.13
 require (
 	github.com/DATA-DOG/go-sqlmock v1.4.1
 	github.com/Masterminds/squirrel v1.4.0
-	github.com/aws/aws-sdk-go v1.33.11
+	github.com/aws/aws-sdk-go v1.33.18
 	github.com/bufbuild/buf v0.11.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/coreos/go-oidc v2.2.1+incompatible
@@ -25,7 +25,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway v1.14.6
 	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334
 	github.com/jhump/protoreflect v1.7.0
-	github.com/lib/pq v1.7.1
+	github.com/lib/pq v1.8.0
 	github.com/lyft/protoc-gen-star v0.4.14 // indirect
 	github.com/mitchellh/hashstructure v1.0.0
 	github.com/shurcooL/githubv4 v0.0.0-20200414012201-bbc966b061dd

@@ -227,3 +227,45 @@ func TestGenerateDeploymentStrategicPatch(t *testing.T) {
 		})
 	}
 }
+
+func TestProtoForDeploymentClusterName(t *testing.T) {
+	t.Parallel()
+
+	var deploymentTestCases = []struct {
+		id                  string
+		inputClusterName    string
+		expectedClusterName string
+		deployment          *appsv1.Deployment
+	}{
+		{
+			id:                  "clustername already set",
+			inputClusterName:    "notprod",
+			expectedClusterName: "production",
+			deployment: &appsv1.Deployment{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "production",
+				},
+			},
+		},
+		{
+			id:                  "custername is not set",
+			inputClusterName:    "staging",
+			expectedClusterName: "staging",
+			deployment: &appsv1.Deployment{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "",
+				},
+			},
+		},
+	}
+
+	for _, tt := range deploymentTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			deployment := ProtoForDeployment(tt.inputClusterName, tt.deployment)
+			assert.Equal(t, tt.expectedClusterName, deployment.Cluster)
+		})
+	}
+}
