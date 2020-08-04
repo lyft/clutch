@@ -4,6 +4,10 @@ module.exports = {
       trending: true,
       componentProps: {
         resolverType: "clutch.aws.ec2.v1.Instance",
+        // notes: [{
+        //   severity: "info",
+        //   text: "This is a test note for terminate instance.",
+        // }, ],
       },
     },
     resizeAutoscalingGroup: {
