@@ -122,7 +122,7 @@ const { onSubmit, onBack } = useWizardContext();
 
 Workflows are essentially a combination of the packages listed above with configration values for routing and display purposes. Bear in mind that while, at the time of writing this, the out of the box workflows are all linear and serve a single purpose not all workflows need to follow that design. A workflow could be anything from a dashboard of information to a single form for submission.
 
-The most important piece of a workflow, even before the implementation is the configuration. A workflows configuration allows it to be registered on the Clutch app, allows for users to override default values to suit their sepcific needs, and provides ownership details for others.
+The most important piece of a workflow, even before the implementation is the configuration. A workflows configuration allows it to be registered on the Clutch app, allows for users to override default values to suit their specific needs, and provides ownership details for others.
 
 ```jsx
 import RemoteTriage from "./remote-triage";
