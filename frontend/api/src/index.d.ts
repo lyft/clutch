@@ -7960,6 +7960,9 @@ export namespace clutch {
 
                 /** Schema fields */
                 fields?: (clutch.resolver.v1.IField[]|null);
+
+                /** Schema error */
+                error?: (google.rpc.IStatus|null);
             }
 
             /** Represents a Schema. */
@@ -7979,6 +7982,9 @@ export namespace clutch {
 
                 /** Schema fields. */
                 public fields: clutch.resolver.v1.IField[];
+
+                /** Schema error. */
+                public error?: (google.rpc.IStatus|null);
 
                 /**
                  * Verifies a Schema message.
