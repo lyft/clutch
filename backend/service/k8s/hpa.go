@@ -26,8 +26,12 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 }
 
 func ProtoForHPA(cluster string, autoscaler *autoscalingv1.HorizontalPodAutoscaler) *k8sapiv1.HPA {
+	clusterName := autoscaler.ClusterName
+	if clusterName == "" {
+		clusterName = cluster
+	}
 	return &k8sapiv1.HPA{
-		Cluster:   cluster,
+		Cluster:   clusterName,
 		Namespace: autoscaler.Namespace,
 		Name:      autoscaler.Name,
 		Sizing: &k8sapiv1.HPA_Sizing{
