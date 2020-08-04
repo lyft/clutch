@@ -64,7 +64,7 @@ const ListExperiments = ({ heading, columns, mapping }) => {
       });
   }
 
-  let column_names = columns.map(name => name.toUpperCase()  );
+  let column_names = columns.map(name => name.toUpperCase());
 
   return (
     <Layout>

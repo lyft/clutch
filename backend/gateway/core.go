@@ -15,7 +15,7 @@ import (
 	awsmod "github.com/lyft/clutch/backend/module/aws"
 	experimentationapi "github.com/lyft/clutch/backend/module/chaos/experimentation/api"
 	rtdsmod "github.com/lyft/clutch/backend/module/chaos/experimentation/rtds"
-	serverexperimentation "github.com/lyft/clutch/backend/module/chaos/serverexperimentation"
+	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation"
 	"github.com/lyft/clutch/backend/module/envoytriage"
 	"github.com/lyft/clutch/backend/module/healthcheck"
 	k8smod "github.com/lyft/clutch/backend/module/k8s"
@@ -48,20 +48,20 @@ var Middleware = middleware.Factory{
 }
 
 var Modules = module.Factory{
-	assetsmod.Name:          assetsmod.New,
-	auditmod.Name:           auditmod.New,
-	authnmod.Name:           authnmod.New,
-	authzmod.Name:           authzmod.New,
-	awsmod.Name:             awsmod.New,
-	envoytriage.Name:        envoytriage.New,
-	experimentationapi.Name: experimentationapi.New,
+	assetsmod.Name:             assetsmod.New,
+	auditmod.Name:              auditmod.New,
+	authnmod.Name:              authnmod.New,
+	authzmod.Name:              authzmod.New,
+	awsmod.Name:                awsmod.New,
+	envoytriage.Name:           envoytriage.New,
+	experimentationapi.Name:    experimentationapi.New,
 	serverexperimentation.Name: serverexperimentation.New,
-	k8smod.Name:             k8smod.New,
-	kinesismod.Name:         kinesismod.New,
-	healthcheck.Name:        healthcheck.New,
-	resolvermod.Name:        resolvermod.New,
-	rtdsmod.Name:            rtdsmod.New,
-	sourcecontrol.Name:      sourcecontrol.New,
+	k8smod.Name:                k8smod.New,
+	kinesismod.Name:            kinesismod.New,
+	healthcheck.Name:           healthcheck.New,
+	resolvermod.Name:           resolvermod.New,
+	rtdsmod.Name:               rtdsmod.New,
+	sourcecontrol.Name:         sourcecontrol.New,
 }
 
 var Services = service.Factory{
