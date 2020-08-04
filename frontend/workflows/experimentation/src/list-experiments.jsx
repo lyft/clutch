@@ -4,10 +4,6 @@ import { ButtonGroup, client, Error, Row, Table } from "@clutch-sh/core";
 import { Container } from "@material-ui/core";
 import styled from "styled-components";
 
-function isFunction(functionToCheck) {
-  return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
-}
-
 const ExperimentSpecificationData = ({ experiment, columns, mapping }) => {
   const specification = experiment.testConfig;
 
