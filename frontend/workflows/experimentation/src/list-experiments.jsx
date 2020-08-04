@@ -11,13 +11,13 @@ const ExperimentSpecificationData = ({ experiment, columns, mapping }) => {
   columns.forEach(column => {
     var item;
     if (column in mapping) {
-      item = experiment.testConfig[mapping[column]]
+      item = experiment.testConfig[mapping[column]];
     } else {
-      item = experiment.testConfig[column]
+      item = experiment.testConfig[column];
     }
 
-    if (typeof item === 'undefined') {
-      data.push("Unknown")
+    if (typeof item === "undefined") {
+      data.push("Unknown");
     } else {
       data.push(item);
     }
