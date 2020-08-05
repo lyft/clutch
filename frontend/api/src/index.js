@@ -18987,6 +18987,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [typeUrl] Schema typeUrl
                  * @property {clutch.resolver.v1.ISchemaMetadata|null} [metadata] Schema metadata
                  * @property {Array.<clutch.resolver.v1.IField>|null} [fields] Schema fields
+                 * @property {google.rpc.IStatus|null} [error] Schema error
                  */
 
                 /**
@@ -19030,6 +19031,14 @@ export const clutch = $root.clutch = (() => {
                 Schema.prototype.fields = $util.emptyArray;
 
                 /**
+                 * Schema error.
+                 * @member {google.rpc.IStatus|null|undefined} error
+                 * @memberof clutch.resolver.v1.Schema
+                 * @instance
+                 */
+                Schema.prototype.error = null;
+
+                /**
                  * Verifies a Schema message.
                  * @function verify
                  * @memberof clutch.resolver.v1.Schema
@@ -19056,6 +19065,11 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "fields." + error;
                         }
+                    }
+                    if (message.error != null && message.hasOwnProperty("error")) {
+                        let error = $root.google.rpc.Status.verify(message.error);
+                        if (error)
+                            return "error." + error;
                     }
                     return null;
                 };
@@ -19089,6 +19103,11 @@ export const clutch = $root.clutch = (() => {
                             message.fields[i] = $root.clutch.resolver.v1.Field.fromObject(object.fields[i]);
                         }
                     }
+                    if (object.error != null) {
+                        if (typeof object.error !== "object")
+                            throw TypeError(".clutch.resolver.v1.Schema.error: object expected");
+                        message.error = $root.google.rpc.Status.fromObject(object.error);
+                    }
                     return message;
                 };
 
@@ -19110,6 +19129,7 @@ export const clutch = $root.clutch = (() => {
                     if (options.defaults) {
                         object.typeUrl = "";
                         object.metadata = null;
+                        object.error = null;
                     }
                     if (message.typeUrl != null && message.hasOwnProperty("typeUrl"))
                         object.typeUrl = message.typeUrl;
@@ -19120,6 +19140,8 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < message.fields.length; ++j)
                             object.fields[j] = $root.clutch.resolver.v1.Field.toObject(message.fields[j], options);
                     }
+                    if (message.error != null && message.hasOwnProperty("error"))
+                        object.error = $root.google.rpc.Status.toObject(message.error, options);
                     return object;
                 };
 
