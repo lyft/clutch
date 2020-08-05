@@ -14,7 +14,7 @@ import (
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 )
 
-func (c *client) WriteRequestEvent(_ context.Context, event *auditv1.RequestEvent) (int64, error) {
+func (c *client) WriteRequestEvent(ctx context.Context, event *auditv1.RequestEvent) (int64, error) {
 	if event == nil {
 		return -1, errors.New("cannot write empty event to table")
 	}
@@ -37,7 +37,7 @@ func (c *client) WriteRequestEvent(_ context.Context, event *auditv1.RequestEven
 
 	var id int64
 	const writeEventStatement = `INSERT INTO audit_events (occurred_at, details) VALUES (NOW(), $1) RETURNING id`
-	err = c.db.QueryRow(writeEventStatement, blob).Scan(&id)
+	err = c.db.QueryRowContext(ctx, writeEventStatement, blob).Scan(&id)
 	if err != nil {
 		return -1, err
 	}
@@ -45,7 +45,7 @@ func (c *client) WriteRequestEvent(_ context.Context, event *auditv1.RequestEven
 	return id, nil
 }
 
-func (c *client) UpdateRequestEvent(_ context.Context, id int64, update *auditv1.RequestEvent) error {
+func (c *client) UpdateRequestEvent(ctx context.Context, id int64, update *auditv1.RequestEvent) error {
 	dbEvent := &eventDetails{
 		Status: status{
 			Code:    int(update.Status.Code),
@@ -63,7 +63,7 @@ func (c *client) UpdateRequestEvent(_ context.Context, id int64, update *auditv1
 		SET details = details || $2::jsonb
 		WHERE id = $1
     `
-	if _, err = c.db.Exec(updateEventStatement, id, blob); err != nil {
+	if _, err = c.db.ExecContext(ctx, updateEventStatement, id, blob); err != nil {
 		c.logger.Warn(
 			"error updating audit row",
 			zap.Int64("row_id", id),
@@ -100,8 +100,8 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 	return c.query(ctx, readEventsRangeStatement, start, *end)
 }
 
-func (c *client) query(_ context.Context, query string, args ...interface{}) ([]*auditv1.Event, error) {
-	rows, err := c.db.Query(query, args...)
+func (c *client) query(ctx context.Context, query string, args ...interface{}) ([]*auditv1.Event, error) {
+	rows, err := c.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		c.logger.Error("error querying db", zap.Error(err))
 		return nil, err

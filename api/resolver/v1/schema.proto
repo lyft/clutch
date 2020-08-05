@@ -4,6 +4,8 @@ package clutch.resolver.v1;
 
 option go_package = "resolverv1";
 
+import "google/rpc/status.proto";
+
 message StringField {
   string placeholder = 1;
   string default_value = 2;
@@ -49,4 +51,8 @@ message Schema {
 
   SchemaMetadata metadata = 2;
   repeated Field fields = 3;
+
+  // If the schema is broken, e.g. a required option field is missing options, an error will be returned here to be
+  // displayed when that schema is selected.
+  google.rpc.Status error = 4;
 }

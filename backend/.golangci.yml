@@ -20,6 +20,9 @@ linters:
 linters-settings:
   goimports:
     local-prefixes: github.com/lyft/clutch/backend
+  gocritic:
+    disabled-checks:
+      - singleCaseSwitch
 issues:
   max-per-linter: 0
   max-same-issues: 0
