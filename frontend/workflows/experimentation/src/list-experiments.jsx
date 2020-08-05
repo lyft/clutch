@@ -10,6 +10,7 @@ const ExperimentSpecificationData = ({ experiment, columns, mapping }) => {
   var data = [];  
   columns.forEach(column => {
     var item;
+    mapping = mapping || {}
     if (column in mapping) {
       item = experiment.testConfig[mapping[column]];
     } else {
@@ -42,11 +43,11 @@ const ListExperiments = ({ heading, columns, mapping }) => {
 
   const navigate = useNavigate();
   function handleClickStartAbortExperiment() {
-    navigate("/experimentation/startabort");
+    navigate("/serverexperimentation/startabort");
   }
 
   function handleClickStartLatencyExperiment() {
-    navigate("/experimentation/startlatency");
+    navigate("/serverexperimentation/startlatency");
   }
 
   if (experiments.length === 0) {

@@ -17,18 +17,6 @@ const register = function register() {
         description: "List Experiments.",
         component: ListExperiments,
       },
-      startAbortExperiment: {
-        path: "startabort",
-        displayName: "Start an Abort Experiment",
-        description: "Start an Abort Experiment.",
-        component: StartAbortExperiment,
-      },
-      startLatencyExperiment: {
-        path: "startlatency",
-        displayName: "Start a Latency Experiment",
-        description: "Start a Latency Experiment.",
-        component: StartLatencyExperiment,
-      },
     },
   };
 };

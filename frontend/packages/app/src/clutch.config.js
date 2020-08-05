@@ -51,12 +51,21 @@ module.exports = {
       trending: true,
       componentProps: {
         columns: ["identifier", "targets", "type", "description"],
-        mapping: {
-          targets: "clusters",
-        },
+        server: {
+          mapping: {
+            targets: "clusters",
+          },
+          start: {
+            workflow: "startAbortExperiment",
+            description: "something something",
+            path: "/startabort"
+          }
+        }
       },
     },
+  },
+  "@clutch-sh/serverexperimentation": {
     startAbortExperiment: {},
     startLatencyExperiment: {},
-  },
+  }
 };
