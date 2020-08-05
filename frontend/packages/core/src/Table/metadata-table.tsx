@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
-import { yupResolver } from '@hookform/resolvers';
+import { yupResolver } from "@hookform/resolvers";
 import { Table, TableBody, TableCell, TableContainer, TableRow } from "@material-ui/core";
 import type { Size } from "@material-ui/core/TableCell";
 import _ from "lodash";
