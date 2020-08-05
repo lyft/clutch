@@ -25,7 +25,7 @@ message InstanceID {
     display_name : "Region",
     option_field : {
       include_all_option : true,
-      include_dynamic_options : [ "regions" ]
+      include_dynamic_options : "regions"
     },
   } ];
 }
@@ -48,7 +48,7 @@ message AutoscalingGroupName {
     display_name : "Region",
     option_field : {
       include_all_option : true,
-      include_dynamic_options : [ "regions" ]
+      include_dynamic_options : "regions"
     },
   } ];
 }
@@ -71,7 +71,7 @@ message KinesisStreamName {
     display_name : "Region",
     option_field : {
       include_all_option : true,
-      include_dynamic_options : [ "regions" ]
+      include_dynamic_options : "regions"
     },
   } ];
 }

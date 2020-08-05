@@ -6,9 +6,9 @@ PROTOC_RELEASE=3.11.4
 PROTO_ZIP_RELEASE_MD5_LINUX=7c0babfc7d2ae4eff6ce3e47c2de90c2
 PROTO_ZIP_RELEASE_MD5_OSX=58c8716eabdbc1259d14880ace6e719a
 
-# https://github.com/protobufjs/protobuf.js
-PROTOBUFJS_SHA=1d626f84db4a4f339004609f654a9f24a211b716
-PROTOBUFJS_FORK=https://github.com/natiz/protobuf.js
+# https://github.com/protobufjs/protobuf.js/releases
+# NOTE: should match frontend/package.json
+PROTOBUFJS_RELEASE=6.10.1
 
 # https://github.com/angular/clang-format/releases
 ANGULAR_CLANG_FORMAT_RELEASE=1.4.0
@@ -218,11 +218,11 @@ prepare_build_environment() {
 }
 
 install_protobufjs() {
-  export PROTOBUFJS_DIR="${BUILD_ROOT}/bin/protobufjs-${PROTOBUFJS_SHA}"
+  export PROTOBUFJS_DIR="${BUILD_ROOT}/bin/protobufjs-${PROTOBUFJS_RELEASE}"
   if [[ ! -f "${PROTOBUFJS_DIR}/node_modules/.bin/pbjs" ]]; then
     echo "info: Downloading protobufjs to build environment"
     mkdir -p "${PROTOBUFJS_DIR}"
-    "${BUILD_ROOT}/bin/yarn.sh" --cwd "${PROTOBUFJS_DIR}" add --frozen-lockfile "${PROTOBUFJS_FORK}#${PROTOBUFJS_SHA}"
+    "${BUILD_ROOT}/bin/yarn.sh" --cwd "${PROTOBUFJS_DIR}" add --frozen-lockfile "protobufjs@${PROTOBUFJS_RELEASE}"
   fi
 }
 
