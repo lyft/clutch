@@ -5,7 +5,7 @@ go 1.13
 require (
 	github.com/DATA-DOG/go-sqlmock v1.4.1
 	github.com/Masterminds/squirrel v1.4.0
-	github.com/aws/aws-sdk-go v1.33.18
+	github.com/aws/aws-sdk-go v1.33.20
 	github.com/bufbuild/buf v0.11.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/coreos/go-oidc v2.2.1+incompatible
