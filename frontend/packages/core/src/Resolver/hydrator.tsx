@@ -1,9 +1,7 @@
 import React from "react";
-import { Controller } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
 import {
   FormControl as MuiFormControl,
-  FormHelperText,
   InputLabel as MuiInputLabel,
   MenuItem,
   Select as MuiSelect,
@@ -15,21 +13,14 @@ import TextField from "../Input/text-field";
 const maxWidth = "500px";
 const InputLabel = styled(MuiInputLabel)`
   ${({ theme }) => `
-    && {
-      color: ${theme.palette.text.primary};
-    }
+    color: ${theme.palette.text.primary};
   `}
 `;
 
 const FormControl = styled(MuiFormControl)`
-  ${({ theme }) => `
   display: flex;
   width: 100%;
   max-width: ${maxWidth};
-  .MuiInput-underline:after {
-    border-bottom: 2px solid ${theme.palette.accent.main};
-  }
-  `}
 `;
 
 const Select = styled(MuiSelect)`
@@ -95,10 +86,9 @@ const StringField = (
 
 const OptionField = (
   field: clutch.resolver.v1.IField,
-  onChange: (e: ResolverChangeEvent) => void,
-  validation: any
+  onChange: (e: ResolverChangeEvent) => void
 ): React.ReactElement => {
-  let options = field.metadata.optionField.options.map(option => {
+  const options = field.metadata.optionField.options.map(option => {
     return option.displayName;
   });
   const [selectedIdx, setSelectedIdx] = React.useState(0);
@@ -107,10 +97,8 @@ const OptionField = (
     onChange(convertChangeEvent(event));
   };
 
-  const missingRequiredOptions = field.metadata.required && options.length === 0;
-  const fieldName = (field.metadata.displayName || field.name).toLowerCase();
-
   React.useEffect(() => {
+    const fieldName = field.metadata.displayName || field.name;
     onChange({
       target: {
         name: fieldName,
@@ -120,59 +108,25 @@ const OptionField = (
     });
   }, []);
 
-  if (missingRequiredOptions) {
-    options = ["Error: Missing options for required field"];
-  }
-
-  const validationRequired = field.metadata.required ? "required" : false;
   return (
-    options.length !== 0 && (
-      <FormControl key={fieldName} required={field.metadata.required || false}>
-        <InputLabel
-          error={validation.errors?.[fieldName] !== undefined || false}
-          shrink={options[selectedIdx] !== ""}
-          color="secondary"
-        >
-          {field.metadata.displayName || field.name}
-        </InputLabel>
-        <Controller
-          control={validation.control}
-          name={fieldName}
-          defaultValue={options[0]}
-          rules={{ required: validationRequired }}
-          as={
-            <Select
-              value={options[selectedIdx] || ""}
-              onChange={updateSelectedOption}
-              inputProps={{
-                style: { minWidth: "100px" },
-                name: fieldName,
-                inputRef: (ref: any) => {
-                  validation.register({
-                    name: fieldName,
-                    value: missingRequiredOptions ? "" : options[selectedIdx],
-                    required: validationRequired,
-                    ref,
-                  });
-                },
-              }}
-              disabled={missingRequiredOptions}
-            >
-              {options.map(option => (
-                <MenuItem key={option} value={option}>
-                  {option}
-                </MenuItem>
-              ))}
-            </Select>
-          }
-        />
-        {validation.errors?.[fieldName] !== undefined && (
-          <FormHelperText error={validation.errors?.[fieldName] !== undefined || false}>
-            {validation.errors[fieldName].message}
-          </FormHelperText>
-        )}
-      </FormControl>
-    )
+    <FormControl
+      key={field.metadata.displayName || field.name}
+      required={field.metadata.required || false}
+    >
+      <InputLabel color="secondary">{field.metadata.displayName || field.name}</InputLabel>
+      <Select
+        value={options[selectedIdx] || ""}
+        onChange={updateSelectedOption}
+        name={field.metadata.displayName || field.name}
+        inputProps={{ style: { minWidth: "100px" } }}
+      >
+        {options.map(option => (
+          <MenuItem key={option} value={option}>
+            {option}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 };
 

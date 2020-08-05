@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
+import { DevTool } from "react-hook-form-devtools";
 import _ from "lodash";
 import styled from "styled-components";
 
@@ -57,21 +57,18 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
   const queryValidation = useForm({
     mode: "onSubmit",
     reValidateMode: "onSubmit",
-    shouldFocusError: false,
+    submitFocusError: false,
   });
   const schemaValidation = useForm({
     mode: "onSubmit",
     reValidateMode: "onSubmit",
-    shouldFocusError: false,
+    submitFocusError: false,
   });
   const [validation, setValidation] = React.useState(() => queryValidation);
 
   React.useEffect(() => loadSchemas(type, dispatch), []);
 
   const submitHandler = () => {
-    if (Object.keys(validation.errors).length !== 0) {
-      return;
-    }
     dispatch({ type: ResolverAction.RESOLVING });
     const data = {
       ...state.queryData,
@@ -93,7 +90,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
   };
 
   const updateResolverData = (e: ResolverChangeEvent) => {
-    validation.clearErrors();
+    validation.clearError();
     if (e.target.name !== "query") {
       setValidation(() => schemaValidation);
     } else {
