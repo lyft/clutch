@@ -3,6 +3,7 @@ import type { FieldValues, FormContextValues } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
 import { MenuItem, Select } from "@material-ui/core";
 
+import { Error } from "../error";
 import TextField from "../Input/text-field";
 
 import type { ChangeEventTarget, ResolverChangeEvent } from "./hydrator";
@@ -64,7 +65,11 @@ const SchemaResolver: React.FC<SchemaResolverProps> = ({
         ))}
       </Select>
     </FormControl>
-    {schemas[selectedSchema]?.fields.map(field => hydrateField(field, onChange, validation))}
+    {schemas[selectedSchema]?.error ? (
+      <Error message={`Schema Error: ${schemas[selectedSchema].error.message}`} />
+    ) : (
+      schemas[selectedSchema]?.fields.map(field => hydrateField(field, onChange, validation))
+    )}
   </>
 );
 
