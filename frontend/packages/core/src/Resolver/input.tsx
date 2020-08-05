@@ -1,5 +1,5 @@
 import React from "react";
-import type { FieldValues, FormContextValues } from "react-hook-form";
+import type { UseFormMethods } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
 import { MenuItem, Select } from "@material-ui/core";
 
@@ -12,7 +12,7 @@ import { convertChangeEvent, FormControl, hydrateField, InputLabel } from "./hyd
 interface QueryResolverProps {
   schemas: clutch.resolver.v1.Schema[];
   onChange: (e: ResolverChangeEvent) => void;
-  validation: FormContextValues<FieldValues>;
+  validation: UseFormMethods;
 }
 
 const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, onChange, validation }) => {
@@ -44,7 +44,7 @@ interface SchemaResolverProps {
   selectedSchema: number;
   onSelect: (e: React.ChangeEvent<{ name?: string; value: unknown }>) => void;
   onChange: (e: ResolverChangeEvent) => void;
-  validation: FormContextValues<FieldValues>;
+  validation: UseFormMethods;
 }
 
 const SchemaResolver: React.FC<SchemaResolverProps> = ({
