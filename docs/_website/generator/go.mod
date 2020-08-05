@@ -1,4 +1,4 @@
-module github.com/clutch-sh/clutch/docs/website/generator
+module github.com/lyft/clutch/docs/website/generator
 
 go 1.14
 
