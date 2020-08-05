@@ -57,7 +57,7 @@
     ]
   },
   "dependencies": {
-    "protobufjs": "https://github.com/natiz/protobuf.js#1d626f84db4a4f339004609f654a9f24a211b716"
+    "protobufjs": "6.10.1"
   },
   "devDependencies": {
     "lerna": "^3.20.0",

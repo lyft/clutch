@@ -39,7 +39,7 @@ export const clutch = $root.clutch = (() => {
             /**
              * ActionType enum.
              * @name clutch.api.v1.ActionType
-             * @enum {string}
+             * @enum {number}
              * @property {number} UNSPECIFIED=0 UNSPECIFIED value
              * @property {number} CREATE=1 CREATE value
              * @property {number} READ=2 READ value
@@ -2707,7 +2707,7 @@ export const clutch = $root.clutch = (() => {
             /**
              * Decision enum.
              * @name clutch.authz.v1.Decision
-             * @enum {string}
+             * @enum {number}
              * @property {number} UNSPECIFIED=0 UNSPECIFIED value
              * @property {number} DENY=1 DENY value
              * @property {number} ALLOW=2 ALLOW value
@@ -3631,7 +3631,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * TerminationPolicy enum.
                      * @name clutch.aws.ec2.v1.AutoscalingGroup.TerminationPolicy
-                     * @enum {string}
+                     * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} UNKNOWN=1 UNKNOWN value
                      * @property {number} OLDEST_INSTANCE=2 OLDEST_INSTANCE value
@@ -3903,7 +3903,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * LifecycleState enum.
                          * @name clutch.aws.ec2.v1.AutoscalingGroup.Instance.LifecycleState
-                         * @enum {string}
+                         * @enum {number}
                          * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                          * @property {number} UNKNOWN=1 UNKNOWN value
                          * @property {number} PENDING=2 PENDING value
@@ -4644,7 +4644,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * State enum.
                      * @name clutch.aws.ec2.v1.Instance.State
-                     * @enum {string}
+                     * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} UNKNOWN=1 UNKNOWN value
                      * @property {number} PENDING=2 PENDING value
@@ -8602,7 +8602,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Level enum.
                      * @name clutch.config.gateway.v1.Logger.Level
-                     * @enum {string}
+                     * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} DEBUG=1 DEBUG value
                      * @property {number} INFO=2 INFO value
@@ -9669,7 +9669,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * FilterType enum.
                          * @name clutch.config.service.audit.v1.EventFilter.FilterType
-                         * @enum {string}
+                         * @enum {number}
                          * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                          * @property {number} SERVICE=1 SERVICE value
                          * @property {number} METHOD=2 METHOD value
@@ -11627,7 +11627,7 @@ export const clutch = $root.clutch = (() => {
                             /**
                              * SSLMode enum.
                              * @name clutch.config.service.db.postgres.v1.Connection.SSLMode
-                             * @enum {string}
+                             * @enum {number}
                              * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                              * @property {number} DISABLE=1 DISABLE value
                              * @property {number} ALLOW=2 ALLOW value
@@ -15653,7 +15653,7 @@ export const clutch = $root.clutch = (() => {
                 /**
                  * State enum.
                  * @name clutch.k8s.v1.Container.State
-                 * @enum {string}
+                 * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} UNKNOWN=1 UNKNOWN value
                  * @property {number} TERMINATED=2 TERMINATED value
@@ -16015,7 +16015,7 @@ export const clutch = $root.clutch = (() => {
                 /**
                  * State enum.
                  * @name clutch.k8s.v1.Pod.State
-                 * @enum {string}
+                 * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} UNKNOWN=1 UNKNOWN value
                  * @property {number} PENDING=2 PENDING value
@@ -20845,7 +20845,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Visibility enum.
                      * @name clutch.sourcecontrol.github.v1.RepositoryParameters.Visibility
-                     * @enum {string}
+                     * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} PUBLIC=1 PUBLIC value
                      * @property {number} PRIVATE=2 PRIVATE value
@@ -22103,7 +22103,7 @@ export const clutch = $root.clutch = (() => {
                 /**
                  * Operator enum.
                  * @name clutch.topology.v1.Constraint.Operator
-                 * @enum {string}
+                 * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} EQUAL=1 EQUAL value
                  * @property {number} NOT_EQUAL=2 NOT_EQUAL value
@@ -22352,7 +22352,7 @@ export const clutch = $root.clutch = (() => {
                 /**
                  * Aggregation enum.
                  * @name clutch.topology.v1.MetadataQuery.Aggregation
-                 * @enum {string}
+                 * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} SUM=1 SUM value
                  * @property {number} AVERAGE=2 AVERAGE value
@@ -27962,7 +27962,7 @@ export const validate = $root.validate = (() => {
     /**
      * KnownRegex enum.
      * @name validate.KnownRegex
-     * @enum {string}
+     * @enum {number}
      * @property {number} UNKNOWN=0 UNKNOWN value
      * @property {number} HTTP_HEADER_NAME=1 HTTP_HEADER_NAME value
      * @property {number} HTTP_HEADER_VALUE=2 HTTP_HEADER_VALUE value
@@ -31521,7 +31521,7 @@ export const google = $root.google = (() => {
             /**
              * Type enum.
              * @name google.protobuf.FieldDescriptorProto.Type
-             * @enum {string}
+             * @enum {number}
              * @property {number} TYPE_DOUBLE=1 TYPE_DOUBLE value
              * @property {number} TYPE_FLOAT=2 TYPE_FLOAT value
              * @property {number} TYPE_INT64=3 TYPE_INT64 value
@@ -31567,7 +31567,7 @@ export const google = $root.google = (() => {
             /**
              * Label enum.
              * @name google.protobuf.FieldDescriptorProto.Label
-             * @enum {string}
+             * @enum {number}
              * @property {number} LABEL_OPTIONAL=1 LABEL_OPTIONAL value
              * @property {number} LABEL_REQUIRED=2 LABEL_REQUIRED value
              * @property {number} LABEL_REPEATED=3 LABEL_REPEATED value
@@ -33017,7 +33017,7 @@ export const google = $root.google = (() => {
             /**
              * OptimizeMode enum.
              * @name google.protobuf.FileOptions.OptimizeMode
-             * @enum {string}
+             * @enum {number}
              * @property {number} SPEED=1 SPEED value
              * @property {number} CODE_SIZE=2 CODE_SIZE value
              * @property {number} LITE_RUNTIME=3 LITE_RUNTIME value
@@ -33606,7 +33606,7 @@ export const google = $root.google = (() => {
             /**
              * CType enum.
              * @name google.protobuf.FieldOptions.CType
-             * @enum {string}
+             * @enum {number}
              * @property {number} STRING=0 STRING value
              * @property {number} CORD=1 CORD value
              * @property {number} STRING_PIECE=2 STRING_PIECE value
@@ -33622,7 +33622,7 @@ export const google = $root.google = (() => {
             /**
              * JSType enum.
              * @name google.protobuf.FieldOptions.JSType
-             * @enum {string}
+             * @enum {number}
              * @property {number} JS_NORMAL=0 JS_NORMAL value
              * @property {number} JS_STRING=1 JS_STRING value
              * @property {number} JS_NUMBER=2 JS_NUMBER value
@@ -34416,7 +34416,7 @@ export const google = $root.google = (() => {
             /**
              * IdempotencyLevel enum.
              * @name google.protobuf.MethodOptions.IdempotencyLevel
-             * @enum {string}
+             * @enum {number}
              * @property {number} IDEMPOTENCY_UNKNOWN=0 IDEMPOTENCY_UNKNOWN value
              * @property {number} NO_SIDE_EFFECTS=1 NO_SIDE_EFFECTS value
              * @property {number} IDEMPOTENT=2 IDEMPOTENT value
@@ -36186,7 +36186,7 @@ export const google = $root.google = (() => {
         /**
          * NullValue enum.
          * @name google.protobuf.NullValue
-         * @enum {string}
+         * @enum {number}
          * @property {number} NULL_VALUE=0 NULL_VALUE value
          */
         protobuf.NullValue = (function() {

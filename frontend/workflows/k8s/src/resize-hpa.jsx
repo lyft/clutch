@@ -4,6 +4,7 @@ import {
   client,
   Confirmation,
   MetadataTable,
+  NotePanel,
   Resolver,
   useWizardContext,
 } from "@clutch-sh/core";
@@ -77,7 +78,7 @@ const HPADetails = () => {
   );
 };
 
-const Confirm = () => {
+const Confirm = ({ notes }) => {
   const hpa = useDataLayout("hpaData").displayValue();
   const resizeData = useDataLayout("resizeData");
 
@@ -93,11 +94,12 @@ const Confirm = () => {
           { name: "New Max Size", value: hpa.sizing.maxReplicas },
         ]}
       />
+      <NotePanel notes={notes} />
     </WizardStep>
   );
 };
 
-const ResizeHPA = ({ heading, resolverType }) => {
+const ResizeHPA = ({ heading, resolverType, notes = [] }) => {
   const dataLayout = {
     hpaData: {},
     inputData: {},
@@ -124,7 +126,7 @@ const ResizeHPA = ({ heading, resolverType }) => {
     <Wizard dataLayout={dataLayout} heading={heading}>
       <HPAIdentifier name="Lookup" resolverType={resolverType} />
       <HPADetails name="Modify" />
-      <Confirm name="Confirmation" />
+      <Confirm name="Confirmation" notes={notes} />
     </Wizard>
   );
 };
