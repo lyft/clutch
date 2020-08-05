@@ -31,7 +31,7 @@ require (
 	github.com/shurcooL/githubv4 v0.0.0-20200802174311-f27d2ca7f6d5
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f // indirect
 	github.com/shurcooL/httpfs v0.0.0-20190707220628-8d4bc4ba7749 // indirect
-	github.com/shurcooL/vfsgen v0.0.0-20181202132449-6a9ea43bcacd
+	github.com/shurcooL/vfsgen v0.0.0-20200627165143-92b8a710ab6c
 	github.com/slack-go/slack v0.6.5
 	github.com/stretchr/testify v1.6.1
 	github.com/uber-go/tally v3.3.17+incompatible
