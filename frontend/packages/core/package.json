@@ -45,7 +45,7 @@
     "react-router": "^6.0.0-alpha",
     "react-router-dom": "^6.0.0-alpha",
     "styled-components": "^5.1.1",
-    "superstruct": "~0.8.4",
+    "superstruct": "~0.10.0",
     "yup": "^0.29.0"
   },
   "devDependencies": {
