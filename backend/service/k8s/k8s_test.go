@@ -7,11 +7,13 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/golang/protobuf/ptypes/duration"
+	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
+	k8sv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
-
-	k8sv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
+	restclient "k8s.io/client-go/rest"
 )
 
 var testConfig = `
@@ -64,4 +66,49 @@ func TestNew(t *testing.T) {
 func TestNewWithWrongConfig(t *testing.T) {
 	_, err := New(&any.Any{TypeUrl: "foobar"}, nil, nil)
 	assert.EqualError(t, err, `message type url "foobar" is invalid`)
+}
+
+func TestApplyRestClientConfig(t *testing.T) {
+	t.Parallel()
+	var testCases = []struct {
+		id                 string
+		restConfig         *restclient.Config
+		expectedRestConfig restclient.Config
+		restClientConfig   k8sconfigv1.RestClientConfig
+	}{
+		{
+			id:                 "no config override",
+			restConfig:         &restclient.Config{},
+			expectedRestConfig: restclient.Config{},
+			restClientConfig:   k8sconfigv1.RestClientConfig{},
+		},
+		{
+			id:         "all config override",
+			restConfig: &restclient.Config{},
+			expectedRestConfig: restclient.Config{
+				Timeout: 10000000000, // This is in nanoseconds
+				QPS:     100,
+				Burst:   1000,
+			},
+			restClientConfig: k8sconfigv1.RestClientConfig{
+				Timeout: &duration.Duration{
+					Seconds: 10,
+				},
+				QPS:   100,
+				Burst: 1000,
+			},
+		},
+	}
+
+	for _, tt := range testCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+			applyRestClientConfig(tt.restConfig, tt.restClientConfig)
+
+			assert.Equal(t, tt.restConfig.Timeout, tt.expectedRestConfig.Timeout)
+			assert.Equal(t, tt.restConfig.QPS, tt.expectedRestConfig.QPS)
+			assert.Equal(t, tt.restConfig.Burst, tt.expectedRestConfig.Burst)
+		})
+	}
 }

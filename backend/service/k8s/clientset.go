@@ -9,6 +9,7 @@ import (
 	"go.uber.org/zap"
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
+	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 )
 
@@ -63,17 +64,7 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientCo
 			return nil, fmt.Errorf("could not load restconfig: %w", err)
 		}
 
-		if restClientConfig.Burst != 0 {
-			restConfig.Burst = int(restClientConfig.Burst)
-		}
-
-		if restClientConfig.QPS >= 0 {
-			restConfig.QPS = restClientConfig.QPS
-		}
-
-		if restClientConfig.Timeout.Seconds >= 0 {
-			restConfig.Timeout = time.Duration(restClientConfig.Timeout.Seconds) * time.Second
-		}
+		applyRestClientConfig(restConfig, restClientConfig)
 
 		clientset, err := k8s.NewForConfig(restConfig)
 		if err != nil {
@@ -92,6 +83,8 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientCo
 		logger.Info("no kubeconfig was found, falling back to InClusterConfig")
 
 		restConfig, err := rest.InClusterConfig()
+		applyRestClientConfig(restConfig, restClientConfig)
+
 		switch err {
 		case rest.ErrNotInCluster:
 			logger.Warn("not in a kubernetes cluster, unable to configure kube clientset")
@@ -107,6 +100,20 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientCo
 	}
 
 	return &managerImpl{clientsets: lookup}, nil
+}
+
+func applyRestClientConfig(restConfig *restclient.Config, restClientConfig k8sconfigv1.RestClientConfig) {
+	if restClientConfig.Burst != 0 {
+		restConfig.Burst = int(restClientConfig.Burst)
+	}
+
+	if restClientConfig.QPS >= 0 {
+		restConfig.QPS = restClientConfig.QPS
+	}
+
+	if restClientConfig.Timeout != nil {
+		restConfig.Timeout = time.Duration(restClientConfig.Timeout.Seconds) * time.Second
+	}
 }
 
 type managerImpl struct {
