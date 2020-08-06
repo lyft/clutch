@@ -5008,6 +5008,9 @@ export namespace clutch {
 
                         /** Config kubeconfigs */
                         kubeconfigs?: (string[]|null);
+
+                        /** Config restClientConfig */
+                        restClientConfig?: (clutch.config.service.k8s.v1.IRestClientConfig|null);
                     }
 
                     /** Represents a Config. */
@@ -5021,6 +5024,9 @@ export namespace clutch {
 
                         /** Config kubeconfigs. */
                         public kubeconfigs: string[];
+
+                        /** Config restClientConfig. */
+                        public restClientConfig?: (clutch.config.service.k8s.v1.IRestClientConfig|null);
 
                         /**
                          * Verifies a Config message.
@@ -5046,6 +5052,66 @@ export namespace clutch {
 
                         /**
                          * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a RestClientConfig. */
+                    interface IRestClientConfig {
+
+                        /** RestClientConfig timeout */
+                        timeout?: (google.protobuf.IDuration|null);
+
+                        /** RestClientConfig QPS */
+                        QPS?: (number|null);
+
+                        /** RestClientConfig burst */
+                        burst?: (number|null);
+                    }
+
+                    /** Represents a RestClientConfig. */
+                    class RestClientConfig implements IRestClientConfig {
+
+                        /**
+                         * Constructs a new RestClientConfig.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.k8s.v1.IRestClientConfig);
+
+                        /** RestClientConfig timeout. */
+                        public timeout?: (google.protobuf.IDuration|null);
+
+                        /** RestClientConfig QPS. */
+                        public QPS: number;
+
+                        /** RestClientConfig burst. */
+                        public burst: number;
+
+                        /**
+                         * Verifies a RestClientConfig message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a RestClientConfig message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns RestClientConfig
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.k8s.v1.RestClientConfig;
+
+                        /**
+                         * Creates a plain object from a RestClientConfig message. Also converts values to other types if specified.
+                         * @param message RestClientConfig
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.k8s.v1.RestClientConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this RestClientConfig to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };

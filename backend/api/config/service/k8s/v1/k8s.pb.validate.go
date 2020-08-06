@@ -60,6 +60,16 @@ func (m *Config) Validate() error {
 		// no validation rules for Kubeconfigs[idx]
 	}
 
+	if v, ok := interface{}(m.GetRestClientConfig()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ConfigValidationError{
+				field:  "RestClientConfig",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -116,3 +126,103 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ConfigValidationError{}
+
+// Validate checks the field values on RestClientConfig with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *RestClientConfig) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if d := m.GetTimeout(); d != nil {
+		dur, err := ptypes.Duration(d)
+		if err != nil {
+			return RestClientConfigValidationError{
+				field:  "Timeout",
+				reason: "value is not a valid duration",
+				cause:  err,
+			}
+		}
+
+		gt := time.Duration(1*time.Second + 0*time.Nanosecond)
+
+		if dur <= gt {
+			return RestClientConfigValidationError{
+				field:  "Timeout",
+				reason: "value must be greater than 1s",
+			}
+		}
+
+	}
+
+	if m.GetQPS() < 0 {
+		return RestClientConfigValidationError{
+			field:  "QPS",
+			reason: "value must be greater than or equal to 0",
+		}
+	}
+
+	if m.GetBurst() < 0 {
+		return RestClientConfigValidationError{
+			field:  "Burst",
+			reason: "value must be greater than or equal to 0",
+		}
+	}
+
+	return nil
+}
+
+// RestClientConfigValidationError is the validation error returned by
+// RestClientConfig.Validate if the designated constraints aren't met.
+type RestClientConfigValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RestClientConfigValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RestClientConfigValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RestClientConfigValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RestClientConfigValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RestClientConfigValidationError) ErrorName() string { return "RestClientConfigValidationError" }
+
+// Error satisfies the builtin error interface
+func (e RestClientConfigValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRestClientConfig.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RestClientConfigValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RestClientConfigValidationError{}
