@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="0.0.0-$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')-$(git rev-parse --short=12 HEAD)"
+VERSION="0.0.0-beta.$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')"
 PACKAGE=$1
 
 if yarn info "@clutch-sh/${PACKAGE}" | grep -q "$VERSION"; then
@@ -8,6 +8,4 @@ if yarn info "@clutch-sh/${PACKAGE}" | grep -q "$VERSION"; then
   exit 0
 fi
 
-(
-  cd "$PWD" && yarn publish --new-version="0.0.0-beta.$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')" --access public --no-git-tag-version $1
-)
+yarn pack --new-version="${VERSION}" --access public --no-git-tag-version
