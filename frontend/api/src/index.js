@@ -39,7 +39,7 @@ export const clutch = $root.clutch = (() => {
             /**
              * ActionType enum.
              * @name clutch.api.v1.ActionType
-             * @enum {string}
+             * @enum {number}
              * @property {number} UNSPECIFIED=0 UNSPECIFIED value
              * @property {number} CREATE=1 CREATE value
              * @property {number} READ=2 READ value
@@ -2707,7 +2707,7 @@ export const clutch = $root.clutch = (() => {
             /**
              * Decision enum.
              * @name clutch.authz.v1.Decision
-             * @enum {string}
+             * @enum {number}
              * @property {number} UNSPECIFIED=0 UNSPECIFIED value
              * @property {number} DENY=1 DENY value
              * @property {number} ALLOW=2 ALLOW value
@@ -3631,7 +3631,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * TerminationPolicy enum.
                      * @name clutch.aws.ec2.v1.AutoscalingGroup.TerminationPolicy
-                     * @enum {string}
+                     * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} UNKNOWN=1 UNKNOWN value
                      * @property {number} OLDEST_INSTANCE=2 OLDEST_INSTANCE value
@@ -3903,7 +3903,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * LifecycleState enum.
                          * @name clutch.aws.ec2.v1.AutoscalingGroup.Instance.LifecycleState
-                         * @enum {string}
+                         * @enum {number}
                          * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                          * @property {number} UNKNOWN=1 UNKNOWN value
                          * @property {number} PENDING=2 PENDING value
@@ -4644,7 +4644,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * State enum.
                      * @name clutch.aws.ec2.v1.Instance.State
-                     * @enum {string}
+                     * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} UNKNOWN=1 UNKNOWN value
                      * @property {number} PENDING=2 PENDING value
@@ -8602,7 +8602,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Level enum.
                      * @name clutch.config.gateway.v1.Logger.Level
-                     * @enum {string}
+                     * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} DEBUG=1 DEBUG value
                      * @property {number} INFO=2 INFO value
@@ -9669,7 +9669,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * FilterType enum.
                          * @name clutch.config.service.audit.v1.EventFilter.FilterType
-                         * @enum {string}
+                         * @enum {number}
                          * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                          * @property {number} SERVICE=1 SERVICE value
                          * @property {number} METHOD=2 METHOD value
@@ -11627,7 +11627,7 @@ export const clutch = $root.clutch = (() => {
                             /**
                              * SSLMode enum.
                              * @name clutch.config.service.db.postgres.v1.Connection.SSLMode
-                             * @enum {string}
+                             * @enum {number}
                              * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                              * @property {number} DISABLE=1 DISABLE value
                              * @property {number} ALLOW=2 ALLOW value
@@ -15147,6 +15147,39 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateDeployment}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef UpdateDeploymentCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.UpdateDeploymentResponse} [response] UpdateDeploymentResponse
+                 */
+
+                /**
+                 * Calls UpdateDeployment.
+                 * @function updateDeployment
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IUpdateDeploymentRequest} request UpdateDeploymentRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.UpdateDeploymentCallback} callback Node-style callback called with the error, if any, and UpdateDeploymentResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.updateDeployment = function updateDeployment(request, callback) {
+                    return this.rpcCall(updateDeployment, $root.clutch.k8s.v1.UpdateDeploymentRequest, $root.clutch.k8s.v1.UpdateDeploymentResponse, request, callback);
+                }, "name", { value: "UpdateDeployment" });
+
+                /**
+                 * Calls UpdateDeployment.
+                 * @function updateDeployment
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IUpdateDeploymentRequest} request UpdateDeploymentRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.UpdateDeploymentResponse>} Promise
+                 * @variation 2
+                 */
+
                 return K8sAPI;
             })();
 
@@ -15620,7 +15653,7 @@ export const clutch = $root.clutch = (() => {
                 /**
                  * State enum.
                  * @name clutch.k8s.v1.Container.State
-                 * @enum {string}
+                 * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} UNKNOWN=1 UNKNOWN value
                  * @property {number} TERMINATED=2 TERMINATED value
@@ -15982,7 +16015,7 @@ export const clutch = $root.clutch = (() => {
                 /**
                  * State enum.
                  * @name clutch.k8s.v1.Pod.State
-                 * @enum {string}
+                 * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} UNKNOWN=1 UNKNOWN value
                  * @property {number} PENDING=2 PENDING value
@@ -17091,6 +17124,605 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return ResizeHPAResponse;
+            })();
+
+            v1.Deployment = (function() {
+
+                /**
+                 * Properties of a Deployment.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeployment
+                 * @property {string|null} [cluster] Deployment cluster
+                 * @property {string|null} [namespace] Deployment namespace
+                 * @property {string|null} [name] Deployment name
+                 * @property {Object.<string,string>|null} [labels] Deployment labels
+                 * @property {Object.<string,string>|null} [annotations] Deployment annotations
+                 */
+
+                /**
+                 * Constructs a new Deployment.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a Deployment.
+                 * @implements IDeployment
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeployment=} [properties] Properties to set
+                 */
+                function Deployment(properties) {
+                    this.labels = {};
+                    this.annotations = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Deployment cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.Deployment
+                 * @instance
+                 */
+                Deployment.prototype.cluster = "";
+
+                /**
+                 * Deployment namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.Deployment
+                 * @instance
+                 */
+                Deployment.prototype.namespace = "";
+
+                /**
+                 * Deployment name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.Deployment
+                 * @instance
+                 */
+                Deployment.prototype.name = "";
+
+                /**
+                 * Deployment labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.Deployment
+                 * @instance
+                 */
+                Deployment.prototype.labels = $util.emptyObject;
+
+                /**
+                 * Deployment annotations.
+                 * @member {Object.<string,string>} annotations
+                 * @memberof clutch.k8s.v1.Deployment
+                 * @instance
+                 */
+                Deployment.prototype.annotations = $util.emptyObject;
+
+                /**
+                 * Verifies a Deployment message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.Deployment
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Deployment.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                        if (!$util.isObject(message.annotations))
+                            return "annotations: object expected";
+                        let key = Object.keys(message.annotations);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.annotations[key[i]]))
+                                return "annotations: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Deployment message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.Deployment
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.Deployment} Deployment
+                 */
+                Deployment.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.Deployment)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.Deployment();
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.Deployment.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    if (object.annotations) {
+                        if (typeof object.annotations !== "object")
+                            throw TypeError(".clutch.k8s.v1.Deployment.annotations: object expected");
+                        message.annotations = {};
+                        for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
+                            message.annotations[keys[i]] = String(object.annotations[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Deployment message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.Deployment
+                 * @static
+                 * @param {clutch.k8s.v1.Deployment} message Deployment
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Deployment.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults) {
+                        object.labels = {};
+                        object.annotations = {};
+                    }
+                    if (options.defaults) {
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    let keys2;
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
+                        object.annotations = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this Deployment to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.Deployment
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Deployment.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Deployment;
+            })();
+
+            v1.UpdateDeploymentRequest = (function() {
+
+                /**
+                 * Properties of an UpdateDeploymentRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IUpdateDeploymentRequest
+                 * @property {string|null} [clientset] UpdateDeploymentRequest clientset
+                 * @property {string|null} [cluster] UpdateDeploymentRequest cluster
+                 * @property {string|null} [namespace] UpdateDeploymentRequest namespace
+                 * @property {string|null} [name] UpdateDeploymentRequest name
+                 * @property {clutch.k8s.v1.UpdateDeploymentRequest.IFields|null} [fields] UpdateDeploymentRequest fields
+                 */
+
+                /**
+                 * Constructs a new UpdateDeploymentRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an UpdateDeploymentRequest.
+                 * @implements IUpdateDeploymentRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IUpdateDeploymentRequest=} [properties] Properties to set
+                 */
+                function UpdateDeploymentRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * UpdateDeploymentRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.UpdateDeploymentRequest
+                 * @instance
+                 */
+                UpdateDeploymentRequest.prototype.clientset = "";
+
+                /**
+                 * UpdateDeploymentRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.UpdateDeploymentRequest
+                 * @instance
+                 */
+                UpdateDeploymentRequest.prototype.cluster = "";
+
+                /**
+                 * UpdateDeploymentRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.UpdateDeploymentRequest
+                 * @instance
+                 */
+                UpdateDeploymentRequest.prototype.namespace = "";
+
+                /**
+                 * UpdateDeploymentRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.UpdateDeploymentRequest
+                 * @instance
+                 */
+                UpdateDeploymentRequest.prototype.name = "";
+
+                /**
+                 * UpdateDeploymentRequest fields.
+                 * @member {clutch.k8s.v1.UpdateDeploymentRequest.IFields|null|undefined} fields
+                 * @memberof clutch.k8s.v1.UpdateDeploymentRequest
+                 * @instance
+                 */
+                UpdateDeploymentRequest.prototype.fields = null;
+
+                /**
+                 * Verifies an UpdateDeploymentRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.UpdateDeploymentRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                UpdateDeploymentRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.fields != null && message.hasOwnProperty("fields")) {
+                        let error = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.verify(message.fields);
+                        if (error)
+                            return "fields." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates an UpdateDeploymentRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.UpdateDeploymentRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.UpdateDeploymentRequest} UpdateDeploymentRequest
+                 */
+                UpdateDeploymentRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.UpdateDeploymentRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.UpdateDeploymentRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.fields != null) {
+                        if (typeof object.fields !== "object")
+                            throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.fields: object expected");
+                        message.fields = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.fromObject(object.fields);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an UpdateDeploymentRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.UpdateDeploymentRequest
+                 * @static
+                 * @param {clutch.k8s.v1.UpdateDeploymentRequest} message UpdateDeploymentRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                UpdateDeploymentRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                        object.fields = null;
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.fields != null && message.hasOwnProperty("fields"))
+                        object.fields = $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields.toObject(message.fields, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this UpdateDeploymentRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.UpdateDeploymentRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                UpdateDeploymentRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                UpdateDeploymentRequest.Fields = (function() {
+
+                    /**
+                     * Properties of a Fields.
+                     * @memberof clutch.k8s.v1.UpdateDeploymentRequest
+                     * @interface IFields
+                     * @property {Object.<string,string>|null} [labels] Fields labels
+                     * @property {Object.<string,string>|null} [annotations] Fields annotations
+                     */
+
+                    /**
+                     * Constructs a new Fields.
+                     * @memberof clutch.k8s.v1.UpdateDeploymentRequest
+                     * @classdesc Represents a Fields.
+                     * @implements IFields
+                     * @constructor
+                     * @param {clutch.k8s.v1.UpdateDeploymentRequest.IFields=} [properties] Properties to set
+                     */
+                    function Fields(properties) {
+                        this.labels = {};
+                        this.annotations = {};
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Fields labels.
+                     * @member {Object.<string,string>} labels
+                     * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields
+                     * @instance
+                     */
+                    Fields.prototype.labels = $util.emptyObject;
+
+                    /**
+                     * Fields annotations.
+                     * @member {Object.<string,string>} annotations
+                     * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields
+                     * @instance
+                     */
+                    Fields.prototype.annotations = $util.emptyObject;
+
+                    /**
+                     * Verifies a Fields message.
+                     * @function verify
+                     * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Fields.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.labels != null && message.hasOwnProperty("labels")) {
+                            if (!$util.isObject(message.labels))
+                                return "labels: object expected";
+                            let key = Object.keys(message.labels);
+                            for (let i = 0; i < key.length; ++i)
+                                if (!$util.isString(message.labels[key[i]]))
+                                    return "labels: string{k:string} expected";
+                        }
+                        if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                            if (!$util.isObject(message.annotations))
+                                return "annotations: object expected";
+                            let key = Object.keys(message.annotations);
+                            for (let i = 0; i < key.length; ++i)
+                                if (!$util.isString(message.annotations[key[i]]))
+                                    return "annotations: string{k:string} expected";
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Fields message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.k8s.v1.UpdateDeploymentRequest.Fields} Fields
+                     */
+                    Fields.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields)
+                            return object;
+                        let message = new $root.clutch.k8s.v1.UpdateDeploymentRequest.Fields();
+                        if (object.labels) {
+                            if (typeof object.labels !== "object")
+                                throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.labels: object expected");
+                            message.labels = {};
+                            for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                                message.labels[keys[i]] = String(object.labels[keys[i]]);
+                        }
+                        if (object.annotations) {
+                            if (typeof object.annotations !== "object")
+                                throw TypeError(".clutch.k8s.v1.UpdateDeploymentRequest.Fields.annotations: object expected");
+                            message.annotations = {};
+                            for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
+                                message.annotations[keys[i]] = String(object.annotations[keys[i]]);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Fields message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields
+                     * @static
+                     * @param {clutch.k8s.v1.UpdateDeploymentRequest.Fields} message Fields
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Fields.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.objects || options.defaults) {
+                            object.labels = {};
+                            object.annotations = {};
+                        }
+                        let keys2;
+                        if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                            object.labels = {};
+                            for (let j = 0; j < keys2.length; ++j)
+                                object.labels[keys2[j]] = message.labels[keys2[j]];
+                        }
+                        if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
+                            object.annotations = {};
+                            for (let j = 0; j < keys2.length; ++j)
+                                object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Fields to JSON.
+                     * @function toJSON
+                     * @memberof clutch.k8s.v1.UpdateDeploymentRequest.Fields
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Fields.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Fields;
+                })();
+
+                return UpdateDeploymentRequest;
+            })();
+
+            v1.UpdateDeploymentResponse = (function() {
+
+                /**
+                 * Properties of an UpdateDeploymentResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IUpdateDeploymentResponse
+                 */
+
+                /**
+                 * Constructs a new UpdateDeploymentResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an UpdateDeploymentResponse.
+                 * @implements IUpdateDeploymentResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IUpdateDeploymentResponse=} [properties] Properties to set
+                 */
+                function UpdateDeploymentResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies an UpdateDeploymentResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.UpdateDeploymentResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                UpdateDeploymentResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an UpdateDeploymentResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.UpdateDeploymentResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.UpdateDeploymentResponse} UpdateDeploymentResponse
+                 */
+                UpdateDeploymentResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.UpdateDeploymentResponse)
+                        return object;
+                    return new $root.clutch.k8s.v1.UpdateDeploymentResponse();
+                };
+
+                /**
+                 * Creates a plain object from an UpdateDeploymentResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.UpdateDeploymentResponse
+                 * @static
+                 * @param {clutch.k8s.v1.UpdateDeploymentResponse} message UpdateDeploymentResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                UpdateDeploymentResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this UpdateDeploymentResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.UpdateDeploymentResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                UpdateDeploymentResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return UpdateDeploymentResponse;
             })();
 
             return v1;
@@ -18355,6 +18987,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [typeUrl] Schema typeUrl
                  * @property {clutch.resolver.v1.ISchemaMetadata|null} [metadata] Schema metadata
                  * @property {Array.<clutch.resolver.v1.IField>|null} [fields] Schema fields
+                 * @property {google.rpc.IStatus|null} [error] Schema error
                  */
 
                 /**
@@ -18398,6 +19031,14 @@ export const clutch = $root.clutch = (() => {
                 Schema.prototype.fields = $util.emptyArray;
 
                 /**
+                 * Schema error.
+                 * @member {google.rpc.IStatus|null|undefined} error
+                 * @memberof clutch.resolver.v1.Schema
+                 * @instance
+                 */
+                Schema.prototype.error = null;
+
+                /**
                  * Verifies a Schema message.
                  * @function verify
                  * @memberof clutch.resolver.v1.Schema
@@ -18424,6 +19065,11 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "fields." + error;
                         }
+                    }
+                    if (message.error != null && message.hasOwnProperty("error")) {
+                        let error = $root.google.rpc.Status.verify(message.error);
+                        if (error)
+                            return "error." + error;
                     }
                     return null;
                 };
@@ -18457,6 +19103,11 @@ export const clutch = $root.clutch = (() => {
                             message.fields[i] = $root.clutch.resolver.v1.Field.fromObject(object.fields[i]);
                         }
                     }
+                    if (object.error != null) {
+                        if (typeof object.error !== "object")
+                            throw TypeError(".clutch.resolver.v1.Schema.error: object expected");
+                        message.error = $root.google.rpc.Status.fromObject(object.error);
+                    }
                     return message;
                 };
 
@@ -18478,6 +19129,7 @@ export const clutch = $root.clutch = (() => {
                     if (options.defaults) {
                         object.typeUrl = "";
                         object.metadata = null;
+                        object.error = null;
                     }
                     if (message.typeUrl != null && message.hasOwnProperty("typeUrl"))
                         object.typeUrl = message.typeUrl;
@@ -18488,6 +19140,8 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < message.fields.length; ++j)
                             object.fields[j] = $root.clutch.resolver.v1.Field.toObject(message.fields[j], options);
                     }
+                    if (message.error != null && message.hasOwnProperty("error"))
+                        object.error = $root.google.rpc.Status.toObject(message.error, options);
                     return object;
                 };
 
@@ -19835,6 +20489,141 @@ export const clutch = $root.clutch = (() => {
                     return HPAName;
                 })();
 
+                v1.Deployment = (function() {
+
+                    /**
+                     * Properties of a Deployment.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @interface IDeployment
+                     * @property {string|null} [name] Deployment name
+                     * @property {string|null} [clientset] Deployment clientset
+                     * @property {string|null} [namespace] Deployment namespace
+                     */
+
+                    /**
+                     * Constructs a new Deployment.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @classdesc Represents a Deployment.
+                     * @implements IDeployment
+                     * @constructor
+                     * @param {clutch.resolver.k8s.v1.IDeployment=} [properties] Properties to set
+                     */
+                    function Deployment(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Deployment name.
+                     * @member {string} name
+                     * @memberof clutch.resolver.k8s.v1.Deployment
+                     * @instance
+                     */
+                    Deployment.prototype.name = "";
+
+                    /**
+                     * Deployment clientset.
+                     * @member {string} clientset
+                     * @memberof clutch.resolver.k8s.v1.Deployment
+                     * @instance
+                     */
+                    Deployment.prototype.clientset = "";
+
+                    /**
+                     * Deployment namespace.
+                     * @member {string} namespace
+                     * @memberof clutch.resolver.k8s.v1.Deployment
+                     * @instance
+                     */
+                    Deployment.prototype.namespace = "";
+
+                    /**
+                     * Verifies a Deployment message.
+                     * @function verify
+                     * @memberof clutch.resolver.k8s.v1.Deployment
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Deployment.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            if (!$util.isString(message.clientset))
+                                return "clientset: string expected";
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            if (!$util.isString(message.namespace))
+                                return "namespace: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Deployment message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.resolver.k8s.v1.Deployment
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.resolver.k8s.v1.Deployment} Deployment
+                     */
+                    Deployment.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.resolver.k8s.v1.Deployment)
+                            return object;
+                        let message = new $root.clutch.resolver.k8s.v1.Deployment();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.clientset != null)
+                            message.clientset = String(object.clientset);
+                        if (object.namespace != null)
+                            message.namespace = String(object.namespace);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Deployment message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.resolver.k8s.v1.Deployment
+                     * @static
+                     * @param {clutch.resolver.k8s.v1.Deployment} message Deployment
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Deployment.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.clientset = "";
+                            object.namespace = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            object.clientset = message.clientset;
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            object.namespace = message.namespace;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Deployment to JSON.
+                     * @function toJSON
+                     * @memberof clutch.resolver.k8s.v1.Deployment
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Deployment.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Deployment;
+                })();
+
                 return v1;
             })();
 
@@ -20056,7 +20845,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Visibility enum.
                      * @name clutch.sourcecontrol.github.v1.RepositoryParameters.Visibility
-                     * @enum {string}
+                     * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} PUBLIC=1 PUBLIC value
                      * @property {number} PRIVATE=2 PRIVATE value
@@ -21314,7 +22103,7 @@ export const clutch = $root.clutch = (() => {
                 /**
                  * Operator enum.
                  * @name clutch.topology.v1.Constraint.Operator
-                 * @enum {string}
+                 * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} EQUAL=1 EQUAL value
                  * @property {number} NOT_EQUAL=2 NOT_EQUAL value
@@ -21563,7 +22352,7 @@ export const clutch = $root.clutch = (() => {
                 /**
                  * Aggregation enum.
                  * @name clutch.topology.v1.MetadataQuery.Aggregation
-                 * @enum {string}
+                 * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} SUM=1 SUM value
                  * @property {number} AVERAGE=2 AVERAGE value
@@ -26488,6 +27277,7 @@ export const validate = $root.validate = (() => {
          * @property {boolean|null} [address] StringRules address
          * @property {boolean|null} [uuid] StringRules uuid
          * @property {validate.KnownRegex|null} [wellKnownRegex] StringRules wellKnownRegex
+         * @property {boolean|null} [strict] StringRules strict
          */
 
         /**
@@ -26699,6 +27489,14 @@ export const validate = $root.validate = (() => {
          */
         StringRules.prototype.wellKnownRegex = 0;
 
+        /**
+         * StringRules strict.
+         * @member {boolean} strict
+         * @memberof validate.StringRules
+         * @instance
+         */
+        StringRules.prototype.strict = true;
+
         // OneOf field names bound to virtual getters and setters
         let $oneOfFields;
 
@@ -26849,6 +27647,9 @@ export const validate = $root.validate = (() => {
                     break;
                 }
             }
+            if (message.strict != null && message.hasOwnProperty("strict"))
+                if (typeof message.strict !== "boolean")
+                    return "strict: boolean expected";
             return null;
         };
 
@@ -26976,6 +27777,8 @@ export const validate = $root.validate = (() => {
                 message.wellKnownRegex = 2;
                 break;
             }
+            if (object.strict != null)
+                message.strict = Boolean(object.strict);
             return message;
         };
 
@@ -27033,6 +27836,7 @@ export const validate = $root.validate = (() => {
                 } else
                     object.lenBytes = options.longs === String ? "0" : 0;
                 object.notContains = "";
+                object.strict = true;
             }
             if (message["const"] != null && message.hasOwnProperty("const"))
                 object["const"] = message["const"];
@@ -27136,6 +27940,8 @@ export const validate = $root.validate = (() => {
                 if (options.oneofs)
                     object.wellKnown = "wellKnownRegex";
             }
+            if (message.strict != null && message.hasOwnProperty("strict"))
+                object.strict = message.strict;
             return object;
         };
 
@@ -27156,7 +27962,7 @@ export const validate = $root.validate = (() => {
     /**
      * KnownRegex enum.
      * @name validate.KnownRegex
-     * @enum {string}
+     * @enum {number}
      * @property {number} UNKNOWN=0 UNKNOWN value
      * @property {number} HTTP_HEADER_NAME=1 HTTP_HEADER_NAME value
      * @property {number} HTTP_HEADER_VALUE=2 HTTP_HEADER_VALUE value
@@ -30715,7 +31521,7 @@ export const google = $root.google = (() => {
             /**
              * Type enum.
              * @name google.protobuf.FieldDescriptorProto.Type
-             * @enum {string}
+             * @enum {number}
              * @property {number} TYPE_DOUBLE=1 TYPE_DOUBLE value
              * @property {number} TYPE_FLOAT=2 TYPE_FLOAT value
              * @property {number} TYPE_INT64=3 TYPE_INT64 value
@@ -30761,7 +31567,7 @@ export const google = $root.google = (() => {
             /**
              * Label enum.
              * @name google.protobuf.FieldDescriptorProto.Label
-             * @enum {string}
+             * @enum {number}
              * @property {number} LABEL_OPTIONAL=1 LABEL_OPTIONAL value
              * @property {number} LABEL_REQUIRED=2 LABEL_REQUIRED value
              * @property {number} LABEL_REPEATED=3 LABEL_REPEATED value
@@ -32211,7 +33017,7 @@ export const google = $root.google = (() => {
             /**
              * OptimizeMode enum.
              * @name google.protobuf.FileOptions.OptimizeMode
-             * @enum {string}
+             * @enum {number}
              * @property {number} SPEED=1 SPEED value
              * @property {number} CODE_SIZE=2 CODE_SIZE value
              * @property {number} LITE_RUNTIME=3 LITE_RUNTIME value
@@ -32800,7 +33606,7 @@ export const google = $root.google = (() => {
             /**
              * CType enum.
              * @name google.protobuf.FieldOptions.CType
-             * @enum {string}
+             * @enum {number}
              * @property {number} STRING=0 STRING value
              * @property {number} CORD=1 CORD value
              * @property {number} STRING_PIECE=2 STRING_PIECE value
@@ -32816,7 +33622,7 @@ export const google = $root.google = (() => {
             /**
              * JSType enum.
              * @name google.protobuf.FieldOptions.JSType
-             * @enum {string}
+             * @enum {number}
              * @property {number} JS_NORMAL=0 JS_NORMAL value
              * @property {number} JS_STRING=1 JS_STRING value
              * @property {number} JS_NUMBER=2 JS_NUMBER value
@@ -33610,7 +34416,7 @@ export const google = $root.google = (() => {
             /**
              * IdempotencyLevel enum.
              * @name google.protobuf.MethodOptions.IdempotencyLevel
-             * @enum {string}
+             * @enum {number}
              * @property {number} IDEMPOTENCY_UNKNOWN=0 IDEMPOTENCY_UNKNOWN value
              * @property {number} NO_SIDE_EFFECTS=1 NO_SIDE_EFFECTS value
              * @property {number} IDEMPOTENT=2 IDEMPOTENT value
@@ -35380,7 +36186,7 @@ export const google = $root.google = (() => {
         /**
          * NullValue enum.
          * @name google.protobuf.NullValue
-         * @enum {string}
+         * @enum {number}
          * @property {number} NULL_VALUE=0 NULL_VALUE value
          */
         protobuf.NullValue = (function() {

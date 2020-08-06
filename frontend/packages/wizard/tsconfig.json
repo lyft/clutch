@@ -13,7 +13,7 @@
     "src/tests/**/*"
   ],
   "references": [
-    {"path": "../../packages/core"},
-    {"path": "../../packages/data-layout"},
+    {"path": "../core"},
+    {"path": "../data-layout"},
   ]
 }

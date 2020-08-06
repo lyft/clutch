@@ -88,7 +88,7 @@ for the website live within the [docs/](docs/) directory.
 
 Thinking of contributing back to Clutch? Awesome! We love and welcome all contributions.
 
-First things first, please read over our [Code of Conduct](./CODE_OF_CONDUCT.md) and our
+First things first, please read over our [Code of Conduct](./CODE_OF_CONDUCT) and our
 [guidelines](https://clutch.sh/docs/community#contributing) before opening a pull
 request.
 

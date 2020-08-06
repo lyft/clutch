@@ -4,6 +4,7 @@ import (
 	"context"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/util/retry"
 
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 
@@ -21,12 +22,16 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 	if err != nil {
 		return nil, err
 	}
-	return ProtoForHPA(hpa), nil
+	return ProtoForHPA(cs.Cluster(), hpa), nil
 }
 
-func ProtoForHPA(autoscaler *autoscalingv1.HorizontalPodAutoscaler) *k8sapiv1.HPA {
+func ProtoForHPA(cluster string, autoscaler *autoscalingv1.HorizontalPodAutoscaler) *k8sapiv1.HPA {
+	clusterName := autoscaler.ClusterName
+	if clusterName == "" {
+		clusterName = cluster
+	}
 	return &k8sapiv1.HPA{
-		Cluster:   autoscaler.ClusterName,
+		Cluster:   clusterName,
 		Namespace: autoscaler.Namespace,
 		Name:      autoscaler.Name,
 		Sizing: &k8sapiv1.HPA_Sizing{
@@ -53,8 +58,12 @@ func (s *svc) ResizeHPA(ctx context.Context, clientset, cluster, namespace, name
 	}
 
 	normalizeHPAChanges(hpa, sizing)
-	_, err = cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Update(hpa)
-	return err
+
+	retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
+		_, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Update(hpa)
+		return err
+	})
+	return retryErr
 }
 
 func normalizeHPAChanges(hpa *autoscalingv1.HorizontalPodAutoscaler, sizing *k8sapiv1.ResizeHPARequest_Sizing) {

@@ -24,7 +24,8 @@ message PodID {
 
   string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
     display_name : "Clientset",
-    option_field : {include_dynamic_options : [ "clientset" ]},
+    required : true,
+    option_field : {include_dynamic_options : "clientset"},
   } ];
 
   string namespace = 3 [ (clutch.resolver.v1.schema_field) = {
@@ -67,7 +68,37 @@ message HPAName {
 
   string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
     display_name : "Clientset",
-    option_field : {include_dynamic_options : [ "clientset" ]},
+    required : true,
+    option_field : {include_dynamic_options : "clientset"},
+  } ];
+
+  string namespace = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Namespace",
+    required : true,
+    string_field : {
+      placeholder : "my-namespace",
+    },
+  } ];
+}
+
+message Deployment {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "name"
+    searchable : true
+  };
+
+  string name = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Name",
+    required : true,
+    string_field : {
+      placeholder : "my-deployment-name",
+    },
+  } ];
+
+  string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Clientset",
+    required : true,
+    option_field : {include_dynamic_options : "clientset"},
   } ];
 
   string namespace = 3 [ (clutch.resolver.v1.schema_field) = {

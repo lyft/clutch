@@ -20,25 +20,36 @@ const Checkbox = styled(MuiCheckbox)`
 `;
 
 interface CheckboxPanelProps {
-  header: string;
+  header?: string;
   options: {
-    [option: string]: string;
+    [option: string]: boolean;
   };
-  onChange: (option: string, checked: boolean) => null;
+  onChange: (state: { [option: string]: boolean }) => void;
 }
 
 const CheckboxPanel: React.FC<CheckboxPanelProps> = ({ header, options, onChange }) => {
   const allOptions = {};
   Object.keys(options).forEach(option => {
-    allOptions[option] = { checked: false, value: options[option] };
+    allOptions[option] = { checked: options[option], value: option };
   });
   const [selected, setSelected] = React.useState(allOptions);
 
   const onToggle = e => {
-    const selectedOption = { ...selected[e.target.name], checked: e.target.checked };
-    const updatedSelections = { ...selected, [e.target.name]: selectedOption };
+    const targetName = e.target.name;
+    const targetValue = e.target.checked;
+    const selectedOption = { ...selected[targetName], checked: targetValue };
+    const updatedSelections = { ...selected, [targetName]: selectedOption };
     setSelected(updatedSelections);
-    onChange(allOptions[e.target.name].value, e.target.checked);
+    const callbackOptions = {};
+    Object.keys(allOptions).forEach(option => {
+      callbackOptions[option] =
+        option === targetName
+          ? targetValue
+          : selected[option]
+          ? selected[option].checked
+          : allOptions[option].checked;
+    });
+    onChange(callbackOptions);
   };
 
   return (

@@ -163,7 +163,7 @@ make api
 ```
 
 The resulting generated code will be in:
-- `frontend/api/index.js`, the unified bundle of all frontend generated objects.
+- `frontend/api/src/index.js`, the unified bundle of all frontend generated objects.
 - `backend/api/amiibo/v1/`, the `amiibov1` package.
 
 ### 3. Backend: Implement the APIs

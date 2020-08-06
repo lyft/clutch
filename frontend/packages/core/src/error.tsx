@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import RefreshIcon from "@material-ui/icons/Refresh";
-import { Alert, AlertTitle } from "@material-ui/lab";
+import { Alert as MuiAlert, AlertTitle } from "@material-ui/lab";
 import styled from "styled-components";
 
 const PANEL_MESSAGE_BREAKPOINT = 150;
@@ -19,6 +19,10 @@ interface ErrorProps {
   message: string;
   retry?: () => void;
 }
+
+const Alert = styled(MuiAlert)`
+  margin: 5px;
+`;
 
 const Error: React.FC<ErrorProps> = ({ message, retry }) => {
   const action =

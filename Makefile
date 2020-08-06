@@ -9,6 +9,7 @@ DOCS_DEPLOY_GIT_USER ?= git
 VERSION := 0.0.0
 
 YARN:=./build/bin/yarn.sh
+PROJECT_ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 .PHONY: help # Print this help message.
  help:
@@ -19,22 +20,22 @@ all: api frontend backend-with-assets
 
 .PHONY: api # Generate API assets.
 api: yarn-ensure
-	tools/compile-protos.sh
+	tools/compile-protos.sh -c "$(PROJECT_ROOT_DIR)/api"
 
 .PHONY: api-lint # Lint the generated API assets.
 api-lint:
-	tools/compile-protos.sh -l
+	tools/compile-protos.sh -c "$(PROJECT_ROOT_DIR)/api" -l
 
 .PHONY: api-lint-fix # Lint and fix the generated API assets.
 api-lint-fix:
-	tools/compile-protos.sh -lf
+	tools/compile-protos.sh -c "$(PROJECT_ROOT_DIR)/api" -lf
 
 .PHONY: api-verify # Verify API proto changes include generate frontend and backend assets.
 api-verify:
 	find backend/api -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} \;
-	find frontend/api -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} \;
+	find frontend/api/src -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} \;
 	$(MAKE) api
-	tools/ensure-no-diff.sh backend/api frontend/api
+	tools/ensure-no-diff.sh backend/api frontend/api/src
 
 .PHONY: backend # Build the standalone backend.
 backend:
@@ -134,7 +135,7 @@ lint-fix: api-lint-fix backend-lint-fix frontend-lint-fix
 
 .PHONY: scaffold-gateway # Generate a new gateway.
 scaffold-gateway:
-	cd tools/scaffolding && go run scaffolder.go -m gateway
+	cd tools/scaffolding && go run scaffolder.go -m gateway -p $(shell git rev-parse --short HEAD)
 
 .PHONY: scaffold-workflow # Generate a new Workflow package.
 scaffold-workflow:

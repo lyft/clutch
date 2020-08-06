@@ -1,0 +1,28 @@
+{
+  "extends": [
+    "config:base",
+    ":automergeLinters",
+    ":combinePatchMinorReleases",
+    ":enableVulnerabilityAlerts",
+    ":preserveSemverRanges",
+    ":separateMajorReleases",
+    ":separateMultipleMajorReleases",
+    ":unpublishSafe",
+    "group:definitelyTyped",
+    "group:materialMonorepo",
+    "group:reactMonorepo",
+    "group:reactrouterMonorepo"
+  ],
+  "commitMessagePrefix": "housekeeping:",
+  "rebaseWhen": "conflicted",
+  "labels": [
+    "dependencies"
+  ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "postUpdateOptions": [
+    "gomodTidy"
+  ],
+  "yarnrc": ""
+}

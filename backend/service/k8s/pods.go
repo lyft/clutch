@@ -21,7 +21,7 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 	if err != nil {
 		return nil, err
 	}
-	return podDescription(pod, cluster), nil
+	return podDescription(pod, cs.Cluster()), nil
 }
 
 func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error {
@@ -56,7 +56,7 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 	var pods []*k8sapiv1.Pod
 	for _, p := range podList.Items {
 		pod := p
-		pods = append(pods, podDescription(&pod, cluster))
+		pods = append(pods, podDescription(&pod, cs.Cluster()))
 	}
 
 	return pods, nil
@@ -69,8 +69,12 @@ func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 	//if converted, err := ptypes.TimestampProto(k8spod.Status.StartTime.Time); err == nil {
 	//	launch = converted
 	//}
+	clusterName := k8spod.ClusterName
+	if clusterName == "" {
+		clusterName = cluster
+	}
 	return &k8sapiv1.Pod{
-		Cluster:    cluster,
+		Cluster:    clusterName,
 		Namespace:  k8spod.Namespace,
 		Name:       k8spod.Name,
 		Containers: makeContainers(k8spod.Status.ContainerStatuses),

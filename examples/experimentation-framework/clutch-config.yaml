@@ -1,0 +1,29 @@
+gateway:
+  logger:
+    pretty: true
+    level: DEBUG
+  stats:
+    flush_interval: 1s
+  timeouts:
+    default: 15s
+  middleware:
+    - name: clutch.middleware.stats
+    - name: clutch.middleware.validate
+  listener:
+    tcp:
+      address: 0.0.0.0
+      port: 8080
+      secure: false
+modules:
+  - name: clutch.module.assets
+  - name: clutch.module.healthcheck
+  - name: clutch.module.resolver
+  - name: clutch.module.chaos.experimentation.api
+  - name: clutch.module.chaos.experimentation.rtds
+    typed_config:
+      "@type": types.google.com/clutch.config.module.chaos.experimentation.rtds.v1.Config
+      rtds_layer_name: foo
+      cache_refresh_interval: "60s"
+services:
+  - name: clutch.service.chaos.experimentation.store
+resolvers:

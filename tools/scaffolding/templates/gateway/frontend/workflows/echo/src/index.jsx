@@ -13,7 +13,7 @@ const register = () => {
       echo: {
         path: "echo",
         component: EchoWorkflow,
-        displayName: "Echo Example Workflow",
+        displayName: "Demo Workflow",
         description: "Workflow for demonstration purposes.",
       },
     },

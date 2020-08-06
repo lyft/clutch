@@ -44,7 +44,7 @@ From the root of the project directory, run:
 make api
 ```
 
-Generated code from the API definitions lives in `backend/api` and `frontend/api`. Files in these directories should never be edited directly.
+Generated code from the API definitions lives in `backend/api` and `frontend/api/src`. Files in these directories should never be edited directly.
 
 :::info Note
 The [script that compiles protos](https://github.com/lyft/clutch/blob/main/tools/compile-protos.sh) automatically downloads `protoc`, `pbjs`, and other dependencies to the local build environment.

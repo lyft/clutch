@@ -9,5 +9,5 @@ if yarn info "@clutch-sh/${PACKAGE}" | grep -q "$VERSION"; then
 fi
 
 (
-  cd "$PWD" && yarn publish --new-version="$VERSION" --access public --no-git-tag-version
+  cd "$PWD" && yarn publish --new-version="0.0.0-beta.$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')" --access public --no-git-tag-version $1
 )

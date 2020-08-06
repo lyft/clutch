@@ -1,4 +1,5 @@
 import React from "react";
+import type { clutch } from "@clutch-sh/api";
 import {
   FormControl as MuiFormControl,
   InputLabel as MuiInputLabel,
@@ -7,7 +8,6 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 
-import type { clutch } from "../../../../api";
 import TextField from "../Input/text-field";
 
 const maxWidth = "500px";
@@ -102,7 +102,7 @@ const OptionField = (
     onChange({
       target: {
         name: fieldName,
-        value: field.metadata.optionField.options[selectedIdx].stringValue,
+        value: field.metadata.optionField.options?.[selectedIdx]?.stringValue,
       },
       initialLoad: true,
     });

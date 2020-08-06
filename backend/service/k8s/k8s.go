@@ -40,7 +40,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		}
 	}
 
-	c, err := newClientsetManager(loadingRules)
+	c, err := newClientsetManager(loadingRules, logger)
 	if err != nil {
 		return nil, err
 	}
@@ -60,6 +60,10 @@ type Service interface {
 	// HPA management functions.
 	DescribeHPA(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.HPA, error)
 	ResizeHPA(ctx context.Context, clientset, cluster, namespace, name string, sizing *k8sapiv1.ResizeHPARequest_Sizing) error
+
+	// Deployment management functions.
+	DescribeDeployment(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Deployment, error)
+	UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error
 }
 
 type svc struct {

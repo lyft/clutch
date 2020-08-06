@@ -12,10 +12,10 @@
     "noImplicitReturns": true,
     "outDir": "dist",
     "paths": {
-      "@clutch-sh/*": ["packages/*/src", "workflows/*/src"],
+      "@clutch-sh/*": ["api/*", "packages/*/src", "workflows/*/src"],
     },
     "preserveConstEnums": true,
-    "target": "ESNext",
-    "types": ["node"]
+    "target": "ES2018",
+    "types": ["node", "long"]
   },
 }

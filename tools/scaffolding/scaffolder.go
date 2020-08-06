@@ -149,14 +149,30 @@ func getGatewayTemplateValues() (*gatewayTemplateValues, string) {
 	return data, dest
 }
 
-func generateAPI(dest string) {
-	// TODO: Move this to occur in tmpdir once clutch is published publicly.
-	log.Println("Generating API code from protos...")
-	log.Println("cd", dest, "&& make api")
-	if err := os.Chdir(dest); err != nil {
+func generateAPI(args *args, tmpFolder, dest string) {
+	log.Println("Adding clutch dependencies to go.mod...")
+	if err := os.Chdir(filepath.Join(tmpFolder, "backend")); err != nil {
 		log.Fatal(err)
 	}
-	cmd := exec.Command("make", "api")
+	cmd := exec.Command("go", "get", fmt.Sprintf("github.com/%s/clutch/backend@%s", args.Org, args.GoPin))
+	if out, err := cmd.CombinedOutput(); err != nil {
+		fmt.Println(string(out))
+		log.Fatal("`go get` backend in the destination dir returned the above error")
+	}
+
+	cmd = exec.Command("go", "get", fmt.Sprintf("github.com/%s/clutch/tools@%s", args.Org, args.GoPin))
+	if out, err := cmd.CombinedOutput(); err != nil {
+		fmt.Println(string(out))
+		log.Fatal("`go get` tools in the destination dir returned the above error")
+	}
+
+	if err := os.Chdir(tmpFolder); err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("Generating API code from protos...")
+	log.Println("cd", tmpFolder, "&& make api")
+	cmd = exec.Command("make", "api")
 	if out, err := cmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
 		log.Fatal("`make api` in the destination dir returned the above error")
@@ -165,14 +181,14 @@ func generateAPI(dest string) {
 
 	fmt.Println("*** All done!")
 	fmt.Println("\n*** Try the following command to get started developing the custom gateway:")
-	fmt.Println("cd", dest, "&& make")
+	fmt.Printf("cd %s && make\n", dest)
 }
 
-func generateFrontend(dest string) {
+func generateFrontend(args *args, tmpFolder, dest string) {
 	// Update clutch.config.js for new workflow
 	log.Println("Compiling workflow, this may take a few minutes...")
-	log.Println("cd", dest, "&& yarn --frozen-lockfile && yarn tsc && yarn compile")
-	if err := os.Chdir(dest); err != nil {
+	log.Println("cd", tmpFolder, "&& yarn --frozen-lockfile && yarn tsc && yarn compile")
+	if err := os.Chdir(tmpFolder); err != nil {
 		log.Fatal(err)
 	}
 
@@ -194,24 +210,24 @@ func generateFrontend(dest string) {
 		log.Fatal("`yarn compile` returned the above error")
 	}
 
-	frontendDir := filepath.Join(os.Getenv("OLDPWD"), "frontend")
-	log.Println("Moving to", frontendDir)
-	if err := os.Chdir(frontendDir); err != nil {
-		log.Fatal(err)
-	}
-	log.Println("Registering workflow...")
-	log.Println("yarn workspace @clutch-sh/app register-workflows")
-
-	registerCmd := exec.Command("yarn", "workspace", "@clutch-sh/app", "register-workflows")
-	if out, err := registerCmd.CombinedOutput(); err != nil {
-		fmt.Println(string(out))
-		log.Fatal("yarn workspace @clutch-sh/app register-workflows")
-	}
-	log.Println("Frontend generation complete")
-
 	fmt.Println("*** All done!")
 	fmt.Println("\n*** Try the following command to get started developing the new workflow:")
-	fmt.Println("make frontend-dev")
+	fmt.Printf("cd %s && make frontend-dev\n", dest)
+}
+
+type args struct {
+	Mode  string
+	GoPin string
+	Org   string
+}
+
+func parseArgs() *args {
+	f := &args{}
+	flag.StringVar(&f.Mode, "m", "gateway", "oneof gateway, workflow")
+	flag.StringVar(&f.GoPin, "p", "main", "sha or other github ref to version of tools used in scaffolding")
+	flag.StringVar(&f.Org, "o", "lyft", "overrides the github organization (for use in fork testing)")
+	flag.Parse()
+	return f
 }
 
 func main() {
@@ -220,16 +236,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	mode := flag.String("m", "gateway", "oneof gateway, workflow")
+	flags := parseArgs()
 
-	flag.Parse()
 	// Collect info from user based on mode and determine template root.
 	var dest string
 	var templateRoot string
 	var data interface{}
-	var postProcessFunction func(dest string)
+	var postProcessFunction func(flags *args, tmpFolder, dest string)
 
-	switch *mode {
+	switch flags.Mode {
 	case "gateway":
 		templateRoot = filepath.Join(root, "templates/gateway")
 		data, dest = getGatewayTemplateValues()
@@ -252,7 +267,7 @@ func main() {
 	log.Println("Using templates in", templateRoot)
 
 	// Make a tmpdir for output.
-	tmpout, err := ioutil.TempDir(os.TempDir(), "clutch-scaffolding-*")
+	tmpout, err := ioutil.TempDir(os.TempDir(), "clutch-scaffolding-")
 	if err != nil {
 		log.Fatal("could not create temp dir", err)
 	}
@@ -261,6 +276,9 @@ func main() {
 
 	// Walk files and template them.
 	err = filepath.Walk(templateRoot, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
 		relpath, err := filepath.Rel(templateRoot, path)
 		if err != nil {
 			return err
@@ -291,17 +309,16 @@ func main() {
 		log.Fatal(err)
 	}
 
+	postProcessFunction(flags, tmpout, dest)
+
 	// Move tmpdir contents to destination.
-	log.Println("Moving to", dest)
 	if err := os.MkdirAll(filepath.Dir(dest), 0755); err != nil {
 		log.Fatal(err)
 	}
 	if err := os.Rename(tmpout, dest); err != nil {
 		if os.IsExist(err) {
-			log.Fatal("destination folder already exists")
+			log.Fatal(fmt.Sprintf("Failed moving %s to %s destination folder already exists", tmpout, dest))
 		}
 		log.Fatal(err)
 	}
-
-	postProcessFunction(dest)
 }

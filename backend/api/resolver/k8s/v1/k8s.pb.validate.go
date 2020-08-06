@@ -241,3 +241,73 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = HPANameValidationError{}
+
+// Validate checks the field values on Deployment with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Deployment) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Name
+
+	// no validation rules for Clientset
+
+	// no validation rules for Namespace
+
+	return nil
+}
+
+// DeploymentValidationError is the validation error returned by
+// Deployment.Validate if the designated constraints aren't met.
+type DeploymentValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeploymentValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeploymentValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeploymentValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeploymentValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeploymentValidationError) ErrorName() string { return "DeploymentValidationError" }
+
+// Error satisfies the builtin error interface
+func (e DeploymentValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeployment.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeploymentValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeploymentValidationError{}
