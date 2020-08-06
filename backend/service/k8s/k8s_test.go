@@ -5,11 +5,11 @@ import (
 	"os"
 	"testing"
 
+	k8sv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
+
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/golang/protobuf/ptypes/duration"
-	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
-	k8sv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
@@ -74,13 +74,13 @@ func TestApplyRestClientConfig(t *testing.T) {
 		id                 string
 		restConfig         *restclient.Config
 		expectedRestConfig restclient.Config
-		restClientConfig   k8sconfigv1.RestClientConfig
+		restClientConfig   k8sv1.RestClientConfig
 	}{
 		{
 			id:                 "no config override",
 			restConfig:         &restclient.Config{},
 			expectedRestConfig: restclient.Config{},
-			restClientConfig:   k8sconfigv1.RestClientConfig{},
+			restClientConfig:   k8sv1.RestClientConfig{},
 		},
 		{
 			id:         "all config override",
@@ -90,7 +90,7 @@ func TestApplyRestClientConfig(t *testing.T) {
 				QPS:     100,
 				Burst:   1000,
 			},
-			restClientConfig: k8sconfigv1.RestClientConfig{
+			restClientConfig: k8sv1.RestClientConfig{
 				Timeout: &duration.Duration{
 					Seconds: 10,
 				},
