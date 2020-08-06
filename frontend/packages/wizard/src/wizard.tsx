@@ -12,6 +12,7 @@ import {
   Stepper,
   Typography,
 } from "@material-ui/core";
+import type { ContainerProps } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Check from "@material-ui/icons/Check";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
@@ -113,7 +114,7 @@ const Spacer = styled.div<SpacerProps>`
 interface WizardProps {
   heading?: string;
   dataLayout: ManagerLayout;
-  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false;
+  maxWidth?: ContainerProps["maxWidth"];
 }
 
 export interface WizardChild {
