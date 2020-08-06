@@ -8,4 +8,4 @@ if yarn info "@clutch-sh/${PACKAGE}" | grep -q "$VERSION"; then
   exit 0
 fi
 
-yarn pack --new-version="${VERSION}" --access public --no-git-tag-version
+yarn publish --new-version="${VERSION}" --access public --no-git-tag-version
