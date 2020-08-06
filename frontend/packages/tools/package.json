@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
   "scripts": {
-    "publishBeta": "yarn publish --new-version=\"0.0.0-beta.$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')\" --access public",
+    "publishBeta": "../../../tools/publish-frontend.sh tools",
     "registerWorkflows": "node workflow-registrar.js",
     "test": "jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage"

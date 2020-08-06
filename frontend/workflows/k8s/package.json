@@ -16,7 +16,7 @@
     "compile:watch": "yarn run compile --watch",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
-    "publishBeta": "yarn publish --new-version=\"0.0.0-beta.$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')\" --access public",
+    "publishBeta": "../../../tools/publish-frontend.sh k8s",
     "test": "jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"

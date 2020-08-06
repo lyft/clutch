@@ -35,7 +35,7 @@
     "lint:fix": "lerna run lint:fix --no-bail",
     "lint:packages": "sort-package-json package.json packages/**/package.json --check",
     "lint:packages:fix": "sort-package-json package.json packages/**/package.json",
-    "publishBeta": "lerna run compile && lerna run publishBeta --no-bail -- --no-git-tag-version",
+    "publishBeta": "lerna run compile && lerna run publishBeta --no-bail",
     "start": "yarn compile:watch & yarn workspace @clutch-sh/app start",
     "test": "lerna run test --stream --no-bail --",
     "test:coverage": "lerna run test:coverage --stream --no-bail --",
