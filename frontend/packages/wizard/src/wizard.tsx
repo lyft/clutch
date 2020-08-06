@@ -113,7 +113,7 @@ const Spacer = styled.div<SpacerProps>`
 interface WizardProps {
   heading?: string;
   dataLayout: ManagerLayout;
-  maxWidth?: string | boolean;
+  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false;
 }
 
 export interface WizardChild {
