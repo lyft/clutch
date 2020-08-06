@@ -3,10 +3,10 @@ package k8s
 import (
 	"errors"
 	"fmt"
-	"time"
 
 	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 
+	"github.com/golang/protobuf/ptypes"
 	"go.uber.org/zap"
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -65,7 +65,9 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientCo
 			return nil, fmt.Errorf("could not load restconfig: %w", err)
 		}
 
-		applyRestClientConfig(restConfig, restClientConfig)
+		if err := applyRestClientConfig(restConfig, restClientConfig); err != nil {
+			return nil, err
+		}
 
 		clientset, err := k8s.NewForConfig(restConfig)
 		if err != nil {
@@ -84,7 +86,9 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientCo
 		logger.Info("no kubeconfig was found, falling back to InClusterConfig")
 
 		restConfig, err := rest.InClusterConfig()
-		applyRestClientConfig(restConfig, restClientConfig)
+		if err := applyRestClientConfig(restConfig, restClientConfig); err != nil {
+			return nil, err
+		}
 
 		switch err {
 		case rest.ErrNotInCluster:
@@ -103,7 +107,7 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientCo
 	return &managerImpl{clientsets: lookup}, nil
 }
 
-func applyRestClientConfig(restConfig *restclient.Config, restClientConfig k8sconfigv1.RestClientConfig) {
+func applyRestClientConfig(restConfig *restclient.Config, restClientConfig k8sconfigv1.RestClientConfig) error {
 	if restClientConfig.Burst != 0 {
 		restConfig.Burst = int(restClientConfig.Burst)
 	}
@@ -113,8 +117,13 @@ func applyRestClientConfig(restConfig *restclient.Config, restClientConfig k8sco
 	}
 
 	if restClientConfig.Timeout != nil {
-		restConfig.Timeout = time.Duration(restClientConfig.Timeout.Seconds) * time.Second
+		timeout, err := ptypes.Duration(restClientConfig.Timeout)
+		if err != nil {
+			return err
+		}
+		restConfig.Timeout = timeout
 	}
+	return nil
 }
 
 type managerImpl struct {

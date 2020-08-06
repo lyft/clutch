@@ -104,8 +104,9 @@ func TestApplyRestClientConfig(t *testing.T) {
 		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
-			applyRestClientConfig(tt.restConfig, tt.restClientConfig)
 
+			err := applyRestClientConfig(tt.restConfig, tt.restClientConfig)
+			assert.NoError(t, err)
 			assert.Equal(t, tt.restConfig.Timeout, tt.expectedRestConfig.Timeout)
 			assert.Equal(t, tt.restConfig.QPS, tt.expectedRestConfig.QPS)
 			assert.Equal(t, tt.restConfig.Burst, tt.expectedRestConfig.Burst)
