@@ -9,7 +9,7 @@ const AppLayout: React.FC = ({ children }) => {
   return (
     <>
       <Header />
-      {children}  
+      {children}
       <FeedbackButton />
       <Container maxWidth="xl">
         <Outlet />

@@ -212,7 +212,11 @@ const Wizard: React.FC<WizardProps> = ({ heading, dataLayout, children }) => {
 
   return (
     <Spacer margin="3">
-      {heading && <Heading variant="h5"><strong>{heading}</strong></Heading>}
+      {heading && (
+        <Heading variant="h5">
+          <strong>{heading}</strong>
+        </Heading>
+      )}
       <SizedContainer
         container
         direction="column"
