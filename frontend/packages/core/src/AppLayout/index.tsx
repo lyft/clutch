@@ -1,5 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import { Container } from "@material-ui/core";
 
 import FeedbackButton from "./feedback";
 import Header from "./header";
@@ -8,9 +9,11 @@ const AppLayout: React.FC = ({ children }) => {
   return (
     <>
       <Header />
-      {children}
+      {children}  
       <FeedbackButton />
-      <Outlet />
+      <Container maxWidth="xl">
+        <Outlet />
+      </Container>
     </>
   );
 };
