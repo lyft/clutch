@@ -20,7 +20,7 @@ const InputLabel = styled(MuiInputLabel)`
 const FormControl = styled(MuiFormControl)`
   display: flex;
   width: 100%;
-  margin-top: 15px;
+  margin-top: 5px;
   max-width: ${maxWidth};
 `;
 

@@ -3,6 +3,7 @@ import { Button, Warning, WizardContext } from "@clutch-sh/core";
 import type { ManagerLayout } from "@clutch-sh/data-layout";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
 import {
+  Container,
   Grid,
   Step,
   StepConnector as MUIStepConnector,
@@ -112,6 +113,7 @@ const Spacer = styled.div<SpacerProps>`
 interface WizardProps {
   heading?: string;
   dataLayout: ManagerLayout;
+  maxWidth?: string | boolean;
 }
 
 export interface WizardChild {
@@ -134,10 +136,10 @@ const StartOverIcon = styled(FirstPageIcon)`
   transform: rotate(90deg);
 `;
 
-const Wizard: React.FC<WizardProps> = ({ heading, dataLayout, children }) => {
+const Wizard: React.FC<WizardProps> = ({ heading, dataLayout, children, maxWidth }) => {
   const [state, dispatch] = useWizardState();
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
-  const [gloablWarnings, setGlobalWarnings] = React.useState<string[]>([]);
+  const [globalWarnings, setGlobalWarnings] = React.useState<string[]>([]);
   const dataLayoutManager = useDataLayoutManager(dataLayout);
 
   const updateStepData = (stepName: string, data: object) => {
@@ -212,31 +214,33 @@ const Wizard: React.FC<WizardProps> = ({ heading, dataLayout, children }) => {
 
   return (
     <Spacer margin="3">
-      {heading && (
-        <Heading variant="h5">
-          <strong>{heading}</strong>
-        </Heading>
-      )}
-      <SizedContainer
-        container
-        direction="column"
-        justify="center"
-        alignItems="stretch"
-        style={{ display: "inline" }}
-      >
-        <Grid item>
-          <StyledStepper
-            orientation="vertical"
-            activeStep={state.activeStep}
-            connector={<StepConnector />}
-          >
-            {steps}
-          </StyledStepper>
-        </Grid>
-      </SizedContainer>
-      {gloablWarnings.map(error => (
-        <Warning key={error} message={error} />
-      ))}
+      <Container maxWidth={maxWidth}>
+        {heading && (
+          <Heading variant="h5">
+            <strong>{heading}</strong>
+          </Heading>
+        )}
+        <SizedContainer
+          container
+          direction="column"
+          justify="center"
+          alignItems="stretch"
+          style={{ display: "inline" }}
+        >
+          <Grid item>
+            <StyledStepper
+              orientation="vertical"
+              activeStep={state.activeStep}
+              connector={<StepConnector />}
+            >
+              {steps}
+            </StyledStepper>
+          </Grid>
+        </SizedContainer>
+        {globalWarnings.map(error => (
+          <Warning key={error} message={error} />
+        ))}
+      </Container>
     </Spacer>
   );
 };
