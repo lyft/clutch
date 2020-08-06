@@ -5063,8 +5063,8 @@ export namespace clutch {
                         /** RestClientConfig timeout */
                         timeout?: (google.protobuf.IDuration|null);
 
-                        /** RestClientConfig QPS */
-                        QPS?: (number|null);
+                        /** RestClientConfig qps */
+                        qps?: (number|null);
 
                         /** RestClientConfig burst */
                         burst?: (number|null);
@@ -5082,8 +5082,8 @@ export namespace clutch {
                         /** RestClientConfig timeout. */
                         public timeout?: (google.protobuf.IDuration|null);
 
-                        /** RestClientConfig QPS. */
-                        public QPS: number;
+                        /** RestClientConfig qps. */
+                        public qps: number;
 
                         /** RestClientConfig burst. */
                         public burst: number;

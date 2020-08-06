@@ -12210,7 +12210,7 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.service.k8s.v1
                          * @interface IRestClientConfig
                          * @property {google.protobuf.IDuration|null} [timeout] RestClientConfig timeout
-                         * @property {number|null} [QPS] RestClientConfig QPS
+                         * @property {number|null} [qps] RestClientConfig qps
                          * @property {number|null} [burst] RestClientConfig burst
                          */
 
@@ -12238,12 +12238,12 @@ export const clutch = $root.clutch = (() => {
                         RestClientConfig.prototype.timeout = null;
 
                         /**
-                         * RestClientConfig QPS.
-                         * @member {number} QPS
+                         * RestClientConfig qps.
+                         * @member {number} qps
                          * @memberof clutch.config.service.k8s.v1.RestClientConfig
                          * @instance
                          */
-                        RestClientConfig.prototype.QPS = 0;
+                        RestClientConfig.prototype.qps = 0;
 
                         /**
                          * RestClientConfig burst.
@@ -12269,9 +12269,9 @@ export const clutch = $root.clutch = (() => {
                                 if (error)
                                     return "timeout." + error;
                             }
-                            if (message.QPS != null && message.hasOwnProperty("QPS"))
-                                if (typeof message.QPS !== "number")
-                                    return "QPS: number expected";
+                            if (message.qps != null && message.hasOwnProperty("qps"))
+                                if (typeof message.qps !== "number")
+                                    return "qps: number expected";
                             if (message.burst != null && message.hasOwnProperty("burst"))
                                 if (!$util.isInteger(message.burst))
                                     return "burst: integer expected";
@@ -12295,8 +12295,8 @@ export const clutch = $root.clutch = (() => {
                                     throw TypeError(".clutch.config.service.k8s.v1.RestClientConfig.timeout: object expected");
                                 message.timeout = $root.google.protobuf.Duration.fromObject(object.timeout);
                             }
-                            if (object.QPS != null)
-                                message.QPS = Number(object.QPS);
+                            if (object.qps != null)
+                                message.qps = Number(object.qps);
                             if (object.burst != null)
                                 message.burst = object.burst >>> 0;
                             return message;
@@ -12317,13 +12317,13 @@ export const clutch = $root.clutch = (() => {
                             let object = {};
                             if (options.defaults) {
                                 object.timeout = null;
-                                object.QPS = 0;
+                                object.qps = 0;
                                 object.burst = 0;
                             }
                             if (message.timeout != null && message.hasOwnProperty("timeout"))
                                 object.timeout = $root.google.protobuf.Duration.toObject(message.timeout, options);
-                            if (message.QPS != null && message.hasOwnProperty("QPS"))
-                                object.QPS = options.json && !isFinite(message.QPS) ? String(message.QPS) : message.QPS;
+                            if (message.qps != null && message.hasOwnProperty("qps"))
+                                object.qps = options.json && !isFinite(message.qps) ? String(message.qps) : message.qps;
                             if (message.burst != null && message.hasOwnProperty("burst"))
                                 object.burst = message.burst;
                             return object;

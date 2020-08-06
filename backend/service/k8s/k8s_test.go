@@ -94,7 +94,7 @@ func TestApplyRestClientConfig(t *testing.T) {
 				Timeout: &duration.Duration{
 					Seconds: 10,
 				},
-				QPS:   100,
+				Qps:   100,
 				Burst: 1000,
 			},
 		},

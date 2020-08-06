@@ -107,8 +107,8 @@ func applyRestClientConfig(restConfig *restclient.Config, restClientConfig k8sco
 		restConfig.Burst = int(restClientConfig.Burst)
 	}
 
-	if restClientConfig.QPS >= 0 {
-		restConfig.QPS = restClientConfig.QPS
+	if restClientConfig.Qps >= 0 {
+		restConfig.QPS = restClientConfig.Qps
 	}
 
 	if restClientConfig.Timeout != nil {

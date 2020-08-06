@@ -156,9 +156,9 @@ func (m *RestClientConfig) Validate() error {
 
 	}
 
-	if m.GetQPS() < 0 {
+	if m.GetQps() < 0 {
 		return RestClientConfigValidationError{
-			field:  "QPS",
+			field:  "Qps",
 			reason: "value must be greater than or equal to 0",
 		}
 	}
