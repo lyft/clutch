@@ -145,12 +145,12 @@ func (m *RestClientConfig) Validate() error {
 			}
 		}
 
-		gt := time.Duration(1*time.Second + 0*time.Nanosecond)
+		gte := time.Duration(0*time.Second + 0*time.Nanosecond)
 
-		if dur <= gt {
+		if dur < gte {
 			return RestClientConfigValidationError{
 				field:  "Timeout",
-				reason: "value must be greater than 1s",
+				reason: "value must be greater than or equal to 0s",
 			}
 		}
 

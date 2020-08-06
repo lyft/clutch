@@ -3,7 +3,9 @@ package k8s
 import (
 	"errors"
 	"fmt"
+	"time"
 
+	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 	"go.uber.org/zap"
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -42,7 +44,7 @@ type ctxClientsetImpl struct {
 func (c *ctxClientsetImpl) Namespace() string { return c.namespace }
 func (c *ctxClientsetImpl) Cluster() string   { return c.cluster }
 
-func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, logger *zap.Logger) (ClientsetManager, error) {
+func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientConfig k8sconfigv1.RestClientConfig, logger *zap.Logger) (ClientsetManager, error) {
 	kubeConfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(rules, &clientcmd.ConfigOverrides{})
 	apiConfig, err := kubeConfig.RawConfig()
 	if err != nil {
@@ -59,6 +61,18 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, logger *zap.
 		restConfig, err := contextConfig.ClientConfig()
 		if err != nil {
 			return nil, fmt.Errorf("could not load restconfig: %w", err)
+		}
+
+		if restClientConfig.Burst != 0 {
+			restConfig.Burst = int(restClientConfig.Burst)
+		}
+
+		if restClientConfig.QPS >= 0 {
+			restConfig.QPS = restClientConfig.QPS
+		}
+
+		if restClientConfig.Timeout.Seconds >= 0 {
+			restConfig.Timeout = time.Duration(restClientConfig.Timeout.Seconds) * time.Second
 		}
 
 		clientset, err := k8s.NewForConfig(restConfig)
