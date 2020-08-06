@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Warning, WizardContext } from "@clutch-sh/core";
 import type { ManagerLayout } from "@clutch-sh/data-layout";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
+import type { ContainerProps } from "@material-ui/core";
 import {
   Container,
   Grid,
@@ -12,7 +13,6 @@ import {
   Stepper,
   Typography,
 } from "@material-ui/core";
-import type { ContainerProps } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Check from "@material-ui/icons/Check";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
