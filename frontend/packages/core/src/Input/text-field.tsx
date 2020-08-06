@@ -9,7 +9,7 @@ const StyledTextField = styled(MuiTextField)`
   display: flex;
   width: 100%;
   max-width: ${props["data-max-width"] || "500px"};
-  margin: 5px;
+  margin: 15px;
   .MuiInputLabel-root {
     color: ${theme.palette.text.primary};
   }
