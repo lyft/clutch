@@ -9,13 +9,13 @@
     "infrastructure",
     "infra"
   ],
-  "homepage": "https://github.com/clutch-sh/clutch#readme",
+  "homepage": "https://clutch.sh",
   "bugs": {
-    "url": "https://github.com/clutch-sh/clutch/issues"
+    "url": "https://github.com/lyft/clutch/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/clutch-sh/clutch.git"
+    "url": "git+https://github.com/lyft/clutch.git"
   },
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",

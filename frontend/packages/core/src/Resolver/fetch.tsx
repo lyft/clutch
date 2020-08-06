@@ -73,7 +73,7 @@ const resolveResource = async (
         return;
       }
 
-      onError(err.response.displayText);
+      onError(err.response.displayText || err.response.statusText);
     });
 };
 
