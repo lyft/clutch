@@ -8010,13 +8010,6 @@ hex-color-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/hex-color-regex/-/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"
   integrity sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==
 
-history@5.0.0-beta.4:
-  version "5.0.0-beta.4"
-  resolved "https://registry.yarnpkg.com/history/-/history-5.0.0-beta.4.tgz#7fd3bb1f6c75d00d9b5112a816766bfc72d1a3cd"
-  integrity sha512-LMUnKPB5UlEzDF1BO0VxtDsrguGPO7SuQEmB/5OjL1305afR1O8FvX29rbJep4g2SLmKK3YdDA7+8ZDs8P8n8g==
-  dependencies:
-    "@babel/runtime" "^7.7.6"
-
 history@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/history/-/history-5.0.0.tgz#0cabbb6c4bbf835addb874f8259f6d25101efd08"
@@ -12743,7 +12736,7 @@ react-redux@^7.0.3:
     prop-types "^15.7.2"
     react-is "^16.9.0"
 
-react-router-dom@^6.0.0-alpha, react-router-dom@^6.0.0-beta.0:
+react-router-dom@^6.0.0-beta, react-router-dom@^6.0.0-beta.0:
   version "6.0.0-beta.0"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.0.0-beta.0.tgz#9dcc8555365f22f7fbd09f26b6b82543f3eb97d6"
   integrity sha512-36yNNGMT8RB9FRPL9nKJi6HKDkgOakU+o/2hHpSzR6e37gN70MpOU6QQlmif4oAWWBwjyGc3ZNOMFCsFuHUY5w==
@@ -12756,19 +12749,11 @@ react-router-test-context@^0.1.0:
   resolved "https://registry.yarnpkg.com/react-router-test-context/-/react-router-test-context-0.1.0.tgz#3a8f52078fc171f4c966c05cefb6dff3de399713"
   integrity sha1-Oo9SB4/BcfTJZsBc77bf8945lxM=
 
-react-router@6.0.0-beta.0:
+react-router@6.0.0-beta.0, react-router@^6.0.0-beta:
   version "6.0.0-beta.0"
   resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.0.0-beta.0.tgz#3e11f39b6ded4412c2fed9e4f989dd4c8156724d"
   integrity sha512-VgMdfpVcmFQki/LZuLh8E/MNACekDetz4xqft+a6fBZvvJnVqKbLqebF7hyoawGrV1HcO5tVaUang2Og4W2j1Q==
   dependencies:
-    prop-types "^15.7.2"
-
-react-router@^6.0.0-alpha:
-  version "6.0.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.0.0-alpha.2.tgz#cfed9b59e88109f124f6164108b95d4fc8851a77"
-  integrity sha512-pQyM4qQfkB2PYzf5O43RKi6nMrdFrUyHfkFRpY3Y/RjgzLljQ8CKy+ePoBSAL94t7WKDew0ArSTUOv1C1uiDVg==
-  dependencies:
-    history "5.0.0-beta.4"
     prop-types "^15.7.2"
 
 react-scripts@^3.4.1:
