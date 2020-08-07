@@ -211,8 +211,8 @@ func generateFrontend(args *args, tmpFolder, dest string) {
 	}
 
 	fmt.Println("*** All done!")
-	fmt.Println("\n*** Try the following command to get started developing the new workflow:")
-	fmt.Printf("cd %s && make frontend-dev\n", dest)
+	fmt.Printf("\n*** Your new workflow can be found here: %s\n", dest)
+	fmt.Println("For information on how to register this new workflow see our configuration guide: https://clutch.sh/docs/configuration")
 }
 
 type args struct {
