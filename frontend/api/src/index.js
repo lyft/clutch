@@ -12074,6 +12074,7 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.service.k8s.v1
                          * @interface IConfig
                          * @property {Array.<string>|null} [kubeconfigs] Config kubeconfigs
+                         * @property {clutch.config.service.k8s.v1.IRestClientConfig|null} [restClientConfig] Config restClientConfig
                          */
 
                         /**
@@ -12101,6 +12102,14 @@ export const clutch = $root.clutch = (() => {
                         Config.prototype.kubeconfigs = $util.emptyArray;
 
                         /**
+                         * Config restClientConfig.
+                         * @member {clutch.config.service.k8s.v1.IRestClientConfig|null|undefined} restClientConfig
+                         * @memberof clutch.config.service.k8s.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.restClientConfig = null;
+
+                        /**
                          * Verifies a Config message.
                          * @function verify
                          * @memberof clutch.config.service.k8s.v1.Config
@@ -12117,6 +12126,11 @@ export const clutch = $root.clutch = (() => {
                                 for (let i = 0; i < message.kubeconfigs.length; ++i)
                                     if (!$util.isString(message.kubeconfigs[i]))
                                         return "kubeconfigs: string[] expected";
+                            }
+                            if (message.restClientConfig != null && message.hasOwnProperty("restClientConfig")) {
+                                let error = $root.clutch.config.service.k8s.v1.RestClientConfig.verify(message.restClientConfig);
+                                if (error)
+                                    return "restClientConfig." + error;
                             }
                             return null;
                         };
@@ -12140,6 +12154,11 @@ export const clutch = $root.clutch = (() => {
                                 for (let i = 0; i < object.kubeconfigs.length; ++i)
                                     message.kubeconfigs[i] = String(object.kubeconfigs[i]);
                             }
+                            if (object.restClientConfig != null) {
+                                if (typeof object.restClientConfig !== "object")
+                                    throw TypeError(".clutch.config.service.k8s.v1.Config.restClientConfig: object expected");
+                                message.restClientConfig = $root.clutch.config.service.k8s.v1.RestClientConfig.fromObject(object.restClientConfig);
+                            }
                             return message;
                         };
 
@@ -12158,11 +12177,15 @@ export const clutch = $root.clutch = (() => {
                             let object = {};
                             if (options.arrays || options.defaults)
                                 object.kubeconfigs = [];
+                            if (options.defaults)
+                                object.restClientConfig = null;
                             if (message.kubeconfigs && message.kubeconfigs.length) {
                                 object.kubeconfigs = [];
                                 for (let j = 0; j < message.kubeconfigs.length; ++j)
                                     object.kubeconfigs[j] = message.kubeconfigs[j];
                             }
+                            if (message.restClientConfig != null && message.hasOwnProperty("restClientConfig"))
+                                object.restClientConfig = $root.clutch.config.service.k8s.v1.RestClientConfig.toObject(message.restClientConfig, options);
                             return object;
                         };
 
@@ -12178,6 +12201,146 @@ export const clutch = $root.clutch = (() => {
                         };
 
                         return Config;
+                    })();
+
+                    v1.RestClientConfig = (function() {
+
+                        /**
+                         * Properties of a RestClientConfig.
+                         * @memberof clutch.config.service.k8s.v1
+                         * @interface IRestClientConfig
+                         * @property {google.protobuf.IDuration|null} [timeout] RestClientConfig timeout
+                         * @property {number|null} [qps] RestClientConfig qps
+                         * @property {number|null} [burst] RestClientConfig burst
+                         */
+
+                        /**
+                         * Constructs a new RestClientConfig.
+                         * @memberof clutch.config.service.k8s.v1
+                         * @classdesc Represents a RestClientConfig.
+                         * @implements IRestClientConfig
+                         * @constructor
+                         * @param {clutch.config.service.k8s.v1.IRestClientConfig=} [properties] Properties to set
+                         */
+                        function RestClientConfig(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * RestClientConfig timeout.
+                         * @member {google.protobuf.IDuration|null|undefined} timeout
+                         * @memberof clutch.config.service.k8s.v1.RestClientConfig
+                         * @instance
+                         */
+                        RestClientConfig.prototype.timeout = null;
+
+                        /**
+                         * RestClientConfig qps.
+                         * @member {number} qps
+                         * @memberof clutch.config.service.k8s.v1.RestClientConfig
+                         * @instance
+                         */
+                        RestClientConfig.prototype.qps = 0;
+
+                        /**
+                         * RestClientConfig burst.
+                         * @member {number} burst
+                         * @memberof clutch.config.service.k8s.v1.RestClientConfig
+                         * @instance
+                         */
+                        RestClientConfig.prototype.burst = 0;
+
+                        /**
+                         * Verifies a RestClientConfig message.
+                         * @function verify
+                         * @memberof clutch.config.service.k8s.v1.RestClientConfig
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        RestClientConfig.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.timeout != null && message.hasOwnProperty("timeout")) {
+                                let error = $root.google.protobuf.Duration.verify(message.timeout);
+                                if (error)
+                                    return "timeout." + error;
+                            }
+                            if (message.qps != null && message.hasOwnProperty("qps"))
+                                if (typeof message.qps !== "number")
+                                    return "qps: number expected";
+                            if (message.burst != null && message.hasOwnProperty("burst"))
+                                if (!$util.isInteger(message.burst))
+                                    return "burst: integer expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a RestClientConfig message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.k8s.v1.RestClientConfig
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.k8s.v1.RestClientConfig} RestClientConfig
+                         */
+                        RestClientConfig.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.k8s.v1.RestClientConfig)
+                                return object;
+                            let message = new $root.clutch.config.service.k8s.v1.RestClientConfig();
+                            if (object.timeout != null) {
+                                if (typeof object.timeout !== "object")
+                                    throw TypeError(".clutch.config.service.k8s.v1.RestClientConfig.timeout: object expected");
+                                message.timeout = $root.google.protobuf.Duration.fromObject(object.timeout);
+                            }
+                            if (object.qps != null)
+                                message.qps = Number(object.qps);
+                            if (object.burst != null)
+                                message.burst = object.burst >>> 0;
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a RestClientConfig message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.k8s.v1.RestClientConfig
+                         * @static
+                         * @param {clutch.config.service.k8s.v1.RestClientConfig} message RestClientConfig
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        RestClientConfig.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.timeout = null;
+                                object.qps = 0;
+                                object.burst = 0;
+                            }
+                            if (message.timeout != null && message.hasOwnProperty("timeout"))
+                                object.timeout = $root.google.protobuf.Duration.toObject(message.timeout, options);
+                            if (message.qps != null && message.hasOwnProperty("qps"))
+                                object.qps = options.json && !isFinite(message.qps) ? String(message.qps) : message.qps;
+                            if (message.burst != null && message.hasOwnProperty("burst"))
+                                object.burst = message.burst;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this RestClientConfig to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.k8s.v1.RestClientConfig
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        RestClientConfig.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return RestClientConfig;
                     })();
 
                     return v1;
