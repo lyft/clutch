@@ -46,7 +46,7 @@ type ctxClientsetImpl struct {
 func (c *ctxClientsetImpl) Namespace() string { return c.namespace }
 func (c *ctxClientsetImpl) Cluster() string   { return c.cluster }
 
-func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientConfig k8sconfigv1.RestClientConfig, logger *zap.Logger) (ClientsetManager, error) {
+func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientConfig *k8sconfigv1.RestClientConfig, logger *zap.Logger) (ClientsetManager, error) {
 	kubeConfig := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(rules, &clientcmd.ConfigOverrides{})
 	apiConfig, err := kubeConfig.RawConfig()
 	if err != nil {
@@ -65,7 +65,7 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientCo
 			return nil, fmt.Errorf("could not load restconfig: %w", err)
 		}
 
-		if err := applyRestClientConfig(restConfig, restClientConfig); err != nil {
+		if err := ApplyRestClientConfig(restConfig, restClientConfig); err != nil {
 			return nil, err
 		}
 
@@ -86,7 +86,7 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientCo
 		logger.Info("no kubeconfig was found, falling back to InClusterConfig")
 
 		restConfig, err := rest.InClusterConfig()
-		if err := applyRestClientConfig(restConfig, restClientConfig); err != nil {
+		if err := ApplyRestClientConfig(restConfig, restClientConfig); err != nil {
 			return nil, err
 		}
 
@@ -107,7 +107,11 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientCo
 	return &managerImpl{clientsets: lookup}, nil
 }
 
-func applyRestClientConfig(restConfig *restclient.Config, restClientConfig k8sconfigv1.RestClientConfig) error {
+func ApplyRestClientConfig(restConfig *restclient.Config, restClientConfig *k8sconfigv1.RestClientConfig) error {
+	if restClientConfig == nil {
+		return nil
+	}
+
 	if restClientConfig.Burst != 0 {
 		restConfig.Burst = int(restClientConfig.Burst)
 	}

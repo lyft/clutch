@@ -24,28 +24,23 @@ const Name = "clutch.service.k8s"
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	loadingRules := clientcmd.NewDefaultClientConfigLoadingRules()
-	restClientConfig := k8sconfigv1.RestClientConfig{}
+	k8sConfig := &k8sconfigv1.Config{}
 
 	// Use the default kubeconfig (environment or well-known path) if kubeconfigs are not passed in.
 	// https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/
 	if cfg != nil {
-		c := &k8sconfigv1.Config{}
-		if err := ptypes.UnmarshalAny(cfg, c); err != nil {
+		if err := ptypes.UnmarshalAny(cfg, k8sConfig); err != nil {
 			return nil, err
 		}
 
-		if c.Kubeconfigs != nil {
+		if k8sConfig.Kubeconfigs != nil {
 			loadingRules = &clientcmd.ClientConfigLoadingRules{
-				Precedence: c.Kubeconfigs,
+				Precedence: k8sConfig.Kubeconfigs,
 			}
-		}
-
-		if c.RestClientConfig != nil {
-			restClientConfig = *c.RestClientConfig
 		}
 	}
 
-	c, err := newClientsetManager(loadingRules, restClientConfig, logger)
+	c, err := newClientsetManager(loadingRules, k8sConfig.RestClientConfig, logger)
 	if err != nil {
 		return nil, err
 	}

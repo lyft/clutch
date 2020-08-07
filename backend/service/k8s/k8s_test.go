@@ -74,13 +74,13 @@ func TestApplyRestClientConfig(t *testing.T) {
 		id                 string
 		restConfig         *restclient.Config
 		expectedRestConfig restclient.Config
-		restClientConfig   k8sv1.RestClientConfig
+		restClientConfig   *k8sv1.RestClientConfig
 	}{
 		{
 			id:                 "no config override",
 			restConfig:         &restclient.Config{},
 			expectedRestConfig: restclient.Config{},
-			restClientConfig:   k8sv1.RestClientConfig{},
+			restClientConfig:   &k8sv1.RestClientConfig{},
 		},
 		{
 			id:         "all config override",
@@ -90,7 +90,7 @@ func TestApplyRestClientConfig(t *testing.T) {
 				QPS:     100,
 				Burst:   1000,
 			},
-			restClientConfig: k8sv1.RestClientConfig{
+			restClientConfig: &k8sv1.RestClientConfig{
 				Timeout: &duration.Duration{
 					Seconds: 10,
 				},
@@ -105,7 +105,7 @@ func TestApplyRestClientConfig(t *testing.T) {
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
-			err := applyRestClientConfig(tt.restConfig, tt.restClientConfig)
+			err := ApplyRestClientConfig(tt.restConfig, tt.restClientConfig)
 			assert.NoError(t, err)
 			assert.Equal(t, tt.restConfig.Timeout, tt.expectedRestConfig.Timeout)
 			assert.Equal(t, tt.restConfig.QPS, tt.expectedRestConfig.QPS)
