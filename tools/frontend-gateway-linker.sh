@@ -39,5 +39,11 @@ for package in "${LINKED_PACKAGES[@]}"; do
   "${YARN}" link "${package}"
 done
 
-"${YARN}" install
+if [[ -f "yarn.lock" ]]; then
+  echo "Found lockfile..."
+  "${YARN}" install --frozen-lockfile
+else
+  echo "No lockfile. Generating one..."
+  "${YARN}" install
+fi
 "${YARN}" "${action}"
