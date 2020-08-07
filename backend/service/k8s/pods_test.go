@@ -8,7 +8,6 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
 
 	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
@@ -28,7 +27,7 @@ func TestProtoForContainerState(t *testing.T) {
 	assert.Equal(t, k8sv1.Container_TERMINATED, protoForContainerState(corev1.ContainerState{Terminated: &corev1.ContainerStateTerminated{}}))
 }
 
-func testPodClientset() k8s.Interface {
+func testPodClientset() *fake.Clientset {
 	testPods := []runtime.Object{
 		&corev1.Pod{
 			ObjectMeta: metav1.ObjectMeta{
@@ -91,9 +90,9 @@ func TestDescribePod(t *testing.T) {
 	cs := testPodClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": {
 				Interface: cs,
-				namespace: "default",
+				namespace: "testing-namespace",
 				cluster:   "core-testing",
 			}},
 		},
@@ -113,6 +112,16 @@ func TestDescribePod(t *testing.T) {
 		"foo",
 		"",
 		"testing-namespace",
+		"testing-pod-name",
+	)
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
+
+	// Assert that the pod is found using the clientset's namespace if none is provided.
+	result, err = s.DescribePod(context.Background(),
+		"foo",
+		"",
+		"",
 		"testing-pod-name",
 	)
 	assert.NoError(t, err)
