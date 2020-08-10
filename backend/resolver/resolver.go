@@ -44,7 +44,7 @@ type Resolver interface {
 const typePrefix = "type.googleapis.com/"
 
 func TypeURL(m proto.Message) string {
-	return typePrefix + proto.MessageName(m)
+	return typePrefix + string(proto.MessageReflect(m).Descriptor().FullName())
 }
 
 func MarshalProtoSlice(pbs interface{}) ([]*any.Any, error) {
