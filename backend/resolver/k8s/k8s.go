@@ -150,7 +150,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	ctx, handler := resolver.NewFanoutHandler(ctx)
 	switch typeURL {
 	case typeURLPod:
-		if id := idPattern.FindString(query); id != "" {
+		if idPattern.MatchString(query) {
 			for _, name := range r.svc.Clientsets() {
 				handler.Add(1)
 				go func(name string) {
@@ -168,7 +168,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 			return nil, status.Error(codes.InvalidArgument, "did not understand input")
 		}
 	case typeURLHPA:
-		if id := idPattern.FindString(query); id != "" {
+		if idPattern.MatchString(query) {
 			for _, name := range r.svc.Clientsets() {
 				handler.Add(1)
 				go func(name string) {
