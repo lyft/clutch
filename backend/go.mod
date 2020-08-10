@@ -8,9 +8,10 @@ require (
 	github.com/aws/aws-sdk-go v1.34.0
 	github.com/bufbuild/buf v0.11.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
+	github.com/cncf/udpa/go v0.0.0-20200629203442-efcf912fb354 // indirect
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/envoyproxy/go-control-plane v0.9.4
+	github.com/envoyproxy/go-control-plane v0.9.6
 	github.com/envoyproxy/protoc-gen-validate v0.4.0
 	github.com/fullstorydev/grpcurl v1.7.0
 	github.com/go-git/go-billy/v5 v5.0.0
