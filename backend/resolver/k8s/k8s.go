@@ -155,7 +155,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 				handler.Add(1)
 				go func(name string) {
 					defer handler.Done()
-					pod, err := r.svc.DescribePod(ctx, name, "", "", id)
+					pod, err := r.svc.DescribePod(ctx, name, "", "", query)
 					select {
 					case handler.Channel() <- resolver.NewFanoutResult([]*k8sv1api.Pod{pod}, err):
 						return

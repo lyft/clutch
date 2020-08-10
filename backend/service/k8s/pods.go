@@ -18,6 +18,22 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 	if err != nil {
 		return nil, err
 	}
+
+	if namespace == "" || cs.Namespace() == "default" {
+		pod, err := cs.CoreV1().Pods(metav1.NamespaceAll).List(metav1.ListOptions{
+			FieldSelector: "metadata.name=" + name,
+		})
+		if err != nil {
+			return nil, err
+		}
+
+		if len(pod.Items) == 0 {
+			return nil, fmt.Errorf("no pod found")
+		}
+
+		return podDescription(&pod.Items[0], cs.Cluster()), nil
+	}
+
 	opts := metav1.GetOptions{}
 	pod, err := cs.CoreV1().Pods(cs.Namespace()).Get(name, opts)
 	if err != nil {
