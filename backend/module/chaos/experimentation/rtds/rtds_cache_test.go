@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"testing"
 
-	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
-	gcpResource "github.com/envoyproxy/go-control-plane/pkg/resource/v2"
-
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
+	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
+	gcpResource "github.com/envoyproxy/go-control-plane/pkg/resource/v2"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
