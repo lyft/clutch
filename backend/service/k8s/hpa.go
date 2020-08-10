@@ -17,7 +17,7 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 		return nil, err
 	}
 
-	if namespace == "" || cs.Namespace() == "default" {
+	if cs.Namespace() == "" {
 		hpas, err := s.ListHPAs(ctx, clientset, cluster, namespace, &k8sapiv1.ListOptions{
 			FieldSelectors: "metadata.name=" + name,
 		})
@@ -50,12 +50,7 @@ func (s *svc) ListHPAs(ctx context.Context, clientset, cluster, namespace string
 
 	opts := ApplyListOptions(listOpts)
 
-	ns := namespace
-	if namespace == "" || cs.Namespace() == "default" {
-		ns = metav1.NamespaceAll
-	}
-
-	hpaList, err := cs.AutoscalingV1().HorizontalPodAutoscalers(ns).List(opts)
+	hpaList, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).List(opts)
 	if err != nil {
 		return nil, err
 	}

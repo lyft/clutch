@@ -18,7 +18,7 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 		return nil, err
 	}
 
-	if namespace == "" || cs.Namespace() == "default" {
+	if cs.Namespace() == "" {
 		pods, err := s.ListPods(ctx, clientset, cluster, namespace, &k8sapiv1.ListOptions{
 			FieldSelectors: "metadata.name=" + name,
 		})
@@ -64,12 +64,7 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 
 	opts := ApplyListOptions(listOpts)
 
-	ns := namespace
-	if namespace == "" || cs.Namespace() == "default" {
-		ns = metav1.NamespaceAll
-	}
-
-	podList, err := cs.CoreV1().Pods(ns).List(opts)
+	podList, err := cs.CoreV1().Pods(cs.Namespace()).List(opts)
 	if err != nil {
 		return nil, err
 	}

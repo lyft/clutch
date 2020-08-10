@@ -6,6 +6,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"go.uber.org/zap"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
@@ -151,13 +152,14 @@ func (m *managerImpl) GetK8sClientset(clientset, cluster, namespace string) (Con
 		return nil, errors.New("specified cluster does not match clientset")
 	}
 
-	if namespace == "" {
-		// Use the clients' default namespace.
-		return cs, nil
-	}
-
 	// Shallow copy and update namespace.
 	ret := *cs
-	ret.namespace = namespace
+	if namespace == "" {
+		// if the caller wants to search all namespaces allow this operation
+		ret.namespace = metav1.NamespaceAll
+	} else {
+		ret.namespace = namespace
+	}
+
 	return &ret, nil
 }
