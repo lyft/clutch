@@ -211,7 +211,7 @@ func getClusterPair(experiment *experimentation.Experiment) *experimentation.Clu
 }
 
 func computeChecksum(item interface{}) (string, error) {
-	hash, err := hashstructure.Hash(item, nil)
+	hash, err := hashstructure.Hash(item, &hashstructure.HashOptions{TagName: "json"})
 	if err != nil {
 		return "", err
 	}
