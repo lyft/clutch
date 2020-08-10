@@ -6,10 +6,10 @@ import (
 	"reflect"
 	"time"
 
-	gcpResource "github.com/envoyproxy/go-control-plane/pkg/resource/v2"
-	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
+	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
+	gcpResource "github.com/envoyproxy/go-control-plane/pkg/resource/v2"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/mitchellh/hashstructure"
 	"go.uber.org/zap"
@@ -112,7 +112,6 @@ func setSnapshot(snapshotCache gcpCache.SnapshotCache, rtdsLayerName string, ups
 				"value", faultValue)
 		}
 	}
-
 
 	runtimes := []gcpTypes.Resource{
 		&gcpDiscovery.Runtime{
