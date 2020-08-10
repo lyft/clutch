@@ -20,18 +20,20 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 	}
 
 	if namespace == "" || cs.Namespace() == "default" {
-		pod, err := cs.CoreV1().Pods(metav1.NamespaceAll).List(metav1.ListOptions{
-			FieldSelector: "metadata.name=" + name,
+		pods, err := s.ListPods(ctx, clientset, cluster, namespace, &k8sapiv1.ListOptions{
+			FieldSelectors: "metadata.name=" + name,
 		})
 		if err != nil {
 			return nil, err
 		}
 
-		if len(pod.Items) == 0 {
-			return nil, fmt.Errorf("no pod found")
+		if len(pods) == 1 {
+			return pods[0], nil
+		} else if len(pods) > 1 {
+			return nil, fmt.Errorf("Located multipule pods")
 		}
 
-		return podDescription(&pod.Items[0], cs.Cluster()), nil
+		return nil, fmt.Errorf("Unable to locate pod")
 	}
 
 	opts := metav1.GetOptions{}
@@ -55,7 +57,7 @@ func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name
 	return cs.CoreV1().Pods(cs.Namespace()).Delete(name, opts)
 }
 
-func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string, listPodsOpts *k8sapiv1.ListPodsOptions) ([]*k8sapiv1.Pod, error) {
+func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string, listPodsOpts *k8sapiv1.ListOptions) ([]*k8sapiv1.Pod, error) {
 	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
 	if err != nil {
 		return nil, err
@@ -66,7 +68,16 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 		opts.LabelSelector = k8slabels.FormatLabels(listPodsOpts.Labels)
 	}
 
-	podList, err := cs.CoreV1().Pods(cs.Namespace()).List(opts)
+	if len(listPodsOpts.FieldSelectors) > 0 {
+		opts.FieldSelector = listPodsOpts.FieldSelectors
+	}
+
+	ns := namespace
+	if namespace == "" || cs.Namespace() == "default" {
+		ns = metav1.NamespaceAll
+	}
+
+	podList, err := cs.CoreV1().Pods(ns).List(opts)
 	if err != nil {
 		return nil, err
 	}

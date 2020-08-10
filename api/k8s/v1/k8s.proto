@@ -114,8 +114,10 @@ message Pod {
   map<string, string> annotations = 10;
 }
 
-message ListPodsOptions {
-  map<string, string> labels = 9;
+// List Options are suitable for all resources types eg: pods, HPA, and deployment.
+message ListOptions {
+  map<string, string> labels = 1;
+  string field_selectors = 2 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message DeletePodRequest {

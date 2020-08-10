@@ -55,7 +55,7 @@ func (s *svc) DescribePod(_ context.Context, clientset, cluster, namespace, name
 	return pod, nil
 }
 
-func (s *svc) ListPods(_ context.Context, clientset, cluster, namespace string, listPodsOptions *k8sv1.ListPodsOptions) ([]*k8sv1.Pod, error) {
+func (s *svc) ListPods(_ context.Context, clientset, cluster, namespace string, ListOptions *k8sv1.ListOptions) ([]*k8sv1.Pod, error) {
 	pods := []*k8sv1.Pod{
 		&k8sv1.Pod{
 			Cluster:     cluster,
@@ -64,7 +64,7 @@ func (s *svc) ListPods(_ context.Context, clientset, cluster, namespace string, 
 			NodeIp:      "10.0.0.1",
 			PodIp:       "8.1.1.8",
 			State:       k8sv1.Pod_State(rand.Intn(len(k8sv1.Pod_State_value))),
-			Labels:      listPodsOptions.Labels,
+			Labels:      ListOptions.Labels,
 			Annotations: map[string]string{"Key": "value"},
 		},
 		&k8sv1.Pod{
@@ -74,7 +74,7 @@ func (s *svc) ListPods(_ context.Context, clientset, cluster, namespace string, 
 			NodeIp:      "10.0.0.2",
 			PodIp:       "8.1.1.9",
 			State:       k8sv1.Pod_State(rand.Intn(len(k8sv1.Pod_State_value))),
-			Labels:      listPodsOptions.Labels,
+			Labels:      ListOptions.Labels,
 			Annotations: map[string]string{"Key": "value"},
 		},
 	}

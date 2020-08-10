@@ -16200,24 +16200,25 @@ export const clutch = $root.clutch = (() => {
                 return Pod;
             })();
 
-            v1.ListPodsOptions = (function() {
+            v1.ListOptions = (function() {
 
                 /**
-                 * Properties of a ListPodsOptions.
+                 * Properties of a ListOptions.
                  * @memberof clutch.k8s.v1
-                 * @interface IListPodsOptions
-                 * @property {Object.<string,string>|null} [labels] ListPodsOptions labels
+                 * @interface IListOptions
+                 * @property {Object.<string,string>|null} [labels] ListOptions labels
+                 * @property {string|null} [fieldSelectors] ListOptions fieldSelectors
                  */
 
                 /**
-                 * Constructs a new ListPodsOptions.
+                 * Constructs a new ListOptions.
                  * @memberof clutch.k8s.v1
-                 * @classdesc Represents a ListPodsOptions.
-                 * @implements IListPodsOptions
+                 * @classdesc Represents a ListOptions.
+                 * @implements IListOptions
                  * @constructor
-                 * @param {clutch.k8s.v1.IListPodsOptions=} [properties] Properties to set
+                 * @param {clutch.k8s.v1.IListOptions=} [properties] Properties to set
                  */
-                function ListPodsOptions(properties) {
+                function ListOptions(properties) {
                     this.labels = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -16226,22 +16227,30 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * ListPodsOptions labels.
+                 * ListOptions labels.
                  * @member {Object.<string,string>} labels
-                 * @memberof clutch.k8s.v1.ListPodsOptions
+                 * @memberof clutch.k8s.v1.ListOptions
                  * @instance
                  */
-                ListPodsOptions.prototype.labels = $util.emptyObject;
+                ListOptions.prototype.labels = $util.emptyObject;
 
                 /**
-                 * Verifies a ListPodsOptions message.
+                 * ListOptions fieldSelectors.
+                 * @member {string} fieldSelectors
+                 * @memberof clutch.k8s.v1.ListOptions
+                 * @instance
+                 */
+                ListOptions.prototype.fieldSelectors = "";
+
+                /**
+                 * Verifies a ListOptions message.
                  * @function verify
-                 * @memberof clutch.k8s.v1.ListPodsOptions
+                 * @memberof clutch.k8s.v1.ListOptions
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                ListPodsOptions.verify = function verify(message) {
+                ListOptions.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.labels != null && message.hasOwnProperty("labels")) {
@@ -16252,67 +16261,76 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.labels[key[i]]))
                                 return "labels: string{k:string} expected";
                     }
+                    if (message.fieldSelectors != null && message.hasOwnProperty("fieldSelectors"))
+                        if (!$util.isString(message.fieldSelectors))
+                            return "fieldSelectors: string expected";
                     return null;
                 };
 
                 /**
-                 * Creates a ListPodsOptions message from a plain object. Also converts values to their respective internal types.
+                 * Creates a ListOptions message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.k8s.v1.ListPodsOptions
+                 * @memberof clutch.k8s.v1.ListOptions
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.k8s.v1.ListPodsOptions} ListPodsOptions
+                 * @returns {clutch.k8s.v1.ListOptions} ListOptions
                  */
-                ListPodsOptions.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.k8s.v1.ListPodsOptions)
+                ListOptions.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListOptions)
                         return object;
-                    let message = new $root.clutch.k8s.v1.ListPodsOptions();
+                    let message = new $root.clutch.k8s.v1.ListOptions();
                     if (object.labels) {
                         if (typeof object.labels !== "object")
-                            throw TypeError(".clutch.k8s.v1.ListPodsOptions.labels: object expected");
+                            throw TypeError(".clutch.k8s.v1.ListOptions.labels: object expected");
                         message.labels = {};
                         for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
                             message.labels[keys[i]] = String(object.labels[keys[i]]);
                     }
+                    if (object.fieldSelectors != null)
+                        message.fieldSelectors = String(object.fieldSelectors);
                     return message;
                 };
 
                 /**
-                 * Creates a plain object from a ListPodsOptions message. Also converts values to other types if specified.
+                 * Creates a plain object from a ListOptions message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.k8s.v1.ListPodsOptions
+                 * @memberof clutch.k8s.v1.ListOptions
                  * @static
-                 * @param {clutch.k8s.v1.ListPodsOptions} message ListPodsOptions
+                 * @param {clutch.k8s.v1.ListOptions} message ListOptions
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                ListPodsOptions.toObject = function toObject(message, options) {
+                ListOptions.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
                     if (options.objects || options.defaults)
                         object.labels = {};
+                    if (options.defaults)
+                        object.fieldSelectors = "";
                     let keys2;
                     if (message.labels && (keys2 = Object.keys(message.labels)).length) {
                         object.labels = {};
                         for (let j = 0; j < keys2.length; ++j)
                             object.labels[keys2[j]] = message.labels[keys2[j]];
                     }
+                    if (message.fieldSelectors != null && message.hasOwnProperty("fieldSelectors"))
+                        object.fieldSelectors = message.fieldSelectors;
                     return object;
                 };
 
                 /**
-                 * Converts this ListPodsOptions to JSON.
+                 * Converts this ListOptions to JSON.
                  * @function toJSON
-                 * @memberof clutch.k8s.v1.ListPodsOptions
+                 * @memberof clutch.k8s.v1.ListOptions
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                ListPodsOptions.prototype.toJSON = function toJSON() {
+                ListOptions.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return ListPodsOptions;
+                return ListOptions;
             })();
 
             v1.DeletePodRequest = (function() {
