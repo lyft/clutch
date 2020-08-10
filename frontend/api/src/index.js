@@ -31330,6 +31330,7 @@ export const google = $root.google = (() => {
              * @property {number|null} [oneofIndex] FieldDescriptorProto oneofIndex
              * @property {string|null} [jsonName] FieldDescriptorProto jsonName
              * @property {google.protobuf.IFieldOptions|null} [options] FieldDescriptorProto options
+             * @property {boolean|null} [proto3Optional] FieldDescriptorProto proto3Optional
              */
 
             /**
@@ -31428,6 +31429,14 @@ export const google = $root.google = (() => {
             FieldDescriptorProto.prototype.options = null;
 
             /**
+             * FieldDescriptorProto proto3Optional.
+             * @member {boolean} proto3Optional
+             * @memberof google.protobuf.FieldDescriptorProto
+             * @instance
+             */
+            FieldDescriptorProto.prototype.proto3Optional = false;
+
+            /**
              * Verifies a FieldDescriptorProto message.
              * @function verify
              * @memberof google.protobuf.FieldDescriptorProto
@@ -31497,6 +31506,9 @@ export const google = $root.google = (() => {
                     if (error)
                         return "options." + error;
                 }
+                if (message.proto3Optional != null && message.hasOwnProperty("proto3Optional"))
+                    if (typeof message.proto3Optional !== "boolean")
+                        return "proto3Optional: boolean expected";
                 return null;
             };
 
@@ -31619,6 +31631,8 @@ export const google = $root.google = (() => {
                         throw TypeError(".google.protobuf.FieldDescriptorProto.options: object expected");
                     message.options = $root.google.protobuf.FieldOptions.fromObject(object.options);
                 }
+                if (object.proto3Optional != null)
+                    message.proto3Optional = Boolean(object.proto3Optional);
                 return message;
             };
 
@@ -31646,6 +31660,7 @@ export const google = $root.google = (() => {
                     object.options = null;
                     object.oneofIndex = 0;
                     object.jsonName = "";
+                    object.proto3Optional = false;
                 }
                 if (message.name != null && message.hasOwnProperty("name"))
                     object.name = message.name;
@@ -31667,6 +31682,8 @@ export const google = $root.google = (() => {
                     object.oneofIndex = message.oneofIndex;
                 if (message.jsonName != null && message.hasOwnProperty("jsonName"))
                     object.jsonName = message.jsonName;
+                if (message.proto3Optional != null && message.hasOwnProperty("proto3Optional"))
+                    object.proto3Optional = message.proto3Optional;
                 return object;
             };
 
@@ -32849,7 +32866,7 @@ export const google = $root.google = (() => {
              * @memberof google.protobuf.FileOptions
              * @instance
              */
-            FileOptions.prototype.ccEnableArenas = false;
+            FileOptions.prototype.ccEnableArenas = true;
 
             /**
              * FileOptions objcClassPrefix.
@@ -33108,7 +33125,7 @@ export const google = $root.google = (() => {
                     object.javaGenerateEqualsAndHash = false;
                     object.deprecated = false;
                     object.javaStringCheckUtf8 = false;
-                    object.ccEnableArenas = false;
+                    object.ccEnableArenas = true;
                     object.objcClassPrefix = "";
                     object.csharpNamespace = "";
                     object.swiftPrefix = "";
