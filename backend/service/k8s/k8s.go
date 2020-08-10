@@ -11,13 +11,12 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 	"k8s.io/client-go/tools/clientcmd"
 
 	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/service"
-
-	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 )
 
 const Name = "clutch.service.k8s"

@@ -8,8 +8,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/lyft/clutch/backend/middleware"
-
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -17,6 +15,7 @@ import (
 
 	authzv1 "github.com/lyft/clutch/backend/api/authz/v1"
 	authzcfgv1 "github.com/lyft/clutch/backend/api/config/service/authz/v1"
+	"github.com/lyft/clutch/backend/middleware"
 	"github.com/lyft/clutch/backend/service"
 )
 

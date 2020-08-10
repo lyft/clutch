@@ -9,28 +9,24 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/aws/aws-sdk-go/service/autoscaling"
-	"github.com/aws/aws-sdk-go/service/autoscaling/autoscalingiface"
-	"github.com/iancoleman/strcase"
-
-	"github.com/lyft/clutch/backend/service"
-
-	"github.com/uber-go/tally"
-	"go.uber.org/zap"
-
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/autoscaling"
+	"github.com/aws/aws-sdk-go/service/autoscaling/autoscalingiface"
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/kinesis"
 	"github.com/aws/aws-sdk-go/service/kinesis/kinesisiface"
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/any"
+	"github.com/iancoleman/strcase"
+	"github.com/uber-go/tally"
+	"go.uber.org/zap"
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
+	"github.com/lyft/clutch/backend/service"
 )
 
 const (

@@ -13,27 +13,23 @@ import (
 	"strings"
 	"time"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
-	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
-
 	"github.com/go-git/go-billy/v5/memfs"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	gittransport "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/go-git/go-git/v5/storage/memory"
-
-	githubv3 "github.com/google/go-github/v32/github"
-
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
+	githubv3 "github.com/google/go-github/v32/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"golang.org/x/oauth2"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	githubv1 "github.com/lyft/clutch/backend/api/config/service/github/v1"
+	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
 	"github.com/lyft/clutch/backend/service"
 )
 

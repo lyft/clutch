@@ -3,13 +3,12 @@ package resolver
 import (
 	"context"
 	"errors"
+	"testing"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/stretchr/testify/assert"
 
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
-
-	"testing"
 )
 
 type basicValue struct {

@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/gobwas/glob"
-
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"

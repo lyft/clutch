@@ -3,27 +3,23 @@ package gateway
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/uber-go/tally"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
+	"github.com/lyft/clutch/backend/gateway/mux"
 	"github.com/lyft/clutch/backend/gateway/stats"
 	"github.com/lyft/clutch/backend/middleware"
 	"github.com/lyft/clutch/backend/middleware/timeouts"
-	"github.com/lyft/clutch/backend/resolver"
-
-	"net/http"
-	"time"
-
-	"github.com/lyft/clutch/backend/service"
-
-	"go.uber.org/zap"
-
-	"github.com/lyft/clutch/backend/gateway/mux"
 	"github.com/lyft/clutch/backend/module"
+	"github.com/lyft/clutch/backend/resolver"
+	"github.com/lyft/clutch/backend/service"
 )
 
 // All available components supply their factory here.

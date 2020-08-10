@@ -3,6 +3,7 @@ linters:
   disable-all: true
   enable:
   - deadcode
+  - gci
   - errcheck
   - gocritic
   - goimports
@@ -27,6 +28,9 @@ issues:
   max-per-linter: 0
   max-same-issues: 0
   exclude-rules:
+    - path: (_test\.go|mock\.go)
+      linters:
+        - gosec
     # TODO: remove this rule once the migration to the new protobuf APIs are complete
     - linters:
         - staticcheck

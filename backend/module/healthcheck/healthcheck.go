@@ -7,10 +7,9 @@ package healthcheck
 import (
 	"context"
 
+	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
-
-	"github.com/golang/protobuf/ptypes/any"
 
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	"github.com/lyft/clutch/backend/module"
