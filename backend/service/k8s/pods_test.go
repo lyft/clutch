@@ -117,16 +117,6 @@ func TestDescribePod(t *testing.T) {
 	)
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
-
-	// Assert that the pod is found using the clientset's namespace if none is provided.
-	result, err = s.DescribePod(context.Background(),
-		"foo",
-		"",
-		"",
-		"testing-pod-name",
-	)
-	assert.NoError(t, err)
-	assert.NotNil(t, result)
 }
 
 func TestDeletePod(t *testing.T) {
