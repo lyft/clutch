@@ -8,7 +8,6 @@ import (
 	"go.uber.org/zap"
 	k8s "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
-	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
 	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
@@ -85,13 +84,13 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientCo
 	if len(lookup) == 0 {
 		logger.Info("no kubeconfig was found, falling back to InClusterConfig")
 
-		restConfig, err := rest.InClusterConfig()
+		restConfig, err := restclient.InClusterConfig()
 		if err := ApplyRestClientConfig(restConfig, restClientConfig); err != nil {
 			return nil, err
 		}
 
 		switch err {
-		case rest.ErrNotInCluster:
+		case restclient.ErrNotInCluster:
 			logger.Warn("not in a kubernetes cluster, unable to configure kube clientset")
 		case nil:
 			clientset, err := k8s.NewForConfig(restConfig)
