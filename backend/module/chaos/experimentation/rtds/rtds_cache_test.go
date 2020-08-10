@@ -171,7 +171,7 @@ func TestComputeVersionReturnValue(t *testing.T) {
 	checksum, _ := computeChecksum(mockRuntime)
 	assert.Equal(t, "4464232557941748628", checksum)
 
-	mockRuntime2 := []gcpCache.Resource{
+	mockRuntime2 := []gcpTypes.Resource{
 		&gcpDiscovery.Runtime{
 			Name: rtdsLayerName + "foo",
 			Layer: &pstruct.Struct{
