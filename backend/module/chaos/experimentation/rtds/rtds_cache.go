@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"time"
 
+	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
 	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
@@ -111,7 +112,8 @@ func setSnapshot(snapshotCache gcpCache.SnapshotCache, rtdsLayerName string, ups
 		}
 	}
 
-	runtimes := []gcpCache.Resource{
+
+	runtimes := []gcpTypes.Resource{
 		&gcpDiscovery.Runtime{
 			Name: rtdsLayerName,
 			Layer: &pstruct.Struct{
@@ -128,7 +130,7 @@ func setSnapshot(snapshotCache gcpCache.SnapshotCache, rtdsLayerName string, ups
 
 	currentSnapshot, _ := snapshotCache.GetSnapshot(upstreamCluster)
 	if !reflect.DeepEqual(currentSnapshot, gcpCache.Snapshot{}) {
-		currentVersion := currentSnapshot.GetVersion(gcpCache.RuntimeType)
+		currentVersion := currentSnapshot.GetVersion(gcpTypes.RuntimeType)
 		if currentVersion == computedVersion {
 			// No change in snapshot of this upstream cluster
 			logger.Debugw("Fault exists for upstream cluster", "cluster", upstreamCluster)
