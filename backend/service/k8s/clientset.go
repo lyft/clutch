@@ -4,14 +4,13 @@ import (
 	"errors"
 	"fmt"
 
-	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
-
 	"github.com/golang/protobuf/ptypes"
 	"go.uber.org/zap"
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
-	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
+
+	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 )
 
 const (
@@ -107,7 +106,7 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientCo
 	return &managerImpl{clientsets: lookup}, nil
 }
 
-func ApplyRestClientConfig(restConfig *restclient.Config, restClientConfig *k8sconfigv1.RestClientConfig) error {
+func ApplyRestClientConfig(restConfig *rest.Config, restClientConfig *k8sconfigv1.RestClientConfig) error {
 	if restClientConfig == nil {
 		return nil
 	}

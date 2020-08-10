@@ -3,9 +3,8 @@ package kinesis
 import (
 	"context"
 
-	"github.com/lyft/clutch/backend/service/aws"
-
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
+	"github.com/lyft/clutch/backend/service/aws"
 )
 
 func newKinesisAPI(c aws.Client) kinesisv1.KinesisAPIServer {

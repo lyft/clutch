@@ -3,18 +3,16 @@ package meta
 import (
 	"testing"
 
+	"github.com/golang/protobuf/descriptor"
+	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
+	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
+	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/module/healthcheck"
-
-	"github.com/golang/protobuf/descriptor"
-	"github.com/stretchr/testify/assert"
-
-	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
-	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 )
 
 type mockRegistrar struct {

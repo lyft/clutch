@@ -5,8 +5,6 @@ import (
 	"os"
 	"testing"
 
-	k8sv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
-
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/golang/protobuf/ptypes/duration"
@@ -14,6 +12,8 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
 	restclient "k8s.io/client-go/rest"
+
+	k8sv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 )
 
 var testConfig = `

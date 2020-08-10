@@ -6,18 +6,16 @@ import (
 	"testing"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 
 	authzv1 "github.com/lyft/clutch/backend/api/authz/v1"
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	"github.com/lyft/clutch/backend/middleware"
-	"github.com/lyft/clutch/backend/service/authn"
-	"github.com/lyft/clutch/backend/service/authz"
-
-	"github.com/stretchr/testify/assert"
-
 	"github.com/lyft/clutch/backend/mock/service/authzmock"
 	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/authn"
+	"github.com/lyft/clutch/backend/service/authz"
 )
 
 func newWithMock(c authz.Client) (middleware.Middleware, error) {

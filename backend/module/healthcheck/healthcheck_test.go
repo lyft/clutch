@@ -2,16 +2,14 @@ package healthcheck
 
 import (
 	"context"
+	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
+	"go.uber.org/zap/zaptest"
 
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	"github.com/lyft/clutch/backend/module/moduletest"
-
-	"testing"
-
-	"go.uber.org/zap/zaptest"
 )
 
 func TestModule(t *testing.T) {

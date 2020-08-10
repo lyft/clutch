@@ -9,15 +9,13 @@ import (
 	"fmt"
 	"strings"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
 	"github.com/lyft/clutch/backend/module"
