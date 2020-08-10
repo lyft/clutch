@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
-	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache"
+	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
