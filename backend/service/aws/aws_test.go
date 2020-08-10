@@ -54,7 +54,7 @@ func TestNew(t *testing.T) {
 
 func TestNewWithWrongConfigType(t *testing.T) {
 	_, err := New(&any.Any{TypeUrl: "foo"}, nil, nil)
-	assert.EqualError(t, err, "message type url \"foo\" is invalid")
+	assert.EqualError(t, err, "mismatched message type: got \"foo\" want \"clutch.config.service.aws.v1.Config\"")
 }
 
 func TestRegions(t *testing.T) {
