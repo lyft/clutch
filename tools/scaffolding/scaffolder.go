@@ -210,24 +210,9 @@ func generateFrontend(args *args, tmpFolder, dest string) {
 		log.Fatal("`yarn compile` returned the above error")
 	}
 
-	frontendDir := filepath.Join(os.Getenv("OLDPWD"), "frontend")
-	log.Println("Moving to", frontendDir)
-	if err := os.Chdir(frontendDir); err != nil {
-		log.Fatal(err)
-	}
-	log.Println("Registering workflow...")
-	log.Println("yarn workspace @clutch-sh/app register-workflows")
-
-	registerCmd := exec.Command("yarn", "workspace", "@clutch-sh/app", "register-workflows")
-	if out, err := registerCmd.CombinedOutput(); err != nil {
-		fmt.Println(string(out))
-		log.Fatal("yarn workspace @clutch-sh/app register-workflows")
-	}
-	log.Println("Frontend generation complete")
-
 	fmt.Println("*** All done!")
-	fmt.Println("\n*** Try the following command to get started developing the new workflow:")
-	fmt.Printf("cd %s && make frontend-dev\n", dest)
+	fmt.Printf("\n*** Your new workflow can be found here: %s\n", dest)
+	fmt.Println("For information on how to register this new workflow see our configuration guide: https://clutch.sh/docs/configuration")
 }
 
 type args struct {
@@ -291,6 +276,9 @@ func main() {
 
 	// Walk files and template them.
 	err = filepath.Walk(templateRoot, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
 		relpath, err := filepath.Rel(templateRoot, path)
 		if err != nil {
 			return err

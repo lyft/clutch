@@ -91,7 +91,7 @@ const RemoteTriage = ({ heading, options }) => {
   };
 
   return (
-    <Wizard dataLayout={dataLayout} heading={heading}>
+    <Wizard dataLayout={dataLayout} heading={heading} maxWidth={false}>
       <TriageIdentifier name="Lookup" options={options} />
       <TriageDetails name="Details" heading="Details" />
     </Wizard>

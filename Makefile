@@ -20,15 +20,15 @@ all: api frontend backend-with-assets
 
 .PHONY: api # Generate API assets.
 api: yarn-ensure
-	tools/compile-protos.sh -c "$(PROJECT_ROOT_DIR)"
+	tools/compile-protos.sh -c "$(PROJECT_ROOT_DIR)/api"
 
 .PHONY: api-lint # Lint the generated API assets.
 api-lint:
-	tools/compile-protos.sh -c "$(PROJECT_ROOT_DIR)" -l
+	tools/compile-protos.sh -c "$(PROJECT_ROOT_DIR)/api" -l
 
 .PHONY: api-lint-fix # Lint and fix the generated API assets.
 api-lint-fix:
-	tools/compile-protos.sh -c "$(PROJECT_ROOT_DIR)" -lf
+	tools/compile-protos.sh -c "$(PROJECT_ROOT_DIR)/api" -lf
 
 .PHONY: api-verify # Verify API proto changes include generate frontend and backend assets.
 api-verify:

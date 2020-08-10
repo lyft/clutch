@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { DevTool } from "react-hook-form-devtools";
+import { DevTool } from "@hookform/devtools";
+import { yupResolver } from "@hookform/resolvers";
 import { Table, TableBody, TableCell, TableContainer, TableRow } from "@material-ui/core";
 import type { Size } from "@material-ui/core/TableCell";
 import _ from "lodash";
@@ -129,13 +130,12 @@ const MetadataTable: React.FC<MetadataTableProps> = ({
   });
   const validation = useForm({
     mode: "onChange",
-    validationSchema: object().shape(validationShape),
+    resolver: yupResolver(object().shape(validationShape)),
   });
   const { control, handleSubmit } = validation;
 
   React.useEffect(() => {
     setOnSubmit(handleSubmit);
-    validation.triggerValidation();
   }, []);
 
   return (

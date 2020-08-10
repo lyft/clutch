@@ -45,7 +45,7 @@ const resolveFields = async (
     have: fields,
     limit,
   });
-  return { results: response.data.results, failures: response.data.partialFailures };
+  return { results: response.data?.results || [], failures: response.data?.partialFailures || [] };
 };
 
 const resolveResource = async (
@@ -73,7 +73,7 @@ const resolveResource = async (
         return;
       }
 
-      onError(err.response.displayText);
+      onError(err.response.displayText || err.response.statusText);
     });
 };
 

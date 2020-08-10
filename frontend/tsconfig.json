@@ -16,6 +16,6 @@
     },
     "preserveConstEnums": true,
     "target": "ES2018",
-    "types": ["node"]
+    "types": ["node", "long"]
   },
 }

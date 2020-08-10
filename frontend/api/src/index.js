@@ -39,7 +39,7 @@ export const clutch = $root.clutch = (() => {
             /**
              * ActionType enum.
              * @name clutch.api.v1.ActionType
-             * @enum {string}
+             * @enum {number}
              * @property {number} UNSPECIFIED=0 UNSPECIFIED value
              * @property {number} CREATE=1 CREATE value
              * @property {number} READ=2 READ value
@@ -2707,7 +2707,7 @@ export const clutch = $root.clutch = (() => {
             /**
              * Decision enum.
              * @name clutch.authz.v1.Decision
-             * @enum {string}
+             * @enum {number}
              * @property {number} UNSPECIFIED=0 UNSPECIFIED value
              * @property {number} DENY=1 DENY value
              * @property {number} ALLOW=2 ALLOW value
@@ -3631,7 +3631,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * TerminationPolicy enum.
                      * @name clutch.aws.ec2.v1.AutoscalingGroup.TerminationPolicy
-                     * @enum {string}
+                     * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} UNKNOWN=1 UNKNOWN value
                      * @property {number} OLDEST_INSTANCE=2 OLDEST_INSTANCE value
@@ -3903,7 +3903,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * LifecycleState enum.
                          * @name clutch.aws.ec2.v1.AutoscalingGroup.Instance.LifecycleState
-                         * @enum {string}
+                         * @enum {number}
                          * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                          * @property {number} UNKNOWN=1 UNKNOWN value
                          * @property {number} PENDING=2 PENDING value
@@ -4644,7 +4644,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * State enum.
                      * @name clutch.aws.ec2.v1.Instance.State
-                     * @enum {string}
+                     * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} UNKNOWN=1 UNKNOWN value
                      * @property {number} PENDING=2 PENDING value
@@ -8602,7 +8602,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Level enum.
                      * @name clutch.config.gateway.v1.Logger.Level
-                     * @enum {string}
+                     * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} DEBUG=1 DEBUG value
                      * @property {number} INFO=2 INFO value
@@ -9669,7 +9669,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * FilterType enum.
                          * @name clutch.config.service.audit.v1.EventFilter.FilterType
-                         * @enum {string}
+                         * @enum {number}
                          * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                          * @property {number} SERVICE=1 SERVICE value
                          * @property {number} METHOD=2 METHOD value
@@ -11627,7 +11627,7 @@ export const clutch = $root.clutch = (() => {
                             /**
                              * SSLMode enum.
                              * @name clutch.config.service.db.postgres.v1.Connection.SSLMode
-                             * @enum {string}
+                             * @enum {number}
                              * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                              * @property {number} DISABLE=1 DISABLE value
                              * @property {number} ALLOW=2 ALLOW value
@@ -12074,6 +12074,7 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.service.k8s.v1
                          * @interface IConfig
                          * @property {Array.<string>|null} [kubeconfigs] Config kubeconfigs
+                         * @property {clutch.config.service.k8s.v1.IRestClientConfig|null} [restClientConfig] Config restClientConfig
                          */
 
                         /**
@@ -12101,6 +12102,14 @@ export const clutch = $root.clutch = (() => {
                         Config.prototype.kubeconfigs = $util.emptyArray;
 
                         /**
+                         * Config restClientConfig.
+                         * @member {clutch.config.service.k8s.v1.IRestClientConfig|null|undefined} restClientConfig
+                         * @memberof clutch.config.service.k8s.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.restClientConfig = null;
+
+                        /**
                          * Verifies a Config message.
                          * @function verify
                          * @memberof clutch.config.service.k8s.v1.Config
@@ -12117,6 +12126,11 @@ export const clutch = $root.clutch = (() => {
                                 for (let i = 0; i < message.kubeconfigs.length; ++i)
                                     if (!$util.isString(message.kubeconfigs[i]))
                                         return "kubeconfigs: string[] expected";
+                            }
+                            if (message.restClientConfig != null && message.hasOwnProperty("restClientConfig")) {
+                                let error = $root.clutch.config.service.k8s.v1.RestClientConfig.verify(message.restClientConfig);
+                                if (error)
+                                    return "restClientConfig." + error;
                             }
                             return null;
                         };
@@ -12140,6 +12154,11 @@ export const clutch = $root.clutch = (() => {
                                 for (let i = 0; i < object.kubeconfigs.length; ++i)
                                     message.kubeconfigs[i] = String(object.kubeconfigs[i]);
                             }
+                            if (object.restClientConfig != null) {
+                                if (typeof object.restClientConfig !== "object")
+                                    throw TypeError(".clutch.config.service.k8s.v1.Config.restClientConfig: object expected");
+                                message.restClientConfig = $root.clutch.config.service.k8s.v1.RestClientConfig.fromObject(object.restClientConfig);
+                            }
                             return message;
                         };
 
@@ -12158,11 +12177,15 @@ export const clutch = $root.clutch = (() => {
                             let object = {};
                             if (options.arrays || options.defaults)
                                 object.kubeconfigs = [];
+                            if (options.defaults)
+                                object.restClientConfig = null;
                             if (message.kubeconfigs && message.kubeconfigs.length) {
                                 object.kubeconfigs = [];
                                 for (let j = 0; j < message.kubeconfigs.length; ++j)
                                     object.kubeconfigs[j] = message.kubeconfigs[j];
                             }
+                            if (message.restClientConfig != null && message.hasOwnProperty("restClientConfig"))
+                                object.restClientConfig = $root.clutch.config.service.k8s.v1.RestClientConfig.toObject(message.restClientConfig, options);
                             return object;
                         };
 
@@ -12178,6 +12201,146 @@ export const clutch = $root.clutch = (() => {
                         };
 
                         return Config;
+                    })();
+
+                    v1.RestClientConfig = (function() {
+
+                        /**
+                         * Properties of a RestClientConfig.
+                         * @memberof clutch.config.service.k8s.v1
+                         * @interface IRestClientConfig
+                         * @property {google.protobuf.IDuration|null} [timeout] RestClientConfig timeout
+                         * @property {number|null} [qps] RestClientConfig qps
+                         * @property {number|null} [burst] RestClientConfig burst
+                         */
+
+                        /**
+                         * Constructs a new RestClientConfig.
+                         * @memberof clutch.config.service.k8s.v1
+                         * @classdesc Represents a RestClientConfig.
+                         * @implements IRestClientConfig
+                         * @constructor
+                         * @param {clutch.config.service.k8s.v1.IRestClientConfig=} [properties] Properties to set
+                         */
+                        function RestClientConfig(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * RestClientConfig timeout.
+                         * @member {google.protobuf.IDuration|null|undefined} timeout
+                         * @memberof clutch.config.service.k8s.v1.RestClientConfig
+                         * @instance
+                         */
+                        RestClientConfig.prototype.timeout = null;
+
+                        /**
+                         * RestClientConfig qps.
+                         * @member {number} qps
+                         * @memberof clutch.config.service.k8s.v1.RestClientConfig
+                         * @instance
+                         */
+                        RestClientConfig.prototype.qps = 0;
+
+                        /**
+                         * RestClientConfig burst.
+                         * @member {number} burst
+                         * @memberof clutch.config.service.k8s.v1.RestClientConfig
+                         * @instance
+                         */
+                        RestClientConfig.prototype.burst = 0;
+
+                        /**
+                         * Verifies a RestClientConfig message.
+                         * @function verify
+                         * @memberof clutch.config.service.k8s.v1.RestClientConfig
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        RestClientConfig.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.timeout != null && message.hasOwnProperty("timeout")) {
+                                let error = $root.google.protobuf.Duration.verify(message.timeout);
+                                if (error)
+                                    return "timeout." + error;
+                            }
+                            if (message.qps != null && message.hasOwnProperty("qps"))
+                                if (typeof message.qps !== "number")
+                                    return "qps: number expected";
+                            if (message.burst != null && message.hasOwnProperty("burst"))
+                                if (!$util.isInteger(message.burst))
+                                    return "burst: integer expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a RestClientConfig message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.k8s.v1.RestClientConfig
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.k8s.v1.RestClientConfig} RestClientConfig
+                         */
+                        RestClientConfig.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.k8s.v1.RestClientConfig)
+                                return object;
+                            let message = new $root.clutch.config.service.k8s.v1.RestClientConfig();
+                            if (object.timeout != null) {
+                                if (typeof object.timeout !== "object")
+                                    throw TypeError(".clutch.config.service.k8s.v1.RestClientConfig.timeout: object expected");
+                                message.timeout = $root.google.protobuf.Duration.fromObject(object.timeout);
+                            }
+                            if (object.qps != null)
+                                message.qps = Number(object.qps);
+                            if (object.burst != null)
+                                message.burst = object.burst >>> 0;
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a RestClientConfig message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.k8s.v1.RestClientConfig
+                         * @static
+                         * @param {clutch.config.service.k8s.v1.RestClientConfig} message RestClientConfig
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        RestClientConfig.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.timeout = null;
+                                object.qps = 0;
+                                object.burst = 0;
+                            }
+                            if (message.timeout != null && message.hasOwnProperty("timeout"))
+                                object.timeout = $root.google.protobuf.Duration.toObject(message.timeout, options);
+                            if (message.qps != null && message.hasOwnProperty("qps"))
+                                object.qps = options.json && !isFinite(message.qps) ? String(message.qps) : message.qps;
+                            if (message.burst != null && message.hasOwnProperty("burst"))
+                                object.burst = message.burst;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this RestClientConfig to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.k8s.v1.RestClientConfig
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        RestClientConfig.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return RestClientConfig;
                     })();
 
                     return v1;
@@ -15653,7 +15816,7 @@ export const clutch = $root.clutch = (() => {
                 /**
                  * State enum.
                  * @name clutch.k8s.v1.Container.State
-                 * @enum {string}
+                 * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} UNKNOWN=1 UNKNOWN value
                  * @property {number} TERMINATED=2 TERMINATED value
@@ -16015,7 +16178,7 @@ export const clutch = $root.clutch = (() => {
                 /**
                  * State enum.
                  * @name clutch.k8s.v1.Pod.State
-                 * @enum {string}
+                 * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} UNKNOWN=1 UNKNOWN value
                  * @property {number} PENDING=2 PENDING value
@@ -19087,6 +19250,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [typeUrl] Schema typeUrl
                  * @property {clutch.resolver.v1.ISchemaMetadata|null} [metadata] Schema metadata
                  * @property {Array.<clutch.resolver.v1.IField>|null} [fields] Schema fields
+                 * @property {google.rpc.IStatus|null} [error] Schema error
                  */
 
                 /**
@@ -19130,6 +19294,14 @@ export const clutch = $root.clutch = (() => {
                 Schema.prototype.fields = $util.emptyArray;
 
                 /**
+                 * Schema error.
+                 * @member {google.rpc.IStatus|null|undefined} error
+                 * @memberof clutch.resolver.v1.Schema
+                 * @instance
+                 */
+                Schema.prototype.error = null;
+
+                /**
                  * Verifies a Schema message.
                  * @function verify
                  * @memberof clutch.resolver.v1.Schema
@@ -19156,6 +19328,11 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "fields." + error;
                         }
+                    }
+                    if (message.error != null && message.hasOwnProperty("error")) {
+                        let error = $root.google.rpc.Status.verify(message.error);
+                        if (error)
+                            return "error." + error;
                     }
                     return null;
                 };
@@ -19189,6 +19366,11 @@ export const clutch = $root.clutch = (() => {
                             message.fields[i] = $root.clutch.resolver.v1.Field.fromObject(object.fields[i]);
                         }
                     }
+                    if (object.error != null) {
+                        if (typeof object.error !== "object")
+                            throw TypeError(".clutch.resolver.v1.Schema.error: object expected");
+                        message.error = $root.google.rpc.Status.fromObject(object.error);
+                    }
                     return message;
                 };
 
@@ -19210,6 +19392,7 @@ export const clutch = $root.clutch = (() => {
                     if (options.defaults) {
                         object.typeUrl = "";
                         object.metadata = null;
+                        object.error = null;
                     }
                     if (message.typeUrl != null && message.hasOwnProperty("typeUrl"))
                         object.typeUrl = message.typeUrl;
@@ -19220,6 +19403,8 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < message.fields.length; ++j)
                             object.fields[j] = $root.clutch.resolver.v1.Field.toObject(message.fields[j], options);
                     }
+                    if (message.error != null && message.hasOwnProperty("error"))
+                        object.error = $root.google.rpc.Status.toObject(message.error, options);
                     return object;
                 };
 
@@ -20923,7 +21108,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Visibility enum.
                      * @name clutch.sourcecontrol.github.v1.RepositoryParameters.Visibility
-                     * @enum {string}
+                     * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} PUBLIC=1 PUBLIC value
                      * @property {number} PRIVATE=2 PRIVATE value
@@ -22181,7 +22366,7 @@ export const clutch = $root.clutch = (() => {
                 /**
                  * Operator enum.
                  * @name clutch.topology.v1.Constraint.Operator
-                 * @enum {string}
+                 * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} EQUAL=1 EQUAL value
                  * @property {number} NOT_EQUAL=2 NOT_EQUAL value
@@ -22430,7 +22615,7 @@ export const clutch = $root.clutch = (() => {
                 /**
                  * Aggregation enum.
                  * @name clutch.topology.v1.MetadataQuery.Aggregation
-                 * @enum {string}
+                 * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} SUM=1 SUM value
                  * @property {number} AVERAGE=2 AVERAGE value
@@ -28040,7 +28225,7 @@ export const validate = $root.validate = (() => {
     /**
      * KnownRegex enum.
      * @name validate.KnownRegex
-     * @enum {string}
+     * @enum {number}
      * @property {number} UNKNOWN=0 UNKNOWN value
      * @property {number} HTTP_HEADER_NAME=1 HTTP_HEADER_NAME value
      * @property {number} HTTP_HEADER_VALUE=2 HTTP_HEADER_VALUE value
@@ -31245,6 +31430,7 @@ export const google = $root.google = (() => {
              * @property {number|null} [oneofIndex] FieldDescriptorProto oneofIndex
              * @property {string|null} [jsonName] FieldDescriptorProto jsonName
              * @property {google.protobuf.IFieldOptions|null} [options] FieldDescriptorProto options
+             * @property {boolean|null} [proto3Optional] FieldDescriptorProto proto3Optional
              */
 
             /**
@@ -31343,6 +31529,14 @@ export const google = $root.google = (() => {
             FieldDescriptorProto.prototype.options = null;
 
             /**
+             * FieldDescriptorProto proto3Optional.
+             * @member {boolean} proto3Optional
+             * @memberof google.protobuf.FieldDescriptorProto
+             * @instance
+             */
+            FieldDescriptorProto.prototype.proto3Optional = false;
+
+            /**
              * Verifies a FieldDescriptorProto message.
              * @function verify
              * @memberof google.protobuf.FieldDescriptorProto
@@ -31412,6 +31606,9 @@ export const google = $root.google = (() => {
                     if (error)
                         return "options." + error;
                 }
+                if (message.proto3Optional != null && message.hasOwnProperty("proto3Optional"))
+                    if (typeof message.proto3Optional !== "boolean")
+                        return "proto3Optional: boolean expected";
                 return null;
             };
 
@@ -31534,6 +31731,8 @@ export const google = $root.google = (() => {
                         throw TypeError(".google.protobuf.FieldDescriptorProto.options: object expected");
                     message.options = $root.google.protobuf.FieldOptions.fromObject(object.options);
                 }
+                if (object.proto3Optional != null)
+                    message.proto3Optional = Boolean(object.proto3Optional);
                 return message;
             };
 
@@ -31561,6 +31760,7 @@ export const google = $root.google = (() => {
                     object.options = null;
                     object.oneofIndex = 0;
                     object.jsonName = "";
+                    object.proto3Optional = false;
                 }
                 if (message.name != null && message.hasOwnProperty("name"))
                     object.name = message.name;
@@ -31582,6 +31782,8 @@ export const google = $root.google = (() => {
                     object.oneofIndex = message.oneofIndex;
                 if (message.jsonName != null && message.hasOwnProperty("jsonName"))
                     object.jsonName = message.jsonName;
+                if (message.proto3Optional != null && message.hasOwnProperty("proto3Optional"))
+                    object.proto3Optional = message.proto3Optional;
                 return object;
             };
 
@@ -31599,7 +31801,7 @@ export const google = $root.google = (() => {
             /**
              * Type enum.
              * @name google.protobuf.FieldDescriptorProto.Type
-             * @enum {string}
+             * @enum {number}
              * @property {number} TYPE_DOUBLE=1 TYPE_DOUBLE value
              * @property {number} TYPE_FLOAT=2 TYPE_FLOAT value
              * @property {number} TYPE_INT64=3 TYPE_INT64 value
@@ -31645,7 +31847,7 @@ export const google = $root.google = (() => {
             /**
              * Label enum.
              * @name google.protobuf.FieldDescriptorProto.Label
-             * @enum {string}
+             * @enum {number}
              * @property {number} LABEL_OPTIONAL=1 LABEL_OPTIONAL value
              * @property {number} LABEL_REQUIRED=2 LABEL_REQUIRED value
              * @property {number} LABEL_REPEATED=3 LABEL_REPEATED value
@@ -32764,7 +32966,7 @@ export const google = $root.google = (() => {
              * @memberof google.protobuf.FileOptions
              * @instance
              */
-            FileOptions.prototype.ccEnableArenas = false;
+            FileOptions.prototype.ccEnableArenas = true;
 
             /**
              * FileOptions objcClassPrefix.
@@ -33023,7 +33225,7 @@ export const google = $root.google = (() => {
                     object.javaGenerateEqualsAndHash = false;
                     object.deprecated = false;
                     object.javaStringCheckUtf8 = false;
-                    object.ccEnableArenas = false;
+                    object.ccEnableArenas = true;
                     object.objcClassPrefix = "";
                     object.csharpNamespace = "";
                     object.swiftPrefix = "";
@@ -33095,7 +33297,7 @@ export const google = $root.google = (() => {
             /**
              * OptimizeMode enum.
              * @name google.protobuf.FileOptions.OptimizeMode
-             * @enum {string}
+             * @enum {number}
              * @property {number} SPEED=1 SPEED value
              * @property {number} CODE_SIZE=2 CODE_SIZE value
              * @property {number} LITE_RUNTIME=3 LITE_RUNTIME value
@@ -33684,7 +33886,7 @@ export const google = $root.google = (() => {
             /**
              * CType enum.
              * @name google.protobuf.FieldOptions.CType
-             * @enum {string}
+             * @enum {number}
              * @property {number} STRING=0 STRING value
              * @property {number} CORD=1 CORD value
              * @property {number} STRING_PIECE=2 STRING_PIECE value
@@ -33700,7 +33902,7 @@ export const google = $root.google = (() => {
             /**
              * JSType enum.
              * @name google.protobuf.FieldOptions.JSType
-             * @enum {string}
+             * @enum {number}
              * @property {number} JS_NORMAL=0 JS_NORMAL value
              * @property {number} JS_STRING=1 JS_STRING value
              * @property {number} JS_NUMBER=2 JS_NUMBER value
@@ -34494,7 +34696,7 @@ export const google = $root.google = (() => {
             /**
              * IdempotencyLevel enum.
              * @name google.protobuf.MethodOptions.IdempotencyLevel
-             * @enum {string}
+             * @enum {number}
              * @property {number} IDEMPOTENCY_UNKNOWN=0 IDEMPOTENCY_UNKNOWN value
              * @property {number} NO_SIDE_EFFECTS=1 NO_SIDE_EFFECTS value
              * @property {number} IDEMPOTENT=2 IDEMPOTENT value
@@ -36264,7 +36466,7 @@ export const google = $root.google = (() => {
         /**
          * NullValue enum.
          * @name google.protobuf.NullValue
-         * @enum {string}
+         * @enum {number}
          * @property {number} NULL_VALUE=0 NULL_VALUE value
          */
         protobuf.NullValue = (function() {

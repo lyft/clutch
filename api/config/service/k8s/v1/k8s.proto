@@ -5,7 +5,27 @@ package clutch.config.service.k8s.v1;
 option go_package = "k8sv1";
 
 import "validate/validate.proto";
+import "google/protobuf/duration.proto";
 
 message Config {
   repeated string kubeconfigs = 1 [ (validate.rules).repeated = {unique : true} ];
+  RestClientConfig rest_client_config = 2;
+}
+
+// These configuration values are passed directly through to the rest config object.
+message RestClientConfig {
+  // The maximum length of time to wait before giving up on a server request.
+  // By default a value of zero means no timeout.
+  // https://github.com/kubernetes/client-go/blob/00dbcca6ee44c678754d3f5fda1bd0e704b26fe2/rest/config.go#L130-L131
+  google.protobuf.Duration timeout = 1 [ (validate.rules).duration.gte.seconds = 0 ];
+
+  // QPS indicates the maximum QPS to the master from this client.
+  // If it's zero, the created RESTClient will use DefaultQPS: 5
+  // https://github.com/kubernetes/client-go/blob/00dbcca6ee44c678754d3f5fda1bd0e704b26fe2/rest/config.go#L115-L117
+  float qps = 2 [ (validate.rules).float.gte = 0 ];
+
+  // Maximum burst for throttle.
+  // If it's zero, the created RESTClient will use DefaultBurst: 10.
+  // https://github.com/kubernetes/client-go/blob/00dbcca6ee44c678754d3f5fda1bd0e704b26fe2/rest/config.go#L119-L121
+  uint32 burst = 3 [ (validate.rules).uint32.gte = 0 ];
 }

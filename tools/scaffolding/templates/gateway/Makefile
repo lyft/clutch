@@ -41,3 +41,7 @@ yarn-install: yarn-ensure
 .PHONY: yarn-ensure
 yarn-ensure:
 	@$(SHELL) $(TOOLS_MODULE_DIR)/install-yarn.sh
+
+.PHONY: frontend-dev # Start the frontend in development mode.
+frontend-dev: yarn-ensure
+	yarn --cwd frontend install --frozen-lockfile && yarn --cwd frontend start

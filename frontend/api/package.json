@@ -7,6 +7,6 @@
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "scripts": {
-    "publishBeta": "yarn publish --new-version=\"0.0.0-beta.$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')\" --access public"
+    "publishBeta": "../../tools/publish-frontend.sh api"
   }
 }

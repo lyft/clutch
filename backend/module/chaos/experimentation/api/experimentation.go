@@ -35,7 +35,7 @@ type Service struct {
 func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
 	store, ok := service.Registry[experimentstore.Name]
 	if !ok {
-		return nil, errors.New("could not find service")
+		return nil, errors.New("could not find experiment store service")
 	}
 
 	experimentStore, ok := store.(experimentstore.ExperimentStore)

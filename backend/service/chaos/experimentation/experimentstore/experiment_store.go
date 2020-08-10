@@ -44,7 +44,7 @@ type experimentStore struct {
 func New(cfg *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
 	p, ok := service.Registry[pgservice.Name]
 	if !ok {
-		return nil, errors.New("could not find service")
+		return nil, errors.New("could not find database service")
 	}
 
 	client, ok := p.(pgservice.Client)

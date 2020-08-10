@@ -142,8 +142,12 @@ func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 	//if converted, err := ptypes.TimestampProto(k8spod.Status.StartTime.Time); err == nil {
 	//	launch = converted
 	//}
+	clusterName := k8spod.ClusterName
+	if clusterName == "" {
+		clusterName = cluster
+	}
 	return &k8sapiv1.Pod{
-		Cluster:    cluster,
+		Cluster:    clusterName,
 		Namespace:  k8spod.Namespace,
 		Name:       k8spod.Name,
 		Containers: makeContainers(k8spod.Status.ContainerStatuses),

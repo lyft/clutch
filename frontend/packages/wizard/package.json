@@ -19,7 +19,7 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "prepublishOnly": "yarn run build",
-    "publishBeta": "yarn publish --new-version=\"0.0.0-beta.$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')\" --access public",
+    "publishBeta": "../../../tools/publish-frontend.sh wizard",
     "test": "jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"
@@ -31,7 +31,9 @@
     "@material-ui/icons": "^4.9.1",
     "clsx": "^1.1.1",
     "react": "^16.8.0",
-    "styled-components": "^5.0.1"
+    "react-dom": "^16.8.0",
+    "react-is": "^16.8.0",
+    "styled-components": "^5.1.1"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^0.0.0-beta"

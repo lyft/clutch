@@ -8,7 +8,6 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
 
 	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
@@ -28,12 +27,13 @@ func TestProtoForContainerState(t *testing.T) {
 	assert.Equal(t, k8sv1.Container_TERMINATED, protoForContainerState(corev1.ContainerState{Terminated: &corev1.ContainerStateTerminated{}}))
 }
 
-func testPodClientset() k8s.Interface {
+func testPodClientset() *fake.Clientset {
 	testPods := []runtime.Object{
 		&corev1.Pod{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:        "testing-pod-name",
 				Namespace:   "testing-namespace",
+				ClusterName: "production",
 				Labels:      map[string]string{"foo": "bar"},
 				Annotations: map[string]string{"baz": "quuz"},
 			},
@@ -50,6 +50,7 @@ func testPodClientset() k8s.Interface {
 			ObjectMeta: metav1.ObjectMeta{
 				Name:        "testing-pod-name-1",
 				Namespace:   "testing-namespace",
+				ClusterName: "staging",
 				Labels:      map[string]string{"foo": "bar"},
 				Annotations: map[string]string{"baz": "quuz"},
 			},
@@ -89,9 +90,9 @@ func TestDescribePod(t *testing.T) {
 	cs := testPodClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": {
 				Interface: cs,
-				namespace: "default",
+				namespace: "testing-namespace",
 				cluster:   "core-testing",
 			}},
 		},
@@ -111,6 +112,16 @@ func TestDescribePod(t *testing.T) {
 		"foo",
 		"",
 		"testing-namespace",
+		"testing-pod-name",
+	)
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
+
+	// Assert that the pod is found using the clientset's namespace if none is provided.
+	result, err = s.DescribePod(context.Background(),
+		"foo",
+		"",
+		"",
 		"testing-pod-name",
 	)
 	assert.NoError(t, err)
@@ -193,6 +204,48 @@ func TestListPods(t *testing.T) {
 	)
 	assert.NoError(t, err)
 	assert.Len(t, result, 2)
+}
+
+func TestPodDescriptionClusterName(t *testing.T) {
+	t.Parallel()
+
+	var podTestCases = []struct {
+		id                  string
+		inputClusterName    string
+		expectedClusterName string
+		pod                 *corev1.Pod
+	}{
+		{
+			id:                  "clustername already set",
+			inputClusterName:    "notprod",
+			expectedClusterName: "production",
+			pod: &corev1.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "production",
+				},
+			},
+		},
+		{
+			id:                  "custername is not set",
+			inputClusterName:    "staging",
+			expectedClusterName: "staging",
+			pod: &corev1.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "",
+				},
+			},
+		},
+	}
+
+	for _, tt := range podTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			pod := podDescription(tt.pod, tt.inputClusterName)
+			assert.Equal(t, tt.expectedClusterName, pod.Cluster)
+		})
+	}
 }
 
 func TestUpdatePodAnnotations(t *testing.T) {

@@ -213,6 +213,9 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 				}
 				fm.OptionField.Options = append([]*resolverv1.Option{all}, fm.OptionField.Options...)
 			}
+
+			// add error if needed
+			updateSchemaError(schema)
 		}
 	}
 
@@ -220,4 +223,18 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 		TypeUrl: req.TypeUrl,
 		Schemas: schemas,
 	}, nil
+}
+
+// Add error information to the schema if it's broken in some way.
+func updateSchemaError(input *resolverv1.Schema) {
+	for _, field := range input.Fields {
+		switch t := field.Metadata.Type.(type) {
+		case *resolverv1.FieldMetadata_OptionField:
+			if field.Metadata.Required && len(t.OptionField.Options) == 0 {
+				s := status.New(codes.OutOfRange, fmt.Sprintf("missing required options for field '%s'", field.Name))
+				input.Error = s.Proto()
+				return
+			}
+		}
+	}
 }

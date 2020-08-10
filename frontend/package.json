@@ -9,13 +9,13 @@
     "infrastructure",
     "infra"
   ],
-  "homepage": "https://github.com/clutch-sh/clutch#readme",
+  "homepage": "https://clutch.sh",
   "bugs": {
-    "url": "https://github.com/clutch-sh/clutch/issues"
+    "url": "https://github.com/lyft/clutch/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/clutch-sh/clutch.git"
+    "url": "git+https://github.com/lyft/clutch.git"
   },
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
@@ -35,7 +35,8 @@
     "lint:fix": "lerna run lint:fix --no-bail",
     "lint:packages": "sort-package-json package.json packages/**/package.json --check",
     "lint:packages:fix": "sort-package-json package.json packages/**/package.json",
-    "publishBeta": "lerna run compile && lerna run publishBeta --no-bail -- --no-git-tag-version",
+    "package": "func() { yarn workspace @clutch-sh/\"$@\"; }; func",
+    "publishBeta": "lerna run compile && lerna run publishBeta --no-bail",
     "start": "yarn compile:watch & yarn workspace @clutch-sh/app start",
     "test": "lerna run test --stream --no-bail --",
     "test:coverage": "lerna run test:coverage --stream --no-bail --",
@@ -57,10 +58,10 @@
     ]
   },
   "dependencies": {
-    "protobufjs": "https://github.com/natiz/protobuf.js#1d626f84db4a4f339004609f654a9f24a211b716"
+    "protobufjs": "6.10.1"
   },
   "devDependencies": {
-    "lerna": "^3.20.0",
+    "lerna": "^3.22.1",
     "license-checker": "^25.0.1",
     "sort-package-json": "^1.44.0"
   },

@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"testing"
 
+	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
+	gcpResource "github.com/envoyproxy/go-control-plane/pkg/resource/v2"
+
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
-	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache"
+	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
@@ -90,7 +93,7 @@ func TestSetSnapshot(t *testing.T) {
 		t.Errorf("Snapshot not found for cluster %s", testUpstreamCluster)
 	}
 
-	resources := snapshot.GetResources(gcpCache.RuntimeType)
+	resources := snapshot.GetResources(gcpResource.RuntimeType)
 	if resources == nil {
 		t.Errorf("no resources")
 	}
@@ -156,7 +159,7 @@ func TestCreateRuntimeKeys(t *testing.T) {
 func TestComputeVersionReturnValue(t *testing.T) {
 	rtdsLayerName := "TestRtdsLayer"
 
-	mockRuntime := []gcpCache.Resource{
+	mockRuntime := []gcpTypes.Resource{
 		&gcpDiscovery.Runtime{
 			Name: rtdsLayerName,
 			Layer: &pstruct.Struct{
@@ -166,5 +169,17 @@ func TestComputeVersionReturnValue(t *testing.T) {
 	}
 
 	checksum, _ := computeChecksum(mockRuntime)
-	assert.Equal(t, "18363920902738959582", checksum)
+	assert.Equal(t, "4464232557941748628", checksum)
+
+	mockRuntime2 := []gcpTypes.Resource{
+		&gcpDiscovery.Runtime{
+			Name: rtdsLayerName + "foo",
+			Layer: &pstruct.Struct{
+				Fields: map[string]*pstruct.Value{},
+			},
+		},
+	}
+
+	checksum2, _ := computeChecksum(mockRuntime2)
+	assert.NotEqual(t, checksum, checksum2)
 }

@@ -13,8 +13,8 @@ import (
 	gcpV2 "github.com/envoyproxy/go-control-plane/envoy/api/v2"
 	gcpCore "github.com/envoyproxy/go-control-plane/envoy/api/v2/core"
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
-	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache"
-	gcpServer "github.com/envoyproxy/go-control-plane/pkg/server"
+	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
+	gcpServer "github.com/envoyproxy/go-control-plane/pkg/server/v2"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -78,7 +78,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 
 	store, ok := service.Registry[experimentstore.Name]
 	if !ok {
-		return nil, errors.New("could not find service")
+		return nil, errors.New("could not find experiment store service")
 	}
 
 	experimentStore, ok := store.(experimentstore.ExperimentStore)

@@ -1,4 +1,4 @@
-package experimentstore
+package experimentstoremock
 
 import (
 	"context"
@@ -11,8 +11,6 @@ import (
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/service"
 )
-
-const Name = "clutch.service.chaos.experimentation.mockstore"
 
 type mockExperimentStore struct {
 }
