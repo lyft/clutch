@@ -8,7 +8,6 @@ import (
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	k8slabels "k8s.io/apimachinery/pkg/labels"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
@@ -57,20 +56,13 @@ func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name
 	return cs.CoreV1().Pods(cs.Namespace()).Delete(name, opts)
 }
 
-func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string, listPodsOpts *k8sapiv1.ListOptions) ([]*k8sapiv1.Pod, error) {
+func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string, listOpts *k8sapiv1.ListOptions) ([]*k8sapiv1.Pod, error) {
 	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
 	if err != nil {
 		return nil, err
 	}
 
-	opts := metav1.ListOptions{}
-	if len(listPodsOpts.Labels) > 0 {
-		opts.LabelSelector = k8slabels.FormatLabels(listPodsOpts.Labels)
-	}
-
-	if len(listPodsOpts.FieldSelectors) > 0 {
-		opts.FieldSelector = listPodsOpts.FieldSelectors
-	}
+	opts := ApplyListOptions(listOpts)
 
 	ns := namespace
 	if namespace == "" || cs.Namespace() == "default" {
