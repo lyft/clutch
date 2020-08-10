@@ -173,7 +173,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 				handler.Add(1)
 				go func(name string) {
 					defer handler.Done()
-					hpa, err := r.svc.DescribeHPA(ctx, name, "", "", id)
+					hpa, err := r.svc.DescribeHPA(ctx, name, "", "", query)
 					select {
 					case handler.Channel() <- resolver.NewFanoutResult([]*k8sv1api.HPA{hpa}, err):
 						return

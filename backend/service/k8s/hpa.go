@@ -2,6 +2,7 @@ package k8s
 
 import (
 	"context"
+	"fmt"
 
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -16,12 +17,56 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 		return nil, err
 	}
 
+	if namespace == "" || cs.Namespace() == "default" {
+		hpas, err := s.ListHPAs(ctx, clientset, cluster, namespace, &k8sapiv1.ListOptions{
+			FieldSelectors: "metadata.name=" + name,
+		})
+		if err != nil {
+			return nil, err
+		}
+
+		if len(hpas) == 1 {
+			return hpas[0], nil
+		} else if len(hpas) > 1 {
+			return nil, fmt.Errorf("Located multipule hpas")
+		}
+
+		return nil, fmt.Errorf("Unable to locate hpas")
+	}
+
 	getOpts := metav1.GetOptions{}
 	hpa, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Get(name, getOpts)
 	if err != nil {
 		return nil, err
 	}
 	return ProtoForHPA(cs.Cluster(), hpa), nil
+}
+
+func (s *svc) ListHPAs(ctx context.Context, clientset, cluster, namespace string, listOpts *k8sapiv1.ListOptions) ([]*k8sapiv1.HPA, error) {
+	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	if err != nil {
+		return nil, err
+	}
+
+	opts := ApplyListOptions(listOpts)
+
+	ns := namespace
+	if namespace == "" || cs.Namespace() == "default" {
+		ns = metav1.NamespaceAll
+	}
+
+	hpaList, err := cs.AutoscalingV1().HorizontalPodAutoscalers(ns).List(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	var HPAs []*k8sapiv1.HPA
+	for _, h := range hpaList.Items {
+		hpa := h
+		HPAs = append(HPAs, ProtoForHPA(cs.Cluster(), &hpa))
+	}
+
+	return HPAs, nil
 }
 
 func ProtoForHPA(cluster string, autoscaler *autoscalingv1.HorizontalPodAutoscaler) *k8sapiv1.HPA {
