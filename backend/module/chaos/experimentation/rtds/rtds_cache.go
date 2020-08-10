@@ -7,7 +7,7 @@ import (
 	"time"
 
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
-	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache"
+	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/mitchellh/hashstructure"
 	"go.uber.org/zap"
