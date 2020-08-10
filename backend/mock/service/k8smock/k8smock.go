@@ -32,7 +32,7 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 	return hpa, nil
 }
 
-func (s *svc) ListHPAs(_ context.Context, clientset, cluster, namespace string, ListOptions *k8sv1.ListOptions) ([]*k8sv1.HPA, error) {
+func (s *svc) ListHPAs(_ context.Context, clientset, cluster, namespace string, listOptions *k8sv1.ListOptions) ([]*k8sv1.HPA, error) {
 	pods := []*k8sv1.HPA{
 		&k8sv1.HPA{
 			Cluster:   "fake-cluster-name",
@@ -44,7 +44,7 @@ func (s *svc) ListHPAs(_ context.Context, clientset, cluster, namespace string, 
 				CurrentReplicas: uint32(rand.Int31n(100)),
 				DesiredReplicas: uint32(rand.Int31n(100)),
 			},
-			Labels:      map[string]string{"Label key": "Value"},
+			Labels:      listOptions.Labels,
 			Annotations: map[string]string{"Annotation key": "Value"},
 		},
 		&k8sv1.HPA{
@@ -57,7 +57,7 @@ func (s *svc) ListHPAs(_ context.Context, clientset, cluster, namespace string, 
 				CurrentReplicas: uint32(rand.Int31n(500)),
 				DesiredReplicas: uint32(rand.Int31n(500)),
 			},
-			Labels:      map[string]string{"Label key": "Value"},
+			Labels:      listOptions.Labels,
 			Annotations: map[string]string{"Annotation key": "Value"},
 		},
 	}
@@ -87,7 +87,7 @@ func (s *svc) DescribePod(_ context.Context, clientset, cluster, namespace, name
 	return pod, nil
 }
 
-func (s *svc) ListPods(_ context.Context, clientset, cluster, namespace string, ListOptions *k8sv1.ListOptions) ([]*k8sv1.Pod, error) {
+func (s *svc) ListPods(_ context.Context, clientset, cluster, namespace string, listOptions *k8sv1.ListOptions) ([]*k8sv1.Pod, error) {
 	pods := []*k8sv1.Pod{
 		&k8sv1.Pod{
 			Cluster:     cluster,
@@ -96,7 +96,7 @@ func (s *svc) ListPods(_ context.Context, clientset, cluster, namespace string, 
 			NodeIp:      "10.0.0.1",
 			PodIp:       "8.1.1.8",
 			State:       k8sv1.Pod_State(rand.Intn(len(k8sv1.Pod_State_value))),
-			Labels:      ListOptions.Labels,
+			Labels:      listOptions.Labels,
 			Annotations: map[string]string{"Key": "value"},
 		},
 		&k8sv1.Pod{
@@ -106,7 +106,7 @@ func (s *svc) ListPods(_ context.Context, clientset, cluster, namespace string, 
 			NodeIp:      "10.0.0.2",
 			PodIp:       "8.1.1.9",
 			State:       k8sv1.Pod_State(rand.Intn(len(k8sv1.Pod_State_value))),
-			Labels:      ListOptions.Labels,
+			Labels:      listOptions.Labels,
 			Annotations: map[string]string{"Key": "value"},
 		},
 	}
