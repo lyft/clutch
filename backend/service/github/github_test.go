@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"testing"
 	"time"
 
@@ -139,6 +140,9 @@ func TestGetFile(t *testing.T) {
 type mockRepositories struct {
 	actualOrg  string
 	actualRepo *githubv3.Repository
+
+	generalError           bool
+	malformedEncodingError bool
 }
 
 func (m *mockRepositories) Create(ctx context.Context, org string, repo *githubv3.Repository) (*githubv3.Repository, *githubv3.Response, error) {
@@ -149,6 +153,27 @@ func (m *mockRepositories) Create(ctx context.Context, org string, repo *githubv
 		URL: strPtr(fmt.Sprintf("https://example.com/%s/%s", org, *repo.Name)),
 	}
 	return ret, nil, nil
+}
+
+func (m *mockRepositories) GetContents(_ context.Context, _, _, _ string, _ *githubv3.RepositoryContentGetOptions) (*githubv3.RepositoryContent, []*githubv3.RepositoryContent, *githubv3.Response, error) {
+	fmt.Fprintf(os.Stdout, "Made it here\n")
+	if m.generalError == true {
+		return nil, nil, nil, errors.New(problem)
+	}
+	fmt.Fprintf(os.Stdout, "Made it here2\n")
+	if m.malformedEncodingError {
+		encoding := "unsupported"
+		return &githubv3.RepositoryContent{Encoding: &encoding}, nil, nil, nil
+	}
+	return &githubv3.RepositoryContent{}, nil, nil, nil
+}
+
+func (m *mockRepositories) CompareCommits(ctx context.Context, owner, repo, base, head string) (*githubv3.CommitsComparison, *githubv3.Response, error) {
+	if m.generalError {
+		return nil, nil, errors.New(problem)
+	}
+	returnstr := "behind"
+	return &githubv3.CommitsComparison{Status: &returnstr}, nil, nil
 }
 
 var createRepoTests = []struct {
@@ -203,6 +228,121 @@ func TestCreateRepository(t *testing.T) {
 			assert.Equal(t, expectedViz, *m.actualRepo.Visibility)
 			assert.Equal(t, tt.req.Description, *m.actualRepo.Description)
 			assert.NotEmpty(t, resp.Url)
+		})
+	}
+}
+
+var getContentsTest = []struct {
+	name      string
+	errorText string
+	mockRepo  *mockRepositories
+}{
+	{
+		name:      "v3 error",
+		errorText: "could not get contents",
+		mockRepo:  &mockRepositories{generalError: true},
+	},
+	{
+		name:      "malformed encoding error",
+		errorText: "unsupported content encoding",
+		mockRepo:  &mockRepositories{malformedEncodingError: true},
+	},
+	{
+		name:     "success",
+		mockRepo: &mockRepositories{},
+	},
+}
+
+func TestGetContents(t *testing.T) {
+	t.Parallel()
+
+	for _, tt := range getContentsTest {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			a := assert.New(t)
+			s := &svc{rest: v3client{
+				Repositories: tt.mockRepo,
+			}}
+
+			_, err := s.GetContents(
+				context.Background(),
+				&RemoteRef{
+					RepoOwner: "owner",
+					RepoName:  "myRepo",
+					Ref:       "master",
+				},
+				"somefile.txt",
+			)
+
+			if tt.errorText != "" {
+				a.Error(err)
+				a.NotNil(err)
+				a.Contains(err.Error(), tt.errorText)
+				return
+			}
+			if err != nil {
+				a.FailNow("unexpected error")
+				return
+			}
+			a.Nil(err)
+		})
+	}
+}
+
+var compareCommitsTest = []struct {
+	name         string
+	errorText    string
+	resp         *ComparedCommits
+	generalError bool
+	mockRepo     *mockRepositories
+}{
+	{
+		name:         "v3 error",
+		generalError: true,
+		errorText:    "Could not get compare status",
+		mockRepo:     &mockRepositories{generalError: true},
+	},
+	{
+		name: "happy path",
+		resp: &ComparedCommits{
+			Status: Behind,
+		},
+		mockRepo: &mockRepositories{},
+	},
+}
+
+func TestCompareCommits(t *testing.T) {
+	t.Parallel()
+
+	for _, tt := range compareCommitsTest {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			a := assert.New(t)
+			s := &svc{rest: v3client{
+				Repositories: tt.mockRepo,
+			}}
+
+			resp, err := s.CompareCommits(
+				&RemoteRef{
+					RepoOwner: "owner",
+					RepoName:  "myRepo",
+					Ref:       "master",
+				},
+				"1234",
+			)
+			if tt.errorText != "" {
+				a.Error(err)
+				a.Contains(err.Error(), tt.errorText)
+				return
+			}
+			if err != nil {
+				a.FailNow("unexpected error")
+				return
+			}
+			a.Equal(resp, tt.resp)
+			a.Nil(err)
 		})
 	}
 }

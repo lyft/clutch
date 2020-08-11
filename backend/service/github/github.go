@@ -273,3 +273,72 @@ func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, 
 
 	return f, nil
 }
+
+type CompareStatus int
+
+func (c CompareStatus) String() string {
+	names := []string{
+		"behind",
+		"ahead",
+		"identical",
+	}
+	if c < Behind || c > Identical {
+		return "unknown"
+	}
+	return names[c]
+}
+
+const (
+	Behind    CompareStatus = iota
+	Ahead     CompareStatus = iota
+	Identical CompareStatus = iota
+)
+
+type ComparedCommits struct {
+	Status CompareStatus
+}
+
+func (s *svc) GetContents(ctx context.Context, ref *RemoteRef, path string) (*File, error) {
+	options := &githubv3.RepositoryContentGetOptions{
+		Ref: ref.Ref,
+	}
+	content, _, _, err := s.rest.Repositories.GetContents(context.Background(), ref.RepoOwner, ref.RepoName, path, options)
+	if err != nil {
+		return nil, fmt.Errorf("could not get contents for %s at sha %s for repo %s/%s: %+v",
+			path, ref.Ref, ref.RepoOwner, ref.RepoName, err)
+	}
+	fileText, err := content.GetContent()
+	if err != nil {
+		return nil, fmt.Errorf("could not get contents for %s at sha %s for repo %s/%s: %+v",
+			path, ref.Ref, ref.RepoOwner, ref.RepoName, err)
+	}
+	file := &File{
+		Path:     path,
+		Contents: ioutil.NopCloser(strings.NewReader(string(fileText))),
+		SHA:      content.GetSHA(),
+	}
+	return file, nil
+}
+
+func (s *svc) CompareCommits(ref *RemoteRef, compareSha string) (*ComparedCommits, error) {
+	comp, _, err := s.rest.Repositories.CompareCommits(context.Background(), ref.RepoOwner, ref.RepoName, compareSha, ref.Ref)
+	if err != nil {
+		return nil, fmt.Errorf("Could not get compare status for %s and %s. %+v", ref.Ref, compareSha, err)
+	}
+
+	var cs CompareStatus
+	switch *comp.Status {
+	case Behind.String():
+		cs = Behind
+	case Ahead.String():
+		cs = Ahead
+	case Identical.String():
+		cs = Identical
+	default:
+		return nil, fmt.Errorf("Unknown status %s", *comp.Status)
+	}
+
+	return &ComparedCommits{
+		Status: cs,
+	}, nil
+}

@@ -27,6 +27,7 @@ require (
 	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334
 	github.com/jhump/protoreflect v1.7.0
 	github.com/lib/pq v1.8.0
+	github.com/lyft/gostats v0.4.2
 	github.com/lyft/protoc-gen-star v0.4.14 // indirect
 	github.com/mitchellh/hashstructure v1.0.0
 	github.com/shurcooL/githubv4 v0.0.0-20200802174311-f27d2ca7f6d5
