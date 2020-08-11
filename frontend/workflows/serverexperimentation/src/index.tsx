@@ -10,8 +10,8 @@ const register = (): WorkflowConfiguration => {
       contactUrl: "mailto:example@lyft.com",
     },
     path: "serverexperimentation",
-    group: "Experimentation Server",
-    displayName: "Experimentation Server",
+    group: "Experimentation",
+    displayName: "Server Experimentation",
     routes: {
       startAbortExperiment: {
         path: "startabort",
@@ -30,4 +30,3 @@ const register = (): WorkflowConfiguration => {
 };
 
 export default register;
-

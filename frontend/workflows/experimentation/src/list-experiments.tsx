@@ -9,17 +9,28 @@ import styled from "styled-components";
 interface ExperimentationSpecificationDataProps {
   experiment: IClutch.chaos.experimentation.v1.Experiment,
   columns: [string],
-  mapping: any
+  experimentTypes: any
 }
 
 const ExperimentSpecificationData: React.FC<ExperimentationSpecificationDataProps> = ({
-  experiment, columns, mapping 
+  experiment, columns, experimentTypes
 }) => {
-  mapping = mapping || {};
+  experimentTypes = experimentTypes || {};
 
-  const converter = mapping[experiment.testConfig["@type"]];
-  const converterExists = typeof converter !== "undefined";
-  const model = converterExists ? converter(experiment.testConfig) : experiment;
+  const registeredExperimentType = experimentTypes[experiment.testConfig["@type"]];
+  const isExperimentTypeRegistered = typeof registeredExperimentType !== "undefined";
+  if (!isExperimentTypeRegistered) {
+    const data = columns.map(_ => {
+      return experiment.testConfig["@type"]
+    });
+    return (
+      <Row data={data} />
+    );
+  }
+
+  const mapper = registeredExperimentType["mapping"];
+  const mapperExists = typeof mapper !== "undefined";
+  const model = mapperExists ? mapper(experiment.testConfig) : experiment;
 
   const data = columns.map(column => {
     if (column == "identifier") {
@@ -46,11 +57,10 @@ const Layout = styled(Container)`
 
 interface ListExperimentsProps extends BaseWorkflowProps {
   columns: [string],
-  mapping: any,
-  links: [any]
+  experimentTypes: [any]
 }
 
-const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, mapping, links }) => {
+const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, experimentTypes }) => {
   const [experiments, setExperiments] = useState([]);
   const [error, setError] = useState("");
 
@@ -67,7 +77,15 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, map
       });
   }
 
-  links = links || []
+  experimentTypes = experimentTypes || {};
+  let links = []
+  Object.keys(experimentTypes).forEach(function(experimentType) {
+    const specification = experimentTypes[experimentType]
+    if (typeof specification["links"] !== "undefined") {
+      links = links.concat(specification["links"])
+    }
+  })
+
   let columnNames = columns.map(name => name.toUpperCase());
   let buttons = links.map(link =>  {
     return {
@@ -83,7 +101,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, map
         headings={columnNames}
       >
         {experiments.map(e => (
-          <ExperimentSpecificationData key={e.id} experiment={e} columns={columns} mapping={mapping} />
+          <ExperimentSpecificationData key={e.id} experiment={e} columns={columns} experimentTypes={experimentTypes} />
         ))}
       </Table>
       <ButtonGroup

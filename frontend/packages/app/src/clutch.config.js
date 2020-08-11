@@ -51,8 +51,9 @@ module.exports = {
       trending: true,
       componentProps: {
         columns: ["identifier", "targets", "type", "description"],
-        mapping: {
-          "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestSpecification": function(e) {
+        experimentTypes: {
+          "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestSpecification": {
+            mapping: function(e) {
               const config = e.latency || e.abort;
               const clusters = config.clusterPair
               return {
@@ -60,18 +61,19 @@ module.exports = {
                 "type": "server",
                 "description": e.abort ? `${e.abort.percent}% abort with ${e.abort.httpStatus} status code` : `${e.latency.percent}% latency with ${e.latency.durationMs}ms delay`,
               }
-          },
-        },
-        links: [
-          {
-            text: "Start Abort",
-            path: "/serverexperimentation/startabort",
-          },
-          {
-            text: "Start Latency",
-            path: "/serverexperimentation/startlatency",
-          },
-        ],
+            },
+            links: [
+              {
+                text: "Start Abort",
+                path: "/serverexperimentation/startabort",
+              },
+              {
+                text: "Start Latency",
+                path: "/serverexperimentation/startlatency",
+              },
+            ]
+          }
+        }
       },
     },
   },

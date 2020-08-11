@@ -10,6 +10,7 @@ import "api/v1/annotations.proto";
 option go_package = "serverexperimentationv1";
 
 message TestSpecification {
+  ClusterPair clusters = 1
   oneof config {
     AbortFault abort = 2;
     LatencyFault latency = 3;
