@@ -1,8 +1,13 @@
 import React from "react";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import { ExpansionPanel, TreeTable } from "@clutch-sh/core";
 import _ from "lodash";
 
-const Stats = ({ stats }) => {
+interface StatsProps {
+  stats: IClutch.envoytriage.v1.IStats;
+}
+
+const Stats: React.FC<StatsProps> = ({ stats }) => {
   const structuredStats = {};
   stats.stats.forEach(stat => {
     if (stat.value > 0) {
