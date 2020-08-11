@@ -1,8 +1,6 @@
 .idea/
 .DS_STORE
 
-tmp/
 build/
 
-backend/.air.toml
 backend/cmd/assets/generated_assets.go

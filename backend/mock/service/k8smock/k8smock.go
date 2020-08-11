@@ -32,38 +32,6 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 	return hpa, nil
 }
 
-func (s *svc) ListHPAs(_ context.Context, clientset, cluster, namespace string, listOptions *k8sv1.ListOptions) ([]*k8sv1.HPA, error) {
-	pods := []*k8sv1.HPA{
-		&k8sv1.HPA{
-			Cluster:   "fake-cluster-name",
-			Namespace: namespace,
-			Name:      "hpa1",
-			Sizing: &k8sv1.HPA_Sizing{
-				MinReplicas:     1,
-				MaxReplicas:     100,
-				CurrentReplicas: uint32(rand.Int31n(100)),
-				DesiredReplicas: uint32(rand.Int31n(100)),
-			},
-			Labels:      listOptions.Labels,
-			Annotations: map[string]string{"Annotation key": "Value"},
-		},
-		&k8sv1.HPA{
-			Cluster:   "fake-cluster-name",
-			Namespace: namespace,
-			Name:      "hpa2",
-			Sizing: &k8sv1.HPA_Sizing{
-				MinReplicas:     3,
-				MaxReplicas:     300,
-				CurrentReplicas: uint32(rand.Int31n(500)),
-				DesiredReplicas: uint32(rand.Int31n(500)),
-			},
-			Labels:      listOptions.Labels,
-			Annotations: map[string]string{"Annotation key": "Value"},
-		},
-	}
-	return pods, nil
-}
-
 func (*svc) ResizeHPA(ctx context.Context, clientset, cluster, namespace, name string, sizing *k8sv1.ResizeHPARequest_Sizing) error {
 	return nil
 }

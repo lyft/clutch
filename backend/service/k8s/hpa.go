@@ -33,28 +33,6 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 	return nil, fmt.Errorf("Unable to locate HPA")
 }
 
-func (s *svc) ListHPAs(ctx context.Context, clientset, cluster, namespace string, listOpts *k8sapiv1.ListOptions) ([]*k8sapiv1.HPA, error) {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
-	if err != nil {
-		return nil, err
-	}
-
-	opts := ApplyListOptions(listOpts)
-
-	hpaList, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).List(opts)
-	if err != nil {
-		return nil, err
-	}
-
-	var HPAs []*k8sapiv1.HPA
-	for _, h := range hpaList.Items {
-		hpa := h
-		HPAs = append(HPAs, ProtoForHPA(cs.Cluster(), &hpa))
-	}
-
-	return HPAs, nil
-}
-
 func ProtoForHPA(cluster string, autoscaler *autoscalingv1.HorizontalPodAutoscaler) *k8sapiv1.HPA {
 	clusterName := autoscaler.ClusterName
 	if clusterName == "" {
