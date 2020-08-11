@@ -3,4 +3,5 @@
 
 build/
 
+backend/tmp/
 backend/cmd/assets/generated_assets.go
