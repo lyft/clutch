@@ -44,7 +44,13 @@ const Layout = styled(Container)`
   padding: 5% 0;
 `;
 
-const ListExperiments: React.FC<BaseWorkflowProps> = ({ heading, columns, mapping, links }) => {
+interface ListExperimentsProps extends BaseWorkflowProps {
+  columns: [string],
+  mapping: any,
+  links: [any]
+}
+
+const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, mapping, links }) => {
   const [experiments, setExperiments] = useState([]);
   const [error, setError] = useState("");
 
