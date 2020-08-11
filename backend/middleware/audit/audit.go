@@ -9,8 +9,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/lyft/clutch/backend/service/authn"
-
 	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -24,6 +22,7 @@ import (
 	"github.com/lyft/clutch/backend/middleware"
 	"github.com/lyft/clutch/backend/service"
 	auditservice "github.com/lyft/clutch/backend/service/audit"
+	"github.com/lyft/clutch/backend/service/authn"
 )
 
 const Name = "clutch.middleware.audit"

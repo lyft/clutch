@@ -8,14 +8,12 @@ import (
 	"testing"
 	"time"
 
-	githubv1 "github.com/lyft/clutch/backend/api/sourcecontrol/github/v1"
-
 	githubv3 "github.com/google/go-github/v32/github"
-
-	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
-
 	"github.com/shurcooL/githubv4"
 	"github.com/stretchr/testify/assert"
+
+	githubv1 "github.com/lyft/clutch/backend/api/sourcecontrol/github/v1"
+	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
 )
 
 const problem = "we've had a problem"

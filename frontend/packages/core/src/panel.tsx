@@ -15,7 +15,7 @@ const FullWidthExpansionPanel = styled(MuiExpansionPanel)`
 interface ExpansionPanelProps {
   heading: string;
   summary: string;
-  expanded: boolean;
+  expanded?: boolean;
 }
 
 const ExpansionPanel: React.FC<ExpansionPanelProps> = ({

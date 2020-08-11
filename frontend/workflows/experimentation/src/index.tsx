@@ -1,6 +1,8 @@
+import type { WorkflowConfiguration } from "@clutch-sh/core";
+
 import ListExperiments from "./list-experiments";
 
-const register = function register() {
+const register = (): WorkflowConfiguration => {
   return {
     developer: {
       name: "Lyft",

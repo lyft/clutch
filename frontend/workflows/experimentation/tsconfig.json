@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "include": [
+    "src/**/*",
+  ],
+  "exclude": [
+    "node_modules",
+    "src/tests/**/*"
+  ],
+  "references": [
+    {"path": "../../api"},
+    {"path": "../../packages/core"},
+    {"path": "../../packages/data-layout"},
+    {"path": "../../packages/wizard"},
+  ]
+}

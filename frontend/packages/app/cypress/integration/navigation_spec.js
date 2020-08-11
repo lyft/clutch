@@ -16,24 +16,17 @@ describe("Navigation drawer", () => {
     });
   });
 
-  it("displays routes", () => {
+  it("displays and hides routes", () => {
     cy.element(WORKFLOW_GROUP).each((_, idx) => {
-      cy.element(WORKFLOW_GROUP).eq(idx).descendent(TOGGLE).click();
+      cy.element(WORKFLOW_GROUP).eq(idx).descendent(TOGGLE).children().first().click();
       cy.element(WORKFLOW_GROUP)
         .eq(idx)
         .find("a")
         .each(link => {
           cy.wrap(link).should("have.attr", "href");
         });
-      cy.element(WORKFLOW_GROUP).eq(idx).descendent(TOGGLE).click();
-    });
-  });
-
-  it("hides routes", () => {
-    cy.element(WORKFLOW_GROUP).each((_, idx) => {
-      cy.element(WORKFLOW_GROUP).eq(idx).descendent(TOGGLE).click();
+      cy.element(WORKFLOW_GROUP).eq(idx).descendent(TOGGLE).children().first().click();
       cy.element(WORKFLOW_GROUP).eq(idx).find("a").should("not.be.visible");
-      cy.element(WORKFLOW_GROUP).eq(idx).descendent(TOGGLE).click();
     });
   });
 
@@ -58,7 +51,7 @@ describe("Navigation drawer", () => {
 
     it("can route correctly", () => {
       return cy.element(WORKFLOW_GROUP).each((_, groupIdx) => {
-        cy.element(WORKFLOW_GROUP).eq(groupIdx).descendent(TOGGLE).click();
+        cy.element(WORKFLOW_GROUP).eq(groupIdx).descendent(TOGGLE).children().first().click();
         cy.element(WORKFLOW_GROUP)
           .eq(groupIdx)
           .descendent(groupItemId)

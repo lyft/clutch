@@ -1,8 +1,15 @@
 import React from "react";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import { ExpandableRow, ExpandableTable, ExpansionPanel, Status, StatusRow } from "@clutch-sh/core";
 import { Grid } from "@material-ui/core";
 
-const RatioStatus = ({ succeeded, failed, ...props }) => (
+interface RatioStatusProps {
+  succeeded: boolean;
+  failed: boolean;
+  align?: "right" | "center";
+}
+
+const RatioStatus: React.FC<RatioStatusProps> = ({ succeeded, failed, ...props }) => (
   <Grid container alignItems="center" justify="flex-end" {...props}>
     {succeeded ? (
       <Grid item>
@@ -22,7 +29,7 @@ const RatioStatus = ({ succeeded, failed, ...props }) => (
   </Grid>
 );
 
-const clusterStatuses = data => {
+const clusterStatuses = (data: IClutch.envoytriage.v1.IClusters) => {
   return data.clusterStatuses.map(clusterStatus => {
     const healthyCount = clusterStatus.hostStatuses.filter(hostStatus => hostStatus.healthy).length;
     const unhealthyCount = clusterStatus.hostStatuses.length - healthyCount;
@@ -35,7 +42,11 @@ const clusterStatuses = data => {
   });
 };
 
-const Clusters = ({ clusters }) => {
+interface ClustersProps {
+  clusters: IClutch.envoytriage.v1.IClusters;
+}
+
+const Clusters: React.FC<ClustersProps> = ({ clusters }) => {
   const [statuses, setStatuses] = React.useState([]);
   const [summary, setSummary] = React.useState("");
 

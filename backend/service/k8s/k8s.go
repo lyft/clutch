@@ -11,36 +11,35 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 	"k8s.io/client-go/tools/clientcmd"
 
 	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/service"
-
-	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 )
 
 const Name = "clutch.service.k8s"
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	loadingRules := clientcmd.NewDefaultClientConfigLoadingRules()
+	k8sConfig := &k8sconfigv1.Config{}
 
 	// Use the default kubeconfig (environment or well-known path) if kubeconfigs are not passed in.
 	// https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/
 	if cfg != nil {
-		c := &k8sconfigv1.Config{}
-		if err := ptypes.UnmarshalAny(cfg, c); err != nil {
+		if err := ptypes.UnmarshalAny(cfg, k8sConfig); err != nil {
 			return nil, err
 		}
 
-		if c.Kubeconfigs != nil {
+		if k8sConfig.Kubeconfigs != nil {
 			loadingRules = &clientcmd.ClientConfigLoadingRules{
-				Precedence: c.Kubeconfigs,
+				Precedence: k8sConfig.Kubeconfigs,
 			}
 		}
 	}
 
-	c, err := newClientsetManager(loadingRules, logger)
+	c, err := newClientsetManager(loadingRules, k8sConfig.RestClientConfig, logger)
 	if err != nil {
 		return nil, err
 	}

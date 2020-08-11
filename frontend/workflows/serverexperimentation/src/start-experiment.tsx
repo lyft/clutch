@@ -1,4 +1,6 @@
 import React from "react";
+import type { clutch as IClutch } from "@clutch-sh/api";
+import type { BaseWorkflowProps } from "@clutch-sh/core";
 import {
   ButtonGroup,
   client,
@@ -7,16 +9,17 @@ import {
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
+import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import * as yup from "yup";
 
-const ClusterPairTargetDetails = () => {
+const ClusterPairTargetDetails: React.FC<WizardChild> = () => {
   const { onSubmit } = useWizardContext();
   const clusterPairData = useDataLayout("clusterPairTargetData");
   const clusterPair = clusterPairData.displayValue();
 
   return (
-    <WizardStep error={clusterPairData.error}>
+    <WizardStep error={clusterPairData.error} isLoading={false}>
       <MetadataTable
         onUpdate={(key, value) => clusterPairData.updateData(key, value)}
         data={[
@@ -50,13 +53,13 @@ const ClusterPairTargetDetails = () => {
   );
 };
 
-const AbortExperimentDetails = () => {
+const AbortExperimentDetails: React.FC<WizardChild> = () => {
   const { onSubmit, onBack } = useWizardContext();
   const abortExperimentData = useDataLayout("abortExperimentData");
   const abortExperiment = abortExperimentData.value;
 
   return (
-    <WizardStep error={abortExperimentData.error}>
+    <WizardStep error={abortExperimentData.error} isLoading={false}>
       <MetadataTable
         onUpdate={(key, value) => abortExperimentData.updateData(key, value)}
         data={[
@@ -97,13 +100,13 @@ const AbortExperimentDetails = () => {
   );
 };
 
-const LatencyExperimentDetails = () => {
+const LatencyExperimentDetails: React.FC<WizardChild> = () => {
   const { onSubmit, onBack } = useWizardContext();
   const latencyExperimentData = useDataLayout("latencyExperimentData");
   const latencyExperiment = latencyExperimentData.value;
 
   return (
-    <WizardStep error={latencyExperimentData.error}>
+    <WizardStep error={latencyExperimentData.error} isLoading={false}>
       <MetadataTable
         onUpdate={(key, value) => latencyExperimentData.updateData(key, value)}
         data={[
@@ -144,7 +147,7 @@ const LatencyExperimentDetails = () => {
   );
 };
 
-const Confirm = () => {
+const Confirm: React.FC<WizardChild> = () => {
   const startData = useDataLayout("startData");
 
   return (
@@ -154,8 +157,12 @@ const Confirm = () => {
   );
 };
 
+<<<<<<< HEAD:frontend/workflows/serverexperimentation/src/start-experiment.jsx
 const createExperiment = data => {
   data["@type"] = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestSpecification";
+=======
+const createExperiment = (data: IClutch.chaos.experimentation.v1.ITestSpecification) => {
+>>>>>>> main:frontend/workflows/experimentation/src/start-experiment.tsx
   return client.post("/v1/experiments/create", {
     experiments: [
       {
@@ -165,14 +172,17 @@ const createExperiment = data => {
   });
 };
 
-export const StartAbortExperiment = ({ heading }) => {
+export const StartAbortExperiment: React.FC<BaseWorkflowProps> = ({ heading }) => {
   const dataLayout = {
     clusterPairTargetData: {},
     abortExperimentData: {},
     latencyExperimentData: {},
     startData: {
       deps: ["clusterPairTargetData", "abortExperimentData"],
-      hydrator: (clusterPairTargetData, abortExperimentData) => {
+      hydrator: (
+        clusterPairTargetData: IClutch.chaos.experimentation.v1.IClusterPairTarget,
+        abortExperimentData: IClutch.chaos.experimentation.v1.AbortFault
+      ) => {
         return createExperiment({
           abort: {
             clusterPair: {
@@ -196,13 +206,16 @@ export const StartAbortExperiment = ({ heading }) => {
   );
 };
 
-export const StartLatencyExperiment = ({ heading }) => {
+export const StartLatencyExperiment: React.FC<BaseWorkflowProps> = ({ heading }) => {
   const dataLayout = {
     clusterPairTargetData: {},
     latencyExperimentData: {},
     startData: {
       deps: ["clusterPairTargetData", "latencyExperimentData"],
-      hydrator: (clusterPairTargetData, latencyExperimentData) => {
+      hydrator: (
+        clusterPairTargetData: IClutch.chaos.experimentation.v1.IClusterPairTarget,
+        latencyExperimentData: IClutch.chaos.experimentation.v1.LatencyFault
+      ) => {
         return createExperiment({
           latency: {
             clusterPair: {

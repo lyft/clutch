@@ -4,7 +4,6 @@ import (
 	"context"
 
 	githubv3 "github.com/google/go-github/v32/github"
-
 	"github.com/shurcooL/githubv4"
 )
 

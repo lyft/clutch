@@ -3,6 +3,7 @@ linters:
   disable-all: true
   enable:
   - deadcode
+  - gci
   - errcheck
   - gocritic
   - goimports
@@ -18,11 +19,22 @@ linters:
   - whitespace
   - varcheck
 linters-settings:
+  gocritic:
+    disabled-checks:
+      - singleCaseSwitch
   goimports:
     local-prefixes: github.com/lyft/clutch/backend
 issues:
   max-per-linter: 0
   max-same-issues: 0
+  exclude-rules:
+    - path: (_test\.go|mock\.go)
+      linters:
+        - gosec
+    # TODO: remove this rule once the migration to the new protobuf APIs are complete
+    - linters:
+        - staticcheck
+      text: "^SA1019.*?(github.com/golang/protobuf|descriptor\\.(For)?Message).*?deprecated"
 run:
   timeout: 5m
   skip-dirs:

@@ -3,11 +3,10 @@ package resolver
 import (
 	"testing"
 
-	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
-
 	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 
+	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
 )
 

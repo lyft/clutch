@@ -1,9 +1,18 @@
 import React from "react";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import { ExpansionPanel, MetadataTable } from "@clutch-sh/core";
 import { TableCell, TableRow } from "@material-ui/core";
 
-const ServerInfo = ({ info }) => {
-  const serverInfo = { ...info.value };
+interface ServerInformation {
+  // eslint-disable-next-line camelcase
+  command_line_options: {
+    [key: string]: string;
+  };
+  state: string;
+}
+
+const ServerInfo: React.FC<{ info: IClutch.envoytriage.v1.IServerInfo }> = ({ info }) => {
+  const serverInfo = { ...info.value } as ServerInformation;
   const cliOptions = serverInfo.command_line_options;
   delete serverInfo.command_line_options;
 

@@ -4,6 +4,7 @@ import {
   client,
   Confirmation,
   MetadataTable,
+  NotePanel,
   Resolver,
   useWizardContext,
 } from "@clutch-sh/core";
@@ -11,7 +12,7 @@ import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 
-import type { ResolverChild, WorkflowProps } from ".";
+import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
 const InstanceIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   const { onSubmit } = useWizardContext();
@@ -67,23 +68,18 @@ const InstanceDetails: React.FC<WizardChild> = () => {
   );
 };
 
-/*
-TODO: Need information boxes for
-  These changes are not permanent, and will be overwritten on your next deploy. Adjust your manifest.yaml to persist changes across deploys.
-and
-  Note: the HPA should take just a few minutes to scale in either direction.
-*/
-const Confirm: React.FC<WizardChild> = () => {
+const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const terminationData = useDataLayout("terminationData");
 
   return (
     <WizardStep error={terminationData.error} isLoading={terminationData.isLoading}>
       <Confirmation action="Termination" />
+      <NotePanel notes={notes} />
     </WizardStep>
   );
 };
 
-const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
+const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
   const dataLayout = {
     resourceData: {},
     terminationData: {
@@ -101,7 +97,7 @@ const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType }) =
     <Wizard dataLayout={dataLayout} heading={heading}>
       <InstanceIdentifier name="Lookup" resolverType={resolverType} />
       <InstanceDetails name="Modify" />
-      <Confirm name="Confirmation" />
+      <Confirm name="Confirmation" notes={notes} />
     </Wizard>
   );
 };

@@ -1,6 +1,8 @@
+import type { WorkflowConfiguration } from "@clutch-sh/core";
+
 import RemoteTriage from "./remote-triage";
 
-const register = () => {
+const register = (): WorkflowConfiguration => {
   return {
     developer: {
       name: "Lyft",
@@ -15,7 +17,6 @@ const register = () => {
         component: RemoteTriage,
         displayName: "Remote Triage",
         description: "Triage Envoy configurations.",
-        trending: true,
       },
     },
   };

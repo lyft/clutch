@@ -1,8 +1,13 @@
 import React from "react";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import { ExpansionPanel, TreeTable } from "@clutch-sh/core";
 import _ from "lodash";
 
-const Runtime = ({ runtime }) => {
+interface RuntimeProps {
+  runtime: IClutch.envoytriage.v1.IRuntime;
+}
+
+const Runtime: React.FC<RuntimeProps> = ({ runtime }) => {
   const structuredEntries = {};
   let status = "";
   runtime.entries.forEach(entry => {

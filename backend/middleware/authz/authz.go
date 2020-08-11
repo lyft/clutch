@@ -8,22 +8,19 @@ import (
 	"context"
 	"errors"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
 	"github.com/golang/protobuf/descriptor"
-	"google.golang.org/grpc"
-
-	authzv1 "github.com/lyft/clutch/backend/api/authz/v1"
-	"github.com/lyft/clutch/backend/gateway/meta"
-	"github.com/lyft/clutch/backend/service/authn"
-
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
+	authzv1 "github.com/lyft/clutch/backend/api/authz/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/middleware"
 	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/authn"
 	"github.com/lyft/clutch/backend/service/authz"
 )
 

@@ -4,12 +4,11 @@ import (
 	"context"
 	"encoding/json"
 
+	appsv1 "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/strategicpatch"
 	"k8s.io/client-go/util/retry"
-
-	appsv1 "k8s.io/api/apps/v1"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )

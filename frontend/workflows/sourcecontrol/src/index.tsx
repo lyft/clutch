@@ -1,12 +1,24 @@
+import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+import type { WizardChild } from "@clutch-sh/wizard";
+
 import CreateRepository from "./create-repository";
 
-const register = () => {
+interface RepositoryConfigProps {
+  options: {
+    [option: string]: boolean;
+  };
+}
+
+export interface WorkflowProps extends BaseWorkflowProps, RepositoryConfigProps {}
+export interface RepostioryChild extends WizardChild, RepositoryConfigProps {}
+
+const register = (): WorkflowConfiguration => {
   return {
     developer: {
       name: "Lyft",
       contactUrl: "mailto:hello@clutch.sh",
     },
-    path: "SCM",
+    path: "scm",
     group: "Source Control",
     displayName: "Source Control",
     routes: {

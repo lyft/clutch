@@ -4,12 +4,11 @@ import (
 	"context"
 	"testing"
 
-	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
 
+	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
 	"github.com/lyft/clutch/backend/mock/service/githubmock"
 	"github.com/lyft/clutch/backend/module/moduletest"
 	"github.com/lyft/clutch/backend/service"

@@ -1,17 +1,22 @@
 import React from "react";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import {
   ButtonGroup,
   client,
   Confirmation,
   MetadataTable,
+  NotePanel,
   Resolver,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
+import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import * as yup from "yup";
 
-const HPAIdentifier = ({ resolverType }) => {
+import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
+
+const HPAIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   const { onSubmit } = useWizardContext();
   const hpaData = useDataLayout("hpaData");
   const inputData = useDataLayout("inputData");
@@ -26,11 +31,11 @@ const HPAIdentifier = ({ resolverType }) => {
   return <Resolver type={resolverType} searchLimit={1} onResolve={onResolve} />;
 };
 
-const HPADetails = () => {
+const HPADetails: React.FC<WizardChild> = () => {
   const { onSubmit, onBack } = useWizardContext();
   const hpaData = useDataLayout("hpaData");
-  const hpa = hpaData.displayValue();
-  const update = (key, value) => {
+  const hpa = hpaData.displayValue() as IClutch.k8s.v1.HPA;
+  const update = (key: string, value: any) => {
     hpaData.updateData(key, value);
   };
 
@@ -77,8 +82,8 @@ const HPADetails = () => {
   );
 };
 
-const Confirm = () => {
-  const hpa = useDataLayout("hpaData").displayValue();
+const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
+  const hpa = useDataLayout("hpaData").displayValue() as IClutch.k8s.v1.HPA;
   const resizeData = useDataLayout("resizeData");
 
   return (
@@ -93,17 +98,18 @@ const Confirm = () => {
           { name: "New Max Size", value: hpa.sizing.maxReplicas },
         ]}
       />
+      <NotePanel notes={notes} />
     </WizardStep>
   );
 };
 
-const ResizeHPA = ({ heading, resolverType }) => {
+const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
   const dataLayout = {
     hpaData: {},
     inputData: {},
     resizeData: {
       deps: ["hpaData", "inputData"],
-      hydrator: (hpaData, inputData) => {
+      hydrator: (hpaData: IClutch.k8s.v1.HPA, inputData: { clientset: string }) => {
         const clientset = inputData.clientset ?? "unspecified";
 
         return client.post("/v1/k8s/resizeHPA", {
@@ -115,7 +121,7 @@ const ResizeHPA = ({ heading, resolverType }) => {
             min: hpaData.sizing.minReplicas,
             max: hpaData.sizing.maxReplicas,
           },
-        });
+        } as IClutch.k8s.v1.IResizeHPARequest);
       },
     },
   };
@@ -124,7 +130,7 @@ const ResizeHPA = ({ heading, resolverType }) => {
     <Wizard dataLayout={dataLayout} heading={heading}>
       <HPAIdentifier name="Lookup" resolverType={resolverType} />
       <HPADetails name="Modify" />
-      <Confirm name="Confirmation" />
+      <Confirm name="Confirmation" notes={notes} />
     </Wizard>
   );
 };

@@ -3,10 +3,9 @@ package k8s
 import (
 	"context"
 
+	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/util/retry"
-
-	autoscalingv1 "k8s.io/api/autoscaling/v1"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
