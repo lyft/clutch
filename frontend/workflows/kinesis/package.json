@@ -12,7 +12,7 @@
   "scripts": {
     "build": "yarn clean && yarn compile",
     "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
-    "compile": "yarn clean && tsc -b",
+    "compile": "tsc -b",
     "compile:dev": "tsc --sourceMap",
     "compile:watch": "BABEL_ENV=build babel src --out-dir dist --source-maps --extensions .js,.jsx,.ts,.tsx --ignore **/tests --watch",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
