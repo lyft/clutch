@@ -1,6 +1,5 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useDataLayoutManager } from "@clutch-sh/data-layout";
 import {
   Button,
   CheckboxPanel,
@@ -10,9 +9,9 @@ import {
   TextField,
   useWizardContext,
 } from "@clutch-sh/core";
-import { useDataLayout } from "@clutch-sh/data-layout";
-import { Wizard, WizardStep } from "@clutch-sh/wizard";
+import { useDataLayout, useDataLayoutManager } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
+import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import { MenuItem, Select } from "@material-ui/core";
 import * as yup from "yup";
 
@@ -123,7 +122,7 @@ const Confirm: React.FC<WizardChild> = () => {
 const CreateRepository: React.FC<WorkflowProps> = ({ heading, options }) => {
   const dataLayout = {
     extraOptionsData: {},
-    resourceData: {cache: false},
+    resourceData: { cache: false },
     repoData: {
       deps: ["resourceData"],
       cache: false,
