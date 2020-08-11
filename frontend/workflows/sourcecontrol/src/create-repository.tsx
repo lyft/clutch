@@ -1,5 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useDataLayoutManager } from "@clutch-sh/data-layout";
 import {
   Button,
   CheckboxPanel,
@@ -11,8 +12,11 @@ import {
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
+import type { WizardChild } from "@clutch-sh/wizard";
 import { MenuItem, Select } from "@material-ui/core";
 import * as yup from "yup";
+
+import type { RepostioryChild, WorkflowProps } from ".";
 
 const REPOSITORY_OPTIONS = {
   // Fill in later, use config to override
@@ -23,7 +27,7 @@ const schema = yup.object().shape({
   owner: yup.string().required("Organization is required"),
 });
 
-const RepositoryDetails = () => {
+const RepositoryDetails: React.FC<WizardChild> = () => {
   const { register, errors, handleSubmit } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
@@ -39,56 +43,54 @@ const RepositoryDetails = () => {
   };
 
   return (
-    <WizardStep>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField
-          label="Name"
-          name="name"
-          onChange={e => resourceData.updateData("name", e.target.value)}
-          inputRef={register}
-          helperText={errors.name ? errors.name.message : ""}
-          error={!!errors.name}
-        />
-        <TextField
-          label="Description"
-          name="description"
-          onChange={e => resourceData.updateData("description", e.target.value)}
-          inputRef={register}
-          error={!!errors.description}
-          helperText={errors.description ? errors.description.message : ""}
-        />
-        <TextField
-          label="Organization"
-          name="owner"
-          onChange={e => resourceData.updateData("owner", e.target.value)}
-          inputRef={register}
-          error={!!errors.owner}
-          helperText={errors.owner ? errors.owner.message : ""}
-        />
-        <Select
-          labelId="Visibility"
-          id="visibility"
-          value={visibility}
-          onChange={handleVisibilityChange}
-          defaultValue="PRIVATE"
-          displayEmpty
-        >
-          <MenuItem value="PRIVATE">Private</MenuItem>
-          <MenuItem value="PUBLIC">Public</MenuItem>
-        </Select>
-        <div />
-        <Button text="Continue" type="submit" />
-      </form>
-    </WizardStep>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <TextField
+        label="Name"
+        name="name"
+        onChange={e => resourceData.updateData("name", e.target.value)}
+        inputRef={register}
+        helperText={errors.name ? errors.name.message : ""}
+        error={!!errors.name}
+      />
+      <TextField
+        label="Description"
+        name="description"
+        onChange={e => resourceData.updateData("description", e.target.value)}
+        inputRef={register}
+        error={!!errors.description}
+        helperText={errors.description ? errors.description.message : ""}
+      />
+      <TextField
+        label="Organization"
+        name="owner"
+        onChange={e => resourceData.updateData("owner", e.target.value)}
+        inputRef={register}
+        error={!!errors.owner}
+        helperText={errors.owner ? errors.owner.message : ""}
+      />
+      <Select
+        labelId="Visibility"
+        id="visibility"
+        value={visibility}
+        onChange={handleVisibilityChange}
+        defaultValue="PRIVATE"
+        displayEmpty
+      >
+        <MenuItem value="PRIVATE">Private</MenuItem>
+        <MenuItem value="PUBLIC">Public</MenuItem>
+      </Select>
+      <div />
+      <Button text="Continue" type="submit" />
+    </form>
   );
 };
 
-const RepositorySettings = ({ options = REPOSITORY_OPTIONS }) => {
+const RepositorySettings: React.FC<RepostioryChild> = ({ options = REPOSITORY_OPTIONS }) => {
   const { onSubmit } = useWizardContext();
   const extraOptionsData = useDataLayout("extraOptionsData");
 
   return (
-    <WizardStep>
+    <WizardStep error={extraOptionsData.error} isLoading={extraOptionsData.isLoading}>
       <TextField
         placeholder="Teams"
         onChange={e => extraOptionsData.updateData("teams", e.target.value)}
@@ -97,11 +99,8 @@ const RepositorySettings = ({ options = REPOSITORY_OPTIONS }) => {
       <CheckboxPanel
         header="Options"
         options={options}
-        onChange={(option, checked) =>
-          extraOptionsData.updateData("applicationsOptions", {
-            ...extraOptionsData.value?.extraOptionsData,
-            [option]: checked,
-          })
+        onChange={(state: { [option: string]: boolean }) =>
+          extraOptionsData.updateData("applicationsOptions", state)
         }
       />
       <Button text="Create Repository" onClick={onSubmit} />
@@ -109,7 +108,7 @@ const RepositorySettings = ({ options = REPOSITORY_OPTIONS }) => {
   );
 };
 
-const Confirm = () => {
+const Confirm: React.FC<WizardChild> = () => {
   const repoData = useDataLayout("repoData");
   const instance = repoData.displayValue();
 
@@ -121,14 +120,10 @@ const Confirm = () => {
   );
 };
 
-const CreateRepository = ({ heading, options }) => {
-  const defaultOptions = {};
-  Object.values(REPOSITORY_OPTIONS).forEach(option => {
-    defaultOptions[option] = true;
-  });
+const CreateRepository: React.FC<WorkflowProps> = ({ heading, options }) => {
   const dataLayout = {
     extraOptionsData: {},
-    resourceData: {},
+    resourceData: {cache: false},
     repoData: {
       deps: ["resourceData"],
       cache: false,
@@ -145,7 +140,7 @@ const CreateRepository = ({ heading, options }) => {
 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
-      <RepositoryDetails name="Repository Details" options={options} />
+      <RepositoryDetails name="Repository Details" />
       <RepositorySettings name="Repository Settings" options={options} />
       <Confirm name="Confirmation" />
     </Wizard>
