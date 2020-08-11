@@ -24,7 +24,6 @@ modules:
   - name: clutch.module.k8s
   - name: clutch.module.kinesis
   - name: clutch.module.chaos.experimentation.api
-  - name: clutch.module.chaos.serverexperimentation
 services:
   - name: clutch.service.aws
     typed_config:

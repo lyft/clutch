@@ -9,14 +9,6 @@ import "api/v1/annotations.proto";
 
 option go_package = "serverexperimentationv1";
 
-// A view model a server experiment should be converted to before it is displayed in a list view.
-message ExperimentListViewModel {
-    string identifier = 1;
-    string clusters = 2;
-    string description = 3;
-    string type = 4;
-}
-
 message TestSpecification {
   oneof config {
     AbortFault abort = 2;

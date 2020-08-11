@@ -153,17 +153,6 @@ func (fs *experimentStore) GetExperiments(ctx context.Context, convert bool) ([]
 		}
 
 		experiment.TestConfig = anyConfig
-
-		typeURL := experiment.TestConfig.TypeUrl
-		if converter, ok := fs.registry.converters[typeURL]; ok && convert  {
-			newConfig, err := converter(&experiment)
-			if err != nil {
-				return nil, err
-			}
-
-			experiment.TestConfig = newConfig
-		}
-
 		experiments = append(experiments, &experiment)
 	}
 
