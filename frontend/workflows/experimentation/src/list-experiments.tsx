@@ -7,7 +7,9 @@ import { Container } from "@material-ui/core";
 import styled from "styled-components";
 
 interface ExperimentationSpecificationDataProps {
-  experiment: IClutch.chaos.experimentation.v1.Experiment;
+  experiment: IClutch.chaos.experimentation.v1.Experiment,
+  columns: [string],
+  mapping: any
 }
 
 const ExperimentSpecificationData: React.FC<ExperimentationSpecificationDataProps> = ({
@@ -73,7 +75,6 @@ const ListExperiments: React.FC<BaseWorkflowProps> = ({ heading, columns, mappin
       {error && <Error message={error} />}
       <Table
         headings={columnNames}
-        data={experiments}
       >
         {experiments.map(e => (
           <ExperimentSpecificationData key={e.id} experiment={e} columns={columns} mapping={mapping} />
