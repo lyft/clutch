@@ -38,7 +38,7 @@ message UpdateRepositoryOptions {
 
 enum CommitCompareStatus {
   UNSPECIFIED = 0;
-  UNKNOWN =1;
+  UNKNOWN = 1;
   BEHIND = 2;
   AHEAD = 3;
   IDENTICAL = 4;
