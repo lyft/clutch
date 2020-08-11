@@ -8,10 +8,6 @@
   "include": [
     "src/**/*",
   ],
-  "exclude": [
-    "node_modules",
-    "src/tests/**/*"
-  ],
   "references": [
     {"path": "../core"},
     {"path": "../data-layout"},
