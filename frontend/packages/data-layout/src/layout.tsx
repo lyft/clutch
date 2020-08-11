@@ -14,7 +14,7 @@ interface DataLayout {
   assign: (value: object) => void;
   updateData: (dataKey: string, value: unknown) => void;
   hydrate: () => void;
-  value: string;
+  value: any;
   displayValue: () => any;
   isLoading: boolean;
   error: string;
