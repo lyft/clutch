@@ -67,8 +67,8 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, map
       });
   }
 
+  links = links || []
   let columnNames = columns.map(name => name.toUpperCase());
-  var links = links || []
   let buttons = links.map(link =>  {
     return {
       text: link.text,
