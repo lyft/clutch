@@ -5,6 +5,7 @@ package clutch.k8s.v1;
 option go_package = "k8sv1";
 
 import "google/api/annotations.proto";
+import "google/protobuf/wrappers.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
@@ -132,14 +133,6 @@ message DeletePodRequest {
 message DeletePodResponse {
 }
 
-// Annotation value is wrapped in the message field to make it nullable.
-// Setting AnnotationValue to nil means the annotation shouldn't exist or
-// should be deleted.
-message AnnotationValue {
-  // Value of the annotation.
-  string value = 1;
-}
-
 message HPA {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.HPA",
@@ -222,4 +215,24 @@ message UpdateDeploymentRequest {
 }
 
 message UpdateDeploymentResponse {
+}
+
+// Preconditions to check before updating an object's metadata.
+//
+// Note: An empty StringValue signals that the label/annotation should not be set.
+message ExpectedObjectMetaFields {
+  map<string, google.protobuf.StringValue> labels = 1 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+  map<string, google.protobuf.StringValue> annotations = 2 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+}
+
+// Metadata fields to update when updating an object
+message ObjectMetaFields {
+  map<string, string> labels = 1 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+  map<string, string> annotations = 2 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+}
+
+// Metadata fields to remove when updating an object
+message RemoveObjectMetaFields {
+  repeated string labels = 1 [ (validate.rules).repeated = {unique : true} ];
+  repeated string annotations = 2 [ (validate.rules).repeated = {unique : true} ];
 }

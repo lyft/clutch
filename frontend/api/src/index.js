@@ -16545,106 +16545,6 @@ export const clutch = $root.clutch = (() => {
                 return DeletePodResponse;
             })();
 
-            v1.AnnotationValue = (function() {
-
-                /**
-                 * Properties of an AnnotationValue.
-                 * @memberof clutch.k8s.v1
-                 * @interface IAnnotationValue
-                 * @property {string|null} [value] AnnotationValue value
-                 */
-
-                /**
-                 * Constructs a new AnnotationValue.
-                 * @memberof clutch.k8s.v1
-                 * @classdesc Represents an AnnotationValue.
-                 * @implements IAnnotationValue
-                 * @constructor
-                 * @param {clutch.k8s.v1.IAnnotationValue=} [properties] Properties to set
-                 */
-                function AnnotationValue(properties) {
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * AnnotationValue value.
-                 * @member {string} value
-                 * @memberof clutch.k8s.v1.AnnotationValue
-                 * @instance
-                 */
-                AnnotationValue.prototype.value = "";
-
-                /**
-                 * Verifies an AnnotationValue message.
-                 * @function verify
-                 * @memberof clutch.k8s.v1.AnnotationValue
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                AnnotationValue.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    if (message.value != null && message.hasOwnProperty("value"))
-                        if (!$util.isString(message.value))
-                            return "value: string expected";
-                    return null;
-                };
-
-                /**
-                 * Creates an AnnotationValue message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.k8s.v1.AnnotationValue
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.k8s.v1.AnnotationValue} AnnotationValue
-                 */
-                AnnotationValue.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.k8s.v1.AnnotationValue)
-                        return object;
-                    let message = new $root.clutch.k8s.v1.AnnotationValue();
-                    if (object.value != null)
-                        message.value = String(object.value);
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from an AnnotationValue message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.k8s.v1.AnnotationValue
-                 * @static
-                 * @param {clutch.k8s.v1.AnnotationValue} message AnnotationValue
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                AnnotationValue.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (options.defaults)
-                        object.value = "";
-                    if (message.value != null && message.hasOwnProperty("value"))
-                        object.value = message.value;
-                    return object;
-                };
-
-                /**
-                 * Converts this AnnotationValue to JSON.
-                 * @function toJSON
-                 * @memberof clutch.k8s.v1.AnnotationValue
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                AnnotationValue.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return AnnotationValue;
-            })();
-
             v1.HPA = (function() {
 
                 /**
@@ -17986,6 +17886,454 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return UpdateDeploymentResponse;
+            })();
+
+            v1.ExpectedObjectMetaFields = (function() {
+
+                /**
+                 * Properties of an ExpectedObjectMetaFields.
+                 * @memberof clutch.k8s.v1
+                 * @interface IExpectedObjectMetaFields
+                 * @property {Object.<string,google.protobuf.IStringValue>|null} [labels] ExpectedObjectMetaFields labels
+                 * @property {Object.<string,google.protobuf.IStringValue>|null} [annotations] ExpectedObjectMetaFields annotations
+                 */
+
+                /**
+                 * Constructs a new ExpectedObjectMetaFields.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an ExpectedObjectMetaFields.
+                 * @implements IExpectedObjectMetaFields
+                 * @constructor
+                 * @param {clutch.k8s.v1.IExpectedObjectMetaFields=} [properties] Properties to set
+                 */
+                function ExpectedObjectMetaFields(properties) {
+                    this.labels = {};
+                    this.annotations = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ExpectedObjectMetaFields labels.
+                 * @member {Object.<string,google.protobuf.IStringValue>} labels
+                 * @memberof clutch.k8s.v1.ExpectedObjectMetaFields
+                 * @instance
+                 */
+                ExpectedObjectMetaFields.prototype.labels = $util.emptyObject;
+
+                /**
+                 * ExpectedObjectMetaFields annotations.
+                 * @member {Object.<string,google.protobuf.IStringValue>} annotations
+                 * @memberof clutch.k8s.v1.ExpectedObjectMetaFields
+                 * @instance
+                 */
+                ExpectedObjectMetaFields.prototype.annotations = $util.emptyObject;
+
+                /**
+                 * Verifies an ExpectedObjectMetaFields message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ExpectedObjectMetaFields
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ExpectedObjectMetaFields.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i) {
+                            let error = $root.google.protobuf.StringValue.verify(message.labels[key[i]]);
+                            if (error)
+                                return "labels." + error;
+                        }
+                    }
+                    if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                        if (!$util.isObject(message.annotations))
+                            return "annotations: object expected";
+                        let key = Object.keys(message.annotations);
+                        for (let i = 0; i < key.length; ++i) {
+                            let error = $root.google.protobuf.StringValue.verify(message.annotations[key[i]]);
+                            if (error)
+                                return "annotations." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates an ExpectedObjectMetaFields message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ExpectedObjectMetaFields
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ExpectedObjectMetaFields} ExpectedObjectMetaFields
+                 */
+                ExpectedObjectMetaFields.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ExpectedObjectMetaFields)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ExpectedObjectMetaFields();
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.ExpectedObjectMetaFields.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i) {
+                            if (typeof object.labels[keys[i]] !== "object")
+                                throw TypeError(".clutch.k8s.v1.ExpectedObjectMetaFields.labels: object expected");
+                            message.labels[keys[i]] = $root.google.protobuf.StringValue.fromObject(object.labels[keys[i]]);
+                        }
+                    }
+                    if (object.annotations) {
+                        if (typeof object.annotations !== "object")
+                            throw TypeError(".clutch.k8s.v1.ExpectedObjectMetaFields.annotations: object expected");
+                        message.annotations = {};
+                        for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i) {
+                            if (typeof object.annotations[keys[i]] !== "object")
+                                throw TypeError(".clutch.k8s.v1.ExpectedObjectMetaFields.annotations: object expected");
+                            message.annotations[keys[i]] = $root.google.protobuf.StringValue.fromObject(object.annotations[keys[i]]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an ExpectedObjectMetaFields message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ExpectedObjectMetaFields
+                 * @static
+                 * @param {clutch.k8s.v1.ExpectedObjectMetaFields} message ExpectedObjectMetaFields
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ExpectedObjectMetaFields.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults) {
+                        object.labels = {};
+                        object.annotations = {};
+                    }
+                    let keys2;
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = $root.google.protobuf.StringValue.toObject(message.labels[keys2[j]], options);
+                    }
+                    if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
+                        object.annotations = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.annotations[keys2[j]] = $root.google.protobuf.StringValue.toObject(message.annotations[keys2[j]], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this ExpectedObjectMetaFields to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ExpectedObjectMetaFields
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ExpectedObjectMetaFields.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ExpectedObjectMetaFields;
+            })();
+
+            v1.ObjectMetaFields = (function() {
+
+                /**
+                 * Properties of an ObjectMetaFields.
+                 * @memberof clutch.k8s.v1
+                 * @interface IObjectMetaFields
+                 * @property {Object.<string,string>|null} [labels] ObjectMetaFields labels
+                 * @property {Object.<string,string>|null} [annotations] ObjectMetaFields annotations
+                 */
+
+                /**
+                 * Constructs a new ObjectMetaFields.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an ObjectMetaFields.
+                 * @implements IObjectMetaFields
+                 * @constructor
+                 * @param {clutch.k8s.v1.IObjectMetaFields=} [properties] Properties to set
+                 */
+                function ObjectMetaFields(properties) {
+                    this.labels = {};
+                    this.annotations = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ObjectMetaFields labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.ObjectMetaFields
+                 * @instance
+                 */
+                ObjectMetaFields.prototype.labels = $util.emptyObject;
+
+                /**
+                 * ObjectMetaFields annotations.
+                 * @member {Object.<string,string>} annotations
+                 * @memberof clutch.k8s.v1.ObjectMetaFields
+                 * @instance
+                 */
+                ObjectMetaFields.prototype.annotations = $util.emptyObject;
+
+                /**
+                 * Verifies an ObjectMetaFields message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ObjectMetaFields
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ObjectMetaFields.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                        if (!$util.isObject(message.annotations))
+                            return "annotations: object expected";
+                        let key = Object.keys(message.annotations);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.annotations[key[i]]))
+                                return "annotations: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates an ObjectMetaFields message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ObjectMetaFields
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ObjectMetaFields} ObjectMetaFields
+                 */
+                ObjectMetaFields.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ObjectMetaFields)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ObjectMetaFields();
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.ObjectMetaFields.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    if (object.annotations) {
+                        if (typeof object.annotations !== "object")
+                            throw TypeError(".clutch.k8s.v1.ObjectMetaFields.annotations: object expected");
+                        message.annotations = {};
+                        for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
+                            message.annotations[keys[i]] = String(object.annotations[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an ObjectMetaFields message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ObjectMetaFields
+                 * @static
+                 * @param {clutch.k8s.v1.ObjectMetaFields} message ObjectMetaFields
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ObjectMetaFields.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults) {
+                        object.labels = {};
+                        object.annotations = {};
+                    }
+                    let keys2;
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
+                        object.annotations = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this ObjectMetaFields to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ObjectMetaFields
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ObjectMetaFields.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ObjectMetaFields;
+            })();
+
+            v1.RemoveObjectMetaFields = (function() {
+
+                /**
+                 * Properties of a RemoveObjectMetaFields.
+                 * @memberof clutch.k8s.v1
+                 * @interface IRemoveObjectMetaFields
+                 * @property {Array.<string>|null} [labels] RemoveObjectMetaFields labels
+                 * @property {Array.<string>|null} [annotations] RemoveObjectMetaFields annotations
+                 */
+
+                /**
+                 * Constructs a new RemoveObjectMetaFields.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a RemoveObjectMetaFields.
+                 * @implements IRemoveObjectMetaFields
+                 * @constructor
+                 * @param {clutch.k8s.v1.IRemoveObjectMetaFields=} [properties] Properties to set
+                 */
+                function RemoveObjectMetaFields(properties) {
+                    this.labels = [];
+                    this.annotations = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * RemoveObjectMetaFields labels.
+                 * @member {Array.<string>} labels
+                 * @memberof clutch.k8s.v1.RemoveObjectMetaFields
+                 * @instance
+                 */
+                RemoveObjectMetaFields.prototype.labels = $util.emptyArray;
+
+                /**
+                 * RemoveObjectMetaFields annotations.
+                 * @member {Array.<string>} annotations
+                 * @memberof clutch.k8s.v1.RemoveObjectMetaFields
+                 * @instance
+                 */
+                RemoveObjectMetaFields.prototype.annotations = $util.emptyArray;
+
+                /**
+                 * Verifies a RemoveObjectMetaFields message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.RemoveObjectMetaFields
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                RemoveObjectMetaFields.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!Array.isArray(message.labels))
+                            return "labels: array expected";
+                        for (let i = 0; i < message.labels.length; ++i)
+                            if (!$util.isString(message.labels[i]))
+                                return "labels: string[] expected";
+                    }
+                    if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                        if (!Array.isArray(message.annotations))
+                            return "annotations: array expected";
+                        for (let i = 0; i < message.annotations.length; ++i)
+                            if (!$util.isString(message.annotations[i]))
+                                return "annotations: string[] expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a RemoveObjectMetaFields message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.RemoveObjectMetaFields
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.RemoveObjectMetaFields} RemoveObjectMetaFields
+                 */
+                RemoveObjectMetaFields.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.RemoveObjectMetaFields)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.RemoveObjectMetaFields();
+                    if (object.labels) {
+                        if (!Array.isArray(object.labels))
+                            throw TypeError(".clutch.k8s.v1.RemoveObjectMetaFields.labels: array expected");
+                        message.labels = [];
+                        for (let i = 0; i < object.labels.length; ++i)
+                            message.labels[i] = String(object.labels[i]);
+                    }
+                    if (object.annotations) {
+                        if (!Array.isArray(object.annotations))
+                            throw TypeError(".clutch.k8s.v1.RemoveObjectMetaFields.annotations: array expected");
+                        message.annotations = [];
+                        for (let i = 0; i < object.annotations.length; ++i)
+                            message.annotations[i] = String(object.annotations[i]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a RemoveObjectMetaFields message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.RemoveObjectMetaFields
+                 * @static
+                 * @param {clutch.k8s.v1.RemoveObjectMetaFields} message RemoveObjectMetaFields
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                RemoveObjectMetaFields.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults) {
+                        object.labels = [];
+                        object.annotations = [];
+                    }
+                    if (message.labels && message.labels.length) {
+                        object.labels = [];
+                        for (let j = 0; j < message.labels.length; ++j)
+                            object.labels[j] = message.labels[j];
+                    }
+                    if (message.annotations && message.annotations.length) {
+                        object.annotations = [];
+                        for (let j = 0; j < message.annotations.length; ++j)
+                            object.annotations[j] = message.annotations[j];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this RemoveObjectMetaFields to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.RemoveObjectMetaFields
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                RemoveObjectMetaFields.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return RemoveObjectMetaFields;
             })();
 
             return v1;

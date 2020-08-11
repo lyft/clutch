@@ -48,8 +48,6 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	return NewWithClientsetManager(c, logger, scope)
 }
 
-type Annotations map[string]*k8sapiv1.AnnotationValue
-
 type Service interface {
 	// All names of clientsets.
 	Clientsets() []string
@@ -58,7 +56,7 @@ type Service interface {
 	DescribePod(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Pod, error)
 	DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error
 	ListPods(ctx context.Context, clientset, cluster, namespace string, listPodsOptions *k8sapiv1.ListPodsOptions) ([]*k8sapiv1.Pod, error)
-	UpdatePodAnnotations(ctx context.Context, clientset, cluster, namespace, name string, expectedAnnotations, newAnnotations Annotations) error
+	UpdatePod(ctx context.Context, clientset, cluster, namespace, name string, expectedObjectMetaFields *k8sapiv1.ExpectedObjectMetaFields, objectMetaFields *k8sapiv1.ObjectMetaFields, removeObjectMetaFields *k8sapiv1.RemoveObjectMetaFields) error
 
 	// HPA management functions.
 	DescribeHPA(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.HPA, error)

@@ -99,7 +99,7 @@ func (*svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name s
 	return nil
 }
 
-func (s *svc) UpdatePodAnnotations(_ context.Context, clientset, cluster, namespace, name string, newAnnotations, expectedAnnotations k8sservice.Annotations) error {
+func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name string, expectedObjectMetaFields *k8sv1.ExpectedObjectMetaFields, objectMetaFields *k8sv1.ObjectMetaFields, removeObjectMetaFields *k8sv1.RemoveObjectMetaFields) error {
 	return nil
 }
 

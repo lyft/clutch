@@ -2,6 +2,8 @@ package k8s
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"strings"
 
 	corev1 "k8s.io/api/core/v1"
@@ -62,7 +64,23 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 	return pods, nil
 }
 
-func (s *svc) UpdatePodAnnotations(ctx context.Context, clientset, cluster, namespace, name string, expectedAnnotations, newAnnotations Annotations) error {
+// Update pod fields if the current field values match with that's described by expectedObjectMetaFields
+//
+// TODO: add support for updating pod labels
+func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name string, expectedObjectMetaFields *k8sapiv1.ExpectedObjectMetaFields, objectMetaFields *k8sapiv1.ObjectMetaFields, removeObjectMetaFields *k8sapiv1.RemoveObjectMetaFields) error {
+	if len(objectMetaFields.GetLabels()) > 0 || len(removeObjectMetaFields.GetLabels()) > 0 {
+		return errors.New("update of pod labels not implemented")
+	}
+
+	// Ensure that the caller is not trying to delete an annotation and update it at the same time
+	newAnnotations := objectMetaFields.GetAnnotations()
+	for _, annotation := range removeObjectMetaFields.GetAnnotations() {
+		_, annotationIsUpdated := newAnnotations[annotation]
+		if annotationIsUpdated {
+			return fmt.Errorf("annotation '%s' can't be updated and removed at once", annotation)
+		}
+	}
+
 	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
 	if err != nil {
 		return err
@@ -73,33 +91,42 @@ func (s *svc) UpdatePodAnnotations(ctx context.Context, clientset, cluster, name
 		return err
 	}
 
-	podAnnotations := pod.GetAnnotations()
-
-	err = checkPreconditions(expectedAnnotations, podAnnotations)
+	// Check that the current state of the pod matches with expectedObjectMetaFields.
+	//
+	// If there is a mismatch, checkExpectedObjectMetaFields() will return an error with the list of mismatches.
+	err = checkExpectedObjectMetaFields(expectedObjectMetaFields, pod)
 	if err != nil {
 		return err
 	}
 
-	for newAnnotations, newValue := range newAnnotations {
-		if newValue != nil {
-			podAnnotations[newAnnotations] = newValue.GetValue()
-		} else {
-			delete(podAnnotations, newAnnotations)
-		}
+	// Update/add annotations
+	podAnnotations := pod.GetAnnotations()
+	for annotation, value := range newAnnotations {
+		podAnnotations[annotation] = value
+	}
+
+	// Delete annotations to be removed
+	for _, annotation := range removeObjectMetaFields.GetAnnotations() {
+		delete(podAnnotations, annotation)
 	}
 
 	_, err = cs.CoreV1().Pods(cs.Namespace()).Update(pod)
 	return err
 }
 
-func checkPreconditions(expectedAnnotations Annotations, currentAnnotations map[string]string) error {
+func checkExpectedObjectMetaFields(expectedObjectMetaFields *k8sapiv1.ExpectedObjectMetaFields, pod *corev1.Pod) error {
+	if len(expectedObjectMetaFields.Labels) > 0 {
+		return errors.New("checking for pod labels not implemented")
+	}
+
+	podAnnotations := pod.GetAnnotations()
 	var mismatchedAnnotations []*mismatchedAnnotation
 
-	for expectedAnnotation, expectedValue := range expectedAnnotations {
+	for expectedAnnotation, expectedValue := range expectedObjectMetaFields.GetAnnotations() {
 		// "" is a valid annotation value, so nil is used to indicate that the
 		// annotation shouldn't be set
 		annotationShouldBePresent := expectedValue != nil
-		currentValue, annotationIsPresent := currentAnnotations[expectedAnnotation]
+		currentValue, annotationIsPresent := podAnnotations[expectedAnnotation]
 
 		// Existance precondition not met
 		if annotationShouldBePresent != annotationIsPresent {
@@ -132,7 +159,7 @@ func checkPreconditions(expectedAnnotations Annotations, currentAnnotations map[
 		return nil
 	}
 
-	return &AnnotationsPreconditionMismatchError{MismatchedAnnotations: mismatchedAnnotations}
+	return &ExpectedObjectMetaFieldsCheckError{MismatchedAnnotations: mismatchedAnnotations}
 }
 
 func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
