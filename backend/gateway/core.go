@@ -47,19 +47,19 @@ var Middleware = middleware.Factory{
 }
 
 var Modules = module.Factory{
-	assetsmod.Name:             assetsmod.New,
-	auditmod.Name:              auditmod.New,
-	authnmod.Name:              authnmod.New,
-	authzmod.Name:              authzmod.New,
-	awsmod.Name:                awsmod.New,
-	envoytriage.Name:           envoytriage.New,
-	experimentationapi.Name:    experimentationapi.New,
-	k8smod.Name:                k8smod.New,
-	kinesismod.Name:            kinesismod.New,
-	healthcheck.Name:           healthcheck.New,
-	resolvermod.Name:           resolvermod.New,
-	rtdsmod.Name:               rtdsmod.New,
-	sourcecontrol.Name:         sourcecontrol.New,
+	assetsmod.Name:          assetsmod.New,
+	auditmod.Name:           auditmod.New,
+	authnmod.Name:           authnmod.New,
+	authzmod.Name:           authzmod.New,
+	awsmod.Name:             awsmod.New,
+	envoytriage.Name:        envoytriage.New,
+	experimentationapi.Name: experimentationapi.New,
+	k8smod.Name:             k8smod.New,
+	kinesismod.Name:         kinesismod.New,
+	healthcheck.Name:        healthcheck.New,
+	resolvermod.Name:        resolvermod.New,
+	rtdsmod.Name:            rtdsmod.New,
+	sourcecontrol.Name:      sourcecontrol.New,
 }
 
 var Services = service.Factory{

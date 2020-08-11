@@ -37,7 +37,7 @@ type ExperimentStore interface {
 }
 
 type experimentStore struct {
-	db       *sql.DB
+	db *sql.DB
 }
 
 // New returns a new NewExperimentStore instance.
