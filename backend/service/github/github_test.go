@@ -232,68 +232,10 @@ func TestCreateRepository(t *testing.T) {
 	}
 }
 
-var getContentsTest = []struct {
-	name      string
-	errorText string
-	mockRepo  *mockRepositories
-}{
-	{
-		name:      "v3 error",
-		errorText: "could not get contents",
-		mockRepo:  &mockRepositories{generalError: true},
-	},
-	{
-		name:      "malformed encoding error",
-		errorText: "unsupported content encoding",
-		mockRepo:  &mockRepositories{malformedEncodingError: true},
-	},
-	{
-		name:     "success",
-		mockRepo: &mockRepositories{},
-	},
-}
-
-func TestGetContents(t *testing.T) {
-	t.Parallel()
-
-	for _, tt := range getContentsTest {
-		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-			a := assert.New(t)
-			s := &svc{rest: v3client{
-				Repositories: tt.mockRepo,
-			}}
-
-			_, err := s.GetContents(
-				context.Background(),
-				&RemoteRef{
-					RepoOwner: "owner",
-					RepoName:  "myRepo",
-					Ref:       "master",
-				},
-				"somefile.txt",
-			)
-
-			if tt.errorText != "" {
-				a.Error(err)
-				a.NotNil(err)
-				a.Contains(err.Error(), tt.errorText)
-				return
-			}
-			if err != nil {
-				a.FailNow("unexpected error")
-				return
-			}
-			a.Nil(err)
-		})
-	}
-}
-
 var compareCommitsTest = []struct {
 	name         string
 	errorText    string
-	resp         *ComparedCommits
+	status       githubv1.CommitCompareStatus
 	generalError bool
 	mockRepo     *mockRepositories
 }{
@@ -304,10 +246,8 @@ var compareCommitsTest = []struct {
 		mockRepo:     &mockRepositories{generalError: true},
 	},
 	{
-		name: "happy path",
-		resp: &ComparedCommits{
-			Status: Behind,
-		},
+		name:     "happy path",
+		status:   githubv1.CommitCompareStatus_BEHIND,
 		mockRepo: &mockRepositories{},
 	},
 }
@@ -324,7 +264,8 @@ func TestCompareCommits(t *testing.T) {
 				Repositories: tt.mockRepo,
 			}}
 
-			resp, err := s.CompareCommits(
+			status, err := s.CompareCommits(
+				context.Background(),
 				&RemoteRef{
 					RepoOwner: "owner",
 					RepoName:  "myRepo",
@@ -338,10 +279,10 @@ func TestCompareCommits(t *testing.T) {
 				return
 			}
 			if err != nil {
-				a.FailNow("unexpected error")
+				a.FailNowf("unexpected error: %s", err.Error())
 				return
 			}
-			a.Equal(resp, tt.resp)
+			a.Equal(status, tt.status)
 			a.Nil(err)
 		})
 	}

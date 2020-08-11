@@ -21270,6 +21270,26 @@ export const clutch = $root.clutch = (() => {
                     return UpdateRepositoryOptions;
                 })();
 
+                /**
+                 * CommitCompareStatus enum.
+                 * @name clutch.sourcecontrol.github.v1.CommitCompareStatus
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} UNKNOWN=1 UNKNOWN value
+                 * @property {number} BEHIND=2 BEHIND value
+                 * @property {number} AHEAD=3 AHEAD value
+                 * @property {number} IDENTICAL=4 IDENTICAL value
+                 */
+                v1.CommitCompareStatus = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "UNKNOWN"] = 1;
+                    values[valuesById[2] = "BEHIND"] = 2;
+                    values[valuesById[3] = "AHEAD"] = 3;
+                    values[valuesById[4] = "IDENTICAL"] = 4;
+                    return values;
+                })();
+
                 return v1;
             })();
 

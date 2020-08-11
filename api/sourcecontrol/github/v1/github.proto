@@ -35,3 +35,11 @@ message UpdateRepositoryOptions {
   // Pass true to archive this repository. Note: You cannot unarchive repositories through the API.
   bool archived = 2;
 }
+
+enum CommitCompareStatus {
+  UNSPECIFIED = 0;
+  UNKNOWN =1;
+  BEHIND = 2;
+  AHEAD = 3;
+  IDENTICAL = 4;
+}

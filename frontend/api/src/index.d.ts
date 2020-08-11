@@ -8917,6 +8917,15 @@ export namespace clutch {
                      */
                     public toJSON(): { [k: string]: any };
                 }
+
+                /** CommitCompareStatus enum. */
+                enum CommitCompareStatus {
+                    UNSPECIFIED = 0,
+                    UNKNOWN = 1,
+                    BEHIND = 2,
+                    AHEAD = 3,
+                    IDENTICAL = 4
+                }
             }
         }
 

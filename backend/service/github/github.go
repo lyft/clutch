@@ -29,6 +29,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	githubv1 "github.com/lyft/clutch/backend/api/config/service/github/v1"
+	scgithubv1 "github.com/lyft/clutch/backend/api/sourcecontrol/github/v1"
 	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
 	"github.com/lyft/clutch/backend/service"
 )
@@ -71,6 +72,7 @@ type Client interface {
 	CreatePullRequest(ctx context.Context, ref *RemoteRef, title, body string) (*PullRequestInfo, error)
 	CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error)
 	CreateIssueComment(ctx context.Context, ref *RemoteRef, number int, body string) error
+	CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (scgithubv1.CommitCompareStatus, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -274,71 +276,20 @@ func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, 
 	return f, nil
 }
 
-type CompareStatus int
-
-func (c CompareStatus) String() string {
-	names := []string{
-		"behind",
-		"ahead",
-		"identical",
-	}
-	if c < Behind || c > Identical {
-		return "unknown"
-	}
-	return names[c]
-}
-
-const (
-	Behind    CompareStatus = iota
-	Ahead     CompareStatus = iota
-	Identical CompareStatus = iota
-)
-
-type ComparedCommits struct {
-	Status CompareStatus
-}
-
-func (s *svc) GetContents(ctx context.Context, ref *RemoteRef, path string) (*File, error) {
-	options := &githubv3.RepositoryContentGetOptions{
-		Ref: ref.Ref,
-	}
-	content, _, _, err := s.rest.Repositories.GetContents(context.Background(), ref.RepoOwner, ref.RepoName, path, options)
+func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (scgithubv1.CommitCompareStatus, error) {
+	comp, _, err := s.rest.Repositories.CompareCommits(context.Background(), ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref)
 	if err != nil {
-		return nil, fmt.Errorf("could not get contents for %s at sha %s for repo %s/%s: %+v",
-			path, ref.Ref, ref.RepoOwner, ref.RepoName, err)
-	}
-	fileText, err := content.GetContent()
-	if err != nil {
-		return nil, fmt.Errorf("could not get contents for %s at sha %s for repo %s/%s: %+v",
-			path, ref.Ref, ref.RepoOwner, ref.RepoName, err)
-	}
-	file := &File{
-		Path:     path,
-		Contents: ioutil.NopCloser(strings.NewReader(string(fileText))),
-		SHA:      content.GetSHA(),
-	}
-	return file, nil
-}
-
-func (s *svc) CompareCommits(ref *RemoteRef, compareSha string) (*ComparedCommits, error) {
-	comp, _, err := s.rest.Repositories.CompareCommits(context.Background(), ref.RepoOwner, ref.RepoName, compareSha, ref.Ref)
-	if err != nil {
-		return nil, fmt.Errorf("Could not get compare status for %s and %s. %+v", ref.Ref, compareSha, err)
+		return scgithubv1.CommitCompareStatus_UNKNOWN, fmt.Errorf("Could not get compare status for %s and %s. %+v", ref.Ref, compareSHA, err)
 	}
 
-	var cs CompareStatus
-	switch *comp.Status {
-	case Behind.String():
-		cs = Behind
-	case Ahead.String():
-		cs = Ahead
-	case Identical.String():
-		cs = Identical
+	switch strings.ToUpper(*comp.Status) {
+	case scgithubv1.CommitCompareStatus_BEHIND.String():
+		return scgithubv1.CommitCompareStatus_BEHIND, nil
+	case scgithubv1.CommitCompareStatus_AHEAD.String():
+		return scgithubv1.CommitCompareStatus_AHEAD, nil
+	case scgithubv1.CommitCompareStatus_IDENTICAL.String():
+		return scgithubv1.CommitCompareStatus_IDENTICAL, nil
 	default:
-		return nil, fmt.Errorf("Unknown status %s", *comp.Status)
+		return scgithubv1.CommitCompareStatus_UNKNOWN, fmt.Errorf("Unknown status %s", *comp.Status)
 	}
-
-	return &ComparedCommits{
-		Status: cs,
-	}, nil
 }
