@@ -16,11 +16,11 @@
     },
     "preserveConstEnums": true,
     "target": "ES2018",
-    "types": ["node", "long"]
+    "types": ["jest", "node", "long"]
   },
   "exclude": [
     "node_modules",
-    "**/*.test.jsx",
-    "**/*.test.tsx"
+    "**/*.test.js*",
+    "**/*.test.ts*"
   ],
 }
