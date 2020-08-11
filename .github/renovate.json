@@ -24,7 +24,7 @@
   "packageRules": [
     {
       "packageNames": ["github.com/aws/aws-sdk-go"],
-      "schedule": ["schedule:weekly"]
+      "extends": ["schedule:weekly"]
     }
   ],
   "postUpdateOptions": [
