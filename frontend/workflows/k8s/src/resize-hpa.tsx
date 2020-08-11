@@ -10,8 +10,8 @@ import {
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
-import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import type { WizardChild } from "@clutch-sh/wizard";
+import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import * as yup from "yup";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
@@ -109,7 +109,7 @@ const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
     inputData: {},
     resizeData: {
       deps: ["hpaData", "inputData"],
-      hydrator: (hpaData: IClutch.k8s.v1.HPA, inputData: {clientset: string}) => {
+      hydrator: (hpaData: IClutch.k8s.v1.HPA, inputData: { clientset: string }) => {
         const clientset = inputData.clientset ?? "unspecified";
 
         return client.post("/v1/k8s/resizeHPA", {

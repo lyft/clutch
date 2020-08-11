@@ -9,8 +9,8 @@ import {
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
-import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import type { WizardChild } from "@clutch-sh/wizard";
+import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import _ from "lodash";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
@@ -34,7 +34,6 @@ const PodDetails: React.FC<WizardChild> = () => {
   const { onSubmit, onBack } = useWizardContext();
   const resourceData = useDataLayout("resourceData");
   const instance = resourceData.displayValue() as IClutch.k8s.v1.Pod;
-  console.log(instance)
 
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
@@ -87,7 +86,7 @@ const DeletePod: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
     resourceData: {},
     deletionData: {
       deps: ["resourceData", "resolverInput"],
-      hydrator: (resourceData: IClutch.k8s.v1.Pod, resolverInput: {clientset: string}) => {
+      hydrator: (resourceData: IClutch.k8s.v1.Pod, resolverInput: { clientset: string }) => {
         const clientset = resolverInput.clientset ?? "undefined";
         return client.post("/v1/k8s/deletePod", {
           clientset,
