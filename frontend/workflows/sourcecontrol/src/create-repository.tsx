@@ -9,7 +9,7 @@ import {
   TextField,
   useWizardContext,
 } from "@clutch-sh/core";
-import { useDataLayout, useDataLayoutManager } from "@clutch-sh/data-layout";
+import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import { MenuItem, Select } from "@material-ui/core";
