@@ -27,19 +27,22 @@ require (
 	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334
 	github.com/jhump/protoreflect v1.7.0
 	github.com/lib/pq v1.8.0
-	github.com/lyft/protoc-gen-star v0.4.14 // indirect
+	github.com/lyft/protoc-gen-star v0.5.1 // indirect
 	github.com/mitchellh/hashstructure v1.0.0
 	github.com/shurcooL/githubv4 v0.0.0-20200802174311-f27d2ca7f6d5
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f // indirect
 	github.com/shurcooL/httpfs v0.0.0-20190707220628-8d4bc4ba7749 // indirect
 	github.com/shurcooL/vfsgen v0.0.0-20200627165143-92b8a710ab6c
 	github.com/slack-go/slack v0.6.5
+	github.com/spf13/afero v1.3.4 // indirect
 	github.com/stretchr/testify v1.6.1
 	github.com/uber-go/tally v3.3.17+incompatible
 	go.uber.org/zap v1.15.0
 	golang.org/x/net v0.0.0-20200707034311-ab3426394381
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
 	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
+	golang.org/x/tools v0.0.0-20200811172722-d77521d07411 // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013
 	google.golang.org/grpc v1.31.0
 	google.golang.org/protobuf v1.25.0
