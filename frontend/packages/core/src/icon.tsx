@@ -10,8 +10,8 @@ const StatusIcon = styled(FiberManualRecordTwoToneIcon)`
   `}
 `;
 
-interface StatusProps {
-  variant: "neutral" | "success" | "failure";
+export interface StatusProps {
+  variant?: "neutral" | "success" | "failure";
   align?: "right" | "center";
 }
 

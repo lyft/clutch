@@ -42,7 +42,7 @@ const ExpandableTable: React.FC<ExpandableTableProps> = ({ headings, children })
 
 interface ExpandableRowProps {
   heading: string;
-  summary: React.ElementType | string;
+  summary: React.ReactElement | string;
 }
 
 const ExpandableRow: React.FC<ExpandableRowProps> = ({ heading, summary, children }) => {

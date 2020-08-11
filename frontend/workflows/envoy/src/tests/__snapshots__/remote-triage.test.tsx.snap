@@ -2,7 +2,7 @@
 
 exports[`Remote Triage workflow renders correctly 1`] = `
 "<Wizard dataLayout={{...}} heading={[undefined]} maxWidth={false}>
-  <TriageIdentifier name=\\"Lookup\\" options={[undefined]} />
-  <TriageDetails name=\\"Details\\" heading=\\"Details\\" />
+  <TriageIdentifier name=\\"Lookup\\" />
+  <TriageDetails name=\\"Details\\" />
 </Wizard>"
 `;

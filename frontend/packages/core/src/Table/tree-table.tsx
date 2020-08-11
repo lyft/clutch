@@ -59,7 +59,7 @@ const flattenTreeData = (data: object, parentId?: string) => {
 };
 
 interface TreeTableProps {
-  title: string;
+  title?: string;
   data: object;
 }
 

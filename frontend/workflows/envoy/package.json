@@ -10,18 +10,19 @@
   ],
   "scripts": {
     "build": "yarn clean && yarn compile",
-    "clean": "rm -rf dist",
-    "compile": "BABEL_ENV=build babel src --out-dir dist --extensions .js,.jsx,.ts,.tsx --no-comments --ignore **/tests",
-    "compile:dev": "yarn compile --source-maps",
-    "compile:watch": "yarn compile --watch",
+    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
+    "compile": "tsc -b",
+    "compile:dev": "tsc --sourceMap",
+    "compile:watch": "BABEL_ENV=build babel src --out-dir dist --source-maps --extensions .js,.jsx,.ts,.tsx --ignore **/tests --watch",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
-    "lint:fix": "yarn lint --fix",
+    "lint:fix": "yarn run lint --fix",
     "publishBeta": "../../../tools/publish-frontend.sh envoy",
     "test": "jest --passWithNoTests",
-    "test:coverage": "yarn test --collect-coverage",
-    "test:watch": "yarn test --watch"
+    "test:coverage": "yarn run test --collect-coverage",
+    "test:watch": "yarn run test --watch"
   },
   "dependencies": {
+    "@clutch-sh/api": "^0.0.0-beta",
     "@clutch-sh/core": "^0.0.0-beta",
     "@clutch-sh/data-layout": "^0.0.0-beta",
     "@clutch-sh/wizard": "^0.0.0-beta",
