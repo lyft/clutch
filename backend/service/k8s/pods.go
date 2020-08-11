@@ -94,7 +94,7 @@ func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name
 	// Check that the current state of the pod matches with expectedObjectMetaFields.
 	//
 	// If there is a mismatch, checkExpectedObjectMetaFields() will return an error with the list of mismatches.
-	err = checkExpectedObjectMetaFields(expectedObjectMetaFields, pod)
+	err = checkExpectedObjectMetaFields(expectedObjectMetaFields, pod.GetObjectMeta())
 	if err != nil {
 		return err
 	}
@@ -114,12 +114,12 @@ func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name
 	return err
 }
 
-func checkExpectedObjectMetaFields(expectedObjectMetaFields *k8sapiv1.ExpectedObjectMetaFields, pod *corev1.Pod) error {
+func checkExpectedObjectMetaFields(expectedObjectMetaFields *k8sapiv1.ExpectedObjectMetaFields, object metav1.Object) error {
 	if len(expectedObjectMetaFields.Labels) > 0 {
-		return errors.New("checking for pod labels not implemented")
+		return errors.New("checking label expectations not implemented")
 	}
 
-	podAnnotations := pod.GetAnnotations()
+	podAnnotations := object.GetAnnotations()
 	var mismatchedAnnotations []*mismatchedAnnotation
 
 	for expectedAnnotation, expectedValue := range expectedObjectMetaFields.GetAnnotations() {
