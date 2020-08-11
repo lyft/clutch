@@ -20,7 +20,7 @@
   },
   "exclude": [
     "node_modules",
-    "**/*.test.jsx",
-    "**/*.test.tsx"
+    "**/*.test.js*",
+    "**/*.test.ts*"
   ],
 }
