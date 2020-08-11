@@ -13,7 +13,7 @@ interface ExperimentationSpecificationDataProps {
 }
 
 const ExperimentSpecificationData: React.FC<ExperimentationSpecificationDataProps> = ({
-experiment, columns, mapping 
+  experiment, columns, mapping 
 }) => {
   mapping = mapping || {};
 
