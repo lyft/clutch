@@ -1668,7 +1668,6 @@ var file_k8s_v1_k8s_proto_rawDesc = []byte{
 	0x01, 0x0a, 0x10, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d,
 	0x65, 0x6e, 0x74, 0x12, 0x26, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73,
 	0x2e, 0x76, 0x31, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79,
-<<<<<<< HEAD
 	0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2e, 0x46, 0x69, 0x65, 0x6c,
 	0x64, 0x73, 0x2e, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x45, 0x6e,
 	0x74, 0x72, 0x79, 0x42, 0x0c, 0xfa, 0x42, 0x09, 0x9a, 0x01, 0x06, 0x22, 0x04, 0x72, 0x02, 0x20,
@@ -1772,15 +1771,6 @@ var file_k8s_v1_k8s_proto_rawDesc = []byte{
 	0x73, 0x2f, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65,
 	0x6e, 0x74, 0x3a, 0x01, 0x2a, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x03, 0x42, 0x07, 0x5a, 0x05, 0x6b,
 	0x38, 0x73, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
-=======
-	0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x27, 0x2e, 0x63, 0x6c,
-	0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x70, 0x64, 0x61,
-	0x74, 0x65, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x29, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1d, 0x22, 0x18, 0x2f, 0x76,
-	0x31, 0x2f, 0x6b, 0x38, 0x73, 0x2f, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x65, 0x70, 0x6c,
-	0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x3a, 0x01, 0x2a, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x03, 0x42,
-	0x07, 0x5a, 0x05, 0x6b, 0x38, 0x73, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
->>>>>>> rebase and regen protos
 }
 
 var (
@@ -1813,7 +1803,6 @@ var file_k8s_v1_k8s_proto_goTypes = []interface{}{
 	(*Deployment)(nil),                     // 12: clutch.k8s.v1.Deployment
 	(*UpdateDeploymentRequest)(nil),        // 13: clutch.k8s.v1.UpdateDeploymentRequest
 	(*UpdateDeploymentResponse)(nil),       // 14: clutch.k8s.v1.UpdateDeploymentResponse
-<<<<<<< HEAD
 	(*ExpectedObjectMetaFields)(nil),       // 15: clutch.k8s.v1.ExpectedObjectMetaFields
 	(*ObjectMetaFields)(nil),               // 16: clutch.k8s.v1.ObjectMetaFields
 	(*RemoveObjectMetaFields)(nil),         // 17: clutch.k8s.v1.RemoveObjectMetaFields
@@ -1836,22 +1825,6 @@ var file_k8s_v1_k8s_proto_goTypes = []interface{}{
 	nil,                                    // 34: clutch.k8s.v1.ObjectMetaFields.AnnotationsEntry
 	(*timestamp.Timestamp)(nil),            // 35: google.protobuf.Timestamp
 	(*wrappers.StringValue)(nil),           // 36: google.protobuf.StringValue
-=======
-	nil,                                    // 15: clutch.k8s.v1.DescribePodRequest.LabelsEntry
-	nil,                                    // 16: clutch.k8s.v1.Pod.LabelsEntry
-	nil,                                    // 17: clutch.k8s.v1.Pod.AnnotationsEntry
-	nil,                                    // 18: clutch.k8s.v1.ListOptions.LabelsEntry
-	(*HPA_Sizing)(nil),                     // 19: clutch.k8s.v1.HPA.Sizing
-	nil,                                    // 20: clutch.k8s.v1.HPA.LabelsEntry
-	nil,                                    // 21: clutch.k8s.v1.HPA.AnnotationsEntry
-	(*ResizeHPARequest_Sizing)(nil),        // 22: clutch.k8s.v1.ResizeHPARequest.Sizing
-	nil,                                    // 23: clutch.k8s.v1.Deployment.LabelsEntry
-	nil,                                    // 24: clutch.k8s.v1.Deployment.AnnotationsEntry
-	(*UpdateDeploymentRequest_Fields)(nil), // 25: clutch.k8s.v1.UpdateDeploymentRequest.Fields
-	nil,                                    // 26: clutch.k8s.v1.UpdateDeploymentRequest.Fields.LabelsEntry
-	nil,                                    // 27: clutch.k8s.v1.UpdateDeploymentRequest.Fields.AnnotationsEntry
-	(*timestamp.Timestamp)(nil),            // 28: google.protobuf.Timestamp
->>>>>>> rebase and regen protos
 }
 var file_k8s_v1_k8s_proto_depIdxs = []int32{
 	18, // 0: clutch.k8s.v1.DescribePodRequest.labels:type_name -> clutch.k8s.v1.DescribePodRequest.LabelsEntry
@@ -1859,7 +1832,6 @@ var file_k8s_v1_k8s_proto_depIdxs = []int32{
 	0,  // 2: clutch.k8s.v1.Container.state:type_name -> clutch.k8s.v1.Container.State
 	4,  // 3: clutch.k8s.v1.Pod.containers:type_name -> clutch.k8s.v1.Container
 	1,  // 4: clutch.k8s.v1.Pod.state:type_name -> clutch.k8s.v1.Pod.State
-<<<<<<< HEAD
 	35, // 5: clutch.k8s.v1.Pod.start_time:type_name -> google.protobuf.Timestamp
 	19, // 6: clutch.k8s.v1.Pod.labels:type_name -> clutch.k8s.v1.Pod.LabelsEntry
 	20, // 7: clutch.k8s.v1.Pod.annotations:type_name -> clutch.k8s.v1.Pod.AnnotationsEntry
@@ -1892,34 +1864,6 @@ var file_k8s_v1_k8s_proto_depIdxs = []int32{
 	24, // [24:24] is the sub-list for extension type_name
 	24, // [24:24] is the sub-list for extension extendee
 	0,  // [0:24] is the sub-list for field type_name
-=======
-	28, // 5: clutch.k8s.v1.Pod.start_time:type_name -> google.protobuf.Timestamp
-	16, // 6: clutch.k8s.v1.Pod.labels:type_name -> clutch.k8s.v1.Pod.LabelsEntry
-	17, // 7: clutch.k8s.v1.Pod.annotations:type_name -> clutch.k8s.v1.Pod.AnnotationsEntry
-	18, // 8: clutch.k8s.v1.ListOptions.labels:type_name -> clutch.k8s.v1.ListOptions.LabelsEntry
-	19, // 9: clutch.k8s.v1.HPA.sizing:type_name -> clutch.k8s.v1.HPA.Sizing
-	20, // 10: clutch.k8s.v1.HPA.labels:type_name -> clutch.k8s.v1.HPA.LabelsEntry
-	21, // 11: clutch.k8s.v1.HPA.annotations:type_name -> clutch.k8s.v1.HPA.AnnotationsEntry
-	22, // 12: clutch.k8s.v1.ResizeHPARequest.sizing:type_name -> clutch.k8s.v1.ResizeHPARequest.Sizing
-	23, // 13: clutch.k8s.v1.Deployment.labels:type_name -> clutch.k8s.v1.Deployment.LabelsEntry
-	24, // 14: clutch.k8s.v1.Deployment.annotations:type_name -> clutch.k8s.v1.Deployment.AnnotationsEntry
-	25, // 15: clutch.k8s.v1.UpdateDeploymentRequest.fields:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields
-	26, // 16: clutch.k8s.v1.UpdateDeploymentRequest.Fields.labels:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.LabelsEntry
-	27, // 17: clutch.k8s.v1.UpdateDeploymentRequest.Fields.annotations:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.AnnotationsEntry
-	2,  // 18: clutch.k8s.v1.K8sAPI.DescribePod:input_type -> clutch.k8s.v1.DescribePodRequest
-	7,  // 19: clutch.k8s.v1.K8sAPI.DeletePod:input_type -> clutch.k8s.v1.DeletePodRequest
-	10, // 20: clutch.k8s.v1.K8sAPI.ResizeHPA:input_type -> clutch.k8s.v1.ResizeHPARequest
-	13, // 21: clutch.k8s.v1.K8sAPI.UpdateDeployment:input_type -> clutch.k8s.v1.UpdateDeploymentRequest
-	3,  // 22: clutch.k8s.v1.K8sAPI.DescribePod:output_type -> clutch.k8s.v1.DescribePodResponse
-	8,  // 23: clutch.k8s.v1.K8sAPI.DeletePod:output_type -> clutch.k8s.v1.DeletePodResponse
-	11, // 24: clutch.k8s.v1.K8sAPI.ResizeHPA:output_type -> clutch.k8s.v1.ResizeHPAResponse
-	14, // 25: clutch.k8s.v1.K8sAPI.UpdateDeployment:output_type -> clutch.k8s.v1.UpdateDeploymentResponse
-	22, // [22:26] is the sub-list for method output_type
-	18, // [18:22] is the sub-list for method input_type
-	18, // [18:18] is the sub-list for extension type_name
-	18, // [18:18] is the sub-list for extension extendee
-	0,  // [0:18] is the sub-list for field type_name
->>>>>>> rebase and regen protos
 }
 
 func init() { file_k8s_v1_k8s_proto_init() }

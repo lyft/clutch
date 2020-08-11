@@ -54,13 +54,13 @@ type Service interface {
 	// Pod management functions.
 	DescribePod(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Pod, error)
 	DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error
-	ListPods(ctx context.Context, clientset, cluster, namespace string, ListOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Pod, error)
+	ListPods(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Pod, error)
 	UpdatePod(ctx context.Context, clientset, cluster, namespace, name string, expectedObjectMetaFields *k8sapiv1.ExpectedObjectMetaFields, objectMetaFields *k8sapiv1.ObjectMetaFields, removeObjectMetaFields *k8sapiv1.RemoveObjectMetaFields) error
 
 	// HPA management functions.
 	DescribeHPA(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.HPA, error)
 	ResizeHPA(ctx context.Context, clientset, cluster, namespace, name string, sizing *k8sapiv1.ResizeHPARequest_Sizing) error
-	ListHPAs(ctx context.Context, clientset, cluster, namespace string, ListOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.HPA, error)
+	ListHPAs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.HPA, error)
 
 	// Deployment management functions.
 	DescribeDeployment(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Deployment, error)

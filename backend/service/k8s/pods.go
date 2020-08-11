@@ -18,29 +18,19 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 		return nil, err
 	}
 
-	if cs.Namespace() == "" {
-		pods, err := s.ListPods(ctx, clientset, cluster, namespace, &k8sapiv1.ListOptions{
-			FieldSelectors: "metadata.name=" + name,
-		})
-		if err != nil {
-			return nil, err
-		}
-
-		if len(pods) == 1 {
-			return pods[0], nil
-		} else if len(pods) > 1 {
-			return nil, fmt.Errorf("Located multipule pods")
-		}
-
-		return nil, fmt.Errorf("Unable to locate pod")
-	}
-
-	opts := metav1.GetOptions{}
-	pod, err := cs.CoreV1().Pods(cs.Namespace()).Get(name, opts)
+	pods, err := cs.CoreV1().Pods(cs.Namespace()).List(metav1.ListOptions{
+		FieldSelector: "metadata.name=" + name,
+	})
 	if err != nil {
 		return nil, err
 	}
-	return podDescription(pod, cs.Cluster()), nil
+
+	if len(pods.Items) == 1 {
+		return podDescription(&pods.Items[0], cs.Cluster()), nil
+	} else if len(pods.Items) > 1 {
+		return nil, fmt.Errorf("Located multipule Pods")
+	}
+	return nil, fmt.Errorf("Unable to locate pod")
 }
 
 func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error {

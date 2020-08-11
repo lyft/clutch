@@ -17,29 +17,20 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 		return nil, err
 	}
 
-	if cs.Namespace() == "" {
-		hpas, err := s.ListHPAs(ctx, clientset, cluster, namespace, &k8sapiv1.ListOptions{
-			FieldSelectors: "metadata.name=" + name,
-		})
-		if err != nil {
-			return nil, err
-		}
-
-		if len(hpas) == 1 {
-			return hpas[0], nil
-		} else if len(hpas) > 1 {
-			return nil, fmt.Errorf("Located multipule hpas")
-		}
-
-		return nil, fmt.Errorf("Unable to locate hpas")
-	}
-
-	getOpts := metav1.GetOptions{}
-	hpa, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Get(name, getOpts)
+	hpas, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).List(metav1.ListOptions{
+		FieldSelector: "metadata.name=" + name,
+	})
 	if err != nil {
 		return nil, err
 	}
-	return ProtoForHPA(cs.Cluster(), hpa), nil
+
+	if len(hpas.Items) == 1 {
+		return ProtoForHPA(cs.Cluster(), &hpas.Items[0]), nil
+	} else if len(hpas.Items) > 1 {
+		return nil, fmt.Errorf("Located multiple HPAs")
+	}
+
+	return nil, fmt.Errorf("Unable to locate HPA")
 }
 
 func (s *svc) ListHPAs(ctx context.Context, clientset, cluster, namespace string, listOpts *k8sapiv1.ListOptions) ([]*k8sapiv1.HPA, error) {
