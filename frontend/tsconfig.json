@@ -16,7 +16,7 @@
     },
     "preserveConstEnums": true,
     "target": "ES2018",
-    "types": ["node", "long"]
+    "types": ["jest", "node", "long"]
   },
   "exclude": [
     "node_modules",
