@@ -1,5 +1,4 @@
 import ListExperiments from "./list-experiments";
-import { StartAbortExperiment, StartLatencyExperiment } from "./start-experiment";
 
 const register = function register() {
   return {

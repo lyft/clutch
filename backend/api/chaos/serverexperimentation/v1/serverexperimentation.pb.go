@@ -23,6 +23,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+// A view model a server experiment should be converted to before it is displayed in a list view.
 type ExperimentListViewModel struct {
 	Identifier           string   `protobuf:"bytes,1,opt,name=identifier,proto3" json:"identifier,omitempty"`
 	Clusters             string   `protobuf:"bytes,2,opt,name=clusters,proto3" json:"clusters,omitempty"`

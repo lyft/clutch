@@ -154,7 +154,8 @@ func (m *CreateExperimentsResponse) GetExperiments() []*Experiment {
 }
 
 type GetExperimentsRequest struct {
-	Ids                  []uint64 `protobuf:"varint,1,rep,packed,name=ids,proto3" json:"ids,omitempty"`
+	Ids []uint64 `protobuf:"varint,1,rep,packed,name=ids,proto3" json:"ids,omitempty"`
+	// Whether fetched experiments should be converted to view models before they are returned to the caller.
 	Convert              bool     `protobuf:"varint,2,opt,name=convert,proto3" json:"convert,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`

@@ -5,22 +5,19 @@ import { Container } from "@material-ui/core";
 import styled from "styled-components";
 
 const ExperimentSpecificationData = ({ experiment, columns, mapping }) => {
-  const specification = experiment.testConfig;
+  mapping = mapping || {};
 
-  var data = [];  
-  columns.forEach(column => {
-    var item;
-    mapping = mapping || {}
-    if (column in mapping) {
-      item = experiment.testConfig[mapping[column]];
-    } else {
-      item = experiment.testConfig[column];
-    }
+  const converter = mapping[experiment.testConfig["@type"]];
+  const converterExists = typeof converter !== "undefined";
+  const model = converterExists ? converter(experiment.testConfig) : experiment;
 
-    if (typeof item === "undefined") {
-      data.push("Unknown");
+  const data = columns.map(column => {
+    if (column == "identifier") {
+      return experiment.id;
+    } else if (column in model) {
+      return model[column];
     } else {
-      data.push(item);
+      return "Unknown";
     }
   });
 
@@ -37,22 +34,15 @@ const Layout = styled(Container)`
   padding: 5% 0;
 `;
 
-const ListExperiments = ({ heading, columns, mapping }) => {
+const ListExperiments = ({ heading, columns, mapping, links }) => {
   const [experiments, setExperiments] = useState([]);
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
-  function handleClickStartAbortExperiment() {
-    navigate("/serverexperimentation/startabort");
-  }
-
-  function handleClickStartLatencyExperiment() {
-    navigate("/serverexperimentation/startlatency");
-  }
 
   if (experiments.length === 0) {
     client
-      .post("/v1/experiments/get", { convert: true })
+      .post("/v1/experiments/get")
       .then(response => {
         setExperiments(response?.data?.experiments || []);
       })
@@ -61,30 +51,28 @@ const ListExperiments = ({ heading, columns, mapping }) => {
       });
   }
 
-  let column_names = columns.map(name => name.toUpperCase());
+  let columnNames = columns.map(name => name.toUpperCase());
+  var links = links || []
+  let buttons = links.map(link =>  {
+    return {
+      text: link.text,
+      onClick: () => navigate(link.path)
+    }
+  })
 
   return (
     <Layout>
       {error && <Error message={error} />}
       <Table
         data={experiments}
-        headings={column_names}
+        headings={columnNames}
       >
         {experiments.map(e => (
           <ExperimentSpecificationData key={e.id} experiment={e} columns={columns} mapping={mapping} />
         ))}
       </Table>
       <ButtonGroup
-        buttons={[
-          {
-            text: "Start Abort Experiment",
-            onClick: () => handleClickStartAbortExperiment(),
-          },
-          {
-            text: "Start Latency Experiment",
-            onClick: () => handleClickStartLatencyExperiment(),
-          },
-        ]}
+        buttons={buttons}
       />
     </Layout>
   );
