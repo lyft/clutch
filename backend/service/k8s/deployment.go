@@ -3,6 +3,7 @@ package k8s
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	appsv1 "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -19,13 +20,20 @@ func (s *svc) DescribeDeployment(ctx context.Context, clientset, cluster, namesp
 		return nil, err
 	}
 
-	getOpts := metav1.GetOptions{}
-	deployment, err := cs.AppsV1().Deployments(cs.Namespace()).Get(name, getOpts)
+	deployments, err := cs.AppsV1().Deployments(cs.Namespace()).List(metav1.ListOptions{
+		FieldSelector: "metadata.name=" + name,
+	})
 	if err != nil {
 		return nil, err
 	}
 
-	return ProtoForDeployment(cs.Cluster(), deployment), nil
+	if len(deployments.Items) == 1 {
+		return ProtoForDeployment(cs.Cluster(), &deployments.Items[0]), nil
+	} else if len(deployments.Items) > 1 {
+		return nil, fmt.Errorf("Located multiple Deployments")
+	}
+
+	return nil, fmt.Errorf("Unable to locate Deployment")
 }
 
 func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1.Deployment {
