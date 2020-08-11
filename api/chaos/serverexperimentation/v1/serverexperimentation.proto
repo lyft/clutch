@@ -48,4 +48,3 @@ message LatencyFault {
   // The latency duration in milliseconds.
   int32 duration_ms = 3 [ (validate.rules).int32.gt = 0 ];
 }
-
