@@ -1,10 +1,10 @@
 package k8s
 
 import (
-	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
-
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8slabels "k8s.io/apimachinery/pkg/labels"
+
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func ApplyListOptions(listOpts *k8sapiv1.ListOptions) metav1.ListOptions {

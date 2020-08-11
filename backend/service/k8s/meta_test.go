@@ -3,11 +3,10 @@ package k8s
 import (
 	"testing"
 
-	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
-
 	"github.com/stretchr/testify/assert"
-
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func TestApplyListOptions(t *testing.T) {

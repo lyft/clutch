@@ -5,16 +5,15 @@ import (
 	"fmt"
 	"testing"
 
-	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
-
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes/fake"
-
 	k8stesting "k8s.io/client-go/testing"
+
+	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func TestProtoForPodState(t *testing.T) {
