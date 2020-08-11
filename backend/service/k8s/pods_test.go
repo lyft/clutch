@@ -2,7 +2,10 @@ package k8s
 
 import (
 	"context"
+	"fmt"
 	"testing"
+
+	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/wrapperspb"
@@ -11,7 +14,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes/fake"
 
-	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
+	k8stesting "k8s.io/client-go/testing"
 )
 
 func TestProtoForPodState(t *testing.T) {
@@ -85,17 +88,44 @@ func testPodClientset() *fake.Clientset {
 	return fake.NewSimpleClientset(testPods...)
 }
 
+func testListFakeClientset(numPods int) *fake.Clientset {
+	var fakeClient fake.Clientset
+	fakeClient.AddReactor("list", "pods",
+		func(action k8stesting.Action) (handled bool, ret runtime.Object, err error) {
+			pods := corev1.PodList{}
+
+			for i := 0; i < numPods; i++ {
+				pods.Items = append(pods.Items, corev1.Pod{
+					ObjectMeta: metav1.ObjectMeta{
+						Name:        fmt.Sprintf("testing-pod-name-%b", i),
+						Namespace:   "testing-namespace",
+						ClusterName: "staging",
+					},
+				})
+			}
+
+			return true, &pods, nil
+		})
+	return &fakeClient
+}
+
 func TestDescribePod(t *testing.T) {
 	t.Parallel()
 
-	cs := testPodClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": {
-				Interface: cs,
-				namespace: "testing-namespace",
-				cluster:   "core-testing",
-			}},
+			clientsets: map[string]*ctxClientsetImpl{
+				"foo": {
+					Interface: testListFakeClientset(3),
+					namespace: "testing-namespace",
+					cluster:   "core-testing",
+				},
+				"bar": {
+					Interface: testListFakeClientset(1),
+					namespace: "testing-namespace",
+					cluster:   "core-testing",
+				},
+			},
 		},
 	}
 	// Not found.
@@ -109,11 +139,22 @@ func TestDescribePod(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 
+	// Found more than 1 pod
 	result, err = s.DescribePod(context.Background(),
 		"foo",
 		"",
 		"testing-namespace",
-		"testing-pod-name",
+		"testing-pod-name-1",
+	)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+
+	// Found exactly 1 pod
+	result, err = s.DescribePod(context.Background(),
+		"bar",
+		"",
+		"testing-namespace",
+		"testing-pod-name-0",
 	)
 	assert.NoError(t, err)
 	assert.NotNil(t, result)

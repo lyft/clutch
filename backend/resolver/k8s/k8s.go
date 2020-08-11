@@ -24,6 +24,8 @@ import (
 	"github.com/lyft/clutch/backend/resolver"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/k8s"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 const Name = "clutch.resolver.k8s"
@@ -155,7 +157,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 				handler.Add(1)
 				go func(name string) {
 					defer handler.Done()
-					pod, err := r.svc.DescribePod(ctx, name, "", "", query)
+					pod, err := r.svc.DescribePod(ctx, name, "", metav1.NamespaceAll, query)
 					select {
 					case handler.Channel() <- resolver.NewFanoutResult([]*k8sv1api.Pod{pod}, err):
 						return
@@ -173,7 +175,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 				handler.Add(1)
 				go func(name string) {
 					defer handler.Done()
-					hpa, err := r.svc.DescribeHPA(ctx, name, "", "", query)
+					hpa, err := r.svc.DescribeHPA(ctx, name, "", metav1.NamespaceAll, query)
 					select {
 					case handler.Channel() <- resolver.NewFanoutResult([]*k8sv1api.HPA{hpa}, err):
 						return
