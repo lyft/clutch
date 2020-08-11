@@ -25,8 +25,6 @@ message CreateExperimentsResponse {
 
 message GetExperimentsRequest {
   repeated uint64 ids = 1;
-  // Whether fetched experiments should be converted to view models before they are returned to the caller.
-  bool convert = 2;
 }
 
 message GetExperimentsResponse {

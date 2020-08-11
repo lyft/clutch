@@ -291,8 +291,6 @@ func (m *GetExperimentsRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Convert
-
 	return nil
 }
 

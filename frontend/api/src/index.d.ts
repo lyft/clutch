@@ -2469,9 +2469,6 @@ export namespace clutch {
 
                     /** GetExperimentsRequest ids */
                     ids?: ((number|Long)[]|null);
-
-                    /** GetExperimentsRequest convert */
-                    convert?: (boolean|null);
                 }
 
                 /** Represents a GetExperimentsRequest. */
@@ -2485,9 +2482,6 @@ export namespace clutch {
 
                     /** GetExperimentsRequest ids. */
                     public ids: (number|Long)[];
-
-                    /** GetExperimentsRequest convert. */
-                    public convert: boolean;
 
                     /**
                      * Verifies a GetExperimentsRequest message.

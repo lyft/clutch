@@ -5768,7 +5768,6 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.chaos.experimentation.v1
                      * @interface IGetExperimentsRequest
                      * @property {Array.<number|Long>|null} [ids] GetExperimentsRequest ids
-                     * @property {boolean|null} [convert] GetExperimentsRequest convert
                      */
 
                     /**
@@ -5796,14 +5795,6 @@ export const clutch = $root.clutch = (() => {
                     GetExperimentsRequest.prototype.ids = $util.emptyArray;
 
                     /**
-                     * GetExperimentsRequest convert.
-                     * @member {boolean} convert
-                     * @memberof clutch.chaos.experimentation.v1.GetExperimentsRequest
-                     * @instance
-                     */
-                    GetExperimentsRequest.prototype.convert = false;
-
-                    /**
                      * Verifies a GetExperimentsRequest message.
                      * @function verify
                      * @memberof clutch.chaos.experimentation.v1.GetExperimentsRequest
@@ -5821,9 +5812,6 @@ export const clutch = $root.clutch = (() => {
                                 if (!$util.isInteger(message.ids[i]) && !(message.ids[i] && $util.isInteger(message.ids[i].low) && $util.isInteger(message.ids[i].high)))
                                     return "ids: integer|Long[] expected";
                         }
-                        if (message.convert != null && message.hasOwnProperty("convert"))
-                            if (typeof message.convert !== "boolean")
-                                return "convert: boolean expected";
                         return null;
                     };
 
@@ -5853,8 +5841,6 @@ export const clutch = $root.clutch = (() => {
                                 else if (typeof object.ids[i] === "object")
                                     message.ids[i] = new $util.LongBits(object.ids[i].low >>> 0, object.ids[i].high >>> 0).toNumber(true);
                         }
-                        if (object.convert != null)
-                            message.convert = Boolean(object.convert);
                         return message;
                     };
 
@@ -5873,8 +5859,6 @@ export const clutch = $root.clutch = (() => {
                         let object = {};
                         if (options.arrays || options.defaults)
                             object.ids = [];
-                        if (options.defaults)
-                            object.convert = false;
                         if (message.ids && message.ids.length) {
                             object.ids = [];
                             for (let j = 0; j < message.ids.length; ++j)
@@ -5883,8 +5867,6 @@ export const clutch = $root.clutch = (() => {
                                 else
                                     object.ids[j] = options.longs === String ? $util.Long.prototype.toString.call(message.ids[j]) : options.longs === Number ? new $util.LongBits(message.ids[j].low >>> 0, message.ids[j].high >>> 0).toNumber(true) : message.ids[j];
                         }
-                        if (message.convert != null && message.hasOwnProperty("convert"))
-                            object.convert = message.convert;
                         return object;
                     };
 

@@ -43,7 +43,7 @@ func PeriodicallyRefreshCache(s *Server) {
 
 func refreshCache(ctx context.Context, store experimentstore.ExperimentStore, snapshotCache gcpCache.SnapshotCache, rtdsLayerName string,
 	logger *zap.SugaredLogger) {
-	allExperiments, err := store.GetExperiments(ctx, false)
+	allExperiments, err := store.GetExperiments(ctx)
 	if err != nil {
 		logger.Errorw("Failed to get data from experiments store", "error", err)
 		return

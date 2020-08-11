@@ -32,25 +32,12 @@ const experimentsTableName = "experiments"
 type ExperimentStore interface {
 	CreateExperiments(context.Context, []*experimentation.Experiment) error
 	DeleteExperiments(context.Context, []uint64) error
-	GetExperiments(context.Context, bool) ([]*experimentation.Experiment, error)
-	Register(messageName string, conversion func(experiment *experimentation.Experiment) (*any.Any, error))
+	GetExperiments(context.Context) ([]*experimentation.Experiment, error)
 	Close()
-}
-
-
-type Registry struct {
-	converters map[string]func(experiment *experimentation.Experiment) (*any.Any, error)
-}
-
-func NewRegistry() *Registry {
-	return &Registry{
-		converters: make(map[string]func(experiment *experimentation.Experiment) (*any.Any, error)),
-	}
 }
 
 type experimentStore struct {
 	db       *sql.DB
-	registry *Registry
 }
 
 // New returns a new NewExperimentStore instance.
@@ -67,12 +54,7 @@ func New(cfg *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
 
 	return &experimentStore{
 		client.DB(),
-		NewRegistry(),
 	}, nil
-}
-
-func (fs *experimentStore) Register(messageName string, conversion func(experiment *experimentation.Experiment) (*any.Any, error)) {
-	fs.registry.converters[messageName] = conversion
 }
 
 func (fs *experimentStore) CreateExperiments(ctx context.Context, experiments []*experimentation.Experiment) error {
@@ -121,7 +103,7 @@ func (fs *experimentStore) DeleteExperiments(ctx context.Context, ids []uint64) 
 }
 
 // GetExperiments gets all experiments
-func (fs *experimentStore) GetExperiments(ctx context.Context, convert bool) ([]*experimentation.Experiment, error) {
+func (fs *experimentStore) GetExperiments(ctx context.Context) ([]*experimentation.Experiment, error) {
 	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
 	builder := psql.Select(experimentColumns...).From(experimentsTableName)
 
