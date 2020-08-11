@@ -157,12 +157,8 @@ const Confirm: React.FC<WizardChild> = () => {
   );
 };
 
-<<<<<<< HEAD:frontend/workflows/serverexperimentation/src/start-experiment.jsx
-const createExperiment = data => {
+const createExperiment = (data: IClutch.chaos.serverexperimentation.v1.ITestSpecification) => {
   data["@type"] = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestSpecification";
-=======
-const createExperiment = (data: IClutch.chaos.experimentation.v1.ITestSpecification) => {
->>>>>>> main:frontend/workflows/experimentation/src/start-experiment.tsx
   return client.post("/v1/experiments/create", {
     experiments: [
       {
