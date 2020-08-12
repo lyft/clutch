@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"testing"
 
+	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 
