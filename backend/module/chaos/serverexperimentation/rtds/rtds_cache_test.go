@@ -2,13 +2,13 @@ package rtds
 
 import (
 	"fmt"
-	"github.com/golang/protobuf/ptypes"
 	"testing"
 
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
 	gcpResource "github.com/envoyproxy/go-control-plane/pkg/resource/v2"
+	"github.com/golang/protobuf/ptypes"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"

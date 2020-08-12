@@ -4,18 +4,18 @@ import (
 	"context"
 	"database/sql/driver"
 	"errors"
-	"github.com/golang/protobuf/ptypes"
 	"regexp"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 )
 
-type ExperimentTest struct {
+type experimentTest struct {
 	id          string
 	experiments []*experimentation.Experiment
 	sql         string
@@ -23,8 +23,7 @@ type ExperimentTest struct {
 	err         error
 }
 
-
-func createExperimentsTests() ([]ExperimentTest, error) {
+func createExperimentsTests() ([]experimentTest, error) {
 	specification := &serverexperimentation.TestSpecification{
 		Config: &serverexperimentation.TestSpecification_Abort{
 			Abort: &serverexperimentation.AbortFault{
@@ -42,11 +41,11 @@ func createExperimentsTests() ([]ExperimentTest, error) {
 
 	anyConfig, err := ptypes.MarshalAny(specification)
 	if err != nil {
-		return []ExperimentTest{}, err
+		return []experimentTest{}, err
 	}
 
-	return []ExperimentTest {
-		ExperimentTest{
+	return []experimentTest{
+		experimentTest{
 			id: "create experiment",
 			experiments: []*experimentation.Experiment{
 				{
@@ -59,7 +58,7 @@ func createExperimentsTests() ([]ExperimentTest, error) {
 				`{"@type":"type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestSpecification","abort":{"clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"percent":100,"httpStatus":401}}`,
 			},
 		},
-		ExperimentTest {
+		experimentTest{
 			id:  "create empty experiments",
 			err: errors.New("insert statements must have at least one set of values or select clause"),
 		},
