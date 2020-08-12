@@ -28,7 +28,7 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 	if len(pods.Items) == 1 {
 		return podDescription(&pods.Items[0], cs.Cluster()), nil
 	} else if len(pods.Items) > 1 {
-		return nil, fmt.Errorf("Located multipule Pods")
+		return nil, fmt.Errorf("Located multiple Pods")
 	}
 	return nil, fmt.Errorf("Unable to locate pod")
 }
