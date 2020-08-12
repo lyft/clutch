@@ -3,7 +3,6 @@ package resolver
 import (
 	"testing"
 
-
 	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
