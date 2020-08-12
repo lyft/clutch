@@ -13,7 +13,7 @@
     "preserveConstEnums": true,
     "rootDir": "./src",
     "target": "ES2018",
-    "types": ["node"]
+    "types": ["node", "long"]
   },
   "include": [
     "src/**/*",
