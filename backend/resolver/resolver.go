@@ -122,20 +122,23 @@ func InputsToSchemas(typeSchemas map[string][]descriptor.Message) (TypeURLToSche
 					return nil, err
 				}
 
-				FieldMeta := fext.(*resolverv1.FieldMetadata)
+				fieldMeta := fext.(*resolverv1.FieldMetadata)
+
+				// Clone the fieldMeta since it's mutable (i.e. dynamic options).
+				fieldMeta = proto.Clone(fieldMeta).(*resolverv1.FieldMetadata)
 
 				// TODO(maybe): this should probably respond with Name instead of JsonName for gRPC clients.
 				// Would need to check context and add a flag.
 				name := *field.JsonName
 
 				// Use default display name of field name if none was provided.
-				if FieldMeta.DisplayName == "" {
-					FieldMeta.DisplayName = name
+				if fieldMeta.DisplayName == "" {
+					fieldMeta.DisplayName = name
 				}
 
 				schema.Fields[j] = &resolverv1.Field{
 					Name:     name,
-					Metadata: FieldMeta,
+					Metadata: fieldMeta,
 				}
 			}
 
