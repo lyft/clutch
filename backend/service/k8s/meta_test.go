@@ -14,46 +14,23 @@ func TestApplyListOptions(t *testing.T) {
 
 	var testCases = []struct {
 		id                  string
-		listOptions         *k8sapiv1.ListOptions
+		listOptions         *k8sapiv1.ListPodsOptions
 		expectedListOptions metav1.ListOptions
 	}{
 		{
 			id:                  "noop",
-			listOptions:         &k8sapiv1.ListOptions{},
+			listOptions:         &k8sapiv1.ListPodsOptions{},
 			expectedListOptions: metav1.ListOptions{},
 		},
 		{
-			id: "adding field selectors",
-			listOptions: &k8sapiv1.ListOptions{
-				FieldSelectors: "metadata.name=this-is-a-pod-name",
-			},
-			expectedListOptions: metav1.ListOptions{
-				FieldSelector: "metadata.name=this-is-a-pod-name",
-			},
-		},
-		{
 			id: "adding label selectors",
-			listOptions: &k8sapiv1.ListOptions{
-				LabelSelectors: map[string]string{
+			listOptions: &k8sapiv1.ListPodsOptions{
+				Labels: map[string]string{
 					"foo": "bar",
 					"key": "value",
 				},
 			},
 			expectedListOptions: metav1.ListOptions{
-				LabelSelector: "foo=bar,key=value",
-			},
-		},
-		{
-			id: "adding both labels and field selectors",
-			listOptions: &k8sapiv1.ListOptions{
-				FieldSelectors: "metadata.name=this-is-a-pod-name",
-				LabelSelectors: map[string]string{
-					"foo": "bar",
-					"key": "value",
-				},
-			},
-			expectedListOptions: metav1.ListOptions{
-				FieldSelector: "metadata.name=this-is-a-pod-name",
 				LabelSelector: "foo=bar,key=value",
 			},
 		},

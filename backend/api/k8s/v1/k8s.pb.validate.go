@@ -398,29 +398,22 @@ var _ interface {
 	ErrorName() string
 } = PodValidationError{}
 
-// Validate checks the field values on ListOptions with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *ListOptions) Validate() error {
+// Validate checks the field values on ListPodsOptions with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *ListPodsOptions) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	// no validation rules for LabelSelectors
-
-	if len(m.GetFieldSelectors()) < 1 {
-		return ListOptionsValidationError{
-			field:  "FieldSelectors",
-			reason: "value length must be at least 1 bytes",
-		}
-	}
+	// no validation rules for Labels
 
 	return nil
 }
 
-// ListOptionsValidationError is the validation error returned by
-// ListOptions.Validate if the designated constraints aren't met.
-type ListOptionsValidationError struct {
+// ListPodsOptionsValidationError is the validation error returned by
+// ListPodsOptions.Validate if the designated constraints aren't met.
+type ListPodsOptionsValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -428,22 +421,22 @@ type ListOptionsValidationError struct {
 }
 
 // Field function returns field value.
-func (e ListOptionsValidationError) Field() string { return e.field }
+func (e ListPodsOptionsValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ListOptionsValidationError) Reason() string { return e.reason }
+func (e ListPodsOptionsValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ListOptionsValidationError) Cause() error { return e.cause }
+func (e ListPodsOptionsValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ListOptionsValidationError) Key() bool { return e.key }
+func (e ListPodsOptionsValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ListOptionsValidationError) ErrorName() string { return "ListOptionsValidationError" }
+func (e ListPodsOptionsValidationError) ErrorName() string { return "ListPodsOptionsValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ListOptionsValidationError) Error() string {
+func (e ListPodsOptionsValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -455,14 +448,14 @@ func (e ListOptionsValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sListOptions.%s: %s%s",
+		"invalid %sListPodsOptions.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ListOptionsValidationError{}
+var _ error = ListPodsOptionsValidationError{}
 
 var _ interface {
 	Field() string
@@ -470,7 +463,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ListOptionsValidationError{}
+} = ListPodsOptionsValidationError{}
 
 // Validate checks the field values on DeletePodRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an

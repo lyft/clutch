@@ -16200,26 +16200,25 @@ export const clutch = $root.clutch = (() => {
                 return Pod;
             })();
 
-            v1.ListOptions = (function() {
+            v1.ListPodsOptions = (function() {
 
                 /**
-                 * Properties of a ListOptions.
+                 * Properties of a ListPodsOptions.
                  * @memberof clutch.k8s.v1
-                 * @interface IListOptions
-                 * @property {Object.<string,string>|null} [labelSelectors] ListOptions labelSelectors
-                 * @property {string|null} [fieldSelectors] ListOptions fieldSelectors
+                 * @interface IListPodsOptions
+                 * @property {Object.<string,string>|null} [labels] ListPodsOptions labels
                  */
 
                 /**
-                 * Constructs a new ListOptions.
+                 * Constructs a new ListPodsOptions.
                  * @memberof clutch.k8s.v1
-                 * @classdesc Represents a ListOptions.
-                 * @implements IListOptions
+                 * @classdesc Represents a ListPodsOptions.
+                 * @implements IListPodsOptions
                  * @constructor
-                 * @param {clutch.k8s.v1.IListOptions=} [properties] Properties to set
+                 * @param {clutch.k8s.v1.IListPodsOptions=} [properties] Properties to set
                  */
-                function ListOptions(properties) {
-                    this.labelSelectors = {};
+                function ListPodsOptions(properties) {
+                    this.labels = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -16227,110 +16226,93 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * ListOptions labelSelectors.
-                 * @member {Object.<string,string>} labelSelectors
-                 * @memberof clutch.k8s.v1.ListOptions
+                 * ListPodsOptions labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.ListPodsOptions
                  * @instance
                  */
-                ListOptions.prototype.labelSelectors = $util.emptyObject;
+                ListPodsOptions.prototype.labels = $util.emptyObject;
 
                 /**
-                 * ListOptions fieldSelectors.
-                 * @member {string} fieldSelectors
-                 * @memberof clutch.k8s.v1.ListOptions
-                 * @instance
-                 */
-                ListOptions.prototype.fieldSelectors = "";
-
-                /**
-                 * Verifies a ListOptions message.
+                 * Verifies a ListPodsOptions message.
                  * @function verify
-                 * @memberof clutch.k8s.v1.ListOptions
+                 * @memberof clutch.k8s.v1.ListPodsOptions
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                ListOptions.verify = function verify(message) {
+                ListPodsOptions.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.labelSelectors != null && message.hasOwnProperty("labelSelectors")) {
-                        if (!$util.isObject(message.labelSelectors))
-                            return "labelSelectors: object expected";
-                        let key = Object.keys(message.labelSelectors);
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
                         for (let i = 0; i < key.length; ++i)
-                            if (!$util.isString(message.labelSelectors[key[i]]))
-                                return "labelSelectors: string{k:string} expected";
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
                     }
-                    if (message.fieldSelectors != null && message.hasOwnProperty("fieldSelectors"))
-                        if (!$util.isString(message.fieldSelectors))
-                            return "fieldSelectors: string expected";
                     return null;
                 };
 
                 /**
-                 * Creates a ListOptions message from a plain object. Also converts values to their respective internal types.
+                 * Creates a ListPodsOptions message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.k8s.v1.ListOptions
+                 * @memberof clutch.k8s.v1.ListPodsOptions
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.k8s.v1.ListOptions} ListOptions
+                 * @returns {clutch.k8s.v1.ListPodsOptions} ListPodsOptions
                  */
-                ListOptions.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.k8s.v1.ListOptions)
+                ListPodsOptions.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListPodsOptions)
                         return object;
-                    let message = new $root.clutch.k8s.v1.ListOptions();
-                    if (object.labelSelectors) {
-                        if (typeof object.labelSelectors !== "object")
-                            throw TypeError(".clutch.k8s.v1.ListOptions.labelSelectors: object expected");
-                        message.labelSelectors = {};
-                        for (let keys = Object.keys(object.labelSelectors), i = 0; i < keys.length; ++i)
-                            message.labelSelectors[keys[i]] = String(object.labelSelectors[keys[i]]);
+                    let message = new $root.clutch.k8s.v1.ListPodsOptions();
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.ListPodsOptions.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
                     }
-                    if (object.fieldSelectors != null)
-                        message.fieldSelectors = String(object.fieldSelectors);
                     return message;
                 };
 
                 /**
-                 * Creates a plain object from a ListOptions message. Also converts values to other types if specified.
+                 * Creates a plain object from a ListPodsOptions message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.k8s.v1.ListOptions
+                 * @memberof clutch.k8s.v1.ListPodsOptions
                  * @static
-                 * @param {clutch.k8s.v1.ListOptions} message ListOptions
+                 * @param {clutch.k8s.v1.ListPodsOptions} message ListPodsOptions
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                ListOptions.toObject = function toObject(message, options) {
+                ListPodsOptions.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
                     if (options.objects || options.defaults)
-                        object.labelSelectors = {};
-                    if (options.defaults)
-                        object.fieldSelectors = "";
+                        object.labels = {};
                     let keys2;
-                    if (message.labelSelectors && (keys2 = Object.keys(message.labelSelectors)).length) {
-                        object.labelSelectors = {};
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
                         for (let j = 0; j < keys2.length; ++j)
-                            object.labelSelectors[keys2[j]] = message.labelSelectors[keys2[j]];
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
                     }
-                    if (message.fieldSelectors != null && message.hasOwnProperty("fieldSelectors"))
-                        object.fieldSelectors = message.fieldSelectors;
                     return object;
                 };
 
                 /**
-                 * Converts this ListOptions to JSON.
+                 * Converts this ListPodsOptions to JSON.
                  * @function toJSON
-                 * @memberof clutch.k8s.v1.ListOptions
+                 * @memberof clutch.k8s.v1.ListPodsOptions
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                ListOptions.prototype.toJSON = function toJSON() {
+                ListPodsOptions.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return ListOptions;
+                return ListPodsOptions;
             })();
 
             v1.DeletePodRequest = (function() {

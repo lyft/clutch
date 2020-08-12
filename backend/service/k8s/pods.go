@@ -46,13 +46,13 @@ func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name
 	return cs.CoreV1().Pods(cs.Namespace()).Delete(name, opts)
 }
 
-func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string, listOpts *k8sapiv1.ListOptions) ([]*k8sapiv1.Pod, error) {
+func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string, listPodsOpts *k8sapiv1.ListPodsOptions) ([]*k8sapiv1.Pod, error) {
 	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
 	if err != nil {
 		return nil, err
 	}
 
-	opts := ApplyListOptions(listOpts)
+	opts := ApplyListOptions(listPodsOpts)
 
 	podList, err := cs.CoreV1().Pods(cs.Namespace()).List(opts)
 	if err != nil {

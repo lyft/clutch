@@ -6770,55 +6770,49 @@ export namespace clutch {
                 }
             }
 
-            /** Properties of a ListOptions. */
-            interface IListOptions {
+            /** Properties of a ListPodsOptions. */
+            interface IListPodsOptions {
 
-                /** ListOptions labelSelectors */
-                labelSelectors?: ({ [k: string]: string }|null);
-
-                /** ListOptions fieldSelectors */
-                fieldSelectors?: (string|null);
+                /** ListPodsOptions labels */
+                labels?: ({ [k: string]: string }|null);
             }
 
-            /** Represents a ListOptions. */
-            class ListOptions implements IListOptions {
+            /** Represents a ListPodsOptions. */
+            class ListPodsOptions implements IListPodsOptions {
 
                 /**
-                 * Constructs a new ListOptions.
+                 * Constructs a new ListPodsOptions.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.k8s.v1.IListOptions);
+                constructor(properties?: clutch.k8s.v1.IListPodsOptions);
 
-                /** ListOptions labelSelectors. */
-                public labelSelectors: { [k: string]: string };
-
-                /** ListOptions fieldSelectors. */
-                public fieldSelectors: string;
+                /** ListPodsOptions labels. */
+                public labels: { [k: string]: string };
 
                 /**
-                 * Verifies a ListOptions message.
+                 * Verifies a ListPodsOptions message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a ListOptions message from a plain object. Also converts values to their respective internal types.
+                 * Creates a ListPodsOptions message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns ListOptions
+                 * @returns ListPodsOptions
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListOptions;
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListPodsOptions;
 
                 /**
-                 * Creates a plain object from a ListOptions message. Also converts values to other types if specified.
-                 * @param message ListOptions
+                 * Creates a plain object from a ListPodsOptions message. Also converts values to other types if specified.
+                 * @param message ListPodsOptions
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.k8s.v1.ListOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.k8s.v1.ListPodsOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this ListOptions to JSON.
+                 * Converts this ListPodsOptions to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
