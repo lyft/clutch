@@ -466,14 +466,19 @@ func (x *Pod) GetAnnotations() map[string]string {
 	return nil
 }
 
-// List Options are suitable for all resources types eg: pods, HPA, and deployment.
+// ListOptions are suitable for all resources types eg: pods, HPA, and deployment.
 type ListOptions struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// Label selectors preform an exact key/value match against a resource type.
+	// All labels supplied must be present on a resource, this is an AND operation.
 	LabelSelectors map[string]string `protobuf:"bytes,1,rep,name=label_selectors,json=labelSelectors,proto3" json:"label_selectors,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	FieldSelectors string            `protobuf:"bytes,2,opt,name=field_selectors,json=fieldSelectors,proto3" json:"field_selectors,omitempty"`
+	// Field selectors are construct as a single string, the same as you would with kubectl.
+	// This value is passed right through to the List operation, follow the k8s docs for usage.
+	// https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/
+	FieldSelectors string `protobuf:"bytes,2,opt,name=field_selectors,json=fieldSelectors,proto3" json:"field_selectors,omitempty"`
 }
 
 func (x *ListOptions) Reset() {

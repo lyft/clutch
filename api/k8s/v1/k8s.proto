@@ -114,11 +114,14 @@ message Pod {
   map<string, string> annotations = 10;
 }
 
-// List Options are suitable for all resources types eg: pods, HPA, and deployment.
+// ListOptions are suitable for all resources types eg: pods, HPA, and deployment.
 message ListOptions {
-  // L
+  // Label selectors preform an exact key/value match against a resource type.
+  // All labels supplied must be present on a resource, this is an AND operation.
   map<string, string> label_selectors = 1;
-  // Field selectors can be construct as a single string, the same
+  // Field selectors are construct as a single string, the same as you would with kubectl.
+  // This value is passed right through to the List operation, follow the k8s docs for usage.
+  // https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/
   string field_selectors = 2 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
