@@ -9,6 +9,8 @@ on:
     paths:
       - 'api/**'
       - 'backend/api/**'
+      - backend/go.mod
+      - backend/go.sum
       - 'frontend/api/**'
       - tools/compile-protos.sh
       - .github/workflows/api.yml
