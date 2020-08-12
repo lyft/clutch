@@ -1,19 +1,8 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "declaration": true,
-    "esModuleInterop": true,
-    "importsNotUsedAsValues": "error",
-    "incremental": true,
-    "jsx": "react",
-    "lib": ["DOM", "ESNext"],
-    "moduleResolution": "node",
-    "noImplicitAny": false,
-    "noImplicitReturns": true,
     "outDir": "./dist",
-    "preserveConstEnums": true,
-    "rootDir": "./src",
-    "target": "ES2018",
-    "types": ["node", "long"]
+    "rootDir": "./src"
   },
   "include": [
     "src/**/*",
@@ -21,5 +10,11 @@
   "exclude": [
     "node_modules",
     "src/tests/**/*"
+  ],
+  "references": [
+    {"path": "../../api"},
+    {"path": "../../packages/core"},
+    {"path": "../../packages/data-layout"},
+    {"path": "../../packages/wizard"},
   ]
 }
