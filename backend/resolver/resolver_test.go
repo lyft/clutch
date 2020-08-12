@@ -3,10 +3,13 @@ package resolver
 import (
 	"testing"
 
+
+	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
+	k8sv1resolver "github.com/lyft/clutch/backend/api/resolver/k8s/v1"
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
 )
 
@@ -18,6 +21,64 @@ func TestTypeURL(t *testing.T) {
 	a, _ := ptypes.MarshalAny(s)
 	assert.Equal(t, u, a.TypeUrl)
 	assert.Equal(t, u, "type.googleapis.com/clutch.resolver.v1.Schema")
+}
+
+func TestInputsToSchema(t *testing.T) {
+	tp := "type.googleapis.com/foo.v1.Bar"
+	m, err := InputsToSchemas(map[string][]descriptor.Message{
+		tp: {
+			(*k8sv1resolver.PodID)(nil),
+		},
+	})
+	assert.NoError(t, err)
+	assert.Len(t, m, 1)
+	assert.Len(t, m[tp], 1)
+	assert.Equal(t, TypeURL((*k8sv1resolver.PodID)(nil)), m[tp][0].TypeUrl)
+	assert.NotEmpty(t, m[tp][0].Metadata.DisplayName)
+	assert.NotEmpty(t, m[tp][0].Fields)
+}
+
+func TestHydrateDynamicOptions(t *testing.T) {
+	schema := &resolverv1.Schema{
+		TypeUrl: "aaa",
+		Metadata: &resolverv1.SchemaMetadata{
+			DisplayName: "AAA",
+			Searchable:  false,
+		},
+		Fields: []*resolverv1.Field{
+			{
+				Name: "myOptions",
+				Metadata: &resolverv1.FieldMetadata{
+					DisplayName: "My Options",
+					Type: &resolverv1.FieldMetadata_OptionField{
+						OptionField: &resolverv1.OptionField{
+							IncludeDynamicOptions: []string{"foo"},
+							Options:               nil,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	m := TypeURLToSchemasMap{
+		"bar": []*resolverv1.Schema{schema},
+	}
+
+	HydrateDynamicOptions(m, map[string][]*resolverv1.Option{
+		"foo": {
+			{
+				DisplayName: "Option 1",
+				Value:       &resolverv1.Option_StringValue{StringValue: "option_1"},
+			},
+			{
+				DisplayName: "Option 2",
+				Value:       &resolverv1.Option_StringValue{StringValue: "option_2"},
+			},
+		},
+	})
+
+	assert.Len(t, m["bar"][0].Fields[0].Metadata.GetOptionField().Options, 2)
 }
 
 func TestMarshalProtoSliceToAny(t *testing.T) {
