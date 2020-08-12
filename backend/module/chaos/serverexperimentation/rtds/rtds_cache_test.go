@@ -2,6 +2,7 @@ package rtds
 
 import (
 	"fmt"
+	"github.com/golang/protobuf/ptypes"
 	"testing"
 
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
@@ -13,50 +14,61 @@ import (
 	"go.uber.org/zap"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 )
 
-func createAbortExperiment(upstreamCluster string, downstreamCluster string, faultPercent float32, httpStatus int32) *experimentation.Experiment {
-	return &experimentation.Experiment{
-		TestSpecification: &experimentation.TestSpecification{
-			Config: &experimentation.TestSpecification_Abort{
-				Abort: &experimentation.AbortFault{
-					Target: &experimentation.AbortFault_ClusterPair{
-						ClusterPair: &experimentation.ClusterPairTarget{
-							DownstreamCluster: downstreamCluster,
-							UpstreamCluster:   upstreamCluster,
-						},
+func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent float32, httpStatus int32) *experimentation.Experiment {
+	testConfig := &serverexperimentation.TestSpecification{
+		Config: &serverexperimentation.TestSpecification_Abort{
+			Abort: &serverexperimentation.AbortFault{
+				Target: &serverexperimentation.AbortFault_ClusterPair{
+					ClusterPair: &serverexperimentation.ClusterPairTarget{
+						DownstreamCluster: downstreamCluster,
+						UpstreamCluster:   upstreamCluster,
 					},
-					Percent:    faultPercent,
-					HttpStatus: httpStatus},
-			},
+				},
+				Percent:    faultPercent,
+				HttpStatus: httpStatus},
 		},
 	}
+
+	anyConfig, err := ptypes.MarshalAny(testConfig)
+	if err != nil {
+		t.Errorf("setSnapshot failed %v", err)
+	}
+
+	return &experimentation.Experiment{TestConfig: anyConfig}
 }
 
-func createLatencyExperiment(upstreamCluster string, downstreamCluster string, latencyPercent float32, duration int32) *experimentation.Experiment {
-	return &experimentation.Experiment{
-		TestSpecification: &experimentation.TestSpecification{
-			Config: &experimentation.TestSpecification_Latency{
-				Latency: &experimentation.LatencyFault{
-					Target: &experimentation.LatencyFault_ClusterPair{
-						ClusterPair: &experimentation.ClusterPairTarget{
-							DownstreamCluster: downstreamCluster,
-							UpstreamCluster:   upstreamCluster,
-						},
+func createLatencyExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, latencyPercent float32, duration int32) *experimentation.Experiment {
+	testConfig := &serverexperimentation.TestSpecification{
+		Config: &serverexperimentation.TestSpecification_Latency{
+			Latency: &serverexperimentation.LatencyFault{
+				Target: &serverexperimentation.LatencyFault_ClusterPair{
+					ClusterPair: &serverexperimentation.ClusterPairTarget{
+						DownstreamCluster: downstreamCluster,
+						UpstreamCluster:   upstreamCluster,
 					},
-					Percent:    latencyPercent,
-					DurationMs: duration},
-			},
+				},
+				Percent:    latencyPercent,
+				DurationMs: duration},
 		},
 	}
+
+	anyConfig, err := ptypes.MarshalAny(testConfig)
+	if err != nil {
+		t.Errorf("setSnapshot failed %v", err)
+	}
+
+	return &experimentation.Experiment{TestConfig: anyConfig}
 }
 
-func mockGenerateFaultData() []*experimentation.Experiment {
+func mockGenerateFaultData(t *testing.T) []*experimentation.Experiment {
 	return []*experimentation.Experiment{
-		createAbortExperiment("serviceA", "serviceB", 10, 404),
-		createAbortExperiment("serviceC", "", 20, 504),
-		createLatencyExperiment("serviceA", "serviceD", 30, 100),
-		createLatencyExperiment("serviceE", "", 40, 200),
+		createAbortExperiment(t, "serviceA", "serviceB", 10, 404),
+		createAbortExperiment(t, "serviceC", "", 20, 504),
+		createLatencyExperiment(t, "serviceA", "serviceD", 30, 100),
+		createLatencyExperiment(t, "serviceE", "", 40, 200),
 	}
 }
 
@@ -64,18 +76,24 @@ func TestSetSnapshot(t *testing.T) {
 	testCache := gcpCache.NewSnapshotCache(false, gcpCache.IDHash{}, nil)
 	testRtdsLayerName := "testRtdsLayerName"
 	testUpstreamCluster := "serviceA"
-	mockExperimentList := mockGenerateFaultData()
+	mockExperimentList := mockGenerateFaultData(t)
 
 	var testUpstreamClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
-		switch experiment.GetTestSpecification().GetConfig().(type) {
-		case *experimentation.TestSpecification_Abort:
-			target := experiment.GetTestSpecification().GetAbort().GetClusterPair()
+		specification := &serverexperimentation.TestSpecification{}
+		err := ptypes.UnmarshalAny(experiment.GetTestConfig(), specification)
+		if err != nil {
+			t.Errorf("setSnapshot failed %v", err)
+		}
+
+		switch specification.GetConfig().(type) {
+		case *serverexperimentation.TestSpecification_Abort:
+			target := specification.GetAbort().GetClusterPair()
 			if target.GetUpstreamCluster() == testUpstreamCluster {
 				testUpstreamClusterFaults = append(testUpstreamClusterFaults, experiment)
 			}
-		case *experimentation.TestSpecification_Latency:
-			target := experiment.GetTestSpecification().GetLatency().GetClusterPair()
+		case *serverexperimentation.TestSpecification_Latency:
+			target := specification.GetLatency().GetClusterPair()
 			if target.GetUpstreamCluster() == testUpstreamCluster {
 				testUpstreamClusterFaults = append(testUpstreamClusterFaults, experiment)
 			}
@@ -112,16 +130,22 @@ func TestSetSnapshot(t *testing.T) {
 }
 
 func TestCreateRuntimeKeys(t *testing.T) {
-	testDataList := mockGenerateFaultData()
+	testDataList := mockGenerateFaultData(t)
 	for _, testExperiment := range testDataList {
 		var expectedPercentageKey string
 		var expectedPercentageValue float32
 		var expectedFaultKey string
 		var expectedFaultValue int32
 
-		switch testExperiment.GetTestSpecification().GetConfig().(type) {
-		case *experimentation.TestSpecification_Abort:
-			abort := testExperiment.GetTestSpecification().GetAbort()
+		specification := &serverexperimentation.TestSpecification{}
+		err := ptypes.UnmarshalAny(testExperiment.GetTestConfig(), specification)
+		if err != nil {
+			t.Errorf("setSnapshot failed %v", err)
+		}
+
+		switch specification.GetConfig().(type) {
+		case *serverexperimentation.TestSpecification_Abort:
+			abort := specification.GetAbort()
 			expectedFaultValue = abort.HttpStatus
 			expectedPercentageValue = abort.Percent
 			target := abort.GetClusterPair()
@@ -132,8 +156,8 @@ func TestCreateRuntimeKeys(t *testing.T) {
 				expectedPercentageKey = fmt.Sprintf(HTTPPercentageWithDownstream, target.DownstreamCluster)
 				expectedFaultKey = fmt.Sprintf(HTTPStatusWithDownstream, target.DownstreamCluster)
 			}
-		case *experimentation.TestSpecification_Latency:
-			latency := testExperiment.GetTestSpecification().GetLatency()
+		case *serverexperimentation.TestSpecification_Latency:
+			latency := specification.GetLatency()
 			expectedFaultValue = latency.DurationMs
 			expectedPercentageValue = latency.Percent
 			target := latency.GetClusterPair()
@@ -146,7 +170,7 @@ func TestCreateRuntimeKeys(t *testing.T) {
 			}
 		}
 
-		percentageKey, percentageValue, faultKey, faultValue := createRuntimeKeys(testExperiment, zap.NewNop().Sugar())
+		percentageKey, percentageValue, faultKey, faultValue := createRuntimeKeys(specification, zap.NewNop().Sugar())
 
 		assert.Equal(t, expectedPercentageKey, percentageKey)
 		assert.Equal(t, expectedPercentageValue, percentageValue)

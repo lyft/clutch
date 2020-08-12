@@ -40,14 +40,14 @@ func (fs *mockExperimentStore) GetExperiments(context.Context) ([]*experimentati
             "percent":100,
             "httpStatus":401}}`
 
-	spec := &experimentation.TestSpecification{}
-	err := jsonpb.UnmarshalString(details, spec)
+	anyConfig := &any.Any{}
+	err := jsonpb.UnmarshalString(details, anyConfig)
 	if err != nil {
 		return nil, err
 	}
 
 	experiment.Id = 1
-	experiment.TestSpecification = spec
+	experiment.TestConfig = anyConfig
 
 	experiments = append(experiments, &experiment)
 
