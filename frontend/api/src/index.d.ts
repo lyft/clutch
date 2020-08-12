@@ -6773,8 +6773,8 @@ export namespace clutch {
             /** Properties of a ListOptions. */
             interface IListOptions {
 
-                /** ListOptions labels */
-                labels?: ({ [k: string]: string }|null);
+                /** ListOptions labelSelectors */
+                labelSelectors?: ({ [k: string]: string }|null);
 
                 /** ListOptions fieldSelectors */
                 fieldSelectors?: (string|null);
@@ -6789,8 +6789,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.k8s.v1.IListOptions);
 
-                /** ListOptions labels. */
-                public labels: { [k: string]: string };
+                /** ListOptions labelSelectors. */
+                public labelSelectors: { [k: string]: string };
 
                 /** ListOptions fieldSelectors. */
                 public fieldSelectors: string;

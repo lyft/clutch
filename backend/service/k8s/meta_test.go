@@ -34,7 +34,7 @@ func TestApplyListOptions(t *testing.T) {
 		{
 			id: "adding label selectors",
 			listOptions: &k8sapiv1.ListOptions{
-				Labels: map[string]string{
+				LabelSelectors: map[string]string{
 					"foo": "bar",
 					"key": "value",
 				},
@@ -47,7 +47,7 @@ func TestApplyListOptions(t *testing.T) {
 			id: "adding both labels and field selectors",
 			listOptions: &k8sapiv1.ListOptions{
 				FieldSelectors: "metadata.name=this-is-a-pod-name",
-				Labels: map[string]string{
+				LabelSelectors: map[string]string{
 					"foo": "bar",
 					"key": "value",
 				},

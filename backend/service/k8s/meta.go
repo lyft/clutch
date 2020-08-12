@@ -9,8 +9,8 @@ import (
 
 func ApplyListOptions(listOpts *k8sapiv1.ListOptions) metav1.ListOptions {
 	opts := metav1.ListOptions{}
-	if len(listOpts.Labels) > 0 {
-		opts.LabelSelector = k8slabels.FormatLabels(listOpts.Labels)
+	if len(listOpts.LabelSelectors) > 0 {
+		opts.LabelSelector = k8slabels.FormatLabels(listOpts.LabelSelectors)
 	}
 
 	if len(listOpts.FieldSelectors) > 0 {

@@ -406,7 +406,7 @@ func (m *ListOptions) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Labels
+	// no validation rules for LabelSelectors
 
 	if len(m.GetFieldSelectors()) < 1 {
 		return ListOptionsValidationError{

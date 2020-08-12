@@ -220,7 +220,7 @@ func TestListPods(t *testing.T) {
 		"testing-clientset",
 		"testing-cluster",
 		"testing-namespace",
-		&k8sv1.ListOptions{Labels: map[string]string{"unknown-annotation": "bar"}},
+		&k8sv1.ListOptions{LabelSelectors: map[string]string{"unknown-annotation": "bar"}},
 	)
 	assert.NoError(t, err)
 	assert.Empty(t, result)
@@ -231,7 +231,7 @@ func TestListPods(t *testing.T) {
 		"testing-clientset",
 		"testing-cluster",
 		"testing-namespace",
-		&k8sv1.ListOptions{Labels: map[string]string{"foo": "bar"}},
+		&k8sv1.ListOptions{LabelSelectors: map[string]string{"foo": "bar"}},
 	)
 	assert.NoError(t, err)
 	assert.Len(t, result, 2)

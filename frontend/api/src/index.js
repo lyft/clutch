@@ -16206,7 +16206,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a ListOptions.
                  * @memberof clutch.k8s.v1
                  * @interface IListOptions
-                 * @property {Object.<string,string>|null} [labels] ListOptions labels
+                 * @property {Object.<string,string>|null} [labelSelectors] ListOptions labelSelectors
                  * @property {string|null} [fieldSelectors] ListOptions fieldSelectors
                  */
 
@@ -16219,7 +16219,7 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.k8s.v1.IListOptions=} [properties] Properties to set
                  */
                 function ListOptions(properties) {
-                    this.labels = {};
+                    this.labelSelectors = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -16227,12 +16227,12 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * ListOptions labels.
-                 * @member {Object.<string,string>} labels
+                 * ListOptions labelSelectors.
+                 * @member {Object.<string,string>} labelSelectors
                  * @memberof clutch.k8s.v1.ListOptions
                  * @instance
                  */
-                ListOptions.prototype.labels = $util.emptyObject;
+                ListOptions.prototype.labelSelectors = $util.emptyObject;
 
                 /**
                  * ListOptions fieldSelectors.
@@ -16253,13 +16253,13 @@ export const clutch = $root.clutch = (() => {
                 ListOptions.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.labels != null && message.hasOwnProperty("labels")) {
-                        if (!$util.isObject(message.labels))
-                            return "labels: object expected";
-                        let key = Object.keys(message.labels);
+                    if (message.labelSelectors != null && message.hasOwnProperty("labelSelectors")) {
+                        if (!$util.isObject(message.labelSelectors))
+                            return "labelSelectors: object expected";
+                        let key = Object.keys(message.labelSelectors);
                         for (let i = 0; i < key.length; ++i)
-                            if (!$util.isString(message.labels[key[i]]))
-                                return "labels: string{k:string} expected";
+                            if (!$util.isString(message.labelSelectors[key[i]]))
+                                return "labelSelectors: string{k:string} expected";
                     }
                     if (message.fieldSelectors != null && message.hasOwnProperty("fieldSelectors"))
                         if (!$util.isString(message.fieldSelectors))
@@ -16279,12 +16279,12 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.k8s.v1.ListOptions)
                         return object;
                     let message = new $root.clutch.k8s.v1.ListOptions();
-                    if (object.labels) {
-                        if (typeof object.labels !== "object")
-                            throw TypeError(".clutch.k8s.v1.ListOptions.labels: object expected");
-                        message.labels = {};
-                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
-                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    if (object.labelSelectors) {
+                        if (typeof object.labelSelectors !== "object")
+                            throw TypeError(".clutch.k8s.v1.ListOptions.labelSelectors: object expected");
+                        message.labelSelectors = {};
+                        for (let keys = Object.keys(object.labelSelectors), i = 0; i < keys.length; ++i)
+                            message.labelSelectors[keys[i]] = String(object.labelSelectors[keys[i]]);
                     }
                     if (object.fieldSelectors != null)
                         message.fieldSelectors = String(object.fieldSelectors);
@@ -16305,14 +16305,14 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.objects || options.defaults)
-                        object.labels = {};
+                        object.labelSelectors = {};
                     if (options.defaults)
                         object.fieldSelectors = "";
                     let keys2;
-                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
-                        object.labels = {};
+                    if (message.labelSelectors && (keys2 = Object.keys(message.labelSelectors)).length) {
+                        object.labelSelectors = {};
                         for (let j = 0; j < keys2.length; ++j)
-                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                            object.labelSelectors[keys2[j]] = message.labelSelectors[keys2[j]];
                     }
                     if (message.fieldSelectors != null && message.hasOwnProperty("fieldSelectors"))
                         object.fieldSelectors = message.fieldSelectors;
