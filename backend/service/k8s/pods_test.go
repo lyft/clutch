@@ -282,14 +282,41 @@ func TestPodDescriptionClusterName(t *testing.T) {
 func TestUpdatePod(t *testing.T) {
 	t.Parallel()
 
-	cs := testPodClientset()
+	pods := &corev1.PodList{}
+	pods.Items = append(pods.Items, corev1.Pod{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:        "testing-pod-name",
+			Namespace:   "testing-namespace",
+			ClusterName: "staging",
+			Labels:      map[string]string{"foo": "bar"},
+			Annotations: map[string]string{"baz": "quuz"},
+		},
+	})
+
+	var fakeClient fake.Clientset
+	fakeClient.AddReactor("list", "pods",
+		func(action k8stesting.Action) (handled bool, ret runtime.Object, err error) {
+			return true, pods, nil
+		})
+	fakeClient.AddReactor("get", "pods",
+		func(action k8stesting.Action) (handled bool, ret runtime.Object, err error) {
+			name := action.(k8stesting.GetAction).GetName()
+
+			if name != pods.Items[0].Name {
+				return true, nil, fmt.Errorf("no pod found")
+			}
+
+			return true, &pods.Items[0], nil
+		})
+
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": &ctxClientsetImpl{
-				Interface: cs,
-				namespace: "testing-namespace",
-				cluster:   "testing-cluster",
-			}},
+			clientsets: map[string]*ctxClientsetImpl{
+				"testing-clientset": &ctxClientsetImpl{
+					Interface: &fakeClient,
+					namespace: "testing-namespace",
+					cluster:   "testing-cluster",
+				}},
 		},
 	}
 

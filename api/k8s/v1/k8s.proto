@@ -116,7 +116,9 @@ message Pod {
 
 // List Options are suitable for all resources types eg: pods, HPA, and deployment.
 message ListOptions {
+  // L
   map<string, string> label_selectors = 1;
+  // Field selectors can be construct as a single string, the same
   string field_selectors = 2 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
