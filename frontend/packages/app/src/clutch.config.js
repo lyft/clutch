@@ -53,16 +53,16 @@ module.exports = {
         columns: ["identifier", "targets", "type", "description"],
         experimentTypes: {
           "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestSpecification": {
-            mapping: function(e) {
+            mapping: e => {
               const config = e.latency || e.abort;
-              const clusters = config.clusterPair
+              const clusters = config.clusterPair;
               return {
-                "targets": `from "${clusters.downstreamCluster}" to "${clusters.upstreamCluster}"`,
-                "type": "server",
-                "description": e.abort
+                targets: `from "${clusters.downstreamCluster}" to "${clusters.upstreamCluster}"`,
+                type: "server",
+                description: e.abort
                   ? `${e.abort.percent}% abort with ${e.abort.httpStatus} status code`
                   : `${e.latency.percent}% latency with ${e.latency.durationMs}ms delay`,
-              }
+              };
             },
             links: [
               {
@@ -73,9 +73,9 @@ module.exports = {
                 displayName: "Start Latency",
                 path: "/serverexperimentation/startlatency",
               },
-            ]
-          }
-        }
+            ],
+          },
+        },
       },
     },
   },

@@ -1,7 +1,6 @@
-import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
-import { StartAbortExperiment, StartLatencyExperiment } from "./start-experiment";
+import type { WorkflowConfiguration } from "@clutch-sh/core";
 
-export interface WorkflowProps extends BaseWorkflowProps {}
+import { StartAbortExperiment, StartLatencyExperiment } from "./start-experiment";
 
 const register = (): WorkflowConfiguration => {
   return {
@@ -15,16 +14,16 @@ const register = (): WorkflowConfiguration => {
     routes: {
       startAbortExperiment: {
         path: "startabort",
-        description: "Start Abort Experiment.",
         displayName: "Start Abort Experiment",
+        description: "Start Abort Experiment.",
         component: StartAbortExperiment,
       },
       startLatencyExperiment: {
         path: "startlatency",
-        description: "Start Latency Experiment.",
         displayName: "Start Latency Experiment",
+        description: "Start Latency Experiment.",
         component: StartLatencyExperiment,
-      }
+      },
     },
   };
 };

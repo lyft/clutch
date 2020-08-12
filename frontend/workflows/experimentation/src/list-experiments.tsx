@@ -1,54 +1,47 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import type { BaseWorkflowProps } from "@clutch-sh/core";
 import { ButtonGroup, client, Error, Row, Table } from "@clutch-sh/core";
 import { Container } from "@material-ui/core";
 import styled from "styled-components";
 
 interface ExperimentationSpecificationDataProps {
-  experiment: IClutch.chaos.experimentation.v1.Experiment,
-  columns: string[],
-  experimentTypes: any
+  experiment: IClutch.chaos.experimentation.v1.Experiment;
+  columns: string[];
+  experimentTypes: any;
 }
 
 const ExperimentSpecificationData: React.FC<ExperimentationSpecificationDataProps> = ({
-  experiment, columns, experimentTypes
+  experiment,
+  columns,
+  experimentTypes,
 }) => {
-  experimentTypes = experimentTypes || {};
-
-  const registeredExperimentType = experimentTypes[experiment.testConfig["@type"]];
+  const types = experimentTypes || {};
+  const registeredExperimentType = types[experiment.testConfig["@type"]];
   const isExperimentTypeRegistered = typeof registeredExperimentType !== "undefined";
   if (!isExperimentTypeRegistered) {
-    const data = columns.map(_ => {
-      return experiment.testConfig["@type"]
+    const data = columns.map(() => {
+      return experiment.testConfig["@type"];
     });
-    return (
-      <Row data={data} />
-    );
+    return <Row data={data} />;
   }
 
-  const mapper = registeredExperimentType["mapping"];
+  const mapper = registeredExperimentType.mapping;
   const mapperExists = typeof mapper !== "undefined";
   const model = mapperExists ? mapper(experiment.testConfig) : experiment;
 
   const data = columns.map(column => {
-    if (column == "identifier") {
-      return experiment.id;
+    let value: string;
+    if (column === "identifier") {
+      value = experiment.id.toString();
     } else if (column in model) {
-      return model[column];
-    } else {
-      return "Unknown";
+      value = model[column];
     }
+
+    return value ?? "Unknown";
   });
 
-  return (
-    <Row
-      data={
-        data
-      }
-    />
-  );
+  return <Row data={data} />;
 };
 
 const Layout = styled(Container)`
@@ -56,21 +49,21 @@ const Layout = styled(Container)`
 `;
 
 interface ExperimentTypeLinkProps {
-  displayName: string,
-  path: string
+  displayName: string;
+  path: string;
 }
 
 interface ExperimentTypeProps {
-  mapping: string,
-  links: ExperimentTypeLinkProps[]
+  mapping: string;
+  links: ExperimentTypeLinkProps[];
 }
 
-interface ListExperimentsProps extends BaseWorkflowProps {
-  columns: [string],
-  experimentTypes: ExperimentTypeProps[]
+interface ListExperimentsProps {
+  columns: [string];
+  experimentTypes: ExperimentTypeProps[];
 }
 
-const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, experimentTypes }) => {
+const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, experimentTypes }) => {
   const [experiments, setExperiments] = useState([]);
   const [error, setError] = useState("");
 
@@ -87,36 +80,37 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, exp
       });
   }
 
-  experimentTypes = experimentTypes || [];
+  const types = experimentTypes || [];
   let links: ExperimentTypeLinkProps[] = [];
-  Object.keys(experimentTypes).forEach(function(experimentType) {
-    const specification = experimentTypes[experimentType]
-    if (typeof specification["links"] !== "undefined") {
-      links = links.concat(specification["links"])
+  Object.keys(types).forEach(experimentType => {
+    const specification = types[experimentType];
+    if (typeof specification.links !== "undefined") {
+      links = links.concat(specification.links);
     }
-  })
+  });
 
-  let columnNames = columns.map(name => name.toUpperCase());
-  let buttons = links.map(link =>  {
+  const columnNames = columns.map(name => name.toUpperCase());
+  const buttons = links.map(link => {
     return {
       text: link.displayName,
-      onClick: () => navigate(link.path)
-    }
-  })
+      onClick: () => navigate(link.path),
+    };
+  });
 
   return (
     <Layout>
       {error && <Error message={error} />}
-      <Table
-        headings={columnNames}
-      >
+      <Table headings={columnNames}>
         {experiments.map(e => (
-          <ExperimentSpecificationData key={e.id} experiment={e} columns={columns} experimentTypes={experimentTypes} />
+          <ExperimentSpecificationData
+            key={e.id}
+            experiment={e}
+            columns={columns}
+            experimentTypes={types}
+          />
         ))}
       </Table>
-      <ButtonGroup
-        buttons={buttons}
-      />
+      <ButtonGroup buttons={buttons} />
     </Layout>
   );
 };
