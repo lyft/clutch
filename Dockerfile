@@ -7,7 +7,7 @@ COPY Makefile .
 RUN make frontend
 
 # Backend build.
-FROM golang:1.14-buster as gobuild
+FROM golang:1.15-buster as gobuild
 WORKDIR /go/src/github.com/lyft/clutch
 COPY ./backend ./backend
 COPY Makefile .
