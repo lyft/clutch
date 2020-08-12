@@ -8,7 +8,6 @@ import (
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	k8slabels "k8s.io/apimachinery/pkg/labels"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
@@ -18,12 +17,20 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 	if err != nil {
 		return nil, err
 	}
-	opts := metav1.GetOptions{}
-	pod, err := cs.CoreV1().Pods(cs.Namespace()).Get(name, opts)
+
+	pods, err := cs.CoreV1().Pods(cs.Namespace()).List(metav1.ListOptions{
+		FieldSelector: "metadata.name=" + name,
+	})
 	if err != nil {
 		return nil, err
 	}
-	return podDescription(pod, cs.Cluster()), nil
+
+	if len(pods.Items) == 1 {
+		return podDescription(&pods.Items[0], cs.Cluster()), nil
+	} else if len(pods.Items) > 1 {
+		return nil, fmt.Errorf("Located multiple Pods")
+	}
+	return nil, fmt.Errorf("Unable to locate pod")
 }
 
 func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error {
@@ -45,10 +52,7 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 		return nil, err
 	}
 
-	opts := metav1.ListOptions{}
-	if len(listPodsOpts.Labels) > 0 {
-		opts.LabelSelector = k8slabels.FormatLabels(listPodsOpts.Labels)
-	}
+	opts := ApplyListOptions(listPodsOpts)
 
 	podList, err := cs.CoreV1().Pods(cs.Namespace()).List(opts)
 	if err != nil {

@@ -2,6 +2,7 @@ package k8s
 
 import (
 	"context"
+	"fmt"
 
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -16,12 +17,20 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 		return nil, err
 	}
 
-	getOpts := metav1.GetOptions{}
-	hpa, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Get(name, getOpts)
+	hpas, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).List(metav1.ListOptions{
+		FieldSelector: "metadata.name=" + name,
+	})
 	if err != nil {
 		return nil, err
 	}
-	return ProtoForHPA(cs.Cluster(), hpa), nil
+
+	if len(hpas.Items) == 1 {
+		return ProtoForHPA(cs.Cluster(), &hpas.Items[0]), nil
+	} else if len(hpas.Items) > 1 {
+		return nil, fmt.Errorf("Located multiple HPAs")
+	}
+
+	return nil, fmt.Errorf("Unable to locate HPA")
 }
 
 func ProtoForHPA(cluster string, autoscaler *autoscalingv1.HorizontalPodAutoscaler) *k8sapiv1.HPA {

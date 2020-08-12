@@ -2,6 +2,7 @@ package k8s
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -10,6 +11,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes/fake"
+	k8stesting "k8s.io/client-go/testing"
 
 	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
@@ -85,17 +87,44 @@ func testPodClientset() *fake.Clientset {
 	return fake.NewSimpleClientset(testPods...)
 }
 
+func testListFakeClientset(numPods int) *fake.Clientset {
+	var fakeClient fake.Clientset
+	fakeClient.AddReactor("list", "pods",
+		func(action k8stesting.Action) (handled bool, ret runtime.Object, err error) {
+			pods := corev1.PodList{}
+
+			for i := 0; i < numPods; i++ {
+				pods.Items = append(pods.Items, corev1.Pod{
+					ObjectMeta: metav1.ObjectMeta{
+						Name:        fmt.Sprintf("testing-pod-name-%b", i),
+						Namespace:   "testing-namespace",
+						ClusterName: "staging",
+					},
+				})
+			}
+
+			return true, &pods, nil
+		})
+	return &fakeClient
+}
+
 func TestDescribePod(t *testing.T) {
 	t.Parallel()
 
-	cs := testPodClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": {
-				Interface: cs,
-				namespace: "testing-namespace",
-				cluster:   "core-testing",
-			}},
+			clientsets: map[string]*ctxClientsetImpl{
+				"foo": {
+					Interface: testListFakeClientset(3),
+					namespace: "testing-namespace",
+					cluster:   "core-testing",
+				},
+				"bar": {
+					Interface: testListFakeClientset(1),
+					namespace: "testing-namespace",
+					cluster:   "core-testing",
+				},
+			},
 		},
 	}
 	// Not found.
@@ -109,21 +138,22 @@ func TestDescribePod(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 
+	// Found more than 1 pod
 	result, err = s.DescribePod(context.Background(),
 		"foo",
 		"",
 		"testing-namespace",
-		"testing-pod-name",
+		"testing-pod-name-1",
 	)
-	assert.NoError(t, err)
-	assert.NotNil(t, result)
+	assert.Error(t, err)
+	assert.Nil(t, result)
 
-	// Assert that the pod is found using the clientset's namespace if none is provided.
+	// Found exactly 1 pod
 	result, err = s.DescribePod(context.Background(),
-		"foo",
+		"bar",
 		"",
-		"",
-		"testing-pod-name",
+		"testing-namespace",
+		"testing-pod-name-0",
 	)
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
@@ -252,14 +282,41 @@ func TestPodDescriptionClusterName(t *testing.T) {
 func TestUpdatePod(t *testing.T) {
 	t.Parallel()
 
-	cs := testPodClientset()
+	pods := &corev1.PodList{}
+	pods.Items = append(pods.Items, corev1.Pod{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:        "testing-pod-name",
+			Namespace:   "testing-namespace",
+			ClusterName: "staging",
+			Labels:      map[string]string{"foo": "bar"},
+			Annotations: map[string]string{"baz": "quuz"},
+		},
+	})
+
+	var fakeClient fake.Clientset
+	fakeClient.AddReactor("list", "pods",
+		func(action k8stesting.Action) (handled bool, ret runtime.Object, err error) {
+			return true, pods, nil
+		})
+	fakeClient.AddReactor("get", "pods",
+		func(action k8stesting.Action) (handled bool, ret runtime.Object, err error) {
+			name := action.(k8stesting.GetAction).GetName()
+
+			if name != pods.Items[0].Name {
+				return true, nil, fmt.Errorf("no pod found")
+			}
+
+			return true, &pods.Items[0], nil
+		})
+
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": &ctxClientsetImpl{
-				Interface: cs,
-				namespace: "testing-namespace",
-				cluster:   "testing-cluster",
-			}},
+			clientsets: map[string]*ctxClientsetImpl{
+				"testing-clientset": &ctxClientsetImpl{
+					Interface: &fakeClient,
+					namespace: "testing-namespace",
+					cluster:   "testing-cluster",
+				}},
 		},
 	}
 

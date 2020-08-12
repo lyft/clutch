@@ -17,6 +17,7 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	k8sv1api "github.com/lyft/clutch/backend/api/k8s/v1"
 	k8sv1resolver "github.com/lyft/clutch/backend/api/resolver/k8s/v1"
@@ -150,12 +151,12 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	ctx, handler := resolver.NewFanoutHandler(ctx)
 	switch typeURL {
 	case typeURLPod:
-		if id := idPattern.FindString(query); id != "" {
+		if idPattern.MatchString(query) {
 			for _, name := range r.svc.Clientsets() {
 				handler.Add(1)
 				go func(name string) {
 					defer handler.Done()
-					pod, err := r.svc.DescribePod(ctx, name, "", "", id)
+					pod, err := r.svc.DescribePod(ctx, name, "", metav1.NamespaceAll, query)
 					select {
 					case handler.Channel() <- resolver.NewFanoutResult([]*k8sv1api.Pod{pod}, err):
 						return
@@ -168,12 +169,12 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 			return nil, status.Error(codes.InvalidArgument, "did not understand input")
 		}
 	case typeURLHPA:
-		if id := idPattern.FindString(query); id != "" {
+		if idPattern.MatchString(query) {
 			for _, name := range r.svc.Clientsets() {
 				handler.Add(1)
 				go func(name string) {
 					defer handler.Done()
-					hpa, err := r.svc.DescribeHPA(ctx, name, "", "", id)
+					hpa, err := r.svc.DescribeHPA(ctx, name, "", metav1.NamespaceAll, query)
 					select {
 					case handler.Channel() <- resolver.NewFanoutResult([]*k8sv1api.HPA{hpa}, err):
 						return
