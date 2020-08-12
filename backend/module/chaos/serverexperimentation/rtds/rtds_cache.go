@@ -197,7 +197,10 @@ func createRuntimeKeys(testSpecification *serverexperimentation.TestSpecificatio
 }
 
 func isFaultTest(experiment *experimentation.Experiment, testSpecification *serverexperimentation.TestSpecification) bool {
-	ptypes.UnmarshalAny(experiment.GetTestConfig(), testSpecification)
+	err := ptypes.UnmarshalAny(experiment.GetTestConfig(), testSpecification)
+	if err != nil {
+		return false
+	}
 
 	switch testSpecification.GetConfig().(type) {
 	case *serverexperimentation.TestSpecification_Abort:
