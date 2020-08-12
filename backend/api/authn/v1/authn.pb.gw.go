@@ -106,6 +106,7 @@ func local_request_AuthnAPI_Callback_0(ctx context.Context, marshaler runtime.Ma
 // RegisterAuthnAPIHandlerServer registers the http handlers for service AuthnAPI to "mux".
 // UnaryRPC     :call AuthnAPIServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+// Note that using this registration option will cause many gRPC library features (such as grpc.SendHeader, etc) to stop working. Consider using RegisterAuthnAPIHandlerFromEndpoint instead.
 func RegisterAuthnAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server AuthnAPIServer) error {
 
 	mux.Handle("GET", pattern_AuthnAPI_Login_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {

@@ -68,6 +68,7 @@ func local_request_SourceControlAPI_CreateRepository_0(ctx context.Context, mars
 // RegisterSourceControlAPIHandlerServer registers the http handlers for service SourceControlAPI to "mux".
 // UnaryRPC     :call SourceControlAPIServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+// Note that using this registration option will cause many gRPC library features (such as grpc.SendHeader, etc) to stop working. Consider using RegisterSourceControlAPIHandlerFromEndpoint instead.
 func RegisterSourceControlAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server SourceControlAPIServer) error {
 
 	mux.Handle("POST", pattern_SourceControlAPI_CreateRepository_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {

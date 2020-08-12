@@ -136,6 +136,7 @@ func local_request_ExperimentsAPI_DeleteExperiments_0(ctx context.Context, marsh
 // RegisterExperimentsAPIHandlerServer registers the http handlers for service ExperimentsAPI to "mux".
 // UnaryRPC     :call ExperimentsAPIServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+// Note that using this registration option will cause many gRPC library features (such as grpc.SendHeader, etc) to stop working. Consider using RegisterExperimentsAPIHandlerFromEndpoint instead.
 func RegisterExperimentsAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ExperimentsAPIServer) error {
 
 	mux.Handle("POST", pattern_ExperimentsAPI_CreateExperiments_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {

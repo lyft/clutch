@@ -70,6 +70,7 @@ func local_request_HealthcheckAPI_Healthcheck_1(ctx context.Context, marshaler r
 // RegisterHealthcheckAPIHandlerServer registers the http handlers for service HealthcheckAPI to "mux".
 // UnaryRPC     :call HealthcheckAPIServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+// Note that using this registration option will cause many gRPC library features (such as grpc.SendHeader, etc) to stop working. Consider using RegisterHealthcheckAPIHandlerFromEndpoint instead.
 func RegisterHealthcheckAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server HealthcheckAPIServer) error {
 
 	mux.Handle("GET", pattern_HealthcheckAPI_Healthcheck_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {

@@ -136,6 +136,7 @@ func local_request_EC2API_ResizeAutoscalingGroup_0(ctx context.Context, marshale
 // RegisterEC2APIHandlerServer registers the http handlers for service EC2API to "mux".
 // UnaryRPC     :call EC2APIServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+// Note that using this registration option will cause many gRPC library features (such as grpc.SendHeader, etc) to stop working. Consider using RegisterEC2APIHandlerFromEndpoint instead.
 func RegisterEC2APIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server EC2APIServer) error {
 
 	mux.Handle("POST", pattern_EC2API_GetInstance_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
