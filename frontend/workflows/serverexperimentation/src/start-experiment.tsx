@@ -21,7 +21,7 @@ const ClusterPairTargetDetails: React.FC<WizardChild> = () => {
   return (
     <WizardStep error={clusterPairData.error} isLoading={false}>
       <MetadataTable
-        onUpdate={(key, value) => clusterPairData.updateData(key, value)}
+        onUpdate={(key, value: string) => clusterPairData.updateData(key, value)}
         data={[
           {
             name: "Downstream Cluster",
@@ -176,8 +176,8 @@ export const StartAbortExperiment: React.FC<BaseWorkflowProps> = ({ heading }) =
     startData: {
       deps: ["clusterPairTargetData", "abortExperimentData"],
       hydrator: (
-        clusterPairTargetData: IClutch.chaos.experimentation.v1.IClusterPairTarget,
-        abortExperimentData: IClutch.chaos.experimentation.v1.AbortFault
+        clusterPairTargetData: IClutch.chaos.serverexperimentation.v1.IClusterPairTarget,
+        abortExperimentData: IClutch.chaos.serverexperimentation.v1.AbortFault
       ) => {
         return createExperiment({
           abort: {
@@ -209,8 +209,8 @@ export const StartLatencyExperiment: React.FC<BaseWorkflowProps> = ({ heading })
     startData: {
       deps: ["clusterPairTargetData", "latencyExperimentData"],
       hydrator: (
-        clusterPairTargetData: IClutch.chaos.experimentation.v1.IClusterPairTarget,
-        latencyExperimentData: IClutch.chaos.experimentation.v1.LatencyFault
+        clusterPairTargetData: IClutch.chaos.serverexperimentation.v1.IClusterPairTarget,
+        latencyExperimentData: IClutch.chaos.serverexperimentation.v1.LatencyFault
       ) => {
         return createExperiment({
           latency: {

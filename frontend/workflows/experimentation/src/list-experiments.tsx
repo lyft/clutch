@@ -8,7 +8,7 @@ import styled from "styled-components";
 
 interface ExperimentationSpecificationDataProps {
   experiment: IClutch.chaos.experimentation.v1.Experiment,
-  columns: [string],
+  columns: string[],
   experimentTypes: any
 }
 
@@ -55,9 +55,19 @@ const Layout = styled(Container)`
   padding: 5% 0;
 `;
 
+interface ExperimentTypeLinkProps {
+  displayName: string,
+  path: string
+}
+
+interface ExperimentTypeProps {
+  mapping: string,
+  links: ExperimentTypeLinkProps[]
+}
+
 interface ListExperimentsProps extends BaseWorkflowProps {
   columns: [string],
-  experimentTypes: [any]
+  experimentTypes: ExperimentTypeProps[]
 }
 
 const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, experimentTypes }) => {
@@ -77,8 +87,8 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, exp
       });
   }
 
-  experimentTypes = experimentTypes || {};
-  let links = []
+  experimentTypes = experimentTypes || [];
+  let links: ExperimentTypeLinkProps[] = [];
   Object.keys(experimentTypes).forEach(function(experimentType) {
     const specification = experimentTypes[experimentType]
     if (typeof specification["links"] !== "undefined") {
@@ -89,7 +99,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, exp
   let columnNames = columns.map(name => name.toUpperCase());
   let buttons = links.map(link =>  {
     return {
-      text: link.text,
+      text: link.displayName,
       onClick: () => navigate(link.path)
     }
   })

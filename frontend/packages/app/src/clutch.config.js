@@ -59,16 +59,18 @@ module.exports = {
               return {
                 "targets": `from "${clusters.downstreamCluster}" to "${clusters.upstreamCluster}"`,
                 "type": "server",
-                "description": e.abort ? `${e.abort.percent}% abort with ${e.abort.httpStatus} status code` : `${e.latency.percent}% latency with ${e.latency.durationMs}ms delay`,
+                "description": e.abort
+                ? `${e.abort.percent}% abort with ${e.abort.httpStatus} status code`
+                : `${e.latency.percent}% latency with ${e.latency.durationMs}ms delay`,
               }
             },
             links: [
               {
-                text: "Start Abort",
+                displayName: "Start Abort",
                 path: "/serverexperimentation/startabort",
               },
               {
-                text: "Start Latency",
+                displayName: "Start Latency",
                 path: "/serverexperimentation/startlatency",
               },
             ]
