@@ -68,6 +68,7 @@ func local_request_TopologyAPI_GetTopology_0(ctx context.Context, marshaler runt
 // RegisterTopologyAPIHandlerServer registers the http handlers for service TopologyAPI to "mux".
 // UnaryRPC     :call TopologyAPIServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+// Note that using this registration option will cause many gRPC library features (such as grpc.SendHeader, etc) to stop working. Consider using RegisterTopologyAPIHandlerFromEndpoint instead.
 func RegisterTopologyAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server TopologyAPIServer) error {
 
 	mux.Handle("POST", pattern_TopologyAPI_GetTopology_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {

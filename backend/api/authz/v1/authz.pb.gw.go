@@ -68,6 +68,7 @@ func local_request_AuthzAPI_Check_0(ctx context.Context, marshaler runtime.Marsh
 // RegisterAuthzAPIHandlerServer registers the http handlers for service AuthzAPI to "mux".
 // UnaryRPC     :call AuthzAPIServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+// Note that using this registration option will cause many gRPC library features (such as grpc.SendHeader, etc) to stop working. Consider using RegisterAuthzAPIHandlerFromEndpoint instead.
 func RegisterAuthzAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server AuthzAPIServer) error {
 
 	mux.Handle("POST", pattern_AuthzAPI_Check_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {

@@ -52,6 +52,7 @@ func local_request_AssetsAPI_Fetch_0(ctx context.Context, marshaler runtime.Mars
 // RegisterAssetsAPIHandlerServer registers the http handlers for service AssetsAPI to "mux".
 // UnaryRPC     :call AssetsAPIServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+// Note that using this registration option will cause many gRPC library features (such as grpc.SendHeader, etc) to stop working. Consider using RegisterAssetsAPIHandlerFromEndpoint instead.
 func RegisterAssetsAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server AssetsAPIServer) error {
 
 	mux.Handle("GET", pattern_AssetsAPI_Fetch_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
