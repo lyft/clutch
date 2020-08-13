@@ -5,8 +5,8 @@ import { StartAbortExperiment, StartLatencyExperiment } from "./start-experiment
 const register = (): WorkflowConfiguration => {
   return {
     developer: {
-      name: "hello@lyft.com",
-      contactUrl: "mailto:example@lyft.com",
+      name: "Lyft",
+      contactUrl: "mailto:hello@clutch.sh",
     },
     path: "serverexperimentation",
     group: "Experimentation",
