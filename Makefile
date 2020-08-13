@@ -49,6 +49,10 @@ backend-with-assets:
 backend-dev:
 	cd backend && go run .
 
+.PHONY: backend-watch # Start the backend in development mode with live code reloading.
+backend-watch:
+	tools/air.sh
+
 .PHONY: backend-dev-mock # Start the backend in development mode with mock responses.
 backend-dev-mock:
 	cd backend && go run mock/gateway.go
