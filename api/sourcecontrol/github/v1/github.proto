@@ -43,3 +43,7 @@ enum CommitCompareStatus {
   AHEAD = 3;
   IDENTICAL = 4;
 }
+
+message CommitComparison {
+  CommitCompareStatus status = 1;
+}

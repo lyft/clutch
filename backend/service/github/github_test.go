@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"os"
 	"testing"
 	"time"
 
@@ -156,11 +155,9 @@ func (m *mockRepositories) Create(ctx context.Context, org string, repo *githubv
 }
 
 func (m *mockRepositories) GetContents(_ context.Context, _, _, _ string, _ *githubv3.RepositoryContentGetOptions) (*githubv3.RepositoryContent, []*githubv3.RepositoryContent, *githubv3.Response, error) {
-	fmt.Fprintf(os.Stdout, "Made it here\n")
 	if m.generalError == true {
 		return nil, nil, nil, errors.New(problem)
 	}
-	fmt.Fprintf(os.Stdout, "Made it here2\n")
 	if m.malformedEncodingError {
 		encoding := "unsupported"
 		return &githubv3.RepositoryContent{Encoding: &encoding}, nil, nil, nil
@@ -264,7 +261,7 @@ func TestCompareCommits(t *testing.T) {
 				Repositories: tt.mockRepo,
 			}}
 
-			status, err := s.CompareCommits(
+			comp, err := s.CompareCommits(
 				context.Background(),
 				&RemoteRef{
 					RepoOwner: "owner",
@@ -282,7 +279,7 @@ func TestCompareCommits(t *testing.T) {
 				a.FailNowf("unexpected error: %s", err.Error())
 				return
 			}
-			a.Equal(status, tt.status)
+			a.Equal(comp.GetStatus(), tt.status)
 			a.Nil(err)
 		})
 	}

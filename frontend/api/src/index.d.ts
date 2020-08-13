@@ -8926,6 +8926,54 @@ export namespace clutch {
                     AHEAD = 3,
                     IDENTICAL = 4
                 }
+
+                /** Properties of a CommitComparison. */
+                interface ICommitComparison {
+
+                    /** CommitComparison status */
+                    status?: (clutch.sourcecontrol.github.v1.CommitCompareStatus|null);
+                }
+
+                /** Represents a CommitComparison. */
+                class CommitComparison implements ICommitComparison {
+
+                    /**
+                     * Constructs a new CommitComparison.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.sourcecontrol.github.v1.ICommitComparison);
+
+                    /** CommitComparison status. */
+                    public status: clutch.sourcecontrol.github.v1.CommitCompareStatus;
+
+                    /**
+                     * Verifies a CommitComparison message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a CommitComparison message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns CommitComparison
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.sourcecontrol.github.v1.CommitComparison;
+
+                    /**
+                     * Creates a plain object from a CommitComparison message. Also converts values to other types if specified.
+                     * @param message CommitComparison
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.sourcecontrol.github.v1.CommitComparison, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this CommitComparison to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
             }
         }
 

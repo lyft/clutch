@@ -72,7 +72,7 @@ type Client interface {
 	CreatePullRequest(ctx context.Context, ref *RemoteRef, title, body string) (*PullRequestInfo, error)
 	CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error)
 	CreateIssueComment(ctx context.Context, ref *RemoteRef, number int, body string) error
-	CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (scgithubv1.CommitCompareStatus, error)
+	CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -276,20 +276,20 @@ func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, 
 	return f, nil
 }
 
-func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (scgithubv1.CommitCompareStatus, error) {
-	comp, _, err := s.rest.Repositories.CompareCommits(context.Background(), ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref)
-	if err != nil {
-		return scgithubv1.CommitCompareStatus_UNKNOWN, fmt.Errorf("Could not get compare status for %s and %s. %+v", ref.Ref, compareSHA, err)
+func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error) {
+	cc := &scgithubv1.CommitComparison{
+		Status: scgithubv1.CommitCompareStatus_UNKNOWN,
 	}
 
-	switch strings.ToUpper(*comp.Status) {
-	case scgithubv1.CommitCompareStatus_BEHIND.String():
-		return scgithubv1.CommitCompareStatus_BEHIND, nil
-	case scgithubv1.CommitCompareStatus_AHEAD.String():
-		return scgithubv1.CommitCompareStatus_AHEAD, nil
-	case scgithubv1.CommitCompareStatus_IDENTICAL.String():
-		return scgithubv1.CommitCompareStatus_IDENTICAL, nil
-	default:
-		return scgithubv1.CommitCompareStatus_UNKNOWN, fmt.Errorf("Unknown status %s", *comp.Status)
+	comp, _, err := s.rest.Repositories.CompareCommits(ctx, ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref)
+	if err != nil {
+		return cc, fmt.Errorf("Could not get compare status for %s and %s. %+v", ref.Ref, compareSHA, err)
 	}
+
+	status, ok := scgithubv1.CommitCompareStatus_value[strings.ToUpper(comp.GetStatus())]
+	if !ok {
+		return cc, fmt.Errorf("unknown status %s", comp.GetStatus())
+	}
+	cc.Status = scgithubv1.CommitCompareStatus(status)
+	return cc, nil
 }
