@@ -68,6 +68,7 @@ func local_request_EnvoyTriageAPI_Read_0(ctx context.Context, marshaler runtime.
 // RegisterEnvoyTriageAPIHandlerServer registers the http handlers for service EnvoyTriageAPI to "mux".
 // UnaryRPC     :call EnvoyTriageAPIServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+// Note that using this registration option will cause many gRPC library features (such as grpc.SendHeader, etc) to stop working. Consider using RegisterEnvoyTriageAPIHandlerFromEndpoint instead.
 func RegisterEnvoyTriageAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server EnvoyTriageAPIServer) error {
 
 	mux.Handle("POST", pattern_EnvoyTriageAPI_Read_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {

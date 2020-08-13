@@ -102,6 +102,7 @@ func local_request_KinesisAPI_UpdateShardCount_0(ctx context.Context, marshaler 
 // RegisterKinesisAPIHandlerServer registers the http handlers for service KinesisAPI to "mux".
 // UnaryRPC     :call KinesisAPIServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+// Note that using this registration option will cause many gRPC library features (such as grpc.SendHeader, etc) to stop working. Consider using RegisterKinesisAPIHandlerFromEndpoint instead.
 func RegisterKinesisAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server KinesisAPIServer) error {
 
 	mux.Handle("POST", pattern_KinesisAPI_GetStream_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {

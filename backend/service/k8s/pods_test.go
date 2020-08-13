@@ -2,13 +2,16 @@ package k8s
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes/fake"
+	k8stesting "k8s.io/client-go/testing"
 
 	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
@@ -84,17 +87,44 @@ func testPodClientset() *fake.Clientset {
 	return fake.NewSimpleClientset(testPods...)
 }
 
+func testListFakeClientset(numPods int) *fake.Clientset {
+	var fakeClient fake.Clientset
+	fakeClient.AddReactor("list", "pods",
+		func(action k8stesting.Action) (handled bool, ret runtime.Object, err error) {
+			pods := corev1.PodList{}
+
+			for i := 0; i < numPods; i++ {
+				pods.Items = append(pods.Items, corev1.Pod{
+					ObjectMeta: metav1.ObjectMeta{
+						Name:        fmt.Sprintf("testing-pod-name-%b", i),
+						Namespace:   "testing-namespace",
+						ClusterName: "staging",
+					},
+				})
+			}
+
+			return true, &pods, nil
+		})
+	return &fakeClient
+}
+
 func TestDescribePod(t *testing.T) {
 	t.Parallel()
 
-	cs := testPodClientset()
 	s := &svc{
 		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": {
-				Interface: cs,
-				namespace: "testing-namespace",
-				cluster:   "core-testing",
-			}},
+			clientsets: map[string]*ctxClientsetImpl{
+				"foo": {
+					Interface: testListFakeClientset(3),
+					namespace: "testing-namespace",
+					cluster:   "core-testing",
+				},
+				"bar": {
+					Interface: testListFakeClientset(1),
+					namespace: "testing-namespace",
+					cluster:   "core-testing",
+				},
+			},
 		},
 	}
 	// Not found.
@@ -108,21 +138,22 @@ func TestDescribePod(t *testing.T) {
 	assert.Error(t, err)
 	assert.Nil(t, result)
 
+	// Found more than 1 pod
 	result, err = s.DescribePod(context.Background(),
 		"foo",
 		"",
 		"testing-namespace",
-		"testing-pod-name",
+		"testing-pod-name-1",
 	)
-	assert.NoError(t, err)
-	assert.NotNil(t, result)
+	assert.Error(t, err)
+	assert.Nil(t, result)
 
-	// Assert that the pod is found using the clientset's namespace if none is provided.
+	// Found exactly 1 pod
 	result, err = s.DescribePod(context.Background(),
-		"foo",
+		"bar",
 		"",
-		"",
-		"testing-pod-name",
+		"testing-namespace",
+		"testing-pod-name-0",
 	)
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
@@ -246,4 +277,129 @@ func TestPodDescriptionClusterName(t *testing.T) {
 			assert.Equal(t, tt.expectedClusterName, pod.Cluster)
 		})
 	}
+}
+
+func TestUpdatePod(t *testing.T) {
+	t.Parallel()
+
+	pods := &corev1.PodList{}
+	pods.Items = append(pods.Items, corev1.Pod{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:        "testing-pod-name",
+			Namespace:   "testing-namespace",
+			ClusterName: "staging",
+			Labels:      map[string]string{"foo": "bar"},
+			Annotations: map[string]string{"baz": "quuz"},
+		},
+	})
+
+	var fakeClient fake.Clientset
+	fakeClient.AddReactor("list", "pods",
+		func(action k8stesting.Action) (handled bool, ret runtime.Object, err error) {
+			return true, pods, nil
+		})
+	fakeClient.AddReactor("get", "pods",
+		func(action k8stesting.Action) (handled bool, ret runtime.Object, err error) {
+			name := action.(k8stesting.GetAction).GetName()
+
+			if name != pods.Items[0].Name {
+				return true, nil, fmt.Errorf("no pod found")
+			}
+
+			return true, &pods.Items[0], nil
+		})
+
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{
+				"testing-clientset": &ctxClientsetImpl{
+					Interface: &fakeClient,
+					namespace: "testing-namespace",
+					cluster:   "testing-cluster",
+				}},
+		},
+	}
+
+	// Pod not found.
+	err := s.UpdatePod(context.Background(),
+		"testing-clientset",
+		"testing-cluster",
+		"testing-namespace",
+		"non-existent-pod-name",
+		&k8sv1.ExpectedObjectMetaFields{},
+		&k8sv1.ObjectMetaFields{Annotations: map[string]string{"new-annotation": "foo"}},
+		&k8sv1.RemoveObjectMetaFields{},
+	)
+	assert.Error(t, err)
+
+	// Returns an error when the precondition is not met
+	err = s.UpdatePod(context.Background(),
+		"testing-clientset",
+		"testing-cluster",
+		"testing-namespace",
+		"testing-pod-name",
+		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*wrapperspb.StringValue{"foo": &wrapperspb.StringValue{Value: "non-matching-value"}}},
+		&k8sv1.ObjectMetaFields{Annotations: map[string]string{"new-annotation": "foo"}},
+		&k8sv1.RemoveObjectMetaFields{},
+	)
+	assert.Error(t, err)
+
+	// Successfully sets an annotation when the precondition is met
+	err = s.UpdatePod(context.Background(),
+		"testing-clientset",
+		"testing-cluster",
+		"testing-namespace",
+		"testing-pod-name",
+		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*wrapperspb.StringValue{"baz": &wrapperspb.StringValue{Value: "quuz"}}},
+		&k8sv1.ObjectMetaFields{Annotations: map[string]string{"baz": "new-value"}},
+		&k8sv1.RemoveObjectMetaFields{},
+	)
+	assert.NoError(t, err)
+
+	// Successfully removes an annotation. This step also verifies that the previous step has properly updated the annotation.
+	err = s.UpdatePod(context.Background(),
+		"testing-clientset",
+		"testing-cluster",
+		"testing-namespace",
+		"testing-pod-name",
+		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*wrapperspb.StringValue{"baz": &wrapperspb.StringValue{Value: "new-value"}}},
+		&k8sv1.ObjectMetaFields{},
+		&k8sv1.RemoveObjectMetaFields{Annotations: []string{"baz"}},
+	)
+	assert.NoError(t, err)
+
+	pod, err := s.DescribePod(context.Background(),
+		"testing-clientset",
+		"testing-cluster",
+		"testing-namespace",
+		"testing-pod-name",
+	)
+	assert.NoError(t, err)
+
+	_, annotationPresent := pod.Annotations["baz"]
+	assert.False(t, annotationPresent)
+
+	// Checking that an annotation is not set works
+	err = s.UpdatePod(context.Background(),
+		"testing-clientset",
+		"testing-cluster",
+		"testing-namespace",
+		"testing-pod-name",
+		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*wrapperspb.StringValue{"baz": nil}},
+		&k8sv1.ObjectMetaFields{Annotations: map[string]string{"baz": "new-value"}},
+		&k8sv1.RemoveObjectMetaFields{},
+	)
+	assert.NoError(t, err)
+
+	pod, err = s.DescribePod(context.Background(),
+		"testing-clientset",
+		"testing-cluster",
+		"testing-namespace",
+		"testing-pod-name",
+	)
+	assert.NoError(t, err)
+
+	annotationValue, annotationPresent := pod.Annotations["baz"]
+	assert.True(t, annotationPresent)
+	assert.Equal(t, "new-value", annotationValue)
 }

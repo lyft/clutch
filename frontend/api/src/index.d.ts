@@ -7494,6 +7494,168 @@ export namespace clutch {
                  */
                 public toJSON(): { [k: string]: any };
             }
+
+            /** Properties of an ExpectedObjectMetaFields. */
+            interface IExpectedObjectMetaFields {
+
+                /** ExpectedObjectMetaFields labels */
+                labels?: ({ [k: string]: google.protobuf.IStringValue }|null);
+
+                /** ExpectedObjectMetaFields annotations */
+                annotations?: ({ [k: string]: google.protobuf.IStringValue }|null);
+            }
+
+            /** Represents an ExpectedObjectMetaFields. */
+            class ExpectedObjectMetaFields implements IExpectedObjectMetaFields {
+
+                /**
+                 * Constructs a new ExpectedObjectMetaFields.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IExpectedObjectMetaFields);
+
+                /** ExpectedObjectMetaFields labels. */
+                public labels: { [k: string]: google.protobuf.IStringValue };
+
+                /** ExpectedObjectMetaFields annotations. */
+                public annotations: { [k: string]: google.protobuf.IStringValue };
+
+                /**
+                 * Verifies an ExpectedObjectMetaFields message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an ExpectedObjectMetaFields message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ExpectedObjectMetaFields
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ExpectedObjectMetaFields;
+
+                /**
+                 * Creates a plain object from an ExpectedObjectMetaFields message. Also converts values to other types if specified.
+                 * @param message ExpectedObjectMetaFields
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ExpectedObjectMetaFields, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ExpectedObjectMetaFields to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an ObjectMetaFields. */
+            interface IObjectMetaFields {
+
+                /** ObjectMetaFields labels */
+                labels?: ({ [k: string]: string }|null);
+
+                /** ObjectMetaFields annotations */
+                annotations?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents an ObjectMetaFields. */
+            class ObjectMetaFields implements IObjectMetaFields {
+
+                /**
+                 * Constructs a new ObjectMetaFields.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IObjectMetaFields);
+
+                /** ObjectMetaFields labels. */
+                public labels: { [k: string]: string };
+
+                /** ObjectMetaFields annotations. */
+                public annotations: { [k: string]: string };
+
+                /**
+                 * Verifies an ObjectMetaFields message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an ObjectMetaFields message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ObjectMetaFields
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ObjectMetaFields;
+
+                /**
+                 * Creates a plain object from an ObjectMetaFields message. Also converts values to other types if specified.
+                 * @param message ObjectMetaFields
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ObjectMetaFields, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ObjectMetaFields to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a RemoveObjectMetaFields. */
+            interface IRemoveObjectMetaFields {
+
+                /** RemoveObjectMetaFields labels */
+                labels?: (string[]|null);
+
+                /** RemoveObjectMetaFields annotations */
+                annotations?: (string[]|null);
+            }
+
+            /** Represents a RemoveObjectMetaFields. */
+            class RemoveObjectMetaFields implements IRemoveObjectMetaFields {
+
+                /**
+                 * Constructs a new RemoveObjectMetaFields.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IRemoveObjectMetaFields);
+
+                /** RemoveObjectMetaFields labels. */
+                public labels: string[];
+
+                /** RemoveObjectMetaFields annotations. */
+                public annotations: string[];
+
+                /**
+                 * Verifies a RemoveObjectMetaFields message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a RemoveObjectMetaFields message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns RemoveObjectMetaFields
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.RemoveObjectMetaFields;
+
+                /**
+                 * Creates a plain object from a RemoveObjectMetaFields message. Also converts values to other types if specified.
+                 * @param message RemoveObjectMetaFields
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.RemoveObjectMetaFields, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this RemoveObjectMetaFields to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
         }
     }
 

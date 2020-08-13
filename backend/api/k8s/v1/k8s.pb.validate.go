@@ -1139,6 +1139,309 @@ var _ interface {
 	ErrorName() string
 } = UpdateDeploymentResponseValidationError{}
 
+// Validate checks the field values on ExpectedObjectMetaFields with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ExpectedObjectMetaFields) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for key, val := range m.GetLabels() {
+		_ = val
+
+		if len(key) < 1 {
+			return ExpectedObjectMetaFieldsValidationError{
+				field:  fmt.Sprintf("Labels[%v]", key),
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ExpectedObjectMetaFieldsValidationError{
+					field:  fmt.Sprintf("Labels[%v]", key),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	for key, val := range m.GetAnnotations() {
+		_ = val
+
+		if len(key) < 1 {
+			return ExpectedObjectMetaFieldsValidationError{
+				field:  fmt.Sprintf("Annotations[%v]", key),
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ExpectedObjectMetaFieldsValidationError{
+					field:  fmt.Sprintf("Annotations[%v]", key),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ExpectedObjectMetaFieldsValidationError is the validation error returned by
+// ExpectedObjectMetaFields.Validate if the designated constraints aren't met.
+type ExpectedObjectMetaFieldsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ExpectedObjectMetaFieldsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ExpectedObjectMetaFieldsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ExpectedObjectMetaFieldsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ExpectedObjectMetaFieldsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ExpectedObjectMetaFieldsValidationError) ErrorName() string {
+	return "ExpectedObjectMetaFieldsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ExpectedObjectMetaFieldsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sExpectedObjectMetaFields.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ExpectedObjectMetaFieldsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ExpectedObjectMetaFieldsValidationError{}
+
+// Validate checks the field values on ObjectMetaFields with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *ObjectMetaFields) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for key, val := range m.GetLabels() {
+		_ = val
+
+		if len(key) < 1 {
+			return ObjectMetaFieldsValidationError{
+				field:  fmt.Sprintf("Labels[%v]", key),
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+		// no validation rules for Labels[key]
+	}
+
+	for key, val := range m.GetAnnotations() {
+		_ = val
+
+		if len(key) < 1 {
+			return ObjectMetaFieldsValidationError{
+				field:  fmt.Sprintf("Annotations[%v]", key),
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+		// no validation rules for Annotations[key]
+	}
+
+	return nil
+}
+
+// ObjectMetaFieldsValidationError is the validation error returned by
+// ObjectMetaFields.Validate if the designated constraints aren't met.
+type ObjectMetaFieldsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ObjectMetaFieldsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ObjectMetaFieldsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ObjectMetaFieldsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ObjectMetaFieldsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ObjectMetaFieldsValidationError) ErrorName() string { return "ObjectMetaFieldsValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ObjectMetaFieldsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sObjectMetaFields.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ObjectMetaFieldsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ObjectMetaFieldsValidationError{}
+
+// Validate checks the field values on RemoveObjectMetaFields with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *RemoveObjectMetaFields) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	_RemoveObjectMetaFields_Labels_Unique := make(map[string]struct{}, len(m.GetLabels()))
+
+	for idx, item := range m.GetLabels() {
+		_, _ = idx, item
+
+		if _, exists := _RemoveObjectMetaFields_Labels_Unique[item]; exists {
+			return RemoveObjectMetaFieldsValidationError{
+				field:  fmt.Sprintf("Labels[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+		} else {
+			_RemoveObjectMetaFields_Labels_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Labels[idx]
+	}
+
+	_RemoveObjectMetaFields_Annotations_Unique := make(map[string]struct{}, len(m.GetAnnotations()))
+
+	for idx, item := range m.GetAnnotations() {
+		_, _ = idx, item
+
+		if _, exists := _RemoveObjectMetaFields_Annotations_Unique[item]; exists {
+			return RemoveObjectMetaFieldsValidationError{
+				field:  fmt.Sprintf("Annotations[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+		} else {
+			_RemoveObjectMetaFields_Annotations_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for Annotations[idx]
+	}
+
+	return nil
+}
+
+// RemoveObjectMetaFieldsValidationError is the validation error returned by
+// RemoveObjectMetaFields.Validate if the designated constraints aren't met.
+type RemoveObjectMetaFieldsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RemoveObjectMetaFieldsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RemoveObjectMetaFieldsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RemoveObjectMetaFieldsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RemoveObjectMetaFieldsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RemoveObjectMetaFieldsValidationError) ErrorName() string {
+	return "RemoveObjectMetaFieldsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RemoveObjectMetaFieldsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRemoveObjectMetaFields.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RemoveObjectMetaFieldsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RemoveObjectMetaFieldsValidationError{}
+
 // Validate checks the field values on HPA_Sizing with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *HPA_Sizing) Validate() error {

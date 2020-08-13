@@ -99,6 +99,10 @@ func (*svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name s
 	return nil
 }
 
+func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name string, expectedObjectMetaFields *k8sv1.ExpectedObjectMetaFields, objectMetaFields *k8sv1.ObjectMetaFields, removeObjectMetaFields *k8sv1.RemoveObjectMetaFields) error {
+	return nil
+}
+
 func (*svc) Clientsets() []string {
 	return []string{"fake-user@fake-cluster"}
 }

@@ -68,6 +68,7 @@ func local_request_AuditAPI_GetEvents_0(ctx context.Context, marshaler runtime.M
 // RegisterAuditAPIHandlerServer registers the http handlers for service AuditAPI to "mux".
 // UnaryRPC     :call AuditAPIServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+// Note that using this registration option will cause many gRPC library features (such as grpc.SendHeader, etc) to stop working. Consider using RegisterAuditAPIHandlerFromEndpoint instead.
 func RegisterAuditAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server AuditAPIServer) error {
 
 	mux.Handle("POST", pattern_AuditAPI_GetEvents_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {

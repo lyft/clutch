@@ -2,11 +2,12 @@ package k8s
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"strings"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	k8slabels "k8s.io/apimachinery/pkg/labels"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
@@ -16,12 +17,20 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 	if err != nil {
 		return nil, err
 	}
-	opts := metav1.GetOptions{}
-	pod, err := cs.CoreV1().Pods(cs.Namespace()).Get(name, opts)
+
+	pods, err := cs.CoreV1().Pods(cs.Namespace()).List(metav1.ListOptions{
+		FieldSelector: "metadata.name=" + name,
+	})
 	if err != nil {
 		return nil, err
 	}
-	return podDescription(pod, cs.Cluster()), nil
+
+	if len(pods.Items) == 1 {
+		return podDescription(&pods.Items[0], cs.Cluster()), nil
+	} else if len(pods.Items) > 1 {
+		return nil, fmt.Errorf("Located multiple Pods")
+	}
+	return nil, fmt.Errorf("Unable to locate pod")
 }
 
 func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error {
@@ -43,10 +52,7 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 		return nil, err
 	}
 
-	opts := metav1.ListOptions{}
-	if len(listPodsOpts.Labels) > 0 {
-		opts.LabelSelector = k8slabels.FormatLabels(listPodsOpts.Labels)
-	}
+	opts := ApplyListOptions(listPodsOpts)
 
 	podList, err := cs.CoreV1().Pods(cs.Namespace()).List(opts)
 	if err != nil {
@@ -60,6 +66,104 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 	}
 
 	return pods, nil
+}
+
+// Update pod fields if the current field values match with that's described by expectedObjectMetaFields
+//
+// TODO: add support for updating pod labels
+func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name string, expectedObjectMetaFields *k8sapiv1.ExpectedObjectMetaFields, objectMetaFields *k8sapiv1.ObjectMetaFields, removeObjectMetaFields *k8sapiv1.RemoveObjectMetaFields) error {
+	if len(objectMetaFields.GetLabels()) > 0 || len(removeObjectMetaFields.GetLabels()) > 0 {
+		return errors.New("update of pod labels not implemented")
+	}
+
+	// Ensure that the caller is not trying to delete an annotation and update it at the same time
+	newAnnotations := objectMetaFields.GetAnnotations()
+	for _, annotation := range removeObjectMetaFields.GetAnnotations() {
+		_, annotationIsUpdated := newAnnotations[annotation]
+		if annotationIsUpdated {
+			return fmt.Errorf("annotation '%s' can't be updated and removed at once", annotation)
+		}
+	}
+
+	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	if err != nil {
+		return err
+	}
+
+	pod, err := cs.CoreV1().Pods(cs.Namespace()).Get(name, metav1.GetOptions{})
+	if err != nil {
+		return err
+	}
+
+	// Check that the current state of the pod matches with expectedObjectMetaFields.
+	//
+	// If there is a mismatch, checkExpectedObjectMetaFields() will return an error with the list of mismatches.
+	err = checkExpectedObjectMetaFields(expectedObjectMetaFields, pod.GetObjectMeta())
+	if err != nil {
+		return err
+	}
+
+	// Update/add annotations
+	podAnnotations := pod.GetAnnotations()
+	for annotation, value := range newAnnotations {
+		podAnnotations[annotation] = value
+	}
+
+	// Delete annotations to be removed
+	for _, annotation := range removeObjectMetaFields.GetAnnotations() {
+		delete(podAnnotations, annotation)
+	}
+
+	_, err = cs.CoreV1().Pods(cs.Namespace()).Update(pod)
+	return err
+}
+
+func checkExpectedObjectMetaFields(expectedObjectMetaFields *k8sapiv1.ExpectedObjectMetaFields, object metav1.Object) error {
+	if len(expectedObjectMetaFields.Labels) > 0 {
+		return errors.New("checking label expectations not implemented")
+	}
+
+	podAnnotations := object.GetAnnotations()
+	var mismatchedAnnotations []*mismatchedAnnotation
+
+	for expectedAnnotation, expectedValue := range expectedObjectMetaFields.GetAnnotations() {
+		// "" is a valid annotation value, so nil is used to indicate that the
+		// annotation shouldn't be set
+		annotationShouldBePresent := expectedValue != nil
+		currentValue, annotationIsPresent := podAnnotations[expectedAnnotation]
+
+		// Existance precondition not met
+		if annotationShouldBePresent != annotationIsPresent {
+			mismatchedAnnotations = append(
+				mismatchedAnnotations,
+				&mismatchedAnnotation{
+					Annotation:    expectedAnnotation,
+					ExpectedValue: expectedValue.GetValue(),
+					CurrentValue:  currentValue,
+				},
+			)
+
+			continue
+		}
+
+		// Annotation values mismatched
+		if expectedValue.GetValue() != currentValue {
+			mismatchedAnnotations = append(
+				mismatchedAnnotations,
+				&mismatchedAnnotation{
+					Annotation:    expectedAnnotation,
+					ExpectedValue: expectedValue.GetValue(),
+					CurrentValue:  currentValue,
+				},
+			)
+		}
+	}
+
+	if len(mismatchedAnnotations) == 0 {
+		return nil
+	}
+
+	return &ExpectedObjectMetaFieldsCheckError{MismatchedAnnotations: mismatchedAnnotations}
 }
 
 func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {

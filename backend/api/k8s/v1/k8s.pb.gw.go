@@ -170,6 +170,7 @@ func local_request_K8SAPI_UpdateDeployment_0(ctx context.Context, marshaler runt
 // RegisterK8SAPIHandlerServer registers the http handlers for service K8SAPI to "mux".
 // UnaryRPC     :call K8SAPIServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+// Note that using this registration option will cause many gRPC library features (such as grpc.SendHeader, etc) to stop working. Consider using RegisterK8SAPIHandlerFromEndpoint instead.
 func RegisterK8SAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server K8SAPIServer) error {
 
 	mux.Handle("POST", pattern_K8SAPI_DescribePod_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
