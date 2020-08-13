@@ -20,12 +20,28 @@ service K8sAPI {
     option (clutch.api.v1.action).type = READ;
   }
 
+  rpc ListPods(ListPodsRequest) returns (ListPodsResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/listPods"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
   rpc DeletePod(DeletePodRequest) returns (DeletePodResponse) {
     option (google.api.http) = {
       post : "/v1/k8s/deletePod"
       body : "*"
     };
     option (clutch.api.v1.action).type = DELETE;
+  }
+
+  rpc UpdatePod(UpdatePodRequest) returns (UpdatePodResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/updatePod"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = UPDATE;
   }
 
   rpc ResizeHPA(ResizeHPARequest) returns (ResizeHPAResponse) {
@@ -114,8 +130,22 @@ message Pod {
   map<string, string> annotations = 10;
 }
 
-message ListPodsOptions {
+message ListOptions {
   map<string, string> labels = 9;
+}
+
+message ListPodsRequest {
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+
+  ListOptions options = 4  [ (validate.rules).message = {required : true} ];
+}
+
+message ListPodsResponse {
+  option (clutch.api.v1.reference).fields = "pods";
+
+  repeated Pod pods = 1;
 }
 
 message DeletePodRequest {
@@ -131,6 +161,32 @@ message DeletePodRequest {
 }
 
 message DeletePodResponse {
+}
+
+message UpdatePodRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Pod",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+
+  // Preconditions to check before updating the pod's metadata
+  //
+  // Note: An empty StringValue signals that the label/annotation should not be set
+  ExpectedObjectMetaFields expectedObjectMetaFields = 5;
+
+  // Metadata fields to update
+  ObjectMetaFields objectMetaFields = 6;
+
+  // Metadata fields to remove
+  RemoveObjectMetaFields removeObjectMetaFields = 7;
+}
+
+message UpdatePodResponse {
 }
 
 message HPA {

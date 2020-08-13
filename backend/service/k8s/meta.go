@@ -9,7 +9,7 @@ import (
 
 // TODO (mcutalo): make this generic when adding additional `List` functionality
 // for all k8s resources and support field selectors
-func ApplyListOptions(listOpts *k8sapiv1.ListPodsOptions) metav1.ListOptions {
+func ApplyListOptions(listOpts *k8sapiv1.ListOptions) metav1.ListOptions {
 	opts := metav1.ListOptions{}
 	if len(listOpts.Labels) > 0 {
 		opts.LabelSelector = labels.FormatLabels(listOpts.Labels)
