@@ -24,7 +24,6 @@ stop_on_error = true
 send_interrupt = true
 # Delay after sending Interrupt signal
 kill_delay = 1000 # ms
-
 # Customize binary.
 # full_bin = "APP_ENV=dev APP_USER=air ./tmp/main"
 # Watch these directories if you specified.
