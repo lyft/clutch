@@ -139,7 +139,7 @@ message ListPodsRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
 
-  ListOptions options = 4  [ (validate.rules).message = {required : true} ];
+  ListOptions options = 4 [ (validate.rules).message = {required : true} ];
 }
 
 message ListPodsResponse {
