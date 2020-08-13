@@ -5,6 +5,15 @@
 
 https://medium.com/@akhaku/protobuf-definition-best-practices-87f281576f31
 
+## Required Annotations
+
+## grpc-gateway
+For `google.api.http` annotations:
+- Always use `POST`.
+- Don't forget to include `body : "*"` or data will not be transmitted.
+- The API endpoint should always be camel case.
+- The API endpoint should be literally named after the package and RPC method, e.g. `package clutch.aws.ec2.v1`
+
 ##  Enums
 
 All `enum` values should have a zero value of `UNSPECIFIED`. This signifies that the value was never filled in.
