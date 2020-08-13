@@ -66,11 +66,11 @@ module.exports = {
             },
             links: [
               {
-                displayName: "Start Abort",
+                displayName: "Start Abort Experiment",
                 path: "/serverexperimentation/startabort",
               },
               {
-                displayName: "Start Latency",
+                displayName: "Start Latency Experiment",
                 path: "/serverexperimentation/startlatency",
               },
             ],
