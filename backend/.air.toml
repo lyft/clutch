@@ -3,13 +3,13 @@
 # Working directory
 # . or absolute path, please note that the directories following must be under root.
 root = "."
-tmp_dir = "tmp"
+tmp_dir = ".air"
 
 [build]
 # Just plain old shell command. You could use `make` as well.
-cmd = "go build -o ./tmp/main ."
+cmd = "go build -o .air/clutch ."
 # Binary file yields from `cmd`.
-bin = "tmp/main"
+bin = ".air/clutch"
 # Watch these filename extensions.
 include_ext = ["go"]
 # Ignore these filename extensions or directories.
