@@ -277,19 +277,18 @@ func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, 
 }
 
 func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error) {
-	cc := &scgithubv1.CommitComparison{
-		Status: scgithubv1.CommitCompareStatus_UNKNOWN,
-	}
 
 	comp, _, err := s.rest.Repositories.CompareCommits(ctx, ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref)
 	if err != nil {
-		return cc, fmt.Errorf("Could not get compare status for %s and %s. %+v", ref.Ref, compareSHA, err)
+		return nil, fmt.Errorf("Could not get compare status for %s and %s. %+v", ref.Ref, compareSHA, err)
 	}
 
 	status, ok := scgithubv1.CommitCompareStatus_value[strings.ToUpper(comp.GetStatus())]
 	if !ok {
-		return cc, fmt.Errorf("unknown status %s", comp.GetStatus())
+		return nil, fmt.Errorf("unknown status %s", comp.GetStatus())
 	}
-	cc.Status = scgithubv1.CommitCompareStatus(status)
-	return cc, nil
+
+	return &scgithubv1.CommitComparison{
+		Status: scgithubv1.CommitCompareStatus(status),
+	}, nil
 }
