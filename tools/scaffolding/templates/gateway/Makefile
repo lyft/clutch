@@ -22,6 +22,10 @@ backend:
 backend-dev:
 	cd backend && go run main.go -c clutch-config.yaml
 
+.PHONY: backend-watch # Start the backend in development mode with live code reloading.
+backend-watch:
+	REPO_ROOT=$(MY_ROOT_DIR) $(TOOLS_MODULE_DIR)/air.sh
+
 .PHONY: backend-test
 backend-test:
 	cd backend && go test -race -covermode=atomic ./...
