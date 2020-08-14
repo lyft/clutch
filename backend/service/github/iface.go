@@ -23,6 +23,7 @@ type v3repositories interface {
 	Create(ctx context.Context, org string, repo *githubv3.Repository) (*githubv3.Repository, *githubv3.Response, error)
 	GetContents(ctx context.Context, owner, repo, path string, opt *githubv3.RepositoryContentGetOptions) (*githubv3.RepositoryContent, []*githubv3.RepositoryContent, *githubv3.Response, error)
 	CompareCommits(ctx context.Context, owner, repo string, base, head string) (*githubv3.CommitsComparison, *githubv3.Response, error)
+	GetCommit(ctx context.Context, owner, repo, sha string) (*githubv3.RepositoryCommit, *githubv3.Response, error)
 }
 
 // Interface for struct defined in https://github.com/google/go-github/blob/master/github/pulls.go.
