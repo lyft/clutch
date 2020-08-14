@@ -21718,6 +21718,154 @@ export const clutch = $root.clutch = (() => {
                     return UpdateRepositoryOptions;
                 })();
 
+                /**
+                 * CommitCompareStatus enum.
+                 * @name clutch.sourcecontrol.github.v1.CommitCompareStatus
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} UNKNOWN=1 UNKNOWN value
+                 * @property {number} BEHIND=2 BEHIND value
+                 * @property {number} AHEAD=3 AHEAD value
+                 * @property {number} IDENTICAL=4 IDENTICAL value
+                 */
+                v1.CommitCompareStatus = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "UNKNOWN"] = 1;
+                    values[valuesById[2] = "BEHIND"] = 2;
+                    values[valuesById[3] = "AHEAD"] = 3;
+                    values[valuesById[4] = "IDENTICAL"] = 4;
+                    return values;
+                })();
+
+                v1.CommitComparison = (function() {
+
+                    /**
+                     * Properties of a CommitComparison.
+                     * @memberof clutch.sourcecontrol.github.v1
+                     * @interface ICommitComparison
+                     * @property {clutch.sourcecontrol.github.v1.CommitCompareStatus|null} [status] CommitComparison status
+                     */
+
+                    /**
+                     * Constructs a new CommitComparison.
+                     * @memberof clutch.sourcecontrol.github.v1
+                     * @classdesc Represents a CommitComparison.
+                     * @implements ICommitComparison
+                     * @constructor
+                     * @param {clutch.sourcecontrol.github.v1.ICommitComparison=} [properties] Properties to set
+                     */
+                    function CommitComparison(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * CommitComparison status.
+                     * @member {clutch.sourcecontrol.github.v1.CommitCompareStatus} status
+                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
+                     * @instance
+                     */
+                    CommitComparison.prototype.status = 0;
+
+                    /**
+                     * Verifies a CommitComparison message.
+                     * @function verify
+                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    CommitComparison.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            switch (message.status) {
+                            default:
+                                return "status: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                                break;
+                            }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a CommitComparison message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.sourcecontrol.github.v1.CommitComparison} CommitComparison
+                     */
+                    CommitComparison.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.sourcecontrol.github.v1.CommitComparison)
+                            return object;
+                        let message = new $root.clutch.sourcecontrol.github.v1.CommitComparison();
+                        switch (object.status) {
+                        case "UNSPECIFIED":
+                        case 0:
+                            message.status = 0;
+                            break;
+                        case "UNKNOWN":
+                        case 1:
+                            message.status = 1;
+                            break;
+                        case "BEHIND":
+                        case 2:
+                            message.status = 2;
+                            break;
+                        case "AHEAD":
+                        case 3:
+                            message.status = 3;
+                            break;
+                        case "IDENTICAL":
+                        case 4:
+                            message.status = 4;
+                            break;
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a CommitComparison message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
+                     * @static
+                     * @param {clutch.sourcecontrol.github.v1.CommitComparison} message CommitComparison
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    CommitComparison.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            object.status = options.enums === String ? "UNSPECIFIED" : 0;
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            object.status = options.enums === String ? $root.clutch.sourcecontrol.github.v1.CommitCompareStatus[message.status] : message.status;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this CommitComparison to JSON.
+                     * @function toJSON
+                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    CommitComparison.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return CommitComparison;
+                })();
+
                 return v1;
             })();
 
