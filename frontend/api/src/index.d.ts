@@ -6384,6 +6384,20 @@ export namespace clutch {
                 public describePod(request: clutch.k8s.v1.IDescribePodRequest): Promise<clutch.k8s.v1.DescribePodResponse>;
 
                 /**
+                 * Calls ListPods.
+                 * @param request ListPodsRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and ListPodsResponse
+                 */
+                public listPods(request: clutch.k8s.v1.IListPodsRequest, callback: clutch.k8s.v1.K8sAPI.ListPodsCallback): void;
+
+                /**
+                 * Calls ListPods.
+                 * @param request ListPodsRequest message or plain object
+                 * @returns Promise
+                 */
+                public listPods(request: clutch.k8s.v1.IListPodsRequest): Promise<clutch.k8s.v1.ListPodsResponse>;
+
+                /**
                  * Calls DeletePod.
                  * @param request DeletePodRequest message or plain object
                  * @param callback Node-style callback called with the error, if any, and DeletePodResponse
@@ -6396,6 +6410,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public deletePod(request: clutch.k8s.v1.IDeletePodRequest): Promise<clutch.k8s.v1.DeletePodResponse>;
+
+                /**
+                 * Calls UpdatePod.
+                 * @param request UpdatePodRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and UpdatePodResponse
+                 */
+                public updatePod(request: clutch.k8s.v1.IUpdatePodRequest, callback: clutch.k8s.v1.K8sAPI.UpdatePodCallback): void;
+
+                /**
+                 * Calls UpdatePod.
+                 * @param request UpdatePodRequest message or plain object
+                 * @returns Promise
+                 */
+                public updatePod(request: clutch.k8s.v1.IUpdatePodRequest): Promise<clutch.k8s.v1.UpdatePodResponse>;
 
                 /**
                  * Calls ResizeHPA.
@@ -6436,11 +6464,25 @@ export namespace clutch {
                 type DescribePodCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribePodResponse) => void;
 
                 /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listPods}.
+                 * @param error Error, if any
+                 * @param [response] ListPodsResponse
+                 */
+                type ListPodsCallback = (error: (Error|null), response?: clutch.k8s.v1.ListPodsResponse) => void;
+
+                /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#deletePod}.
                  * @param error Error, if any
                  * @param [response] DeletePodResponse
                  */
                 type DeletePodCallback = (error: (Error|null), response?: clutch.k8s.v1.DeletePodResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#updatePod}.
+                 * @param error Error, if any
+                 * @param [response] UpdatePodResponse
+                 */
+                type UpdatePodCallback = (error: (Error|null), response?: clutch.k8s.v1.UpdatePodResponse) => void;
 
                 /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#resizeHPA}.
@@ -6770,49 +6812,163 @@ export namespace clutch {
                 }
             }
 
-            /** Properties of a ListPodsOptions. */
-            interface IListPodsOptions {
+            /** Properties of a ListOptions. */
+            interface IListOptions {
 
-                /** ListPodsOptions labels */
+                /** ListOptions labels */
                 labels?: ({ [k: string]: string }|null);
             }
 
-            /** Represents a ListPodsOptions. */
-            class ListPodsOptions implements IListPodsOptions {
+            /** Represents a ListOptions. */
+            class ListOptions implements IListOptions {
 
                 /**
-                 * Constructs a new ListPodsOptions.
+                 * Constructs a new ListOptions.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.k8s.v1.IListPodsOptions);
+                constructor(properties?: clutch.k8s.v1.IListOptions);
 
-                /** ListPodsOptions labels. */
+                /** ListOptions labels. */
                 public labels: { [k: string]: string };
 
                 /**
-                 * Verifies a ListPodsOptions message.
+                 * Verifies a ListOptions message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a ListPodsOptions message from a plain object. Also converts values to their respective internal types.
+                 * Creates a ListOptions message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns ListPodsOptions
+                 * @returns ListOptions
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListPodsOptions;
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListOptions;
 
                 /**
-                 * Creates a plain object from a ListPodsOptions message. Also converts values to other types if specified.
-                 * @param message ListPodsOptions
+                 * Creates a plain object from a ListOptions message. Also converts values to other types if specified.
+                 * @param message ListOptions
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.k8s.v1.ListPodsOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.k8s.v1.ListOptions, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this ListPodsOptions to JSON.
+                 * Converts this ListOptions to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListPodsRequest. */
+            interface IListPodsRequest {
+
+                /** ListPodsRequest clientset */
+                clientset?: (string|null);
+
+                /** ListPodsRequest cluster */
+                cluster?: (string|null);
+
+                /** ListPodsRequest namespace */
+                namespace?: (string|null);
+
+                /** ListPodsRequest options */
+                options?: (clutch.k8s.v1.IListOptions|null);
+            }
+
+            /** Represents a ListPodsRequest. */
+            class ListPodsRequest implements IListPodsRequest {
+
+                /**
+                 * Constructs a new ListPodsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListPodsRequest);
+
+                /** ListPodsRequest clientset. */
+                public clientset: string;
+
+                /** ListPodsRequest cluster. */
+                public cluster: string;
+
+                /** ListPodsRequest namespace. */
+                public namespace: string;
+
+                /** ListPodsRequest options. */
+                public options?: (clutch.k8s.v1.IListOptions|null);
+
+                /**
+                 * Verifies a ListPodsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListPodsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListPodsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListPodsRequest;
+
+                /**
+                 * Creates a plain object from a ListPodsRequest message. Also converts values to other types if specified.
+                 * @param message ListPodsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListPodsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListPodsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListPodsResponse. */
+            interface IListPodsResponse {
+
+                /** ListPodsResponse pods */
+                pods?: (clutch.k8s.v1.IPod[]|null);
+            }
+
+            /** Represents a ListPodsResponse. */
+            class ListPodsResponse implements IListPodsResponse {
+
+                /**
+                 * Constructs a new ListPodsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListPodsResponse);
+
+                /** ListPodsResponse pods. */
+                public pods: clutch.k8s.v1.IPod[];
+
+                /**
+                 * Verifies a ListPodsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListPodsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListPodsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListPodsResponse;
+
+                /**
+                 * Creates a plain object from a ListPodsResponse message. Also converts values to other types if specified.
+                 * @param message ListPodsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListPodsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListPodsResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -6921,6 +7077,132 @@ export namespace clutch {
 
                 /**
                  * Converts this DeletePodResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an UpdatePodRequest. */
+            interface IUpdatePodRequest {
+
+                /** UpdatePodRequest clientset */
+                clientset?: (string|null);
+
+                /** UpdatePodRequest cluster */
+                cluster?: (string|null);
+
+                /** UpdatePodRequest namespace */
+                namespace?: (string|null);
+
+                /** UpdatePodRequest name */
+                name?: (string|null);
+
+                /** UpdatePodRequest expectedObjectMetaFields */
+                expectedObjectMetaFields?: (clutch.k8s.v1.IExpectedObjectMetaFields|null);
+
+                /** UpdatePodRequest objectMetaFields */
+                objectMetaFields?: (clutch.k8s.v1.IObjectMetaFields|null);
+
+                /** UpdatePodRequest removeObjectMetaFields */
+                removeObjectMetaFields?: (clutch.k8s.v1.IRemoveObjectMetaFields|null);
+            }
+
+            /** Represents an UpdatePodRequest. */
+            class UpdatePodRequest implements IUpdatePodRequest {
+
+                /**
+                 * Constructs a new UpdatePodRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IUpdatePodRequest);
+
+                /** UpdatePodRequest clientset. */
+                public clientset: string;
+
+                /** UpdatePodRequest cluster. */
+                public cluster: string;
+
+                /** UpdatePodRequest namespace. */
+                public namespace: string;
+
+                /** UpdatePodRequest name. */
+                public name: string;
+
+                /** UpdatePodRequest expectedObjectMetaFields. */
+                public expectedObjectMetaFields?: (clutch.k8s.v1.IExpectedObjectMetaFields|null);
+
+                /** UpdatePodRequest objectMetaFields. */
+                public objectMetaFields?: (clutch.k8s.v1.IObjectMetaFields|null);
+
+                /** UpdatePodRequest removeObjectMetaFields. */
+                public removeObjectMetaFields?: (clutch.k8s.v1.IRemoveObjectMetaFields|null);
+
+                /**
+                 * Verifies an UpdatePodRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an UpdatePodRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns UpdatePodRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdatePodRequest;
+
+                /**
+                 * Creates a plain object from an UpdatePodRequest message. Also converts values to other types if specified.
+                 * @param message UpdatePodRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.UpdatePodRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this UpdatePodRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an UpdatePodResponse. */
+            interface IUpdatePodResponse {
+            }
+
+            /** Represents an UpdatePodResponse. */
+            class UpdatePodResponse implements IUpdatePodResponse {
+
+                /**
+                 * Constructs a new UpdatePodResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IUpdatePodResponse);
+
+                /**
+                 * Verifies an UpdatePodResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an UpdatePodResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns UpdatePodResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdatePodResponse;
+
+                /**
+                 * Creates a plain object from an UpdatePodResponse message. Also converts values to other types if specified.
+                 * @param message UpdatePodResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.UpdatePodResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this UpdatePodResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

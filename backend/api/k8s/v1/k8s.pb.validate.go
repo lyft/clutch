@@ -398,10 +398,10 @@ var _ interface {
 	ErrorName() string
 } = PodValidationError{}
 
-// Validate checks the field values on ListPodsOptions with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *ListPodsOptions) Validate() error {
+// Validate checks the field values on ListOptions with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *ListOptions) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -411,9 +411,9 @@ func (m *ListPodsOptions) Validate() error {
 	return nil
 }
 
-// ListPodsOptionsValidationError is the validation error returned by
-// ListPodsOptions.Validate if the designated constraints aren't met.
-type ListPodsOptionsValidationError struct {
+// ListOptionsValidationError is the validation error returned by
+// ListOptions.Validate if the designated constraints aren't met.
+type ListOptionsValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -421,22 +421,22 @@ type ListPodsOptionsValidationError struct {
 }
 
 // Field function returns field value.
-func (e ListPodsOptionsValidationError) Field() string { return e.field }
+func (e ListOptionsValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ListPodsOptionsValidationError) Reason() string { return e.reason }
+func (e ListOptionsValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ListPodsOptionsValidationError) Cause() error { return e.cause }
+func (e ListOptionsValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ListPodsOptionsValidationError) Key() bool { return e.key }
+func (e ListOptionsValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ListPodsOptionsValidationError) ErrorName() string { return "ListPodsOptionsValidationError" }
+func (e ListOptionsValidationError) ErrorName() string { return "ListOptionsValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ListPodsOptionsValidationError) Error() string {
+func (e ListOptionsValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -448,14 +448,14 @@ func (e ListPodsOptionsValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sListPodsOptions.%s: %s%s",
+		"invalid %sListOptions.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ListPodsOptionsValidationError{}
+var _ error = ListOptionsValidationError{}
 
 var _ interface {
 	Field() string
@@ -463,7 +463,190 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ListPodsOptionsValidationError{}
+} = ListOptionsValidationError{}
+
+// Validate checks the field values on ListPodsRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *ListPodsRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return ListPodsRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return ListPodsRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return ListPodsRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if m.GetOptions() == nil {
+		return ListPodsRequestValidationError{
+			field:  "Options",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOptions()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListPodsRequestValidationError{
+				field:  "Options",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// ListPodsRequestValidationError is the validation error returned by
+// ListPodsRequest.Validate if the designated constraints aren't met.
+type ListPodsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListPodsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListPodsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListPodsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListPodsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListPodsRequestValidationError) ErrorName() string { return "ListPodsRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ListPodsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListPodsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListPodsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListPodsRequestValidationError{}
+
+// Validate checks the field values on ListPodsResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *ListPodsResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for idx, item := range m.GetPods() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListPodsResponseValidationError{
+					field:  fmt.Sprintf("Pods[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ListPodsResponseValidationError is the validation error returned by
+// ListPodsResponse.Validate if the designated constraints aren't met.
+type ListPodsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListPodsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListPodsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListPodsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListPodsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListPodsResponseValidationError) ErrorName() string { return "ListPodsResponseValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ListPodsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListPodsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListPodsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListPodsResponseValidationError{}
 
 // Validate checks the field values on DeletePodRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, an
@@ -624,6 +807,196 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeletePodResponseValidationError{}
+
+// Validate checks the field values on UpdatePodRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *UpdatePodRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return UpdatePodRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return UpdatePodRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return UpdatePodRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetName()) < 1 {
+		return UpdatePodRequestValidationError{
+			field:  "Name",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if v, ok := interface{}(m.GetExpectedObjectMetaFields()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdatePodRequestValidationError{
+				field:  "ExpectedObjectMetaFields",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetObjectMetaFields()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdatePodRequestValidationError{
+				field:  "ObjectMetaFields",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetRemoveObjectMetaFields()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdatePodRequestValidationError{
+				field:  "RemoveObjectMetaFields",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// UpdatePodRequestValidationError is the validation error returned by
+// UpdatePodRequest.Validate if the designated constraints aren't met.
+type UpdatePodRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdatePodRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdatePodRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdatePodRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdatePodRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdatePodRequestValidationError) ErrorName() string { return "UpdatePodRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e UpdatePodRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdatePodRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdatePodRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdatePodRequestValidationError{}
+
+// Validate checks the field values on UpdatePodResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *UpdatePodResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// UpdatePodResponseValidationError is the validation error returned by
+// UpdatePodResponse.Validate if the designated constraints aren't met.
+type UpdatePodResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdatePodResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdatePodResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdatePodResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdatePodResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdatePodResponseValidationError) ErrorName() string {
+	return "UpdatePodResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdatePodResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdatePodResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdatePodResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdatePodResponseValidationError{}
 
 // Validate checks the field values on HPA with the rules defined in the proto
 // definition for this message. If any rules are violated, an error is returned.
