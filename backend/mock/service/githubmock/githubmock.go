@@ -38,6 +38,7 @@ func (s svc) CreateIssueComment(ctx context.Context, ref *github.RemoteRef, numb
 func (s svc) CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error) {
 	return &sourcecontrolv1.CreateRepositoryResponse{Url: "https://github.com/lyft/clutch"}, nil
 }
+
 func (s svc) CompareCommits(ctx context.Context, ref *github.RemoteRef, compareSHA string) (*githubv1.CommitComparison, error) {
 	panic("implement me")
 }
