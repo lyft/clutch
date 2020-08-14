@@ -177,13 +177,13 @@ message UpdatePodRequest {
   // Preconditions to check before updating the pod's metadata
   //
   // Note: An empty StringValue signals that the label/annotation should not be set
-  ExpectedObjectMetaFields expectedObjectMetaFields = 5;
+  ExpectedObjectMetaFields expected_object_meta_fields = 5;
 
   // Metadata fields to update
-  ObjectMetaFields objectMetaFields = 6;
+  ObjectMetaFields object_meta_fields = 6;
 
   // Metadata fields to remove
-  RemoveObjectMetaFields removeObjectMetaFields = 7;
+  RemoveObjectMetaFields remove_object_meta_fields = 7;
 }
 
 message UpdatePodResponse {
