@@ -277,7 +277,6 @@ func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, 
 }
 
 func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error) {
-
 	comp, _, err := s.rest.Repositories.CompareCommits(ctx, ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref)
 	if err != nil {
 		return nil, fmt.Errorf("Could not get compare status for %s and %s. %+v", ref.Ref, compareSHA, err)
