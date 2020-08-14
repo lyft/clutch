@@ -8,7 +8,12 @@ https://medium.com/@akhaku/protobuf-definition-best-practices-87f281576f31
 ## Required Annotations
 
 ## grpc-gateway
-For `google.api.http` annotations:
+
+Clutch uses [grpc-ecosystem/grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway) to serve endpoints via HTTP+JSON for the front-end in addition to the gRPC normally provided by the proto definitions.
+
+grpc-gateway uses the [`google.api.http` annotation](https://github.com/googleapis/googleapis/blob/master/google/api/http.proto#L44-L312) to map endpoints.
+
+Rules for `google.api.http` annotations:
 - Always use `POST`.
 - Don't forget to include `body : "*"` or data will not be transmitted.
 - The API endpoint should always be camel case.
