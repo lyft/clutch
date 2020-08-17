@@ -14,9 +14,7 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
-	"google.golang.org/grpc/status"
 )
 
 var apiPattern = regexp.MustCompile(`^/v\d+/`)
@@ -98,20 +96,10 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 	return nil
 }
 
-func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Marshaler, w http.ResponseWriter, req *http.Request, err error) {
-	//  TODO(maybe): once we have non-browser clients we probably want to avoid the redirect and directly return the error.
-	if s, ok := status.FromError(err); ok && s.Code() == codes.Unauthenticated {
-		http.Redirect(w, req, "/v1/authn/login", http.StatusFound)
-		return
-	}
-	runtime.DefaultHTTPProtoErrorHandler(ctx, mux, m, w, req, err)
-}
-
 func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem) *Mux {
 	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(unaryInterceptors...))
 	jsonGateway := runtime.NewServeMux(
 		runtime.WithForwardResponseOption(customResponseForwarder),
-		runtime.WithProtoErrorHandler(customErrorHandler),
 		runtime.WithMarshalerOption(
 			runtime.MIMEWildcard,
 			&runtime.JSONPb{
