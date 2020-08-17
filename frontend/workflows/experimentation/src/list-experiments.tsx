@@ -17,14 +17,14 @@ const ExperimentSpecificationData: React.FC<ExperimentationSpecificationDataProp
   experimentTypes,
 }) => {
   const types = experimentTypes || {};
-  const registeredExperimentType = types[experiment.testConfig["@type"]];
-  const isExperimentTypeRegistered = typeof registeredExperimentType !== "undefined";
-  if (!isExperimentTypeRegistered) {
+  if (!types.hasOwnProperty(experiment.testConfig["@type"])) {
     const data = columns.map(() => {
       return experiment.testConfig["@type"];
     });
     return <Row data={data} />;
   }
+
+  const registeredExperimentType = types[experiment.testConfig["@type"]];
 
   const mapper = registeredExperimentType.mapping;
   const mapperExists = typeof mapper !== "undefined";
