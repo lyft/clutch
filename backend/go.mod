@@ -3,7 +3,7 @@ module github.com/lyft/clutch/backend
 go 1.13
 
 require (
-	github.com/DATA-DOG/go-sqlmock v1.4.1
+	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/Masterminds/squirrel v1.4.0
 	github.com/aws/aws-sdk-go v1.34.0
 	github.com/bufbuild/buf v0.11.0
