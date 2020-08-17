@@ -5,6 +5,12 @@ on:
       - main
     paths-ignore:
       - 'docs/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'tools/scaffolding/**'
+    
 env:
   GOPATH: ${{ github.workspace }}/go
   GOBIN: ${{ github.workspace }}/go/bin
