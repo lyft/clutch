@@ -1,6 +1,5 @@
 import type { AxiosError, AxiosResponse } from "axios";
 import axios from "axios";
-import querystring from "querystring";
 
 interface HttpStatus {
   code: number;
@@ -97,11 +96,8 @@ const errorInterceptor = (error: AxiosError) => {
   const { response } = error;
 
   if (response?.status === HTTP_STATUS_MAPPINGS.UNAUTHORIZED) {
-    const href = window.location.href.split("?");
-    const queryParams = querystring.parse(href[href.length - 1]);
-    if (!queryParams.retry) {
-      window.location.href = `${window.location.href}?retry=true`;
-    }
+    const dest = encodeURIComponent(window.location.pathname);
+    window.location.href = `${window.location.origin}/v1/authn/login?redirect_url=${dest}`;
   }
 
   if (response.data?.code && response.data?.message) {
