@@ -34,7 +34,7 @@ func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamClust
 
 	anyConfig, err := ptypes.MarshalAny(testConfig)
 	if err != nil {
-		t.Errorf("setSnapshot failed %v", err)
+		t.Errorf("couldn't marshal experiment config: %v", err)
 	}
 
 	return &experimentation.Experiment{TestConfig: anyConfig}
