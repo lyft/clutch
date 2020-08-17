@@ -37,7 +37,7 @@
     "js-cookie": "^2.2.1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.15",
-    "material-table": "1.68.0",
+    "material-table": "1.68.1",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-hook-form": "^6.3.0",
