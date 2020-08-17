@@ -27,14 +27,14 @@ const ExperimentSpecificationData: React.FC<ExperimentationSpecificationDataProp
   const registeredExperimentType = types[experiment.testConfig["@type"]];
 
   const mapper = registeredExperimentType.mapping;
-  const mapperExists = typeof mapper !== "undefined";
+  const mapperExists = registeredExperimentType.hasOwnProperty("mapping");
   const model = mapperExists ? mapper(experiment.testConfig) : experiment;
 
   const data = columns.map(column => {
     let value: string;
     if (column === "identifier") {
       value = experiment.id.toString();
-    } else if (column in model) {
+    } else if (model.hasOwnProperty(column)) {
       value = model[column];
     }
 
@@ -84,7 +84,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, experimentTy
   let links: ExperimentTypeLinkProps[] = [];
   Object.keys(types).forEach(experimentType => {
     const specification = types[experimentType];
-    if (typeof specification.links !== "undefined") {
+    if (specification.hasOwnProperty("links")) {
       links = links.concat(specification.links);
     }
   });

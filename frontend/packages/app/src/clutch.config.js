@@ -46,41 +46,4 @@ module.exports = {
       },
     },
   },
-  "@clutch-sh/experimentation": {
-    listExperiments: {
-      trending: true,
-      componentProps: {
-        columns: ["identifier", "targets", "type", "description"],
-        experimentTypes: {
-          "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestSpecification": {
-            mapping: e => {
-              const config = e.latency || e.abort;
-              const clusters = config.clusterPair;
-              return {
-                targets: `"${clusters.downstreamCluster}" ➡️ "${clusters.upstreamCluster}"`,
-                type: "server",
-                description: e.abort
-                  ? `${e.abort.percent}% abort with ${e.abort.httpStatus} status code`
-                  : `${e.latency.percent}% latency with ${e.latency.durationMs}ms delay`,
-              };
-            },
-            links: [
-              {
-                displayName: "Start Abort Experiment",
-                path: "/serverexperimentation/startabort",
-              },
-              {
-                displayName: "Start Latency Experiment",
-                path: "/serverexperimentation/startlatency",
-              },
-            ],
-          },
-        },
-      },
-    },
-  },
-  "@clutch-sh/serverexperimentation": {
-    startAbortExperiment: {},
-    startLatencyExperiment: {},
-  },
 };
