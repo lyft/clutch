@@ -17,7 +17,7 @@ const ExperimentSpecificationData: React.FC<ExperimentationSpecificationDataProp
   experimentTypes,
 }) => {
   const types = experimentTypes || {};
-  if (!types.hasOwnProperty(experiment.testConfig["@type"])) {
+  if (!Object.prototype.hasOwnProperty.call(types, experiment.testConfig["@type"])) {
     const data = columns.map(() => {
       return experiment.testConfig["@type"];
     });
@@ -27,14 +27,14 @@ const ExperimentSpecificationData: React.FC<ExperimentationSpecificationDataProp
   const registeredExperimentType = types[experiment.testConfig["@type"]];
 
   const mapper = registeredExperimentType.mapping;
-  const mapperExists = registeredExperimentType.hasOwnProperty("mapping");
+  const mapperExists = Object.prototype.hasOwnProperty.call(registeredExperimentType, "mapping");
   const model = mapperExists ? mapper(experiment.testConfig) : experiment;
 
   const data = columns.map(column => {
     let value: string;
     if (column === "identifier") {
       value = experiment.id.toString();
-    } else if (model.hasOwnProperty(column)) {
+    } else if (model.prototype.hasOwnProperty.call(column)) {
       value = model[column];
     }
 
@@ -84,7 +84,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, experimentTy
   let links: ExperimentTypeLinkProps[] = [];
   Object.keys(types).forEach(experimentType => {
     const specification = types[experimentType];
-    if (specification.hasOwnProperty("links")) {
+    if (Object.prototype.hasOwnProperty.call(specification, "links")) {
       links = links.concat(specification.links);
     }
   });
