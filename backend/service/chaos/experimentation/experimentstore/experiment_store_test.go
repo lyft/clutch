@@ -49,7 +49,7 @@ func createExperimentsTests() ([]experimentTest, error) {
 			id: "create experiment",
 			experiments: []*experimentation.Experiment{
 				{
-					TestConfig: anyConfig,
+					Config: anyConfig,
 				},
 			},
 			sql: "INSERT INTO experiments (id,details) VALUES ($1,$2)",
@@ -214,7 +214,7 @@ func TestGetExperiments(t *testing.T) {
 			a.NotEqual(0, experiment.GetId())
 
 			specification := &serverexperimentation.TestSpecification{}
-			err2 := ptypes.UnmarshalAny(experiment.GetTestConfig(), specification)
+			err2 := ptypes.UnmarshalAny(experiment.GetConfig(), specification)
 			if err2 != nil {
 				t.Errorf("setSnapshot failed %v", err2)
 			}

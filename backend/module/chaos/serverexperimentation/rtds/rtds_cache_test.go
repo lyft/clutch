@@ -18,7 +18,7 @@ import (
 )
 
 func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent float32, httpStatus int32) *experimentation.Experiment {
-	testConfig := &serverexperimentation.TestSpecification{
+	config := &serverexperimentation.TestSpecification{
 		Config: &serverexperimentation.TestSpecification_Abort{
 			Abort: &serverexperimentation.AbortFault{
 				Target: &serverexperimentation.AbortFault_ClusterPair{
@@ -32,16 +32,16 @@ func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamClust
 		},
 	}
 
-	anyConfig, err := ptypes.MarshalAny(testConfig)
+	anyConfig, err := ptypes.MarshalAny(config)
 	if err != nil {
 		t.Errorf("marshalAny failed: %v", err)
 	}
 
-	return &experimentation.Experiment{TestConfig: anyConfig}
+	return &experimentation.Experiment{Config: anyConfig}
 }
 
 func createLatencyExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, latencyPercent float32, duration int32) *experimentation.Experiment {
-	testConfig := &serverexperimentation.TestSpecification{
+	config := &serverexperimentation.TestSpecification{
 		Config: &serverexperimentation.TestSpecification_Latency{
 			Latency: &serverexperimentation.LatencyFault{
 				Target: &serverexperimentation.LatencyFault_ClusterPair{
@@ -55,12 +55,12 @@ func createLatencyExperiment(t *testing.T, upstreamCluster string, downstreamClu
 		},
 	}
 
-	anyConfig, err := ptypes.MarshalAny(testConfig)
+	anyConfig, err := ptypes.MarshalAny(config)
 	if err != nil {
 		t.Errorf("setSnapshot failed %v", err)
 	}
 
-	return &experimentation.Experiment{TestConfig: anyConfig}
+	return &experimentation.Experiment{Config: anyConfig}
 }
 
 func mockGenerateFaultData(t *testing.T) []*experimentation.Experiment {
@@ -81,7 +81,7 @@ func TestSetSnapshot(t *testing.T) {
 	var testUpstreamClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		specification := &serverexperimentation.TestSpecification{}
-		err := ptypes.UnmarshalAny(experiment.GetTestConfig(), specification)
+		err := ptypes.UnmarshalAny(experiment.GetConfig(), specification)
 		if err != nil {
 			t.Errorf("unmarshalAny failed %v", err)
 		}
@@ -138,7 +138,7 @@ func TestCreateRuntimeKeys(t *testing.T) {
 		var expectedFaultValue int32
 
 		specification := &serverexperimentation.TestSpecification{}
-		err := ptypes.UnmarshalAny(testExperiment.GetTestConfig(), specification)
+		err := ptypes.UnmarshalAny(testExperiment.GetConfig(), specification)
 		if err != nil {
 			t.Errorf("unmarshalAny failed %v", err)
 		}

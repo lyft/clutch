@@ -17,18 +17,17 @@ const ExperimentSpecificationData: React.FC<ExperimentationSpecificationDataProp
   experimentTypes,
 }) => {
   const types = experimentTypes || {};
-  if (!Object.prototype.hasOwnProperty.call(types, experiment.testConfig["@type"])) {
+  if (!Object.prototype.hasOwnProperty.call(types, experiment.config["@type"])) {
     const data = columns.map(() => {
-      return experiment.testConfig["@type"];
+      return experiment.config["@type"];
     });
     return <Row data={data} />;
   }
 
-  const registeredExperimentType = types[experiment.testConfig["@type"]];
+  const registeredExperimentType = types[experiment.config["@type"]];
 
-  const mapper = registeredExperimentType.mapping;
   const mapperExists = Object.prototype.hasOwnProperty.call(registeredExperimentType, "mapping");
-  const model = mapperExists ? mapper(experiment.testConfig) : experiment;
+  const model = mapperExists ? registeredExperimentType.mapper(experiment.config) : experiment;
 
   const data = columns.map(column => {
     let value: string;

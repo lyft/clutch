@@ -197,7 +197,7 @@ func createRuntimeKeys(testSpecification *serverexperimentation.TestSpecificatio
 }
 
 func isFaultTest(experiment *experimentation.Experiment, testSpecification *serverexperimentation.TestSpecification) bool {
-	err := ptypes.UnmarshalAny(experiment.GetTestConfig(), testSpecification)
+	err := ptypes.UnmarshalAny(experiment.GetConfig(), testSpecification)
 	if err != nil {
 		return false
 	}

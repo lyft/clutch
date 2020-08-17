@@ -47,7 +47,7 @@ func (fs *mockExperimentStore) GetExperiments(context.Context) ([]*experimentati
 	}
 
 	experiment.Id = 1
-	experiment.TestConfig = anyConfig
+	experiment.Config = anyConfig
 
 	experiments = append(experiments, &experiment)
 

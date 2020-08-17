@@ -64,7 +64,7 @@ func (fs *experimentStore) CreateExperiments(ctx context.Context, experiments []
 	for _, experiment := range experiments {
 		marshaler := jsonpb.Marshaler{}
 		buf := &bytes.Buffer{}
-		err := marshaler.Marshal(buf, experiment.GetTestConfig())
+		err := marshaler.Marshal(buf, experiment.GetConfig())
 		if err != nil {
 			return err
 		}
@@ -134,7 +134,7 @@ func (fs *experimentStore) GetExperiments(ctx context.Context) ([]*experimentati
 			return nil, err
 		}
 
-		experiment.TestConfig = anyConfig
+		experiment.Config = anyConfig
 		experiments = append(experiments, &experiment)
 	}
 
