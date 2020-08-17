@@ -2,9 +2,11 @@ package mux
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"regexp"
 	"strconv"
 	"strings"
@@ -100,8 +102,18 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 
 func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Marshaler, w http.ResponseWriter, req *http.Request, err error) {
 	//  TODO(maybe): once we have non-browser clients we probably want to avoid the redirect and directly return the error.
+	referer := req.Referer()
+	redirectPath := "/v1/authn/login"
+	if len(referer) != 0 {
+		referer, err := url.Parse(referer)
+		if err != nil {
+			runtime.DefaultHTTPProtoErrorHandler(ctx, mux, m, w, req, err)
+			return
+		}
+		redirectPath = fmt.Sprintf("%s?redirect_url=%s", redirectPath, referer.Path)
+	}
 	if s, ok := status.FromError(err); ok && s.Code() == codes.Unauthenticated {
-		http.Redirect(w, req, "/v1/authn/login", http.StatusFound)
+		http.Redirect(w, req, redirectPath, http.StatusFound)
 		return
 	}
 	runtime.DefaultHTTPProtoErrorHandler(ctx, mux, m, w, req, err)
