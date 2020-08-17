@@ -34,7 +34,7 @@ func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamClust
 
 	anyConfig, err := ptypes.MarshalAny(testConfig)
 	if err != nil {
-		t.Errorf("couldn't marshal experiment config: %v", err)
+		t.Errorf("marshalAny failed: %v", err)
 	}
 
 	return &experimentation.Experiment{TestConfig: anyConfig}
@@ -83,7 +83,7 @@ func TestSetSnapshot(t *testing.T) {
 		specification := &serverexperimentation.TestSpecification{}
 		err := ptypes.UnmarshalAny(experiment.GetTestConfig(), specification)
 		if err != nil {
-			t.Errorf("setSnapshot failed %v", err)
+			t.Errorf("unmarshalAny failed %v", err)
 		}
 
 		switch specification.GetConfig().(type) {
@@ -140,7 +140,7 @@ func TestCreateRuntimeKeys(t *testing.T) {
 		specification := &serverexperimentation.TestSpecification{}
 		err := ptypes.UnmarshalAny(testExperiment.GetTestConfig(), specification)
 		if err != nil {
-			t.Errorf("setSnapshot failed %v", err)
+			t.Errorf("unmarshalAny failed %v", err)
 		}
 
 		switch specification.GetConfig().(type) {

@@ -57,7 +57,7 @@ module.exports = {
               const config = e.latency || e.abort;
               const clusters = config.clusterPair;
               return {
-                targets: `from "${clusters.downstreamCluster}" to "${clusters.upstreamCluster}"`,
+                targets: `"${clusters.downstreamCluster}" ➡️ "${clusters.upstreamCluster}"`,
                 type: "server",
                 description: e.abort
                   ? `${e.abort.percent}% abort with ${e.abort.httpStatus} status code`
