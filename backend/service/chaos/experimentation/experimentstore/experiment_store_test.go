@@ -8,54 +8,72 @@ import (
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 )
 
-var createExperimentsTests = []struct {
+type experimentTest struct {
 	id          string
 	experiments []*experimentation.Experiment
 	sql         string
 	args        []driver.Value
 	err         error
-}{
-	{
-		id: "create experiment",
-		experiments: []*experimentation.Experiment{
-			{
-				TestSpecification: &experimentation.TestSpecification{
-					Config: &experimentation.TestSpecification_Abort{
-						Abort: &experimentation.AbortFault{
-							Target: &experimentation.AbortFault_ClusterPair{
-								ClusterPair: &experimentation.ClusterPairTarget{
-									DownstreamCluster: "upstreamCluster",
-									UpstreamCluster:   "downstreamCluster",
-								},
-							},
-							Percent:    100.0,
-							HttpStatus: 401,
-						},
-					},
-				},
+}
+
+func createExperimentsTests() ([]experimentTest, error) {
+	config := &serverexperimentation.TestConfig{
+		Target: &serverexperimentation.TestConfig_ClusterPair{
+			ClusterPair: &serverexperimentation.ClusterPairTarget{
+				DownstreamCluster: "upstreamCluster",
+				UpstreamCluster:   "downstreamCluster",
 			},
 		},
-		sql: "INSERT INTO experiments (id,details) VALUES ($1,$2)",
-		args: []driver.Value{
-			1,
-			`{"abort":{"clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"percent":100,"httpStatus":401}}`,
+		Fault: &serverexperimentation.TestConfig_Abort{
+			Abort: &serverexperimentation.AbortFaultConfig{
+				Percent:    100.0,
+				HttpStatus: 401,
+			},
 		},
-	},
-	{
-		id:  "create empty experiments",
-		err: errors.New("insert statements must have at least one set of values or select clause"),
-	},
+	}
+
+	anyConfig, err := ptypes.MarshalAny(config)
+	if err != nil {
+		return []experimentTest{}, err
+	}
+
+	return []experimentTest{
+		experimentTest{
+			id: "create experiment",
+			experiments: []*experimentation.Experiment{
+				{
+					Config: anyConfig,
+				},
+			},
+			sql: "INSERT INTO experiments (id,details) VALUES ($1,$2)",
+			args: []driver.Value{
+				1,
+				`{"@type":"type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig","clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"abort":{"percent":100,"httpStatus":401}}`,
+			},
+		},
+		experimentTest{
+			id:  "create empty experiments",
+			err: errors.New("insert statements must have at least one set of values or select clause"),
+		},
+	}, nil
 }
 
 func TestCreateExperiments(t *testing.T) {
 	t.Parallel()
 
-	for _, test := range createExperimentsTests {
+	tests, err := createExperimentsTests()
+	if err != nil {
+		t.Errorf("setSnapshot failed %v", err)
+	}
+
+	for _, test := range tests {
 		test := test
 
 		t.Run(test.id, func(t *testing.T) {
@@ -151,7 +169,7 @@ var getExperimentsTests = []struct {
 		rows: [][]driver.Value{
 			{
 				1234,
-				`{"abort":{"clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"percent":100,"httpStatus":401}}`,
+				`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig","clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"abort":{"percent":100,"httpStatus":401}}`,
 			},
 		},
 	},
@@ -194,8 +212,14 @@ func TestGetExperiments(t *testing.T) {
 			a.Equal(1, len(experiments))
 			experiment := experiments[0]
 			a.NotEqual(0, experiment.GetId())
-			a.Nil(experiment.GetTestSpecification().GetLatency())
-			abort := experiment.GetTestSpecification().GetAbort()
+
+			config := &serverexperimentation.TestConfig{}
+			err2 := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+			if err2 != nil {
+				t.Errorf("setSnapshot failed %v", err2)
+			}
+			a.Nil(config.GetLatency())
+			abort := config.GetAbort()
 			a.NotNil(abort)
 			a.Equal(int32(401), abort.GetHttpStatus())
 			a.Equal(float32(100), abort.GetPercent())

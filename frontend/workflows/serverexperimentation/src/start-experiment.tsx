@@ -21,7 +21,7 @@ const ClusterPairTargetDetails: React.FC<WizardChild> = () => {
   return (
     <WizardStep error={clusterPairData.error} isLoading={false}>
       <MetadataTable
-        onUpdate={(key, value) => clusterPairData.updateData(key, value)}
+        onUpdate={(key, value: string) => clusterPairData.updateData(key, value)}
         data={[
           {
             name: "Downstream Cluster",
@@ -157,11 +157,14 @@ const Confirm: React.FC<WizardChild> = () => {
   );
 };
 
-const createExperiment = (data: IClutch.chaos.experimentation.v1.ITestSpecification) => {
+const createExperiment = (data: IClutch.chaos.serverexperimentation.v1.ITestConfig) => {
+  const testConfig = data;
+  testConfig["@type"] = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig";
+
   return client.post("/v1/experiments/create", {
     experiments: [
       {
-        testSpecification: data,
+        config: testConfig,
       },
     ],
   });
@@ -175,15 +178,15 @@ export const StartAbortExperiment: React.FC<BaseWorkflowProps> = ({ heading }) =
     startData: {
       deps: ["clusterPairTargetData", "abortExperimentData"],
       hydrator: (
-        clusterPairTargetData: IClutch.chaos.experimentation.v1.IClusterPairTarget,
-        abortExperimentData: IClutch.chaos.experimentation.v1.AbortFault
+        clusterPairTargetData: IClutch.chaos.serverexperimentation.v1.IClusterPairTarget,
+        abortExperimentData: IClutch.chaos.serverexperimentation.v1.AbortFaultConfig
       ) => {
         return createExperiment({
+          clusterPair: {
+            downstreamCluster: clusterPairTargetData.downstreamCluster,
+            upstreamCluster: clusterPairTargetData.upstreamCluster,
+          },
           abort: {
-            clusterPair: {
-              downstreamCluster: clusterPairTargetData.downstreamCluster,
-              upstreamCluster: clusterPairTargetData.upstreamCluster,
-            },
             percent: abortExperimentData.percent,
             httpStatus: abortExperimentData.httpStatus,
           },
@@ -208,15 +211,15 @@ export const StartLatencyExperiment: React.FC<BaseWorkflowProps> = ({ heading })
     startData: {
       deps: ["clusterPairTargetData", "latencyExperimentData"],
       hydrator: (
-        clusterPairTargetData: IClutch.chaos.experimentation.v1.IClusterPairTarget,
-        latencyExperimentData: IClutch.chaos.experimentation.v1.LatencyFault
+        clusterPairTargetData: IClutch.chaos.serverexperimentation.v1.IClusterPairTarget,
+        latencyExperimentData: IClutch.chaos.serverexperimentation.v1.LatencyFaultConfig
       ) => {
         return createExperiment({
+          clusterPair: {
+            downstreamCluster: clusterPairTargetData.downstreamCluster,
+            upstreamCluster: clusterPairTargetData.upstreamCluster,
+          },
           latency: {
-            clusterPair: {
-              downstreamCluster: clusterPairTargetData.downstreamCluster,
-              upstreamCluster: clusterPairTargetData.upstreamCluster,
-            },
             percent: latencyExperimentData.percent,
             durationMs: latencyExperimentData.durationMs,
           },

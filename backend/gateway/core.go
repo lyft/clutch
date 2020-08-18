@@ -14,7 +14,7 @@ import (
 	authzmod "github.com/lyft/clutch/backend/module/authz"
 	awsmod "github.com/lyft/clutch/backend/module/aws"
 	experimentationapi "github.com/lyft/clutch/backend/module/chaos/experimentation/api"
-	rtdsmod "github.com/lyft/clutch/backend/module/chaos/experimentation/rtds"
+	rtdsmod "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds"
 	"github.com/lyft/clutch/backend/module/envoytriage"
 	"github.com/lyft/clutch/backend/module/healthcheck"
 	k8smod "github.com/lyft/clutch/backend/module/k8s"
