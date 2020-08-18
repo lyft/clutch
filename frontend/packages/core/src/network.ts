@@ -92,6 +92,19 @@ class ClientError extends Error {
   }
 }
 
+const successInterceptor = (response: AxiosResponse<any>) => {
+  // n.b. this middleware handles authentication redirects
+  // to prevent CORS issues from redirecting on the server.
+  if (response?.data?.authUrl) {
+    window.location = response.data.authUrl;
+    response.data.code = 401;
+    response.data.message = "Authentication Expired";
+    throw new ClientError(response);
+  }
+
+  return response;
+};
+
 const errorInterceptor = (error: AxiosError) => {
   const { response } = error;
 
@@ -110,7 +123,7 @@ const errorInterceptor = (error: AxiosError) => {
 const createClient = () => {
   const instance = axios.create();
   instance.interceptors.response.use(
-    success => success,
+    response => successInterceptor(response),
     error => errorInterceptor(error)
   );
 
