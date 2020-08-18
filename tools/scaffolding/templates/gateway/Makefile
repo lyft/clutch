@@ -20,7 +20,7 @@ backend:
 
 .PHONY: backend-dev
 backend-dev:
-	cd backend && go run main.go -c clutch-config.yaml
+	REPO_ROOT=$(MY_ROOT_DIR) $(SHELL) $(TOOLS_MODULE_DIR)/air.sh
 
 .PHONY: backend-test
 backend-test:

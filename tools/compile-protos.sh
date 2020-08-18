@@ -37,6 +37,8 @@ done
 shift "$((OPTIND-1))" # shift so that $@, $1, etc. refer to the non-option arguments
 
 main() {
+  check_prereqs
+
   REPO_ROOT="${SCRIPT_ROOT}"
   # Use alternate root if provided as command line argument.
   if [[ -n "${1-}" ]]; then
@@ -214,6 +216,13 @@ prepare_build_environment() {
 
   if [[ "${ACTION}" == "lint" ]]; then
     install_clang_format
+  fi
+}
+
+check_prereqs() {
+  if ! command -v "npm" &> /dev/null; then
+    echo "ERROR: npm not found, see https://github.com/lyft/clutch/wiki/Requirements#nodejs for more information."
+    exit 1
   fi
 }
 

@@ -47,7 +47,7 @@ backend-with-assets:
 
 .PHONY: backend-dev # Start the backend in development mode.
 backend-dev:
-	cd backend && go run .
+	tools/air.sh
 
 .PHONY: backend-dev-mock # Start the backend in development mode with mock responses.
 backend-dev-mock:

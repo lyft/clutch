@@ -15223,6 +15223,39 @@ export const clutch = $root.clutch = (() => {
                  */
 
                 /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listPods}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef ListPodsCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.ListPodsResponse} [response] ListPodsResponse
+                 */
+
+                /**
+                 * Calls ListPods.
+                 * @function listPods
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListPodsRequest} request ListPodsRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.ListPodsCallback} callback Node-style callback called with the error, if any, and ListPodsResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.listPods = function listPods(request, callback) {
+                    return this.rpcCall(listPods, $root.clutch.k8s.v1.ListPodsRequest, $root.clutch.k8s.v1.ListPodsResponse, request, callback);
+                }, "name", { value: "ListPods" });
+
+                /**
+                 * Calls ListPods.
+                 * @function listPods
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListPodsRequest} request ListPodsRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.ListPodsResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#deletePod}.
                  * @memberof clutch.k8s.v1.K8sAPI
                  * @typedef DeletePodCallback
@@ -15252,6 +15285,39 @@ export const clutch = $root.clutch = (() => {
                  * @instance
                  * @param {clutch.k8s.v1.IDeletePodRequest} request DeletePodRequest message or plain object
                  * @returns {Promise<clutch.k8s.v1.DeletePodResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#updatePod}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef UpdatePodCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.UpdatePodResponse} [response] UpdatePodResponse
+                 */
+
+                /**
+                 * Calls UpdatePod.
+                 * @function updatePod
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IUpdatePodRequest} request UpdatePodRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.UpdatePodCallback} callback Node-style callback called with the error, if any, and UpdatePodResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.updatePod = function updatePod(request, callback) {
+                    return this.rpcCall(updatePod, $root.clutch.k8s.v1.UpdatePodRequest, $root.clutch.k8s.v1.UpdatePodResponse, request, callback);
+                }, "name", { value: "UpdatePod" });
+
+                /**
+                 * Calls UpdatePod.
+                 * @function updatePod
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IUpdatePodRequest} request UpdatePodRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.UpdatePodResponse>} Promise
                  * @variation 2
                  */
 
@@ -16178,24 +16244,24 @@ export const clutch = $root.clutch = (() => {
                 return Pod;
             })();
 
-            v1.ListPodsOptions = (function() {
+            v1.ListOptions = (function() {
 
                 /**
-                 * Properties of a ListPodsOptions.
+                 * Properties of a ListOptions.
                  * @memberof clutch.k8s.v1
-                 * @interface IListPodsOptions
-                 * @property {Object.<string,string>|null} [labels] ListPodsOptions labels
+                 * @interface IListOptions
+                 * @property {Object.<string,string>|null} [labels] ListOptions labels
                  */
 
                 /**
-                 * Constructs a new ListPodsOptions.
+                 * Constructs a new ListOptions.
                  * @memberof clutch.k8s.v1
-                 * @classdesc Represents a ListPodsOptions.
-                 * @implements IListPodsOptions
+                 * @classdesc Represents a ListOptions.
+                 * @implements IListOptions
                  * @constructor
-                 * @param {clutch.k8s.v1.IListPodsOptions=} [properties] Properties to set
+                 * @param {clutch.k8s.v1.IListOptions=} [properties] Properties to set
                  */
-                function ListPodsOptions(properties) {
+                function ListOptions(properties) {
                     this.labels = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -16204,22 +16270,22 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * ListPodsOptions labels.
+                 * ListOptions labels.
                  * @member {Object.<string,string>} labels
-                 * @memberof clutch.k8s.v1.ListPodsOptions
+                 * @memberof clutch.k8s.v1.ListOptions
                  * @instance
                  */
-                ListPodsOptions.prototype.labels = $util.emptyObject;
+                ListOptions.prototype.labels = $util.emptyObject;
 
                 /**
-                 * Verifies a ListPodsOptions message.
+                 * Verifies a ListOptions message.
                  * @function verify
-                 * @memberof clutch.k8s.v1.ListPodsOptions
+                 * @memberof clutch.k8s.v1.ListOptions
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                ListPodsOptions.verify = function verify(message) {
+                ListOptions.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.labels != null && message.hasOwnProperty("labels")) {
@@ -16234,20 +16300,20 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a ListPodsOptions message from a plain object. Also converts values to their respective internal types.
+                 * Creates a ListOptions message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.k8s.v1.ListPodsOptions
+                 * @memberof clutch.k8s.v1.ListOptions
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.k8s.v1.ListPodsOptions} ListPodsOptions
+                 * @returns {clutch.k8s.v1.ListOptions} ListOptions
                  */
-                ListPodsOptions.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.k8s.v1.ListPodsOptions)
+                ListOptions.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListOptions)
                         return object;
-                    let message = new $root.clutch.k8s.v1.ListPodsOptions();
+                    let message = new $root.clutch.k8s.v1.ListOptions();
                     if (object.labels) {
                         if (typeof object.labels !== "object")
-                            throw TypeError(".clutch.k8s.v1.ListPodsOptions.labels: object expected");
+                            throw TypeError(".clutch.k8s.v1.ListOptions.labels: object expected");
                         message.labels = {};
                         for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
                             message.labels[keys[i]] = String(object.labels[keys[i]]);
@@ -16256,15 +16322,15 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a plain object from a ListPodsOptions message. Also converts values to other types if specified.
+                 * Creates a plain object from a ListOptions message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.k8s.v1.ListPodsOptions
+                 * @memberof clutch.k8s.v1.ListOptions
                  * @static
-                 * @param {clutch.k8s.v1.ListPodsOptions} message ListPodsOptions
+                 * @param {clutch.k8s.v1.ListOptions} message ListOptions
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                ListPodsOptions.toObject = function toObject(message, options) {
+                ListOptions.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -16280,17 +16346,292 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this ListPodsOptions to JSON.
+                 * Converts this ListOptions to JSON.
                  * @function toJSON
-                 * @memberof clutch.k8s.v1.ListPodsOptions
+                 * @memberof clutch.k8s.v1.ListOptions
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                ListPodsOptions.prototype.toJSON = function toJSON() {
+                ListOptions.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return ListPodsOptions;
+                return ListOptions;
+            })();
+
+            v1.ListPodsRequest = (function() {
+
+                /**
+                 * Properties of a ListPodsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListPodsRequest
+                 * @property {string|null} [clientset] ListPodsRequest clientset
+                 * @property {string|null} [cluster] ListPodsRequest cluster
+                 * @property {string|null} [namespace] ListPodsRequest namespace
+                 * @property {clutch.k8s.v1.IListOptions|null} [options] ListPodsRequest options
+                 */
+
+                /**
+                 * Constructs a new ListPodsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListPodsRequest.
+                 * @implements IListPodsRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListPodsRequest=} [properties] Properties to set
+                 */
+                function ListPodsRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListPodsRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.ListPodsRequest
+                 * @instance
+                 */
+                ListPodsRequest.prototype.clientset = "";
+
+                /**
+                 * ListPodsRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.ListPodsRequest
+                 * @instance
+                 */
+                ListPodsRequest.prototype.cluster = "";
+
+                /**
+                 * ListPodsRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.ListPodsRequest
+                 * @instance
+                 */
+                ListPodsRequest.prototype.namespace = "";
+
+                /**
+                 * ListPodsRequest options.
+                 * @member {clutch.k8s.v1.IListOptions|null|undefined} options
+                 * @memberof clutch.k8s.v1.ListPodsRequest
+                 * @instance
+                 */
+                ListPodsRequest.prototype.options = null;
+
+                /**
+                 * Verifies a ListPodsRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListPodsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListPodsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.options != null && message.hasOwnProperty("options")) {
+                        let error = $root.clutch.k8s.v1.ListOptions.verify(message.options);
+                        if (error)
+                            return "options." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListPodsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListPodsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListPodsRequest} ListPodsRequest
+                 */
+                ListPodsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListPodsRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListPodsRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.options != null) {
+                        if (typeof object.options !== "object")
+                            throw TypeError(".clutch.k8s.v1.ListPodsRequest.options: object expected");
+                        message.options = $root.clutch.k8s.v1.ListOptions.fromObject(object.options);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListPodsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListPodsRequest
+                 * @static
+                 * @param {clutch.k8s.v1.ListPodsRequest} message ListPodsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListPodsRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.options = null;
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.options != null && message.hasOwnProperty("options"))
+                        object.options = $root.clutch.k8s.v1.ListOptions.toObject(message.options, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this ListPodsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListPodsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListPodsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListPodsRequest;
+            })();
+
+            v1.ListPodsResponse = (function() {
+
+                /**
+                 * Properties of a ListPodsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListPodsResponse
+                 * @property {Array.<clutch.k8s.v1.IPod>|null} [pods] ListPodsResponse pods
+                 */
+
+                /**
+                 * Constructs a new ListPodsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListPodsResponse.
+                 * @implements IListPodsResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListPodsResponse=} [properties] Properties to set
+                 */
+                function ListPodsResponse(properties) {
+                    this.pods = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListPodsResponse pods.
+                 * @member {Array.<clutch.k8s.v1.IPod>} pods
+                 * @memberof clutch.k8s.v1.ListPodsResponse
+                 * @instance
+                 */
+                ListPodsResponse.prototype.pods = $util.emptyArray;
+
+                /**
+                 * Verifies a ListPodsResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListPodsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListPodsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.pods != null && message.hasOwnProperty("pods")) {
+                        if (!Array.isArray(message.pods))
+                            return "pods: array expected";
+                        for (let i = 0; i < message.pods.length; ++i) {
+                            let error = $root.clutch.k8s.v1.Pod.verify(message.pods[i]);
+                            if (error)
+                                return "pods." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListPodsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListPodsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListPodsResponse} ListPodsResponse
+                 */
+                ListPodsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListPodsResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListPodsResponse();
+                    if (object.pods) {
+                        if (!Array.isArray(object.pods))
+                            throw TypeError(".clutch.k8s.v1.ListPodsResponse.pods: array expected");
+                        message.pods = [];
+                        for (let i = 0; i < object.pods.length; ++i) {
+                            if (typeof object.pods[i] !== "object")
+                                throw TypeError(".clutch.k8s.v1.ListPodsResponse.pods: object expected");
+                            message.pods[i] = $root.clutch.k8s.v1.Pod.fromObject(object.pods[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListPodsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListPodsResponse
+                 * @static
+                 * @param {clutch.k8s.v1.ListPodsResponse} message ListPodsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListPodsResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.pods = [];
+                    if (message.pods && message.pods.length) {
+                        object.pods = [];
+                        for (let j = 0; j < message.pods.length; ++j)
+                            object.pods[j] = $root.clutch.k8s.v1.Pod.toObject(message.pods[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this ListPodsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListPodsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListPodsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListPodsResponse;
             })();
 
             v1.DeletePodRequest = (function() {
@@ -16521,6 +16862,302 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return DeletePodResponse;
+            })();
+
+            v1.UpdatePodRequest = (function() {
+
+                /**
+                 * Properties of an UpdatePodRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IUpdatePodRequest
+                 * @property {string|null} [clientset] UpdatePodRequest clientset
+                 * @property {string|null} [cluster] UpdatePodRequest cluster
+                 * @property {string|null} [namespace] UpdatePodRequest namespace
+                 * @property {string|null} [name] UpdatePodRequest name
+                 * @property {clutch.k8s.v1.IExpectedObjectMetaFields|null} [expectedObjectMetaFields] UpdatePodRequest expectedObjectMetaFields
+                 * @property {clutch.k8s.v1.IObjectMetaFields|null} [objectMetaFields] UpdatePodRequest objectMetaFields
+                 * @property {clutch.k8s.v1.IRemoveObjectMetaFields|null} [removeObjectMetaFields] UpdatePodRequest removeObjectMetaFields
+                 */
+
+                /**
+                 * Constructs a new UpdatePodRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an UpdatePodRequest.
+                 * @implements IUpdatePodRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IUpdatePodRequest=} [properties] Properties to set
+                 */
+                function UpdatePodRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * UpdatePodRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.UpdatePodRequest
+                 * @instance
+                 */
+                UpdatePodRequest.prototype.clientset = "";
+
+                /**
+                 * UpdatePodRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.UpdatePodRequest
+                 * @instance
+                 */
+                UpdatePodRequest.prototype.cluster = "";
+
+                /**
+                 * UpdatePodRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.UpdatePodRequest
+                 * @instance
+                 */
+                UpdatePodRequest.prototype.namespace = "";
+
+                /**
+                 * UpdatePodRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.UpdatePodRequest
+                 * @instance
+                 */
+                UpdatePodRequest.prototype.name = "";
+
+                /**
+                 * UpdatePodRequest expectedObjectMetaFields.
+                 * @member {clutch.k8s.v1.IExpectedObjectMetaFields|null|undefined} expectedObjectMetaFields
+                 * @memberof clutch.k8s.v1.UpdatePodRequest
+                 * @instance
+                 */
+                UpdatePodRequest.prototype.expectedObjectMetaFields = null;
+
+                /**
+                 * UpdatePodRequest objectMetaFields.
+                 * @member {clutch.k8s.v1.IObjectMetaFields|null|undefined} objectMetaFields
+                 * @memberof clutch.k8s.v1.UpdatePodRequest
+                 * @instance
+                 */
+                UpdatePodRequest.prototype.objectMetaFields = null;
+
+                /**
+                 * UpdatePodRequest removeObjectMetaFields.
+                 * @member {clutch.k8s.v1.IRemoveObjectMetaFields|null|undefined} removeObjectMetaFields
+                 * @memberof clutch.k8s.v1.UpdatePodRequest
+                 * @instance
+                 */
+                UpdatePodRequest.prototype.removeObjectMetaFields = null;
+
+                /**
+                 * Verifies an UpdatePodRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.UpdatePodRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                UpdatePodRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.expectedObjectMetaFields != null && message.hasOwnProperty("expectedObjectMetaFields")) {
+                        let error = $root.clutch.k8s.v1.ExpectedObjectMetaFields.verify(message.expectedObjectMetaFields);
+                        if (error)
+                            return "expectedObjectMetaFields." + error;
+                    }
+                    if (message.objectMetaFields != null && message.hasOwnProperty("objectMetaFields")) {
+                        let error = $root.clutch.k8s.v1.ObjectMetaFields.verify(message.objectMetaFields);
+                        if (error)
+                            return "objectMetaFields." + error;
+                    }
+                    if (message.removeObjectMetaFields != null && message.hasOwnProperty("removeObjectMetaFields")) {
+                        let error = $root.clutch.k8s.v1.RemoveObjectMetaFields.verify(message.removeObjectMetaFields);
+                        if (error)
+                            return "removeObjectMetaFields." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates an UpdatePodRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.UpdatePodRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.UpdatePodRequest} UpdatePodRequest
+                 */
+                UpdatePodRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.UpdatePodRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.UpdatePodRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.expectedObjectMetaFields != null) {
+                        if (typeof object.expectedObjectMetaFields !== "object")
+                            throw TypeError(".clutch.k8s.v1.UpdatePodRequest.expectedObjectMetaFields: object expected");
+                        message.expectedObjectMetaFields = $root.clutch.k8s.v1.ExpectedObjectMetaFields.fromObject(object.expectedObjectMetaFields);
+                    }
+                    if (object.objectMetaFields != null) {
+                        if (typeof object.objectMetaFields !== "object")
+                            throw TypeError(".clutch.k8s.v1.UpdatePodRequest.objectMetaFields: object expected");
+                        message.objectMetaFields = $root.clutch.k8s.v1.ObjectMetaFields.fromObject(object.objectMetaFields);
+                    }
+                    if (object.removeObjectMetaFields != null) {
+                        if (typeof object.removeObjectMetaFields !== "object")
+                            throw TypeError(".clutch.k8s.v1.UpdatePodRequest.removeObjectMetaFields: object expected");
+                        message.removeObjectMetaFields = $root.clutch.k8s.v1.RemoveObjectMetaFields.fromObject(object.removeObjectMetaFields);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an UpdatePodRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.UpdatePodRequest
+                 * @static
+                 * @param {clutch.k8s.v1.UpdatePodRequest} message UpdatePodRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                UpdatePodRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                        object.expectedObjectMetaFields = null;
+                        object.objectMetaFields = null;
+                        object.removeObjectMetaFields = null;
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.expectedObjectMetaFields != null && message.hasOwnProperty("expectedObjectMetaFields"))
+                        object.expectedObjectMetaFields = $root.clutch.k8s.v1.ExpectedObjectMetaFields.toObject(message.expectedObjectMetaFields, options);
+                    if (message.objectMetaFields != null && message.hasOwnProperty("objectMetaFields"))
+                        object.objectMetaFields = $root.clutch.k8s.v1.ObjectMetaFields.toObject(message.objectMetaFields, options);
+                    if (message.removeObjectMetaFields != null && message.hasOwnProperty("removeObjectMetaFields"))
+                        object.removeObjectMetaFields = $root.clutch.k8s.v1.RemoveObjectMetaFields.toObject(message.removeObjectMetaFields, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this UpdatePodRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.UpdatePodRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                UpdatePodRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return UpdatePodRequest;
+            })();
+
+            v1.UpdatePodResponse = (function() {
+
+                /**
+                 * Properties of an UpdatePodResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IUpdatePodResponse
+                 */
+
+                /**
+                 * Constructs a new UpdatePodResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an UpdatePodResponse.
+                 * @implements IUpdatePodResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IUpdatePodResponse=} [properties] Properties to set
+                 */
+                function UpdatePodResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies an UpdatePodResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.UpdatePodResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                UpdatePodResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an UpdatePodResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.UpdatePodResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.UpdatePodResponse} UpdatePodResponse
+                 */
+                UpdatePodResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.UpdatePodResponse)
+                        return object;
+                    return new $root.clutch.k8s.v1.UpdatePodResponse();
+                };
+
+                /**
+                 * Creates a plain object from an UpdatePodResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.UpdatePodResponse
+                 * @static
+                 * @param {clutch.k8s.v1.UpdatePodResponse} message UpdatePodResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                UpdatePodResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this UpdatePodResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.UpdatePodResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                UpdatePodResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return UpdatePodResponse;
             })();
 
             v1.HPA = (function() {
@@ -21694,6 +22331,154 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return UpdateRepositoryOptions;
+                })();
+
+                /**
+                 * CommitCompareStatus enum.
+                 * @name clutch.sourcecontrol.github.v1.CommitCompareStatus
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} UNKNOWN=1 UNKNOWN value
+                 * @property {number} BEHIND=2 BEHIND value
+                 * @property {number} AHEAD=3 AHEAD value
+                 * @property {number} IDENTICAL=4 IDENTICAL value
+                 */
+                v1.CommitCompareStatus = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "UNKNOWN"] = 1;
+                    values[valuesById[2] = "BEHIND"] = 2;
+                    values[valuesById[3] = "AHEAD"] = 3;
+                    values[valuesById[4] = "IDENTICAL"] = 4;
+                    return values;
+                })();
+
+                v1.CommitComparison = (function() {
+
+                    /**
+                     * Properties of a CommitComparison.
+                     * @memberof clutch.sourcecontrol.github.v1
+                     * @interface ICommitComparison
+                     * @property {clutch.sourcecontrol.github.v1.CommitCompareStatus|null} [status] CommitComparison status
+                     */
+
+                    /**
+                     * Constructs a new CommitComparison.
+                     * @memberof clutch.sourcecontrol.github.v1
+                     * @classdesc Represents a CommitComparison.
+                     * @implements ICommitComparison
+                     * @constructor
+                     * @param {clutch.sourcecontrol.github.v1.ICommitComparison=} [properties] Properties to set
+                     */
+                    function CommitComparison(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * CommitComparison status.
+                     * @member {clutch.sourcecontrol.github.v1.CommitCompareStatus} status
+                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
+                     * @instance
+                     */
+                    CommitComparison.prototype.status = 0;
+
+                    /**
+                     * Verifies a CommitComparison message.
+                     * @function verify
+                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    CommitComparison.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            switch (message.status) {
+                            default:
+                                return "status: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                                break;
+                            }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a CommitComparison message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.sourcecontrol.github.v1.CommitComparison} CommitComparison
+                     */
+                    CommitComparison.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.sourcecontrol.github.v1.CommitComparison)
+                            return object;
+                        let message = new $root.clutch.sourcecontrol.github.v1.CommitComparison();
+                        switch (object.status) {
+                        case "UNSPECIFIED":
+                        case 0:
+                            message.status = 0;
+                            break;
+                        case "UNKNOWN":
+                        case 1:
+                            message.status = 1;
+                            break;
+                        case "BEHIND":
+                        case 2:
+                            message.status = 2;
+                            break;
+                        case "AHEAD":
+                        case 3:
+                            message.status = 3;
+                            break;
+                        case "IDENTICAL":
+                        case 4:
+                            message.status = 4;
+                            break;
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a CommitComparison message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
+                     * @static
+                     * @param {clutch.sourcecontrol.github.v1.CommitComparison} message CommitComparison
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    CommitComparison.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            object.status = options.enums === String ? "UNSPECIFIED" : 0;
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            object.status = options.enums === String ? $root.clutch.sourcecontrol.github.v1.CommitCompareStatus[message.status] : message.status;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this CommitComparison to JSON.
+                     * @function toJSON
+                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    CommitComparison.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return CommitComparison;
                 })();
 
                 return v1;

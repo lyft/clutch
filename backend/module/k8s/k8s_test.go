@@ -37,6 +37,22 @@ func TestK8SAPIDescribePod(t *testing.T) {
 	assert.NotNil(t, resp)
 }
 
+func TestK8SAPIListPods(t *testing.T) {
+	c := k8smock.New()
+	api := newK8sAPI(c)
+	resp, err := api.ListPods(context.Background(), &k8sapiv1.ListPodsRequest{Options: &k8sapiv1.ListOptions{}})
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
+
+func TestK8SAPIUpdatePod(t *testing.T) {
+	c := k8smock.New()
+	api := newK8sAPI(c)
+	resp, err := api.UpdatePod(context.Background(), &k8sapiv1.UpdatePodRequest{})
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
+
 func TestK8SAPIResizeHPA(t *testing.T) {
 	c := k8smock.New()
 	api := newK8sAPI(c)
