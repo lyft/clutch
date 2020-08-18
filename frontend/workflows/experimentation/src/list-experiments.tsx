@@ -17,6 +17,7 @@ const ExperimentData: React.FC<ExperimentationDataProps> = ({
   experimentTypes,
 }) => {
   const types = experimentTypes || {};
+  // Check for a configuration describing how a test of a given type should be displayed within the list view.
   if (!Object.prototype.hasOwnProperty.call(types, experiment.config["@type"])) {
     const data = columns.map(() => {
       return experiment.config["@type"];
