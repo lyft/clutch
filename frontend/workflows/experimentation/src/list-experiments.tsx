@@ -5,13 +5,13 @@ import { ButtonGroup, client, Error, Row, Table } from "@clutch-sh/core";
 import { Container } from "@material-ui/core";
 import styled from "styled-components";
 
-interface ExperimentationSpecificationDataProps {
+interface ExperimentationDataProps {
   experiment: IClutch.chaos.experimentation.v1.Experiment;
   columns: string[];
   experimentTypes: any;
 }
 
-const ExperimentSpecificationData: React.FC<ExperimentationSpecificationDataProps> = ({
+const ExperimentData: React.FC<ExperimentationDataProps> = ({
   experiment,
   columns,
   experimentTypes,
@@ -82,9 +82,9 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, experimentTy
   const types = experimentTypes || [];
   let links: ExperimentTypeLinkProps[] = [];
   Object.keys(types).forEach(experimentType => {
-    const specification = types[experimentType];
-    if (Object.prototype.hasOwnProperty.call(specification, "links")) {
-      links = links.concat(specification.links);
+    const configuration = types[experimentType];
+    if (Object.prototype.hasOwnProperty.call(configuration, "links")) {
+      links = links.concat(configuration.links);
     }
   });
 
@@ -101,7 +101,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, experimentTy
       {error && <Error message={error} />}
       <Table headings={columnNames}>
         {experiments.map(e => (
-          <ExperimentSpecificationData
+          <ExperimentData
             key={e.id}
             experiment={e}
             columns={columns}
