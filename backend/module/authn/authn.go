@@ -62,6 +62,13 @@ func (a *api) Login(ctx context.Context, request *authnv1.LoginRequest) (*authnv
 		return nil, err
 	}
 
+	if request.RedirectUrl == "" {
+		md := metadata.Pairs("Location", authURL)
+		if err := grpc.SendHeader(ctx, md); err != nil {
+			return nil, err
+		}
+	}
+
 	return &authnv1.LoginResponse{
 		AuthUrl: authURL,
 	}, nil
