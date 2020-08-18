@@ -27,13 +27,13 @@ const ExperimentSpecificationData: React.FC<ExperimentationSpecificationDataProp
   const registeredExperimentType = types[experiment.config["@type"]];
 
   const mapperExists = Object.prototype.hasOwnProperty.call(registeredExperimentType, "mapping");
-  const model = mapperExists ? registeredExperimentType.mapper(experiment.config) : experiment;
+  const model = mapperExists ? registeredExperimentType.mapping(experiment.config) : experiment;
 
   const data = columns.map(column => {
     let value: string;
     if (column === "identifier") {
       value = experiment.id.toString();
-    } else if (model.prototype.hasOwnProperty.call(column)) {
+    } else if (Object.prototype.hasOwnProperty.call(model, column)) {
       value = model[column];
     }
 
