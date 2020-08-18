@@ -2320,8 +2320,8 @@ export namespace clutch {
                     /** Experiment id */
                     id?: (number|Long|null);
 
-                    /** Experiment testConfig */
-                    testConfig?: (google.protobuf.IAny|null);
+                    /** Experiment config */
+                    config?: (google.protobuf.IAny|null);
                 }
 
                 /** Represents an Experiment. */
@@ -2336,8 +2336,8 @@ export namespace clutch {
                     /** Experiment id. */
                     public id: (number|Long);
 
-                    /** Experiment testConfig. */
-                    public testConfig?: (google.protobuf.IAny|null);
+                    /** Experiment config. */
+                    public config?: (google.protobuf.IAny|null);
 
                     /**
                      * Verifies an Experiment message.
@@ -2736,58 +2736,67 @@ export namespace clutch {
             /** Namespace v1. */
             namespace v1 {
 
-                /** Properties of a TestSpecification. */
-                interface ITestSpecification {
+                /** Properties of a TestConfig. */
+                interface ITestConfig {
 
-                    /** TestSpecification abort */
-                    abort?: (clutch.chaos.serverexperimentation.v1.IAbortFault|null);
+                    /** TestConfig clusterPair */
+                    clusterPair?: (clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null);
 
-                    /** TestSpecification latency */
-                    latency?: (clutch.chaos.serverexperimentation.v1.ILatencyFault|null);
+                    /** TestConfig abort */
+                    abort?: (clutch.chaos.serverexperimentation.v1.IAbortFaultConfig|null);
+
+                    /** TestConfig latency */
+                    latency?: (clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null);
                 }
 
-                /** Represents a TestSpecification. */
-                class TestSpecification implements ITestSpecification {
+                /** Represents a TestConfig. */
+                class TestConfig implements ITestConfig {
 
                     /**
-                     * Constructs a new TestSpecification.
+                     * Constructs a new TestConfig.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.ITestSpecification);
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.ITestConfig);
 
-                    /** TestSpecification abort. */
-                    public abort?: (clutch.chaos.serverexperimentation.v1.IAbortFault|null);
+                    /** TestConfig clusterPair. */
+                    public clusterPair?: (clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null);
 
-                    /** TestSpecification latency. */
-                    public latency?: (clutch.chaos.serverexperimentation.v1.ILatencyFault|null);
+                    /** TestConfig abort. */
+                    public abort?: (clutch.chaos.serverexperimentation.v1.IAbortFaultConfig|null);
 
-                    /** TestSpecification config. */
-                    public config?: ("abort"|"latency");
+                    /** TestConfig latency. */
+                    public latency?: (clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null);
+
+                    /** TestConfig target. */
+                    public target?: "clusterPair";
+
+                    /** TestConfig fault. */
+                    public fault?: ("abort"|"latency");
 
                     /**
-                     * Verifies a TestSpecification message.
+                     * Verifies a TestConfig message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a TestSpecification message from a plain object. Also converts values to their respective internal types.
+                     * Creates a TestConfig message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns TestSpecification
+                     * @returns TestConfig
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.TestSpecification;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.TestConfig;
 
                     /**
-                     * Creates a plain object from a TestSpecification message. Also converts values to other types if specified.
-                     * @param message TestSpecification
+                     * Creates a plain object from a TestConfig message. Also converts values to other types if specified.
+                     * @param message TestConfig
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.TestSpecification, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.TestConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this TestSpecification to JSON.
+                     * Converts this TestConfig to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -2847,127 +2856,109 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of an AbortFault. */
-                interface IAbortFault {
+                /** Properties of an AbortFaultConfig. */
+                interface IAbortFaultConfig {
 
-                    /** AbortFault clusterPair */
-                    clusterPair?: (clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null);
-
-                    /** AbortFault percent */
+                    /** AbortFaultConfig percent */
                     percent?: (number|null);
 
-                    /** AbortFault httpStatus */
+                    /** AbortFaultConfig httpStatus */
                     httpStatus?: (number|null);
                 }
 
-                /** Represents an AbortFault. */
-                class AbortFault implements IAbortFault {
+                /** Represents an AbortFaultConfig. */
+                class AbortFaultConfig implements IAbortFaultConfig {
 
                     /**
-                     * Constructs a new AbortFault.
+                     * Constructs a new AbortFaultConfig.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IAbortFault);
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IAbortFaultConfig);
 
-                    /** AbortFault clusterPair. */
-                    public clusterPair?: (clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null);
-
-                    /** AbortFault percent. */
+                    /** AbortFaultConfig percent. */
                     public percent: number;
 
-                    /** AbortFault httpStatus. */
+                    /** AbortFaultConfig httpStatus. */
                     public httpStatus: number;
 
-                    /** AbortFault target. */
-                    public target?: "clusterPair";
-
                     /**
-                     * Verifies an AbortFault message.
+                     * Verifies an AbortFaultConfig message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates an AbortFault message from a plain object. Also converts values to their respective internal types.
+                     * Creates an AbortFaultConfig message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns AbortFault
+                     * @returns AbortFaultConfig
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.AbortFault;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.AbortFaultConfig;
 
                     /**
-                     * Creates a plain object from an AbortFault message. Also converts values to other types if specified.
-                     * @param message AbortFault
+                     * Creates a plain object from an AbortFaultConfig message. Also converts values to other types if specified.
+                     * @param message AbortFaultConfig
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.AbortFault, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.AbortFaultConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this AbortFault to JSON.
+                     * Converts this AbortFaultConfig to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a LatencyFault. */
-                interface ILatencyFault {
+                /** Properties of a LatencyFaultConfig. */
+                interface ILatencyFaultConfig {
 
-                    /** LatencyFault clusterPair */
-                    clusterPair?: (clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null);
-
-                    /** LatencyFault percent */
+                    /** LatencyFaultConfig percent */
                     percent?: (number|null);
 
-                    /** LatencyFault durationMs */
+                    /** LatencyFaultConfig durationMs */
                     durationMs?: (number|null);
                 }
 
-                /** Represents a LatencyFault. */
-                class LatencyFault implements ILatencyFault {
+                /** Represents a LatencyFaultConfig. */
+                class LatencyFaultConfig implements ILatencyFaultConfig {
 
                     /**
-                     * Constructs a new LatencyFault.
+                     * Constructs a new LatencyFaultConfig.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.ILatencyFault);
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig);
 
-                    /** LatencyFault clusterPair. */
-                    public clusterPair?: (clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null);
-
-                    /** LatencyFault percent. */
+                    /** LatencyFaultConfig percent. */
                     public percent: number;
 
-                    /** LatencyFault durationMs. */
+                    /** LatencyFaultConfig durationMs. */
                     public durationMs: number;
 
-                    /** LatencyFault target. */
-                    public target?: "clusterPair";
-
                     /**
-                     * Verifies a LatencyFault message.
+                     * Verifies a LatencyFaultConfig message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a LatencyFault message from a plain object. Also converts values to their respective internal types.
+                     * Creates a LatencyFaultConfig message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns LatencyFault
+                     * @returns LatencyFaultConfig
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.LatencyFault;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.LatencyFaultConfig;
 
                     /**
-                     * Creates a plain object from a LatencyFault message. Also converts values to other types if specified.
-                     * @param message LatencyFault
+                     * Creates a plain object from a LatencyFaultConfig message. Also converts values to other types if specified.
+                     * @param message LatencyFaultConfig
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.LatencyFault, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.LatencyFaultConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this LatencyFault to JSON.
+                     * Converts this LatencyFaultConfig to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

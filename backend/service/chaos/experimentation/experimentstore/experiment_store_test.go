@@ -24,22 +24,22 @@ type experimentTest struct {
 }
 
 func createExperimentsTests() ([]experimentTest, error) {
-	specification := &serverexperimentation.TestSpecification{
-		Config: &serverexperimentation.TestSpecification_Abort{
-			Abort: &serverexperimentation.AbortFault{
-				Target: &serverexperimentation.AbortFault_ClusterPair{
-					ClusterPair: &serverexperimentation.ClusterPairTarget{
-						DownstreamCluster: "upstreamCluster",
-						UpstreamCluster:   "downstreamCluster",
-					},
-				},
+	config := &serverexperimentation.TestConfig{
+		Target: &serverexperimentation.TestConfig_ClusterPair{
+			ClusterPair: &serverexperimentation.ClusterPairTarget{
+				DownstreamCluster: "upstreamCluster",
+				UpstreamCluster:   "downstreamCluster",
+			},
+		},
+		Fault: &serverexperimentation.TestConfig_Abort{
+			Abort: &serverexperimentation.AbortFaultConfig{
 				Percent:    100.0,
 				HttpStatus: 401,
 			},
 		},
 	}
 
-	anyConfig, err := ptypes.MarshalAny(specification)
+	anyConfig, err := ptypes.MarshalAny(config)
 	if err != nil {
 		return []experimentTest{}, err
 	}
@@ -55,7 +55,7 @@ func createExperimentsTests() ([]experimentTest, error) {
 			sql: "INSERT INTO experiments (id,details) VALUES ($1,$2)",
 			args: []driver.Value{
 				1,
-				`{"@type":"type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestSpecification","abort":{"clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"percent":100,"httpStatus":401}}`,
+				`{"@type":"type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig","clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"abort":{"percent":100,"httpStatus":401}}`,
 			},
 		},
 		experimentTest{
@@ -169,7 +169,7 @@ var getExperimentsTests = []struct {
 		rows: [][]driver.Value{
 			{
 				1234,
-				`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestSpecification", "abort":{"clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"percent":100,"httpStatus":401}}`,
+				`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig","clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"abort":{"percent":100,"httpStatus":401}}`,
 			},
 		},
 	},
@@ -213,13 +213,13 @@ func TestGetExperiments(t *testing.T) {
 			experiment := experiments[0]
 			a.NotEqual(0, experiment.GetId())
 
-			specification := &serverexperimentation.TestSpecification{}
-			err2 := ptypes.UnmarshalAny(experiment.GetConfig(), specification)
+			config := &serverexperimentation.TestConfig{}
+			err2 := ptypes.UnmarshalAny(experiment.GetConfig(), config)
 			if err2 != nil {
 				t.Errorf("setSnapshot failed %v", err2)
 			}
-			a.Nil(specification.GetLatency())
-			abort := specification.GetAbort()
+			a.Nil(config.GetLatency())
+			abort := config.GetAbort()
 			a.NotNil(abort)
 			a.Equal(int32(401), abort.GetHttpStatus())
 			a.Equal(float32(100), abort.GetPercent())

@@ -18,17 +18,18 @@ import (
 )
 
 func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent float32, httpStatus int32) *experimentation.Experiment {
-	config := &serverexperimentation.TestSpecification{
-		Config: &serverexperimentation.TestSpecification_Abort{
-			Abort: &serverexperimentation.AbortFault{
-				Target: &serverexperimentation.AbortFault_ClusterPair{
-					ClusterPair: &serverexperimentation.ClusterPairTarget{
-						DownstreamCluster: downstreamCluster,
-						UpstreamCluster:   upstreamCluster,
-					},
-				},
+	config := &serverexperimentation.TestConfig{
+		Target: &serverexperimentation.TestConfig_ClusterPair{
+			ClusterPair: &serverexperimentation.ClusterPairTarget{
+				DownstreamCluster: downstreamCluster,
+				UpstreamCluster:   upstreamCluster,
+			},
+		},
+		Fault: &serverexperimentation.TestConfig_Abort{
+			Abort: &serverexperimentation.AbortFaultConfig{
 				Percent:    faultPercent,
-				HttpStatus: httpStatus},
+				HttpStatus: httpStatus,
+			},
 		},
 	}
 
@@ -41,17 +42,18 @@ func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamClust
 }
 
 func createLatencyExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, latencyPercent float32, duration int32) *experimentation.Experiment {
-	config := &serverexperimentation.TestSpecification{
-		Config: &serverexperimentation.TestSpecification_Latency{
-			Latency: &serverexperimentation.LatencyFault{
-				Target: &serverexperimentation.LatencyFault_ClusterPair{
-					ClusterPair: &serverexperimentation.ClusterPairTarget{
-						DownstreamCluster: downstreamCluster,
-						UpstreamCluster:   upstreamCluster,
-					},
-				},
+	config := &serverexperimentation.TestConfig{
+		Target: &serverexperimentation.TestConfig_ClusterPair{
+			ClusterPair: &serverexperimentation.ClusterPairTarget{
+				DownstreamCluster: downstreamCluster,
+				UpstreamCluster:   upstreamCluster,
+			},
+		},
+		Fault: &serverexperimentation.TestConfig_Latency{
+			Latency: &serverexperimentation.LatencyFaultConfig{
 				Percent:    latencyPercent,
-				DurationMs: duration},
+				DurationMs: duration,
+			},
 		},
 	}
 
@@ -80,23 +82,15 @@ func TestSetSnapshot(t *testing.T) {
 
 	var testUpstreamClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
-		specification := &serverexperimentation.TestSpecification{}
-		err := ptypes.UnmarshalAny(experiment.GetConfig(), specification)
+		config := &serverexperimentation.TestConfig{}
+		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
 		if err != nil {
 			t.Errorf("unmarshalAny failed %v", err)
 		}
 
-		switch specification.GetConfig().(type) {
-		case *serverexperimentation.TestSpecification_Abort:
-			target := specification.GetAbort().GetClusterPair()
-			if target.GetUpstreamCluster() == testUpstreamCluster {
-				testUpstreamClusterFaults = append(testUpstreamClusterFaults, experiment)
-			}
-		case *serverexperimentation.TestSpecification_Latency:
-			target := specification.GetLatency().GetClusterPair()
-			if target.GetUpstreamCluster() == testUpstreamCluster {
-				testUpstreamClusterFaults = append(testUpstreamClusterFaults, experiment)
-			}
+		target := config.GetClusterPair()
+		if target.GetUpstreamCluster() == testUpstreamCluster {
+			testUpstreamClusterFaults = append(testUpstreamClusterFaults, experiment)
 		}
 	}
 
@@ -137,18 +131,19 @@ func TestCreateRuntimeKeys(t *testing.T) {
 		var expectedFaultKey string
 		var expectedFaultValue int32
 
-		specification := &serverexperimentation.TestSpecification{}
-		err := ptypes.UnmarshalAny(testExperiment.GetConfig(), specification)
+		config := &serverexperimentation.TestConfig{}
+		err := ptypes.UnmarshalAny(testExperiment.GetConfig(), config)
 		if err != nil {
 			t.Errorf("unmarshalAny failed %v", err)
 		}
 
-		switch specification.GetConfig().(type) {
-		case *serverexperimentation.TestSpecification_Abort:
-			abort := specification.GetAbort()
+		target := config.GetClusterPair()
+		switch config.GetFault().(type) {
+		case *serverexperimentation.TestConfig_Abort:
+			abort := config.GetAbort()
 			expectedFaultValue = abort.HttpStatus
 			expectedPercentageValue = abort.Percent
-			target := abort.GetClusterPair()
+
 			if target.DownstreamCluster == "" {
 				expectedPercentageKey = HTTPPercentageWithoutDownstream
 				expectedFaultKey = HTTPStatusWithoutDownstream
@@ -156,11 +151,10 @@ func TestCreateRuntimeKeys(t *testing.T) {
 				expectedPercentageKey = fmt.Sprintf(HTTPPercentageWithDownstream, target.DownstreamCluster)
 				expectedFaultKey = fmt.Sprintf(HTTPStatusWithDownstream, target.DownstreamCluster)
 			}
-		case *serverexperimentation.TestSpecification_Latency:
-			latency := specification.GetLatency()
+		case *serverexperimentation.TestConfig_Latency:
+			latency := config.GetLatency()
 			expectedFaultValue = latency.DurationMs
 			expectedPercentageValue = latency.Percent
-			target := latency.GetClusterPair()
 			if target.DownstreamCluster == "" {
 				expectedPercentageKey = LatencyPercentageWithoutDownstream
 				expectedFaultKey = LatencyDurationWithoutDownstream
@@ -170,7 +164,7 @@ func TestCreateRuntimeKeys(t *testing.T) {
 			}
 		}
 
-		percentageKey, percentageValue, faultKey, faultValue := createRuntimeKeys(specification, zap.NewNop().Sugar())
+		percentageKey, percentageValue, faultKey, faultValue := createRuntimeKeys(config, zap.NewNop().Sugar())
 
 		assert.Equal(t, expectedPercentageKey, percentageKey)
 		assert.Equal(t, expectedPercentageValue, percentageValue)

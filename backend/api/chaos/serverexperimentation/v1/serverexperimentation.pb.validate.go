@@ -36,21 +36,36 @@ var (
 // define the regex for a UUID once up-front
 var _serverexperimentation_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
-// Validate checks the field values on TestSpecification with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *TestSpecification) Validate() error {
+// Validate checks the field values on TestConfig with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *TestConfig) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	switch m.Config.(type) {
+	switch m.Target.(type) {
 
-	case *TestSpecification_Abort:
+	case *TestConfig_ClusterPair:
+
+		if v, ok := interface{}(m.GetClusterPair()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return TestConfigValidationError{
+					field:  "ClusterPair",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	switch m.Fault.(type) {
+
+	case *TestConfig_Abort:
 
 		if v, ok := interface{}(m.GetAbort()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return TestSpecificationValidationError{
+				return TestConfigValidationError{
 					field:  "Abort",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -58,11 +73,11 @@ func (m *TestSpecification) Validate() error {
 			}
 		}
 
-	case *TestSpecification_Latency:
+	case *TestConfig_Latency:
 
 		if v, ok := interface{}(m.GetLatency()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return TestSpecificationValidationError{
+				return TestConfigValidationError{
 					field:  "Latency",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -75,9 +90,9 @@ func (m *TestSpecification) Validate() error {
 	return nil
 }
 
-// TestSpecificationValidationError is the validation error returned by
-// TestSpecification.Validate if the designated constraints aren't met.
-type TestSpecificationValidationError struct {
+// TestConfigValidationError is the validation error returned by
+// TestConfig.Validate if the designated constraints aren't met.
+type TestConfigValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -85,24 +100,22 @@ type TestSpecificationValidationError struct {
 }
 
 // Field function returns field value.
-func (e TestSpecificationValidationError) Field() string { return e.field }
+func (e TestConfigValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e TestSpecificationValidationError) Reason() string { return e.reason }
+func (e TestConfigValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e TestSpecificationValidationError) Cause() error { return e.cause }
+func (e TestConfigValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e TestSpecificationValidationError) Key() bool { return e.key }
+func (e TestConfigValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e TestSpecificationValidationError) ErrorName() string {
-	return "TestSpecificationValidationError"
-}
+func (e TestConfigValidationError) ErrorName() string { return "TestConfigValidationError" }
 
 // Error satisfies the builtin error interface
-func (e TestSpecificationValidationError) Error() string {
+func (e TestConfigValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -114,14 +127,14 @@ func (e TestSpecificationValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sTestSpecification.%s: %s%s",
+		"invalid %sTestConfig.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = TestSpecificationValidationError{}
+var _ error = TestConfigValidationError{}
 
 var _ interface {
 	Field() string
@@ -129,7 +142,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = TestSpecificationValidationError{}
+} = TestConfigValidationError{}
 
 // Validate checks the field values on ClusterPairTarget with the rules defined
 // in the proto definition for this message. If any rules are violated, an
@@ -212,49 +225,34 @@ var _ interface {
 	ErrorName() string
 } = ClusterPairTargetValidationError{}
 
-// Validate checks the field values on AbortFault with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *AbortFault) Validate() error {
+// Validate checks the field values on AbortFaultConfig with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *AbortFaultConfig) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if val := m.GetPercent(); val <= 0 || val > 100 {
-		return AbortFaultValidationError{
+		return AbortFaultConfigValidationError{
 			field:  "Percent",
 			reason: "value must be inside range (0, 100]",
 		}
 	}
 
 	if val := m.GetHttpStatus(); val <= 99 || val >= 600 {
-		return AbortFaultValidationError{
+		return AbortFaultConfigValidationError{
 			field:  "HttpStatus",
 			reason: "value must be inside range (99, 600)",
 		}
 	}
 
-	switch m.Target.(type) {
-
-	case *AbortFault_ClusterPair:
-
-		if v, ok := interface{}(m.GetClusterPair()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return AbortFaultValidationError{
-					field:  "ClusterPair",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
 	return nil
 }
 
-// AbortFaultValidationError is the validation error returned by
-// AbortFault.Validate if the designated constraints aren't met.
-type AbortFaultValidationError struct {
+// AbortFaultConfigValidationError is the validation error returned by
+// AbortFaultConfig.Validate if the designated constraints aren't met.
+type AbortFaultConfigValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -262,22 +260,22 @@ type AbortFaultValidationError struct {
 }
 
 // Field function returns field value.
-func (e AbortFaultValidationError) Field() string { return e.field }
+func (e AbortFaultConfigValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e AbortFaultValidationError) Reason() string { return e.reason }
+func (e AbortFaultConfigValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e AbortFaultValidationError) Cause() error { return e.cause }
+func (e AbortFaultConfigValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e AbortFaultValidationError) Key() bool { return e.key }
+func (e AbortFaultConfigValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e AbortFaultValidationError) ErrorName() string { return "AbortFaultValidationError" }
+func (e AbortFaultConfigValidationError) ErrorName() string { return "AbortFaultConfigValidationError" }
 
 // Error satisfies the builtin error interface
-func (e AbortFaultValidationError) Error() string {
+func (e AbortFaultConfigValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -289,14 +287,14 @@ func (e AbortFaultValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sAbortFault.%s: %s%s",
+		"invalid %sAbortFaultConfig.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = AbortFaultValidationError{}
+var _ error = AbortFaultConfigValidationError{}
 
 var _ interface {
 	Field() string
@@ -304,52 +302,36 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = AbortFaultValidationError{}
+} = AbortFaultConfigValidationError{}
 
-// Validate checks the field values on LatencyFault with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *LatencyFault) Validate() error {
+// Validate checks the field values on LatencyFaultConfig with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *LatencyFaultConfig) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if val := m.GetPercent(); val <= 0 || val > 100 {
-		return LatencyFaultValidationError{
+		return LatencyFaultConfigValidationError{
 			field:  "Percent",
 			reason: "value must be inside range (0, 100]",
 		}
 	}
 
 	if m.GetDurationMs() <= 0 {
-		return LatencyFaultValidationError{
+		return LatencyFaultConfigValidationError{
 			field:  "DurationMs",
 			reason: "value must be greater than 0",
 		}
 	}
 
-	switch m.Target.(type) {
-
-	case *LatencyFault_ClusterPair:
-
-		if v, ok := interface{}(m.GetClusterPair()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return LatencyFaultValidationError{
-					field:  "ClusterPair",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
 	return nil
 }
 
-// LatencyFaultValidationError is the validation error returned by
-// LatencyFault.Validate if the designated constraints aren't met.
-type LatencyFaultValidationError struct {
+// LatencyFaultConfigValidationError is the validation error returned by
+// LatencyFaultConfig.Validate if the designated constraints aren't met.
+type LatencyFaultConfigValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -357,22 +339,24 @@ type LatencyFaultValidationError struct {
 }
 
 // Field function returns field value.
-func (e LatencyFaultValidationError) Field() string { return e.field }
+func (e LatencyFaultConfigValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e LatencyFaultValidationError) Reason() string { return e.reason }
+func (e LatencyFaultConfigValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e LatencyFaultValidationError) Cause() error { return e.cause }
+func (e LatencyFaultConfigValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e LatencyFaultValidationError) Key() bool { return e.key }
+func (e LatencyFaultConfigValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e LatencyFaultValidationError) ErrorName() string { return "LatencyFaultValidationError" }
+func (e LatencyFaultConfigValidationError) ErrorName() string {
+	return "LatencyFaultConfigValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e LatencyFaultValidationError) Error() string {
+func (e LatencyFaultConfigValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -384,14 +368,14 @@ func (e LatencyFaultValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sLatencyFault.%s: %s%s",
+		"invalid %sLatencyFaultConfig.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = LatencyFaultValidationError{}
+var _ error = LatencyFaultConfigValidationError{}
 
 var _ interface {
 	Field() string
@@ -399,4 +383,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = LatencyFaultValidationError{}
+} = LatencyFaultConfigValidationError{}

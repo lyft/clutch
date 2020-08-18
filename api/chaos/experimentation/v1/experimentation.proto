@@ -12,7 +12,7 @@ option go_package = "experimentationv1";
 
 message Experiment {
   fixed64 id = 1;
-  google.protobuf.Any test_config = 2;
+  google.protobuf.Any config = 2;
 }
 
 message CreateExperimentsRequest {

@@ -45,10 +45,10 @@ func (m *Experiment) Validate() error {
 
 	// no validation rules for Id
 
-	if v, ok := interface{}(m.GetTestConfig()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetConfig()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ExperimentValidationError{
-				field:  "TestConfig",
+				field:  "Config",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}

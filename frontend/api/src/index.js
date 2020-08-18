@@ -5395,7 +5395,7 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.chaos.experimentation.v1
                      * @interface IExperiment
                      * @property {number|Long|null} [id] Experiment id
-                     * @property {google.protobuf.IAny|null} [testConfig] Experiment testConfig
+                     * @property {google.protobuf.IAny|null} [config] Experiment config
                      */
 
                     /**
@@ -5422,12 +5422,12 @@ export const clutch = $root.clutch = (() => {
                     Experiment.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                     /**
-                     * Experiment testConfig.
-                     * @member {google.protobuf.IAny|null|undefined} testConfig
+                     * Experiment config.
+                     * @member {google.protobuf.IAny|null|undefined} config
                      * @memberof clutch.chaos.experimentation.v1.Experiment
                      * @instance
                      */
-                    Experiment.prototype.testConfig = null;
+                    Experiment.prototype.config = null;
 
                     /**
                      * Verifies an Experiment message.
@@ -5443,10 +5443,10 @@ export const clutch = $root.clutch = (() => {
                         if (message.id != null && message.hasOwnProperty("id"))
                             if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
                                 return "id: integer|Long expected";
-                        if (message.testConfig != null && message.hasOwnProperty("testConfig")) {
-                            let error = $root.google.protobuf.Any.verify(message.testConfig);
+                        if (message.config != null && message.hasOwnProperty("config")) {
+                            let error = $root.google.protobuf.Any.verify(message.config);
                             if (error)
-                                return "testConfig." + error;
+                                return "config." + error;
                         }
                         return null;
                     };
@@ -5472,10 +5472,10 @@ export const clutch = $root.clutch = (() => {
                                 message.id = object.id;
                             else if (typeof object.id === "object")
                                 message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
-                        if (object.testConfig != null) {
-                            if (typeof object.testConfig !== "object")
-                                throw TypeError(".clutch.chaos.experimentation.v1.Experiment.testConfig: object expected");
-                            message.testConfig = $root.google.protobuf.Any.fromObject(object.testConfig);
+                        if (object.config != null) {
+                            if (typeof object.config !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.Experiment.config: object expected");
+                            message.config = $root.google.protobuf.Any.fromObject(object.config);
                         }
                         return message;
                     };
@@ -5499,15 +5499,15 @@ export const clutch = $root.clutch = (() => {
                                 object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                             } else
                                 object.id = options.longs === String ? "0" : 0;
-                            object.testConfig = null;
+                            object.config = null;
                         }
                         if (message.id != null && message.hasOwnProperty("id"))
                             if (typeof message.id === "number")
                                 object.id = options.longs === String ? String(message.id) : message.id;
                             else
                                 object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
-                        if (message.testConfig != null && message.hasOwnProperty("testConfig"))
-                            object.testConfig = $root.google.protobuf.Any.toObject(message.testConfig, options);
+                        if (message.config != null && message.hasOwnProperty("config"))
+                            object.config = $root.google.protobuf.Any.toObject(message.config, options);
                         return object;
                     };
 
@@ -6347,25 +6347,26 @@ export const clutch = $root.clutch = (() => {
                  */
                 const v1 = {};
 
-                v1.TestSpecification = (function() {
+                v1.TestConfig = (function() {
 
                     /**
-                     * Properties of a TestSpecification.
+                     * Properties of a TestConfig.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @interface ITestSpecification
-                     * @property {clutch.chaos.serverexperimentation.v1.IAbortFault|null} [abort] TestSpecification abort
-                     * @property {clutch.chaos.serverexperimentation.v1.ILatencyFault|null} [latency] TestSpecification latency
+                     * @interface ITestConfig
+                     * @property {clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null} [clusterPair] TestConfig clusterPair
+                     * @property {clutch.chaos.serverexperimentation.v1.IAbortFaultConfig|null} [abort] TestConfig abort
+                     * @property {clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null} [latency] TestConfig latency
                      */
 
                     /**
-                     * Constructs a new TestSpecification.
+                     * Constructs a new TestConfig.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @classdesc Represents a TestSpecification.
-                     * @implements ITestSpecification
+                     * @classdesc Represents a TestConfig.
+                     * @implements ITestConfig
                      * @constructor
-                     * @param {clutch.chaos.serverexperimentation.v1.ITestSpecification=} [properties] Properties to set
+                     * @param {clutch.chaos.serverexperimentation.v1.ITestConfig=} [properties] Properties to set
                      */
-                    function TestSpecification(properties) {
+                    function TestConfig(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -6373,61 +6374,88 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * TestSpecification abort.
-                     * @member {clutch.chaos.serverexperimentation.v1.IAbortFault|null|undefined} abort
-                     * @memberof clutch.chaos.serverexperimentation.v1.TestSpecification
+                     * TestConfig clusterPair.
+                     * @member {clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null|undefined} clusterPair
+                     * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
                      * @instance
                      */
-                    TestSpecification.prototype.abort = null;
+                    TestConfig.prototype.clusterPair = null;
 
                     /**
-                     * TestSpecification latency.
-                     * @member {clutch.chaos.serverexperimentation.v1.ILatencyFault|null|undefined} latency
-                     * @memberof clutch.chaos.serverexperimentation.v1.TestSpecification
+                     * TestConfig abort.
+                     * @member {clutch.chaos.serverexperimentation.v1.IAbortFaultConfig|null|undefined} abort
+                     * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
                      * @instance
                      */
-                    TestSpecification.prototype.latency = null;
+                    TestConfig.prototype.abort = null;
+
+                    /**
+                     * TestConfig latency.
+                     * @member {clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null|undefined} latency
+                     * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
+                     * @instance
+                     */
+                    TestConfig.prototype.latency = null;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
 
                     /**
-                     * TestSpecification config.
-                     * @member {"abort"|"latency"|undefined} config
-                     * @memberof clutch.chaos.serverexperimentation.v1.TestSpecification
+                     * TestConfig target.
+                     * @member {"clusterPair"|undefined} target
+                     * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
                      * @instance
                      */
-                    Object.defineProperty(TestSpecification.prototype, "config", {
+                    Object.defineProperty(TestConfig.prototype, "target", {
+                        get: $util.oneOfGetter($oneOfFields = ["clusterPair"]),
+                        set: $util.oneOfSetter($oneOfFields)
+                    });
+
+                    /**
+                     * TestConfig fault.
+                     * @member {"abort"|"latency"|undefined} fault
+                     * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
+                     * @instance
+                     */
+                    Object.defineProperty(TestConfig.prototype, "fault", {
                         get: $util.oneOfGetter($oneOfFields = ["abort", "latency"]),
                         set: $util.oneOfSetter($oneOfFields)
                     });
 
                     /**
-                     * Verifies a TestSpecification message.
+                     * Verifies a TestConfig message.
                      * @function verify
-                     * @memberof clutch.chaos.serverexperimentation.v1.TestSpecification
+                     * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    TestSpecification.verify = function verify(message) {
+                    TestConfig.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         let properties = {};
-                        if (message.abort != null && message.hasOwnProperty("abort")) {
-                            properties.config = 1;
+                        if (message.clusterPair != null && message.hasOwnProperty("clusterPair")) {
+                            properties.target = 1;
                             {
-                                let error = $root.clutch.chaos.serverexperimentation.v1.AbortFault.verify(message.abort);
+                                let error = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.verify(message.clusterPair);
+                                if (error)
+                                    return "clusterPair." + error;
+                            }
+                        }
+                        if (message.abort != null && message.hasOwnProperty("abort")) {
+                            properties.fault = 1;
+                            {
+                                let error = $root.clutch.chaos.serverexperimentation.v1.AbortFaultConfig.verify(message.abort);
                                 if (error)
                                     return "abort." + error;
                             }
                         }
                         if (message.latency != null && message.hasOwnProperty("latency")) {
-                            if (properties.config === 1)
-                                return "config: multiple values";
-                            properties.config = 1;
+                            if (properties.fault === 1)
+                                return "fault: multiple values";
+                            properties.fault = 1;
                             {
-                                let error = $root.clutch.chaos.serverexperimentation.v1.LatencyFault.verify(message.latency);
+                                let error = $root.clutch.chaos.serverexperimentation.v1.LatencyFaultConfig.verify(message.latency);
                                 if (error)
                                     return "latency." + error;
                             }
@@ -6436,68 +6464,78 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a TestSpecification message from a plain object. Also converts values to their respective internal types.
+                     * Creates a TestConfig message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.TestSpecification
+                     * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.serverexperimentation.v1.TestSpecification} TestSpecification
+                     * @returns {clutch.chaos.serverexperimentation.v1.TestConfig} TestConfig
                      */
-                    TestSpecification.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.TestSpecification)
+                    TestConfig.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.TestConfig)
                             return object;
-                        let message = new $root.clutch.chaos.serverexperimentation.v1.TestSpecification();
+                        let message = new $root.clutch.chaos.serverexperimentation.v1.TestConfig();
+                        if (object.clusterPair != null) {
+                            if (typeof object.clusterPair !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.TestConfig.clusterPair: object expected");
+                            message.clusterPair = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.fromObject(object.clusterPair);
+                        }
                         if (object.abort != null) {
                             if (typeof object.abort !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.TestSpecification.abort: object expected");
-                            message.abort = $root.clutch.chaos.serverexperimentation.v1.AbortFault.fromObject(object.abort);
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.TestConfig.abort: object expected");
+                            message.abort = $root.clutch.chaos.serverexperimentation.v1.AbortFaultConfig.fromObject(object.abort);
                         }
                         if (object.latency != null) {
                             if (typeof object.latency !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.TestSpecification.latency: object expected");
-                            message.latency = $root.clutch.chaos.serverexperimentation.v1.LatencyFault.fromObject(object.latency);
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.TestConfig.latency: object expected");
+                            message.latency = $root.clutch.chaos.serverexperimentation.v1.LatencyFaultConfig.fromObject(object.latency);
                         }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from a TestSpecification message. Also converts values to other types if specified.
+                     * Creates a plain object from a TestConfig message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.TestSpecification
+                     * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
                      * @static
-                     * @param {clutch.chaos.serverexperimentation.v1.TestSpecification} message TestSpecification
+                     * @param {clutch.chaos.serverexperimentation.v1.TestConfig} message TestConfig
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    TestSpecification.toObject = function toObject(message, options) {
+                    TestConfig.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (message.abort != null && message.hasOwnProperty("abort")) {
-                            object.abort = $root.clutch.chaos.serverexperimentation.v1.AbortFault.toObject(message.abort, options);
+                        if (message.clusterPair != null && message.hasOwnProperty("clusterPair")) {
+                            object.clusterPair = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.toObject(message.clusterPair, options);
                             if (options.oneofs)
-                                object.config = "abort";
+                                object.target = "clusterPair";
+                        }
+                        if (message.abort != null && message.hasOwnProperty("abort")) {
+                            object.abort = $root.clutch.chaos.serverexperimentation.v1.AbortFaultConfig.toObject(message.abort, options);
+                            if (options.oneofs)
+                                object.fault = "abort";
                         }
                         if (message.latency != null && message.hasOwnProperty("latency")) {
-                            object.latency = $root.clutch.chaos.serverexperimentation.v1.LatencyFault.toObject(message.latency, options);
+                            object.latency = $root.clutch.chaos.serverexperimentation.v1.LatencyFaultConfig.toObject(message.latency, options);
                             if (options.oneofs)
-                                object.config = "latency";
+                                object.fault = "latency";
                         }
                         return object;
                     };
 
                     /**
-                     * Converts this TestSpecification to JSON.
+                     * Converts this TestConfig to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.serverexperimentation.v1.TestSpecification
+                     * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    TestSpecification.prototype.toJSON = function toJSON() {
+                    TestConfig.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return TestSpecification;
+                    return TestConfig;
                 })();
 
                 v1.ClusterPairTarget = (function() {
@@ -6618,26 +6656,25 @@ export const clutch = $root.clutch = (() => {
                     return ClusterPairTarget;
                 })();
 
-                v1.AbortFault = (function() {
+                v1.AbortFaultConfig = (function() {
 
                     /**
-                     * Properties of an AbortFault.
+                     * Properties of an AbortFaultConfig.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @interface IAbortFault
-                     * @property {clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null} [clusterPair] AbortFault clusterPair
-                     * @property {number|null} [percent] AbortFault percent
-                     * @property {number|null} [httpStatus] AbortFault httpStatus
+                     * @interface IAbortFaultConfig
+                     * @property {number|null} [percent] AbortFaultConfig percent
+                     * @property {number|null} [httpStatus] AbortFaultConfig httpStatus
                      */
 
                     /**
-                     * Constructs a new AbortFault.
+                     * Constructs a new AbortFaultConfig.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @classdesc Represents an AbortFault.
-                     * @implements IAbortFault
+                     * @classdesc Represents an AbortFaultConfig.
+                     * @implements IAbortFaultConfig
                      * @constructor
-                     * @param {clutch.chaos.serverexperimentation.v1.IAbortFault=} [properties] Properties to set
+                     * @param {clutch.chaos.serverexperimentation.v1.IAbortFaultConfig=} [properties] Properties to set
                      */
-                    function AbortFault(properties) {
+                    function AbortFaultConfig(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -6645,63 +6682,32 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * AbortFault clusterPair.
-                     * @member {clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null|undefined} clusterPair
-                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
-                     * @instance
-                     */
-                    AbortFault.prototype.clusterPair = null;
-
-                    /**
-                     * AbortFault percent.
+                     * AbortFaultConfig percent.
                      * @member {number} percent
-                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
+                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFaultConfig
                      * @instance
                      */
-                    AbortFault.prototype.percent = 0;
+                    AbortFaultConfig.prototype.percent = 0;
 
                     /**
-                     * AbortFault httpStatus.
+                     * AbortFaultConfig httpStatus.
                      * @member {number} httpStatus
-                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
+                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFaultConfig
                      * @instance
                      */
-                    AbortFault.prototype.httpStatus = 0;
-
-                    // OneOf field names bound to virtual getters and setters
-                    let $oneOfFields;
+                    AbortFaultConfig.prototype.httpStatus = 0;
 
                     /**
-                     * AbortFault target.
-                     * @member {"clusterPair"|undefined} target
-                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
-                     * @instance
-                     */
-                    Object.defineProperty(AbortFault.prototype, "target", {
-                        get: $util.oneOfGetter($oneOfFields = ["clusterPair"]),
-                        set: $util.oneOfSetter($oneOfFields)
-                    });
-
-                    /**
-                     * Verifies an AbortFault message.
+                     * Verifies an AbortFaultConfig message.
                      * @function verify
-                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
+                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFaultConfig
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    AbortFault.verify = function verify(message) {
+                    AbortFaultConfig.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        let properties = {};
-                        if (message.clusterPair != null && message.hasOwnProperty("clusterPair")) {
-                            properties.target = 1;
-                            {
-                                let error = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.verify(message.clusterPair);
-                                if (error)
-                                    return "clusterPair." + error;
-                            }
-                        }
                         if (message.percent != null && message.hasOwnProperty("percent"))
                             if (typeof message.percent !== "number")
                                 return "percent: number expected";
@@ -6712,22 +6718,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates an AbortFault message from a plain object. Also converts values to their respective internal types.
+                     * Creates an AbortFaultConfig message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
+                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFaultConfig
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.serverexperimentation.v1.AbortFault} AbortFault
+                     * @returns {clutch.chaos.serverexperimentation.v1.AbortFaultConfig} AbortFaultConfig
                      */
-                    AbortFault.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.AbortFault)
+                    AbortFaultConfig.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.AbortFaultConfig)
                             return object;
-                        let message = new $root.clutch.chaos.serverexperimentation.v1.AbortFault();
-                        if (object.clusterPair != null) {
-                            if (typeof object.clusterPair !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.AbortFault.clusterPair: object expected");
-                            message.clusterPair = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.fromObject(object.clusterPair);
-                        }
+                        let message = new $root.clutch.chaos.serverexperimentation.v1.AbortFaultConfig();
                         if (object.percent != null)
                             message.percent = Number(object.percent);
                         if (object.httpStatus != null)
@@ -6736,26 +6737,21 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a plain object from an AbortFault message. Also converts values to other types if specified.
+                     * Creates a plain object from an AbortFaultConfig message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
+                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFaultConfig
                      * @static
-                     * @param {clutch.chaos.serverexperimentation.v1.AbortFault} message AbortFault
+                     * @param {clutch.chaos.serverexperimentation.v1.AbortFaultConfig} message AbortFaultConfig
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    AbortFault.toObject = function toObject(message, options) {
+                    AbortFaultConfig.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
                         if (options.defaults) {
                             object.percent = 0;
                             object.httpStatus = 0;
-                        }
-                        if (message.clusterPair != null && message.hasOwnProperty("clusterPair")) {
-                            object.clusterPair = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.toObject(message.clusterPair, options);
-                            if (options.oneofs)
-                                object.target = "clusterPair";
                         }
                         if (message.percent != null && message.hasOwnProperty("percent"))
                             object.percent = options.json && !isFinite(message.percent) ? String(message.percent) : message.percent;
@@ -6765,39 +6761,38 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this AbortFault to JSON.
+                     * Converts this AbortFaultConfig to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
+                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFaultConfig
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    AbortFault.prototype.toJSON = function toJSON() {
+                    AbortFaultConfig.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return AbortFault;
+                    return AbortFaultConfig;
                 })();
 
-                v1.LatencyFault = (function() {
+                v1.LatencyFaultConfig = (function() {
 
                     /**
-                     * Properties of a LatencyFault.
+                     * Properties of a LatencyFaultConfig.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @interface ILatencyFault
-                     * @property {clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null} [clusterPair] LatencyFault clusterPair
-                     * @property {number|null} [percent] LatencyFault percent
-                     * @property {number|null} [durationMs] LatencyFault durationMs
+                     * @interface ILatencyFaultConfig
+                     * @property {number|null} [percent] LatencyFaultConfig percent
+                     * @property {number|null} [durationMs] LatencyFaultConfig durationMs
                      */
 
                     /**
-                     * Constructs a new LatencyFault.
+                     * Constructs a new LatencyFaultConfig.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @classdesc Represents a LatencyFault.
-                     * @implements ILatencyFault
+                     * @classdesc Represents a LatencyFaultConfig.
+                     * @implements ILatencyFaultConfig
                      * @constructor
-                     * @param {clutch.chaos.serverexperimentation.v1.ILatencyFault=} [properties] Properties to set
+                     * @param {clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig=} [properties] Properties to set
                      */
-                    function LatencyFault(properties) {
+                    function LatencyFaultConfig(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -6805,63 +6800,32 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * LatencyFault clusterPair.
-                     * @member {clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null|undefined} clusterPair
-                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
-                     * @instance
-                     */
-                    LatencyFault.prototype.clusterPair = null;
-
-                    /**
-                     * LatencyFault percent.
+                     * LatencyFaultConfig percent.
                      * @member {number} percent
-                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
+                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFaultConfig
                      * @instance
                      */
-                    LatencyFault.prototype.percent = 0;
+                    LatencyFaultConfig.prototype.percent = 0;
 
                     /**
-                     * LatencyFault durationMs.
+                     * LatencyFaultConfig durationMs.
                      * @member {number} durationMs
-                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
+                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFaultConfig
                      * @instance
                      */
-                    LatencyFault.prototype.durationMs = 0;
-
-                    // OneOf field names bound to virtual getters and setters
-                    let $oneOfFields;
+                    LatencyFaultConfig.prototype.durationMs = 0;
 
                     /**
-                     * LatencyFault target.
-                     * @member {"clusterPair"|undefined} target
-                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
-                     * @instance
-                     */
-                    Object.defineProperty(LatencyFault.prototype, "target", {
-                        get: $util.oneOfGetter($oneOfFields = ["clusterPair"]),
-                        set: $util.oneOfSetter($oneOfFields)
-                    });
-
-                    /**
-                     * Verifies a LatencyFault message.
+                     * Verifies a LatencyFaultConfig message.
                      * @function verify
-                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
+                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFaultConfig
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    LatencyFault.verify = function verify(message) {
+                    LatencyFaultConfig.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        let properties = {};
-                        if (message.clusterPair != null && message.hasOwnProperty("clusterPair")) {
-                            properties.target = 1;
-                            {
-                                let error = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.verify(message.clusterPair);
-                                if (error)
-                                    return "clusterPair." + error;
-                            }
-                        }
                         if (message.percent != null && message.hasOwnProperty("percent"))
                             if (typeof message.percent !== "number")
                                 return "percent: number expected";
@@ -6872,22 +6836,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a LatencyFault message from a plain object. Also converts values to their respective internal types.
+                     * Creates a LatencyFaultConfig message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
+                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFaultConfig
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.serverexperimentation.v1.LatencyFault} LatencyFault
+                     * @returns {clutch.chaos.serverexperimentation.v1.LatencyFaultConfig} LatencyFaultConfig
                      */
-                    LatencyFault.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.LatencyFault)
+                    LatencyFaultConfig.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.LatencyFaultConfig)
                             return object;
-                        let message = new $root.clutch.chaos.serverexperimentation.v1.LatencyFault();
-                        if (object.clusterPair != null) {
-                            if (typeof object.clusterPair !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.LatencyFault.clusterPair: object expected");
-                            message.clusterPair = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.fromObject(object.clusterPair);
-                        }
+                        let message = new $root.clutch.chaos.serverexperimentation.v1.LatencyFaultConfig();
                         if (object.percent != null)
                             message.percent = Number(object.percent);
                         if (object.durationMs != null)
@@ -6896,26 +6855,21 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a plain object from a LatencyFault message. Also converts values to other types if specified.
+                     * Creates a plain object from a LatencyFaultConfig message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
+                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFaultConfig
                      * @static
-                     * @param {clutch.chaos.serverexperimentation.v1.LatencyFault} message LatencyFault
+                     * @param {clutch.chaos.serverexperimentation.v1.LatencyFaultConfig} message LatencyFaultConfig
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    LatencyFault.toObject = function toObject(message, options) {
+                    LatencyFaultConfig.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
                         if (options.defaults) {
                             object.percent = 0;
                             object.durationMs = 0;
-                        }
-                        if (message.clusterPair != null && message.hasOwnProperty("clusterPair")) {
-                            object.clusterPair = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.toObject(message.clusterPair, options);
-                            if (options.oneofs)
-                                object.target = "clusterPair";
                         }
                         if (message.percent != null && message.hasOwnProperty("percent"))
                             object.percent = options.json && !isFinite(message.percent) ? String(message.percent) : message.percent;
@@ -6925,17 +6879,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this LatencyFault to JSON.
+                     * Converts this LatencyFaultConfig to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
+                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFaultConfig
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    LatencyFault.prototype.toJSON = function toJSON() {
+                    LatencyFaultConfig.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return LatencyFault;
+                    return LatencyFaultConfig;
                 })();
 
                 return v1;

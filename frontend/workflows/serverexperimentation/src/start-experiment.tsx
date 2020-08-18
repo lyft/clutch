@@ -157,14 +157,14 @@ const Confirm: React.FC<WizardChild> = () => {
   );
 };
 
-const createExperiment = (data: IClutch.chaos.serverexperimentation.v1.ITestSpecification) => {
+const createExperiment = (data: IClutch.chaos.serverexperimentation.v1.ITestConfig) => {
   const config = data;
-  config["@type"] = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestSpecification";
+  config["@type"] = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig";
 
   return client.post("/v1/experiments/create", {
     experiments: [
       {
-        testConfig: config,
+        config: config,
       },
     ],
   });
@@ -182,11 +182,11 @@ export const StartAbortExperiment: React.FC<BaseWorkflowProps> = ({ heading }) =
         abortExperimentData: IClutch.chaos.serverexperimentation.v1.AbortFault
       ) => {
         return createExperiment({
+          clusterPair: {
+            downstreamCluster: clusterPairTargetData.downstreamCluster,
+            upstreamCluster: clusterPairTargetData.upstreamCluster,
+          },
           abort: {
-            clusterPair: {
-              downstreamCluster: clusterPairTargetData.downstreamCluster,
-              upstreamCluster: clusterPairTargetData.upstreamCluster,
-            },
             percent: abortExperimentData.percent,
             httpStatus: abortExperimentData.httpStatus,
           },
@@ -215,11 +215,11 @@ export const StartLatencyExperiment: React.FC<BaseWorkflowProps> = ({ heading })
         latencyExperimentData: IClutch.chaos.serverexperimentation.v1.LatencyFault
       ) => {
         return createExperiment({
+          clusterPair: {
+            downstreamCluster: clusterPairTargetData.downstreamCluster,
+            upstreamCluster: clusterPairTargetData.upstreamCluster,
+          },
           latency: {
-            clusterPair: {
-              downstreamCluster: clusterPairTargetData.downstreamCluster,
-              upstreamCluster: clusterPairTargetData.upstreamCluster,
-            },
             percent: latencyExperimentData.percent,
             durationMs: latencyExperimentData.durationMs,
           },
