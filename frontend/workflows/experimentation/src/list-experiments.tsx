@@ -101,12 +101,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, experimentTy
       {error && <Error message={error} />}
       <Table headings={columnNames}>
         {experiments.map(e => (
-          <ExperimentData
-            key={e.id}
-            experiment={e}
-            columns={columns}
-            experimentTypes={types}
-          />
+          <ExperimentData key={e.id} experiment={e} columns={columns} experimentTypes={types} />
         ))}
       </Table>
       <ButtonGroup buttons={buttons} />

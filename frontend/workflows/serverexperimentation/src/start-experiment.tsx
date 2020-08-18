@@ -158,13 +158,13 @@ const Confirm: React.FC<WizardChild> = () => {
 };
 
 const createExperiment = (data: IClutch.chaos.serverexperimentation.v1.ITestConfig) => {
-  const config = data;
-  config["@type"] = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig";
+  const testConfig = data;
+  testConfig["@type"] = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig";
 
   return client.post("/v1/experiments/create", {
     experiments: [
       {
-        config: config,
+        config: testConfig,
       },
     ],
   });
