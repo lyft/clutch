@@ -97,6 +97,9 @@ const successInterceptor = (response: AxiosResponse<any>) => {
   // to prevent CORS issues from redirecting on the server.
   if (response?.data?.authUrl) {
     window.location = response.data.authUrl;
+    response.data.code = 401;
+    response.data.message = "Authentication Expired";
+    throw new ClientError(response)
   }
 
   return response;
