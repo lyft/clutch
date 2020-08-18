@@ -110,7 +110,9 @@ func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Ma
 			runtime.DefaultHTTPProtoErrorHandler(ctx, mux, m, w, req, err)
 			return
 		}
-		redirectPath = fmt.Sprintf("%s?redirect_url=%s", redirectPath, referer.Path)
+		if redirectPath != referer.Path {
+			redirectPath = fmt.Sprintf("%s?redirect_url=%s", redirectPath, referer.Path)
+		}
 	}
 	if s, ok := status.FromError(err); ok && s.Code() == codes.Unauthenticated {
 		http.Redirect(w, req, redirectPath, http.StatusFound)
