@@ -179,7 +179,7 @@ export const StartAbortExperiment: React.FC<BaseWorkflowProps> = ({ heading }) =
       deps: ["clusterPairTargetData", "abortExperimentData"],
       hydrator: (
         clusterPairTargetData: IClutch.chaos.serverexperimentation.v1.IClusterPairTarget,
-        abortExperimentData: IClutch.chaos.serverexperimentation.v1.AbortFault
+        abortExperimentData: IClutch.chaos.serverexperimentation.v1.AbortFaultConfig
       ) => {
         return createExperiment({
           clusterPair: {
@@ -212,7 +212,7 @@ export const StartLatencyExperiment: React.FC<BaseWorkflowProps> = ({ heading })
       deps: ["clusterPairTargetData", "latencyExperimentData"],
       hydrator: (
         clusterPairTargetData: IClutch.chaos.serverexperimentation.v1.IClusterPairTarget,
-        latencyExperimentData: IClutch.chaos.serverexperimentation.v1.LatencyFault
+        latencyExperimentData: IClutch.chaos.serverexperimentation.v1.LatencyFaultConfig
       ) => {
         return createExperiment({
           clusterPair: {
