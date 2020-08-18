@@ -99,7 +99,7 @@ const successInterceptor = (response: AxiosResponse<any>) => {
     window.location = response.data.authUrl;
     response.data.code = 401;
     response.data.message = "Authentication Expired";
-    throw new ClientError(response)
+    throw new ClientError(response);
   }
 
   return response;
