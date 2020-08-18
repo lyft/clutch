@@ -28,6 +28,7 @@ const TextField: React.FC<TextFieldProps & MuiTextFieldProps> = ({
   onChange,
   onReturn,
   maxWidth,
+  placeholder,
   ...props
 }) => {
   const onKeyDown = (
@@ -39,11 +40,12 @@ const TextField: React.FC<TextFieldProps & MuiTextFieldProps> = ({
     }
   };
 
+  const shrinkLabel = (placeholder !== undefined || placeholder !== "");
   return (
     <StyledTextField
       data-max-width={maxWidth}
       color="secondary"
-      InputLabelProps={{ color: "secondary" }}
+      InputLabelProps={{ color: "secondary", shrink: shrinkLabel}}
       onKeyDown={e => onKeyDown(e)}
       onFocus={onChange}
       onBlur={onChange}
