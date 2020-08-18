@@ -40,12 +40,12 @@ const TextField: React.FC<TextFieldProps & MuiTextFieldProps> = ({
     }
   };
 
-  const shrinkLabel = (placeholder !== undefined || placeholder !== "");
+  const shrinkLabel = placeholder !== undefined || placeholder !== "";
   return (
     <StyledTextField
       data-max-width={maxWidth}
       color="secondary"
-      InputLabelProps={{ color: "secondary", shrink: shrinkLabel}}
+      InputLabelProps={{ color: "secondary", shrink: shrinkLabel }}
       onKeyDown={e => onKeyDown(e)}
       onFocus={onChange}
       onBlur={onChange}
