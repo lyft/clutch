@@ -33,7 +33,7 @@ type ComponentFactory struct {
 
 func Run(f *Flags, cf *ComponentFactory, assets http.FileSystem) {
 	// Use a temporary logger to parse the configuration and output.
-	tmpLogger := newTmpLogger().With(zap.String("filename", f.ConfigPath))
+	tmpLogger := newTmpLogger().With(zap.String("file", f.ConfigPath))
 
 	var cfg gatewayv1.Config
 	if err := parseFile(f.ConfigPath, &cfg, f.Template); err != nil {
@@ -48,6 +48,7 @@ func Run(f *Flags, cf *ComponentFactory, assets http.FileSystem) {
 		os.Exit(0)
 	}
 
+	tmpLogger.Info("Using configuration")
 	RunWithConfig(&cfg, cf, assets)
 }
 
