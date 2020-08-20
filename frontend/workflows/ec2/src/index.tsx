@@ -32,6 +32,7 @@ const register = (): WorkflowConfiguration => {
         description: "Terminate an EC2 instance.",
         component: TerminateInstance,
         requiredConfigProps: ["resolverType"],
+        private: true,
       },
       resizeAutoscalingGroup: {
         path: "asg/resize",
