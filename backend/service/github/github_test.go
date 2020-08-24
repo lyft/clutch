@@ -173,6 +173,20 @@ func (m *mockRepositories) CompareCommits(ctx context.Context, owner, repo, base
 	return &githubv3.CommitsComparison{Status: &returnstr}, nil, nil
 }
 
+func (m *mockRepositories) GetCommit(ctx context.Context, owner, repo, sha string) (*githubv3.RepositoryCommit, *githubv3.Response, error) {
+	file := "testfile.go"
+	if m.generalError {
+		return &githubv3.RepositoryCommit{}, &githubv3.Response{}, errors.New(problem)
+	}
+	return &githubv3.RepositoryCommit{
+		Files: []*githubv3.CommitFile{
+			{
+				Filename: &file,
+			},
+		},
+	}, &githubv3.Response{}, nil
+}
+
 var createRepoTests = []struct {
 	req *sourcecontrolv1.CreateRepositoryRequest
 }{
@@ -229,7 +243,7 @@ func TestCreateRepository(t *testing.T) {
 	}
 }
 
-var compareCommitsTest = []struct {
+var compareCommitsTests = []struct {
 	name         string
 	errorText    string
 	status       githubv1.CommitCompareStatus
@@ -252,7 +266,7 @@ var compareCommitsTest = []struct {
 func TestCompareCommits(t *testing.T) {
 	t.Parallel()
 
-	for _, tt := range compareCommitsTest {
+	for _, tt := range compareCommitsTests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
@@ -280,6 +294,58 @@ func TestCompareCommits(t *testing.T) {
 				return
 			}
 			a.Equal(comp.GetStatus(), tt.status)
+			a.Nil(err)
+		})
+	}
+}
+
+var getCommitsTests = []struct {
+	name      string
+	errorText string
+	mockRepo  *mockRepositories
+	file      string
+}{
+	{
+		name:      "v3 error",
+		mockRepo:  &mockRepositories{generalError: true},
+		errorText: "we've had a problem",
+	},
+	{
+		name:     "happy path",
+		mockRepo: &mockRepositories{},
+		file:     "testfile.go",
+	},
+}
+
+func TestGetCommit(t *testing.T) {
+	t.Parallel()
+	for _, tt := range getCommitsTests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			a := assert.New(t)
+			s := &svc{rest: v3client{
+				Repositories: tt.mockRepo,
+			}}
+
+			commit, err := s.GetCommit(context.Background(),
+				&RemoteRef{
+					RepoOwner: "owner",
+					RepoName:  "myRepo",
+					Ref:       "1234",
+				},
+			)
+
+			if tt.errorText != "" {
+				a.Error(err)
+				a.Contains(err.Error(), tt.errorText)
+				return
+			}
+			if err != nil {
+				a.FailNowf("unexpected error: %s", err.Error())
+				return
+			}
+			a.Equal(tt.file, *commit.Files[0].Filename)
 			a.Nil(err)
 		})
 	}
