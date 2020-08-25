@@ -53,7 +53,7 @@ module.exports = {
         columns: ["identifier", "targets", "type", "description"],
         experimentTypes: {
           "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig": {
-            mapping: (e) => {
+            mapping: e => {
               const clusters = e.clusterPair;
               return {
                 targets: `"${clusters.downstreamCluster}" ➡️ "${clusters.upstreamCluster}"`,

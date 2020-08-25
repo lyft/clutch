@@ -97,8 +97,12 @@ func (fs *experimentStore) CreateExperiments(ctx context.Context, experiments []
 
 // DeleteExperiments deletes the specified experiments from the store.
 func (fs *experimentStore) DeleteExperiments(ctx context.Context, ids []uint64) error {
-	sql := `DELETE FROM experiment_run WHERE id IN $1`
-	_, err := fs.db.ExecContext(ctx, sql, ids)
+	if len(ids) != 1 {
+		// TODO: This API will be renamed to StopExperiment and will take a single ID as a parameter
+		return errors.New("A single ID must be provided")
+	}
+	sql := `DELETE FROM experiment_run WHERE id == $1`
+	_, err := fs.db.ExecContext(ctx, sql, ids[0])
 	return err
 }
 
@@ -157,4 +161,3 @@ func marshalConfig(experiment *experimentation.Experiment) (string, error) {
 	}
 	return buf.String(), nil
 }
-
