@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/uber-go/tally"
@@ -32,28 +31,31 @@ type ComponentFactory struct {
 }
 
 func Run(f *Flags, cf *ComponentFactory, assets http.FileSystem) {
-	// Use a temporary logger to parse the configuration and output.
-	tmpLogger := newTmpLogger().With(zap.String("file", f.ConfigPath))
+	cfg := MustReadOrValidateConfig(f)
 
-	var cfg gatewayv1.Config
-	if err := parseFile(f.ConfigPath, &cfg, f.Template); err != nil {
-		tmpLogger.Fatal("parsing configuration failed", zap.Error(err))
+	// Init a real logger to log the filename.
+	logger, err := newLogger(cfg.Gateway.Logger)
+	if err != nil {
+		tmpLogger := newTmpLogger()
+		defer func() {
+			if err := tmpLogger.Sync(); err != nil {
+				panic(err)
+			}
+		}()
+		tmpLogger.Fatal("could not instantiate logger", zap.Error(err))
 	}
-	if err := cfg.Validate(); err != nil {
-		tmpLogger.Fatal("validating configuration failed", zap.Error(err))
-	}
+	defer func() {
+		if err := logger.Sync(); err != nil {
+			panic(err)
+		}
+	}()
+	logger.Info("using configuration", zap.String("file", f.ConfigPath))
 
-	if f.Validate {
-		tmpLogger.Info("configuration validation was successful")
-		os.Exit(0)
-	}
-
-	tmpLogger.Info("Using configuration")
-	RunWithConfig(&cfg, cf, assets)
+	RunWithConfig(cfg, cf, assets)
 }
 
 func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory, assets http.FileSystem) {
-	// Init the logger.
+	// Init the server's logger.
 	logger, err := newLogger(cfg.Gateway.Logger)
 	if err != nil {
 		newTmpLogger().Fatal("could not instantiate logger", zap.Error(err))
