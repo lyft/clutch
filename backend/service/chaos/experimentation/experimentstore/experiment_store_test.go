@@ -69,7 +69,7 @@ func createExperimentsTests() ([]experimentTest, error) {
 					},
 				},
 				{
-					sql: `INSERT INTO experiment_run ( id, experiment_config_id, start_time, end_time, creation_time) VALUES ($1, $2, NOW(), NULL, NOW())`,
+					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, NOW(), NULL, NOW())`,
 					args: []driver.Value{
 						sqlmock.AnyArg(),
 						sqlmock.AnyArg(),
@@ -131,10 +131,6 @@ var deleteExperimentsTests = []struct {
 	args []driver.Value
 	err  error
 }{
-	//{
-	//	id:  "delete all experiments",
-	//	sql: `DELETE FROM experiments`,
-	//},
 	{
 		id:   "delete specific experiment",
 		ids:  []uint64{1},
@@ -185,7 +181,7 @@ var getExperimentsTests = []struct {
 }{
 	{
 		id:   "get all experiments",
-		sql:  `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND experiment_run.start_time < now()`,
+		sql:  `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND now() && experiment_run.execution_time`,
 		args: []driver.Value{"upstreamCluster", "downstreamCluster", 1},
 		rows: [][]driver.Value{
 			{

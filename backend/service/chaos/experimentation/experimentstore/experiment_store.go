@@ -80,10 +80,9 @@ func (fs *experimentStore) CreateExperiments(ctx context.Context, experiments []
 			INSERT INTO experiment_run (
                 id, 
 		        experiment_config_id,
-		        start_time,
-			    end_time,                        
+		        execution_time,
 		        creation_time)
-            VALUES ($1, $2, NOW(), NULL, NOW())`
+            VALUES ($1, $2, tstzrange(NOW(), NULL), NOW())`
 
 		_, err = fs.db.ExecContext(ctx, runSql, id.NewID(), configID)
 		if err != nil {
@@ -111,7 +110,7 @@ func (fs *experimentStore) GetExperiments(ctx context.Context) ([]*experimentati
 	sql := `
         SELECT experiment_run.id, details FROM experiment_config, experiment_run
         WHERE experiment_config.id = experiment_run.experiment_config_id
-        	AND experiment_run.start_time < now()`
+        	AND now() <@ experiment_run.execution_time`
 
 	rows, err := fs.db.QueryContext(ctx, sql)
 	if err != nil {
