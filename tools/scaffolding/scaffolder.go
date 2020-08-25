@@ -297,7 +297,8 @@ func main() {
 			return err
 		}
 
-		fh, err := os.Create(filepath.Join(tmpout, relpath))
+		out := strings.TrimSuffix(filepath.Join(tmpout, relpath), ".tmpl")
+		fh, err := os.Create(out)
 		if err != nil {
 			return err
 		}
