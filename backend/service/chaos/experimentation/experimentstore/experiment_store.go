@@ -7,7 +7,6 @@ import (
 	"errors"
 	"strings"
 
-	sq "github.com/Masterminds/squirrel"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -20,13 +19,6 @@ import (
 )
 
 const Name = "clutch.service.chaos.experimentation.store"
-
-var experimentColumns = []string{
-	"id",
-	"details",
-}
-
-const experimentsTableName = "experiments"
 
 // ExperimentStore stores experiment data
 type ExperimentStore interface {
@@ -41,7 +33,7 @@ type experimentStore struct {
 }
 
 // New returns a new NewExperimentStore instance.
-func New(cfg *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
+func New(_ *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
 	p, ok := service.Registry[pgservice.Name]
 	if !ok {
 		return nil, errors.New("could not find database service")
@@ -58,61 +50,66 @@ func New(cfg *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
 }
 
 func (fs *experimentStore) CreateExperiments(ctx context.Context, experiments []*experimentation.Experiment) error {
-	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
-	builder := psql.Insert(experimentsTableName).Columns(experimentColumns...)
+	// This API call will eventually be broken into 2 separate calls:
+	// 1) creating the config
+	// 2) starting a new experiment with the config
 
-	for _, experiment := range experiments {
-		marshaler := jsonpb.Marshaler{}
-		buf := &bytes.Buffer{}
-		err := marshaler.Marshal(buf, experiment.GetConfig())
-		if err != nil {
-			return err
-		}
-		s := buf.String()
-		builder = builder.Values(
-			id.NewID(),
-			s,
-		)
-	}
-
-	sql, args, err := builder.ToSql()
+	// All experiments are created in a single transaction
+	tx, err := fs.db.Begin()
 	if err != nil {
 		return err
 	}
 
-	_, err = fs.db.ExecContext(ctx, sql, args...)
+	for _, experiment := range experiments {
+		// Step 1) create the config
+		configID := id.NewID()
+
+		configJson, err := marshalConfig(experiment)
+		if err != nil {
+			return err
+		}
+
+		configSql := `INSERT INTO experiment_config (id, details) VALUES ($1, $2)`
+		_, err = fs.db.ExecContext(ctx, configSql, configID, configJson)
+		if err != nil {
+			return err
+		}
+
+		// Step 2) start a new experiment with the config
+		runSql := `
+			INSERT INTO experiment_run (
+                id, 
+		        experiment_config_id,
+		        start_time,
+			    end_time,                        
+		        creation_time)
+            VALUES ($1, $2, NOW(), NULL, NOW())`
+
+		_, err = fs.db.ExecContext(ctx, runSql, id.NewID(), configID)
+		if err != nil {
+			return err
+		}
+	}
+
+	err = tx.Commit()
 	return err
 }
 
 // DeleteExperiments deletes the specified experiments from the store.
 func (fs *experimentStore) DeleteExperiments(ctx context.Context, ids []uint64) error {
-	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
-	builder := psql.Delete("").From(experimentsTableName)
-
-	if len(ids) > 0 {
-		builder = builder.Where(sq.Eq{"id": ids})
-	}
-
-	sql, args, err := builder.ToSql()
-	if err != nil {
-		return err
-	}
-
-	_, err = fs.db.ExecContext(ctx, sql, args...)
+	sql := `DELETE FROM experiment_run WHERE id IN $1`
+	_, err := fs.db.ExecContext(ctx, sql, ids)
 	return err
 }
 
 // GetExperiments gets all experiments
 func (fs *experimentStore) GetExperiments(ctx context.Context) ([]*experimentation.Experiment, error) {
-	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
-	builder := psql.Select(experimentColumns...).From(experimentsTableName)
+	sql := `
+        SELECT experiment_run.id, details FROM experiment_config, experiment_run
+        WHERE experiment_config.id = experiment_run.experiment_config_id
+        	AND experiment_run.start_time < now()`
 
-	sql, args, err := builder.ToSql()
-	if err != nil {
-		return nil, err
-	}
-
-	rows, err := fs.db.QueryContext(ctx, sql, args...)
+	rows, err := fs.db.QueryContext(ctx, sql)
 	if err != nil {
 		return nil, err
 	}
@@ -150,3 +147,14 @@ func (fs *experimentStore) GetExperiments(ctx context.Context) ([]*experimentati
 func (fs *experimentStore) Close() {
 	fs.db.Close()
 }
+
+func marshalConfig(experiment *experimentation.Experiment) (string, error) {
+	marshaler := jsonpb.Marshaler{}
+	buf := &bytes.Buffer{}
+	err := marshaler.Marshal(buf, experiment.GetConfig())
+	if err != nil {
+		return "", err
+	}
+	return buf.String(), nil
+}
+
