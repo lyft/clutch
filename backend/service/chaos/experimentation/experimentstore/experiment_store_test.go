@@ -69,7 +69,7 @@ func createExperimentsTests() ([]experimentTest, error) {
 					},
 				},
 				{
-					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, NOW(), NULL, NOW())`,
+					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, tstzrange(NOW(), NULL), NOW())`,
 					args: []driver.Value{
 						sqlmock.AnyArg(),
 						sqlmock.AnyArg(),
@@ -181,7 +181,7 @@ var getExperimentsTests = []struct {
 }{
 	{
 		id:   "get all experiments",
-		sql:  `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND now() && experiment_run.execution_time`,
+		sql:  `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND now() <@ experiment_run.execution_time`,
 		args: []driver.Value{"upstreamCluster", "downstreamCluster", 1},
 		rows: [][]driver.Value{
 			{
