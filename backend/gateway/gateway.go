@@ -32,29 +32,10 @@ type ComponentFactory struct {
 
 func Run(f *Flags, cf *ComponentFactory, assets http.FileSystem) {
 	cfg := MustReadOrValidateConfig(f)
-
-	// Init a real logger to log the filename.
-	logger, err := newLogger(cfg.Gateway.Logger)
-	if err != nil {
-		tmpLogger := newTmpLogger()
-		defer func() {
-			if err := tmpLogger.Sync(); err != nil {
-				panic(err)
-			}
-		}()
-		tmpLogger.Fatal("could not instantiate logger", zap.Error(err))
-	}
-	defer func() {
-		if err := logger.Sync(); err != nil {
-			panic(err)
-		}
-	}()
-	logger.Info("using configuration", zap.String("file", f.ConfigPath))
-
-	RunWithConfig(cfg, cf, assets)
+	RunWithConfig(f, cfg, cf, assets)
 }
 
-func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory, assets http.FileSystem) {
+func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets http.FileSystem) {
 	// Init the server's logger.
 	logger, err := newLogger(cfg.Gateway.Logger)
 	if err != nil {
@@ -65,6 +46,8 @@ func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory, assets http.File
 			panic(err)
 		}
 	}()
+
+	logger.Info("using configuration", zap.String("file", f.ConfigPath))
 
 	// Init stats.
 	var reporter tally.StatsReporter

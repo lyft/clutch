@@ -29,12 +29,17 @@ type Flags struct {
 	Validate   bool
 }
 
-// Parse command line arguments.
-func ParseFlags() *Flags {
-	f := &Flags{}
+// Link register the struct vars globally for parsing by the flag library.
+func (f *Flags) Link() {
 	flag.StringVar(&f.ConfigPath, "c", "clutch-config.yaml", "path to YAML configuration")
 	flag.BoolVar(&f.Template, "template", false, "executes go templates on the configuration file")
 	flag.BoolVar(&f.Validate, "validate", false, "validates the configuration file and exits")
+}
+
+// Parse command line arguments.
+func ParseFlags() *Flags {
+	f := &Flags{}
+	f.Link()
 	flag.Parse()
 	return f
 }

@@ -57,7 +57,7 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Set the original path.
+	// Link the original path.
 	r.URL.Path = origPath
 
 	// Serve!
@@ -76,7 +76,7 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 		return nil
 	}
 
-	if cookies := md.HeaderMD.Get("Set-Cookie-Token"); len(cookies) > 0 {
+	if cookies := md.HeaderMD.Get("Link-Cookie-Token"); len(cookies) > 0 {
 		cookie := &http.Cookie{
 			Name:     "token",
 			Value:    cookies[0],
