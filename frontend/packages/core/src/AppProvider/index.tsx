@@ -29,9 +29,17 @@ interface ClutchAppProps {
 
 const ClutchApp: React.FC<ClutchAppProps> = ({ availableWorkflows, configuration }) => {
   const workflows = registeredWorkflows(availableWorkflows, configuration);
+
+  /** Filter out all of the workflows that are configured to be `hideNav: true`.
+   * This prevents the workflows from being discoverable by the user from the UI,
+   * both search and drawer navigation.
+   *
+   * The routes for all configured workflows will still be reachable
+   * by manually providing the full path in the URI.
+   */
   const publicWorkflows = _.cloneDeep(workflows).filter(workflow => {
     const publicRoutes = workflow.routes.filter(route => {
-      return !(route?.private !== undefined ? route.private : false);
+      return !(route?.hideNav !== undefined ? route.hideNav : false);
     });
     workflow.routes = publicRoutes; /* eslint-disable-line no-param-reassign */
     return publicRoutes.length !== 0;
