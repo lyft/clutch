@@ -24,7 +24,7 @@ require (
 	github.com/googleapis/gnostic v0.4.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.1
 	github.com/grpc-ecosystem/grpc-gateway v1.14.7
-	github.com/iancoleman/strcase v0.1.0
+	github.com/iancoleman/strcase v0.1.1
 	github.com/jhump/protoreflect v1.7.0
 	github.com/lib/pq v1.8.0
 	github.com/mitchellh/hashstructure v1.0.0
