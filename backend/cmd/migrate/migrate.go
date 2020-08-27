@@ -33,7 +33,8 @@ func (m *MigrateFlags) Link() {
 	flag.BoolVar(&m.Force, "f", false, "do not ask user for confirmation")
 }
 
-func run() error {
+func main() {
+	// Read flags and config.
 	f := &MigrateFlags{}
 	f.Link()
 	flag.Parse()
@@ -43,6 +44,7 @@ func run() error {
 	logger, _ := zap.NewDevelopment()
 	logger = logger.WithOptions(zap.AddStacktrace(zap.FatalLevel + 1))
 
+	// Find the database in config and instantiate the service.
 	var sqlDB *sql.DB
 	var hostInfo string
 	for _, s := range cfg.Services {
@@ -63,35 +65,40 @@ func run() error {
 			break
 		}
 	}
-
 	if sqlDB == nil {
 		logger.Fatal("no database found in config", zap.String("file", f.BaseFlags.ConfigPath))
 	}
-	fmt.Printf("connecting to '%s' for migration\n", hostInfo)
+
+	// Verify that user wants to continue (unless -f for force is passed as a flag).
+	logger.Info("using database", zap.String("hostInfo", hostInfo))
 	if !f.Force {
-		fmt.Printf("this could cause irrevocable data loss, is this okay? [Y/n] ")
+		logger.Warn("migration has the potential to cause irrevocable data loss, verify host information above")
+
+		fmt.Printf("\n*** Continue with migration? [y/N] ")
 		var answer string
 		if _, err := fmt.Scanln(&answer); err != nil && err.Error() != "unexpected newline" {
 			logger.Fatal("could not read user input", zap.Error(err))
 		}
-		if answer != "" || strings.ToLower(answer) == "y" {
-			fmt.Println("aborting")
-			os.Exit(1)
+		if strings.ToLower(answer) != "y" {
+			logger.Fatal("aborting, enter 'y' to continue or use the '-f' (force) option")
 		}
+		fmt.Println()
 	}
 
+	// Ping database and bring up driver.
 	if err := sqlDB.Ping(); err != nil {
-		return fmt.Errorf("error pinging db: %w", err)
+		logger.Fatal("error pinging db", zap.Error(err))
 	}
 
 	driver, err := postgres.WithInstance(sqlDB, &postgres.Config{})
 	if err != nil {
-		return fmt.Errorf("error creating pg driver: %w", err)
+		logger.Fatal("error creating pg driver", zap.Error(err))
 	}
 
+	// Create migrator.
 	migrationDir, err := os.Getwd()
 	if err != nil {
-		return fmt.Errorf("could not get working dir: %w", err)
+		logger.Fatal("could not get working dir", zap.Error(err))
 	}
 	migrationDir = filepath.Join(migrationDir, "migrations")
 
@@ -99,20 +106,12 @@ func run() error {
 		fmt.Sprintf("file://%s", migrationDir),
 		"postgres", driver)
 	if err != nil {
-		return fmt.Errorf("error creating migrator: %w", err)
+		logger.Fatal("error creating migrator", zap.Error(err))
 	}
 
+	// Apply migrations!
 	err = m.Up()
 	if err != nil {
-		return fmt.Errorf("failed running migrations: %w", err)
-	}
-
-	return nil
-}
-
-func main() {
-	if err := run(); err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "%s\n", err)
-		os.Exit(-1)
+		logger.Fatal("failed running migrations", zap.Error(err))
 	}
 }
