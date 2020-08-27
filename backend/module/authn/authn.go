@@ -92,9 +92,9 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 	// set the cookie header
 	// redirect back to original location
 	md := metadata.New(map[string]string{
-		"Location":          redirectURL,
-		"Location-Status":   "303",
-		"Link-Cookie-Token": token,
+		"Location":         redirectURL,
+		"Location-Status":  "303",
+		"Set-Cookie-Token": token,
 	})
 
 	if err := grpc.SendHeader(ctx, md); err != nil {
