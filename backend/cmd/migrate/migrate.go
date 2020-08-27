@@ -33,6 +33,18 @@ func (m *MigrateFlags) Link() {
 	flag.BoolVar(&m.Force, "f", false, "do not ask user for confirmation")
 }
 
+type migrateLogger struct {
+	logger *zap.SugaredLogger
+}
+
+func (m *migrateLogger) Printf(format string, v ...interface{}) {
+	m.logger.Infof(strings.TrimRight(format, "\n"), v...)
+}
+
+func (m *migrateLogger) Verbose() bool {
+	return true
+}
+
 func main() {
 	// Read flags and config.
 	f := &MigrateFlags{}
@@ -109,7 +121,12 @@ func main() {
 		logger.Fatal("error creating migrator", zap.Error(err))
 	}
 
+	m.Log = &migrateLogger{
+		logger: logger.Sugar(),
+	}
+
 	// Apply migrations!
+	logger.Info("applying migrations", zap.String("migrationDir", migrationDir))
 	err = m.Up()
 	if err != nil {
 		logger.Fatal("failed running migrations", zap.Error(err))
