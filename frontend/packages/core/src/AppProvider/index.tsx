@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Outlet, Route, Routes } from "react-router-dom";
 import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
+import _ from "lodash";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
 
 import AppLayout from "../AppLayout";
@@ -28,13 +29,29 @@ interface ClutchAppProps {
 
 const ClutchApp: React.FC<ClutchAppProps> = ({ availableWorkflows, configuration }) => {
   const workflows = registeredWorkflows(availableWorkflows, configuration);
+
+  /** Filter out all of the workflows that are configured to be `hideNav: true`.
+   * This prevents the workflows from being discoverable by the user from the UI,
+   * both search and drawer navigation.
+   *
+   * The routes for all configured workflows will still be reachable
+   * by manually providing the full path in the URI.
+   */
+  const publicWorkflows = _.cloneDeep(workflows).filter(workflow => {
+    const publicRoutes = workflow.routes.filter(route => {
+      return !(route?.hideNav !== undefined ? route.hideNav : false);
+    });
+    workflow.routes = publicRoutes; /* eslint-disable-line no-param-reassign */
+    return publicRoutes.length !== 0;
+  });
+
   return (
     <Router>
       <MuiThemeProvider theme={getTheme()}>
         <StyledThemeProvider theme={getTheme()}>
           <CssBaseline />
           <div id="App">
-            <ApplicationContext.Provider value={{ workflows }}>
+            <ApplicationContext.Provider value={{ workflows: publicWorkflows }}>
               <Routes>
                 <Route path="/*" element={<AppLayout />}>
                   <Route key="landing" path="/" element={<Landing />} />

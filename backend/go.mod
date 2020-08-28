@@ -17,13 +17,14 @@ require (
 	github.com/go-git/go-git/v5 v5.1.0
 	github.com/go-swagger/go-swagger v0.23.0
 	github.com/gobwas/glob v0.2.3
+	github.com/golang-migrate/migrate/v4 v4.12.2
 	github.com/golang/protobuf v1.4.2
 	github.com/google/go-github/v32 v32.1.0
 	github.com/google/uuid v1.1.1
 	github.com/googleapis/gnostic v0.4.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.1
 	github.com/grpc-ecosystem/grpc-gateway v1.14.7
-	github.com/iancoleman/strcase v0.1.0
+	github.com/iancoleman/strcase v0.1.1
 	github.com/jhump/protoreflect v1.7.0
 	github.com/lib/pq v1.8.0
 	github.com/mitchellh/hashstructure v1.0.0
@@ -38,10 +39,10 @@ require (
 	golang.org/x/net v0.0.0-20200813134508-3edf25e44fcc
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
 	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
-	golang.org/x/tools v0.0.0-20200811172722-d77521d07411 // indirect
+	golang.org/x/tools v0.0.0-20200826040757-bc8aaaa29e06 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
-	google.golang.org/genproto v0.0.0-20200814021100-8c09557e8a18
-	google.golang.org/grpc v1.31.0
+	google.golang.org/genproto v0.0.0-20200827165113-ac2560b5e952
+	google.golang.org/grpc v1.31.1
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 	k8s.io/api v0.17.0
