@@ -64,7 +64,7 @@ func (fs *experimentStore) CreateExperiments(ctx context.Context, experiments []
 		// Step 1) create the config
 		configID := id.NewID()
 
-		configJson, err := marshalConfig(experiment)
+		configJson, err := marshalConfig(experiment.GetConfig())
 		if err != nil {
 			return err
 		}
@@ -84,10 +84,16 @@ func (fs *experimentStore) CreateExperiments(ctx context.Context, experiments []
 		        creation_time)
             VALUES ($1, $2, tstzrange(NOW(), NULL), NOW())`
 
-		_, err = fs.db.ExecContext(ctx, runSql, id.NewID(), configID)
+		runId := id.NewID()
+		_, err = fs.db.ExecContext(ctx, runSql, runId, configID)
 		if err != nil {
 			return err
 		}
+
+		// TODO(bgallagher) temporarily returning the experiment run ID. Eventually, the CreateExperiments function
+		// will be split into CreateExperimentConfig and CreateExperimentRun in which case they will each return
+		// their respective IDs
+		experiment.Id = uint64(runId)
 	}
 
 	err = tx.Commit()
@@ -151,10 +157,10 @@ func (fs *experimentStore) Close() {
 	fs.db.Close()
 }
 
-func marshalConfig(experiment *experimentation.Experiment) (string, error) {
+func marshalConfig(config *any.Any) (string, error) {
 	marshaler := jsonpb.Marshaler{}
 	buf := &bytes.Buffer{}
-	err := marshaler.Marshal(buf, experiment.GetConfig())
+	err := marshaler.Marshal(buf, config)
 	if err != nil {
 		return "", err
 	}

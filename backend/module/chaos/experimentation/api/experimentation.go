@@ -61,12 +61,13 @@ func (s *Service) Register(r module.Registrar) error {
 // CreateExperiments adds experiments to the experiment store.
 func (s *Service) CreateExperiments(ctx context.Context, req *experimentation.CreateExperimentsRequest) (*experimentation.CreateExperimentsResponse, error) {
 	s.createExperimentsStat.Inc(1)
+
 	err := s.experimentStore.CreateExperiments(ctx, req.Experiments)
 	if err != nil {
 		return nil, err
 	}
 
-	return &experimentation.CreateExperimentsResponse{}, nil
+	return &experimentation.CreateExperimentsResponse{Experiments: req.Experiments}, nil
 }
 
 // GetExperiments returns all experiments from the experiment store.
