@@ -115,8 +115,7 @@ func (fs *experimentStore) DeleteExperiments(ctx context.Context, ids []uint64) 
 func (fs *experimentStore) GetExperiments(ctx context.Context) ([]*experimentation.Experiment, error) {
 	sql := `
         SELECT experiment_run.id, details FROM experiment_config, experiment_run
-        WHERE experiment_config.id = experiment_run.experiment_config_id
-        	AND now() <@ experiment_run.execution_time`
+        WHERE experiment_config.id = experiment_run.experiment_config_id`
 
 	rows, err := fs.db.QueryContext(ctx, sql)
 	if err != nil {

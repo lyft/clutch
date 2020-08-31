@@ -28,7 +28,6 @@ type experimentTest struct {
 	id          string
 	experiments []*experimentation.Experiment
 	queries     []*testQuery
-	err         error
 }
 
 func createExperimentsTests() ([]experimentTest, error) {
@@ -106,20 +105,12 @@ func TestCreateExperiments(t *testing.T) {
 			mock.ExpectBegin()
 			for _, query := range test.queries {
 				expected := mock.ExpectExec(regexp.QuoteMeta(query.sql))
-				if test.err != nil {
-					expected.WillReturnError(test.err)
-				} else {
-					expected.WithArgs(query.args...).WillReturnResult(sqlmock.NewResult(1, 1))
-				}
+				expected.WithArgs(query.args...).WillReturnResult(sqlmock.NewResult(1, 1))
 			}
 			mock.ExpectCommit()
 
 			err = es.CreateExperiments(context.Background(), test.experiments)
-			if test.err != nil {
-				a.Equal(test.err, err)
-			} else {
-				a.NoError(err)
-			}
+			a.NoError(err)
 		})
 	}
 }
