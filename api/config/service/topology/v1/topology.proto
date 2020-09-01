@@ -12,6 +12,6 @@ message Config {
 }
 
 message Cache {
-  // The time to live (ttl) for an item in cache, the default is 60 minutes.
+  // The time to live (ttl) for an item in cache, the default is 1 hour (3600 seconds).
   google.protobuf.Duration ttl = 1 [ (validate.rules).duration.gt.seconds = 1 ];
 }
