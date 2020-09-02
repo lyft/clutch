@@ -99,8 +99,8 @@ func local_request_ExperimentsAPI_GetExperiments_0(ctx context.Context, marshale
 
 }
 
-func request_ExperimentsAPI_DeleteExperiments_0(ctx context.Context, marshaler runtime.Marshaler, client ExperimentsAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DeleteExperimentsRequest
+func request_ExperimentsAPI_StopExperiments_0(ctx context.Context, marshaler runtime.Marshaler, client ExperimentsAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq StopExperimentsRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -111,13 +111,13 @@ func request_ExperimentsAPI_DeleteExperiments_0(ctx context.Context, marshaler r
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.DeleteExperiments(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.StopExperiments(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_ExperimentsAPI_DeleteExperiments_0(ctx context.Context, marshaler runtime.Marshaler, server ExperimentsAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DeleteExperimentsRequest
+func local_request_ExperimentsAPI_StopExperiments_0(ctx context.Context, marshaler runtime.Marshaler, server ExperimentsAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq StopExperimentsRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -128,7 +128,7 @@ func local_request_ExperimentsAPI_DeleteExperiments_0(ctx context.Context, marsh
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := server.DeleteExperiments(ctx, &protoReq)
+	msg, err := server.StopExperiments(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -179,7 +179,7 @@ func RegisterExperimentsAPIHandlerServer(ctx context.Context, mux *runtime.Serve
 
 	})
 
-	mux.Handle("POST", pattern_ExperimentsAPI_DeleteExperiments_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ExperimentsAPI_StopExperiments_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -188,14 +188,14 @@ func RegisterExperimentsAPIHandlerServer(ctx context.Context, mux *runtime.Serve
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ExperimentsAPI_DeleteExperiments_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_ExperimentsAPI_StopExperiments_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ExperimentsAPI_DeleteExperiments_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ExperimentsAPI_StopExperiments_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -280,7 +280,7 @@ func RegisterExperimentsAPIHandlerClient(ctx context.Context, mux *runtime.Serve
 
 	})
 
-	mux.Handle("POST", pattern_ExperimentsAPI_DeleteExperiments_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ExperimentsAPI_StopExperiments_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -289,14 +289,14 @@ func RegisterExperimentsAPIHandlerClient(ctx context.Context, mux *runtime.Serve
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ExperimentsAPI_DeleteExperiments_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_ExperimentsAPI_StopExperiments_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ExperimentsAPI_DeleteExperiments_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_ExperimentsAPI_StopExperiments_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -308,7 +308,7 @@ var (
 
 	pattern_ExperimentsAPI_GetExperiments_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "experiments", "get"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ExperimentsAPI_DeleteExperiments_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "experiments", "delete"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_ExperimentsAPI_StopExperiments_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "experiments", "stop"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (
@@ -316,5 +316,5 @@ var (
 
 	forward_ExperimentsAPI_GetExperiments_0 = runtime.ForwardResponseMessage
 
-	forward_ExperimentsAPI_DeleteExperiments_0 = runtime.ForwardResponseMessage
+	forward_ExperimentsAPI_StopExperiments_0 = runtime.ForwardResponseMessage
 )

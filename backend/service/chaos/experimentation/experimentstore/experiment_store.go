@@ -23,7 +23,7 @@ const Name = "clutch.service.chaos.experimentation.store"
 // ExperimentStore stores experiment data
 type ExperimentStore interface {
 	CreateExperiments(context.Context, []*experimentation.Experiment) error
-	DeleteExperiments(context.Context, []uint64) error
+	StopExperiments(context.Context, []uint64) error
 	GetExperiments(context.Context) ([]*experimentation.Experiment, error)
 	Close()
 }
@@ -100,8 +100,7 @@ func (fs *experimentStore) CreateExperiments(ctx context.Context, experiments []
 	return err
 }
 
-// DeleteExperiments deletes the specified experiments from the store.
-func (fs *experimentStore) DeleteExperiments(ctx context.Context, ids []uint64) error {
+func (fs *experimentStore) StopExperiments(ctx context.Context, ids []uint64) error {
 	if len(ids) != 1 {
 		// TODO: This API will be renamed to StopExperiment and will take a single ID as a parameter
 		return errors.New("A single ID must be provided")
