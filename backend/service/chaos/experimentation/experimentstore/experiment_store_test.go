@@ -130,7 +130,7 @@ var deleteExperimentsTests = []struct {
 	},
 }
 
-func TestDeleteExperiments(t *testing.T) {
+func TestStopExperiments(t *testing.T) {
 	t.Parallel()
 
 	for _, test := range deleteExperimentsTests {
@@ -153,7 +153,7 @@ func TestDeleteExperiments(t *testing.T) {
 				expected.WithArgs(test.args...).WillReturnResult(sqlmock.NewResult(1, 1))
 			}
 
-			err = es.DeleteExperiments(context.Background(), test.ids)
+			err = es.StopExperiments(context.Background(), test.ids)
 			if test.err != nil {
 				a.Equal(test.err, err)
 			} else {
