@@ -2,7 +2,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
-LINKED_PACKAGES=("react" "react-dom" "react-router" "react-router-dom")
+LINKED_PACKAGES=("react" "react-dom" "react-router" "react-router-dom" "styled-components" "@material-ui/styles")
 
 EXTERNAL_ROOT="${1}"
 YARN="${EXTERNAL_ROOT}/build/bin/yarn.sh"
