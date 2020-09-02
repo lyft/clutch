@@ -81,13 +81,13 @@ func (s *Service) GetExperiments(ctx context.Context, _ *experimentation.GetExpe
 	return &experimentation.GetExperimentsResponse{Experiments: experiments}, nil
 }
 
-// DeleteExperiments deletes experiments from the experiment store.
-func (s *Service) DeleteExperiments(ctx context.Context, req *experimentation.DeleteExperimentsRequest) (*experimentation.DeleteExperimentsResponse, error) {
+// StopExperiments stops experiments that are currently running.
+func (s *Service) StopExperiments(ctx context.Context, req *experimentation.StopExperimentsRequest) (*experimentation.StopExperimentsResponse, error) {
 	s.deleteExperimentsStat.Inc(1)
-	err := s.experimentStore.DeleteExperiments(ctx, req.Ids)
+	err := s.experimentStore.StopExperiments(ctx, req.Ids)
 	if err != nil {
 		return nil, err
 	}
 
-	return &experimentation.DeleteExperimentsResponse{}, nil
+	return &experimentation.StopExperimentsResponse{}, nil
 }

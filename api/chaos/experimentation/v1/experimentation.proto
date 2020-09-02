@@ -31,11 +31,11 @@ message GetExperimentsResponse {
   repeated Experiment experiments = 3;
 }
 
-message DeleteExperimentsRequest {
+message StopExperimentsRequest {
   repeated uint64 ids = 1;
 }
 
-message DeleteExperimentsResponse {
+message StopExperimentsResponse {
 }
 
 // Simple CRUD API for experiments
@@ -54,9 +54,9 @@ service ExperimentsAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
-  rpc DeleteExperiments(DeleteExperimentsRequest) returns (DeleteExperimentsResponse) {
+  rpc StopExperiments(StopExperimentsRequest) returns (StopExperimentsResponse) {
     option (google.api.http) = {
-      post : "/v1/experiments/delete"
+      post : "/v1/experiments/stop"
       body : "*"
     };
     option (clutch.api.v1.action).type = DELETE;
