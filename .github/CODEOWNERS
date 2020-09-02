@@ -1,1 +1,4 @@
-*       @lyft/clutch-admin
+*                                            @lyft/clutch-admin
+/backend/**/chaos/                           @lyft/resilience
+/frontend/workflows/experimentation/         @lyft/resilience
+/frontend/workflows/serverexperimentation/   @lyft/resilience
