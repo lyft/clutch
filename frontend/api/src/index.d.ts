@@ -2322,6 +2322,12 @@ export namespace clutch {
 
                     /** Experiment config */
                     config?: (google.protobuf.IAny|null);
+
+                    /** Experiment startTime */
+                    startTime?: (google.protobuf.ITimestamp|null);
+
+                    /** Experiment endTime */
+                    endTime?: (google.protobuf.ITimestamp|null);
                 }
 
                 /** Represents an Experiment. */
@@ -2338,6 +2344,12 @@ export namespace clutch {
 
                     /** Experiment config. */
                     public config?: (google.protobuf.IAny|null);
+
+                    /** Experiment startTime. */
+                    public startTime?: (google.protobuf.ITimestamp|null);
+
+                    /** Experiment endTime. */
+                    public endTime?: (google.protobuf.ITimestamp|null);
 
                     /**
                      * Verifies an Experiment message.
@@ -2371,8 +2383,14 @@ export namespace clutch {
                 /** Properties of a CreateExperimentsRequest. */
                 interface ICreateExperimentsRequest {
 
-                    /** CreateExperimentsRequest experiments */
-                    experiments?: (clutch.chaos.experimentation.v1.IExperiment[]|null);
+                    /** CreateExperimentsRequest config */
+                    config?: (google.protobuf.IAny|null);
+
+                    /** CreateExperimentsRequest startTime */
+                    startTime?: (google.protobuf.ITimestamp|null);
+
+                    /** CreateExperimentsRequest endTime */
+                    endTime?: (google.protobuf.ITimestamp|null);
                 }
 
                 /** Represents a CreateExperimentsRequest. */
@@ -2384,8 +2402,14 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.experimentation.v1.ICreateExperimentsRequest);
 
-                    /** CreateExperimentsRequest experiments. */
-                    public experiments: clutch.chaos.experimentation.v1.IExperiment[];
+                    /** CreateExperimentsRequest config. */
+                    public config?: (google.protobuf.IAny|null);
+
+                    /** CreateExperimentsRequest startTime. */
+                    public startTime?: (google.protobuf.ITimestamp|null);
+
+                    /** CreateExperimentsRequest endTime. */
+                    public endTime?: (google.protobuf.ITimestamp|null);
 
                     /**
                      * Verifies a CreateExperimentsRequest message.

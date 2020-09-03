@@ -8,12 +8,12 @@ import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
-import "api/v1/annotations.proto";
 import "chaos/experimentation/v1/experiment_run_details.proto";
 
 option go_package = "experimentationv1";
 
-message ExperimentParams {
+message Experiment {
+  fixed64 id = 1;
 
   // The experiment configuration specific to the type of experiment
   google.protobuf.Any config = 2;
@@ -25,14 +25,15 @@ message ExperimentParams {
   google.protobuf.Timestamp end_time = 4;
 }
 
-message Experiment {
-  fixed64 id = 1;
-
-  ExperimentParams params = 2;
-}
-
 message CreateExperimentsRequest {
-  repeated ExperimentParams experiments = 1 [ (validate.rules).repeated = {min_items : 1} ];
+  // The experiment configuration specific to the type of experiment
+  google.protobuf.Any config = 1;
+
+  // The time when the experiment should start. If unspecified, defaults to 'now'
+  google.protobuf.Timestamp start_time = 2;
+
+  // The time when the experiment should end, If unspecified, the experiment runs indefinitely.
+  google.protobuf.Timestamp end_time = 3;
 }
 
 message CreateExperimentsResponse {
