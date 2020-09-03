@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package clutch.chaos.experimentation.v1;
 
+import "api/v1/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
@@ -14,7 +15,15 @@ option go_package = "experimentationv1";
 
 message Experiment {
   fixed64 id = 1;
+
+  // The experiment configuration specific to the type of experiment
   google.protobuf.Any config = 2;
+
+  // The time when the experiment should start. If unspecified, defaults to 'now'
+  google.protobuf.Timestamp start_time = 3;
+
+  // The time when the experiment should end, If unspecified, the experiment runs indefinitely.
+  google.protobuf.Timestamp end_time = 4;
 }
 
 message CreateExperimentsRequest {
