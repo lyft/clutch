@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"log"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
@@ -13,6 +14,7 @@ import (
 	topologyv1 "github.com/lyft/clutch/backend/api/config/service/topology/v1"
 	"github.com/lyft/clutch/backend/service"
 	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
+	k8sservice "github.com/lyft/clutch/backend/service/k8s"
 )
 
 type Client interface {
@@ -45,7 +47,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 
 	dbClient, ok := p.(pgservice.Client)
 	if !ok {
-		return nil, errors.New("topology wrong type")
+		return nil, errors.New("Unable to get dbClient")
 	}
 
 	topologyConfig := &topologyv1.Config{}
@@ -54,23 +56,32 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, err
 	}
 
-	return &client{
+	c, err := &client{
 		config: topologyConfig,
 		db:     dbClient.DB(),
 		log:    logger,
 		scope:  scope,
 	}, nil
+
+	c.PopulateCacheFromKubernetes()
+
+	return c, err
 }
 
 // pretend we are the leader
-func PopulateCacheFromKubernetes() {
-	// if k8s is enabled then cache it
-	// k8sClient, ok := service.Registry[k8sservice.Name]
-	// if !ok {
-	// 	return
-	// }
-}
+func (c *client) PopulateCacheFromKubernetes() {
+	log.Print("topology is enabled and starting k8s cache.")
 
-func PopulateCacheFromAWS() {
-	// if aws is enabled then cache it
+	// if k8s is enabled then cache it
+	client, ok := service.Registry["clutch.service.k8s"]
+	if !ok {
+		return
+	}
+
+	svc, ok := client.(k8sservice.Service)
+	if !ok {
+		return
+	}
+
+	svc.PopulateCache(c.db)
 }

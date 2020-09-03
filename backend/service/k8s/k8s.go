@@ -6,6 +6,7 @@ package k8s
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
@@ -64,6 +65,9 @@ type Service interface {
 	// Deployment management functions.
 	DescribeDeployment(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Deployment, error)
 	UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error
+
+	// Topology Cache
+	PopulateCache(db *sql.DB)
 }
 
 type svc struct {
