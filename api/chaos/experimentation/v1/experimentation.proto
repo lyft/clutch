@@ -21,7 +21,8 @@ message Experiment {
   // The time when the experiment should start. If unspecified, defaults to 'now'
   google.protobuf.Timestamp start_time = 3;
 
-  // The time when the experiment should end, If unspecified, the experiment runs indefinitely.
+  // The time when the experiment should end, If unspecified, the experiment runs indefinitely unless it is manually
+  // stopped by a user.
   google.protobuf.Timestamp end_time = 4;
 }
 
