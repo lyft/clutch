@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"errors"
 	"strings"
+	"time"
 
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/ptypes/any"
@@ -25,6 +26,7 @@ type ExperimentStore interface {
 	CreateExperiments(context.Context, []*experimentation.Experiment) error
 	StopExperiments(context.Context, []uint64) error
 	GetExperiments(context.Context) ([]*experimentation.Experiment, error)
+	GetExperimentRunConfigPairDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunConfigPairDetails, error)
 	Close()
 }
 
@@ -148,6 +150,26 @@ func (fs *experimentStore) GetExperiments(ctx context.Context) ([]*experimentati
 	}
 
 	return experiments, nil
+}
+
+func (fs *experimentStore) GetExperimentRunConfigPairDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunConfigPairDetails, error) {
+	sqlQuery := `
+        SELECT experiment_run.id, lower(execution_time), upper(execution_time), scheduled_end_time, creation_time, details FROM experiment_config, experiment_run
+        WHERE experiment_run.id = $1 AND experiment_run.experiment_config_id = experiment_config.id`
+
+	row := fs.db.QueryRowContext(ctx, sqlQuery, id)
+
+	var fetchedID uint64
+	var startTime, endTime, scheduledEndTime sql.NullTime
+	var creationTime time.Time
+	var details string
+
+	err := row.Scan(&fetchedID, &startTime, &endTime, &scheduledEndTime, &creationTime, &details)
+	if err != nil {
+		return nil, err
+	}
+
+	return NewRunConfigPairDetails(fetchedID, startTime, endTime, scheduledEndTime, creationTime, details)
 }
 
 // Close closes all resources held.

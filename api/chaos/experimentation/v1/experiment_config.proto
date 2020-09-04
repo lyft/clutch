@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package clutch.chaos.experimentation.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "experimentationv1";
+
+message ExperimentConfig {
+    fixed64 id = 1;
+}

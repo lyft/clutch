@@ -6002,6 +6002,225 @@ export const clutch = $root.clutch = (() => {
                     return GetExperimentsResponse;
                 })();
 
+                v1.GetExperimentRunConfigPairDetailsRequest = (function() {
+
+                    /**
+                     * Properties of a GetExperimentRunConfigPairDetailsRequest.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface IGetExperimentRunConfigPairDetailsRequest
+                     * @property {number|Long|null} [id] GetExperimentRunConfigPairDetailsRequest id
+                     */
+
+                    /**
+                     * Constructs a new GetExperimentRunConfigPairDetailsRequest.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents a GetExperimentRunConfigPairDetailsRequest.
+                     * @implements IGetExperimentRunConfigPairDetailsRequest
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.IGetExperimentRunConfigPairDetailsRequest=} [properties] Properties to set
+                     */
+                    function GetExperimentRunConfigPairDetailsRequest(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetExperimentRunConfigPairDetailsRequest id.
+                     * @member {number|Long} id
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsRequest
+                     * @instance
+                     */
+                    GetExperimentRunConfigPairDetailsRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+                    /**
+                     * Verifies a GetExperimentRunConfigPairDetailsRequest message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetExperimentRunConfigPairDetailsRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                                return "id: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetExperimentRunConfigPairDetailsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsRequest} GetExperimentRunConfigPairDetailsRequest
+                     */
+                    GetExperimentRunConfigPairDetailsRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsRequest)
+                            return object;
+                        let message = new $root.clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsRequest();
+                        if (object.id != null)
+                            if ($util.Long)
+                                (message.id = $util.Long.fromValue(object.id)).unsigned = true;
+                            else if (typeof object.id === "string")
+                                message.id = parseInt(object.id, 10);
+                            else if (typeof object.id === "number")
+                                message.id = object.id;
+                            else if (typeof object.id === "object")
+                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetExperimentRunConfigPairDetailsRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsRequest
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsRequest} message GetExperimentRunConfigPairDetailsRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetExperimentRunConfigPairDetailsRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, true);
+                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.id = options.longs === String ? "0" : 0;
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (typeof message.id === "number")
+                                object.id = options.longs === String ? String(message.id) : message.id;
+                            else
+                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetExperimentRunConfigPairDetailsRequest to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetExperimentRunConfigPairDetailsRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetExperimentRunConfigPairDetailsRequest;
+                })();
+
+                v1.GetExperimentRunConfigPairDetailsResponse = (function() {
+
+                    /**
+                     * Properties of a GetExperimentRunConfigPairDetailsResponse.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface IGetExperimentRunConfigPairDetailsResponse
+                     * @property {clutch.chaos.experimentation.v1.IExperimentRunConfigPairDetails|null} [runConfigPairDetails] GetExperimentRunConfigPairDetailsResponse runConfigPairDetails
+                     */
+
+                    /**
+                     * Constructs a new GetExperimentRunConfigPairDetailsResponse.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents a GetExperimentRunConfigPairDetailsResponse.
+                     * @implements IGetExperimentRunConfigPairDetailsResponse
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.IGetExperimentRunConfigPairDetailsResponse=} [properties] Properties to set
+                     */
+                    function GetExperimentRunConfigPairDetailsResponse(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetExperimentRunConfigPairDetailsResponse runConfigPairDetails.
+                     * @member {clutch.chaos.experimentation.v1.IExperimentRunConfigPairDetails|null|undefined} runConfigPairDetails
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsResponse
+                     * @instance
+                     */
+                    GetExperimentRunConfigPairDetailsResponse.prototype.runConfigPairDetails = null;
+
+                    /**
+                     * Verifies a GetExperimentRunConfigPairDetailsResponse message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetExperimentRunConfigPairDetailsResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.runConfigPairDetails != null && message.hasOwnProperty("runConfigPairDetails")) {
+                            let error = $root.clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails.verify(message.runConfigPairDetails);
+                            if (error)
+                                return "runConfigPairDetails." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetExperimentRunConfigPairDetailsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsResponse} GetExperimentRunConfigPairDetailsResponse
+                     */
+                    GetExperimentRunConfigPairDetailsResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsResponse)
+                            return object;
+                        let message = new $root.clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsResponse();
+                        if (object.runConfigPairDetails != null) {
+                            if (typeof object.runConfigPairDetails !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsResponse.runConfigPairDetails: object expected");
+                            message.runConfigPairDetails = $root.clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails.fromObject(object.runConfigPairDetails);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetExperimentRunConfigPairDetailsResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsResponse
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsResponse} message GetExperimentRunConfigPairDetailsResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetExperimentRunConfigPairDetailsResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            object.runConfigPairDetails = null;
+                        if (message.runConfigPairDetails != null && message.hasOwnProperty("runConfigPairDetails"))
+                            object.runConfigPairDetails = $root.clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails.toObject(message.runConfigPairDetails, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetExperimentRunConfigPairDetailsResponse to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetExperimentRunConfigPairDetailsResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetExperimentRunConfigPairDetailsResponse;
+                })();
+
                 v1.StopExperimentsRequest = (function() {
 
                     /**
@@ -6288,6 +6507,39 @@ export const clutch = $root.clutch = (() => {
                      */
 
                     /**
+                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#getExperimentRunConfigPairDetails}.
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
+                     * @typedef GetExperimentRunConfigPairDetailsCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsResponse} [response] GetExperimentRunConfigPairDetailsResponse
+                     */
+
+                    /**
+                     * Calls GetExperimentRunConfigPairDetails.
+                     * @function getExperimentRunConfigPairDetails
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
+                     * @instance
+                     * @param {clutch.chaos.experimentation.v1.IGetExperimentRunConfigPairDetailsRequest} request GetExperimentRunConfigPairDetailsRequest message or plain object
+                     * @param {clutch.chaos.experimentation.v1.ExperimentsAPI.GetExperimentRunConfigPairDetailsCallback} callback Node-style callback called with the error, if any, and GetExperimentRunConfigPairDetailsResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(ExperimentsAPI.prototype.getExperimentRunConfigPairDetails = function getExperimentRunConfigPairDetails(request, callback) {
+                        return this.rpcCall(getExperimentRunConfigPairDetails, $root.clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsRequest, $root.clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsResponse, request, callback);
+                    }, "name", { value: "GetExperimentRunConfigPairDetails" });
+
+                    /**
+                     * Calls GetExperimentRunConfigPairDetails.
+                     * @function getExperimentRunConfigPairDetails
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
+                     * @instance
+                     * @param {clutch.chaos.experimentation.v1.IGetExperimentRunConfigPairDetailsRequest} request GetExperimentRunConfigPairDetailsRequest message or plain object
+                     * @returns {Promise<clutch.chaos.experimentation.v1.GetExperimentRunConfigPairDetailsResponse>} Promise
+                     * @variation 2
+                     */
+
+                    /**
                      * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#stopExperiments}.
                      * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
                      * @typedef StopExperimentsCallback
@@ -6321,6 +6573,573 @@ export const clutch = $root.clutch = (() => {
                      */
 
                     return ExperimentsAPI;
+                })();
+
+                v1.ExperimentRunConfigPairDetails = (function() {
+
+                    /**
+                     * Properties of an ExperimentRunConfigPairDetails.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface IExperimentRunConfigPairDetails
+                     * @property {number|Long|null} [runId] ExperimentRunConfigPairDetails runId
+                     * @property {clutch.chaos.experimentation.v1.Status|null} [status] ExperimentRunConfigPairDetails status
+                     * @property {clutch.chaos.experimentation.v1.IForm|null} [form] ExperimentRunConfigPairDetails form
+                     * @property {google.protobuf.IAny|null} [config] ExperimentRunConfigPairDetails config
+                     */
+
+                    /**
+                     * Constructs a new ExperimentRunConfigPairDetails.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents an ExperimentRunConfigPairDetails.
+                     * @implements IExperimentRunConfigPairDetails
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.IExperimentRunConfigPairDetails=} [properties] Properties to set
+                     */
+                    function ExperimentRunConfigPairDetails(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ExperimentRunConfigPairDetails runId.
+                     * @member {number|Long} runId
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails
+                     * @instance
+                     */
+                    ExperimentRunConfigPairDetails.prototype.runId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * ExperimentRunConfigPairDetails status.
+                     * @member {clutch.chaos.experimentation.v1.Status} status
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails
+                     * @instance
+                     */
+                    ExperimentRunConfigPairDetails.prototype.status = 0;
+
+                    /**
+                     * ExperimentRunConfigPairDetails form.
+                     * @member {clutch.chaos.experimentation.v1.IForm|null|undefined} form
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails
+                     * @instance
+                     */
+                    ExperimentRunConfigPairDetails.prototype.form = null;
+
+                    /**
+                     * ExperimentRunConfigPairDetails config.
+                     * @member {google.protobuf.IAny|null|undefined} config
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails
+                     * @instance
+                     */
+                    ExperimentRunConfigPairDetails.prototype.config = null;
+
+                    /**
+                     * Verifies an ExperimentRunConfigPairDetails message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ExperimentRunConfigPairDetails.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.runId != null && message.hasOwnProperty("runId"))
+                            if (!$util.isInteger(message.runId) && !(message.runId && $util.isInteger(message.runId.low) && $util.isInteger(message.runId.high)))
+                                return "runId: integer|Long expected";
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            switch (message.status) {
+                            default:
+                                return "status: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                                break;
+                            }
+                        if (message.form != null && message.hasOwnProperty("form")) {
+                            let error = $root.clutch.chaos.experimentation.v1.Form.verify(message.form);
+                            if (error)
+                                return "form." + error;
+                        }
+                        if (message.config != null && message.hasOwnProperty("config")) {
+                            let error = $root.google.protobuf.Any.verify(message.config);
+                            if (error)
+                                return "config." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates an ExperimentRunConfigPairDetails message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails} ExperimentRunConfigPairDetails
+                     */
+                    ExperimentRunConfigPairDetails.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails)
+                            return object;
+                        let message = new $root.clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails();
+                        if (object.runId != null)
+                            if ($util.Long)
+                                (message.runId = $util.Long.fromValue(object.runId)).unsigned = false;
+                            else if (typeof object.runId === "string")
+                                message.runId = parseInt(object.runId, 10);
+                            else if (typeof object.runId === "number")
+                                message.runId = object.runId;
+                            else if (typeof object.runId === "object")
+                                message.runId = new $util.LongBits(object.runId.low >>> 0, object.runId.high >>> 0).toNumber();
+                        switch (object.status) {
+                        case "UNKNOWN":
+                        case 0:
+                            message.status = 0;
+                            break;
+                        case "SCHEDULED":
+                        case 1:
+                            message.status = 1;
+                            break;
+                        case "RUNNING":
+                        case 2:
+                            message.status = 2;
+                            break;
+                        case "COMPLETED":
+                        case 3:
+                            message.status = 3;
+                            break;
+                        }
+                        if (object.form != null) {
+                            if (typeof object.form !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails.form: object expected");
+                            message.form = $root.clutch.chaos.experimentation.v1.Form.fromObject(object.form);
+                        }
+                        if (object.config != null) {
+                            if (typeof object.config !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails.config: object expected");
+                            message.config = $root.google.protobuf.Any.fromObject(object.config);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an ExperimentRunConfigPairDetails message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails} message ExperimentRunConfigPairDetails
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ExperimentRunConfigPairDetails.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.runId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.runId = options.longs === String ? "0" : 0;
+                            object.status = options.enums === String ? "UNKNOWN" : 0;
+                            object.form = null;
+                            object.config = null;
+                        }
+                        if (message.runId != null && message.hasOwnProperty("runId"))
+                            if (typeof message.runId === "number")
+                                object.runId = options.longs === String ? String(message.runId) : message.runId;
+                            else
+                                object.runId = options.longs === String ? $util.Long.prototype.toString.call(message.runId) : options.longs === Number ? new $util.LongBits(message.runId.low >>> 0, message.runId.high >>> 0).toNumber() : message.runId;
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            object.status = options.enums === String ? $root.clutch.chaos.experimentation.v1.Status[message.status] : message.status;
+                        if (message.form != null && message.hasOwnProperty("form"))
+                            object.form = $root.clutch.chaos.experimentation.v1.Form.toObject(message.form, options);
+                        if (message.config != null && message.hasOwnProperty("config"))
+                            object.config = $root.google.protobuf.Any.toObject(message.config, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ExperimentRunConfigPairDetails to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ExperimentRunConfigPairDetails.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ExperimentRunConfigPairDetails;
+                })();
+
+                /**
+                 * Status enum.
+                 * @name clutch.chaos.experimentation.v1.Status
+                 * @enum {number}
+                 * @property {number} UNKNOWN=0 UNKNOWN value
+                 * @property {number} SCHEDULED=1 SCHEDULED value
+                 * @property {number} RUNNING=2 RUNNING value
+                 * @property {number} COMPLETED=3 COMPLETED value
+                 */
+                v1.Status = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNKNOWN"] = 0;
+                    values[valuesById[1] = "SCHEDULED"] = 1;
+                    values[valuesById[2] = "RUNNING"] = 2;
+                    values[valuesById[3] = "COMPLETED"] = 3;
+                    return values;
+                })();
+
+                v1.Form = (function() {
+
+                    /**
+                     * Properties of a Form.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface IForm
+                     * @property {Array.<clutch.chaos.experimentation.v1.ITextField>|null} [fields] Form fields
+                     */
+
+                    /**
+                     * Constructs a new Form.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents a Form.
+                     * @implements IForm
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.IForm=} [properties] Properties to set
+                     */
+                    function Form(properties) {
+                        this.fields = [];
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Form fields.
+                     * @member {Array.<clutch.chaos.experimentation.v1.ITextField>} fields
+                     * @memberof clutch.chaos.experimentation.v1.Form
+                     * @instance
+                     */
+                    Form.prototype.fields = $util.emptyArray;
+
+                    /**
+                     * Verifies a Form message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.Form
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Form.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.fields != null && message.hasOwnProperty("fields")) {
+                            if (!Array.isArray(message.fields))
+                                return "fields: array expected";
+                            for (let i = 0; i < message.fields.length; ++i) {
+                                let error = $root.clutch.chaos.experimentation.v1.TextField.verify(message.fields[i]);
+                                if (error)
+                                    return "fields." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Form message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.Form
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.Form} Form
+                     */
+                    Form.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.Form)
+                            return object;
+                        let message = new $root.clutch.chaos.experimentation.v1.Form();
+                        if (object.fields) {
+                            if (!Array.isArray(object.fields))
+                                throw TypeError(".clutch.chaos.experimentation.v1.Form.fields: array expected");
+                            message.fields = [];
+                            for (let i = 0; i < object.fields.length; ++i) {
+                                if (typeof object.fields[i] !== "object")
+                                    throw TypeError(".clutch.chaos.experimentation.v1.Form.fields: object expected");
+                                message.fields[i] = $root.clutch.chaos.experimentation.v1.TextField.fromObject(object.fields[i]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Form message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.Form
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.Form} message Form
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Form.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.arrays || options.defaults)
+                            object.fields = [];
+                        if (message.fields && message.fields.length) {
+                            object.fields = [];
+                            for (let j = 0; j < message.fields.length; ++j)
+                                object.fields[j] = $root.clutch.chaos.experimentation.v1.TextField.toObject(message.fields[j], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Form to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.Form
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Form.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Form;
+                })();
+
+                v1.TextField = (function() {
+
+                    /**
+                     * Properties of a TextField.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface ITextField
+                     * @property {string|null} [label] TextField label
+                     * @property {string|null} [value] TextField value
+                     */
+
+                    /**
+                     * Constructs a new TextField.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents a TextField.
+                     * @implements ITextField
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.ITextField=} [properties] Properties to set
+                     */
+                    function TextField(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * TextField label.
+                     * @member {string} label
+                     * @memberof clutch.chaos.experimentation.v1.TextField
+                     * @instance
+                     */
+                    TextField.prototype.label = "";
+
+                    /**
+                     * TextField value.
+                     * @member {string} value
+                     * @memberof clutch.chaos.experimentation.v1.TextField
+                     * @instance
+                     */
+                    TextField.prototype.value = "";
+
+                    /**
+                     * Verifies a TextField message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.TextField
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    TextField.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.label != null && message.hasOwnProperty("label"))
+                            if (!$util.isString(message.label))
+                                return "label: string expected";
+                        if (message.value != null && message.hasOwnProperty("value"))
+                            if (!$util.isString(message.value))
+                                return "value: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a TextField message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.TextField
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.TextField} TextField
+                     */
+                    TextField.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.TextField)
+                            return object;
+                        let message = new $root.clutch.chaos.experimentation.v1.TextField();
+                        if (object.label != null)
+                            message.label = String(object.label);
+                        if (object.value != null)
+                            message.value = String(object.value);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a TextField message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.TextField
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.TextField} message TextField
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    TextField.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.label = "";
+                            object.value = "";
+                        }
+                        if (message.label != null && message.hasOwnProperty("label"))
+                            object.label = message.label;
+                        if (message.value != null && message.hasOwnProperty("value"))
+                            object.value = message.value;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this TextField to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.TextField
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    TextField.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return TextField;
+                })();
+
+                v1.ExperimentConfig = (function() {
+
+                    /**
+                     * Properties of an ExperimentConfig.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface IExperimentConfig
+                     * @property {number|Long|null} [id] ExperimentConfig id
+                     */
+
+                    /**
+                     * Constructs a new ExperimentConfig.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents an ExperimentConfig.
+                     * @implements IExperimentConfig
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.IExperimentConfig=} [properties] Properties to set
+                     */
+                    function ExperimentConfig(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ExperimentConfig id.
+                     * @member {number|Long} id
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentConfig
+                     * @instance
+                     */
+                    ExperimentConfig.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Verifies an ExperimentConfig message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentConfig
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ExperimentConfig.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                                return "id: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an ExperimentConfig message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentConfig
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.ExperimentConfig} ExperimentConfig
+                     */
+                    ExperimentConfig.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.ExperimentConfig)
+                            return object;
+                        let message = new $root.clutch.chaos.experimentation.v1.ExperimentConfig();
+                        if (object.id != null)
+                            if ($util.Long)
+                                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+                            else if (typeof object.id === "string")
+                                message.id = parseInt(object.id, 10);
+                            else if (typeof object.id === "number")
+                                message.id = object.id;
+                            else if (typeof object.id === "object")
+                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an ExperimentConfig message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentConfig
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.ExperimentConfig} message ExperimentConfig
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ExperimentConfig.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.id = options.longs === String ? "0" : 0;
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (typeof message.id === "number")
+                                object.id = options.longs === String ? String(message.id) : message.id;
+                            else
+                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ExperimentConfig to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentConfig
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ExperimentConfig.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ExperimentConfig;
                 })();
 
                 return v1;

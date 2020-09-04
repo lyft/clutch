@@ -24,11 +24,12 @@ const (
 
 // Service contains all dependencies for the API service.
 type Service struct {
-	experimentStore       experimentstore.ExperimentStore
-	logger                *zap.SugaredLogger
-	createExperimentsStat tally.Counter
-	getExperimentsStat    tally.Counter
-	deleteExperimentsStat tally.Counter
+	experimentStore                   experimentstore.ExperimentStore
+	logger                            *zap.SugaredLogger
+	createExperimentsStat             tally.Counter
+	getExperimentsStat                tally.Counter
+	getExperimentRunConfigPairDetails tally.Counter
+	deleteExperimentsStat             tally.Counter
 }
 
 // New instantiates a Service object.
@@ -45,11 +46,12 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 
 	apiScope := scope.SubScope("experimentation")
 	return &Service{
-		experimentStore:       experimentStore,
-		logger:                logger.Sugar(),
-		createExperimentsStat: apiScope.Counter("create_experiments"),
-		getExperimentsStat:    apiScope.Counter("get_experiments"),
-		deleteExperimentsStat: apiScope.Counter("delete_experiments"),
+		experimentStore:                   experimentStore,
+		logger:                            logger.Sugar(),
+		createExperimentsStat:             apiScope.Counter("create_experiments"),
+		getExperimentsStat:                apiScope.Counter("get_experiments"),
+		getExperimentRunConfigPairDetails: apiScope.Counter("get_experiment_run_config_pair_details"),
+		deleteExperimentsStat:             apiScope.Counter("delete_experiments"),
 	}, nil
 }
 
@@ -79,6 +81,16 @@ func (s *Service) GetExperiments(ctx context.Context, _ *experimentation.GetExpe
 	}
 
 	return &experimentation.GetExperimentsResponse{Experiments: experiments}, nil
+}
+
+func (s *Service) GetExperimentRunConfigPairDetails(ctx context.Context, request *experimentation.GetExperimentRunConfigPairDetailsRequest) (*experimentation.GetExperimentRunConfigPairDetailsResponse, error) {
+	s.getExperimentRunConfigPairDetails.Inc(1)
+	runConfigPairDetails, err := s.experimentStore.GetExperimentRunConfigPairDetails(ctx, request.Id)
+	if err != nil {
+		return &experimentation.GetExperimentRunConfigPairDetailsResponse{}, err
+	}
+
+	return &experimentation.GetExperimentRunConfigPairDetailsResponse{RunConfigPairDetails: runConfigPairDetails}, nil
 }
 
 // StopExperiments stops experiments that are currently running.

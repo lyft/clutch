@@ -27,6 +27,8 @@ const ExperimentData: React.FC<ExperimentationDataProps> = ({
 
   const registeredExperimentType = types[experiment.config["@type"]];
 
+  const navigate = useNavigate();
+
   const mapperExists = Object.prototype.hasOwnProperty.call(registeredExperimentType, "mapping");
   const model = mapperExists ? registeredExperimentType.mapping(experiment.config) : experiment;
 
@@ -41,7 +43,7 @@ const ExperimentData: React.FC<ExperimentationDataProps> = ({
     return value ?? "Unknown";
   });
 
-  return <Row data={data} />;
+  return <Row hover onClick={(e) => {  navigate("/experimentation/view/"+experiment.id) }} data={data} />;
 };
 
 const Layout = styled(Container)`

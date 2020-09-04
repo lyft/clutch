@@ -432,6 +432,154 @@ var _ interface {
 	ErrorName() string
 } = GetExperimentsResponseValidationError{}
 
+// Validate checks the field values on GetExperimentRunConfigPairDetailsRequest
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, an error is returned.
+func (m *GetExperimentRunConfigPairDetailsRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Id
+
+	return nil
+}
+
+// GetExperimentRunConfigPairDetailsRequestValidationError is the validation
+// error returned by GetExperimentRunConfigPairDetailsRequest.Validate if the
+// designated constraints aren't met.
+type GetExperimentRunConfigPairDetailsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetExperimentRunConfigPairDetailsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetExperimentRunConfigPairDetailsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetExperimentRunConfigPairDetailsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetExperimentRunConfigPairDetailsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetExperimentRunConfigPairDetailsRequestValidationError) ErrorName() string {
+	return "GetExperimentRunConfigPairDetailsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetExperimentRunConfigPairDetailsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetExperimentRunConfigPairDetailsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetExperimentRunConfigPairDetailsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetExperimentRunConfigPairDetailsRequestValidationError{}
+
+// Validate checks the field values on
+// GetExperimentRunConfigPairDetailsResponse with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *GetExperimentRunConfigPairDetailsResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetRunConfigPairDetails()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetExperimentRunConfigPairDetailsResponseValidationError{
+				field:  "RunConfigPairDetails",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// GetExperimentRunConfigPairDetailsResponseValidationError is the validation
+// error returned by GetExperimentRunConfigPairDetailsResponse.Validate if the
+// designated constraints aren't met.
+type GetExperimentRunConfigPairDetailsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetExperimentRunConfigPairDetailsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetExperimentRunConfigPairDetailsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetExperimentRunConfigPairDetailsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetExperimentRunConfigPairDetailsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetExperimentRunConfigPairDetailsResponseValidationError) ErrorName() string {
+	return "GetExperimentRunConfigPairDetailsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetExperimentRunConfigPairDetailsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetExperimentRunConfigPairDetailsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetExperimentRunConfigPairDetailsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetExperimentRunConfigPairDetailsResponseValidationError{}
+
 // Validate checks the field values on StopExperimentsRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.

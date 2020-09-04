@@ -1,6 +1,7 @@
 import type { WorkflowConfiguration } from "@clutch-sh/core";
 
 import ListExperiments from "./list-experiments";
+import ViewExperiment from "./view-experiment";
 
 const register = (): WorkflowConfiguration => {
   return {
@@ -18,6 +19,12 @@ const register = (): WorkflowConfiguration => {
         description: "List Experiments.",
         component: ListExperiments,
       },
+      viewExperiment: {
+        path: "view/:id",
+        displayName: "View Experiment",
+        description: "View Experiment",
+        component: ViewExperiment,
+      }
     },
   };
 };

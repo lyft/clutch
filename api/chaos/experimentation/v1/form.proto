@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package clutch.chaos.experimentation.v1;
+
+option go_package = "experimentationv1";
+
+message Form {
+  repeated TextField fields = 1;
+}
+
+message TextField {
+  string label = 1;
+  string value = 2;
+}
