@@ -36,9 +36,8 @@ const ViewExperiment: React.FC = () => {
       text: title,
       destructive: true,
       onClick: () => {
-        console.log(experiment.runId);
         client.post("/v1/experiments/stop", { ids: [experiment.runId] })
-          .then(response => { setExperiment(undefined); })
+          .then(response => { goBack(); })
           .catch(err => { setError(err.response.statusText); });
         }
     };
