@@ -6693,7 +6693,7 @@ export const clutch = $root.clutch = (() => {
                             else if (typeof object.runId === "object")
                                 message.runId = new $util.LongBits(object.runId.low >>> 0, object.runId.high >>> 0).toNumber();
                         switch (object.status) {
-                        case "UNKNOWN":
+                        case "UNSPECIFIED":
                         case 0:
                             message.status = 0;
                             break;
@@ -6742,7 +6742,7 @@ export const clutch = $root.clutch = (() => {
                                 object.runId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                             } else
                                 object.runId = options.longs === String ? "0" : 0;
-                            object.status = options.enums === String ? "UNKNOWN" : 0;
+                            object.status = options.enums === String ? "UNSPECIFIED" : 0;
                             object.form = null;
                             object.config = null;
                         }
@@ -6778,14 +6778,14 @@ export const clutch = $root.clutch = (() => {
                  * Status enum.
                  * @name clutch.chaos.experimentation.v1.Status
                  * @enum {number}
-                 * @property {number} UNKNOWN=0 UNKNOWN value
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} SCHEDULED=1 SCHEDULED value
                  * @property {number} RUNNING=2 RUNNING value
                  * @property {number} COMPLETED=3 COMPLETED value
                  */
                 v1.Status = (function() {
                     const valuesById = {}, values = Object.create(valuesById);
-                    values[valuesById[0] = "UNKNOWN"] = 0;
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
                     values[valuesById[1] = "SCHEDULED"] = 1;
                     values[valuesById[2] = "RUNNING"] = 2;
                     values[valuesById[3] = "COMPLETED"] = 3;

@@ -2913,7 +2913,7 @@ export namespace clutch {
 
                 /** Status enum. */
                 enum Status {
-                    UNKNOWN = 0,
+                    UNSPECIFIED = 0,
                     SCHEDULED = 1,
                     RUNNING = 2,
                     COMPLETED = 3

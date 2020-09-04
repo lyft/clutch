@@ -77,8 +77,8 @@ func timesToStatus(startTime sql.NullTime, endTime sql.NullTime, scheduledEndTim
 
 func statusToString(status experimentation.Status) string {
 	switch status {
-	case experimentation.Status_UNKNOWN:
-		return "Unknown"
+	case experimentation.Status_UNSPECIFIED:
+		return "Unspecified"
 	case experimentation.Status_SCHEDULED:
 		return "Scheduled"
 	case experimentation.Status_RUNNING:
