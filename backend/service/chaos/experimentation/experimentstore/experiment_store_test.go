@@ -125,7 +125,7 @@ var deleteExperimentsTests = []struct {
 	{
 		id:   "delete specific experiment",
 		ids:  []uint64{1},
-		sql:  `DELETE FROM experiment_run WHERE id == $1`,
+		sql:  `DELETE FROM experiment_run WHERE id = $1`,
 		args: []driver.Value{1},
 	},
 }
