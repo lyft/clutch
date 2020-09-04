@@ -43,7 +43,15 @@ const ExperimentData: React.FC<ExperimentationDataProps> = ({
     return value ?? "Unknown";
   });
 
-  return <Row hover onClick={(e) => {  navigate("/experimentation/view/"+experiment.id) }} data={data} />;
+  return (
+    <Row
+      hover
+      onClick={() => {
+        navigate(`/experimentation/view/${experiment.id}`);
+      }}
+      data={data}
+    />
+  );
 };
 
 const Layout = styled(Container)`
