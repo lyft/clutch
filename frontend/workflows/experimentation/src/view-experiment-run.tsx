@@ -12,7 +12,7 @@ export const Form = styled.form`
   width: 100%;
 `;
 
-const ViewExperiment: React.FC = () => {
+const ViewExperimentRun: React.FC = () => {
   const [experiment, setExperiment] = useState<IClutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails | undefined>(undefined);
   const [error, setError] = useState("");
 
@@ -78,4 +78,4 @@ const ViewExperiment: React.FC = () => {
   )
 }
 
-export default ViewExperiment;
+export default ViewExperimentRun;
