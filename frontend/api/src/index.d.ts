@@ -3020,54 +3020,6 @@ export namespace clutch {
                      */
                     public toJSON(): { [k: string]: any };
                 }
-
-                /** Properties of an ExperimentConfig. */
-                interface IExperimentConfig {
-
-                    /** ExperimentConfig id */
-                    id?: (number|Long|null);
-                }
-
-                /** Represents an ExperimentConfig. */
-                class ExperimentConfig implements IExperimentConfig {
-
-                    /**
-                     * Constructs a new ExperimentConfig.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.experimentation.v1.IExperimentConfig);
-
-                    /** ExperimentConfig id. */
-                    public id: (number|Long);
-
-                    /**
-                     * Verifies an ExperimentConfig message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates an ExperimentConfig message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns ExperimentConfig
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.ExperimentConfig;
-
-                    /**
-                     * Creates a plain object from an ExperimentConfig message. Also converts values to other types if specified.
-                     * @param message ExperimentConfig
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.experimentation.v1.ExperimentConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this ExperimentConfig to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
             }
         }
 
