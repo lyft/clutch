@@ -1,5 +1,8 @@
 import React from "react";
-import type { TableProps as MuiTableProps } from "@material-ui/core";
+import type { 
+  TableProps as MuiTableProps,
+  TableRowProps
+} from "@material-ui/core";
 import {
   Paper,
   Table as MuiTable,
@@ -51,15 +54,15 @@ const Table: React.FC<TableProps> = ({ headings, children, elevation = 1, ...pro
   );
 };
 
-interface RowProps {
+interface RowProps extends TableRowProps {
   data: any[];
 }
 
-const Row: React.FC<RowProps> = ({ data }) => {
+const Row: React.FC<RowProps> = ({ data, ...props }) => {
   const rowData = data ? [...data] : [];
   const headerValue = rowData.shift();
   return (
-    <TableRow>
+    <TableRow {...props}>
       <TableCell component="th" scope="row">
         {headerValue}
       </TableCell>
