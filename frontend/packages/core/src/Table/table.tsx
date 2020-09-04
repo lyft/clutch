@@ -1,8 +1,5 @@
 import React from "react";
-import type { 
-  TableProps as MuiTableProps,
-  TableRowProps
-} from "@material-ui/core";
+import type { TableProps as MuiTableProps, TableRowProps } from "@material-ui/core";
 import {
   Paper,
   Table as MuiTable,
