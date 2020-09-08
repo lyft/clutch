@@ -136,7 +136,7 @@ message ListOptions {
 
 message ListPodsRequest {
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
-  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2;
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
 
   ListOptions options = 4 [ (validate.rules).message = {required : true} ];

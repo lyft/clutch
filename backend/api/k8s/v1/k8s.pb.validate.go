@@ -480,12 +480,7 @@ func (m *ListPodsRequest) Validate() error {
 		}
 	}
 
-	if len(m.GetCluster()) < 1 {
-		return ListPodsRequestValidationError{
-			field:  "Cluster",
-			reason: "value length must be at least 1 bytes",
-		}
-	}
+	// no validation rules for Cluster
 
 	if len(m.GetNamespace()) < 1 {
 		return ListPodsRequestValidationError{
