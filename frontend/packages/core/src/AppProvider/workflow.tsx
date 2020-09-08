@@ -47,6 +47,8 @@ interface Route {
   path: string;
   /** Properties required by the Component that are set only via the config. */
   requiredConfigProps?: string[];
+  /** Is the workflow discoverable via search and drawer navigation. This defaults to false. */
+  hideNav?: boolean;
 }
 
 export interface ConfiguredRoute extends Route {

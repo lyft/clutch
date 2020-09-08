@@ -43,6 +43,10 @@ func (s svc) CompareCommits(ctx context.Context, ref *github.RemoteRef, compareS
 	panic("implement me")
 }
 
+func (s svc) GetCommit(ctx context.Context, ref *github.RemoteRef) (*github.Commit, error) {
+	panic("implement me")
+}
+
 func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	return New(), nil
 }

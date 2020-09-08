@@ -73,6 +73,7 @@ type Client interface {
 	CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error)
 	CreateIssueComment(ctx context.Context, ref *RemoteRef, number int, body string) error
 	CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error)
+	GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -289,5 +290,19 @@ func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA str
 
 	return &scgithubv1.CommitComparison{
 		Status: scgithubv1.CommitCompareStatus(status),
+	}, nil
+}
+
+type Commit struct {
+	Files []*githubv3.CommitFile
+}
+
+func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
+	commit, _, err := s.rest.Repositories.GetCommit(ctx, ref.RepoOwner, ref.RepoName, ref.Ref)
+	if err != nil {
+		return nil, err
+	}
+	return &Commit{
+		Files: commit.Files,
 	}, nil
 }

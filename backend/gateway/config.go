@@ -29,14 +29,39 @@ type Flags struct {
 	Validate   bool
 }
 
-// Parse command line arguments.
-func ParseFlags() *Flags {
-	f := &Flags{}
+// Link register the struct vars globally for parsing by the flag library.
+func (f *Flags) Link() {
 	flag.StringVar(&f.ConfigPath, "c", "clutch-config.yaml", "path to YAML configuration")
 	flag.BoolVar(&f.Template, "template", false, "executes go templates on the configuration file")
 	flag.BoolVar(&f.Validate, "validate", false, "validates the configuration file and exits")
+}
+
+// Parse command line arguments.
+func ParseFlags() *Flags {
+	f := &Flags{}
+	f.Link()
 	flag.Parse()
 	return f
+}
+
+func MustReadOrValidateConfig(f *Flags) *gatewayv1.Config {
+	// Use a temporary logger to parse the configuration and output.
+	tmpLogger := newTmpLogger().With(zap.String("file", f.ConfigPath))
+
+	var cfg gatewayv1.Config
+	if err := parseFile(f.ConfigPath, &cfg, f.Template); err != nil {
+		tmpLogger.Fatal("parsing configuration failed", zap.Error(err))
+	}
+	if err := cfg.Validate(); err != nil {
+		tmpLogger.Fatal("validating configuration failed", zap.Error(err))
+	}
+
+	if f.Validate {
+		tmpLogger.Info("configuration validation was successful")
+		os.Exit(0)
+	}
+
+	return &cfg
 }
 
 func executeTemplate(contents []byte) ([]byte, error) {
