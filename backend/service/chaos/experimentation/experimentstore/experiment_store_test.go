@@ -3,11 +3,10 @@ package experimentstore
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"regexp"
 	"testing"
 	"time"
-
-	"github.com/golang/protobuf/ptypes/any"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/golang/protobuf/ptypes"
@@ -28,9 +27,11 @@ type testQuery struct {
 }
 
 type experimentTest struct {
-	id      string
-	config  *any.Any
-	queries []*testQuery
+	id        string
+	config    *any.Any
+	startTime time.Time
+	queries   []*testQuery
+	err       error
 }
 
 func createExperimentsTests() ([]experimentTest, error) {
@@ -56,8 +57,9 @@ func createExperimentsTests() ([]experimentTest, error) {
 
 	return []experimentTest{
 		{
-			id:     "create experiment",
-			config: anyConfig,
+			id:        "create experiment",
+			config:    anyConfig,
+			startTime: time.Now(),
 			queries: []*testQuery{
 				{
 					sql: `INSERT INTO experiment_config (id, details) VALUES ($1, $2)`,
@@ -67,16 +69,21 @@ func createExperimentsTests() ([]experimentTest, error) {
 					},
 				},
 				{
-					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, tstzrange(NOW(), NULL), NOW())`,
+					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, tstzrange($3, $4), NOW())`,
 					args: []driver.Value{
+						sqlmock.AnyArg(),
+						sqlmock.AnyArg(),
 						sqlmock.AnyArg(),
 						sqlmock.AnyArg(),
 					},
 				},
 			},
+			err: nil,
 		},
 		{
-			id: "create empty experiments",
+			id:        "create empty experiments",
+			startTime: time.Now(),
+			err:       errors.New("empty config"),
 		},
 	}, nil
 }
@@ -108,9 +115,8 @@ func TestCreateExperiments(t *testing.T) {
 			}
 			mock.ExpectCommit()
 
-			startTime := time.Now()
-			_, err = es.CreateExperiment(context.Background(), test.config, &startTime, nil)
-			a.NoError(err)
+			_, err = es.CreateExperiment(context.Background(), test.config, &test.startTime, nil)
+			a.Equal(test.err, err)
 		})
 	}
 }

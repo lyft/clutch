@@ -62,6 +62,10 @@ func (fs *experimentStore) CreateExperiment(ctx context.Context, config *any.Any
 		return nil, err
 	}
 
+	if config == nil {
+		return nil, errors.New("empty config")
+	}
+
 	// Step 1) create the config
 	configID := id.NewID()
 
