@@ -64,8 +64,7 @@ service ExperimentsAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
-  rpc GetExperimentRunDetails(GetExperimentRunDetailsRequest)
-      returns (GetExperimentRunDetailsResponse) {
+  rpc GetExperimentRunDetails(GetExperimentRunDetailsRequest) returns (GetExperimentRunDetailsResponse) {
     option (google.api.http) = {
       post : "/v1/experiments/details/run"
       body : "*"
