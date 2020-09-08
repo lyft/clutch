@@ -5,12 +5,15 @@ import (
 	"database/sql/driver"
 	"regexp"
 	"testing"
+	"time"
+
+	"github.com/golang/protobuf/ptypes/any"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 )
 
@@ -25,9 +28,9 @@ type testQuery struct {
 }
 
 type experimentTest struct {
-	id          string
-	experiments []*experimentation.Experiment
-	queries     []*testQuery
+	id      string
+	config  *any.Any
+	queries []*testQuery
 }
 
 func createExperimentsTests() ([]experimentTest, error) {
@@ -53,12 +56,8 @@ func createExperimentsTests() ([]experimentTest, error) {
 
 	return []experimentTest{
 		{
-			id: "create experiment",
-			experiments: []*experimentation.Experiment{
-				{
-					Config: anyConfig,
-				},
-			},
+			id:     "create experiment",
+			config: anyConfig,
 			queries: []*testQuery{
 				{
 					sql: `INSERT INTO experiment_config (id, details) VALUES ($1, $2)`,
@@ -109,7 +108,8 @@ func TestCreateExperiments(t *testing.T) {
 			}
 			mock.ExpectCommit()
 
-			err = es.CreateExperiments(context.Background(), test.experiments)
+			startTime := time.Now()
+			_, err = es.CreateExperiment(context.Background(), test.config, &startTime, nil)
 			a.NoError(err)
 		})
 	}

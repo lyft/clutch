@@ -38,7 +38,7 @@ message CreateExperimentRequest {
 }
 
 message CreateExperimentResponse {
-  Experiment experiments = 1;
+  Experiment experiment = 1;
 }
 
 message GetExperimentsRequest {

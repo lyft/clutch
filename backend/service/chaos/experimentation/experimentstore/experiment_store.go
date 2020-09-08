@@ -23,7 +23,7 @@ const Name = "clutch.service.chaos.experimentation.store"
 
 // ExperimentStore stores experiment data
 type ExperimentStore interface {
-	CreateExperiments(context.Context, []*experimentation.Experiment) error
+	CreateExperiment(context.Context, *any.Any, *time.Time, *time.Time) (*experimentation.Experiment, error)
 	StopExperiments(context.Context, []uint64) error
 	GetExperiments(context.Context) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
@@ -51,7 +51,7 @@ func New(_ *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
 	}, nil
 }
 
-func (fs *experimentStore) CreateExperiments(ctx context.Context, experiments []*experimentation.Experiment) error {
+func (fs *experimentStore) CreateExperiment(ctx context.Context, config *any.Any, startTime *time.Time, endTime *time.Time) (*experimentation.Experiment, error) {
 	// This API call will eventually be broken into 2 separate calls:
 	// 1) creating the config
 	// 2) starting a new experiment with the config
@@ -59,47 +59,50 @@ func (fs *experimentStore) CreateExperiments(ctx context.Context, experiments []
 	// All experiments are created in a single transaction
 	tx, err := fs.db.Begin()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	for _, experiment := range experiments {
-		// Step 1) create the config
-		configID := id.NewID()
+	// Step 1) create the config
+	configID := id.NewID()
 
-		configJson, err := marshalConfig(experiment.GetConfig())
-		if err != nil {
-			return err
-		}
+	configJson, err := marshalConfig(config)
+	if err != nil {
+		return nil, err
+	}
 
-		configSql := `INSERT INTO experiment_config (id, details) VALUES ($1, $2)`
-		_, err = fs.db.ExecContext(ctx, configSql, configID, configJson)
-		if err != nil {
-			return err
-		}
+	configSql := `INSERT INTO experiment_config (id, details) VALUES ($1, $2)`
+	_, err = fs.db.ExecContext(ctx, configSql, configID, configJson)
+	if err != nil {
+		return nil, err
+	}
 
-		// Step 2) start a new experiment with the config
-		runSql := `
+	// Step 2) start a new experiment with the config
+	runSql := `
 			INSERT INTO experiment_run (
                 id, 
 		        experiment_config_id,
 		        execution_time,
 		        creation_time)
-            VALUES ($1, $2, tstzrange(NOW(), NULL), NOW())`
+            VALUES ($1, $2, tstzrange($3, $4), NOW())`
 
-		runId := id.NewID()
-		_, err = fs.db.ExecContext(ctx, runSql, runId, configID)
-		if err != nil {
-			return err
-		}
-
-		// TODO(bgallagher) temporarily returning the experiment run ID. Eventually, the CreateExperiments function
-		// will be split into CreateExperimentConfig and CreateExperimentRun in which case they will each return
-		// their respective IDs
-		experiment.Id = uint64(runId)
+	runId := id.NewID()
+	_, err = fs.db.ExecContext(ctx, runSql, runId, configID, startTime, endTime)
+	if err != nil {
+		return nil, err
 	}
 
 	err = tx.Commit()
-	return err
+	if err != nil {
+		return nil, err
+	}
+
+	return &experimentation.Experiment{
+		// TODO(bgallagher) temporarily returning the experiment run ID. Eventually, the CreateExperiments function
+		// will be split into CreateExperimentConfig and CreateExperimentRun in which case they will each return
+		// their respective IDs
+		Id:     uint64(runId),
+		Config: config,
+	}, nil
 }
 
 func (fs *experimentStore) StopExperiments(ctx context.Context, ids []uint64) error {
