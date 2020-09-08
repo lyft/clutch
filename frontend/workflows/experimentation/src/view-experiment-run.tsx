@@ -18,7 +18,7 @@ const ViewExperimentRun: React.FC = () => {
   >(undefined);
   const [error, setError] = useState("");
 
-  const { id } = useParams();
+  const { experimentID } = useParams();
   const navigate = useNavigate();
 
   function makeButtons(): ButtonProps[] {
@@ -43,7 +43,7 @@ const ViewExperimentRun: React.FC = () => {
       destructive: true,
       onClick: () => {
         client
-          .post("/v1/experiments/stop", { ids: [experiment.runId] })
+          .post("/v1/experiments/stop", { ids: [experimentID] })
           .then(() => {
             goBack();
           })
@@ -58,7 +58,7 @@ const ViewExperimentRun: React.FC = () => {
 
   if (experiment === undefined) {
     client
-      .post("/v1/experiments/details/run", { id: id })
+      .post("/v1/experiments/details/run", { id: experimentID })
       .then(response => {
         setExperiment(response?.data?.runDetails);
       })
