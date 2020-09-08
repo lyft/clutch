@@ -12,24 +12,24 @@ import (
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
-func NewRunConfigPairDetails(fetchedID uint64, startTime sql.NullTime, endTime sql.NullTime, scheduledEndTime sql.NullTime, creationTime time.Time, details string) (*experimentation.ExperimentRunConfigPairDetails, error) {
-	runConfigPair := &experimentation.ExperimentRunConfigPairDetails{}
+func NewRunDetails(fetchedID uint64, startTime sql.NullTime, endTime sql.NullTime, scheduledEndTime sql.NullTime, creationTime time.Time, details string) (*experimentation.ExperimentRunDetails, error) {
+	runConfigPair := &experimentation.ExperimentRunDetails{}
 	runConfigPair.RunId = fetchedID
-	runConfigPair.Form = &experimentation.Form{}
+	runConfigPair.Properties = &experimentation.Properties{}
 	runConfigPair.Status = timesToStatus(startTime, endTime, scheduledEndTime)
-	runConfigPair.GetForm().Fields = []*experimentation.TextField{
+	runConfigPair.GetProperties().Items = []*experimentation.Text{
 		{Label: "Run Identifier", Value: strconv.FormatUint(fetchedID, 10)},
 		{Label: "Status", Value: statusToString(runConfigPair.Status)},
 		{Label: "Start Time", Value: timeToString(startTime)},
 	}
 
 	if runConfigPair.Status == experimentation.Status_COMPLETED {
-		endTimeField := &experimentation.TextField{Label: "Scheduled End Time", Value: timeToString(endTime)}
-		runConfigPair.GetForm().Fields = append(runConfigPair.GetForm().Fields, endTimeField)
+		endTimeField := &experimentation.Text{Label: "Scheduled End Time", Value: timeToString(endTime)}
+		runConfigPair.GetProperties().Items = append(runConfigPair.GetProperties().Items, endTimeField)
 	}
 
-	scheduledEndTimeField := &experimentation.TextField{Label: "Scheduled End Time", Value: timeToString(endTime)}
-	runConfigPair.GetForm().Fields = append(runConfigPair.GetForm().Fields, scheduledEndTimeField)
+	scheduledEndTimeField := &experimentation.Text{Label: "Scheduled End Time", Value: timeToString(endTime)}
+	runConfigPair.GetProperties().Items = append(runConfigPair.GetProperties().Items, scheduledEndTimeField)
 
 	anyConfig := &any.Any{}
 	err := jsonpb.Unmarshal(strings.NewReader(details), anyConfig)

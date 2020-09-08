@@ -26,7 +26,7 @@ type ExperimentStore interface {
 	CreateExperiments(context.Context, []*experimentation.Experiment) error
 	StopExperiments(context.Context, []uint64) error
 	GetExperiments(context.Context) ([]*experimentation.Experiment, error)
-	GetExperimentRunConfigPairDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunConfigPairDetails, error)
+	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
 	Close()
 }
 
@@ -152,7 +152,7 @@ func (fs *experimentStore) GetExperiments(ctx context.Context) ([]*experimentati
 	return experiments, nil
 }
 
-func (fs *experimentStore) GetExperimentRunConfigPairDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunConfigPairDetails, error) {
+func (fs *experimentStore) GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error) {
 	sqlQuery := `
         SELECT experiment_run.id, lower(execution_time), upper(execution_time), scheduled_end_time, creation_time, details FROM experiment_config, experiment_run
         WHERE experiment_run.id = $1 AND experiment_run.experiment_config_id = experiment_config.id`
@@ -169,7 +169,7 @@ func (fs *experimentStore) GetExperimentRunConfigPairDetails(ctx context.Context
 		return nil, err
 	}
 
-	return NewRunConfigPairDetails(fetchedID, startTime, endTime, scheduledEndTime, creationTime, details)
+	return NewRunDetails(fetchedID, startTime, endTime, scheduledEndTime, creationTime, details)
 }
 
 // Close closes all resources held.

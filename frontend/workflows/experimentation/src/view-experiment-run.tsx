@@ -14,7 +14,7 @@ export const Form = styled.form`
 
 const ViewExperimentRun: React.FC = () => {
   const [experiment, setExperiment] = useState<
-    IClutch.chaos.experimentation.v1.ExperimentRunConfigPairDetails | undefined
+    IClutch.chaos.experimentation.v1.ExperimentRunDetails | undefined
   >(undefined);
   const [error, setError] = useState("");
 
@@ -58,9 +58,9 @@ const ViewExperimentRun: React.FC = () => {
 
   if (experiment === undefined) {
     client
-      .post("/v1/experiment/details/run-config", { id })
+      .post("/v1/experiments/details/run", { id: id })
       .then(response => {
-        setExperiment(response?.data?.runConfigPairDetails);
+        setExperiment(response?.data?.runDetails);
       })
       .catch(err => {
         setError(err.response.statusText);
@@ -72,11 +72,11 @@ const ViewExperimentRun: React.FC = () => {
       {error && <Error message={error} />}
       {experiment && (
         <>
-          {experiment.form.fields.map(field => (
+          {experiment.properties.items.map(property => (
             <TextField
-              key={field.label}
-              label={field.label}
-              defaultValue={field.value}
+              key={property.label}
+              label={property.label}
+              defaultValue={property.value}
               InputProps={{ readOnly: true }}
             />
           ))}

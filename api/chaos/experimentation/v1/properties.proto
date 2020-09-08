@@ -4,11 +4,11 @@ package clutch.chaos.experimentation.v1;
 
 option go_package = "experimentationv1";
 
-message Form {
-  repeated TextField fields = 1;
+message Properties {
+  repeated Text items = 1;
 }
 
-message TextField {
+message Text {
   string label = 1;
   string value = 2;
 }
