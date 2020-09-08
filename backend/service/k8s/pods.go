@@ -98,7 +98,7 @@ func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name
 	// Check that the current state of the pod matches with expectedObjectMetaFields.
 	//
 	// If there is a mismatch, checkExpectedObjectMetaFields() will return an error with the list of mismatches.
-	err = checkExpectedObjectMetaFields(expectedObjectMetaFields, pod.GetObjectMeta())
+	err = s.checkExpectedObjectMetaFields(expectedObjectMetaFields, pod.GetObjectMeta())
 	if err != nil {
 		return err
 	}
@@ -118,7 +118,7 @@ func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name
 	return err
 }
 
-func checkExpectedObjectMetaFields(expectedObjectMetaFields *k8sapiv1.ExpectedObjectMetaFields, object metav1.Object) error {
+func (s *svc) checkExpectedObjectMetaFields(expectedObjectMetaFields *k8sapiv1.ExpectedObjectMetaFields, object metav1.Object) error {
 	if len(expectedObjectMetaFields.Labels) > 0 {
 		return errors.New("checking label expectations not implemented")
 	}
@@ -127,35 +127,33 @@ func checkExpectedObjectMetaFields(expectedObjectMetaFields *k8sapiv1.ExpectedOb
 	var mismatchedAnnotations []*mismatchedAnnotation
 
 	for expectedAnnotation, expectedValue := range expectedObjectMetaFields.GetAnnotations() {
-		// "" is a valid annotation value, so nil is used to indicate that the
-		// annotation shouldn't be set
-		annotationShouldBePresent := expectedValue != nil
 		currentValue, annotationIsPresent := podAnnotations[expectedAnnotation]
 
-		// Existance precondition not met
-		if annotationShouldBePresent != annotationIsPresent {
-			mismatchedAnnotations = append(
-				mismatchedAnnotations,
-				&mismatchedAnnotation{
-					Annotation:    expectedAnnotation,
-					ExpectedValue: expectedValue.GetValue(),
-					CurrentValue:  currentValue,
-				},
-			)
-
-			continue
-		}
-
-		// Annotation values mismatched
-		if expectedValue.GetValue() != currentValue {
-			mismatchedAnnotations = append(
-				mismatchedAnnotations,
-				&mismatchedAnnotation{
-					Annotation:    expectedAnnotation,
-					ExpectedValue: expectedValue.GetValue(),
-					CurrentValue:  currentValue,
-				},
-			)
+		switch expectedValue.Kind.(type) {
+		case *k8sapiv1.NullableString_Null:
+			// Existance precondition not met
+			if annotationIsPresent {
+				mismatchedAnnotations = append(
+					mismatchedAnnotations,
+					&mismatchedAnnotation{
+						Annotation:    expectedAnnotation,
+						ExpectedValue: expectedValue.GetValue(),
+						CurrentValue:  currentValue,
+					},
+				)
+			}
+		case *k8sapiv1.NullableString_Value:
+			if !annotationIsPresent || expectedValue.GetValue() != currentValue {
+				// Annotation values mismatched
+				mismatchedAnnotations = append(
+					mismatchedAnnotations,
+					&mismatchedAnnotation{
+						Annotation:    expectedAnnotation,
+						ExpectedValue: expectedValue.GetValue(),
+						CurrentValue:  currentValue,
+					},
+				)
+			}
 		}
 	}
 

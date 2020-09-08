@@ -7768,14 +7768,71 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a NullableString. */
+            interface INullableString {
+
+                /** NullableString null */
+                "null"?: (google.protobuf.NullValue|null);
+
+                /** NullableString value */
+                value?: (string|null);
+            }
+
+            /** Represents a NullableString. */
+            class NullableString implements INullableString {
+
+                /**
+                 * Constructs a new NullableString.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.INullableString);
+
+                /** NullableString null. */
+                public null: google.protobuf.NullValue;
+
+                /** NullableString value. */
+                public value: string;
+
+                /** NullableString kind. */
+                public kind?: ("null"|"value");
+
+                /**
+                 * Verifies a NullableString message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a NullableString message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns NullableString
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.NullableString;
+
+                /**
+                 * Creates a plain object from a NullableString message. Also converts values to other types if specified.
+                 * @param message NullableString
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.NullableString, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this NullableString to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of an ExpectedObjectMetaFields. */
             interface IExpectedObjectMetaFields {
 
                 /** ExpectedObjectMetaFields labels */
-                labels?: ({ [k: string]: google.protobuf.IStringValue }|null);
+                labels?: ({ [k: string]: clutch.k8s.v1.INullableString }|null);
 
                 /** ExpectedObjectMetaFields annotations */
-                annotations?: ({ [k: string]: google.protobuf.IStringValue }|null);
+                annotations?: ({ [k: string]: clutch.k8s.v1.INullableString }|null);
             }
 
             /** Represents an ExpectedObjectMetaFields. */
@@ -7788,10 +7845,10 @@ export namespace clutch {
                 constructor(properties?: clutch.k8s.v1.IExpectedObjectMetaFields);
 
                 /** ExpectedObjectMetaFields labels. */
-                public labels: { [k: string]: google.protobuf.IStringValue };
+                public labels: { [k: string]: clutch.k8s.v1.INullableString };
 
                 /** ExpectedObjectMetaFields annotations. */
-                public annotations: { [k: string]: google.protobuf.IStringValue };
+                public annotations: { [k: string]: clutch.k8s.v1.INullableString };
 
                 /**
                  * Verifies an ExpectedObjectMetaFields message.
