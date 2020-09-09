@@ -42,7 +42,7 @@ require (
 	golang.org/x/tools v0.0.0-20200826040757-bc8aaaa29e06 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/genproto v0.0.0-20200903010400-9bfcb5116336
-	google.golang.org/grpc v1.31.1
+	google.golang.org/grpc v1.32.0
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 	k8s.io/api v0.17.0
