@@ -17,7 +17,6 @@ import (
 	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/service"
-	topologyservice "github.com/lyft/clutch/backend/service/topology"
 )
 
 const Name = "clutch.service.k8s"
@@ -66,16 +65,13 @@ type Service interface {
 	// Deployment management functions.
 	DescribeDeployment(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Deployment, error)
 	UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error
-
-	ManageCache(client *topologyservice.Client)
 }
 
 type svc struct {
 	manager ClientsetManager
 
-	topologyCache *topologyservice.Client
-	log           *zap.Logger
-	scope         tally.Scope
+	log   *zap.Logger
+	scope tally.Scope
 }
 
 func NewWithClientsetManager(manager ClientsetManager, logger *zap.Logger, scope tally.Scope) (Service, error) {

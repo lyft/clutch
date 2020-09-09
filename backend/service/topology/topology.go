@@ -1,10 +1,8 @@
 package topology
 
 import (
-	"context"
 	"database/sql"
 	"errors"
-	"log"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
@@ -14,7 +12,6 @@ import (
 	topologyv1 "github.com/lyft/clutch/backend/api/config/service/topology/v1"
 	"github.com/lyft/clutch/backend/service"
 	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
-	k8sservice "github.com/lyft/clutch/backend/service/k8s"
 )
 
 const Name = "clutch.service.topology"
@@ -26,12 +23,11 @@ type Service interface {
 	SetCache(key string, resolverTypeUrl string, data []byte)
 	DeleteCache(key string)
 
-	// DeleteExpiredCache()
 	// LeaderElect()
-	// ManageCache()
+	// deleteExpiredCache()
 }
 
-type Client struct {
+type client struct {
 	config *topologyv1.Config
 
 	db    *sql.DB
@@ -56,7 +52,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, err
 	}
 
-	c, err := &Client{
+	c, err := &client{
 		config: topologyConfig,
 		db:     dbClient.DB(),
 		log:    logger,
@@ -66,40 +62,4 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	c.startCaching()
 
 	return c, err
-}
-
-func (c *Client) startCaching() {
-	// if k8s is enabled then cache it
-	k8sClient, _ := service.Registry["clutch.service.k8s"]
-	svc, _ := k8sClient.(k8sservice.Service)
-	svc.ManageCache(c)
-
-}
-
-func (c *Client) DeleteCache(id string) {
-	const deleteQuery = `
-		DELETE FROM topology_cache WHERE id = $1
-	`
-	_, err := c.db.ExecContext(context.Background(), deleteQuery, id)
-	if err != nil {
-		log.Printf("%v", err)
-		return
-	}
-}
-
-func (c *Client) SetCache(id string, resolver_type_url string, data []byte) {
-	const upsertQuery = `
-		INSERT INTO topology_cache (id, data, resolver_type_url)
-		VALUES ($1, $2, $3)
-		ON CONFLICT (id) DO UPDATE SET
-			id = EXCLUDED.id,
-			data = EXCLUDED.data,
-			resolver_type_url = EXCLUDED.resolver_type_url
-	`
-
-	_, err := c.db.ExecContext(context.Background(), upsertQuery, id, data, resolver_type_url)
-	if err != nil {
-		log.Printf("%v", err)
-		return
-	}
 }
