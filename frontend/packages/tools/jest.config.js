@@ -1,5 +1,4 @@
 module.exports = {
-  roots: ["./src"],
   collectCoverageFrom: [ "src/*.*sx"],
   coverageDirectory: "/tmp",
   coverageReporters: ["text", "cobertura"],
@@ -12,6 +11,7 @@ module.exports = {
   moduleNameMapper: {
     "\\.(css)$": "identity-obj-proxy",
   },
+  setupFiles: ["jest-canvas-mock"],
   setupFilesAfterEnv: ["@clutch-sh/tools/jest.setup.js"],
   verbose: true,
 };
