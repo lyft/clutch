@@ -23,7 +23,7 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/googleapis/gnostic v0.4.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
-	github.com/grpc-ecosystem/grpc-gateway v1.14.7
+	github.com/grpc-ecosystem/grpc-gateway v1.14.8
 	github.com/iancoleman/strcase v0.1.1
 	github.com/jhump/protoreflect v1.7.0
 	github.com/lib/pq v1.8.0
