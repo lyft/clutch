@@ -1,10 +1,3 @@
-CREATE OR REPLACE FUNCTION set_timestamp() RETURNS TRIGGER LANGUAGE plpgsql AS '
-BEGIN
-  NEW.updated_at = NOW();
-  RETURN NEW;
-END;
-';
-
 CREATE TABLE topology_cache (
   -- id: This is the resource identifier, could be a pod-id, aws instance-id, this value must be unique
   id varchar UNIQUE,
@@ -25,8 +18,3 @@ CREATE TABLE topology_cache (
 
 CREATE INDEX topology_cache_id_search_idx ON topology_cache (id varchar_pattern_ops);
 CREATE INDEX topology_cache_metadata_idx ON topology_cache USING GIN (metadata jsonb_path_ops);
-
-CREATE TRIGGER trigger_set_timestamp
-BEFORE UPDATE ON topology_cache
-FOR EACH ROW 
-EXECUTE PROCEDURE set_timestamp();
