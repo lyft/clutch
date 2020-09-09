@@ -17,27 +17,27 @@ import (
 	k8sservice "github.com/lyft/clutch/backend/service/k8s"
 )
 
-type Client interface {
-	GetByID(ctx context.Context, key string, resolverTypeUrl string)
-	GetByLabel(ctx context.Context, labels map[string]string, resolverTypeUrl string)
+const Name = "clutch.service.topology"
 
-	SetCache(ctx context.Context, key string, resolverTypeUrl string, data any.Any)
+type Service interface {
+	// GetByID(ctx context.Context, key string, resolverTypeUrl string)
+	// GetByLabel(ctx context.Context, labels map[string]string, resolverTypeUrl string)
 
-	DeleteExpiredCache()
-	LeaderElect()
-	ManageCache()
+	SetCache(key string, resolverTypeUrl string, data []byte)
+	DeleteCache(key string)
+
+	// DeleteExpiredCache()
+	// LeaderElect()
+	// ManageCache()
 }
 
-type client struct {
+type Client struct {
 	config *topologyv1.Config
 
-	isLeader bool
-	db       *sql.DB
-	log      *zap.Logger
-	scope    tally.Scope
+	db    *sql.DB
+	log   *zap.Logger
+	scope tally.Scope
 }
-
-const Name = "clutch.service.topology"
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	p, ok := service.Registry[pgservice.Name]
@@ -56,32 +56,50 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, err
 	}
 
-	c, err := &client{
+	c, err := &Client{
 		config: topologyConfig,
 		db:     dbClient.DB(),
 		log:    logger,
 		scope:  scope,
 	}, nil
 
-	c.PopulateCacheFromKubernetes()
+	c.startCaching()
 
 	return c, err
 }
 
-// pretend we are the leader
-func (c *client) PopulateCacheFromKubernetes() {
-	log.Print("topology is enabled and starting k8s cache.")
-
+func (c *Client) startCaching() {
 	// if k8s is enabled then cache it
-	client, ok := service.Registry["clutch.service.k8s"]
-	if !ok {
+	k8sClient, _ := service.Registry["clutch.service.k8s"]
+	svc, _ := k8sClient.(k8sservice.Service)
+	svc.ManageCache(c)
+
+}
+
+func (c *Client) DeleteCache(id string) {
+	const deleteQuery = `
+		DELETE FROM topology_cache WHERE id = $1
+	`
+	_, err := c.db.ExecContext(context.Background(), deleteQuery, id)
+	if err != nil {
+		log.Printf("%v", err)
 		return
 	}
+}
 
-	svc, ok := client.(k8sservice.Service)
-	if !ok {
+func (c *Client) SetCache(id string, resolver_type_url string, data []byte) {
+	const upsertQuery = `
+		INSERT INTO topology_cache (id, data, resolver_type_url)
+		VALUES ($1, $2, $3)
+		ON CONFLICT (id) DO UPDATE SET
+			id = EXCLUDED.id,
+			data = EXCLUDED.data,
+			resolver_type_url = EXCLUDED.resolver_type_url
+	`
+
+	_, err := c.db.ExecContext(context.Background(), upsertQuery, id, data, resolver_type_url)
+	if err != nil {
+		log.Printf("%v", err)
 		return
 	}
-
-	svc.PopulateCache(c.db)
 }

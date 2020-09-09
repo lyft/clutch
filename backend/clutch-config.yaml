@@ -23,6 +23,7 @@ modules:
   - name: clutch.module.envoytriage
   - name: clutch.module.k8s
   - name: clutch.module.kinesis
+
 services:
   - name: clutch.service.db.postgres
     typed_config:
@@ -41,11 +42,13 @@ services:
       regions:
         - us-east-1
         - us-west-2
+
   - name: clutch.service.envoyadmin
     typed_config:
       "@type": types.google.com/clutch.config.service.envoyadmin.v1.Config
       secure: false
       default_remote_port: 9876
+
   - name: clutch.service.k8s
     typed_config:
       "@type": types.google.com/clutch.config.service.k8s.v1.Config

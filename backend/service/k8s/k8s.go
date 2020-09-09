@@ -6,7 +6,6 @@ package k8s
 
 import (
 	"context"
-	"database/sql"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
@@ -18,6 +17,7 @@ import (
 	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/service"
+	topologyservice "github.com/lyft/clutch/backend/service/topology"
 )
 
 const Name = "clutch.service.k8s"
@@ -51,6 +51,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 type Service interface {
 	// All names of clientsets.
 	Clientsets() []string
+	GetClientSets() map[string]ContextClientset
 
 	// Pod management functions.
 	DescribePod(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Pod, error)
@@ -66,15 +67,15 @@ type Service interface {
 	DescribeDeployment(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Deployment, error)
 	UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error
 
-	// Topology Cache
-	PopulateCache(db *sql.DB)
+	ManageCache(client *topologyservice.Client)
 }
 
 type svc struct {
 	manager ClientsetManager
 
-	log   *zap.Logger
-	scope tally.Scope
+	topologyCache *topologyservice.Client
+	log           *zap.Logger
+	scope         tally.Scope
 }
 
 func NewWithClientsetManager(manager ClientsetManager, logger *zap.Logger, scope tally.Scope) (Service, error) {
@@ -87,4 +88,8 @@ func (s *svc) Clientsets() []string {
 		ret = append(ret, name)
 	}
 	return ret
+}
+
+func (s *svc) GetClientSets() map[string]ContextClientset {
+	return s.manager.Clientsets()
 }

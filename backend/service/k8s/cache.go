@@ -1,49 +1,77 @@
 package k8s
 
 import (
-	"database/sql"
+	"encoding/json"
 	"log"
 	"time"
 
-	"k8s.io/apimachinery/pkg/runtime"
+	topologyservice "github.com/lyft/clutch/backend/service/topology"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/tools/cache"
 )
 
-// setup a channel to stop the informers
-func (s *svc) PopulateCache(db *sql.DB) {
-	for _, cs := range s.manager.Clientsets() {
-		startInformers(cs)
+func (s *svc) ManageCache(client topologyservice.Client) {
+	s.topologyCache = client
+
+	log.Print("populate cache")
+	stop := make(chan struct{})
+
+	for name, cs := range s.GetClientSets() {
+		log.Printf("starting informer for cluster: %s", name)
+		s.startInformers(cs, stop)
 	}
 }
 
-func startInformers(cs ContextClientset) {
-	factory := informers.NewSharedInformerFactoryWithOptions(cs, time.Second*10)
+func (s *svc) startInformers(cs ContextClientset, stop chan struct{}) {
+	factory := informers.NewSharedInformerFactoryWithOptions(cs, time.Minute*1)
 
 	podInformer := factory.Core().V1().Pods().Informer()
 	deploymentInformer := factory.Apps().V1().Deployments().Informer()
 
 	informerHandlers := cache.ResourceEventHandlerFuncs{
-		AddFunc:    informerAddHandler,
-		UpdateFunc: informerUpdateHandler,
-		DeleteFunc: informerDeleteHandler,
+		AddFunc:    s.informerAddHandler,
+		UpdateFunc: s.informerUpdateHandler,
+		DeleteFunc: s.informerDeleteHandler,
 	}
 
 	podInformer.AddEventHandler(informerHandlers)
 	deploymentInformer.AddEventHandler(informerHandlers)
+
+	go func() {
+		podInformer.Run(stop)
+	}()
+
+	// go func() {
+	// 	deploymentInformer.Run(stop)
+	// }()
 }
 
-func informerAddHandler(obj interface{}) {
+// switch to select type?
+func (s *svc) informerAddHandler(obj interface{}) {
 	log.Print("Add Handler")
-	log.Printf("%v", obj.(runtime.Object))
+	// log.Printf("%v", obj.(runtime.Object))
+
+	k8sObj := obj.(*corev1.Pod)
+	// todo: make a switch for this choiceniss
+	// k8sObj.GetObjectKind()
+	b, _ := json.Marshal(k8sObj)
+
+	s.topologyCache.SetCache(k8sObj.Name, "pod", b)
 }
 
-func informerUpdateHandler(oldObj, newObj interface{}) {
+func (s *svc) informerUpdateHandler(oldObj, newObj interface{}) {
 	log.Print("Update Handler")
-	log.Printf("%v", newObj.(runtime.Object))
+
+	k8sObj := newObj.(*corev1.Pod)
+	b, _ := json.Marshal(k8sObj)
+	s.topologyCache.SetCache(k8sObj.Name, "pod", b)
 }
 
-func informerDeleteHandler(obj interface{}) {
+func (s *svc) informerDeleteHandler(obj interface{}) {
 	log.Print("Delete handler")
-	log.Printf("%v", obj.(runtime.Object))
+	// log.Printf("%v", obj.(runtime.Object))
+	k8sObj := obj.(*corev1.Pod)
+
+	s.topologyCache.DeleteCache(k8sObj.Name)
 }
