@@ -73,10 +73,11 @@ func (s *Service) CreateExperiment(ctx context.Context, req *experimentation.Cre
 		startTime = &s
 	}
 
+	// If the end time is not provided, default to no end time
 	var endTime *time.Time = nil
 	if req.EndTime != nil {
-		t := time.Now()
-		endTime = &t
+		s := req.EndTime.AsTime()
+		endTime = &s
 	}
 
 	experiment, err := s.experimentStore.CreateExperiment(ctx, req.Config, startTime, endTime)
