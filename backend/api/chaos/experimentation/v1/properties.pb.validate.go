@@ -115,9 +115,9 @@ var _ interface {
 	ErrorName() string
 } = PropertiesValidationError{}
 
-// Validate checks the field values on Text with the rules defined in the proto
-// definition for this message. If any rules are violated, an error is returned.
-func (m *Text) Validate() error {
+// Validate checks the field values on Property with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Property) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -129,9 +129,9 @@ func (m *Text) Validate() error {
 	return nil
 }
 
-// TextValidationError is the validation error returned by Text.Validate if the
-// designated constraints aren't met.
-type TextValidationError struct {
+// PropertyValidationError is the validation error returned by
+// Property.Validate if the designated constraints aren't met.
+type PropertyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -139,22 +139,22 @@ type TextValidationError struct {
 }
 
 // Field function returns field value.
-func (e TextValidationError) Field() string { return e.field }
+func (e PropertyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e TextValidationError) Reason() string { return e.reason }
+func (e PropertyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e TextValidationError) Cause() error { return e.cause }
+func (e PropertyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e TextValidationError) Key() bool { return e.key }
+func (e PropertyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e TextValidationError) ErrorName() string { return "TextValidationError" }
+func (e PropertyValidationError) ErrorName() string { return "PropertyValidationError" }
 
 // Error satisfies the builtin error interface
-func (e TextValidationError) Error() string {
+func (e PropertyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -166,14 +166,14 @@ func (e TextValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sText.%s: %s%s",
+		"invalid %sProperty.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = TextValidationError{}
+var _ error = PropertyValidationError{}
 
 var _ interface {
 	Field() string
@@ -181,4 +181,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = TextValidationError{}
+} = PropertyValidationError{}

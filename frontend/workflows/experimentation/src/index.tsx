@@ -20,7 +20,7 @@ const register = (): WorkflowConfiguration => {
         component: ListExperiments,
       },
       viewExperimentRun: {
-        path: "view/:id",
+        path: "run/:runID",
         displayName: "View Experiment Run",
         description: "View Experiment Run",
         hideNav: true,

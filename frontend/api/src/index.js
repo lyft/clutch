@@ -6798,7 +6798,7 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a Properties.
                      * @memberof clutch.chaos.experimentation.v1
                      * @interface IProperties
-                     * @property {Array.<clutch.chaos.experimentation.v1.IText>|null} [items] Properties items
+                     * @property {Array.<clutch.chaos.experimentation.v1.IProperty>|null} [items] Properties items
                      */
 
                     /**
@@ -6819,7 +6819,7 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Properties items.
-                     * @member {Array.<clutch.chaos.experimentation.v1.IText>} items
+                     * @member {Array.<clutch.chaos.experimentation.v1.IProperty>} items
                      * @memberof clutch.chaos.experimentation.v1.Properties
                      * @instance
                      */
@@ -6840,7 +6840,7 @@ export const clutch = $root.clutch = (() => {
                             if (!Array.isArray(message.items))
                                 return "items: array expected";
                             for (let i = 0; i < message.items.length; ++i) {
-                                let error = $root.clutch.chaos.experimentation.v1.Text.verify(message.items[i]);
+                                let error = $root.clutch.chaos.experimentation.v1.Property.verify(message.items[i]);
                                 if (error)
                                     return "items." + error;
                             }
@@ -6867,7 +6867,7 @@ export const clutch = $root.clutch = (() => {
                             for (let i = 0; i < object.items.length; ++i) {
                                 if (typeof object.items[i] !== "object")
                                     throw TypeError(".clutch.chaos.experimentation.v1.Properties.items: object expected");
-                                message.items[i] = $root.clutch.chaos.experimentation.v1.Text.fromObject(object.items[i]);
+                                message.items[i] = $root.clutch.chaos.experimentation.v1.Property.fromObject(object.items[i]);
                             }
                         }
                         return message;
@@ -6891,7 +6891,7 @@ export const clutch = $root.clutch = (() => {
                         if (message.items && message.items.length) {
                             object.items = [];
                             for (let j = 0; j < message.items.length; ++j)
-                                object.items[j] = $root.clutch.chaos.experimentation.v1.Text.toObject(message.items[j], options);
+                                object.items[j] = $root.clutch.chaos.experimentation.v1.Property.toObject(message.items[j], options);
                         }
                         return object;
                     };
@@ -6910,25 +6910,25 @@ export const clutch = $root.clutch = (() => {
                     return Properties;
                 })();
 
-                v1.Text = (function() {
+                v1.Property = (function() {
 
                     /**
-                     * Properties of a Text.
+                     * Properties of a Property.
                      * @memberof clutch.chaos.experimentation.v1
-                     * @interface IText
-                     * @property {string|null} [label] Text label
-                     * @property {string|null} [value] Text value
+                     * @interface IProperty
+                     * @property {string|null} [label] Property label
+                     * @property {string|null} [value] Property value
                      */
 
                     /**
-                     * Constructs a new Text.
+                     * Constructs a new Property.
                      * @memberof clutch.chaos.experimentation.v1
-                     * @classdesc Represents a Text.
-                     * @implements IText
+                     * @classdesc Represents a Property.
+                     * @implements IProperty
                      * @constructor
-                     * @param {clutch.chaos.experimentation.v1.IText=} [properties] Properties to set
+                     * @param {clutch.chaos.experimentation.v1.IProperty=} [properties] Properties to set
                      */
-                    function Text(properties) {
+                    function Property(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -6936,30 +6936,30 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * Text label.
+                     * Property label.
                      * @member {string} label
-                     * @memberof clutch.chaos.experimentation.v1.Text
+                     * @memberof clutch.chaos.experimentation.v1.Property
                      * @instance
                      */
-                    Text.prototype.label = "";
+                    Property.prototype.label = "";
 
                     /**
-                     * Text value.
+                     * Property value.
                      * @member {string} value
-                     * @memberof clutch.chaos.experimentation.v1.Text
+                     * @memberof clutch.chaos.experimentation.v1.Property
                      * @instance
                      */
-                    Text.prototype.value = "";
+                    Property.prototype.value = "";
 
                     /**
-                     * Verifies a Text message.
+                     * Verifies a Property message.
                      * @function verify
-                     * @memberof clutch.chaos.experimentation.v1.Text
+                     * @memberof clutch.chaos.experimentation.v1.Property
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    Text.verify = function verify(message) {
+                    Property.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.label != null && message.hasOwnProperty("label"))
@@ -6972,17 +6972,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a Text message from a plain object. Also converts values to their respective internal types.
+                     * Creates a Property message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.experimentation.v1.Text
+                     * @memberof clutch.chaos.experimentation.v1.Property
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.experimentation.v1.Text} Text
+                     * @returns {clutch.chaos.experimentation.v1.Property} Property
                      */
-                    Text.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.experimentation.v1.Text)
+                    Property.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.Property)
                             return object;
-                        let message = new $root.clutch.chaos.experimentation.v1.Text();
+                        let message = new $root.clutch.chaos.experimentation.v1.Property();
                         if (object.label != null)
                             message.label = String(object.label);
                         if (object.value != null)
@@ -6991,15 +6991,15 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a plain object from a Text message. Also converts values to other types if specified.
+                     * Creates a plain object from a Property message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.experimentation.v1.Text
+                     * @memberof clutch.chaos.experimentation.v1.Property
                      * @static
-                     * @param {clutch.chaos.experimentation.v1.Text} message Text
+                     * @param {clutch.chaos.experimentation.v1.Property} message Property
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    Text.toObject = function toObject(message, options) {
+                    Property.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
@@ -7015,17 +7015,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this Text to JSON.
+                     * Converts this Property to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.experimentation.v1.Text
+                     * @memberof clutch.chaos.experimentation.v1.Property
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    Text.prototype.toJSON = function toJSON() {
+                    Property.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return Text;
+                    return Property;
                 })();
 
                 return v1;

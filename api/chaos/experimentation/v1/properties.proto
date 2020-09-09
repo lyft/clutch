@@ -5,10 +5,10 @@ package clutch.chaos.experimentation.v1;
 option go_package = "experimentationv1";
 
 message Properties {
-  repeated Text items = 1;
+  repeated Property items = 1;
 }
 
-message Text {
+message Property {
   string label = 1;
   string value = 2;
 }

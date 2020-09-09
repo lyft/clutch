@@ -2923,7 +2923,7 @@ export namespace clutch {
                 interface IProperties {
 
                     /** Properties items */
-                    items?: (clutch.chaos.experimentation.v1.IText[]|null);
+                    items?: (clutch.chaos.experimentation.v1.IProperty[]|null);
                 }
 
                 /** Represents a Properties. */
@@ -2936,7 +2936,7 @@ export namespace clutch {
                     constructor(properties?: clutch.chaos.experimentation.v1.IProperties);
 
                     /** Properties items. */
-                    public items: clutch.chaos.experimentation.v1.IText[];
+                    public items: clutch.chaos.experimentation.v1.IProperty[];
 
                     /**
                      * Verifies a Properties message.
@@ -2967,55 +2967,55 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a Text. */
-                interface IText {
+                /** Properties of a Property. */
+                interface IProperty {
 
-                    /** Text label */
+                    /** Property label */
                     label?: (string|null);
 
-                    /** Text value */
+                    /** Property value */
                     value?: (string|null);
                 }
 
-                /** Represents a Text. */
-                class Text implements IText {
+                /** Represents a Property. */
+                class Property implements IProperty {
 
                     /**
-                     * Constructs a new Text.
+                     * Constructs a new Property.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.experimentation.v1.IText);
+                    constructor(properties?: clutch.chaos.experimentation.v1.IProperty);
 
-                    /** Text label. */
+                    /** Property label. */
                     public label: string;
 
-                    /** Text value. */
+                    /** Property value. */
                     public value: string;
 
                     /**
-                     * Verifies a Text message.
+                     * Verifies a Property message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a Text message from a plain object. Also converts values to their respective internal types.
+                     * Creates a Property message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns Text
+                     * @returns Property
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.Text;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.Property;
 
                     /**
-                     * Creates a plain object from a Text message. Also converts values to other types if specified.
-                     * @param message Text
+                     * Creates a plain object from a Property message. Also converts values to other types if specified.
+                     * @param message Property
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.experimentation.v1.Text, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.experimentation.v1.Property, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this Text to JSON.
+                     * Converts this Property to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

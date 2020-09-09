@@ -47,7 +47,7 @@ const ExperimentData: React.FC<ExperimentationDataProps> = ({
     <Row
       hover
       onClick={() => {
-        navigate(`/experimentation/view/${experiment.id}`);
+        navigate(`/experimentation/run/${experiment.id}`);
       }}
       data={data}
     />
