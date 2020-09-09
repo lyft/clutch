@@ -50,6 +50,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 type Service interface {
 	// All names of clientsets.
 	Clientsets() []string
+	GetClientSets() map[string]ContextClientset
 
 	// Pod management functions.
 	DescribePod(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Pod, error)
@@ -83,4 +84,8 @@ func (s *svc) Clientsets() []string {
 		ret = append(ret, name)
 	}
 	return ret
+}
+
+func (s *svc) GetClientSets() map[string]ContextClientset {
+	return s.manager.Clientsets()
 }

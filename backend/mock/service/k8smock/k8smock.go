@@ -7,6 +7,7 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"k8s.io/client-go/kubernetes"
 
 	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -105,6 +106,12 @@ func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name
 
 func (*svc) Clientsets() []string {
 	return []string{"fake-user@fake-cluster"}
+}
+
+func (s *svc) GetClientSets() map[string]k8sservice.ContextClientset {
+	return map[string]k8sservice.ContextClientset{
+		"fake-cluster": k8sservice.NewContextClientset("ns", "cluster", &kubernetes.Clientset{}),
+	}
 }
 
 func New() k8sservice.Service {
