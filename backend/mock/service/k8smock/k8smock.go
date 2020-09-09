@@ -108,7 +108,7 @@ func (*svc) Clientsets() []string {
 	return []string{"fake-user@fake-cluster"}
 }
 
-func (s *svc) GetClientSets() map[string]k8sservice.ContextClientset {
+func (s *svc) GetCacheableTopologyObjects() map[string]k8sservice.ContextClientset {
 	return map[string]k8sservice.ContextClientset{
 		"fake-cluster": k8sservice.NewContextClientset("ns", "cluster", &kubernetes.Clientset{}),
 	}

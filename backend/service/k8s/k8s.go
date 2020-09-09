@@ -50,7 +50,9 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 type Service interface {
 	// All names of clientsets.
 	Clientsets() []string
-	GetClientSets() map[string]ContextClientset
+
+	// Used by the topology API to determin which clientsets to cache.
+	GetCacheableTopologyObjects() map[string]ContextClientset
 
 	// Pod management functions.
 	DescribePod(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Pod, error)
@@ -86,6 +88,7 @@ func (s *svc) Clientsets() []string {
 	return ret
 }
 
-func (s *svc) GetClientSets() map[string]ContextClientset {
+func (s *svc) GetCacheableTopologyObjects() map[string]ContextClientset {
+	// Cache all configured clusters
 	return s.manager.Clientsets()
 }
