@@ -5434,6 +5434,110 @@ export namespace clutch {
                     }
                 }
             }
+
+            /** Namespace topology. */
+            namespace topology {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+
+                        /** Config cache */
+                        cache?: (clutch.config.service.topology.v1.ICache|null);
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.topology.v1.IConfig);
+
+                        /** Config cache. */
+                        public cache?: (clutch.config.service.topology.v1.ICache|null);
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.topology.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.topology.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a Cache. */
+                    interface ICache {
+
+                        /** Cache ttl */
+                        ttl?: (google.protobuf.IDuration|null);
+                    }
+
+                    /** Represents a Cache. */
+                    class Cache implements ICache {
+
+                        /**
+                         * Constructs a new Cache.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.topology.v1.ICache);
+
+                        /** Cache ttl. */
+                        public ttl?: (google.protobuf.IDuration|null);
+
+                        /**
+                         * Verifies a Cache message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Cache message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Cache
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.topology.v1.Cache;
+
+                        /**
+                         * Creates a plain object from a Cache message. Also converts values to other types if specified.
+                         * @param message Cache
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.topology.v1.Cache, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Cache to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
         }
     }
 

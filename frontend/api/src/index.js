@@ -13095,6 +13095,240 @@ export const clutch = $root.clutch = (() => {
                 return k8s;
             })();
 
+            service.topology = (function() {
+
+                /**
+                 * Namespace topology.
+                 * @memberof clutch.config.service
+                 * @namespace
+                 */
+                const topology = {};
+
+                topology.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.service.topology
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.service.topology.v1
+                         * @interface IConfig
+                         * @property {clutch.config.service.topology.v1.ICache|null} [cache] Config cache
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.service.topology.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.service.topology.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Config cache.
+                         * @member {clutch.config.service.topology.v1.ICache|null|undefined} cache
+                         * @memberof clutch.config.service.topology.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.cache = null;
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.service.topology.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.cache != null && message.hasOwnProperty("cache")) {
+                                let error = $root.clutch.config.service.topology.v1.Cache.verify(message.cache);
+                                if (error)
+                                    return "cache." + error;
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.topology.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.topology.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.topology.v1.Config)
+                                return object;
+                            let message = new $root.clutch.config.service.topology.v1.Config();
+                            if (object.cache != null) {
+                                if (typeof object.cache !== "object")
+                                    throw TypeError(".clutch.config.service.topology.v1.Config.cache: object expected");
+                                message.cache = $root.clutch.config.service.topology.v1.Cache.fromObject(object.cache);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.topology.v1.Config
+                         * @static
+                         * @param {clutch.config.service.topology.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults)
+                                object.cache = null;
+                            if (message.cache != null && message.hasOwnProperty("cache"))
+                                object.cache = $root.clutch.config.service.topology.v1.Cache.toObject(message.cache, options);
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.topology.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    v1.Cache = (function() {
+
+                        /**
+                         * Properties of a Cache.
+                         * @memberof clutch.config.service.topology.v1
+                         * @interface ICache
+                         * @property {google.protobuf.IDuration|null} [ttl] Cache ttl
+                         */
+
+                        /**
+                         * Constructs a new Cache.
+                         * @memberof clutch.config.service.topology.v1
+                         * @classdesc Represents a Cache.
+                         * @implements ICache
+                         * @constructor
+                         * @param {clutch.config.service.topology.v1.ICache=} [properties] Properties to set
+                         */
+                        function Cache(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Cache ttl.
+                         * @member {google.protobuf.IDuration|null|undefined} ttl
+                         * @memberof clutch.config.service.topology.v1.Cache
+                         * @instance
+                         */
+                        Cache.prototype.ttl = null;
+
+                        /**
+                         * Verifies a Cache message.
+                         * @function verify
+                         * @memberof clutch.config.service.topology.v1.Cache
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Cache.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.ttl != null && message.hasOwnProperty("ttl")) {
+                                let error = $root.google.protobuf.Duration.verify(message.ttl);
+                                if (error)
+                                    return "ttl." + error;
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Cache message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.topology.v1.Cache
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.topology.v1.Cache} Cache
+                         */
+                        Cache.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.topology.v1.Cache)
+                                return object;
+                            let message = new $root.clutch.config.service.topology.v1.Cache();
+                            if (object.ttl != null) {
+                                if (typeof object.ttl !== "object")
+                                    throw TypeError(".clutch.config.service.topology.v1.Cache.ttl: object expected");
+                                message.ttl = $root.google.protobuf.Duration.fromObject(object.ttl);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Cache message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.topology.v1.Cache
+                         * @static
+                         * @param {clutch.config.service.topology.v1.Cache} message Cache
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Cache.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults)
+                                object.ttl = null;
+                            if (message.ttl != null && message.hasOwnProperty("ttl"))
+                                object.ttl = $root.google.protobuf.Duration.toObject(message.ttl, options);
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Cache to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.topology.v1.Cache
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Cache.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Cache;
+                    })();
+
+                    return v1;
+                })();
+
+                return topology;
+            })();
+
             return service;
         })();
 
