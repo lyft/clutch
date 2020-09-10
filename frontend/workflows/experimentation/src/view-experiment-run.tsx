@@ -29,7 +29,7 @@ const ViewExperimentRun: React.FC = () => {
       onClick: goBack,
     };
 
-    const statusValue = clutch.chaos.experimentation.v1.Status[experiment.status];
+    const statusValue = clutch.chaos.experimentation.v1.Status[experiment.status].toString();
     if (statusValue === clutch.chaos.experimentation.v1.Status.COMPLETED.toString()) {
       return [goBackButton];
     }
