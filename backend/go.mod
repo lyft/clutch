@@ -22,8 +22,8 @@ require (
 	github.com/google/go-github/v32 v32.1.0
 	github.com/google/uuid v1.1.2
 	github.com/googleapis/gnostic v0.4.0 // indirect
-	github.com/grpc-ecosystem/go-grpc-middleware v1.2.1
-	github.com/grpc-ecosystem/grpc-gateway v1.14.7
+	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
+	github.com/grpc-ecosystem/grpc-gateway v1.14.8
 	github.com/iancoleman/strcase v0.1.1
 	github.com/jhump/protoreflect v1.7.0
 	github.com/lib/pq v1.8.0
@@ -37,12 +37,11 @@ require (
 	github.com/uber-go/tally v3.3.17+incompatible
 	go.uber.org/zap v1.16.0
 	golang.org/x/net v0.0.0-20200904194848-62affa334b73
-	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
+	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43
 	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
 	golang.org/x/tools v0.0.0-20200826040757-bc8aaaa29e06 // indirect
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
-	google.golang.org/genproto v0.0.0-20200903010400-9bfcb5116336
-	google.golang.org/grpc v1.31.1
+	google.golang.org/genproto v0.0.0-20200904004341-0bd0a958aa1d
+	google.golang.org/grpc v1.32.0
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 	k8s.io/api v0.17.0
