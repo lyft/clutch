@@ -3,14 +3,16 @@ package experimentstore
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"regexp"
 	"testing"
+	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 )
 
@@ -25,9 +27,11 @@ type testQuery struct {
 }
 
 type experimentTest struct {
-	id          string
-	experiments []*experimentation.Experiment
-	queries     []*testQuery
+	id        string
+	config    *any.Any
+	startTime time.Time
+	queries   []*testQuery
+	err       error
 }
 
 func createExperimentsTests() ([]experimentTest, error) {
@@ -53,12 +57,9 @@ func createExperimentsTests() ([]experimentTest, error) {
 
 	return []experimentTest{
 		{
-			id: "create experiment",
-			experiments: []*experimentation.Experiment{
-				{
-					Config: anyConfig,
-				},
-			},
+			id:        "create experiment",
+			config:    anyConfig,
+			startTime: time.Now(),
 			queries: []*testQuery{
 				{
 					sql: `INSERT INTO experiment_config (id, details) VALUES ($1, $2)`,
@@ -68,16 +69,21 @@ func createExperimentsTests() ([]experimentTest, error) {
 					},
 				},
 				{
-					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, tstzrange(NOW(), NULL), NOW())`,
+					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, tstzrange($3, $4), NOW())`,
 					args: []driver.Value{
+						sqlmock.AnyArg(),
+						sqlmock.AnyArg(),
 						sqlmock.AnyArg(),
 						sqlmock.AnyArg(),
 					},
 				},
 			},
+			err: nil,
 		},
 		{
-			id: "create empty experiments",
+			id:        "create empty experiments",
+			startTime: time.Now(),
+			err:       errors.New("empty config"),
 		},
 	}, nil
 }
@@ -109,8 +115,8 @@ func TestCreateExperiments(t *testing.T) {
 			}
 			mock.ExpectCommit()
 
-			err = es.CreateExperiments(context.Background(), test.experiments)
-			a.NoError(err)
+			_, err = es.CreateExperiment(context.Background(), test.config, &test.startTime, nil)
+			a.Equal(test.err, err)
 		})
 	}
 }

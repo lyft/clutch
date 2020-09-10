@@ -6,6 +6,7 @@ package api
 
 import (
 	"errors"
+	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -61,15 +62,30 @@ func (s *Service) Register(r module.Registrar) error {
 }
 
 // CreateExperiments adds experiments to the experiment store.
-func (s *Service) CreateExperiments(ctx context.Context, req *experimentation.CreateExperimentsRequest) (*experimentation.CreateExperimentsResponse, error) {
+func (s *Service) CreateExperiment(ctx context.Context, req *experimentation.CreateExperimentRequest) (*experimentation.CreateExperimentResponse, error) {
 	s.createExperimentsStat.Inc(1)
 
-	err := s.experimentStore.CreateExperiments(ctx, req.Experiments)
+	// If start time is not provided, default to starting now
+	now := time.Now()
+	startTime := &now
+	if req.StartTime != nil {
+		s := req.StartTime.AsTime()
+		startTime = &s
+	}
+
+	// If the end time is not provided, default to no end time
+	var endTime *time.Time = nil
+	if req.EndTime != nil {
+		s := req.EndTime.AsTime()
+		endTime = &s
+	}
+
+	experiment, err := s.experimentStore.CreateExperiment(ctx, req.Config, startTime, endTime)
 	if err != nil {
 		return nil, err
 	}
 
-	return &experimentation.CreateExperimentsResponse{Experiments: req.Experiments}, nil
+	return &experimentation.CreateExperimentResponse{Experiment: experiment}, nil
 }
 
 // GetExperiments returns all experiments from the experiment store.
