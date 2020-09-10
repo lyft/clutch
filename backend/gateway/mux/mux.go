@@ -13,12 +13,14 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	runtimev2 "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 var apiPattern = regexp.MustCompile(`^/v\d+/`)
@@ -129,12 +131,10 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 		runtime.WithProtoErrorHandler(customErrorHandler),
 		runtime.WithMarshalerOption(
 			runtime.MIMEWildcard,
-			&runtime.JSONPb{
-				// Use camelCase for the JSON version.
-				OrigName: false,
-				// Transmit zero-values over the wire.
-				EmitDefaults: true,
-			},
+			&protojsonShim{marshalerv2: &runtimev2.JSONPb{
+				MarshalOptions:   protojson.MarshalOptions{},
+				UnmarshalOptions: protojson.UnmarshalOptions{},
+			}},
 		),
 	)
 
