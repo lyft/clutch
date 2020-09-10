@@ -48,4 +48,4 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({ buttons, justify = "center" }
   </Grid>
 );
 
-export { AdvanceButton, Button, ButtonGroup, ButtonProps, DestructiveButton };
+export { AdvanceButton, Button, ButtonGroup, DestructiveButton };

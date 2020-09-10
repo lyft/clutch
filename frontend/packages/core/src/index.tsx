@@ -3,7 +3,7 @@ import { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow
 import CheckboxPanel from "./Input/checkbox";
 import TextField from "./Input/text-field";
 import ClutchApp from "./AppProvider";
-import { AdvanceButton, Button, ButtonGroup, ButtonProps, DestructiveButton } from "./button";
+import { AdvanceButton, Button, ButtonGroup, DestructiveButton } from "./button";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
 import { Error, Warning } from "./error";
@@ -29,7 +29,6 @@ export {
   BaseWorkflowProps,
   Button,
   ButtonGroup,
-  ButtonProps,
   CheckboxPanel,
   client,
   ClientError,

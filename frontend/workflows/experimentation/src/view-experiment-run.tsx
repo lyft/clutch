@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { clutch, clutch as IClutch } from "@clutch-sh/api";
-import type { ButtonProps } from "@clutch-sh/core";
 import { ButtonGroup, client, Error, TextField } from "@clutch-sh/core";
 import styled from "styled-components";
 
@@ -21,7 +20,7 @@ const ViewExperimentRun: React.FC = () => {
   const { runID } = useParams();
   const navigate = useNavigate();
 
-  function makeButtons(): ButtonProps[] {
+  function makeButtons() {
     const goBack = () => {
       navigate("/experimentation/list");
     };
