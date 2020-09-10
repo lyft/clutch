@@ -17,7 +17,17 @@ import SearchField from "./search";
 import { UserInformation } from "./user";
 
 const AppBar = styled(MuiAppBar)`
+  ${({ theme }) => `
   min-width: fit-content;
+  background-color: ${theme.palette.secondary.main};
+  color: ${theme.palette.primary.main};
+  min-width: fit-content;
+  `}
+`;
+
+const MenuButton = styled(IconButton)`
+  padding: 12px;
+  margin-left: -12px;
 `;
 
 const Title = styled(Typography)`
@@ -58,11 +68,11 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <AppBar position="static" color="secondary" style={{ minWidth: "fit-content" }}>
+      <AppBar position="static" color="secondary">
         <Toolbar>
-          <IconButton onClick={openDrawer} edge="start" color="primary" data-qa="menuBtn">
+          <MenuButton onClick={openDrawer} edge="start" color="primary" data-qa="menuBtn">
             <MenuIcon />
-          </IconButton>
+          </MenuButton>
           <Link to="/">
             <Logo />
           </Link>
@@ -75,7 +85,7 @@ const Header: React.FC = () => {
         </Toolbar>
       </AppBar>
       <Drawer open={drawerOpen} onClose={onDrawerClose} />
-    </>
+      </>
   );
 };
 
