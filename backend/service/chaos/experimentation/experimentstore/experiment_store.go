@@ -5,14 +5,13 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/timestamp"
 	"strings"
 	"time"
 
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 
@@ -117,10 +116,10 @@ func (fs *experimentStore) CreateExperiment(ctx context.Context, config *any.Any
 		// TODO(bgallagher) temporarily returning the experiment run ID. Eventually, the CreateExperiments function
 		// will be split into CreateExperimentConfig and CreateExperimentRun in which case they will each return
 		// their respective IDs
-		Id:     uint64(runId),
-		Config: config,
+		Id:        uint64(runId),
+		Config:    config,
 		StartTime: st,
-		EndTime: et,
+		EndTime:   et,
 	}, nil
 }
 
