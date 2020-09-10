@@ -5,10 +5,13 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/timestamp"
 	"strings"
 	"time"
 
 	"github.com/golang/protobuf/jsonpb"
+	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -100,13 +103,38 @@ func (fs *experimentStore) CreateExperiment(ctx context.Context, config *any.Any
 		return nil, err
 	}
 
+	st, err := toProto(startTime)
+	if err != nil {
+		return nil, err
+	}
+
+	et, err := toProto(endTime)
+	if err != nil {
+		return nil, err
+	}
+
 	return &experimentation.Experiment{
 		// TODO(bgallagher) temporarily returning the experiment run ID. Eventually, the CreateExperiments function
 		// will be split into CreateExperimentConfig and CreateExperimentRun in which case they will each return
 		// their respective IDs
 		Id:     uint64(runId),
 		Config: config,
+		StartTime: st,
+		EndTime: et,
 	}, nil
+}
+
+func toProto(t *time.Time) (*timestamp.Timestamp, error) {
+	if t == nil {
+		return nil, nil
+	}
+
+	timestampProto, err := ptypes.TimestampProto(*t)
+	if err != nil {
+		return nil, err
+	}
+
+	return timestampProto, nil
 }
 
 func (fs *experimentStore) StopExperiments(ctx context.Context, ids []uint64) error {
