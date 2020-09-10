@@ -24,11 +24,11 @@ func NewRunDetails(fetchedID uint64, startTime sql.NullTime, endTime sql.NullTim
 	}
 
 	if runConfigPair.Status == experimentation.Status_COMPLETED {
-		endTimeField := &experimentation.Property{Label: "Scheduled End Time", Value: timeToString(endTime)}
+		endTimeField := &experimentation.Property{Label: "End Time", Value: timeToString(endTime)}
 		runConfigPair.GetProperties().Items = append(runConfigPair.GetProperties().Items, endTimeField)
 	}
 
-	scheduledEndTimeField := &experimentation.Property{Label: "Scheduled End Time", Value: timeToString(endTime)}
+	scheduledEndTimeField := &experimentation.Property{Label: "Scheduled End Time", Value: timeToString(scheduledEndTime)}
 	runConfigPair.GetProperties().Items = append(runConfigPair.GetProperties().Items, scheduledEndTimeField)
 
 	anyConfig := &any.Any{}
