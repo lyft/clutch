@@ -1,6 +1,7 @@
 // @ts-ignore
 import { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 import CheckboxPanel from "./Input/checkbox";
+import Select from "./Input/select";
 import TextField from "./Input/text-field";
 import ClutchApp from "./AppProvider";
 import { AdvanceButton, Button, ButtonGroup, ButtonProps, DestructiveButton } from "./button";
@@ -47,6 +48,7 @@ export {
   NotePanel,
   Resolver,
   Row,
+  Select,
   Status,
   StatusRow,
   Table,
