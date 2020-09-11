@@ -19505,14 +19505,163 @@ export const clutch = $root.clutch = (() => {
                 return UpdateDeploymentResponse;
             })();
 
+            v1.NullableString = (function() {
+
+                /**
+                 * Properties of a NullableString.
+                 * @memberof clutch.k8s.v1
+                 * @interface INullableString
+                 * @property {google.protobuf.NullValue|null} ["null"] NullableString null
+                 * @property {string|null} [value] NullableString value
+                 */
+
+                /**
+                 * Constructs a new NullableString.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a NullableString.
+                 * @implements INullableString
+                 * @constructor
+                 * @param {clutch.k8s.v1.INullableString=} [properties] Properties to set
+                 */
+                function NullableString(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * NullableString null.
+                 * @member {google.protobuf.NullValue} null
+                 * @memberof clutch.k8s.v1.NullableString
+                 * @instance
+                 */
+                NullableString.prototype["null"] = 0;
+
+                /**
+                 * NullableString value.
+                 * @member {string} value
+                 * @memberof clutch.k8s.v1.NullableString
+                 * @instance
+                 */
+                NullableString.prototype.value = "";
+
+                // OneOf field names bound to virtual getters and setters
+                let $oneOfFields;
+
+                /**
+                 * NullableString kind.
+                 * @member {"null"|"value"|undefined} kind
+                 * @memberof clutch.k8s.v1.NullableString
+                 * @instance
+                 */
+                Object.defineProperty(NullableString.prototype, "kind", {
+                    get: $util.oneOfGetter($oneOfFields = ["null", "value"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Verifies a NullableString message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.NullableString
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                NullableString.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    let properties = {};
+                    if (message["null"] != null && message.hasOwnProperty("null")) {
+                        properties.kind = 1;
+                        switch (message["null"]) {
+                        default:
+                            return "null: enum value expected";
+                        case 0:
+                            break;
+                        }
+                    }
+                    if (message.value != null && message.hasOwnProperty("value")) {
+                        if (properties.kind === 1)
+                            return "kind: multiple values";
+                        properties.kind = 1;
+                        if (!$util.isString(message.value))
+                            return "value: string expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a NullableString message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.NullableString
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.NullableString} NullableString
+                 */
+                NullableString.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.NullableString)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.NullableString();
+                    switch (object["null"]) {
+                    case "NULL_VALUE":
+                    case 0:
+                        message["null"] = 0;
+                        break;
+                    }
+                    if (object.value != null)
+                        message.value = String(object.value);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a NullableString message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.NullableString
+                 * @static
+                 * @param {clutch.k8s.v1.NullableString} message NullableString
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                NullableString.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (message["null"] != null && message.hasOwnProperty("null")) {
+                        object["null"] = options.enums === String ? $root.google.protobuf.NullValue[message["null"]] : message["null"];
+                        if (options.oneofs)
+                            object.kind = "null";
+                    }
+                    if (message.value != null && message.hasOwnProperty("value")) {
+                        object.value = message.value;
+                        if (options.oneofs)
+                            object.kind = "value";
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this NullableString to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.NullableString
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                NullableString.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return NullableString;
+            })();
+
             v1.ExpectedObjectMetaFields = (function() {
 
                 /**
                  * Properties of an ExpectedObjectMetaFields.
                  * @memberof clutch.k8s.v1
                  * @interface IExpectedObjectMetaFields
-                 * @property {Object.<string,google.protobuf.IStringValue>|null} [labels] ExpectedObjectMetaFields labels
-                 * @property {Object.<string,google.protobuf.IStringValue>|null} [annotations] ExpectedObjectMetaFields annotations
+                 * @property {Object.<string,clutch.k8s.v1.INullableString>|null} [labels] ExpectedObjectMetaFields labels
+                 * @property {Object.<string,clutch.k8s.v1.INullableString>|null} [annotations] ExpectedObjectMetaFields annotations
                  */
 
                 /**
@@ -19534,7 +19683,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * ExpectedObjectMetaFields labels.
-                 * @member {Object.<string,google.protobuf.IStringValue>} labels
+                 * @member {Object.<string,clutch.k8s.v1.INullableString>} labels
                  * @memberof clutch.k8s.v1.ExpectedObjectMetaFields
                  * @instance
                  */
@@ -19542,7 +19691,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * ExpectedObjectMetaFields annotations.
-                 * @member {Object.<string,google.protobuf.IStringValue>} annotations
+                 * @member {Object.<string,clutch.k8s.v1.INullableString>} annotations
                  * @memberof clutch.k8s.v1.ExpectedObjectMetaFields
                  * @instance
                  */
@@ -19564,7 +19713,7 @@ export const clutch = $root.clutch = (() => {
                             return "labels: object expected";
                         let key = Object.keys(message.labels);
                         for (let i = 0; i < key.length; ++i) {
-                            let error = $root.google.protobuf.StringValue.verify(message.labels[key[i]]);
+                            let error = $root.clutch.k8s.v1.NullableString.verify(message.labels[key[i]]);
                             if (error)
                                 return "labels." + error;
                         }
@@ -19574,7 +19723,7 @@ export const clutch = $root.clutch = (() => {
                             return "annotations: object expected";
                         let key = Object.keys(message.annotations);
                         for (let i = 0; i < key.length; ++i) {
-                            let error = $root.google.protobuf.StringValue.verify(message.annotations[key[i]]);
+                            let error = $root.clutch.k8s.v1.NullableString.verify(message.annotations[key[i]]);
                             if (error)
                                 return "annotations." + error;
                         }
@@ -19601,7 +19750,7 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i) {
                             if (typeof object.labels[keys[i]] !== "object")
                                 throw TypeError(".clutch.k8s.v1.ExpectedObjectMetaFields.labels: object expected");
-                            message.labels[keys[i]] = $root.google.protobuf.StringValue.fromObject(object.labels[keys[i]]);
+                            message.labels[keys[i]] = $root.clutch.k8s.v1.NullableString.fromObject(object.labels[keys[i]]);
                         }
                     }
                     if (object.annotations) {
@@ -19611,7 +19760,7 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i) {
                             if (typeof object.annotations[keys[i]] !== "object")
                                 throw TypeError(".clutch.k8s.v1.ExpectedObjectMetaFields.annotations: object expected");
-                            message.annotations[keys[i]] = $root.google.protobuf.StringValue.fromObject(object.annotations[keys[i]]);
+                            message.annotations[keys[i]] = $root.clutch.k8s.v1.NullableString.fromObject(object.annotations[keys[i]]);
                         }
                     }
                     return message;
@@ -19638,12 +19787,12 @@ export const clutch = $root.clutch = (() => {
                     if (message.labels && (keys2 = Object.keys(message.labels)).length) {
                         object.labels = {};
                         for (let j = 0; j < keys2.length; ++j)
-                            object.labels[keys2[j]] = $root.google.protobuf.StringValue.toObject(message.labels[keys2[j]], options);
+                            object.labels[keys2[j]] = $root.clutch.k8s.v1.NullableString.toObject(message.labels[keys2[j]], options);
                     }
                     if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
                         object.annotations = {};
                         for (let j = 0; j < keys2.length; ++j)
-                            object.annotations[keys2[j]] = $root.google.protobuf.StringValue.toObject(message.annotations[keys2[j]], options);
+                            object.annotations[keys2[j]] = $root.clutch.k8s.v1.NullableString.toObject(message.annotations[keys2[j]], options);
                     }
                     return object;
                 };
