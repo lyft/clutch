@@ -1909,6 +1909,85 @@
     webpack-merge "^4.2.2"
     webpackbar "^4.0.0"
 
+"@docusaurus/core@2.0.0-alpha.64":
+  version "2.0.0-alpha.64"
+  resolved "https://registry.yarnpkg.com/@docusaurus/core/-/core-2.0.0-alpha.64.tgz#08031993fcfff78b395091ec06ed1ab38c06e689"
+  integrity sha512-lIFAaBz5SvN/vIMrljHwUiT+EGglqmCbKWUXsGwg8FZ86SqkD0T5hPtpaQBIDkerSMzOqntokUEcXB46AQsieQ==
+  dependencies:
+    "@babel/core" "^7.9.0"
+    "@babel/plugin-proposal-nullish-coalescing-operator" "^7.10.1"
+    "@babel/plugin-proposal-optional-chaining" "^7.10.3"
+    "@babel/plugin-syntax-dynamic-import" "^7.8.3"
+    "@babel/plugin-transform-runtime" "^7.9.0"
+    "@babel/preset-env" "^7.9.0"
+    "@babel/preset-react" "^7.9.4"
+    "@babel/preset-typescript" "^7.9.0"
+    "@babel/runtime" "^7.9.2"
+    "@babel/runtime-corejs3" "^7.10.4"
+    "@docusaurus/types" "2.0.0-alpha.64"
+    "@docusaurus/utils" "2.0.0-alpha.64"
+    "@docusaurus/utils-validation" "2.0.0-alpha.64"
+    "@endiliey/static-site-generator-webpack-plugin" "^4.0.0"
+    "@hapi/joi" "^17.1.1"
+    "@svgr/webpack" "^5.4.0"
+    babel-loader "^8.1.0"
+    babel-plugin-dynamic-import-node "^2.3.0"
+    boxen "^4.2.0"
+    cache-loader "^4.1.0"
+    chalk "^3.0.0"
+    chokidar "^3.3.0"
+    commander "^4.0.1"
+    copy-webpack-plugin "^6.0.3"
+    core-js "^2.6.5"
+    css-loader "^3.4.2"
+    del "^5.1.0"
+    detect-port "^1.3.0"
+    eta "^1.1.1"
+    express "^4.17.1"
+    file-loader "^6.0.0"
+    fs-extra "^8.1.0"
+    globby "^10.0.1"
+    html-minifier-terser "^5.0.5"
+    html-tags "^3.1.0"
+    html-webpack-plugin "^4.0.4"
+    import-fresh "^3.2.1"
+    inquirer "^7.2.0"
+    is-root "^2.1.0"
+    leven "^3.1.0"
+    lodash "^4.5.2"
+    lodash.flatmap "^4.5.0"
+    lodash.has "^4.5.2"
+    lodash.isplainobject "^4.0.6"
+    lodash.isstring "^4.0.1"
+    mini-css-extract-plugin "^0.8.0"
+    nprogress "^0.2.0"
+    null-loader "^3.0.0"
+    optimize-css-assets-webpack-plugin "^5.0.3"
+    pnp-webpack-plugin "^1.6.4"
+    postcss-loader "^3.0.0"
+    postcss-preset-env "^6.7.0"
+    react-dev-utils "^10.2.1"
+    react-helmet "^6.0.0-beta"
+    react-loadable "^5.5.0"
+    react-loadable-ssr-addon "^0.3.0"
+    react-router "^5.1.2"
+    react-router-config "^5.1.1"
+    react-router-dom "^5.1.2"
+    resolve-pathname "^3.0.0"
+    semver "^6.3.0"
+    serve-handler "^6.1.3"
+    shelljs "^0.8.4"
+    std-env "^2.2.1"
+    terser-webpack-plugin "^4.1.0"
+    update-notifier "^4.1.0"
+    url-loader "^4.1.0"
+    wait-file "^1.0.5"
+    webpack "^4.44.1"
+    webpack-bundle-analyzer "^3.6.1"
+    webpack-dev-server "^3.11.0"
+    webpack-merge "^4.2.2"
+    webpackbar "^4.0.0"
+
 "@docusaurus/mdx-loader@2.0.0-alpha.63":
   version "2.0.0-alpha.63"
   resolved "https://registry.yarnpkg.com/@docusaurus/mdx-loader/-/mdx-loader-2.0.0-alpha.63.tgz#e6b363bdcfae84306aad74a162130672df33ef40"
@@ -2102,6 +2181,16 @@
     querystring "0.2.0"
     webpack-merge "^4.2.2"
 
+"@docusaurus/types@2.0.0-alpha.64":
+  version "2.0.0-alpha.64"
+  resolved "https://registry.yarnpkg.com/@docusaurus/types/-/types-2.0.0-alpha.64.tgz#62e42beb222f7a73a5ec1218426dcdbe2ccb4294"
+  integrity sha512-YBTRXHbZDWxGQ14ES62s5UnMA3MM9BuLS5EDseOPd8/GwMz6pws+N9QeLCUCEQQTbdTb2MZsQjdSGaHOMjbiEA==
+  dependencies:
+    "@types/webpack" "^4.41.0"
+    commander "^4.0.1"
+    querystring "0.2.0"
+    webpack-merge "^4.2.2"
+
 "@docusaurus/utils-validation@2.0.0-alpha.63":
   version "2.0.0-alpha.63"
   resolved "https://registry.yarnpkg.com/@docusaurus/utils-validation/-/utils-validation-2.0.0-alpha.63.tgz#78e31bfa289a5c310a018465f232e4c7e369cff8"
@@ -2111,10 +2200,31 @@
     "@hapi/joi" "17.1.1"
     chalk "^3.0.0"
 
+"@docusaurus/utils-validation@2.0.0-alpha.64":
+  version "2.0.0-alpha.64"
+  resolved "https://registry.yarnpkg.com/@docusaurus/utils-validation/-/utils-validation-2.0.0-alpha.64.tgz#caf7dcc1ad2ad4d6890b660b575906493ac62db1"
+  integrity sha512-WO1v10/Dga5pR3e5XGwuv8Wb+vjp4d8MZ4h0x+6MBOMX9HXgoUN2pmdXq0HcolNV2RMNdXAgkT8NZhCV5Wea1A==
+  dependencies:
+    "@docusaurus/utils" "2.0.0-alpha.64"
+    "@hapi/joi" "17.1.1"
+    chalk "^3.0.0"
+
 "@docusaurus/utils@2.0.0-alpha.63":
   version "2.0.0-alpha.63"
   resolved "https://registry.yarnpkg.com/@docusaurus/utils/-/utils-2.0.0-alpha.63.tgz#a33b10ae8f4920cba7cbc55566ad1c8abd716442"
   integrity sha512-QrRuZAoj11cFgQMvjeNK12ds6y3VvPnYKu0mDpUp6jzB1fSlvIeKdnGR5Ju81LJ1CCXojNQkR8PtNK6kp1+KaA==
+  dependencies:
+    escape-string-regexp "^2.0.0"
+    fs-extra "^8.1.0"
+    gray-matter "^4.0.2"
+    lodash.camelcase "^4.3.0"
+    lodash.kebabcase "^4.1.1"
+    resolve-pathname "^3.0.0"
+
+"@docusaurus/utils@2.0.0-alpha.64":
+  version "2.0.0-alpha.64"
+  resolved "https://registry.yarnpkg.com/@docusaurus/utils/-/utils-2.0.0-alpha.64.tgz#ed8da246504d68d4e817929806962cbee76e0b60"
+  integrity sha512-rvRNTSNL0BQnO15/dZRO3MsZwcnglvm1aBl/9qbPVBVS82/VdoUB8YZ5QGrCQewXugQBkYqZU2cx+khDhNICvw==
   dependencies:
     escape-string-regexp "^2.0.0"
     fs-extra "^8.1.0"
@@ -4388,6 +4498,21 @@ chokidar@^3.0.2, chokidar@^3.3.0:
   optionalDependencies:
     fsevents "~2.1.2"
 
+chokidar@^3.4.1:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.4.2.tgz#38dc8e658dec3809741eb3ef7bb0a47fe424232d"
+  integrity sha512-IZHaDeBeI+sZJRX7lGcXsdzgvZqKv6sECqsbErJA4mHWfpRrD8B97kSFN4cQz6nGBGiuFia1MKR4d6c1o8Cv7A==
+  dependencies:
+    anymatch "~3.1.1"
+    braces "~3.0.2"
+    glob-parent "~5.1.0"
+    is-binary-path "~2.1.0"
+    is-glob "~4.0.1"
+    normalize-path "~3.0.0"
+    readdirp "~3.4.0"
+  optionalDependencies:
+    fsevents "~2.1.2"
+
 chownr@^1.1.1:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.4.tgz#6fc9d7b42d32a583596337666e7d08084da2cc6b"
@@ -6010,6 +6135,15 @@ enhanced-resolve@^4.1.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-4.1.1.tgz#2937e2b8066cd0fe7ce0990a98f0d71a35189f66"
   integrity sha512-98p2zE+rL7/g/DzMHMTF4zZlCgeVdJ7yr6xzEpJRYwFYrGi9ANdn5DnJURg6RpBkyk60XYDnWIv51VfIhfNGuA==
+  dependencies:
+    graceful-fs "^4.1.2"
+    memory-fs "^0.5.0"
+    tapable "^1.0.0"
+
+enhanced-resolve@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-4.3.0.tgz#3b806f3bfafc1ec7de69551ef93cca46c1704126"
+  integrity sha512-3e87LvavsdxyoCfGusJnrZ5G8SLPOFeHSNpZI/ATL9a5leXo2k0w6MKnbqhdBad9qTobSfB20Ld7UmgoNbAZkQ==
   dependencies:
     graceful-fs "^4.1.2"
     memory-fs "^0.5.0"
@@ -8393,7 +8527,7 @@ jest-validate@^24.9.0:
     leven "^3.1.0"
     pretty-format "^24.9.0"
 
-jest-worker@^26.2.1:
+jest-worker@^26.2.1, jest-worker@^26.3.0:
   version "26.3.0"
   resolved "https://registry.yarnpkg.com/jest-worker/-/jest-worker-26.3.0.tgz#7c8a97e4f4364b4f05ed8bca8ca0c24de091871f"
   integrity sha512-Vmpn2F6IASefL+DVBhPzI2J9/GJUsqzomdeN+P+dK8/jKxbh8R3BtFnx3FIta7wYlPU62cpJMJQo4kuOowcMnw==
@@ -13211,6 +13345,21 @@ terser-webpack-plugin@^3.0.3:
     terser "^4.8.0"
     webpack-sources "^1.4.3"
 
+terser-webpack-plugin@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/terser-webpack-plugin/-/terser-webpack-plugin-4.1.0.tgz#6e9d6ae4e1a900d88ddce8da6a47507ea61f44bc"
+  integrity sha512-0ZWDPIP8BtEDZdChbufcXUigOYk6dOX/P/X0hWxqDDcVAQLb8Yy/0FAaemSfax3PAA67+DJR778oz8qVbmy4hA==
+  dependencies:
+    cacache "^15.0.5"
+    find-cache-dir "^3.3.1"
+    jest-worker "^26.3.0"
+    p-limit "^3.0.2"
+    schema-utils "^2.6.6"
+    serialize-javascript "^4.0.0"
+    source-map "^0.6.1"
+    terser "^5.0.0"
+    webpack-sources "^1.4.3"
+
 terser@^4.1.2, terser@^4.6.3:
   version "4.6.13"
   resolved "https://registry.yarnpkg.com/terser/-/terser-4.6.13.tgz#e879a7364a5e0db52ba4891ecde007422c56a916"
@@ -13224,6 +13373,15 @@ terser@^4.8.0:
   version "4.8.0"
   resolved "https://registry.yarnpkg.com/terser/-/terser-4.8.0.tgz#63056343d7c70bb29f3af665865a46fe03a0df17"
   integrity sha512-EAPipTNeWsb/3wLPeup1tVPaXfIaU68xMnVdPafIL1TV05OhASArYyIfFvnvJCNrR2NIOvDVNNTFRa+Re2MWyw==
+  dependencies:
+    commander "^2.20.0"
+    source-map "~0.6.1"
+    source-map-support "~0.5.12"
+
+terser@^5.0.0:
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-5.3.1.tgz#f50fe20ab48b15234fe9bdd86b10148ad5fca787"
+  integrity sha512-yD80f4hdwCWTH5mojzxe1q8bN1oJbsK/vfJGLcPZM/fl+/jItIVNKhFIHqqR71OipFWMLgj3Kc+GIp6CeIqfnA==
   dependencies:
     commander "^2.20.0"
     source-map "~0.6.1"
@@ -14031,6 +14189,13 @@ wait-port@^0.2.2:
     commander "^3.0.2"
     debug "^4.1.1"
 
+watchpack-chokidar2@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/watchpack-chokidar2/-/watchpack-chokidar2-2.0.0.tgz#9948a1866cbbd6cb824dea13a7ed691f6c8ddff0"
+  integrity sha512-9TyfOyN/zLUbA288wZ8IsMZ+6cbzvsNyEzSBp6e/zkifi6xxbl8SmQ/CxQq32k8NNqrdVEVUVSEf56L4rQ/ZxA==
+  dependencies:
+    chokidar "^2.1.8"
+
 watchpack@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-1.6.1.tgz#280da0a8718592174010c078c7585a74cd8cd0e2"
@@ -14039,6 +14204,17 @@ watchpack@^1.6.1:
     chokidar "^2.1.8"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
+
+watchpack@^1.7.4:
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-1.7.4.tgz#6e9da53b3c80bb2d6508188f5b200410866cd30b"
+  integrity sha512-aWAgTW4MoSJzZPAicljkO1hsi1oKj/RRq/OJQh2PKI2UKL04c2Bs+MBOB+BBABHTXJpf9mCwHN7ANCvYsvY2sg==
+  dependencies:
+    graceful-fs "^4.1.2"
+    neo-async "^2.5.0"
+  optionalDependencies:
+    chokidar "^3.4.1"
+    watchpack-chokidar2 "^2.0.0"
 
 wbuf@^1.1.0, wbuf@^1.7.3:
   version "1.7.3"
@@ -14183,6 +14359,35 @@ webpack@^4.41.2:
     tapable "^1.1.3"
     terser-webpack-plugin "^1.4.3"
     watchpack "^1.6.1"
+    webpack-sources "^1.4.1"
+
+webpack@^4.44.1:
+  version "4.44.1"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.44.1.tgz#17e69fff9f321b8f117d1fda714edfc0b939cc21"
+  integrity sha512-4UOGAohv/VGUNQJstzEywwNxqX417FnjZgZJpJQegddzPmTvph37eBIRbRTfdySXzVtJXLJfbMN3mMYhM6GdmQ==
+  dependencies:
+    "@webassemblyjs/ast" "1.9.0"
+    "@webassemblyjs/helper-module-context" "1.9.0"
+    "@webassemblyjs/wasm-edit" "1.9.0"
+    "@webassemblyjs/wasm-parser" "1.9.0"
+    acorn "^6.4.1"
+    ajv "^6.10.2"
+    ajv-keywords "^3.4.1"
+    chrome-trace-event "^1.0.2"
+    enhanced-resolve "^4.3.0"
+    eslint-scope "^4.0.3"
+    json-parse-better-errors "^1.0.2"
+    loader-runner "^2.4.0"
+    loader-utils "^1.2.3"
+    memory-fs "^0.4.1"
+    micromatch "^3.1.10"
+    mkdirp "^0.5.3"
+    neo-async "^2.6.1"
+    node-libs-browser "^2.2.1"
+    schema-utils "^1.0.0"
+    tapable "^1.1.3"
+    terser-webpack-plugin "^1.4.3"
+    watchpack "^1.7.4"
     webpack-sources "^1.4.1"
 
 webpackbar@^4.0.0:
