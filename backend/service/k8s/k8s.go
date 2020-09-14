@@ -17,6 +17,7 @@ import (
 	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/types"
 )
 
 const Name = "clutch.service.k8s"
@@ -48,9 +49,10 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 }
 
 type Service interface {
+	types.CacheableTopology
+
 	// All names of clientsets.
 	Clientsets() []string
-	GetClientSets() map[string]ContextClientset
 
 	// Pod management functions.
 	DescribePod(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Pod, error)
@@ -70,12 +72,14 @@ type Service interface {
 type svc struct {
 	manager ClientsetManager
 
-	log   *zap.Logger
-	scope tally.Scope
+	TopologyObjectChan chan types.TopologyObject
+	log                *zap.Logger
+	scope              tally.Scope
 }
 
 func NewWithClientsetManager(manager ClientsetManager, logger *zap.Logger, scope tally.Scope) (Service, error) {
-	return &svc{manager: manager, log: logger, scope: scope}, nil
+	topologyObjectChan := make(chan types.TopologyObject, 1000)
+	return &svc{manager: manager, TopologyObjectChan: topologyObjectChan, log: logger, scope: scope}, nil
 }
 
 func (s *svc) Clientsets() []string {
@@ -84,8 +88,4 @@ func (s *svc) Clientsets() []string {
 		ret = append(ret, name)
 	}
 	return ret
-}
-
-func (s *svc) GetClientSets() map[string]ContextClientset {
-	return s.manager.Clientsets()
 }

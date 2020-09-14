@@ -103,10 +103,6 @@ func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name
 	return nil
 }
 
-func (*svc) Clientsets() []string {
-	return []string{"fake-user@fake-cluster"}
-}
-
 func New() k8sservice.Service {
 	return &svc{}
 }
