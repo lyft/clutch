@@ -36,7 +36,7 @@ const StyledSelect = styled(MuiSelect)`
 
 interface SelectOption {
   label: string;
-  value: string;
+  value?: string;
 }
 
 interface SelectProps {
@@ -60,21 +60,29 @@ const Select: React.FC<SelectProps> = ({
     return null;
   }
 
-  const [selectedIdx, setSelectedIdx] = React.useState(defaultOption);
+  const defaultIdx = defaultOption < options.length ? defaultOption : 0;
+  const [selectedIdx, setSelectedIdx] = React.useState(defaultIdx);
 
   const updateSelectedOption = (event: React.ChangeEvent<{ name?: string; value: string }>) => {
     const { value } = event.target;
-    const optionValues = options.map(o => o.value);
+    const optionValues = options.map(o => o.value || o.label);
     setSelectedIdx(optionValues.indexOf(value));
     onChange(value);
   };
 
+  React.useEffect(() => {
+    onChange(options[selectedIdx].value || options[selectedIdx].label);
+  }, []);
+
   return (
     <FormControl key={name} data-max-width={maxWidth}>
       <InputLabel color="secondary">{label}</InputLabel>
-      <StyledSelect value={options[selectedIdx].label} onChange={updateSelectedOption}>
+      <StyledSelect
+        value={options[selectedIdx].value || options[selectedIdx].label}
+        onChange={updateSelectedOption}
+      >
         {options.map(option => (
-          <MenuItem key={option.label} value={option.value}>
+          <MenuItem key={option.label} value={option.value || option.label}>
             {option.label}
           </MenuItem>
         ))}
