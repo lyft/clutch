@@ -16,6 +16,8 @@ import (
 	"unicode/utf8"
 
 	"github.com/golang/protobuf/ptypes"
+
+	structpb "github.com/golang/protobuf/ptypes/struct"
 )
 
 // ensure the imports are used
@@ -31,6 +33,8 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = ptypes.DynamicAny{}
+
+	_ = structpb.NullValue(0)
 )
 
 // define the regex for a UUID once up-front
@@ -1511,6 +1515,81 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = UpdateDeploymentResponseValidationError{}
+
+// Validate checks the field values on NullableString with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *NullableString) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	switch m.Kind.(type) {
+
+	case *NullableString_Null:
+		// no validation rules for Null
+
+	case *NullableString_Value:
+		// no validation rules for Value
+
+	}
+
+	return nil
+}
+
+// NullableStringValidationError is the validation error returned by
+// NullableString.Validate if the designated constraints aren't met.
+type NullableStringValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e NullableStringValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e NullableStringValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e NullableStringValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e NullableStringValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e NullableStringValidationError) ErrorName() string { return "NullableStringValidationError" }
+
+// Error satisfies the builtin error interface
+func (e NullableStringValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sNullableString.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = NullableStringValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = NullableStringValidationError{}
 
 // Validate checks the field values on ExpectedObjectMetaFields with the rules
 // defined in the proto definition for this message. If any rules are
