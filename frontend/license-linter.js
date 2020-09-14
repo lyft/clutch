@@ -61,7 +61,7 @@ const allowLicenses = [
   "ZPL",
 ];
 
-const ignorePackages = ["@clutch-sh/clutch"];
+const ignorePackages = ["@clutch-sh/clutch", "language-subtag-registry"];
 
 const checkerArgs = {
   start: ".",
