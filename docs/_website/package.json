@@ -6,7 +6,6 @@
     "start": "docusaurus start",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
-    "netlify": "netlify"
   },
   "dependencies": {
     "@docusaurus/core": "2.0.0-alpha.64",
