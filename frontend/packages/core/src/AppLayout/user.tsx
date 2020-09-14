@@ -16,8 +16,8 @@ import styled from "styled-components";
 
 const UserPhoto = styled(IconButton)`
   ${({ theme }) => `
-  padding-top: 1px;
-  padding-bottom: ${theme.spacing(0.5)}px;
+  padding: 1px 0 ${theme.spacing(0.5)}px 12px;
+  margin-right: ${theme.spacing(0.5)}px;
   `}
 `;
 
