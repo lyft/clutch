@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"log"
 
+	"github.com/golang/protobuf/ptypes"
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/service"
 	k8sservice "github.com/lyft/clutch/backend/service/k8s"
 	"github.com/lyft/clutch/backend/types"
@@ -26,16 +28,20 @@ func (c *client) processTopologyObjectChannel(objs chan types.TopologyObject) {
 		case types.UPDATE:
 			c.SetCache(obj)
 		case types.DELETE:
-			c.DeleteCache(obj.Id)
+			c.DeleteCache(obj)
 		}
 	}
 }
 
-func (c *client) DeleteCache(id string) {
+func (c *client) DeleteCache(obj types.TopologyObject) {
 	const deleteQuery = `
 		DELETE FROM topology_cache WHERE id = $1
 	`
-	_, err := c.db.ExecContext(context.Background(), deleteQuery, id)
+
+	pod := k8sapiv1.Pod{}
+	_ = ptypes.UnmarshalAny(obj.Pb, &pod)
+
+	_, err := c.db.ExecContext(context.Background(), deleteQuery, pod.Name)
 	if err != nil {
 		log.Printf("%v", err)
 		return
@@ -45,7 +51,7 @@ func (c *client) DeleteCache(id string) {
 func (c *client) SetCache(obj types.TopologyObject) {
 	const upsertQuery = `
 		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
-		VALUES ($1, $2, $3)
+		VALUES ($1, $2, $3, $4)
 		ON CONFLICT (id) DO UPDATE SET
 			id = EXCLUDED.id,
 			resolver_type_url = EXCLUDED.resolver_type_url,
@@ -53,14 +59,18 @@ func (c *client) SetCache(obj types.TopologyObject) {
 			metadata = EXCLUDED.metadata
 	`
 
+	pod := k8sapiv1.Pod{}
+	_ = ptypes.UnmarshalAny(obj.Pb, &pod)
+
 	metadataJson, _ := json.Marshal(obj.Metadata)
+	dataJson, _ := json.Marshal(pod)
 
 	_, err := c.db.ExecContext(
 		context.Background(),
 		upsertQuery,
-		obj.Id,
+		pod.Name,
 		obj.ResolverTypeURL,
-		obj.Pb.Value,
+		dataJson,
 		metadataJson,
 	)
 	if err != nil {

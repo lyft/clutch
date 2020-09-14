@@ -54,13 +54,11 @@ func (s *svc) startInformers(cs ContextClientset, stop chan struct{}) {
 func (s *svc) informerAddHandler(obj interface{}) {
 	log.Print("Add Handler")
 	podObj, _ := obj.(*corev1.Pod)
-
-	clutchPod := podDescription(podObj, "choice")
+	clutchPod := podDescription(podObj, "")
 	protoPod, _ := ptypes.MarshalAny(clutchPod)
 
 	s.TopologyObjectChan <- types.TopologyObject{
-		Id:              podObj.Name,
-		ResolverTypeURL: protoPod.TypeUrl,
+		ResolverTypeURL: protoPod.GetTypeUrl(),
 		Pb:              protoPod,
 		Metadata:        clutchPod.GetLabels(),
 		Action:          types.CREATE,
@@ -69,10 +67,28 @@ func (s *svc) informerAddHandler(obj interface{}) {
 
 func (s *svc) informerUpdateHandler(oldObj, newObj interface{}) {
 	log.Print("Update Handler")
-	_ = newObj.(*corev1.Pod)
+	podObj, _ := newObj.(*corev1.Pod)
+	clutchPod := podDescription(podObj, "")
+	protoPod, _ := ptypes.MarshalAny(clutchPod)
+
+	s.TopologyObjectChan <- types.TopologyObject{
+		ResolverTypeURL: protoPod.GetTypeUrl(),
+		Pb:              protoPod,
+		Metadata:        clutchPod.GetLabels(),
+		Action:          types.UPDATE,
+	}
 }
 
 func (s *svc) informerDeleteHandler(obj interface{}) {
 	log.Print("Delete handler")
-	_ = obj.(*corev1.Pod)
+	podObj, _ := obj.(*corev1.Pod)
+	clutchPod := podDescription(podObj, "")
+	protoPod, _ := ptypes.MarshalAny(clutchPod)
+
+	s.TopologyObjectChan <- types.TopologyObject{
+		ResolverTypeURL: protoPod.GetTypeUrl(),
+		Pb:              protoPod,
+		Metadata:        clutchPod.GetLabels(),
+		Action:          types.DELETE,
+	}
 }

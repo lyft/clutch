@@ -16,7 +16,6 @@ type CacheableTopology interface {
 }
 
 type TopologyObject struct {
-	Id              string
 	ResolverTypeURL string
 	Pb              *any.Any
 	Metadata        map[string]string
