@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"log"
 
-	"github.com/golang/protobuf/ptypes"
-	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/service"
 	k8sservice "github.com/lyft/clutch/backend/service/k8s"
 	"github.com/lyft/clutch/backend/types"
@@ -38,10 +36,7 @@ func (c *client) DeleteCache(obj types.TopologyObject) {
 		DELETE FROM topology_cache WHERE id = $1
 	`
 
-	pod := k8sapiv1.Pod{}
-	_ = ptypes.UnmarshalAny(obj.Pb, &pod)
-
-	_, err := c.db.ExecContext(context.Background(), deleteQuery, pod.Name)
+	_, err := c.db.ExecContext(context.Background(), deleteQuery, obj.Id)
 	if err != nil {
 		log.Printf("%v", err)
 		return
@@ -59,16 +54,13 @@ func (c *client) SetCache(obj types.TopologyObject) {
 			metadata = EXCLUDED.metadata
 	`
 
-	pod := k8sapiv1.Pod{}
-	_ = ptypes.UnmarshalAny(obj.Pb, &pod)
-
 	metadataJson, _ := json.Marshal(obj.Metadata)
-	dataJson, _ := json.Marshal(pod)
+	dataJson, _ := json.Marshal(obj.Pb.Value)
 
 	_, err := c.db.ExecContext(
 		context.Background(),
 		upsertQuery,
-		pod.Name,
+		obj.Id,
 		obj.ResolverTypeURL,
 		dataJson,
 		metadataJson,
