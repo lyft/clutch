@@ -28,7 +28,7 @@ require (
 	github.com/jhump/protoreflect v1.7.1-0.20200723220026-11eaaf73e0ec
 	github.com/lib/pq v1.8.0
 	github.com/mitchellh/hashstructure v1.0.0
-	github.com/shurcooL/githubv4 v0.0.0-20200802174311-f27d2ca7f6d5
+	github.com/shurcooL/githubv4 v0.0.0-20200915023059-bc5e4feb2971
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f // indirect
 	github.com/shurcooL/httpfs v0.0.0-20190707220628-8d4bc4ba7749 // indirect
 	github.com/shurcooL/vfsgen v0.0.0-20200824052919-0d455de96546
