@@ -69,7 +69,7 @@ func createExperimentsTests() ([]experimentTest, error) {
 					},
 				},
 				{
-					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, tstzrange($3, $4), NOW())`,
+					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, tstzrange($3, $4, '[]'), NOW())`,
 					args: []driver.Value{
 						sqlmock.AnyArg(),
 						sqlmock.AnyArg(),
@@ -131,7 +131,7 @@ var deleteExperimentsTests = []struct {
 	{
 		id:   "delete specific experiment",
 		ids:  []uint64{1},
-		sql:  `DELETE FROM experiment_run WHERE id = $1`,
+		sql:  `UPDATE experiment_run SET execution_time = tstzrange(lower(execution_time), NOW(), '[]') WHERE id = $1 AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`,
 		args: []driver.Value{1},
 	},
 }

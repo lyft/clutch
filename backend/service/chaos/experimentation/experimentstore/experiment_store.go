@@ -89,7 +89,7 @@ func (fs *experimentStore) CreateExperiment(ctx context.Context, config *any.Any
 		        experiment_config_id,
 		        execution_time,
 		        creation_time)
-            VALUES ($1, $2, tstzrange($3, $4), NOW())`
+            VALUES ($1, $2, tstzrange($3, $4, '[]'), NOW())`
 
 	runId := id.NewID()
 	_, err = fs.db.ExecContext(ctx, runSql, runId, configID, startTime, endTime)
@@ -138,10 +138,14 @@ func toProto(t *time.Time) (*timestamp.Timestamp, error) {
 
 func (fs *experimentStore) StopExperiments(ctx context.Context, ids []uint64) error {
 	if len(ids) != 1 {
-		// TODO: This API will be renamed to StopExperiment and will take a single ID as a parameter
+		// TODO: This API will be changed to take a single ID as a parameter
 		return errors.New("A single ID must be provided")
 	}
-	sql := `DELETE FROM experiment_run WHERE id = $1`
+	sql :=
+		`UPDATE experiment_run 
+         SET execution_time = tstzrange(lower(execution_time), NOW(), '[]') 
+         WHERE id = $1 AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
+
 	_, err := fs.db.ExecContext(ctx, sql, ids[0])
 	return err
 }
