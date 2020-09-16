@@ -144,7 +144,7 @@ func (fs *experimentStore) StopExperiments(ctx context.Context, ids []uint64) er
 	sql :=
 		`UPDATE experiment_run 
          SET execution_time = tstzrange(lower(execution_time), NOW(), '[]') 
-         WHERE id = $1 AND (upper(execution_time) IS NOT NULL OR NOW() < upper(execution_time))`
+         WHERE id = $1 AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
 
 	_, err := fs.db.ExecContext(ctx, sql, ids[0])
 	return err
