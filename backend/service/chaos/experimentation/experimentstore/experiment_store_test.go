@@ -131,7 +131,7 @@ var deleteExperimentsTests = []struct {
 	{
 		id:   "delete specific experiment",
 		ids:  []uint64{1},
-		sql:  `UPDATE experiment_run SET execution_time = tstzrange(lower(execution_time), NOW(), '[]') WHERE id == $1`,
+		sql:  `UPDATE experiment_run SET execution_time = tstzrange(lower(execution_time), NOW(), '[]') WHERE id = $1 AND (lower(execution_time) IS NOT NULL OR clock_timestamp() <@ execution_time)`,
 		args: []driver.Value{1},
 	},
 }
