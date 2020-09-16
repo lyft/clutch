@@ -24,10 +24,10 @@ export interface NoteConfig extends NoteProps {
 
 interface NotePanelProps {
   direction?: "row" | "column";
-  notes: NoteConfig[];
+  notes?: NoteConfig[];
 }
 
-const NotePanel: React.FC<NotePanelProps> = ({ direction = "column", notes }) => {
+const NotePanel: React.FC<NotePanelProps> = ({ direction = "column", notes, children }) => {
   const isColumnLayout = direction === "column";
   const maxWidth = isColumnLayout ? "100%" : "300px";
   const noteDirection = isColumnLayout ? "row" : "column";
@@ -39,7 +39,7 @@ const NotePanel: React.FC<NotePanelProps> = ({ direction = "column", notes }) =>
       alignContent="space-between"
       wrap="nowrap"
     >
-      {notes.map((note: NoteConfig) => (
+      {notes?.map((note: NoteConfig) => (
         <Note
           key={note.text}
           severity={note.severity}
@@ -49,6 +49,7 @@ const NotePanel: React.FC<NotePanelProps> = ({ direction = "column", notes }) =>
           {note.text}
         </Note>
       ))}
+      {children}
     </Grid>
   );
 };
