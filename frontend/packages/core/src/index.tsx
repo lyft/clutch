@@ -4,7 +4,14 @@ import CheckboxPanel from "./Input/checkbox";
 import Select from "./Input/select";
 import TextField from "./Input/text-field";
 import ClutchApp from "./AppProvider";
-import { AdvanceButton, Button, ButtonGroup, ButtonProps, DestructiveButton } from "./button";
+import {
+  AdvanceButton,
+  Button,
+  ButtonGroup,
+  ButtonProps,
+  ClipboardButton,
+  DestructiveButton,
+} from "./button";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
 import { Error, Warning } from "./error";
@@ -34,6 +41,7 @@ export {
   CheckboxPanel,
   client,
   ClientError,
+  ClipboardButton,
   Confirmation,
   DestructiveButton,
   Error,
