@@ -46,7 +46,7 @@ message GetExperimentsRequest {
 }
 
 message GetExperimentsResponse {
-  repeated Experiment experiments = 3;
+  repeated Experiment experiments = 1;
 }
 
 message GetExperimentRunDetailsRequest {
