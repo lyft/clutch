@@ -69,13 +69,16 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
   React.useEffect(() => loadSchemas(type, dispatch), []);
 
   const submitHandler = () => {
+    // Move to loading state.
     dispatch({ type: ResolverAction.RESOLVING });
 
-    const trimmedData = _.mapValues(state.queryData, v => (_.isString(v) && _.trim(v)) || v);
-    const data = {
-      ...trimmedData,
-      "@type": state.allSchemas[state.selectedSchema]?.typeUrl,
-    };
+    // Copy incoming data, trimming whitespace from any string values (usually artifact of cut and paste into tool).
+    const data = _.mapValues(state.queryData, v => (_.isString(v) && _.trim(v)) || v);
+
+    // Set desired type.
+    data["@type"] = state.allSchemas[state.selectedSchema]?.typeUrl;
+
+    // Resolve!
     resolveResource(
       type,
       searchLimit,
