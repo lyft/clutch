@@ -87,9 +87,10 @@ func (fs *experimentStore) CreateExperiment(ctx context.Context, config *any.Any
 			INSERT INTO experiment_run (
                 id, 
 		        experiment_config_id,
-		        execution_time,
+						execution_time,
+						scheduled_end_time,
 		        creation_time)
-            VALUES ($1, $2, tstzrange($3, $4, '[]'), NOW())`
+            VALUES ($1, $2, tstzrange($3, $4, '[]'), $4, NOW())`
 
 	runId := id.NewID()
 	_, err = fs.db.ExecContext(ctx, runSql, runId, configID, startTime, endTime)

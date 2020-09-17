@@ -69,7 +69,7 @@ func createExperimentsTests() ([]experimentTest, error) {
 					},
 				},
 				{
-					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, tstzrange($3, $4, '[]'), NOW())`,
+					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, scheduled_end_time, creation_time) VALUES ($1, $2, tstzrange($3, $4, '[]'), $4, NOW())`,
 					args: []driver.Value{
 						sqlmock.AnyArg(),
 						sqlmock.AnyArg(),
