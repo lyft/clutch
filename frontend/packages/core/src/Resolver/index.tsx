@@ -70,8 +70,10 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
 
   const submitHandler = () => {
     dispatch({ type: ResolverAction.RESOLVING });
+
+    const trimmedData = _.mapValues(state.queryData, v => (_.isString(v) && _.trim(v)) || v);
     const data = {
-      ...state.queryData,
+      ...trimmedData,
       "@type": state.allSchemas[state.selectedSchema]?.typeUrl,
     };
     resolveResource(
