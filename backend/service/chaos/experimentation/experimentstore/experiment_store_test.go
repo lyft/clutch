@@ -216,7 +216,7 @@ func TestGetExperiments(t *testing.T) {
 				expected.WillReturnRows(rows)
 			}
 
-			experiments, err := es.GetExperiments(context.Background())
+			experiments, err := es.GetExperiments(context.Background(), "")
 			if test.err != nil {
 				a.Equal(test.err, err)
 			} else {

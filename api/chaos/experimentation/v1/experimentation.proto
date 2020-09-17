@@ -42,7 +42,7 @@ message CreateExperimentResponse {
 }
 
 message GetExperimentsRequest {
-  repeated uint64 ids = 1;
+  string config_type = 1;
 }
 
 message GetExperimentsResponse {

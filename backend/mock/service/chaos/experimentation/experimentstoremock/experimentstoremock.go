@@ -35,7 +35,8 @@ func (fs *mockExperimentStore) GetExperiments(context.Context) ([]*experimentati
 	var experiment experimentation.Experiment
 
 	details :=
-		`{"abort":{
+		`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig",
+			"abort":{
             "clusterPair":{"downstreamCluster":"dCluster","upstreamCluster":"uCluster"},
             "percent":100,
             "httpStatus":401}}`

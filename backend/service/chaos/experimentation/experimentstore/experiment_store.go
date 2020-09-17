@@ -27,7 +27,7 @@ const Name = "clutch.service.chaos.experimentation.store"
 type ExperimentStore interface {
 	CreateExperiment(context.Context, *any.Any, *time.Time, *time.Time) (*experimentation.Experiment, error)
 	StopExperiments(context.Context, []uint64) error
-	GetExperiments(context.Context) ([]*experimentation.Experiment, error)
+	GetExperiments(ctx context.Context, config_type string) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
 	Close()
 }
@@ -152,10 +152,14 @@ func (fs *experimentStore) StopExperiments(ctx context.Context, ids []uint64) er
 }
 
 // GetExperiments gets all experiments
-func (fs *experimentStore) GetExperiments(ctx context.Context) ([]*experimentation.Experiment, error) {
+func (fs *experimentStore) GetExperiments(ctx context.Context, config_type string) ([]*experimentation.Experiment, error) {
 	sql := `
         SELECT experiment_run.id, details FROM experiment_config, experiment_run
         WHERE experiment_config.id = experiment_run.experiment_config_id`
+
+	if config_type != "" {
+		sql += `AND experiment_config.details ->> '@type' == $1`
+	}
 
 	rows, err := fs.db.QueryContext(ctx, sql)
 	if err != nil {
