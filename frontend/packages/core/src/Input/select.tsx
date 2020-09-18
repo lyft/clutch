@@ -29,7 +29,7 @@ const FormControl = styled(MuiFormControl)`
 const StyledSelect = styled(MuiSelect)`
   ${({ ...props }) => `
   display: flex;
-  margin: 16px 0 16px 0;
+  margin: 16px 0;
   width: 100%;
   max-width: ${props["data-max-width"] || "500px"};
   `}
