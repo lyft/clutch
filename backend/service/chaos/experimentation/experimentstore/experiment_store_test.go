@@ -205,7 +205,7 @@ func TestGetExperiments(t *testing.T) {
 			es := &experimentStore{db: db}
 			defer es.Close()
 
-			expected := mock.ExpectQuery(regexp.QuoteMeta(test.sql))
+			expected := mock.ExpectQuery(regexp.QuoteMeta(test.sql)).WithArgs("foo")
 			if test.err != nil {
 				expected.WillReturnError(test.err)
 			} else {
@@ -216,7 +216,7 @@ func TestGetExperiments(t *testing.T) {
 				expected.WillReturnRows(rows)
 			}
 
-			experiments, err := es.GetExperiments(context.Background(), "")
+			experiments, err := es.GetExperiments(context.Background(), "foo")
 			if test.err != nil {
 				a.Equal(test.err, err)
 			} else {
