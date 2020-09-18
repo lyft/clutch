@@ -41,7 +41,7 @@ export interface WorkflowConfiguration extends BaseWorkflowConfiguration {
 }
 
 interface Route {
-  component: React.FC;
+  component: React.FC<any>;
   description: string;
   displayName?: string;
   path: string;
