@@ -1,8 +1,8 @@
 import React from "react";
 import {
-  ExpansionPanel as MuiExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
+  Accordion as MuiExpansionPanel,
+  AccordionDetails,
+  AccordionSummary,
   Typography,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -26,12 +26,12 @@ const ExpansionPanel: React.FC<ExpansionPanelProps> = ({
 }) => {
   return (
     <FullWidthExpansionPanel expanded={expanded}>
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>{heading}</Typography>
         <div style={{ flexGrow: 1 }} />
         <Typography color="secondary">{summary}</Typography>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>{children}</ExpansionPanelDetails>
+      </AccordionSummary>
+      <AccordionDetails>{children}</AccordionDetails>
     </FullWidthExpansionPanel>
   );
 };
