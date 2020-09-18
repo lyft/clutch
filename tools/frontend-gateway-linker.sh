@@ -26,6 +26,7 @@ cd node_modules
 NODE_MODULES_DIR=$(pwd)
 for package in "${LINKED_PACKAGES[@]}"; do
   cd "${package}"
+  "${YARN}" link
   cd "${NODE_MODULES_DIR}"
 done
 
