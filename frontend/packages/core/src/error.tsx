@@ -2,8 +2,8 @@ import React from "react";
 import {
   Collapse as MuiCollapse,
   ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
+  AccordionDetails,
+  AccordionSummary,
   IconButton,
   Snackbar,
   Typography,
@@ -71,16 +71,16 @@ const CompressedError = ({ title, message }) => {
         <AlertTitle>{title || "Error"}</AlertTitle>
         {(errorMsg?.length || 0) > PANEL_MESSAGE_BREAKPOINT ? (
           <ErrorPanel elevation={0}>
-            <ExpansionPanelSummary
+            <AccordionSummary
               style={{ padding: "0px" }}
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
             >
               <ErrorText>{errorMsg.slice(0, PANEL_MESSAGE_BREAKPOINT)}</ErrorText>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails style={{ padding: "0px" }}>
+            </AccordionSummary>
+            <AccordionDetails style={{ padding: "0px" }}>
               <ErrorText>{errorMsg.slice(PANEL_MESSAGE_BREAKPOINT)}</ErrorText>
-            </ExpansionPanelDetails>
+            </AccordionDetails>
           </ErrorPanel>
         ) : (
           errorMsg

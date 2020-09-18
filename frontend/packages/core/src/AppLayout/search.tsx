@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Grid, TextField, Typography, useTheme } from "@material-ui/core";
 import { fade } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
-import type { RenderInputParams } from "@material-ui/lab/Autocomplete";
+import type { AutocompleteRenderInputParams } from "@material-ui/lab/Autocomplete";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import type { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
 import _ from "lodash";
@@ -47,7 +47,7 @@ const ResultLabel = styled(Typography)`
   `}
 `;
 
-const Input = (params: RenderInputParams): React.ReactNode => {
+const Input = (params: AutocompleteRenderInputParams): React.ReactNode => {
   const searchRef = React.useRef();
   const theme = useTheme();
   const handleKeyPress = (event: KeyboardEvent) => {
@@ -97,7 +97,7 @@ const Result: React.FC<ResultProps> = ({ option, handleSelection }) => (
   </Grid>
 );
 
-const filterResults = (searchOptions: SearchIndex[], state: FilterOptionsState) => {
+const filterResults = (searchOptions: SearchIndex[], state: FilterOptionsState<SearchIndex>) => {
   return _.filter(searchOptions, o => {
     return o.label.toLowerCase().includes(state.inputValue.toLowerCase());
   });
