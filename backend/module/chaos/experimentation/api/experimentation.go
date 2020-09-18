@@ -91,7 +91,7 @@ func (s *Service) CreateExperiment(ctx context.Context, req *experimentation.Cre
 // GetExperiments returns all experiments from the experiment store.
 func (s *Service) GetExperiments(ctx context.Context, request *experimentation.GetExperimentsRequest) (*experimentation.GetExperimentsResponse, error) {
 	s.getExperimentsStat.Inc(1)
-	experiments, err := s.experimentStore.GetExperiments(ctx, request.ConfigType)
+	experiments, err := s.experimentStore.GetExperiments(ctx, request.GetConfigType())
 	if err != nil {
 		return &experimentation.GetExperimentsResponse{}, err
 	}
