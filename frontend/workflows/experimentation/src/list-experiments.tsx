@@ -81,7 +81,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, experimentTy
 
   if (experiments.length === 0) {
     client
-      .post("/v1/experiments/get")
+      .post("/v1/chaos/experimentation/getExperiments")
       .then(response => {
         setExperiments(response?.data?.experiments || []);
       })
