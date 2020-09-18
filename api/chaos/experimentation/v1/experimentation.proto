@@ -68,7 +68,7 @@ message StopExperimentsResponse {
 service ExperimentsAPI {
   rpc CreateExperiment(CreateExperimentRequest) returns (CreateExperimentResponse) {
     option (google.api.http) = {
-      post : "/v1/experiments/create"
+      post : "/v1/experiment/create"
       body : "*"
     };
     option (clutch.api.v1.action).type = CREATE;
@@ -80,18 +80,18 @@ service ExperimentsAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
-  rpc GetExperimentRunDetails(GetExperimentRunDetailsRequest) returns (GetExperimentRunDetailsResponse) {
-    option (google.api.http) = {
-      post : "/v1/experiments/details/run"
-      body : "*"
-    };
-    option (clutch.api.v1.action).type = READ;
-  }
   rpc StopExperiments(StopExperimentsRequest) returns (StopExperimentsResponse) {
     option (google.api.http) = {
       post : "/v1/experiments/stop"
       body : "*"
     };
     option (clutch.api.v1.action).type = DELETE;
+  }
+  rpc GetExperimentRunDetails(GetExperimentRunDetailsRequest) returns (GetExperimentRunDetailsResponse) {
+    option (google.api.http) = {
+      post : "/v1/experiment/run-details"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
   }
 }

@@ -6547,39 +6547,6 @@ export const clutch = $root.clutch = (() => {
                      */
 
                     /**
-                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#getExperimentRunDetails}.
-                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
-                     * @typedef GetExperimentRunDetailsCallback
-                     * @type {function}
-                     * @param {Error|null} error Error, if any
-                     * @param {clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse} [response] GetExperimentRunDetailsResponse
-                     */
-
-                    /**
-                     * Calls GetExperimentRunDetails.
-                     * @function getExperimentRunDetails
-                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
-                     * @instance
-                     * @param {clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest} request GetExperimentRunDetailsRequest message or plain object
-                     * @param {clutch.chaos.experimentation.v1.ExperimentsAPI.GetExperimentRunDetailsCallback} callback Node-style callback called with the error, if any, and GetExperimentRunDetailsResponse
-                     * @returns {undefined}
-                     * @variation 1
-                     */
-                    Object.defineProperty(ExperimentsAPI.prototype.getExperimentRunDetails = function getExperimentRunDetails(request, callback) {
-                        return this.rpcCall(getExperimentRunDetails, $root.clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest, $root.clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse, request, callback);
-                    }, "name", { value: "GetExperimentRunDetails" });
-
-                    /**
-                     * Calls GetExperimentRunDetails.
-                     * @function getExperimentRunDetails
-                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
-                     * @instance
-                     * @param {clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest} request GetExperimentRunDetailsRequest message or plain object
-                     * @returns {Promise<clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse>} Promise
-                     * @variation 2
-                     */
-
-                    /**
                      * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#stopExperiments}.
                      * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
                      * @typedef StopExperimentsCallback
@@ -6609,6 +6576,39 @@ export const clutch = $root.clutch = (() => {
                      * @instance
                      * @param {clutch.chaos.experimentation.v1.IStopExperimentsRequest} request StopExperimentsRequest message or plain object
                      * @returns {Promise<clutch.chaos.experimentation.v1.StopExperimentsResponse>} Promise
+                     * @variation 2
+                     */
+
+                    /**
+                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#getExperimentRunDetails}.
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
+                     * @typedef GetExperimentRunDetailsCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse} [response] GetExperimentRunDetailsResponse
+                     */
+
+                    /**
+                     * Calls GetExperimentRunDetails.
+                     * @function getExperimentRunDetails
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
+                     * @instance
+                     * @param {clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest} request GetExperimentRunDetailsRequest message or plain object
+                     * @param {clutch.chaos.experimentation.v1.ExperimentsAPI.GetExperimentRunDetailsCallback} callback Node-style callback called with the error, if any, and GetExperimentRunDetailsResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(ExperimentsAPI.prototype.getExperimentRunDetails = function getExperimentRunDetails(request, callback) {
+                        return this.rpcCall(getExperimentRunDetails, $root.clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest, $root.clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse, request, callback);
+                    }, "name", { value: "GetExperimentRunDetails" });
+
+                    /**
+                     * Calls GetExperimentRunDetails.
+                     * @function getExperimentRunDetails
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
+                     * @instance
+                     * @param {clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest} request GetExperimentRunDetailsRequest message or plain object
+                     * @returns {Promise<clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse>} Promise
                      * @variation 2
                      */
 

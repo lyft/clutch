@@ -58,7 +58,7 @@ const ViewExperimentRun: React.FC = () => {
 
   if (experiment === undefined && error === "") {
     client
-      .post("/v1/experiments/details/run", { id: runID })
+      .post("/v1/experiment/run-details", { id: runID })
       .then(response => {
         setExperiment(response?.data?.runDetails);
       })

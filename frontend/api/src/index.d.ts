@@ -2810,20 +2810,6 @@ export namespace clutch {
                     public getExperiments(request: clutch.chaos.experimentation.v1.IGetExperimentsRequest): Promise<clutch.chaos.experimentation.v1.GetExperimentsResponse>;
 
                     /**
-                     * Calls GetExperimentRunDetails.
-                     * @param request GetExperimentRunDetailsRequest message or plain object
-                     * @param callback Node-style callback called with the error, if any, and GetExperimentRunDetailsResponse
-                     */
-                    public getExperimentRunDetails(request: clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest, callback: clutch.chaos.experimentation.v1.ExperimentsAPI.GetExperimentRunDetailsCallback): void;
-
-                    /**
-                     * Calls GetExperimentRunDetails.
-                     * @param request GetExperimentRunDetailsRequest message or plain object
-                     * @returns Promise
-                     */
-                    public getExperimentRunDetails(request: clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest): Promise<clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse>;
-
-                    /**
                      * Calls StopExperiments.
                      * @param request StopExperimentsRequest message or plain object
                      * @param callback Node-style callback called with the error, if any, and StopExperimentsResponse
@@ -2836,6 +2822,20 @@ export namespace clutch {
                      * @returns Promise
                      */
                     public stopExperiments(request: clutch.chaos.experimentation.v1.IStopExperimentsRequest): Promise<clutch.chaos.experimentation.v1.StopExperimentsResponse>;
+
+                    /**
+                     * Calls GetExperimentRunDetails.
+                     * @param request GetExperimentRunDetailsRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and GetExperimentRunDetailsResponse
+                     */
+                    public getExperimentRunDetails(request: clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest, callback: clutch.chaos.experimentation.v1.ExperimentsAPI.GetExperimentRunDetailsCallback): void;
+
+                    /**
+                     * Calls GetExperimentRunDetails.
+                     * @param request GetExperimentRunDetailsRequest message or plain object
+                     * @returns Promise
+                     */
+                    public getExperimentRunDetails(request: clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest): Promise<clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse>;
                 }
 
                 namespace ExperimentsAPI {
@@ -2855,18 +2855,18 @@ export namespace clutch {
                     type GetExperimentsCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.GetExperimentsResponse) => void;
 
                     /**
-                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#getExperimentRunDetails}.
-                     * @param error Error, if any
-                     * @param [response] GetExperimentRunDetailsResponse
-                     */
-                    type GetExperimentRunDetailsCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse) => void;
-
-                    /**
                      * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#stopExperiments}.
                      * @param error Error, if any
                      * @param [response] StopExperimentsResponse
                      */
                     type StopExperimentsCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.StopExperimentsResponse) => void;
+
+                    /**
+                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#getExperimentRunDetails}.
+                     * @param error Error, if any
+                     * @param [response] GetExperimentRunDetailsResponse
+                     */
+                    type GetExperimentRunDetailsCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse) => void;
                 }
 
                 /** Properties of an ExperimentRunDetails. */
