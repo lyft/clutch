@@ -1,9 +1,9 @@
 import React from "react";
 import {
-  Collapse as MuiCollapse,
-  ExpansionPanel,
   AccordionDetails,
   AccordionSummary,
+  Collapse as MuiCollapse,
+  ExpansionPanel,
   IconButton,
   Snackbar,
   Typography,

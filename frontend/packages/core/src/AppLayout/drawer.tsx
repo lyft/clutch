@@ -8,7 +8,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  SvgIcon,
   Typography,
 } from "@material-ui/core";
 import ExpandLess from "@material-ui/icons/ExpandLess";
