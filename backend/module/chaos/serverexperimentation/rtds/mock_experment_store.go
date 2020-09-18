@@ -34,4 +34,5 @@ func (fs *mockExperimentStore) GetExperimentRunDetails(ctx context.Context, id u
 	return nil, nil
 }
 
-func (fs *mockExperimentStore) Close() {}
+func (fs *mockExperimentStore) Close() {
+}
