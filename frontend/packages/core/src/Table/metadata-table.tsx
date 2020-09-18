@@ -52,6 +52,9 @@ const ViewOnlyRow: React.FC<ViewOnlyRowProps> = ({ data, size }) => {
   if (data.value instanceof Array && data.value.length > 1) {
     value = data.value.join(", ");
   }
+  if (data.value instanceof Object) {
+    value = JSON.stringify(data.value);
+  }
   return (
     <TableRow key={data.id}>
       <KeyCell data={data} size={size} />
