@@ -392,13 +392,13 @@ func RegisterExperimentsAPIHandlerClient(ctx context.Context, mux *runtime.Serve
 }
 
 var (
-	pattern_ExperimentsAPI_CreateExperiment_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "experiment", "create"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_ExperimentsAPI_CreateExperiment_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "chaos", "experimentation", "createExperiment"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ExperimentsAPI_GetExperiments_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "experiments", "get"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_ExperimentsAPI_GetExperiments_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "chaos", "experimentation", "getExperiments"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ExperimentsAPI_StopExperiments_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "experiments", "stop"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_ExperimentsAPI_StopExperiments_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "chaos", "experimentation", "stopExperiments"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ExperimentsAPI_GetExperimentRunDetails_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "experiment", "run-details"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_ExperimentsAPI_GetExperimentRunDetails_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "chaos", "experimentation", "getExperimentRunDetails"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (

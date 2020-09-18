@@ -43,7 +43,7 @@ const ViewExperimentRun: React.FC = () => {
       destructive: true,
       onClick: () => {
         client
-          .post("/v1/experiments/stop", { ids: [runID] })
+          .post("/v1/chaos/experimentation/stopExperiments", { ids: [runID] })
           .then(() => {
             goBack();
           })
@@ -58,7 +58,7 @@ const ViewExperimentRun: React.FC = () => {
 
   if (experiment === undefined && error === "") {
     client
-      .post("/v1/experiment/run-details", { id: runID })
+      .post("/v1/chaos/experimentation/getExperimentRunDetails", { id: runID })
       .then(response => {
         setExperiment(response?.data?.runDetails);
       })
