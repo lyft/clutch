@@ -1,49 +1,83 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import type { BaseWorkflowProps } from "@clutch-sh/core";
 import { ButtonGroup, client, Error, Row, Table } from "@clutch-sh/core";
 import { Container } from "@material-ui/core";
 import styled from "styled-components";
 
-interface ExperimentationSpecificationDataProps {
+interface ExperimentationDataProps {
   experiment: IClutch.chaos.experimentation.v1.Experiment;
+  columns: string[];
+  experimentTypes: any;
 }
 
-const ExperimentSpecificationData: React.FC<ExperimentationSpecificationDataProps> = ({
+const ExperimentData: React.FC<ExperimentationDataProps> = ({
   experiment,
+  columns,
+  experimentTypes,
 }) => {
-  const specification = experiment.testSpecification;
-  const data = specification?.abort ? specification.abort : specification.latency;
-
-  const defaultData = [
-    data.clusterPair.downstreamCluster,
-    data.clusterPair.upstreamCluster,
-    data.percent,
-  ];
-  if (specification?.abort) {
-    defaultData.push((data as IClutch.chaos.experimentation.v1.AbortFault).httpStatus);
+  const types = experimentTypes || {};
+  // Check for a configuration describing how a test of a given type should be displayed within the list view.
+  if (!Object.prototype.hasOwnProperty.call(types, experiment.config["@type"])) {
+    const data = columns.map(() => {
+      return experiment.config["@type"];
+    });
+    return <Row data={data} />;
   }
 
-  return <Row data={defaultData} />;
+  const registeredExperimentType = types[experiment.config["@type"]];
+
+  const navigate = useNavigate();
+
+  const mapperExists = Object.prototype.hasOwnProperty.call(registeredExperimentType, "mapping");
+  const model = mapperExists ? registeredExperimentType.mapping(experiment.config) : experiment;
+
+  const data = columns.map(column => {
+    let value: string;
+    if (column === "identifier") {
+      value = experiment.id.toString();
+    } else if (Object.prototype.hasOwnProperty.call(model, column)) {
+      value = model[column];
+    }
+
+    return value ?? "Unknown";
+  });
+
+  return (
+    <Row
+      hover
+      onClick={() => {
+        navigate(`/experimentation/run/${experiment.id}`);
+      }}
+      data={data}
+    />
+  );
 };
 
 const Layout = styled(Container)`
   padding: 5% 0;
 `;
 
-const ListExperiments: React.FC<BaseWorkflowProps> = () => {
+interface ExperimentTypeLinkProps {
+  displayName: string;
+  path: string;
+}
+
+interface ExperimentTypeProps {
+  mapping: string;
+  links: ExperimentTypeLinkProps[];
+}
+
+interface ListExperimentsProps {
+  columns: [string];
+  experimentTypes: ExperimentTypeProps[];
+}
+
+const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, experimentTypes }) => {
   const [experiments, setExperiments] = useState([]);
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
-  function handleClickStartAbortExperiment() {
-    navigate("/experimentation/startabort");
-  }
-
-  function handleClickStartLatencyExperiment() {
-    navigate("/experimentation/startlatency");
-  }
 
   if (experiments.length === 0) {
     client
@@ -56,26 +90,32 @@ const ListExperiments: React.FC<BaseWorkflowProps> = () => {
       });
   }
 
+  const types = experimentTypes || [];
+  let links: ExperimentTypeLinkProps[] = [];
+  Object.keys(types).forEach(experimentType => {
+    const configuration = types[experimentType];
+    if (Object.prototype.hasOwnProperty.call(configuration, "links")) {
+      links = links.concat(configuration.links);
+    }
+  });
+
+  const columnNames = columns.map(name => name.toUpperCase());
+  const buttons = links.map(link => {
+    return {
+      text: link.displayName,
+      onClick: () => navigate(link.path),
+    };
+  });
+
   return (
     <Layout>
       {error && <Error message={error} />}
-      <Table headings={["Downstream Cluster", "Upstream Cluster", "Percentage", "HTTP Status"]}>
+      <Table headings={columnNames}>
         {experiments.map(e => (
-          <ExperimentSpecificationData key={e.id} experiment={e} />
+          <ExperimentData key={e.id} experiment={e} columns={columns} experimentTypes={types} />
         ))}
       </Table>
-      <ButtonGroup
-        buttons={[
-          {
-            text: "Start Abort Experiment",
-            onClick: () => handleClickStartAbortExperiment(),
-          },
-          {
-            text: "Start Latency Experiment",
-            onClick: () => handleClickStartLatencyExperiment(),
-          },
-        ]}
-      />
+      <ButtonGroup buttons={buttons} />
     </Layout>
   );
 };

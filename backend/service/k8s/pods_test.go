@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"google.golang.org/protobuf/types/known/wrapperspb"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -209,7 +208,7 @@ func TestListPods(t *testing.T) {
 		"unknown-clientset",
 		"testing-cluster",
 		"testing-namespace",
-		&k8sv1.ListPodsOptions{},
+		&k8sv1.ListOptions{},
 	)
 	assert.Error(t, err)
 	assert.Nil(t, result)
@@ -220,7 +219,7 @@ func TestListPods(t *testing.T) {
 		"testing-clientset",
 		"testing-cluster",
 		"testing-namespace",
-		&k8sv1.ListPodsOptions{Labels: map[string]string{"unknown-annotation": "bar"}},
+		&k8sv1.ListOptions{Labels: map[string]string{"unknown-annotation": "bar"}},
 	)
 	assert.NoError(t, err)
 	assert.Empty(t, result)
@@ -231,7 +230,7 @@ func TestListPods(t *testing.T) {
 		"testing-clientset",
 		"testing-cluster",
 		"testing-namespace",
-		&k8sv1.ListPodsOptions{Labels: map[string]string{"foo": "bar"}},
+		&k8sv1.ListOptions{Labels: map[string]string{"foo": "bar"}},
 	)
 	assert.NoError(t, err)
 	assert.Len(t, result, 2)
@@ -338,7 +337,7 @@ func TestUpdatePod(t *testing.T) {
 		"testing-cluster",
 		"testing-namespace",
 		"testing-pod-name",
-		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*wrapperspb.StringValue{"foo": &wrapperspb.StringValue{Value: "non-matching-value"}}},
+		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*k8sv1.NullableString{"foo": &k8sv1.NullableString{Kind: &k8sv1.NullableString_Value{Value: "non-matching-value"}}}},
 		&k8sv1.ObjectMetaFields{Annotations: map[string]string{"new-annotation": "foo"}},
 		&k8sv1.RemoveObjectMetaFields{},
 	)
@@ -350,7 +349,7 @@ func TestUpdatePod(t *testing.T) {
 		"testing-cluster",
 		"testing-namespace",
 		"testing-pod-name",
-		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*wrapperspb.StringValue{"baz": &wrapperspb.StringValue{Value: "quuz"}}},
+		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*k8sv1.NullableString{"baz": &k8sv1.NullableString{Kind: &k8sv1.NullableString_Value{Value: "quuz"}}}},
 		&k8sv1.ObjectMetaFields{Annotations: map[string]string{"baz": "new-value"}},
 		&k8sv1.RemoveObjectMetaFields{},
 	)
@@ -362,7 +361,7 @@ func TestUpdatePod(t *testing.T) {
 		"testing-cluster",
 		"testing-namespace",
 		"testing-pod-name",
-		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*wrapperspb.StringValue{"baz": &wrapperspb.StringValue{Value: "new-value"}}},
+		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*k8sv1.NullableString{"baz": &k8sv1.NullableString{Kind: &k8sv1.NullableString_Value{Value: "new-value"}}}},
 		&k8sv1.ObjectMetaFields{},
 		&k8sv1.RemoveObjectMetaFields{Annotations: []string{"baz"}},
 	)
@@ -385,7 +384,7 @@ func TestUpdatePod(t *testing.T) {
 		"testing-cluster",
 		"testing-namespace",
 		"testing-pod-name",
-		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*wrapperspb.StringValue{"baz": nil}},
+		&k8sv1.ExpectedObjectMetaFields{Annotations: map[string]*k8sv1.NullableString{"baz": &k8sv1.NullableString{Kind: &k8sv1.NullableString_Null{}}}},
 		&k8sv1.ObjectMetaFields{Annotations: map[string]string{"baz": "new-value"}},
 		&k8sv1.RemoveObjectMetaFields{},
 	)

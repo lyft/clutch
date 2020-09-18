@@ -6,6 +6,7 @@ package api
 
 import (
 	"errors"
+	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -24,11 +25,12 @@ const (
 
 // Service contains all dependencies for the API service.
 type Service struct {
-	experimentStore       experimentstore.ExperimentStore
-	logger                *zap.SugaredLogger
-	createExperimentsStat tally.Counter
-	getExperimentsStat    tally.Counter
-	deleteExperimentsStat tally.Counter
+	experimentStore             experimentstore.ExperimentStore
+	logger                      *zap.SugaredLogger
+	createExperimentsStat       tally.Counter
+	getExperimentsStat          tally.Counter
+	getExperimentRunDetailsStat tally.Counter
+	deleteExperimentsStat       tally.Counter
 }
 
 // New instantiates a Service object.
@@ -45,11 +47,12 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 
 	apiScope := scope.SubScope("experimentation")
 	return &Service{
-		experimentStore:       experimentStore,
-		logger:                logger.Sugar(),
-		createExperimentsStat: apiScope.Counter("create_experiments"),
-		getExperimentsStat:    apiScope.Counter("get_experiments"),
-		deleteExperimentsStat: apiScope.Counter("delete_experiments"),
+		experimentStore:             experimentStore,
+		logger:                      logger.Sugar(),
+		createExperimentsStat:       apiScope.Counter("create_experiments"),
+		getExperimentsStat:          apiScope.Counter("get_experiments"),
+		getExperimentRunDetailsStat: apiScope.Counter("get_experiment_run_config_pair_details"),
+		deleteExperimentsStat:       apiScope.Counter("delete_experiments"),
 	}, nil
 }
 
@@ -59,14 +62,30 @@ func (s *Service) Register(r module.Registrar) error {
 }
 
 // CreateExperiments adds experiments to the experiment store.
-func (s *Service) CreateExperiments(ctx context.Context, req *experimentation.CreateExperimentsRequest) (*experimentation.CreateExperimentsResponse, error) {
+func (s *Service) CreateExperiment(ctx context.Context, req *experimentation.CreateExperimentRequest) (*experimentation.CreateExperimentResponse, error) {
 	s.createExperimentsStat.Inc(1)
-	err := s.experimentStore.CreateExperiments(ctx, req.Experiments)
+
+	// If start time is not provided, default to starting now
+	now := time.Now()
+	startTime := &now
+	if req.StartTime != nil {
+		s := req.StartTime.AsTime()
+		startTime = &s
+	}
+
+	// If the end time is not provided, default to no end time
+	var endTime *time.Time = nil
+	if req.EndTime != nil {
+		s := req.EndTime.AsTime()
+		endTime = &s
+	}
+
+	experiment, err := s.experimentStore.CreateExperiment(ctx, req.Config, startTime, endTime)
 	if err != nil {
 		return nil, err
 	}
 
-	return &experimentation.CreateExperimentsResponse{}, nil
+	return &experimentation.CreateExperimentResponse{Experiment: experiment}, nil
 }
 
 // GetExperiments returns all experiments from the experiment store.
@@ -80,13 +99,23 @@ func (s *Service) GetExperiments(ctx context.Context, _ *experimentation.GetExpe
 	return &experimentation.GetExperimentsResponse{Experiments: experiments}, nil
 }
 
-// DeleteExperiments deletes experiments from the experiment store.
-func (s *Service) DeleteExperiments(ctx context.Context, req *experimentation.DeleteExperimentsRequest) (*experimentation.DeleteExperimentsResponse, error) {
+func (s *Service) GetExperimentRunDetails(ctx context.Context, request *experimentation.GetExperimentRunDetailsRequest) (*experimentation.GetExperimentRunDetailsResponse, error) {
+	s.getExperimentRunDetailsStat.Inc(1)
+	runDetails, err := s.experimentStore.GetExperimentRunDetails(ctx, request.Id)
+	if err != nil {
+		return &experimentation.GetExperimentRunDetailsResponse{}, err
+	}
+
+	return &experimentation.GetExperimentRunDetailsResponse{RunDetails: runDetails}, nil
+}
+
+// StopExperiments stops experiments that are currently running.
+func (s *Service) StopExperiments(ctx context.Context, req *experimentation.StopExperimentsRequest) (*experimentation.StopExperimentsResponse, error) {
 	s.deleteExperimentsStat.Inc(1)
-	err := s.experimentStore.DeleteExperiments(ctx, req.Ids)
+	err := s.experimentStore.StopExperiments(ctx, req.Ids)
 	if err != nil {
 		return nil, err
 	}
 
-	return &experimentation.DeleteExperimentsResponse{}, nil
+	return &experimentation.StopExperimentsResponse{}, nil
 }

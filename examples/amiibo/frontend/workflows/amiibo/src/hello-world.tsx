@@ -7,14 +7,10 @@ import {
   Table,
   Row,
   TextField,
-} from "@clutch/core";
+} from "@clutch-sh/core";
 
-import { useDataLayout } from "@clutch/data-layout";
-import { Wizard, WizardStep } from "@clutch/wizard";
-
-import type { WizardChild } from "@clutch/wizard";
-
-import type { WorkflowProps } from ".";
+import { useDataLayout } from "@clutch-sh/data-layout";
+import { Wizard, WizardStep } from "@clutch-sh/wizard";
 
 const AmiiboLookup: React.FC<WizardChild> = () => {
   const { onSubmit } = useWizardContext();

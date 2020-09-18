@@ -1,0 +1,32 @@
+{
+  "name": "@clutch-sh/server-experimentation",
+  "version": "0.0.0-beta",
+  "private": true,
+  "description": "Clutch Server Experimentation Workflows",
+  "license": "Apache-2.0",
+  "author": "clutch@lyft.com",
+  "main": "dist/index.js",
+  "scripts": {
+    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
+    "compile": "tsc -b",
+    "compile:dev": "tsc --sourceMap",
+    "compile:watch": "BABEL_ENV=build babel src --out-dir dist --source-maps --extensions .js,.jsx,.ts,.tsx --ignore **/tests --watch",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "lint:fix": "yarn run lint --fix",
+    "test": "jest --passWithNoTests",
+    "test:coverage": "yarn run test --collect-coverage",
+    "test:watch": "yarn run test --watch"
+  },
+  "dependencies": {
+    "@clutch-sh/api": "^0.0.0-beta",
+    "@clutch-sh/core": "^0.0.0-beta",
+    "@clutch-sh/data-layout": "^0.0.0-beta",
+    "@clutch-sh/wizard": "^0.0.0-beta",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "yup": "^0.29.0"
+  },
+  "devDependencies": {
+    "@clutch-sh/tools": "^0.0.0-beta"
+  }
+}

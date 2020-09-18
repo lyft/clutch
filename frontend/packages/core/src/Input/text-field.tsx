@@ -28,22 +28,26 @@ const TextField: React.FC<TextFieldProps & MuiTextFieldProps> = ({
   onChange,
   onReturn,
   maxWidth,
+  placeholder,
   ...props
 }) => {
   const onKeyDown = (
     e: React.KeyboardEvent<HTMLDivElement | HTMLTextAreaElement | HTMLInputElement>
   ) => {
-    onChange(e as React.ChangeEvent<any>);
+    if (onChange !== undefined) {
+      onChange(e as React.ChangeEvent<any>);
+    }
     if (e.keyCode === KEY_ENTER && onReturn) {
       onReturn();
     }
   };
 
+  const shrinkLabel = placeholder !== undefined || placeholder !== "";
   return (
     <StyledTextField
       data-max-width={maxWidth}
       color="secondary"
-      InputLabelProps={{ color: "secondary" }}
+      InputLabelProps={{ color: "secondary", shrink: shrinkLabel }}
       onKeyDown={e => onKeyDown(e)}
       onFocus={onChange}
       onBlur={onChange}

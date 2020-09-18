@@ -14,17 +14,17 @@ func TestApplyListOptions(t *testing.T) {
 
 	var testCases = []struct {
 		id                  string
-		listOptions         *k8sapiv1.ListPodsOptions
+		listOptions         *k8sapiv1.ListOptions
 		expectedListOptions metav1.ListOptions
 	}{
 		{
 			id:                  "noop",
-			listOptions:         &k8sapiv1.ListPodsOptions{},
+			listOptions:         &k8sapiv1.ListOptions{},
 			expectedListOptions: metav1.ListOptions{},
 		},
 		{
 			id: "adding label selectors",
-			listOptions: &k8sapiv1.ListPodsOptions{
+			listOptions: &k8sapiv1.ListOptions{
 				Labels: map[string]string{
 					"foo": "bar",
 					"key": "value",

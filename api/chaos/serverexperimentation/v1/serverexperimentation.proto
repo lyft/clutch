@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package clutch.chaos.serverexperimentation.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+import "api/v1/annotations.proto";
+
+option go_package = "serverexperimentationv1";
+
+message TestConfig {
+  oneof target {
+    ClusterPairTarget cluster_pair = 1;
+  }
+
+  oneof fault {
+    AbortFaultConfig abort = 2;
+    LatencyFaultConfig latency = 3;
+  }
+}
+
+// Targets requests from downstream_cluster -> upstream_cluster
+message ClusterPairTarget {
+  // The name of the downstream cluster
+  string downstream_cluster = 1 [ (validate.rules).string = {min_bytes : 1} ];
+
+  // The name of the upstream cluster
+  string upstream_cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message AbortFaultConfig {
+  // The percentage of requests that will be slowed down.
+  float percent = 1 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
+
+  // The abort HTTP status that will be returned.
+  int32 http_status = 2 [ (validate.rules).int32 = {gt : 99, lt : 600} ];
+}
+
+message LatencyFaultConfig {
+  // The percentage of requests that will be slowed down.
+  float percent = 1 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
+
+  // The latency duration in milliseconds.
+  int32 duration_ms = 2 [ (validate.rules).int32.gt = 0 ];
+}

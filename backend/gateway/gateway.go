@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/uber-go/tally"
@@ -32,27 +31,12 @@ type ComponentFactory struct {
 }
 
 func Run(f *Flags, cf *ComponentFactory, assets http.FileSystem) {
-	// Use a temporary logger to parse the configuration and output.
-	tmpLogger := newTmpLogger().With(zap.String("filename", f.ConfigPath))
-
-	var cfg gatewayv1.Config
-	if err := parseFile(f.ConfigPath, &cfg, f.Template); err != nil {
-		tmpLogger.Fatal("parsing configuration failed", zap.Error(err))
-	}
-	if err := cfg.Validate(); err != nil {
-		tmpLogger.Fatal("validating configuration failed", zap.Error(err))
-	}
-
-	if f.Validate {
-		tmpLogger.Info("configuration validation was successful")
-		os.Exit(0)
-	}
-
-	RunWithConfig(&cfg, cf, assets)
+	cfg := MustReadOrValidateConfig(f)
+	RunWithConfig(f, cfg, cf, assets)
 }
 
-func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory, assets http.FileSystem) {
-	// Init the logger.
+func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets http.FileSystem) {
+	// Init the server's logger.
 	logger, err := newLogger(cfg.Gateway.Logger)
 	if err != nil {
 		newTmpLogger().Fatal("could not instantiate logger", zap.Error(err))
@@ -62,6 +46,8 @@ func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory, assets http.File
 			panic(err)
 		}
 	}()
+
+	logger.Info("using configuration", zap.String("file", f.ConfigPath))
 
 	// Init stats.
 	var reporter tally.StatsReporter

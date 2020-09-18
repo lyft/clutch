@@ -29,6 +29,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	githubv1 "github.com/lyft/clutch/backend/api/config/service/github/v1"
+	scgithubv1 "github.com/lyft/clutch/backend/api/sourcecontrol/github/v1"
 	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
 	"github.com/lyft/clutch/backend/service"
 )
@@ -71,6 +72,8 @@ type Client interface {
 	CreatePullRequest(ctx context.Context, ref *RemoteRef, title, body string) (*PullRequestInfo, error)
 	CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error)
 	CreateIssueComment(ctx context.Context, ref *RemoteRef, number int, body string) error
+	CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error)
+	GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -272,4 +275,34 @@ func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, 
 	}
 
 	return f, nil
+}
+
+func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error) {
+	comp, _, err := s.rest.Repositories.CompareCommits(ctx, ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref)
+	if err != nil {
+		return nil, fmt.Errorf("Could not get compare status for %s and %s. %+v", ref.Ref, compareSHA, err)
+	}
+
+	status, ok := scgithubv1.CommitCompareStatus_value[strings.ToUpper(comp.GetStatus())]
+	if !ok {
+		return nil, fmt.Errorf("unknown status %s", comp.GetStatus())
+	}
+
+	return &scgithubv1.CommitComparison{
+		Status: scgithubv1.CommitCompareStatus(status),
+	}, nil
+}
+
+type Commit struct {
+	Files []*githubv3.CommitFile
+}
+
+func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
+	commit, _, err := s.rest.Repositories.GetCommit(ctx, ref.RepoOwner, ref.RepoName, ref.Ref)
+	if err != nil {
+		return nil, err
+	}
+	return &Commit{
+		Files: commit.Files,
+	}, nil
 }

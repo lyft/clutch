@@ -8,7 +8,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  SvgIcon,
   Typography,
 } from "@material-ui/core";
 import ExpandLess from "@material-ui/icons/ExpandLess";
@@ -52,7 +51,13 @@ const DrawerHeader = styled(Grid)`
   `}
 `;
 
-const GroupIcon = styled(SvgIcon)`
+const ExpandLessIcon = styled(ExpandLess)`
+  ${({ theme }) => `
+  color: ${theme.palette.primary.main};
+  `}
+`;
+
+const ExpandMoreIcon = styled(ExpandMore)`
   ${({ theme }) => `
   color: ${theme.palette.primary.main};
   `}
@@ -142,7 +147,7 @@ const Group: React.FC<GroupProps> = ({
           {heading}
         </GroupHeading>
         <Grid container justify="flex-end" data-qa="toggle">
-          {open ? <GroupIcon component={ExpandLess} /> : <GroupIcon component={ExpandMore} />}
+          {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </Grid>
       </ListItem>
       {!open ? <Divider variant="middle" /> : null}

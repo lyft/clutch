@@ -5,7 +5,7 @@ package clutch.k8s.v1;
 option go_package = "k8sv1";
 
 import "google/api/annotations.proto";
-import "google/protobuf/wrappers.proto";
+import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
@@ -20,12 +20,28 @@ service K8sAPI {
     option (clutch.api.v1.action).type = READ;
   }
 
+  rpc ListPods(ListPodsRequest) returns (ListPodsResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/listPods"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
   rpc DeletePod(DeletePodRequest) returns (DeletePodResponse) {
     option (google.api.http) = {
       post : "/v1/k8s/deletePod"
       body : "*"
     };
     option (clutch.api.v1.action).type = DELETE;
+  }
+
+  rpc UpdatePod(UpdatePodRequest) returns (UpdatePodResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/updatePod"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = UPDATE;
   }
 
   rpc ResizeHPA(ResizeHPARequest) returns (ResizeHPAResponse) {
@@ -114,8 +130,22 @@ message Pod {
   map<string, string> annotations = 10;
 }
 
-message ListPodsOptions {
+message ListOptions {
   map<string, string> labels = 9;
+}
+
+message ListPodsRequest {
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+
+  ListOptions options = 4 [ (validate.rules).message = {required : true} ];
+}
+
+message ListPodsResponse {
+  option (clutch.api.v1.reference).fields = "pods";
+
+  repeated Pod pods = 1;
 }
 
 message DeletePodRequest {
@@ -131,6 +161,32 @@ message DeletePodRequest {
 }
 
 message DeletePodResponse {
+}
+
+message UpdatePodRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Pod",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+
+  // Preconditions to check before updating the pod's metadata
+  //
+  // Note: An empty StringValue signals that the label/annotation should not be set
+  ExpectedObjectMetaFields expected_object_meta_fields = 5;
+
+  // Metadata fields to update
+  ObjectMetaFields object_meta_fields = 6;
+
+  // Metadata fields to remove
+  RemoveObjectMetaFields remove_object_meta_fields = 7;
+}
+
+message UpdatePodResponse {
 }
 
 message HPA {
@@ -217,12 +273,23 @@ message UpdateDeploymentRequest {
 message UpdateDeploymentResponse {
 }
 
+// This message type is used to add support for nullable strings and is an
+// alternative to the well-known `StringValue` type. We need it, because the
+// grpc-gateway used by Clutch deserializes a null `StringValue` as an empty
+// string.
+message NullableString {
+  oneof kind {
+    google.protobuf.NullValue null = 1;
+    string value = 2;
+  }
+}
+
 // Preconditions to check before updating an object's metadata.
 //
-// Note: An empty StringValue signals that the label/annotation should not be set.
+// Note: A `null` NullableString means that the label/annotation should not be set.
 message ExpectedObjectMetaFields {
-  map<string, google.protobuf.StringValue> labels = 1 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
-  map<string, google.protobuf.StringValue> annotations = 2 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+  map<string, NullableString> labels = 1 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+  map<string, NullableString> annotations = 2 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 // Metadata fields to update when updating an object
