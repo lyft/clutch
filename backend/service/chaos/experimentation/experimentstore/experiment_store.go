@@ -151,7 +151,8 @@ func (fs *experimentStore) StopExperiments(ctx context.Context, ids []uint64) er
 	return err
 }
 
-// GetExperiments gets all experiments
+// GetExperiments experiments with a given type of the configuration. Returns all experiments if provided configuration type
+// parameter is an emtpy string.
 func (fs *experimentStore) GetExperiments(ctx context.Context, configType string) ([]*experimentation.Experiment, error) {
 	sql := `
         SELECT experiment_run.id, details FROM experiment_config, experiment_run
