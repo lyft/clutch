@@ -2,7 +2,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
-LINKED_PACKAGES=("react" "react-dom" "react-router" "react-router-dom" "styled-components" "@material-ui/styles")
+LINKED_PACKAGES=("react" "react-dom" "react-router" "react-router-dom" "styled-components" "@material-ui/styles" "@material-ui/core")
 
 EXTERNAL_ROOT="${1}"
 YARN="${EXTERNAL_ROOT}/build/bin/yarn.sh"
@@ -23,10 +23,10 @@ cd "${REPO_ROOT}/frontend"
 
 # Link deps from core repo.
 cd node_modules
+NODE_MODULES_DIR=$(pwd)
 for package in "${LINKED_PACKAGES[@]}"; do
   cd "${package}"
-  "${YARN}" link
-  cd ..
+  cd "${NODE_MODULES_DIR}"
 done
 
 # Ensure yarn in destination directory
