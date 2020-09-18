@@ -178,7 +178,7 @@ var getExperimentsTests = []struct {
 }{
 	{
 		id:   "get all experiments",
-		sql:  `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id`,
+		sql:  `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`,
 		args: []driver.Value{"upstreamCluster", "downstreamCluster", 1},
 		rows: [][]driver.Value{
 			{
