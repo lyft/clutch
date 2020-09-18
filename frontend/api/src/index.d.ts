@@ -2491,8 +2491,8 @@ export namespace clutch {
                 /** Properties of a GetExperimentsRequest. */
                 interface IGetExperimentsRequest {
 
-                    /** GetExperimentsRequest ids */
-                    ids?: ((number|Long)[]|null);
+                    /** GetExperimentsRequest configType */
+                    configType?: (string|null);
                 }
 
                 /** Represents a GetExperimentsRequest. */
@@ -2504,8 +2504,8 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.experimentation.v1.IGetExperimentsRequest);
 
-                    /** GetExperimentsRequest ids. */
-                    public ids: (number|Long)[];
+                    /** GetExperimentsRequest configType. */
+                    public configType: string;
 
                     /**
                      * Verifies a GetExperimentsRequest message.

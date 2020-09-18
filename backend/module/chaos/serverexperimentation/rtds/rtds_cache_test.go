@@ -1,6 +1,7 @@
 package rtds
 
 import (
+	"context"
 	"fmt"
 	"testing"
 
@@ -121,6 +122,13 @@ func TestSetSnapshot(t *testing.T) {
 	assert.EqualValues(t, 404, fields["fault.http.serviceB.abort.http_status"].GetNumberValue())
 	assert.EqualValues(t, 30, fields["fault.http.serviceD.delay.fixed_delay_percent"].GetNumberValue())
 	assert.EqualValues(t, 100, fields["fault.http.serviceD.delay.fixed_duration_ms"].GetNumberValue())
+}
+
+func TestRefreshCache(t *testing.T) {
+	es := &mockExperimentStore{}
+	testCache := gcpCache.NewSnapshotCache(false, gcpCache.IDHash{}, nil)
+	refreshCache(context.Background(), es, testCache, "test_layer", nil)
+	assert.Equal(t, es.getExperimentArguments.configType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig")
 }
 
 func TestCreateRuntimeKeys(t *testing.T) {

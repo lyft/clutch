@@ -178,7 +178,7 @@ var getExperimentsTests = []struct {
 }{
 	{
 		id:   "get all experiments",
-		sql:  `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id`,
+		sql:  `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`,
 		args: []driver.Value{"upstreamCluster", "downstreamCluster", 1},
 		rows: [][]driver.Value{
 			{
@@ -205,7 +205,7 @@ func TestGetExperiments(t *testing.T) {
 			es := &experimentStore{db: db}
 			defer es.Close()
 
-			expected := mock.ExpectQuery(regexp.QuoteMeta(test.sql))
+			expected := mock.ExpectQuery(regexp.QuoteMeta(test.sql)).WithArgs("foo")
 			if test.err != nil {
 				expected.WillReturnError(test.err)
 			} else {
@@ -216,7 +216,7 @@ func TestGetExperiments(t *testing.T) {
 				expected.WillReturnRows(rows)
 			}
 
-			experiments, err := es.GetExperiments(context.Background())
+			experiments, err := es.GetExperiments(context.Background(), "foo")
 			if test.err != nil {
 				a.Equal(test.err, err)
 			} else {

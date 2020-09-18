@@ -5830,7 +5830,7 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a GetExperimentsRequest.
                      * @memberof clutch.chaos.experimentation.v1
                      * @interface IGetExperimentsRequest
-                     * @property {Array.<number|Long>|null} [ids] GetExperimentsRequest ids
+                     * @property {string|null} [configType] GetExperimentsRequest configType
                      */
 
                     /**
@@ -5842,7 +5842,6 @@ export const clutch = $root.clutch = (() => {
                      * @param {clutch.chaos.experimentation.v1.IGetExperimentsRequest=} [properties] Properties to set
                      */
                     function GetExperimentsRequest(properties) {
-                        this.ids = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -5850,12 +5849,12 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * GetExperimentsRequest ids.
-                     * @member {Array.<number|Long>} ids
+                     * GetExperimentsRequest configType.
+                     * @member {string} configType
                      * @memberof clutch.chaos.experimentation.v1.GetExperimentsRequest
                      * @instance
                      */
-                    GetExperimentsRequest.prototype.ids = $util.emptyArray;
+                    GetExperimentsRequest.prototype.configType = "";
 
                     /**
                      * Verifies a GetExperimentsRequest message.
@@ -5868,13 +5867,9 @@ export const clutch = $root.clutch = (() => {
                     GetExperimentsRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.ids != null && message.hasOwnProperty("ids")) {
-                            if (!Array.isArray(message.ids))
-                                return "ids: array expected";
-                            for (let i = 0; i < message.ids.length; ++i)
-                                if (!$util.isInteger(message.ids[i]) && !(message.ids[i] && $util.isInteger(message.ids[i].low) && $util.isInteger(message.ids[i].high)))
-                                    return "ids: integer|Long[] expected";
-                        }
+                        if (message.configType != null && message.hasOwnProperty("configType"))
+                            if (!$util.isString(message.configType))
+                                return "configType: string expected";
                         return null;
                     };
 
@@ -5890,20 +5885,8 @@ export const clutch = $root.clutch = (() => {
                         if (object instanceof $root.clutch.chaos.experimentation.v1.GetExperimentsRequest)
                             return object;
                         let message = new $root.clutch.chaos.experimentation.v1.GetExperimentsRequest();
-                        if (object.ids) {
-                            if (!Array.isArray(object.ids))
-                                throw TypeError(".clutch.chaos.experimentation.v1.GetExperimentsRequest.ids: array expected");
-                            message.ids = [];
-                            for (let i = 0; i < object.ids.length; ++i)
-                                if ($util.Long)
-                                    (message.ids[i] = $util.Long.fromValue(object.ids[i])).unsigned = true;
-                                else if (typeof object.ids[i] === "string")
-                                    message.ids[i] = parseInt(object.ids[i], 10);
-                                else if (typeof object.ids[i] === "number")
-                                    message.ids[i] = object.ids[i];
-                                else if (typeof object.ids[i] === "object")
-                                    message.ids[i] = new $util.LongBits(object.ids[i].low >>> 0, object.ids[i].high >>> 0).toNumber(true);
-                        }
+                        if (object.configType != null)
+                            message.configType = String(object.configType);
                         return message;
                     };
 
@@ -5920,16 +5903,10 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.arrays || options.defaults)
-                            object.ids = [];
-                        if (message.ids && message.ids.length) {
-                            object.ids = [];
-                            for (let j = 0; j < message.ids.length; ++j)
-                                if (typeof message.ids[j] === "number")
-                                    object.ids[j] = options.longs === String ? String(message.ids[j]) : message.ids[j];
-                                else
-                                    object.ids[j] = options.longs === String ? $util.Long.prototype.toString.call(message.ids[j]) : options.longs === Number ? new $util.LongBits(message.ids[j].low >>> 0, message.ids[j].high >>> 0).toNumber(true) : message.ids[j];
-                        }
+                        if (options.defaults)
+                            object.configType = "";
+                        if (message.configType != null && message.hasOwnProperty("configType"))
+                            object.configType = message.configType;
                         return object;
                     };
 

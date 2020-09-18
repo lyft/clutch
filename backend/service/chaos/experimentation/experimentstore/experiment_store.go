@@ -27,7 +27,7 @@ const Name = "clutch.service.chaos.experimentation.store"
 type ExperimentStore interface {
 	CreateExperiment(context.Context, *any.Any, *time.Time, *time.Time) (*experimentation.Experiment, error)
 	StopExperiments(context.Context, []uint64) error
-	GetExperiments(context.Context) ([]*experimentation.Experiment, error)
+	GetExperiments(ctx context.Context, configType string) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
 	Close()
 }
@@ -151,13 +151,16 @@ func (fs *experimentStore) StopExperiments(ctx context.Context, ids []uint64) er
 	return err
 }
 
-// GetExperiments gets all experiments
-func (fs *experimentStore) GetExperiments(ctx context.Context) ([]*experimentation.Experiment, error) {
+// GetExperiments experiments with a given type of the configuration. Returns all experiments if provided configuration type
+// parameter is an emtpy string.
+func (fs *experimentStore) GetExperiments(ctx context.Context, configType string) ([]*experimentation.Experiment, error) {
 	sql := `
         SELECT experiment_run.id, details FROM experiment_config, experiment_run
-        WHERE experiment_config.id = experiment_run.experiment_config_id`
+			WHERE
+				experiment_config.id = experiment_run.experiment_config_id
+				AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`
 
-	rows, err := fs.db.QueryContext(ctx, sql)
+	rows, err := fs.db.QueryContext(ctx, sql, configType)
 	if err != nil {
 		return nil, err
 	}
