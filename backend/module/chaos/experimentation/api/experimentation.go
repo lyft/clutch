@@ -27,10 +27,10 @@ const (
 type Service struct {
 	experimentStore             experimentstore.ExperimentStore
 	logger                      *zap.SugaredLogger
-	createExperimentsStat       tally.Counter
+	createExperimentStat        tally.Counter
 	getExperimentsStat          tally.Counter
 	getExperimentRunDetailsStat tally.Counter
-	deleteExperimentsStat       tally.Counter
+	cancelExperimentStat        tally.Counter
 }
 
 // New instantiates a Service object.
@@ -49,10 +49,10 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 	return &Service{
 		experimentStore:             experimentStore,
 		logger:                      logger.Sugar(),
-		createExperimentsStat:       apiScope.Counter("create_experiments"),
+		createExperimentStat:        apiScope.Counter("create_experiment"),
 		getExperimentsStat:          apiScope.Counter("get_experiments"),
 		getExperimentRunDetailsStat: apiScope.Counter("get_experiment_run_config_pair_details"),
-		deleteExperimentsStat:       apiScope.Counter("delete_experiments"),
+		cancelExperimentStat:        apiScope.Counter("cancel_experiment"),
 	}, nil
 }
 
@@ -63,7 +63,7 @@ func (s *Service) Register(r module.Registrar) error {
 
 // CreateExperiments adds experiments to the experiment store.
 func (s *Service) CreateExperiment(ctx context.Context, req *experimentation.CreateExperimentRequest) (*experimentation.CreateExperimentResponse, error) {
-	s.createExperimentsStat.Inc(1)
+	s.createExperimentStat.Inc(1)
 
 	// If start time is not provided, default to starting now
 	now := time.Now()
@@ -88,6 +88,17 @@ func (s *Service) CreateExperiment(ctx context.Context, req *experimentation.Cre
 	return &experimentation.CreateExperimentResponse{Experiment: experiment}, nil
 }
 
+// CancelExperiment stops experiments that are currently running.
+func (s *Service) CancelExperiment(ctx context.Context, req *experimentation.CancelExperimentRequest) (*experimentation.CancelExperimentResponse, error) {
+	s.cancelExperimentStat.Inc(1)
+	err := s.experimentStore.CancelExperiment(ctx, req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &experimentation.CancelExperimentResponse{}, nil
+}
+
 // GetExperiments returns all experiments from the experiment store.
 func (s *Service) GetExperiments(ctx context.Context, request *experimentation.GetExperimentsRequest) (*experimentation.GetExperimentsResponse, error) {
 	s.getExperimentsStat.Inc(1)
@@ -107,15 +118,4 @@ func (s *Service) GetExperimentRunDetails(ctx context.Context, request *experime
 	}
 
 	return &experimentation.GetExperimentRunDetailsResponse{RunDetails: runDetails}, nil
-}
-
-// StopExperiments stops experiments that are currently running.
-func (s *Service) StopExperiments(ctx context.Context, req *experimentation.StopExperimentsRequest) (*experimentation.StopExperimentsResponse, error) {
-	s.deleteExperimentsStat.Inc(1)
-	err := s.experimentStore.StopExperiments(ctx, req.Ids)
-	if err != nil {
-		return nil, err
-	}
-
-	return &experimentation.StopExperimentsResponse{}, nil
 }

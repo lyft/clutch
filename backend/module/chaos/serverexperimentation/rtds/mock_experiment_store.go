@@ -21,7 +21,7 @@ func (fs *mockExperimentStore) CreateExperiment(ctx context.Context, config *any
 	return nil, nil
 }
 
-func (fs *mockExperimentStore) StopExperiments(ctx context.Context, ids []uint64) error {
+func (fs *mockExperimentStore) CancelExperiment(ctx context.Context, id uint64) error {
 	return nil
 }
 
