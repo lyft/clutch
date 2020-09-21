@@ -1,7 +1,6 @@
 package topology
 
 import (
-	"context"
 	"database/sql"
 	"errors"
 
@@ -17,15 +16,7 @@ import (
 
 const Name = "clutch.service.topology"
 
-type Service interface {
-	GetByID(ctx context.Context, key string, resolverTypeUrl string)
-	GetByLabel(ctx context.Context, labels map[string]string, resolverTypeUrl string)
-
-	SetCache(ctx context.Context, key string, resolverTypeUrl string, data []byte, metadata map[string]string)
-	DeleteCache(ctx context.Context, key string)
-
-	deleteExpiredCache()
-}
+type Service interface{}
 
 type client struct {
 	config *topologyv1.Config
