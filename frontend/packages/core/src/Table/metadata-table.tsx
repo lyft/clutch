@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers";
 import { Table, TableBody, TableCell, TableContainer, TableRow } from "@material-ui/core";
 import type { Size } from "@material-ui/core/TableCell";
 import _ from "lodash";
+import styled from "styled-components";
 import type { Schema } from "yup";
 import { object } from "yup";
 
@@ -30,15 +31,19 @@ interface KeyCellProps {
   size: Size;
 }
 
+const StyledKeyCell = styled(TableCell)`
+  width: 50%;
+`;
+
 const KeyCell: React.FC<KeyCellProps> = ({ data, size }) => {
   let { name } = data;
   if (data.value instanceof Array && data.value.length > 1) {
     name = `${data.name}s`;
   }
   return (
-    <TableCell size={size}>
+    <StyledKeyCell size={size}>
       <strong>{name}</strong>
-    </TableCell>
+    </StyledKeyCell>
   );
 };
 
@@ -66,11 +71,18 @@ const ViewOnlyRow: React.FC<ViewOnlyRowProps> = ({ data, size }) => {
 interface EditableRowProps {
   data: IdentifiableRowData;
   onUpdate: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
+  onReturn: () => void;
   validation: any;
   size: Size;
 }
 
-const EditableRow: React.FC<EditableRowProps> = ({ data, onUpdate, validation, size }) => {
+const EditableRow: React.FC<EditableRowProps> = ({
+  data,
+  onUpdate,
+  onReturn,
+  validation,
+  size,
+}) => {
   const error = validation.errors?.[data.name];
 
   return (
@@ -86,19 +98,18 @@ const EditableRow: React.FC<EditableRowProps> = ({ data, onUpdate, validation, s
           InputProps={{ margin: "dense", color: "secondary", name: data.name }}
           inputProps={data?.input}
           onChange={onUpdate}
+          onReturn={onReturn}
           onFocus={onUpdate}
           inputRef={validation.register}
           helperText={error?.message || ""}
           error={!!error || false}
           maxWidth="50%"
+          style={{ marginLeft: 0 }}
         />
       </TableCell>
     </TableRow>
   );
 };
-
-const Wrapper: React.FC<{ editable: boolean }> = ({ editable, children }) =>
-  editable ? <form>{children}</form> : <>{children}</>;
 
 interface MetadataTableProps {
   data: RowData[];
@@ -114,7 +125,7 @@ const MetadataTable: React.FC<MetadataTableProps> = ({
   ...props
 }) => {
   const displayVariant = variant || "medium";
-  const { setOnSubmit } = useWizardContext();
+  const { onSubmit, setOnSubmit } = useWizardContext();
   let rows = data;
   if (_.isEmpty(data)) {
     rows = [{ name: "Error", value: "No Data Available" }];
@@ -144,26 +155,25 @@ const MetadataTable: React.FC<MetadataTableProps> = ({
   return (
     <TableContainer {...props}>
       {process.env.REACT_APP_DEBUG_FORMS && onUpdate !== undefined && <DevTool control={control} />}
-      <Wrapper editable={onUpdate !== undefined}>
-        <Table {...props}>
-          <TableBody>
-            {rows.map((row: IdentifiableRowData) => {
-              return row.input !== undefined && onUpdate ? (
-                <EditableRow
-                  data={row}
-                  onUpdate={e => onUpdate(e.target.id, e.target.value)}
-                  key={row.id}
-                  validation={validation}
-                  size={displayVariant}
-                />
-              ) : (
-                <ViewOnlyRow data={row} key={row.id} size={displayVariant} />
-              );
-            })}
-            {children}
-          </TableBody>
-        </Table>
-      </Wrapper>
+      <Table {...props}>
+        <TableBody>
+          {rows.map((row: IdentifiableRowData) => {
+            return row.input !== undefined && onUpdate ? (
+              <EditableRow
+                data={row}
+                onUpdate={e => onUpdate(e.target.id, e.target.value)}
+                onReturn={onSubmit}
+                key={row.id}
+                validation={validation}
+                size={displayVariant}
+              />
+            ) : (
+              <ViewOnlyRow data={row} key={row.id} size={displayVariant} />
+            );
+          })}
+          {children}
+        </TableBody>
+      </Table>
     </TableContainer>
   );
 };
