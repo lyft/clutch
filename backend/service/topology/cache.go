@@ -22,9 +22,7 @@ func (c *client) processTopologyObjectChannel(objs chan types.TopologyObject) {
 	for {
 		obj := <-objs
 		switch obj.Action {
-		case types.CREATE:
-			c.SetCache(obj)
-		case types.UPDATE:
+		case types.UPSERT:
 			c.SetCache(obj)
 		case types.DELETE:
 			c.DeleteCache(obj)
@@ -71,7 +69,7 @@ func (c *client) SetCache(obj types.TopologyObject) {
 		context.Background(),
 		upsertQuery,
 		obj.Id,
-		obj.ResolverTypeURL,
+		obj.Pb.GetTypeUrl(),
 		dataJson,
 		metadataJson,
 	)

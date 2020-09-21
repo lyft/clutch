@@ -53,12 +53,12 @@ func (s *svc) startInformers(cs ContextClientset, stop chan struct{}) {
 
 func (s *svc) informerAddHandler(obj interface{}) {
 	log.Print("Add Handler")
-	s.processInformerEvent(obj, types.CREATE)
+	s.processInformerEvent(obj, types.UPSERT)
 }
 
 func (s *svc) informerUpdateHandler(oldObj, newObj interface{}) {
 	log.Print("Update Handler")
-	s.processInformerEvent(newObj, types.UPDATE)
+	s.processInformerEvent(newObj, types.UPSERT)
 }
 
 func (s *svc) informerDeleteHandler(obj interface{}) {
@@ -66,37 +66,34 @@ func (s *svc) informerDeleteHandler(obj interface{}) {
 	s.processInformerEvent(obj, types.DELETE)
 }
 
-func (s *svc) processInformerEvent(obj interface{}, action types.Action) {
+func (s *svc) processInformerEvent(obj interface{}, action types.TopologyCacheAction) {
 	switch obj.(type) {
 	case *corev1.Pod:
 		pod := podDescription(obj.(*corev1.Pod), "")
 		protoPod, _ := ptypes.MarshalAny(pod)
 		s.TopologyObjectChan <- types.TopologyObject{
-			Id:              pod.Name,
-			ResolverTypeURL: protoPod.GetTypeUrl(),
-			Pb:              protoPod,
-			Metadata:        pod.GetLabels(),
-			Action:          action,
+			Id:       pod.Name,
+			Pb:       protoPod,
+			Metadata: pod.GetLabels(),
+			Action:   action,
 		}
 	case *appsv1.Deployment:
 		deployment := ProtoForDeployment("", obj.(*appsv1.Deployment))
 		protoDeployment, _ := ptypes.MarshalAny(deployment)
 		s.TopologyObjectChan <- types.TopologyObject{
-			Id:              deployment.Name,
-			ResolverTypeURL: protoDeployment.GetTypeUrl(),
-			Pb:              protoDeployment,
-			Metadata:        deployment.GetLabels(),
-			Action:          action,
+			Id:       deployment.Name,
+			Pb:       protoDeployment,
+			Metadata: deployment.GetLabels(),
+			Action:   action,
 		}
 	case *autoscalingv1.HorizontalPodAutoscaler:
 		hpa := ProtoForHPA("", obj.(*autoscalingv1.HorizontalPodAutoscaler))
 		protoHpa, _ := ptypes.MarshalAny(hpa)
 		s.TopologyObjectChan <- types.TopologyObject{
-			Id:              hpa.Name,
-			ResolverTypeURL: protoHpa.GetTypeUrl(),
-			Pb:              protoHpa,
-			Metadata:        hpa.GetLabels(),
-			Action:          action,
+			Id:       hpa.Name,
+			Pb:       protoHpa,
+			Metadata: hpa.GetLabels(),
+			Action:   action,
 		}
 	default:
 		s.log.Warn("unable to determin topology object type")
