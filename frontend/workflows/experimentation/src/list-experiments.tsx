@@ -81,7 +81,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, experimentTy
 
   const navigate = useNavigate();
 
-  if (experiments === undefined) {
+  React.useEffect(() => {
     client
       .post("/v1/chaos/experimentation/getExperiments")
       .then(response => {
@@ -90,7 +90,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, experimentTy
       .catch(err => {
         setError(err.response.statusText);
       });
-  }
+  }, []);
 
   const types = experimentTypes || [];
   let links: ExperimentTypeLinkProps[] = [];
