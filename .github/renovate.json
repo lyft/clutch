@@ -23,12 +23,18 @@
   },
   "packageRules": [
     {
-      "packageNames": ["github.com/aws/aws-sdk-go"],
+      "packageNames": ["github.com/aws/aws-sdk-go", "google.golang.org/genproto"],
       "extends": ["schedule:weekly"]
     }
   ],
   "postUpdateOptions": [
     "gomodTidy"
   ],
-  "yarnrc": ""
+  "yarnrc": "",
+  "ignoreDeps": [
+    "@date-io/core",
+    "babel-jest",
+    "eslint",
+    "jest"
+  ]
 }

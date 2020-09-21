@@ -41,7 +41,7 @@ export interface WorkflowConfiguration extends BaseWorkflowConfiguration {
 }
 
 interface Route {
-  component: React.FC;
+  component: React.FC<any>;
   description: string;
   displayName?: string;
   path: string;
@@ -138,7 +138,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
               </RightAlignedButton>
             </DialogTitle>
             <DialogContent dividers>
-              <DialogContentText tabIndex={-1} component="div">
+              <DialogContentText color="textPrimary" tabIndex={-1} component="div">
                 {errorInfo.componentStack.split("\n").map((i, key) => {
                   /* eslint-disable-next-line react/no-array-index-key */
                   return <div key={key}>{i}</div>;

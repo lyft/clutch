@@ -2,33 +2,59 @@ syntax = "proto3";
 
 package clutch.chaos.experimentation.v1;
 
+import "api/v1/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
-import "api/v1/annotations.proto";
+import "chaos/experimentation/v1/experiment_run_details.proto";
 
 option go_package = "experimentationv1";
 
 message Experiment {
   fixed64 id = 1;
+
+  // The experiment configuration specific to the type of experiment
   google.protobuf.Any config = 2;
+
+  // The time when the experiment should start. If unspecified, defaults to 'now'
+  google.protobuf.Timestamp start_time = 3;
+
+  // The time when the experiment should end, If unspecified, the experiment runs indefinitely unless it is manually
+  // stopped by a user.
+  google.protobuf.Timestamp end_time = 4;
 }
 
-message CreateExperimentsRequest {
-  repeated Experiment experiments = 1 [ (validate.rules).repeated = {min_items : 1} ];
+message CreateExperimentRequest {
+  // The experiment configuration specific to the type of experiment
+  google.protobuf.Any config = 1;
+
+  // The time when the experiment should start. If unspecified, defaults to 'now'
+  google.protobuf.Timestamp start_time = 2;
+
+  // The time when the experiment should end, If unspecified, the experiment runs indefinitely.
+  google.protobuf.Timestamp end_time = 3;
 }
 
-message CreateExperimentsResponse {
-  repeated Experiment experiments = 1;
+message CreateExperimentResponse {
+  Experiment experiment = 1;
 }
 
 message GetExperimentsRequest {
-  repeated uint64 ids = 1;
+  string config_type = 1;
 }
 
 message GetExperimentsResponse {
-  repeated Experiment experiments = 3;
+  repeated Experiment experiments = 1;
+}
+
+message GetExperimentRunDetailsRequest {
+  uint64 id = 1;
+}
+
+message GetExperimentRunDetailsResponse {
+  ExperimentRunDetails run_details = 1;
 }
 
 message StopExperimentsRequest {
@@ -40,25 +66,32 @@ message StopExperimentsResponse {
 
 // Simple CRUD API for experiments
 service ExperimentsAPI {
-  rpc CreateExperiments(CreateExperimentsRequest) returns (CreateExperimentsResponse) {
+  rpc CreateExperiment(CreateExperimentRequest) returns (CreateExperimentResponse) {
     option (google.api.http) = {
-      post : "/v1/experiments/create"
+      post : "/v1/chaos/experimentation/createExperiment"
       body : "*"
     };
     option (clutch.api.v1.action).type = CREATE;
   }
   rpc GetExperiments(GetExperimentsRequest) returns (GetExperimentsResponse) {
     option (google.api.http) = {
-      post : "/v1/experiments/get"
+      post : "/v1/chaos/experimentation/getExperiments"
       body : "*"
     };
     option (clutch.api.v1.action).type = READ;
   }
   rpc StopExperiments(StopExperimentsRequest) returns (StopExperimentsResponse) {
     option (google.api.http) = {
-      post : "/v1/experiments/stop"
+      post : "/v1/chaos/experimentation/stopExperiments"
       body : "*"
     };
     option (clutch.api.v1.action).type = DELETE;
+  }
+  rpc GetExperimentRunDetails(GetExperimentRunDetailsRequest) returns (GetExperimentRunDetailsResponse) {
+    option (google.api.http) = {
+      post : "/v1/chaos/experimentation/getExperimentRunDetails"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
   }
 }

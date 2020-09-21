@@ -5,7 +5,7 @@ package clutch.k8s.v1;
 option go_package = "k8sv1";
 
 import "google/api/annotations.proto";
-import "google/protobuf/wrappers.proto";
+import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
@@ -273,12 +273,23 @@ message UpdateDeploymentRequest {
 message UpdateDeploymentResponse {
 }
 
+// This message type is used to add support for nullable strings and is an
+// alternative to the well-known `StringValue` type. We need it, because the
+// grpc-gateway used by Clutch deserializes a null `StringValue` as an empty
+// string.
+message NullableString {
+  oneof kind {
+    google.protobuf.NullValue null = 1;
+    string value = 2;
+  }
+}
+
 // Preconditions to check before updating an object's metadata.
 //
-// Note: An empty StringValue signals that the label/annotation should not be set.
+// Note: A `null` NullableString means that the label/annotation should not be set.
 message ExpectedObjectMetaFields {
-  map<string, google.protobuf.StringValue> labels = 1 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
-  map<string, google.protobuf.StringValue> annotations = 2 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+  map<string, NullableString> labels = 1 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+  map<string, NullableString> annotations = 2 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 // Metadata fields to update when updating an object

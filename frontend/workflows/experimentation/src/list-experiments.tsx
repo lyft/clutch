@@ -27,6 +27,8 @@ const ExperimentData: React.FC<ExperimentationDataProps> = ({
 
   const registeredExperimentType = types[experiment.config["@type"]];
 
+  const navigate = useNavigate();
+
   const mapperExists = Object.prototype.hasOwnProperty.call(registeredExperimentType, "mapping");
   const model = mapperExists ? registeredExperimentType.mapping(experiment.config) : experiment;
 
@@ -41,7 +43,15 @@ const ExperimentData: React.FC<ExperimentationDataProps> = ({
     return value ?? "Unknown";
   });
 
-  return <Row data={data} />;
+  return (
+    <Row
+      hover
+      onClick={() => {
+        navigate(`/experimentation/run/${experiment.id}`);
+      }}
+      data={data}
+    />
+  );
 };
 
 const Layout = styled(Container)`
@@ -71,7 +81,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, experimentTy
 
   if (experiments.length === 0) {
     client
-      .post("/v1/experiments/get")
+      .post("/v1/chaos/experimentation/getExperiments")
       .then(response => {
         setExperiments(response?.data?.experiments || []);
       })

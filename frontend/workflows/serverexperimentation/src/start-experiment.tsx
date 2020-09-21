@@ -161,12 +161,8 @@ const createExperiment = (data: IClutch.chaos.serverexperimentation.v1.ITestConf
   const testConfig = data;
   testConfig["@type"] = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig";
 
-  return client.post("/v1/experiments/create", {
-    experiments: [
-      {
-        config: testConfig,
-      },
-    ],
+  return client.post("/v1/chaos/experimentation/createExperiment", {
+    config: testConfig,
   });
 };
 

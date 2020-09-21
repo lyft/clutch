@@ -3,14 +3,16 @@ package experimentstore
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"regexp"
 	"testing"
+	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 )
 
@@ -25,9 +27,11 @@ type testQuery struct {
 }
 
 type experimentTest struct {
-	id          string
-	experiments []*experimentation.Experiment
-	queries     []*testQuery
+	id        string
+	config    *any.Any
+	startTime time.Time
+	queries   []*testQuery
+	err       error
 }
 
 func createExperimentsTests() ([]experimentTest, error) {
@@ -53,12 +57,9 @@ func createExperimentsTests() ([]experimentTest, error) {
 
 	return []experimentTest{
 		{
-			id: "create experiment",
-			experiments: []*experimentation.Experiment{
-				{
-					Config: anyConfig,
-				},
-			},
+			id:        "create experiment",
+			config:    anyConfig,
+			startTime: time.Now(),
 			queries: []*testQuery{
 				{
 					sql: `INSERT INTO experiment_config (id, details) VALUES ($1, $2)`,
@@ -68,16 +69,21 @@ func createExperimentsTests() ([]experimentTest, error) {
 					},
 				},
 				{
-					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, tstzrange(NOW(), NULL), NOW())`,
+					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, scheduled_end_time, creation_time) VALUES ($1, $2, tstzrange($3, $4, '[]'), $4, NOW())`,
 					args: []driver.Value{
+						sqlmock.AnyArg(),
+						sqlmock.AnyArg(),
 						sqlmock.AnyArg(),
 						sqlmock.AnyArg(),
 					},
 				},
 			},
+			err: nil,
 		},
 		{
-			id: "create empty experiments",
+			id:        "create empty experiments",
+			startTime: time.Now(),
+			err:       errors.New("empty config"),
 		},
 	}, nil
 }
@@ -109,8 +115,8 @@ func TestCreateExperiments(t *testing.T) {
 			}
 			mock.ExpectCommit()
 
-			err = es.CreateExperiments(context.Background(), test.experiments)
-			a.NoError(err)
+			_, err = es.CreateExperiment(context.Background(), test.config, &test.startTime, nil)
+			a.Equal(test.err, err)
 		})
 	}
 }
@@ -125,7 +131,7 @@ var deleteExperimentsTests = []struct {
 	{
 		id:   "delete specific experiment",
 		ids:  []uint64{1},
-		sql:  `DELETE FROM experiment_run WHERE id = $1`,
+		sql:  `UPDATE experiment_run SET execution_time = tstzrange(lower(execution_time), NOW(), '[]') WHERE id = $1 AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`,
 		args: []driver.Value{1},
 	},
 }
@@ -172,7 +178,7 @@ var getExperimentsTests = []struct {
 }{
 	{
 		id:   "get all experiments",
-		sql:  `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id`,
+		sql:  `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`,
 		args: []driver.Value{"upstreamCluster", "downstreamCluster", 1},
 		rows: [][]driver.Value{
 			{
@@ -199,7 +205,7 @@ func TestGetExperiments(t *testing.T) {
 			es := &experimentStore{db: db}
 			defer es.Close()
 
-			expected := mock.ExpectQuery(regexp.QuoteMeta(test.sql))
+			expected := mock.ExpectQuery(regexp.QuoteMeta(test.sql)).WithArgs("foo")
 			if test.err != nil {
 				expected.WillReturnError(test.err)
 			} else {
@@ -210,7 +216,7 @@ func TestGetExperiments(t *testing.T) {
 				expected.WillReturnRows(rows)
 			}
 
-			experiments, err := es.GetExperiments(context.Background())
+			experiments, err := es.GetExperiments(context.Background(), "foo")
 			if test.err != nil {
 				a.Equal(test.err, err)
 			} else {
