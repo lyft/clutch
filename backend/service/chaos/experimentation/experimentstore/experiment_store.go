@@ -26,7 +26,7 @@ const Name = "clutch.service.chaos.experimentation.store"
 // ExperimentStore stores experiment data
 type ExperimentStore interface {
 	CreateExperiment(context.Context, *any.Any, *time.Time, *time.Time) (*experimentation.Experiment, error)
-	StopExperiments(context.Context, []uint64) error
+	CancelExperimentRun(context.Context, uint64) error
 	GetExperiments(ctx context.Context, configType string) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
 	Close()
@@ -140,17 +140,13 @@ func toProto(t *time.Time) (*timestamp.Timestamp, error) {
 	return timestampProto, nil
 }
 
-func (fs *experimentStore) StopExperiments(ctx context.Context, ids []uint64) error {
-	if len(ids) != 1 {
-		// TODO: This API will be changed to take a single ID as a parameter
-		return errors.New("A single ID must be provided")
-	}
+func (fs *experimentStore) CancelExperimentRun(ctx context.Context, id uint64) error {
 	sql :=
 		`UPDATE experiment_run 
          SET execution_time = tstzrange(lower(execution_time), NOW(), '[]') 
          WHERE id = $1 AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
 
-	_, err := fs.db.ExecContext(ctx, sql, ids[0])
+	_, err := fs.db.ExecContext(ctx, sql, id)
 	return err
 }
 

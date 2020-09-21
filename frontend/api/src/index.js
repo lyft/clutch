@@ -6261,25 +6261,24 @@ export const clutch = $root.clutch = (() => {
                     return GetExperimentRunDetailsResponse;
                 })();
 
-                v1.StopExperimentsRequest = (function() {
+                v1.CancelExperimentRunRequest = (function() {
 
                     /**
-                     * Properties of a StopExperimentsRequest.
+                     * Properties of a CancelExperimentRunRequest.
                      * @memberof clutch.chaos.experimentation.v1
-                     * @interface IStopExperimentsRequest
-                     * @property {Array.<number|Long>|null} [ids] StopExperimentsRequest ids
+                     * @interface ICancelExperimentRunRequest
+                     * @property {number|Long|null} [id] CancelExperimentRunRequest id
                      */
 
                     /**
-                     * Constructs a new StopExperimentsRequest.
+                     * Constructs a new CancelExperimentRunRequest.
                      * @memberof clutch.chaos.experimentation.v1
-                     * @classdesc Represents a StopExperimentsRequest.
-                     * @implements IStopExperimentsRequest
+                     * @classdesc Represents a CancelExperimentRunRequest.
+                     * @implements ICancelExperimentRunRequest
                      * @constructor
-                     * @param {clutch.chaos.experimentation.v1.IStopExperimentsRequest=} [properties] Properties to set
+                     * @param {clutch.chaos.experimentation.v1.ICancelExperimentRunRequest=} [properties] Properties to set
                      */
-                    function StopExperimentsRequest(properties) {
-                        this.ids = [];
+                    function CancelExperimentRunRequest(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -6287,120 +6286,112 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * StopExperimentsRequest ids.
-                     * @member {Array.<number|Long>} ids
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsRequest
+                     * CancelExperimentRunRequest id.
+                     * @member {number|Long} id
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunRequest
                      * @instance
                      */
-                    StopExperimentsRequest.prototype.ids = $util.emptyArray;
+                    CancelExperimentRunRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
 
                     /**
-                     * Verifies a StopExperimentsRequest message.
+                     * Verifies a CancelExperimentRunRequest message.
                      * @function verify
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsRequest
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunRequest
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    StopExperimentsRequest.verify = function verify(message) {
+                    CancelExperimentRunRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.ids != null && message.hasOwnProperty("ids")) {
-                            if (!Array.isArray(message.ids))
-                                return "ids: array expected";
-                            for (let i = 0; i < message.ids.length; ++i)
-                                if (!$util.isInteger(message.ids[i]) && !(message.ids[i] && $util.isInteger(message.ids[i].low) && $util.isInteger(message.ids[i].high)))
-                                    return "ids: integer|Long[] expected";
-                        }
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                                return "id: integer|Long expected";
                         return null;
                     };
 
                     /**
-                     * Creates a StopExperimentsRequest message from a plain object. Also converts values to their respective internal types.
+                     * Creates a CancelExperimentRunRequest message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsRequest
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunRequest
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.experimentation.v1.StopExperimentsRequest} StopExperimentsRequest
+                     * @returns {clutch.chaos.experimentation.v1.CancelExperimentRunRequest} CancelExperimentRunRequest
                      */
-                    StopExperimentsRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.experimentation.v1.StopExperimentsRequest)
+                    CancelExperimentRunRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.CancelExperimentRunRequest)
                             return object;
-                        let message = new $root.clutch.chaos.experimentation.v1.StopExperimentsRequest();
-                        if (object.ids) {
-                            if (!Array.isArray(object.ids))
-                                throw TypeError(".clutch.chaos.experimentation.v1.StopExperimentsRequest.ids: array expected");
-                            message.ids = [];
-                            for (let i = 0; i < object.ids.length; ++i)
-                                if ($util.Long)
-                                    (message.ids[i] = $util.Long.fromValue(object.ids[i])).unsigned = true;
-                                else if (typeof object.ids[i] === "string")
-                                    message.ids[i] = parseInt(object.ids[i], 10);
-                                else if (typeof object.ids[i] === "number")
-                                    message.ids[i] = object.ids[i];
-                                else if (typeof object.ids[i] === "object")
-                                    message.ids[i] = new $util.LongBits(object.ids[i].low >>> 0, object.ids[i].high >>> 0).toNumber(true);
-                        }
+                        let message = new $root.clutch.chaos.experimentation.v1.CancelExperimentRunRequest();
+                        if (object.id != null)
+                            if ($util.Long)
+                                (message.id = $util.Long.fromValue(object.id)).unsigned = true;
+                            else if (typeof object.id === "string")
+                                message.id = parseInt(object.id, 10);
+                            else if (typeof object.id === "number")
+                                message.id = object.id;
+                            else if (typeof object.id === "object")
+                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from a StopExperimentsRequest message. Also converts values to other types if specified.
+                     * Creates a plain object from a CancelExperimentRunRequest message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsRequest
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunRequest
                      * @static
-                     * @param {clutch.chaos.experimentation.v1.StopExperimentsRequest} message StopExperimentsRequest
+                     * @param {clutch.chaos.experimentation.v1.CancelExperimentRunRequest} message CancelExperimentRunRequest
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    StopExperimentsRequest.toObject = function toObject(message, options) {
+                    CancelExperimentRunRequest.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.arrays || options.defaults)
-                            object.ids = [];
-                        if (message.ids && message.ids.length) {
-                            object.ids = [];
-                            for (let j = 0; j < message.ids.length; ++j)
-                                if (typeof message.ids[j] === "number")
-                                    object.ids[j] = options.longs === String ? String(message.ids[j]) : message.ids[j];
-                                else
-                                    object.ids[j] = options.longs === String ? $util.Long.prototype.toString.call(message.ids[j]) : options.longs === Number ? new $util.LongBits(message.ids[j].low >>> 0, message.ids[j].high >>> 0).toNumber(true) : message.ids[j];
-                        }
+                        if (options.defaults)
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, true);
+                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.id = options.longs === String ? "0" : 0;
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (typeof message.id === "number")
+                                object.id = options.longs === String ? String(message.id) : message.id;
+                            else
+                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
                         return object;
                     };
 
                     /**
-                     * Converts this StopExperimentsRequest to JSON.
+                     * Converts this CancelExperimentRunRequest to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsRequest
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunRequest
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    StopExperimentsRequest.prototype.toJSON = function toJSON() {
+                    CancelExperimentRunRequest.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return StopExperimentsRequest;
+                    return CancelExperimentRunRequest;
                 })();
 
-                v1.StopExperimentsResponse = (function() {
+                v1.CancelExperimentRunResponse = (function() {
 
                     /**
-                     * Properties of a StopExperimentsResponse.
+                     * Properties of a CancelExperimentRunResponse.
                      * @memberof clutch.chaos.experimentation.v1
-                     * @interface IStopExperimentsResponse
+                     * @interface ICancelExperimentRunResponse
                      */
 
                     /**
-                     * Constructs a new StopExperimentsResponse.
+                     * Constructs a new CancelExperimentRunResponse.
                      * @memberof clutch.chaos.experimentation.v1
-                     * @classdesc Represents a StopExperimentsResponse.
-                     * @implements IStopExperimentsResponse
+                     * @classdesc Represents a CancelExperimentRunResponse.
+                     * @implements ICancelExperimentRunResponse
                      * @constructor
-                     * @param {clutch.chaos.experimentation.v1.IStopExperimentsResponse=} [properties] Properties to set
+                     * @param {clutch.chaos.experimentation.v1.ICancelExperimentRunResponse=} [properties] Properties to set
                      */
-                    function StopExperimentsResponse(properties) {
+                    function CancelExperimentRunResponse(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -6408,58 +6399,58 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * Verifies a StopExperimentsResponse message.
+                     * Verifies a CancelExperimentRunResponse message.
                      * @function verify
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsResponse
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunResponse
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    StopExperimentsResponse.verify = function verify(message) {
+                    CancelExperimentRunResponse.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         return null;
                     };
 
                     /**
-                     * Creates a StopExperimentsResponse message from a plain object. Also converts values to their respective internal types.
+                     * Creates a CancelExperimentRunResponse message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsResponse
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunResponse
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.experimentation.v1.StopExperimentsResponse} StopExperimentsResponse
+                     * @returns {clutch.chaos.experimentation.v1.CancelExperimentRunResponse} CancelExperimentRunResponse
                      */
-                    StopExperimentsResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.experimentation.v1.StopExperimentsResponse)
+                    CancelExperimentRunResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.CancelExperimentRunResponse)
                             return object;
-                        return new $root.clutch.chaos.experimentation.v1.StopExperimentsResponse();
+                        return new $root.clutch.chaos.experimentation.v1.CancelExperimentRunResponse();
                     };
 
                     /**
-                     * Creates a plain object from a StopExperimentsResponse message. Also converts values to other types if specified.
+                     * Creates a plain object from a CancelExperimentRunResponse message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsResponse
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunResponse
                      * @static
-                     * @param {clutch.chaos.experimentation.v1.StopExperimentsResponse} message StopExperimentsResponse
+                     * @param {clutch.chaos.experimentation.v1.CancelExperimentRunResponse} message CancelExperimentRunResponse
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    StopExperimentsResponse.toObject = function toObject() {
+                    CancelExperimentRunResponse.toObject = function toObject() {
                         return {};
                     };
 
                     /**
-                     * Converts this StopExperimentsResponse to JSON.
+                     * Converts this CancelExperimentRunResponse to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsResponse
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunResponse
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    StopExperimentsResponse.prototype.toJSON = function toJSON() {
+                    CancelExperimentRunResponse.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return StopExperimentsResponse;
+                    return CancelExperimentRunResponse;
                 })();
 
                 v1.ExperimentsAPI = (function() {
@@ -6514,6 +6505,39 @@ export const clutch = $root.clutch = (() => {
                      */
 
                     /**
+                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#cancelExperimentRun}.
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
+                     * @typedef CancelExperimentRunCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {clutch.chaos.experimentation.v1.CancelExperimentRunResponse} [response] CancelExperimentRunResponse
+                     */
+
+                    /**
+                     * Calls CancelExperimentRun.
+                     * @function cancelExperimentRun
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
+                     * @instance
+                     * @param {clutch.chaos.experimentation.v1.ICancelExperimentRunRequest} request CancelExperimentRunRequest message or plain object
+                     * @param {clutch.chaos.experimentation.v1.ExperimentsAPI.CancelExperimentRunCallback} callback Node-style callback called with the error, if any, and CancelExperimentRunResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(ExperimentsAPI.prototype.cancelExperimentRun = function cancelExperimentRun(request, callback) {
+                        return this.rpcCall(cancelExperimentRun, $root.clutch.chaos.experimentation.v1.CancelExperimentRunRequest, $root.clutch.chaos.experimentation.v1.CancelExperimentRunResponse, request, callback);
+                    }, "name", { value: "CancelExperimentRun" });
+
+                    /**
+                     * Calls CancelExperimentRun.
+                     * @function cancelExperimentRun
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
+                     * @instance
+                     * @param {clutch.chaos.experimentation.v1.ICancelExperimentRunRequest} request CancelExperimentRunRequest message or plain object
+                     * @returns {Promise<clutch.chaos.experimentation.v1.CancelExperimentRunResponse>} Promise
+                     * @variation 2
+                     */
+
+                    /**
                      * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#getExperiments}.
                      * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
                      * @typedef GetExperimentsCallback
@@ -6543,39 +6567,6 @@ export const clutch = $root.clutch = (() => {
                      * @instance
                      * @param {clutch.chaos.experimentation.v1.IGetExperimentsRequest} request GetExperimentsRequest message or plain object
                      * @returns {Promise<clutch.chaos.experimentation.v1.GetExperimentsResponse>} Promise
-                     * @variation 2
-                     */
-
-                    /**
-                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#stopExperiments}.
-                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
-                     * @typedef StopExperimentsCallback
-                     * @type {function}
-                     * @param {Error|null} error Error, if any
-                     * @param {clutch.chaos.experimentation.v1.StopExperimentsResponse} [response] StopExperimentsResponse
-                     */
-
-                    /**
-                     * Calls StopExperiments.
-                     * @function stopExperiments
-                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
-                     * @instance
-                     * @param {clutch.chaos.experimentation.v1.IStopExperimentsRequest} request StopExperimentsRequest message or plain object
-                     * @param {clutch.chaos.experimentation.v1.ExperimentsAPI.StopExperimentsCallback} callback Node-style callback called with the error, if any, and StopExperimentsResponse
-                     * @returns {undefined}
-                     * @variation 1
-                     */
-                    Object.defineProperty(ExperimentsAPI.prototype.stopExperiments = function stopExperiments(request, callback) {
-                        return this.rpcCall(stopExperiments, $root.clutch.chaos.experimentation.v1.StopExperimentsRequest, $root.clutch.chaos.experimentation.v1.StopExperimentsResponse, request, callback);
-                    }, "name", { value: "StopExperiments" });
-
-                    /**
-                     * Calls StopExperiments.
-                     * @function stopExperiments
-                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
-                     * @instance
-                     * @param {clutch.chaos.experimentation.v1.IStopExperimentsRequest} request StopExperimentsRequest message or plain object
-                     * @returns {Promise<clutch.chaos.experimentation.v1.StopExperimentsResponse>} Promise
                      * @variation 2
                      */
 
