@@ -36,6 +36,7 @@ import (
 	"github.com/lyft/clutch/backend/service/envoyadmin"
 	"github.com/lyft/clutch/backend/service/github"
 	k8sservice "github.com/lyft/clutch/backend/service/k8s"
+	topologyservice "github.com/lyft/clutch/backend/service/topology"
 )
 
 var Middleware = middleware.Factory{
@@ -74,6 +75,7 @@ var Services = service.Factory{
 	loggingsink.Name:     loggingsink.New,
 	pgservice.Name:       pgservice.New,
 	slack.Name:           slack.New,
+	topologyservice.Name: topologyservice.New,
 }
 
 var Resolvers = resolver.Factory{
