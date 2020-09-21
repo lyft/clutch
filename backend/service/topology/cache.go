@@ -8,6 +8,7 @@ import (
 	"github.com/lyft/clutch/backend/service"
 	k8sservice "github.com/lyft/clutch/backend/service/k8s"
 	"github.com/lyft/clutch/backend/types"
+	"go.uber.org/zap"
 )
 
 func (c *client) startCaching() {
@@ -54,10 +55,19 @@ func (c *client) SetCache(obj types.TopologyObject) {
 			metadata = EXCLUDED.metadata
 	`
 
-	metadataJson, _ := json.Marshal(obj.Metadata)
-	dataJson, _ := json.Marshal(obj.Pb.Value)
+	metadataJson, err := json.Marshal(obj.Metadata)
+	if err != nil {
+		c.log.With(zap.Error(err)).Error("unable to marshal metadata")
+		return
+	}
 
-	_, err := c.db.ExecContext(
+	dataJson, err := json.Marshal(obj.Pb.Value)
+	if err != nil {
+		c.log.With(zap.Error(err)).Error("unable to marshal pb data")
+		return
+	}
+
+	_, err = c.db.ExecContext(
 		context.Background(),
 		upsertQuery,
 		obj.Id,
@@ -66,7 +76,7 @@ func (c *client) SetCache(obj types.TopologyObject) {
 		metadataJson,
 	)
 	if err != nil {
-		log.Printf("%v", err)
+		c.log.With(zap.Error(err)).Error("unable to upsert cache item")
 		return
 	}
 }

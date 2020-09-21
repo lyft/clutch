@@ -29,6 +29,7 @@ func (s *svc) GetTopologyObjectChannel() chan types.TopologyObject {
 }
 
 func (s *svc) startInformers(cs ContextClientset, stop chan struct{}) {
+	// TODO: either make this configurable or make it pretty high like 30min+ ?
 	factory := informers.NewSharedInformerFactoryWithOptions(cs, time.Minute*1)
 
 	podInformer := factory.Core().V1().Pods().Informer()
