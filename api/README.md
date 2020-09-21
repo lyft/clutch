@@ -51,9 +51,9 @@ The rules are meant to take as much guesswork out of naming things as possible b
 
 **Examples of incorrect definition for this rule:**
 ```
-rpc GetThing(GetThingRequest) returns (GetThingResponse) {
+rpc GetBook(GetBookRequest) returns (GetBookResponse) {
   option (google.api.http) = {
-    get : "/v1/foo/thing"
+    get : "/v1/bookstore/catalog/getBook"
   };
 }
 ```
@@ -61,9 +61,9 @@ rpc GetThing(GetThingRequest) returns (GetThingResponse) {
 
 **Examples of correct definition for this rule:**
 ```
-rpc GetThing(GetThingRequest) returns (GetThingResponse) {
+rpc GetBook(GetBookRequest) returns (GetBookResponse) {
   option (google.api.http) = {
-    post : "/v1/foo/getThing"
+    post : "/v1/bookstore/catalog/getBook"
     body : "*"
   };
 }
@@ -85,12 +85,13 @@ package clutch.v1.healthcheck;
 - :x: Last component of package is `healthcheck`, not `v1`.
 
 **Examples of correct definition for this rule:**
-```proto
-package clutch.healthcheck.v1;
-```
 
 ```proto
 package clutch.aws.ec2.v1;
+```
+
+```proto
+package clutch.healthcheck.v1;
 ```
 
 ### Package name and folder structure should match
@@ -115,32 +116,44 @@ package clutch.aws.ec2.v1;
 
 **Examples of incorrect definition for this rule:**
 
+- Filename `clutch/api/bookstore/v1/bookstore.proto`
 ```proto
-package clutch.foo.v1;
+package clutch.bookstore.v1;
 
-service BarAPI {
+service BookAPI {
   ...
 }
 ```
 
-- :x: Last package component is `foo`, but service name is `bar`.
+- :x: Last package component is `bookstore`, but service name is `BookAPI`.
+
+- Filename `clutch/api/bookstore/catalog/v1/catalog.proto`
+```proto
+package clutch.bookstore.catalog.v1;
+
+service LookupAPI {
+  ...
+}
+```
+
+- :x: Last package component is `catalog`, but service name is `LookupAPI`.
 
 **Examples of correct definition for this rule:**
 
-- Filename `clutch/api/foo/v1/foo.proto`
+- Filename `clutch/api/bookstore/v1/bookstore.proto`
 ```proto
-package clutch.foo.v1;
+package clutch.bookstore.v1;
 
-service FooAPI {
+service BookstoreAPI {
   ...
 }
 ```
 
-- Filename `clutch/api/foo/bar/v1/bar.proto`
+- Filename `clutch/api/bookstore/catalog/v1/catalog.proto`
 ```proto
-package clutch.foo.bar.v1;
+package clutch.bookstore.catalog.v1;
 
-service BarAPI {
+service CatalogAPI {
   ...
 }
 ```
@@ -150,33 +163,32 @@ service BarAPI {
 **Examples of incorrect definition for this rule:**
 
 ```proto
-package clutch.foo.v1;
+package clutch.bookstore.catalog.v1;
 
-service FooAPI {
-  rpc CreateBar(CreateBarRequest) returns (CreateBarResponse) {
+service CatalogAPI {
+  rpc CreateEntry(CreateEntryRequest) returns (CreateEntryResponse) {
     option (google.api.http) = {
-      post : "/v1/bar/create"
+      post : "/v1/catalog/entry"
       body : "*"
     };
   }
 }
 ```
 
-- :x: Leading path is `/v1/experiments`, not `/v1/foo` in accordance with package name.
-- :x: RPC method is `CreateExperiment` but HTTP mapping is `/experiments/create`.
+- :x: Leading path is `/v1/catalog`, not `/v1/bookstore/catalog` in accordance with package name.
+- :x: RPC method is `CreateEntry` but HTTP mapping is `/v1/catalog/entry`.
 
 **Examples of correct definition for this rule:**
 
 ```proto
-package clutch.foo.v1;
+package clutch.bookstore.catalog.v1;
 
-service FooAPI {
-  rpc CreateBar(CreateBarRequest) returns (CreateBarResponse) {
+service CatalogAPI {
+  rpc CreateEntry(CreateEntryRequest) returns (CreateEntryResponse) {
     option (google.api.http) = {
-      post : "/v1/foo/createBar"
+      post : "/v1/bookstore/catalog/createEntry"
       body : "*"
     };
   }
 }
 ```
-
