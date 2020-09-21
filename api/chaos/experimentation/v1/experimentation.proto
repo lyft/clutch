@@ -57,11 +57,11 @@ message GetExperimentRunDetailsResponse {
   ExperimentRunDetails run_details = 1;
 }
 
-message CancelExperimentRequest {
+message CancelExperimentRunRequest {
   uint64 id = 1;
 }
 
-message CancelExperimentResponse {
+message CancelExperimentRunResponse {
 }
 
 // Simple CRUD API for experiments
@@ -73,9 +73,9 @@ service ExperimentsAPI {
     };
     option (clutch.api.v1.action).type = CREATE;
   }
-  rpc CancelExperiment(CancelExperimentRequest) returns (CancelExperimentResponse) {
+  rpc CancelExperimentRun(CancelExperimentRunRequest) returns (CancelExperimentRunResponse) {
     option (google.api.http) = {
-      post : "/v1/chaos/experimentation/cancelExperiment"
+      post : "/v1/chaos/experimentation/cancelExperimentRun"
       body : "*"
     };
     option (clutch.api.v1.action).type = DELETE;

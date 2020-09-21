@@ -136,7 +136,7 @@ var cancelExperimentsTests = []struct {
 	},
 }
 
-func TestCancelExperiment(t *testing.T) {
+func TestCancelExperimentRun(t *testing.T) {
 	t.Parallel()
 
 	for _, test := range cancelExperimentsTests {
@@ -159,7 +159,7 @@ func TestCancelExperiment(t *testing.T) {
 				expected.WithArgs(test.args...).WillReturnResult(sqlmock.NewResult(1, 1))
 			}
 
-			err = es.CancelExperiment(context.Background(), test.runID)
+			err = es.CancelExperimentRun(context.Background(), test.runID)
 			if test.err != nil {
 				a.Equal(test.err, err)
 			} else {

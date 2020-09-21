@@ -30,7 +30,7 @@ type Service struct {
 	createExperimentStat        tally.Counter
 	getExperimentsStat          tally.Counter
 	getExperimentRunDetailsStat tally.Counter
-	cancelExperimentStat        tally.Counter
+	cancelExperimentRunStat     tally.Counter
 }
 
 // New instantiates a Service object.
@@ -52,7 +52,7 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 		createExperimentStat:        apiScope.Counter("create_experiment"),
 		getExperimentsStat:          apiScope.Counter("get_experiments"),
 		getExperimentRunDetailsStat: apiScope.Counter("get_experiment_run_config_pair_details"),
-		cancelExperimentStat:        apiScope.Counter("cancel_experiment"),
+		cancelExperimentRunStat:     apiScope.Counter("cancel_experiment_run"),
 	}, nil
 }
 
@@ -88,15 +88,15 @@ func (s *Service) CreateExperiment(ctx context.Context, req *experimentation.Cre
 	return &experimentation.CreateExperimentResponse{Experiment: experiment}, nil
 }
 
-// CancelExperiment stops experiments that are currently running.
-func (s *Service) CancelExperiment(ctx context.Context, req *experimentation.CancelExperimentRequest) (*experimentation.CancelExperimentResponse, error) {
-	s.cancelExperimentStat.Inc(1)
-	err := s.experimentStore.CancelExperiment(ctx, req.Id)
+// CancelExperimentRun cancel experiment that is currently running or is scheduled to be run in the future.
+func (s *Service) CancelExperimentRun(ctx context.Context, req *experimentation.CancelExperimentRunRequest) (*experimentation.CancelExperimentRunResponse, error) {
+	s.cancelExperimentRunStat.Inc(1)
+	err := s.experimentStore.CancelExperimentRun(ctx, req.Id)
 	if err != nil {
 		return nil, err
 	}
 
-	return &experimentation.CancelExperimentResponse{}, nil
+	return &experimentation.CancelExperimentRunResponse{}, nil
 }
 
 // GetExperiments returns all experiments from the experiment store.
