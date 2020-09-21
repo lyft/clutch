@@ -121,25 +121,25 @@ func TestCreateExperiments(t *testing.T) {
 	}
 }
 
-var deleteExperimentsTests = []struct {
-	id   string
-	ids  []uint64
-	sql  string
-	args []driver.Value
-	err  error
+var cancelExperimentsTests = []struct {
+	id    string
+	runID uint64
+	sql   string
+	args  []driver.Value
+	err   error
 }{
 	{
-		id:   "delete specific experiment",
-		ids:  []uint64{1},
-		sql:  `UPDATE experiment_run SET execution_time = tstzrange(lower(execution_time), NOW(), '[]') WHERE id = $1 AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`,
-		args: []driver.Value{1},
+		id:    "cancel an experiment run",
+		runID: uint64(1),
+		sql:   `UPDATE experiment_run SET execution_time = tstzrange(lower(execution_time), NOW(), '[]') WHERE id = $1 AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`,
+		args:  []driver.Value{1},
 	},
 }
 
-func TestStopExperiments(t *testing.T) {
+func TestCancelExperimentRun(t *testing.T) {
 	t.Parallel()
 
-	for _, test := range deleteExperimentsTests {
+	for _, test := range cancelExperimentsTests {
 		test := test
 
 		t.Run(test.id, func(t *testing.T) {
@@ -159,7 +159,7 @@ func TestStopExperiments(t *testing.T) {
 				expected.WithArgs(test.args...).WillReturnResult(sqlmock.NewResult(1, 1))
 			}
 
-			err = es.StopExperiments(context.Background(), test.ids)
+			err = es.CancelExperimentRun(context.Background(), test.runID)
 			if test.err != nil {
 				a.Equal(test.err, err)
 			} else {

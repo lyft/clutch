@@ -2680,91 +2680,91 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a StopExperimentsRequest. */
-                interface IStopExperimentsRequest {
+                /** Properties of a CancelExperimentRunRequest. */
+                interface ICancelExperimentRunRequest {
 
-                    /** StopExperimentsRequest ids */
-                    ids?: ((number|Long)[]|null);
+                    /** CancelExperimentRunRequest id */
+                    id?: (number|Long|null);
                 }
 
-                /** Represents a StopExperimentsRequest. */
-                class StopExperimentsRequest implements IStopExperimentsRequest {
+                /** Represents a CancelExperimentRunRequest. */
+                class CancelExperimentRunRequest implements ICancelExperimentRunRequest {
 
                     /**
-                     * Constructs a new StopExperimentsRequest.
+                     * Constructs a new CancelExperimentRunRequest.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.experimentation.v1.IStopExperimentsRequest);
+                    constructor(properties?: clutch.chaos.experimentation.v1.ICancelExperimentRunRequest);
 
-                    /** StopExperimentsRequest ids. */
-                    public ids: (number|Long)[];
+                    /** CancelExperimentRunRequest id. */
+                    public id: (number|Long);
 
                     /**
-                     * Verifies a StopExperimentsRequest message.
+                     * Verifies a CancelExperimentRunRequest message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a StopExperimentsRequest message from a plain object. Also converts values to their respective internal types.
+                     * Creates a CancelExperimentRunRequest message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns StopExperimentsRequest
+                     * @returns CancelExperimentRunRequest
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.StopExperimentsRequest;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.CancelExperimentRunRequest;
 
                     /**
-                     * Creates a plain object from a StopExperimentsRequest message. Also converts values to other types if specified.
-                     * @param message StopExperimentsRequest
+                     * Creates a plain object from a CancelExperimentRunRequest message. Also converts values to other types if specified.
+                     * @param message CancelExperimentRunRequest
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.experimentation.v1.StopExperimentsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.experimentation.v1.CancelExperimentRunRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this StopExperimentsRequest to JSON.
+                     * Converts this CancelExperimentRunRequest to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a StopExperimentsResponse. */
-                interface IStopExperimentsResponse {
+                /** Properties of a CancelExperimentRunResponse. */
+                interface ICancelExperimentRunResponse {
                 }
 
-                /** Represents a StopExperimentsResponse. */
-                class StopExperimentsResponse implements IStopExperimentsResponse {
+                /** Represents a CancelExperimentRunResponse. */
+                class CancelExperimentRunResponse implements ICancelExperimentRunResponse {
 
                     /**
-                     * Constructs a new StopExperimentsResponse.
+                     * Constructs a new CancelExperimentRunResponse.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.experimentation.v1.IStopExperimentsResponse);
+                    constructor(properties?: clutch.chaos.experimentation.v1.ICancelExperimentRunResponse);
 
                     /**
-                     * Verifies a StopExperimentsResponse message.
+                     * Verifies a CancelExperimentRunResponse message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a StopExperimentsResponse message from a plain object. Also converts values to their respective internal types.
+                     * Creates a CancelExperimentRunResponse message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns StopExperimentsResponse
+                     * @returns CancelExperimentRunResponse
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.StopExperimentsResponse;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.CancelExperimentRunResponse;
 
                     /**
-                     * Creates a plain object from a StopExperimentsResponse message. Also converts values to other types if specified.
-                     * @param message StopExperimentsResponse
+                     * Creates a plain object from a CancelExperimentRunResponse message. Also converts values to other types if specified.
+                     * @param message CancelExperimentRunResponse
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.experimentation.v1.StopExperimentsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.experimentation.v1.CancelExperimentRunResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this StopExperimentsResponse to JSON.
+                     * Converts this CancelExperimentRunResponse to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -2796,6 +2796,20 @@ export namespace clutch {
                     public createExperiment(request: clutch.chaos.experimentation.v1.ICreateExperimentRequest): Promise<clutch.chaos.experimentation.v1.CreateExperimentResponse>;
 
                     /**
+                     * Calls CancelExperimentRun.
+                     * @param request CancelExperimentRunRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and CancelExperimentRunResponse
+                     */
+                    public cancelExperimentRun(request: clutch.chaos.experimentation.v1.ICancelExperimentRunRequest, callback: clutch.chaos.experimentation.v1.ExperimentsAPI.CancelExperimentRunCallback): void;
+
+                    /**
+                     * Calls CancelExperimentRun.
+                     * @param request CancelExperimentRunRequest message or plain object
+                     * @returns Promise
+                     */
+                    public cancelExperimentRun(request: clutch.chaos.experimentation.v1.ICancelExperimentRunRequest): Promise<clutch.chaos.experimentation.v1.CancelExperimentRunResponse>;
+
+                    /**
                      * Calls GetExperiments.
                      * @param request GetExperimentsRequest message or plain object
                      * @param callback Node-style callback called with the error, if any, and GetExperimentsResponse
@@ -2808,20 +2822,6 @@ export namespace clutch {
                      * @returns Promise
                      */
                     public getExperiments(request: clutch.chaos.experimentation.v1.IGetExperimentsRequest): Promise<clutch.chaos.experimentation.v1.GetExperimentsResponse>;
-
-                    /**
-                     * Calls StopExperiments.
-                     * @param request StopExperimentsRequest message or plain object
-                     * @param callback Node-style callback called with the error, if any, and StopExperimentsResponse
-                     */
-                    public stopExperiments(request: clutch.chaos.experimentation.v1.IStopExperimentsRequest, callback: clutch.chaos.experimentation.v1.ExperimentsAPI.StopExperimentsCallback): void;
-
-                    /**
-                     * Calls StopExperiments.
-                     * @param request StopExperimentsRequest message or plain object
-                     * @returns Promise
-                     */
-                    public stopExperiments(request: clutch.chaos.experimentation.v1.IStopExperimentsRequest): Promise<clutch.chaos.experimentation.v1.StopExperimentsResponse>;
 
                     /**
                      * Calls GetExperimentRunDetails.
@@ -2848,18 +2848,18 @@ export namespace clutch {
                     type CreateExperimentCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.CreateExperimentResponse) => void;
 
                     /**
+                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#cancelExperimentRun}.
+                     * @param error Error, if any
+                     * @param [response] CancelExperimentRunResponse
+                     */
+                    type CancelExperimentRunCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.CancelExperimentRunResponse) => void;
+
+                    /**
                      * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#getExperiments}.
                      * @param error Error, if any
                      * @param [response] GetExperimentsResponse
                      */
                     type GetExperimentsCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.GetExperimentsResponse) => void;
-
-                    /**
-                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#stopExperiments}.
-                     * @param error Error, if any
-                     * @param [response] StopExperimentsResponse
-                     */
-                    type StopExperimentsCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.StopExperimentsResponse) => void;
 
                     /**
                      * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#getExperimentRunDetails}.
