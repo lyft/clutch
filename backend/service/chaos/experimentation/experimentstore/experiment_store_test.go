@@ -129,7 +129,7 @@ var cancelExperimentsTests = []struct {
 	err   error
 }{
 	{
-		id:    "cancel specific experiment",
+		id:    "cancel an experiment run",
 		runID: uint64(1),
 		sql:   `UPDATE experiment_run SET execution_time = tstzrange(lower(execution_time), NOW(), '[]') WHERE id = $1 AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`,
 		args:  []driver.Value{1},
