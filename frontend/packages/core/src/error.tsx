@@ -90,17 +90,30 @@ const CompressedError = ({ title, message }) => {
   );
 };
 
-const Warning = ({ message }) => {
+interface WarningProps {
+  message: any;
+  onClose?: () => void;
+}
+
+const Warning: React.FC<WarningProps> = ({ message, onClose }) => {
   const [open, setOpen] = React.useState(true);
+
+  const onDismiss = () => {
+    if (onClose !== undefined) {
+      onClose();
+    }
+    setOpen(false);
+  }
 
   return (
     <Snackbar
       open={open}
       autoHideDuration={6000}
+      onExit={onDismiss}
       onClose={() => setOpen(false)}
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
     >
-      <Alert elevation={6} variant="filled" onClose={() => setOpen(false)} severity="warning">
+      <Alert elevation={6} variant="filled" onClose={onDismiss} severity="warning">
         {message}
       </Alert>
     </Snackbar>
