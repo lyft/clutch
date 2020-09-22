@@ -56,6 +56,21 @@ const lightPalette = (): ClutchPalette => {
 const getTheme = () => {
   return createMuiTheme({
     palette: lightPalette(),
+    overrides: {
+      MuiTypography: {
+        colorPrimary: {
+          color: NAVY,
+        },
+        colorSecondary: {
+          color: GRAY,
+        },
+      },
+      MuiLink: {
+        root: {
+          color: TEAL,
+        },
+      },
+    },
   });
 };
 
