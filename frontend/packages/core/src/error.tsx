@@ -103,7 +103,7 @@ const Warning: React.FC<WarningProps> = ({ message, onClose }) => {
       onClose();
     }
     setOpen(false);
-  }
+  };
 
   return (
     <Snackbar

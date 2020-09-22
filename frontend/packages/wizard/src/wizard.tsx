@@ -215,7 +215,7 @@ const Wizard: React.FC<WizardProps> = ({ heading, dataLayout, children, maxWidth
 
   const removeWarning = (warning: string) => {
     setGlobalWarnings(globalWarnings.filter(w => w !== warning));
-  }
+  };
 
   return (
     <Spacer margin="3">
