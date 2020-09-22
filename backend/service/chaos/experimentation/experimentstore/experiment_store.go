@@ -37,7 +37,7 @@ type experimentStore struct {
 }
 
 // New returns a new NewExperimentStore instance.
-func New(_ *any.Any, _ *zap.Logger, scope tally.Scope) (service.Service, error) {
+func New(_ *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
 	p, ok := service.Registry[pgservice.Name]
 	if !ok {
 		return nil, errors.New("could not find database service")
