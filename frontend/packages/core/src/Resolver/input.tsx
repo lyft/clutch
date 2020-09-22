@@ -25,7 +25,7 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, onChange, valida
       _.compact(schema?.fields.map(field => field?.metadata?.stringField?.placeholder))
     )
     .flat()
-    .join(",");
+    .join(", ");
 
   const handleChanges = (event: React.ChangeEvent<ChangeEventTarget> | React.KeyboardEvent) => {
     onChange(convertChangeEvent(event));
