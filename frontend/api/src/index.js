@@ -6687,6 +6687,8 @@ export const clutch = $root.clutch = (() => {
                             case 1:
                             case 2:
                             case 3:
+                            case 4:
+                            case 5:
                                 break;
                             }
                         if (message.properties != null && message.hasOwnProperty("properties")) {
@@ -6739,6 +6741,14 @@ export const clutch = $root.clutch = (() => {
                         case "COMPLETED":
                         case 3:
                             message.status = 3;
+                            break;
+                        case "CANCELED":
+                        case 4:
+                            message.status = 4;
+                            break;
+                        case "STOPPED":
+                        case 5:
+                            message.status = 5;
                             break;
                         }
                         if (object.properties != null) {
@@ -6813,6 +6823,8 @@ export const clutch = $root.clutch = (() => {
                  * @property {number} SCHEDULED=1 SCHEDULED value
                  * @property {number} RUNNING=2 RUNNING value
                  * @property {number} COMPLETED=3 COMPLETED value
+                 * @property {number} CANCELED=4 CANCELED value
+                 * @property {number} STOPPED=5 STOPPED value
                  */
                 v1.Status = (function() {
                     const valuesById = {}, values = Object.create(valuesById);
@@ -6820,6 +6832,8 @@ export const clutch = $root.clutch = (() => {
                     values[valuesById[1] = "SCHEDULED"] = 1;
                     values[valuesById[2] = "RUNNING"] = 2;
                     values[valuesById[3] = "COMPLETED"] = 3;
+                    values[valuesById[4] = "CANCELED"] = 4;
+                    values[valuesById[5] = "STOPPED"] = 5;
                     return values;
                 })();
 
