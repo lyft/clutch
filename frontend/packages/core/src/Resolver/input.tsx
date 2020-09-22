@@ -2,6 +2,7 @@ import React from "react";
 import type { UseFormMethods } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
 import { MenuItem, Select } from "@material-ui/core";
+import _ from "lodash";
 
 import { Error } from "../error";
 import TextField from "../Input/text-field";
@@ -19,6 +20,13 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, onChange, valida
   let typeLabel = schemas.map(schema => schema?.metadata.displayName).join();
   typeLabel = `Search by ${typeLabel}`;
 
+  const placeholder = schemas
+    .map(schema =>
+      _.compact(schema?.fields.map(field => field?.metadata?.stringField?.placeholder))
+    )
+    .flat()
+    .join(",");
+
   const handleChanges = (event: React.ChangeEvent<ChangeEventTarget> | React.KeyboardEvent) => {
     onChange(convertChangeEvent(event));
   };
@@ -35,6 +43,7 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, onChange, valida
       inputRef={validation.register({ required: true })}
       error={!!error}
       helperText={error?.message || error?.type || ""}
+      placeholder={placeholder}
     />
   );
 };

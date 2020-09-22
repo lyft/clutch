@@ -51,6 +51,7 @@ const TextField: React.FC<TextFieldProps & MuiTextFieldProps> = ({
       onKeyDown={e => onKeyDown(e)}
       onFocus={onChange}
       onBlur={onChange}
+      placeholder={placeholder}
       {...props}
     />
   );
