@@ -177,8 +177,7 @@ func TestGetExperimentsUnmarshalsExperimentConfiguration(t *testing.T) {
 	db, mock, err := sqlmock.New()
 	assert.NoError(err)
 
-	counter := &mockCounter{}
-	es := &experimentStore{db: db, getExperimentsLoadConfigurationError: counter}
+	es := &experimentStore{db: db}
 	defer es.Close()
 
 	expected := mock.ExpectQuery(regexp.QuoteMeta(getExperimentsSQLQuery)).WithArgs("foo")
@@ -208,14 +207,13 @@ func TestGetExperimentsUnmarshalsExperimentConfiguration(t *testing.T) {
 	assert.Equal(float32(100), abort.GetPercent())
 }
 
-func TestGetExperimentsIgnoresExperimentWithMalformedConfiguration(t *testing.T) {
+func TestGetExperimentsFailsIfItReadsExperimentWithMalformedConfiguration(t *testing.T) {
 	assert := assert.New(t)
 
 	db, mock, err := sqlmock.New()
 	assert.NoError(err)
 
-	counter := &mockCounter{}
-	es := &experimentStore{db: db, getExperimentsLoadConfigurationError: counter}
+	es := &experimentStore{db: db}
 	defer es.Close()
 
 	expected := mock.ExpectQuery(regexp.QuoteMeta(getExperimentsSQLQuery)).WithArgs("foo")
@@ -228,10 +226,6 @@ func TestGetExperimentsIgnoresExperimentWithMalformedConfiguration(t *testing.T)
 			2,
 			`{"@type": "malformed_foo","clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"abort":{"percent":100,"httpStatus":401}}`,
 		},
-		{
-			3,
-			`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig","clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"abort":{"percent":100,"httpStatus":401}}`,
-		},
 	}
 
 	rows := sqlmock.NewRows(experimentColumns)
@@ -241,12 +235,6 @@ func TestGetExperimentsIgnoresExperimentWithMalformedConfiguration(t *testing.T)
 	expected.WillReturnRows(rows)
 
 	experiments, err := es.GetExperiments(context.Background(), "foo")
-	assert.NoError(err)
-
-	experimentIDs := []uint64{}
-	for _, experiment := range experiments {
-		experimentIDs = append(experimentIDs, experiment.Id)
-	}
-	assert.Equal([]uint64{1, 3}, experimentIDs)
-	assert.Equal(int64(1), counter.count)
+	assert.Nil(experiments)
+	assert.Error(err)
 }

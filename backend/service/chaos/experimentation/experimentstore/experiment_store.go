@@ -33,8 +33,7 @@ type ExperimentStore interface {
 }
 
 type experimentStore struct {
-	db                                   *sql.DB
-	getExperimentsLoadConfigurationError CounterInterface
+	db *sql.DB
 }
 
 // New returns a new NewExperimentStore instance.
@@ -49,10 +48,8 @@ func New(_ *any.Any, _ *zap.Logger, scope tally.Scope) (service.Service, error) 
 		return nil, errors.New("experiment store wrong type")
 	}
 
-	storeScope := scope.SubScope("experimentation_store")
 	return &experimentStore{
 		client.DB(),
-		storeScope.Counter("get_experiments_load_configuration_error"),
 	}, nil
 }
 
@@ -177,9 +174,9 @@ func (fs *experimentStore) GetExperiments(ctx context.Context, configType string
 		}
 
 		anyConfig := &any.Any{}
-		if nil != jsonpb.Unmarshal(strings.NewReader(details), anyConfig) {
-			fs.getExperimentsLoadConfigurationError.Inc(1)
-			continue
+		err = jsonpb.Unmarshal(strings.NewReader(details), anyConfig)
+		if err != nil {
+			return nil, err
 		}
 
 		experiment.Config = anyConfig
