@@ -59,18 +59,18 @@ const getTheme = () => {
     overrides: {
       MuiTypography: {
         colorPrimary: {
-          color: NAVY
+          color: NAVY,
         },
         colorSecondary: {
-          color: GRAY
-        }
+          color: GRAY,
+        },
       },
       MuiLink: {
         root: {
-          color: TEAL
-        }
-      }
-    }
+          color: TEAL,
+        },
+      },
+    },
   });
 };
 
