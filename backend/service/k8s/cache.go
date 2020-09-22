@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
-	"github.com/lyft/clutch/backend/types"
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	appsv1 "k8s.io/api/apps/v1"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -17,7 +17,7 @@ func (s *svc) CacheEnabled() bool {
 	return true
 }
 
-func (s *svc) GetTopologyObjectChannel() chan types.TopologyObject {
+func (s *svc) GetTopologyObjectChannel() chan topologyv1.TopologyObject {
 	stop := make(chan struct{})
 
 	for name, cs := range s.manager.Clientsets() {
@@ -53,25 +53,25 @@ func (s *svc) startInformers(cs ContextClientset, stop chan struct{}) {
 
 func (s *svc) informerAddHandler(obj interface{}) {
 	log.Print("Add Handler")
-	s.processInformerEvent(obj, types.UPSERT)
+	s.processInformerEvent(obj, topologyv1.TopologyObject_UPSERT)
 }
 
 func (s *svc) informerUpdateHandler(oldObj, newObj interface{}) {
 	log.Print("Update Handler")
-	s.processInformerEvent(newObj, types.UPSERT)
+	s.processInformerEvent(newObj, topologyv1.TopologyObject_UPSERT)
 }
 
 func (s *svc) informerDeleteHandler(obj interface{}) {
 	log.Print("Delete handler")
-	s.processInformerEvent(obj, types.DELETE)
+	s.processInformerEvent(obj, topologyv1.TopologyObject_DELETE)
 }
 
-func (s *svc) processInformerEvent(obj interface{}, action types.TopologyCacheAction) {
+func (s *svc) processInformerEvent(obj interface{}, action topologyv1.TopologyObject_TopologyCacheAction) {
 	switch obj.(type) {
 	case *corev1.Pod:
 		pod := podDescription(obj.(*corev1.Pod), "")
 		protoPod, _ := ptypes.MarshalAny(pod)
-		s.TopologyObjectChan <- types.TopologyObject{
+		s.TopologyObjectChan <- topologyv1.TopologyObject{
 			Id:       pod.Name,
 			Pb:       protoPod,
 			Metadata: pod.GetLabels(),
@@ -80,7 +80,7 @@ func (s *svc) processInformerEvent(obj interface{}, action types.TopologyCacheAc
 	case *appsv1.Deployment:
 		deployment := ProtoForDeployment("", obj.(*appsv1.Deployment))
 		protoDeployment, _ := ptypes.MarshalAny(deployment)
-		s.TopologyObjectChan <- types.TopologyObject{
+		s.TopologyObjectChan <- topologyv1.TopologyObject{
 			Id:       deployment.Name,
 			Pb:       protoDeployment,
 			Metadata: deployment.GetLabels(),
@@ -89,7 +89,7 @@ func (s *svc) processInformerEvent(obj interface{}, action types.TopologyCacheAc
 	case *autoscalingv1.HorizontalPodAutoscaler:
 		hpa := ProtoForHPA("", obj.(*autoscalingv1.HorizontalPodAutoscaler))
 		protoHpa, _ := ptypes.MarshalAny(hpa)
-		s.TopologyObjectChan <- types.TopologyObject{
+		s.TopologyObjectChan <- topologyv1.TopologyObject{
 			Id:       hpa.Name,
 			Pb:       protoHpa,
 			Metadata: hpa.GetLabels(),

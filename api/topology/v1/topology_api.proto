@@ -4,6 +4,7 @@ package clutch.topology.v1;
 
 option go_package = "topologyv1";
 
+import "google/protobuf/any.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
 import "google/rpc/status.proto";
@@ -157,4 +158,29 @@ message Edge {
   // Metadata maps field names to assorted state or characteristics of the
   // edge.
   map<string, google.protobuf.Value> metadata = 4;
+}
+
+message TopologyObject {
+  // Id is the unique identifer of the object.
+  string id = 1;
+
+  // Pb is the clutch proto object.
+  google.protobuf.Any pb = 2;
+
+  // Metadata is set by the service which produces TopologyObjects, for example k8s would extract
+  // relevent metadata that gives the TopologyAPI the ability to query against it.
+  map<string, string> metadata = 3;
+
+  // TopologyCacheAction signifies to the Topology service what to do with an incomeing TopologyObject
+  //
+  // The topology service gets TopologyObjects off of the `GetTopologyObjectChannel` which is processed
+  // and stored in the topology_cache table.
+  enum TopologyCacheAction {
+    // UPSERT creates or updates items in the topology_cache table
+    UPSERT = 0;
+    DELETE = 1;
+  }
+
+  // Action denotes what the topology service should do with this object.
+  TopologyCacheAction action = 4; 
 }

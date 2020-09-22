@@ -9,7 +9,8 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 
-	topologyv1 "github.com/lyft/clutch/backend/api/config/service/topology/v1"
+	topologyconfigv1 "github.com/lyft/clutch/backend/api/config/service/topology/v1"
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/service"
 	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
 )
@@ -20,19 +21,30 @@ type Service interface {
 	// GetByID(ctx context.Context, key string, resolverTypeUrl string)
 	// GetByLabel(ctx context.Context, labels map[string]string, resolverTypeUrl string)
 
-	SetCache(key string, resolverTypeUrl string, data []byte)
-	DeleteCache(key string)
+	SetCache(obj topologyv1.TopologyObject)
+	DeleteCache(obj topologyv1.TopologyObject)
 
 	// LeaderElect()
 	// deleteExpiredCache()
 }
 
 type client struct {
-	config *topologyv1.Config
+	config *topologyconfigv1.Config
 
 	db    *sql.DB
 	log   *zap.Logger
 	scope tally.Scope
+}
+
+// CacheableTopology is implemented by a service that wishes to enable the topology API feature set
+//
+// By implmenting this interface the topology service will automatically setup all services which
+// implement this interface. Automatically ingesting TopologyObjects via the `GetTopologyObjectChannel()` function.
+// This enables users to make use of the Topology APIs with these new TopologyObjects.
+//
+type CacheableTopology interface {
+	CacheEnabled() bool
+	GetTopologyObjectChannel() chan topologyv1.TopologyObject
 }
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
@@ -46,7 +58,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, errors.New("Unable to get dbClient")
 	}
 
-	topologyConfig := &topologyv1.Config{}
+	topologyConfig := &topologyconfigv1.Config{}
 	err := ptypes.UnmarshalAny(cfg, topologyConfig)
 	if err != nil {
 		return nil, err

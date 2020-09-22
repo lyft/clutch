@@ -16,8 +16,8 @@ import (
 
 	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/service"
-	"github.com/lyft/clutch/backend/types"
 )
 
 const Name = "clutch.service.k8s"
@@ -49,8 +49,6 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 }
 
 type Service interface {
-	types.CacheableTopology
-
 	// All names of clientsets.
 	Clientsets() []string
 
@@ -67,18 +65,21 @@ type Service interface {
 	// Deployment management functions.
 	DescribeDeployment(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Deployment, error)
 	UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error
+
+	// CacheEnabled() bool
+	// GetTopologyObjectChannel() chan topologyv1.TopologyObject
 }
 
 type svc struct {
 	manager ClientsetManager
 
-	TopologyObjectChan chan types.TopologyObject
+	TopologyObjectChan chan topologyv1.TopologyObject
 	log                *zap.Logger
 	scope              tally.Scope
 }
 
 func NewWithClientsetManager(manager ClientsetManager, logger *zap.Logger, scope tally.Scope) (Service, error) {
-	topologyObjectChan := make(chan types.TopologyObject, 1000)
+	topologyObjectChan := make(chan topologyv1.TopologyObject, 1000)
 	return &svc{manager: manager, TopologyObjectChan: topologyObjectChan, log: logger, scope: scope}, nil
 }
 

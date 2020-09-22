@@ -10618,6 +10618,81 @@ export namespace clutch {
                  */
                 public toJSON(): { [k: string]: any };
             }
+
+            /** Properties of a TopologyObject. */
+            interface ITopologyObject {
+
+                /** TopologyObject id */
+                id?: (string|null);
+
+                /** TopologyObject pb */
+                pb?: (google.protobuf.IAny|null);
+
+                /** TopologyObject metadata */
+                metadata?: ({ [k: string]: string }|null);
+
+                /** TopologyObject action */
+                action?: (clutch.topology.v1.TopologyObject.TopologyCacheAction|null);
+            }
+
+            /** Represents a TopologyObject. */
+            class TopologyObject implements ITopologyObject {
+
+                /**
+                 * Constructs a new TopologyObject.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.topology.v1.ITopologyObject);
+
+                /** TopologyObject id. */
+                public id: string;
+
+                /** TopologyObject pb. */
+                public pb?: (google.protobuf.IAny|null);
+
+                /** TopologyObject metadata. */
+                public metadata: { [k: string]: string };
+
+                /** TopologyObject action. */
+                public action: clutch.topology.v1.TopologyObject.TopologyCacheAction;
+
+                /**
+                 * Verifies a TopologyObject message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a TopologyObject message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns TopologyObject
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.TopologyObject;
+
+                /**
+                 * Creates a plain object from a TopologyObject message. Also converts values to other types if specified.
+                 * @param message TopologyObject
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.topology.v1.TopologyObject, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this TopologyObject to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace TopologyObject {
+
+                /** TopologyCacheAction enum. */
+                enum TopologyCacheAction {
+                    UPSERT = 0,
+                    DELETE = 1
+                }
+            }
         }
     }
 }

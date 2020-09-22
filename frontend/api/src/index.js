@@ -25556,6 +25556,206 @@ export const clutch = $root.clutch = (() => {
                 return Edge;
             })();
 
+            v1.TopologyObject = (function() {
+
+                /**
+                 * Properties of a TopologyObject.
+                 * @memberof clutch.topology.v1
+                 * @interface ITopologyObject
+                 * @property {string|null} [id] TopologyObject id
+                 * @property {google.protobuf.IAny|null} [pb] TopologyObject pb
+                 * @property {Object.<string,string>|null} [metadata] TopologyObject metadata
+                 * @property {clutch.topology.v1.TopologyObject.TopologyCacheAction|null} [action] TopologyObject action
+                 */
+
+                /**
+                 * Constructs a new TopologyObject.
+                 * @memberof clutch.topology.v1
+                 * @classdesc Represents a TopologyObject.
+                 * @implements ITopologyObject
+                 * @constructor
+                 * @param {clutch.topology.v1.ITopologyObject=} [properties] Properties to set
+                 */
+                function TopologyObject(properties) {
+                    this.metadata = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * TopologyObject id.
+                 * @member {string} id
+                 * @memberof clutch.topology.v1.TopologyObject
+                 * @instance
+                 */
+                TopologyObject.prototype.id = "";
+
+                /**
+                 * TopologyObject pb.
+                 * @member {google.protobuf.IAny|null|undefined} pb
+                 * @memberof clutch.topology.v1.TopologyObject
+                 * @instance
+                 */
+                TopologyObject.prototype.pb = null;
+
+                /**
+                 * TopologyObject metadata.
+                 * @member {Object.<string,string>} metadata
+                 * @memberof clutch.topology.v1.TopologyObject
+                 * @instance
+                 */
+                TopologyObject.prototype.metadata = $util.emptyObject;
+
+                /**
+                 * TopologyObject action.
+                 * @member {clutch.topology.v1.TopologyObject.TopologyCacheAction} action
+                 * @memberof clutch.topology.v1.TopologyObject
+                 * @instance
+                 */
+                TopologyObject.prototype.action = 0;
+
+                /**
+                 * Verifies a TopologyObject message.
+                 * @function verify
+                 * @memberof clutch.topology.v1.TopologyObject
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                TopologyObject.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (!$util.isString(message.id))
+                            return "id: string expected";
+                    if (message.pb != null && message.hasOwnProperty("pb")) {
+                        let error = $root.google.protobuf.Any.verify(message.pb);
+                        if (error)
+                            return "pb." + error;
+                    }
+                    if (message.metadata != null && message.hasOwnProperty("metadata")) {
+                        if (!$util.isObject(message.metadata))
+                            return "metadata: object expected";
+                        let key = Object.keys(message.metadata);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.metadata[key[i]]))
+                                return "metadata: string{k:string} expected";
+                    }
+                    if (message.action != null && message.hasOwnProperty("action"))
+                        switch (message.action) {
+                        default:
+                            return "action: enum value expected";
+                        case 0:
+                        case 1:
+                            break;
+                        }
+                    return null;
+                };
+
+                /**
+                 * Creates a TopologyObject message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.topology.v1.TopologyObject
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.topology.v1.TopologyObject} TopologyObject
+                 */
+                TopologyObject.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.TopologyObject)
+                        return object;
+                    let message = new $root.clutch.topology.v1.TopologyObject();
+                    if (object.id != null)
+                        message.id = String(object.id);
+                    if (object.pb != null) {
+                        if (typeof object.pb !== "object")
+                            throw TypeError(".clutch.topology.v1.TopologyObject.pb: object expected");
+                        message.pb = $root.google.protobuf.Any.fromObject(object.pb);
+                    }
+                    if (object.metadata) {
+                        if (typeof object.metadata !== "object")
+                            throw TypeError(".clutch.topology.v1.TopologyObject.metadata: object expected");
+                        message.metadata = {};
+                        for (let keys = Object.keys(object.metadata), i = 0; i < keys.length; ++i)
+                            message.metadata[keys[i]] = String(object.metadata[keys[i]]);
+                    }
+                    switch (object.action) {
+                    case "UPSERT":
+                    case 0:
+                        message.action = 0;
+                        break;
+                    case "DELETE":
+                    case 1:
+                        message.action = 1;
+                        break;
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a TopologyObject message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.topology.v1.TopologyObject
+                 * @static
+                 * @param {clutch.topology.v1.TopologyObject} message TopologyObject
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                TopologyObject.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults)
+                        object.metadata = {};
+                    if (options.defaults) {
+                        object.id = "";
+                        object.pb = null;
+                        object.action = options.enums === String ? "UPSERT" : 0;
+                    }
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        object.id = message.id;
+                    if (message.pb != null && message.hasOwnProperty("pb"))
+                        object.pb = $root.google.protobuf.Any.toObject(message.pb, options);
+                    let keys2;
+                    if (message.metadata && (keys2 = Object.keys(message.metadata)).length) {
+                        object.metadata = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.metadata[keys2[j]] = message.metadata[keys2[j]];
+                    }
+                    if (message.action != null && message.hasOwnProperty("action"))
+                        object.action = options.enums === String ? $root.clutch.topology.v1.TopologyObject.TopologyCacheAction[message.action] : message.action;
+                    return object;
+                };
+
+                /**
+                 * Converts this TopologyObject to JSON.
+                 * @function toJSON
+                 * @memberof clutch.topology.v1.TopologyObject
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                TopologyObject.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * TopologyCacheAction enum.
+                 * @name clutch.topology.v1.TopologyObject.TopologyCacheAction
+                 * @enum {number}
+                 * @property {number} UPSERT=0 UPSERT value
+                 * @property {number} DELETE=1 DELETE value
+                 */
+                TopologyObject.TopologyCacheAction = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UPSERT"] = 0;
+                    values[valuesById[1] = "DELETE"] = 1;
+                    return values;
+                })();
+
+                return TopologyObject;
+            })();
+
             return v1;
         })();
 

@@ -5,32 +5,32 @@ import (
 	"encoding/json"
 	"log"
 
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
+
 	"github.com/lyft/clutch/backend/service"
-	k8sservice "github.com/lyft/clutch/backend/service/k8s"
-	"github.com/lyft/clutch/backend/types"
 	"go.uber.org/zap"
 )
 
 func (c *client) startCaching() {
 	if svc, ok := service.Registry["clutch.service.k8s"]; ok {
-		k8sSvc, _ := svc.(k8sservice.Service)
+		k8sSvc, _ := svc.(CacheableTopology)
 		go c.processTopologyObjectChannel(k8sSvc.GetTopologyObjectChannel())
 	}
 }
 
-func (c *client) processTopologyObjectChannel(objs chan types.TopologyObject) {
+func (c *client) processTopologyObjectChannel(objs chan topologyv1.TopologyObject) {
 	for {
 		obj := <-objs
 		switch obj.Action {
-		case types.UPSERT:
+		case topologyv1.TopologyObject_UPSERT:
 			c.SetCache(obj)
-		case types.DELETE:
+		case topologyv1.TopologyObject_DELETE:
 			c.DeleteCache(obj)
 		}
 	}
 }
 
-func (c *client) DeleteCache(obj types.TopologyObject) {
+func (c *client) DeleteCache(obj topologyv1.TopologyObject) {
 	const deleteQuery = `
 		DELETE FROM topology_cache WHERE id = $1
 	`
@@ -42,7 +42,7 @@ func (c *client) DeleteCache(obj types.TopologyObject) {
 	}
 }
 
-func (c *client) SetCache(obj types.TopologyObject) {
+func (c *client) SetCache(obj topologyv1.TopologyObject) {
 	const upsertQuery = `
 		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
 		VALUES ($1, $2, $3, $4)
