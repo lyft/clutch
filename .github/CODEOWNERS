@@ -1,6 +1,7 @@
-*                                            @lyft/clutch-admin
-/api/chaos/                                  @lyft/resilience
-/backend/**/chaos/                           @lyft/resilience
-/frontend/api/src/                           @lyft/resilience
-/frontend/workflows/experimentation/         @lyft/resilience
-/frontend/workflows/serverexperimentation/   @lyft/resilience
+*                                                    @lyft/clutch-admin
+/api/chaos/                                          @lyft/resilience
+/backend/**/chaos/                                   @lyft/resilience
+/backend/cmd/migrate/migrations/*_experimentation_*  @lyft/resilience
+/frontend/api/src/                                   @lyft/resilience
+/frontend/workflows/experimentation/                 @lyft/resilience
+/frontend/workflows/serverexperimentation/           @lyft/resilience
