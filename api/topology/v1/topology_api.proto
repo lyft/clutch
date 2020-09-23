@@ -176,8 +176,8 @@ message TopologyObject {
   // The topology service gets TopologyObjects off of the `GetTopologyObjectChannel` which is processed
   // and stored in the topology_cache table.
   enum TopologyCacheAction {
-    // UPSERT creates or updates items in the topology_cache table
     UNSPECIFIED = 0;
+    // UPSERT creates or updates items in the topology_cache table
     UPSERT = 1;
     DELETE = 2;
   }

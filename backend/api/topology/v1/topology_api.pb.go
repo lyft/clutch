@@ -176,17 +176,17 @@ func (MetadataQuery_Aggregation) EnumDescriptor() ([]byte, []int) {
 	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{4, 0}
 }
 
-// TopologyCacheAction signifies to the Topology service what to do with an incomeing TopologyObject
+// TopologyCacheAction signifies to the Topology service what to do with an incoming TopologyObject
 //
 // The topology service gets TopologyObjects off of the `GetTopologyObjectChannel` which is processed
 // and stored in the topology_cache table.
 type TopologyObject_TopologyCacheAction int32
 
 const (
-	// UPSERT creates or updates items in the topology_cache table
 	TopologyObject_UNSPECIFIED TopologyObject_TopologyCacheAction = 0
-	TopologyObject_UPSERT      TopologyObject_TopologyCacheAction = 1
-	TopologyObject_DELETE      TopologyObject_TopologyCacheAction = 2
+	// UPSERT creates or updates items in the topology_cache table
+	TopologyObject_UPSERT TopologyObject_TopologyCacheAction = 1
+	TopologyObject_DELETE TopologyObject_TopologyCacheAction = 2
 )
 
 // Enum value maps for TopologyObject_TopologyCacheAction.
