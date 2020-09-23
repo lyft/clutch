@@ -25691,7 +25691,6 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [id] TopologyObject id
                  * @property {google.protobuf.IAny|null} [pb] TopologyObject pb
                  * @property {Object.<string,string>|null} [metadata] TopologyObject metadata
-                 * @property {clutch.topology.v1.TopologyObject.TopologyCacheAction|null} [action] TopologyObject action
                  */
 
                 /**
@@ -25735,14 +25734,6 @@ export const clutch = $root.clutch = (() => {
                 TopologyObject.prototype.metadata = $util.emptyObject;
 
                 /**
-                 * TopologyObject action.
-                 * @member {clutch.topology.v1.TopologyObject.TopologyCacheAction} action
-                 * @memberof clutch.topology.v1.TopologyObject
-                 * @instance
-                 */
-                TopologyObject.prototype.action = 0;
-
-                /**
                  * Verifies a TopologyObject message.
                  * @function verify
                  * @memberof clutch.topology.v1.TopologyObject
@@ -25769,15 +25760,6 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.metadata[key[i]]))
                                 return "metadata: string{k:string} expected";
                     }
-                    if (message.action != null && message.hasOwnProperty("action"))
-                        switch (message.action) {
-                        default:
-                            return "action: enum value expected";
-                        case 0:
-                        case 1:
-                        case 2:
-                            break;
-                        }
                     return null;
                 };
 
@@ -25807,20 +25789,6 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.metadata), i = 0; i < keys.length; ++i)
                             message.metadata[keys[i]] = String(object.metadata[keys[i]]);
                     }
-                    switch (object.action) {
-                    case "UNSPECIFIED":
-                    case 0:
-                        message.action = 0;
-                        break;
-                    case "UPSERT":
-                    case 1:
-                        message.action = 1;
-                        break;
-                    case "DELETE":
-                    case 2:
-                        message.action = 2;
-                        break;
-                    }
                     return message;
                 };
 
@@ -25842,7 +25810,6 @@ export const clutch = $root.clutch = (() => {
                     if (options.defaults) {
                         object.id = "";
                         object.pb = null;
-                        object.action = options.enums === String ? "UNSPECIFIED" : 0;
                     }
                     if (message.id != null && message.hasOwnProperty("id"))
                         object.id = message.id;
@@ -25854,8 +25821,6 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < keys2.length; ++j)
                             object.metadata[keys2[j]] = message.metadata[keys2[j]];
                     }
-                    if (message.action != null && message.hasOwnProperty("action"))
-                        object.action = options.enums === String ? $root.clutch.topology.v1.TopologyObject.TopologyCacheAction[message.action] : message.action;
                     return object;
                 };
 
@@ -25870,23 +25835,164 @@ export const clutch = $root.clutch = (() => {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
+                return TopologyObject;
+            })();
+
+            v1.TopologyCacheObject = (function() {
+
+                /**
+                 * Properties of a TopologyCacheObject.
+                 * @memberof clutch.topology.v1
+                 * @interface ITopologyCacheObject
+                 * @property {clutch.topology.v1.ITopologyObject|null} [topologyObject] TopologyCacheObject topologyObject
+                 * @property {clutch.topology.v1.TopologyCacheObject.TopologyCacheAction|null} [action] TopologyCacheObject action
+                 */
+
+                /**
+                 * Constructs a new TopologyCacheObject.
+                 * @memberof clutch.topology.v1
+                 * @classdesc Represents a TopologyCacheObject.
+                 * @implements ITopologyCacheObject
+                 * @constructor
+                 * @param {clutch.topology.v1.ITopologyCacheObject=} [properties] Properties to set
+                 */
+                function TopologyCacheObject(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * TopologyCacheObject topologyObject.
+                 * @member {clutch.topology.v1.ITopologyObject|null|undefined} topologyObject
+                 * @memberof clutch.topology.v1.TopologyCacheObject
+                 * @instance
+                 */
+                TopologyCacheObject.prototype.topologyObject = null;
+
+                /**
+                 * TopologyCacheObject action.
+                 * @member {clutch.topology.v1.TopologyCacheObject.TopologyCacheAction} action
+                 * @memberof clutch.topology.v1.TopologyCacheObject
+                 * @instance
+                 */
+                TopologyCacheObject.prototype.action = 0;
+
+                /**
+                 * Verifies a TopologyCacheObject message.
+                 * @function verify
+                 * @memberof clutch.topology.v1.TopologyCacheObject
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                TopologyCacheObject.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.topologyObject != null && message.hasOwnProperty("topologyObject")) {
+                        let error = $root.clutch.topology.v1.TopologyObject.verify(message.topologyObject);
+                        if (error)
+                            return "topologyObject." + error;
+                    }
+                    if (message.action != null && message.hasOwnProperty("action"))
+                        switch (message.action) {
+                        default:
+                            return "action: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                            break;
+                        }
+                    return null;
+                };
+
+                /**
+                 * Creates a TopologyCacheObject message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.topology.v1.TopologyCacheObject
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.topology.v1.TopologyCacheObject} TopologyCacheObject
+                 */
+                TopologyCacheObject.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.TopologyCacheObject)
+                        return object;
+                    let message = new $root.clutch.topology.v1.TopologyCacheObject();
+                    if (object.topologyObject != null) {
+                        if (typeof object.topologyObject !== "object")
+                            throw TypeError(".clutch.topology.v1.TopologyCacheObject.topologyObject: object expected");
+                        message.topologyObject = $root.clutch.topology.v1.TopologyObject.fromObject(object.topologyObject);
+                    }
+                    switch (object.action) {
+                    case "UNSPECIFIED":
+                    case 0:
+                        message.action = 0;
+                        break;
+                    case "CREATE_OR_UPDATE":
+                    case 1:
+                        message.action = 1;
+                        break;
+                    case "DELETE":
+                    case 2:
+                        message.action = 2;
+                        break;
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a TopologyCacheObject message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.topology.v1.TopologyCacheObject
+                 * @static
+                 * @param {clutch.topology.v1.TopologyCacheObject} message TopologyCacheObject
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                TopologyCacheObject.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.topologyObject = null;
+                        object.action = options.enums === String ? "UNSPECIFIED" : 0;
+                    }
+                    if (message.topologyObject != null && message.hasOwnProperty("topologyObject"))
+                        object.topologyObject = $root.clutch.topology.v1.TopologyObject.toObject(message.topologyObject, options);
+                    if (message.action != null && message.hasOwnProperty("action"))
+                        object.action = options.enums === String ? $root.clutch.topology.v1.TopologyCacheObject.TopologyCacheAction[message.action] : message.action;
+                    return object;
+                };
+
+                /**
+                 * Converts this TopologyCacheObject to JSON.
+                 * @function toJSON
+                 * @memberof clutch.topology.v1.TopologyCacheObject
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                TopologyCacheObject.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
                 /**
                  * TopologyCacheAction enum.
-                 * @name clutch.topology.v1.TopologyObject.TopologyCacheAction
+                 * @name clutch.topology.v1.TopologyCacheObject.TopologyCacheAction
                  * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
-                 * @property {number} UPSERT=1 UPSERT value
+                 * @property {number} CREATE_OR_UPDATE=1 CREATE_OR_UPDATE value
                  * @property {number} DELETE=2 DELETE value
                  */
-                TopologyObject.TopologyCacheAction = (function() {
+                TopologyCacheObject.TopologyCacheAction = (function() {
                     const valuesById = {}, values = Object.create(valuesById);
                     values[valuesById[0] = "UNSPECIFIED"] = 0;
-                    values[valuesById[1] = "UPSERT"] = 1;
+                    values[valuesById[1] = "CREATE_OR_UPDATE"] = 1;
                     values[valuesById[2] = "DELETE"] = 2;
                     return values;
                 })();
 
-                return TopologyObject;
+                return TopologyCacheObject;
             })();
 
             return v1;
