@@ -21,6 +21,10 @@ const SizedCard = styled(CardContent)`
   `};
 `;
 
+const CardTitle = styled(Typography)`
+  color: #ffffff;
+`;
+
 interface MediaCardProps {
   title: string;
   description: string;
@@ -38,9 +42,9 @@ const MediaCard: React.FC<MediaCardProps> = ({ title, description, path }) => {
       <Card raised>
         <CardActionArea onClick={navigateTo}>
           <SizedCard>
-            <Typography gutterBottom variant="h6" color="primary">
+            <CardTitle gutterBottom variant="h6">
               {title}
-            </Typography>
+            </CardTitle>
             <Typography variant="body2" color="textSecondary">
               {description}
             </Typography>
