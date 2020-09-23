@@ -157,7 +157,7 @@ func (fs *experimentStore) GetExperiments(ctx context.Context, configType string
 		WHERE
 			experiment_config.id = experiment_run.experiment_config_id
 			AND ($1 = '' OR $1 = experiment_config.details ->> '@type')
-			AND ($2 != 'RUNNING' OR (experiment_run.cancellation_time is NOT NULL AND NOW() > lower(experiment_run.execution_time) AND (upper(experiment_run.execution_time) IS NULL OR NOW() < upper(experiment_run.execution_time))))`
+			AND ($2 != 'RUNNING' OR (experiment_run.cancellation_time is NULL AND NOW() > lower(experiment_run.execution_time) AND (upper(experiment_run.execution_time) IS NULL OR NOW() < upper(experiment_run.execution_time))))`
 
 	rows, err := fs.db.QueryContext(ctx, query, configType, status.String())
 	if err != nil {
