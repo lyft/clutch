@@ -11,7 +11,7 @@ COPY Makefile .
 COPY --from=nodebuild ./frontend/build ./frontend/build/
 RUN cd backend \
     && go mod download \
-    && go run $(go list -f "{{ .Dir }}" -m "github.com/lyft/clutch/backend")/cmd/assets/generate.go ../frontend/build \
+    && go run $(go list -f "{{ "{{" }} .Dir {{ "}}" }}" -m "github.com/lyft/clutch/backend")/cmd/assets/generate.go ../frontend/build \
     && go build -tags withAssets -o ../build/clutch -ldflags="-X main.version=${VERSION}"
 
 FROM gcr.io/distroless/base-debian10
