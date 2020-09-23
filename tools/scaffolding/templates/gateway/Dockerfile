@@ -1,8 +1,7 @@
 FROM node:14-buster as nodebuild
 COPY ./frontend ./frontend
-COPY ./tools/install-yarn.sh ./tools/install-yarn.sh
 COPY Makefile .
-RUN tools/install-yarn.sh && yarn --cwd frontend install
+RUN yarn --cwd frontend install
 
 FROM golang:1.15-buster as gobuild
 WORKDIR /go/src/{{ .RepoProvider}}/{{ .RepoOwner }}/{{ .RepoName }}
