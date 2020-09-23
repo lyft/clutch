@@ -11,11 +11,9 @@ import (
 )
 
 var startTime = time.Date(2020, 11, 17, 20, 34, 58, 651387237, time.UTC)
-var creationTime = startTime
 var endTime = time.Date(2020, 11, 20, 20, 34, 58, 651387237, time.UTC)
-var details = `{"@type":"type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig","clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"abort":{"percent":100,"httpStatus":401}}`
 
-func TestScheduledExperiment(t *testing.T) {
+func TestScheduledExperimentStatus(t *testing.T) {
 	start := sql.NullTime{
 		Time:  startTime,
 		Valid: true,
@@ -25,14 +23,14 @@ func TestScheduledExperiment(t *testing.T) {
 
 	now := startTime.AddDate(0, 0, -1)
 
-	runDetails, err := NewRunDetails(uint64(1), creationTime, start, end, cancellation, now, details)
+	status, err := TimesToStatus(start, end, cancellation, now)
 
 	assert := assert.New(t)
 	assert.NoError(err)
-	assert.Equal(experimentation.Status_SCHEDULED, runDetails.Status)
+	assert.Equal(experimentation.ExperimentRunDetails_SCHEDULED, status)
 }
 
-func TestCanceledExperiment(t *testing.T) {
+func TestCanceledExperimentStatus(t *testing.T) {
 	start := sql.NullTime{
 		Time:  startTime,
 		Valid: true,
@@ -43,14 +41,14 @@ func TestCanceledExperiment(t *testing.T) {
 		Valid: true,
 	}
 
-	runDetails, err := NewRunDetails(uint64(1), creationTime, start, end, cancellation, time.Now(), details)
+	status, err := TimesToStatus(start, end, cancellation, time.Now())
 
 	assert := assert.New(t)
 	assert.NoError(err)
-	assert.Equal(experimentation.Status_CANCELED, runDetails.Status)
+	assert.Equal(experimentation.ExperimentRunDetails_CANCELED, status)
 }
 
-func TestRunningExperiment(t *testing.T) {
+func TestRunningExperimentStatus(t *testing.T) {
 	now := startTime.AddDate(0, 0, 1)
 	start := sql.NullTime{
 		Time:  startTime,
@@ -59,14 +57,14 @@ func TestRunningExperiment(t *testing.T) {
 	end := sql.NullTime{Valid: false}
 	cancellation := sql.NullTime{Valid: false}
 
-	runDetails, err := NewRunDetails(uint64(1), creationTime, start, end, cancellation, now, details)
+	status, err := TimesToStatus(start, end, cancellation, now)
 
 	assert := assert.New(t)
 	assert.NoError(err)
-	assert.Equal(experimentation.Status_RUNNING, runDetails.Status)
+	assert.Equal(experimentation.ExperimentRunDetails_RUNNING, status)
 }
 
-func TestStoppedExperiment(t *testing.T) {
+func TestStoppedExperimentStatus(t *testing.T) {
 	start := sql.NullTime{
 		Time:  startTime,
 		Valid: true,
@@ -80,14 +78,14 @@ func TestStoppedExperiment(t *testing.T) {
 		Valid: true,
 	}
 
-	runDetails, err := NewRunDetails(uint64(1), creationTime, start, end, cancellation, time.Now(), details)
+	status, err := TimesToStatus(start, end, cancellation, time.Now())
 
 	assert := assert.New(t)
 	assert.NoError(err)
-	assert.Equal(experimentation.Status_STOPPED, runDetails.Status)
+	assert.Equal(experimentation.ExperimentRunDetails_STOPPED, status)
 }
 
-func TestCompletedExperiment(t *testing.T) {
+func TestCompletedExperimentStatus(t *testing.T) {
 	start := sql.NullTime{
 		Time:  startTime,
 		Valid: true,
@@ -101,9 +99,9 @@ func TestCompletedExperiment(t *testing.T) {
 	}
 	now := endTime.AddDate(0, 0, 1)
 
-	runDetails, err := NewRunDetails(uint64(1), creationTime, start, end, cancellation, now, details)
+	status, err := TimesToStatus(start, end, cancellation, now)
 
 	assert := assert.New(t)
 	assert.NoError(err)
-	assert.Equal(experimentation.Status_COMPLETED, runDetails.Status)
+	assert.Equal(experimentation.ExperimentRunDetails_COMPLETED, status)
 }

@@ -2536,6 +2536,15 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
+                namespace GetExperimentsRequest {
+
+                    /** Status enum. */
+                    enum Status {
+                        UNSPECIFIED = 0,
+                        RUNNING = 1
+                    }
+                }
+
                 /** Properties of a GetExperimentsResponse. */
                 interface IGetExperimentsResponse {
 
@@ -2876,7 +2885,7 @@ export namespace clutch {
                     runId?: (number|Long|null);
 
                     /** ExperimentRunDetails status */
-                    status?: (clutch.chaos.experimentation.v1.Status|null);
+                    status?: (clutch.chaos.experimentation.v1.ExperimentRunDetails.Status|null);
 
                     /** ExperimentRunDetails properties */
                     properties?: (clutch.chaos.experimentation.v1.IProperties|null);
@@ -2898,7 +2907,7 @@ export namespace clutch {
                     public runId: (number|Long);
 
                     /** ExperimentRunDetails status. */
-                    public status: clutch.chaos.experimentation.v1.Status;
+                    public status: clutch.chaos.experimentation.v1.ExperimentRunDetails.Status;
 
                     /** ExperimentRunDetails properties. */
                     public properties?: (clutch.chaos.experimentation.v1.IProperties|null);
@@ -2935,14 +2944,17 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Status enum. */
-                enum Status {
-                    UNSPECIFIED = 0,
-                    SCHEDULED = 1,
-                    RUNNING = 2,
-                    COMPLETED = 3,
-                    CANCELED = 4,
-                    STOPPED = 5
+                namespace ExperimentRunDetails {
+
+                    /** Status enum. */
+                    enum Status {
+                        UNSPECIFIED = 0,
+                        SCHEDULED = 1,
+                        RUNNING = 2,
+                        COMPLETED = 3,
+                        CANCELED = 4,
+                        STOPPED = 5
+                    }
                 }
 
                 /** Properties of a Properties. */

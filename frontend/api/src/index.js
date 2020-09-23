@@ -5921,6 +5921,20 @@ export const clutch = $root.clutch = (() => {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
+                    /**
+                     * Status enum.
+                     * @name clutch.chaos.experimentation.v1.GetExperimentsRequest.Status
+                     * @enum {number}
+                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                     * @property {number} RUNNING=1 RUNNING value
+                     */
+                    GetExperimentsRequest.Status = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "RUNNING"] = 1;
+                        return values;
+                    })();
+
                     return GetExperimentsRequest;
                 })();
 
@@ -6613,7 +6627,7 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.chaos.experimentation.v1
                      * @interface IExperimentRunDetails
                      * @property {number|Long|null} [runId] ExperimentRunDetails runId
-                     * @property {clutch.chaos.experimentation.v1.Status|null} [status] ExperimentRunDetails status
+                     * @property {clutch.chaos.experimentation.v1.ExperimentRunDetails.Status|null} [status] ExperimentRunDetails status
                      * @property {clutch.chaos.experimentation.v1.IProperties|null} [properties] ExperimentRunDetails properties
                      * @property {google.protobuf.IAny|null} [config] ExperimentRunDetails config
                      */
@@ -6643,7 +6657,7 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * ExperimentRunDetails status.
-                     * @member {clutch.chaos.experimentation.v1.Status} status
+                     * @member {clutch.chaos.experimentation.v1.ExperimentRunDetails.Status} status
                      * @memberof clutch.chaos.experimentation.v1.ExperimentRunDetails
                      * @instance
                      */
@@ -6793,7 +6807,7 @@ export const clutch = $root.clutch = (() => {
                             else
                                 object.runId = options.longs === String ? $util.Long.prototype.toString.call(message.runId) : options.longs === Number ? new $util.LongBits(message.runId.low >>> 0, message.runId.high >>> 0).toNumber() : message.runId;
                         if (message.status != null && message.hasOwnProperty("status"))
-                            object.status = options.enums === String ? $root.clutch.chaos.experimentation.v1.Status[message.status] : message.status;
+                            object.status = options.enums === String ? $root.clutch.chaos.experimentation.v1.ExperimentRunDetails.Status[message.status] : message.status;
                         if (message.properties != null && message.hasOwnProperty("properties"))
                             object.properties = $root.clutch.chaos.experimentation.v1.Properties.toObject(message.properties, options);
                         if (message.config != null && message.hasOwnProperty("config"))
@@ -6812,29 +6826,29 @@ export const clutch = $root.clutch = (() => {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return ExperimentRunDetails;
-                })();
+                    /**
+                     * Status enum.
+                     * @name clutch.chaos.experimentation.v1.ExperimentRunDetails.Status
+                     * @enum {number}
+                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                     * @property {number} SCHEDULED=1 SCHEDULED value
+                     * @property {number} RUNNING=2 RUNNING value
+                     * @property {number} COMPLETED=3 COMPLETED value
+                     * @property {number} CANCELED=4 CANCELED value
+                     * @property {number} STOPPED=5 STOPPED value
+                     */
+                    ExperimentRunDetails.Status = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "SCHEDULED"] = 1;
+                        values[valuesById[2] = "RUNNING"] = 2;
+                        values[valuesById[3] = "COMPLETED"] = 3;
+                        values[valuesById[4] = "CANCELED"] = 4;
+                        values[valuesById[5] = "STOPPED"] = 5;
+                        return values;
+                    })();
 
-                /**
-                 * Status enum.
-                 * @name clutch.chaos.experimentation.v1.Status
-                 * @enum {number}
-                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
-                 * @property {number} SCHEDULED=1 SCHEDULED value
-                 * @property {number} RUNNING=2 RUNNING value
-                 * @property {number} COMPLETED=3 COMPLETED value
-                 * @property {number} CANCELED=4 CANCELED value
-                 * @property {number} STOPPED=5 STOPPED value
-                 */
-                v1.Status = (function() {
-                    const valuesById = {}, values = Object.create(valuesById);
-                    values[valuesById[0] = "UNSPECIFIED"] = 0;
-                    values[valuesById[1] = "SCHEDULED"] = 1;
-                    values[valuesById[2] = "RUNNING"] = 2;
-                    values[valuesById[3] = "COMPLETED"] = 3;
-                    values[valuesById[4] = "CANCELED"] = 4;
-                    values[valuesById[5] = "STOPPED"] = 5;
-                    return values;
+                    return ExperimentRunDetails;
                 })();
 
                 v1.Properties = (function() {

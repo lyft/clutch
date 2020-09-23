@@ -10,17 +10,18 @@ import "chaos/experimentation/v1/properties.proto";
 option go_package = "experimentationv1";
 
 message ExperimentRunDetails {
+  enum Status {
+    UNSPECIFIED = 0;
+    SCHEDULED = 1;
+
+    RUNNING = 2;
+    COMPLETED = 3;
+    CANCELED = 4;
+    STOPPED = 5;
+  }
+  
   fixed64 run_id = 1;
   Status status = 2;
   Properties properties = 3;
   google.protobuf.Any config = 4;
-}
-
-enum Status {
-  UNSPECIFIED = 0;
-  SCHEDULED = 1;
-  RUNNING = 2;
-  COMPLETED = 3;
-  CANCELED = 4;
-  STOPPED = 5;
 }
