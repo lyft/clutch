@@ -73,13 +73,13 @@ type Service interface {
 type svc struct {
 	manager ClientsetManager
 
-	TopologyObjectChan chan topologyv1.TopologyObject
+	TopologyObjectChan chan topologyv1.TopologyCacheObject
 	log                *zap.Logger
 	scope              tally.Scope
 }
 
 func NewWithClientsetManager(manager ClientsetManager, logger *zap.Logger, scope tally.Scope) (Service, error) {
-	topologyObjectChan := make(chan topologyv1.TopologyObject, 1000)
+	topologyObjectChan := make(chan topologyv1.TopologyCacheObject, 1000)
 	return &svc{manager: manager, TopologyObjectChan: topologyObjectChan, log: logger, scope: scope}, nil
 }
 

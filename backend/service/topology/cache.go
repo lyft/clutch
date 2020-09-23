@@ -18,19 +18,19 @@ func (c *client) startCaching() {
 	}
 }
 
-func (c *client) processTopologyObjectChannel(objs chan topologyv1.TopologyObject) {
+func (c *client) processTopologyObjectChannel(objs chan topologyv1.TopologyCacheObject) {
 	for {
 		obj := <-objs
 		switch obj.Action {
-		case topologyv1.TopologyObject_UPSERT:
-			c.SetCache(obj)
-		case topologyv1.TopologyObject_DELETE:
-			c.DeleteCache(obj)
+		case topologyv1.TopologyCacheObject_CREATE_OR_UPDATE:
+			c.SetCache(obj.TopologyObject)
+		case topologyv1.TopologyCacheObject_DELETE:
+			c.DeleteCache(obj.TopologyObject)
 		}
 	}
 }
 
-func (c *client) DeleteCache(obj topologyv1.TopologyObject) {
+func (c *client) DeleteCache(obj *topologyv1.TopologyObject) {
 	const deleteQuery = `
 		DELETE FROM topology_cache WHERE id = $1
 	`
@@ -42,7 +42,7 @@ func (c *client) DeleteCache(obj topologyv1.TopologyObject) {
 	}
 }
 
-func (c *client) SetCache(obj topologyv1.TopologyObject) {
+func (c *client) SetCache(obj *topologyv1.TopologyObject) {
 	const upsertQuery = `
 		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
 		VALUES ($1, $2, $3, $4)

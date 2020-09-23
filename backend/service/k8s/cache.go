@@ -17,7 +17,7 @@ func (s *svc) CacheEnabled() bool {
 	return true
 }
 
-func (s *svc) GetTopologyObjectChannel() chan topologyv1.TopologyObject {
+func (s *svc) GetTopologyObjectChannel() chan topologyv1.TopologyCacheObject {
 	stop := make(chan struct{})
 
 	for name, cs := range s.manager.Clientsets() {
@@ -53,47 +53,53 @@ func (s *svc) startInformers(cs ContextClientset, stop chan struct{}) {
 
 func (s *svc) informerAddHandler(obj interface{}) {
 	log.Print("Add Handler")
-	s.processInformerEvent(obj, topologyv1.TopologyObject_UPSERT)
+	s.processInformerEvent(obj, topologyv1.TopologyCacheObject_CREATE_OR_UPDATE)
 }
 
 func (s *svc) informerUpdateHandler(oldObj, newObj interface{}) {
 	log.Print("Update Handler")
-	s.processInformerEvent(newObj, topologyv1.TopologyObject_UPSERT)
+	s.processInformerEvent(newObj, topologyv1.TopologyCacheObject_CREATE_OR_UPDATE)
 }
 
 func (s *svc) informerDeleteHandler(obj interface{}) {
 	log.Print("Delete handler")
-	s.processInformerEvent(obj, topologyv1.TopologyObject_DELETE)
+	s.processInformerEvent(obj, topologyv1.TopologyCacheObject_DELETE)
 }
 
-func (s *svc) processInformerEvent(obj interface{}, action topologyv1.TopologyObject_TopologyCacheAction) {
+func (s *svc) processInformerEvent(obj interface{}, action topologyv1.TopologyCacheObject_TopologyCacheAction) {
 	switch obj.(type) {
 	case *corev1.Pod:
 		pod := podDescription(obj.(*corev1.Pod), "")
 		protoPod, _ := ptypes.MarshalAny(pod)
-		s.TopologyObjectChan <- topologyv1.TopologyObject{
-			Id:       pod.Name,
-			Pb:       protoPod,
-			Metadata: pod.GetLabels(),
-			Action:   action,
+		s.TopologyObjectChan <- topologyv1.TopologyCacheObject{
+			TopologyObject: &topologyv1.TopologyObject{
+				Id:       pod.Name,
+				Pb:       protoPod,
+				Metadata: pod.GetLabels(),
+			},
+			Action: action,
 		}
 	case *appsv1.Deployment:
 		deployment := ProtoForDeployment("", obj.(*appsv1.Deployment))
 		protoDeployment, _ := ptypes.MarshalAny(deployment)
-		s.TopologyObjectChan <- topologyv1.TopologyObject{
-			Id:       deployment.Name,
-			Pb:       protoDeployment,
-			Metadata: deployment.GetLabels(),
-			Action:   action,
+		s.TopologyObjectChan <- topologyv1.TopologyCacheObject{
+			TopologyObject: &topologyv1.TopologyObject{
+				Id:       deployment.Name,
+				Pb:       protoDeployment,
+				Metadata: deployment.GetLabels(),
+			},
+			Action: action,
 		}
 	case *autoscalingv1.HorizontalPodAutoscaler:
 		hpa := ProtoForHPA("", obj.(*autoscalingv1.HorizontalPodAutoscaler))
 		protoHpa, _ := ptypes.MarshalAny(hpa)
-		s.TopologyObjectChan <- topologyv1.TopologyObject{
-			Id:       hpa.Name,
-			Pb:       protoHpa,
-			Metadata: hpa.GetLabels(),
-			Action:   action,
+		s.TopologyObjectChan <- topologyv1.TopologyCacheObject{
+			TopologyObject: &topologyv1.TopologyObject{
+				Id:       hpa.Name,
+				Pb:       protoHpa,
+				Metadata: hpa.GetLabels(),
+			},
+			Action: action,
 		}
 	default:
 		s.log.Warn("unable to determin topology object type")

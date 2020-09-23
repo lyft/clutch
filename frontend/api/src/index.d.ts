@@ -10630,9 +10630,6 @@ export namespace clutch {
 
                 /** TopologyObject metadata */
                 metadata?: ({ [k: string]: string }|null);
-
-                /** TopologyObject action */
-                action?: (clutch.topology.v1.TopologyObject.TopologyCacheAction|null);
             }
 
             /** Represents a TopologyObject. */
@@ -10652,9 +10649,6 @@ export namespace clutch {
 
                 /** TopologyObject metadata. */
                 public metadata: { [k: string]: string };
-
-                /** TopologyObject action. */
-                public action: clutch.topology.v1.TopologyObject.TopologyCacheAction;
 
                 /**
                  * Verifies a TopologyObject message.
@@ -10685,12 +10679,67 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
-            namespace TopologyObject {
+            /** Properties of a TopologyCacheObject. */
+            interface ITopologyCacheObject {
+
+                /** TopologyCacheObject topologyObject */
+                topologyObject?: (clutch.topology.v1.ITopologyObject|null);
+
+                /** TopologyCacheObject action */
+                action?: (clutch.topology.v1.TopologyCacheObject.TopologyCacheAction|null);
+            }
+
+            /** Represents a TopologyCacheObject. */
+            class TopologyCacheObject implements ITopologyCacheObject {
+
+                /**
+                 * Constructs a new TopologyCacheObject.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.topology.v1.ITopologyCacheObject);
+
+                /** TopologyCacheObject topologyObject. */
+                public topologyObject?: (clutch.topology.v1.ITopologyObject|null);
+
+                /** TopologyCacheObject action. */
+                public action: clutch.topology.v1.TopologyCacheObject.TopologyCacheAction;
+
+                /**
+                 * Verifies a TopologyCacheObject message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a TopologyCacheObject message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns TopologyCacheObject
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.TopologyCacheObject;
+
+                /**
+                 * Creates a plain object from a TopologyCacheObject message. Also converts values to other types if specified.
+                 * @param message TopologyCacheObject
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.topology.v1.TopologyCacheObject, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this TopologyCacheObject to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace TopologyCacheObject {
 
                 /** TopologyCacheAction enum. */
                 enum TopologyCacheAction {
-                    UPSERT = 0,
-                    DELETE = 1
+                    UNSPECIFIED = 0,
+                    CREATE_OR_UPDATE = 1,
+                    DELETE = 2
                 }
             }
         }

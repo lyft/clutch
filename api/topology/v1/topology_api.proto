@@ -170,17 +170,23 @@ message TopologyObject {
   // Metadata is set by the service which produces TopologyObjects, for example k8s would extract
   // relevent metadata that gives the TopologyAPI the ability to query against it.
   map<string, string> metadata = 3;
+}
 
-  // TopologyCacheAction signifies to the Topology service what to do with an incomeing TopologyObject
+// A TopologyCacheObject is used when a service such as kuberentes or aws produces objects for
+// the topology API to cache in the topology_cache table.
+message TopologyCacheObject {
+  TopologyObject topology_object = 1;
+
+  // TopologyCacheAction signifies to the Topology service what to do with an incoming TopologyObject
   //
-  // The topology service gets TopologyObjects off of the `GetTopologyObjectChannel` which is processed
+  // The topology service gets TopologyCacheObject off of the `GetTopologyObjectChannel` which is processed
   // and stored in the topology_cache table.
   enum TopologyCacheAction {
-    // UPSERT creates or updates items in the topology_cache table
-    UPSERT = 0;
-    DELETE = 1;
+    UNSPECIFIED = 0;
+    CREATE_OR_UPDATE = 1;
+    DELETE = 2;
   }
 
   // Action denotes what the topology service should do with this object.
-  TopologyCacheAction action = 4; 
+  TopologyCacheAction action = 2;
 }

@@ -176,55 +176,57 @@ func (MetadataQuery_Aggregation) EnumDescriptor() ([]byte, []int) {
 	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{4, 0}
 }
 
-// TopologyCacheAction signifies to the Topology service what to do with an incomeing TopologyObject
+// TopologyCacheAction signifies to the Topology service what to do with an incoming TopologyObject
 //
-// The topology service gets TopologyObjects off of the `GetTopologyObjectChannel` which is processed
+// The topology service gets TopologyCacheObject off of the `GetTopologyObjectChannel` which is processed
 // and stored in the topology_cache table.
-type TopologyObject_TopologyCacheAction int32
+type TopologyCacheObject_TopologyCacheAction int32
 
 const (
-	// UPSERT creates or updates items in the topology_cache table
-	TopologyObject_UPSERT TopologyObject_TopologyCacheAction = 0
-	TopologyObject_DELETE TopologyObject_TopologyCacheAction = 1
+	TopologyCacheObject_UNSPECIFIED      TopologyCacheObject_TopologyCacheAction = 0
+	TopologyCacheObject_CREATE_OR_UPDATE TopologyCacheObject_TopologyCacheAction = 1
+	TopologyCacheObject_DELETE           TopologyCacheObject_TopologyCacheAction = 2
 )
 
-// Enum value maps for TopologyObject_TopologyCacheAction.
+// Enum value maps for TopologyCacheObject_TopologyCacheAction.
 var (
-	TopologyObject_TopologyCacheAction_name = map[int32]string{
-		0: "UPSERT",
-		1: "DELETE",
+	TopologyCacheObject_TopologyCacheAction_name = map[int32]string{
+		0: "UNSPECIFIED",
+		1: "CREATE_OR_UPDATE",
+		2: "DELETE",
 	}
-	TopologyObject_TopologyCacheAction_value = map[string]int32{
-		"UPSERT": 0,
-		"DELETE": 1,
+	TopologyCacheObject_TopologyCacheAction_value = map[string]int32{
+		"UNSPECIFIED":      0,
+		"CREATE_OR_UPDATE": 1,
+		"DELETE":           2,
 	}
 )
 
-func (x TopologyObject_TopologyCacheAction) Enum() *TopologyObject_TopologyCacheAction {
-	p := new(TopologyObject_TopologyCacheAction)
+func (x TopologyCacheObject_TopologyCacheAction) Enum() *TopologyCacheObject_TopologyCacheAction {
+	p := new(TopologyCacheObject_TopologyCacheAction)
 	*p = x
 	return p
 }
 
-func (x TopologyObject_TopologyCacheAction) String() string {
+func (x TopologyCacheObject_TopologyCacheAction) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (TopologyObject_TopologyCacheAction) Descriptor() protoreflect.EnumDescriptor {
+func (TopologyCacheObject_TopologyCacheAction) Descriptor() protoreflect.EnumDescriptor {
 	return file_topology_v1_topology_api_proto_enumTypes[2].Descriptor()
 }
 
-func (TopologyObject_TopologyCacheAction) Type() protoreflect.EnumType {
+func (TopologyCacheObject_TopologyCacheAction) Type() protoreflect.EnumType {
 	return &file_topology_v1_topology_api_proto_enumTypes[2]
 }
 
-func (x TopologyObject_TopologyCacheAction) Number() protoreflect.EnumNumber {
+func (x TopologyCacheObject_TopologyCacheAction) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use TopologyObject_TopologyCacheAction.Descriptor instead.
-func (TopologyObject_TopologyCacheAction) EnumDescriptor() ([]byte, []int) {
-	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{9, 0}
+// Deprecated: Use TopologyCacheObject_TopologyCacheAction.Descriptor instead.
+func (TopologyCacheObject_TopologyCacheAction) EnumDescriptor() ([]byte, []int) {
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{10, 0}
 }
 
 type GetTopologyRequest struct {
@@ -848,8 +850,6 @@ type TopologyObject struct {
 	// Metadata is set by the service which produces TopologyObjects, for example k8s would extract
 	// relevent metadata that gives the TopologyAPI the ability to query against it.
 	Metadata map[string]string `protobuf:"bytes,3,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// Action denotes what the topology service should do with this object.
-	Action TopologyObject_TopologyCacheAction `protobuf:"varint,4,opt,name=action,proto3,enum=clutch.topology.v1.TopologyObject_TopologyCacheAction" json:"action,omitempty"`
 }
 
 func (x *TopologyObject) Reset() {
@@ -905,11 +905,62 @@ func (x *TopologyObject) GetMetadata() map[string]string {
 	return nil
 }
 
-func (x *TopologyObject) GetAction() TopologyObject_TopologyCacheAction {
+// A TopologyCacheObject is used when a service such as kuberentes or aws produces objects for
+// the topology API to cache in the topology_cache table.
+type TopologyCacheObject struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	TopologyObject *TopologyObject `protobuf:"bytes,1,opt,name=topology_object,json=topologyObject,proto3" json:"topology_object,omitempty"`
+	// Action denotes what the topology service should do with this object.
+	Action TopologyCacheObject_TopologyCacheAction `protobuf:"varint,2,opt,name=action,proto3,enum=clutch.topology.v1.TopologyCacheObject_TopologyCacheAction" json:"action,omitempty"`
+}
+
+func (x *TopologyCacheObject) Reset() {
+	*x = TopologyCacheObject{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_topology_v1_topology_api_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *TopologyCacheObject) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TopologyCacheObject) ProtoMessage() {}
+
+func (x *TopologyCacheObject) ProtoReflect() protoreflect.Message {
+	mi := &file_topology_v1_topology_api_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TopologyCacheObject.ProtoReflect.Descriptor instead.
+func (*TopologyCacheObject) Descriptor() ([]byte, []int) {
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *TopologyCacheObject) GetTopologyObject() *TopologyObject {
+	if x != nil {
+		return x.TopologyObject
+	}
+	return nil
+}
+
+func (x *TopologyCacheObject) GetAction() TopologyCacheObject_TopologyCacheAction {
 	if x != nil {
 		return x.Action
 	}
-	return TopologyObject_UPSERT
+	return TopologyCacheObject_UNSPECIFIED
 }
 
 var File_topology_v1_topology_api_proto protoreflect.FileDescriptor
@@ -1063,7 +1114,7 @@ var file_topology_v1_topology_api_proto_rawDesc = []byte{
 	0x6b, 0x65, 0x79, 0x12, 0x2c, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01,
 	0x28, 0x0b, 0x32, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
 	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75,
-	0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0xd0, 0x02, 0x0a, 0x0e, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f,
+	0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0xd1, 0x01, 0x0a, 0x0e, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f,
 	0x67, 0x79, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x24, 0x0a, 0x02, 0x70, 0x62, 0x18, 0x02,
 	0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
@@ -1072,30 +1123,38 @@ var file_topology_v1_topology_api_proto_rawDesc = []byte{
 	0x32, 0x30, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f,
 	0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x4f, 0x62,
 	0x6a, 0x65, 0x63, 0x74, 0x2e, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x45, 0x6e, 0x74,
-	0x72, 0x79, 0x52, 0x08, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x12, 0x4e, 0x0a, 0x06,
-	0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x36, 0x2e, 0x63,
-	0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76,
-	0x31, 0x2e, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74,
-	0x2e, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x43, 0x61, 0x63, 0x68, 0x65, 0x41, 0x63,
-	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x1a, 0x3b, 0x0a, 0x0d,
+	0x72, 0x79, 0x52, 0x08, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x1a, 0x3b, 0x0a, 0x0d,
 	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a,
 	0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12,
 	0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05,
-	0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x2d, 0x0a, 0x13, 0x54, 0x6f, 0x70,
-	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x43, 0x61, 0x63, 0x68, 0x65, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e,
-	0x12, 0x0a, 0x0a, 0x06, 0x55, 0x50, 0x53, 0x45, 0x52, 0x54, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06,
-	0x44, 0x45, 0x4c, 0x45, 0x54, 0x45, 0x10, 0x01, 0x32, 0x99, 0x01, 0x0a, 0x0b, 0x54, 0x6f, 0x70,
-	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x41, 0x50, 0x49, 0x12, 0x89, 0x01, 0x0a, 0x0b, 0x47, 0x65, 0x74,
-	0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x12, 0x26, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63,
-	0x68, 0x2e, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65,
-	0x74, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x27, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f,
-	0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67,
-	0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x29, 0x82, 0xd3, 0xe4, 0x93, 0x02,
-	0x1d, 0x22, 0x18, 0x2f, 0x76, 0x31, 0x2f, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2f,
-	0x67, 0x65, 0x74, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x3a, 0x01, 0x2a, 0xaa, 0xe1,
-	0x1c, 0x02, 0x08, 0x02, 0x42, 0x0c, 0x5a, 0x0a, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
-	0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x81, 0x02, 0x0a, 0x13, 0x54, 0x6f,
+	0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x43, 0x61, 0x63, 0x68, 0x65, 0x4f, 0x62, 0x6a, 0x65, 0x63,
+	0x74, 0x12, 0x4b, 0x0a, 0x0f, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x5f, 0x6f, 0x62,
+	0x6a, 0x65, 0x63, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x63, 0x6c, 0x75,
+	0x74, 0x63, 0x68, 0x2e, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e,
+	0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x52, 0x0e,
+	0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x12, 0x53,
+	0x0a, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x3b,
+	0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
+	0x2e, 0x76, 0x31, 0x2e, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x43, 0x61, 0x63, 0x68,
+	0x65, 0x4f, 0x62, 0x6a, 0x65, 0x63, 0x74, 0x2e, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
+	0x43, 0x61, 0x63, 0x68, 0x65, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x06, 0x61, 0x63, 0x74,
+	0x69, 0x6f, 0x6e, 0x22, 0x48, 0x0a, 0x13, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x43,
+	0x61, 0x63, 0x68, 0x65, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x0f, 0x0a, 0x0b, 0x55, 0x4e,
+	0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x14, 0x0a, 0x10, 0x43,
+	0x52, 0x45, 0x41, 0x54, 0x45, 0x5f, 0x4f, 0x52, 0x5f, 0x55, 0x50, 0x44, 0x41, 0x54, 0x45, 0x10,
+	0x01, 0x12, 0x0a, 0x0a, 0x06, 0x44, 0x45, 0x4c, 0x45, 0x54, 0x45, 0x10, 0x02, 0x32, 0x99, 0x01,
+	0x0a, 0x0b, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x41, 0x50, 0x49, 0x12, 0x89, 0x01,
+	0x0a, 0x0b, 0x47, 0x65, 0x74, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x12, 0x26, 0x2e,
+	0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e,
+	0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x27, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x74,
+	0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x6f,
+	0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x29,
+	0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1d, 0x22, 0x18, 0x2f, 0x76, 0x31, 0x2f, 0x74, 0x6f, 0x70, 0x6f,
+	0x6c, 0x6f, 0x67, 0x79, 0x2f, 0x67, 0x65, 0x74, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
+	0x3a, 0x01, 0x2a, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x02, 0x42, 0x0c, 0x5a, 0x0a, 0x74, 0x6f, 0x70,
+	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1111,64 +1170,66 @@ func file_topology_v1_topology_api_proto_rawDescGZIP() []byte {
 }
 
 var file_topology_v1_topology_api_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_topology_v1_topology_api_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_topology_v1_topology_api_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_topology_v1_topology_api_proto_goTypes = []interface{}{
-	(Constraint_Operator)(0),                // 0: clutch.topology.v1.Constraint.Operator
-	(MetadataQuery_Aggregation)(0),          // 1: clutch.topology.v1.MetadataQuery.Aggregation
-	(TopologyObject_TopologyCacheAction)(0), // 2: clutch.topology.v1.TopologyObject.TopologyCacheAction
-	(*GetTopologyRequest)(nil),              // 3: clutch.topology.v1.GetTopologyRequest
-	(*GetTopologyResponse)(nil),             // 4: clutch.topology.v1.GetTopologyResponse
-	(*FeatureQuery)(nil),                    // 5: clutch.topology.v1.FeatureQuery
-	(*Constraint)(nil),                      // 6: clutch.topology.v1.Constraint
-	(*MetadataQuery)(nil),                   // 7: clutch.topology.v1.MetadataQuery
-	(*Query)(nil),                           // 8: clutch.topology.v1.Query
-	(*QueryResult)(nil),                     // 9: clutch.topology.v1.QueryResult
-	(*Node)(nil),                            // 10: clutch.topology.v1.Node
-	(*Edge)(nil),                            // 11: clutch.topology.v1.Edge
-	(*TopologyObject)(nil),                  // 12: clutch.topology.v1.TopologyObject
-	nil,                                     // 13: clutch.topology.v1.QueryResult.NodesEntry
-	nil,                                     // 14: clutch.topology.v1.QueryResult.EdgesEntry
-	nil,                                     // 15: clutch.topology.v1.Node.FeaturesEntry
-	nil,                                     // 16: clutch.topology.v1.Node.MetadataEntry
-	nil,                                     // 17: clutch.topology.v1.Edge.MetadataEntry
-	nil,                                     // 18: clutch.topology.v1.TopologyObject.MetadataEntry
-	(*_struct.Value)(nil),                   // 19: google.protobuf.Value
-	(*_struct.Struct)(nil),                  // 20: google.protobuf.Struct
-	(*status.Status)(nil),                   // 21: google.rpc.Status
-	(*any.Any)(nil),                         // 22: google.protobuf.Any
+	(Constraint_Operator)(0),                     // 0: clutch.topology.v1.Constraint.Operator
+	(MetadataQuery_Aggregation)(0),               // 1: clutch.topology.v1.MetadataQuery.Aggregation
+	(TopologyCacheObject_TopologyCacheAction)(0), // 2: clutch.topology.v1.TopologyCacheObject.TopologyCacheAction
+	(*GetTopologyRequest)(nil),                   // 3: clutch.topology.v1.GetTopologyRequest
+	(*GetTopologyResponse)(nil),                  // 4: clutch.topology.v1.GetTopologyResponse
+	(*FeatureQuery)(nil),                         // 5: clutch.topology.v1.FeatureQuery
+	(*Constraint)(nil),                           // 6: clutch.topology.v1.Constraint
+	(*MetadataQuery)(nil),                        // 7: clutch.topology.v1.MetadataQuery
+	(*Query)(nil),                                // 8: clutch.topology.v1.Query
+	(*QueryResult)(nil),                          // 9: clutch.topology.v1.QueryResult
+	(*Node)(nil),                                 // 10: clutch.topology.v1.Node
+	(*Edge)(nil),                                 // 11: clutch.topology.v1.Edge
+	(*TopologyObject)(nil),                       // 12: clutch.topology.v1.TopologyObject
+	(*TopologyCacheObject)(nil),                  // 13: clutch.topology.v1.TopologyCacheObject
+	nil,                                          // 14: clutch.topology.v1.QueryResult.NodesEntry
+	nil,                                          // 15: clutch.topology.v1.QueryResult.EdgesEntry
+	nil,                                          // 16: clutch.topology.v1.Node.FeaturesEntry
+	nil,                                          // 17: clutch.topology.v1.Node.MetadataEntry
+	nil,                                          // 18: clutch.topology.v1.Edge.MetadataEntry
+	nil,                                          // 19: clutch.topology.v1.TopologyObject.MetadataEntry
+	(*_struct.Value)(nil),                        // 20: google.protobuf.Value
+	(*_struct.Struct)(nil),                       // 21: google.protobuf.Struct
+	(*status.Status)(nil),                        // 22: google.rpc.Status
+	(*any.Any)(nil),                              // 23: google.protobuf.Any
 }
 var file_topology_v1_topology_api_proto_depIdxs = []int32{
 	8,  // 0: clutch.topology.v1.GetTopologyRequest.queries:type_name -> clutch.topology.v1.Query
 	9,  // 1: clutch.topology.v1.GetTopologyResponse.results:type_name -> clutch.topology.v1.QueryResult
 	0,  // 2: clutch.topology.v1.Constraint.operator:type_name -> clutch.topology.v1.Constraint.Operator
-	19, // 3: clutch.topology.v1.Constraint.value:type_name -> google.protobuf.Value
-	20, // 4: clutch.topology.v1.MetadataQuery.params:type_name -> google.protobuf.Struct
+	20, // 3: clutch.topology.v1.Constraint.value:type_name -> google.protobuf.Value
+	21, // 4: clutch.topology.v1.MetadataQuery.params:type_name -> google.protobuf.Struct
 	1,  // 5: clutch.topology.v1.MetadataQuery.aggregation:type_name -> clutch.topology.v1.MetadataQuery.Aggregation
 	6,  // 6: clutch.topology.v1.MetadataQuery.constraints:type_name -> clutch.topology.v1.Constraint
 	5,  // 7: clutch.topology.v1.Query.features:type_name -> clutch.topology.v1.FeatureQuery
 	7,  // 8: clutch.topology.v1.Query.node_metadata:type_name -> clutch.topology.v1.MetadataQuery
 	7,  // 9: clutch.topology.v1.Query.edge_metadata:type_name -> clutch.topology.v1.MetadataQuery
-	21, // 10: clutch.topology.v1.QueryResult.status:type_name -> google.rpc.Status
+	22, // 10: clutch.topology.v1.QueryResult.status:type_name -> google.rpc.Status
 	8,  // 11: clutch.topology.v1.QueryResult.query:type_name -> clutch.topology.v1.Query
-	13, // 12: clutch.topology.v1.QueryResult.nodes:type_name -> clutch.topology.v1.QueryResult.NodesEntry
-	14, // 13: clutch.topology.v1.QueryResult.edges:type_name -> clutch.topology.v1.QueryResult.EdgesEntry
-	15, // 14: clutch.topology.v1.Node.features:type_name -> clutch.topology.v1.Node.FeaturesEntry
-	16, // 15: clutch.topology.v1.Node.metadata:type_name -> clutch.topology.v1.Node.MetadataEntry
-	17, // 16: clutch.topology.v1.Edge.metadata:type_name -> clutch.topology.v1.Edge.MetadataEntry
-	22, // 17: clutch.topology.v1.TopologyObject.pb:type_name -> google.protobuf.Any
-	18, // 18: clutch.topology.v1.TopologyObject.metadata:type_name -> clutch.topology.v1.TopologyObject.MetadataEntry
-	2,  // 19: clutch.topology.v1.TopologyObject.action:type_name -> clutch.topology.v1.TopologyObject.TopologyCacheAction
-	10, // 20: clutch.topology.v1.QueryResult.NodesEntry.value:type_name -> clutch.topology.v1.Node
-	11, // 21: clutch.topology.v1.QueryResult.EdgesEntry.value:type_name -> clutch.topology.v1.Edge
-	19, // 22: clutch.topology.v1.Node.MetadataEntry.value:type_name -> google.protobuf.Value
-	19, // 23: clutch.topology.v1.Edge.MetadataEntry.value:type_name -> google.protobuf.Value
-	3,  // 24: clutch.topology.v1.TopologyAPI.GetTopology:input_type -> clutch.topology.v1.GetTopologyRequest
-	4,  // 25: clutch.topology.v1.TopologyAPI.GetTopology:output_type -> clutch.topology.v1.GetTopologyResponse
-	25, // [25:26] is the sub-list for method output_type
-	24, // [24:25] is the sub-list for method input_type
-	24, // [24:24] is the sub-list for extension type_name
-	24, // [24:24] is the sub-list for extension extendee
-	0,  // [0:24] is the sub-list for field type_name
+	14, // 12: clutch.topology.v1.QueryResult.nodes:type_name -> clutch.topology.v1.QueryResult.NodesEntry
+	15, // 13: clutch.topology.v1.QueryResult.edges:type_name -> clutch.topology.v1.QueryResult.EdgesEntry
+	16, // 14: clutch.topology.v1.Node.features:type_name -> clutch.topology.v1.Node.FeaturesEntry
+	17, // 15: clutch.topology.v1.Node.metadata:type_name -> clutch.topology.v1.Node.MetadataEntry
+	18, // 16: clutch.topology.v1.Edge.metadata:type_name -> clutch.topology.v1.Edge.MetadataEntry
+	23, // 17: clutch.topology.v1.TopologyObject.pb:type_name -> google.protobuf.Any
+	19, // 18: clutch.topology.v1.TopologyObject.metadata:type_name -> clutch.topology.v1.TopologyObject.MetadataEntry
+	12, // 19: clutch.topology.v1.TopologyCacheObject.topology_object:type_name -> clutch.topology.v1.TopologyObject
+	2,  // 20: clutch.topology.v1.TopologyCacheObject.action:type_name -> clutch.topology.v1.TopologyCacheObject.TopologyCacheAction
+	10, // 21: clutch.topology.v1.QueryResult.NodesEntry.value:type_name -> clutch.topology.v1.Node
+	11, // 22: clutch.topology.v1.QueryResult.EdgesEntry.value:type_name -> clutch.topology.v1.Edge
+	20, // 23: clutch.topology.v1.Node.MetadataEntry.value:type_name -> google.protobuf.Value
+	20, // 24: clutch.topology.v1.Edge.MetadataEntry.value:type_name -> google.protobuf.Value
+	3,  // 25: clutch.topology.v1.TopologyAPI.GetTopology:input_type -> clutch.topology.v1.GetTopologyRequest
+	4,  // 26: clutch.topology.v1.TopologyAPI.GetTopology:output_type -> clutch.topology.v1.GetTopologyResponse
+	26, // [26:27] is the sub-list for method output_type
+	25, // [25:26] is the sub-list for method input_type
+	25, // [25:25] is the sub-list for extension type_name
+	25, // [25:25] is the sub-list for extension extendee
+	0,  // [0:25] is the sub-list for field type_name
 }
 
 func init() { file_topology_v1_topology_api_proto_init() }
@@ -1297,6 +1358,18 @@ func file_topology_v1_topology_api_proto_init() {
 				return nil
 			}
 		}
+		file_topology_v1_topology_api_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*TopologyCacheObject); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1304,7 +1377,7 @@ func file_topology_v1_topology_api_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_topology_v1_topology_api_proto_rawDesc,
 			NumEnums:      3,
-			NumMessages:   16,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
