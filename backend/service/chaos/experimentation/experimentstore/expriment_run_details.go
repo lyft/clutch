@@ -17,7 +17,7 @@ func NewRunDetails(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 	runConfigPair := &experimentation.ExperimentRunDetails{}
 	runConfigPair.RunId = fetchedID
 	runConfigPair.Properties = &experimentation.Properties{}
-	status, err := TimesToStatus(startTime, endTime, cancellationTime, now)
+	status, err := timesToStatus(startTime, endTime, cancellationTime, now)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func NewRunDetails(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 	return runConfigPair, err
 }
 
-func TimesToStatus(startTime sql.NullTime, endTime sql.NullTime, cancellationTime sql.NullTime, now time.Time) (experimentation.ExperimentRunDetails_Status, error) {
+func timesToStatus(startTime sql.NullTime, endTime sql.NullTime, cancellationTime sql.NullTime, now time.Time) (experimentation.ExperimentRunDetails_Status, error) {
 	if !startTime.Valid {
 		return experimentation.ExperimentRunDetails_UNSPECIFIED, errors.New("experiment doesn't have startTime")
 	}

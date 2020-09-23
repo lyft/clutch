@@ -5824,6 +5824,20 @@ export const clutch = $root.clutch = (() => {
                     return CreateExperimentResponse;
                 })();
 
+                /**
+                 * GetExperimentsStatus enum.
+                 * @name clutch.chaos.experimentation.v1.GetExperimentsStatus
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} RUNNING=1 RUNNING value
+                 */
+                v1.GetExperimentsStatus = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "RUNNING"] = 1;
+                    return values;
+                })();
+
                 v1.GetExperimentsRequest = (function() {
 
                     /**
@@ -5831,6 +5845,7 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.chaos.experimentation.v1
                      * @interface IGetExperimentsRequest
                      * @property {string|null} [configType] GetExperimentsRequest configType
+                     * @property {clutch.chaos.experimentation.v1.GetExperimentsStatus|null} [status] GetExperimentsRequest status
                      */
 
                     /**
@@ -5857,6 +5872,14 @@ export const clutch = $root.clutch = (() => {
                     GetExperimentsRequest.prototype.configType = "";
 
                     /**
+                     * GetExperimentsRequest status.
+                     * @member {clutch.chaos.experimentation.v1.GetExperimentsStatus} status
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentsRequest
+                     * @instance
+                     */
+                    GetExperimentsRequest.prototype.status = 0;
+
+                    /**
                      * Verifies a GetExperimentsRequest message.
                      * @function verify
                      * @memberof clutch.chaos.experimentation.v1.GetExperimentsRequest
@@ -5870,6 +5893,14 @@ export const clutch = $root.clutch = (() => {
                         if (message.configType != null && message.hasOwnProperty("configType"))
                             if (!$util.isString(message.configType))
                                 return "configType: string expected";
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            switch (message.status) {
+                            default:
+                                return "status: enum value expected";
+                            case 0:
+                            case 1:
+                                break;
+                            }
                         return null;
                     };
 
@@ -5887,6 +5918,16 @@ export const clutch = $root.clutch = (() => {
                         let message = new $root.clutch.chaos.experimentation.v1.GetExperimentsRequest();
                         if (object.configType != null)
                             message.configType = String(object.configType);
+                        switch (object.status) {
+                        case "UNSPECIFIED":
+                        case 0:
+                            message.status = 0;
+                            break;
+                        case "RUNNING":
+                        case 1:
+                            message.status = 1;
+                            break;
+                        }
                         return message;
                     };
 
@@ -5903,10 +5944,14 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.defaults)
+                        if (options.defaults) {
                             object.configType = "";
+                            object.status = options.enums === String ? "UNSPECIFIED" : 0;
+                        }
                         if (message.configType != null && message.hasOwnProperty("configType"))
                             object.configType = message.configType;
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            object.status = options.enums === String ? $root.clutch.chaos.experimentation.v1.GetExperimentsStatus[message.status] : message.status;
                         return object;
                     };
 
@@ -5920,20 +5965,6 @@ export const clutch = $root.clutch = (() => {
                     GetExperimentsRequest.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
-
-                    /**
-                     * Status enum.
-                     * @name clutch.chaos.experimentation.v1.GetExperimentsRequest.Status
-                     * @enum {number}
-                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
-                     * @property {number} RUNNING=1 RUNNING value
-                     */
-                    GetExperimentsRequest.Status = (function() {
-                        const valuesById = {}, values = Object.create(valuesById);
-                        values[valuesById[0] = "UNSPECIFIED"] = 0;
-                        values[valuesById[1] = "RUNNING"] = 1;
-                        return values;
-                    })();
 
                     return GetExperimentsRequest;
                 })();

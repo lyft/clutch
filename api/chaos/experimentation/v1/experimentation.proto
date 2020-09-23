@@ -41,13 +41,14 @@ message CreateExperimentResponse {
   Experiment experiment = 1;
 }
 
-message GetExperimentsRequest {
-  enum Status {
+enum GetExperimentsStatus {
     UNSPECIFIED = 0;
     RUNNING = 1;
-  }
+}
 
+message GetExperimentsRequest {
   string config_type = 1;
+  GetExperimentsStatus status = 2;
 }
 
 message GetExperimentsResponse {

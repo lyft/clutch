@@ -29,13 +29,18 @@ const ViewExperimentRun: React.FC = () => {
       onClick: goBack,
     };
 
-    const statusValue = clutch.chaos.experimentation.v1.Status[experiment.status].toString();
-    if (statusValue === clutch.chaos.experimentation.v1.Status.COMPLETED.toString()) {
+    const statusValue = clutch.chaos.experimentation.v1.ExperimentRunDetails.Status[experiment.status].toString();
+    const completedStatuses = [
+      clutch.chaos.experimentation.v1.ExperimentRunDetails.Status.RUNNING.toString(),
+      clutch.chaos.experimentation.v1.ExperimentRunDetails.Status.SCHEDULED.toString()
+    ];
+
+    if (completedStatuses.indexOf(statusValue) < 0) {
       return [goBackButton];
     }
 
     const title =
-      statusValue === clutch.chaos.experimentation.v1.Status.RUNNING.toString()
+      statusValue === clutch.chaos.experimentation.v1.ExperimentRunDetails.Status.RUNNING.toString()
         ? "Stop Experiment Run"
         : "Cancel Experiment Run";
     const destructiveButton = {

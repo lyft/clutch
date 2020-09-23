@@ -2488,11 +2488,20 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
+                /** GetExperimentsStatus enum. */
+                enum GetExperimentsStatus {
+                    UNSPECIFIED = 0,
+                    RUNNING = 1
+                }
+
                 /** Properties of a GetExperimentsRequest. */
                 interface IGetExperimentsRequest {
 
                     /** GetExperimentsRequest configType */
                     configType?: (string|null);
+
+                    /** GetExperimentsRequest status */
+                    status?: (clutch.chaos.experimentation.v1.GetExperimentsStatus|null);
                 }
 
                 /** Represents a GetExperimentsRequest. */
@@ -2506,6 +2515,9 @@ export namespace clutch {
 
                     /** GetExperimentsRequest configType. */
                     public configType: string;
+
+                    /** GetExperimentsRequest status. */
+                    public status: clutch.chaos.experimentation.v1.GetExperimentsStatus;
 
                     /**
                      * Verifies a GetExperimentsRequest message.
@@ -2534,15 +2546,6 @@ export namespace clutch {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
-                }
-
-                namespace GetExperimentsRequest {
-
-                    /** Status enum. */
-                    enum Status {
-                        UNSPECIFIED = 0,
-                        RUNNING = 1
-                    }
                 }
 
                 /** Properties of a GetExperimentsResponse. */

@@ -13,6 +13,7 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 
+	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 )
 
@@ -173,7 +174,7 @@ func TestGetExperiments(t *testing.T) {
 			es := &experimentStore{db: db}
 			defer es.Close()
 
-			expected := mock.ExpectQuery(regexp.QuoteMeta(test.sql)).WithArgs("foo")
+			expected := mock.ExpectQuery(regexp.QuoteMeta(test.sql)).WithArgs("foo", "UNSPECIFIED")
 			if test.err != nil {
 				expected.WillReturnError(test.err)
 			} else {
@@ -184,7 +185,7 @@ func TestGetExperiments(t *testing.T) {
 				expected.WillReturnRows(rows)
 			}
 
-			experiments, err := es.GetExperiments(context.Background(), "foo")
+			experiments, err := es.GetExperiments(context.Background(), "foo", experimentation.GetExperimentsStatus_UNSPECIFIED)
 			if test.err != nil {
 				a.Equal(test.err, err)
 			} else {

@@ -316,6 +316,8 @@ func (m *GetExperimentsRequest) Validate() error {
 
 	// no validation rules for ConfigType
 
+	// no validation rules for Status
+
 	return nil
 }
 
