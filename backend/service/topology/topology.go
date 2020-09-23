@@ -75,3 +75,12 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 
 	return c, err
 }
+
+func (c *client) LeaderElect() (bool, error) {
+	var lock bool
+	if err := c.db.QueryRow("SELECT pg_try_advisory_lock(100)").Scan(&lock); err != nil {
+		return lock, err
+	}
+
+	return lock, nil
+}
