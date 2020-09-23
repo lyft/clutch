@@ -13,7 +13,6 @@ message ExperimentRunDetails {
   enum Status {
     UNSPECIFIED = 0;
     SCHEDULED = 1;
-
     RUNNING = 2;
     COMPLETED = 3;
     CANCELED = 4;

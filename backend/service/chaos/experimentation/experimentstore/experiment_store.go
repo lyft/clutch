@@ -151,9 +151,9 @@ func (fs *experimentStore) CancelExperimentRun(ctx context.Context, id uint64) e
 func (fs *experimentStore) GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsStatus) ([]*experimentation.Experiment, error) {
 	query := `
         SELECT 
-        	experiment_run.id, 
-        	details
-        FROM experiment_config, experiment_run
+			experiment_run.id, 
+			details
+		FROM experiment_config, experiment_run
 		WHERE
 			experiment_config.id = experiment_run.experiment_config_id
 			AND ($1 = '' OR $1 = experiment_config.details ->> '@type')
