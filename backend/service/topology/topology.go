@@ -43,12 +43,10 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, errors.New("Unable to get the datastore client")
 	}
 
-	c, err := &client{
+	return &client{
 		config: topologyConfig,
 		db:     dbClient.DB(),
 		log:    logger,
 		scope:  scope,
 	}, nil
-
-	return c, err
 }
