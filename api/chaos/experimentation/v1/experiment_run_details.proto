@@ -11,11 +11,17 @@ option go_package = "experimentationv1";
 
 message ExperimentRunDetails {
   enum Status {
+    // Unspecifiedf Status.
     UNSPECIFIED = 0;
+    // An experiment is specified to be run at a future date.
     SCHEDULED = 1;
+    // An experiment is currently running.
     RUNNING = 2;
+    // An experiment has completed.
     COMPLETED = 3;
+    // An experiment has been canceled before it started.
     CANCELED = 4;
+    // An experiment was running and was stopped before its originally scheduled end time.
     STOPPED = 5;
   }
   

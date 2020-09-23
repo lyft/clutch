@@ -15,7 +15,7 @@ var creationTime = startTime
 var endTime = time.Date(2020, 11, 20, 20, 34, 58, 651387237, time.UTC)
 var details = `{"@type":"type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig","clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"abort":{"percent":100,"httpStatus":401}}`
 
-func TestScheduledExperimentStatus(t *testing.T) {
+func TestScheduledExperiment(t *testing.T) {
 	start := sql.NullTime{
 		Time:  startTime,
 		Valid: true,
@@ -32,7 +32,7 @@ func TestScheduledExperimentStatus(t *testing.T) {
 	assert.Equal(experimentation.ExperimentRunDetails_SCHEDULED, runDetails.Status)
 }
 
-func TestCanceledExperimentStatus(t *testing.T) {
+func TestCanceledExperiment(t *testing.T) {
 	start := sql.NullTime{
 		Time:  startTime,
 		Valid: true,
@@ -50,7 +50,7 @@ func TestCanceledExperimentStatus(t *testing.T) {
 	assert.Equal(experimentation.ExperimentRunDetails_CANCELED, runDetails.Status)
 }
 
-func TestRunningExperimentStatus(t *testing.T) {
+func TestRunningExperiment(t *testing.T) {
 	now := startTime.AddDate(0, 0, 1)
 	start := sql.NullTime{
 		Time:  startTime,
@@ -66,7 +66,7 @@ func TestRunningExperimentStatus(t *testing.T) {
 	assert.Equal(experimentation.ExperimentRunDetails_RUNNING, runDetails.Status)
 }
 
-func TestStoppedExperimentStatus(t *testing.T) {
+func TestStoppedExperiment(t *testing.T) {
 	start := sql.NullTime{
 		Time:  startTime,
 		Valid: true,
@@ -87,7 +87,7 @@ func TestStoppedExperimentStatus(t *testing.T) {
 	assert.Equal(experimentation.ExperimentRunDetails_STOPPED, runDetails.Status)
 }
 
-func TestCompletedExperimentStatus(t *testing.T) {
+func TestCompletedExperiment(t *testing.T) {
 	start := sql.NullTime{
 		Time:  startTime,
 		Valid: true,
