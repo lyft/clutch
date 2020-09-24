@@ -841,10 +841,9 @@ var _ interface {
 	ErrorName() string
 } = EdgeValidationError{}
 
-// Validate checks the field values on TopologyObject with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *TopologyObject) Validate() error {
+// Validate checks the field values on Resource with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Resource) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -853,7 +852,7 @@ func (m *TopologyObject) Validate() error {
 
 	if v, ok := interface{}(m.GetPb()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return TopologyObjectValidationError{
+			return ResourceValidationError{
 				field:  "Pb",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -866,9 +865,9 @@ func (m *TopologyObject) Validate() error {
 	return nil
 }
 
-// TopologyObjectValidationError is the validation error returned by
-// TopologyObject.Validate if the designated constraints aren't met.
-type TopologyObjectValidationError struct {
+// ResourceValidationError is the validation error returned by
+// Resource.Validate if the designated constraints aren't met.
+type ResourceValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -876,22 +875,22 @@ type TopologyObjectValidationError struct {
 }
 
 // Field function returns field value.
-func (e TopologyObjectValidationError) Field() string { return e.field }
+func (e ResourceValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e TopologyObjectValidationError) Reason() string { return e.reason }
+func (e ResourceValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e TopologyObjectValidationError) Cause() error { return e.cause }
+func (e ResourceValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e TopologyObjectValidationError) Key() bool { return e.key }
+func (e ResourceValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e TopologyObjectValidationError) ErrorName() string { return "TopologyObjectValidationError" }
+func (e ResourceValidationError) ErrorName() string { return "ResourceValidationError" }
 
 // Error satisfies the builtin error interface
-func (e TopologyObjectValidationError) Error() string {
+func (e ResourceValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -903,14 +902,14 @@ func (e TopologyObjectValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sTopologyObject.%s: %s%s",
+		"invalid %sResource.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = TopologyObjectValidationError{}
+var _ error = ResourceValidationError{}
 
 var _ interface {
 	Field() string
@@ -918,20 +917,20 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = TopologyObjectValidationError{}
+} = ResourceValidationError{}
 
-// Validate checks the field values on TopologyCacheObject with the rules
+// Validate checks the field values on UpdateCacheRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *TopologyCacheObject) Validate() error {
+func (m *UpdateCacheRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetTopologyObject()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetResource()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return TopologyCacheObjectValidationError{
-				field:  "TopologyObject",
+			return UpdateCacheRequestValidationError{
+				field:  "Resource",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -943,9 +942,9 @@ func (m *TopologyCacheObject) Validate() error {
 	return nil
 }
 
-// TopologyCacheObjectValidationError is the validation error returned by
-// TopologyCacheObject.Validate if the designated constraints aren't met.
-type TopologyCacheObjectValidationError struct {
+// UpdateCacheRequestValidationError is the validation error returned by
+// UpdateCacheRequest.Validate if the designated constraints aren't met.
+type UpdateCacheRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -953,24 +952,24 @@ type TopologyCacheObjectValidationError struct {
 }
 
 // Field function returns field value.
-func (e TopologyCacheObjectValidationError) Field() string { return e.field }
+func (e UpdateCacheRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e TopologyCacheObjectValidationError) Reason() string { return e.reason }
+func (e UpdateCacheRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e TopologyCacheObjectValidationError) Cause() error { return e.cause }
+func (e UpdateCacheRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e TopologyCacheObjectValidationError) Key() bool { return e.key }
+func (e UpdateCacheRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e TopologyCacheObjectValidationError) ErrorName() string {
-	return "TopologyCacheObjectValidationError"
+func (e UpdateCacheRequestValidationError) ErrorName() string {
+	return "UpdateCacheRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e TopologyCacheObjectValidationError) Error() string {
+func (e UpdateCacheRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -982,14 +981,14 @@ func (e TopologyCacheObjectValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sTopologyCacheObject.%s: %s%s",
+		"invalid %sUpdateCacheRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = TopologyCacheObjectValidationError{}
+var _ error = UpdateCacheRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -997,4 +996,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = TopologyCacheObjectValidationError{}
+} = UpdateCacheRequestValidationError{}

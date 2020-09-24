@@ -25682,26 +25682,26 @@ export const clutch = $root.clutch = (() => {
                 return Edge;
             })();
 
-            v1.TopologyObject = (function() {
+            v1.Resource = (function() {
 
                 /**
-                 * Properties of a TopologyObject.
+                 * Properties of a Resource.
                  * @memberof clutch.topology.v1
-                 * @interface ITopologyObject
-                 * @property {string|null} [id] TopologyObject id
-                 * @property {google.protobuf.IAny|null} [pb] TopologyObject pb
-                 * @property {Object.<string,string>|null} [metadata] TopologyObject metadata
+                 * @interface IResource
+                 * @property {string|null} [id] Resource id
+                 * @property {google.protobuf.IAny|null} [pb] Resource pb
+                 * @property {Object.<string,string>|null} [metadata] Resource metadata
                  */
 
                 /**
-                 * Constructs a new TopologyObject.
+                 * Constructs a new Resource.
                  * @memberof clutch.topology.v1
-                 * @classdesc Represents a TopologyObject.
-                 * @implements ITopologyObject
+                 * @classdesc Represents a Resource.
+                 * @implements IResource
                  * @constructor
-                 * @param {clutch.topology.v1.ITopologyObject=} [properties] Properties to set
+                 * @param {clutch.topology.v1.IResource=} [properties] Properties to set
                  */
-                function TopologyObject(properties) {
+                function Resource(properties) {
                     this.metadata = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -25710,38 +25710,38 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * TopologyObject id.
+                 * Resource id.
                  * @member {string} id
-                 * @memberof clutch.topology.v1.TopologyObject
+                 * @memberof clutch.topology.v1.Resource
                  * @instance
                  */
-                TopologyObject.prototype.id = "";
+                Resource.prototype.id = "";
 
                 /**
-                 * TopologyObject pb.
+                 * Resource pb.
                  * @member {google.protobuf.IAny|null|undefined} pb
-                 * @memberof clutch.topology.v1.TopologyObject
+                 * @memberof clutch.topology.v1.Resource
                  * @instance
                  */
-                TopologyObject.prototype.pb = null;
+                Resource.prototype.pb = null;
 
                 /**
-                 * TopologyObject metadata.
+                 * Resource metadata.
                  * @member {Object.<string,string>} metadata
-                 * @memberof clutch.topology.v1.TopologyObject
+                 * @memberof clutch.topology.v1.Resource
                  * @instance
                  */
-                TopologyObject.prototype.metadata = $util.emptyObject;
+                Resource.prototype.metadata = $util.emptyObject;
 
                 /**
-                 * Verifies a TopologyObject message.
+                 * Verifies a Resource message.
                  * @function verify
-                 * @memberof clutch.topology.v1.TopologyObject
+                 * @memberof clutch.topology.v1.Resource
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                TopologyObject.verify = function verify(message) {
+                Resource.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.id != null && message.hasOwnProperty("id"))
@@ -25764,27 +25764,27 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a TopologyObject message from a plain object. Also converts values to their respective internal types.
+                 * Creates a Resource message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.topology.v1.TopologyObject
+                 * @memberof clutch.topology.v1.Resource
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.topology.v1.TopologyObject} TopologyObject
+                 * @returns {clutch.topology.v1.Resource} Resource
                  */
-                TopologyObject.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.topology.v1.TopologyObject)
+                Resource.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.Resource)
                         return object;
-                    let message = new $root.clutch.topology.v1.TopologyObject();
+                    let message = new $root.clutch.topology.v1.Resource();
                     if (object.id != null)
                         message.id = String(object.id);
                     if (object.pb != null) {
                         if (typeof object.pb !== "object")
-                            throw TypeError(".clutch.topology.v1.TopologyObject.pb: object expected");
+                            throw TypeError(".clutch.topology.v1.Resource.pb: object expected");
                         message.pb = $root.google.protobuf.Any.fromObject(object.pb);
                     }
                     if (object.metadata) {
                         if (typeof object.metadata !== "object")
-                            throw TypeError(".clutch.topology.v1.TopologyObject.metadata: object expected");
+                            throw TypeError(".clutch.topology.v1.Resource.metadata: object expected");
                         message.metadata = {};
                         for (let keys = Object.keys(object.metadata), i = 0; i < keys.length; ++i)
                             message.metadata[keys[i]] = String(object.metadata[keys[i]]);
@@ -25793,15 +25793,15 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a plain object from a TopologyObject message. Also converts values to other types if specified.
+                 * Creates a plain object from a Resource message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.topology.v1.TopologyObject
+                 * @memberof clutch.topology.v1.Resource
                  * @static
-                 * @param {clutch.topology.v1.TopologyObject} message TopologyObject
+                 * @param {clutch.topology.v1.Resource} message Resource
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                TopologyObject.toObject = function toObject(message, options) {
+                Resource.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -25825,38 +25825,38 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this TopologyObject to JSON.
+                 * Converts this Resource to JSON.
                  * @function toJSON
-                 * @memberof clutch.topology.v1.TopologyObject
+                 * @memberof clutch.topology.v1.Resource
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                TopologyObject.prototype.toJSON = function toJSON() {
+                Resource.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return TopologyObject;
+                return Resource;
             })();
 
-            v1.TopologyCacheObject = (function() {
+            v1.UpdateCacheRequest = (function() {
 
                 /**
-                 * Properties of a TopologyCacheObject.
+                 * Properties of an UpdateCacheRequest.
                  * @memberof clutch.topology.v1
-                 * @interface ITopologyCacheObject
-                 * @property {clutch.topology.v1.ITopologyObject|null} [topologyObject] TopologyCacheObject topologyObject
-                 * @property {clutch.topology.v1.TopologyCacheObject.TopologyCacheAction|null} [action] TopologyCacheObject action
+                 * @interface IUpdateCacheRequest
+                 * @property {clutch.topology.v1.IResource|null} [resource] UpdateCacheRequest resource
+                 * @property {clutch.topology.v1.UpdateCacheRequest.Action|null} [action] UpdateCacheRequest action
                  */
 
                 /**
-                 * Constructs a new TopologyCacheObject.
+                 * Constructs a new UpdateCacheRequest.
                  * @memberof clutch.topology.v1
-                 * @classdesc Represents a TopologyCacheObject.
-                 * @implements ITopologyCacheObject
+                 * @classdesc Represents an UpdateCacheRequest.
+                 * @implements IUpdateCacheRequest
                  * @constructor
-                 * @param {clutch.topology.v1.ITopologyCacheObject=} [properties] Properties to set
+                 * @param {clutch.topology.v1.IUpdateCacheRequest=} [properties] Properties to set
                  */
-                function TopologyCacheObject(properties) {
+                function UpdateCacheRequest(properties) {
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -25864,36 +25864,36 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * TopologyCacheObject topologyObject.
-                 * @member {clutch.topology.v1.ITopologyObject|null|undefined} topologyObject
-                 * @memberof clutch.topology.v1.TopologyCacheObject
+                 * UpdateCacheRequest resource.
+                 * @member {clutch.topology.v1.IResource|null|undefined} resource
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
                  * @instance
                  */
-                TopologyCacheObject.prototype.topologyObject = null;
+                UpdateCacheRequest.prototype.resource = null;
 
                 /**
-                 * TopologyCacheObject action.
-                 * @member {clutch.topology.v1.TopologyCacheObject.TopologyCacheAction} action
-                 * @memberof clutch.topology.v1.TopologyCacheObject
+                 * UpdateCacheRequest action.
+                 * @member {clutch.topology.v1.UpdateCacheRequest.Action} action
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
                  * @instance
                  */
-                TopologyCacheObject.prototype.action = 0;
+                UpdateCacheRequest.prototype.action = 0;
 
                 /**
-                 * Verifies a TopologyCacheObject message.
+                 * Verifies an UpdateCacheRequest message.
                  * @function verify
-                 * @memberof clutch.topology.v1.TopologyCacheObject
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                TopologyCacheObject.verify = function verify(message) {
+                UpdateCacheRequest.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.topologyObject != null && message.hasOwnProperty("topologyObject")) {
-                        let error = $root.clutch.topology.v1.TopologyObject.verify(message.topologyObject);
+                    if (message.resource != null && message.hasOwnProperty("resource")) {
+                        let error = $root.clutch.topology.v1.Resource.verify(message.resource);
                         if (error)
-                            return "topologyObject." + error;
+                            return "resource." + error;
                     }
                     if (message.action != null && message.hasOwnProperty("action"))
                         switch (message.action) {
@@ -25908,21 +25908,21 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a TopologyCacheObject message from a plain object. Also converts values to their respective internal types.
+                 * Creates an UpdateCacheRequest message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.topology.v1.TopologyCacheObject
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.topology.v1.TopologyCacheObject} TopologyCacheObject
+                 * @returns {clutch.topology.v1.UpdateCacheRequest} UpdateCacheRequest
                  */
-                TopologyCacheObject.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.topology.v1.TopologyCacheObject)
+                UpdateCacheRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.UpdateCacheRequest)
                         return object;
-                    let message = new $root.clutch.topology.v1.TopologyCacheObject();
-                    if (object.topologyObject != null) {
-                        if (typeof object.topologyObject !== "object")
-                            throw TypeError(".clutch.topology.v1.TopologyCacheObject.topologyObject: object expected");
-                        message.topologyObject = $root.clutch.topology.v1.TopologyObject.fromObject(object.topologyObject);
+                    let message = new $root.clutch.topology.v1.UpdateCacheRequest();
+                    if (object.resource != null) {
+                        if (typeof object.resource !== "object")
+                            throw TypeError(".clutch.topology.v1.UpdateCacheRequest.resource: object expected");
+                        message.resource = $root.clutch.topology.v1.Resource.fromObject(object.resource);
                     }
                     switch (object.action) {
                     case "UNSPECIFIED":
@@ -25942,49 +25942,49 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a plain object from a TopologyCacheObject message. Also converts values to other types if specified.
+                 * Creates a plain object from an UpdateCacheRequest message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.topology.v1.TopologyCacheObject
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
                  * @static
-                 * @param {clutch.topology.v1.TopologyCacheObject} message TopologyCacheObject
+                 * @param {clutch.topology.v1.UpdateCacheRequest} message UpdateCacheRequest
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                TopologyCacheObject.toObject = function toObject(message, options) {
+                UpdateCacheRequest.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
                     if (options.defaults) {
-                        object.topologyObject = null;
+                        object.resource = null;
                         object.action = options.enums === String ? "UNSPECIFIED" : 0;
                     }
-                    if (message.topologyObject != null && message.hasOwnProperty("topologyObject"))
-                        object.topologyObject = $root.clutch.topology.v1.TopologyObject.toObject(message.topologyObject, options);
+                    if (message.resource != null && message.hasOwnProperty("resource"))
+                        object.resource = $root.clutch.topology.v1.Resource.toObject(message.resource, options);
                     if (message.action != null && message.hasOwnProperty("action"))
-                        object.action = options.enums === String ? $root.clutch.topology.v1.TopologyCacheObject.TopologyCacheAction[message.action] : message.action;
+                        object.action = options.enums === String ? $root.clutch.topology.v1.UpdateCacheRequest.Action[message.action] : message.action;
                     return object;
                 };
 
                 /**
-                 * Converts this TopologyCacheObject to JSON.
+                 * Converts this UpdateCacheRequest to JSON.
                  * @function toJSON
-                 * @memberof clutch.topology.v1.TopologyCacheObject
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                TopologyCacheObject.prototype.toJSON = function toJSON() {
+                UpdateCacheRequest.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
                 /**
-                 * TopologyCacheAction enum.
-                 * @name clutch.topology.v1.TopologyCacheObject.TopologyCacheAction
+                 * Action enum.
+                 * @name clutch.topology.v1.UpdateCacheRequest.Action
                  * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} CREATE_OR_UPDATE=1 CREATE_OR_UPDATE value
                  * @property {number} DELETE=2 DELETE value
                  */
-                TopologyCacheObject.TopologyCacheAction = (function() {
+                UpdateCacheRequest.Action = (function() {
                     const valuesById = {}, values = Object.create(valuesById);
                     values[valuesById[0] = "UNSPECIFIED"] = 0;
                     values[valuesById[1] = "CREATE_OR_UPDATE"] = 1;
@@ -25992,7 +25992,7 @@ export const clutch = $root.clutch = (() => {
                     return values;
                 })();
 
-                return TopologyCacheObject;
+                return UpdateCacheRequest;
             })();
 
             return v1;

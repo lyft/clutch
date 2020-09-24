@@ -10676,124 +10676,124 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a TopologyObject. */
-            interface ITopologyObject {
+            /** Properties of a Resource. */
+            interface IResource {
 
-                /** TopologyObject id */
+                /** Resource id */
                 id?: (string|null);
 
-                /** TopologyObject pb */
+                /** Resource pb */
                 pb?: (google.protobuf.IAny|null);
 
-                /** TopologyObject metadata */
+                /** Resource metadata */
                 metadata?: ({ [k: string]: string }|null);
             }
 
-            /** Represents a TopologyObject. */
-            class TopologyObject implements ITopologyObject {
+            /** Represents a Resource. */
+            class Resource implements IResource {
 
                 /**
-                 * Constructs a new TopologyObject.
+                 * Constructs a new Resource.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.topology.v1.ITopologyObject);
+                constructor(properties?: clutch.topology.v1.IResource);
 
-                /** TopologyObject id. */
+                /** Resource id. */
                 public id: string;
 
-                /** TopologyObject pb. */
+                /** Resource pb. */
                 public pb?: (google.protobuf.IAny|null);
 
-                /** TopologyObject metadata. */
+                /** Resource metadata. */
                 public metadata: { [k: string]: string };
 
                 /**
-                 * Verifies a TopologyObject message.
+                 * Verifies a Resource message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a TopologyObject message from a plain object. Also converts values to their respective internal types.
+                 * Creates a Resource message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns TopologyObject
+                 * @returns Resource
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.TopologyObject;
+                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.Resource;
 
                 /**
-                 * Creates a plain object from a TopologyObject message. Also converts values to other types if specified.
-                 * @param message TopologyObject
+                 * Creates a plain object from a Resource message. Also converts values to other types if specified.
+                 * @param message Resource
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.topology.v1.TopologyObject, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.topology.v1.Resource, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this TopologyObject to JSON.
+                 * Converts this Resource to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a TopologyCacheObject. */
-            interface ITopologyCacheObject {
+            /** Properties of an UpdateCacheRequest. */
+            interface IUpdateCacheRequest {
 
-                /** TopologyCacheObject topologyObject */
-                topologyObject?: (clutch.topology.v1.ITopologyObject|null);
+                /** UpdateCacheRequest resource */
+                resource?: (clutch.topology.v1.IResource|null);
 
-                /** TopologyCacheObject action */
-                action?: (clutch.topology.v1.TopologyCacheObject.TopologyCacheAction|null);
+                /** UpdateCacheRequest action */
+                action?: (clutch.topology.v1.UpdateCacheRequest.Action|null);
             }
 
-            /** Represents a TopologyCacheObject. */
-            class TopologyCacheObject implements ITopologyCacheObject {
+            /** Represents an UpdateCacheRequest. */
+            class UpdateCacheRequest implements IUpdateCacheRequest {
 
                 /**
-                 * Constructs a new TopologyCacheObject.
+                 * Constructs a new UpdateCacheRequest.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.topology.v1.ITopologyCacheObject);
+                constructor(properties?: clutch.topology.v1.IUpdateCacheRequest);
 
-                /** TopologyCacheObject topologyObject. */
-                public topologyObject?: (clutch.topology.v1.ITopologyObject|null);
+                /** UpdateCacheRequest resource. */
+                public resource?: (clutch.topology.v1.IResource|null);
 
-                /** TopologyCacheObject action. */
-                public action: clutch.topology.v1.TopologyCacheObject.TopologyCacheAction;
+                /** UpdateCacheRequest action. */
+                public action: clutch.topology.v1.UpdateCacheRequest.Action;
 
                 /**
-                 * Verifies a TopologyCacheObject message.
+                 * Verifies an UpdateCacheRequest message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a TopologyCacheObject message from a plain object. Also converts values to their respective internal types.
+                 * Creates an UpdateCacheRequest message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns TopologyCacheObject
+                 * @returns UpdateCacheRequest
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.TopologyCacheObject;
+                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.UpdateCacheRequest;
 
                 /**
-                 * Creates a plain object from a TopologyCacheObject message. Also converts values to other types if specified.
-                 * @param message TopologyCacheObject
+                 * Creates a plain object from an UpdateCacheRequest message. Also converts values to other types if specified.
+                 * @param message UpdateCacheRequest
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.topology.v1.TopologyCacheObject, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.topology.v1.UpdateCacheRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this TopologyCacheObject to JSON.
+                 * Converts this UpdateCacheRequest to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
             }
 
-            namespace TopologyCacheObject {
+            namespace UpdateCacheRequest {
 
-                /** TopologyCacheAction enum. */
-                enum TopologyCacheAction {
+                /** Action enum. */
+                enum Action {
                     UNSPECIFIED = 0,
                     CREATE_OR_UPDATE = 1,
                     DELETE = 2
