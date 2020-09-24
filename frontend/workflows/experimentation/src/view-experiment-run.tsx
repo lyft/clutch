@@ -29,10 +29,12 @@ const ViewExperimentRun: React.FC = () => {
       onClick: goBack,
     };
 
-    const statusValue = clutch.chaos.experimentation.v1.Experiment.Status[experiment.status].toString();
+    const statusValue = clutch.chaos.experimentation.v1.Experiment.Status[
+      experiment.status
+    ].toString();
     const completedStatuses = [
       clutch.chaos.experimentation.v1.Experiment.Status.RUNNING.toString(),
-      clutch.chaos.experimentation.v1.Experiment.Status.SCHEDULED.toString()
+      clutch.chaos.experimentation.v1.Experiment.Status.SCHEDULED.toString(),
     ];
 
     if (completedStatuses.indexOf(statusValue) < 0) {

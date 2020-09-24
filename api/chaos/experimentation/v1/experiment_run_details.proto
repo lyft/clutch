@@ -8,7 +8,7 @@ import "chaos/experimentation/v1/experiment.proto";
 
 option go_package = "experimentationv1";
 
-message ExperimentRunDetails {  
+message ExperimentRunDetails {
   fixed64 run_id = 1;
   Experiment.Status status = 2;
   Properties properties = 3;
