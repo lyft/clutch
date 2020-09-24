@@ -59,6 +59,22 @@ service K8sAPI {
     };
     option (clutch.api.v1.action).type = UPDATE;
   }
+
+  rpc DescribeService(DescribeServiceRequest) returns (DescribeServiceResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/describeService"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
+  rpc ListServices(ListServicesRequest) returns (ListServicesResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/listServices"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
 }
 
 message DescribePodRequest {
@@ -271,6 +287,80 @@ message UpdateDeploymentRequest {
 }
 
 message UpdateDeploymentResponse {
+}
+
+message DescribeServiceRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Service",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+
+  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+}
+
+message DescribeServiceResponse {
+  option (clutch.api.v1.reference).fields = "service";
+
+  Service svc = 1;
+}
+
+message ListServicesRequest {
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+
+  ListOptions options = 4 [ (validate.rules).message = {required : true} ];
+}
+
+message ListServicesResponse {
+  option (clutch.api.v1.reference).fields = "pods";
+
+  repeated Service svc = 1;
+}
+
+message Service {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Service",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string cluster = 1;
+  string namespace = 2;
+  string name = 3;
+
+  // repeated Container containers = 4;
+
+  string cluster_ip = 5;
+//  string external_ip = 6;
+//  string ports = 7;
+
+
+  enum Type {
+    Unknown = 0;
+    ClusterIP = 1;
+    NodePort = 2;
+    LoadBalancer = 3;
+    ExternalName = 4;
+  }
+  Type type = 6;
+
+  // google.protobuf.Timestamp start_time = 8;
+  string start_time = 7;
+
+  map<string, string> labels = 8;
+  map<string, string> annotations = 9;
+
+  string data = 10;
+}
+
+message Namespace {
+  string name = 1;
+  // TODO @cpuri add more?
 }
 
 // This message type is used to add support for nullable strings and is an

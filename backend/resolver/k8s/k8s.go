@@ -31,6 +31,8 @@ const Name = "clutch.resolver.k8s"
 
 var typeURLPod = resolver.TypeURL((*k8sv1api.Pod)(nil))
 var typeURLHPA = resolver.TypeURL((*k8sv1api.HPA)(nil))
+var typeURLService = resolver.TypeURL((*k8sv1api.Service)(nil))
+var typeURLNamespace = resolver.TypeURL((*k8sv1api.Namespace)(nil))
 
 var typeSchemas = map[string][]descriptor.Message{
 	typeURLPod: {
@@ -39,6 +41,12 @@ var typeSchemas = map[string][]descriptor.Message{
 	},
 	typeURLHPA: {
 		(*k8sv1resolver.HPAName)(nil),
+	},
+	typeURLService: {
+		(*k8sv1resolver.ServiceID)(nil),
+	},
+	typeURLNamespace: {
+		(*k8sv1resolver.NamespaceID)(nil),
 	},
 }
 
@@ -128,6 +136,41 @@ func (r *res) resolveForHPA(ctx context.Context, input proto.Message) ([]*k8sv1a
 	}
 }
 
+func (r *res) locateByServiceID(ctx context.Context, in *k8sv1resolver.ServiceID) ([]*k8sv1api.Service, error) {
+	// Only possible to get one at a time by ServiceID.
+	svc, err := r.svc.DescribeService(ctx, in.Clientset, "", in.Namespace, in.Name)
+	if err != nil {
+		return nil, err
+	}
+	return []*k8sv1api.Service{svc}, nil
+}
+
+func (r *res) resolveForService(ctx context.Context, input proto.Message) ([]*k8sv1api.Service, error) {
+	switch i := input.(type) {
+	case *k8sv1resolver.ServiceID:
+		return r.locateByServiceID(ctx, i)
+	default:
+		// TODO: IP address via List?
+		return nil, fmt.Errorf("unrecognized input type %T", i)
+	}
+}
+
+func (r *res) locateServicesByNamespace(ctx context.Context, in *k8sv1resolver.NamespaceID) ([]*k8sv1api.Service, error) {
+	svcList, err := r.svc.ListServices(ctx, in.Clientset, "", in.Name, nil)
+	if err != nil {
+		return nil, err
+	}
+	return svcList, nil
+}
+
+func (r *res) resolveForNamespace(ctx context.Context, input proto.Message) ([]*k8sv1api.Service, error) {
+	switch i := input.(type) {
+	case *k8sv1resolver.NamespaceID:
+		return r.locateServicesByNamespace(ctx, i)
+	default:
+		return nil, fmt.Errorf("unrecognized input type %T", i)
+	}
+}
 func (r *res) Resolve(ctx context.Context, typeURL string, input proto.Message, limit uint32) (*resolver.Results, error) {
 	switch typeURL {
 	case typeURLPod:
@@ -138,6 +181,18 @@ func (r *res) Resolve(ctx context.Context, typeURL string, input proto.Message, 
 		return &resolver.Results{Messages: resolver.MessageSlice(result)}, nil
 	case typeURLHPA:
 		result, err := r.resolveForHPA(ctx, input)
+		if err != nil {
+			return nil, err
+		}
+		return &resolver.Results{Messages: resolver.MessageSlice(result)}, nil
+	case typeURLService:
+		result, err := r.resolveForService(ctx, input)
+		if err != nil {
+			return nil, err
+		}
+		return &resolver.Results{Messages: resolver.MessageSlice(result)}, nil
+	case typeURLNamespace:
+		result, err := r.resolveForNamespace(ctx, input)
 		if err != nil {
 			return nil, err
 		}
@@ -177,6 +232,42 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 					hpa, err := r.svc.DescribeHPA(ctx, name, "", metav1.NamespaceAll, query)
 					select {
 					case handler.Channel() <- resolver.NewFanoutResult([]*k8sv1api.HPA{hpa}, err):
+						return
+					case <-handler.Cancelled():
+						return
+					}
+				}(name)
+			}
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "did not understand input")
+		}
+	case typeURLService:
+		if idPattern.MatchString(query) {
+			for _, name := range r.svc.Clientsets() {
+				handler.Add(1)
+				go func(name string) {
+					defer handler.Done()
+					svc, err := r.svc.DescribeService(ctx, name, "", metav1.NamespaceAll, query)
+					select {
+					case handler.Channel() <- resolver.NewFanoutResult([]*k8sv1api.Service{svc}, err):
+						return
+					case <-handler.Cancelled():
+						return
+					}
+				}(name)
+			}
+		} else {
+			return nil, status.Error(codes.InvalidArgument, "did not understand input")
+		}
+	case typeURLNamespace:
+		if idPattern.MatchString(query) {
+			for _, name := range r.svc.Clientsets() {
+				handler.Add(1)
+				go func(name string) {
+					defer handler.Done()
+					svcList, err := r.svc.ListServices(ctx, name, "", query, nil)
+					select {
+					case handler.Channel() <- resolver.NewFanoutResult(svcList, err):
 						return
 					case <-handler.Cancelled():
 						return
