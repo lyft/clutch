@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package clutch.chaos.experimentation.v1;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "experimentationv1";
+
+message Experiment {
+  enum Status {
+    // Unspecifiedf Status.
+    UNSPECIFIED = 0;
+    // An experiment is specified to be run at a future date.
+    SCHEDULED = 1;
+    // An experiment is currently running.
+    RUNNING = 2;
+    // An experiment has completed.
+    COMPLETED = 3;
+    // An experiment has been canceled before it started.
+    CANCELED = 4;
+    // An experiment was running and was stopped before its originally scheduled end time.
+    STOPPED = 5;
+  }
+
+  fixed64 id = 1;
+
+  // The experiment configuration specific to the type of experiment
+  google.protobuf.Any config = 2;
+
+  // The time when the experiment should start. If unspecified, defaults to 'now'
+  google.protobuf.Timestamp start_time = 3;
+
+  // The time when the experiment should end, If unspecified, the experiment runs indefinitely unless it is manually
+  // stopped by a user.
+  google.protobuf.Timestamp end_time = 4;
+}

@@ -150,16 +150,16 @@ func (fs *experimentStore) CancelExperimentRun(ctx context.Context, id uint64) e
 // parameter is an emtpy string.
 func (fs *experimentStore) GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
 	query := `
-        SELECT 
+		SELECT 
 			experiment_run.id, 
 			details
 		FROM experiment_config, experiment_run
 		WHERE
 			experiment_config.id = experiment_run.experiment_config_id` +
-		// Return only experiments of a given `configType` or all of them if configType is equal to an empty string.
-		` AND ($1 = '' OR $1 = experiment_config.details ->> '@type')` +
-		// Return only running experiments if `status` is equal to `Running`, return all experiments otherwise.
-		` AND ($2 = 'UNSPECIFIED' OR (experiment_run.cancellation_time is NULL AND NOW() > lower(experiment_run.execution_time) AND (upper(experiment_run.execution_time) IS NULL OR NOW() < upper(experiment_run.execution_time))))`
+			// Return only experiments of a given `configType` or all of them if configType is equal to an empty string.
+			` AND ($1 = '' OR $1 = experiment_config.details ->> '@type')` +
+			// Return only running experiments if `status` is equal to `Running`, return all experiments otherwise.
+			` AND ($2 = 'UNSPECIFIED' OR (experiment_run.cancellation_time is NULL AND NOW() > lower(experiment_run.execution_time) AND (upper(experiment_run.execution_time) IS NULL OR NOW() < upper(experiment_run.execution_time))))`
 
 	rows, err := fs.db.QueryContext(ctx, query, configType, status.String())
 	if err != nil {

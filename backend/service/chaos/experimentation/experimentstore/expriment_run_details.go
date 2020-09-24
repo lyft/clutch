@@ -29,17 +29,15 @@ func NewRunDetails(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 		{Label: "Start Time", Value: timeToString(startTime)},
 	}
 
-	if runConfigPair.Status == experimentation.Experiment_COMPLETED {
-		var time sql.NullTime
-		if endTime.Valid {
-			time = endTime
-		} else if cancellationTime.Valid {
-			time = cancellationTime
-		}
-
-		endTimeField := &experimentation.Property{Label: "End Time", Value: timeToString(time)}
-		runConfigPair.GetProperties().Items = append(runConfigPair.GetProperties().Items, endTimeField)
+	var time sql.NullTime
+	if endTime.Valid {
+		time = endTime
+	} else if cancellationTime.Valid {
+		time = cancellationTime
 	}
+
+	endTimeField := &experimentation.Property{Label: "End Time", Value: timeToString(time)}
+	runConfigPair.GetProperties().Items = append(runConfigPair.GetProperties().Items, endTimeField)
 
 	if runConfigPair.Status == experimentation.Experiment_STOPPED {
 		stoppedTimeField := &experimentation.Property{Label: "Stopped At", Value: timeToString(cancellationTime)}
