@@ -3,24 +3,14 @@ syntax = "proto3";
 package clutch.chaos.experimentation.v1;
 
 import "google/protobuf/any.proto";
-import "google/protobuf/timestamp.proto";
-
 import "chaos/experimentation/v1/properties.proto";
+import "chaos/experimentation/v1/experiment.proto";
 
 option go_package = "experimentationv1";
 
 message ExperimentRunDetails {
   fixed64 run_id = 1;
-  Status status = 2;
+  Experiment.Status status = 2;
   Properties properties = 3;
   google.protobuf.Any config = 4;
-}
-
-enum Status {
-  UNSPECIFIED = 0;
-  SCHEDULED = 1;
-  RUNNING = 2;
-  COMPLETED = 3;
-  CANCELED = 4;
-  STOPPED = 5;
 }
