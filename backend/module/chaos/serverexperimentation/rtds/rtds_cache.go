@@ -33,6 +33,8 @@ const (
 	HTTPStatusWithDownstream           = `fault.http.%s.abort.http_status`
 )
 
+// cacheWrapper is a wrapper interface that abstracts away the cache operations to make it easier
+// to reuse as much of the code as possible for V2/V3.
 type cacheWrapper interface {
 	GetStatusKeys() []string
 	GetSnapshotVersion(key string) (string, error)
