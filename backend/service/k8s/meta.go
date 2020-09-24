@@ -8,12 +8,12 @@ import (
 )
 
 // TODO (mcutalo): make this generic when adding additional `List` functionality
+// TODO (cpuri): Added null check for safely passing in empty ListOptions, not sure if this is the best practice...
 // for all k8s resources and support field selectors
 func ApplyListOptions(listOpts *k8sapiv1.ListOptions) metav1.ListOptions {
 	opts := metav1.ListOptions{}
-	if len(listOpts.Labels) > 0 {
+	if listOpts != nil && len(listOpts.Labels) > 0 {
 		opts.LabelSelector = labels.FormatLabels(listOpts.Labels)
 	}
-
 	return opts
 }

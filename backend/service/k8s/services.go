@@ -54,7 +54,7 @@ func (s *svc) ListServices(ctx context.Context, clientset, cluster, namespace st
 
 func svcDescription(k8sSvc *corev1.Service, cluster string) *k8sapiv1.Service {
 	// TODO: There's a mismatch between the serialization of the timestamp here and what's expected on the frontend.
-	// TODO: Currently I use a string to serialize the timestamp from k8s instead of the protobuf std timestamp...
+	// TODO: (cpuri) Currently I use a string to serialize the timestamp from k8s instead of the protobuf std timestamp...
 	//var launch *timestamp.Timestamp
 	//if converted, err := ptypes.TimestampProto(k8spod.Status.StartTime.Time); err == nil {
 	//	launch = converted
