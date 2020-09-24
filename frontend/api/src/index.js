@@ -8983,6 +8983,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.config.gateway.v1.IStats|null} [stats] GatewayOptions stats
                      * @property {clutch.config.gateway.v1.ITimeouts|null} [timeouts] GatewayOptions timeouts
                      * @property {Array.<clutch.config.gateway.v1.IMiddleware>|null} [middleware] GatewayOptions middleware
+                     * @property {clutch.config.gateway.v1.IFrontend|null} [frontend] GatewayOptions frontend
                      */
 
                     /**
@@ -9050,6 +9051,14 @@ export const clutch = $root.clutch = (() => {
                     GatewayOptions.prototype.middleware = $util.emptyArray;
 
                     /**
+                     * GatewayOptions frontend.
+                     * @member {clutch.config.gateway.v1.IFrontend|null|undefined} frontend
+                     * @memberof clutch.config.gateway.v1.GatewayOptions
+                     * @instance
+                     */
+                    GatewayOptions.prototype.frontend = null;
+
+                    /**
                      * Verifies a GatewayOptions message.
                      * @function verify
                      * @memberof clutch.config.gateway.v1.GatewayOptions
@@ -9093,6 +9102,11 @@ export const clutch = $root.clutch = (() => {
                                 if (error)
                                     return "middleware." + error;
                             }
+                        }
+                        if (message.frontend != null && message.hasOwnProperty("frontend")) {
+                            let error = $root.clutch.config.gateway.v1.Frontend.verify(message.frontend);
+                            if (error)
+                                return "frontend." + error;
                         }
                         return null;
                     };
@@ -9144,6 +9158,11 @@ export const clutch = $root.clutch = (() => {
                                 message.middleware[i] = $root.clutch.config.gateway.v1.Middleware.fromObject(object.middleware[i]);
                             }
                         }
+                        if (object.frontend != null) {
+                            if (typeof object.frontend !== "object")
+                                throw TypeError(".clutch.config.gateway.v1.GatewayOptions.frontend: object expected");
+                            message.frontend = $root.clutch.config.gateway.v1.Frontend.fromObject(object.frontend);
+                        }
                         return message;
                     };
 
@@ -9168,6 +9187,7 @@ export const clutch = $root.clutch = (() => {
                             object.logger = null;
                             object.stats = null;
                             object.timeouts = null;
+                            object.frontend = null;
                         }
                         if (message.listener != null && message.hasOwnProperty("listener"))
                             object.listener = $root.clutch.config.gateway.v1.Listener.toObject(message.listener, options);
@@ -9184,6 +9204,8 @@ export const clutch = $root.clutch = (() => {
                             for (let j = 0; j < message.middleware.length; ++j)
                                 object.middleware[j] = $root.clutch.config.gateway.v1.Middleware.toObject(message.middleware[j], options);
                         }
+                        if (message.frontend != null && message.hasOwnProperty("frontend"))
+                            object.frontend = $root.clutch.config.gateway.v1.Frontend.toObject(message.frontend, options);
                         return object;
                     };
 
@@ -9199,6 +9221,106 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return GatewayOptions;
+                })();
+
+                v1.Frontend = (function() {
+
+                    /**
+                     * Properties of a Frontend.
+                     * @memberof clutch.config.gateway.v1
+                     * @interface IFrontend
+                     * @property {string|null} [cdnUrl] Frontend cdnUrl
+                     */
+
+                    /**
+                     * Constructs a new Frontend.
+                     * @memberof clutch.config.gateway.v1
+                     * @classdesc Represents a Frontend.
+                     * @implements IFrontend
+                     * @constructor
+                     * @param {clutch.config.gateway.v1.IFrontend=} [properties] Properties to set
+                     */
+                    function Frontend(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Frontend cdnUrl.
+                     * @member {string} cdnUrl
+                     * @memberof clutch.config.gateway.v1.Frontend
+                     * @instance
+                     */
+                    Frontend.prototype.cdnUrl = "";
+
+                    /**
+                     * Verifies a Frontend message.
+                     * @function verify
+                     * @memberof clutch.config.gateway.v1.Frontend
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Frontend.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.cdnUrl != null && message.hasOwnProperty("cdnUrl"))
+                            if (!$util.isString(message.cdnUrl))
+                                return "cdnUrl: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Frontend message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.config.gateway.v1.Frontend
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.config.gateway.v1.Frontend} Frontend
+                     */
+                    Frontend.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.config.gateway.v1.Frontend)
+                            return object;
+                        let message = new $root.clutch.config.gateway.v1.Frontend();
+                        if (object.cdnUrl != null)
+                            message.cdnUrl = String(object.cdnUrl);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Frontend message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.config.gateway.v1.Frontend
+                     * @static
+                     * @param {clutch.config.gateway.v1.Frontend} message Frontend
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Frontend.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            object.cdnUrl = "";
+                        if (message.cdnUrl != null && message.hasOwnProperty("cdnUrl"))
+                            object.cdnUrl = message.cdnUrl;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Frontend to JSON.
+                     * @function toJSON
+                     * @memberof clutch.config.gateway.v1.Frontend
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Frontend.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Frontend;
                 })();
 
                 v1.Logger = (function() {

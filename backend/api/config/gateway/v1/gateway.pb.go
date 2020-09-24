@@ -86,7 +86,7 @@ func (x Logger_Level) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Logger_Level.Descriptor instead.
 func (Logger_Level) EnumDescriptor() ([]byte, []int) {
-	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{6, 0}
+	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{7, 0}
 }
 
 type Config struct {
@@ -447,6 +447,7 @@ type GatewayOptions struct {
 	Stats                    *Stats        `protobuf:"bytes,4,opt,name=stats,proto3" json:"stats,omitempty"`
 	Timeouts                 *Timeouts     `protobuf:"bytes,5,opt,name=timeouts,proto3" json:"timeouts,omitempty"`
 	Middleware               []*Middleware `protobuf:"bytes,6,rep,name=middleware,proto3" json:"middleware,omitempty"`
+	Frontend                 *Frontend     `protobuf:"bytes,7,opt,name=frontend,proto3" json:"frontend,omitempty"`
 }
 
 func (x *GatewayOptions) Reset() {
@@ -523,6 +524,60 @@ func (x *GatewayOptions) GetMiddleware() []*Middleware {
 	return nil
 }
 
+func (x *GatewayOptions) GetFrontend() *Frontend {
+	if x != nil {
+		return x.Frontend
+	}
+	return nil
+}
+
+type Frontend struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	CdnUrl string `protobuf:"bytes,1,opt,name=cdn_url,json=cdnUrl,proto3" json:"cdn_url,omitempty"`
+}
+
+func (x *Frontend) Reset() {
+	*x = Frontend{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_config_gateway_v1_gateway_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Frontend) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Frontend) ProtoMessage() {}
+
+func (x *Frontend) ProtoReflect() protoreflect.Message {
+	mi := &file_config_gateway_v1_gateway_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Frontend.ProtoReflect.Descriptor instead.
+func (*Frontend) Descriptor() ([]byte, []int) {
+	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *Frontend) GetCdnUrl() string {
+	if x != nil {
+		return x.CdnUrl
+	}
+	return ""
+}
+
 type Logger struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -537,7 +592,7 @@ type Logger struct {
 func (x *Logger) Reset() {
 	*x = Logger{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_config_gateway_v1_gateway_proto_msgTypes[6]
+		mi := &file_config_gateway_v1_gateway_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -550,7 +605,7 @@ func (x *Logger) String() string {
 func (*Logger) ProtoMessage() {}
 
 func (x *Logger) ProtoReflect() protoreflect.Message {
-	mi := &file_config_gateway_v1_gateway_proto_msgTypes[6]
+	mi := &file_config_gateway_v1_gateway_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -563,7 +618,7 @@ func (x *Logger) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Logger.ProtoReflect.Descriptor instead.
 func (*Logger) Descriptor() ([]byte, []int) {
-	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{6}
+	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *Logger) GetLevel() Logger_Level {
@@ -609,7 +664,7 @@ type Middleware struct {
 func (x *Middleware) Reset() {
 	*x = Middleware{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_config_gateway_v1_gateway_proto_msgTypes[7]
+		mi := &file_config_gateway_v1_gateway_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -622,7 +677,7 @@ func (x *Middleware) String() string {
 func (*Middleware) ProtoMessage() {}
 
 func (x *Middleware) ProtoReflect() protoreflect.Message {
-	mi := &file_config_gateway_v1_gateway_proto_msgTypes[7]
+	mi := &file_config_gateway_v1_gateway_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -635,7 +690,7 @@ func (x *Middleware) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Middleware.ProtoReflect.Descriptor instead.
 func (*Middleware) Descriptor() ([]byte, []int) {
-	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{7}
+	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *Middleware) GetName() string {
@@ -664,7 +719,7 @@ type Service struct {
 func (x *Service) Reset() {
 	*x = Service{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_config_gateway_v1_gateway_proto_msgTypes[8]
+		mi := &file_config_gateway_v1_gateway_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -677,7 +732,7 @@ func (x *Service) String() string {
 func (*Service) ProtoMessage() {}
 
 func (x *Service) ProtoReflect() protoreflect.Message {
-	mi := &file_config_gateway_v1_gateway_proto_msgTypes[8]
+	mi := &file_config_gateway_v1_gateway_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -690,7 +745,7 @@ func (x *Service) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Service.ProtoReflect.Descriptor instead.
 func (*Service) Descriptor() ([]byte, []int) {
-	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{8}
+	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *Service) GetName() string {
@@ -719,7 +774,7 @@ type Resolver struct {
 func (x *Resolver) Reset() {
 	*x = Resolver{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_config_gateway_v1_gateway_proto_msgTypes[9]
+		mi := &file_config_gateway_v1_gateway_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -732,7 +787,7 @@ func (x *Resolver) String() string {
 func (*Resolver) ProtoMessage() {}
 
 func (x *Resolver) ProtoReflect() protoreflect.Message {
-	mi := &file_config_gateway_v1_gateway_proto_msgTypes[9]
+	mi := &file_config_gateway_v1_gateway_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -745,7 +800,7 @@ func (x *Resolver) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Resolver.ProtoReflect.Descriptor instead.
 func (*Resolver) Descriptor() ([]byte, []int) {
-	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{9}
+	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *Resolver) GetName() string {
@@ -774,7 +829,7 @@ type Module struct {
 func (x *Module) Reset() {
 	*x = Module{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_config_gateway_v1_gateway_proto_msgTypes[10]
+		mi := &file_config_gateway_v1_gateway_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -787,7 +842,7 @@ func (x *Module) String() string {
 func (*Module) ProtoMessage() {}
 
 func (x *Module) ProtoReflect() protoreflect.Message {
-	mi := &file_config_gateway_v1_gateway_proto_msgTypes[10]
+	mi := &file_config_gateway_v1_gateway_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -800,7 +855,7 @@ func (x *Module) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Module.ProtoReflect.Descriptor instead.
 func (*Module) Descriptor() ([]byte, []int) {
-	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{10}
+	return file_config_gateway_v1_gateway_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *Module) GetName() string {
@@ -826,7 +881,7 @@ type Stats_LogReporter struct {
 func (x *Stats_LogReporter) Reset() {
 	*x = Stats_LogReporter{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_config_gateway_v1_gateway_proto_msgTypes[11]
+		mi := &file_config_gateway_v1_gateway_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -839,7 +894,7 @@ func (x *Stats_LogReporter) String() string {
 func (*Stats_LogReporter) ProtoMessage() {}
 
 func (x *Stats_LogReporter) ProtoReflect() protoreflect.Message {
-	mi := &file_config_gateway_v1_gateway_proto_msgTypes[11]
+	mi := &file_config_gateway_v1_gateway_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -869,7 +924,7 @@ type Stats_StatsdReporter struct {
 func (x *Stats_StatsdReporter) Reset() {
 	*x = Stats_StatsdReporter{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_config_gateway_v1_gateway_proto_msgTypes[12]
+		mi := &file_config_gateway_v1_gateway_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -882,7 +937,7 @@ func (x *Stats_StatsdReporter) String() string {
 func (*Stats_StatsdReporter) ProtoMessage() {}
 
 func (x *Stats_StatsdReporter) ProtoReflect() protoreflect.Message {
-	mi := &file_config_gateway_v1_gateway_proto_msgTypes[12]
+	mi := &file_config_gateway_v1_gateway_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -940,7 +995,7 @@ type Stats_StatsdReporter_PointTags struct {
 func (x *Stats_StatsdReporter_PointTags) Reset() {
 	*x = Stats_StatsdReporter_PointTags{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_config_gateway_v1_gateway_proto_msgTypes[13]
+		mi := &file_config_gateway_v1_gateway_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -953,7 +1008,7 @@ func (x *Stats_StatsdReporter_PointTags) String() string {
 func (*Stats_StatsdReporter_PointTags) ProtoMessage() {}
 
 func (x *Stats_StatsdReporter_PointTags) ProtoReflect() protoreflect.Message {
-	mi := &file_config_gateway_v1_gateway_proto_msgTypes[13]
+	mi := &file_config_gateway_v1_gateway_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -989,7 +1044,7 @@ type Timeouts_Entry struct {
 func (x *Timeouts_Entry) Reset() {
 	*x = Timeouts_Entry{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_config_gateway_v1_gateway_proto_msgTypes[14]
+		mi := &file_config_gateway_v1_gateway_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1002,7 +1057,7 @@ func (x *Timeouts_Entry) String() string {
 func (*Timeouts_Entry) ProtoMessage() {}
 
 func (x *Timeouts_Entry) ProtoReflect() protoreflect.Message {
-	mi := &file_config_gateway_v1_gateway_proto_msgTypes[14]
+	mi := &file_config_gateway_v1_gateway_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1128,7 +1183,7 @@ var file_config_gateway_v1_gateway_proto_rawDesc = []byte{
 	0x19, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
 	0x66, 0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x0c, 0xfa, 0x42, 0x09, 0xaa,
 	0x01, 0x06, 0x08, 0x01, 0x32, 0x02, 0x08, 0x01, 0x52, 0x07, 0x74, 0x69, 0x6d, 0x65, 0x6f, 0x75,
-	0x74, 0x22, 0xc8, 0x03, 0x0a, 0x0e, 0x47, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x4f, 0x70, 0x74,
+	0x74, 0x22, 0x88, 0x04, 0x0a, 0x0e, 0x47, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x4f, 0x70, 0x74,
 	0x69, 0x6f, 0x6e, 0x73, 0x12, 0x48, 0x0a, 0x08, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x6e, 0x65, 0x72,
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e,
 	0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x2e, 0x76,
@@ -1156,45 +1211,52 @@ var file_config_gateway_v1_gateway_proto_rawDesc = []byte{
 	0x77, 0x61, 0x72, 0x65, 0x18, 0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x63, 0x6c, 0x75,
 	0x74, 0x63, 0x68, 0x2e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x67, 0x61, 0x74, 0x65, 0x77,
 	0x61, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x69, 0x64, 0x64, 0x6c, 0x65, 0x77, 0x61, 0x72, 0x65,
-	0x52, 0x0a, 0x6d, 0x69, 0x64, 0x64, 0x6c, 0x65, 0x77, 0x61, 0x72, 0x65, 0x22, 0xc4, 0x01, 0x0a,
-	0x06, 0x4c, 0x6f, 0x67, 0x67, 0x65, 0x72, 0x12, 0x3c, 0x0a, 0x05, 0x6c, 0x65, 0x76, 0x65, 0x6c,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x26, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e,
-	0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x2e, 0x76,
-	0x31, 0x2e, 0x4c, 0x6f, 0x67, 0x67, 0x65, 0x72, 0x2e, 0x4c, 0x65, 0x76, 0x65, 0x6c, 0x52, 0x05,
-	0x6c, 0x65, 0x76, 0x65, 0x6c, 0x12, 0x18, 0x0a, 0x06, 0x70, 0x72, 0x65, 0x74, 0x74, 0x79, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x08, 0x48, 0x00, 0x52, 0x06, 0x70, 0x72, 0x65, 0x74, 0x74, 0x79, 0x22,
-	0x58, 0x0a, 0x05, 0x4c, 0x65, 0x76, 0x65, 0x6c, 0x12, 0x0f, 0x0a, 0x0b, 0x55, 0x4e, 0x53, 0x50,
-	0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x09, 0x0a, 0x05, 0x44, 0x45, 0x42,
-	0x55, 0x47, 0x10, 0x01, 0x12, 0x08, 0x0a, 0x04, 0x49, 0x4e, 0x46, 0x4f, 0x10, 0x02, 0x12, 0x08,
-	0x0a, 0x04, 0x57, 0x41, 0x52, 0x4e, 0x10, 0x03, 0x12, 0x09, 0x0a, 0x05, 0x45, 0x52, 0x52, 0x4f,
-	0x52, 0x10, 0x04, 0x12, 0x09, 0x0a, 0x05, 0x50, 0x41, 0x4e, 0x49, 0x43, 0x10, 0x05, 0x12, 0x09,
-	0x0a, 0x05, 0x46, 0x41, 0x54, 0x41, 0x4c, 0x10, 0x06, 0x42, 0x08, 0x0a, 0x06, 0x66, 0x6f, 0x72,
-	0x6d, 0x61, 0x74, 0x22, 0x62, 0x0a, 0x0a, 0x4d, 0x69, 0x64, 0x64, 0x6c, 0x65, 0x77, 0x61, 0x72,
-	0x65, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42,
-	0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x37,
-	0x0a, 0x0c, 0x74, 0x79, 0x70, 0x65, 0x64, 0x5f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x6e, 0x79, 0x52, 0x0b, 0x74, 0x79, 0x70, 0x65,
-	0x64, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x5f, 0x0a, 0x07, 0x53, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12,
-	0x37, 0x0a, 0x0c, 0x74, 0x79, 0x70, 0x65, 0x64, 0x5f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x6e, 0x79, 0x52, 0x0b, 0x74, 0x79, 0x70,
-	0x65, 0x64, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x60, 0x0a, 0x08, 0x52, 0x65, 0x73, 0x6f,
-	0x6c, 0x76, 0x65, 0x72, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x04, 0x6e, 0x61, 0x6d,
-	0x65, 0x12, 0x37, 0x0a, 0x0c, 0x74, 0x79, 0x70, 0x65, 0x64, 0x5f, 0x63, 0x6f, 0x6e, 0x66, 0x69,
-	0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
-	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x6e, 0x79, 0x52, 0x0b, 0x74,
-	0x79, 0x70, 0x65, 0x64, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x5e, 0x0a, 0x06, 0x4d, 0x6f,
-	0x64, 0x75, 0x6c, 0x65, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x04, 0x6e, 0x61, 0x6d,
-	0x65, 0x12, 0x37, 0x0a, 0x0c, 0x74, 0x79, 0x70, 0x65, 0x64, 0x5f, 0x63, 0x6f, 0x6e, 0x66, 0x69,
-	0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
-	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x6e, 0x79, 0x52, 0x0b, 0x74,
-	0x79, 0x70, 0x65, 0x64, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x42, 0x0b, 0x5a, 0x09, 0x67, 0x61,
-	0x74, 0x65, 0x77, 0x61, 0x79, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x52, 0x0a, 0x6d, 0x69, 0x64, 0x64, 0x6c, 0x65, 0x77, 0x61, 0x72, 0x65, 0x12, 0x3e, 0x0a, 0x08,
+	0x66, 0x72, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22,
+	0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x67,
+	0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x46, 0x72, 0x6f, 0x6e, 0x74, 0x65,
+	0x6e, 0x64, 0x52, 0x08, 0x66, 0x72, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x64, 0x22, 0x23, 0x0a, 0x08,
+	0x46, 0x72, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x63, 0x64, 0x6e, 0x5f,
+	0x75, 0x72, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x63, 0x64, 0x6e, 0x55, 0x72,
+	0x6c, 0x22, 0xc4, 0x01, 0x0a, 0x06, 0x4c, 0x6f, 0x67, 0x67, 0x65, 0x72, 0x12, 0x3c, 0x0a, 0x05,
+	0x6c, 0x65, 0x76, 0x65, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x26, 0x2e, 0x63, 0x6c,
+	0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x67, 0x61, 0x74, 0x65,
+	0x77, 0x61, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x6f, 0x67, 0x67, 0x65, 0x72, 0x2e, 0x4c, 0x65,
+	0x76, 0x65, 0x6c, 0x52, 0x05, 0x6c, 0x65, 0x76, 0x65, 0x6c, 0x12, 0x18, 0x0a, 0x06, 0x70, 0x72,
+	0x65, 0x74, 0x74, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x48, 0x00, 0x52, 0x06, 0x70, 0x72,
+	0x65, 0x74, 0x74, 0x79, 0x22, 0x58, 0x0a, 0x05, 0x4c, 0x65, 0x76, 0x65, 0x6c, 0x12, 0x0f, 0x0a,
+	0x0b, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x09,
+	0x0a, 0x05, 0x44, 0x45, 0x42, 0x55, 0x47, 0x10, 0x01, 0x12, 0x08, 0x0a, 0x04, 0x49, 0x4e, 0x46,
+	0x4f, 0x10, 0x02, 0x12, 0x08, 0x0a, 0x04, 0x57, 0x41, 0x52, 0x4e, 0x10, 0x03, 0x12, 0x09, 0x0a,
+	0x05, 0x45, 0x52, 0x52, 0x4f, 0x52, 0x10, 0x04, 0x12, 0x09, 0x0a, 0x05, 0x50, 0x41, 0x4e, 0x49,
+	0x43, 0x10, 0x05, 0x12, 0x09, 0x0a, 0x05, 0x46, 0x41, 0x54, 0x41, 0x4c, 0x10, 0x06, 0x42, 0x08,
+	0x0a, 0x06, 0x66, 0x6f, 0x72, 0x6d, 0x61, 0x74, 0x22, 0x62, 0x0a, 0x0a, 0x4d, 0x69, 0x64, 0x64,
+	0x6c, 0x65, 0x77, 0x61, 0x72, 0x65, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x04, 0x6e,
+	0x61, 0x6d, 0x65, 0x12, 0x37, 0x0a, 0x0c, 0x74, 0x79, 0x70, 0x65, 0x64, 0x5f, 0x63, 0x6f, 0x6e,
+	0x66, 0x69, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
+	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x6e, 0x79, 0x52,
+	0x0b, 0x74, 0x79, 0x70, 0x65, 0x64, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x5f, 0x0a, 0x07,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x37, 0x0a, 0x0c, 0x74, 0x79, 0x70, 0x65, 0x64, 0x5f, 0x63, 0x6f,
+	0x6e, 0x66, 0x69, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x6e, 0x79,
+	0x52, 0x0b, 0x74, 0x79, 0x70, 0x65, 0x64, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0x60, 0x0a,
+	0x08, 0x52, 0x65, 0x73, 0x6f, 0x6c, 0x76, 0x65, 0x72, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01,
+	0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x37, 0x0a, 0x0c, 0x74, 0x79, 0x70, 0x65, 0x64, 0x5f,
+	0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41,
+	0x6e, 0x79, 0x52, 0x0b, 0x74, 0x79, 0x70, 0x65, 0x64, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22,
+	0x5e, 0x0a, 0x06, 0x4d, 0x6f, 0x64, 0x75, 0x6c, 0x65, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
+	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01,
+	0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x37, 0x0a, 0x0c, 0x74, 0x79, 0x70, 0x65, 0x64, 0x5f,
+	0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41,
+	0x6e, 0x79, 0x52, 0x0b, 0x74, 0x79, 0x70, 0x65, 0x64, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x42,
+	0x0b, 0x5a, 0x09, 0x67, 0x61, 0x74, 0x65, 0x77, 0x61, 0x79, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1210,7 +1272,7 @@ func file_config_gateway_v1_gateway_proto_rawDescGZIP() []byte {
 }
 
 var file_config_gateway_v1_gateway_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_config_gateway_v1_gateway_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_config_gateway_v1_gateway_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_config_gateway_v1_gateway_proto_goTypes = []interface{}{
 	(Logger_Level)(0),                      // 0: clutch.config.gateway.v1.Logger.Level
 	(*Config)(nil),                         // 1: clutch.config.gateway.v1.Config
@@ -1219,47 +1281,49 @@ var file_config_gateway_v1_gateway_proto_goTypes = []interface{}{
 	(*Stats)(nil),                          // 4: clutch.config.gateway.v1.Stats
 	(*Timeouts)(nil),                       // 5: clutch.config.gateway.v1.Timeouts
 	(*GatewayOptions)(nil),                 // 6: clutch.config.gateway.v1.GatewayOptions
-	(*Logger)(nil),                         // 7: clutch.config.gateway.v1.Logger
-	(*Middleware)(nil),                     // 8: clutch.config.gateway.v1.Middleware
-	(*Service)(nil),                        // 9: clutch.config.gateway.v1.Service
-	(*Resolver)(nil),                       // 10: clutch.config.gateway.v1.Resolver
-	(*Module)(nil),                         // 11: clutch.config.gateway.v1.Module
-	(*Stats_LogReporter)(nil),              // 12: clutch.config.gateway.v1.Stats.LogReporter
-	(*Stats_StatsdReporter)(nil),           // 13: clutch.config.gateway.v1.Stats.StatsdReporter
-	(*Stats_StatsdReporter_PointTags)(nil), // 14: clutch.config.gateway.v1.Stats.StatsdReporter.PointTags
-	(*Timeouts_Entry)(nil),                 // 15: clutch.config.gateway.v1.Timeouts.Entry
-	(*duration.Duration)(nil),              // 16: google.protobuf.Duration
-	(*any.Any)(nil),                        // 17: google.protobuf.Any
+	(*Frontend)(nil),                       // 7: clutch.config.gateway.v1.Frontend
+	(*Logger)(nil),                         // 8: clutch.config.gateway.v1.Logger
+	(*Middleware)(nil),                     // 9: clutch.config.gateway.v1.Middleware
+	(*Service)(nil),                        // 10: clutch.config.gateway.v1.Service
+	(*Resolver)(nil),                       // 11: clutch.config.gateway.v1.Resolver
+	(*Module)(nil),                         // 12: clutch.config.gateway.v1.Module
+	(*Stats_LogReporter)(nil),              // 13: clutch.config.gateway.v1.Stats.LogReporter
+	(*Stats_StatsdReporter)(nil),           // 14: clutch.config.gateway.v1.Stats.StatsdReporter
+	(*Stats_StatsdReporter_PointTags)(nil), // 15: clutch.config.gateway.v1.Stats.StatsdReporter.PointTags
+	(*Timeouts_Entry)(nil),                 // 16: clutch.config.gateway.v1.Timeouts.Entry
+	(*duration.Duration)(nil),              // 17: google.protobuf.Duration
+	(*any.Any)(nil),                        // 18: google.protobuf.Any
 }
 var file_config_gateway_v1_gateway_proto_depIdxs = []int32{
 	6,  // 0: clutch.config.gateway.v1.Config.gateway:type_name -> clutch.config.gateway.v1.GatewayOptions
-	9,  // 1: clutch.config.gateway.v1.Config.services:type_name -> clutch.config.gateway.v1.Service
-	10, // 2: clutch.config.gateway.v1.Config.resolvers:type_name -> clutch.config.gateway.v1.Resolver
-	11, // 3: clutch.config.gateway.v1.Config.modules:type_name -> clutch.config.gateway.v1.Module
+	10, // 1: clutch.config.gateway.v1.Config.services:type_name -> clutch.config.gateway.v1.Service
+	11, // 2: clutch.config.gateway.v1.Config.resolvers:type_name -> clutch.config.gateway.v1.Resolver
+	12, // 3: clutch.config.gateway.v1.Config.modules:type_name -> clutch.config.gateway.v1.Module
 	2,  // 4: clutch.config.gateway.v1.Listener.tcp:type_name -> clutch.config.gateway.v1.TCPSocket
-	16, // 5: clutch.config.gateway.v1.Stats.flush_interval:type_name -> google.protobuf.Duration
-	12, // 6: clutch.config.gateway.v1.Stats.log_reporter:type_name -> clutch.config.gateway.v1.Stats.LogReporter
-	13, // 7: clutch.config.gateway.v1.Stats.statsd_reporter:type_name -> clutch.config.gateway.v1.Stats.StatsdReporter
-	16, // 8: clutch.config.gateway.v1.Timeouts.default:type_name -> google.protobuf.Duration
-	15, // 9: clutch.config.gateway.v1.Timeouts.overrides:type_name -> clutch.config.gateway.v1.Timeouts.Entry
+	17, // 5: clutch.config.gateway.v1.Stats.flush_interval:type_name -> google.protobuf.Duration
+	13, // 6: clutch.config.gateway.v1.Stats.log_reporter:type_name -> clutch.config.gateway.v1.Stats.LogReporter
+	14, // 7: clutch.config.gateway.v1.Stats.statsd_reporter:type_name -> clutch.config.gateway.v1.Stats.StatsdReporter
+	17, // 8: clutch.config.gateway.v1.Timeouts.default:type_name -> google.protobuf.Duration
+	16, // 9: clutch.config.gateway.v1.Timeouts.overrides:type_name -> clutch.config.gateway.v1.Timeouts.Entry
 	3,  // 10: clutch.config.gateway.v1.GatewayOptions.listener:type_name -> clutch.config.gateway.v1.Listener
 	3,  // 11: clutch.config.gateway.v1.GatewayOptions.json_grpc_loopback_listener:type_name -> clutch.config.gateway.v1.Listener
-	7,  // 12: clutch.config.gateway.v1.GatewayOptions.logger:type_name -> clutch.config.gateway.v1.Logger
+	8,  // 12: clutch.config.gateway.v1.GatewayOptions.logger:type_name -> clutch.config.gateway.v1.Logger
 	4,  // 13: clutch.config.gateway.v1.GatewayOptions.stats:type_name -> clutch.config.gateway.v1.Stats
 	5,  // 14: clutch.config.gateway.v1.GatewayOptions.timeouts:type_name -> clutch.config.gateway.v1.Timeouts
-	8,  // 15: clutch.config.gateway.v1.GatewayOptions.middleware:type_name -> clutch.config.gateway.v1.Middleware
-	0,  // 16: clutch.config.gateway.v1.Logger.level:type_name -> clutch.config.gateway.v1.Logger.Level
-	17, // 17: clutch.config.gateway.v1.Middleware.typed_config:type_name -> google.protobuf.Any
-	17, // 18: clutch.config.gateway.v1.Service.typed_config:type_name -> google.protobuf.Any
-	17, // 19: clutch.config.gateway.v1.Resolver.typed_config:type_name -> google.protobuf.Any
-	17, // 20: clutch.config.gateway.v1.Module.typed_config:type_name -> google.protobuf.Any
-	14, // 21: clutch.config.gateway.v1.Stats.StatsdReporter.point_tags:type_name -> clutch.config.gateway.v1.Stats.StatsdReporter.PointTags
-	16, // 22: clutch.config.gateway.v1.Timeouts.Entry.timeout:type_name -> google.protobuf.Duration
-	23, // [23:23] is the sub-list for method output_type
-	23, // [23:23] is the sub-list for method input_type
-	23, // [23:23] is the sub-list for extension type_name
-	23, // [23:23] is the sub-list for extension extendee
-	0,  // [0:23] is the sub-list for field type_name
+	9,  // 15: clutch.config.gateway.v1.GatewayOptions.middleware:type_name -> clutch.config.gateway.v1.Middleware
+	7,  // 16: clutch.config.gateway.v1.GatewayOptions.frontend:type_name -> clutch.config.gateway.v1.Frontend
+	0,  // 17: clutch.config.gateway.v1.Logger.level:type_name -> clutch.config.gateway.v1.Logger.Level
+	18, // 18: clutch.config.gateway.v1.Middleware.typed_config:type_name -> google.protobuf.Any
+	18, // 19: clutch.config.gateway.v1.Service.typed_config:type_name -> google.protobuf.Any
+	18, // 20: clutch.config.gateway.v1.Resolver.typed_config:type_name -> google.protobuf.Any
+	18, // 21: clutch.config.gateway.v1.Module.typed_config:type_name -> google.protobuf.Any
+	15, // 22: clutch.config.gateway.v1.Stats.StatsdReporter.point_tags:type_name -> clutch.config.gateway.v1.Stats.StatsdReporter.PointTags
+	17, // 23: clutch.config.gateway.v1.Timeouts.Entry.timeout:type_name -> google.protobuf.Duration
+	24, // [24:24] is the sub-list for method output_type
+	24, // [24:24] is the sub-list for method input_type
+	24, // [24:24] is the sub-list for extension type_name
+	24, // [24:24] is the sub-list for extension extendee
+	0,  // [0:24] is the sub-list for field type_name
 }
 
 func init() { file_config_gateway_v1_gateway_proto_init() }
@@ -1341,7 +1405,7 @@ func file_config_gateway_v1_gateway_proto_init() {
 			}
 		}
 		file_config_gateway_v1_gateway_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Logger); i {
+			switch v := v.(*Frontend); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1353,7 +1417,7 @@ func file_config_gateway_v1_gateway_proto_init() {
 			}
 		}
 		file_config_gateway_v1_gateway_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Middleware); i {
+			switch v := v.(*Logger); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1365,7 +1429,7 @@ func file_config_gateway_v1_gateway_proto_init() {
 			}
 		}
 		file_config_gateway_v1_gateway_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Service); i {
+			switch v := v.(*Middleware); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1377,7 +1441,7 @@ func file_config_gateway_v1_gateway_proto_init() {
 			}
 		}
 		file_config_gateway_v1_gateway_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Resolver); i {
+			switch v := v.(*Service); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1389,7 +1453,7 @@ func file_config_gateway_v1_gateway_proto_init() {
 			}
 		}
 		file_config_gateway_v1_gateway_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Module); i {
+			switch v := v.(*Resolver); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1401,7 +1465,7 @@ func file_config_gateway_v1_gateway_proto_init() {
 			}
 		}
 		file_config_gateway_v1_gateway_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Stats_LogReporter); i {
+			switch v := v.(*Module); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1413,7 +1477,7 @@ func file_config_gateway_v1_gateway_proto_init() {
 			}
 		}
 		file_config_gateway_v1_gateway_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Stats_StatsdReporter); i {
+			switch v := v.(*Stats_LogReporter); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1425,7 +1489,7 @@ func file_config_gateway_v1_gateway_proto_init() {
 			}
 		}
 		file_config_gateway_v1_gateway_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Stats_StatsdReporter_PointTags); i {
+			switch v := v.(*Stats_StatsdReporter); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1437,6 +1501,18 @@ func file_config_gateway_v1_gateway_proto_init() {
 			}
 		}
 		file_config_gateway_v1_gateway_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Stats_StatsdReporter_PointTags); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_config_gateway_v1_gateway_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Timeouts_Entry); i {
 			case 0:
 				return &v.state
@@ -1456,10 +1532,10 @@ func file_config_gateway_v1_gateway_proto_init() {
 		(*Stats_LogReporter_)(nil),
 		(*Stats_StatsdReporter_)(nil),
 	}
-	file_config_gateway_v1_gateway_proto_msgTypes[6].OneofWrappers = []interface{}{
+	file_config_gateway_v1_gateway_proto_msgTypes[7].OneofWrappers = []interface{}{
 		(*Logger_Pretty)(nil),
 	}
-	file_config_gateway_v1_gateway_proto_msgTypes[12].OneofWrappers = []interface{}{
+	file_config_gateway_v1_gateway_proto_msgTypes[13].OneofWrappers = []interface{}{
 		(*Stats_StatsdReporter_PointTags_)(nil),
 	}
 	type x struct{}
@@ -1468,7 +1544,7 @@ func file_config_gateway_v1_gateway_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_config_gateway_v1_gateway_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   15,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

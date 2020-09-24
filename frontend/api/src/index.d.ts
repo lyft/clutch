@@ -3843,6 +3843,9 @@ export namespace clutch {
 
                     /** GatewayOptions middleware */
                     middleware?: (clutch.config.gateway.v1.IMiddleware[]|null);
+
+                    /** GatewayOptions frontend */
+                    frontend?: (clutch.config.gateway.v1.IFrontend|null);
                 }
 
                 /** Represents a GatewayOptions. */
@@ -3872,6 +3875,9 @@ export namespace clutch {
                     /** GatewayOptions middleware. */
                     public middleware: clutch.config.gateway.v1.IMiddleware[];
 
+                    /** GatewayOptions frontend. */
+                    public frontend?: (clutch.config.gateway.v1.IFrontend|null);
+
                     /**
                      * Verifies a GatewayOptions message.
                      * @param message Plain object to verify
@@ -3896,6 +3902,54 @@ export namespace clutch {
 
                     /**
                      * Converts this GatewayOptions to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a Frontend. */
+                interface IFrontend {
+
+                    /** Frontend cdnUrl */
+                    cdnUrl?: (string|null);
+                }
+
+                /** Represents a Frontend. */
+                class Frontend implements IFrontend {
+
+                    /**
+                     * Constructs a new Frontend.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.config.gateway.v1.IFrontend);
+
+                    /** Frontend cdnUrl. */
+                    public cdnUrl: string;
+
+                    /**
+                     * Verifies a Frontend message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Frontend message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Frontend
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.config.gateway.v1.Frontend;
+
+                    /**
+                     * Creates a plain object from a Frontend message. Also converts values to other types if specified.
+                     * @param message Frontend
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.config.gateway.v1.Frontend, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Frontend to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

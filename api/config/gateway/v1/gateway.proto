@@ -85,6 +85,12 @@ message GatewayOptions {
   Timeouts timeouts = 5;
 
   repeated Middleware middleware = 6;
+
+  Frontend frontend = 7;
+}
+
+message Frontend {
+  string cdn_url = 1;
 }
 
 message Logger {
