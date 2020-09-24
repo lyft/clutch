@@ -57,9 +57,6 @@
       "last 1 safari version"
     ]
   },
-  "dependencies": {
-    "protobufjs": "6.10.1"
-  },
   "devDependencies": {
     "lerna": "^3.22.1",
     "license-checker": "^25.0.1",

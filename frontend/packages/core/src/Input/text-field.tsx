@@ -34,7 +34,9 @@ const TextField: React.FC<TextFieldProps & MuiTextFieldProps> = ({
   const onKeyDown = (
     e: React.KeyboardEvent<HTMLDivElement | HTMLTextAreaElement | HTMLInputElement>
   ) => {
-    onChange(e as React.ChangeEvent<any>);
+    if (onChange !== undefined) {
+      onChange(e as React.ChangeEvent<any>);
+    }
     if (e.keyCode === KEY_ENTER && onReturn) {
       onReturn();
     }
@@ -49,6 +51,7 @@ const TextField: React.FC<TextFieldProps & MuiTextFieldProps> = ({
       onKeyDown={e => onKeyDown(e)}
       onFocus={onChange}
       onBlur={onChange}
+      placeholder={placeholder}
       {...props}
     />
   );

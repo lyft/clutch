@@ -2,7 +2,25 @@
 set -euo pipefail
 
 REPO_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
-LINKED_PACKAGES=("react" "react-dom" "react-router" "react-router-dom" "styled-components" "@material-ui/styles")
+# Packages should be added to this list if there can only be one of them present when using Clutch as a submodule.
+LINKED_PACKAGES=(
+  "react"
+  "react-dom"
+  "react-router"
+  "react-router-dom"
+  "styled-components"
+  "@material-ui/styles"
+  "@material-ui/core"
+  "@types/enzyme"
+  "@types/jest"
+  "@types/mocha"
+  "@types/node"
+  "@types/react"
+  "@types/react-dom"
+  "@types/styled-components"
+  "@types/yup"
+  "typescript"
+)
 
 EXTERNAL_ROOT="${1}"
 YARN="${EXTERNAL_ROOT}/build/bin/yarn.sh"
@@ -23,10 +41,11 @@ cd "${REPO_ROOT}/frontend"
 
 # Link deps from core repo.
 cd node_modules
+NODE_MODULES_DIR=$(pwd)
 for package in "${LINKED_PACKAGES[@]}"; do
   cd "${package}"
   "${YARN}" link
-  cd ..
+  cd "${NODE_MODULES_DIR}"
 done
 
 # Ensure yarn in destination directory

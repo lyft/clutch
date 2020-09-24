@@ -1,9 +1,9 @@
 import React from "react";
 import {
+  AccordionDetails,
+  AccordionSummary,
   Collapse as MuiCollapse,
   ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
   IconButton,
   Snackbar,
   Typography,
@@ -71,16 +71,16 @@ const CompressedError = ({ title, message }) => {
         <AlertTitle>{title || "Error"}</AlertTitle>
         {(errorMsg?.length || 0) > PANEL_MESSAGE_BREAKPOINT ? (
           <ErrorPanel elevation={0}>
-            <ExpansionPanelSummary
+            <AccordionSummary
               style={{ padding: "0px" }}
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
             >
               <ErrorText>{errorMsg.slice(0, PANEL_MESSAGE_BREAKPOINT)}</ErrorText>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails style={{ padding: "0px" }}>
+            </AccordionSummary>
+            <AccordionDetails style={{ padding: "0px" }}>
               <ErrorText>{errorMsg.slice(PANEL_MESSAGE_BREAKPOINT)}</ErrorText>
-            </ExpansionPanelDetails>
+            </AccordionDetails>
           </ErrorPanel>
         ) : (
           errorMsg
@@ -90,17 +90,30 @@ const CompressedError = ({ title, message }) => {
   );
 };
 
-const Warning = ({ message }) => {
+interface WarningProps {
+  message: any;
+  onClose?: () => void;
+}
+
+const Warning: React.FC<WarningProps> = ({ message, onClose }) => {
   const [open, setOpen] = React.useState(true);
+
+  const onDismiss = () => {
+    if (onClose !== undefined) {
+      onClose();
+    }
+    setOpen(false);
+  };
 
   return (
     <Snackbar
       open={open}
       autoHideDuration={6000}
+      onExit={onDismiss}
       onClose={() => setOpen(false)}
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
     >
-      <Alert elevation={6} variant="filled" onClose={() => setOpen(false)} severity="warning">
+      <Alert elevation={6} variant="filled" onClose={onDismiss} severity="warning">
         {message}
       </Alert>
     </Snackbar>

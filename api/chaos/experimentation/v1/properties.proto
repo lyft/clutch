@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package clutch.chaos.experimentation.v1;
+
+option go_package = "experimentationv1";
+
+message Properties {
+  repeated Property items = 1;
+}
+
+message Property {
+  string label = 1;
+  string value = 2;
+}

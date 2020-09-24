@@ -27,6 +27,8 @@ const ExperimentData: React.FC<ExperimentationDataProps> = ({
 
   const registeredExperimentType = types[experiment.config["@type"]];
 
+  const navigate = useNavigate();
+
   const mapperExists = Object.prototype.hasOwnProperty.call(registeredExperimentType, "mapping");
   const model = mapperExists ? registeredExperimentType.mapping(experiment.config) : experiment;
 
@@ -41,7 +43,15 @@ const ExperimentData: React.FC<ExperimentationDataProps> = ({
     return value ?? "Unknown";
   });
 
-  return <Row data={data} />;
+  return (
+    <Row
+      hover
+      onClick={() => {
+        navigate(`/experimentation/run/${experiment.id}`);
+      }}
+      data={data}
+    />
+  );
 };
 
 const Layout = styled(Container)`
@@ -64,21 +74,23 @@ interface ListExperimentsProps {
 }
 
 const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, experimentTypes }) => {
-  const [experiments, setExperiments] = useState([]);
+  const [experiments, setExperiments] = useState<
+    IClutch.chaos.experimentation.v1.Experiment[] | undefined
+  >(undefined);
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
-  if (experiments.length === 0) {
+  React.useEffect(() => {
     client
-      .post("/v1/experiments/get")
+      .post("/v1/chaos/experimentation/getExperiments")
       .then(response => {
         setExperiments(response?.data?.experiments || []);
       })
       .catch(err => {
         setError(err.response.statusText);
       });
-  }
+  }, []);
 
   const types = experimentTypes || [];
   let links: ExperimentTypeLinkProps[] = [];
@@ -101,9 +113,15 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, experimentTy
     <Layout>
       {error && <Error message={error} />}
       <Table headings={columnNames}>
-        {experiments.map(e => (
-          <ExperimentData key={e.id} experiment={e} columns={columns} experimentTypes={types} />
-        ))}
+        {experiments &&
+          experiments.map(e => (
+            <ExperimentData
+              key={e.id.toString()}
+              experiment={e}
+              columns={columns}
+              experimentTypes={types}
+            />
+          ))}
       </Table>
       <ButtonGroup buttons={buttons} />
     </Layout>

@@ -3,11 +3,14 @@ package experimentstore
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"regexp"
 	"testing"
+	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
@@ -25,9 +28,11 @@ type testQuery struct {
 }
 
 type experimentTest struct {
-	id          string
-	experiments []*experimentation.Experiment
-	queries     []*testQuery
+	id        string
+	config    *any.Any
+	startTime time.Time
+	queries   []*testQuery
+	err       error
 }
 
 func createExperimentsTests() ([]experimentTest, error) {
@@ -53,12 +58,9 @@ func createExperimentsTests() ([]experimentTest, error) {
 
 	return []experimentTest{
 		{
-			id: "create experiment",
-			experiments: []*experimentation.Experiment{
-				{
-					Config: anyConfig,
-				},
-			},
+			id:        "create experiment",
+			config:    anyConfig,
+			startTime: time.Now(),
 			queries: []*testQuery{
 				{
 					sql: `INSERT INTO experiment_config (id, details) VALUES ($1, $2)`,
@@ -68,16 +70,21 @@ func createExperimentsTests() ([]experimentTest, error) {
 					},
 				},
 				{
-					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, tstzrange(NOW(), NULL), NOW())`,
+					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, tstzrange($3, $4, '[]'), NOW())`,
 					args: []driver.Value{
+						sqlmock.AnyArg(),
+						sqlmock.AnyArg(),
 						sqlmock.AnyArg(),
 						sqlmock.AnyArg(),
 					},
 				},
 			},
+			err: nil,
 		},
 		{
-			id: "create empty experiments",
+			id:        "create empty experiments",
+			startTime: time.Now(),
+			err:       errors.New("empty config"),
 		},
 	}, nil
 }
@@ -109,58 +116,26 @@ func TestCreateExperiments(t *testing.T) {
 			}
 			mock.ExpectCommit()
 
-			err = es.CreateExperiments(context.Background(), test.experiments)
-			a.NoError(err)
+			_, err = es.CreateExperiment(context.Background(), test.config, &test.startTime, nil)
+			a.Equal(test.err, err)
 		})
 	}
 }
 
-var deleteExperimentsTests = []struct {
-	id   string
-	ids  []uint64
-	sql  string
-	args []driver.Value
-	err  error
-}{
-	{
-		id:   "delete specific experiment",
-		ids:  []uint64{1},
-		sql:  `DELETE FROM experiment_run WHERE id == $1`,
-		args: []driver.Value{1},
-	},
-}
+func TestCancelExperimentRun(t *testing.T) {
+	assert := assert.New(t)
 
-func TestStopExperiments(t *testing.T) {
-	t.Parallel()
+	db, mock, err := sqlmock.New()
+	assert.NoError(err)
 
-	for _, test := range deleteExperimentsTests {
-		test := test
+	es := &experimentStore{db: db}
+	defer es.Close()
 
-		t.Run(test.id, func(t *testing.T) {
-			t.Parallel()
-			a := assert.New(t)
+	expected := mock.ExpectExec(regexp.QuoteMeta(`UPDATE experiment_run SET cancellation_time = NOW() WHERE id = $1 AND cancellation_time IS NULL`))
+	expected.WithArgs([]driver.Value{1}...).WillReturnResult(sqlmock.NewResult(1, 1))
 
-			db, mock, err := sqlmock.New()
-			a.NoError(err)
-
-			es := &experimentStore{db: db}
-			defer es.Close()
-
-			expected := mock.ExpectExec(regexp.QuoteMeta(test.sql))
-			if test.err != nil {
-				expected.WillReturnError(test.err)
-			} else {
-				expected.WithArgs(test.args...).WillReturnResult(sqlmock.NewResult(1, 1))
-			}
-
-			err = es.StopExperiments(context.Background(), test.ids)
-			if test.err != nil {
-				a.Equal(test.err, err)
-			} else {
-				a.NoError(err)
-			}
-		})
-	}
+	err = es.CancelExperimentRun(context.Background(), uint64(1))
+	assert.NoError(err)
 }
 
 var getExperimentsTests = []struct {
@@ -172,7 +147,7 @@ var getExperimentsTests = []struct {
 }{
 	{
 		id:   "get all experiments",
-		sql:  `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id`,
+		sql:  `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`,
 		args: []driver.Value{"upstreamCluster", "downstreamCluster", 1},
 		rows: [][]driver.Value{
 			{
@@ -199,7 +174,7 @@ func TestGetExperiments(t *testing.T) {
 			es := &experimentStore{db: db}
 			defer es.Close()
 
-			expected := mock.ExpectQuery(regexp.QuoteMeta(test.sql))
+			expected := mock.ExpectQuery(regexp.QuoteMeta(test.sql)).WithArgs("foo", "UNSPECIFIED")
 			if test.err != nil {
 				expected.WillReturnError(test.err)
 			} else {
@@ -210,7 +185,7 @@ func TestGetExperiments(t *testing.T) {
 				expected.WillReturnRows(rows)
 			}
 
-			experiments, err := es.GetExperiments(context.Background())
+			experiments, err := es.GetExperiments(context.Background(), "foo", experimentation.GetExperimentsRequest_UNSPECIFIED)
 			if test.err != nil {
 				a.Equal(test.err, err)
 			} else {
