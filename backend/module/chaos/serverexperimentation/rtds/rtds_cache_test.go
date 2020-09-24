@@ -5,9 +5,12 @@ import (
 	"testing"
 
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
+	gcpDiscoveryServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
+	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	gcpResource "github.com/envoyproxy/go-control-plane/pkg/resource/v2"
+	gcpResourceV3 "github.com/envoyproxy/go-control-plane/pkg/resource/v3"
 	"github.com/golang/protobuf/ptypes"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/stretchr/testify/assert"
@@ -74,7 +77,7 @@ func mockGenerateFaultData(t *testing.T) []*experimentation.Experiment {
 	}
 }
 
-func TestSetSnapshot(t *testing.T) {
+func TestSetSnapshotV2(t *testing.T) {
 	testCache := gcpCache.NewSnapshotCache(false, gcpCache.IDHash{}, nil)
 	testRtdsLayerName := "testRtdsLayerName"
 	testUpstreamCluster := "serviceA"
@@ -94,7 +97,7 @@ func TestSetSnapshot(t *testing.T) {
 		}
 	}
 
-	err := setSnapshot(testCache, testRtdsLayerName, testUpstreamCluster, testUpstreamClusterFaults, zap.NewNop().Sugar())
+	err := setSnapshot(&cacheWrapperV2{testCache}, testRtdsLayerName, testUpstreamCluster, testUpstreamClusterFaults, zap.NewNop().Sugar())
 	if err != nil {
 		t.Errorf("setSnapshot failed %v", err)
 	}
@@ -115,6 +118,55 @@ func TestSetSnapshot(t *testing.T) {
 	}
 
 	runtime := resource.(*gcpDiscovery.Runtime)
+	fields := runtime.GetLayer().GetFields()
+	assert.Equal(t, 4, len(fields))
+	assert.EqualValues(t, 10, fields["fault.http.serviceB.abort.abort_percent"].GetNumberValue())
+	assert.EqualValues(t, 404, fields["fault.http.serviceB.abort.http_status"].GetNumberValue())
+	assert.EqualValues(t, 30, fields["fault.http.serviceD.delay.fixed_delay_percent"].GetNumberValue())
+	assert.EqualValues(t, 100, fields["fault.http.serviceD.delay.fixed_duration_ms"].GetNumberValue())
+}
+
+func TestSetSnapshotV3(t *testing.T) {
+	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
+	testRtdsLayerName := "testRtdsLayerName"
+	testUpstreamCluster := "serviceA"
+	mockExperimentList := mockGenerateFaultData(t)
+
+	var testUpstreamClusterFaults []*experimentation.Experiment
+	for _, experiment := range mockExperimentList {
+		config := &serverexperimentation.TestConfig{}
+		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+		if err != nil {
+			t.Errorf("unmarshalAny failed %v", err)
+		}
+
+		target := config.GetClusterPair()
+		if target.GetUpstreamCluster() == testUpstreamCluster {
+			testUpstreamClusterFaults = append(testUpstreamClusterFaults, experiment)
+		}
+	}
+
+	err := setSnapshot(&cacheWrapperV3{testCache}, testRtdsLayerName, testUpstreamCluster, testUpstreamClusterFaults, zap.NewNop().Sugar())
+	if err != nil {
+		t.Errorf("setSnapshot failed %v", err)
+	}
+
+	snapshot, err := testCache.GetSnapshot(testUpstreamCluster)
+	if err != nil {
+		t.Errorf("Snapshot not found for cluster %s", testUpstreamCluster)
+	}
+
+	resources := snapshot.GetResources(gcpResourceV3.RuntimeType)
+	if resources == nil {
+		t.Errorf("no resources")
+	}
+
+	resource := resources[testRtdsLayerName]
+	if resources == nil {
+		t.Errorf("no RTDS resources")
+	}
+
+	runtime := resource.(*gcpDiscoveryServiceV3.Runtime)
 	fields := runtime.GetLayer().GetFields()
 	assert.Equal(t, 4, len(fields))
 	assert.EqualValues(t, 10, fields["fault.http.serviceB.abort.abort_percent"].GetNumberValue())
