@@ -179,7 +179,7 @@ func TestSetSnapshotV3(t *testing.T) {
 func TestRefreshCache(t *testing.T) {
 	es := &mockExperimentStore{}
 	testCache := gcpCache.NewSnapshotCache(false, gcpCache.IDHash{}, nil)
-	refreshCache(context.Background(), es, testCache, "test_layer", nil)
+	refreshCache(context.Background(), es, &cacheWrapperV2{testCache}, "test_layer", nil)
 	assert.Equal(t, es.getExperimentArguments.configType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig")
 }
 
