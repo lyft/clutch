@@ -29,7 +29,7 @@ func NewRunDetails(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 		{Label: "Start Time", Value: timeToString(startTime)},
 	}
 
-	if runConfigPair.Status == experimentation.ExperimentRunDetails_COMPLETED {
+	if runConfigPair.Status == experimentation.Experiment_COMPLETED {
 		var time sql.NullTime
 		if endTime.Valid {
 			time = endTime
@@ -41,10 +41,10 @@ func NewRunDetails(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 		runConfigPair.GetProperties().Items = append(runConfigPair.GetProperties().Items, endTimeField)
 	}
 
-	if runConfigPair.Status == experimentation.ExperimentRunDetails_STOPPED {
+	if runConfigPair.Status == experimentation.Experiment_STOPPED {
 		stoppedTimeField := &experimentation.Property{Label: "Stopped At", Value: timeToString(cancellationTime)}
 		runConfigPair.GetProperties().Items = append(runConfigPair.GetProperties().Items, stoppedTimeField)
-	} else if runConfigPair.Status == experimentation.ExperimentRunDetails_CANCELED {
+	} else if runConfigPair.Status == experimentation.Experiment_CANCELED {
 		cancellationTimeField := &experimentation.Property{Label: "Canceled At", Value: timeToString(cancellationTime)}
 		runConfigPair.GetProperties().Items = append(runConfigPair.GetProperties().Items, cancellationTimeField)
 	}
@@ -59,28 +59,28 @@ func NewRunDetails(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 	return runConfigPair, err
 }
 
-func timesToStatus(startTime sql.NullTime, endTime sql.NullTime, cancellationTime sql.NullTime, now time.Time) (experimentation.ExperimentRunDetails_Status, error) {
+func timesToStatus(startTime sql.NullTime, endTime sql.NullTime, cancellationTime sql.NullTime, now time.Time) (experimentation.Experiment_Status, error) {
 	if !startTime.Valid {
-		return experimentation.ExperimentRunDetails_UNSPECIFIED, errors.New("experiment doesn't have startTime")
+		return experimentation.Experiment_UNSPECIFIED, errors.New("experiment doesn't have startTime")
 	}
 
 	if cancellationTime.Valid {
 		if cancellationTime.Time.After(startTime.Time) {
 			if endTime.Valid {
-				return experimentation.ExperimentRunDetails_STOPPED, nil
+				return experimentation.Experiment_STOPPED, nil
 			} else {
-				return experimentation.ExperimentRunDetails_COMPLETED, nil
+				return experimentation.Experiment_COMPLETED, nil
 			}
 		} else {
-			return experimentation.ExperimentRunDetails_CANCELED, nil
+			return experimentation.Experiment_CANCELED, nil
 		}
 	} else {
 		if now.Before(startTime.Time) {
-			return experimentation.ExperimentRunDetails_SCHEDULED, nil
+			return experimentation.Experiment_SCHEDULED, nil
 		} else if now.After(startTime.Time) && (!endTime.Valid || now.Before(endTime.Time)) {
-			return experimentation.ExperimentRunDetails_RUNNING, nil
+			return experimentation.Experiment_RUNNING, nil
 		}
-		return experimentation.ExperimentRunDetails_COMPLETED, nil
+		return experimentation.Experiment_COMPLETED, nil
 	}
 }
 
@@ -93,19 +93,19 @@ func timeToString(t sql.NullTime) string {
 	}
 }
 
-func statusToString(status experimentation.ExperimentRunDetails_Status) string {
+func statusToString(status experimentation.Experiment_Status) string {
 	switch status {
-	case experimentation.ExperimentRunDetails_UNSPECIFIED:
+	case experimentation.Experiment_UNSPECIFIED:
 		return "Unspecified"
-	case experimentation.ExperimentRunDetails_SCHEDULED:
+	case experimentation.Experiment_SCHEDULED:
 		return "Scheduled"
-	case experimentation.ExperimentRunDetails_RUNNING:
+	case experimentation.Experiment_RUNNING:
 		return "Running"
-	case experimentation.ExperimentRunDetails_COMPLETED:
+	case experimentation.Experiment_COMPLETED:
 		return "Completed"
-	case experimentation.ExperimentRunDetails_CANCELED:
+	case experimentation.Experiment_CANCELED:
 		return "Canceled"
-	case experimentation.ExperimentRunDetails_STOPPED:
+	case experimentation.Experiment_STOPPED:
 		return "Stopped"
 	default:
 		return status.String()

@@ -5388,187 +5388,6 @@ export const clutch = $root.clutch = (() => {
                  */
                 const v1 = {};
 
-                v1.Experiment = (function() {
-
-                    /**
-                     * Properties of an Experiment.
-                     * @memberof clutch.chaos.experimentation.v1
-                     * @interface IExperiment
-                     * @property {number|Long|null} [id] Experiment id
-                     * @property {google.protobuf.IAny|null} [config] Experiment config
-                     * @property {google.protobuf.ITimestamp|null} [startTime] Experiment startTime
-                     * @property {google.protobuf.ITimestamp|null} [endTime] Experiment endTime
-                     */
-
-                    /**
-                     * Constructs a new Experiment.
-                     * @memberof clutch.chaos.experimentation.v1
-                     * @classdesc Represents an Experiment.
-                     * @implements IExperiment
-                     * @constructor
-                     * @param {clutch.chaos.experimentation.v1.IExperiment=} [properties] Properties to set
-                     */
-                    function Experiment(properties) {
-                        if (properties)
-                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * Experiment id.
-                     * @member {number|Long} id
-                     * @memberof clutch.chaos.experimentation.v1.Experiment
-                     * @instance
-                     */
-                    Experiment.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-                    /**
-                     * Experiment config.
-                     * @member {google.protobuf.IAny|null|undefined} config
-                     * @memberof clutch.chaos.experimentation.v1.Experiment
-                     * @instance
-                     */
-                    Experiment.prototype.config = null;
-
-                    /**
-                     * Experiment startTime.
-                     * @member {google.protobuf.ITimestamp|null|undefined} startTime
-                     * @memberof clutch.chaos.experimentation.v1.Experiment
-                     * @instance
-                     */
-                    Experiment.prototype.startTime = null;
-
-                    /**
-                     * Experiment endTime.
-                     * @member {google.protobuf.ITimestamp|null|undefined} endTime
-                     * @memberof clutch.chaos.experimentation.v1.Experiment
-                     * @instance
-                     */
-                    Experiment.prototype.endTime = null;
-
-                    /**
-                     * Verifies an Experiment message.
-                     * @function verify
-                     * @memberof clutch.chaos.experimentation.v1.Experiment
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    Experiment.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        if (message.id != null && message.hasOwnProperty("id"))
-                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                                return "id: integer|Long expected";
-                        if (message.config != null && message.hasOwnProperty("config")) {
-                            let error = $root.google.protobuf.Any.verify(message.config);
-                            if (error)
-                                return "config." + error;
-                        }
-                        if (message.startTime != null && message.hasOwnProperty("startTime")) {
-                            let error = $root.google.protobuf.Timestamp.verify(message.startTime);
-                            if (error)
-                                return "startTime." + error;
-                        }
-                        if (message.endTime != null && message.hasOwnProperty("endTime")) {
-                            let error = $root.google.protobuf.Timestamp.verify(message.endTime);
-                            if (error)
-                                return "endTime." + error;
-                        }
-                        return null;
-                    };
-
-                    /**
-                     * Creates an Experiment message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof clutch.chaos.experimentation.v1.Experiment
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.experimentation.v1.Experiment} Experiment
-                     */
-                    Experiment.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.experimentation.v1.Experiment)
-                            return object;
-                        let message = new $root.clutch.chaos.experimentation.v1.Experiment();
-                        if (object.id != null)
-                            if ($util.Long)
-                                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
-                            else if (typeof object.id === "string")
-                                message.id = parseInt(object.id, 10);
-                            else if (typeof object.id === "number")
-                                message.id = object.id;
-                            else if (typeof object.id === "object")
-                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
-                        if (object.config != null) {
-                            if (typeof object.config !== "object")
-                                throw TypeError(".clutch.chaos.experimentation.v1.Experiment.config: object expected");
-                            message.config = $root.google.protobuf.Any.fromObject(object.config);
-                        }
-                        if (object.startTime != null) {
-                            if (typeof object.startTime !== "object")
-                                throw TypeError(".clutch.chaos.experimentation.v1.Experiment.startTime: object expected");
-                            message.startTime = $root.google.protobuf.Timestamp.fromObject(object.startTime);
-                        }
-                        if (object.endTime != null) {
-                            if (typeof object.endTime !== "object")
-                                throw TypeError(".clutch.chaos.experimentation.v1.Experiment.endTime: object expected");
-                            message.endTime = $root.google.protobuf.Timestamp.fromObject(object.endTime);
-                        }
-                        return message;
-                    };
-
-                    /**
-                     * Creates a plain object from an Experiment message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof clutch.chaos.experimentation.v1.Experiment
-                     * @static
-                     * @param {clutch.chaos.experimentation.v1.Experiment} message Experiment
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    Experiment.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        let object = {};
-                        if (options.defaults) {
-                            if ($util.Long) {
-                                let long = new $util.Long(0, 0, false);
-                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                            } else
-                                object.id = options.longs === String ? "0" : 0;
-                            object.config = null;
-                            object.startTime = null;
-                            object.endTime = null;
-                        }
-                        if (message.id != null && message.hasOwnProperty("id"))
-                            if (typeof message.id === "number")
-                                object.id = options.longs === String ? String(message.id) : message.id;
-                            else
-                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
-                        if (message.config != null && message.hasOwnProperty("config"))
-                            object.config = $root.google.protobuf.Any.toObject(message.config, options);
-                        if (message.startTime != null && message.hasOwnProperty("startTime"))
-                            object.startTime = $root.google.protobuf.Timestamp.toObject(message.startTime, options);
-                        if (message.endTime != null && message.hasOwnProperty("endTime"))
-                            object.endTime = $root.google.protobuf.Timestamp.toObject(message.endTime, options);
-                        return object;
-                    };
-
-                    /**
-                     * Converts this Experiment to JSON.
-                     * @function toJSON
-                     * @memberof clutch.chaos.experimentation.v1.Experiment
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    Experiment.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return Experiment;
-                })();
-
                 v1.CreateExperimentRequest = (function() {
 
                     /**
@@ -5824,20 +5643,6 @@ export const clutch = $root.clutch = (() => {
                     return CreateExperimentResponse;
                 })();
 
-                /**
-                 * GetExperimentsStatus enum.
-                 * @name clutch.chaos.experimentation.v1.GetExperimentsStatus
-                 * @enum {number}
-                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
-                 * @property {number} RUNNING=1 RUNNING value
-                 */
-                v1.GetExperimentsStatus = (function() {
-                    const valuesById = {}, values = Object.create(valuesById);
-                    values[valuesById[0] = "UNSPECIFIED"] = 0;
-                    values[valuesById[1] = "RUNNING"] = 1;
-                    return values;
-                })();
-
                 v1.GetExperimentsRequest = (function() {
 
                     /**
@@ -5845,7 +5650,7 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.chaos.experimentation.v1
                      * @interface IGetExperimentsRequest
                      * @property {string|null} [configType] GetExperimentsRequest configType
-                     * @property {clutch.chaos.experimentation.v1.GetExperimentsStatus|null} [status] GetExperimentsRequest status
+                     * @property {clutch.chaos.experimentation.v1.GetExperimentsRequest.Status|null} [status] GetExperimentsRequest status
                      */
 
                     /**
@@ -5873,7 +5678,7 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * GetExperimentsRequest status.
-                     * @member {clutch.chaos.experimentation.v1.GetExperimentsStatus} status
+                     * @member {clutch.chaos.experimentation.v1.GetExperimentsRequest.Status} status
                      * @memberof clutch.chaos.experimentation.v1.GetExperimentsRequest
                      * @instance
                      */
@@ -5951,7 +5756,7 @@ export const clutch = $root.clutch = (() => {
                         if (message.configType != null && message.hasOwnProperty("configType"))
                             object.configType = message.configType;
                         if (message.status != null && message.hasOwnProperty("status"))
-                            object.status = options.enums === String ? $root.clutch.chaos.experimentation.v1.GetExperimentsStatus[message.status] : message.status;
+                            object.status = options.enums === String ? $root.clutch.chaos.experimentation.v1.GetExperimentsRequest.Status[message.status] : message.status;
                         return object;
                     };
 
@@ -5965,6 +5770,20 @@ export const clutch = $root.clutch = (() => {
                     GetExperimentsRequest.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
+
+                    /**
+                     * Status enum.
+                     * @name clutch.chaos.experimentation.v1.GetExperimentsRequest.Status
+                     * @enum {number}
+                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                     * @property {number} RUNNING=1 RUNNING value
+                     */
+                    GetExperimentsRequest.Status = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "RUNNING"] = 1;
+                        return values;
+                    })();
 
                     return GetExperimentsRequest;
                 })();
@@ -6651,6 +6470,209 @@ export const clutch = $root.clutch = (() => {
                     return ExperimentsAPI;
                 })();
 
+                v1.Experiment = (function() {
+
+                    /**
+                     * Properties of an Experiment.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface IExperiment
+                     * @property {number|Long|null} [id] Experiment id
+                     * @property {google.protobuf.IAny|null} [config] Experiment config
+                     * @property {google.protobuf.ITimestamp|null} [startTime] Experiment startTime
+                     * @property {google.protobuf.ITimestamp|null} [endTime] Experiment endTime
+                     */
+
+                    /**
+                     * Constructs a new Experiment.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents an Experiment.
+                     * @implements IExperiment
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.IExperiment=} [properties] Properties to set
+                     */
+                    function Experiment(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Experiment id.
+                     * @member {number|Long} id
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @instance
+                     */
+                    Experiment.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Experiment config.
+                     * @member {google.protobuf.IAny|null|undefined} config
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @instance
+                     */
+                    Experiment.prototype.config = null;
+
+                    /**
+                     * Experiment startTime.
+                     * @member {google.protobuf.ITimestamp|null|undefined} startTime
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @instance
+                     */
+                    Experiment.prototype.startTime = null;
+
+                    /**
+                     * Experiment endTime.
+                     * @member {google.protobuf.ITimestamp|null|undefined} endTime
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @instance
+                     */
+                    Experiment.prototype.endTime = null;
+
+                    /**
+                     * Verifies an Experiment message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Experiment.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                                return "id: integer|Long expected";
+                        if (message.config != null && message.hasOwnProperty("config")) {
+                            let error = $root.google.protobuf.Any.verify(message.config);
+                            if (error)
+                                return "config." + error;
+                        }
+                        if (message.startTime != null && message.hasOwnProperty("startTime")) {
+                            let error = $root.google.protobuf.Timestamp.verify(message.startTime);
+                            if (error)
+                                return "startTime." + error;
+                        }
+                        if (message.endTime != null && message.hasOwnProperty("endTime")) {
+                            let error = $root.google.protobuf.Timestamp.verify(message.endTime);
+                            if (error)
+                                return "endTime." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates an Experiment message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.Experiment} Experiment
+                     */
+                    Experiment.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.Experiment)
+                            return object;
+                        let message = new $root.clutch.chaos.experimentation.v1.Experiment();
+                        if (object.id != null)
+                            if ($util.Long)
+                                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
+                            else if (typeof object.id === "string")
+                                message.id = parseInt(object.id, 10);
+                            else if (typeof object.id === "number")
+                                message.id = object.id;
+                            else if (typeof object.id === "object")
+                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+                        if (object.config != null) {
+                            if (typeof object.config !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.Experiment.config: object expected");
+                            message.config = $root.google.protobuf.Any.fromObject(object.config);
+                        }
+                        if (object.startTime != null) {
+                            if (typeof object.startTime !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.Experiment.startTime: object expected");
+                            message.startTime = $root.google.protobuf.Timestamp.fromObject(object.startTime);
+                        }
+                        if (object.endTime != null) {
+                            if (typeof object.endTime !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.Experiment.endTime: object expected");
+                            message.endTime = $root.google.protobuf.Timestamp.fromObject(object.endTime);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an Experiment message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.Experiment} message Experiment
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Experiment.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.id = options.longs === String ? "0" : 0;
+                            object.config = null;
+                            object.startTime = null;
+                            object.endTime = null;
+                        }
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (typeof message.id === "number")
+                                object.id = options.longs === String ? String(message.id) : message.id;
+                            else
+                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
+                        if (message.config != null && message.hasOwnProperty("config"))
+                            object.config = $root.google.protobuf.Any.toObject(message.config, options);
+                        if (message.startTime != null && message.hasOwnProperty("startTime"))
+                            object.startTime = $root.google.protobuf.Timestamp.toObject(message.startTime, options);
+                        if (message.endTime != null && message.hasOwnProperty("endTime"))
+                            object.endTime = $root.google.protobuf.Timestamp.toObject(message.endTime, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Experiment to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Experiment.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    /**
+                     * Status enum.
+                     * @name clutch.chaos.experimentation.v1.Experiment.Status
+                     * @enum {number}
+                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                     * @property {number} SCHEDULED=1 SCHEDULED value
+                     * @property {number} RUNNING=2 RUNNING value
+                     * @property {number} COMPLETED=3 COMPLETED value
+                     * @property {number} CANCELED=4 CANCELED value
+                     * @property {number} STOPPED=5 STOPPED value
+                     */
+                    Experiment.Status = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "SCHEDULED"] = 1;
+                        values[valuesById[2] = "RUNNING"] = 2;
+                        values[valuesById[3] = "COMPLETED"] = 3;
+                        values[valuesById[4] = "CANCELED"] = 4;
+                        values[valuesById[5] = "STOPPED"] = 5;
+                        return values;
+                    })();
+
+                    return Experiment;
+                })();
+
                 v1.ExperimentRunDetails = (function() {
 
                     /**
@@ -6658,7 +6680,7 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.chaos.experimentation.v1
                      * @interface IExperimentRunDetails
                      * @property {number|Long|null} [runId] ExperimentRunDetails runId
-                     * @property {clutch.chaos.experimentation.v1.ExperimentRunDetails.Status|null} [status] ExperimentRunDetails status
+                     * @property {clutch.chaos.experimentation.v1.Experiment.Status|null} [status] ExperimentRunDetails status
                      * @property {clutch.chaos.experimentation.v1.IProperties|null} [properties] ExperimentRunDetails properties
                      * @property {google.protobuf.IAny|null} [config] ExperimentRunDetails config
                      */
@@ -6688,7 +6710,7 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * ExperimentRunDetails status.
-                     * @member {clutch.chaos.experimentation.v1.ExperimentRunDetails.Status} status
+                     * @member {clutch.chaos.experimentation.v1.Experiment.Status} status
                      * @memberof clutch.chaos.experimentation.v1.ExperimentRunDetails
                      * @instance
                      */
@@ -6838,7 +6860,7 @@ export const clutch = $root.clutch = (() => {
                             else
                                 object.runId = options.longs === String ? $util.Long.prototype.toString.call(message.runId) : options.longs === Number ? new $util.LongBits(message.runId.low >>> 0, message.runId.high >>> 0).toNumber() : message.runId;
                         if (message.status != null && message.hasOwnProperty("status"))
-                            object.status = options.enums === String ? $root.clutch.chaos.experimentation.v1.ExperimentRunDetails.Status[message.status] : message.status;
+                            object.status = options.enums === String ? $root.clutch.chaos.experimentation.v1.Experiment.Status[message.status] : message.status;
                         if (message.properties != null && message.hasOwnProperty("properties"))
                             object.properties = $root.clutch.chaos.experimentation.v1.Properties.toObject(message.properties, options);
                         if (message.config != null && message.hasOwnProperty("config"))
@@ -6856,28 +6878,6 @@ export const clutch = $root.clutch = (() => {
                     ExperimentRunDetails.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
-
-                    /**
-                     * Status enum.
-                     * @name clutch.chaos.experimentation.v1.ExperimentRunDetails.Status
-                     * @enum {number}
-                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
-                     * @property {number} SCHEDULED=1 SCHEDULED value
-                     * @property {number} RUNNING=2 RUNNING value
-                     * @property {number} COMPLETED=3 COMPLETED value
-                     * @property {number} CANCELED=4 CANCELED value
-                     * @property {number} STOPPED=5 STOPPED value
-                     */
-                    ExperimentRunDetails.Status = (function() {
-                        const valuesById = {}, values = Object.create(valuesById);
-                        values[valuesById[0] = "UNSPECIFIED"] = 0;
-                        values[valuesById[1] = "SCHEDULED"] = 1;
-                        values[valuesById[2] = "RUNNING"] = 2;
-                        values[valuesById[3] = "COMPLETED"] = 3;
-                        values[valuesById[4] = "CANCELED"] = 4;
-                        values[valuesById[5] = "STOPPED"] = 5;
-                        return values;
-                    })();
 
                     return ExperimentRunDetails;
                 })();
