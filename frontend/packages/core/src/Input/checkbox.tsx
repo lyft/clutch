@@ -53,8 +53,8 @@ const CheckboxPanel: React.FC<CheckboxPanelProps> = ({ header, options, onChange
   };
 
   const optionKeys = Object.keys(allOptions);
-  const column1Keys = [...optionKeys].splice(0, optionKeys.length/2);
-  const column2Keys = [...optionKeys].splice(column1Keys.length+1, optionKeys.length);
+  const column1Keys = [...optionKeys].splice(0, optionKeys.length / 2);
+  const column2Keys = [...optionKeys].splice(column1Keys.length + 1, optionKeys.length);
 
   return (
     <FormControl>
@@ -76,7 +76,7 @@ const CheckboxPanel: React.FC<CheckboxPanelProps> = ({ header, options, onChange
           ))}
         </FormGroup>
         <FormGroup>
-        {column2Keys.map(option => (
+          {column2Keys.map(option => (
             <FormGroup row key={option}>
               <FormControlLabel
                 key={option}
