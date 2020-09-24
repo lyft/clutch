@@ -20,7 +20,6 @@ import (
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	gcpServerV2 "github.com/envoyproxy/go-control-plane/pkg/server/v2"
 	gcpServerV3 "github.com/envoyproxy/go-control-plane/pkg/server/v3"
-
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
