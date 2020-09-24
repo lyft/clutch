@@ -6,7 +6,7 @@ import (
 	"time"
 
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
-	gcpDiscoveryServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
+	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCacheV2 "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
@@ -85,7 +85,7 @@ func (c *cacheWrapperV3) GetSnapshotVersion(key string) (string, error) {
 
 func (c *cacheWrapperV3) SetRuntimeLayer(nodeName string, layerName string, layer *pstruct.Struct, version string) error {
 	runtimes := []gcpTypes.Resource{
-		&gcpDiscoveryServiceV3.Runtime{
+		&gcpRuntimeServiceV3.Runtime{
 			Name:  layerName,
 			Layer: layer,
 		},

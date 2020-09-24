@@ -15,7 +15,7 @@ import (
 	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
 	gcpDiscoveryV2 "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
 	gcpDiscoveryV3 "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v3"
-	gcpDiscoveryServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
+	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	gcpCacheV2 "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	gcpServerV2 "github.com/envoyproxy/go-control-plane/pkg/server/v2"
@@ -128,7 +128,7 @@ func (s *Server) Register(r module.Registrar) error {
 		s.totalResourcesServed, s.logger, 0})
 	xdsServerV3 := gcpServerV3.NewServer(s.ctx, s.snapshotCacheV3, &callbacksV3{s.totalStreams,
 		s.totalResourcesServed, s.logger, 0})
-	gcpDiscoveryServiceV3.RegisterRuntimeDiscoveryServiceServer(r.GRPCServer(), xdsServerV3)
+	gcpRuntimeServiceV3.RegisterRuntimeDiscoveryServiceServer(r.GRPCServer(), xdsServerV3)
 	gcpDiscoveryV2.RegisterRuntimeDiscoveryServiceServer(r.GRPCServer(), xdsServerV2)
 	return nil
 }

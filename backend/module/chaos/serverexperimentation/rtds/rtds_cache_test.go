@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
-	gcpDiscoveryServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
+	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
@@ -167,7 +167,7 @@ func TestSetSnapshotV3(t *testing.T) {
 		t.Errorf("no RTDS resources")
 	}
 
-	runtime := resource.(*gcpDiscoveryServiceV3.Runtime)
+	runtime := resource.(*gcpRuntimeServiceV3.Runtime)
 	fields := runtime.GetLayer().GetFields()
 	assert.Equal(t, 4, len(fields))
 	assert.EqualValues(t, 10, fields["fault.http.serviceB.abort.abort_percent"].GetNumberValue())
