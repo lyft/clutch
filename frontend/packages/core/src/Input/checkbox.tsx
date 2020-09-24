@@ -52,14 +52,31 @@ const CheckboxPanel: React.FC<CheckboxPanelProps> = ({ header, options, onChange
     onChange(callbackOptions);
   };
 
+  const optionKeys = Object.keys(allOptions);
+  const column1Keys = optionKeys.splice(0, optionKeys.length/2);
+  const column2Keys = optionKeys.splice(column1Keys.length+1, optionKeys.length);
+
   return (
     <FormControl>
-      <Grid container direction="column">
+      <Grid container direction="row" justify="center" alignItems="stretch">
         <FormLabel color="secondary" component="legend">
           {header}
         </FormLabel>
-        <FormGroup row>
-          {Object.keys(allOptions).map(option => (
+        <FormGroup>
+          {column1Keys.map(option => (
+            <FormGroup row key={option}>
+              <FormControlLabel
+                key={option}
+                control={
+                  <Checkbox checked={selected[option].checked} onChange={onToggle} name={option} />
+                }
+                label={option}
+              />
+            </FormGroup>
+          ))}
+        </FormGroup>
+        <FormGroup>
+        {column2Keys.map(option => (
             <FormGroup row key={option}>
               <FormControlLabel
                 key={option}
