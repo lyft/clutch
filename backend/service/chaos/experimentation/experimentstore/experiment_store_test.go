@@ -69,7 +69,7 @@ func createExperimentsTests() ([]experimentTest, error) {
 					},
 				},
 				{
-					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, scheduled_end_time, creation_time) VALUES ($1, $2, tstzrange($3, $4, '[]'), $4, NOW())`,
+					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, tstzrange($3, $4, '[]'), NOW())`,
 					args: []driver.Value{
 						sqlmock.AnyArg(),
 						sqlmock.AnyArg(),
@@ -121,52 +121,20 @@ func TestCreateExperiments(t *testing.T) {
 	}
 }
 
-var cancelExperimentsTests = []struct {
-	id    string
-	runID uint64
-	sql   string
-	args  []driver.Value
-	err   error
-}{
-	{
-		id:    "cancel an experiment run",
-		runID: uint64(1),
-		sql:   `UPDATE experiment_run SET execution_time = tstzrange(lower(execution_time), NOW(), '[]') WHERE id = $1 AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`,
-		args:  []driver.Value{1},
-	},
-}
-
 func TestCancelExperimentRun(t *testing.T) {
-	t.Parallel()
+	assert := assert.New(t)
 
-	for _, test := range cancelExperimentsTests {
-		test := test
+	db, mock, err := sqlmock.New()
+	assert.NoError(err)
 
-		t.Run(test.id, func(t *testing.T) {
-			t.Parallel()
-			a := assert.New(t)
+	es := &experimentStore{db: db}
+	defer es.Close()
 
-			db, mock, err := sqlmock.New()
-			a.NoError(err)
+	expected := mock.ExpectExec(regexp.QuoteMeta(`UPDATE experiment_run SET cancellation_time = NOW() WHERE id = $1 AND cancellation_time IS NULL`))
+	expected.WithArgs([]driver.Value{1}...).WillReturnResult(sqlmock.NewResult(1, 1))
 
-			es := &experimentStore{db: db}
-			defer es.Close()
-
-			expected := mock.ExpectExec(regexp.QuoteMeta(test.sql))
-			if test.err != nil {
-				expected.WillReturnError(test.err)
-			} else {
-				expected.WithArgs(test.args...).WillReturnResult(sqlmock.NewResult(1, 1))
-			}
-
-			err = es.CancelExperimentRun(context.Background(), test.runID)
-			if test.err != nil {
-				a.Equal(test.err, err)
-			} else {
-				a.NoError(err)
-			}
-		})
-	}
+	err = es.CancelExperimentRun(context.Background(), uint64(1))
+	assert.NoError(err)
 }
 
 var getExperimentsTests = []struct {

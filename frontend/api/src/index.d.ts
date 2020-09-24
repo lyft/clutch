@@ -2940,7 +2940,9 @@ export namespace clutch {
                     UNSPECIFIED = 0,
                     SCHEDULED = 1,
                     RUNNING = 2,
-                    COMPLETED = 3
+                    COMPLETED = 3,
+                    CANCELED = 4,
+                    STOPPED = 5
                 }
 
                 /** Properties of a Properties. */

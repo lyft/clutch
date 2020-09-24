@@ -88,9 +88,8 @@ func (fs *experimentStore) CreateExperiment(ctx context.Context, config *any.Any
 				id,
 				experiment_config_id,
 				execution_time,
-				scheduled_end_time,
 				creation_time)
-			VALUES ($1, $2, tstzrange($3, $4, '[]'), $4, NOW())`
+			VALUES ($1, $2, tstzrange($3, $4, '[]'), NOW())`
 
 	runId := id.NewID()
 	_, err = fs.db.ExecContext(ctx, runSql, runId, configID, startTime, endTime)
@@ -140,8 +139,8 @@ func toProto(t *time.Time) (*timestamp.Timestamp, error) {
 func (fs *experimentStore) CancelExperimentRun(ctx context.Context, id uint64) error {
 	sql :=
 		`UPDATE experiment_run 
-         SET execution_time = tstzrange(lower(execution_time), NOW(), '[]') 
-         WHERE id = $1 AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
+         SET cancellation_time = NOW()
+         WHERE id = $1 AND cancellation_time IS NULL AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
 
 	_, err := fs.db.ExecContext(ctx, sql, id)
 	return err
@@ -192,22 +191,22 @@ func (fs *experimentStore) GetExperiments(ctx context.Context, configType string
 
 func (fs *experimentStore) GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error) {
 	sqlQuery := `
-        SELECT experiment_run.id, lower(execution_time), upper(execution_time), scheduled_end_time, creation_time, details FROM experiment_config, experiment_run
+        SELECT experiment_run.id, lower(execution_time), upper(execution_time), cancellation_time, creation_time, details FROM experiment_config, experiment_run
         WHERE experiment_run.id = $1 AND experiment_run.experiment_config_id = experiment_config.id`
 
 	row := fs.db.QueryRowContext(ctx, sqlQuery, id)
 
 	var fetchedID uint64
-	var startTime, endTime, scheduledEndTime sql.NullTime
+	var startTime, endTime, cancellationTime sql.NullTime
 	var creationTime time.Time
 	var details string
 
-	err := row.Scan(&fetchedID, &startTime, &endTime, &scheduledEndTime, &creationTime, &details)
+	err := row.Scan(&fetchedID, &startTime, &endTime, &cancellationTime, &creationTime, &details)
 	if err != nil {
 		return nil, err
 	}
 
-	return NewRunDetails(fetchedID, startTime, endTime, scheduledEndTime, creationTime, details)
+	return NewRunDetails(fetchedID, creationTime, startTime, endTime, cancellationTime, time.Now(), details)
 }
 
 // Close closes all resources held.
