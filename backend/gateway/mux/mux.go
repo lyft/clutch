@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -11,7 +12,10 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/lyft/clutch/backend/service"
+
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
+	awsservice "github.com/lyft/clutch/backend/service/aws"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -26,7 +30,7 @@ import (
 var apiPattern = regexp.MustCompile(`^/v\d+/`)
 
 type assetHandler struct {
-	feCfg *gatewayv1.Frontend
+	assetCfg *gatewayv1.Assets
 
 	next       http.Handler
 	fileSystem http.FileSystem
@@ -67,6 +71,7 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Serve!
 	if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
 		// If not a known static asset and a CDN is enabled, try streaming from it.
+
 		if len(a.feCfg.CdnUrl) > 0 && strings.HasPrefix(r.URL.Path, "/static/") {
 			w.Header().Set("x-clutch-cdn-passthrough", "true")
 
@@ -81,6 +86,23 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		_ = f.Close()
 	}
 	a.fileServer.ServeHTTP(w, r)
+}
+
+func (a *assetHandler) assetProviderHandler() (io.Reader, error) {
+	switch a.assetCfg.Provider.(type) {
+	case *gatewayv1.Assets_S3:
+		aws, ok := service.Registry[awsservice.Name]
+		if !ok {
+			log.Print("need aws configured plz")
+		}
+
+		awsClient, ok := aws.(awsservice.Client)
+		if !ok {
+			log.Print("unable to get aws client")
+		}
+
+		// awsClient.
+	}
 }
 
 func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp proto.Message) error {
@@ -135,7 +157,7 @@ func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Ma
 	runtime.DefaultHTTPProtoErrorHandler(ctx, mux, m, w, req, err)
 }
 
-func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem, feCfg *gatewayv1.Frontend) *Mux {
+func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem, assetCfg *gatewayv1.Assets) *Mux {
 	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(unaryInterceptors...))
 	jsonGateway := runtime.NewServeMux(
 		runtime.WithForwardResponseOption(customResponseForwarder),
@@ -153,7 +175,7 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 
 	httpMux := http.NewServeMux()
 	httpMux.Handle("/", &assetHandler{
-		feCfg:      feCfg,
+		assetCfg:   assetCfg,
 		next:       jsonGateway,
 		fileSystem: assets,
 		fileServer: http.FileServer(assets),
