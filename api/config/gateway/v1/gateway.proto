@@ -92,7 +92,8 @@ message GatewayOptions {
 message Assets {
   // To use the S3Provider you must have the AWS service configured and enabled
   message S3Provider {
-    string bucket_name = 1;
+    string bucket = 1;
+    string key = 2;
   }
 
   oneof provider {

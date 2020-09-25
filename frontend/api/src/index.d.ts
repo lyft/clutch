@@ -3963,8 +3963,11 @@ export namespace clutch {
                     /** Properties of a S3Provider. */
                     interface IS3Provider {
 
-                        /** S3Provider bucketName */
-                        bucketName?: (string|null);
+                        /** S3Provider bucket */
+                        bucket?: (string|null);
+
+                        /** S3Provider key */
+                        key?: (string|null);
                     }
 
                     /** Represents a S3Provider. */
@@ -3976,8 +3979,11 @@ export namespace clutch {
                          */
                         constructor(properties?: clutch.config.gateway.v1.Assets.IS3Provider);
 
-                        /** S3Provider bucketName. */
-                        public bucketName: string;
+                        /** S3Provider bucket. */
+                        public bucket: string;
+
+                        /** S3Provider key. */
+                        public key: string;
 
                         /**
                          * Verifies a S3Provider message.

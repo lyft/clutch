@@ -1518,7 +1518,9 @@ func (m *Assets_S3Provider) Validate() error {
 		return nil
 	}
 
-	// no validation rules for BucketName
+	// no validation rules for Bucket
+
+	// no validation rules for Key
 
 	return nil
 }

@@ -15,8 +15,11 @@ gateway:
       address: 0.0.0.0
       port: 8080
       secure: false
-  frontend:
-    cdn_url: https://localhost:9000/clutch
+  assets:
+    s3:
+      bucket: meow
+      key: meow
+  
 modules:
   - name: clutch.module.assets
   - name: clutch.module.healthcheck

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -70,14 +69,11 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// Serve!
 	if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
-		// If not a known static asset and a CDN is enabled, try streaming from it.
-
-		if len(a.feCfg.CdnUrl) > 0 && strings.HasPrefix(r.URL.Path, "/static/") {
-			w.Header().Set("x-clutch-cdn-passthrough", "true")
-
-			req, _ := http.NewRequest("GET", fmt.Sprintf("%s%s", a.feCfg.CdnUrl, r.URL.Path), nil)
-			resp, _ := http.DefaultClient.Do(req)
-			_, _ = io.Copy(w, resp.Body)
+		// If not a known static asset and a asset provider is enabled, try streaming from it.
+		if a.assetCfg.Provider != nil {
+			asset, _ := a.assetProviderHandler(r.URL.Path)
+			_, _ = io.Copy(w, asset)
+			return
 		}
 
 		// If not a known static asset serve the SPA.
@@ -88,20 +84,27 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.fileServer.ServeHTTP(w, r)
 }
 
-func (a *assetHandler) assetProviderHandler() (io.Reader, error) {
+func (a *assetHandler) assetProviderHandler(path string) (io.Reader, error) {
 	switch a.assetCfg.Provider.(type) {
 	case *gatewayv1.Assets_S3:
 		aws, ok := service.Registry[awsservice.Name]
 		if !ok {
-			log.Print("need aws configured plz")
+			return nil, fmt.Errorf("The AWS service must be configured to use the asset s3 provider.")
 		}
 
 		awsClient, ok := aws.(awsservice.Client)
 		if !ok {
-			log.Print("unable to get aws client")
+			return nil, fmt.Errorf("Unable to aquire the aws client")
 		}
 
-		// awsClient.
+		return awsClient.S3StreamingGet(
+			context.Background(),
+			awsClient.GetCurrentRegion(),
+			a.assetCfg.GetS3().Bucket,
+			fmt.Sprintf("%s%s", a.assetCfg.GetS3().Key, path),
+		)
+	default:
+		return nil, fmt.Errorf("No asset provider is configured")
 	}
 }
 

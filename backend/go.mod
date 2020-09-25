@@ -8,6 +8,7 @@ require (
 	github.com/bufbuild/buf v0.24.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/cncf/udpa/go v0.0.0-20200629203442-efcf912fb354 // indirect
+	github.com/coreos/etcd v3.3.13+incompatible
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/docker/docker v1.4.2-0.20200213202729-31a86c4ab209

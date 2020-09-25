@@ -9350,7 +9350,8 @@ export const clutch = $root.clutch = (() => {
                          * Properties of a S3Provider.
                          * @memberof clutch.config.gateway.v1.Assets
                          * @interface IS3Provider
-                         * @property {string|null} [bucketName] S3Provider bucketName
+                         * @property {string|null} [bucket] S3Provider bucket
+                         * @property {string|null} [key] S3Provider key
                          */
 
                         /**
@@ -9369,12 +9370,20 @@ export const clutch = $root.clutch = (() => {
                         }
 
                         /**
-                         * S3Provider bucketName.
-                         * @member {string} bucketName
+                         * S3Provider bucket.
+                         * @member {string} bucket
                          * @memberof clutch.config.gateway.v1.Assets.S3Provider
                          * @instance
                          */
-                        S3Provider.prototype.bucketName = "";
+                        S3Provider.prototype.bucket = "";
+
+                        /**
+                         * S3Provider key.
+                         * @member {string} key
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @instance
+                         */
+                        S3Provider.prototype.key = "";
 
                         /**
                          * Verifies a S3Provider message.
@@ -9387,9 +9396,12 @@ export const clutch = $root.clutch = (() => {
                         S3Provider.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
-                            if (message.bucketName != null && message.hasOwnProperty("bucketName"))
-                                if (!$util.isString(message.bucketName))
-                                    return "bucketName: string expected";
+                            if (message.bucket != null && message.hasOwnProperty("bucket"))
+                                if (!$util.isString(message.bucket))
+                                    return "bucket: string expected";
+                            if (message.key != null && message.hasOwnProperty("key"))
+                                if (!$util.isString(message.key))
+                                    return "key: string expected";
                             return null;
                         };
 
@@ -9405,8 +9417,10 @@ export const clutch = $root.clutch = (() => {
                             if (object instanceof $root.clutch.config.gateway.v1.Assets.S3Provider)
                                 return object;
                             let message = new $root.clutch.config.gateway.v1.Assets.S3Provider();
-                            if (object.bucketName != null)
-                                message.bucketName = String(object.bucketName);
+                            if (object.bucket != null)
+                                message.bucket = String(object.bucket);
+                            if (object.key != null)
+                                message.key = String(object.key);
                             return message;
                         };
 
@@ -9423,10 +9437,14 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.defaults)
-                                object.bucketName = "";
-                            if (message.bucketName != null && message.hasOwnProperty("bucketName"))
-                                object.bucketName = message.bucketName;
+                            if (options.defaults) {
+                                object.bucket = "";
+                                object.key = "";
+                            }
+                            if (message.bucket != null && message.hasOwnProperty("bucket"))
+                                object.bucket = message.bucket;
+                            if (message.key != null && message.hasOwnProperty("key"))
+                                object.key = message.key;
                             return object;
                         };
 
