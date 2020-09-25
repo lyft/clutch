@@ -1,7 +1,6 @@
 module.exports = {
   "@clutch-sh/ec2": {
     terminateInstance: {
-      trending: true,
       componentProps: {
         resolverType: "clutch.aws.ec2.v1.Instance",
       },
@@ -40,9 +39,20 @@ module.exports = {
       },
     },
     resizeHPA: {
-      trending: true,
       componentProps: {
         resolverType: "clutch.k8s.v1.HPA",
+      },
+    },
+    describeService: {
+      trending: true,
+      componentProps: {
+        resolverType: "clutch.k8s.v1.Service",
+      },
+    },
+    listServices: {
+      trending: true,
+      componentProps: {
+        resolverType: "clutch.k8s.v1.Namespace",
       },
     },
   },
