@@ -67,13 +67,12 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Serve!
 	if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
 		// If not a known static asset and a CDN is enabled, try streaming from it.
-		if len(a.feCfg.CdnUrl) > 0 {
+		if len(a.feCfg.CdnUrl) > 0 && strings.HasPrefix(r.URL.Path, "/static/") {
 			w.Header().Set("x-clutch-cdn-passthrough", "true")
 
-			req, _ := http.NewRequest("GET", fmt.Sprintf("%s/%s", a.feCfg.CdnUrl, r.URL.Path), nil)
+			req, _ := http.NewRequest("GET", fmt.Sprintf("%s%s", a.feCfg.CdnUrl, r.URL.Path), nil)
 			resp, _ := http.DefaultClient.Do(req)
 			_, _ = io.Copy(w, resp.Body)
-
 		}
 
 		// If not a known static asset serve the SPA.

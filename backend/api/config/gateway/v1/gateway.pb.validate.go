@@ -642,10 +642,10 @@ func (m *GatewayOptions) Validate() error {
 
 	}
 
-	if v, ok := interface{}(m.GetFrontend()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetAssets()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return GatewayOptionsValidationError{
-				field:  "Frontend",
+				field:  "Assets",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -709,21 +709,35 @@ var _ interface {
 	ErrorName() string
 } = GatewayOptionsValidationError{}
 
-// Validate checks the field values on Frontend with the rules defined in the
+// Validate checks the field values on Assets with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
-func (m *Frontend) Validate() error {
+func (m *Assets) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	// no validation rules for CdnUrl
+	switch m.Provider.(type) {
+
+	case *Assets_S3:
+
+		if v, ok := interface{}(m.GetS3()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return AssetsValidationError{
+					field:  "S3",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
 
 	return nil
 }
 
-// FrontendValidationError is the validation error returned by
-// Frontend.Validate if the designated constraints aren't met.
-type FrontendValidationError struct {
+// AssetsValidationError is the validation error returned by Assets.Validate if
+// the designated constraints aren't met.
+type AssetsValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -731,22 +745,22 @@ type FrontendValidationError struct {
 }
 
 // Field function returns field value.
-func (e FrontendValidationError) Field() string { return e.field }
+func (e AssetsValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e FrontendValidationError) Reason() string { return e.reason }
+func (e AssetsValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e FrontendValidationError) Cause() error { return e.cause }
+func (e AssetsValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e FrontendValidationError) Key() bool { return e.key }
+func (e AssetsValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e FrontendValidationError) ErrorName() string { return "FrontendValidationError" }
+func (e AssetsValidationError) ErrorName() string { return "AssetsValidationError" }
 
 // Error satisfies the builtin error interface
-func (e FrontendValidationError) Error() string {
+func (e AssetsValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -758,14 +772,14 @@ func (e FrontendValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sFrontend.%s: %s%s",
+		"invalid %sAssets.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = FrontendValidationError{}
+var _ error = AssetsValidationError{}
 
 var _ interface {
 	Field() string
@@ -773,7 +787,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = FrontendValidationError{}
+} = AssetsValidationError{}
 
 // Validate checks the field values on Logger with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
@@ -1495,3 +1509,72 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = Timeouts_EntryValidationError{}
+
+// Validate checks the field values on Assets_S3Provider with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *Assets_S3Provider) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for BucketName
+
+	return nil
+}
+
+// Assets_S3ProviderValidationError is the validation error returned by
+// Assets_S3Provider.Validate if the designated constraints aren't met.
+type Assets_S3ProviderValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Assets_S3ProviderValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Assets_S3ProviderValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Assets_S3ProviderValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Assets_S3ProviderValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Assets_S3ProviderValidationError) ErrorName() string {
+	return "Assets_S3ProviderValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Assets_S3ProviderValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAssets_S3Provider.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Assets_S3ProviderValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Assets_S3ProviderValidationError{}
