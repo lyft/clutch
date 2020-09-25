@@ -3,6 +3,7 @@ package k8s
 import (
 	"context"
 	"fmt"
+
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -64,15 +65,16 @@ func svcDescription(k8sSvc *corev1.Service, cluster string) *k8sapiv1.Service {
 		clusterName = cluster
 	}
 	return &k8sapiv1.Service{
-		Cluster:    clusterName,
-		Namespace:  k8sSvc.Namespace,
-		Name:       k8sSvc.Name,
-		ClusterIp:  k8sSvc.Spec.ClusterIP,
+		Cluster:   clusterName,
+		Namespace: k8sSvc.Namespace,
+		Name:      k8sSvc.Name,
+		ClusterIp: k8sSvc.Spec.ClusterIP,
 		//ExternalIp: k8sSvc.Spec.ExternalIPs, // TODO ExternalIPs is a string array
-		Type:      protoForServiceType(k8sSvc.Spec.Type),
+		Type:        protoForServiceType(k8sSvc.Spec.Type),
 		StartTime:   k8sSvc.CreationTimestamp.String(),
 		Labels:      k8sSvc.Labels,
 		Annotations: k8sSvc.Annotations,
+		Data:        k8sSvc.String(),
 	}
 }
 
