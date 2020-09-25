@@ -71,6 +71,7 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
 		// If not a known static asset and a asset provider is enabled, try streaming from it.
 		if a.assetCfg.Provider != nil {
+			w.Header().Set("x-cltuch-asset-passthrough", "true")
 			asset, _ := a.assetProviderHandler(r.URL.Path)
 			_, _ = io.Copy(w, asset)
 			return
