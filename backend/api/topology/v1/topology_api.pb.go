@@ -848,7 +848,7 @@ type Resource struct {
 	// Pb is the clutch proto object.
 	Pb *any.Any `protobuf:"bytes,2,opt,name=pb,proto3" json:"pb,omitempty"`
 	// Metadata is set by the service which produces the topology Resource, for example k8s would extract
-	// relevent metadata that gives the Topology API the ability to query against it.
+	// relevant metadata that gives the Topology API the ability to query against it.
 	Metadata map[string]string `protobuf:"bytes,3,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
@@ -905,7 +905,7 @@ func (x *Resource) GetMetadata() map[string]string {
 	return nil
 }
 
-// A UpdateCacheRequest is used when a service such as kuberentes or aws produces objects for
+// A UpdateCacheRequest is used when a service such as kubernetes or aws produces objects for
 // the topology API to cache.
 type UpdateCacheRequest struct {
 	state         protoimpl.MessageState
