@@ -10695,6 +10695,130 @@ export namespace clutch {
                  */
                 public toJSON(): { [k: string]: any };
             }
+
+            /** Properties of a Resource. */
+            interface IResource {
+
+                /** Resource id */
+                id?: (string|null);
+
+                /** Resource pb */
+                pb?: (google.protobuf.IAny|null);
+
+                /** Resource metadata */
+                metadata?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a Resource. */
+            class Resource implements IResource {
+
+                /**
+                 * Constructs a new Resource.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.topology.v1.IResource);
+
+                /** Resource id. */
+                public id: string;
+
+                /** Resource pb. */
+                public pb?: (google.protobuf.IAny|null);
+
+                /** Resource metadata. */
+                public metadata: { [k: string]: string };
+
+                /**
+                 * Verifies a Resource message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Resource message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Resource
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.Resource;
+
+                /**
+                 * Creates a plain object from a Resource message. Also converts values to other types if specified.
+                 * @param message Resource
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.topology.v1.Resource, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Resource to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an UpdateCacheRequest. */
+            interface IUpdateCacheRequest {
+
+                /** UpdateCacheRequest resource */
+                resource?: (clutch.topology.v1.IResource|null);
+
+                /** UpdateCacheRequest action */
+                action?: (clutch.topology.v1.UpdateCacheRequest.Action|null);
+            }
+
+            /** Represents an UpdateCacheRequest. */
+            class UpdateCacheRequest implements IUpdateCacheRequest {
+
+                /**
+                 * Constructs a new UpdateCacheRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.topology.v1.IUpdateCacheRequest);
+
+                /** UpdateCacheRequest resource. */
+                public resource?: (clutch.topology.v1.IResource|null);
+
+                /** UpdateCacheRequest action. */
+                public action: clutch.topology.v1.UpdateCacheRequest.Action;
+
+                /**
+                 * Verifies an UpdateCacheRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an UpdateCacheRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns UpdateCacheRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.UpdateCacheRequest;
+
+                /**
+                 * Creates a plain object from an UpdateCacheRequest message. Also converts values to other types if specified.
+                 * @param message UpdateCacheRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.topology.v1.UpdateCacheRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this UpdateCacheRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace UpdateCacheRequest {
+
+                /** Action enum. */
+                enum Action {
+                    UNSPECIFIED = 0,
+                    CREATE_OR_UPDATE = 1,
+                    DELETE = 2
+                }
+            }
         }
     }
 }

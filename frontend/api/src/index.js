@@ -25732,6 +25732,319 @@ export const clutch = $root.clutch = (() => {
                 return Edge;
             })();
 
+            v1.Resource = (function() {
+
+                /**
+                 * Properties of a Resource.
+                 * @memberof clutch.topology.v1
+                 * @interface IResource
+                 * @property {string|null} [id] Resource id
+                 * @property {google.protobuf.IAny|null} [pb] Resource pb
+                 * @property {Object.<string,string>|null} [metadata] Resource metadata
+                 */
+
+                /**
+                 * Constructs a new Resource.
+                 * @memberof clutch.topology.v1
+                 * @classdesc Represents a Resource.
+                 * @implements IResource
+                 * @constructor
+                 * @param {clutch.topology.v1.IResource=} [properties] Properties to set
+                 */
+                function Resource(properties) {
+                    this.metadata = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Resource id.
+                 * @member {string} id
+                 * @memberof clutch.topology.v1.Resource
+                 * @instance
+                 */
+                Resource.prototype.id = "";
+
+                /**
+                 * Resource pb.
+                 * @member {google.protobuf.IAny|null|undefined} pb
+                 * @memberof clutch.topology.v1.Resource
+                 * @instance
+                 */
+                Resource.prototype.pb = null;
+
+                /**
+                 * Resource metadata.
+                 * @member {Object.<string,string>} metadata
+                 * @memberof clutch.topology.v1.Resource
+                 * @instance
+                 */
+                Resource.prototype.metadata = $util.emptyObject;
+
+                /**
+                 * Verifies a Resource message.
+                 * @function verify
+                 * @memberof clutch.topology.v1.Resource
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Resource.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (!$util.isString(message.id))
+                            return "id: string expected";
+                    if (message.pb != null && message.hasOwnProperty("pb")) {
+                        let error = $root.google.protobuf.Any.verify(message.pb);
+                        if (error)
+                            return "pb." + error;
+                    }
+                    if (message.metadata != null && message.hasOwnProperty("metadata")) {
+                        if (!$util.isObject(message.metadata))
+                            return "metadata: object expected";
+                        let key = Object.keys(message.metadata);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.metadata[key[i]]))
+                                return "metadata: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Resource message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.topology.v1.Resource
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.topology.v1.Resource} Resource
+                 */
+                Resource.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.Resource)
+                        return object;
+                    let message = new $root.clutch.topology.v1.Resource();
+                    if (object.id != null)
+                        message.id = String(object.id);
+                    if (object.pb != null) {
+                        if (typeof object.pb !== "object")
+                            throw TypeError(".clutch.topology.v1.Resource.pb: object expected");
+                        message.pb = $root.google.protobuf.Any.fromObject(object.pb);
+                    }
+                    if (object.metadata) {
+                        if (typeof object.metadata !== "object")
+                            throw TypeError(".clutch.topology.v1.Resource.metadata: object expected");
+                        message.metadata = {};
+                        for (let keys = Object.keys(object.metadata), i = 0; i < keys.length; ++i)
+                            message.metadata[keys[i]] = String(object.metadata[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Resource message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.topology.v1.Resource
+                 * @static
+                 * @param {clutch.topology.v1.Resource} message Resource
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Resource.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults)
+                        object.metadata = {};
+                    if (options.defaults) {
+                        object.id = "";
+                        object.pb = null;
+                    }
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        object.id = message.id;
+                    if (message.pb != null && message.hasOwnProperty("pb"))
+                        object.pb = $root.google.protobuf.Any.toObject(message.pb, options);
+                    let keys2;
+                    if (message.metadata && (keys2 = Object.keys(message.metadata)).length) {
+                        object.metadata = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.metadata[keys2[j]] = message.metadata[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this Resource to JSON.
+                 * @function toJSON
+                 * @memberof clutch.topology.v1.Resource
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Resource.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Resource;
+            })();
+
+            v1.UpdateCacheRequest = (function() {
+
+                /**
+                 * Properties of an UpdateCacheRequest.
+                 * @memberof clutch.topology.v1
+                 * @interface IUpdateCacheRequest
+                 * @property {clutch.topology.v1.IResource|null} [resource] UpdateCacheRequest resource
+                 * @property {clutch.topology.v1.UpdateCacheRequest.Action|null} [action] UpdateCacheRequest action
+                 */
+
+                /**
+                 * Constructs a new UpdateCacheRequest.
+                 * @memberof clutch.topology.v1
+                 * @classdesc Represents an UpdateCacheRequest.
+                 * @implements IUpdateCacheRequest
+                 * @constructor
+                 * @param {clutch.topology.v1.IUpdateCacheRequest=} [properties] Properties to set
+                 */
+                function UpdateCacheRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * UpdateCacheRequest resource.
+                 * @member {clutch.topology.v1.IResource|null|undefined} resource
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @instance
+                 */
+                UpdateCacheRequest.prototype.resource = null;
+
+                /**
+                 * UpdateCacheRequest action.
+                 * @member {clutch.topology.v1.UpdateCacheRequest.Action} action
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @instance
+                 */
+                UpdateCacheRequest.prototype.action = 0;
+
+                /**
+                 * Verifies an UpdateCacheRequest message.
+                 * @function verify
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                UpdateCacheRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.resource != null && message.hasOwnProperty("resource")) {
+                        let error = $root.clutch.topology.v1.Resource.verify(message.resource);
+                        if (error)
+                            return "resource." + error;
+                    }
+                    if (message.action != null && message.hasOwnProperty("action"))
+                        switch (message.action) {
+                        default:
+                            return "action: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                            break;
+                        }
+                    return null;
+                };
+
+                /**
+                 * Creates an UpdateCacheRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.topology.v1.UpdateCacheRequest} UpdateCacheRequest
+                 */
+                UpdateCacheRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.UpdateCacheRequest)
+                        return object;
+                    let message = new $root.clutch.topology.v1.UpdateCacheRequest();
+                    if (object.resource != null) {
+                        if (typeof object.resource !== "object")
+                            throw TypeError(".clutch.topology.v1.UpdateCacheRequest.resource: object expected");
+                        message.resource = $root.clutch.topology.v1.Resource.fromObject(object.resource);
+                    }
+                    switch (object.action) {
+                    case "UNSPECIFIED":
+                    case 0:
+                        message.action = 0;
+                        break;
+                    case "CREATE_OR_UPDATE":
+                    case 1:
+                        message.action = 1;
+                        break;
+                    case "DELETE":
+                    case 2:
+                        message.action = 2;
+                        break;
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an UpdateCacheRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @static
+                 * @param {clutch.topology.v1.UpdateCacheRequest} message UpdateCacheRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                UpdateCacheRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.resource = null;
+                        object.action = options.enums === String ? "UNSPECIFIED" : 0;
+                    }
+                    if (message.resource != null && message.hasOwnProperty("resource"))
+                        object.resource = $root.clutch.topology.v1.Resource.toObject(message.resource, options);
+                    if (message.action != null && message.hasOwnProperty("action"))
+                        object.action = options.enums === String ? $root.clutch.topology.v1.UpdateCacheRequest.Action[message.action] : message.action;
+                    return object;
+                };
+
+                /**
+                 * Converts this UpdateCacheRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                UpdateCacheRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Action enum.
+                 * @name clutch.topology.v1.UpdateCacheRequest.Action
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} CREATE_OR_UPDATE=1 CREATE_OR_UPDATE value
+                 * @property {number} DELETE=2 DELETE value
+                 */
+                UpdateCacheRequest.Action = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "CREATE_OR_UPDATE"] = 1;
+                    values[valuesById[2] = "DELETE"] = 2;
+                    return values;
+                })();
+
+                return UpdateCacheRequest;
+            })();
+
             return v1;
         })();
 
