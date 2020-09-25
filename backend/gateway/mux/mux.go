@@ -11,6 +11,8 @@ import (
 	"strconv"
 	"strings"
 
+	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
+
 	"github.com/golang/protobuf/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"golang.org/x/net/http2"
@@ -24,6 +26,8 @@ import (
 var apiPattern = regexp.MustCompile(`^/v\d+/`)
 
 type assetHandler struct {
+	feCfg *gatewayv1.Frontend
+
 	next       http.Handler
 	fileSystem http.FileSystem
 	fileServer http.Handler
@@ -62,6 +66,14 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// Serve!
 	if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
+		// If not a known static asset and a CDN is enabled, try streaming from it.
+		if len(a.feCfg.CdnUrl) > 0 {
+			w.Header().Set("x-clutch-cdn-passthrough", "true")
+			req, _ := http.NewRequest("GET", a.feCfg.CdnUrl, nil)
+			resp, _ := http.DefaultClient.Do(req)
+			_, _ = io.Copy(w, resp.Body)
+		}
+
 		// If not a known static asset serve the SPA.
 		r.URL.Path = "/"
 	} else {
@@ -122,7 +134,7 @@ func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Ma
 	runtime.DefaultHTTPProtoErrorHandler(ctx, mux, m, w, req, err)
 }
 
-func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem) *Mux {
+func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem, feCfg *gatewayv1.Frontend) *Mux {
 	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(unaryInterceptors...))
 	jsonGateway := runtime.NewServeMux(
 		runtime.WithForwardResponseOption(customResponseForwarder),
@@ -140,6 +152,7 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 
 	httpMux := http.NewServeMux()
 	httpMux.Handle("/", &assetHandler{
+		feCfg:      feCfg,
 		next:       jsonGateway,
 		fileSystem: assets,
 		fileServer: http.FileServer(assets),
