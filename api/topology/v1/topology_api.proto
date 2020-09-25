@@ -168,11 +168,11 @@ message Resource {
   google.protobuf.Any pb = 2;
 
   // Metadata is set by the service which produces the topology Resource, for example k8s would extract
-  // relevent metadata that gives the Topology API the ability to query against it.
+  // relevant metadata that gives the Topology API the ability to query against it.
   map<string, string> metadata = 3;
 }
 
-// A UpdateCacheRequest is used when a service such as kuberentes or aws produces objects for
+// A UpdateCacheRequest is used when a service such as kubernetes or aws produces objects for
 // the topology API to cache.
 message UpdateCacheRequest {
   Resource resource = 1;
