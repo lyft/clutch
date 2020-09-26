@@ -9,8 +9,8 @@ const register = (): WorkflowConfiguration => {
       contactUrl: "mailto:hello@clutch.sh",
     },
     path: "server-experimentation",
-    group: "Chaos Experimentation",
-    displayName: "Server Experimentation",
+    group: "Experimentation",
+    displayName: "Server Fault Injection",
     routes: {
       startAbortExperiment: {
         path: "startabort",

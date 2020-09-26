@@ -10,13 +10,13 @@ const register = (): WorkflowConfiguration => {
       contactUrl: "mailto:hello@clutch.sh",
     },
     path: "experimentation",
-    group: "Chaos Experimentation",
-    displayName: "Chaos Experimentation",
+    group: "Experimentation",
+    displayName: "Fault Injection",
     routes: {
       listExperiments: {
         path: "list",
-        displayName: "List Experiments",
-        description: "List Experiments.",
+        displayName: "Experiments",
+        description: "Manage fault injection experiments.",
         component: ListExperiments,
       },
       viewExperimentRun: {
