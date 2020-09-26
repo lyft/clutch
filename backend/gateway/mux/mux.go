@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -70,34 +69,19 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	r.URL.Path = origPath
 
 	// Serve!
-	// if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
-	// 	// If not a known static asset and a asset provider is enabled, try streaming from it.
-	// 	if a.assetCfg.Provider != nil {
-	// 		w.Header().Set("x-cltuch-asset-passthrough", "true")
-	// 		asset, _ := a.assetProviderHandler(r.URL.Path)
-	// 		_, _ = io.Copy(w, asset)
-	// 		return
-	// 	}
-
-	// 	// If not a known static asset serve the SPA.
-	// 	r.URL.Path = "/"
-	// } else {
-	// 	_ = f.Close()
-	// }
-
-	log.Printf("URL path: %s", r.URL.Path)
-
-	if strings.HasPrefix(r.URL.Path, "/static") {
-		w.Header().Set("x-cltuch-asset-passthrough", "true")
-		asset, _ := a.assetProviderHandler(r.URL.Path)
-		_, _ = io.Copy(w, asset)
-	} else {
-		if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
-			// If not a known static asset serve the SPA.
-			r.URL.Path = "/"
-		} else {
-			_ = f.Close()
+	if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
+		// If not a known static asset and a asset provider is configured, try streaming from the configured provider.
+		if a.assetCfg.Provider != nil && strings.HasPrefix(r.URL.Path, "/static") {
+			w.Header().Set("x-clutch-asset-passthrough", "true")
+			asset, _ := a.assetProviderHandler(r.URL.Path)
+			_, _ = io.Copy(w, asset)
+			return
 		}
+
+		// If not a known static asset serve the SPA.
+		r.URL.Path = "/"
+	} else {
+		_ = f.Close()
 	}
 
 	a.fileServer.ServeHTTP(w, r)
@@ -116,14 +100,11 @@ func (a *assetHandler) assetProviderHandler(urlPath string) (io.Reader, error) {
 			return nil, fmt.Errorf("Unable to aquire the aws client")
 		}
 
-		bucketKey := path.Join(a.assetCfg.GetS3().Key, strings.TrimPrefix(urlPath, "/static"))
-		log.Printf("looking for key: %s", bucketKey)
-
 		return awsClient.S3StreamingGet(
 			context.Background(),
 			awsClient.GetCurrentRegion(),
 			a.assetCfg.GetS3().Bucket,
-			bucketKey,
+			path.Join(a.assetCfg.GetS3().Key, strings.TrimPrefix(urlPath, "/static")),
 		)
 	default:
 		return nil, fmt.Errorf("No asset provider is configured")
