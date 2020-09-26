@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"path"
 	"regexp"
 	"strconv"
 	"strings"
@@ -84,16 +85,25 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// 	_ = f.Close()
 	// }
 
-	w.Header().Set("x-cltuch-asset-passthrough", "true")
 	log.Printf("URL path: %s", r.URL.Path)
 
-	asset, _ := a.assetProviderHandler(r.URL.Path)
-	_, _ = io.Copy(w, asset)
+	if strings.HasPrefix(r.URL.Path, "/static") {
+		w.Header().Set("x-cltuch-asset-passthrough", "true")
+		asset, _ := a.assetProviderHandler(r.URL.Path)
+		_, _ = io.Copy(w, asset)
+	} else {
+		if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
+			// If not a known static asset serve the SPA.
+			r.URL.Path = "/"
+		} else {
+			_ = f.Close()
+		}
+	}
 
 	a.fileServer.ServeHTTP(w, r)
 }
 
-func (a *assetHandler) assetProviderHandler(path string) (io.Reader, error) {
+func (a *assetHandler) assetProviderHandler(urlPath string) (io.Reader, error) {
 	switch a.assetCfg.Provider.(type) {
 	case *gatewayv1.Assets_S3:
 		aws, ok := service.Registry[awsservice.Name]
@@ -106,7 +116,7 @@ func (a *assetHandler) assetProviderHandler(path string) (io.Reader, error) {
 			return nil, fmt.Errorf("Unable to aquire the aws client")
 		}
 
-		bucketKey := fmt.Sprintf("%s%s", a.assetCfg.GetS3().Key, path)
+		bucketKey := path.Join(a.assetCfg.GetS3().Key, strings.TrimPrefix(urlPath, "/static"))
 		log.Printf("looking for key: %s", bucketKey)
 
 		return awsClient.S3StreamingGet(
