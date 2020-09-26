@@ -10,7 +10,7 @@ const register = (): WorkflowConfiguration => {
     },
     path: "server-experimentation",
     group: "Experimentation",
-    displayName: "Server Fault Injection",
+    displayName: "Server Experimentation",
     routes: {
       startAbortExperiment: {
         path: "startabort",
