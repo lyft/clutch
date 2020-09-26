@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -68,20 +69,27 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	r.URL.Path = origPath
 
 	// Serve!
-	if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
-		// If not a known static asset and a asset provider is enabled, try streaming from it.
-		if a.assetCfg.Provider != nil {
-			w.Header().Set("x-cltuch-asset-passthrough", "true")
-			asset, _ := a.assetProviderHandler(r.URL.Path)
-			_, _ = io.Copy(w, asset)
-			return
-		}
+	// if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
+	// 	// If not a known static asset and a asset provider is enabled, try streaming from it.
+	// 	if a.assetCfg.Provider != nil {
+	// 		w.Header().Set("x-cltuch-asset-passthrough", "true")
+	// 		asset, _ := a.assetProviderHandler(r.URL.Path)
+	// 		_, _ = io.Copy(w, asset)
+	// 		return
+	// 	}
 
-		// If not a known static asset serve the SPA.
-		r.URL.Path = "/"
-	} else {
-		_ = f.Close()
-	}
+	// 	// If not a known static asset serve the SPA.
+	// 	r.URL.Path = "/"
+	// } else {
+	// 	_ = f.Close()
+	// }
+
+	w.Header().Set("x-cltuch-asset-passthrough", "true")
+	log.Printf("URL path: %s", r.URL.Path)
+
+	asset, _ := a.assetProviderHandler(r.URL.Path)
+	_, _ = io.Copy(w, asset)
+
 	a.fileServer.ServeHTTP(w, r)
 }
 
@@ -98,11 +106,14 @@ func (a *assetHandler) assetProviderHandler(path string) (io.Reader, error) {
 			return nil, fmt.Errorf("Unable to aquire the aws client")
 		}
 
+		bucketKey := fmt.Sprintf("%s%s", a.assetCfg.GetS3().Key, path)
+		log.Printf("looking for key: %s", bucketKey)
+
 		return awsClient.S3StreamingGet(
 			context.Background(),
 			awsClient.GetCurrentRegion(),
 			a.assetCfg.GetS3().Bucket,
-			fmt.Sprintf("%s%s", a.assetCfg.GetS3().Key, path),
+			bucketKey,
 		)
 	default:
 		return nil, fmt.Errorf("No asset provider is configured")
