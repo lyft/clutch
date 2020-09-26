@@ -11,12 +11,12 @@ const register = (): WorkflowConfiguration => {
     },
     path: "experimentation",
     group: "Experimentation",
-    displayName: "Fault Injection",
+    displayName: "Experimentation",
     routes: {
       listExperiments: {
         path: "list",
         displayName: "Experiments",
-        description: "Manage fault injection experiments.",
+        description: "Manage experiments.",
         component: ListExperiments,
       },
       viewExperimentRun: {
