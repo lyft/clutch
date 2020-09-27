@@ -17,8 +17,9 @@ gateway:
       secure: false
   assets:
     s3:
-      bucket: meow
-      key: meow
+      region: us-east-1
+      bucket: clutch
+      key: static
   
 modules:
   - name: clutch.module.assets

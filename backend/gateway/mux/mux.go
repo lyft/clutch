@@ -12,11 +12,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/lyft/clutch/backend/service"
-
-	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
-	awsservice "github.com/lyft/clutch/backend/service/aws"
-
 	"github.com/golang/protobuf/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"golang.org/x/net/http2"
@@ -25,6 +20,10 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
+
+	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
+	"github.com/lyft/clutch/backend/service"
+	awsservice "github.com/lyft/clutch/backend/service/aws"
 )
 
 var apiPattern = regexp.MustCompile(`^/v\d+/`)
@@ -106,7 +105,7 @@ func (a *assetHandler) assetProviderHandler(urlPath string) (io.Reader, error) {
 
 		return awsClient.S3StreamingGet(
 			context.Background(),
-			awsClient.GetCurrentRegion(),
+			a.assetCfg.GetS3().Region,
 			a.assetCfg.GetS3().Bucket,
 			path.Join(a.assetCfg.GetS3().Key, strings.TrimPrefix(urlPath, "/static")),
 		)

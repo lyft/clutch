@@ -8,7 +8,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"os"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -82,7 +81,6 @@ type Client interface {
 	S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error)
 
 	Regions() []string
-	GetCurrentRegion() string
 }
 
 type client struct {
@@ -200,10 +198,6 @@ func (c *client) Regions() []string {
 		regions = append(regions, region)
 	}
 	return regions
-}
-
-func (c *client) GetCurrentRegion() string {
-	return os.Getenv("EC2_REGION")
 }
 
 type regionalClient struct {

@@ -9350,6 +9350,7 @@ export const clutch = $root.clutch = (() => {
                          * Properties of a S3Provider.
                          * @memberof clutch.config.gateway.v1.Assets
                          * @interface IS3Provider
+                         * @property {string|null} [region] S3Provider region
                          * @property {string|null} [bucket] S3Provider bucket
                          * @property {string|null} [key] S3Provider key
                          */
@@ -9368,6 +9369,14 @@ export const clutch = $root.clutch = (() => {
                                     if (properties[keys[i]] != null)
                                         this[keys[i]] = properties[keys[i]];
                         }
+
+                        /**
+                         * S3Provider region.
+                         * @member {string} region
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @instance
+                         */
+                        S3Provider.prototype.region = "";
 
                         /**
                          * S3Provider bucket.
@@ -9396,6 +9405,9 @@ export const clutch = $root.clutch = (() => {
                         S3Provider.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
+                            if (message.region != null && message.hasOwnProperty("region"))
+                                if (!$util.isString(message.region))
+                                    return "region: string expected";
                             if (message.bucket != null && message.hasOwnProperty("bucket"))
                                 if (!$util.isString(message.bucket))
                                     return "bucket: string expected";
@@ -9417,6 +9429,8 @@ export const clutch = $root.clutch = (() => {
                             if (object instanceof $root.clutch.config.gateway.v1.Assets.S3Provider)
                                 return object;
                             let message = new $root.clutch.config.gateway.v1.Assets.S3Provider();
+                            if (object.region != null)
+                                message.region = String(object.region);
                             if (object.bucket != null)
                                 message.bucket = String(object.bucket);
                             if (object.key != null)
@@ -9438,9 +9452,12 @@ export const clutch = $root.clutch = (() => {
                                 options = {};
                             let object = {};
                             if (options.defaults) {
+                                object.region = "";
                                 object.bucket = "";
                                 object.key = "";
                             }
+                            if (message.region != null && message.hasOwnProperty("region"))
+                                object.region = message.region;
                             if (message.bucket != null && message.hasOwnProperty("bucket"))
                                 object.bucket = message.bucket;
                             if (message.key != null && message.hasOwnProperty("key"))

@@ -7,8 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/stretchr/testify/assert"
+
+	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 )
 
 func TestCopyHTTPResponse(t *testing.T) {
@@ -36,6 +37,7 @@ func TestAssetProviderS3Handler(t *testing.T) {
 		assetCfg: &gatewayv1.Assets{
 			Provider: &gatewayv1.Assets_S3{
 				S3: &gatewayv1.Assets_S3Provider{
+					Region: "us-east-1",
 					Bucket: "clutch",
 					Key:    "static",
 				},

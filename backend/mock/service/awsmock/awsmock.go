@@ -101,10 +101,6 @@ func (s *svc) Regions() []string {
 	return []string{"us-mock-1"}
 }
 
-func (s *svc) GetCurrentRegion() string {
-	return "us-east-1"
-}
-
 func New() aws.Client {
 	return &svc{}
 }

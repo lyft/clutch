@@ -3963,6 +3963,9 @@ export namespace clutch {
                     /** Properties of a S3Provider. */
                     interface IS3Provider {
 
+                        /** S3Provider region */
+                        region?: (string|null);
+
                         /** S3Provider bucket */
                         bucket?: (string|null);
 
@@ -3978,6 +3981,9 @@ export namespace clutch {
                          * @param [properties] Properties to set
                          */
                         constructor(properties?: clutch.config.gateway.v1.Assets.IS3Provider);
+
+                        /** S3Provider region. */
+                        public region: string;
 
                         /** S3Provider bucket. */
                         public bucket: string;
