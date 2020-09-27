@@ -89,8 +89,10 @@ message GatewayOptions {
   Assets assets = 7;
 }
 
+// Assets configuration provide a passthrough cdn for frontend static assets.
+// This is useful if you dont have the ability to enable sticky sessions or a blue/green deploy system in place.
 message Assets {
-  // To use the S3Provider you must have the AWS service configured and enabled
+  // To use the S3Provider you must have the AWS service configured
   message S3Provider {
     string bucket = 1;
     string key = 2;
