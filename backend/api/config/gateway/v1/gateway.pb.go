@@ -531,6 +531,8 @@ func (x *GatewayOptions) GetAssets() *Assets {
 	return nil
 }
 
+// Assets configuration provide a passthrough cdn for frontend static assets.
+// This is useful if you dont have the ability to enable sticky sessions or a blue/green deploy system in place.
 type Assets struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -1113,7 +1115,7 @@ func (x *Timeouts_Entry) GetTimeout() *duration.Duration {
 	return nil
 }
 
-// To use the S3Provider you must have the AWS service configured and enabled
+// To use the S3Provider you must have the AWS service configured
 type Assets_S3Provider struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
