@@ -531,7 +531,7 @@ func (x *GatewayOptions) GetAssets() *Assets {
 	return nil
 }
 
-// Assets configuration provide a passthrough cdn for frontend static assets.
+// Assets configuration provide a passthrough host for frontend static assets.
 // This is useful if you dont have the ability to enable sticky sessions or a blue/green deploy system in place.
 type Assets struct {
 	state         protoimpl.MessageState

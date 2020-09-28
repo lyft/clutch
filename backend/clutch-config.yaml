@@ -15,12 +15,6 @@ gateway:
       address: 0.0.0.0
       port: 8080
       secure: false
-  assets:
-    s3:
-      region: us-east-1
-      bucket: clutch
-      key: static
-  
 modules:
   - name: clutch.module.assets
   - name: clutch.module.healthcheck
