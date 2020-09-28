@@ -138,74 +138,70 @@ func TestCancelExperimentRun(t *testing.T) {
 	assert.NoError(err)
 }
 
-var getExperimentsTests = []struct {
-	id   string
-	sql  string
-	args []driver.Value
-	rows [][]driver.Value
-	err  error
-}{
-	{
-		id:   "get all experiments",
-		sql:  `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`,
-		args: []driver.Value{"upstreamCluster", "downstreamCluster", 1},
-		rows: [][]driver.Value{
-			{
-				1234,
-				`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig","clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"abort":{"percent":100,"httpStatus":401}}`,
-			},
-		},
-	},
+var getExperimentsSQLQuery = `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`
+
+func TestGetExperimentsUnmarshalsExperimentConfiguration(t *testing.T) {
+	assert := assert.New(t)
+
+	db, mock, err := sqlmock.New()
+	assert.NoError(err)
+
+	es := &experimentStore{db: db}
+	defer es.Close()
+
+	expected := mock.ExpectQuery(regexp.QuoteMeta(getExperimentsSQLQuery)).WithArgs("foo", "UNSPECIFIED")
+	rows := sqlmock.NewRows(experimentColumns)
+	rows.AddRow([]driver.Value{
+		1234,
+		`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig","clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"abort":{"percent":100,"httpStatus":401}}`,
+	}...)
+	expected.WillReturnRows(rows)
+
+	experiments, err := es.GetExperiments(context.Background(), "foo", experimentation.GetExperimentsRequest_UNSPECIFIED)
+	assert.NoError(err)
+
+	assert.Equal(1, len(experiments))
+	experiment := experiments[0]
+	assert.Equal(uint64(1234), experiment.GetId())
+
+	config := &serverexperimentation.TestConfig{}
+	err = ptypes.UnmarshalAny(experiment.GetConfig(), config)
+	assert.NoError(err)
+	assert.Nil(config.GetLatency())
+	abort := config.GetAbort()
+	assert.NotNil(abort)
+	assert.Equal(int32(401), abort.GetHttpStatus())
+	assert.Equal(float32(100), abort.GetPercent())
 }
 
-func TestGetExperiments(t *testing.T) {
-	t.Parallel()
+func TestGetExperimentsFailsIfItReadsExperimentWithMalformedConfiguration(t *testing.T) {
+	assert := assert.New(t)
 
-	for _, test := range getExperimentsTests {
-		test := test
+	db, mock, err := sqlmock.New()
+	assert.NoError(err)
 
-		t.Run(test.id, func(t *testing.T) {
-			t.Parallel()
-			a := assert.New(t)
+	es := &experimentStore{db: db}
+	defer es.Close()
 
-			db, mock, err := sqlmock.New()
-			a.NoError(err)
-
-			es := &experimentStore{db: db}
-			defer es.Close()
-
-			expected := mock.ExpectQuery(regexp.QuoteMeta(test.sql)).WithArgs("foo", "UNSPECIFIED")
-			if test.err != nil {
-				expected.WillReturnError(test.err)
-			} else {
-				rows := sqlmock.NewRows(experimentColumns)
-				for _, row := range test.rows {
-					rows.AddRow(row...)
-				}
-				expected.WillReturnRows(rows)
-			}
-
-			experiments, err := es.GetExperiments(context.Background(), "foo", experimentation.GetExperimentsRequest_UNSPECIFIED)
-			if test.err != nil {
-				a.Equal(test.err, err)
-			} else {
-				a.NoError(err)
-			}
-
-			a.Equal(1, len(experiments))
-			experiment := experiments[0]
-			a.NotEqual(0, experiment.GetId())
-
-			config := &serverexperimentation.TestConfig{}
-			err2 := ptypes.UnmarshalAny(experiment.GetConfig(), config)
-			if err2 != nil {
-				t.Errorf("setSnapshot failed %v", err2)
-			}
-			a.Nil(config.GetLatency())
-			abort := config.GetAbort()
-			a.NotNil(abort)
-			a.Equal(int32(401), abort.GetHttpStatus())
-			a.Equal(float32(100), abort.GetPercent())
-		})
+	expected := mock.ExpectQuery(regexp.QuoteMeta(getExperimentsSQLQuery)).WithArgs("foo", "UNSPECIFIED")
+	rowsData := [][]driver.Value{
+		{
+			1,
+			`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig","clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"abort":{"percent":100,"httpStatus":401}}`,
+		},
+		{
+			2,
+			`{"@type": "malformed_foo","clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"abort":{"percent":100,"httpStatus":401}}`,
+		},
 	}
+
+	rows := sqlmock.NewRows(experimentColumns)
+	for _, row := range rowsData {
+		rows.AddRow(row...)
+	}
+	expected.WillReturnRows(rows)
+
+	experiments, err := es.GetExperiments(context.Background(), "foo", experimentation.GetExperimentsRequest_UNSPECIFIED)
+	assert.Nil(experiments)
+	assert.Error(err)
 }
