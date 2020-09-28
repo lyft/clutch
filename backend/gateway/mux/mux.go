@@ -70,15 +70,17 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Serve!
 	if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
 		// If not a known static asset and an asset provider is configured, try streaming from the configured provider.
-		if a.assetCfg.Provider != nil && strings.HasPrefix(r.URL.Path, "/static") {
-			// We attatch this header simply for observibility purposes.
-			// Otherwise its difficult to know if the assets are being served from the configured provider.
-			w.Header().Set("x-clutch-asset-passthrough", "true")
+		if a.assetCfg != nil {
+			if a.assetCfg.Provider != nil && strings.HasPrefix(r.URL.Path, "/static") {
+				// We attatch this header simply for observibility purposes.
+				// Otherwise its difficult to know if the assets are being served from the configured provider.
+				w.Header().Set("x-clutch-asset-passthrough", "true")
 
-			// TODO: handle errors
-			asset, _ := a.assetProviderHandler(r.URL.Path)
-			_, _ = io.Copy(w, asset)
-			return
+				// TODO: handle errors
+				asset, _ := a.assetProviderHandler(r.URL.Path)
+				_, _ = io.Copy(w, asset)
+				return
+			}
 		}
 
 		// If not a known static asset serve the SPA.
