@@ -50,3 +50,19 @@ func TestAssetProviderS3Handler(t *testing.T) {
 	_, err := handler.assetProviderHandler(context.TODO(), "clutch.sh/static/main.js")
 	assert.Error(t, err)
 }
+
+func TestGetAssetProivderService(t *testing.T) {
+	assetCfg := &gatewayv1.Assets{
+		Provider: &gatewayv1.Assets_S3{
+			S3: &gatewayv1.Assets_S3Provider{
+				Region: "us-east-1",
+				Bucket: "clutch",
+				Key:    "static",
+			},
+		},
+	}
+
+	// Test that the aws service must be configured to use the S3 handler
+	_, err := getAssetProviderService(assetCfg)
+	assert.Error(t, err)
+}

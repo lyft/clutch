@@ -75,10 +75,20 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			// Otherwise its difficult to know if the assets are being served from the configured provider.
 			w.Header().Set("x-clutch-asset-passthrough", "true")
 
-			asset, _ := a.assetProviderHandler(r.Context(), r.URL.Path)
+			asset, err := a.assetProviderHandler(r.Context(), r.URL.Path)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				_, _ = w.Write([]byte("Error getting assets from the configured asset provider"))
+				return
+			}
 			defer asset.Close()
 
-			_, _ = io.Copy(w, asset)
+			_, err = io.Copy(w, asset)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				_, _ = w.Write([]byte("Error getting assets from the configured asset provider"))
+				return
+			}
 			return
 		}
 
@@ -94,9 +104,9 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (a *assetHandler) assetProviderHandler(ctx context.Context, urlPath string) (io.ReadCloser, error) {
 	switch a.assetCfg.Provider.(type) {
 	case *gatewayv1.Assets_S3:
-		aws, ok := service.Registry[awsservice.Name]
-		if !ok {
-			return nil, fmt.Errorf("The AWS service must be configured to use the asset s3 provider.")
+		aws, err := getAssetProviderService(a.assetCfg)
+		if err != nil {
+			return nil, err
 		}
 
 		awsClient, ok := aws.(awsservice.Client)
@@ -112,6 +122,27 @@ func (a *assetHandler) assetProviderHandler(ctx context.Context, urlPath string)
 		)
 	default:
 		return nil, fmt.Errorf("configured asset provider has not been implemented")
+	}
+}
+
+// getAssetProviderService is used in two different contexts
+// Its invoked in the mux constructor which checks if the necessary service has been configured,
+// if there is an asset provider which requires ones.
+//
+// Otherwise its used to get the service for an asset provider in assetProviderHandler() if necessary.
+func getAssetProviderService(assetCfg *gatewayv1.Assets) (service.Service, error) {
+	switch assetCfg.Provider.(type) {
+	case *gatewayv1.Assets_S3:
+		aws, ok := service.Registry[awsservice.Name]
+		if !ok {
+			return nil, fmt.Errorf("The AWS service must be configured to use the asset s3 provider.")
+		}
+		return aws, nil
+
+	default:
+		// An asset provider does not necessarily require a service to function properly
+		// if there is nothing configured for a provider type we cant necessarily throw an error here.
+		return nil, nil
 	}
 }
 
@@ -182,6 +213,15 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 			},
 		),
 	)
+
+	// If there is a configured asset provider, we check to see if the service is configured before proceeding.
+	// Bailing out early during the startup process instead of hitting this error at runtime when serving assets.
+	if assetCfg != nil && assetCfg.Provider != nil {
+		_, err := getAssetProviderService(assetCfg)
+		if err != nil {
+			panic(err)
+		}
+	}
 
 	httpMux := http.NewServeMux()
 	httpMux.Handle("/", &assetHandler{
