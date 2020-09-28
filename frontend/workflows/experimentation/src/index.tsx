@@ -15,14 +15,14 @@ const register = (): WorkflowConfiguration => {
     routes: {
       listExperiments: {
         path: "list",
-        displayName: "List Experiments",
-        description: "List Experiments.",
+        displayName: "Manage experiments",
+        description: "Manage experiments.",
         component: ListExperiments,
       },
       viewExperimentRun: {
         path: "run/:runID",
         displayName: "View Experiment Run",
-        description: "View Experiment Run",
+        description: "View Experiment Run.",
         hideNav: true,
         component: ViewExperimentRun,
       },
