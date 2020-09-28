@@ -7,7 +7,6 @@ package aws
 import (
 	"context"
 	"fmt"
-	"io"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -18,8 +17,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/kinesis"
 	"github.com/aws/aws-sdk-go/service/kinesis/kinesisiface"
-	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/iancoleman/strcase"
@@ -58,7 +55,6 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 
 		c.clients[region] = &regionalClient{
 			region:      region,
-			s3:          s3.New(awsSession),
 			kinesis:     kinesis.New(awsSession),
 			ec2:         ec2.New(awsSession),
 			autoscaling: autoscaling.New(awsSession),
@@ -77,8 +73,6 @@ type Client interface {
 
 	DescribeKinesisStream(ctx context.Context, region string, streamName string) (*kinesisv1.Stream, error)
 	UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount uint32) error
-
-	S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error)
 
 	Regions() []string
 }
@@ -203,7 +197,6 @@ func (c *client) Regions() []string {
 type regionalClient struct {
 	region string
 
-	s3          s3iface.S3API
 	kinesis     kinesisiface.KinesisAPI
 	ec2         ec2iface.EC2API
 	autoscaling autoscalingiface.AutoScalingAPI
