@@ -69,7 +69,7 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// Serve!
 	if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
-		// If not a known static asset and a asset provider is configured, try streaming from the configured provider.
+		// If not a known static asset and an asset provider is configured, try streaming from the configured provider.
 		if a.assetCfg.Provider != nil && strings.HasPrefix(r.URL.Path, "/static") {
 			// We attatch this header simply for observibility purposes.
 			// Otherwise its difficult to know if the assets are being served from the configured provider.
