@@ -213,6 +213,10 @@ const Wizard: React.FC<WizardProps> = ({ heading, dataLayout, children, maxWidth
     );
   });
 
+  const removeWarning = (warning: string) => {
+    setGlobalWarnings(globalWarnings.filter(w => w !== warning));
+  };
+
   return (
     <Spacer margin="3">
       <Container maxWidth={maxWidth}>
@@ -239,7 +243,7 @@ const Wizard: React.FC<WizardProps> = ({ heading, dataLayout, children, maxWidth
           </Grid>
         </SizedContainer>
         {globalWarnings.map(error => (
-          <Warning key={error} message={error} />
+          <Warning key={error} message={error} onClose={() => removeWarning(error)} />
         ))}
       </Container>
     </Spacer>

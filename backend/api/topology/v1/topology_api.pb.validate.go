@@ -840,3 +840,160 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = EdgeValidationError{}
+
+// Validate checks the field values on Resource with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Resource) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Id
+
+	if v, ok := interface{}(m.GetPb()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ResourceValidationError{
+				field:  "Pb",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for Metadata
+
+	return nil
+}
+
+// ResourceValidationError is the validation error returned by
+// Resource.Validate if the designated constraints aren't met.
+type ResourceValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ResourceValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ResourceValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ResourceValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ResourceValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ResourceValidationError) ErrorName() string { return "ResourceValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ResourceValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sResource.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ResourceValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ResourceValidationError{}
+
+// Validate checks the field values on UpdateCacheRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpdateCacheRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetResource()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateCacheRequestValidationError{
+				field:  "Resource",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for Action
+
+	return nil
+}
+
+// UpdateCacheRequestValidationError is the validation error returned by
+// UpdateCacheRequest.Validate if the designated constraints aren't met.
+type UpdateCacheRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateCacheRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateCacheRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateCacheRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateCacheRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateCacheRequestValidationError) ErrorName() string {
+	return "UpdateCacheRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateCacheRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateCacheRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateCacheRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateCacheRequestValidationError{}

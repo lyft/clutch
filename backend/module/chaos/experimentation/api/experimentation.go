@@ -102,7 +102,7 @@ func (s *Service) CancelExperimentRun(ctx context.Context, req *experimentation.
 // GetExperiments returns all experiments from the experiment store.
 func (s *Service) GetExperiments(ctx context.Context, request *experimentation.GetExperimentsRequest) (*experimentation.GetExperimentsResponse, error) {
 	s.getExperimentsStat.Inc(1)
-	experiments, err := s.experimentStore.GetExperiments(ctx, request.GetConfigType())
+	experiments, err := s.experimentStore.GetExperiments(ctx, request.GetConfigType(), request.GetStatus())
 	if err != nil {
 		s.logger.Errorw("GetExperiments: Unable to retrieve experiments", "error", err)
 		return &experimentation.GetExperimentsResponse{}, err

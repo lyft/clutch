@@ -13,6 +13,7 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 
+	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 )
 
@@ -69,7 +70,7 @@ func createExperimentsTests() ([]experimentTest, error) {
 					},
 				},
 				{
-					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, scheduled_end_time, creation_time) VALUES ($1, $2, tstzrange($3, $4, '[]'), $4, NOW())`,
+					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, tstzrange($3, $4, '[]'), NOW())`,
 					args: []driver.Value{
 						sqlmock.AnyArg(),
 						sqlmock.AnyArg(),
@@ -121,25 +122,46 @@ func TestCreateExperiments(t *testing.T) {
 	}
 }
 
-var cancelExperimentsTests = []struct {
-	id    string
-	runID uint64
-	sql   string
-	args  []driver.Value
-	err   error
+func TestCancelExperimentRun(t *testing.T) {
+	assert := assert.New(t)
+
+	db, mock, err := sqlmock.New()
+	assert.NoError(err)
+
+	es := &experimentStore{db: db}
+	defer es.Close()
+
+	expected := mock.ExpectExec(regexp.QuoteMeta(`UPDATE experiment_run SET cancellation_time = NOW() WHERE id = $1 AND cancellation_time IS NULL`))
+	expected.WithArgs([]driver.Value{1}...).WillReturnResult(sqlmock.NewResult(1, 1))
+
+	err = es.CancelExperimentRun(context.Background(), uint64(1))
+	assert.NoError(err)
+}
+
+var getExperimentsTests = []struct {
+	id   string
+	sql  string
+	args []driver.Value
+	rows [][]driver.Value
+	err  error
 }{
 	{
-		id:    "cancel an experiment run",
-		runID: uint64(1),
-		sql:   `UPDATE experiment_run SET execution_time = tstzrange(lower(execution_time), NOW(), '[]') WHERE id = $1 AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`,
-		args:  []driver.Value{1},
+		id:   "get all experiments",
+		sql:  `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`,
+		args: []driver.Value{"upstreamCluster", "downstreamCluster", 1},
+		rows: [][]driver.Value{
+			{
+				1234,
+				`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig","clusterPair":{"downstreamCluster":"upstreamCluster","upstreamCluster":"downstreamCluster"},"abort":{"percent":100,"httpStatus":401}}`,
+			},
+		},
 	},
 }
 
-func TestCancelExperimentRun(t *testing.T) {
+func TestGetExperiments(t *testing.T) {
 	t.Parallel()
 
-	for _, test := range cancelExperimentsTests {
+	for _, test := range getExperimentsTests {
 		test := test
 
 		t.Run(test.id, func(t *testing.T) {
@@ -152,14 +174,18 @@ func TestCancelExperimentRun(t *testing.T) {
 			es := &experimentStore{db: db}
 			defer es.Close()
 
-			expected := mock.ExpectExec(regexp.QuoteMeta(test.sql))
+			expected := mock.ExpectQuery(regexp.QuoteMeta(test.sql)).WithArgs("foo", "UNSPECIFIED")
 			if test.err != nil {
 				expected.WillReturnError(test.err)
 			} else {
-				expected.WithArgs(test.args...).WillReturnResult(sqlmock.NewResult(1, 1))
+				rows := sqlmock.NewRows(experimentColumns)
+				for _, row := range test.rows {
+					rows.AddRow(row...)
+				}
+				expected.WillReturnRows(rows)
 			}
 
-			err = es.CancelExperimentRun(context.Background(), test.runID)
+			experiments, err := es.GetExperiments(context.Background(), "foo", experimentation.GetExperimentsRequest_UNSPECIFIED)
 			if test.err != nil {
 				a.Equal(test.err, err)
 			} else {

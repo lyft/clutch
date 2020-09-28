@@ -3,13 +3,15 @@ package rtds
 import (
 	"context"
 	"fmt"
-	"reflect"
 	"time"
 
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
+	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
-	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
-	gcpResource "github.com/envoyproxy/go-control-plane/pkg/resource/v2"
+	gcpCacheV2 "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
+	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
+	gcpResourceV2 "github.com/envoyproxy/go-control-plane/pkg/resource/v2"
+	gcpResourceV3 "github.com/envoyproxy/go-control-plane/pkg/resource/v3"
 	"github.com/golang/protobuf/ptypes"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/mitchellh/hashstructure"
@@ -31,19 +33,86 @@ const (
 	HTTPStatusWithDownstream           = `fault.http.%s.abort.http_status`
 )
 
+// cacheWrapper is a wrapper interface that abstracts away the cache operations to make it easier
+// to reuse as much of the code as possible for V2/V3.
+type cacheWrapper interface {
+	GetStatusKeys() []string
+	GetSnapshotVersion(key string) (string, error)
+	SetRuntimeLayer(nodeName string, layerName string, layer *pstruct.Struct, version string) error
+}
+
+type cacheWrapperV2 struct {
+	gcpCacheV2.SnapshotCache
+}
+
+func (c *cacheWrapperV2) GetSnapshotVersion(key string) (string, error) {
+	snapshot, err := c.GetSnapshot(key)
+	if err != nil {
+		return "", nil
+	}
+
+	return snapshot.GetVersion(gcpResourceV2.RuntimeType), nil
+}
+
+func (c *cacheWrapperV2) SetRuntimeLayer(nodeName string, layerName string, layer *pstruct.Struct, version string) error {
+	runtimes := []gcpTypes.Resource{
+		&gcpDiscovery.Runtime{
+			Name:  layerName,
+			Layer: layer,
+		},
+	}
+	snapshot := gcpCacheV2.NewSnapshot(version, nil, nil, nil, nil, runtimes)
+	err := c.SetSnapshot(nodeName, snapshot)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+type cacheWrapperV3 struct {
+	gcpCacheV3.SnapshotCache
+}
+
+func (c *cacheWrapperV3) GetSnapshotVersion(key string) (string, error) {
+	snapshot, err := c.GetSnapshot(key)
+	if err != nil {
+		return "", nil
+	}
+
+	return snapshot.GetVersion(gcpResourceV3.RuntimeType), nil
+}
+
+func (c *cacheWrapperV3) SetRuntimeLayer(nodeName string, layerName string, layer *pstruct.Struct, version string) error {
+	runtimes := []gcpTypes.Resource{
+		&gcpRuntimeServiceV3.Runtime{
+			Name:  layerName,
+			Layer: layer,
+		},
+	}
+	snapshot := gcpCacheV3.NewSnapshot(version, nil, nil, nil, nil, runtimes)
+	err := c.SetSnapshot(nodeName, snapshot)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func PeriodicallyRefreshCache(s *Server) {
 	ticker := time.NewTicker(s.cacheRefreshInterval)
 	go func() {
 		for range ticker.C {
 			s.logger.Info("Refreshing RTDS cache")
-			refreshCache(s.ctx, s.experimentStore, s.snapshotCache, s.rtdsLayerName, s.logger)
+			refreshCache(s.ctx, s.experimentStore, &cacheWrapperV2{s.snapshotCacheV2}, s.rtdsLayerName, s.logger)
+			refreshCache(s.ctx, s.experimentStore, &cacheWrapperV3{s.snapshotCacheV3}, s.rtdsLayerName, s.logger)
 		}
 	}()
 }
 
-func refreshCache(ctx context.Context, store experimentstore.ExperimentStore, snapshotCache gcpCache.SnapshotCache, rtdsLayerName string,
+func refreshCache(ctx context.Context, store experimentstore.ExperimentStore, snapshotCache cacheWrapper, rtdsLayerName string,
 	logger *zap.SugaredLogger) {
-	allExperiments, err := store.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig")
+	allExperiments, err := store.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig", experimentation.GetExperimentsRequest_RUNNING)
 	if err != nil {
 		logger.Errorw("Failed to get data from experiments store", "error", err)
 		return
@@ -86,7 +155,7 @@ func refreshCache(ctx context.Context, store experimentstore.ExperimentStore, sn
 	}
 }
 
-func setSnapshot(snapshotCache gcpCache.SnapshotCache, rtdsLayerName string, upstreamCluster string,
+func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, upstreamCluster string,
 	experiments []*experimentation.Experiment, logger *zap.SugaredLogger) error {
 	var fieldMap = map[string]*pstruct.Value{}
 
@@ -120,33 +189,26 @@ func setSnapshot(snapshotCache gcpCache.SnapshotCache, rtdsLayerName string, ups
 		}
 	}
 
-	runtimes := []gcpTypes.Resource{
-		&gcpDiscovery.Runtime{
-			Name: rtdsLayerName,
-			Layer: &pstruct.Struct{
-				Fields: fieldMap,
-			},
-		},
+	runtimeLayer := &pstruct.Struct{
+		Fields: fieldMap,
 	}
 
-	computedVersion, err := computeChecksum(runtimes)
+	computedVersion, err := computeChecksum(runtimeLayer)
 	if err != nil {
 		logger.Errorw("Error computing version", "error", err)
 		return err
 	}
 
-	currentSnapshot, _ := snapshotCache.GetSnapshot(upstreamCluster)
-	if !reflect.DeepEqual(currentSnapshot, gcpCache.Snapshot{}) {
-		currentVersion := currentSnapshot.GetVersion(gcpResource.RuntimeType)
-		if currentVersion == computedVersion {
+	currentSnapshotVersion, err := snapshotCache.GetSnapshotVersion(upstreamCluster)
+	if err == nil {
+		if currentSnapshotVersion == computedVersion {
 			// No change in snapshot of this upstream cluster
 			logger.Debugw("Fault exists for upstream cluster", "cluster", upstreamCluster)
 			return nil
 		}
 	}
 
-	snapshot := gcpCache.NewSnapshot(computedVersion, nil, nil, nil, nil, runtimes)
-	err = snapshotCache.SetSnapshot(upstreamCluster, snapshot)
+	err = snapshotCache.SetRuntimeLayer(upstreamCluster, rtdsLayerName, runtimeLayer, computedVersion)
 	if err != nil {
 		logger.Errorw("Error setting snapshot", "error", err)
 		return err

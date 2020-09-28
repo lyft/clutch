@@ -8,23 +8,10 @@ import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
+import "chaos/experimentation/v1/experiment.proto";
 import "chaos/experimentation/v1/experiment_run_details.proto";
 
 option go_package = "experimentationv1";
-
-message Experiment {
-  fixed64 id = 1;
-
-  // The experiment configuration specific to the type of experiment
-  google.protobuf.Any config = 2;
-
-  // The time when the experiment should start. If unspecified, defaults to 'now'
-  google.protobuf.Timestamp start_time = 3;
-
-  // The time when the experiment should end, If unspecified, the experiment runs indefinitely unless it is manually
-  // stopped by a user.
-  google.protobuf.Timestamp end_time = 4;
-}
 
 message CreateExperimentRequest {
   // The experiment configuration specific to the type of experiment
@@ -42,7 +29,13 @@ message CreateExperimentResponse {
 }
 
 message GetExperimentsRequest {
+  enum Status {
+    UNSPECIFIED = 0;
+    RUNNING = 1;
+  }
+
   string config_type = 1;
+  Status status = 2;
 }
 
 message GetExperimentsResponse {

@@ -11,10 +11,15 @@ import (
 	"time"
 
 	gcpV2 "github.com/envoyproxy/go-control-plane/envoy/api/v2"
-	gcpCore "github.com/envoyproxy/go-control-plane/envoy/api/v2/core"
-	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
-	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
-	gcpServer "github.com/envoyproxy/go-control-plane/pkg/server/v2"
+	gcpCoreV2 "github.com/envoyproxy/go-control-plane/envoy/api/v2/core"
+	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
+	gcpDiscoveryV2 "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
+	gcpDiscoveryV3 "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v3"
+	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
+	gcpCacheV2 "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
+	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
+	gcpServerV2 "github.com/envoyproxy/go-control-plane/pkg/server/v2"
+	gcpServerV3 "github.com/envoyproxy/go-control-plane/pkg/server/v3"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -35,8 +40,11 @@ type Server struct {
 	// Experiment store
 	experimentStore experimentstore.ExperimentStore
 
-	// RTDS built-in cache
-	snapshotCache gcpCache.SnapshotCache
+	// RTDS built-in cache for V2 xDS
+	snapshotCacheV2 gcpCacheV2.SnapshotCache
+
+	// RTDS built-in cache for V3 xDS
+	snapshotCacheV3 gcpCacheV3.SnapshotCache
 
 	// duration of cache refresh in seconds
 	cacheRefreshInterval time.Duration
@@ -54,10 +62,21 @@ type Server struct {
 }
 
 // ClusterHash implements NodeHash interface
-type ClusterHash struct{}
+type ClusterHashV2 struct{}
 
 // ID is an override method to use Cluster instead of a Node
-func (ClusterHash) ID(node *gcpCore.Node) string {
+func (ClusterHashV2) ID(node *gcpCoreV2.Node) string {
+	if node == nil {
+		return ""
+	}
+	return node.Cluster
+}
+
+// ClusterHash implements NodeHash interface
+type ClusterHashV3 struct{}
+
+// ID is an override method to use Cluster instead of a Node
+func (ClusterHashV3) ID(node *gcpCoreV3.Node) string {
 	if node == nil {
 		return ""
 	}
@@ -86,13 +105,15 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		return nil, errors.New("service was not the correct type")
 	}
 
-	initializeGCPCache := gcpCache.NewSnapshotCache(false, ClusterHash{}, logger.Sugar())
+	gcpCacheV3 := gcpCacheV3.NewSnapshotCache(false, ClusterHashV3{}, logger.Sugar())
+	gcpCacheV2 := gcpCacheV2.NewSnapshotCache(false, ClusterHashV2{}, logger.Sugar())
 	rtdsScope := scope.SubScope("rtds")
 
 	return &Server{
 		ctx:                  context.Background(),
 		experimentStore:      experimentStore,
-		snapshotCache:        initializeGCPCache,
+		snapshotCacheV2:      gcpCacheV2,
+		snapshotCacheV3:      gcpCacheV3,
 		cacheRefreshInterval: cacheRefreshInterval,
 		rtdsLayerName:        rtdsLayerName,
 		totalStreams:         rtdsScope.Gauge("totalStreams"),
@@ -103,47 +124,89 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 
 func (s *Server) Register(r module.Registrar) error {
 	PeriodicallyRefreshCache(s)
-	xdsServer := gcpServer.NewServer(s.ctx, s.snapshotCache, &callbacks{s.totalStreams,
+	xdsServerV2 := gcpServerV2.NewServer(s.ctx, s.snapshotCacheV2, &callbacksV2{s.totalStreams,
 		s.totalResourcesServed, s.logger, 0})
-	gcpDiscovery.RegisterRuntimeDiscoveryServiceServer(r.GRPCServer(), xdsServer)
+	xdsServerV3 := gcpServerV3.NewServer(s.ctx, s.snapshotCacheV3, &callbacksV3{s.totalStreams,
+		s.totalResourcesServed, s.logger, 0})
+	gcpRuntimeServiceV3.RegisterRuntimeDiscoveryServiceServer(r.GRPCServer(), xdsServerV3)
+	gcpDiscoveryV2.RegisterRuntimeDiscoveryServiceServer(r.GRPCServer(), xdsServerV2)
 	return nil
 }
 
-type callbacks struct {
+type callbacksV3 struct {
 	totalStreams         tally.Gauge
 	totalResourcesServed tally.Counter
 	logger               *zap.SugaredLogger
 	numStreams           int32
 }
 
-func (c *callbacks) OnStreamOpen(_ context.Context, streamID int64, typeURL string) error {
+func (c *callbacksV3) OnStreamOpen(_ context.Context, streamID int64, typeURL string) error {
 	c.logger.Debugw("RTDS onStreamOpen", "streamID", streamID, "typeURL", typeURL)
 	numStreams := atomic.AddInt32(&c.numStreams, 1)
 	c.totalStreams.Update(float64(numStreams))
 	return nil
 }
 
-func (c *callbacks) OnStreamClosed(streamID int64) {
+func (c *callbacksV3) OnStreamClosed(streamID int64) {
 	c.logger.Debugw("RTDS onStreamClosed", "streamID", streamID)
 	numStreams := atomic.AddInt32(&c.numStreams, -1)
 	c.totalStreams.Update(float64(numStreams))
 }
 
-func (c *callbacks) OnStreamRequest(streamID int64, request *gcpV2.DiscoveryRequest) error {
+func (c *callbacksV3) OnStreamRequest(streamID int64, request *gcpDiscoveryV3.DiscoveryRequest) error {
 	c.logger.Debugw("RTDS OnStreamRequest", "streamID", streamID, "cluster", request.Node.Cluster)
 	return nil
 }
 
-func (c *callbacks) OnStreamResponse(streamID int64, request *gcpV2.DiscoveryRequest, response *gcpV2.DiscoveryResponse) {
+func (c *callbacksV3) OnStreamResponse(streamID int64, request *gcpDiscoveryV3.DiscoveryRequest, response *gcpDiscoveryV3.DiscoveryResponse) {
 	c.totalResourcesServed.Inc(1)
 	c.logger.Debugw("RTDS OnStreamResponse", "streamID", streamID, "cluster", request.Node.Cluster, "version", response.VersionInfo)
 }
 
-func (c *callbacks) OnFetchRequest(context.Context, *gcpV2.DiscoveryRequest) error {
+func (c *callbacksV3) OnFetchRequest(context.Context, *gcpDiscoveryV3.DiscoveryRequest) error {
 	c.logger.Debugw("RTDS OnFetchRequest")
 	return nil
 }
 
-func (c *callbacks) OnFetchResponse(*gcpV2.DiscoveryRequest, *gcpV2.DiscoveryResponse) {
+func (c *callbacksV3) OnFetchResponse(*gcpDiscoveryV3.DiscoveryRequest, *gcpDiscoveryV3.DiscoveryResponse) {
+	c.logger.Debugw("RTDS OnFetchResponse")
+}
+
+type callbacksV2 struct {
+	totalStreams         tally.Gauge
+	totalResourcesServed tally.Counter
+	logger               *zap.SugaredLogger
+	numStreams           int32
+}
+
+func (c *callbacksV2) OnStreamOpen(_ context.Context, streamID int64, typeURL string) error {
+	c.logger.Debugw("RTDS onStreamOpen", "streamID", streamID, "typeURL", typeURL)
+	numStreams := atomic.AddInt32(&c.numStreams, 1)
+	c.totalStreams.Update(float64(numStreams))
+	return nil
+}
+
+func (c *callbacksV2) OnStreamClosed(streamID int64) {
+	c.logger.Debugw("RTDS onStreamClosed", "streamID", streamID)
+	numStreams := atomic.AddInt32(&c.numStreams, -1)
+	c.totalStreams.Update(float64(numStreams))
+}
+
+func (c *callbacksV2) OnStreamRequest(streamID int64, request *gcpV2.DiscoveryRequest) error {
+	c.logger.Debugw("RTDS OnStreamRequest", "streamID", streamID, "cluster", request.Node.Cluster)
+	return nil
+}
+
+func (c *callbacksV2) OnStreamResponse(streamID int64, request *gcpV2.DiscoveryRequest, response *gcpV2.DiscoveryResponse) {
+	c.totalResourcesServed.Inc(1)
+	c.logger.Debugw("RTDS OnStreamResponse", "streamID", streamID, "cluster", request.Node.Cluster, "version", response.VersionInfo)
+}
+
+func (c *callbacksV2) OnFetchRequest(context.Context, *gcpV2.DiscoveryRequest) error {
+	c.logger.Debugw("RTDS OnFetchRequest")
+	return nil
+}
+
+func (c *callbacksV2) OnFetchResponse(*gcpV2.DiscoveryRequest, *gcpV2.DiscoveryResponse) {
 	c.logger.Debugw("RTDS OnFetchResponse")
 }

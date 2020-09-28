@@ -27,7 +27,7 @@ const Name = "clutch.service.chaos.experimentation.store"
 type ExperimentStore interface {
 	CreateExperiment(context.Context, *any.Any, *time.Time, *time.Time) (*experimentation.Experiment, error)
 	CancelExperimentRun(context.Context, uint64) error
-	GetExperiments(ctx context.Context, configType string) ([]*experimentation.Experiment, error)
+	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
 	Close()
 }
@@ -88,9 +88,8 @@ func (fs *experimentStore) CreateExperiment(ctx context.Context, config *any.Any
 				id,
 				experiment_config_id,
 				execution_time,
-				scheduled_end_time,
 				creation_time)
-			VALUES ($1, $2, tstzrange($3, $4, '[]'), $4, NOW())`
+			VALUES ($1, $2, tstzrange($3, $4, '[]'), NOW())`
 
 	runId := id.NewID()
 	_, err = fs.db.ExecContext(ctx, runSql, runId, configID, startTime, endTime)
@@ -140,8 +139,8 @@ func toProto(t *time.Time) (*timestamp.Timestamp, error) {
 func (fs *experimentStore) CancelExperimentRun(ctx context.Context, id uint64) error {
 	sql :=
 		`UPDATE experiment_run 
-         SET execution_time = tstzrange(lower(execution_time), NOW(), '[]') 
-         WHERE id = $1 AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
+         SET cancellation_time = NOW()
+         WHERE id = $1 AND cancellation_time IS NULL AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
 
 	_, err := fs.db.ExecContext(ctx, sql, id)
 	return err
@@ -149,14 +148,20 @@ func (fs *experimentStore) CancelExperimentRun(ctx context.Context, id uint64) e
 
 // GetExperiments experiments with a given type of the configuration. Returns all experiments if provided configuration type
 // parameter is an emtpy string.
-func (fs *experimentStore) GetExperiments(ctx context.Context, configType string) ([]*experimentation.Experiment, error) {
-	sql := `
-        SELECT experiment_run.id, details FROM experiment_config, experiment_run
-			WHERE
-				experiment_config.id = experiment_run.experiment_config_id
-				AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`
+func (fs *experimentStore) GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
+	query := `
+		SELECT 
+			experiment_run.id, 
+			details
+		FROM experiment_config, experiment_run
+		WHERE
+			experiment_config.id = experiment_run.experiment_config_id` +
+		// Return only experiments of a given `configType` or all of them if configType is equal to an empty string.
+		` AND ($1 = '' OR $1 = experiment_config.details ->> '@type')` +
+		// Return only running experiments if `status` is equal to `Running`, return all experiments otherwise.
+		` AND ($2 = 'UNSPECIFIED' OR (experiment_run.cancellation_time is NULL AND NOW() > lower(experiment_run.execution_time) AND (upper(experiment_run.execution_time) IS NULL OR NOW() < upper(experiment_run.execution_time))))`
 
-	rows, err := fs.db.QueryContext(ctx, sql, configType)
+	rows, err := fs.db.QueryContext(ctx, query, configType, status.String())
 	if err != nil {
 		return nil, err
 	}
@@ -193,22 +198,22 @@ func (fs *experimentStore) GetExperiments(ctx context.Context, configType string
 
 func (fs *experimentStore) GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error) {
 	sqlQuery := `
-        SELECT experiment_run.id, lower(execution_time), upper(execution_time), scheduled_end_time, creation_time, details FROM experiment_config, experiment_run
+        SELECT experiment_run.id, lower(execution_time), upper(execution_time), cancellation_time, creation_time, details FROM experiment_config, experiment_run
         WHERE experiment_run.id = $1 AND experiment_run.experiment_config_id = experiment_config.id`
 
 	row := fs.db.QueryRowContext(ctx, sqlQuery, id)
 
 	var fetchedID uint64
-	var startTime, endTime, scheduledEndTime sql.NullTime
+	var startTime, endTime, cancellationTime sql.NullTime
 	var creationTime time.Time
 	var details string
 
-	err := row.Scan(&fetchedID, &startTime, &endTime, &scheduledEndTime, &creationTime, &details)
+	err := row.Scan(&fetchedID, &startTime, &endTime, &cancellationTime, &creationTime, &details)
 	if err != nil {
 		return nil, err
 	}
 
-	return NewRunDetails(fetchedID, startTime, endTime, scheduledEndTime, creationTime, details)
+	return NewRunDetails(fetchedID, creationTime, startTime, endTime, cancellationTime, time.Now(), details)
 }
 
 // Close closes all resources held.

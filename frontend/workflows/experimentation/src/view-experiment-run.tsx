@@ -29,13 +29,20 @@ const ViewExperimentRun: React.FC = () => {
       onClick: goBack,
     };
 
-    const statusValue = clutch.chaos.experimentation.v1.Status[experiment.status].toString();
-    if (statusValue === clutch.chaos.experimentation.v1.Status.COMPLETED.toString()) {
+    const statusValue = clutch.chaos.experimentation.v1.Experiment.Status[
+      experiment.status
+    ].toString();
+    const completedStatuses = [
+      clutch.chaos.experimentation.v1.Experiment.Status.RUNNING.toString(),
+      clutch.chaos.experimentation.v1.Experiment.Status.SCHEDULED.toString(),
+    ];
+
+    if (completedStatuses.indexOf(statusValue) < 0) {
       return [goBackButton];
     }
 
     const title =
-      statusValue === clutch.chaos.experimentation.v1.Status.RUNNING.toString()
+      statusValue === clutch.chaos.experimentation.v1.Experiment.Status.RUNNING.toString()
         ? "Stop Experiment Run"
         : "Cancel Experiment Run";
     const destructiveButton = {
@@ -45,7 +52,7 @@ const ViewExperimentRun: React.FC = () => {
         client
           .post("/v1/chaos/experimentation/cancelExperimentRun", { id: runID })
           .then(() => {
-            goBack();
+            setExperiment(undefined);
           })
           .catch(err => {
             setError(err.response.statusText);
