@@ -70,17 +70,16 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Serve!
 	if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
 		// If not a known static asset and an asset provider is configured, try streaming from the configured provider.
-		if a.assetCfg != nil {
-			if a.assetCfg.Provider != nil && strings.HasPrefix(r.URL.Path, "/static") {
-				// We attatch this header simply for observibility purposes.
-				// Otherwise its difficult to know if the assets are being served from the configured provider.
-				w.Header().Set("x-clutch-asset-passthrough", "true")
+		if a.assetCfg != nil && a.assetCfg.Provider != nil && strings.HasPrefix(r.URL.Path, "/static/") {
+			// We attatch this header simply for observibility purposes.
+			// Otherwise its difficult to know if the assets are being served from the configured provider.
+			w.Header().Set("x-clutch-asset-passthrough", "true")
 
-				// TODO: handle errors
-				asset, _ := a.assetProviderHandler(r.URL.Path)
-				_, _ = io.Copy(w, asset)
-				return
-			}
+			asset, _ := a.assetProviderHandler(r.Context(), r.URL.Path)
+			defer asset.Close()
+
+			_, _ = io.Copy(w, asset)
+			return
 		}
 
 		// If not a known static asset serve the SPA.
@@ -92,7 +91,7 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.fileServer.ServeHTTP(w, r)
 }
 
-func (a *assetHandler) assetProviderHandler(urlPath string) (io.Reader, error) {
+func (a *assetHandler) assetProviderHandler(ctx context.Context, urlPath string) (io.ReadCloser, error) {
 	switch a.assetCfg.Provider.(type) {
 	case *gatewayv1.Assets_S3:
 		aws, ok := service.Registry[awsservice.Name]
@@ -106,13 +105,13 @@ func (a *assetHandler) assetProviderHandler(urlPath string) (io.Reader, error) {
 		}
 
 		return awsClient.S3StreamingGet(
-			context.Background(),
+			ctx,
 			a.assetCfg.GetS3().Region,
 			a.assetCfg.GetS3().Bucket,
 			path.Join(a.assetCfg.GetS3().Key, strings.TrimPrefix(urlPath, "/static")),
 		)
 	default:
-		return nil, fmt.Errorf("No asset provider is configured")
+		return nil, fmt.Errorf("configured asset provider has not been implemented")
 	}
 }
 

@@ -1,6 +1,7 @@
 package mux
 
 import (
+	"context"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -46,6 +47,6 @@ func TestAssetProviderS3Handler(t *testing.T) {
 	}
 
 	// Test that the aws service must be configured to use the S3 handler
-	_, err := handler.assetProviderHandler("clutch.sh/static/main.js")
+	_, err := handler.assetProviderHandler(context.TODO(), "clutch.sh/static/main.js")
 	assert.Error(t, err)
 }

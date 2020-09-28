@@ -96,6 +96,7 @@ message Assets {
   message S3Provider {
     string region = 1;
     string bucket = 2;
+    // key is the path to clutchs frontend static assets in the configured bucket
     string key = 3;
   }
 

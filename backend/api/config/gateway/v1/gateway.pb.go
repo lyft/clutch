@@ -1123,7 +1123,8 @@ type Assets_S3Provider struct {
 
 	Region string `protobuf:"bytes,1,opt,name=region,proto3" json:"region,omitempty"`
 	Bucket string `protobuf:"bytes,2,opt,name=bucket,proto3" json:"bucket,omitempty"`
-	Key    string `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
+	// key is the path to clutchs frontend static assets in the configured bucket
+	Key string `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
 }
 
 func (x *Assets_S3Provider) Reset() {

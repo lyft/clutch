@@ -94,7 +94,7 @@ func (s *svc) TerminateInstances(ctx context.Context, region string, ids []strin
 }
 
 func (s *svc) S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error) {
-	return nil, nil
+	panic("implement me")
 }
 
 func (s *svc) Regions() []string {
