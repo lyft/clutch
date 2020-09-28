@@ -3,7 +3,6 @@ package awsmock
 import (
 	"context"
 	"fmt"
-	"io"
 	"math/rand"
 
 	"github.com/golang/protobuf/ptypes/any"
@@ -91,10 +90,6 @@ func (s *svc) DescribeInstances(ctx context.Context, region string, ids []string
 
 func (s *svc) TerminateInstances(ctx context.Context, region string, ids []string) error {
 	return nil
-}
-
-func (s *svc) S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error) {
-	return nil, nil
 }
 
 func (s *svc) Regions() []string {

@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
-	"path"
 	"regexp"
 	"strconv"
 	"strings"
@@ -20,17 +19,11 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
-
-	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
-	"github.com/lyft/clutch/backend/service"
-	awsservice "github.com/lyft/clutch/backend/service/aws"
 )
 
 var apiPattern = regexp.MustCompile(`^/v\d+/`)
 
 type assetHandler struct {
-	assetCfg *gatewayv1.Assets
-
 	next       http.Handler
 	fileSystem http.FileSystem
 	fileServer http.Handler
@@ -69,49 +62,12 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// Serve!
 	if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
-		// If not a known static asset and an asset provider is configured, try streaming from the configured provider.
-		if a.assetCfg.Provider != nil && strings.HasPrefix(r.URL.Path, "/static") {
-			// We attatch this header simply for observibility purposes.
-			// Otherwise its difficult to know if the assets are being served from the configured provider.
-			w.Header().Set("x-clutch-asset-passthrough", "true")
-
-			// TODO: handle errors
-			asset, _ := a.assetProviderHandler(r.URL.Path)
-			_, _ = io.Copy(w, asset)
-			return
-		}
-
 		// If not a known static asset serve the SPA.
 		r.URL.Path = "/"
 	} else {
 		_ = f.Close()
 	}
-
 	a.fileServer.ServeHTTP(w, r)
-}
-
-func (a *assetHandler) assetProviderHandler(urlPath string) (io.Reader, error) {
-	switch a.assetCfg.Provider.(type) {
-	case *gatewayv1.Assets_S3:
-		aws, ok := service.Registry[awsservice.Name]
-		if !ok {
-			return nil, fmt.Errorf("The AWS service must be configured to use the asset s3 provider.")
-		}
-
-		awsClient, ok := aws.(awsservice.Client)
-		if !ok {
-			return nil, fmt.Errorf("Unable to aquire the aws client")
-		}
-
-		return awsClient.S3StreamingGet(
-			context.Background(),
-			a.assetCfg.GetS3().Region,
-			a.assetCfg.GetS3().Bucket,
-			path.Join(a.assetCfg.GetS3().Key, strings.TrimPrefix(urlPath, "/static")),
-		)
-	default:
-		return nil, fmt.Errorf("No asset provider is configured")
-	}
 }
 
 func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp proto.Message) error {
@@ -166,7 +122,7 @@ func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Ma
 	runtime.DefaultHTTPProtoErrorHandler(ctx, mux, m, w, req, err)
 }
 
-func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem, assetCfg *gatewayv1.Assets) *Mux {
+func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem) *Mux {
 	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(unaryInterceptors...))
 	jsonGateway := runtime.NewServeMux(
 		runtime.WithForwardResponseOption(customResponseForwarder),
@@ -184,7 +140,6 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 
 	httpMux := http.NewServeMux()
 	httpMux.Handle("/", &assetHandler{
-		assetCfg:   assetCfg,
 		next:       jsonGateway,
 		fileSystem: assets,
 		fileServer: http.FileServer(assets),
