@@ -562,7 +562,7 @@ const register = (): WorkflowConfiguration => {
   return {
     developer: {
       name: "Name McName",
-      contactUrl: "mailto:foo@foo-email.com>",
+      contactUrl: "mailto:foo@foo-email.com",
     },
     path: "amiibo",
     group: "Amiibo",
