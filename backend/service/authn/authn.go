@@ -26,7 +26,13 @@ import (
 	"github.com/lyft/clutch/backend/service"
 )
 
-var scopes = []string{oidc.ScopeOpenID, "email"} // TODO(maybe): make scopes part of config?
+// TODO(maybe): make scopes part of config?
+// For more documentation on scopes see: https://developer.okta.com/docs/reference/api/oidc/#scopes
+var scopes = []string{
+	oidc.ScopeOpenID,
+	oidc.ScopeOfflineAccess, // offline_access is used to request issuance of a refresh_token
+	"email",
+}
 
 const Name = "clutch.service.authn"
 
