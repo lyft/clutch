@@ -156,7 +156,10 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	}
 
 	// Instantiate and register modules listed in the configuration.
-	rpcMux := mux.New(interceptors, assets)
+	rpcMux, err := mux.New(interceptors, assets, cfg.Gateway.Assets)
+	if err != nil {
+		panic(err)
+	}
 	ctx := context.TODO()
 
 	// Create a client connection for the registrar to make grpc-gateway's handlers available.
