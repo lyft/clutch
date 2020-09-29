@@ -45,7 +45,7 @@
     "test:update": "yarn test:coverage -u",
     "test:watch": "lerna run test:watch --parallel",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "storybook:build": "build-storybook"
   },
   "browserslist": {
     "production": [
