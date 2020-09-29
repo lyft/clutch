@@ -5,7 +5,7 @@ import TextField from "../text-field";
 import type { TextFieldProps } from "../text-field";
 
 export default {
-  title: 'Core/Input/TextField',
+  title: "Core/Input/TextField",
   component: TextField,
   argTypes: {
     onReturn: { action: "onReturn event" },
