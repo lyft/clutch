@@ -71,14 +71,14 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
 		// If not a known static asset and an asset provider is configured, try streaming from the configured provider.
 		if a.assetCfg != nil && a.assetCfg.Provider != nil && strings.HasPrefix(r.URL.Path, "/static/") {
-			// We attatch this header simply for observibility purposes.
+			// We attach this header simply for observability purposes.
 			// Otherwise its difficult to know if the assets are being served from the configured provider.
 			w.Header().Set("x-clutch-asset-passthrough", "true")
 
 			asset, err := a.assetProviderHandler(r.Context(), r.URL.Path)
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
-				_, _ = w.Write([]byte("Error getting assets from the configured asset provider"))
+				_, _ = w.Write([]byte(fmt.Sprintf("Error getting assets from the configured asset provider: %v", err)))
 				return
 			}
 			defer asset.Close()
@@ -86,7 +86,7 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			_, err = io.Copy(w, asset)
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
-				_, _ = w.Write([]byte("Error getting assets from the configured asset provider"))
+				_, _ = w.Write([]byte(fmt.Sprintf("Error getting assets from the configured asset provider: %v", err)))
 				return
 			}
 			return
@@ -198,7 +198,7 @@ func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Ma
 	runtime.DefaultHTTPProtoErrorHandler(ctx, mux, m, w, req, err)
 }
 
-func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem, assetCfg *gatewayv1.Assets) *Mux {
+func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem, assetCfg *gatewayv1.Assets) (*Mux, error) {
 	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(unaryInterceptors...))
 	jsonGateway := runtime.NewServeMux(
 		runtime.WithForwardResponseOption(customResponseForwarder),
@@ -219,7 +219,7 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 	if assetCfg != nil && assetCfg.Provider != nil {
 		_, err := getAssetProviderService(assetCfg)
 		if err != nil {
-			panic(err)
+			return nil, err
 		}
 	}
 
@@ -236,7 +236,7 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 		JSONGateway: jsonGateway,
 		HTTPMux:     httpMux,
 	}
-	return mux
+	return mux, nil
 }
 
 // Mux allows sharing one port between gRPC and the corresponding JSON gateway via header-based multiplexing.
