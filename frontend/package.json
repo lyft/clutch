@@ -38,14 +38,14 @@
     "package": "func() { yarn workspace @clutch-sh/\"$@\"; }; func",
     "publishBeta": "lerna run compile && lerna run publishBeta --no-bail",
     "start": "yarn compile:watch & yarn workspace @clutch-sh/app start",
+    "storybook": "start-storybook -p 6006",
+    "storybook:build": "build-storybook",
     "test": "lerna run test --stream --no-bail --",
     "test:coverage": "lerna run test:coverage --stream --no-bail --",
     "test:e2e": "lerna run test:e2e",
     "test:licenses": "node license-linter.js",
     "test:update": "yarn test:coverage -u",
-    "test:watch": "lerna run test:watch --parallel",
-    "storybook": "start-storybook -p 6006",
-    "storybook:build": "build-storybook"
+    "test:watch": "lerna run test:watch --parallel"
   },
   "browserslist": {
     "production": [
