@@ -102,6 +102,6 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 	}
 
 	return &authnv1.CallbackResponse{
-		Token: token.AccessToken,
+		AccessToken: token.AccessToken,
 	}, nil
 }
