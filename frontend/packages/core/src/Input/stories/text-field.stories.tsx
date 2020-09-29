@@ -1,8 +1,8 @@
 import React from "react";
-import { Meta } from "@storybook/react/types-6-0";
+import type { Meta } from "@storybook/react";
 
-import TextField from "../text-field";
 import type { TextFieldProps } from "../text-field";
+import TextField from "../text-field";
 
 export default {
   title: "Core/Input/TextField",
@@ -20,10 +20,9 @@ Primary.args = {
   maxWidth: "",
 };
 
-
 export const WithLabel = Template.bind({});
 WithLabel.args = {
   ...Primary.args,
   placeholder: "",
-  label: "TextField"
-}
+  label: "TextField",
+};
