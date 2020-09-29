@@ -1,9 +1,12 @@
 package topology
 
 import (
+	"context"
 	"database/sql"
 	"errors"
+	"time"
 
+	"github.com/apex/log"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -16,7 +19,10 @@ import (
 
 const Name = "clutch.service.topology"
 
-type Service interface{}
+type Service interface {
+	aquireTopologyCacheLock()
+	startTopologyCache()
+}
 
 type client struct {
 	config *topologyv1.Config
@@ -43,10 +49,40 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, errors.New("Unable to get the datastore client")
 	}
 
-	return &client{
+	c, err := &client{
 		config: topologyConfig,
 		db:     dbClient.DB(),
 		log:    logger,
 		scope:  scope,
 	}, nil
+
+	go c.aquireTopologyCacheLock()
+
+	return c, err
+}
+
+func (c *client) aquireTopologyCacheLock() {
+	var lock bool
+
+	conn, err := c.db.Conn(context.Background())
+	if err != nil {
+		log.Errorf("err: %v", err)
+	}
+
+	for {
+		_ = conn.QueryRowContext(context.Background(), "SELECT pg_try_advisory_lock(100)").Scan(&lock)
+		if err != nil {
+			log.Errorf("err: %v", err)
+		}
+
+		if lock {
+			c.startTopologyCache()
+		}
+
+		time.Sleep(time.Second * 10)
+	}
+}
+
+func (c *client) startTopologyCache() {
+	time.Sleep(time.Hour * 2)
 }
