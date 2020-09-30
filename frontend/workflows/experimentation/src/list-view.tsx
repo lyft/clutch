@@ -105,8 +105,8 @@ interface Column {
 
 interface ListViewProps {
   columns: Column[];
-  items: clutch.chaos.experimentation.v1.ListViewItem[];
-  onRowSelection: (event: any, item: IClutch.chaos.experimentation.v1.ListViewItem) => void;
+  items: ListViewItem[];
+  onRowSelection: (event: any, item: ListViewItem) => void;
 }
 
 const ListView: React.FC<ListViewProps> = ({ columns, items, onRowSelection }) => {
@@ -122,7 +122,7 @@ const ListView: React.FC<ListViewProps> = ({ columns, items, onRowSelection }) =
     setOrderBy(columnIdentifier);
   };
 
-  const handleClick = (event: any, item: IClutch.chaos.experimentation.v1.ListViewItem) => {
+  const handleClick = (event: any, item: ListViewItem) => {
     onRowSelection(event, item);
   };
 
@@ -142,7 +142,6 @@ const ListView: React.FC<ListViewProps> = ({ columns, items, onRowSelection }) =
           <Table className={classes.table} size="medium">
             <EnhancedTableHead
               columns={columns}
-              classes={classes}
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
@@ -151,7 +150,7 @@ const ListView: React.FC<ListViewProps> = ({ columns, items, onRowSelection }) =
               <TableBody>
                 {stableSort(items, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((item: IClutch.chaos.experimentation.v1.ListViewItem) => {
+                  .map((item: ListViewItem) => {
                     return (
                       <TableRow
                         hover
