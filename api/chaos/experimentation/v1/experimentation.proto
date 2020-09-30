@@ -9,6 +9,7 @@ import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
 import "chaos/experimentation/v1/experiment.proto";
+import "chaos/experimentation/v1/list_view_item.proto";
 import "chaos/experimentation/v1/experiment_run_details.proto";
 
 option go_package = "experimentationv1";
@@ -16,10 +17,8 @@ option go_package = "experimentationv1";
 message CreateExperimentRequest {
   // The experiment configuration specific to the type of experiment
   google.protobuf.Any config = 1;
-
   // The time when the experiment should start. If unspecified, defaults to 'now'
   google.protobuf.Timestamp start_time = 2;
-
   // The time when the experiment should end, If unspecified, the experiment runs indefinitely.
   google.protobuf.Timestamp end_time = 3;
 }
@@ -42,19 +41,26 @@ message GetExperimentsResponse {
   repeated Experiment experiments = 1;
 }
 
+message CancelExperimentRunRequest {
+  uint64 id = 1;
+}
+
+message CancelExperimentRunResponse {
+}
+
+message GetListViewRequest {
+}
+
+message GetListViewResponse {
+  repeated ListViewItem items = 1;
+}
+
 message GetExperimentRunDetailsRequest {
   uint64 id = 1;
 }
 
 message GetExperimentRunDetailsResponse {
   ExperimentRunDetails run_details = 1;
-}
-
-message CancelExperimentRunRequest {
-  uint64 id = 1;
-}
-
-message CancelExperimentRunResponse {
 }
 
 // Simple CRUD API for experiments
@@ -76,6 +82,13 @@ service ExperimentsAPI {
   rpc GetExperiments(GetExperimentsRequest) returns (GetExperimentsResponse) {
     option (google.api.http) = {
       post : "/v1/chaos/experimentation/getExperiments"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+  rpc GetListView(GetListViewRequest) returns (GetListViewResponse) {
+    option (google.api.http) = {
+      post : "/v1/chaos/experimentation/getListView"
       body : "*"
     };
     option (clutch.api.v1.action).type = READ;

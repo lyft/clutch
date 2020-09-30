@@ -3,9 +3,11 @@ package experimentstore
 import (
 	"database/sql"
 	"errors"
-	"strconv"
 	"strings"
 	"time"
+
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/timestamp"
 
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/ptypes/any"
@@ -14,19 +16,52 @@ import (
 )
 
 func NewRunDetails(fetchedID uint64, creationTime time.Time, startTime sql.NullTime, endTime sql.NullTime, cancellationTime sql.NullTime, now time.Time, details string) (*experimentation.ExperimentRunDetails, error) {
-	runConfigPair := &experimentation.ExperimentRunDetails{}
-	runConfigPair.RunId = fetchedID
-	runConfigPair.Properties = &experimentation.Properties{}
 	status, err := timesToStatus(startTime, endTime, cancellationTime, now)
 	if err != nil {
 		return nil, err
 	}
 
-	runConfigPair.Status = status
-	runConfigPair.GetProperties().Items = []*experimentation.Property{
-		{Label: "Run Identifier", Value: strconv.FormatUint(fetchedID, 10)},
-		{Label: "Status", Value: statusToString(runConfigPair.Status)},
-		{Label: "Start Time", Value: timeToString(startTime)},
+	properties, err := NewProperties(fetchedID, creationTime, startTime, endTime, cancellationTime, now, details)
+	if err != nil {
+		return nil, err
+	}
+
+	anyConfig := &any.Any{}
+	err = jsonpb.Unmarshal(strings.NewReader(details), anyConfig)
+	if err != nil {
+		return nil, err
+	}
+
+	return &experimentation.ExperimentRunDetails{
+		RunId: fetchedID,
+		Status: status,
+		Properties: &experimentation.PropertiesList{Items: properties},
+		Config: anyConfig}, nil
+}
+
+func NewProperties(fetchedID uint64, creationTime time.Time, startTime sql.NullTime, endTime sql.NullTime, cancellationTime sql.NullTime, now time.Time, details string) ([]*experimentation.Property, error) {
+	status, err := timesToStatus(startTime, endTime, cancellationTime, now)
+	if err != nil {
+		return nil, err
+	}
+
+	startTimeTimestamp, err := timeToTimestamp(startTime)
+	properties := []*experimentation.Property{
+		{
+			Identifier: "run_identifier",
+			Label:      "Run Identifier",
+			Value:      &experimentation.Property_IntValue{int64(fetchedID)},
+		},
+		{
+			Identifier: "status",
+			Label:      "Status",
+			Value:      &experimentation.Property_StringValue{statusToString(status)},
+		},
+		{
+			Identifier: "start_time",
+			Label:      "Start Time",
+			Value:      &experimentation.Property_DateValue{startTimeTimestamp},
+		},
 	}
 
 	var time sql.NullTime
@@ -36,25 +71,33 @@ func NewRunDetails(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 		time = cancellationTime
 	}
 
-	endTimeField := &experimentation.Property{Label: "End Time", Value: timeToString(time)}
-	runConfigPair.GetProperties().Items = append(runConfigPair.GetProperties().Items, endTimeField)
-
-	if runConfigPair.Status == experimentation.Experiment_STOPPED {
-		stoppedTimeField := &experimentation.Property{Label: "Stopped At", Value: timeToString(cancellationTime)}
-		runConfigPair.GetProperties().Items = append(runConfigPair.GetProperties().Items, stoppedTimeField)
-	} else if runConfigPair.Status == experimentation.Experiment_CANCELED {
-		cancellationTimeField := &experimentation.Property{Label: "Canceled At", Value: timeToString(cancellationTime)}
-		runConfigPair.GetProperties().Items = append(runConfigPair.GetProperties().Items, cancellationTimeField)
-	}
-
-	anyConfig := &any.Any{}
-	err = jsonpb.Unmarshal(strings.NewReader(details), anyConfig)
+	endTimeTimestamp, err := timeToTimestamp(time)
 	if err != nil {
 		return nil, err
 	}
 
-	runConfigPair.Config = anyConfig
-	return runConfigPair, err
+	properties = append(properties, &experimentation.Property{
+		Identifier: "end_time",
+		Label:      "End Time",
+		Value:      &experimentation.Property_DateValue{endTimeTimestamp},
+	})
+
+	cancelationTimeTimestamp, err := timeToTimestamp(cancellationTime)
+	if status == experimentation.Experiment_STOPPED {
+		properties = append(properties, &experimentation.Property{
+			Identifier: "stopped_at",
+			Label:      "Stopped At",
+			Value:      &experimentation.Property_DateValue{cancelationTimeTimestamp},
+		})
+	} else if status == experimentation.Experiment_CANCELED {
+		properties = append(properties, &experimentation.Property{
+			Identifier: "canceled_at",
+			Label:      "Canceled At",
+			Value:      &experimentation.Property_DateValue{cancelationTimeTimestamp},
+		})
+	}
+
+	return properties, nil
 }
 
 func timesToStatus(startTime sql.NullTime, endTime sql.NullTime, cancellationTime sql.NullTime, now time.Time) (experimentation.Experiment_Status, error) {
@@ -82,12 +125,11 @@ func timesToStatus(startTime sql.NullTime, endTime sql.NullTime, cancellationTim
 	}
 }
 
-func timeToString(t sql.NullTime) string {
-	layout := "01/02/06 15:04:05"
+func timeToTimestamp(t sql.NullTime) (*timestamp.Timestamp, error) {
 	if t.Valid {
-		return t.Time.Format(layout)
+		return ptypes.TimestampProto(t.Time)
 	} else {
-		return "Undefined"
+		return nil, nil
 	}
 }
 

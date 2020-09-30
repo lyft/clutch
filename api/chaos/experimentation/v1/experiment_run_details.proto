@@ -11,6 +11,6 @@ option go_package = "experimentationv1";
 message ExperimentRunDetails {
   fixed64 run_id = 1;
   Experiment.Status status = 2;
-  Properties properties = 3;
+  PropertiesList properties = 3;
   google.protobuf.Any config = 4;
 }
