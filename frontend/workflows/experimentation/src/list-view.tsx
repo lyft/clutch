@@ -24,17 +24,6 @@ const useStyles = makeStyles(theme => ({
   table: {
     minWidth: 750,
   },
-  visuallyHidden: {
-    border: 0,
-    clip: "rect(0 0 0 0)",
-    height: 1,
-    margin: -1,
-    overflow: "hidden",
-    padding: 0,
-    position: "absolute",
-    top: 20,
-    width: 1,
-  },
 }));
 
 type Ordering = "asc" | "desc";
@@ -67,7 +56,6 @@ function stableSort(
 
 interface EnhancedTableHeadProps {
   columns: Column[];
-  classes: any;
   order: Ordering;
   orderBy: string;
   onRequestSort: (event: any, columnIdentifier: string) => void;
@@ -75,7 +63,6 @@ interface EnhancedTableHeadProps {
 
 const EnhancedTableHead: React.FC<EnhancedTableHeadProps> = ({
   columns,
-  classes,
   order,
   orderBy,
   onRequestSort,
@@ -91,7 +78,6 @@ const EnhancedTableHead: React.FC<EnhancedTableHeadProps> = ({
           <TableCell
             key={column.identifier}
             align="left"
-            padding="default"
             sortDirection={orderBy === column.identifier ? order : false}
           >
             {column.sortable && (
@@ -101,11 +87,6 @@ const EnhancedTableHead: React.FC<EnhancedTableHeadProps> = ({
                 onClick={createSortHandler(column.identifier)}
               >
                 {column.header}
-                {orderBy === column.identifier ? (
-                  <span className={classes.visuallyHidden}>
-                    {order === "desc" ? "sorted descending" : "sorted ascending"}
-                  </span>
-                ) : null}
               </TableSortLabel>
             )}
             {!column.sortable && column.header}
@@ -158,12 +139,7 @@ const ListView: React.FC<ListViewProps> = ({ columns, items, onRowSelection }) =
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <TableContainer>
-          <Table
-            className={classes.table}
-            aria-labelledby="tableTitle"
-            size="medium"
-            aria-label="enhanced table"
-          >
+          <Table className={classes.table} size="medium">
             <EnhancedTableHead
               columns={columns}
               classes={classes}
