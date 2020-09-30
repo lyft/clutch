@@ -1,5 +1,5 @@
 import React from "react";
-import type { clutch, clutch as IClutch } from "@clutch-sh/api";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";

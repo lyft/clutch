@@ -12,7 +12,7 @@ const propertyToString = (property: IClutch.chaos.experimentation.v1.IProperty):
     return property.intValue.toString();
   }
   if (property.dateValue !== undefined && property.dateValue != null) {
-    const date = new Date(property.dateValue);
+    const date = new Date(property.dateValue as string);
     return date.toLocaleString();
   }
   if (property.stringValue) {
