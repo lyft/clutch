@@ -8,6 +8,7 @@ package experimentationv1
 
 import (
 	proto "github.com/golang/protobuf/proto"
+	_ "github.com/golang/protobuf/ptypes/timestamp"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -25,15 +26,12 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
-// ListViewItem an abstraction for a list item.
 type ListViewItem struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The unique identifier of a list item.
-	Identifier uint64 `protobuf:"varint,1,opt,name=identifier,proto3" json:"identifier,omitempty"`
-	// The properties map.
+	Identifier uint64         `protobuf:"varint,1,opt,name=identifier,proto3" json:"identifier,omitempty"`
 	Properties *PropertiesMap `protobuf:"bytes,2,opt,name=properties,proto3" json:"properties,omitempty"`
 }
 
