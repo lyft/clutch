@@ -67,8 +67,8 @@ const EnhancedTableHead: React.FC<EnhancedTableHeadProps> = ({
   orderBy,
   onRequestSort,
 }) => {
-  const createSortHandler = property => event => {
-    onRequestSort(event, property);
+  const createSortHandler = (columnIdentifier: string) => (event: any) => {
+    onRequestSort(event, columnIdentifier);
   };
 
   return (
@@ -116,7 +116,7 @@ const ListView: React.FC<ListViewProps> = ({ columns, items, onRowSelection }) =
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
-  const handleRequestSort = (event, columnIdentifier) => {
+  const handleRequestSort = (event: any, columnIdentifier: string) => {
     const isAsc = orderBy === columnIdentifier && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(columnIdentifier);
@@ -130,7 +130,7 @@ const ListView: React.FC<ListViewProps> = ({ columns, items, onRowSelection }) =
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = event => {
+  const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
