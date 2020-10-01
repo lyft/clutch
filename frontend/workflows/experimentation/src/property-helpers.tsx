@@ -1,5 +1,6 @@
 import type { clutch as IClutch } from "@clutch-sh/api";
 
+// Returns a string representation of a given property.
 const propertyToString = (property: IClutch.chaos.experimentation.v1.IProperty): string => {
   if (property === undefined) {
     return "Unknown";
@@ -21,6 +22,10 @@ const propertyToString = (property: IClutch.chaos.experimentation.v1.IProperty):
   return "Unknown";
 };
 
+// Compares the values of two properties. It returns:
+// * 1 if first property is greater than the second one
+// * -1 if the first property is lesser than the second one
+// * 0 otherwise
 const compareProperties = (
   a: IClutch.chaos.experimentation.v1.IProperty,
   b: IClutch.chaos.experimentation.v1.IProperty
