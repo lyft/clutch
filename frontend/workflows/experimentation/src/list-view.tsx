@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 type Ordering = "asc" | "desc";
 type ListViewItem = IClutch.chaos.experimentation.v1.ListViewItem;
 
-function getComparator(order: Ordering, orderBy: string) {
+function getComparator(order: Ordering, orderBy: string): (a: ListViewItem, b: ListViewItem) => number {
   return order === "desc"
     ? (a: ListViewItem, b: ListViewItem) =>
         compareProperties(a.properties.items[orderBy], b.properties.items[orderBy])
@@ -37,6 +37,7 @@ function getComparator(order: Ordering, orderBy: string) {
         -compareProperties(a.properties.items[orderBy], b.properties.items[orderBy]);
 }
 
+// Stable sort for the list of properties.
 function stableSort(
   array: ListViewItem[],
   comparator: (a: ListViewItem, b: ListViewItem) => number
