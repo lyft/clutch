@@ -967,8 +967,8 @@ export namespace clutch {
             /** Properties of a CallbackResponse. */
             interface ICallbackResponse {
 
-                /** CallbackResponse token */
-                token?: (string|null);
+                /** CallbackResponse accessToken */
+                accessToken?: (string|null);
             }
 
             /** Represents a CallbackResponse. */
@@ -980,8 +980,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.authn.v1.ICallbackResponse);
 
-                /** CallbackResponse token. */
-                public token: string;
+                /** CallbackResponse accessToken. */
+                public accessToken: string;
 
                 /**
                  * Verifies a CallbackResponse message.

@@ -2216,7 +2216,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a CallbackResponse.
                  * @memberof clutch.authn.v1
                  * @interface ICallbackResponse
-                 * @property {string|null} [token] CallbackResponse token
+                 * @property {string|null} [accessToken] CallbackResponse accessToken
                  */
 
                 /**
@@ -2235,12 +2235,12 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * CallbackResponse token.
-                 * @member {string} token
+                 * CallbackResponse accessToken.
+                 * @member {string} accessToken
                  * @memberof clutch.authn.v1.CallbackResponse
                  * @instance
                  */
-                CallbackResponse.prototype.token = "";
+                CallbackResponse.prototype.accessToken = "";
 
                 /**
                  * Verifies a CallbackResponse message.
@@ -2253,9 +2253,9 @@ export const clutch = $root.clutch = (() => {
                 CallbackResponse.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.token != null && message.hasOwnProperty("token"))
-                        if (!$util.isString(message.token))
-                            return "token: string expected";
+                    if (message.accessToken != null && message.hasOwnProperty("accessToken"))
+                        if (!$util.isString(message.accessToken))
+                            return "accessToken: string expected";
                     return null;
                 };
 
@@ -2271,8 +2271,8 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.authn.v1.CallbackResponse)
                         return object;
                     let message = new $root.clutch.authn.v1.CallbackResponse();
-                    if (object.token != null)
-                        message.token = String(object.token);
+                    if (object.accessToken != null)
+                        message.accessToken = String(object.accessToken);
                     return message;
                 };
 
@@ -2290,9 +2290,9 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.defaults)
-                        object.token = "";
-                    if (message.token != null && message.hasOwnProperty("token"))
-                        object.token = message.token;
+                        object.accessToken = "";
+                    if (message.accessToken != null && message.hasOwnProperty("accessToken"))
+                        object.accessToken = message.accessToken;
                     return object;
                 };
 
