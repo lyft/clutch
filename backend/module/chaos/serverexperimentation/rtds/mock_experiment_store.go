@@ -2,6 +2,7 @@ package rtds
 
 import (
 	"context"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
@@ -41,6 +42,10 @@ func (fs *mockExperimentStore) GetListView(ctx context.Context) ([]*experimentat
 func (fs *mockExperimentStore) GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error) {
 	return nil, nil
 }
+
+func (fs *mockExperimentStore) RegisterTransformation(typeUrl string, transformation func(config *experimentstore.ExperimentConfig)([]*experimentation.Property, error)) {
+}
+
 
 func (fs *mockExperimentStore) Close() {
 }

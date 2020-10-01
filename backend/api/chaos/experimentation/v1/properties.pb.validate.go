@@ -205,9 +205,9 @@ func (m *Property) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Label
+	// no validation rules for Id
 
-	// no validation rules for Identifier
+	// no validation rules for Label
 
 	if v, ok := interface{}(m.GetDisplayValue()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {

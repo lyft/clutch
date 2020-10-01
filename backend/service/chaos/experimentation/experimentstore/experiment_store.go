@@ -30,11 +30,13 @@ type ExperimentStore interface {
 	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
 	GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error)
+	RegisterTransformation(typeUrl string, transformation func(*ExperimentConfig)([]*experimentation.Property, error))
 	Close()
 }
 
 type experimentStore struct {
-	db *sql.DB
+	db          *sql.DB
+	transformer *Transformer
 }
 
 // New returns a new NewExperimentStore instance.
@@ -51,6 +53,7 @@ func New(_ *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
 
 	return &experimentStore{
 		client.DB(),
+		&Transformer{map[string]func(*ExperimentConfig) ([]*experimentation.Property, error){}},
 	}, nil
 }
 
@@ -124,19 +127,6 @@ func (fs *experimentStore) CreateExperiment(ctx context.Context, config *any.Any
 	}, nil
 }
 
-func toProto(t *time.Time) (*timestamp.Timestamp, error) {
-	if t == nil {
-		return nil, nil
-	}
-
-	timestampProto, err := ptypes.TimestampProto(*t)
-	if err != nil {
-		return nil, err
-	}
-
-	return timestampProto, nil
-}
-
 func (fs *experimentStore) CancelExperimentRun(ctx context.Context, id uint64) error {
 	sql :=
 		`UPDATE experiment_run 
@@ -205,6 +195,7 @@ func (fs *experimentStore) GetListView(ctx context.Context) ([]*experimentation.
 			upper(execution_time),
 			cancellation_time,
 			creation_time,
+			experiment_config.id,
 			details
 		FROM experiment_config, experiment_run
 		WHERE
@@ -219,35 +210,25 @@ func (fs *experimentStore) GetListView(ctx context.Context) ([]*experimentation.
 
 	var listViewItems []*experimentation.ListViewItem
 	for rows.Next() {
-		var fetchedID uint64
-		var startTime, endTime, cancellationTime sql.NullTime
-		var creationTime time.Time
 		var details string
-		err = rows.Scan(&fetchedID, &startTime, &endTime, &cancellationTime, &creationTime, &details)
+		run := ExperimentRun{}
+		config := ExperimentConfig{Config: &any.Any{}}
+		err = rows.Scan(&run.id, &run.startTime, &run.endTime, &run.cancellationTime, &run.creationTime, &config.id, &details)
 		if err != nil {
 			return nil, err
 		}
 
-		anyConfig := &any.Any{}
-		err = jsonpb.Unmarshal(strings.NewReader(details), anyConfig)
+		err = jsonpb.Unmarshal(strings.NewReader(details), config.Config)
 		if err != nil {
 			return nil, err
 		}
 
-		properties, err := NewProperties(fetchedID, creationTime, startTime, endTime, cancellationTime, time.Now(), details)
+		item, err := NewRunListView(&run, &config, fs.transformer, time.Now())
 		if err != nil {
 			return nil, err
 		}
 
-		propertiesMapItems := make(map[string]*experimentation.Property)
-		for _, p := range properties {
-			propertiesMapItems[p.Identifier] = p
-		}
-
-		listViewItems = append(listViewItems, &experimentation.ListViewItem{
-			Identifier: fetchedID,
-			Properties: &experimentation.PropertiesMap{Items: propertiesMapItems},
-		})
+		listViewItems = append(listViewItems, item)
 	}
 
 	err = rows.Err()
@@ -260,27 +241,54 @@ func (fs *experimentStore) GetListView(ctx context.Context) ([]*experimentation.
 
 func (fs *experimentStore) GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error) {
 	sqlQuery := `
-        SELECT experiment_run.id, lower(execution_time), upper(execution_time), cancellation_time, creation_time, details FROM experiment_config, experiment_run
+		SELECT 
+			experiment_run.id,
+			lower(execution_time),
+			upper(execution_time),
+			cancellation_time,
+			creation_time,
+			experiment_config.id, 
+			details FROM experiment_config, experiment_run
         WHERE experiment_run.id = $1 AND experiment_run.experiment_config_id = experiment_config.id`
 
 	row := fs.db.QueryRowContext(ctx, sqlQuery, id)
 
-	var fetchedID uint64
-	var startTime, endTime, cancellationTime sql.NullTime
-	var creationTime time.Time
 	var details string
-
-	err := row.Scan(&fetchedID, &startTime, &endTime, &cancellationTime, &creationTime, &details)
+	run := ExperimentRun{}
+	config := ExperimentConfig{Config: &any.Any{}}
+	err := row.Scan(&run.id, &run.startTime, &run.endTime, &run.cancellationTime, &run.creationTime, &config.id, &details)
 	if err != nil {
 		return nil, err
 	}
 
-	return NewRunDetails(fetchedID, creationTime, startTime, endTime, cancellationTime, time.Now(), details)
+	err = jsonpb.Unmarshal(strings.NewReader(details), config.Config)
+	if err != nil {
+		return nil, err
+	}
+
+	return NewRunDetails(&run, &config, fs.transformer, time.Now())
 }
 
 // Close closes all resources held.
 func (fs *experimentStore) Close() {
 	fs.db.Close()
+}
+
+func (fs *experimentStore) RegisterTransformation(typeUrl string, transformation func(*ExperimentConfig)([]*experimentation.Property, error)) {
+	fs.transformer.nameToConfigTransformMap[typeUrl] = transformation
+}
+
+func toProto(t *time.Time) (*timestamp.Timestamp, error) {
+	if t == nil {
+		return nil, nil
+	}
+
+	timestampProto, err := ptypes.TimestampProto(*t)
+	if err != nil {
+		return nil, err
+	}
+
+	return timestampProto, nil
 }
 
 func marshalConfig(config *any.Any) (string, error) {

@@ -3161,11 +3161,11 @@ export namespace clutch {
                 /** Properties of a Property. */
                 interface IProperty {
 
+                    /** Property id */
+                    id?: (string|null);
+
                     /** Property label */
                     label?: (string|null);
-
-                    /** Property identifier */
-                    identifier?: (string|null);
 
                     /** Property displayValue */
                     displayValue?: (google.protobuf.IStringValue|null);
@@ -3189,11 +3189,11 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.experimentation.v1.IProperty);
 
+                    /** Property id. */
+                    public id: string;
+
                     /** Property label. */
                     public label: string;
-
-                    /** Property identifier. */
-                    public identifier: string;
 
                     /** Property displayValue. */
                     public displayValue?: (google.protobuf.IStringValue|null);

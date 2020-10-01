@@ -11,14 +11,14 @@ const Layout = styled(Container)`
   padding: 5% 0;
 `;
 
-interface ExperimentTypeLinkProps {
+interface RouteLinkProps {
   displayName: string;
   path: string;
 }
 
 interface ListExperimentsProps {
   columns: Column[];
-  links: ExperimentTypeLinkProps[];
+  links: RouteLinkProps[];
 }
 
 const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, links }) => {
