@@ -1,11 +1,8 @@
 package topology
 
 import (
-	"context"
 	"database/sql"
 	"errors"
-	"log"
-	"time"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
@@ -20,7 +17,7 @@ import (
 const Name = "clutch.service.topology"
 
 type Service interface {
-	aquireTopologyCacheLock()
+	acquireTopologyCacheLock()
 	startTopologyCache()
 }
 
@@ -56,43 +53,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		scope:  scope,
 	}, nil
 
-	go c.aquireTopologyCacheLock()
+	go c.acquireTopologyCacheLock()
 
 	return c, err
-}
-
-// Perfroms leader election by aquiring an postgres advisory lock
-func (c *client) aquireTopologyCacheLock() {
-	var lock bool
-
-	// We create our own connection to use for aquirting the advisory lock
-	// If the connection is severed for any reason the advisory lock will automatically unlock
-	conn, err := c.db.Conn(context.Background())
-	if err != nil {
-		log.Printf("err: %v", err)
-	}
-
-	// Infinately try to aquire the advisory lock
-	// Once the lock is aquired we start caching, this is a blocking operation
-	for {
-		c.log.Debug("trying to aquire advisory lock")
-
-		// Advisory locks only take a arbatrary bigint value
-		// In this case 100 is the lock for topology caching
-		_ = conn.QueryRowContext(context.Background(), "SELECT pg_try_advisory_lock(100)").Scan(&lock)
-		if err != nil {
-			log.Printf("err: %v", err)
-		}
-
-		if lock {
-			c.log.Debug("aquired the advisory lock, starting to cache topology now...")
-			c.startTopologyCache()
-		}
-
-		time.Sleep(time.Second * 10)
-	}
-}
-
-func (c *client) startTopologyCache() {
-	c.log.Debug("implement me")
 }
