@@ -4,8 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
-
 	"github.com/golang/protobuf/ptypes/any"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
