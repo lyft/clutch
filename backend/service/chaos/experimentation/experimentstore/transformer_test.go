@@ -3,9 +3,8 @@ package experimentstore
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/stretchr/testify/assert"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )

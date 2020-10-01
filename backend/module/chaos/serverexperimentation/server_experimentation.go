@@ -3,16 +3,18 @@ package serverexperimentation
 import (
 	"errors"
 	"fmt"
-	"github.com/golang/protobuf/ptypes"
-	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 
+
+	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/uber-go/tally"
+	"go.uber.org/zap"
+
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
-	"github.com/uber-go/tally"
-	"go.uber.org/zap"
 )
 
 const (

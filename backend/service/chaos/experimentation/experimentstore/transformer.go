@@ -5,7 +5,7 @@ import (
 )
 
 type Transformer struct {
-	nameToConfigTransformMap map[string]func(*ExperimentConfig)([]*experimentation.Property, error)
+	nameToConfigTransformMap map[string]func(*ExperimentConfig) ([]*experimentation.Property, error)
 }
 
 func (c *Transformer) CreateProperties(config *ExperimentConfig) ([]*experimentation.Property, error) {

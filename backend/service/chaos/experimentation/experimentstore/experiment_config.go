@@ -2,11 +2,12 @@ package experimentstore
 
 import (
 	"github.com/golang/protobuf/ptypes/any"
+
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 type ExperimentConfig struct {
-	id uint64
+	id     uint64
 	Config *any.Any
 }
 

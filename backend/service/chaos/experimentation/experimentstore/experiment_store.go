@@ -30,7 +30,7 @@ type ExperimentStore interface {
 	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
 	GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error)
-	RegisterTransformation(typeUrl string, transformation func(*ExperimentConfig)([]*experimentation.Property, error))
+	RegisterTransformation(typeUrl string, transformation func(*ExperimentConfig) ([]*experimentation.Property, error))
 	Close()
 }
 
@@ -274,7 +274,7 @@ func (fs *experimentStore) Close() {
 	fs.db.Close()
 }
 
-func (fs *experimentStore) RegisterTransformation(typeUrl string, transformation func(*ExperimentConfig)([]*experimentation.Property, error)) {
+func (fs *experimentStore) RegisterTransformation(typeUrl string, transformation func(*ExperimentConfig) ([]*experimentation.Property, error)) {
 	fs.transformer.nameToConfigTransformMap[typeUrl] = transformation
 }
 

@@ -1,8 +1,9 @@
 package experimentstore
 
 import (
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"time"
+
+	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 func NewRunListView(run *ExperimentRun, config *ExperimentConfig, transformer *Transformer, now time.Time) (*experimentation.ListViewItem, error) {

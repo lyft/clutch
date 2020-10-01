@@ -2,17 +2,19 @@ package experimentstore
 
 import (
 	"database/sql"
-	"github.com/golang/protobuf/ptypes"
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"time"
+
+	"github.com/golang/protobuf/ptypes"
+
+	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 type ExperimentRun struct {
-	id uint64
-	startTime time.Time
-	endTime sql.NullTime
+	id               uint64
+	startTime        time.Time
+	endTime          sql.NullTime
 	cancellationTime sql.NullTime
-	creationTime time.Time
+	creationTime     time.Time
 }
 
 func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Property, error) {

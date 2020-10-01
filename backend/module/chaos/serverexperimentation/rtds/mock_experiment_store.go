@@ -2,12 +2,14 @@ package rtds
 
 import (
 	"context"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"time"
+
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 
 	"github.com/golang/protobuf/ptypes/any"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 type mockExperimentStore struct {
@@ -43,9 +45,8 @@ func (fs *mockExperimentStore) GetExperimentRunDetails(ctx context.Context, id u
 	return nil, nil
 }
 
-func (fs *mockExperimentStore) RegisterTransformation(typeUrl string, transformation func(config *experimentstore.ExperimentConfig)([]*experimentation.Property, error)) {
+func (fs *mockExperimentStore) RegisterTransformation(typeUrl string, transformation func(config *experimentstore.ExperimentConfig) ([]*experimentation.Property, error)) {
 }
-
 
 func (fs *mockExperimentStore) Close() {
 }
