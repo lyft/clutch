@@ -34,6 +34,9 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 			return
 		}
 
+		// TODO: We could in the future spread the load of the topology caching
+		// across many clutch instances by having an a lock per service (e.g. AWS, k8s, etc)
+
 		// Advisory locks only take a arbitrary bigint value
 		// In this case 100 is the lock for topology caching
 		if c.tryAdvisoryLock(ctx, conn, advisoryLockId) {
@@ -43,6 +46,8 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 	}
 }
 
+// TODO: The advisory locking logic can be decomposed into its own service (e.g. "global locking service").
+// Which can be used generically for anything that needs distributed locking functionality.
 func (c *client) tryAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uint32) bool {
 	var lock bool
 
@@ -58,7 +63,6 @@ func (c *client) tryAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uin
 
 func (c *client) startTopologyCache() {
 	c.log.Debug("implement me")
-	time.Sleep(time.Hour * 2)
 }
 
 func convertLockIdToAdvisoryLockId(lockId string) (uint32, error) {
