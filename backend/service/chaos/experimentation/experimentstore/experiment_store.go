@@ -179,7 +179,8 @@ func (fs *experimentStore) GetExperiments(ctx context.Context, configType string
 		}
 
 		anyConfig := &any.Any{}
-		if nil != jsonpb.Unmarshal(strings.NewReader(details), anyConfig) {
+		err = jsonpb.Unmarshal(strings.NewReader(details), anyConfig)
+		if err != nil {
 			return nil, err
 		}
 

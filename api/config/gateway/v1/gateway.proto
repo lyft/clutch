@@ -85,6 +85,24 @@ message GatewayOptions {
   Timeouts timeouts = 5;
 
   repeated Middleware middleware = 6;
+
+  Assets assets = 7;
+}
+
+// Assets configuration provide a passthrough host for frontend static assets.
+// This is useful if you dont have the ability to enable sticky sessions or a blue/green deploy system in place.
+message Assets {
+  // To use the S3Provider you must have the AWS service configured
+  message S3Provider {
+    string region = 1;
+    string bucket = 2;
+    // key is the path to clutchs frontend static assets in the configured bucket
+    string key = 3;
+  }
+
+  oneof provider {
+    S3Provider s3 = 1;
+  }
 }
 
 message Logger {

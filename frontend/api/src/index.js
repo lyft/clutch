@@ -2216,7 +2216,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a CallbackResponse.
                  * @memberof clutch.authn.v1
                  * @interface ICallbackResponse
-                 * @property {string|null} [token] CallbackResponse token
+                 * @property {string|null} [accessToken] CallbackResponse accessToken
                  */
 
                 /**
@@ -2235,12 +2235,12 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * CallbackResponse token.
-                 * @member {string} token
+                 * CallbackResponse accessToken.
+                 * @member {string} accessToken
                  * @memberof clutch.authn.v1.CallbackResponse
                  * @instance
                  */
-                CallbackResponse.prototype.token = "";
+                CallbackResponse.prototype.accessToken = "";
 
                 /**
                  * Verifies a CallbackResponse message.
@@ -2253,9 +2253,9 @@ export const clutch = $root.clutch = (() => {
                 CallbackResponse.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.token != null && message.hasOwnProperty("token"))
-                        if (!$util.isString(message.token))
-                            return "token: string expected";
+                    if (message.accessToken != null && message.hasOwnProperty("accessToken"))
+                        if (!$util.isString(message.accessToken))
+                            return "accessToken: string expected";
                     return null;
                 };
 
@@ -2271,8 +2271,8 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.authn.v1.CallbackResponse)
                         return object;
                     let message = new $root.clutch.authn.v1.CallbackResponse();
-                    if (object.token != null)
-                        message.token = String(object.token);
+                    if (object.accessToken != null)
+                        message.accessToken = String(object.accessToken);
                     return message;
                 };
 
@@ -2290,9 +2290,9 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.defaults)
-                        object.token = "";
-                    if (message.token != null && message.hasOwnProperty("token"))
-                        object.token = message.token;
+                        object.accessToken = "";
+                    if (message.accessToken != null && message.hasOwnProperty("accessToken"))
+                        object.accessToken = message.accessToken;
                     return object;
                 };
 
@@ -8983,6 +8983,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.config.gateway.v1.IStats|null} [stats] GatewayOptions stats
                      * @property {clutch.config.gateway.v1.ITimeouts|null} [timeouts] GatewayOptions timeouts
                      * @property {Array.<clutch.config.gateway.v1.IMiddleware>|null} [middleware] GatewayOptions middleware
+                     * @property {clutch.config.gateway.v1.IAssets|null} [assets] GatewayOptions assets
                      */
 
                     /**
@@ -9050,6 +9051,14 @@ export const clutch = $root.clutch = (() => {
                     GatewayOptions.prototype.middleware = $util.emptyArray;
 
                     /**
+                     * GatewayOptions assets.
+                     * @member {clutch.config.gateway.v1.IAssets|null|undefined} assets
+                     * @memberof clutch.config.gateway.v1.GatewayOptions
+                     * @instance
+                     */
+                    GatewayOptions.prototype.assets = null;
+
+                    /**
                      * Verifies a GatewayOptions message.
                      * @function verify
                      * @memberof clutch.config.gateway.v1.GatewayOptions
@@ -9093,6 +9102,11 @@ export const clutch = $root.clutch = (() => {
                                 if (error)
                                     return "middleware." + error;
                             }
+                        }
+                        if (message.assets != null && message.hasOwnProperty("assets")) {
+                            let error = $root.clutch.config.gateway.v1.Assets.verify(message.assets);
+                            if (error)
+                                return "assets." + error;
                         }
                         return null;
                     };
@@ -9144,6 +9158,11 @@ export const clutch = $root.clutch = (() => {
                                 message.middleware[i] = $root.clutch.config.gateway.v1.Middleware.fromObject(object.middleware[i]);
                             }
                         }
+                        if (object.assets != null) {
+                            if (typeof object.assets !== "object")
+                                throw TypeError(".clutch.config.gateway.v1.GatewayOptions.assets: object expected");
+                            message.assets = $root.clutch.config.gateway.v1.Assets.fromObject(object.assets);
+                        }
                         return message;
                     };
 
@@ -9168,6 +9187,7 @@ export const clutch = $root.clutch = (() => {
                             object.logger = null;
                             object.stats = null;
                             object.timeouts = null;
+                            object.assets = null;
                         }
                         if (message.listener != null && message.hasOwnProperty("listener"))
                             object.listener = $root.clutch.config.gateway.v1.Listener.toObject(message.listener, options);
@@ -9184,6 +9204,8 @@ export const clutch = $root.clutch = (() => {
                             for (let j = 0; j < message.middleware.length; ++j)
                                 object.middleware[j] = $root.clutch.config.gateway.v1.Middleware.toObject(message.middleware[j], options);
                         }
+                        if (message.assets != null && message.hasOwnProperty("assets"))
+                            object.assets = $root.clutch.config.gateway.v1.Assets.toObject(message.assets, options);
                         return object;
                     };
 
@@ -9199,6 +9221,265 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return GatewayOptions;
+                })();
+
+                v1.Assets = (function() {
+
+                    /**
+                     * Properties of an Assets.
+                     * @memberof clutch.config.gateway.v1
+                     * @interface IAssets
+                     * @property {clutch.config.gateway.v1.Assets.IS3Provider|null} [s3] Assets s3
+                     */
+
+                    /**
+                     * Constructs a new Assets.
+                     * @memberof clutch.config.gateway.v1
+                     * @classdesc Represents an Assets.
+                     * @implements IAssets
+                     * @constructor
+                     * @param {clutch.config.gateway.v1.IAssets=} [properties] Properties to set
+                     */
+                    function Assets(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Assets s3.
+                     * @member {clutch.config.gateway.v1.Assets.IS3Provider|null|undefined} s3
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @instance
+                     */
+                    Assets.prototype.s3 = null;
+
+                    // OneOf field names bound to virtual getters and setters
+                    let $oneOfFields;
+
+                    /**
+                     * Assets provider.
+                     * @member {"s3"|undefined} provider
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @instance
+                     */
+                    Object.defineProperty(Assets.prototype, "provider", {
+                        get: $util.oneOfGetter($oneOfFields = ["s3"]),
+                        set: $util.oneOfSetter($oneOfFields)
+                    });
+
+                    /**
+                     * Verifies an Assets message.
+                     * @function verify
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Assets.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        let properties = {};
+                        if (message.s3 != null && message.hasOwnProperty("s3")) {
+                            properties.provider = 1;
+                            {
+                                let error = $root.clutch.config.gateway.v1.Assets.S3Provider.verify(message.s3);
+                                if (error)
+                                    return "s3." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates an Assets message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.config.gateway.v1.Assets} Assets
+                     */
+                    Assets.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.config.gateway.v1.Assets)
+                            return object;
+                        let message = new $root.clutch.config.gateway.v1.Assets();
+                        if (object.s3 != null) {
+                            if (typeof object.s3 !== "object")
+                                throw TypeError(".clutch.config.gateway.v1.Assets.s3: object expected");
+                            message.s3 = $root.clutch.config.gateway.v1.Assets.S3Provider.fromObject(object.s3);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an Assets message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @static
+                     * @param {clutch.config.gateway.v1.Assets} message Assets
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Assets.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (message.s3 != null && message.hasOwnProperty("s3")) {
+                            object.s3 = $root.clutch.config.gateway.v1.Assets.S3Provider.toObject(message.s3, options);
+                            if (options.oneofs)
+                                object.provider = "s3";
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Assets to JSON.
+                     * @function toJSON
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Assets.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    Assets.S3Provider = (function() {
+
+                        /**
+                         * Properties of a S3Provider.
+                         * @memberof clutch.config.gateway.v1.Assets
+                         * @interface IS3Provider
+                         * @property {string|null} [region] S3Provider region
+                         * @property {string|null} [bucket] S3Provider bucket
+                         * @property {string|null} [key] S3Provider key
+                         */
+
+                        /**
+                         * Constructs a new S3Provider.
+                         * @memberof clutch.config.gateway.v1.Assets
+                         * @classdesc Represents a S3Provider.
+                         * @implements IS3Provider
+                         * @constructor
+                         * @param {clutch.config.gateway.v1.Assets.IS3Provider=} [properties] Properties to set
+                         */
+                        function S3Provider(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * S3Provider region.
+                         * @member {string} region
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @instance
+                         */
+                        S3Provider.prototype.region = "";
+
+                        /**
+                         * S3Provider bucket.
+                         * @member {string} bucket
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @instance
+                         */
+                        S3Provider.prototype.bucket = "";
+
+                        /**
+                         * S3Provider key.
+                         * @member {string} key
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @instance
+                         */
+                        S3Provider.prototype.key = "";
+
+                        /**
+                         * Verifies a S3Provider message.
+                         * @function verify
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        S3Provider.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.region != null && message.hasOwnProperty("region"))
+                                if (!$util.isString(message.region))
+                                    return "region: string expected";
+                            if (message.bucket != null && message.hasOwnProperty("bucket"))
+                                if (!$util.isString(message.bucket))
+                                    return "bucket: string expected";
+                            if (message.key != null && message.hasOwnProperty("key"))
+                                if (!$util.isString(message.key))
+                                    return "key: string expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a S3Provider message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.gateway.v1.Assets.S3Provider} S3Provider
+                         */
+                        S3Provider.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.gateway.v1.Assets.S3Provider)
+                                return object;
+                            let message = new $root.clutch.config.gateway.v1.Assets.S3Provider();
+                            if (object.region != null)
+                                message.region = String(object.region);
+                            if (object.bucket != null)
+                                message.bucket = String(object.bucket);
+                            if (object.key != null)
+                                message.key = String(object.key);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a S3Provider message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @static
+                         * @param {clutch.config.gateway.v1.Assets.S3Provider} message S3Provider
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        S3Provider.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.region = "";
+                                object.bucket = "";
+                                object.key = "";
+                            }
+                            if (message.region != null && message.hasOwnProperty("region"))
+                                object.region = message.region;
+                            if (message.bucket != null && message.hasOwnProperty("bucket"))
+                                object.bucket = message.bucket;
+                            if (message.key != null && message.hasOwnProperty("key"))
+                                object.key = message.key;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this S3Provider to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        S3Provider.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return S3Provider;
+                    })();
+
+                    return Assets;
                 })();
 
                 v1.Logger = (function() {
@@ -25730,6 +26011,319 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return Edge;
+            })();
+
+            v1.Resource = (function() {
+
+                /**
+                 * Properties of a Resource.
+                 * @memberof clutch.topology.v1
+                 * @interface IResource
+                 * @property {string|null} [id] Resource id
+                 * @property {google.protobuf.IAny|null} [pb] Resource pb
+                 * @property {Object.<string,string>|null} [metadata] Resource metadata
+                 */
+
+                /**
+                 * Constructs a new Resource.
+                 * @memberof clutch.topology.v1
+                 * @classdesc Represents a Resource.
+                 * @implements IResource
+                 * @constructor
+                 * @param {clutch.topology.v1.IResource=} [properties] Properties to set
+                 */
+                function Resource(properties) {
+                    this.metadata = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Resource id.
+                 * @member {string} id
+                 * @memberof clutch.topology.v1.Resource
+                 * @instance
+                 */
+                Resource.prototype.id = "";
+
+                /**
+                 * Resource pb.
+                 * @member {google.protobuf.IAny|null|undefined} pb
+                 * @memberof clutch.topology.v1.Resource
+                 * @instance
+                 */
+                Resource.prototype.pb = null;
+
+                /**
+                 * Resource metadata.
+                 * @member {Object.<string,string>} metadata
+                 * @memberof clutch.topology.v1.Resource
+                 * @instance
+                 */
+                Resource.prototype.metadata = $util.emptyObject;
+
+                /**
+                 * Verifies a Resource message.
+                 * @function verify
+                 * @memberof clutch.topology.v1.Resource
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Resource.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (!$util.isString(message.id))
+                            return "id: string expected";
+                    if (message.pb != null && message.hasOwnProperty("pb")) {
+                        let error = $root.google.protobuf.Any.verify(message.pb);
+                        if (error)
+                            return "pb." + error;
+                    }
+                    if (message.metadata != null && message.hasOwnProperty("metadata")) {
+                        if (!$util.isObject(message.metadata))
+                            return "metadata: object expected";
+                        let key = Object.keys(message.metadata);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.metadata[key[i]]))
+                                return "metadata: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Resource message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.topology.v1.Resource
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.topology.v1.Resource} Resource
+                 */
+                Resource.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.Resource)
+                        return object;
+                    let message = new $root.clutch.topology.v1.Resource();
+                    if (object.id != null)
+                        message.id = String(object.id);
+                    if (object.pb != null) {
+                        if (typeof object.pb !== "object")
+                            throw TypeError(".clutch.topology.v1.Resource.pb: object expected");
+                        message.pb = $root.google.protobuf.Any.fromObject(object.pb);
+                    }
+                    if (object.metadata) {
+                        if (typeof object.metadata !== "object")
+                            throw TypeError(".clutch.topology.v1.Resource.metadata: object expected");
+                        message.metadata = {};
+                        for (let keys = Object.keys(object.metadata), i = 0; i < keys.length; ++i)
+                            message.metadata[keys[i]] = String(object.metadata[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Resource message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.topology.v1.Resource
+                 * @static
+                 * @param {clutch.topology.v1.Resource} message Resource
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Resource.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults)
+                        object.metadata = {};
+                    if (options.defaults) {
+                        object.id = "";
+                        object.pb = null;
+                    }
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        object.id = message.id;
+                    if (message.pb != null && message.hasOwnProperty("pb"))
+                        object.pb = $root.google.protobuf.Any.toObject(message.pb, options);
+                    let keys2;
+                    if (message.metadata && (keys2 = Object.keys(message.metadata)).length) {
+                        object.metadata = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.metadata[keys2[j]] = message.metadata[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this Resource to JSON.
+                 * @function toJSON
+                 * @memberof clutch.topology.v1.Resource
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Resource.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Resource;
+            })();
+
+            v1.UpdateCacheRequest = (function() {
+
+                /**
+                 * Properties of an UpdateCacheRequest.
+                 * @memberof clutch.topology.v1
+                 * @interface IUpdateCacheRequest
+                 * @property {clutch.topology.v1.IResource|null} [resource] UpdateCacheRequest resource
+                 * @property {clutch.topology.v1.UpdateCacheRequest.Action|null} [action] UpdateCacheRequest action
+                 */
+
+                /**
+                 * Constructs a new UpdateCacheRequest.
+                 * @memberof clutch.topology.v1
+                 * @classdesc Represents an UpdateCacheRequest.
+                 * @implements IUpdateCacheRequest
+                 * @constructor
+                 * @param {clutch.topology.v1.IUpdateCacheRequest=} [properties] Properties to set
+                 */
+                function UpdateCacheRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * UpdateCacheRequest resource.
+                 * @member {clutch.topology.v1.IResource|null|undefined} resource
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @instance
+                 */
+                UpdateCacheRequest.prototype.resource = null;
+
+                /**
+                 * UpdateCacheRequest action.
+                 * @member {clutch.topology.v1.UpdateCacheRequest.Action} action
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @instance
+                 */
+                UpdateCacheRequest.prototype.action = 0;
+
+                /**
+                 * Verifies an UpdateCacheRequest message.
+                 * @function verify
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                UpdateCacheRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.resource != null && message.hasOwnProperty("resource")) {
+                        let error = $root.clutch.topology.v1.Resource.verify(message.resource);
+                        if (error)
+                            return "resource." + error;
+                    }
+                    if (message.action != null && message.hasOwnProperty("action"))
+                        switch (message.action) {
+                        default:
+                            return "action: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                            break;
+                        }
+                    return null;
+                };
+
+                /**
+                 * Creates an UpdateCacheRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.topology.v1.UpdateCacheRequest} UpdateCacheRequest
+                 */
+                UpdateCacheRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.UpdateCacheRequest)
+                        return object;
+                    let message = new $root.clutch.topology.v1.UpdateCacheRequest();
+                    if (object.resource != null) {
+                        if (typeof object.resource !== "object")
+                            throw TypeError(".clutch.topology.v1.UpdateCacheRequest.resource: object expected");
+                        message.resource = $root.clutch.topology.v1.Resource.fromObject(object.resource);
+                    }
+                    switch (object.action) {
+                    case "UNSPECIFIED":
+                    case 0:
+                        message.action = 0;
+                        break;
+                    case "CREATE_OR_UPDATE":
+                    case 1:
+                        message.action = 1;
+                        break;
+                    case "DELETE":
+                    case 2:
+                        message.action = 2;
+                        break;
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an UpdateCacheRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @static
+                 * @param {clutch.topology.v1.UpdateCacheRequest} message UpdateCacheRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                UpdateCacheRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.resource = null;
+                        object.action = options.enums === String ? "UNSPECIFIED" : 0;
+                    }
+                    if (message.resource != null && message.hasOwnProperty("resource"))
+                        object.resource = $root.clutch.topology.v1.Resource.toObject(message.resource, options);
+                    if (message.action != null && message.hasOwnProperty("action"))
+                        object.action = options.enums === String ? $root.clutch.topology.v1.UpdateCacheRequest.Action[message.action] : message.action;
+                    return object;
+                };
+
+                /**
+                 * Converts this UpdateCacheRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                UpdateCacheRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Action enum.
+                 * @name clutch.topology.v1.UpdateCacheRequest.Action
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} CREATE_OR_UPDATE=1 CREATE_OR_UPDATE value
+                 * @property {number} DELETE=2 DELETE value
+                 */
+                UpdateCacheRequest.Action = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "CREATE_OR_UPDATE"] = 1;
+                    values[valuesById[2] = "DELETE"] = 2;
+                    return values;
+                })();
+
+                return UpdateCacheRequest;
             })();
 
             return v1;

@@ -4,6 +4,7 @@ package clutch.topology.v1;
 
 option go_package = "topologyv1";
 
+import "google/protobuf/any.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
 import "google/rpc/status.proto";
@@ -157,4 +158,35 @@ message Edge {
   // Metadata maps field names to assorted state or characteristics of the
   // edge.
   map<string, google.protobuf.Value> metadata = 4;
+}
+
+message Resource {
+  // Id is the unique identifer of the Resource.
+  string id = 1;
+
+  // Pb is the clutch proto object.
+  google.protobuf.Any pb = 2;
+
+  // Metadata is set by the service which produces the topology Resource, for example k8s would extract
+  // relevant metadata that gives the Topology API the ability to query against it.
+  map<string, string> metadata = 3;
+}
+
+// A UpdateCacheRequest is used when a service such as kubernetes or aws produces objects for
+// the topology API to cache.
+message UpdateCacheRequest {
+  Resource resource = 1;
+
+  // Action signifies to the topology service what to do with an incoming topology Resource
+  //
+  // The topology service gets a topology Resource off of the `GetTopologyObjectChannel` which is processed
+  // and stored in the topology_cache table.
+  enum Action {
+    UNSPECIFIED = 0;
+    CREATE_OR_UPDATE = 1;
+    DELETE = 2;
+  }
+
+  // Action denotes what the topology service should do with this object.
+  Action action = 2;
 }

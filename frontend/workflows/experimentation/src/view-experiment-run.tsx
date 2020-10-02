@@ -52,7 +52,7 @@ const ViewExperimentRun: React.FC = () => {
         client
           .post("/v1/chaos/experimentation/cancelExperimentRun", { id: runID })
           .then(() => {
-            goBack();
+            setExperiment(undefined);
           })
           .catch(err => {
             setError(err.response.statusText);
