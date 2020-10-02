@@ -8,6 +8,7 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"golang.org/x/net/context"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/config/service/topology/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -43,10 +44,14 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, errors.New("Unable to get the datastore client")
 	}
 
-	return &client{
+	c, err := &client{
 		config: topologyConfig,
 		db:     dbClient.DB(),
 		log:    logger,
 		scope:  scope,
 	}, nil
+
+	go c.acquireTopologyCacheLock(context.Background())
+
+	return c, err
 }
