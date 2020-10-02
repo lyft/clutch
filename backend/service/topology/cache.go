@@ -70,7 +70,7 @@ func convertLockIdToAdvisoryLockId(lockID string) uint32 {
 	return binary.BigEndian.Uint32(x)
 }
 
-func (c *client) SetCache(obj *topologyv1.Resource) {
+func (c *client) SetCache(obj *topologyv1.Resource) error {
 	const upsertQuery = `
 		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
 		VALUES ($1, $2, $3, $4)
@@ -85,13 +85,13 @@ func (c *client) SetCache(obj *topologyv1.Resource) {
 	metadataJson, err := json.Marshal(obj.Metadata)
 	if err != nil {
 		c.log.With(zap.Error(err)).Error("unable to marshal metadata")
-		return
+		return err
 	}
 
 	dataJson, err := json.Marshal(obj.Pb.Value)
 	if err != nil {
 		c.log.With(zap.Error(err)).Error("unable to marshal pb data")
-		return
+		return err
 	}
 
 	_, err = c.db.ExecContext(
@@ -105,6 +105,8 @@ func (c *client) SetCache(obj *topologyv1.Resource) {
 	if err != nil {
 		c.log.With(zap.Error(err)).Error("unable to upsert cache item")
 	}
+
+	return nil
 }
 
 func (c *client) DeleteCache(obj *topologyv1.Resource) {
