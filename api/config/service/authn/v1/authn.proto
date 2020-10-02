@@ -16,7 +16,7 @@ message OIDC {
 
 message Storage {
   // Encryption passphrase for credentials stored in the database.
-  string encryption_passphrase = 1 [ (validate.rules).string = {min_bytes: 12} ];
+  string encryption_passphrase = 1 [ (validate.rules).string = {min_bytes : 12} ];
 }
 
 message Config {
