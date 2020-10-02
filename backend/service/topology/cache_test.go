@@ -1,6 +1,7 @@
 package topology
 
 import (
+	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,17 +18,12 @@ func TestConvertLockIdToAdvisoryLockId(t *testing.T) {
 		{
 			id:     "key with chars",
 			input:  "topologycache",
-			expect: 1047847070,
-		},
-		{
-			id:     "key with space",
-			input:  "topology cache",
-			expect: 4086861350,
+			expect: 1953460335,
 		},
 		{
 			id:     "key with special chars",
 			input:  "*()#@&!*(#!@",
-			expect: 1447352910,
+			expect: 707275043,
 		},
 	}
 
@@ -35,8 +31,8 @@ func TestConvertLockIdToAdvisoryLockId(t *testing.T) {
 		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
-			id, err := convertLockIdToAdvisoryLockId(tt.input)
-			assert.NoError(t, err)
+			id := convertLockIdToAdvisoryLockId(tt.input)
+			log.Printf("%v", id)
 			assert.Equal(t, tt.expect, id)
 		})
 	}

@@ -2,8 +2,9 @@ package topology
 
 import (
 	"context"
+	"crypto/sha256"
 	"database/sql"
-	"hash/fnv"
+	"encoding/binary"
 	"time"
 
 	"go.uber.org/zap"
@@ -22,17 +23,13 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 	}
 	defer conn.Close()
 
+	advisoryLockId := convertLockIdToAdvisoryLockId(topologyCacheLockId)
+
 	ticker := time.NewTicker(time.Second * 10)
 	// Infinitely try to acquire the advisory lock
 	// Once the lock is acquired we start caching, this is a blocking operation
 	for ; true; <-ticker.C {
 		c.log.Debug("trying to acquire advisory lock")
-
-		advisoryLockId, err := convertLockIdToAdvisoryLockId(topologyCacheLockId)
-		if err != nil {
-			c.log.Error("Unable to convert the advisory lock id", zap.Error(err))
-			return
-		}
 
 		// TODO: We could in the future spread the load of the topology caching
 		// across many clutch instances by having an a lock per service (e.g. AWS, k8s, etc)
@@ -65,11 +62,7 @@ func (c *client) startTopologyCache() {
 	c.log.Debug("implement me")
 }
 
-func convertLockIdToAdvisoryLockId(lockId string) (uint32, error) {
-	h := fnv.New32a()
-	_, err := h.Write([]byte(lockId))
-	if err != nil {
-		return 0, err
-	}
-	return h.Sum32(), nil
+func convertLockIdToAdvisoryLockId(lockID string) uint32 {
+	x := sha256.New().Sum([]byte(lockID))
+	return binary.BigEndian.Uint32(x)
 }
