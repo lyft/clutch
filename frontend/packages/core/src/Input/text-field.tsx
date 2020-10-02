@@ -19,7 +19,7 @@ const StyledTextField = styled(MuiTextField)`
   `}
 `;
 
-interface TextFieldProps {
+export interface TextFieldProps {
   maxWidth?: string;
   onReturn?: () => void;
 }
