@@ -128,6 +128,77 @@ var _ interface {
 	ErrorName() string
 } = OIDCValidationError{}
 
+// Validate checks the field values on Storage with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Storage) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetEncryptionPassphrase()) < 12 {
+		return StorageValidationError{
+			field:  "EncryptionPassphrase",
+			reason: "value length must be at least 12 bytes",
+		}
+	}
+
+	return nil
+}
+
+// StorageValidationError is the validation error returned by Storage.Validate
+// if the designated constraints aren't met.
+type StorageValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StorageValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StorageValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StorageValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StorageValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StorageValidationError) ErrorName() string { return "StorageValidationError" }
+
+// Error satisfies the builtin error interface
+func (e StorageValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStorage.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StorageValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StorageValidationError{}
+
 // Validate checks the field values on Config with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *Config) Validate() error {
@@ -139,6 +210,16 @@ func (m *Config) Validate() error {
 		return ConfigValidationError{
 			field:  "SessionSecret",
 			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if v, ok := interface{}(m.GetStorage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ConfigValidationError{
+				field:  "Storage",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
 	}
 
