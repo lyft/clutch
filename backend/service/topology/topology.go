@@ -8,6 +8,7 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"golang.org/x/net/context"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/config/service/topology/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -16,10 +17,7 @@ import (
 
 const Name = "clutch.service.topology"
 
-type Service interface {
-	acquireTopologyCacheLock()
-	startTopologyCache()
-}
+type Service interface{}
 
 type client struct {
 	config *topologyv1.Config
@@ -53,7 +51,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		scope:  scope,
 	}, nil
 
-	go c.acquireTopologyCacheLock()
+	go c.acquireTopologyCacheLock(context.Background())
 
 	return c, err
 }
