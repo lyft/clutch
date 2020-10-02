@@ -94,7 +94,7 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 	md := metadata.New(map[string]string{
 		"Location":         redirectURL,
 		"Location-Status":  "303",
-		"Set-Cookie-Token": token,
+		"Set-Cookie-Token": token.AccessToken,
 	})
 
 	if err := grpc.SendHeader(ctx, md); err != nil {
@@ -102,6 +102,6 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 	}
 
 	return &authnv1.CallbackResponse{
-		Token: token,
+		AccessToken: token.AccessToken,
 	}, nil
 }
