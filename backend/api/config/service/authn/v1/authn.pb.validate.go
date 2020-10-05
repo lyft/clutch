@@ -135,10 +135,10 @@ func (m *Storage) Validate() error {
 		return nil
 	}
 
-	if len(m.GetEncryptionPassphrase()) < 12 {
+	if len(m.GetEncryptionPassphrase()) < 1 {
 		return StorageValidationError{
 			field:  "EncryptionPassphrase",
-			reason: "value length must be at least 12 bytes",
+			reason: "value length must be at least 1 bytes",
 		}
 	}
 
