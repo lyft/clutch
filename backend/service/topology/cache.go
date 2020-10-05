@@ -8,9 +8,9 @@ import (
 	"encoding/json"
 	"time"
 
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
-
 	"go.uber.org/zap"
+
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
 const topologyCacheLockId = "topology:cache"
@@ -84,13 +84,13 @@ func (c *client) SetCache(obj *topologyv1.Resource) error {
 
 	metadataJson, err := json.Marshal(obj.Metadata)
 	if err != nil {
-		c.log.With(zap.Error(err)).Error("unable to marshal metadata")
+		c.scope.SubScope("topology.cache").Counter("cache.set.failure").Inc(1)
 		return err
 	}
 
 	dataJson, err := json.Marshal(obj.Pb.Value)
 	if err != nil {
-		c.log.With(zap.Error(err)).Error("unable to marshal pb data")
+		c.scope.SubScope("topology.cache").Counter("cache.set.failure").Inc(1)
 		return err
 	}
 
@@ -103,19 +103,25 @@ func (c *client) SetCache(obj *topologyv1.Resource) error {
 		metadataJson,
 	)
 	if err != nil {
-		c.log.With(zap.Error(err)).Error("unable to upsert cache item")
+		c.scope.SubScope("topology.cache").Counter("cache.set.failure").Inc(1)
+		return err
 	}
 
+	c.scope.SubScope("topology.cache").Counter("cache.set.success").Inc(1)
 	return nil
 }
 
-func (c *client) DeleteCache(obj *topologyv1.Resource) {
+func (c *client) DeleteCache(obj *topologyv1.Resource) error {
 	const deleteQuery = `
 		DELETE FROM topology_cache WHERE id = $1
 	`
 
 	_, err := c.db.ExecContext(context.Background(), deleteQuery, obj.Id)
 	if err != nil {
-		c.log.With(zap.Error(err)).Error("unable to delete item from cache")
+		c.scope.SubScope("topology.cache").Counter("cache.delete.failure").Inc(1)
+		return err
 	}
+
+	c.scope.SubScope("topology.cache").Counter("cache.delete.success").Inc(1)
+	return nil
 }
