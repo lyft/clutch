@@ -84,13 +84,13 @@ func (c *client) SetCache(ctx context.Context, obj *topologyv1.Resource) error {
 
 	metadataJson, err := json.Marshal(obj.Metadata)
 	if err != nil {
-		c.scope.SubScope("topology.cache").Counter("cache.set.failure").Inc(1)
+		c.scope.SubScope("cache").Counter("set.failure").Inc(1)
 		return err
 	}
 
 	dataJson, err := json.Marshal(obj.Pb.Value)
 	if err != nil {
-		c.scope.SubScope("topology.cache").Counter("cache.set.failure").Inc(1)
+		c.scope.SubScope("cache").Counter("set.failure").Inc(1)
 		return err
 	}
 
@@ -103,25 +103,25 @@ func (c *client) SetCache(ctx context.Context, obj *topologyv1.Resource) error {
 		metadataJson,
 	)
 	if err != nil {
-		c.scope.SubScope("topology.cache").Counter("cache.set.failure").Inc(1)
+		c.scope.SubScope("cache").Counter("set.failure").Inc(1)
 		return err
 	}
 
-	c.scope.SubScope("topology.cache").Counter("cache.set.success").Inc(1)
+	c.scope.SubScope("cache").Counter("set.success").Inc(1)
 	return nil
 }
 
-func (c *client) DeleteCache(ctx context.Context, obj *topologyv1.Resource) error {
+func (c *client) DeleteCache(ctx context.Context, id string) error {
 	const deleteQuery = `
 		DELETE FROM topology_cache WHERE id = $1
 	`
 
-	_, err := c.db.ExecContext(ctx, deleteQuery, obj.Id)
+	_, err := c.db.ExecContext(ctx, deleteQuery, id)
 	if err != nil {
-		c.scope.SubScope("topology.cache").Counter("cache.delete.failure").Inc(1)
+		c.scope.SubScope("cache").Counter("delete.failure").Inc(1)
 		return err
 	}
 
-	c.scope.SubScope("topology.cache").Counter("cache.delete.success").Inc(1)
+	c.scope.SubScope("cache").Counter("delete.success").Inc(1)
 	return nil
 }
