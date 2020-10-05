@@ -18,6 +18,9 @@ func newCryptographer(passphrase string) (*cryptographer, error) {
 		return nil, fmt.Errorf("passphrase was empty")
 	}
 
+	// Hash the passphrase with SHA-256. Alternatively we could have required a 64-byte hex string.
+	// The other option would be a 32-byte key, but entropy with a 32-byte user-provided key is likely to be lower since
+	// use of non-printable characters is unlikely.
 	key := sha256.Sum256([]byte(passphrase))
 
 	cb, err := aes.NewCipher(key[:])
