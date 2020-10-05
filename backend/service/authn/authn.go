@@ -70,6 +70,8 @@ type OIDCProvider struct {
 
 	sessionSecret string
 
+	cryptographer *cryptographer
+
 	claimsFromOIDCToken ClaimsFromOIDCTokenFunc
 }
 
@@ -140,7 +142,7 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 		return nil, errors.New("'id_token' was not present in oauth token")
 	}
 
-	// Verify.
+	// Verify. This is superfluous since the token was just issued but it can't hurt.
 	idToken, err := p.verifier.Verify(ctx, rawIDToken)
 	if err != nil {
 		return nil, err
@@ -150,6 +152,13 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 	claims, err := p.claimsFromOIDCToken(ctx, idToken)
 	if err != nil {
 		return nil, err
+	}
+
+	// TODO: Store the encrypted refresh token in the database.
+	if p.cryptographer != nil {
+		if _, err := p.cryptographer.Encrypt([]byte(token.RefreshToken)); err != nil {
+			return nil, err
+		}
 	}
 
 	// Sign and issue token.
@@ -262,12 +271,22 @@ func NewProvider(config *authnv1.Config) (Provider, error) {
 		return nil, err
 	}
 
-	return &OIDCProvider{
+	p := &OIDCProvider{
 		provider:            provider,
 		verifier:            verifier,
 		oauth2:              oc,
 		httpClient:          httpClient,
 		sessionSecret:       config.SessionSecret,
 		claimsFromOIDCToken: DefaultClaimsFromOIDCToken,
-	}, nil
+	}
+
+	if config.Storage != nil {
+		c, err := newCryptographer(config.Storage.EncryptionPassphrase)
+		if err != nil {
+			return nil, err
+		}
+		p.cryptographer = c
+	}
+
+	return p, nil
 }

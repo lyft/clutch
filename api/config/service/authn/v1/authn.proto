@@ -14,6 +14,11 @@ message OIDC {
   string redirect_url = 4 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
+message Storage {
+  // Encryption passphrase for credentials stored in the database.
+  string encryption_passphrase = 1 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
 message Config {
   // Used to sign the nonce or any other JWT secrets.
   string session_secret = 1 [ (validate.rules).string = {min_bytes : 1} ];
@@ -21,4 +26,8 @@ message Config {
   oneof type {
     OIDC oidc = 2;
   }
+
+  // Configure storage of refresh_token from the issuer. Currently optional as storage implementation is in-progress.
+  // TODO: Update documentation when actual storage is complete, add required message annotation if necessary.
+  Storage storage = 3;
 }
