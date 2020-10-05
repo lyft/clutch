@@ -11,17 +11,13 @@ import (
 	"golang.org/x/net/context"
 
 	topologyv1cfg "github.com/lyft/clutch/backend/api/config/service/topology/v1"
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/service"
 	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
 )
 
 const Name = "clutch.service.topology"
 
-type Service interface {
-	SetCache(obj *topologyv1.Resource) error
-	DeleteCache(obj *topologyv1.Resource) error
-}
+type Service interface{}
 
 type client struct {
 	config *topologyv1cfg.Config
