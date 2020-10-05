@@ -97,7 +97,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		}
 
 		logger.Info("registering service")
-		svc, err := factory(svcConfig.TypedConfig, logger, scope.SubScope("service"))
+		svc, err := factory(svcConfig.TypedConfig, logger, scope.SubScope(svcConfig.Name))
 		if err != nil {
 			logger.Fatal("service instantiation failed", zap.Error(err))
 		}
@@ -119,7 +119,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		}
 
 		logger.Info("registering resolver")
-		res, err := factory(resolverCfg.TypedConfig, logger, scope.SubScope("resolver"))
+		res, err := factory(resolverCfg.TypedConfig, logger, scope.SubScope(resolverCfg.Name))
 		if err != nil {
 			logger.Fatal("resolver instantiation failed", zap.Error(err))
 		}
@@ -200,7 +200,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		}
 
 		logger.Info("registering module")
-		mod, err := factory(modCfg.TypedConfig, logger, scope.SubScope("module"))
+		mod, err := factory(modCfg.TypedConfig, logger, scope.SubScope(modCfg.Name))
 		if err != nil {
 			logger.Fatal("module instantiation failed", zap.Error(err))
 		}
