@@ -12,15 +12,19 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
+	"github.com/lyft/clutch/backend/service"
 )
 
 const topologyCacheLockId = "topology:cache"
 
 // Performs leader election by acquiring a postgres advisory lock.
 // Once the lock is acquired topology caching is started.
-func (c *client) acquireTopologyCacheLock(ctx context.Context) {
+func (c *client) acquireTopologyCacheLock() {
 	// We create our own connection to use for acquiring the advisory lock
 	// If the connection is severed for any reason the advisory lock will automatically unlock
+
+	ctx, ctxCancelFunc := context.WithCancel(context.Background())
+
 	conn, err := c.db.Conn(ctx)
 	if err != nil {
 		c.log.Fatal("Unable to connect to the database", zap.Error(err))
@@ -42,9 +46,13 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 		// In this case 100 is the lock for topology caching
 		if c.tryAdvisoryLock(ctx, conn, advisoryLockId) {
 			c.log.Debug("acquired the advisory lock, starting to cache topology now...")
-			c.startTopologyCache()
+			c.startTopologyCache(ctx)
+		} else {
+			ctxCancelFunc()
 		}
 	}
+
+	ctxCancelFunc()
 }
 
 // TODO: The advisory locking logic can be decomposed into its own service (e.g. "global locking service").
@@ -62,13 +70,30 @@ func (c *client) tryAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uin
 	return lock
 }
 
-func (c *client) startTopologyCache() {
-	c.log.Debug("implement me")
-}
-
 func convertLockIdToAdvisoryLockId(lockID string) uint32 {
 	x := sha256.New().Sum([]byte(lockID))
 	return binary.BigEndian.Uint32(x)
+}
+
+func (c *client) startTopologyCache(ctx context.Context) {
+	for _, s := range service.Registry {
+		svc := s.(CacheableTopology)
+		if svc != nil {
+			go c.processTopologyObjectChannel(ctx, svc.GetTopologyObjectChannel(ctx))
+		}
+	}
+}
+
+func (c *client) processTopologyObjectChannel(ctx context.Context, objs chan topologyv1.UpdateCacheRequest) {
+	for {
+		obj := <-objs
+		switch obj.Action {
+		case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
+			c.setCache(ctx, obj.Resource)
+		case topologyv1.UpdateCacheRequest_DELETE:
+			c.deleteCache(ctx, obj.Resource.Id)
+		}
+	}
 }
 
 // nolint:unused

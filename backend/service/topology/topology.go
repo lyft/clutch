@@ -11,6 +11,7 @@ import (
 	"golang.org/x/net/context"
 
 	topologyv1cfg "github.com/lyft/clutch/backend/api/config/service/topology/v1"
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/service"
 	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
 )
@@ -25,6 +26,17 @@ type client struct {
 	db    *sql.DB
 	log   *zap.Logger
 	scope tally.Scope
+}
+
+// CacheableTopology is implemented by a service that wishes to enable the topology API feature set
+//
+// By implmenting this interface the topology service will automatically setup all services which
+// implement this interface. Automatically ingesting TopologyObjects via the `GetTopologyObjectChannel()` function.
+// This enables users to make use of the Topology APIs with these new TopologyObjects.
+//
+type CacheableTopology interface {
+	CacheEnabled() bool
+	GetTopologyObjectChannel(ctx context.Context) chan topologyv1.UpdateCacheRequest
 }
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
@@ -51,7 +63,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		scope:  scope,
 	}, nil
 
-	go c.acquireTopologyCacheLock(context.Background())
+	go c.acquireTopologyCacheLock()
 
 	return c, err
 }
