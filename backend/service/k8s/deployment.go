@@ -20,7 +20,7 @@ func (s *svc) DescribeDeployment(ctx context.Context, clientset, cluster, namesp
 		return nil, err
 	}
 
-	deployments, err := cs.AppsV1().Deployments(cs.Namespace()).List(metav1.ListOptions{
+	deployments, err := cs.AppsV1().Deployments(cs.Namespace()).List(ctx, metav1.ListOptions{
 		FieldSelector: "metadata.name=" + name,
 	})
 	if err != nil {
@@ -57,7 +57,7 @@ func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespac
 	}
 
 	getOpts := metav1.GetOptions{}
-	oldDeployment, err := cs.AppsV1().Deployments(cs.Namespace()).Get(name, getOpts)
+	oldDeployment, err := cs.AppsV1().Deployments(cs.Namespace()).Get(ctx, name, getOpts)
 	if err != nil {
 		return err
 	}
@@ -71,7 +71,7 @@ func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespac
 	}
 
 	retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
-		_, err := cs.AppsV1().Deployments(cs.Namespace()).Patch(oldDeployment.Name, types.StrategicMergePatchType, patchBytes)
+		_, err := cs.AppsV1().Deployments(cs.Namespace()).Patch(ctx, oldDeployment.Name, types.StrategicMergePatchType, patchBytes, metav1.PatchOptions{})
 		return err
 	})
 	return retryErr
