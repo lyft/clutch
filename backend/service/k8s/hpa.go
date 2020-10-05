@@ -17,7 +17,7 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 		return nil, err
 	}
 
-	hpas, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).List(metav1.ListOptions{
+	hpas, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).List(ctx, metav1.ListOptions{
 		FieldSelector: "metadata.name=" + name,
 	})
 	if err != nil {
@@ -60,7 +60,7 @@ func (s *svc) ResizeHPA(ctx context.Context, clientset, cluster, namespace, name
 	}
 
 	opts := metav1.GetOptions{}
-	hpa, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Get(name, opts)
+	hpa, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Get(ctx, name, opts)
 	if err != nil {
 		return err
 	}
@@ -68,7 +68,7 @@ func (s *svc) ResizeHPA(ctx context.Context, clientset, cluster, namespace, name
 	normalizeHPAChanges(hpa, sizing)
 
 	retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
-		_, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Update(hpa)
+		_, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Update(ctx, hpa, metav1.UpdateOptions{})
 		return err
 	})
 	return retryErr
