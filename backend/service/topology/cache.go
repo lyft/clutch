@@ -70,7 +70,7 @@ func convertLockIdToAdvisoryLockId(lockID string) uint32 {
 	return binary.BigEndian.Uint32(x)
 }
 
-func (c *client) SetCache(ctx context.Context, obj *topologyv1.Resource) error {
+func (c *client) setCache(ctx context.Context, obj *topologyv1.Resource) error {
 	const upsertQuery = `
 		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
 		VALUES ($1, $2, $3, $4)
@@ -111,7 +111,7 @@ func (c *client) SetCache(ctx context.Context, obj *topologyv1.Resource) error {
 	return nil
 }
 
-func (c *client) DeleteCache(ctx context.Context, id string) error {
+func (c *client) deleteCache(ctx context.Context, id string) error {
 	const deleteQuery = `
 		DELETE FROM topology_cache WHERE id = $1
 	`
