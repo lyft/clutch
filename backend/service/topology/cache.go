@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/encoding/protojson"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
@@ -70,13 +71,13 @@ func convertLockIdToAdvisoryLockId(lockID string) uint32 {
 	return binary.BigEndian.Uint32(x)
 }
 
-// TODO (mcutalo): make this private once its in use
-func (c *client) SetCache(ctx context.Context, obj *topologyv1.Resource) error {
+// nolint:unused
+// TODO (mcutalo): remove lint directive once in use
+func (c *client) setCache(ctx context.Context, obj *topologyv1.Resource) error {
 	const upsertQuery = `
 		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
 		VALUES ($1, $2, $3, $4)
 		ON CONFLICT (id) DO UPDATE SET
-			id = EXCLUDED.id,
 			resolver_type_url = EXCLUDED.resolver_type_url,
 			data = EXCLUDED.data,
 			metadata = EXCLUDED.metadata,
@@ -89,7 +90,7 @@ func (c *client) SetCache(ctx context.Context, obj *topologyv1.Resource) error {
 		return err
 	}
 
-	dataJson, err := json.Marshal(obj.Pb.Value)
+	dataJson, err := protojson.Marshal(obj.Pb)
 	if err != nil {
 		c.scope.SubScope("cache").Counter("set.failure").Inc(1)
 		return err
@@ -112,8 +113,9 @@ func (c *client) SetCache(ctx context.Context, obj *topologyv1.Resource) error {
 	return nil
 }
 
-// TODO (mcutalo): make this private once its in use
-func (c *client) DeleteCache(ctx context.Context, id string) error {
+// nolint:unused
+// TODO (mcutalo): remove lint directive once in use
+func (c *client) deleteCache(ctx context.Context, id string) error {
 	const deleteQuery = `
 		DELETE FROM topology_cache WHERE id = $1
 	`
