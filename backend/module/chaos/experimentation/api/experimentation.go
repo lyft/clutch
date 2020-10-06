@@ -45,14 +45,13 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 		return nil, errors.New("service was not the correct type")
 	}
 
-	apiScope := scope.SubScope("experimentation")
 	return &Service{
 		experimentStore:             experimentStore,
 		logger:                      logger.Sugar(),
-		createExperimentStat:        apiScope.Counter("create_experiment"),
-		getExperimentsStat:          apiScope.Counter("get_experiments"),
-		getExperimentRunDetailsStat: apiScope.Counter("get_experiment_run_config_pair_details"),
-		cancelExperimentRunStat:     apiScope.Counter("cancel_experiment_run"),
+		createExperimentStat:        scope.Counter("create_experiment"),
+		getExperimentsStat:          scope.Counter("get_experiments"),
+		getExperimentRunDetailsStat: scope.Counter("get_experiment_run_config_pair_details"),
+		cancelExperimentRunStat:     scope.Counter("cancel_experiment_run"),
 	}, nil
 }
 
