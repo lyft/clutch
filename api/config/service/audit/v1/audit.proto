@@ -45,7 +45,7 @@ message SinkConfig {
 message Config {
   oneof service {
     // The name of the service where the auditor will persist events.
-    string db_provider = 1 [(validate.rules).string = {min_bytes : 1}];
+    string db_provider = 1 [ (validate.rules).string = {min_bytes : 1} ];
 
     // A flag to store audit messages in-memory before flushing to sinks.
     // This is not recommended for production environments.

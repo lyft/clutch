@@ -25,8 +25,7 @@ type client struct {
 	logger *zap.Logger
 	scope  tally.Scope
 
-	db     *sql.DB
-	filter *auditconfigv1.Filter
+	db *sql.DB
 }
 
 func New(cfg *auditconfigv1.Config, logger *zap.Logger, scope tally.Scope) (storage.Storage, error) {

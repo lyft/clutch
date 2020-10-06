@@ -77,7 +77,7 @@ func (c *client) UpdateRequestEvent(ctx context.Context, id int64, update *audit
 // Does a full scan through and copies those with a timestamp that fits the bill.
 func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time) ([]*auditv1.Event, error) {
 	c.RLock()
-	c.RUnlock()
+	defer c.RUnlock()
 
 	var stop time.Time
 	if end == nil {

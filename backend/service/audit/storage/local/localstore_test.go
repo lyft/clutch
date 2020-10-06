@@ -5,12 +5,11 @@ import (
 	"errors"
 	"testing"
 
-	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
 
+	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
 )
 
