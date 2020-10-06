@@ -3,11 +3,28 @@ package audit
 import (
 	"testing"
 
+	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
+	"github.com/uber-go/tally"
+	"go.uber.org/zap/zaptest"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
 )
+
+func TestNew(t *testing.T) {
+	cfg, _ := ptypes.MarshalAny(&auditconfigv1.Config{
+		Service: &auditconfigv1.Config_LocalAuditing{LocalAuditing: true},
+	})
+	log := zaptest.NewLogger(t)
+	scope := tally.NewTestScope("", nil)
+	svc, err := New(cfg, log, scope)
+	assert.Nil(t, err)
+
+	// Assert conformance to public interface.
+	_, ok := svc.(Auditor)
+	assert.True(t, ok)
+}
 
 func TestFilter(t *testing.T) {
 	testCases := []struct {

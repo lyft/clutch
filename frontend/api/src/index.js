@@ -10708,6 +10708,7 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.service.audit.v1
                          * @interface IConfig
                          * @property {string|null} [dbProvider] Config dbProvider
+                         * @property {boolean|null} [localAuditing] Config localAuditing
                          * @property {clutch.config.service.audit.v1.IFilter|null} [filter] Config filter
                          * @property {Array.<string>|null} [sinks] Config sinks
                          */
@@ -10737,6 +10738,14 @@ export const clutch = $root.clutch = (() => {
                         Config.prototype.dbProvider = "";
 
                         /**
+                         * Config localAuditing.
+                         * @member {boolean} localAuditing
+                         * @memberof clutch.config.service.audit.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.localAuditing = false;
+
+                        /**
                          * Config filter.
                          * @member {clutch.config.service.audit.v1.IFilter|null|undefined} filter
                          * @memberof clutch.config.service.audit.v1.Config
@@ -10752,6 +10761,20 @@ export const clutch = $root.clutch = (() => {
                          */
                         Config.prototype.sinks = $util.emptyArray;
 
+                        // OneOf field names bound to virtual getters and setters
+                        let $oneOfFields;
+
+                        /**
+                         * Config service.
+                         * @member {"dbProvider"|"localAuditing"|undefined} service
+                         * @memberof clutch.config.service.audit.v1.Config
+                         * @instance
+                         */
+                        Object.defineProperty(Config.prototype, "service", {
+                            get: $util.oneOfGetter($oneOfFields = ["dbProvider", "localAuditing"]),
+                            set: $util.oneOfSetter($oneOfFields)
+                        });
+
                         /**
                          * Verifies a Config message.
                          * @function verify
@@ -10763,9 +10786,19 @@ export const clutch = $root.clutch = (() => {
                         Config.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
-                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider"))
+                            let properties = {};
+                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider")) {
+                                properties.service = 1;
                                 if (!$util.isString(message.dbProvider))
                                     return "dbProvider: string expected";
+                            }
+                            if (message.localAuditing != null && message.hasOwnProperty("localAuditing")) {
+                                if (properties.service === 1)
+                                    return "service: multiple values";
+                                properties.service = 1;
+                                if (typeof message.localAuditing !== "boolean")
+                                    return "localAuditing: boolean expected";
+                            }
                             if (message.filter != null && message.hasOwnProperty("filter")) {
                                 let error = $root.clutch.config.service.audit.v1.Filter.verify(message.filter);
                                 if (error)
@@ -10795,6 +10828,8 @@ export const clutch = $root.clutch = (() => {
                             let message = new $root.clutch.config.service.audit.v1.Config();
                             if (object.dbProvider != null)
                                 message.dbProvider = String(object.dbProvider);
+                            if (object.localAuditing != null)
+                                message.localAuditing = Boolean(object.localAuditing);
                             if (object.filter != null) {
                                 if (typeof object.filter !== "object")
                                     throw TypeError(".clutch.config.service.audit.v1.Config.filter: object expected");
@@ -10825,12 +10860,18 @@ export const clutch = $root.clutch = (() => {
                             let object = {};
                             if (options.arrays || options.defaults)
                                 object.sinks = [];
-                            if (options.defaults) {
-                                object.dbProvider = "";
+                            if (options.defaults)
                                 object.filter = null;
-                            }
-                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider"))
+                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider")) {
                                 object.dbProvider = message.dbProvider;
+                                if (options.oneofs)
+                                    object.service = "dbProvider";
+                            }
+                            if (message.localAuditing != null && message.hasOwnProperty("localAuditing")) {
+                                object.localAuditing = message.localAuditing;
+                                if (options.oneofs)
+                                    object.service = "localAuditing";
+                            }
                             if (message.filter != null && message.hasOwnProperty("filter"))
                                 object.filter = $root.clutch.config.service.audit.v1.Filter.toObject(message.filter, options);
                             if (message.sinks && message.sinks.length) {

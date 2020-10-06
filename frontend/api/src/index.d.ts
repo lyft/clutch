@@ -4521,6 +4521,9 @@ export namespace clutch {
                         /** Config dbProvider */
                         dbProvider?: (string|null);
 
+                        /** Config localAuditing */
+                        localAuditing?: (boolean|null);
+
                         /** Config filter */
                         filter?: (clutch.config.service.audit.v1.IFilter|null);
 
@@ -4540,11 +4543,17 @@ export namespace clutch {
                         /** Config dbProvider. */
                         public dbProvider: string;
 
+                        /** Config localAuditing. */
+                        public localAuditing: boolean;
+
                         /** Config filter. */
                         public filter?: (clutch.config.service.audit.v1.IFilter|null);
 
                         /** Config sinks. */
                         public sinks: string[];
+
+                        /** Config service. */
+                        public service?: ("dbProvider"|"localAuditing");
 
                         /**
                          * Verifies a Config message.

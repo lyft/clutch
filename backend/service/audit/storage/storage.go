@@ -1,19 +1,15 @@
-package audit
+package storage
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 )
 
-var ErrFailedFilters = errors.New("event did not pass auditor's filters")
-
-// Required functions to save/share events processed by Clutch.
-type Auditor interface {
-	// Check if an event passes the configured filters for this store. True if it should save the event.
-	Filter(event *auditv1.Event) bool
+type Storage interface {
+	// Used to get un-sent events.
+	UnsentEvents(ctx context.Context) ([]*auditv1.Event, error)
 
 	// Calls used by middleware to persist events during requests.
 	WriteRequestEvent(ctx context.Context, req *auditv1.RequestEvent) (int64, error)
