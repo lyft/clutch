@@ -35,10 +35,6 @@ func (fs *mockExperimentStore) GetListView(ctx context.Context) ([]*experimentat
 	return nil, nil
 }
 
-func (fs *mockExperimentStore) GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error) {
-	return nil, nil
-}
-
 func (fs *mockExperimentStore) GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error) {
 	return nil, nil
 }
