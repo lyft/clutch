@@ -549,7 +549,39 @@ Here we define the data layout structure and pass it to the wizard along with th
 
 ##### Configuration
 
-The final step is registering this new Amiibo workflow with the Clutch app. Open your `clutch.config.js` file and add the following:
+The final step is registering this new Amiibo workflow with the Clutch app. First update the component name by replacing the scaffolded default (`HelloWorld`) in our workflow's registration function.
+
+```tsx title="frontend/workflows/amiibo/src/index.tsx"
+import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+// highlight-next-line
+import Amiibo from "./hello-world";
+
+export interface WorkflowProps extends BaseWorkflowProps {}
+
+const register = (): WorkflowConfiguration => {
+  return {
+    developer: {
+      name: "Name McName",
+      contactUrl: "mailto:foo@foo-email.com",
+    },
+    path: "amiibo",
+    group: "Amiibo",
+    displayName: "Amiibo",
+    routes: {
+      landing: {
+        path: "/",
+        description: "Lookup all Amiibo by name.",
+	// highlight-next-line
+        component: Amiibo,
+      },
+    },
+  };
+};
+
+export default register;
+```
+
+Next, open your `clutch.config.js` file and add the following:
 
 ```js title="clutch.config.js"
 module.exports = {
