@@ -5,9 +5,13 @@ import (
 	"crypto/sha256"
 	"database/sql"
 	"encoding/binary"
+	"encoding/json"
 	"time"
 
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/encoding/protojson"
+
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
 const topologyCacheLockId = "topology:cache"
@@ -65,4 +69,63 @@ func (c *client) startTopologyCache() {
 func convertLockIdToAdvisoryLockId(lockID string) uint32 {
 	x := sha256.New().Sum([]byte(lockID))
 	return binary.BigEndian.Uint32(x)
+}
+
+// nolint:unused
+// TODO (mcutalo): remove lint directive once in use
+func (c *client) setCache(ctx context.Context, obj *topologyv1.Resource) error {
+	const upsertQuery = `
+		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
+		VALUES ($1, $2, $3, $4)
+		ON CONFLICT (id) DO UPDATE SET
+			resolver_type_url = EXCLUDED.resolver_type_url,
+			data = EXCLUDED.data,
+			metadata = EXCLUDED.metadata,
+			updated_at = NOW()
+	`
+
+	metadataJson, err := json.Marshal(obj.Metadata)
+	if err != nil {
+		c.scope.SubScope("cache").Counter("set.failure").Inc(1)
+		return err
+	}
+
+	dataJson, err := protojson.Marshal(obj.Pb)
+	if err != nil {
+		c.scope.SubScope("cache").Counter("set.failure").Inc(1)
+		return err
+	}
+
+	_, err = c.db.ExecContext(
+		ctx,
+		upsertQuery,
+		obj.Id,
+		obj.Pb.GetTypeUrl(),
+		dataJson,
+		metadataJson,
+	)
+	if err != nil {
+		c.scope.SubScope("cache").Counter("set.failure").Inc(1)
+		return err
+	}
+
+	c.scope.SubScope("cache").Counter("set.success").Inc(1)
+	return nil
+}
+
+// nolint:unused
+// TODO (mcutalo): remove lint directive once in use
+func (c *client) deleteCache(ctx context.Context, id string) error {
+	const deleteQuery = `
+		DELETE FROM topology_cache WHERE id = $1
+	`
+
+	_, err := c.db.ExecContext(ctx, deleteQuery, id)
+	if err != nil {
+		c.scope.SubScope("cache").Counter("delete.failure").Inc(1)
+		return err
+	}
+
+	c.scope.SubScope("cache").Counter("delete.success").Inc(1)
+	return nil
 }

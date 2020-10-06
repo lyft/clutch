@@ -10,7 +10,7 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/net/context"
 
-	topologyv1 "github.com/lyft/clutch/backend/api/config/service/topology/v1"
+	topologyv1cfg "github.com/lyft/clutch/backend/api/config/service/topology/v1"
 	"github.com/lyft/clutch/backend/service"
 	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
 )
@@ -20,7 +20,7 @@ const Name = "clutch.service.topology"
 type Service interface{}
 
 type client struct {
-	config *topologyv1.Config
+	config *topologyv1cfg.Config
 
 	db    *sql.DB
 	log   *zap.Logger
@@ -28,7 +28,7 @@ type client struct {
 }
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
-	topologyConfig := &topologyv1.Config{}
+	topologyConfig := &topologyv1cfg.Config{}
 	err := ptypes.UnmarshalAny(cfg, topologyConfig)
 	if err != nil {
 		return nil, err
