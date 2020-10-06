@@ -1,49 +1,107 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { ButtonGroup, client, Error } from "@clutch-sh/core";
+import { ButtonGroup, client, Error, Row, Table } from "@clutch-sh/core";
 import { Container } from "@material-ui/core";
 import styled from "styled-components";
 
-import { Column, ListView } from "./list-view";
+interface ExperimentationDataProps {
+  experiment: IClutch.chaos.experimentation.v1.Experiment;
+  columns: string[];
+  experimentTypes: any;
+}
+
+const ExperimentData: React.FC<ExperimentationDataProps> = ({
+  experiment,
+  columns,
+  experimentTypes,
+}) => {
+  const types = experimentTypes || {};
+  // Check for a configuration describing how a test of a given type should be displayed within the list view.
+  if (!Object.prototype.hasOwnProperty.call(types, experiment.config["@type"])) {
+    const data = columns.map(() => {
+      return experiment.config["@type"];
+    });
+    return <Row data={data} />;
+  }
+
+  const registeredExperimentType = types[experiment.config["@type"]];
+
+  const navigate = useNavigate();
+
+  const mapperExists = Object.prototype.hasOwnProperty.call(registeredExperimentType, "mapping");
+  const model = mapperExists ? registeredExperimentType.mapping(experiment.config) : experiment;
+
+  const data = columns.map(column => {
+    let value: string;
+    if (column === "identifier") {
+      value = experiment.id.toString();
+    } else if (Object.prototype.hasOwnProperty.call(model, column)) {
+      value = model[column];
+    }
+
+    return value ?? "Unknown";
+  });
+
+  return (
+    <Row
+      hover
+      onClick={() => {
+        navigate(`/experimentation/run/${experiment.id}`);
+      }}
+      data={data}
+    />
+  );
+};
 
 const Layout = styled(Container)`
   padding: 5% 0;
 `;
 
-interface RouteLinkProps {
+interface ExperimentTypeLinkProps {
   displayName: string;
   path: string;
 }
 
-interface ListExperimentsProps {
-  columns: Column[];
-  links: RouteLinkProps[];
+interface ExperimentTypeProps {
+  mapping: string;
+  links: ExperimentTypeLinkProps[];
 }
 
-const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, links }) => {
+interface ListExperimentsProps {
+  columns: [string];
+  experimentTypes: ExperimentTypeProps[];
+}
+
+const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, experimentTypes }) => {
   const [experiments, setExperiments] = useState<
-    IClutch.chaos.experimentation.v1.ListViewItem[] | undefined
+    IClutch.chaos.experimentation.v1.Experiment[] | undefined
   >(undefined);
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
-  const handleRowSelection = (event: any, item: IClutch.chaos.experimentation.v1.ListViewItem) => {
-    navigate(`/experimentation/run/${item.identifier}`);
-  };
-
   React.useEffect(() => {
     client
-      .post("/v1/chaos/experimentation/getListView")
+      .post("/v1/chaos/experimentation/getExperiments")
       .then(response => {
-        setExperiments(response?.data?.items || []);
+        setExperiments(response?.data?.experiments || []);
       })
       .catch(err => {
         setError(err.response.statusText);
       });
   }, []);
 
+  const types = experimentTypes || [];
+  let links: ExperimentTypeLinkProps[] = [];
+  Object.keys(types).forEach(experimentType => {
+    const configuration = types[experimentType];
+    if (Object.prototype.hasOwnProperty.call(configuration, "links")) {
+      links = links.concat(configuration.links);
+    }
+  });
+
+  const columnNames = columns.map(name => name.toUpperCase());
   const buttons = links.map(link => {
     return {
       text: link.displayName,
@@ -54,14 +112,18 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, links }) => 
   return (
     <Layout>
       {error && <Error message={error} />}
+      <Table headings={columnNames}>
+        {experiments &&
+          experiments.map(e => (
+            <ExperimentData
+              key={e.id.toString()}
+              experiment={e}
+              columns={columns}
+              experimentTypes={types}
+            />
+          ))}
+      </Table>
       <ButtonGroup buttons={buttons} />
-      <ListView
-        columns={columns}
-        items={experiments}
-        onRowSelection={(event, item) => {
-          handleRowSelection(event, item);
-        }}
-      />
     </Layout>
   );
 };
