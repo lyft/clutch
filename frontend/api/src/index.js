@@ -7283,8 +7283,8 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a Property.
                      * @memberof clutch.chaos.experimentation.v1
                      * @interface IProperty
+                     * @property {string|null} [id] Property id
                      * @property {string|null} [label] Property label
-                     * @property {string|null} [identifier] Property identifier
                      * @property {google.protobuf.IStringValue|null} [displayValue] Property displayValue
                      * @property {google.protobuf.ITimestamp|null} [dateValue] Property dateValue
                      * @property {string|null} [stringValue] Property stringValue
@@ -7307,20 +7307,20 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
+                     * Property id.
+                     * @member {string} id
+                     * @memberof clutch.chaos.experimentation.v1.Property
+                     * @instance
+                     */
+                    Property.prototype.id = "";
+
+                    /**
                      * Property label.
                      * @member {string} label
                      * @memberof clutch.chaos.experimentation.v1.Property
                      * @instance
                      */
                     Property.prototype.label = "";
-
-                    /**
-                     * Property identifier.
-                     * @member {string} identifier
-                     * @memberof clutch.chaos.experimentation.v1.Property
-                     * @instance
-                     */
-                    Property.prototype.identifier = "";
 
                     /**
                      * Property displayValue.
@@ -7380,12 +7380,12 @@ export const clutch = $root.clutch = (() => {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         let properties = {};
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isString(message.id))
+                                return "id: string expected";
                         if (message.label != null && message.hasOwnProperty("label"))
                             if (!$util.isString(message.label))
                                 return "label: string expected";
-                        if (message.identifier != null && message.hasOwnProperty("identifier"))
-                            if (!$util.isString(message.identifier))
-                                return "identifier: string expected";
                         if (message.displayValue != null && message.hasOwnProperty("displayValue")) {
                             let error = $root.google.protobuf.StringValue.verify(message.displayValue);
                             if (error)
@@ -7428,10 +7428,10 @@ export const clutch = $root.clutch = (() => {
                         if (object instanceof $root.clutch.chaos.experimentation.v1.Property)
                             return object;
                         let message = new $root.clutch.chaos.experimentation.v1.Property();
+                        if (object.id != null)
+                            message.id = String(object.id);
                         if (object.label != null)
                             message.label = String(object.label);
-                        if (object.identifier != null)
-                            message.identifier = String(object.identifier);
                         if (object.displayValue != null) {
                             if (typeof object.displayValue !== "object")
                                 throw TypeError(".clutch.chaos.experimentation.v1.Property.displayValue: object expected");
@@ -7470,14 +7470,14 @@ export const clutch = $root.clutch = (() => {
                             options = {};
                         let object = {};
                         if (options.defaults) {
+                            object.id = "";
                             object.label = "";
-                            object.identifier = "";
                             object.displayValue = null;
                         }
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            object.id = message.id;
                         if (message.label != null && message.hasOwnProperty("label"))
                             object.label = message.label;
-                        if (message.identifier != null && message.hasOwnProperty("identifier"))
-                            object.identifier = message.identifier;
                         if (message.displayValue != null && message.hasOwnProperty("displayValue"))
                             object.displayValue = $root.google.protobuf.StringValue.toObject(message.displayValue, options);
                         if (message.dateValue != null && message.hasOwnProperty("dateValue")) {
