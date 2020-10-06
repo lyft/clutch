@@ -1,5 +1,5 @@
 [build]
-  ignore = "if [[ '$(git rev-parse --abbrev-ref HEAD)' == 'main' ]]; then ROOT='main'; else ROOT='HEAD^'; fi && git diff --quiet "$ROOT" HEAD -- '*.
+  ignore = "if [[ '$(git rev-parse --abbrev-ref HEAD)' == 'main' ]]; then ROOT='main'; else ROOT='HEAD^'; fi && git diff --quiet '$ROOT' HEAD -- '*.
 ts*' '*.js' 'yarn.lock' '*.html'"
 
 [[headers]]
