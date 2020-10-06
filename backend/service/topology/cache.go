@@ -89,9 +89,13 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs chan top
 		obj := <-objs
 		switch obj.Action {
 		case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
-			c.setCache(ctx, obj.Resource)
+			if err := c.setCache(ctx, obj.Resource); err != nil {
+				c.log.Error("Error setting cache", zap.Error(err))
+			}
 		case topologyv1.UpdateCacheRequest_DELETE:
-			c.deleteCache(ctx, obj.Resource.Id)
+			if err := c.deleteCache(ctx, obj.Resource.Id); err != nil {
+				c.log.Error("Error deleting cache", zap.Error(err))
+			}
 		}
 	}
 }
