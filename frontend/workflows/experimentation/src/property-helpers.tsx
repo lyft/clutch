@@ -22,3 +22,5 @@ const propertyToString = (property: IClutch.chaos.experimentation.v1.IProperty):
   return "Unknown";
 };
 
+export { propertyToString };
+
