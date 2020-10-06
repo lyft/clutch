@@ -4,7 +4,7 @@ import { clutch as IClutch } from "@clutch-sh/api";
 import { ButtonGroup, client, Error, TextField } from "@clutch-sh/core";
 import styled from "styled-components";
 
-import { propertyToString } from "./property-helpers";
+import propertyToString from "./property-helpers";
 
 export const Form = styled.form`
   align-items: center;
