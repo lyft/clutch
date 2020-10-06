@@ -82,7 +82,7 @@ func NewProperties(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 	properties = append(properties, &experimentation.Property{
 		Id:    "end_time",
 		Label: "End Time",
-		Value:  &experimentation.Property_DateValue{DateValue: endTimeTimestamp},
+		Value: &experimentation.Property_DateValue{DateValue: endTimeTimestamp},
 	})
 
 	cancelationTimeTimestamp, err := timeToTimestamp(cancellationTime)
