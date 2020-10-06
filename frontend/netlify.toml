@@ -1,5 +1,5 @@
 [build]
-  ignore = "git diff --quiet HEAD^ HEAD -- '*.ts*' '*.js*' 'yarn.lock'"
+  ignore = "git diff --quiet main HEAD -- '*.ts*' '*.js*' 'yarn.lock'"
 
 [[headers]]
   # Define which paths this specific [[headers]] block will cover.
