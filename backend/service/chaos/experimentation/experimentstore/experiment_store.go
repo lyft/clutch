@@ -29,6 +29,7 @@ type ExperimentStore interface {
 	CancelExperimentRun(context.Context, uint64) error
 	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
+	GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error)
 	Close()
 }
 
@@ -194,6 +195,67 @@ func (fs *experimentStore) GetExperiments(ctx context.Context, configType string
 	}
 
 	return experiments, nil
+}
+
+func (fs *experimentStore) GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error) {
+	query := `
+		SELECT 
+			experiment_run.id,
+			lower(execution_time), 
+			upper(execution_time),
+			cancellation_time,
+			creation_time,
+			details
+		FROM experiment_config, experiment_run
+		WHERE
+			experiment_config.id = experiment_run.experiment_config_id`
+
+	rows, err := fs.db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var listViewItems []*experimentation.ListViewItem
+	for rows.Next() {
+		var fetchedID uint64
+		var startTime, endTime, cancellationTime sql.NullTime
+		var creationTime time.Time
+		var details string
+		err = rows.Scan(&fetchedID, &startTime, &endTime, &cancellationTime, &creationTime, &details)
+		if err != nil {
+			return nil, err
+		}
+
+		anyConfig := &any.Any{}
+		err = jsonpb.Unmarshal(strings.NewReader(details), anyConfig)
+		if err != nil {
+			return nil, err
+		}
+
+		properties, err := NewProperties(fetchedID, creationTime, startTime, endTime, cancellationTime, time.Now(), details)
+		if err != nil {
+			return nil, err
+		}
+
+		propertiesMapItems := make(map[string]*experimentation.Property)
+		for _, p := range properties {
+			propertiesMapItems[p.Id] = p
+		}
+
+		listViewItems = append(listViewItems, &experimentation.ListViewItem{
+			Identifier: fetchedID,
+			Properties: &experimentation.PropertiesMap{Items: propertiesMapItems},
+		})
+	}
+
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+
+	return listViewItems, nil
 }
 
 func (fs *experimentStore) GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error) {

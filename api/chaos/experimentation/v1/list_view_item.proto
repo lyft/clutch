@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package clutch.chaos.experimentation.v1;
+
+import "chaos/experimentation/v1/properties.proto";
+
+option go_package = "experimentationv1";
+
+// ListViewItem an abstraction for a list item.
+message ListViewItem {
+  // The unique identifier of a list item.
+  uint64 identifier = 1;
+  // The properties map.
+  PropertiesMap properties = 2;
+}
