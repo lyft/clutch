@@ -16,6 +16,7 @@ import (
 
 	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/service"
 )
 
@@ -69,12 +70,14 @@ type Service interface {
 type svc struct {
 	manager ClientsetManager
 
-	log   *zap.Logger
-	scope tally.Scope
+	topologyObjectChan chan topologyv1.UpdateCacheRequest
+	log                *zap.Logger
+	scope              tally.Scope
 }
 
 func NewWithClientsetManager(manager ClientsetManager, logger *zap.Logger, scope tally.Scope) (Service, error) {
-	return &svc{manager: manager, log: logger, scope: scope}, nil
+	topologyObjectChan := make(chan topologyv1.UpdateCacheRequest, 5000)
+	return &svc{manager: manager, topologyObjectChan: topologyObjectChan, log: logger, scope: scope}, nil
 }
 
 func (s *svc) Clientsets() []string {
