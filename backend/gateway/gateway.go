@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/uber-go/tally"
@@ -20,6 +21,11 @@ import (
 	"github.com/lyft/clutch/backend/resolver"
 	"github.com/lyft/clutch/backend/service"
 )
+
+// The purpose of this identifier is to trim the prefix off clutch component names,
+// such as services, modules and resolver.
+// This is used when constructing the stats namespace for a given component.
+const clutchComponentPrefix = "clutch."
 
 // All available components supply their factory here.
 // Whether or not they are used at runtime is dependent on the configuration passed to the Gateway.
@@ -97,7 +103,8 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		}
 
 		logger.Info("registering service")
-		svc, err := factory(svcConfig.TypedConfig, logger, scope.SubScope("service"))
+		svc, err := factory(svcConfig.TypedConfig, logger, scope.SubScope(
+			strings.TrimPrefix(svcConfig.Name, clutchComponentPrefix)))
 		if err != nil {
 			logger.Fatal("service instantiation failed", zap.Error(err))
 		}
@@ -119,7 +126,8 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		}
 
 		logger.Info("registering resolver")
-		res, err := factory(resolverCfg.TypedConfig, logger, scope.SubScope("resolver"))
+		res, err := factory(resolverCfg.TypedConfig, logger, scope.SubScope(
+			strings.TrimPrefix(resolverCfg.Name, clutchComponentPrefix)))
 		if err != nil {
 			logger.Fatal("resolver instantiation failed", zap.Error(err))
 		}
@@ -200,7 +208,8 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		}
 
 		logger.Info("registering module")
-		mod, err := factory(modCfg.TypedConfig, logger, scope.SubScope("module"))
+		mod, err := factory(modCfg.TypedConfig, logger, scope.SubScope(
+			strings.TrimPrefix(modCfg.Name, clutchComponentPrefix)))
 		if err != nil {
 			logger.Fatal("module instantiation failed", zap.Error(err))
 		}
