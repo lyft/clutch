@@ -9,7 +9,6 @@ import (
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/golang/protobuf/ptypes/timestamp"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
@@ -44,7 +43,7 @@ func NewProperties(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 		return nil, err
 	}
 
-	startTimeTimestamp, err := timeToTimestamp(startTime)
+	startDateValue, err := timeToPropertyDateValue(startTime)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +62,7 @@ func NewProperties(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 		{
 			Id:    "start_time",
 			Label: "Start Time",
-			Value: &experimentation.Property_DateValue{DateValue: startTimeTimestamp},
+			Value: startDateValue,
 		},
 	}
 
@@ -74,7 +73,7 @@ func NewProperties(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 		time = cancellationTime
 	}
 
-	endTimeTimestamp, err := timeToTimestamp(time)
+	endTimeDateValue, err := timeToPropertyDateValue(time)
 	if err != nil {
 		return nil, err
 	}
@@ -82,10 +81,10 @@ func NewProperties(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 	properties = append(properties, &experimentation.Property{
 		Id:    "end_time",
 		Label: "End Time",
-		Value: &experimentation.Property_DateValue{DateValue: endTimeTimestamp},
+		Value: endTimeDateValue,
 	})
 
-	cancelationTimeTimestamp, err := timeToTimestamp(cancellationTime)
+	cancelationDateValue, err := timeToPropertyDateValue(cancellationTime)
 	if err != nil {
 		return nil, err
 	}
@@ -94,13 +93,13 @@ func NewProperties(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 		properties = append(properties, &experimentation.Property{
 			Id:    "stopped_at",
 			Label: "Stopped At",
-			Value: &experimentation.Property_DateValue{DateValue: cancelationTimeTimestamp},
+			Value: cancelationDateValue,
 		})
 	} else if status == experimentation.Experiment_CANCELED {
 		properties = append(properties, &experimentation.Property{
 			Id:    "canceled_at",
 			Label: "Canceled At",
-			Value: &experimentation.Property_DateValue{DateValue: cancelationTimeTimestamp},
+			Value: cancelationDateValue,
 		})
 	}
 
@@ -132,12 +131,15 @@ func timesToStatus(startTime sql.NullTime, endTime sql.NullTime, cancellationTim
 	}
 }
 
-func timeToTimestamp(t sql.NullTime) (*timestamp.Timestamp, error) {
+func timeToPropertyDateValue(t sql.NullTime) (*experimentation.Property_DateValue, error) {
 	if t.Valid {
-		return ptypes.TimestampProto(t.Time)
-	} else {
-		return nil, nil
+		timestamp, err := ptypes.TimestampProto(t.Time)
+		if err == nil {
+			return &experimentation.Property_DateValue{DateValue: timestamp}, nil
+		}
 	}
+
+	return nil, nil
 }
 
 func statusToString(status experimentation.Experiment_Status) string {
