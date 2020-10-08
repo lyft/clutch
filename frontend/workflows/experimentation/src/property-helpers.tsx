@@ -34,7 +34,7 @@ const compareProperties = (
     return 0;
   }
 
-  if (a.identifier !== b.identifier) {
+  if (a.id !== b.id) {
     if (propertyToString(a) > propertyToString(b)) {
       return 1;
     }

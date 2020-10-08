@@ -62,7 +62,7 @@ interface EnhancedTableHeadProps {
   columns: Column[];
   order: Ordering;
   orderBy: string;
-  onRequestSort: (event: any, columnIdentifier: string) => void;
+  onRequestSort: (event: any, columnId: string) => void;
 }
 
 const EnhancedTableHead: React.FC<EnhancedTableHeadProps> = ({
@@ -71,8 +71,8 @@ const EnhancedTableHead: React.FC<EnhancedTableHeadProps> = ({
   orderBy,
   onRequestSort,
 }) => {
-  const createSortHandler = (columnIdentifier: string) => (event: any) => {
-    onRequestSort(event, columnIdentifier);
+  const createSortHandler = (columnId: string) => (event: any) => {
+    onRequestSort(event, columnId);
   };
 
   return (
@@ -80,15 +80,15 @@ const EnhancedTableHead: React.FC<EnhancedTableHeadProps> = ({
       <TableRow>
         {columns.map(column => (
           <TableCell
-            key={column.identifier}
+            key={column.id}
             align="left"
-            sortDirection={orderBy === column.identifier ? order : false}
+            sortDirection={orderBy === column.id ? order : false}
           >
             {column.sortable && (
               <TableSortLabel
-                active={orderBy === column.identifier}
-                direction={orderBy === column.identifier ? order : "asc"}
-                onClick={createSortHandler(column.identifier)}
+                active={orderBy === column.id}
+                direction={orderBy === column.id ? order : "asc"}
+                onClick={createSortHandler(column.id)}
               >
                 {column.header}
               </TableSortLabel>
@@ -102,7 +102,7 @@ const EnhancedTableHead: React.FC<EnhancedTableHeadProps> = ({
 };
 
 interface Column {
-  identifier: string;
+  id: string;
   header: string;
   sortable: boolean;
 }
@@ -120,10 +120,10 @@ const ListView: React.FC<ListViewProps> = ({ columns, items, onRowSelection }) =
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
-  const handleRequestSort = (event: any, columnIdentifier: string) => {
-    const isAsc = orderBy === columnIdentifier && order === "asc";
+  const handleRequestSort = (event: any, columnId: string) => {
+    const isAsc = orderBy === columnId && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(columnIdentifier);
+    setOrderBy(columnId);
   };
 
   const handleClick = (event: any, item: ListViewItem) => {
@@ -164,8 +164,8 @@ const ListView: React.FC<ListViewProps> = ({ columns, items, onRowSelection }) =
                         {columns &&
                           columns.map(column => {
                             return (
-                              <TableCell key={column.identifier} align="left">
-                                {propertyToString(item.properties.items[column.identifier])}
+                              <TableCell key={column.id} align="left">
+                                {propertyToString(item.properties.items[column.id])}
                               </TableCell>
                             );
                           })}
