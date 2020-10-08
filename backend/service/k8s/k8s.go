@@ -70,7 +70,7 @@ type Service interface {
 type svc struct {
 	manager ClientsetManager
 
-	topologyObjectChan chan topologyv1.UpdateCacheRequest
+	topologyObjectChan chan *topologyv1.UpdateCacheRequest
 	log                *zap.Logger
 	scope              tally.Scope
 }
@@ -79,7 +79,7 @@ func NewWithClientsetManager(manager ClientsetManager, logger *zap.Logger, scope
 	// Setting a large channel buffer mostly for first boot and the  resync timer,
 	// this really should be sized according to the size of your k8s deployment.
 	// However this should be a large enough buffer for the datastore to keep up with.
-	topologyObjectChan := make(chan topologyv1.UpdateCacheRequest, 5000)
+	topologyObjectChan := make(chan *topologyv1.UpdateCacheRequest, 5000)
 	return &svc{manager: manager, topologyObjectChan: topologyObjectChan, log: logger, scope: scope}, nil
 }
 

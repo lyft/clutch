@@ -36,7 +36,7 @@ type client struct {
 //
 type CacheableTopology interface {
 	CacheEnabled() bool
-	GetTopologyObjectChannel(ctx context.Context) chan topologyv1.UpdateCacheRequest
+	GetTopologyObjectChannel(ctx context.Context) chan *topologyv1.UpdateCacheRequest
 }
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {

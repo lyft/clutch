@@ -40,14 +40,9 @@ func (c *client) acquireTopologyCacheLock() {
 
 		// TODO: We could in the future spread the load of the topology caching
 		// across many clutch instances by having an a lock per service (e.g. AWS, k8s, etc)
-
-		// Advisory locks only take a arbitrary bigint value
-		// In this case 100 is the lock for topology caching
 		if c.tryAdvisoryLock(ctx, conn, advisoryLockId) {
 			c.log.Debug("acquired the advisory lock, starting to cache topology now...")
 			c.startTopologyCache(ctx)
-		} else {
-			ctxCancelFunc()
 		}
 	}
 
@@ -89,7 +84,7 @@ func (c *client) startTopologyCache(ctx context.Context) {
 	<-ctx.Done()
 }
 
-func (c *client) processTopologyObjectChannel(ctx context.Context, objs chan topologyv1.UpdateCacheRequest) {
+func (c *client) processTopologyObjectChannel(ctx context.Context, objs chan *topologyv1.UpdateCacheRequest) {
 	for obj := range objs {
 		switch obj.Action {
 		case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:

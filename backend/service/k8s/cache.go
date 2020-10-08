@@ -20,7 +20,7 @@ func (s *svc) CacheEnabled() bool {
 	return true
 }
 
-func (s *svc) GetTopologyObjectChannel(ctx context.Context) chan topologyv1.UpdateCacheRequest {
+func (s *svc) GetTopologyObjectChannel(ctx context.Context) chan *topologyv1.UpdateCacheRequest {
 	for name, cs := range s.manager.Clientsets() {
 		log.Printf("starting informer for cluster: %s", name)
 		s.startInformers(ctx, cs)
@@ -52,10 +52,13 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 	go func() { deploymentInformer.Run(stop) }()
 	go func() { hpaInformer.Run(stop) }()
 
-	<-ctx.Done()
-	s.log.Info("Shutting down the kubernetes cache informers")
-	close(stop)
-	close(s.topologyObjectChan)
+	select {
+	case <-ctx.Done():
+		s.log.Info("Shutting down the kubernetes cache informers")
+		close(stop)
+		close(s.topologyObjectChan)
+	default:
+	}
 }
 
 func (s *svc) informerAddHandler(obj interface{}) {
@@ -75,7 +78,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 	case *corev1.Pod:
 		pod := podDescription(obj.(*corev1.Pod), "")
 		protoPod, _ := ptypes.MarshalAny(pod)
-		s.topologyObjectChan <- topologyv1.UpdateCacheRequest{
+		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
 				Id:       pod.Name,
 				Pb:       protoPod,
@@ -86,7 +89,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 	case *appsv1.Deployment:
 		deployment := ProtoForDeployment("", obj.(*appsv1.Deployment))
 		protoDeployment, _ := ptypes.MarshalAny(deployment)
-		s.topologyObjectChan <- topologyv1.UpdateCacheRequest{
+		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
 				Id:       deployment.Name,
 				Pb:       protoDeployment,
@@ -97,7 +100,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 	case *autoscalingv1.HorizontalPodAutoscaler:
 		hpa := ProtoForHPA("", obj.(*autoscalingv1.HorizontalPodAutoscaler))
 		protoHpa, _ := ptypes.MarshalAny(hpa)
-		s.topologyObjectChan <- topologyv1.UpdateCacheRequest{
+		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
 				Id:       hpa.Name,
 				Pb:       protoHpa,
