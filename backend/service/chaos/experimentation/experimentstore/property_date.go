@@ -2,7 +2,9 @@ package experimentstore
 
 import (
 	"database/sql"
+
 	"github.com/golang/protobuf/ptypes"
+
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 

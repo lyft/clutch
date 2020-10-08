@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 
-
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
