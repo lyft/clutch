@@ -128,7 +128,7 @@ func Run() {
 	// Apply migrations!
 	logger.Info("applying migrations", zap.String("migrationDir", migrationDir))
 	err = m.Up()
-	if err != nil {
+	if err != nil && err != migrate.ErrNoChange {
 		logger.Fatal("failed running migrations", zap.Error(err))
 	}
 }

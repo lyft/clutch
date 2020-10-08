@@ -2,13 +2,33 @@ syntax = "proto3";
 
 package clutch.chaos.experimentation.v1;
 
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
 option go_package = "experimentationv1";
 
-message Properties {
+message PropertiesList {
+  // The ordered list of items.
   repeated Property items = 1;
 }
 
+message PropertiesMap {
+  // The unordered list of items that provides a fast random access to a property with a given identifier.
+  map<string, Property> items = 1;
+}
+
 message Property {
-  string label = 1;
-  string value = 2;
+  // The unique identifier of the property.
+  string id = 1;
+  // The human readable name of the property.
+  string label = 2;
+  // The human readable value of the property. If it's not provided it's up to the caller to determine how
+  // to display the content of the `value` field of the property.
+  google.protobuf.StringValue display_value = 3;
+  // The value of the property.
+  oneof value {
+    google.protobuf.Timestamp date_value = 4;
+    string string_value = 5;
+    int64 int_value = 6;
+  }
 }

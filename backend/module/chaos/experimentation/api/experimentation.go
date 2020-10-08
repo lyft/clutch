@@ -28,9 +28,10 @@ type Service struct {
 	experimentStore             experimentstore.ExperimentStore
 	logger                      *zap.SugaredLogger
 	createExperimentStat        tally.Counter
-	getExperimentsStat          tally.Counter
-	getExperimentRunDetailsStat tally.Counter
 	cancelExperimentRunStat     tally.Counter
+	getExperimentsStat          tally.Counter
+	getListViewStat             tally.Counter
+	getExperimentRunDetailsStat tally.Counter
 }
 
 // New instantiates a Service object.
@@ -49,9 +50,10 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 		experimentStore:             experimentStore,
 		logger:                      logger.Sugar(),
 		createExperimentStat:        scope.Counter("create_experiment"),
-		getExperimentsStat:          scope.Counter("get_experiments"),
-		getExperimentRunDetailsStat: scope.Counter("get_experiment_run_config_pair_details"),
 		cancelExperimentRunStat:     scope.Counter("cancel_experiment_run"),
+		getExperimentsStat:          scope.Counter("get_experiments"),
+		getListViewStat:             scope.Counter("get_list_view"),
+		getExperimentRunDetailsStat: scope.Counter("get_experiment_run_config_pair_details"),
 	}, nil
 }
 
@@ -108,6 +110,16 @@ func (s *Service) GetExperiments(ctx context.Context, request *experimentation.G
 	}
 
 	return &experimentation.GetExperimentsResponse{Experiments: experiments}, nil
+}
+
+func (s *Service) GetListView(ctx context.Context, _ *experimentation.GetListViewRequest) (*experimentation.GetListViewResponse, error) {
+	s.getListViewStat.Inc(1)
+	items, err := s.experimentStore.GetListView(ctx)
+	if err != nil {
+		return &experimentation.GetListViewResponse{}, err
+	}
+
+	return &experimentation.GetListViewResponse{Items: items}, nil
 }
 
 func (s *Service) GetExperimentRunDetails(ctx context.Context, request *experimentation.GetExperimentRunDetailsRequest) (*experimentation.GetExperimentRunDetailsResponse, error) {
