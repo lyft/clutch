@@ -2216,7 +2216,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a CallbackResponse.
                  * @memberof clutch.authn.v1
                  * @interface ICallbackResponse
-                 * @property {string|null} [token] CallbackResponse token
+                 * @property {string|null} [accessToken] CallbackResponse accessToken
                  */
 
                 /**
@@ -2235,12 +2235,12 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * CallbackResponse token.
-                 * @member {string} token
+                 * CallbackResponse accessToken.
+                 * @member {string} accessToken
                  * @memberof clutch.authn.v1.CallbackResponse
                  * @instance
                  */
-                CallbackResponse.prototype.token = "";
+                CallbackResponse.prototype.accessToken = "";
 
                 /**
                  * Verifies a CallbackResponse message.
@@ -2253,9 +2253,9 @@ export const clutch = $root.clutch = (() => {
                 CallbackResponse.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.token != null && message.hasOwnProperty("token"))
-                        if (!$util.isString(message.token))
-                            return "token: string expected";
+                    if (message.accessToken != null && message.hasOwnProperty("accessToken"))
+                        if (!$util.isString(message.accessToken))
+                            return "accessToken: string expected";
                     return null;
                 };
 
@@ -2271,8 +2271,8 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.authn.v1.CallbackResponse)
                         return object;
                     let message = new $root.clutch.authn.v1.CallbackResponse();
-                    if (object.token != null)
-                        message.token = String(object.token);
+                    if (object.accessToken != null)
+                        message.accessToken = String(object.accessToken);
                     return message;
                 };
 
@@ -2290,9 +2290,9 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.defaults)
-                        object.token = "";
-                    if (message.token != null && message.hasOwnProperty("token"))
-                        object.token = message.token;
+                        object.accessToken = "";
+                    if (message.accessToken != null && message.hasOwnProperty("accessToken"))
+                        object.accessToken = message.accessToken;
                     return object;
                 };
 
@@ -7283,8 +7283,8 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a Property.
                      * @memberof clutch.chaos.experimentation.v1
                      * @interface IProperty
+                     * @property {string|null} [id] Property id
                      * @property {string|null} [label] Property label
-                     * @property {string|null} [identifier] Property identifier
                      * @property {google.protobuf.IStringValue|null} [displayValue] Property displayValue
                      * @property {google.protobuf.ITimestamp|null} [dateValue] Property dateValue
                      * @property {string|null} [stringValue] Property stringValue
@@ -7307,20 +7307,20 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
+                     * Property id.
+                     * @member {string} id
+                     * @memberof clutch.chaos.experimentation.v1.Property
+                     * @instance
+                     */
+                    Property.prototype.id = "";
+
+                    /**
                      * Property label.
                      * @member {string} label
                      * @memberof clutch.chaos.experimentation.v1.Property
                      * @instance
                      */
                     Property.prototype.label = "";
-
-                    /**
-                     * Property identifier.
-                     * @member {string} identifier
-                     * @memberof clutch.chaos.experimentation.v1.Property
-                     * @instance
-                     */
-                    Property.prototype.identifier = "";
 
                     /**
                      * Property displayValue.
@@ -7380,12 +7380,12 @@ export const clutch = $root.clutch = (() => {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         let properties = {};
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isString(message.id))
+                                return "id: string expected";
                         if (message.label != null && message.hasOwnProperty("label"))
                             if (!$util.isString(message.label))
                                 return "label: string expected";
-                        if (message.identifier != null && message.hasOwnProperty("identifier"))
-                            if (!$util.isString(message.identifier))
-                                return "identifier: string expected";
                         if (message.displayValue != null && message.hasOwnProperty("displayValue")) {
                             let error = $root.google.protobuf.StringValue.verify(message.displayValue);
                             if (error)
@@ -7428,10 +7428,10 @@ export const clutch = $root.clutch = (() => {
                         if (object instanceof $root.clutch.chaos.experimentation.v1.Property)
                             return object;
                         let message = new $root.clutch.chaos.experimentation.v1.Property();
+                        if (object.id != null)
+                            message.id = String(object.id);
                         if (object.label != null)
                             message.label = String(object.label);
-                        if (object.identifier != null)
-                            message.identifier = String(object.identifier);
                         if (object.displayValue != null) {
                             if (typeof object.displayValue !== "object")
                                 throw TypeError(".clutch.chaos.experimentation.v1.Property.displayValue: object expected");
@@ -7470,14 +7470,14 @@ export const clutch = $root.clutch = (() => {
                             options = {};
                         let object = {};
                         if (options.defaults) {
+                            object.id = "";
                             object.label = "";
-                            object.identifier = "";
                             object.displayValue = null;
                         }
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            object.id = message.id;
                         if (message.label != null && message.hasOwnProperty("label"))
                             object.label = message.label;
-                        if (message.identifier != null && message.hasOwnProperty("identifier"))
-                            object.identifier = message.identifier;
                         if (message.displayValue != null && message.hasOwnProperty("displayValue"))
                             object.displayValue = $root.google.protobuf.StringValue.toObject(message.displayValue, options);
                         if (message.dateValue != null && message.hasOwnProperty("dateValue")) {
@@ -9589,6 +9589,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.config.gateway.v1.IStats|null} [stats] GatewayOptions stats
                      * @property {clutch.config.gateway.v1.ITimeouts|null} [timeouts] GatewayOptions timeouts
                      * @property {Array.<clutch.config.gateway.v1.IMiddleware>|null} [middleware] GatewayOptions middleware
+                     * @property {clutch.config.gateway.v1.IAssets|null} [assets] GatewayOptions assets
                      */
 
                     /**
@@ -9656,6 +9657,14 @@ export const clutch = $root.clutch = (() => {
                     GatewayOptions.prototype.middleware = $util.emptyArray;
 
                     /**
+                     * GatewayOptions assets.
+                     * @member {clutch.config.gateway.v1.IAssets|null|undefined} assets
+                     * @memberof clutch.config.gateway.v1.GatewayOptions
+                     * @instance
+                     */
+                    GatewayOptions.prototype.assets = null;
+
+                    /**
                      * Verifies a GatewayOptions message.
                      * @function verify
                      * @memberof clutch.config.gateway.v1.GatewayOptions
@@ -9699,6 +9708,11 @@ export const clutch = $root.clutch = (() => {
                                 if (error)
                                     return "middleware." + error;
                             }
+                        }
+                        if (message.assets != null && message.hasOwnProperty("assets")) {
+                            let error = $root.clutch.config.gateway.v1.Assets.verify(message.assets);
+                            if (error)
+                                return "assets." + error;
                         }
                         return null;
                     };
@@ -9750,6 +9764,11 @@ export const clutch = $root.clutch = (() => {
                                 message.middleware[i] = $root.clutch.config.gateway.v1.Middleware.fromObject(object.middleware[i]);
                             }
                         }
+                        if (object.assets != null) {
+                            if (typeof object.assets !== "object")
+                                throw TypeError(".clutch.config.gateway.v1.GatewayOptions.assets: object expected");
+                            message.assets = $root.clutch.config.gateway.v1.Assets.fromObject(object.assets);
+                        }
                         return message;
                     };
 
@@ -9774,6 +9793,7 @@ export const clutch = $root.clutch = (() => {
                             object.logger = null;
                             object.stats = null;
                             object.timeouts = null;
+                            object.assets = null;
                         }
                         if (message.listener != null && message.hasOwnProperty("listener"))
                             object.listener = $root.clutch.config.gateway.v1.Listener.toObject(message.listener, options);
@@ -9790,6 +9810,8 @@ export const clutch = $root.clutch = (() => {
                             for (let j = 0; j < message.middleware.length; ++j)
                                 object.middleware[j] = $root.clutch.config.gateway.v1.Middleware.toObject(message.middleware[j], options);
                         }
+                        if (message.assets != null && message.hasOwnProperty("assets"))
+                            object.assets = $root.clutch.config.gateway.v1.Assets.toObject(message.assets, options);
                         return object;
                     };
 
@@ -9805,6 +9827,265 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return GatewayOptions;
+                })();
+
+                v1.Assets = (function() {
+
+                    /**
+                     * Properties of an Assets.
+                     * @memberof clutch.config.gateway.v1
+                     * @interface IAssets
+                     * @property {clutch.config.gateway.v1.Assets.IS3Provider|null} [s3] Assets s3
+                     */
+
+                    /**
+                     * Constructs a new Assets.
+                     * @memberof clutch.config.gateway.v1
+                     * @classdesc Represents an Assets.
+                     * @implements IAssets
+                     * @constructor
+                     * @param {clutch.config.gateway.v1.IAssets=} [properties] Properties to set
+                     */
+                    function Assets(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Assets s3.
+                     * @member {clutch.config.gateway.v1.Assets.IS3Provider|null|undefined} s3
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @instance
+                     */
+                    Assets.prototype.s3 = null;
+
+                    // OneOf field names bound to virtual getters and setters
+                    let $oneOfFields;
+
+                    /**
+                     * Assets provider.
+                     * @member {"s3"|undefined} provider
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @instance
+                     */
+                    Object.defineProperty(Assets.prototype, "provider", {
+                        get: $util.oneOfGetter($oneOfFields = ["s3"]),
+                        set: $util.oneOfSetter($oneOfFields)
+                    });
+
+                    /**
+                     * Verifies an Assets message.
+                     * @function verify
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Assets.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        let properties = {};
+                        if (message.s3 != null && message.hasOwnProperty("s3")) {
+                            properties.provider = 1;
+                            {
+                                let error = $root.clutch.config.gateway.v1.Assets.S3Provider.verify(message.s3);
+                                if (error)
+                                    return "s3." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates an Assets message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.config.gateway.v1.Assets} Assets
+                     */
+                    Assets.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.config.gateway.v1.Assets)
+                            return object;
+                        let message = new $root.clutch.config.gateway.v1.Assets();
+                        if (object.s3 != null) {
+                            if (typeof object.s3 !== "object")
+                                throw TypeError(".clutch.config.gateway.v1.Assets.s3: object expected");
+                            message.s3 = $root.clutch.config.gateway.v1.Assets.S3Provider.fromObject(object.s3);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an Assets message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @static
+                     * @param {clutch.config.gateway.v1.Assets} message Assets
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Assets.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (message.s3 != null && message.hasOwnProperty("s3")) {
+                            object.s3 = $root.clutch.config.gateway.v1.Assets.S3Provider.toObject(message.s3, options);
+                            if (options.oneofs)
+                                object.provider = "s3";
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Assets to JSON.
+                     * @function toJSON
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Assets.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    Assets.S3Provider = (function() {
+
+                        /**
+                         * Properties of a S3Provider.
+                         * @memberof clutch.config.gateway.v1.Assets
+                         * @interface IS3Provider
+                         * @property {string|null} [region] S3Provider region
+                         * @property {string|null} [bucket] S3Provider bucket
+                         * @property {string|null} [key] S3Provider key
+                         */
+
+                        /**
+                         * Constructs a new S3Provider.
+                         * @memberof clutch.config.gateway.v1.Assets
+                         * @classdesc Represents a S3Provider.
+                         * @implements IS3Provider
+                         * @constructor
+                         * @param {clutch.config.gateway.v1.Assets.IS3Provider=} [properties] Properties to set
+                         */
+                        function S3Provider(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * S3Provider region.
+                         * @member {string} region
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @instance
+                         */
+                        S3Provider.prototype.region = "";
+
+                        /**
+                         * S3Provider bucket.
+                         * @member {string} bucket
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @instance
+                         */
+                        S3Provider.prototype.bucket = "";
+
+                        /**
+                         * S3Provider key.
+                         * @member {string} key
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @instance
+                         */
+                        S3Provider.prototype.key = "";
+
+                        /**
+                         * Verifies a S3Provider message.
+                         * @function verify
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        S3Provider.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.region != null && message.hasOwnProperty("region"))
+                                if (!$util.isString(message.region))
+                                    return "region: string expected";
+                            if (message.bucket != null && message.hasOwnProperty("bucket"))
+                                if (!$util.isString(message.bucket))
+                                    return "bucket: string expected";
+                            if (message.key != null && message.hasOwnProperty("key"))
+                                if (!$util.isString(message.key))
+                                    return "key: string expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a S3Provider message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.gateway.v1.Assets.S3Provider} S3Provider
+                         */
+                        S3Provider.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.gateway.v1.Assets.S3Provider)
+                                return object;
+                            let message = new $root.clutch.config.gateway.v1.Assets.S3Provider();
+                            if (object.region != null)
+                                message.region = String(object.region);
+                            if (object.bucket != null)
+                                message.bucket = String(object.bucket);
+                            if (object.key != null)
+                                message.key = String(object.key);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a S3Provider message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @static
+                         * @param {clutch.config.gateway.v1.Assets.S3Provider} message S3Provider
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        S3Provider.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.region = "";
+                                object.bucket = "";
+                                object.key = "";
+                            }
+                            if (message.region != null && message.hasOwnProperty("region"))
+                                object.region = message.region;
+                            if (message.bucket != null && message.hasOwnProperty("bucket"))
+                                object.bucket = message.bucket;
+                            if (message.key != null && message.hasOwnProperty("key"))
+                                object.key = message.key;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this S3Provider to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        S3Provider.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return S3Provider;
+                    })();
+
+                    return Assets;
                 })();
 
                 v1.Logger = (function() {
@@ -11637,6 +11918,106 @@ export const clutch = $root.clutch = (() => {
                         return OIDC;
                     })();
 
+                    v1.Storage = (function() {
+
+                        /**
+                         * Properties of a Storage.
+                         * @memberof clutch.config.service.authn.v1
+                         * @interface IStorage
+                         * @property {string|null} [encryptionPassphrase] Storage encryptionPassphrase
+                         */
+
+                        /**
+                         * Constructs a new Storage.
+                         * @memberof clutch.config.service.authn.v1
+                         * @classdesc Represents a Storage.
+                         * @implements IStorage
+                         * @constructor
+                         * @param {clutch.config.service.authn.v1.IStorage=} [properties] Properties to set
+                         */
+                        function Storage(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Storage encryptionPassphrase.
+                         * @member {string} encryptionPassphrase
+                         * @memberof clutch.config.service.authn.v1.Storage
+                         * @instance
+                         */
+                        Storage.prototype.encryptionPassphrase = "";
+
+                        /**
+                         * Verifies a Storage message.
+                         * @function verify
+                         * @memberof clutch.config.service.authn.v1.Storage
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Storage.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.encryptionPassphrase != null && message.hasOwnProperty("encryptionPassphrase"))
+                                if (!$util.isString(message.encryptionPassphrase))
+                                    return "encryptionPassphrase: string expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Storage message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.authn.v1.Storage
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.authn.v1.Storage} Storage
+                         */
+                        Storage.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.authn.v1.Storage)
+                                return object;
+                            let message = new $root.clutch.config.service.authn.v1.Storage();
+                            if (object.encryptionPassphrase != null)
+                                message.encryptionPassphrase = String(object.encryptionPassphrase);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Storage message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.authn.v1.Storage
+                         * @static
+                         * @param {clutch.config.service.authn.v1.Storage} message Storage
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Storage.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults)
+                                object.encryptionPassphrase = "";
+                            if (message.encryptionPassphrase != null && message.hasOwnProperty("encryptionPassphrase"))
+                                object.encryptionPassphrase = message.encryptionPassphrase;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Storage to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.authn.v1.Storage
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Storage.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Storage;
+                    })();
+
                     v1.Config = (function() {
 
                         /**
@@ -11645,6 +12026,7 @@ export const clutch = $root.clutch = (() => {
                          * @interface IConfig
                          * @property {string|null} [sessionSecret] Config sessionSecret
                          * @property {clutch.config.service.authn.v1.IOIDC|null} [oidc] Config oidc
+                         * @property {clutch.config.service.authn.v1.IStorage|null} [storage] Config storage
                          */
 
                         /**
@@ -11677,6 +12059,14 @@ export const clutch = $root.clutch = (() => {
                          * @instance
                          */
                         Config.prototype.oidc = null;
+
+                        /**
+                         * Config storage.
+                         * @member {clutch.config.service.authn.v1.IStorage|null|undefined} storage
+                         * @memberof clutch.config.service.authn.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.storage = null;
 
                         // OneOf field names bound to virtual getters and setters
                         let $oneOfFields;
@@ -11715,6 +12105,11 @@ export const clutch = $root.clutch = (() => {
                                         return "oidc." + error;
                                 }
                             }
+                            if (message.storage != null && message.hasOwnProperty("storage")) {
+                                let error = $root.clutch.config.service.authn.v1.Storage.verify(message.storage);
+                                if (error)
+                                    return "storage." + error;
+                            }
                             return null;
                         };
 
@@ -11737,6 +12132,11 @@ export const clutch = $root.clutch = (() => {
                                     throw TypeError(".clutch.config.service.authn.v1.Config.oidc: object expected");
                                 message.oidc = $root.clutch.config.service.authn.v1.OIDC.fromObject(object.oidc);
                             }
+                            if (object.storage != null) {
+                                if (typeof object.storage !== "object")
+                                    throw TypeError(".clutch.config.service.authn.v1.Config.storage: object expected");
+                                message.storage = $root.clutch.config.service.authn.v1.Storage.fromObject(object.storage);
+                            }
                             return message;
                         };
 
@@ -11753,8 +12153,10 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.defaults)
+                            if (options.defaults) {
                                 object.sessionSecret = "";
+                                object.storage = null;
+                            }
                             if (message.sessionSecret != null && message.hasOwnProperty("sessionSecret"))
                                 object.sessionSecret = message.sessionSecret;
                             if (message.oidc != null && message.hasOwnProperty("oidc")) {
@@ -11762,6 +12164,8 @@ export const clutch = $root.clutch = (() => {
                                 if (options.oneofs)
                                     object.type = "oidc";
                             }
+                            if (message.storage != null && message.hasOwnProperty("storage"))
+                                object.storage = $root.clutch.config.service.authn.v1.Storage.toObject(message.storage, options);
                             return object;
                         };
 

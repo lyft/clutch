@@ -1,0 +1,10 @@
+[build]
+  ignore = "if [[ \"$(git rev-parse --abbrev-ref HEAD)\" == \"main\" ]]; then ROOT=main; else ROOT=HEAD^; fi && git diff --quiet $ROOT HEAD -- '*.ts*' '*.js' 'yarn.lock'"
+
+[[headers]]
+  # Define which paths this specific [[headers]] block will cover.
+  for = "/*"
+
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"

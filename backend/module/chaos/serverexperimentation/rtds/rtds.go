@@ -107,7 +107,6 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 
 	gcpCacheV3 := gcpCacheV3.NewSnapshotCache(false, ClusterHashV3{}, logger.Sugar())
 	gcpCacheV2 := gcpCacheV2.NewSnapshotCache(false, ClusterHashV2{}, logger.Sugar())
-	rtdsScope := scope.SubScope("rtds")
 
 	return &Server{
 		ctx:                  context.Background(),
@@ -116,8 +115,8 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		snapshotCacheV3:      gcpCacheV3,
 		cacheRefreshInterval: cacheRefreshInterval,
 		rtdsLayerName:        rtdsLayerName,
-		totalStreams:         rtdsScope.Gauge("totalStreams"),
-		totalResourcesServed: rtdsScope.Counter("totalResourcesServed"),
+		totalStreams:         scope.Gauge("totalStreams"),
+		totalResourcesServed: scope.Counter("totalResourcesServed"),
 		logger:               logger.Sugar(),
 	}, nil
 }

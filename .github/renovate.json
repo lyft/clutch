@@ -9,6 +9,7 @@
     ":separateMultipleMajorReleases",
     ":unpublishSafe",
     "group:definitelyTyped",
+    "group:docusaurusMonorepo",
     "group:materialMonorepo",
     "group:reactMonorepo",
     "group:reactrouterMonorepo"

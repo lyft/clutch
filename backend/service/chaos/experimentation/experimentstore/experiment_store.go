@@ -241,7 +241,7 @@ func (fs *experimentStore) GetListView(ctx context.Context) ([]*experimentation.
 
 		propertiesMapItems := make(map[string]*experimentation.Property)
 		for _, p := range properties {
-			propertiesMapItems[p.Identifier] = p
+			propertiesMapItems[p.Id] = p
 		}
 
 		listViewItems = append(listViewItems, &experimentation.ListViewItem{

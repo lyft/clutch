@@ -51,19 +51,19 @@ func NewProperties(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 
 	properties := []*experimentation.Property{
 		{
-			Identifier: "run_identifier",
-			Label:      "Run Identifier",
-			Value:      &experimentation.Property_IntValue{IntValue: int64(fetchedID)},
+			Id:    "run_identifier",
+			Label: "Run Identifier",
+			Value: &experimentation.Property_IntValue{IntValue: int64(fetchedID)},
 		},
 		{
-			Identifier: "status",
-			Label:      "Status",
-			Value:      &experimentation.Property_StringValue{StringValue: statusToString(status)},
+			Id:    "status",
+			Label: "Status",
+			Value: &experimentation.Property_StringValue{StringValue: statusToString(status)},
 		},
 		{
-			Identifier: "start_time",
-			Label:      "Start Time",
-			Value:      &experimentation.Property_DateValue{DateValue: startTimeTimestamp},
+			Id:    "start_time",
+			Label: "Start Time",
+			Value: &experimentation.Property_DateValue{DateValue: startTimeTimestamp},
 		},
 	}
 
@@ -80,9 +80,9 @@ func NewProperties(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 	}
 
 	properties = append(properties, &experimentation.Property{
-		Identifier: "end_time",
-		Label:      "End Time",
-		Value:      &experimentation.Property_DateValue{DateValue: endTimeTimestamp},
+		Id:    "end_time",
+		Label: "End Time",
+		Value: &experimentation.Property_DateValue{DateValue: endTimeTimestamp},
 	})
 
 	cancelationTimeTimestamp, err := timeToTimestamp(cancellationTime)
@@ -92,15 +92,15 @@ func NewProperties(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 
 	if status == experimentation.Experiment_STOPPED {
 		properties = append(properties, &experimentation.Property{
-			Identifier: "stopped_at",
-			Label:      "Stopped At",
-			Value:      &experimentation.Property_DateValue{DateValue: cancelationTimeTimestamp},
+			Id:    "stopped_at",
+			Label: "Stopped At",
+			Value: &experimentation.Property_DateValue{DateValue: cancelationTimeTimestamp},
 		})
 	} else if status == experimentation.Experiment_CANCELED {
 		properties = append(properties, &experimentation.Property{
-			Identifier: "canceled_at",
-			Label:      "Canceled At",
-			Value:      &experimentation.Property_DateValue{DateValue: cancelationTimeTimestamp},
+			Id:    "canceled_at",
+			Label: "Canceled At",
+			Value: &experimentation.Property_DateValue{DateValue: cancelationTimeTimestamp},
 		})
 	}
 

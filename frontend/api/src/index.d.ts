@@ -967,8 +967,8 @@ export namespace clutch {
             /** Properties of a CallbackResponse. */
             interface ICallbackResponse {
 
-                /** CallbackResponse token */
-                token?: (string|null);
+                /** CallbackResponse accessToken */
+                accessToken?: (string|null);
             }
 
             /** Represents a CallbackResponse. */
@@ -980,8 +980,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.authn.v1.ICallbackResponse);
 
-                /** CallbackResponse token. */
-                public token: string;
+                /** CallbackResponse accessToken. */
+                public accessToken: string;
 
                 /**
                  * Verifies a CallbackResponse message.
@@ -3161,11 +3161,11 @@ export namespace clutch {
                 /** Properties of a Property. */
                 interface IProperty {
 
+                    /** Property id */
+                    id?: (string|null);
+
                     /** Property label */
                     label?: (string|null);
-
-                    /** Property identifier */
-                    identifier?: (string|null);
 
                     /** Property displayValue */
                     displayValue?: (google.protobuf.IStringValue|null);
@@ -3189,11 +3189,11 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.experimentation.v1.IProperty);
 
+                    /** Property id. */
+                    public id: string;
+
                     /** Property label. */
                     public label: string;
-
-                    /** Property identifier. */
-                    public identifier: string;
 
                     /** Property displayValue. */
                     public displayValue?: (google.protobuf.IStringValue|null);
@@ -4083,6 +4083,9 @@ export namespace clutch {
 
                     /** GatewayOptions middleware */
                     middleware?: (clutch.config.gateway.v1.IMiddleware[]|null);
+
+                    /** GatewayOptions assets */
+                    assets?: (clutch.config.gateway.v1.IAssets|null);
                 }
 
                 /** Represents a GatewayOptions. */
@@ -4112,6 +4115,9 @@ export namespace clutch {
                     /** GatewayOptions middleware. */
                     public middleware: clutch.config.gateway.v1.IMiddleware[];
 
+                    /** GatewayOptions assets. */
+                    public assets?: (clutch.config.gateway.v1.IAssets|null);
+
                     /**
                      * Verifies a GatewayOptions message.
                      * @param message Plain object to verify
@@ -4139,6 +4145,120 @@ export namespace clutch {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an Assets. */
+                interface IAssets {
+
+                    /** Assets s3 */
+                    s3?: (clutch.config.gateway.v1.Assets.IS3Provider|null);
+                }
+
+                /** Represents an Assets. */
+                class Assets implements IAssets {
+
+                    /**
+                     * Constructs a new Assets.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.config.gateway.v1.IAssets);
+
+                    /** Assets s3. */
+                    public s3?: (clutch.config.gateway.v1.Assets.IS3Provider|null);
+
+                    /** Assets provider. */
+                    public provider?: "s3";
+
+                    /**
+                     * Verifies an Assets message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an Assets message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Assets
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.config.gateway.v1.Assets;
+
+                    /**
+                     * Creates a plain object from an Assets message. Also converts values to other types if specified.
+                     * @param message Assets
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.config.gateway.v1.Assets, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Assets to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                namespace Assets {
+
+                    /** Properties of a S3Provider. */
+                    interface IS3Provider {
+
+                        /** S3Provider region */
+                        region?: (string|null);
+
+                        /** S3Provider bucket */
+                        bucket?: (string|null);
+
+                        /** S3Provider key */
+                        key?: (string|null);
+                    }
+
+                    /** Represents a S3Provider. */
+                    class S3Provider implements IS3Provider {
+
+                        /**
+                         * Constructs a new S3Provider.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.gateway.v1.Assets.IS3Provider);
+
+                        /** S3Provider region. */
+                        public region: string;
+
+                        /** S3Provider bucket. */
+                        public bucket: string;
+
+                        /** S3Provider key. */
+                        public key: string;
+
+                        /**
+                         * Verifies a S3Provider message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a S3Provider message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns S3Provider
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.gateway.v1.Assets.S3Provider;
+
+                        /**
+                         * Creates a plain object from a S3Provider message. Also converts values to other types if specified.
+                         * @param message S3Provider
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.gateway.v1.Assets.S3Provider, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this S3Provider to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
                 }
 
                 /** Properties of a Logger. */
@@ -4889,6 +5009,54 @@ export namespace clutch {
                         public toJSON(): { [k: string]: any };
                     }
 
+                    /** Properties of a Storage. */
+                    interface IStorage {
+
+                        /** Storage encryptionPassphrase */
+                        encryptionPassphrase?: (string|null);
+                    }
+
+                    /** Represents a Storage. */
+                    class Storage implements IStorage {
+
+                        /**
+                         * Constructs a new Storage.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.authn.v1.IStorage);
+
+                        /** Storage encryptionPassphrase. */
+                        public encryptionPassphrase: string;
+
+                        /**
+                         * Verifies a Storage message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Storage message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Storage
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.authn.v1.Storage;
+
+                        /**
+                         * Creates a plain object from a Storage message. Also converts values to other types if specified.
+                         * @param message Storage
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.authn.v1.Storage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Storage to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
                     /** Properties of a Config. */
                     interface IConfig {
 
@@ -4897,6 +5065,9 @@ export namespace clutch {
 
                         /** Config oidc */
                         oidc?: (clutch.config.service.authn.v1.IOIDC|null);
+
+                        /** Config storage */
+                        storage?: (clutch.config.service.authn.v1.IStorage|null);
                     }
 
                     /** Represents a Config. */
@@ -4913,6 +5084,9 @@ export namespace clutch {
 
                         /** Config oidc. */
                         public oidc?: (clutch.config.service.authn.v1.IOIDC|null);
+
+                        /** Config storage. */
+                        public storage?: (clutch.config.service.authn.v1.IStorage|null);
 
                         /** Config type. */
                         public type?: "oidc";
