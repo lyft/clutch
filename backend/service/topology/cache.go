@@ -20,11 +20,10 @@ const topologyCacheLockId = "topology:cache"
 // Performs leader election by acquiring a postgres advisory lock.
 // Once the lock is acquired topology caching is started.
 func (c *client) acquireTopologyCacheLock() {
-	// We create our own connection to use for acquiring the advisory lock
-	// If the connection is severed for any reason the advisory lock will automatically unlock
-
 	ctx, ctxCancelFunc := context.WithCancel(context.Background())
 
+	// We create our own connection to use for acquiring the advisory lock
+	// If the connection is severed for any reason the advisory lock will automatically unlock
 	conn, err := c.db.Conn(ctx)
 	if err != nil {
 		c.log.Fatal("Unable to connect to the database", zap.Error(err))
@@ -107,8 +106,6 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs chan top
 	}
 }
 
-// nolint:unused
-// TODO (mcutalo): remove lint directive once in use
 func (c *client) setCache(ctx context.Context, obj *topologyv1.Resource) error {
 	const upsertQuery = `
 		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
@@ -149,8 +146,6 @@ func (c *client) setCache(ctx context.Context, obj *topologyv1.Resource) error {
 	return nil
 }
 
-// nolint:unused
-// TODO (mcutalo): remove lint directive once in use
 func (c *client) deleteCache(ctx context.Context, id string) error {
 	const deleteQuery = `
 		DELETE FROM topology_cache WHERE id = $1

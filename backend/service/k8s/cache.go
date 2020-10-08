@@ -54,7 +54,9 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 
 	select {
 	case <-ctx.Done():
+		s.log.Info("Shutting down the kubernetes cache informers")
 		close(stop)
+	default:
 	}
 }
 
