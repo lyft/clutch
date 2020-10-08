@@ -14,7 +14,7 @@ const register = (): WorkflowConfiguration => {
     routes: {
       startExperiment: {
         path: "start",
-        displayName: "Start Server Experiment",
+        displayName: "Start Experiment",
         description: "Start Server Experiment.",
         component: StartExperiment,
       },
