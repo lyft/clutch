@@ -30,9 +30,9 @@ type client struct {
 
 // CacheableTopology is implemented by a service that wishes to enable the topology API feature set
 //
-// By implmenting this interface the topology service will automatically setup all services which
-// implement this interface. Automatically ingesting TopologyObjects via the `GetTopologyObjectChannel()` function.
-// This enables users to make use of the Topology APIs with these new TopologyObjects.
+// By implmenting this interface the topology service will automatically setup all services which implement it.
+// Automatically ingesting Resource objects via the `GetTopologyObjectChannel()` function.
+// This enables users to make use of the Topology APIs with these new Topology Resources.
 //
 type CacheableTopology interface {
 	CacheEnabled() bool

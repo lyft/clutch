@@ -31,8 +31,8 @@ func (s *svc) GetTopologyObjectChannel(ctx context.Context) chan *topologyv1.Upd
 
 func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 	stop := make(chan struct{})
-	// TODO (mcutalo): either make this configurable or make it pretty high like 30min+ ?
-	factory := informers.NewSharedInformerFactoryWithOptions(cs, time.Minute*1)
+	// TODO (mcutalo): Make this configurable or keep this at a high value
+	factory := informers.NewSharedInformerFactoryWithOptions(cs, time.Minute*60)
 
 	podInformer := factory.Core().V1().Pods().Informer()
 	deploymentInformer := factory.Apps().V1().Deployments().Informer()
@@ -77,7 +77,11 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 	switch objType := obj.(type) {
 	case *corev1.Pod:
 		pod := podDescription(obj.(*corev1.Pod), "")
-		protoPod, _ := ptypes.MarshalAny(pod)
+		protoPod, err := ptypes.MarshalAny(pod)
+		if err != nil {
+			s.log.Error("unable to marshal pod", zap.Error(err))
+			return
+		}
 		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
 				Id:       pod.Name,
@@ -88,7 +92,11 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 		}
 	case *appsv1.Deployment:
 		deployment := ProtoForDeployment("", obj.(*appsv1.Deployment))
-		protoDeployment, _ := ptypes.MarshalAny(deployment)
+		protoDeployment, err := ptypes.MarshalAny(deployment)
+		if err != nil {
+			s.log.Error("unable to marshal deployment", zap.Error(err))
+			return
+		}
 		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
 				Id:       deployment.Name,
@@ -99,7 +107,11 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 		}
 	case *autoscalingv1.HorizontalPodAutoscaler:
 		hpa := ProtoForHPA("", obj.(*autoscalingv1.HorizontalPodAutoscaler))
-		protoHpa, _ := ptypes.MarshalAny(hpa)
+		protoHpa, err := ptypes.MarshalAny(hpa)
+		if err != nil {
+			s.log.Error("unable to marshal hpa", zap.Error(err))
+			return
+		}
 		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
 				Id:       hpa.Name,

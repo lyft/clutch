@@ -76,8 +76,10 @@ func convertLockIdToAdvisoryLockId(lockID string) uint32 {
 func (c *client) startTopologyCache(ctx context.Context) {
 	for n, s := range service.Registry {
 		if svc, ok := s.(CacheableTopology); ok {
-			c.log.Debug("Processing Topology Objects for service", zap.String("service", n))
-			go c.processTopologyObjectChannel(ctx, svc.GetTopologyObjectChannel(ctx))
+			if svc.CacheEnabled() {
+				c.log.Debug("Processing Topology Objects for service", zap.String("service", n))
+				go c.processTopologyObjectChannel(ctx, svc.GetTopologyObjectChannel(ctx))
+			}
 		}
 	}
 
