@@ -167,10 +167,10 @@ func (s *svc) checkExpectedObjectMetaFields(expectedObjectMetaFields *k8sapiv1.E
 func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 	// TODO: There's a mismatch between the serialization of the timestamp here and what's expected
 	// on the frontend.
-	//var launch *timestamp.Timestamp
-	//if converted, err := ptypes.TimestampProto(k8spod.Status.StartTime.Time); err == nil {
-	//	launch = converted
-	//}
+	// var launch *timestamp.Timestamp
+	// if converted, err := ptypes.TimestampProto(k8spod.Status.StartTime.Time); err == nil {
+	// 	launch = converted
+	// }
 	clusterName := k8spod.ClusterName
 	if clusterName == "" {
 		clusterName = cluster
