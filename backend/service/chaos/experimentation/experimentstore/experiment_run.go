@@ -59,7 +59,7 @@ func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Pro
 		time = er.cancellationTime
 	}
 
-	endTimeTimestamp, err := timeToTimestamp(time)
+	endTimeTimestamp, err := TimeToPropertyDateValue(time)
 	if err != nil {
 		return nil, err
 	}
@@ -67,10 +67,10 @@ func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Pro
 	properties = append(properties, &experimentation.Property{
 		Id:    "end_time",
 		Label: "End Time",
-		Value: &experimentation.Property_DateValue{DateValue: endTimeTimestamp},
+		Value: endTimeTimestamp,
 	})
 
-	cancelationTimeTimestamp, err := timeToTimestamp(er.cancellationTime)
+	cancelationTimeTimestamp, err := TimeToPropertyDateValue(er.cancellationTime)
 	if err != nil {
 		return nil, err
 	}
@@ -79,13 +79,13 @@ func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Pro
 		properties = append(properties, &experimentation.Property{
 			Id:    "stopped_at",
 			Label: "Stopped At",
-			Value: &experimentation.Property_DateValue{DateValue: cancelationTimeTimestamp},
+			Value: cancelationTimeTimestamp,
 		})
 	} else if status == experimentation.Experiment_CANCELED {
 		properties = append(properties, &experimentation.Property{
 			Id:    "canceled_at",
 			Label: "Canceled At",
-			Value: &experimentation.Property_DateValue{DateValue: cancelationTimeTimestamp},
+			Value: cancelationTimeTimestamp,
 		})
 	}
 

@@ -61,7 +61,7 @@ func (c *cacheWrapperV2) SetRuntimeLayer(nodeName string, layerName string, laye
 			Layer: layer,
 		},
 	}
-	snapshot := gcpCacheV2.NewSnapshot(version, nil, nil, nil, nil, runtimes)
+	snapshot := gcpCacheV2.NewSnapshot(version, nil, nil, nil, nil, runtimes, nil)
 	err := c.SetSnapshot(nodeName, snapshot)
 	if err != nil {
 		return err
@@ -90,7 +90,7 @@ func (c *cacheWrapperV3) SetRuntimeLayer(nodeName string, layerName string, laye
 			Layer: layer,
 		},
 	}
-	snapshot := gcpCacheV3.NewSnapshot(version, nil, nil, nil, nil, runtimes)
+	snapshot := gcpCacheV3.NewSnapshot(version, nil, nil, nil, nil, runtimes, nil)
 	err := c.SetSnapshot(nodeName, snapshot)
 	if err != nil {
 		return err

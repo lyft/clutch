@@ -1,8 +1,7 @@
 import React from "react";
 import { mount } from "enzyme";
-import { ThemeProvider as StyledThemeProvider } from "styled-components";
 
-import { getTheme } from "../AppProvider/themes";
+import { Theme } from "../AppProvider/themes";
 import NotFound from "../not-found";
 
 describe("Not Found component", () => {
@@ -10,9 +9,9 @@ describe("Not Found component", () => {
 
   beforeAll(() => {
     component = mount(
-      <StyledThemeProvider theme={getTheme()}>
+      <Theme>
         <NotFound />
-      </StyledThemeProvider>
+      </Theme>
     );
   });
 

@@ -42,5 +42,5 @@ message CallbackRequest {
 message CallbackResponse {
   // This is the token that the user should present. Note: this response is only valid in a gRPC context. In an HTTP
   // context the user will be redirected.
-  string token = 1;
+  string access_token = 1;
 }

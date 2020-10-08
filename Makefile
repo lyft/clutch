@@ -141,6 +141,14 @@ scaffold-gateway:
 scaffold-workflow:
 	cd tools/scaffolding && go run scaffolder.go -m frontend-plugin
 
+.PHONY: storybook # Start storybook locally.
+storybook: yarn-ensure
+	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend storybook
+
+.PHONY: storybook-build # Build storybook assets for deploy.
+storybook-build: yarn-ensure
+	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend storybook:build
+
 .PHONY: test # Unit test all of the code.
 test: backend-test frontend-test
 

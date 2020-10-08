@@ -4,9 +4,6 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/timestamp"
-
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
@@ -55,14 +52,6 @@ func timesToStatus(startTime time.Time, endTime sql.NullTime, cancellationTime s
 			return experimentation.Experiment_RUNNING
 		}
 		return experimentation.Experiment_COMPLETED
-	}
-}
-
-func timeToTimestamp(t sql.NullTime) (*timestamp.Timestamp, error) {
-	if t.Valid {
-		return ptypes.TimestampProto(t.Time)
-	} else {
-		return nil, nil
 	}
 }
 
