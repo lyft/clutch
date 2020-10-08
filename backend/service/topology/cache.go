@@ -75,6 +75,10 @@ func convertLockIdToAdvisoryLockId(lockID string) uint32 {
 	return binary.BigEndian.Uint32(x)
 }
 
+// This will check all services that are currently registered for the given clutch configuration
+// If any of the services implement the CacheableTopology interface we will start consuming
+// topology objects until the context has been cancelled.
+//
 func (c *client) startTopologyCache(ctx context.Context) {
 	for n, s := range service.Registry {
 		if svc, ok := s.(CacheableTopology); ok {
@@ -83,6 +87,7 @@ func (c *client) startTopologyCache(ctx context.Context) {
 		}
 	}
 
+	// TODO: what do i wanna do here ...
 	time.Sleep(time.Hour * 2)
 }
 

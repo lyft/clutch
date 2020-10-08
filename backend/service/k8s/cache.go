@@ -21,18 +21,17 @@ func (s *svc) CacheEnabled() bool {
 }
 
 func (s *svc) GetTopologyObjectChannel(ctx context.Context) chan topologyv1.UpdateCacheRequest {
-	stop := make(chan struct{})
-
 	for name, cs := range s.manager.Clientsets() {
 		log.Printf("starting informer for cluster: %s", name)
-		s.startInformers(cs, stop)
+		s.startInformers(ctx, cs)
 	}
 
 	return s.topologyObjectChan
 }
 
-func (s *svc) startInformers(cs ContextClientset, stop chan struct{}) {
-	// TODO: either make this configurable or make it pretty high like 30min+ ?
+func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
+	stop := make(chan struct{})
+	// TODO (mcutalo): either make this configurable or make it pretty high like 30min+ ?
 	factory := informers.NewSharedInformerFactoryWithOptions(cs, time.Minute*1)
 
 	podInformer := factory.Core().V1().Pods().Informer()
@@ -52,6 +51,11 @@ func (s *svc) startInformers(cs ContextClientset, stop chan struct{}) {
 	go func() { podInformer.Run(stop) }()
 	go func() { deploymentInformer.Run(stop) }()
 	go func() { hpaInformer.Run(stop) }()
+
+	select {
+	case <-ctx.Done():
+		close(stop)
+	}
 }
 
 func (s *svc) informerAddHandler(obj interface{}) {
