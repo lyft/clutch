@@ -33,7 +33,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, err
 	}
 
-	storage, err := getStorageImpl(config, logger, scope)
+	storage, err := getStorageProvider(config, logger, scope)
 	if err != nil {
 		return nil, err
 	}
@@ -77,15 +77,15 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	return c, nil
 }
 
-func getStorageImpl(cfg *auditconfigv1.Config, logger *zap.Logger, scope tally.Scope) (storage.Storage, error) {
-	switch cfg.GetService().(type) {
+func getStorageProvider(cfg *auditconfigv1.Config, logger *zap.Logger, scope tally.Scope) (storage.Storage, error) {
+	switch cfg.GetStorageProvider().(type) {
 	case *auditconfigv1.Config_DbProvider:
 		return sql.New(cfg, logger, scope)
 	case *auditconfigv1.Config_LocalAuditing:
 		return local.New(cfg, logger, scope)
 	}
 
-	return nil, errors.New("reached end of non-exhaustive type switch")
+	return nil, errors.New("reached end of non-exhaustive type switch looking for audit storage")
 }
 
 type client struct {

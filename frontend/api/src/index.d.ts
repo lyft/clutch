@@ -4552,8 +4552,8 @@ export namespace clutch {
                         /** Config sinks. */
                         public sinks: string[];
 
-                        /** Config service. */
-                        public service?: ("dbProvider"|"localAuditing");
+                        /** Config storageProvider. */
+                        public storageProvider?: ("dbProvider"|"localAuditing");
 
                         /**
                          * Verifies a Config message.

@@ -14,7 +14,7 @@ import (
 
 func TestNew(t *testing.T) {
 	cfg, _ := ptypes.MarshalAny(&auditconfigv1.Config{
-		Service: &auditconfigv1.Config_LocalAuditing{LocalAuditing: true},
+		StorageProvider: &auditconfigv1.Config_LocalAuditing{LocalAuditing: true},
 	})
 	log := zaptest.NewLogger(t)
 	scope := tally.NewTestScope("", nil)

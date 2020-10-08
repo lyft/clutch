@@ -282,7 +282,7 @@ func (m *Config) Validate() error {
 		}
 	}
 
-	switch m.Service.(type) {
+	switch m.StorageProvider.(type) {
 
 	case *Config_DbProvider:
 

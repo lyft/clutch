@@ -10765,12 +10765,12 @@ export const clutch = $root.clutch = (() => {
                         let $oneOfFields;
 
                         /**
-                         * Config service.
-                         * @member {"dbProvider"|"localAuditing"|undefined} service
+                         * Config storageProvider.
+                         * @member {"dbProvider"|"localAuditing"|undefined} storageProvider
                          * @memberof clutch.config.service.audit.v1.Config
                          * @instance
                          */
-                        Object.defineProperty(Config.prototype, "service", {
+                        Object.defineProperty(Config.prototype, "storageProvider", {
                             get: $util.oneOfGetter($oneOfFields = ["dbProvider", "localAuditing"]),
                             set: $util.oneOfSetter($oneOfFields)
                         });
@@ -10788,14 +10788,14 @@ export const clutch = $root.clutch = (() => {
                                 return "object expected";
                             let properties = {};
                             if (message.dbProvider != null && message.hasOwnProperty("dbProvider")) {
-                                properties.service = 1;
+                                properties.storageProvider = 1;
                                 if (!$util.isString(message.dbProvider))
                                     return "dbProvider: string expected";
                             }
                             if (message.localAuditing != null && message.hasOwnProperty("localAuditing")) {
-                                if (properties.service === 1)
-                                    return "service: multiple values";
-                                properties.service = 1;
+                                if (properties.storageProvider === 1)
+                                    return "storageProvider: multiple values";
+                                properties.storageProvider = 1;
                                 if (typeof message.localAuditing !== "boolean")
                                     return "localAuditing: boolean expected";
                             }
@@ -10865,12 +10865,12 @@ export const clutch = $root.clutch = (() => {
                             if (message.dbProvider != null && message.hasOwnProperty("dbProvider")) {
                                 object.dbProvider = message.dbProvider;
                                 if (options.oneofs)
-                                    object.service = "dbProvider";
+                                    object.storageProvider = "dbProvider";
                             }
                             if (message.localAuditing != null && message.hasOwnProperty("localAuditing")) {
                                 object.localAuditing = message.localAuditing;
                                 if (options.oneofs)
-                                    object.service = "localAuditing";
+                                    object.storageProvider = "localAuditing";
                             }
                             if (message.filter != null && message.hasOwnProperty("filter"))
                                 object.filter = $root.clutch.config.service.audit.v1.Filter.toObject(message.filter, options);

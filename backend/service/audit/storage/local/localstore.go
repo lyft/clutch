@@ -23,11 +23,16 @@ import (
 type client struct {
 	sync.RWMutex
 
+	logger *zap.Logger
+	scope  tally.Scope
+
 	events map[int64]*auditv1.Event
 }
 
 func New(cfg *auditconfigv1.Config, logger *zap.Logger, scope tally.Scope) (storage.Storage, error) {
 	c := &client{
+		logger: logger,
+		scope:  scope,
 		events: make(map[int64]*auditv1.Event),
 	}
 
@@ -35,14 +40,11 @@ func New(cfg *auditconfigv1.Config, logger *zap.Logger, scope tally.Scope) (stor
 }
 
 func (c *client) UnsentEvents(ctx context.Context) ([]*auditv1.Event, error) {
-	c.RLock()
+	c.Lock()
 	unsent := make([]*auditv1.Event, 0, len(c.events))
 	for _, v := range c.events {
 		unsent = append(unsent, v)
 	}
-	c.RUnlock()
-
-	c.Lock()
 	c.events = make(map[int64]*auditv1.Event)
 	c.Unlock()
 
@@ -53,12 +55,12 @@ func (c *client) WriteRequestEvent(ctx context.Context, req *auditv1.RequestEven
 	c.Lock()
 	defer c.Unlock()
 
-	rval := int64(len(c.events))
-	c.events[rval] = &auditv1.Event{
+	i := int64(len(c.events))
+	c.events[i] = &auditv1.Event{
 		OccurredAt: timestamppb.Now(),
 		EventType:  &auditv1.Event_Event{Event: req},
 	}
-	return rval, nil
+	return i, nil
 }
 
 func (c *client) UpdateRequestEvent(ctx context.Context, id int64, update *auditv1.RequestEvent) error {
@@ -86,13 +88,13 @@ func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time
 		stop = *end
 	}
 
-	rval := make([]*auditv1.Event, 0, len(c.events))
+	events := make([]*auditv1.Event, 0, len(c.events))
 	for _, value := range c.events {
 		t := value.OccurredAt.AsTime()
 		if start.Before(t) && stop.After(t) {
-			rval = append(rval, value)
+			events = append(events, value)
 		}
 	}
 
-	return rval, nil
+	return events, nil
 }

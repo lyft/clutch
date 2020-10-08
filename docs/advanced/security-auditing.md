@@ -180,7 +180,7 @@ Clutch's audit events can also be viewed by querying the audit module if it is e
 
 #### Local Adhoc Use
 
-Clutch ships with an in-memory storage for events which allow it to be used without
+Clutch ships with an in-memory storage for events which allows it to be used without
 setting up a Postgres database. It is not recommended to run this way outside of a trial
 or adhoc temporary use. All history of actions taken with Clutch will be lost with the
 process shutting down.

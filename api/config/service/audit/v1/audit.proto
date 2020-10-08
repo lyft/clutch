@@ -43,7 +43,7 @@ message SinkConfig {
 }
 
 message Config {
-  oneof service {
+  oneof storage_provider {
     // The name of the service where the auditor will persist events.
     string db_provider = 1 [ (validate.rules).string = {min_bytes : 1} ];
 
