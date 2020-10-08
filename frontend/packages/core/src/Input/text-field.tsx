@@ -29,6 +29,7 @@ const TextField: React.FC<TextFieldProps & MuiTextFieldProps> = ({
   onReturn,
   maxWidth,
   placeholder,
+  type,
   ...props
 }) => {
   const onKeyDown = (
@@ -46,7 +47,9 @@ const TextField: React.FC<TextFieldProps & MuiTextFieldProps> = ({
     color: "secondary",
   } as Partial<InputLabelProps>;
 
-  if (placeholder) {
+  const placeholderInputTypes = ["date", "datetime-local", "month", "time", "week"];
+  const hasInputPlaceholder = placeholderInputTypes.indexOf(type) !== -1;
+  if (placeholder || hasInputPlaceholder) {
     inputLabelProps.shrink = true;
   }
 
@@ -59,6 +62,7 @@ const TextField: React.FC<TextFieldProps & MuiTextFieldProps> = ({
       onFocus={onChange}
       onBlur={onChange}
       placeholder={placeholder}
+      type={type}
       {...props}
     />
   );

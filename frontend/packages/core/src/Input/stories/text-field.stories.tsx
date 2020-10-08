@@ -26,3 +26,10 @@ WithLabel.args = {
   placeholder: "",
   label: "TextField",
 };
+
+export const WithType = Template.bind({});
+WithType.args = {
+  ...Primary.args,
+  label: "Date",
+  type: "datetime-local",
+};
