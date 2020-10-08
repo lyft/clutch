@@ -52,12 +52,10 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 	go func() { deploymentInformer.Run(stop) }()
 	go func() { hpaInformer.Run(stop) }()
 
-	select {
-	case <-ctx.Done():
-		s.log.Info("Shutting down the kubernetes cache informers")
-		close(stop)
-	default:
-	}
+	<-ctx.Done()
+	s.log.Info("Shutting down the kubernetes cache informers")
+	close(stop)
+	close(s.topologyObjectChan)
 }
 
 func (s *svc) informerAddHandler(obj interface{}) {

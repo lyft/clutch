@@ -86,13 +86,11 @@ func (c *client) startTopologyCache(ctx context.Context) {
 		}
 	}
 
-	// TODO: what do i wanna do here ...
-	time.Sleep(time.Hour * 2)
+	<-ctx.Done()
 }
 
 func (c *client) processTopologyObjectChannel(ctx context.Context, objs chan topologyv1.UpdateCacheRequest) {
-	for {
-		obj := <-objs
+	for obj := range objs {
 		switch obj.Action {
 		case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
 			if err := c.setCache(ctx, obj.Resource); err != nil {
