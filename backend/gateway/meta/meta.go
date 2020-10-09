@@ -2,12 +2,15 @@ package meta
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 	"regexp"
 	"strings"
 
 	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/proto"
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/any"
 	"github.com/iancoleman/strcase"
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/grpcreflect"
@@ -170,4 +173,34 @@ func resolvePattern(message descriptor.Message, pattern *apiv1.Pattern) *auditv1
 	}
 
 	return &auditv1.Resource{TypeUrl: pattern.TypeUrl, Id: resourceName}
+}
+
+// APIMetadata returns the API request/response interface as an anypb.Any message.
+func APIMetadata(metadata interface{}) *any.Any {
+	if metadata == nil {
+		return nil
+	}
+
+	switch t := reflect.TypeOf(metadata).Kind(); t {
+	// API request and response are type Ptr
+	case reflect.Ptr:
+		// OK.
+	default:
+		return nil
+	}
+
+	result := reflect.ValueOf(metadata)
+
+	protomsg, ok := result.Interface().(proto.Message)
+	if !ok {
+		return nil
+	}
+	log.Printf("protomsg: %v", protomsg)
+
+	a, err := ptypes.MarshalAny(protomsg)
+	if err != nil {
+		return nil
+	}
+
+	return a
 }

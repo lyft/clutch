@@ -86,11 +86,12 @@ func (m *mid) eventFromRequest(ctx context.Context, req interface{}, info *grpc.
 	}
 
 	return &auditv1.RequestEvent{
-		Username:    username,
-		ServiceName: svc,
-		MethodName:  method,
-		Type:        meta.GetAction(info.FullMethod),
-		Resources:   meta.ResourceNames(req.(descriptor.Message)),
+		Username:        username,
+		ServiceName:     svc,
+		MethodName:      method,
+		Type:            meta.GetAction(info.FullMethod),
+		Resources:       meta.ResourceNames(req.(descriptor.Message)),
+		RequestMetadata: meta.APIMetadata(req),
 	}
 }
 
@@ -101,7 +102,8 @@ func (m *mid) eventFromResponse(resp interface{}, err error) *auditv1.RequestEve
 	}
 
 	return &auditv1.RequestEvent{
-		Status:    s.Proto(),
-		Resources: meta.ResourceNames(resp.(descriptor.Message)),
+		Status:           s.Proto(),
+		Resources:        meta.ResourceNames(resp.(descriptor.Message)),
+		ResponseMetadata: meta.APIMetadata(resp),
 	}
 }
