@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package clutch.chaos.serverexperimentation.v1;
 
-// import "google/api/annotations.proto";
+import "google/api/annotations.proto";
 import "validate/validate.proto";
 
-// import "api/v1/annotations.proto";
+import "api/v1/annotations.proto";
 
 option go_package = "serverexperimentationv1";
 
