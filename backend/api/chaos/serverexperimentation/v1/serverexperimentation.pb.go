@@ -28,10 +28,10 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
+// FaultInjectionType
 type FaultInjectionType int32
 
 const (
-	// UNSPECIFIED = 0;
 	FaultInjectionType_INGRESS FaultInjectionType = 0
 	FaultInjectionType_EGRESS  FaultInjectionType = 1
 )
