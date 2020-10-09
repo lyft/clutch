@@ -50,7 +50,7 @@ func transform(config *experimentstore.ExperimentConfig) ([]*experimentation.Pro
 	var testConfig = serverexperimentation.TestConfig{}
 	err := ptypes.UnmarshalAny(config.Config, &testConfig)
 	if err != nil {
-		return []*experimentation.Property{}, nil
+		return []*experimentation.Property{}, err
 	}
 
 	upstream := testConfig.GetClusterPair().GetUpstreamCluster()
