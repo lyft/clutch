@@ -6,6 +6,9 @@ import (
 	"database/sql"
 	"encoding/binary"
 	"encoding/json"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"go.uber.org/zap"
@@ -21,6 +24,8 @@ const topologyCacheLockId = "topology:cache"
 // Once the lock is acquired topology caching is started.
 func (c *client) acquireTopologyCacheLock() {
 	ctx, ctxCancelFunc := context.WithCancel(context.Background())
+	advisoryLockId := convertLockIdToAdvisoryLockId(topologyCacheLockId)
+	ticker := time.NewTicker(time.Second * 10)
 
 	// We create our own connection to use for acquiring the advisory lock
 	// If the connection is severed for any reason the advisory lock will automatically unlock
@@ -30,23 +35,29 @@ func (c *client) acquireTopologyCacheLock() {
 	}
 	defer conn.Close()
 
-	advisoryLockId := convertLockIdToAdvisoryLockId(topologyCacheLockId)
+	// catch signals, shutdown caching by canceling the context, and release the advisory lock.
+	sigc := make(chan os.Signal, 1)
+	signal.Notify(sigc, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	go func() {
+		<-sigc
+		c.log.Info("Caught shutdown signal, shutting down topology caching and releasing advisory lock")
+		ticker.Stop()
+		ctxCancelFunc()
+		c.unlockAdvisoryLock(context.TODO(), conn, advisoryLockId)
+	}()
 
-	ticker := time.NewTicker(time.Second * 10)
 	// Infinitely try to acquire the advisory lock
 	// Once the lock is acquired we start caching, this is a blocking operation
 	for ; true; <-ticker.C {
-		c.log.Debug("trying to acquire advisory lock")
+		c.log.Info("trying to acquire advisory lock")
 
 		// TODO: We could in the future spread the load of the topology caching
 		// across many clutch instances by having an a lock per service (e.g. AWS, k8s, etc)
 		if c.tryAdvisoryLock(ctx, conn, advisoryLockId) {
-			c.log.Debug("acquired the advisory lock, starting to cache topology now...")
+			c.log.Info("acquired the advisory lock, starting to cache topology now...")
 			c.startTopologyCache(ctx)
 		}
 	}
-
-	ctxCancelFunc()
 }
 
 // TODO: The advisory locking logic can be decomposed into its own service (e.g. "global locking service").
@@ -64,6 +75,14 @@ func (c *client) tryAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uin
 	return lock
 }
 
+func (c *client) unlockAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uint32) bool {
+	var unlock bool
+	if err := conn.QueryRowContext(ctx, "SELECT pg_advisory_unlock($1)", lockId).Scan(&unlock); err != nil {
+		c.log.Error("Unable to perfrom an advisory unlock", zap.Error(err))
+	}
+	return unlock
+}
+
 func convertLockIdToAdvisoryLockId(lockID string) uint32 {
 	x := sha256.New().Sum([]byte(lockID))
 	return binary.BigEndian.Uint32(x)
@@ -77,7 +96,7 @@ func (c *client) startTopologyCache(ctx context.Context) {
 	for n, s := range service.Registry {
 		if svc, ok := s.(CacheableTopology); ok {
 			if svc.CacheEnabled() {
-				c.log.Debug("Processing Topology Objects for service", zap.String("service", n))
+				c.log.Info("Processing Topology Objects for service", zap.String("service", n))
 				go c.processTopologyObjectChannel(ctx, svc.GetTopologyObjectChannel(ctx))
 			}
 		}
