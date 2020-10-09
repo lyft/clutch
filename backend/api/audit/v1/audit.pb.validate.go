@@ -343,6 +343,26 @@ func (m *RequestEvent) Validate() error {
 
 	}
 
+	if v, ok := interface{}(m.GetRequestMetadata()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RequestEventValidationError{
+				field:  "RequestMetadata",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetResponseMetadata()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RequestEventValidationError{
+				field:  "ResponseMetadata",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
