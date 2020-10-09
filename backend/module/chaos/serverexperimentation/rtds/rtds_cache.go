@@ -104,18 +104,20 @@ func PeriodicallyRefreshCache(s *Server) {
 	go func() {
 		for range ticker.C {
 			s.logger.Info("Refreshing RTDS cache")
-			refreshCache(s.ctx, s.experimentStore, &cacheWrapperV2{s.snapshotCacheV2}, s.rtdsLayerName, s.logger)
-			refreshCache(s.ctx, s.experimentStore, &cacheWrapperV3{s.snapshotCacheV3}, s.rtdsLayerName, s.logger)
+			refreshCache(s.ctx, s.storer, &cacheWrapperV2{s.snapshotCacheV2}, s.rtdsLayerName, s.logger)
+			refreshCache(s.ctx, s.storer, &cacheWrapperV3{s.snapshotCacheV3}, s.rtdsLayerName, s.logger)
 		}
 	}()
 }
 
-func refreshCache(ctx context.Context, store experimentstore.ExperimentStore, snapshotCache cacheWrapper, rtdsLayerName string,
+func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCache cacheWrapper, rtdsLayerName string,
 	logger *zap.SugaredLogger) {
-	allExperiments, err := store.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig", experimentation.GetExperimentsRequest_STATUS_RUNNING)
+	allExperiments, err := storer.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig", experimentation.GetExperimentsRequest_STATUS_RUNNING)
 	if err != nil {
 		logger.Errorw("Failed to get data from experiments store", "error", err)
-		return
+
+		// If failed to get data from DB, stop all ongoing faults.
+		allExperiments = []*experimentation.Experiment{}
 	}
 
 	// Group faults by upstream cluster

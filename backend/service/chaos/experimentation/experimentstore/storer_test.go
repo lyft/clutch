@@ -107,7 +107,7 @@ func TestCreateExperiments(t *testing.T) {
 			db, mock, err := sqlmock.New()
 			a.NoError(err)
 
-			es := &experimentStore{db: db}
+			es := &storer{db: db}
 			defer es.Close()
 			mock.ExpectBegin()
 			for _, query := range test.queries {
@@ -128,7 +128,7 @@ func TestCancelExperimentRun(t *testing.T) {
 	db, mock, err := sqlmock.New()
 	assert.NoError(err)
 
-	es := &experimentStore{db: db}
+	es := &storer{db: db}
 	defer es.Close()
 
 	expected := mock.ExpectExec(regexp.QuoteMeta(`UPDATE experiment_run SET cancellation_time = NOW() WHERE id = $1 AND cancellation_time IS NULL`))
@@ -146,7 +146,7 @@ func TestGetExperimentsUnmarshalsExperimentConfiguration(t *testing.T) {
 	db, mock, err := sqlmock.New()
 	assert.NoError(err)
 
-	es := &experimentStore{db: db}
+	es := &storer{db: db}
 	defer es.Close()
 
 	expected := mock.ExpectQuery(regexp.QuoteMeta(getExperimentsSQLQuery)).WithArgs("foo", "STATUS_UNSPECIFIED")
@@ -180,7 +180,7 @@ func TestGetExperimentsFailsIfItReadsExperimentWithMalformedConfiguration(t *tes
 	db, mock, err := sqlmock.New()
 	assert.NoError(err)
 
-	es := &experimentStore{db: db}
+	es := &storer{db: db}
 	defer es.Close()
 
 	expected := mock.ExpectQuery(regexp.QuoteMeta(getExperimentsSQLQuery)).WithArgs("foo", "STATUS_UNSPECIFIED")
