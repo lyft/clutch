@@ -73,7 +73,7 @@ func transform(config *experimentstore.ExperimentConfig) ([]*experimentation.Pro
 		{
 			Id:    "target",
 			Label: "Target",
-			Value: &experimentation.Property_StringValue{StringValue: fmt.Sprintf("From \"%s\" To️ \"%s\"", downstream, upstream)},
+			Value: &experimentation.Property_StringValue{StringValue: fmt.Sprintf("\"%s\" ➡️ \"%s\"", downstream, upstream)},
 		},
 		{
 			Id:    "fault_types",
