@@ -3319,14 +3319,14 @@ export namespace clutch {
                     /** TestConfig clusterPair */
                     clusterPair?: (clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null);
 
+                    /** TestConfig trafficType */
+                    trafficType?: (clutch.chaos.serverexperimentation.v1.TrafficType|null);
+
                     /** TestConfig abort */
                     abort?: (clutch.chaos.serverexperimentation.v1.IAbortFaultConfig|null);
 
                     /** TestConfig latency */
                     latency?: (clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null);
-
-                    /** TestConfig faultInjectionType */
-                    faultInjectionType?: (clutch.chaos.serverexperimentation.v1.FaultInjectionType|null);
                 }
 
                 /** Represents a TestConfig. */
@@ -3341,17 +3341,14 @@ export namespace clutch {
                     /** TestConfig clusterPair. */
                     public clusterPair?: (clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null);
 
+                    /** TestConfig trafficType. */
+                    public trafficType: clutch.chaos.serverexperimentation.v1.TrafficType;
+
                     /** TestConfig abort. */
                     public abort?: (clutch.chaos.serverexperimentation.v1.IAbortFaultConfig|null);
 
                     /** TestConfig latency. */
                     public latency?: (clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null);
-
-                    /** TestConfig faultInjectionType. */
-                    public faultInjectionType: clutch.chaos.serverexperimentation.v1.FaultInjectionType;
-
-                    /** TestConfig target. */
-                    public target?: "clusterPair";
 
                     /** TestConfig fault. */
                     public fault?: ("abort"|"latency");
@@ -3385,10 +3382,11 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** FaultInjectionType enum. */
-                enum FaultInjectionType {
-                    INGRESS = 0,
-                    EGRESS = 1
+                /** TrafficType enum. */
+                enum TrafficType {
+                    TRAFFICTYPE_UNSPECIFIED = 0,
+                    TRAFFICTYPE_INGRESS = 1,
+                    TRAFFICTYPE_EGRESS = 2
                 }
 
                 /** Properties of a ClusterPairTarget. */

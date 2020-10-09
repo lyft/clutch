@@ -37,11 +37,9 @@ type experimentTest struct {
 
 func createExperimentsTests() ([]experimentTest, error) {
 	config := &serverexperimentation.TestConfig{
-		Target: &serverexperimentation.TestConfig_ClusterPair{
-			ClusterPair: &serverexperimentation.ClusterPairTarget{
-				DownstreamCluster: "upstreamCluster",
-				UpstreamCluster:   "downstreamCluster",
-			},
+		ClusterPair: &serverexperimentation.ClusterPairTarget{
+			DownstreamCluster: "upstreamCluster",
+			UpstreamCluster:   "downstreamCluster",
 		},
 		Fault: &serverexperimentation.TestConfig_Abort{
 			Abort: &serverexperimentation.AbortFaultConfig{

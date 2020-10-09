@@ -10,30 +10,34 @@ import "api/v1/annotations.proto";
 option go_package = "serverexperimentationv1";
 
 message TestConfig {
-  oneof target {
-    ClusterPairTarget cluster_pair = 1;
-  }
+  // The pair of clusters specifying the origin and the destination of
+  // the traffic that faults should be applied to.
+  ClusterPairTarget cluster_pair = 1;
+
+  // The type of traffic faults should be applied to.
+  TrafficType traffic_type = 2;
 
   oneof fault {
-    AbortFaultConfig abort = 2;
-    LatencyFaultConfig latency = 3;
+    AbortFaultConfig abort = 3;
+    LatencyFaultConfig latency = 4;
   }
-
-  FaultInjectionType fault_injection_type = 4;
 }
 
-// FaultInjectionType
-enum FaultInjectionType {
-  INGRESS = 0;
-  EGRESS = 1;
+// Specifies the type of traffic faults should be applied to.
+enum TrafficType {
+  TRAFFICTYPE_UNSPECIFIED = 0;
+  // Apply faults on ingress trafic coming to an upstream cluster.
+  TRAFFICTYPE_INGRESS = 1;
+  // Apply faults on egress trafic coming out of a downstream cluster.
+  TRAFFICTYPE_EGRESS = 2;
 }
 
-// Targets requests from downstream_cluster -> upstream_cluster
+// Targets requests from downstream_cluster -> upstream_cluster/
 message ClusterPairTarget {
-  // The name of the downstream cluster
+  // The name of the downstream cluster.
   string downstream_cluster = 1 [ (validate.rules).string = {min_bytes : 1} ];
 
-  // The name of the upstream cluster
+  // The name of the upstream cluster.
   string upstream_cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
