@@ -89,13 +89,13 @@ func NewProperties(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 		return nil, err
 	}
 
-	if status == experimentation.Experiment_STOPPED {
+	if status == experimentation.Experiment_STATUS_STOPPED {
 		properties = append(properties, &experimentation.Property{
 			Id:    "stopped_at",
 			Label: "Stopped At",
 			Value: cancelationDateValue,
 		})
-	} else if status == experimentation.Experiment_CANCELED {
+	} else if status == experimentation.Experiment_STATUS_CANCELED {
 		properties = append(properties, &experimentation.Property{
 			Id:    "canceled_at",
 			Label: "Canceled At",
@@ -108,26 +108,26 @@ func NewProperties(fetchedID uint64, creationTime time.Time, startTime sql.NullT
 
 func timesToStatus(startTime sql.NullTime, endTime sql.NullTime, cancellationTime sql.NullTime, now time.Time) (experimentation.Experiment_Status, error) {
 	if !startTime.Valid {
-		return experimentation.Experiment_UNSPECIFIED, errors.New("experiment doesn't have startTime")
+		return experimentation.Experiment_STATUS_UNSPECIFIED, errors.New("experiment doesn't have startTime")
 	}
 
 	if cancellationTime.Valid {
 		if cancellationTime.Time.After(startTime.Time) {
 			if endTime.Valid {
-				return experimentation.Experiment_STOPPED, nil
+				return experimentation.Experiment_STATUS_STOPPED, nil
 			} else {
-				return experimentation.Experiment_COMPLETED, nil
+				return experimentation.Experiment_STATUS_COMPLETED, nil
 			}
 		} else {
-			return experimentation.Experiment_CANCELED, nil
+			return experimentation.Experiment_STATUS_CANCELED, nil
 		}
 	} else {
 		if now.Before(startTime.Time) {
-			return experimentation.Experiment_SCHEDULED, nil
+			return experimentation.Experiment_STATUS_SCHEDULED, nil
 		} else if now.After(startTime.Time) && (!endTime.Valid || now.Before(endTime.Time)) {
-			return experimentation.Experiment_RUNNING, nil
+			return experimentation.Experiment_STATUS_RUNNING, nil
 		}
-		return experimentation.Experiment_COMPLETED, nil
+		return experimentation.Experiment_STATUS_COMPLETED, nil
 	}
 }
 
@@ -144,17 +144,17 @@ func timeToPropertyDateValue(t sql.NullTime) (*experimentation.Property_DateValu
 
 func statusToString(status experimentation.Experiment_Status) string {
 	switch status {
-	case experimentation.Experiment_UNSPECIFIED:
+	case experimentation.Experiment_STATUS_UNSPECIFIED:
 		return "Unspecified"
-	case experimentation.Experiment_SCHEDULED:
+	case experimentation.Experiment_STATUS_SCHEDULED:
 		return "Scheduled"
-	case experimentation.Experiment_RUNNING:
+	case experimentation.Experiment_STATUS_RUNNING:
 		return "Running"
-	case experimentation.Experiment_COMPLETED:
+	case experimentation.Experiment_STATUS_COMPLETED:
 		return "Completed"
-	case experimentation.Experiment_CANCELED:
+	case experimentation.Experiment_STATUS_CANCELED:
 		return "Canceled"
-	case experimentation.Experiment_STOPPED:
+	case experimentation.Experiment_STATUS_STOPPED:
 		return "Stopped"
 	default:
 		return status.String()

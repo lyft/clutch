@@ -29,8 +29,8 @@ message CreateExperimentResponse {
 
 message GetExperimentsRequest {
   enum Status {
-    UNSPECIFIED = 0;
-    RUNNING = 1;
+    STATUS_UNSPECIFIED = 0;
+    STATUS_RUNNING = 1;
   }
 
   string config_type = 1;

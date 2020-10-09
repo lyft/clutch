@@ -29,7 +29,7 @@ func TestScheduledExperiment(t *testing.T) {
 
 	assert := assert.New(t)
 	assert.NoError(err)
-	assert.Equal(experimentation.Experiment_SCHEDULED, runDetails.Status)
+	assert.Equal(experimentation.Experiment_STATUS_SCHEDULED, runDetails.Status)
 }
 
 func TestCanceledExperiment(t *testing.T) {
@@ -47,7 +47,7 @@ func TestCanceledExperiment(t *testing.T) {
 
 	assert := assert.New(t)
 	assert.NoError(err)
-	assert.Equal(experimentation.Experiment_CANCELED, runDetails.Status)
+	assert.Equal(experimentation.Experiment_STATUS_CANCELED, runDetails.Status)
 }
 
 func TestRunningExperiment(t *testing.T) {
@@ -63,7 +63,7 @@ func TestRunningExperiment(t *testing.T) {
 
 	assert := assert.New(t)
 	assert.NoError(err)
-	assert.Equal(experimentation.Experiment_RUNNING, runDetails.Status)
+	assert.Equal(experimentation.Experiment_STATUS_RUNNING, runDetails.Status)
 }
 
 func TestStoppedExperiment(t *testing.T) {
@@ -84,7 +84,7 @@ func TestStoppedExperiment(t *testing.T) {
 
 	assert := assert.New(t)
 	assert.NoError(err)
-	assert.Equal(experimentation.Experiment_STOPPED, runDetails.Status)
+	assert.Equal(experimentation.Experiment_STATUS_STOPPED, runDetails.Status)
 }
 
 func TestCompletedExperiment(t *testing.T) {
@@ -105,5 +105,5 @@ func TestCompletedExperiment(t *testing.T) {
 
 	assert := assert.New(t)
 	assert.NoError(err)
-	assert.Equal(experimentation.Experiment_COMPLETED, runDetails.Status)
+	assert.Equal(experimentation.Experiment_STATUS_COMPLETED, runDetails.Status)
 }
