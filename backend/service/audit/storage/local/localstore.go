@@ -41,12 +41,13 @@ func New(cfg *auditconfigv1.Config, logger *zap.Logger, scope tally.Scope) (stor
 
 func (c *client) UnsentEvents(ctx context.Context) ([]*auditv1.Event, error) {
 	c.Lock()
+	defer c.Unlock()
+
 	unsent := make([]*auditv1.Event, 0, len(c.events))
 	for _, v := range c.events {
 		unsent = append(unsent, v)
 	}
 	c.events = make(map[int64]*auditv1.Event)
-	c.Unlock()
 
 	return unsent, nil
 }
