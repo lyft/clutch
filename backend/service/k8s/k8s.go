@@ -6,6 +6,7 @@ package k8s
 
 import (
 	"context"
+	"sync"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
@@ -70,9 +71,10 @@ type Service interface {
 type svc struct {
 	manager ClientsetManager
 
-	topologyObjectChan chan *topologyv1.UpdateCacheRequest
-	log                *zap.Logger
-	scope              tally.Scope
+	topologyObjectChan   chan *topologyv1.UpdateCacheRequest
+	topologyInformerLock sync.Mutex
+	log                  *zap.Logger
+	scope                tally.Scope
 }
 
 func NewWithClientsetManager(manager ClientsetManager, logger *zap.Logger, scope tally.Scope) (Service, error) {

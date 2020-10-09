@@ -18,13 +18,17 @@ import (
 )
 
 // TODO (mcutalo): Make this configurable or keep this at a high value
-const informerResyncTime = time.Second * 1
+const informerResyncTime = time.Hour * 1
 
 func (s *svc) CacheEnabled() bool {
 	return true
 }
 
 func (s *svc) StartTopologyCaching(ctx context.Context) <-chan *topologyv1.UpdateCacheRequest {
+	// Their should only ever be one instances of all the informers for topology caching
+	// We lock here until the context is closed
+	s.topologyInformerLock.Lock()
+
 	for name, cs := range s.manager.Clientsets() {
 		log.Printf("starting informer for cluster: %s", name)
 		go s.startInformers(ctx, cs)
@@ -59,6 +63,7 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 	<-ctx.Done()
 	s.log.Info("Shutting down the kubernetes cache informers")
 	close(s.topologyObjectChan)
+	s.topologyInformerLock.Unlock()
 }
 
 func (s *svc) informerAddHandler(obj interface{}) {
