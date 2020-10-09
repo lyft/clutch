@@ -21,7 +21,7 @@ const (
 )
 
 type Service struct {
-	experimentStore experimentstore.ExperimentStore
+	storer experimentstore.Storer
 }
 
 // New instantiates a Service object.
@@ -31,18 +31,18 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 		return nil, errors.New("could not find experiment store service")
 	}
 
-	experimentStore, ok := store.(experimentstore.ExperimentStore)
+	storer, ok := store.(experimentstore.Storer)
 	if !ok {
 		return nil, errors.New("service was not the correct type")
 	}
 
 	return &Service{
-		experimentStore: experimentStore,
+		storer: storer,
 	}, nil
 }
 
 func (s *Service) Register(r module.Registrar) error {
-	s.experimentStore.RegisterTransformation("type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig", transform)
+	s.storer.RegisterTransformation("type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig", transform)
 	return nil
 }
 

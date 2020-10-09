@@ -23,8 +23,8 @@ import (
 
 const Name = "clutch.service.chaos.experimentation.store"
 
-// ExperimentStore stores experiment data
-type ExperimentStore interface {
+// Storer stores experiment data
+type Storer interface {
 	CreateExperiment(context.Context, *any.Any, *time.Time, *time.Time) (*experimentation.Experiment, error)
 	CancelExperimentRun(context.Context, uint64) error
 	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
@@ -34,7 +34,7 @@ type ExperimentStore interface {
 	Close()
 }
 
-type experimentStore struct {
+type storer struct {
 	db          *sql.DB
 	transformer *Transformer
 }
@@ -51,19 +51,19 @@ func New(_ *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
 		return nil, errors.New("experiment store wrong type")
 	}
 
-	return &experimentStore{
+	return &storer{
 		client.DB(),
 		&Transformer{map[string]func(*ExperimentConfig) ([]*experimentation.Property, error){}},
 	}, nil
 }
 
-func (fs *experimentStore) CreateExperiment(ctx context.Context, config *any.Any, startTime *time.Time, endTime *time.Time) (*experimentation.Experiment, error) {
+func (s *storer) CreateExperiment(ctx context.Context, config *any.Any, startTime *time.Time, endTime *time.Time) (*experimentation.Experiment, error) {
 	// This API call will eventually be broken into 2 separate calls:
 	// 1) creating the config
 	// 2) starting a new experiment with the config
 
 	// All experiments are created in a single transaction
-	tx, err := fs.db.Begin()
+	tx, err := s.db.Begin()
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (fs *experimentStore) CreateExperiment(ctx context.Context, config *any.Any
 	}
 
 	configSql := `INSERT INTO experiment_config (id, details) VALUES ($1, $2)`
-	_, err = fs.db.ExecContext(ctx, configSql, configID, configJson)
+	_, err = s.db.ExecContext(ctx, configSql, configID, configJson)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +96,7 @@ func (fs *experimentStore) CreateExperiment(ctx context.Context, config *any.Any
 			VALUES ($1, $2, tstzrange($3, $4, '[]'), NOW())`
 
 	runId := id.NewID()
-	_, err = fs.db.ExecContext(ctx, runSql, runId, configID, startTime, endTime)
+	_, err = s.db.ExecContext(ctx, runSql, runId, configID, startTime, endTime)
 	if err != nil {
 		return nil, err
 	}
@@ -127,19 +127,19 @@ func (fs *experimentStore) CreateExperiment(ctx context.Context, config *any.Any
 	}, nil
 }
 
-func (fs *experimentStore) CancelExperimentRun(ctx context.Context, id uint64) error {
+func (s *storer) CancelExperimentRun(ctx context.Context, id uint64) error {
 	sql :=
 		`UPDATE experiment_run 
          SET cancellation_time = NOW()
          WHERE id = $1 AND cancellation_time IS NULL AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
 
-	_, err := fs.db.ExecContext(ctx, sql, id)
+	_, err := s.db.ExecContext(ctx, sql, id)
 	return err
 }
 
 // GetExperiments experiments with a given type of the configuration. Returns all experiments if provided configuration type
 // parameter is an emtpy string.
-func (fs *experimentStore) GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
+func (s *storer) GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
 	query := `
 		SELECT 
 			experiment_run.id, 
@@ -152,7 +152,7 @@ func (fs *experimentStore) GetExperiments(ctx context.Context, configType string
 		// Return only running experiments if `status` is equal to `Running`, return all experiments otherwise.
 		` AND ($2 = 'UNSPECIFIED' OR (experiment_run.cancellation_time is NULL AND NOW() > lower(experiment_run.execution_time) AND (upper(experiment_run.execution_time) IS NULL OR NOW() < upper(experiment_run.execution_time))))`
 
-	rows, err := fs.db.QueryContext(ctx, query, configType, status.String())
+	rows, err := s.db.QueryContext(ctx, query, configType, status.String())
 	if err != nil {
 		return nil, err
 	}
@@ -187,7 +187,7 @@ func (fs *experimentStore) GetExperiments(ctx context.Context, configType string
 	return experiments, nil
 }
 
-func (fs *experimentStore) GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error) {
+func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error) {
 	query := `
 		SELECT 
 			experiment_run.id,
@@ -201,7 +201,7 @@ func (fs *experimentStore) GetListView(ctx context.Context) ([]*experimentation.
 		WHERE
 			experiment_config.id = experiment_run.experiment_config_id`
 
-	rows, err := fs.db.QueryContext(ctx, query)
+	rows, err := s.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}
@@ -223,7 +223,7 @@ func (fs *experimentStore) GetListView(ctx context.Context) ([]*experimentation.
 			return nil, err
 		}
 
-		item, err := NewRunListView(&run, &config, fs.transformer, time.Now())
+		item, err := NewRunListView(&run, &config, s.transformer, time.Now())
 		if err != nil {
 			return nil, err
 		}
@@ -239,7 +239,7 @@ func (fs *experimentStore) GetListView(ctx context.Context) ([]*experimentation.
 	return listViewItems, nil
 }
 
-func (fs *experimentStore) GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error) {
+func (s *storer) GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error) {
 	sqlQuery := `
 		SELECT 
 			experiment_run.id,
@@ -251,7 +251,7 @@ func (fs *experimentStore) GetExperimentRunDetails(ctx context.Context, id uint6
 			details FROM experiment_config, experiment_run
         WHERE experiment_run.id = $1 AND experiment_run.experiment_config_id = experiment_config.id`
 
-	row := fs.db.QueryRowContext(ctx, sqlQuery, id)
+	row := s.db.QueryRowContext(ctx, sqlQuery, id)
 
 	var details string
 	run := ExperimentRun{}
@@ -266,16 +266,16 @@ func (fs *experimentStore) GetExperimentRunDetails(ctx context.Context, id uint6
 		return nil, err
 	}
 
-	return NewRunDetails(&run, &config, fs.transformer, time.Now())
+	return NewRunDetails(&run, &config, s.transformer, time.Now())
 }
 
 // Close closes all resources held.
-func (fs *experimentStore) Close() {
-	fs.db.Close()
+func (s *storer) Close() {
+	s.db.Close()
 }
 
-func (fs *experimentStore) RegisterTransformation(typeUrl string, transformation func(*ExperimentConfig) ([]*experimentation.Property, error)) {
-	fs.transformer.nameToConfigTransformMap[typeUrl] = transformation
+func (s *storer) RegisterTransformation(typeUrl string, transformation func(*ExperimentConfig) ([]*experimentation.Property, error)) {
+	s.transformer.nameToConfigTransformMap[typeUrl] = transformation
 }
 
 func toProto(t *time.Time) (*timestamp.Timestamp, error) {
