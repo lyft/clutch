@@ -30,13 +30,13 @@ type client struct {
 
 // CacheableTopology is implemented by a service that wishes to enable the topology API feature set
 //
-// By implmenting this interface the topology service will automatically setup all services which implement it.
+// By implementing this interface the topology service will automatically setup all services which implement it.
 // Automatically ingesting Resource objects via the `GetTopologyObjectChannel()` function.
 // This enables users to make use of the Topology APIs with these new Topology Resources.
 //
 type CacheableTopology interface {
 	CacheEnabled() bool
-	GetTopologyObjectChannel(ctx context.Context) chan *topologyv1.UpdateCacheRequest
+	StartTopologyCaching(ctx context.Context) <-chan *topologyv1.UpdateCacheRequest
 }
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {

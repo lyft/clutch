@@ -2,6 +2,7 @@ package k8s
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 
@@ -16,23 +17,26 @@ import (
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
+// TODO (mcutalo): Make this configurable or keep this at a high value
+const informerResyncTime = time.Second * 1
+
 func (s *svc) CacheEnabled() bool {
 	return true
 }
 
-func (s *svc) GetTopologyObjectChannel(ctx context.Context) chan *topologyv1.UpdateCacheRequest {
+func (s *svc) StartTopologyCaching(ctx context.Context) <-chan *topologyv1.UpdateCacheRequest {
 	for name, cs := range s.manager.Clientsets() {
 		log.Printf("starting informer for cluster: %s", name)
-		s.startInformers(ctx, cs)
+		go s.startInformers(ctx, cs)
 	}
 
 	return s.topologyObjectChan
 }
 
 func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
+	factory := informers.NewSharedInformerFactoryWithOptions(cs, informerResyncTime)
 	stop := make(chan struct{})
-	// TODO (mcutalo): Make this configurable or keep this at a high value
-	factory := informers.NewSharedInformerFactoryWithOptions(cs, time.Minute*60)
+	defer close(stop)
 
 	podInformer := factory.Core().V1().Pods().Informer()
 	deploymentInformer := factory.Apps().V1().Deployments().Informer()
@@ -48,17 +52,13 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 	deploymentInformer.AddEventHandler(informerHandlers)
 	hpaInformer.AddEventHandler(informerHandlers)
 
-	go func() { podInformer.Run(stop) }()
-	go func() { deploymentInformer.Run(stop) }()
-	go func() { hpaInformer.Run(stop) }()
+	go podInformer.Run(stop)
+	go deploymentInformer.Run(stop)
+	go hpaInformer.Run(stop)
 
-	select {
-	case <-ctx.Done():
-		s.log.Info("Shutting down the kubernetes cache informers")
-		close(stop)
-		close(s.topologyObjectChan)
-	default:
-	}
+	<-ctx.Done()
+	s.log.Info("Shutting down the kubernetes cache informers")
+	close(s.topologyObjectChan)
 }
 
 func (s *svc) informerAddHandler(obj interface{}) {
@@ -76,7 +76,7 @@ func (s *svc) informerDeleteHandler(obj interface{}) {
 func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCacheRequest_Action) {
 	switch objType := obj.(type) {
 	case *corev1.Pod:
-		pod := podDescription(obj.(*corev1.Pod), "")
+		pod := podDescription(objType, "")
 		protoPod, err := ptypes.MarshalAny(pod)
 		if err != nil {
 			s.log.Error("unable to marshal pod", zap.Error(err))
@@ -91,7 +91,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 			Action: action,
 		}
 	case *appsv1.Deployment:
-		deployment := ProtoForDeployment("", obj.(*appsv1.Deployment))
+		deployment := ProtoForDeployment("", objType)
 		protoDeployment, err := ptypes.MarshalAny(deployment)
 		if err != nil {
 			s.log.Error("unable to marshal deployment", zap.Error(err))
@@ -106,7 +106,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 			Action: action,
 		}
 	case *autoscalingv1.HorizontalPodAutoscaler:
-		hpa := ProtoForHPA("", obj.(*autoscalingv1.HorizontalPodAutoscaler))
+		hpa := ProtoForHPA("", objType)
 		protoHpa, err := ptypes.MarshalAny(hpa)
 		if err != nil {
 			s.log.Error("unable to marshal hpa", zap.Error(err))
@@ -121,6 +121,6 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 			Action: action,
 		}
 	default:
-		s.log.Warn("unable to determin topology object type", zap.Any("object type", objType))
+		s.log.Warn("unable to determine topology object type", zap.String("object_type", fmt.Sprintf("%T", objType)))
 	}
 }

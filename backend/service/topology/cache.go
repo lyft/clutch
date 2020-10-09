@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"encoding/binary"
 	"encoding/json"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -97,7 +98,7 @@ func (c *client) startTopologyCache(ctx context.Context) {
 		if svc, ok := s.(CacheableTopology); ok {
 			if svc.CacheEnabled() {
 				c.log.Info("Processing Topology Objects for service", zap.String("service", n))
-				go c.processTopologyObjectChannel(ctx, svc.GetTopologyObjectChannel(ctx))
+				go c.processTopologyObjectChannel(ctx, svc.StartTopologyCaching(ctx))
 			}
 		}
 	}
@@ -105,7 +106,7 @@ func (c *client) startTopologyCache(ctx context.Context) {
 	<-ctx.Done()
 }
 
-func (c *client) processTopologyObjectChannel(ctx context.Context, objs chan *topologyv1.UpdateCacheRequest) {
+func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest) {
 	for obj := range objs {
 		switch obj.Action {
 		case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
@@ -116,6 +117,8 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs chan *to
 			if err := c.deleteCache(ctx, obj.Resource.Id); err != nil {
 				c.log.Error("Error deleting cache", zap.Error(err))
 			}
+		default:
+			c.log.Warn("UpdateCacheRequest action is not implemented", zap.String("action", fmt.Sprintf("%T", obj.Action)))
 		}
 	}
 }
