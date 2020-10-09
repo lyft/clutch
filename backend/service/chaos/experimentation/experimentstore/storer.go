@@ -218,8 +218,7 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 			return nil, err
 		}
 
-		err = jsonpb.Unmarshal(strings.NewReader(details), config.Config)
-		if err != nil {
+		if err = jsonpb.Unmarshal(strings.NewReader(details), config.Config); err != nil {
 			return nil, err
 		}
 

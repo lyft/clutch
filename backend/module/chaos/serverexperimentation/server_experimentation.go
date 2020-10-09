@@ -22,6 +22,7 @@ const (
 
 type Service struct {
 	storer experimentstore.Storer
+	logger *zap.SugaredLogger
 }
 
 // New instantiates a Service object.
@@ -38,18 +39,18 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 
 	return &Service{
 		storer: storer,
+		logger: logger.Sugar(),
 	}, nil
 }
 
 func (s *Service) Register(r module.Registrar) error {
-	s.storer.RegisterTransformation("type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig", transform)
+	s.storer.RegisterTransformation("type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig", s.transform)
 	return nil
 }
 
-func transform(config *experimentstore.ExperimentConfig) ([]*experimentation.Property, error) {
+func (s *Service) transform(config *experimentstore.ExperimentConfig) ([]*experimentation.Property, error) {
 	var testConfig = serverexperimentation.TestConfig{}
-	err := ptypes.UnmarshalAny(config.Config, &testConfig)
-	if err != nil {
+	if err := ptypes.UnmarshalAny(config.Config, &testConfig); err != nil {
 		return []*experimentation.Property{}, err
 	}
 
@@ -62,6 +63,9 @@ func transform(config *experimentstore.ExperimentConfig) ([]*experimentation.Pro
 		description = "Abort"
 	case *serverexperimentation.TestConfig_Latency:
 		description = "Latency"
+	default:
+		s.logger.Errorw("GetExperiments: Unable to retrieve experiments", "fault", testConfig.GetFault())
+		return nil, fmt.Errorf("unexpected fault type %v", testConfig.GetFault())
 	}
 
 	return []*experimentation.Property{

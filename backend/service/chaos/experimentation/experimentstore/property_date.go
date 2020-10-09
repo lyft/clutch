@@ -11,9 +11,11 @@ import (
 func TimeToPropertyDateValue(t sql.NullTime) (*experimentation.Property_DateValue, error) {
 	if t.Valid {
 		timestamp, err := ptypes.TimestampProto(t.Time)
-		if err == nil {
-			return &experimentation.Property_DateValue{DateValue: timestamp}, nil
+		if err != nil {
+			return nil, err
 		}
+
+		return &experimentation.Property_DateValue{DateValue: timestamp}, nil
 	}
 
 	return nil, nil
