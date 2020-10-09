@@ -18,6 +18,14 @@ message TestConfig {
     AbortFaultConfig abort = 2;
     LatencyFaultConfig latency = 3;
   }
+
+  FaultInjectionType fault_injection_type = 4;
+}
+
+// FaultInjectionType
+enum FaultInjectionType {
+  INGRESS = 0;
+  EGRESS = 1;
 }
 
 // Targets requests from downstream_cluster -> upstream_cluster
