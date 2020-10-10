@@ -15,8 +15,8 @@ message TestConfig {
   ClusterPairTarget cluster_pair = 1;
 
   oneof fault {
-    AbortFaultConfig abort = 3;
-    LatencyFaultConfig latency = 4;
+    AbortFaultConfig abort = 2;
+    LatencyFaultConfig latency = 3;
   }
 }
 
