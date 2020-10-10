@@ -14,22 +14,10 @@ message TestConfig {
   // the traffic that faults should be applied to.
   ClusterPairTarget cluster_pair = 1;
 
-  // The type of traffic faults should be applied to.
-  TrafficType traffic_type = 2;
-
   oneof fault {
     AbortFaultConfig abort = 3;
     LatencyFaultConfig latency = 4;
   }
-}
-
-// Specifies the type of traffic faults should be applied to.
-enum TrafficType {
-  TRAFFICTYPE_UNSPECIFIED = 0;
-  // Apply faults on ingress trafic coming to an upstream cluster.
-  TRAFFICTYPE_INGRESS = 1;
-  // Apply faults on egress trafic coming out of a downstream cluster.
-  TRAFFICTYPE_EGRESS = 2;
 }
 
 // Targets requests from downstream_cluster -> upstream_cluster/
