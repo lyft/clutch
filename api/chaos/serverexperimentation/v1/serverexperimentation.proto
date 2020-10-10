@@ -20,7 +20,7 @@ message TestConfig {
   }
 }
 
-// Targets requests from downstream_cluster -> upstream_cluster/
+// Targets requests from downstream_cluster -> upstream_cluster.
 message ClusterPairTarget {
   // The name of the downstream cluster.
   string downstream_cluster = 1 [ (validate.rules).string = {min_bytes : 1} ];
