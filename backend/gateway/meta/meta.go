@@ -2,7 +2,6 @@ package meta
 
 import (
 	"fmt"
-	"log"
 	"reflect"
 	"regexp"
 	"strings"
@@ -195,7 +194,6 @@ func APIMetadata(metadata interface{}) *any.Any {
 	if !ok {
 		return nil
 	}
-	log.Printf("protomsg: %v", protomsg)
 
 	a, err := ptypes.MarshalAny(protomsg)
 	if err != nil {
