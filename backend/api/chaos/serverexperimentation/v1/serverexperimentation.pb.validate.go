@@ -53,8 +53,6 @@ func (m *TestConfig) Validate() error {
 		}
 	}
 
-	// no validation rules for TrafficType
-
 	switch m.Fault.(type) {
 
 	case *TestConfig_Abort:

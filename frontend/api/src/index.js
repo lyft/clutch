@@ -7755,7 +7755,6 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.chaos.serverexperimentation.v1
                      * @interface ITestConfig
                      * @property {clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null} [clusterPair] TestConfig clusterPair
-                     * @property {clutch.chaos.serverexperimentation.v1.TrafficType|null} [trafficType] TestConfig trafficType
                      * @property {clutch.chaos.serverexperimentation.v1.IAbortFaultConfig|null} [abort] TestConfig abort
                      * @property {clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null} [latency] TestConfig latency
                      */
@@ -7782,14 +7781,6 @@ export const clutch = $root.clutch = (() => {
                      * @instance
                      */
                     TestConfig.prototype.clusterPair = null;
-
-                    /**
-                     * TestConfig trafficType.
-                     * @member {clutch.chaos.serverexperimentation.v1.TrafficType} trafficType
-                     * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
-                     * @instance
-                     */
-                    TestConfig.prototype.trafficType = 0;
 
                     /**
                      * TestConfig abort.
@@ -7838,15 +7829,6 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "clusterPair." + error;
                         }
-                        if (message.trafficType != null && message.hasOwnProperty("trafficType"))
-                            switch (message.trafficType) {
-                            default:
-                                return "trafficType: enum value expected";
-                            case 0:
-                            case 1:
-                            case 2:
-                                break;
-                            }
                         if (message.abort != null && message.hasOwnProperty("abort")) {
                             properties.fault = 1;
                             {
@@ -7885,20 +7867,6 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.chaos.serverexperimentation.v1.TestConfig.clusterPair: object expected");
                             message.clusterPair = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.fromObject(object.clusterPair);
                         }
-                        switch (object.trafficType) {
-                        case "TRAFFICTYPE_UNSPECIFIED":
-                        case 0:
-                            message.trafficType = 0;
-                            break;
-                        case "TRAFFICTYPE_INGRESS":
-                        case 1:
-                            message.trafficType = 1;
-                            break;
-                        case "TRAFFICTYPE_EGRESS":
-                        case 2:
-                            message.trafficType = 2;
-                            break;
-                        }
                         if (object.abort != null) {
                             if (typeof object.abort !== "object")
                                 throw TypeError(".clutch.chaos.serverexperimentation.v1.TestConfig.abort: object expected");
@@ -7925,14 +7893,10 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.defaults) {
+                        if (options.defaults)
                             object.clusterPair = null;
-                            object.trafficType = options.enums === String ? "TRAFFICTYPE_UNSPECIFIED" : 0;
-                        }
                         if (message.clusterPair != null && message.hasOwnProperty("clusterPair"))
                             object.clusterPair = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.toObject(message.clusterPair, options);
-                        if (message.trafficType != null && message.hasOwnProperty("trafficType"))
-                            object.trafficType = options.enums === String ? $root.clutch.chaos.serverexperimentation.v1.TrafficType[message.trafficType] : message.trafficType;
                         if (message.abort != null && message.hasOwnProperty("abort")) {
                             object.abort = $root.clutch.chaos.serverexperimentation.v1.AbortFaultConfig.toObject(message.abort, options);
                             if (options.oneofs)
@@ -7958,22 +7922,6 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return TestConfig;
-                })();
-
-                /**
-                 * TrafficType enum.
-                 * @name clutch.chaos.serverexperimentation.v1.TrafficType
-                 * @enum {number}
-                 * @property {number} TRAFFICTYPE_UNSPECIFIED=0 TRAFFICTYPE_UNSPECIFIED value
-                 * @property {number} TRAFFICTYPE_INGRESS=1 TRAFFICTYPE_INGRESS value
-                 * @property {number} TRAFFICTYPE_EGRESS=2 TRAFFICTYPE_EGRESS value
-                 */
-                v1.TrafficType = (function() {
-                    const valuesById = {}, values = Object.create(valuesById);
-                    values[valuesById[0] = "TRAFFICTYPE_UNSPECIFIED"] = 0;
-                    values[valuesById[1] = "TRAFFICTYPE_INGRESS"] = 1;
-                    values[valuesById[2] = "TRAFFICTYPE_EGRESS"] = 2;
-                    return values;
                 })();
 
                 v1.ClusterPairTarget = (function() {
