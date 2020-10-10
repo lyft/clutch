@@ -25,7 +25,7 @@ const (
 
 // Service contains all dependencies for the API service.
 type Service struct {
-	experimentStore             experimentstore.ExperimentStore
+	storer                      experimentstore.Storer
 	logger                      *zap.SugaredLogger
 	createExperimentStat        tally.Counter
 	cancelExperimentRunStat     tally.Counter
@@ -41,13 +41,13 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 		return nil, errors.New("could not find experiment store service")
 	}
 
-	experimentStore, ok := store.(experimentstore.ExperimentStore)
+	experimentStore, ok := store.(experimentstore.Storer)
 	if !ok {
 		return nil, errors.New("service was not the correct type")
 	}
 
 	return &Service{
-		experimentStore:             experimentStore,
+		storer:                      experimentStore,
 		logger:                      logger.Sugar(),
 		createExperimentStat:        scope.Counter("create_experiment"),
 		cancelExperimentRunStat:     scope.Counter("cancel_experiment_run"),
@@ -81,7 +81,7 @@ func (s *Service) CreateExperiment(ctx context.Context, req *experimentation.Cre
 		endTime = &s
 	}
 
-	experiment, err := s.experimentStore.CreateExperiment(ctx, req.Config, startTime, endTime)
+	experiment, err := s.storer.CreateExperiment(ctx, req.Config, startTime, endTime)
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +92,7 @@ func (s *Service) CreateExperiment(ctx context.Context, req *experimentation.Cre
 // CancelExperimentRun cancels experiment that is currently running or is scheduled to be run in the future.
 func (s *Service) CancelExperimentRun(ctx context.Context, req *experimentation.CancelExperimentRunRequest) (*experimentation.CancelExperimentRunResponse, error) {
 	s.cancelExperimentRunStat.Inc(1)
-	err := s.experimentStore.CancelExperimentRun(ctx, req.Id)
+	err := s.storer.CancelExperimentRun(ctx, req.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -103,7 +103,7 @@ func (s *Service) CancelExperimentRun(ctx context.Context, req *experimentation.
 // GetExperiments returns all experiments from the experiment store.
 func (s *Service) GetExperiments(ctx context.Context, request *experimentation.GetExperimentsRequest) (*experimentation.GetExperimentsResponse, error) {
 	s.getExperimentsStat.Inc(1)
-	experiments, err := s.experimentStore.GetExperiments(ctx, request.GetConfigType(), request.GetStatus())
+	experiments, err := s.storer.GetExperiments(ctx, request.GetConfigType(), request.GetStatus())
 	if err != nil {
 		s.logger.Errorw("GetExperiments: Unable to retrieve experiments", "error", err)
 		return &experimentation.GetExperimentsResponse{}, err
@@ -114,7 +114,7 @@ func (s *Service) GetExperiments(ctx context.Context, request *experimentation.G
 
 func (s *Service) GetListView(ctx context.Context, _ *experimentation.GetListViewRequest) (*experimentation.GetListViewResponse, error) {
 	s.getListViewStat.Inc(1)
-	items, err := s.experimentStore.GetListView(ctx)
+	items, err := s.storer.GetListView(ctx)
 	if err != nil {
 		return &experimentation.GetListViewResponse{}, err
 	}
@@ -124,7 +124,7 @@ func (s *Service) GetListView(ctx context.Context, _ *experimentation.GetListVie
 
 func (s *Service) GetExperimentRunDetails(ctx context.Context, request *experimentation.GetExperimentRunDetailsRequest) (*experimentation.GetExperimentRunDetailsResponse, error) {
 	s.getExperimentRunDetailsStat.Inc(1)
-	runDetails, err := s.experimentStore.GetExperimentRunDetails(ctx, request.Id)
+	runDetails, err := s.storer.GetExperimentRunDetails(ctx, request.Id)
 	if err != nil {
 		return &experimentation.GetExperimentRunDetailsResponse{}, err
 	}
