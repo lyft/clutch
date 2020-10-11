@@ -105,7 +105,7 @@ func (x Constraint_Operator) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Constraint_Operator.Descriptor instead.
 func (Constraint_Operator) EnumDescriptor() ([]byte, []int) {
-	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{3, 0}
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{5, 0}
 }
 
 // if aggregate, then all timeseries or array metadata is aggregated into a
@@ -173,7 +173,7 @@ func (x MetadataQuery_Aggregation) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use MetadataQuery_Aggregation.Descriptor instead.
 func (MetadataQuery_Aggregation) EnumDescriptor() ([]byte, []int) {
-	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{4, 0}
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{6, 0}
 }
 
 // Action signifies to the topology service what to do with an incoming topology Resource
@@ -226,7 +226,7 @@ func (x UpdateCacheRequest_Action) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use UpdateCacheRequest_Action.Descriptor instead.
 func (UpdateCacheRequest_Action) EnumDescriptor() ([]byte, []int) {
-	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{10, 0}
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{12, 0}
 }
 
 type GetTopologyRequest struct {
@@ -323,6 +323,132 @@ func (x *GetTopologyResponse) GetResults() []*QueryResult {
 	return nil
 }
 
+type SearchTopologyRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Sort          string            `protobuf:"bytes,1,opt,name=sort,proto3" json:"sort,omitempty"`
+	Skip          int32             `protobuf:"varint,2,opt,name=skip,proto3" json:"skip,omitempty"`
+	Limit         int32             `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`
+	TypeUrl       string            `protobuf:"bytes,4,opt,name=type_url,json=typeUrl,proto3" json:"type_url,omitempty"`
+	MetadataQuery map[string]string `protobuf:"bytes,5,rep,name=metadata_query,json=metadataQuery,proto3" json:"metadata_query,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (x *SearchTopologyRequest) Reset() {
+	*x = SearchTopologyRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_topology_v1_topology_api_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SearchTopologyRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SearchTopologyRequest) ProtoMessage() {}
+
+func (x *SearchTopologyRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_topology_v1_topology_api_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SearchTopologyRequest.ProtoReflect.Descriptor instead.
+func (*SearchTopologyRequest) Descriptor() ([]byte, []int) {
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *SearchTopologyRequest) GetSort() string {
+	if x != nil {
+		return x.Sort
+	}
+	return ""
+}
+
+func (x *SearchTopologyRequest) GetSkip() int32 {
+	if x != nil {
+		return x.Skip
+	}
+	return 0
+}
+
+func (x *SearchTopologyRequest) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+func (x *SearchTopologyRequest) GetTypeUrl() string {
+	if x != nil {
+		return x.TypeUrl
+	}
+	return ""
+}
+
+func (x *SearchTopologyRequest) GetMetadataQuery() map[string]string {
+	if x != nil {
+		return x.MetadataQuery
+	}
+	return nil
+}
+
+type SearchTopologyResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Resources []*Resource `protobuf:"bytes,1,rep,name=Resources,proto3" json:"Resources,omitempty"`
+}
+
+func (x *SearchTopologyResponse) Reset() {
+	*x = SearchTopologyResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_topology_v1_topology_api_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SearchTopologyResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SearchTopologyResponse) ProtoMessage() {}
+
+func (x *SearchTopologyResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_topology_v1_topology_api_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SearchTopologyResponse.ProtoReflect.Descriptor instead.
+func (*SearchTopologyResponse) Descriptor() ([]byte, []int) {
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *SearchTopologyResponse) GetResources() []*Resource {
+	if x != nil {
+		return x.Resources
+	}
+	return nil
+}
+
 // A query allows the user to specify multiple dimensions and the
 // corresponding desired values for the identifying features of the returned
 // nodes.
@@ -338,7 +464,7 @@ type FeatureQuery struct {
 func (x *FeatureQuery) Reset() {
 	*x = FeatureQuery{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topology_v1_topology_api_proto_msgTypes[2]
+		mi := &file_topology_v1_topology_api_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -351,7 +477,7 @@ func (x *FeatureQuery) String() string {
 func (*FeatureQuery) ProtoMessage() {}
 
 func (x *FeatureQuery) ProtoReflect() protoreflect.Message {
-	mi := &file_topology_v1_topology_api_proto_msgTypes[2]
+	mi := &file_topology_v1_topology_api_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -364,7 +490,7 @@ func (x *FeatureQuery) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FeatureQuery.ProtoReflect.Descriptor instead.
 func (*FeatureQuery) Descriptor() ([]byte, []int) {
-	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{2}
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *FeatureQuery) GetName() string {
@@ -394,7 +520,7 @@ type Constraint struct {
 func (x *Constraint) Reset() {
 	*x = Constraint{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topology_v1_topology_api_proto_msgTypes[3]
+		mi := &file_topology_v1_topology_api_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -407,7 +533,7 @@ func (x *Constraint) String() string {
 func (*Constraint) ProtoMessage() {}
 
 func (x *Constraint) ProtoReflect() protoreflect.Message {
-	mi := &file_topology_v1_topology_api_proto_msgTypes[3]
+	mi := &file_topology_v1_topology_api_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -420,7 +546,7 @@ func (x *Constraint) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Constraint.ProtoReflect.Descriptor instead.
 func (*Constraint) Descriptor() ([]byte, []int) {
-	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{3}
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *Constraint) GetOperator() Constraint_Operator {
@@ -459,7 +585,7 @@ type MetadataQuery struct {
 func (x *MetadataQuery) Reset() {
 	*x = MetadataQuery{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topology_v1_topology_api_proto_msgTypes[4]
+		mi := &file_topology_v1_topology_api_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -472,7 +598,7 @@ func (x *MetadataQuery) String() string {
 func (*MetadataQuery) ProtoMessage() {}
 
 func (x *MetadataQuery) ProtoReflect() protoreflect.Message {
-	mi := &file_topology_v1_topology_api_proto_msgTypes[4]
+	mi := &file_topology_v1_topology_api_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -485,7 +611,7 @@ func (x *MetadataQuery) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MetadataQuery.ProtoReflect.Descriptor instead.
 func (*MetadataQuery) Descriptor() ([]byte, []int) {
-	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{4}
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *MetadataQuery) GetName() string {
@@ -541,7 +667,7 @@ type Query struct {
 func (x *Query) Reset() {
 	*x = Query{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topology_v1_topology_api_proto_msgTypes[5]
+		mi := &file_topology_v1_topology_api_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -554,7 +680,7 @@ func (x *Query) String() string {
 func (*Query) ProtoMessage() {}
 
 func (x *Query) ProtoReflect() protoreflect.Message {
-	mi := &file_topology_v1_topology_api_proto_msgTypes[5]
+	mi := &file_topology_v1_topology_api_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -567,7 +693,7 @@ func (x *Query) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Query.ProtoReflect.Descriptor instead.
 func (*Query) Descriptor() ([]byte, []int) {
-	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{5}
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *Query) GetFeatures() []*FeatureQuery {
@@ -626,7 +752,7 @@ type QueryResult struct {
 func (x *QueryResult) Reset() {
 	*x = QueryResult{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topology_v1_topology_api_proto_msgTypes[6]
+		mi := &file_topology_v1_topology_api_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -639,7 +765,7 @@ func (x *QueryResult) String() string {
 func (*QueryResult) ProtoMessage() {}
 
 func (x *QueryResult) ProtoReflect() protoreflect.Message {
-	mi := &file_topology_v1_topology_api_proto_msgTypes[6]
+	mi := &file_topology_v1_topology_api_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -652,7 +778,7 @@ func (x *QueryResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use QueryResult.ProtoReflect.Descriptor instead.
 func (*QueryResult) Descriptor() ([]byte, []int) {
-	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{6}
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *QueryResult) GetStatus() *status.Status {
@@ -711,7 +837,7 @@ type Node struct {
 func (x *Node) Reset() {
 	*x = Node{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topology_v1_topology_api_proto_msgTypes[7]
+		mi := &file_topology_v1_topology_api_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -724,7 +850,7 @@ func (x *Node) String() string {
 func (*Node) ProtoMessage() {}
 
 func (x *Node) ProtoReflect() protoreflect.Message {
-	mi := &file_topology_v1_topology_api_proto_msgTypes[7]
+	mi := &file_topology_v1_topology_api_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -737,7 +863,7 @@ func (x *Node) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Node.ProtoReflect.Descriptor instead.
 func (*Node) Descriptor() ([]byte, []int) {
-	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{7}
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *Node) GetId() string {
@@ -781,7 +907,7 @@ type Edge struct {
 func (x *Edge) Reset() {
 	*x = Edge{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topology_v1_topology_api_proto_msgTypes[8]
+		mi := &file_topology_v1_topology_api_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -794,7 +920,7 @@ func (x *Edge) String() string {
 func (*Edge) ProtoMessage() {}
 
 func (x *Edge) ProtoReflect() protoreflect.Message {
-	mi := &file_topology_v1_topology_api_proto_msgTypes[8]
+	mi := &file_topology_v1_topology_api_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -807,7 +933,7 @@ func (x *Edge) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Edge.ProtoReflect.Descriptor instead.
 func (*Edge) Descriptor() ([]byte, []int) {
-	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{8}
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *Edge) GetId() string {
@@ -855,7 +981,7 @@ type Resource struct {
 func (x *Resource) Reset() {
 	*x = Resource{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topology_v1_topology_api_proto_msgTypes[9]
+		mi := &file_topology_v1_topology_api_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -868,7 +994,7 @@ func (x *Resource) String() string {
 func (*Resource) ProtoMessage() {}
 
 func (x *Resource) ProtoReflect() protoreflect.Message {
-	mi := &file_topology_v1_topology_api_proto_msgTypes[9]
+	mi := &file_topology_v1_topology_api_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -881,7 +1007,7 @@ func (x *Resource) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Resource.ProtoReflect.Descriptor instead.
 func (*Resource) Descriptor() ([]byte, []int) {
-	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{9}
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *Resource) GetId() string {
@@ -920,7 +1046,7 @@ type UpdateCacheRequest struct {
 func (x *UpdateCacheRequest) Reset() {
 	*x = UpdateCacheRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_topology_v1_topology_api_proto_msgTypes[10]
+		mi := &file_topology_v1_topology_api_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -933,7 +1059,7 @@ func (x *UpdateCacheRequest) String() string {
 func (*UpdateCacheRequest) ProtoMessage() {}
 
 func (x *UpdateCacheRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_topology_v1_topology_api_proto_msgTypes[10]
+	mi := &file_topology_v1_topology_api_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -946,7 +1072,7 @@ func (x *UpdateCacheRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCacheRequest.ProtoReflect.Descriptor instead.
 func (*UpdateCacheRequest) Descriptor() ([]byte, []int) {
-	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{10}
+	return file_topology_v1_topology_api_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *UpdateCacheRequest) GetResource() *Resource {
@@ -987,7 +1113,30 @@ var file_topology_v1_topology_api_proto_rawDesc = []byte{
 	0x12, 0x39, 0x0a, 0x07, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28,
 	0x0b, 0x32, 0x1f, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x74, 0x6f, 0x70, 0x6f, 0x6c,
 	0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x52, 0x65, 0x73, 0x75,
-	0x6c, 0x74, 0x52, 0x07, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x73, 0x22, 0x3a, 0x0a, 0x0c, 0x46,
+	0x6c, 0x74, 0x52, 0x07, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x73, 0x22, 0x97, 0x02, 0x0a, 0x15,
+	0x53, 0x65, 0x61, 0x72, 0x63, 0x68, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x73, 0x6f, 0x72, 0x74, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x04, 0x73, 0x6f, 0x72, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x73, 0x6b, 0x69,
+	0x70, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x73, 0x6b, 0x69, 0x70, 0x12, 0x14, 0x0a,
+	0x05, 0x6c, 0x69, 0x6d, 0x69, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x05, 0x6c, 0x69,
+	0x6d, 0x69, 0x74, 0x12, 0x19, 0x0a, 0x08, 0x74, 0x79, 0x70, 0x65, 0x5f, 0x75, 0x72, 0x6c, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x74, 0x79, 0x70, 0x65, 0x55, 0x72, 0x6c, 0x12, 0x63,
+	0x0a, 0x0e, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x5f, 0x71, 0x75, 0x65, 0x72, 0x79,
+	0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x3c, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e,
+	0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x61, 0x72,
+	0x63, 0x68, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x2e, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x51, 0x75, 0x65, 0x72, 0x79, 0x45,
+	0x6e, 0x74, 0x72, 0x79, 0x52, 0x0d, 0x6d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x51, 0x75,
+	0x65, 0x72, 0x79, 0x1a, 0x40, 0x0a, 0x12, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0x51,
+	0x75, 0x65, 0x72, 0x79, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76,
+	0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75,
+	0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x54, 0x0a, 0x16, 0x53, 0x65, 0x61, 0x72, 0x63, 0x68, 0x54,
+	0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x3a, 0x0a, 0x09, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x74, 0x6f, 0x70, 0x6f,
+	0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x52, 0x09, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x73, 0x22, 0x3a, 0x0a, 0x0c, 0x46,
 	0x65, 0x61, 0x74, 0x75, 0x72, 0x65, 0x51, 0x75, 0x65, 0x72, 0x79, 0x12, 0x12, 0x0a, 0x04, 0x6e,
 	0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12,
 	0x16, 0x0a, 0x06, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52,
@@ -1140,7 +1289,7 @@ var file_topology_v1_topology_api_proto_rawDesc = []byte{
 	0x0f, 0x0a, 0x0b, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00,
 	0x12, 0x14, 0x0a, 0x10, 0x43, 0x52, 0x45, 0x41, 0x54, 0x45, 0x5f, 0x4f, 0x52, 0x5f, 0x55, 0x50,
 	0x44, 0x41, 0x54, 0x45, 0x10, 0x01, 0x12, 0x0a, 0x0a, 0x06, 0x44, 0x45, 0x4c, 0x45, 0x54, 0x45,
-	0x10, 0x02, 0x32, 0x99, 0x01, 0x0a, 0x0b, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x41,
+	0x10, 0x02, 0x32, 0xa9, 0x02, 0x0a, 0x0b, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x41,
 	0x50, 0x49, 0x12, 0x89, 0x01, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f,
 	0x67, 0x79, 0x12, 0x26, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x74, 0x6f, 0x70, 0x6f,
 	0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x6f, 0x70, 0x6f, 0x6c,
@@ -1149,7 +1298,16 @@ var file_topology_v1_topology_api_proto_rawDesc = []byte{
 	0x47, 0x65, 0x74, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f,
 	0x6e, 0x73, 0x65, 0x22, 0x29, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1d, 0x22, 0x18, 0x2f, 0x76, 0x31,
 	0x2f, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2f, 0x67, 0x65, 0x74, 0x54, 0x6f, 0x70,
-	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x3a, 0x01, 0x2a, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x02, 0x42, 0x0c,
+	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x3a, 0x01, 0x2a, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x02, 0x12, 0x8d,
+	0x01, 0x0a, 0x0e, 0x53, 0x65, 0x61, 0x72, 0x63, 0x68, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67,
+	0x79, 0x12, 0x29, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x74, 0x6f, 0x70, 0x6f, 0x6c,
+	0x6f, 0x67, 0x79, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x61, 0x72, 0x63, 0x68, 0x54, 0x6f, 0x70,
+	0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x63,
+	0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2e, 0x76,
+	0x31, 0x2e, 0x53, 0x65, 0x61, 0x72, 0x63, 0x68, 0x54, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x24, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x18,
+	0x22, 0x13, 0x2f, 0x76, 0x31, 0x2f, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x2f, 0x73,
+	0x65, 0x61, 0x72, 0x63, 0x68, 0x3a, 0x01, 0x2a, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x02, 0x42, 0x0c,
 	0x5a, 0x0a, 0x74, 0x6f, 0x70, 0x6f, 0x6c, 0x6f, 0x67, 0x79, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x33,
 }
@@ -1167,66 +1325,73 @@ func file_topology_v1_topology_api_proto_rawDescGZIP() []byte {
 }
 
 var file_topology_v1_topology_api_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_topology_v1_topology_api_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_topology_v1_topology_api_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
 var file_topology_v1_topology_api_proto_goTypes = []interface{}{
 	(Constraint_Operator)(0),       // 0: clutch.topology.v1.Constraint.Operator
 	(MetadataQuery_Aggregation)(0), // 1: clutch.topology.v1.MetadataQuery.Aggregation
 	(UpdateCacheRequest_Action)(0), // 2: clutch.topology.v1.UpdateCacheRequest.Action
 	(*GetTopologyRequest)(nil),     // 3: clutch.topology.v1.GetTopologyRequest
 	(*GetTopologyResponse)(nil),    // 4: clutch.topology.v1.GetTopologyResponse
-	(*FeatureQuery)(nil),           // 5: clutch.topology.v1.FeatureQuery
-	(*Constraint)(nil),             // 6: clutch.topology.v1.Constraint
-	(*MetadataQuery)(nil),          // 7: clutch.topology.v1.MetadataQuery
-	(*Query)(nil),                  // 8: clutch.topology.v1.Query
-	(*QueryResult)(nil),            // 9: clutch.topology.v1.QueryResult
-	(*Node)(nil),                   // 10: clutch.topology.v1.Node
-	(*Edge)(nil),                   // 11: clutch.topology.v1.Edge
-	(*Resource)(nil),               // 12: clutch.topology.v1.Resource
-	(*UpdateCacheRequest)(nil),     // 13: clutch.topology.v1.UpdateCacheRequest
-	nil,                            // 14: clutch.topology.v1.QueryResult.NodesEntry
-	nil,                            // 15: clutch.topology.v1.QueryResult.EdgesEntry
-	nil,                            // 16: clutch.topology.v1.Node.FeaturesEntry
-	nil,                            // 17: clutch.topology.v1.Node.MetadataEntry
-	nil,                            // 18: clutch.topology.v1.Edge.MetadataEntry
-	nil,                            // 19: clutch.topology.v1.Resource.MetadataEntry
-	(*_struct.Value)(nil),          // 20: google.protobuf.Value
-	(*_struct.Struct)(nil),         // 21: google.protobuf.Struct
-	(*status.Status)(nil),          // 22: google.rpc.Status
-	(*any.Any)(nil),                // 23: google.protobuf.Any
+	(*SearchTopologyRequest)(nil),  // 5: clutch.topology.v1.SearchTopologyRequest
+	(*SearchTopologyResponse)(nil), // 6: clutch.topology.v1.SearchTopologyResponse
+	(*FeatureQuery)(nil),           // 7: clutch.topology.v1.FeatureQuery
+	(*Constraint)(nil),             // 8: clutch.topology.v1.Constraint
+	(*MetadataQuery)(nil),          // 9: clutch.topology.v1.MetadataQuery
+	(*Query)(nil),                  // 10: clutch.topology.v1.Query
+	(*QueryResult)(nil),            // 11: clutch.topology.v1.QueryResult
+	(*Node)(nil),                   // 12: clutch.topology.v1.Node
+	(*Edge)(nil),                   // 13: clutch.topology.v1.Edge
+	(*Resource)(nil),               // 14: clutch.topology.v1.Resource
+	(*UpdateCacheRequest)(nil),     // 15: clutch.topology.v1.UpdateCacheRequest
+	nil,                            // 16: clutch.topology.v1.SearchTopologyRequest.MetadataQueryEntry
+	nil,                            // 17: clutch.topology.v1.QueryResult.NodesEntry
+	nil,                            // 18: clutch.topology.v1.QueryResult.EdgesEntry
+	nil,                            // 19: clutch.topology.v1.Node.FeaturesEntry
+	nil,                            // 20: clutch.topology.v1.Node.MetadataEntry
+	nil,                            // 21: clutch.topology.v1.Edge.MetadataEntry
+	nil,                            // 22: clutch.topology.v1.Resource.MetadataEntry
+	(*_struct.Value)(nil),          // 23: google.protobuf.Value
+	(*_struct.Struct)(nil),         // 24: google.protobuf.Struct
+	(*status.Status)(nil),          // 25: google.rpc.Status
+	(*any.Any)(nil),                // 26: google.protobuf.Any
 }
 var file_topology_v1_topology_api_proto_depIdxs = []int32{
-	8,  // 0: clutch.topology.v1.GetTopologyRequest.queries:type_name -> clutch.topology.v1.Query
-	9,  // 1: clutch.topology.v1.GetTopologyResponse.results:type_name -> clutch.topology.v1.QueryResult
-	0,  // 2: clutch.topology.v1.Constraint.operator:type_name -> clutch.topology.v1.Constraint.Operator
-	20, // 3: clutch.topology.v1.Constraint.value:type_name -> google.protobuf.Value
-	21, // 4: clutch.topology.v1.MetadataQuery.params:type_name -> google.protobuf.Struct
-	1,  // 5: clutch.topology.v1.MetadataQuery.aggregation:type_name -> clutch.topology.v1.MetadataQuery.Aggregation
-	6,  // 6: clutch.topology.v1.MetadataQuery.constraints:type_name -> clutch.topology.v1.Constraint
-	5,  // 7: clutch.topology.v1.Query.features:type_name -> clutch.topology.v1.FeatureQuery
-	7,  // 8: clutch.topology.v1.Query.node_metadata:type_name -> clutch.topology.v1.MetadataQuery
-	7,  // 9: clutch.topology.v1.Query.edge_metadata:type_name -> clutch.topology.v1.MetadataQuery
-	22, // 10: clutch.topology.v1.QueryResult.status:type_name -> google.rpc.Status
-	8,  // 11: clutch.topology.v1.QueryResult.query:type_name -> clutch.topology.v1.Query
-	14, // 12: clutch.topology.v1.QueryResult.nodes:type_name -> clutch.topology.v1.QueryResult.NodesEntry
-	15, // 13: clutch.topology.v1.QueryResult.edges:type_name -> clutch.topology.v1.QueryResult.EdgesEntry
-	16, // 14: clutch.topology.v1.Node.features:type_name -> clutch.topology.v1.Node.FeaturesEntry
-	17, // 15: clutch.topology.v1.Node.metadata:type_name -> clutch.topology.v1.Node.MetadataEntry
-	18, // 16: clutch.topology.v1.Edge.metadata:type_name -> clutch.topology.v1.Edge.MetadataEntry
-	23, // 17: clutch.topology.v1.Resource.pb:type_name -> google.protobuf.Any
-	19, // 18: clutch.topology.v1.Resource.metadata:type_name -> clutch.topology.v1.Resource.MetadataEntry
-	12, // 19: clutch.topology.v1.UpdateCacheRequest.resource:type_name -> clutch.topology.v1.Resource
-	2,  // 20: clutch.topology.v1.UpdateCacheRequest.action:type_name -> clutch.topology.v1.UpdateCacheRequest.Action
-	10, // 21: clutch.topology.v1.QueryResult.NodesEntry.value:type_name -> clutch.topology.v1.Node
-	11, // 22: clutch.topology.v1.QueryResult.EdgesEntry.value:type_name -> clutch.topology.v1.Edge
-	20, // 23: clutch.topology.v1.Node.MetadataEntry.value:type_name -> google.protobuf.Value
-	20, // 24: clutch.topology.v1.Edge.MetadataEntry.value:type_name -> google.protobuf.Value
-	3,  // 25: clutch.topology.v1.TopologyAPI.GetTopology:input_type -> clutch.topology.v1.GetTopologyRequest
-	4,  // 26: clutch.topology.v1.TopologyAPI.GetTopology:output_type -> clutch.topology.v1.GetTopologyResponse
-	26, // [26:27] is the sub-list for method output_type
-	25, // [25:26] is the sub-list for method input_type
-	25, // [25:25] is the sub-list for extension type_name
-	25, // [25:25] is the sub-list for extension extendee
-	0,  // [0:25] is the sub-list for field type_name
+	10, // 0: clutch.topology.v1.GetTopologyRequest.queries:type_name -> clutch.topology.v1.Query
+	11, // 1: clutch.topology.v1.GetTopologyResponse.results:type_name -> clutch.topology.v1.QueryResult
+	16, // 2: clutch.topology.v1.SearchTopologyRequest.metadata_query:type_name -> clutch.topology.v1.SearchTopologyRequest.MetadataQueryEntry
+	14, // 3: clutch.topology.v1.SearchTopologyResponse.Resources:type_name -> clutch.topology.v1.Resource
+	0,  // 4: clutch.topology.v1.Constraint.operator:type_name -> clutch.topology.v1.Constraint.Operator
+	23, // 5: clutch.topology.v1.Constraint.value:type_name -> google.protobuf.Value
+	24, // 6: clutch.topology.v1.MetadataQuery.params:type_name -> google.protobuf.Struct
+	1,  // 7: clutch.topology.v1.MetadataQuery.aggregation:type_name -> clutch.topology.v1.MetadataQuery.Aggregation
+	8,  // 8: clutch.topology.v1.MetadataQuery.constraints:type_name -> clutch.topology.v1.Constraint
+	7,  // 9: clutch.topology.v1.Query.features:type_name -> clutch.topology.v1.FeatureQuery
+	9,  // 10: clutch.topology.v1.Query.node_metadata:type_name -> clutch.topology.v1.MetadataQuery
+	9,  // 11: clutch.topology.v1.Query.edge_metadata:type_name -> clutch.topology.v1.MetadataQuery
+	25, // 12: clutch.topology.v1.QueryResult.status:type_name -> google.rpc.Status
+	10, // 13: clutch.topology.v1.QueryResult.query:type_name -> clutch.topology.v1.Query
+	17, // 14: clutch.topology.v1.QueryResult.nodes:type_name -> clutch.topology.v1.QueryResult.NodesEntry
+	18, // 15: clutch.topology.v1.QueryResult.edges:type_name -> clutch.topology.v1.QueryResult.EdgesEntry
+	19, // 16: clutch.topology.v1.Node.features:type_name -> clutch.topology.v1.Node.FeaturesEntry
+	20, // 17: clutch.topology.v1.Node.metadata:type_name -> clutch.topology.v1.Node.MetadataEntry
+	21, // 18: clutch.topology.v1.Edge.metadata:type_name -> clutch.topology.v1.Edge.MetadataEntry
+	26, // 19: clutch.topology.v1.Resource.pb:type_name -> google.protobuf.Any
+	22, // 20: clutch.topology.v1.Resource.metadata:type_name -> clutch.topology.v1.Resource.MetadataEntry
+	14, // 21: clutch.topology.v1.UpdateCacheRequest.resource:type_name -> clutch.topology.v1.Resource
+	2,  // 22: clutch.topology.v1.UpdateCacheRequest.action:type_name -> clutch.topology.v1.UpdateCacheRequest.Action
+	12, // 23: clutch.topology.v1.QueryResult.NodesEntry.value:type_name -> clutch.topology.v1.Node
+	13, // 24: clutch.topology.v1.QueryResult.EdgesEntry.value:type_name -> clutch.topology.v1.Edge
+	23, // 25: clutch.topology.v1.Node.MetadataEntry.value:type_name -> google.protobuf.Value
+	23, // 26: clutch.topology.v1.Edge.MetadataEntry.value:type_name -> google.protobuf.Value
+	3,  // 27: clutch.topology.v1.TopologyAPI.GetTopology:input_type -> clutch.topology.v1.GetTopologyRequest
+	5,  // 28: clutch.topology.v1.TopologyAPI.SearchTopology:input_type -> clutch.topology.v1.SearchTopologyRequest
+	4,  // 29: clutch.topology.v1.TopologyAPI.GetTopology:output_type -> clutch.topology.v1.GetTopologyResponse
+	6,  // 30: clutch.topology.v1.TopologyAPI.SearchTopology:output_type -> clutch.topology.v1.SearchTopologyResponse
+	29, // [29:31] is the sub-list for method output_type
+	27, // [27:29] is the sub-list for method input_type
+	27, // [27:27] is the sub-list for extension type_name
+	27, // [27:27] is the sub-list for extension extendee
+	0,  // [0:27] is the sub-list for field type_name
 }
 
 func init() { file_topology_v1_topology_api_proto_init() }
@@ -1260,7 +1425,7 @@ func file_topology_v1_topology_api_proto_init() {
 			}
 		}
 		file_topology_v1_topology_api_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*FeatureQuery); i {
+			switch v := v.(*SearchTopologyRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1272,7 +1437,7 @@ func file_topology_v1_topology_api_proto_init() {
 			}
 		}
 		file_topology_v1_topology_api_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Constraint); i {
+			switch v := v.(*SearchTopologyResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1284,7 +1449,7 @@ func file_topology_v1_topology_api_proto_init() {
 			}
 		}
 		file_topology_v1_topology_api_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MetadataQuery); i {
+			switch v := v.(*FeatureQuery); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1296,7 +1461,7 @@ func file_topology_v1_topology_api_proto_init() {
 			}
 		}
 		file_topology_v1_topology_api_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Query); i {
+			switch v := v.(*Constraint); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1308,7 +1473,7 @@ func file_topology_v1_topology_api_proto_init() {
 			}
 		}
 		file_topology_v1_topology_api_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryResult); i {
+			switch v := v.(*MetadataQuery); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1320,7 +1485,7 @@ func file_topology_v1_topology_api_proto_init() {
 			}
 		}
 		file_topology_v1_topology_api_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Node); i {
+			switch v := v.(*Query); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1332,7 +1497,7 @@ func file_topology_v1_topology_api_proto_init() {
 			}
 		}
 		file_topology_v1_topology_api_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Edge); i {
+			switch v := v.(*QueryResult); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1344,7 +1509,7 @@ func file_topology_v1_topology_api_proto_init() {
 			}
 		}
 		file_topology_v1_topology_api_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Resource); i {
+			switch v := v.(*Node); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1356,6 +1521,30 @@ func file_topology_v1_topology_api_proto_init() {
 			}
 		}
 		file_topology_v1_topology_api_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Edge); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_topology_v1_topology_api_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Resource); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_topology_v1_topology_api_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateCacheRequest); i {
 			case 0:
 				return &v.state
@@ -1374,7 +1563,7 @@ func file_topology_v1_topology_api_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_topology_v1_topology_api_proto_rawDesc,
 			NumEnums:      3,
-			NumMessages:   17,
+			NumMessages:   20,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -1402,6 +1591,7 @@ const _ = grpc.SupportPackageIsVersion6
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type TopologyAPIClient interface {
 	GetTopology(ctx context.Context, in *GetTopologyRequest, opts ...grpc.CallOption) (*GetTopologyResponse, error)
+	SearchTopology(ctx context.Context, in *SearchTopologyRequest, opts ...grpc.CallOption) (*SearchTopologyResponse, error)
 }
 
 type topologyAPIClient struct {
@@ -1421,9 +1611,19 @@ func (c *topologyAPIClient) GetTopology(ctx context.Context, in *GetTopologyRequ
 	return out, nil
 }
 
+func (c *topologyAPIClient) SearchTopology(ctx context.Context, in *SearchTopologyRequest, opts ...grpc.CallOption) (*SearchTopologyResponse, error) {
+	out := new(SearchTopologyResponse)
+	err := c.cc.Invoke(ctx, "/clutch.topology.v1.TopologyAPI/SearchTopology", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TopologyAPIServer is the server API for TopologyAPI service.
 type TopologyAPIServer interface {
 	GetTopology(context.Context, *GetTopologyRequest) (*GetTopologyResponse, error)
+	SearchTopology(context.Context, *SearchTopologyRequest) (*SearchTopologyResponse, error)
 }
 
 // UnimplementedTopologyAPIServer can be embedded to have forward compatible implementations.
@@ -1432,6 +1632,9 @@ type UnimplementedTopologyAPIServer struct {
 
 func (*UnimplementedTopologyAPIServer) GetTopology(context.Context, *GetTopologyRequest) (*GetTopologyResponse, error) {
 	return nil, status1.Errorf(codes.Unimplemented, "method GetTopology not implemented")
+}
+func (*UnimplementedTopologyAPIServer) SearchTopology(context.Context, *SearchTopologyRequest) (*SearchTopologyResponse, error) {
+	return nil, status1.Errorf(codes.Unimplemented, "method SearchTopology not implemented")
 }
 
 func RegisterTopologyAPIServer(s *grpc.Server, srv TopologyAPIServer) {
@@ -1456,6 +1659,24 @@ func _TopologyAPI_GetTopology_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TopologyAPI_SearchTopology_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchTopologyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TopologyAPIServer).SearchTopology(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.topology.v1.TopologyAPI/SearchTopology",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TopologyAPIServer).SearchTopology(ctx, req.(*SearchTopologyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _TopologyAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "clutch.topology.v1.TopologyAPI",
 	HandlerType: (*TopologyAPIServer)(nil),
@@ -1463,6 +1684,10 @@ var _TopologyAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTopology",
 			Handler:    _TopologyAPI_GetTopology_Handler,
+		},
+		{
+			MethodName: "SearchTopology",
+			Handler:    _TopologyAPI_SearchTopology_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

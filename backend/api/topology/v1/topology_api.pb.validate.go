@@ -200,6 +200,165 @@ var _ interface {
 	ErrorName() string
 } = GetTopologyResponseValidationError{}
 
+// Validate checks the field values on SearchTopologyRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *SearchTopologyRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Sort
+
+	// no validation rules for Skip
+
+	// no validation rules for Limit
+
+	// no validation rules for TypeUrl
+
+	// no validation rules for MetadataQuery
+
+	return nil
+}
+
+// SearchTopologyRequestValidationError is the validation error returned by
+// SearchTopologyRequest.Validate if the designated constraints aren't met.
+type SearchTopologyRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SearchTopologyRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SearchTopologyRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SearchTopologyRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SearchTopologyRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SearchTopologyRequestValidationError) ErrorName() string {
+	return "SearchTopologyRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SearchTopologyRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSearchTopologyRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SearchTopologyRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SearchTopologyRequestValidationError{}
+
+// Validate checks the field values on SearchTopologyResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *SearchTopologyResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for idx, item := range m.GetResources() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SearchTopologyResponseValidationError{
+					field:  fmt.Sprintf("Resources[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// SearchTopologyResponseValidationError is the validation error returned by
+// SearchTopologyResponse.Validate if the designated constraints aren't met.
+type SearchTopologyResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SearchTopologyResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SearchTopologyResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SearchTopologyResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SearchTopologyResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SearchTopologyResponseValidationError) ErrorName() string {
+	return "SearchTopologyResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SearchTopologyResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSearchTopologyResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SearchTopologyResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SearchTopologyResponseValidationError{}
+
 // Validate checks the field values on FeatureQuery with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.
