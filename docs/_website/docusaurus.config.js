@@ -113,6 +113,8 @@ module.exports = {
       anonymizeIP: true,
     },
     algolia : {
+      // This is a read-only, search-only key served directly by the front-end, managed by Algolia via their
+      // free DocSearch program. The key is not sensitive. See https://docsearch.algolia.com/ for more details.
       apiKey: '32f1f7956b3d2c3c90fbe259c7901d94',
       indexName: 'lyft_clutch',
     },
