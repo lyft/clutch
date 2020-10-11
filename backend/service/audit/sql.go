@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/any"
 	"go.uber.org/zap"
 	rpcstatus "google.golang.org/genproto/googleapis/rpc/status"
 
@@ -29,6 +30,7 @@ func (c *client) WriteRequestEvent(ctx context.Context, event *auditv1.RequestEv
 		Method:           event.MethodName,
 		ActionType:       event.Type.String(),
 		RequestResources: convertResources(event.Resources),
+		RequestMetadata:  event.RequestMetadata,
 	}
 	blob, err := json.Marshal(dbEvent)
 	if err != nil {
@@ -52,6 +54,7 @@ func (c *client) UpdateRequestEvent(ctx context.Context, id int64, update *audit
 			Message: update.Status.Message,
 		},
 		ResponseResources: convertResources(update.Resources),
+		ResponseMetadata:  update.ResponseMetadata,
 	}
 	blob, err := json.Marshal(dbEvent)
 	if err != nil {
@@ -167,6 +170,8 @@ type eventDetails struct {
 	Status            status      `json:"status,omitempty"`
 	RequestResources  []*resource `json:"request_resources,omitempty"`
 	ResponseResources []*resource `json:"response_resources,omitempty"`
+	RequestMetadata   *any.Any    `json:"request_metadata,omitempty"`
+	ResponseMetadata  *any.Any    `json:"response_metadata,omitempty"`
 }
 
 func (e *eventDetails) ResourcesProto() []*auditv1.Resource {
@@ -199,12 +204,14 @@ type event struct {
 
 func (e *event) RequestEventProto() *auditv1.RequestEvent {
 	return &auditv1.RequestEvent{
-		Username:    e.Details.Username,
-		ServiceName: e.Details.Service,
-		MethodName:  e.Details.Method,
-		Type:        apiv1.ActionType(apiv1.ActionType_value[e.Details.ActionType]),
-		Status:      e.Details.Status.Status(),
-		Resources:   e.Details.ResourcesProto(),
+		Username:         e.Details.Username,
+		ServiceName:      e.Details.Service,
+		MethodName:       e.Details.Method,
+		Type:             apiv1.ActionType(apiv1.ActionType_value[e.Details.ActionType]),
+		Status:           e.Details.Status.Status(),
+		Resources:        e.Details.ResourcesProto(),
+		RequestMetadata:  e.Details.RequestMetadata,
+		ResponseMetadata: e.Details.ResponseMetadata,
 	}
 }
 
