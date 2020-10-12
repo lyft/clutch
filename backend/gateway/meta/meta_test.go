@@ -111,15 +111,6 @@ func TestResourceNames(t *testing.T) {
 }
 
 func TestAPIMetadata(t *testing.T) {
-	// nil value
-	result := APIMetadata(nil)
-	assert.Nil(t, result)
-
-	// non Ptr value
-	result = APIMetadata([]string{"foo"})
-	assert.Nil(t, result)
-
-	// Ptr value
-	result = APIMetadata(&k8sv1.DeletePodRequest{})
+	result := APIMetadata(&k8sv1.DeletePodRequest{})
 	assert.NotNil(t, result)
 }
