@@ -30,15 +30,18 @@ type Storer interface {
 	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
 	GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error)
+	RegisterTransformation(transformation Transformation) error
 	Close()
 }
 
 type storer struct {
-	db *sql.DB
+	db          *sql.DB
+	logger      *zap.SugaredLogger
+	transformer *Transformer
 }
 
 // New returns a new NewExperimentStore instance.
-func New(_ *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
+func New(_ *any.Any, logger *zap.Logger, _ tally.Scope) (service.Service, error) {
 	p, ok := service.Registry[pgservice.Name]
 	if !ok {
 		return nil, errors.New("could not find database service")
@@ -49,8 +52,11 @@ func New(_ *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
 		return nil, errors.New("experiment store wrong type")
 	}
 
+	transformer := NewTransformer()
 	return &storer{
 		client.DB(),
+		logger.Sugar(),
+		&transformer,
 	}, nil
 }
 
@@ -124,19 +130,6 @@ func (s *storer) CreateExperiment(ctx context.Context, config *any.Any, startTim
 	}, nil
 }
 
-func toProto(t *time.Time) (*timestamp.Timestamp, error) {
-	if t == nil {
-		return nil, nil
-	}
-
-	timestampProto, err := ptypes.TimestampProto(*t)
-	if err != nil {
-		return nil, err
-	}
-
-	return timestampProto, nil
-}
-
 func (s *storer) CancelExperimentRun(ctx context.Context, id uint64) error {
 	sql :=
 		`UPDATE experiment_run 
@@ -205,6 +198,7 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 			upper(execution_time),
 			cancellation_time,
 			creation_time,
+			experiment_config.id,
 			details
 		FROM experiment_config, experiment_run
 		WHERE
@@ -219,35 +213,24 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 
 	var listViewItems []*experimentation.ListViewItem
 	for rows.Next() {
-		var fetchedID uint64
-		var startTime, endTime, cancellationTime sql.NullTime
-		var creationTime time.Time
 		var details string
-		err = rows.Scan(&fetchedID, &startTime, &endTime, &cancellationTime, &creationTime, &details)
+		run := ExperimentRun{}
+		config := ExperimentConfig{Config: &any.Any{}}
+		err = rows.Scan(&run.id, &run.startTime, &run.endTime, &run.cancellationTime, &run.creationTime, &config.id, &details)
 		if err != nil {
 			return nil, err
 		}
 
-		anyConfig := &any.Any{}
-		err = jsonpb.Unmarshal(strings.NewReader(details), anyConfig)
+		if err = jsonpb.Unmarshal(strings.NewReader(details), config.Config); err != nil {
+			return nil, err
+		}
+
+		item, err := NewRunListView(&run, &config, s.transformer, time.Now())
 		if err != nil {
 			return nil, err
 		}
 
-		properties, err := NewProperties(fetchedID, creationTime, startTime, endTime, cancellationTime, time.Now(), details)
-		if err != nil {
-			return nil, err
-		}
-
-		propertiesMapItems := make(map[string]*experimentation.Property)
-		for _, p := range properties {
-			propertiesMapItems[p.Id] = p
-		}
-
-		listViewItems = append(listViewItems, &experimentation.ListViewItem{
-			Identifier: fetchedID,
-			Properties: &experimentation.PropertiesMap{Items: propertiesMapItems},
-		})
+		listViewItems = append(listViewItems, item)
 	}
 
 	err = rows.Err()
@@ -260,27 +243,59 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 
 func (s *storer) GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error) {
 	sqlQuery := `
-        SELECT experiment_run.id, lower(execution_time), upper(execution_time), cancellation_time, creation_time, details FROM experiment_config, experiment_run
+		SELECT 
+			experiment_run.id,
+			lower(execution_time),
+			upper(execution_time),
+			cancellation_time,
+			creation_time,
+			experiment_config.id, 
+			details FROM experiment_config, experiment_run
         WHERE experiment_run.id = $1 AND experiment_run.experiment_config_id = experiment_config.id`
 
 	row := s.db.QueryRowContext(ctx, sqlQuery, id)
 
-	var fetchedID uint64
-	var startTime, endTime, cancellationTime sql.NullTime
-	var creationTime time.Time
 	var details string
-
-	err := row.Scan(&fetchedID, &startTime, &endTime, &cancellationTime, &creationTime, &details)
+	run := ExperimentRun{}
+	config := ExperimentConfig{Config: &any.Any{}}
+	err := row.Scan(&run.id, &run.startTime, &run.endTime, &run.cancellationTime, &run.creationTime, &config.id, &details)
 	if err != nil {
 		return nil, err
 	}
 
-	return NewRunDetails(fetchedID, creationTime, startTime, endTime, cancellationTime, time.Now(), details)
+	err = jsonpb.Unmarshal(strings.NewReader(details), config.Config)
+	if err != nil {
+		return nil, err
+	}
+
+	return NewRunDetails(&run, &config, s.transformer, time.Now())
 }
 
 // Close closes all resources held.
 func (s *storer) Close() {
 	s.db.Close()
+}
+
+func (s *storer) RegisterTransformation(transformation Transformation) error {
+	err := s.transformer.Register(transformation)
+	if err != nil {
+		s.logger.Fatal("Could not register transformation %v", transformation)
+	}
+
+	return err
+}
+
+func toProto(t *time.Time) (*timestamp.Timestamp, error) {
+	if t == nil {
+		return nil, nil
+	}
+
+	timestampProto, err := ptypes.TimestampProto(*t)
+	if err != nil {
+		return nil, err
+	}
+
+	return timestampProto, nil
 }
 
 func marshalConfig(config *any.Any) (string, error) {
