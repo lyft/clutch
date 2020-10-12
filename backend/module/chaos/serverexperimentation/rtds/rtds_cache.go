@@ -115,7 +115,9 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 	allExperiments, err := storer.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig", experimentation.GetExperimentsRequest_RUNNING)
 	if err != nil {
 		logger.Errorw("Failed to get data from experiments store", "error", err)
-		return
+
+		// If failed to get data from DB, stop all ongoing faults.
+		allExperiments = []*experimentation.Experiment{}
 	}
 
 	// Group faults by upstream cluster
