@@ -174,9 +174,9 @@ func resolvePattern(message descriptor.Message, pattern *apiv1.Pattern) *auditv1
 	return &auditv1.Resource{TypeUrl: pattern.TypeUrl, Id: resourceName}
 }
 
-// APIMetadata returns the API request/response interface (pointer value) as an anypb.Any message.
-func APIMetadata(metadata interface{}) *any.Any {
-	protomsg, ok := metadata.(proto.Message)
+// APIBody returns the API request/response interface (pointer value) as an anypb.Any message.
+func APIBody(body interface{}) *any.Any {
+	protomsg, ok := body.(proto.Message)
 	if !ok {
 		return nil
 	}

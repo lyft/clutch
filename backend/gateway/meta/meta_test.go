@@ -111,6 +111,6 @@ func TestResourceNames(t *testing.T) {
 }
 
 func TestAPIMetadata(t *testing.T) {
-	result := APIMetadata(&k8sv1.DeletePodRequest{})
+	result := APIBody(&k8sv1.DeletePodRequest{})
 	assert.NotNil(t, result)
 }

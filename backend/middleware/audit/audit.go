@@ -92,7 +92,7 @@ func (m *mid) eventFromRequest(ctx context.Context, req interface{}, info *grpc.
 		Type:        meta.GetAction(info.FullMethod),
 		Resources:   meta.ResourceNames(req.(descriptor.Message)),
 		RequestMetadata: &auditv1.RequestMetadata{
-			Body: meta.APIMetadata(req),
+			Body: meta.APIBody(req),
 		},
 	}
 }
@@ -107,7 +107,7 @@ func (m *mid) eventFromResponse(resp interface{}, err error) *auditv1.RequestEve
 		Status:    s.Proto(),
 		Resources: meta.ResourceNames(resp.(descriptor.Message)),
 		ResponseMetadata: &auditv1.ResponseMetadata{
-			Body: meta.APIMetadata(resp),
+			Body: meta.APIBody(resp),
 		},
 	}
 }
