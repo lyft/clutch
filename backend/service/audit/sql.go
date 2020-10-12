@@ -10,6 +10,7 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"go.uber.org/zap"
 	rpcstatus "google.golang.org/genproto/googleapis/rpc/status"
+	"google.golang.org/protobuf/encoding/protojson"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
@@ -30,7 +31,7 @@ func (c *client) WriteRequestEvent(ctx context.Context, event *auditv1.RequestEv
 		Method:           event.MethodName,
 		ActionType:       event.Type.String(),
 		RequestResources: convertResources(event.Resources),
-		RequestMetadata:  event.RequestMetadata,
+		RequestBody:      convertAPIBody(event.RequestMetadata.Body),
 	}
 	blob, err := json.Marshal(dbEvent)
 	if err != nil {
@@ -54,7 +55,7 @@ func (c *client) UpdateRequestEvent(ctx context.Context, id int64, update *audit
 			Message: update.Status.Message,
 		},
 		ResponseResources: convertResources(update.Resources),
-		ResponseMetadata:  update.ResponseMetadata,
+		ResponseBody:      convertAPIBody(update.ResponseMetadata.Body),
 	}
 	blob, err := json.Marshal(dbEvent)
 	if err != nil {
@@ -163,15 +164,15 @@ type resource struct {
 }
 
 type eventDetails struct {
-	Username          string      `json:"user_name,omitempty"`
-	Service           string      `json:"service_name,omitempty"`
-	Method            string      `json:"method_name,omitempty"`
-	ActionType        string      `json:"type,omitempty"`
-	Status            status      `json:"status,omitempty"`
-	RequestResources  []*resource `json:"request_resources,omitempty"`
-	ResponseResources []*resource `json:"response_resources,omitempty"`
-	RequestMetadata   *any.Any    `json:"request_metadata,omitempty"`
-	ResponseMetadata  *any.Any    `json:"response_metadata,omitempty"`
+	Username          string          `json:"user_name,omitempty"`
+	Service           string          `json:"service_name,omitempty"`
+	Method            string          `json:"method_name,omitempty"`
+	ActionType        string          `json:"type,omitempty"`
+	Status            status          `json:"status,omitempty"`
+	RequestResources  []*resource     `json:"request_resources,omitempty"`
+	ResponseResources []*resource     `json:"response_resources,omitempty"`
+	RequestBody       json.RawMessage `json:"request_body,omitempty"`
+	ResponseBody      json.RawMessage `json:"response_body,omitempty"`
 }
 
 func (e *eventDetails) ResourcesProto() []*auditv1.Resource {
@@ -204,14 +205,18 @@ type event struct {
 
 func (e *event) RequestEventProto() *auditv1.RequestEvent {
 	return &auditv1.RequestEvent{
-		Username:         e.Details.Username,
-		ServiceName:      e.Details.Service,
-		MethodName:       e.Details.Method,
-		Type:             apiv1.ActionType(apiv1.ActionType_value[e.Details.ActionType]),
-		Status:           e.Details.Status.Status(),
-		Resources:        e.Details.ResourcesProto(),
-		RequestMetadata:  e.Details.RequestMetadata,
-		ResponseMetadata: e.Details.ResponseMetadata,
+		Username:    e.Details.Username,
+		ServiceName: e.Details.Service,
+		MethodName:  e.Details.Method,
+		Type:        apiv1.ActionType(apiv1.ActionType_value[e.Details.ActionType]),
+		Status:      e.Details.Status.Status(),
+		Resources:   e.Details.ResourcesProto(),
+		RequestMetadata: &auditv1.RequestMetadata{
+			Body: apiBodyProto(e.Details.RequestBody),
+		},
+		ResponseMetadata: &auditv1.ResponseMetadata{
+			Body: apiBodyProto(e.Details.ResponseBody),
+		},
 	}
 }
 
@@ -221,4 +226,25 @@ func convertResources(proto []*auditv1.Resource) []*resource {
 		resources = append(resources, &resource{Id: p.Id, TypeUrl: p.TypeUrl})
 	}
 	return resources
+}
+
+// Encodes proto object in JSON format
+func convertAPIBody(body *any.Any) json.RawMessage {
+	b, err := protojson.Marshal(body)
+	if err != nil {
+		return nil
+	}
+	return json.RawMessage(b)
+}
+
+// Decodes JSON to proto Any message
+func apiBodyProto(details []byte) *any.Any {
+	body := &any.Any{}
+
+	err := protojson.Unmarshal(details, body)
+	if err != nil {
+		return nil
+	}
+
+	return body
 }
