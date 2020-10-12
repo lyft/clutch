@@ -163,6 +163,7 @@ yarn-ensure:
 k8s-start:
 	tools/kind.sh create cluster --name clutch || true
 	tools/kind.sh get kubeconfig --name clutch > $(PROJECT_ROOT_DIR)/build/kubeconfig-clutch
+	tools/kube-seed.sh
 
 	@echo
 	@echo "Run the follow command to export the environment variables:"
