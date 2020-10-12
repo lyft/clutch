@@ -17,8 +17,17 @@ import (
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
-// TODO (mcutalo): Make this configurable or keep this at a high value
+// TODO (mcutalo): Make this configurable or keep this at a high value.
+// The implications of resync running often is both the pressure it puts on our datastore,
+// and the additional requests that we place on all configured kubernetes cluster.
+// We have to be mindful of our clients Burst & QPS configuration,
+// which is overrideable by the user.
 const informerResyncTime = time.Hour * 1
+
+// Setting a large channel buffer mostly for first boot and the  resync timer,
+// this really should be sized according to the size of your k8s deployment.
+// However this should be a large enough buffer for the datastore to keep up with.
+const topologyObjectChanBufferSize = 5000
 
 func (s *svc) CacheEnabled() bool {
 	return true
@@ -40,7 +49,6 @@ func (s *svc) StartTopologyCaching(ctx context.Context) <-chan *topologyv1.Updat
 func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 	factory := informers.NewSharedInformerFactoryWithOptions(cs, informerResyncTime)
 	stop := make(chan struct{})
-	defer close(stop)
 
 	podInformer := factory.Core().V1().Pods().Informer()
 	deploymentInformer := factory.Apps().V1().Deployments().Informer()
@@ -62,6 +70,7 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 
 	<-ctx.Done()
 	s.log.Info("Shutting down the kubernetes cache informers")
+	close(stop)
 	close(s.topologyObjectChan)
 	s.topologyInformerLock.Unlock()
 }
@@ -89,9 +98,8 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 		}
 		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
-				Id:       pod.Name,
-				Pb:       protoPod,
-				Metadata: pod.GetLabels(),
+				Id: pod.Name,
+				Pb: protoPod,
 			},
 			Action: action,
 		}
@@ -104,9 +112,8 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 		}
 		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
-				Id:       deployment.Name,
-				Pb:       protoDeployment,
-				Metadata: deployment.GetLabels(),
+				Id: deployment.Name,
+				Pb: protoDeployment,
 			},
 			Action: action,
 		}
@@ -119,9 +126,8 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 		}
 		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
-				Id:       hpa.Name,
-				Pb:       protoHpa,
-				Metadata: hpa.GetLabels(),
+				Id: hpa.Name,
+				Pb: protoHpa,
 			},
 			Action: action,
 		}

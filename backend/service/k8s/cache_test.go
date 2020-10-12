@@ -28,7 +28,6 @@ func TestProcessInformerEvent(t *testing.T) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "test-pod-1",
 			Namespace: "testing-namespace",
-			Labels:    map[string]string{"foo": "bar"},
 		},
 	}
 
@@ -38,9 +37,8 @@ func TestProcessInformerEvent(t *testing.T) {
 
 	expectedUpdateCacheRequest := &topologyv1.UpdateCacheRequest{
 		Resource: &topologyv1.Resource{
-			Id:       "test-pod-1",
-			Pb:       protoPod,
-			Metadata: expectedClutchPod.GetLabels(),
+			Id: "test-pod-1",
+			Pb: protoPod,
 		},
 		Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
 	}

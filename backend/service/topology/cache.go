@@ -6,10 +6,6 @@ import (
 	"database/sql"
 	"encoding/binary"
 	"encoding/json"
-	"fmt"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
 
 	"go.uber.org/zap"
@@ -23,8 +19,7 @@ const topologyCacheLockId = "topology:cache"
 
 // Performs leader election by acquiring a postgres advisory lock.
 // Once the lock is acquired topology caching is started.
-func (c *client) acquireTopologyCacheLock() {
-	ctx, ctxCancelFunc := context.WithCancel(context.Background())
+func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 	advisoryLockId := convertLockIdToAdvisoryLockId(topologyCacheLockId)
 	ticker := time.NewTicker(time.Second * 10)
 
@@ -36,14 +31,9 @@ func (c *client) acquireTopologyCacheLock() {
 	}
 	defer conn.Close()
 
-	// catch signals, shutdown caching by canceling the context, and release the advisory lock.
-	sigc := make(chan os.Signal, 1)
-	signal.Notify(sigc, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 	go func() {
-		<-sigc
-		c.log.Info("Caught shutdown signal, shutting down topology caching and releasing advisory lock")
+		<-ctx.Done()
 		ticker.Stop()
-		ctxCancelFunc()
 		c.unlockAdvisoryLock(context.TODO(), conn, advisoryLockId)
 	}()
 
@@ -79,7 +69,7 @@ func (c *client) tryAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uin
 func (c *client) unlockAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uint32) bool {
 	var unlock bool
 	if err := conn.QueryRowContext(ctx, "SELECT pg_advisory_unlock($1)", lockId).Scan(&unlock); err != nil {
-		c.log.Error("Unable to perfrom an advisory unlock", zap.Error(err))
+		c.log.Error("Unable to perform an advisory unlock", zap.Error(err))
 	}
 	return unlock
 }
@@ -118,7 +108,7 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *
 				c.log.Error("Error deleting cache", zap.Error(err))
 			}
 		default:
-			c.log.Warn("UpdateCacheRequest action is not implemented", zap.String("action", fmt.Sprintf("%T", obj.Action)))
+			c.log.Warn("UpdateCacheRequest action is not implemented", zap.String("action", obj.Action.String()))
 		}
 	}
 }

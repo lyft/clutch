@@ -3,6 +3,9 @@ package topology
 import (
 	"database/sql"
 	"errors"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
@@ -63,7 +66,16 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		scope:  scope,
 	}, nil
 
-	go c.acquireTopologyCacheLock()
+	ctx, ctxCancelFunc := context.WithCancel(context.Background())
+	sigc := make(chan os.Signal, 1)
+	signal.Notify(sigc, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	go func() {
+		<-sigc
+		c.log.Info("Caught shutdown signal, shutting down topology caching and releasing advisory lock")
+		ctxCancelFunc()
+	}()
+
+	go c.acquireTopologyCacheLock(ctx)
 
 	return c, err
 }
