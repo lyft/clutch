@@ -276,10 +276,13 @@ func (s *storer) Close() {
 	s.db.Close()
 }
 
-func (s *storer) RegisterTransformation(transformation Transformation) {
-	if s.transformer.Register(transformation) != nil {
-		s.logger.Fatal("Could not register a transformation %v", transformation)
+func (s *storer) RegisterTransformation(transformation Transformation) error {
+	err := s.transformer.Register(transformation)
+	if err != nil {
+		s.logger.Fatal("Could not register transformation %v", transformation)
 	}
+
+	return err
 }
 
 func toProto(t *time.Time) (*timestamp.Timestamp, error) {
