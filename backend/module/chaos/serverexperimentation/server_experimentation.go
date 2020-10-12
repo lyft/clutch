@@ -44,8 +44,8 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 }
 
 func (s *Service) Register(r module.Registrar) error {
-	s.storer.RegisterTransformation("type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig", s.transform)
-	return nil
+	transformation := experimentstore.Transformation{ConfigTypeUrl: "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig", ConfigTransform: s.transform}
+	return s.storer.RegisterTransformation(transformation)
 }
 
 func (s *Service) transform(config *experimentstore.ExperimentConfig) ([]*experimentation.Property, error) {

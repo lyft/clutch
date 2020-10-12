@@ -10,10 +10,10 @@ import (
 )
 
 func TestConfigPropertiesWithNoRegisteredTransform(t *testing.T) {
-	transformer := &Transformer{nameToConfigTransformMap: map[string]func(*ExperimentConfig) ([]*experimentation.Property, error){}}
+	transformer := NewTransformer()
 	config := &ExperimentConfig{id: 1, Config: &any.Any{}}
 
-	properties, err := config.CreateProperties(transformer)
+	properties, err := config.CreateProperties(&transformer)
 
 	assert := assert.New(t)
 	assert.NoError(err)
@@ -23,8 +23,9 @@ func TestConfigPropertiesWithNoRegisteredTransform(t *testing.T) {
 }
 
 func TestConfigPropertiesWithRegisteredTransform(t *testing.T) {
-	transformer := &Transformer{nameToConfigTransformMap: map[string]func(*ExperimentConfig) ([]*experimentation.Property, error){}}
-	transformer.nameToConfigTransformMap["type"] = func(config *ExperimentConfig) ([]*experimentation.Property, error) {
+	assert := assert.New(t)
+
+	transform := func(config *ExperimentConfig) ([]*experimentation.Property, error) {
 		return []*experimentation.Property{
 			{
 				Id:    "foo",
@@ -33,11 +34,13 @@ func TestConfigPropertiesWithRegisteredTransform(t *testing.T) {
 			},
 		}, nil
 	}
+	transformation := Transformation{ConfigTypeUrl: "type", ConfigTransform: transform}
+	transformer := NewTransformer()
+	assert.NoError(transformer.Register(transformation))
 
 	config := &ExperimentConfig{id: 1, Config: &any.Any{TypeUrl: "type"}}
-	properties, err := config.CreateProperties(transformer)
+	properties, err := config.CreateProperties(&transformer)
 
-	assert := assert.New(t)
 	assert.NoError(err)
 	assert.Equal(2, len(properties))
 	assert.Equal("config_identifier", properties[0].Id)

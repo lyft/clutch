@@ -30,17 +30,18 @@ type Storer interface {
 	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
 	GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error)
-	RegisterTransformation(typeUrl string, transformation func(*ExperimentConfig) ([]*experimentation.Property, error))
+	RegisterTransformation(transformation Transformation) error
 	Close()
 }
 
 type storer struct {
 	db          *sql.DB
+	logger      *zap.SugaredLogger
 	transformer *Transformer
 }
 
 // New returns a new NewExperimentStore instance.
-func New(_ *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
+func New(_ *any.Any, logger *zap.Logger, _ tally.Scope) (service.Service, error) {
 	p, ok := service.Registry[pgservice.Name]
 	if !ok {
 		return nil, errors.New("could not find database service")
@@ -51,9 +52,11 @@ func New(_ *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
 		return nil, errors.New("experiment store wrong type")
 	}
 
+	transformer := NewTransformer()
 	return &storer{
 		client.DB(),
-		&Transformer{map[string]func(*ExperimentConfig) ([]*experimentation.Property, error){}},
+		logger.Sugar(),
+		&transformer,
 	}, nil
 }
 
@@ -273,8 +276,10 @@ func (s *storer) Close() {
 	s.db.Close()
 }
 
-func (s *storer) RegisterTransformation(typeUrl string, transformation func(*ExperimentConfig) ([]*experimentation.Property, error)) {
-	s.transformer.nameToConfigTransformMap[typeUrl] = transformation
+func (s *storer) RegisterTransformation(transformation Transformation) {
+	if s.transformer.Register(transformation) != nil {
+		s.logger.Fatal("Could not register a transformation %v", transformation)
+	}
 }
 
 func toProto(t *time.Time) (*timestamp.Timestamp, error) {

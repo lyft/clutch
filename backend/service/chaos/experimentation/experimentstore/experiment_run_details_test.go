@@ -22,9 +22,9 @@ func TestScheduledExperiment(t *testing.T) {
 
 	run := &ExperimentRun{id: 1, startTime: startTime, endTime: end, cancellationTime: cancellation, creationTime: creationTime}
 	config := &ExperimentConfig{id: 2, Config: &any.Any{}}
-	transformer := &Transformer{map[string]func(*ExperimentConfig) ([]*experimentation.Property, error){}}
+	transformer := NewTransformer()
 
-	runDetails, err := NewRunDetails(run, config, transformer, now)
+	runDetails, err := NewRunDetails(run, config, &transformer, now)
 
 	assert := assert.New(t)
 	assert.NoError(err)
@@ -40,9 +40,9 @@ func TestCanceledExperiment(t *testing.T) {
 
 	run := &ExperimentRun{id: 1, startTime: startTime, endTime: end, cancellationTime: cancellation, creationTime: creationTime}
 	config := &ExperimentConfig{id: 2, Config: &any.Any{}}
-	transformer := &Transformer{map[string]func(*ExperimentConfig) ([]*experimentation.Property, error){}}
+	transformer := NewTransformer()
 
-	runDetails, err := NewRunDetails(run, config, transformer, time.Now())
+	runDetails, err := NewRunDetails(run, config, &transformer, time.Now())
 
 	assert := assert.New(t)
 	assert.NoError(err)
@@ -56,9 +56,9 @@ func TestRunningExperiment(t *testing.T) {
 
 	run := &ExperimentRun{id: 1, startTime: startTime, endTime: end, cancellationTime: cancellation, creationTime: creationTime}
 	config := &ExperimentConfig{id: 2, Config: &any.Any{}}
-	transformer := &Transformer{map[string]func(*ExperimentConfig) ([]*experimentation.Property, error){}}
+	transformer := NewTransformer()
 
-	runDetails, err := NewRunDetails(run, config, transformer, now)
+	runDetails, err := NewRunDetails(run, config, &transformer, now)
 
 	assert := assert.New(t)
 	assert.NoError(err)
@@ -77,9 +77,9 @@ func TestStoppedExperiment(t *testing.T) {
 
 	run := &ExperimentRun{id: 1, startTime: startTime, endTime: end, cancellationTime: cancellation, creationTime: creationTime}
 	config := &ExperimentConfig{id: 2, Config: &any.Any{}}
-	transformer := &Transformer{map[string]func(*ExperimentConfig) ([]*experimentation.Property, error){}}
+	transformer := NewTransformer()
 
-	runDetails, err := NewRunDetails(run, config, transformer, time.Now())
+	runDetails, err := NewRunDetails(run, config, &transformer, time.Now())
 
 	assert := assert.New(t)
 	assert.NoError(err)
@@ -98,9 +98,9 @@ func TestCompletedExperiment(t *testing.T) {
 
 	run := &ExperimentRun{id: 1, startTime: startTime, endTime: end, cancellationTime: cancellation, creationTime: creationTime}
 	config := &ExperimentConfig{id: 2, Config: &any.Any{}}
-	transformer := &Transformer{map[string]func(*ExperimentConfig) ([]*experimentation.Property, error){}}
+	transformer := NewTransformer()
 
-	runDetails, err := NewRunDetails(run, config, transformer, now)
+	runDetails, err := NewRunDetails(run, config, &transformer, now)
 
 	assert := assert.New(t)
 	assert.NoError(err)
