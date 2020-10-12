@@ -158,3 +158,20 @@ verify: api-verify backend-verify frontend-verify
 .PHONY: yarn-ensure # Install the pinned version of yarn.
 yarn-ensure:
 	@./tools/install-yarn.sh
+
+.PHONY: k8s-start # Start a local k8s cluster
+k8s-start:
+	tools/kind.sh create cluster --name clutch || true
+	tools/kind.sh get kubeconfig --name clutch > $(PROJECT_ROOT_DIR)/build/kubeconfig-clutch
+
+	@echo
+	@echo "Run the follow command to export the environment variables:"
+	@echo '    eval $$(make k8s-env)'
+
+.PHONY: k8s-stop
+k8s-stop:
+	tools/kind.sh delete cluster --name clutch
+
+.PHONY: k8s-env
+k8s-env:
+	export KUBECONFIG=$(PROJECT_ROOT_DIR)/build/kubeconfig-clutch
