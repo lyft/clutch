@@ -1244,6 +1244,216 @@ export const clutch = $root.clutch = (() => {
                 return Resource;
             })();
 
+            v1.RequestMetadata = (function() {
+
+                /**
+                 * Properties of a RequestMetadata.
+                 * @memberof clutch.audit.v1
+                 * @interface IRequestMetadata
+                 * @property {google.protobuf.IAny|null} [body] RequestMetadata body
+                 */
+
+                /**
+                 * Constructs a new RequestMetadata.
+                 * @memberof clutch.audit.v1
+                 * @classdesc Represents a RequestMetadata.
+                 * @implements IRequestMetadata
+                 * @constructor
+                 * @param {clutch.audit.v1.IRequestMetadata=} [properties] Properties to set
+                 */
+                function RequestMetadata(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * RequestMetadata body.
+                 * @member {google.protobuf.IAny|null|undefined} body
+                 * @memberof clutch.audit.v1.RequestMetadata
+                 * @instance
+                 */
+                RequestMetadata.prototype.body = null;
+
+                /**
+                 * Verifies a RequestMetadata message.
+                 * @function verify
+                 * @memberof clutch.audit.v1.RequestMetadata
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                RequestMetadata.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.body != null && message.hasOwnProperty("body")) {
+                        let error = $root.google.protobuf.Any.verify(message.body);
+                        if (error)
+                            return "body." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a RequestMetadata message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.audit.v1.RequestMetadata
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.audit.v1.RequestMetadata} RequestMetadata
+                 */
+                RequestMetadata.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.audit.v1.RequestMetadata)
+                        return object;
+                    let message = new $root.clutch.audit.v1.RequestMetadata();
+                    if (object.body != null) {
+                        if (typeof object.body !== "object")
+                            throw TypeError(".clutch.audit.v1.RequestMetadata.body: object expected");
+                        message.body = $root.google.protobuf.Any.fromObject(object.body);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a RequestMetadata message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.audit.v1.RequestMetadata
+                 * @static
+                 * @param {clutch.audit.v1.RequestMetadata} message RequestMetadata
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                RequestMetadata.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.body = null;
+                    if (message.body != null && message.hasOwnProperty("body"))
+                        object.body = $root.google.protobuf.Any.toObject(message.body, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this RequestMetadata to JSON.
+                 * @function toJSON
+                 * @memberof clutch.audit.v1.RequestMetadata
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                RequestMetadata.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return RequestMetadata;
+            })();
+
+            v1.ResponseMetadata = (function() {
+
+                /**
+                 * Properties of a ResponseMetadata.
+                 * @memberof clutch.audit.v1
+                 * @interface IResponseMetadata
+                 * @property {google.protobuf.IAny|null} [body] ResponseMetadata body
+                 */
+
+                /**
+                 * Constructs a new ResponseMetadata.
+                 * @memberof clutch.audit.v1
+                 * @classdesc Represents a ResponseMetadata.
+                 * @implements IResponseMetadata
+                 * @constructor
+                 * @param {clutch.audit.v1.IResponseMetadata=} [properties] Properties to set
+                 */
+                function ResponseMetadata(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ResponseMetadata body.
+                 * @member {google.protobuf.IAny|null|undefined} body
+                 * @memberof clutch.audit.v1.ResponseMetadata
+                 * @instance
+                 */
+                ResponseMetadata.prototype.body = null;
+
+                /**
+                 * Verifies a ResponseMetadata message.
+                 * @function verify
+                 * @memberof clutch.audit.v1.ResponseMetadata
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ResponseMetadata.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.body != null && message.hasOwnProperty("body")) {
+                        let error = $root.google.protobuf.Any.verify(message.body);
+                        if (error)
+                            return "body." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ResponseMetadata message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.audit.v1.ResponseMetadata
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.audit.v1.ResponseMetadata} ResponseMetadata
+                 */
+                ResponseMetadata.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.audit.v1.ResponseMetadata)
+                        return object;
+                    let message = new $root.clutch.audit.v1.ResponseMetadata();
+                    if (object.body != null) {
+                        if (typeof object.body !== "object")
+                            throw TypeError(".clutch.audit.v1.ResponseMetadata.body: object expected");
+                        message.body = $root.google.protobuf.Any.fromObject(object.body);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ResponseMetadata message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.audit.v1.ResponseMetadata
+                 * @static
+                 * @param {clutch.audit.v1.ResponseMetadata} message ResponseMetadata
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ResponseMetadata.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.body = null;
+                    if (message.body != null && message.hasOwnProperty("body"))
+                        object.body = $root.google.protobuf.Any.toObject(message.body, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this ResponseMetadata to JSON.
+                 * @function toJSON
+                 * @memberof clutch.audit.v1.ResponseMetadata
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ResponseMetadata.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ResponseMetadata;
+            })();
+
             v1.RequestEvent = (function() {
 
                 /**
@@ -1256,8 +1466,8 @@ export const clutch = $root.clutch = (() => {
                  * @property {clutch.api.v1.ActionType|null} [type] RequestEvent type
                  * @property {google.rpc.IStatus|null} [status] RequestEvent status
                  * @property {Array.<clutch.audit.v1.IResource>|null} [resources] RequestEvent resources
-                 * @property {google.protobuf.IAny|null} [requestMetadata] RequestEvent requestMetadata
-                 * @property {google.protobuf.IAny|null} [responseMetadata] RequestEvent responseMetadata
+                 * @property {clutch.audit.v1.IRequestMetadata|null} [requestMetadata] RequestEvent requestMetadata
+                 * @property {clutch.audit.v1.IResponseMetadata|null} [responseMetadata] RequestEvent responseMetadata
                  */
 
                 /**
@@ -1326,7 +1536,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * RequestEvent requestMetadata.
-                 * @member {google.protobuf.IAny|null|undefined} requestMetadata
+                 * @member {clutch.audit.v1.IRequestMetadata|null|undefined} requestMetadata
                  * @memberof clutch.audit.v1.RequestEvent
                  * @instance
                  */
@@ -1334,7 +1544,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * RequestEvent responseMetadata.
-                 * @member {google.protobuf.IAny|null|undefined} responseMetadata
+                 * @member {clutch.audit.v1.IResponseMetadata|null|undefined} responseMetadata
                  * @memberof clutch.audit.v1.RequestEvent
                  * @instance
                  */
@@ -1386,12 +1596,12 @@ export const clutch = $root.clutch = (() => {
                         }
                     }
                     if (message.requestMetadata != null && message.hasOwnProperty("requestMetadata")) {
-                        let error = $root.google.protobuf.Any.verify(message.requestMetadata);
+                        let error = $root.clutch.audit.v1.RequestMetadata.verify(message.requestMetadata);
                         if (error)
                             return "requestMetadata." + error;
                     }
                     if (message.responseMetadata != null && message.hasOwnProperty("responseMetadata")) {
-                        let error = $root.google.protobuf.Any.verify(message.responseMetadata);
+                        let error = $root.clutch.audit.v1.ResponseMetadata.verify(message.responseMetadata);
                         if (error)
                             return "responseMetadata." + error;
                     }
@@ -1456,12 +1666,12 @@ export const clutch = $root.clutch = (() => {
                     if (object.requestMetadata != null) {
                         if (typeof object.requestMetadata !== "object")
                             throw TypeError(".clutch.audit.v1.RequestEvent.requestMetadata: object expected");
-                        message.requestMetadata = $root.google.protobuf.Any.fromObject(object.requestMetadata);
+                        message.requestMetadata = $root.clutch.audit.v1.RequestMetadata.fromObject(object.requestMetadata);
                     }
                     if (object.responseMetadata != null) {
                         if (typeof object.responseMetadata !== "object")
                             throw TypeError(".clutch.audit.v1.RequestEvent.responseMetadata: object expected");
-                        message.responseMetadata = $root.google.protobuf.Any.fromObject(object.responseMetadata);
+                        message.responseMetadata = $root.clutch.audit.v1.ResponseMetadata.fromObject(object.responseMetadata);
                     }
                     return message;
                 };
@@ -1506,9 +1716,9 @@ export const clutch = $root.clutch = (() => {
                             object.resources[j] = $root.clutch.audit.v1.Resource.toObject(message.resources[j], options);
                     }
                     if (message.requestMetadata != null && message.hasOwnProperty("requestMetadata"))
-                        object.requestMetadata = $root.google.protobuf.Any.toObject(message.requestMetadata, options);
+                        object.requestMetadata = $root.clutch.audit.v1.RequestMetadata.toObject(message.requestMetadata, options);
                     if (message.responseMetadata != null && message.hasOwnProperty("responseMetadata"))
-                        object.responseMetadata = $root.google.protobuf.Any.toObject(message.responseMetadata, options);
+                        object.responseMetadata = $root.clutch.audit.v1.ResponseMetadata.toObject(message.responseMetadata, options);
                     return object;
                 };
 

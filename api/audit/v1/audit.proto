@@ -46,6 +46,14 @@ message Resource {
   string id = 2;
 }
 
+message RequestMetadata {
+  google.protobuf.Any body = 1;
+}
+
+message ResponseMetadata {
+  google.protobuf.Any body = 1;
+}
+
 message RequestEvent {
   option (clutch.api.v1.reference).fields = "resources";
 
@@ -68,10 +76,10 @@ message RequestEvent {
   repeated Resource resources = 6;
 
   // The API request saved as metadata for the event.
-  google.protobuf.Any request_metadata = 7;
+  RequestMetadata request_metadata = 7;
 
   // The API response saved as metadata for the event.
-  google.protobuf.Any response_metadata = 8;
+  ResponseMetadata response_metadata = 8;
 }
 
 message Event {
