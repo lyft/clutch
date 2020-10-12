@@ -36,7 +36,7 @@ func TestRegisteredTransform(t *testing.T) {
 	}
 	transformation := Transformation{ConfigTypeUrl: "test", ConfigTransform: transform}
 	transformer := NewTransformer()
-	transformer.Register(transformation)
+	assert.NoError(transformer.Register(transformation))
 
 	properties, err := transformer.CreateProperties(config)
 	assert.NoError(err)
