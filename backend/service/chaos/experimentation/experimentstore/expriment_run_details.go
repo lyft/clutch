@@ -2,144 +2,57 @@ package experimentstore
 
 import (
 	"database/sql"
-	"errors"
-	"strings"
 	"time"
-
-	"github.com/golang/protobuf/jsonpb"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
-func NewRunDetails(fetchedID uint64, creationTime time.Time, startTime sql.NullTime, endTime sql.NullTime, cancellationTime sql.NullTime, now time.Time, details string) (*experimentation.ExperimentRunDetails, error) {
-	status, err := timesToStatus(startTime, endTime, cancellationTime, now)
+func NewRunDetails(run *ExperimentRun, config *ExperimentConfig, transformer *Transformer, now time.Time) (*experimentation.ExperimentRunDetails, error) {
+	status := timesToStatus(run.startTime, run.endTime, run.cancellationTime, now)
+
+	runProperties, err := run.CreateProperties(time.Now())
 	if err != nil {
 		return nil, err
 	}
 
-	properties, err := NewProperties(fetchedID, creationTime, startTime, endTime, cancellationTime, now, details)
+	configProperties, err := config.CreateProperties(transformer)
 	if err != nil {
 		return nil, err
 	}
 
-	anyConfig := &any.Any{}
-	err = jsonpb.Unmarshal(strings.NewReader(details), anyConfig)
+	properties := append(runProperties, configProperties...)
+
 	if err != nil {
 		return nil, err
 	}
 
 	return &experimentation.ExperimentRunDetails{
-		RunId:      fetchedID,
+		RunId:      run.id,
 		Status:     status,
 		Properties: &experimentation.PropertiesList{Items: properties},
-		Config:     anyConfig}, nil
+		Config:     config.Config,
+	}, nil
 }
 
-func NewProperties(fetchedID uint64, creationTime time.Time, startTime sql.NullTime, endTime sql.NullTime, cancellationTime sql.NullTime, now time.Time, details string) ([]*experimentation.Property, error) {
-	status, err := timesToStatus(startTime, endTime, cancellationTime, now)
-	if err != nil {
-		return nil, err
-	}
-
-	startDateValue, err := timeToPropertyDateValue(startTime)
-	if err != nil {
-		return nil, err
-	}
-
-	properties := []*experimentation.Property{
-		{
-			Id:    "run_identifier",
-			Label: "Run Identifier",
-			Value: &experimentation.Property_IntValue{IntValue: int64(fetchedID)},
-		},
-		{
-			Id:    "status",
-			Label: "Status",
-			Value: &experimentation.Property_StringValue{StringValue: statusToString(status)},
-		},
-		{
-			Id:    "start_time",
-			Label: "Start Time",
-			Value: startDateValue,
-		},
-	}
-
-	var time sql.NullTime
-	if endTime.Valid {
-		time = endTime
-	} else if cancellationTime.Valid {
-		time = cancellationTime
-	}
-
-	endTimeDateValue, err := timeToPropertyDateValue(time)
-	if err != nil {
-		return nil, err
-	}
-
-	properties = append(properties, &experimentation.Property{
-		Id:    "end_time",
-		Label: "End Time",
-		Value: endTimeDateValue,
-	})
-
-	cancelationDateValue, err := timeToPropertyDateValue(cancellationTime)
-	if err != nil {
-		return nil, err
-	}
-
-	if status == experimentation.Experiment_STATUS_STOPPED {
-		properties = append(properties, &experimentation.Property{
-			Id:    "stopped_at",
-			Label: "Stopped At",
-			Value: cancelationDateValue,
-		})
-	} else if status == experimentation.Experiment_STATUS_CANCELED {
-		properties = append(properties, &experimentation.Property{
-			Id:    "canceled_at",
-			Label: "Canceled At",
-			Value: cancelationDateValue,
-		})
-	}
-
-	return properties, nil
-}
-
-func timesToStatus(startTime sql.NullTime, endTime sql.NullTime, cancellationTime sql.NullTime, now time.Time) (experimentation.Experiment_Status, error) {
-	if !startTime.Valid {
-		return experimentation.Experiment_STATUS_UNSPECIFIED, errors.New("experiment doesn't have startTime")
-	}
-
+func timesToStatus(startTime time.Time, endTime sql.NullTime, cancellationTime sql.NullTime, now time.Time) experimentation.Experiment_Status {
 	if cancellationTime.Valid {
-		if cancellationTime.Time.After(startTime.Time) {
+		if cancellationTime.Time.After(startTime) {
 			if endTime.Valid {
-				return experimentation.Experiment_STATUS_STOPPED, nil
+				return experimentation.Experiment_STATUS_STOPPED
 			} else {
-				return experimentation.Experiment_STATUS_COMPLETED, nil
+				return experimentation.Experiment_STATUS_COMPLETED
 			}
 		} else {
-			return experimentation.Experiment_STATUS_CANCELED, nil
+			return experimentation.Experiment_STATUS_CANCELED
 		}
 	} else {
-		if now.Before(startTime.Time) {
-			return experimentation.Experiment_STATUS_SCHEDULED, nil
-		} else if now.After(startTime.Time) && (!endTime.Valid || now.Before(endTime.Time)) {
-			return experimentation.Experiment_STATUS_RUNNING, nil
+		if now.Before(startTime) {
+			return experimentation.Experiment_STATUS_SCHEDULED
+		} else if now.After(startTime) && (!endTime.Valid || now.Before(endTime.Time)) {
+			return experimentation.Experiment_STATUS_RUNNING
 		}
-		return experimentation.Experiment_STATUS_COMPLETED, nil
+		return experimentation.Experiment_STATUS_COMPLETED
 	}
-}
-
-func timeToPropertyDateValue(t sql.NullTime) (*experimentation.Property_DateValue, error) {
-	if t.Valid {
-		timestamp, err := ptypes.TimestampProto(t.Time)
-		if err == nil {
-			return &experimentation.Property_DateValue{DateValue: timestamp}, nil
-		}
-	}
-
-	return nil, nil
 }
 
 func statusToString(status experimentation.Experiment_Status) string {
