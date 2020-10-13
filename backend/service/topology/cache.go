@@ -12,6 +12,7 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
+	"github.com/lyft/clutch/backend/service"
 )
 
 const topologyCacheLockId = "topology:cache"
@@ -19,6 +20,9 @@ const topologyCacheLockId = "topology:cache"
 // Performs leader election by acquiring a postgres advisory lock.
 // Once the lock is acquired topology caching is started.
 func (c *client) acquireTopologyCacheLock(ctx context.Context) {
+	advisoryLockId := convertLockIdToAdvisoryLockId(topologyCacheLockId)
+	ticker := time.NewTicker(time.Second * 10)
+
 	// We create our own connection to use for acquiring the advisory lock
 	// If the connection is severed for any reason the advisory lock will automatically unlock
 	conn, err := c.db.Conn(ctx)
@@ -27,22 +31,22 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 	}
 	defer conn.Close()
 
-	advisoryLockId := convertLockIdToAdvisoryLockId(topologyCacheLockId)
+	go func() {
+		<-ctx.Done()
+		ticker.Stop()
+		c.unlockAdvisoryLock(context.Background(), conn, advisoryLockId)
+	}()
 
-	ticker := time.NewTicker(time.Second * 10)
 	// Infinitely try to acquire the advisory lock
 	// Once the lock is acquired we start caching, this is a blocking operation
 	for ; true; <-ticker.C {
-		c.log.Debug("trying to acquire advisory lock")
+		c.log.Info("trying to acquire advisory lock")
 
 		// TODO: We could in the future spread the load of the topology caching
 		// across many clutch instances by having an a lock per service (e.g. AWS, k8s, etc)
-
-		// Advisory locks only take a arbitrary bigint value
-		// In this case 100 is the lock for topology caching
 		if c.tryAdvisoryLock(ctx, conn, advisoryLockId) {
-			c.log.Debug("acquired the advisory lock, starting to cache topology now...")
-			c.startTopologyCache()
+			c.log.Info("acquired the advisory lock, starting to cache topology now...")
+			c.startTopologyCache(ctx)
 		}
 	}
 }
@@ -62,8 +66,12 @@ func (c *client) tryAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uin
 	return lock
 }
 
-func (c *client) startTopologyCache() {
-	c.log.Debug("implement me")
+func (c *client) unlockAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uint32) bool {
+	var unlock bool
+	if err := conn.QueryRowContext(ctx, "SELECT pg_advisory_unlock($1)", lockId).Scan(&unlock); err != nil {
+		c.log.Error("Unable to perform an advisory unlock", zap.Error(err))
+	}
+	return unlock
 }
 
 func convertLockIdToAdvisoryLockId(lockID string) uint32 {
@@ -71,8 +79,45 @@ func convertLockIdToAdvisoryLockId(lockID string) uint32 {
 	return binary.BigEndian.Uint32(x)
 }
 
-// nolint:unused
-// TODO (mcutalo): remove lint directive once in use
+// This will check all services that are currently registered for the given clutch configuration
+// If any of the services implement the CacheableTopology interface we will start consuming
+// topology objects until the context has been cancelled.
+//
+func (c *client) startTopologyCache(ctx context.Context) {
+	for n, s := range service.Registry {
+		if svc, ok := s.(CacheableTopology); ok {
+			if svc.CacheEnabled() {
+				c.log.Info("Processing Topology Objects for service", zap.String("service", n))
+				topologyChannel, err := svc.StartTopologyCaching(ctx)
+				if err != nil {
+					c.log.Error("Unable to start topology caching", zap.String("service", n), zap.Error(err))
+					continue
+				}
+				go c.processTopologyObjectChannel(ctx, topologyChannel)
+			}
+		}
+	}
+
+	<-ctx.Done()
+}
+
+func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest) {
+	for obj := range objs {
+		switch obj.Action {
+		case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
+			if err := c.setCache(ctx, obj.Resource); err != nil {
+				c.log.Error("Error setting cache", zap.Error(err))
+			}
+		case topologyv1.UpdateCacheRequest_DELETE:
+			if err := c.deleteCache(ctx, obj.Resource.Id); err != nil {
+				c.log.Error("Error deleting cache", zap.Error(err))
+			}
+		default:
+			c.log.Warn("UpdateCacheRequest action is not implemented", zap.String("action", obj.Action.String()))
+		}
+	}
+}
+
 func (c *client) setCache(ctx context.Context, obj *topologyv1.Resource) error {
 	const upsertQuery = `
 		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
@@ -113,8 +158,6 @@ func (c *client) setCache(ctx context.Context, obj *topologyv1.Resource) error {
 	return nil
 }
 
-// nolint:unused
-// TODO (mcutalo): remove lint directive once in use
 func (c *client) deleteCache(ctx context.Context, id string) error {
 	const deleteQuery = `
 		DELETE FROM topology_cache WHERE id = $1
