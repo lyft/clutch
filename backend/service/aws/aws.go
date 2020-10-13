@@ -29,6 +29,7 @@ import (
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/service"
 )
 
@@ -44,9 +45,10 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	}
 
 	c := &client{
-		clients: make(map[string]*regionalClient, len(ac.Regions)),
-		log:     logger,
-		scope:   scope,
+		clients:            make(map[string]*regionalClient, len(ac.Regions)),
+		topologyObjectChan: make(chan *topologyv1.UpdateCacheRequest, 5000),
+		log:                logger,
+		scope:              scope,
 	}
 
 	for _, region := range ac.Regions {
@@ -64,6 +66,8 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 			autoscaling: autoscaling.New(awsSession),
 		}
 	}
+
+	_ = c.StartTopologyCaching(context.TODO())
 
 	return c, nil
 }
@@ -84,10 +88,10 @@ type Client interface {
 }
 
 type client struct {
-	clients map[string]*regionalClient
-
-	log   *zap.Logger
-	scope tally.Scope
+	clients            map[string]*regionalClient
+	topologyObjectChan chan *topologyv1.UpdateCacheRequest
+	log                *zap.Logger
+	scope              tally.Scope
 }
 
 func (c *client) ResizeAutoscalingGroup(ctx context.Context, region string, name string, size *ec2v1.AutoscalingGroupSize) error {
