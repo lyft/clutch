@@ -22,7 +22,6 @@ const (
 
 type Service struct {
 	storer experimentstore.Storer
-	logger *zap.SugaredLogger
 }
 
 // New instantiates a Service object.
@@ -39,7 +38,6 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 
 	return &Service{
 		storer: storer,
-		logger: logger.Sugar(),
 	}, nil
 }
 
