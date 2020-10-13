@@ -175,16 +175,16 @@ func resolvePattern(message descriptor.Message, pattern *apiv1.Pattern) *auditv1
 }
 
 // APIBody returns the API request/response interface (pointer value) as an anypb.Any message.
-func APIBody(body interface{}) *any.Any {
+func APIBody(body interface{}) (*any.Any, error) {
 	protomsg, ok := body.(proto.Message)
 	if !ok {
-		return nil
+		return nil, fmt.Errorf("could not use %s as proto.Message", reflect.TypeOf(body).Kind())
 	}
 
 	a, err := ptypes.MarshalAny(protomsg)
 	if err != nil {
-		return nil
+		return nil, fmt.Errorf("failed to marshal API interface, %v", err)
 	}
 
-	return a
+	return a, nil
 }

@@ -110,7 +110,8 @@ func TestResourceNames(t *testing.T) {
 	}
 }
 
-func TestAPIMetadata(t *testing.T) {
-	result := APIBody(&k8sv1.DeletePodRequest{})
+func TestAPIBody(t *testing.T) {
+	result, err := APIBody(&k8sv1.DeletePodRequest{})
 	assert.NotNil(t, result)
+	assert.NoError(t, err)
 }
