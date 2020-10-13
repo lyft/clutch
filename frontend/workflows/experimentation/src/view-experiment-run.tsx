@@ -35,8 +35,8 @@ const ViewExperimentRun: React.FC = () => {
       experiment.status
     ].toString();
     const completedStatuses = [
-      IClutch.chaos.experimentation.v1.Experiment.Status.RUNNING.toString(),
-      IClutch.chaos.experimentation.v1.Experiment.Status.SCHEDULED.toString(),
+      IClutch.chaos.experimentation.v1.Experiment.Status.STATUS_RUNNING.toString(),
+      IClutch.chaos.experimentation.v1.Experiment.Status.STATUS_SCHEDULED.toString(),
     ];
 
     if (completedStatuses.indexOf(statusValue) < 0) {
@@ -44,7 +44,7 @@ const ViewExperimentRun: React.FC = () => {
     }
 
     const title =
-      statusValue === IClutch.chaos.experimentation.v1.Experiment.Status.RUNNING.toString()
+      statusValue === IClutch.chaos.experimentation.v1.Experiment.Status.STATUS_RUNNING.toString()
         ? "Stop Experiment Run"
         : "Cancel Experiment Run";
     const destructiveButton = {

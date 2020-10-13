@@ -75,13 +75,13 @@ func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Pro
 		return nil, err
 	}
 
-	if status == experimentation.Experiment_STOPPED {
+	if status == experimentation.Experiment_STATUS_STOPPED {
 		properties = append(properties, &experimentation.Property{
 			Id:    "stopped_at",
 			Label: "Stopped At",
 			Value: cancelationTimeTimestamp,
 		})
-	} else if status == experimentation.Experiment_CANCELED {
+	} else if status == experimentation.Experiment_STATUS_CANCELED {
 		properties = append(properties, &experimentation.Property{
 			Id:    "canceled_at",
 			Label: "Canceled At",
