@@ -46,7 +46,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 
 	c := &client{
 		clients:            make(map[string]*regionalClient, len(ac.Regions)),
-		topologyObjectChan: make(chan *topologyv1.UpdateCacheRequest, 5000),
+		topologyObjectChan: make(chan *topologyv1.UpdateCacheRequest, topologyObjectChanBufferSize),
 		log:                logger,
 		scope:              scope,
 	}
