@@ -54,13 +54,13 @@ func (s *Service) transform(config *experimentstore.ExperimentConfig) ([]*experi
 		return []*experimentation.Property{}, err
 	}
 
-	upstream := experimentConfig.GetClusterPair().GetUpstreamCluster()
-	downstream := experimentConfig.GetClusterPair().GetDownstreamCluster()
-
 	faultsDescription, err := experimentConfigToString(&experimentConfig)
 	if err != nil {
 		return nil, err
 	}
+
+	upstream := experimentConfig.GetClusterPair().GetUpstreamCluster()
+	downstream := experimentConfig.GetClusterPair().GetDownstreamCluster()
 
 	return []*experimentation.Property{
 		{
@@ -93,8 +93,8 @@ func experimentConfigToString(experiment *serverexperimentation.TestConfig) (str
 	case *serverexperimentation.TestConfig_Latency:
 		description = "Latency"
 	default:
-		return nil, fmt.Errorf("unexpected fault type %v", fault)
+		return "", fmt.Errorf("unexpected fault type %v", experiment.GetFault())
 	}
 
-	return description
+	return description, nil
 }
