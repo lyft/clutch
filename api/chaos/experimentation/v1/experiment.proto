@@ -9,7 +9,7 @@ option go_package = "experimentationv1";
 
 message Experiment {
   enum Status {
-    // Unspecifiedf Status.
+    // Unspecified Status.
     STATUS_UNSPECIFIED = 0;
     // An experiment is specified to be run at a future date.
     STATUS_SCHEDULED = 1;

@@ -30,7 +30,7 @@ const _ = proto.ProtoPackageIsVersion4
 type Experiment_Status int32
 
 const (
-	// Unspecifiedf Status.
+	// Unspecified Status.
 	Experiment_STATUS_UNSPECIFIED Experiment_Status = 0
 	// An experiment is specified to be run at a future date.
 	Experiment_STATUS_SCHEDULED Experiment_Status = 1
