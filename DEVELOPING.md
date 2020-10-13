@@ -3,7 +3,7 @@
 ## Backend
 
 There are many different ways Clutch can be configured for backend development.
-Depending on your use case, you can enable / disable features in the `clutch-config.yaml`
+Depending on your use case, you can enable / disable features in the [clutch-config.yaml](https://clutch.sh/docs/configuration)
 to start up Clutch with a minimal set of dependencies.
 Here we're going to cover some of the common use cases.
 
@@ -61,6 +61,20 @@ instructions can be found [here](./backend/cmd/migrate/README.md).
     # Runs the Clutch backend
     make backend-dev
     ```
+
+Once you have completed devleopment,
+you can stop the postgres database by simply running the `stop` command.
+This command will retain the datastore contents.
+
+```sh
+docker-compose stop
+```
+
+If you would like stop and delete all data, run the `down` command.
+
+```sh
+docker-compose down
+```
 
 ### If you need a Kubernetes cluster
 
