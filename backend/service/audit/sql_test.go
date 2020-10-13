@@ -7,14 +7,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var protoAny = &any.Any{TypeUrl: "type.googleapis.com/clutch.audit.v1.RequestEvent"}
+
 func TestConvertAPIBody(t *testing.T) {
-	b := convertAPIBody(&any.Any{})
+	b := convertAPIBody(protoAny)
 	assert.NotNil(t, b)
 }
 
 func TestAPIBodyProto(t *testing.T) {
-	proto := &any.Any{TypeUrl: "type.googleapis.com/clutch.audit.v1.RequestEvent"}
-	b := convertAPIBody(proto)
+	b := convertAPIBody(protoAny)
 	assert.NotNil(t, b)
 
 	a := apiBodyProto(b)
