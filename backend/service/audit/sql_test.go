@@ -10,14 +10,17 @@ import (
 var protoAny = &any.Any{TypeUrl: "type.googleapis.com/clutch.audit.v1.RequestEvent"}
 
 func TestConvertAPIBody(t *testing.T) {
-	b := convertAPIBody(protoAny)
+	b, err := convertAPIBody(protoAny)
 	assert.NotNil(t, b)
+	assert.NoError(t, err)
 }
 
 func TestAPIBodyProto(t *testing.T) {
-	b := convertAPIBody(protoAny)
+	b, err := convertAPIBody(protoAny)
 	assert.NotNil(t, b)
+	assert.NoError(t, err)
 
-	a := apiBodyProto(b)
+	c := &client{}
+	a := c.apiBodyProto(b)
 	assert.NotNil(t, a)
 }
