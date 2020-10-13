@@ -52,10 +52,11 @@ func New(_ *any.Any, logger *zap.Logger, _ tally.Scope) (service.Service, error)
 		return nil, errors.New("experiment store wrong type")
 	}
 
-	transformer := NewTransformer()
+	sugaredLogger := logger.Sugar()
+	transformer := NewTransformer(sugaredLogger)
 	return &storer{
 		client.DB(),
-		logger.Sugar(),
+		sugaredLogger,
 		&transformer,
 	}, nil
 }
