@@ -39,7 +39,7 @@ type client struct {
 //
 type CacheableTopology interface {
 	CacheEnabled() bool
-	StartTopologyCaching(ctx context.Context) <-chan *topologyv1.UpdateCacheRequest
+	StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.UpdateCacheRequest, error)
 }
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {

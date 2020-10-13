@@ -34,7 +34,7 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 	go func() {
 		<-ctx.Done()
 		ticker.Stop()
-		c.unlockAdvisoryLock(context.TODO(), conn, advisoryLockId)
+		c.unlockAdvisoryLock(context.Background(), conn, advisoryLockId)
 	}()
 
 	// Infinitely try to acquire the advisory lock
@@ -88,7 +88,12 @@ func (c *client) startTopologyCache(ctx context.Context) {
 		if svc, ok := s.(CacheableTopology); ok {
 			if svc.CacheEnabled() {
 				c.log.Info("Processing Topology Objects for service", zap.String("service", n))
-				go c.processTopologyObjectChannel(ctx, svc.StartTopologyCaching(ctx))
+				topologyChannel, err := svc.StartTopologyCaching(ctx)
+				if err != nil {
+					c.log.Error("Unable to start topology caching", zap.String("service", n), zap.Error(err))
+					continue
+				}
+				go c.processTopologyObjectChannel(ctx, topologyChannel)
 			}
 		}
 	}

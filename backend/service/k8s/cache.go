@@ -2,6 +2,7 @@ package k8s
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"time"
@@ -28,22 +29,25 @@ const informerResyncTime = time.Hour * 1
 // this really should be sized according to the size of your k8s deployment.
 // However this should be a large enough buffer for the datastore to keep up with.
 const topologyObjectChanBufferSize = 5000
+const topologyInformerLockId = 1
 
 func (s *svc) CacheEnabled() bool {
 	return true
 }
 
-func (s *svc) StartTopologyCaching(ctx context.Context) <-chan *topologyv1.UpdateCacheRequest {
-	// Their should only ever be one instances of all the informers for topology caching
+func (s *svc) StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.UpdateCacheRequest, error) {
+	// There should only ever be one instances of all the informers for topology caching
 	// We lock here until the context is closed
-	s.topologyInformerLock.Lock()
+	if !s.topologyInformerLock.TryAcquire(topologyInformerLockId) {
+		return nil, errors.New("TopologyCahing is already in progress")
+	}
 
 	for name, cs := range s.manager.Clientsets() {
 		log.Printf("starting informer for cluster: %s", name)
 		go s.startInformers(ctx, cs)
 	}
 
-	return s.topologyObjectChan
+	return s.topologyObjectChan, nil
 }
 
 func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
@@ -72,7 +76,7 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 	s.log.Info("Shutting down the kubernetes cache informers")
 	close(stop)
 	close(s.topologyObjectChan)
-	s.topologyInformerLock.Unlock()
+	s.topologyInformerLock.Release(topologyInformerLockId)
 }
 
 func (s *svc) informerAddHandler(obj interface{}) {
