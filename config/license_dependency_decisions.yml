@@ -1,0 +1,37 @@
+---
+- - :permit
+  - MIT
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2020-10-14 02:54:10.073647000 Z
+- - :permit
+  - New BSD
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2020-10-14 03:04:19.061374000 Z
+- - :permit
+  - Apache 2.0
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2020-10-14 03:04:44.892543000 Z
+- - :permit
+  - Simplified BSD
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2020-10-14 03:05:11.595624000 Z
+- - :permit
+  - ISC
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2020-10-14 03:05:44.599322000 Z
+- - :permit
+  - Mozilla Public License 2.0
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2020-10-14 03:06:32.269273000 Z
