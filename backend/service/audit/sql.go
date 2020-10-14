@@ -217,12 +217,12 @@ type event struct {
 func requestEventProto(logger *zap.Logger, e *event) *auditv1.RequestEvent {
 	reqBody, err := apiBodyProto(e.Details.RequestBody)
 	if err != nil {
-		logger.Warn("unmarshallable object", zap.Any("requestMetadataBody", reqBody), zap.Error(err))
+		logger.Warn("unmarshallable object for RequestBody", zap.Error(err))
 	}
 
 	respBody, err := apiBodyProto(e.Details.ResponseBody)
 	if err != nil {
-		logger.Warn("unmarshallable object", zap.Any("responseMetadataBody", respBody), zap.Error(err))
+		logger.Warn("unmarshallable object for ResponseBody", zap.Error(err))
 	}
 
 	return &auditv1.RequestEvent{
@@ -253,7 +253,7 @@ func convertResources(proto []*auditv1.Resource) []*resource {
 func convertAPIBody(body *any.Any) (json.RawMessage, error) {
 	b, err := protojson.Marshal(body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal proto object in JSON format, %v", err)
+		return nil, fmt.Errorf("failed to marshal Any proto %v in JSON format, %v", body, err)
 	}
 	return json.RawMessage(b), nil
 }
