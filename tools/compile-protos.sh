@@ -151,6 +151,7 @@ main() {
       --go_out="${MFLAGS}"plugins=grpc:"${proto_out_dir}" \
       --validate_out="${MFLAGS}"lang=go:"${proto_out_dir}" \
       --grpc-gateway_out="${proto_out_dir}" \
+      --grpc-gateway_opt=warn_on_unbound_methods=true \
       --plugin=protoc-gen-go="${GOBIN}/protoc-gen-go" \
       --plugin=protoc-gen-grpc-gateway="${GOBIN}/protoc-gen-grpc-gateway" \
       --plugin=protoc-gen-validate="${GOBIN}/protoc-gen-validate" \
