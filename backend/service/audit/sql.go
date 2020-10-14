@@ -148,7 +148,7 @@ func (c *client) query(ctx context.Context, query string, args ...interface{}) (
 		proto := &auditv1.Event{
 			OccurredAt: occurred,
 			EventType: &auditv1.Event_Event{
-				Event: c.RequestEventProto(row),
+				Event: requestEventProto(c.logger, row),
 			},
 		}
 		events = append(events, proto)
@@ -214,7 +214,25 @@ type event struct {
 	Details    *eventDetails
 }
 
-func (c *client) RequestEventProto(e *event) *auditv1.RequestEvent {
+func requestEventProto(logger *zap.Logger, e *event) *auditv1.RequestEvent {
+	reqBody, err := apiBodyProto(e.Details.RequestBody)
+	if err != nil {
+		logger.Warn(
+			"failed to unmarshal json.RawMessage object to a proto object",
+			zap.Any("requestMetadataBody", reqBody),
+			zap.Error(err),
+		)
+	}
+
+	respBody, err := apiBodyProto(e.Details.ResponseBody)
+	if err != nil {
+		logger.Warn(
+			"failed to unmarshal json.RawMessage object to a proto object",
+			zap.Any("responseMetadataBody", respBody),
+			zap.Error(err),
+		)
+	}
+
 	return &auditv1.RequestEvent{
 		Username:    e.Details.Username,
 		ServiceName: e.Details.Service,
@@ -223,10 +241,10 @@ func (c *client) RequestEventProto(e *event) *auditv1.RequestEvent {
 		Status:      e.Details.Status.Status(),
 		Resources:   e.Details.ResourcesProto(),
 		RequestMetadata: &auditv1.RequestMetadata{
-			Body: c.apiBodyProto(e.Details.RequestBody),
+			Body: reqBody,
 		},
 		ResponseMetadata: &auditv1.ResponseMetadata{
-			Body: c.apiBodyProto(e.Details.ResponseBody),
+			Body: respBody,
 		},
 	}
 }
@@ -249,18 +267,13 @@ func convertAPIBody(body *any.Any) (json.RawMessage, error) {
 }
 
 // Decodes JSON to proto Any message
-func (c *client) apiBodyProto(details json.RawMessage) *any.Any {
+func apiBodyProto(details json.RawMessage) (*any.Any, error) {
 	body := &any.Any{}
 
 	err := protojson.Unmarshal(details, body)
 	if err != nil {
-		c.logger.Warn(
-			"error unmarshall json.RawMessage object to a proto object",
-			zap.Any("event", details),
-			zap.Error(err),
-		)
-		return nil
+		return nil, err
 	}
 
-	return body
+	return body, nil
 }

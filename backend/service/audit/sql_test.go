@@ -20,7 +20,7 @@ func TestAPIBodyProto(t *testing.T) {
 	assert.NotNil(t, b)
 	assert.NoError(t, err)
 
-	c := &client{}
-	a := c.apiBodyProto(b)
+	a, err := apiBodyProto(b)
 	assert.NotNil(t, a)
+	assert.NoError(t, err)
 }
