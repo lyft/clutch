@@ -217,20 +217,12 @@ type event struct {
 func requestEventProto(logger *zap.Logger, e *event) *auditv1.RequestEvent {
 	reqBody, err := apiBodyProto(e.Details.RequestBody)
 	if err != nil {
-		logger.Warn(
-			"failed to unmarshal json.RawMessage object to a proto object",
-			zap.Any("requestMetadataBody", reqBody),
-			zap.Error(err),
-		)
+		logger.Warn("unmarshallable object", zap.Any("requestMetadataBody", reqBody), zap.Error(err))
 	}
 
 	respBody, err := apiBodyProto(e.Details.ResponseBody)
 	if err != nil {
-		logger.Warn(
-			"failed to unmarshal json.RawMessage object to a proto object",
-			zap.Any("responseMetadataBody", respBody),
-			zap.Error(err),
-		)
+		logger.Warn("unmarshallable object", zap.Any("responseMetadataBody", respBody), zap.Error(err))
 	}
 
 	return &auditv1.RequestEvent{
@@ -272,7 +264,7 @@ func apiBodyProto(details json.RawMessage) (*any.Any, error) {
 
 	err := protojson.Unmarshal(details, body)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal json.RawMessage to proto Any message, %v", err)
 	}
 
 	return body, nil

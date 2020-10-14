@@ -183,7 +183,7 @@ func APIBody(body interface{}) (*any.Any, error) {
 
 	a, err := ptypes.MarshalAny(protomsg)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal API interface, %v", err)
+		return nil, fmt.Errorf("failed to marshal API interface as Any message, %v", err)
 	}
 
 	return a, nil
