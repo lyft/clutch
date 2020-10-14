@@ -2480,8 +2480,8 @@ export namespace clutch {
 
                     /** Status enum. */
                     enum Status {
-                        UNSPECIFIED = 0,
-                        RUNNING = 1
+                        STATUS_UNSPECIFIED = 0,
+                        STATUS_RUNNING = 1
                     }
                 }
 
@@ -2999,12 +2999,12 @@ export namespace clutch {
 
                     /** Status enum. */
                     enum Status {
-                        UNSPECIFIED = 0,
-                        SCHEDULED = 1,
-                        RUNNING = 2,
-                        COMPLETED = 3,
-                        CANCELED = 4,
-                        STOPPED = 5
+                        STATUS_UNSPECIFIED = 0,
+                        STATUS_SCHEDULED = 1,
+                        STATUS_RUNNING = 2,
+                        STATUS_COMPLETED = 3,
+                        STATUS_CANCELED = 4,
+                        STATUS_STOPPED = 5
                     }
                 }
 

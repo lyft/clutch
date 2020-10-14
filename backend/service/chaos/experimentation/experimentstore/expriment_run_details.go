@@ -38,36 +38,36 @@ func timesToStatus(startTime time.Time, endTime sql.NullTime, cancellationTime s
 	if cancellationTime.Valid {
 		if cancellationTime.Time.After(startTime) {
 			if endTime.Valid {
-				return experimentation.Experiment_STOPPED
+				return experimentation.Experiment_STATUS_STOPPED
 			} else {
-				return experimentation.Experiment_COMPLETED
+				return experimentation.Experiment_STATUS_COMPLETED
 			}
 		} else {
-			return experimentation.Experiment_CANCELED
+			return experimentation.Experiment_STATUS_CANCELED
 		}
 	} else {
 		if now.Before(startTime) {
-			return experimentation.Experiment_SCHEDULED
+			return experimentation.Experiment_STATUS_SCHEDULED
 		} else if now.After(startTime) && (!endTime.Valid || now.Before(endTime.Time)) {
-			return experimentation.Experiment_RUNNING
+			return experimentation.Experiment_STATUS_RUNNING
 		}
-		return experimentation.Experiment_COMPLETED
+		return experimentation.Experiment_STATUS_COMPLETED
 	}
 }
 
 func statusToString(status experimentation.Experiment_Status) string {
 	switch status {
-	case experimentation.Experiment_UNSPECIFIED:
+	case experimentation.Experiment_STATUS_UNSPECIFIED:
 		return "Unspecified"
-	case experimentation.Experiment_SCHEDULED:
+	case experimentation.Experiment_STATUS_SCHEDULED:
 		return "Scheduled"
-	case experimentation.Experiment_RUNNING:
+	case experimentation.Experiment_STATUS_RUNNING:
 		return "Running"
-	case experimentation.Experiment_COMPLETED:
+	case experimentation.Experiment_STATUS_COMPLETED:
 		return "Completed"
-	case experimentation.Experiment_CANCELED:
+	case experimentation.Experiment_STATUS_CANCELED:
 		return "Canceled"
-	case experimentation.Experiment_STOPPED:
+	case experimentation.Experiment_STATUS_STOPPED:
 		return "Stopped"
 	default:
 		return status.String()

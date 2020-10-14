@@ -5724,11 +5724,11 @@ export const clutch = $root.clutch = (() => {
                         if (object.configType != null)
                             message.configType = String(object.configType);
                         switch (object.status) {
-                        case "UNSPECIFIED":
+                        case "STATUS_UNSPECIFIED":
                         case 0:
                             message.status = 0;
                             break;
-                        case "RUNNING":
+                        case "STATUS_RUNNING":
                         case 1:
                             message.status = 1;
                             break;
@@ -5751,7 +5751,7 @@ export const clutch = $root.clutch = (() => {
                         let object = {};
                         if (options.defaults) {
                             object.configType = "";
-                            object.status = options.enums === String ? "UNSPECIFIED" : 0;
+                            object.status = options.enums === String ? "STATUS_UNSPECIFIED" : 0;
                         }
                         if (message.configType != null && message.hasOwnProperty("configType"))
                             object.configType = message.configType;
@@ -5775,13 +5775,13 @@ export const clutch = $root.clutch = (() => {
                      * Status enum.
                      * @name clutch.chaos.experimentation.v1.GetExperimentsRequest.Status
                      * @enum {number}
-                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
-                     * @property {number} RUNNING=1 RUNNING value
+                     * @property {number} STATUS_UNSPECIFIED=0 STATUS_UNSPECIFIED value
+                     * @property {number} STATUS_RUNNING=1 STATUS_RUNNING value
                      */
                     GetExperimentsRequest.Status = (function() {
                         const valuesById = {}, values = Object.create(valuesById);
-                        values[valuesById[0] = "UNSPECIFIED"] = 0;
-                        values[valuesById[1] = "RUNNING"] = 1;
+                        values[valuesById[0] = "STATUS_UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "STATUS_RUNNING"] = 1;
                         return values;
                     })();
 
@@ -6881,21 +6881,21 @@ export const clutch = $root.clutch = (() => {
                      * Status enum.
                      * @name clutch.chaos.experimentation.v1.Experiment.Status
                      * @enum {number}
-                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
-                     * @property {number} SCHEDULED=1 SCHEDULED value
-                     * @property {number} RUNNING=2 RUNNING value
-                     * @property {number} COMPLETED=3 COMPLETED value
-                     * @property {number} CANCELED=4 CANCELED value
-                     * @property {number} STOPPED=5 STOPPED value
+                     * @property {number} STATUS_UNSPECIFIED=0 STATUS_UNSPECIFIED value
+                     * @property {number} STATUS_SCHEDULED=1 STATUS_SCHEDULED value
+                     * @property {number} STATUS_RUNNING=2 STATUS_RUNNING value
+                     * @property {number} STATUS_COMPLETED=3 STATUS_COMPLETED value
+                     * @property {number} STATUS_CANCELED=4 STATUS_CANCELED value
+                     * @property {number} STATUS_STOPPED=5 STATUS_STOPPED value
                      */
                     Experiment.Status = (function() {
                         const valuesById = {}, values = Object.create(valuesById);
-                        values[valuesById[0] = "UNSPECIFIED"] = 0;
-                        values[valuesById[1] = "SCHEDULED"] = 1;
-                        values[valuesById[2] = "RUNNING"] = 2;
-                        values[valuesById[3] = "COMPLETED"] = 3;
-                        values[valuesById[4] = "CANCELED"] = 4;
-                        values[valuesById[5] = "STOPPED"] = 5;
+                        values[valuesById[0] = "STATUS_UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "STATUS_SCHEDULED"] = 1;
+                        values[valuesById[2] = "STATUS_RUNNING"] = 2;
+                        values[valuesById[3] = "STATUS_COMPLETED"] = 3;
+                        values[valuesById[4] = "STATUS_CANCELED"] = 4;
+                        values[valuesById[5] = "STATUS_STOPPED"] = 5;
                         return values;
                     })();
 
@@ -7635,27 +7635,27 @@ export const clutch = $root.clutch = (() => {
                             else if (typeof object.runId === "object")
                                 message.runId = new $util.LongBits(object.runId.low >>> 0, object.runId.high >>> 0).toNumber();
                         switch (object.status) {
-                        case "UNSPECIFIED":
+                        case "STATUS_UNSPECIFIED":
                         case 0:
                             message.status = 0;
                             break;
-                        case "SCHEDULED":
+                        case "STATUS_SCHEDULED":
                         case 1:
                             message.status = 1;
                             break;
-                        case "RUNNING":
+                        case "STATUS_RUNNING":
                         case 2:
                             message.status = 2;
                             break;
-                        case "COMPLETED":
+                        case "STATUS_COMPLETED":
                         case 3:
                             message.status = 3;
                             break;
-                        case "CANCELED":
+                        case "STATUS_CANCELED":
                         case 4:
                             message.status = 4;
                             break;
-                        case "STOPPED":
+                        case "STATUS_STOPPED":
                         case 5:
                             message.status = 5;
                             break;
@@ -7692,7 +7692,7 @@ export const clutch = $root.clutch = (() => {
                                 object.runId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                             } else
                                 object.runId = options.longs === String ? "0" : 0;
-                            object.status = options.enums === String ? "UNSPECIFIED" : 0;
+                            object.status = options.enums === String ? "STATUS_UNSPECIFIED" : 0;
                             object.properties = null;
                             object.config = null;
                         }
