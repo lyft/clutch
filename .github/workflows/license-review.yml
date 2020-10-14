@@ -1,21 +1,20 @@
+name: license_review
 on:
-# TODO: need pull?
   pull_request:
-      branches:
-      # TODO: is this for a pull request intended to be merged on main branch?
-      - main
+    branches:
+     - main
     paths:
-    # TODO: refernce the workfow itself? reference backend/**
       - backend/go.mod
+      - .github/workflows/license_review.yml
 jobs:
   license-check:
     runs-on: ubuntu-latest
     steps:
-        uses: actions/checkout@v2
-      - name: Setup Ruby 2.x
-        uses: actions/setup-ruby@v1
+      - uses: actions/checkout@v2
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.x
+          ruby-version: 2.6
       - name: Install license finder
         run: gem install license_finder
       - name: Run license finder
