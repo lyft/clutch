@@ -84,15 +84,12 @@ func experimentConfigToString(experiment *serverexperimentation.TestConfig) (str
 		return "", errors.New("experiment is nil")
 	}
 
-	var description string
 	switch experiment.GetFault().(type) {
 	case *serverexperimentation.TestConfig_Abort:
-		description = "Abort"
+		return "Abort", nil
 	case *serverexperimentation.TestConfig_Latency:
-		description = "Latency"
+		return "Latency", nil
 	default:
 		return "", fmt.Errorf("unexpected fault type %v", experiment.GetFault())
 	}
-
-	return description, nil
 }
