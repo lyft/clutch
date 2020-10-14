@@ -5,12 +5,14 @@ import (
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap/zaptest"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 func TestConfigPropertiesWithNoRegisteredTransform(t *testing.T) {
-	transformer := NewTransformer()
+	logger := zaptest.NewLogger(t).Sugar()
+	transformer := NewTransformer(logger)
 	config := &ExperimentConfig{id: 1, Config: &any.Any{}}
 
 	properties, err := config.CreateProperties(&transformer)
@@ -35,7 +37,8 @@ func TestConfigPropertiesWithRegisteredTransform(t *testing.T) {
 		}, nil
 	}
 	transformation := Transformation{ConfigTypeUrl: "type", ConfigTransform: transform}
-	transformer := NewTransformer()
+	logger := zaptest.NewLogger(t).Sugar()
+	transformer := NewTransformer(logger)
 	assert.NoError(transformer.Register(transformation))
 
 	config := &ExperimentConfig{id: 1, Config: &any.Any{TypeUrl: "type"}}

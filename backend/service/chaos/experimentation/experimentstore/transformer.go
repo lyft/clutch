@@ -1,6 +1,8 @@
 package experimentstore
 
 import (
+	"go.uber.org/zap"
+
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
@@ -10,11 +12,12 @@ type Transformation struct {
 }
 
 type Transformer struct {
+	logger                   *zap.SugaredLogger
 	nameToConfigTransformMap map[string]*Transformation
 }
 
-func NewTransformer() Transformer {
-	t := Transformer{map[string]*Transformation{}}
+func NewTransformer(logger *zap.SugaredLogger) Transformer {
+	t := Transformer{logger, map[string]*Transformation{}}
 	t.nameToConfigTransformMap = map[string]*Transformation{}
 	return t
 }
@@ -30,5 +33,10 @@ func (t *Transformer) CreateProperties(config *ExperimentConfig) ([]*experimenta
 		return []*experimentation.Property{}, nil
 	}
 
-	return transform.ConfigTransform(config)
+	properties, err := transform.ConfigTransform(config)
+	if err != nil {
+		t.logger.Errorw("error while creating properties", "error", err, "config", config)
+	}
+
+	return properties, err
 }
