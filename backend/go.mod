@@ -21,7 +21,7 @@ require (
 	github.com/google/go-github/v32 v32.1.0
 	github.com/google/uuid v1.1.2
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
-	github.com/grpc-ecosystem/grpc-gateway v1.15.2
+	github.com/grpc-ecosystem/grpc-gateway/v2/v2 v2.0.0
 	github.com/iancoleman/strcase v0.1.2
 	github.com/jhump/protoreflect v1.7.1-0.20200723220026-11eaaf73e0ec
 	github.com/lib/pq v1.8.0
