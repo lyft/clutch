@@ -41,7 +41,6 @@ func (c *client) processRegionTopologyObjects(ctx context.Context) {
 	ticker := time.NewTicker(time.Minute * 10)
 	for ; true; <-ticker.C {
 		wg := &sync.WaitGroup{}
-
 		for name, client := range c.clients {
 			c.log.Info("processing topology objects for region", zap.String("region", name))
 			go c.processAllEC2Instances(ctx, client, wg)
@@ -55,6 +54,8 @@ func (c *client) processRegionTopologyObjects(ctx context.Context) {
 
 func (c *client) processAllAutoScalingGroups(ctx context.Context, client *regionalClient, wg *sync.WaitGroup) {
 	wg.Add(1)
+
+	// 100 is the maximum amount of records allowed for this API
 	input := autoscaling.DescribeAutoScalingGroupsInput{
 		MaxRecords: aws.Int64(100),
 	}
@@ -88,6 +89,8 @@ func (c *client) processAllAutoScalingGroups(ctx context.Context, client *region
 
 func (c *client) processAllEC2Instances(ctx context.Context, client *regionalClient, wg *sync.WaitGroup) {
 	wg.Add(1)
+
+	// 1000 is the maximum amount of records allowed for this API
 	input := ec2.DescribeInstancesInput{
 		MaxResults: aws.Int64(1000),
 	}
@@ -122,6 +125,9 @@ func (c *client) processAllEC2Instances(ctx context.Context, client *regionalCli
 
 func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalClient, wg *sync.WaitGroup) {
 	wg.Add(1)
+
+	// 100 is arbatrary, currently this API does not have a limit,
+	// looking at other aws API limits this value felt safe.
 	input := kinesis.ListStreamsInput{
 		Limit: aws.Int64(100),
 	}
@@ -154,7 +160,7 @@ func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalC
 		})
 
 	if err != nil {
-		c.log.Error("unable to process auto kinesis streams", zap.Error(err))
+		c.log.Error("unable to process kinesis streams", zap.Error(err))
 	}
 	wg.Done()
 }
