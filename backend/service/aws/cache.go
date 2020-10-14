@@ -2,6 +2,8 @@ package aws
 
 import (
 	"context"
+	"errors"
+	"sync"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -9,51 +11,63 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 	"github.com/aws/aws-sdk-go/service/kinesis"
 	"github.com/golang/protobuf/ptypes"
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"go.uber.org/zap"
-	"golang.org/x/sync/errgroup"
+
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
 const topologyObjectChanBufferSize = 5000
+const topologyLockId = 1
 
 func (c *client) CacheEnabled() bool {
 	return true
 }
 
-func (c *client) StartTopologyCaching(ctx context.Context) <-chan *topologyv1.UpdateCacheRequest {
+func (c *client) StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.UpdateCacheRequest, error) {
+	if !c.topologyLock.TryAcquire(topologyLockId) {
+		return nil, errors.New("TopologyCahing is already in progress")
+	}
+
+	go func() {
+		<-ctx.Done()
+		c.topologyLock.Release(topologyLockId)
+	}()
+
 	go c.processRegionTopologyObjects(ctx)
-	return c.topologyObjectChan
+	return c.topologyObjectChan, nil
 }
 
 func (c *client) processRegionTopologyObjects(ctx context.Context) {
-	ticker := time.NewTicker(time.Minute * 30)
-
+	ticker := time.NewTicker(time.Minute * 10)
 	for ; true; <-ticker.C {
-		eg, _ := errgroup.WithContext(ctx)
+		wg := &sync.WaitGroup{}
 
 		for name, client := range c.clients {
 			c.log.Info("processing topology objects for region", zap.String("region", name))
-			eg.Go(func() error { return c.processAllEC2Instances(ctx, client) })
-			eg.Go(func() error { return c.processAllAutoScalingGroups(ctx, client) })
-			eg.Go(func() error { return c.processAllKinesisStreams(ctx, client) })
+			go c.processAllEC2Instances(ctx, client, wg)
+			go c.processAllAutoScalingGroups(ctx, client, wg)
+			go c.processAllKinesisStreams(ctx, client, wg)
 		}
-
-		if err := eg.Wait(); err != nil {
-			c.log.Error("errors", zap.Error(err))
-		}
+		wg.Wait()
+		c.log.Info("finished processing all aws topology objects, waiting for next tick.")
 	}
 }
 
-func (c *client) processAllAutoScalingGroups(ctx context.Context, client *regionalClient) error {
+func (c *client) processAllAutoScalingGroups(ctx context.Context, client *regionalClient, wg *sync.WaitGroup) {
+	wg.Add(1)
 	input := autoscaling.DescribeAutoScalingGroupsInput{
 		MaxRecords: aws.Int64(100),
 	}
 
-	return client.autoscaling.DescribeAutoScalingGroupsPagesWithContext(ctx, &input,
+	err := client.autoscaling.DescribeAutoScalingGroupsPagesWithContext(ctx, &input,
 		func(page *autoscaling.DescribeAutoScalingGroupsOutput, lastPage bool) bool {
-
 			for _, asg := range page.AutoScalingGroups {
-				protoAsg, _ := ptypes.MarshalAny(newProtoForAutoscalingGroup(asg))
+				protoAsg, err := ptypes.MarshalAny(newProtoForAutoscalingGroup(asg))
+				if err != nil {
+					c.log.Error("unable to marshal asg proto", zap.Error(err))
+					continue
+				}
+
 				c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 					Resource: &topologyv1.Resource{
 						Id: *asg.AutoScalingGroupName,
@@ -65,19 +79,28 @@ func (c *client) processAllAutoScalingGroups(ctx context.Context, client *region
 
 			return !lastPage
 		})
+
+	if err != nil {
+		c.log.Error("unable to process auto scaling groups", zap.Error(err))
+	}
+	wg.Done()
 }
 
-func (c *client) processAllEC2Instances(ctx context.Context, client *regionalClient) error {
+func (c *client) processAllEC2Instances(ctx context.Context, client *regionalClient, wg *sync.WaitGroup) {
+	wg.Add(1)
 	input := ec2.DescribeInstancesInput{
 		MaxResults: aws.Int64(1000),
 	}
 
-	return client.ec2.DescribeInstancesPagesWithContext(ctx, &input,
+	err := client.ec2.DescribeInstancesPagesWithContext(ctx, &input,
 		func(page *ec2.DescribeInstancesOutput, lastPage bool) bool {
-
 			for _, reservation := range page.Reservations {
 				for _, instance := range reservation.Instances {
-					protoInstance, _ := ptypes.MarshalAny(newProtoForInstance(instance))
+					protoInstance, err := ptypes.MarshalAny(newProtoForInstance(instance))
+					if err != nil {
+						c.log.Error("unable to marshal instance proto", zap.Error(err))
+						continue
+					}
 					c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 						Resource: &topologyv1.Resource{
 							Id: *instance.InstanceId,
@@ -90,19 +113,34 @@ func (c *client) processAllEC2Instances(ctx context.Context, client *regionalCli
 
 			return !lastPage
 		})
+
+	if err != nil {
+		c.log.Error("unable to process ec2 instances", zap.Error(err))
+	}
+	wg.Done()
 }
 
-func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalClient) error {
+func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalClient, wg *sync.WaitGroup) {
+	wg.Add(1)
 	input := kinesis.ListStreamsInput{
 		Limit: aws.Int64(100),
 	}
 
-	return client.kinesis.ListStreamsPagesWithContext(ctx, &input,
+	err := client.kinesis.ListStreamsPagesWithContext(ctx, &input,
 		func(page *kinesis.ListStreamsOutput, lastPage bool) bool {
-
 			for _, stream := range page.StreamNames {
-				v1Stream, _ := c.DescribeKinesisStream(ctx, client.region, *stream)
+				v1Stream, err := c.DescribeKinesisStream(ctx, client.region, *stream)
+				if err != nil {
+					c.log.Error("unable to describe kinesis stream", zap.Error(err))
+					continue
+				}
+
 				protoStream, _ := ptypes.MarshalAny(v1Stream)
+				if err != nil {
+					c.log.Error("unable to marshal kinesis stream", zap.Error(err))
+					continue
+				}
+
 				c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 					Resource: &topologyv1.Resource{
 						Id: v1Stream.StreamName,
@@ -114,4 +152,9 @@ func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalC
 
 			return !lastPage
 		})
+
+	if err != nil {
+		c.log.Error("unable to process auto kinesis streams", zap.Error(err))
+	}
+	wg.Done()
 }

@@ -25,6 +25,7 @@ import (
 	"github.com/iancoleman/strcase"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"golang.org/x/sync/semaphore"
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
@@ -47,6 +48,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	c := &client{
 		clients:            make(map[string]*regionalClient, len(ac.Regions)),
 		topologyObjectChan: make(chan *topologyv1.UpdateCacheRequest, topologyObjectChanBufferSize),
+		topologyLock:       semaphore.NewWeighted(1),
 		log:                logger,
 		scope:              scope,
 	}
@@ -66,8 +68,6 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 			autoscaling: autoscaling.New(awsSession),
 		}
 	}
-
-	_ = c.StartTopologyCaching(context.TODO())
 
 	return c, nil
 }
@@ -90,6 +90,7 @@ type Client interface {
 type client struct {
 	clients            map[string]*regionalClient
 	topologyObjectChan chan *topologyv1.UpdateCacheRequest
+	topologyLock       *semaphore.Weighted
 	log                *zap.Logger
 	scope              tally.Scope
 }
