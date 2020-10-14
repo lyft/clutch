@@ -260,10 +260,9 @@ install_protoc() {
 
   go install \
     github.com/bufbuild/buf/cmd/protoc-gen-buf-check-lint \
-    github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway \
-    github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger \
+    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
+    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
     github.com/golang/protobuf/protoc-gen-go \
-    github.com/go-swagger/go-swagger/cmd/swagger \
     github.com/envoyproxy/protoc-gen-validate
 
   if [[ ! -f "${PROTOC_BIN}" || ! -d "${PROTOC_INCLUDE_DIR}" ]]; then
