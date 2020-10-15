@@ -36,9 +36,10 @@ var (
 // define the regex for a UUID once up-front
 var _properties_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
-// Validate checks the field values on Properties with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Properties) Validate() error {
+// Validate checks the field values on PropertiesList with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *PropertiesList) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -48,7 +49,7 @@ func (m *Properties) Validate() error {
 
 		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return PropertiesValidationError{
+				return PropertiesListValidationError{
 					field:  fmt.Sprintf("Items[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -61,9 +62,9 @@ func (m *Properties) Validate() error {
 	return nil
 }
 
-// PropertiesValidationError is the validation error returned by
-// Properties.Validate if the designated constraints aren't met.
-type PropertiesValidationError struct {
+// PropertiesListValidationError is the validation error returned by
+// PropertiesList.Validate if the designated constraints aren't met.
+type PropertiesListValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -71,22 +72,22 @@ type PropertiesValidationError struct {
 }
 
 // Field function returns field value.
-func (e PropertiesValidationError) Field() string { return e.field }
+func (e PropertiesListValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e PropertiesValidationError) Reason() string { return e.reason }
+func (e PropertiesListValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e PropertiesValidationError) Cause() error { return e.cause }
+func (e PropertiesListValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e PropertiesValidationError) Key() bool { return e.key }
+func (e PropertiesListValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e PropertiesValidationError) ErrorName() string { return "PropertiesValidationError" }
+func (e PropertiesListValidationError) ErrorName() string { return "PropertiesListValidationError" }
 
 // Error satisfies the builtin error interface
-func (e PropertiesValidationError) Error() string {
+func (e PropertiesListValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -98,14 +99,14 @@ func (e PropertiesValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sProperties.%s: %s%s",
+		"invalid %sPropertiesList.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = PropertiesValidationError{}
+var _ error = PropertiesListValidationError{}
 
 var _ interface {
 	Field() string
@@ -113,7 +114,89 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = PropertiesValidationError{}
+} = PropertiesListValidationError{}
+
+// Validate checks the field values on PropertiesMap with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *PropertiesMap) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for key, val := range m.GetItems() {
+		_ = val
+
+		// no validation rules for Items[key]
+
+		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return PropertiesMapValidationError{
+					field:  fmt.Sprintf("Items[%v]", key),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// PropertiesMapValidationError is the validation error returned by
+// PropertiesMap.Validate if the designated constraints aren't met.
+type PropertiesMapValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PropertiesMapValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PropertiesMapValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PropertiesMapValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PropertiesMapValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PropertiesMapValidationError) ErrorName() string { return "PropertiesMapValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PropertiesMapValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPropertiesMap.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PropertiesMapValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PropertiesMapValidationError{}
 
 // Validate checks the field values on Property with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
@@ -122,9 +205,41 @@ func (m *Property) Validate() error {
 		return nil
 	}
 
+	// no validation rules for Id
+
 	// no validation rules for Label
 
-	// no validation rules for Value
+	if v, ok := interface{}(m.GetDisplayValue()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return PropertyValidationError{
+				field:  "DisplayValue",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	switch m.Value.(type) {
+
+	case *Property_DateValue:
+
+		if v, ok := interface{}(m.GetDateValue()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return PropertyValidationError{
+					field:  "DateValue",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *Property_StringValue:
+		// no validation rules for StringValue
+
+	case *Property_IntValue:
+		// no validation rules for IntValue
+
+	}
 
 	return nil
 }

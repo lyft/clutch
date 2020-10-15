@@ -23,11 +23,9 @@ import (
 
 func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent float32, httpStatus int32) *experimentation.Experiment {
 	config := &serverexperimentation.TestConfig{
-		Target: &serverexperimentation.TestConfig_ClusterPair{
-			ClusterPair: &serverexperimentation.ClusterPairTarget{
-				DownstreamCluster: downstreamCluster,
-				UpstreamCluster:   upstreamCluster,
-			},
+		ClusterPair: &serverexperimentation.ClusterPairTarget{
+			DownstreamCluster: downstreamCluster,
+			UpstreamCluster:   upstreamCluster,
 		},
 		Fault: &serverexperimentation.TestConfig_Abort{
 			Abort: &serverexperimentation.AbortFaultConfig{
@@ -47,11 +45,9 @@ func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamClust
 
 func createLatencyExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, latencyPercent float32, duration int32) *experimentation.Experiment {
 	config := &serverexperimentation.TestConfig{
-		Target: &serverexperimentation.TestConfig_ClusterPair{
-			ClusterPair: &serverexperimentation.ClusterPairTarget{
-				DownstreamCluster: downstreamCluster,
-				UpstreamCluster:   upstreamCluster,
-			},
+		ClusterPair: &serverexperimentation.ClusterPairTarget{
+			DownstreamCluster: downstreamCluster,
+			UpstreamCluster:   upstreamCluster,
 		},
 		Fault: &serverexperimentation.TestConfig_Latency{
 			Latency: &serverexperimentation.LatencyFaultConfig{
@@ -177,10 +173,10 @@ func TestSetSnapshotV3(t *testing.T) {
 }
 
 func TestRefreshCache(t *testing.T) {
-	es := &mockExperimentStore{}
+	s := &mockStorer{}
 	testCache := gcpCache.NewSnapshotCache(false, gcpCache.IDHash{}, nil)
-	refreshCache(context.Background(), es, &cacheWrapperV2{testCache}, "test_layer", nil)
-	assert.Equal(t, es.getExperimentArguments.configType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig")
+	refreshCache(context.Background(), s, &cacheWrapperV2{testCache}, "test_layer", nil)
+	assert.Equal(t, s.getExperimentArguments.configType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig")
 }
 
 func TestCreateRuntimeKeys(t *testing.T) {

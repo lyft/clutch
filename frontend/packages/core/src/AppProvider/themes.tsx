@@ -1,7 +1,9 @@
-import { createMuiTheme, ThemeOptions } from "@material-ui/core";
+import React from "react";
+import { createMuiTheme, CssBaseline, MuiThemeProvider, ThemeOptions } from "@material-ui/core";
 import { useTheme as useMuiTheme } from "@material-ui/core/styles";
 import type { PaletteOptions } from "@material-ui/core/styles/createPalette";
-import {} from "styled-components";
+import { StylesProvider } from "@material-ui/styles";
+import { ThemeProvider as StyledThemeProvider } from "styled-components";
 
 interface ClutchPalette extends PaletteOptions {
   accent: {
@@ -53,7 +55,7 @@ const lightPalette = (): ClutchPalette => {
   };
 };
 
-const getTheme = () => {
+const lightTheme = () => {
   return createMuiTheme({
     palette: lightPalette(),
     overrides: {
@@ -78,4 +80,20 @@ const useTheme = () => {
   return useMuiTheme() as ClutchTheme;
 };
 
-export { getTheme, useTheme };
+interface ThemeProps {
+  variant?: "light";
+}
+
+const Theme: React.FC<ThemeProps> = ({ children }) => {
+  const theme = lightTheme;
+  return (
+    <MuiThemeProvider theme={theme()}>
+      <StyledThemeProvider theme={theme()}>
+        <CssBaseline />
+        <StylesProvider injectFirst>{children}</StylesProvider>
+      </StyledThemeProvider>
+    </MuiThemeProvider>
+  );
+};
+
+export { Theme, useTheme };

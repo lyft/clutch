@@ -282,6 +282,156 @@ var _ interface {
 	ErrorName() string
 } = ResourceValidationError{}
 
+// Validate checks the field values on RequestMetadata with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *RequestMetadata) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetBody()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RequestMetadataValidationError{
+				field:  "Body",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// RequestMetadataValidationError is the validation error returned by
+// RequestMetadata.Validate if the designated constraints aren't met.
+type RequestMetadataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RequestMetadataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RequestMetadataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RequestMetadataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RequestMetadataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RequestMetadataValidationError) ErrorName() string { return "RequestMetadataValidationError" }
+
+// Error satisfies the builtin error interface
+func (e RequestMetadataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRequestMetadata.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RequestMetadataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RequestMetadataValidationError{}
+
+// Validate checks the field values on ResponseMetadata with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *ResponseMetadata) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetBody()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ResponseMetadataValidationError{
+				field:  "Body",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// ResponseMetadataValidationError is the validation error returned by
+// ResponseMetadata.Validate if the designated constraints aren't met.
+type ResponseMetadataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ResponseMetadataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ResponseMetadataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ResponseMetadataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ResponseMetadataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ResponseMetadataValidationError) ErrorName() string { return "ResponseMetadataValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ResponseMetadataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sResponseMetadata.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ResponseMetadataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ResponseMetadataValidationError{}
+
 // Validate checks the field values on RequestEvent with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.
@@ -341,6 +491,26 @@ func (m *RequestEvent) Validate() error {
 			}
 		}
 
+	}
+
+	if v, ok := interface{}(m.GetRequestMetadata()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RequestEventValidationError{
+				field:  "RequestMetadata",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetResponseMetadata()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RequestEventValidationError{
+				field:  "ResponseMetadata",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	return nil

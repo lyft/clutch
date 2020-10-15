@@ -1,5 +1,5 @@
 import React from "react";
-import type { TextFieldProps as MuiTextFieldProps } from "@material-ui/core";
+import type { InputLabelProps, TextFieldProps as MuiTextFieldProps } from "@material-ui/core";
 import { TextField as MuiTextField } from "@material-ui/core";
 import styled from "styled-components";
 
@@ -19,7 +19,7 @@ const StyledTextField = styled(MuiTextField)`
   `}
 `;
 
-interface TextFieldProps {
+export interface TextFieldProps {
   maxWidth?: string;
   onReturn?: () => void;
 }
@@ -29,6 +29,7 @@ const TextField: React.FC<TextFieldProps & MuiTextFieldProps> = ({
   onReturn,
   maxWidth,
   placeholder,
+  type,
   ...props
 }) => {
   const onKeyDown = (
@@ -42,16 +43,26 @@ const TextField: React.FC<TextFieldProps & MuiTextFieldProps> = ({
     }
   };
 
-  const shrinkLabel = placeholder !== undefined || placeholder !== "";
+  const inputLabelProps = {
+    color: "secondary",
+  } as Partial<InputLabelProps>;
+
+  const placeholderInputTypes = ["date", "datetime-local", "month", "time", "week"];
+  const hasInputPlaceholder = placeholderInputTypes.indexOf(type) !== -1;
+  if (placeholder || hasInputPlaceholder) {
+    inputLabelProps.shrink = true;
+  }
+
   return (
     <StyledTextField
       data-max-width={maxWidth}
       color="secondary"
-      InputLabelProps={{ color: "secondary", shrink: shrinkLabel }}
+      InputLabelProps={inputLabelProps}
       onKeyDown={e => onKeyDown(e)}
       onFocus={onChange}
       onBlur={onChange}
       placeholder={placeholder}
+      type={type}
       {...props}
     />
   );

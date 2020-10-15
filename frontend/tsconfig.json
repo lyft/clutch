@@ -20,6 +20,7 @@
   },
   "exclude": [
     "node_modules",
+    "**/stories/*",
     "**/*.test.js*",
     "**/*.test.ts*"
   ],

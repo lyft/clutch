@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { clutch, clutch as IClutch } from "@clutch-sh/api";
+import { clutch as IClutch } from "@clutch-sh/api";
 import { ButtonGroup, client, Error, TextField } from "@clutch-sh/core";
 import styled from "styled-components";
+
+import { propertyToString } from "./property-helpers";
 
 export const Form = styled.form`
   align-items: center;
@@ -29,12 +31,12 @@ const ViewExperimentRun: React.FC = () => {
       onClick: goBack,
     };
 
-    const statusValue = clutch.chaos.experimentation.v1.Experiment.Status[
+    const statusValue = IClutch.chaos.experimentation.v1.Experiment.Status[
       experiment.status
     ].toString();
     const completedStatuses = [
-      clutch.chaos.experimentation.v1.Experiment.Status.RUNNING.toString(),
-      clutch.chaos.experimentation.v1.Experiment.Status.SCHEDULED.toString(),
+      IClutch.chaos.experimentation.v1.Experiment.Status.STATUS_RUNNING.toString(),
+      IClutch.chaos.experimentation.v1.Experiment.Status.STATUS_SCHEDULED.toString(),
     ];
 
     if (completedStatuses.indexOf(statusValue) < 0) {
@@ -42,7 +44,7 @@ const ViewExperimentRun: React.FC = () => {
     }
 
     const title =
-      statusValue === clutch.chaos.experimentation.v1.Experiment.Status.RUNNING.toString()
+      statusValue === IClutch.chaos.experimentation.v1.Experiment.Status.STATUS_RUNNING.toString()
         ? "Stop Experiment Run"
         : "Cancel Experiment Run";
     const destructiveButton = {
@@ -83,7 +85,7 @@ const ViewExperimentRun: React.FC = () => {
             <TextField
               key={property.label}
               label={property.label}
-              defaultValue={property.value}
+              defaultValue={propertyToString(property)}
               InputProps={{ readOnly: true }}
             />
           ))}

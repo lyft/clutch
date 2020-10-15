@@ -37,11 +37,9 @@ type experimentTest struct {
 
 func createExperimentsTests() ([]experimentTest, error) {
 	config := &serverexperimentation.TestConfig{
-		Target: &serverexperimentation.TestConfig_ClusterPair{
-			ClusterPair: &serverexperimentation.ClusterPairTarget{
-				DownstreamCluster: "upstreamCluster",
-				UpstreamCluster:   "downstreamCluster",
-			},
+		ClusterPair: &serverexperimentation.ClusterPairTarget{
+			DownstreamCluster: "upstreamCluster",
+			UpstreamCluster:   "downstreamCluster",
 		},
 		Fault: &serverexperimentation.TestConfig_Abort{
 			Abort: &serverexperimentation.AbortFaultConfig{
@@ -107,7 +105,7 @@ func TestCreateExperiments(t *testing.T) {
 			db, mock, err := sqlmock.New()
 			a.NoError(err)
 
-			es := &experimentStore{db: db}
+			es := &storer{db: db}
 			defer es.Close()
 			mock.ExpectBegin()
 			for _, query := range test.queries {
@@ -128,7 +126,7 @@ func TestCancelExperimentRun(t *testing.T) {
 	db, mock, err := sqlmock.New()
 	assert.NoError(err)
 
-	es := &experimentStore{db: db}
+	es := &storer{db: db}
 	defer es.Close()
 
 	expected := mock.ExpectExec(regexp.QuoteMeta(`UPDATE experiment_run SET cancellation_time = NOW() WHERE id = $1 AND cancellation_time IS NULL`))
@@ -146,10 +144,10 @@ func TestGetExperimentsUnmarshalsExperimentConfiguration(t *testing.T) {
 	db, mock, err := sqlmock.New()
 	assert.NoError(err)
 
-	es := &experimentStore{db: db}
+	es := &storer{db: db}
 	defer es.Close()
 
-	expected := mock.ExpectQuery(regexp.QuoteMeta(getExperimentsSQLQuery)).WithArgs("foo", "UNSPECIFIED")
+	expected := mock.ExpectQuery(regexp.QuoteMeta(getExperimentsSQLQuery)).WithArgs("foo", "STATUS_UNSPECIFIED")
 	rows := sqlmock.NewRows(experimentColumns)
 	rows.AddRow([]driver.Value{
 		1234,
@@ -157,7 +155,7 @@ func TestGetExperimentsUnmarshalsExperimentConfiguration(t *testing.T) {
 	}...)
 	expected.WillReturnRows(rows)
 
-	experiments, err := es.GetExperiments(context.Background(), "foo", experimentation.GetExperimentsRequest_UNSPECIFIED)
+	experiments, err := es.GetExperiments(context.Background(), "foo", experimentation.GetExperimentsRequest_STATUS_UNSPECIFIED)
 	assert.NoError(err)
 
 	assert.Equal(1, len(experiments))
@@ -180,10 +178,10 @@ func TestGetExperimentsFailsIfItReadsExperimentWithMalformedConfiguration(t *tes
 	db, mock, err := sqlmock.New()
 	assert.NoError(err)
 
-	es := &experimentStore{db: db}
+	es := &storer{db: db}
 	defer es.Close()
 
-	expected := mock.ExpectQuery(regexp.QuoteMeta(getExperimentsSQLQuery)).WithArgs("foo", "UNSPECIFIED")
+	expected := mock.ExpectQuery(regexp.QuoteMeta(getExperimentsSQLQuery)).WithArgs("foo", "STATUS_UNSPECIFIED")
 	rowsData := [][]driver.Value{
 		{
 			1,
@@ -201,7 +199,7 @@ func TestGetExperimentsFailsIfItReadsExperimentWithMalformedConfiguration(t *tes
 	}
 	expected.WillReturnRows(rows)
 
-	experiments, err := es.GetExperiments(context.Background(), "foo", experimentation.GetExperimentsRequest_UNSPECIFIED)
+	experiments, err := es.GetExperiments(context.Background(), "foo", experimentation.GetExperimentsRequest_STATUS_UNSPECIFIED)
 	assert.Nil(experiments)
 	assert.Error(err)
 }

@@ -26,7 +26,13 @@ import (
 	"github.com/lyft/clutch/backend/service"
 )
 
-var scopes = []string{oidc.ScopeOpenID, "email"} // TODO(maybe): make scopes part of config?
+// TODO(maybe): make scopes part of config?
+// For more documentation on scopes see: https://developer.okta.com/docs/reference/api/oidc/#scopes
+var scopes = []string{
+	oidc.ScopeOpenID,
+	oidc.ScopeOfflineAccess, // offline_access is used to request issuance of a refresh_token
+	"email",
+}
 
 const Name = "clutch.service.authn"
 
@@ -52,7 +58,7 @@ type Provider interface {
 
 	Verify(ctx context.Context, rawIDToken string) (*Claims, error)
 	GetAuthCodeURL(ctx context.Context, state string) (string, error)
-	Exchange(ctx context.Context, code string) (token string, err error)
+	Exchange(ctx context.Context, code string) (token *oauth2.Token, err error)
 }
 
 type OIDCProvider struct {
@@ -63,6 +69,8 @@ type OIDCProvider struct {
 	httpClient *http.Client
 
 	sessionSecret string
+
+	cryptographer *cryptographer
 
 	claimsFromOIDCToken ClaimsFromOIDCTokenFunc
 }
@@ -121,31 +129,50 @@ type stateClaims struct {
 	RedirectURL string `json:"redirect"`
 }
 
-func (p *OIDCProvider) Exchange(ctx context.Context, code string) (string, error) {
+func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token, error) {
 	// Exchange.
 	ctx = oidc.ClientContext(ctx, p.httpClient)
 	token, err := p.oauth2.Exchange(ctx, code)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	rawIDToken, ok := token.Extra("id_token").(string)
 	if !ok {
-		return "", errors.New("'id_token' was not present in oauth token")
+		return nil, errors.New("'id_token' was not present in oauth token")
 	}
 
-	// Verify.
+	// Verify. This is superfluous since the token was just issued but it can't hurt.
 	idToken, err := p.verifier.Verify(ctx, rawIDToken)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	// Issue token with claims.
 	claims, err := p.claimsFromOIDCToken(ctx, idToken)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(p.sessionSecret))
+
+	// TODO: Store the encrypted refresh token in the database.
+	if p.cryptographer != nil {
+		if _, err := p.cryptographer.Encrypt([]byte(token.RefreshToken)); err != nil {
+			return nil, err
+		}
+	}
+
+	// Sign and issue token.
+	accessToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(p.sessionSecret))
+	if err != nil {
+		return nil, err
+	}
+	t := &oauth2.Token{
+		AccessToken:  accessToken,
+		Expiry:       time.Unix(claims.ExpiresAt, 0),
+		RefreshToken: "", // TODO: implement refresh_token flow with stateful sessions.
+		TokenType:    "Bearer",
+	}
+	return t, err
 }
 
 // Intermediate claims object for the ID token. Based on what scopes were requested.
@@ -179,7 +206,7 @@ func DefaultClaimsFromOIDCToken(ctx context.Context, t *oidc.IDToken) (*Claims, 
 	sc.Subject = idc.Email
 	return &Claims{
 		StandardClaims: sc,
-		Groups:         []string{"12345"},
+		Groups:         []string{""},
 	}, nil
 }
 
@@ -244,12 +271,22 @@ func NewProvider(config *authnv1.Config) (Provider, error) {
 		return nil, err
 	}
 
-	return &OIDCProvider{
+	p := &OIDCProvider{
 		provider:            provider,
 		verifier:            verifier,
 		oauth2:              oc,
 		httpClient:          httpClient,
 		sessionSecret:       config.SessionSecret,
 		claimsFromOIDCToken: DefaultClaimsFromOIDCToken,
-	}, nil
+	}
+
+	if config.Storage != nil {
+		c, err := newCryptographer(config.Storage.EncryptionPassphrase)
+		if err != nil {
+			return nil, err
+		}
+		p.cryptographer = c
+	}
+
+	return p, nil
 }

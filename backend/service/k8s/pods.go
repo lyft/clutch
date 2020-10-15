@@ -18,7 +18,7 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 		return nil, err
 	}
 
-	pods, err := cs.CoreV1().Pods(cs.Namespace()).List(metav1.ListOptions{
+	pods, err := cs.CoreV1().Pods(cs.Namespace()).List(ctx, metav1.ListOptions{
 		FieldSelector: "metadata.name=" + name,
 	})
 	if err != nil {
@@ -40,10 +40,10 @@ func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name
 	}
 
 	var gracePeriod int64
-	opts := &metav1.DeleteOptions{}
+	opts := metav1.DeleteOptions{}
 	opts.GracePeriodSeconds = &gracePeriod
 
-	return cs.CoreV1().Pods(cs.Namespace()).Delete(name, opts)
+	return cs.CoreV1().Pods(cs.Namespace()).Delete(ctx, name, opts)
 }
 
 func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string, listOpts *k8sapiv1.ListOptions) ([]*k8sapiv1.Pod, error) {
@@ -54,7 +54,7 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 
 	opts := ApplyListOptions(listOpts)
 
-	podList, err := cs.CoreV1().Pods(cs.Namespace()).List(opts)
+	podList, err := cs.CoreV1().Pods(cs.Namespace()).List(ctx, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +90,7 @@ func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name
 		return err
 	}
 
-	pod, err := cs.CoreV1().Pods(cs.Namespace()).Get(name, metav1.GetOptions{})
+	pod, err := cs.CoreV1().Pods(cs.Namespace()).Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		return err
 	}
@@ -114,7 +114,7 @@ func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name
 		delete(podAnnotations, annotation)
 	}
 
-	_, err = cs.CoreV1().Pods(cs.Namespace()).Update(pod)
+	_, err = cs.CoreV1().Pods(cs.Namespace()).Update(ctx, pod, metav1.UpdateOptions{})
 	return err
 }
 
@@ -167,10 +167,10 @@ func (s *svc) checkExpectedObjectMetaFields(expectedObjectMetaFields *k8sapiv1.E
 func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 	// TODO: There's a mismatch between the serialization of the timestamp here and what's expected
 	// on the frontend.
-	//var launch *timestamp.Timestamp
-	//if converted, err := ptypes.TimestampProto(k8spod.Status.StartTime.Time); err == nil {
-	//	launch = converted
-	//}
+	// var launch *timestamp.Timestamp
+	// if converted, err := ptypes.TimestampProto(k8spod.Status.StartTime.Time); err == nil {
+	// 	launch = converted
+	// }
 	clusterName := k8spod.ClusterName
 	if clusterName == "" {
 		clusterName = cluster

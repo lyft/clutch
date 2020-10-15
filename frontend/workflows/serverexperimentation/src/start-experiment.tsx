@@ -6,6 +6,7 @@ import {
   client,
   Confirmation,
   MetadataTable,
+  Select,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
@@ -53,81 +54,59 @@ const ClusterPairTargetDetails: React.FC<WizardChild> = () => {
   );
 };
 
-const AbortExperimentDetails: React.FC<WizardChild> = () => {
-  const { onSubmit, onBack } = useWizardContext();
-  const abortExperimentData = useDataLayout("abortExperimentData");
-  const abortExperiment = abortExperimentData.value;
+enum FaultType {
+  ABORT = "Abort",
+  LATENCY = "Latency",
+}
 
+const ExperimentDetails: React.FC<WizardChild> = () => {
+  const { onSubmit, onBack } = useWizardContext();
+  const experimentData = useDataLayout("experimentData");
+  const experiment = experimentData.value;
+
+  const isAbort = (experiment?.type ?? FaultType.ABORT) === FaultType.ABORT;
   return (
-    <WizardStep error={abortExperimentData.error} isLoading={false}>
+    <WizardStep error={experimentData.error} isLoading={false}>
+      <Select
+        name="Type"
+        label="Fault Type"
+        options={[
+          { label: "Abort", value: FaultType.ABORT },
+          { label: "Latency", value: FaultType.LATENCY },
+        ]}
+        onChange={value => experimentData.updateData("type", value)}
+      />
       <MetadataTable
-        onUpdate={(key, value) => abortExperimentData.updateData(key, value)}
+        onUpdate={(key, value) => experimentData.updateData(key, value)}
         data={[
           {
             name: "Percent",
-            value: abortExperiment.percent,
+            value: experiment.percent,
             input: {
               type: "number",
               key: "percent",
-              validation: yup.number().integer().moreThan(-1).lessThan(101),
+              validation: yup.number().integer().min(1).max(100),
             },
           },
-          {
-            name: "HTTP Status",
-            value: abortExperiment.httpStatus,
-            input: {
-              type: "number",
-              key: "httpStatus",
-              validation: yup.number().integer().moreThan(99).lessThan(600),
-            },
-          },
-        ]}
-      />
-      <ButtonGroup
-        buttons={[
-          {
-            text: "Back",
-            onClick: onBack,
-          },
-          {
-            text: "Next",
-            onClick: onSubmit,
-            destructive: true,
-          },
-        ]}
-      />
-    </WizardStep>
-  );
-};
-
-const LatencyExperimentDetails: React.FC<WizardChild> = () => {
-  const { onSubmit, onBack } = useWizardContext();
-  const latencyExperimentData = useDataLayout("latencyExperimentData");
-  const latencyExperiment = latencyExperimentData.value;
-
-  return (
-    <WizardStep error={latencyExperimentData.error} isLoading={false}>
-      <MetadataTable
-        onUpdate={(key, value) => latencyExperimentData.updateData(key, value)}
-        data={[
-          {
-            name: "Percent",
-            value: latencyExperiment.percent,
-            input: {
-              type: "number",
-              key: "percent",
-              validation: yup.number().integer().min(0).max(100),
-            },
-          },
-          {
-            name: "Duration (ms)",
-            value: latencyExperiment.durationMs,
-            input: {
-              type: "number",
-              key: "durationMs",
-              validation: yup.number().integer().moreThan(0),
-            },
-          },
+          isAbort
+            ? {
+                name: "HTTP Status",
+                value: experiment.httpStatus,
+                input: {
+                  type: "number",
+                  key: "httpStatus",
+                  validation: yup.number().integer().min(100).max(599),
+                },
+              }
+            : {
+                name: "Duration (ms)",
+                value: experiment.durationMs,
+                input: {
+                  type: "number",
+                  key: "durationMs",
+                  validation: yup.number().integer().min(1),
+                },
+              },
         ]}
       />
       <ButtonGroup
@@ -157,35 +136,37 @@ const Confirm: React.FC<WizardChild> = () => {
   );
 };
 
-const createExperiment = (data: IClutch.chaos.serverexperimentation.v1.ITestConfig) => {
-  const testConfig = data;
-  testConfig["@type"] = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig";
+const StartExperiment: React.FC<BaseWorkflowProps> = ({ heading }) => {
+  const createExperiment = (data: IClutch.chaos.serverexperimentation.v1.ITestConfig) => {
+    const testConfig = data;
+    testConfig["@type"] = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig";
 
-  return client.post("/v1/chaos/experimentation/createExperiment", {
-    config: testConfig,
-  });
-};
+    return client.post("/v1/chaos/experimentation/createExperiment", {
+      config: testConfig,
+    });
+  };
 
-export const StartAbortExperiment: React.FC<BaseWorkflowProps> = ({ heading }) => {
   const dataLayout = {
     clusterPairTargetData: {},
-    abortExperimentData: {},
-    latencyExperimentData: {},
+    experimentData: {},
     startData: {
-      deps: ["clusterPairTargetData", "abortExperimentData"],
+      deps: ["clusterPairTargetData", "experimentData"],
       hydrator: (
         clusterPairTargetData: IClutch.chaos.serverexperimentation.v1.IClusterPairTarget,
-        abortExperimentData: IClutch.chaos.serverexperimentation.v1.AbortFaultConfig
+        experimentData: IClutch.chaos.serverexperimentation.v1.AbortFaultConfig &
+          IClutch.chaos.serverexperimentation.v1.LatencyFaultConfig & { type: FaultType }
       ) => {
+        const isAbort = experimentData.type === FaultType.ABORT;
+        const fault = isAbort
+          ? { abort: { httpStatus: experimentData.httpStatus, percent: experimentData.percent } }
+          : { latency: { durationMs: experimentData.durationMs, percent: experimentData.percent } };
+
         return createExperiment({
           clusterPair: {
             downstreamCluster: clusterPairTargetData.downstreamCluster,
             upstreamCluster: clusterPairTargetData.upstreamCluster,
           },
-          abort: {
-            percent: abortExperimentData.percent,
-            httpStatus: abortExperimentData.httpStatus,
-          },
+          ...fault,
         });
       },
     },
@@ -193,42 +174,11 @@ export const StartAbortExperiment: React.FC<BaseWorkflowProps> = ({ heading }) =
 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
-      <ClusterPairTargetDetails name="target" />
-      <AbortExperimentDetails name="abort" />
+      <ClusterPairTargetDetails name="Target" />
+      <ExperimentDetails name="Experiment Data" />
       <Confirm name="Confirmation" />
     </Wizard>
   );
 };
 
-export const StartLatencyExperiment: React.FC<BaseWorkflowProps> = ({ heading }) => {
-  const dataLayout = {
-    clusterPairTargetData: {},
-    latencyExperimentData: {},
-    startData: {
-      deps: ["clusterPairTargetData", "latencyExperimentData"],
-      hydrator: (
-        clusterPairTargetData: IClutch.chaos.serverexperimentation.v1.IClusterPairTarget,
-        latencyExperimentData: IClutch.chaos.serverexperimentation.v1.LatencyFaultConfig
-      ) => {
-        return createExperiment({
-          clusterPair: {
-            downstreamCluster: clusterPairTargetData.downstreamCluster,
-            upstreamCluster: clusterPairTargetData.upstreamCluster,
-          },
-          latency: {
-            percent: latencyExperimentData.percent,
-            durationMs: latencyExperimentData.durationMs,
-          },
-        });
-      },
-    },
-  };
-
-  return (
-    <Wizard dataLayout={dataLayout} heading={heading}>
-      <ClusterPairTargetDetails name="target" />
-      <LatencyExperimentDetails name="latency" />
-      <Confirm name="Confirmation" />
-    </Wizard>
-  );
-};
+export default StartExperiment;
