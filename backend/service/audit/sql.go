@@ -14,6 +14,7 @@ import (
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
+	"github.com/lyft/clutch/backend/gateway/log"
 )
 
 func (c *client) WriteRequestEvent(ctx context.Context, event *auditv1.RequestEvent) (int64, error) {
@@ -81,7 +82,7 @@ func (c *client) UpdateRequestEvent(ctx context.Context, id int64, update *audit
 		c.logger.Warn(
 			"error updating audit row",
 			zap.Int64("row_id", id),
-			zap.Any("event", update),
+			log.ProtoField("event", update),
 			zap.Error(err),
 		)
 		return err

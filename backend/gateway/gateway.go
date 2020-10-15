@@ -232,7 +232,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	case *gatewayv1.Listener_Tcp:
 		// OK
 	default:
-		logger.Fatal("socket not supported", zap.Any("type", t))
+		logger.Fatal("socket not supported", zap.String("type", fmt.Sprintf("%T", t)))
 	}
 
 	if cfg.Gateway.Listener.GetTcp().Secure {

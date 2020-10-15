@@ -18,6 +18,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
+	"github.com/lyft/clutch/backend/gateway/log"
 	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/middleware"
 	"github.com/lyft/clutch/backend/service"
@@ -72,8 +73,8 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 
 			if auditErr := m.audit.UpdateRequestEvent(ctx, id, update); auditErr != nil {
 				m.logger.Warn("error updating audit event",
-					zap.Int64("auditID", id),
-					zap.Any("update event", update),
+					zap.Int64("auditId", id),
+					log.ProtoField("updateEvent", update),
 				)
 			}
 		}
