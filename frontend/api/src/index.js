@@ -7802,17 +7802,6 @@ export const clutch = $root.clutch = (() => {
                     let $oneOfFields;
 
                     /**
-                     * TestConfig target.
-                     * @member {"clusterPair"|undefined} target
-                     * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
-                     * @instance
-                     */
-                    Object.defineProperty(TestConfig.prototype, "target", {
-                        get: $util.oneOfGetter($oneOfFields = ["clusterPair"]),
-                        set: $util.oneOfSetter($oneOfFields)
-                    });
-
-                    /**
                      * TestConfig fault.
                      * @member {"abort"|"latency"|undefined} fault
                      * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
@@ -7836,12 +7825,9 @@ export const clutch = $root.clutch = (() => {
                             return "object expected";
                         let properties = {};
                         if (message.clusterPair != null && message.hasOwnProperty("clusterPair")) {
-                            properties.target = 1;
-                            {
-                                let error = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.verify(message.clusterPair);
-                                if (error)
-                                    return "clusterPair." + error;
-                            }
+                            let error = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.verify(message.clusterPair);
+                            if (error)
+                                return "clusterPair." + error;
                         }
                         if (message.abort != null && message.hasOwnProperty("abort")) {
                             properties.fault = 1;
@@ -7907,11 +7893,10 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (message.clusterPair != null && message.hasOwnProperty("clusterPair")) {
+                        if (options.defaults)
+                            object.clusterPair = null;
+                        if (message.clusterPair != null && message.hasOwnProperty("clusterPair"))
                             object.clusterPair = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.toObject(message.clusterPair, options);
-                            if (options.oneofs)
-                                object.target = "clusterPair";
-                        }
                         if (message.abort != null && message.hasOwnProperty("abort")) {
                             object.abort = $root.clutch.chaos.serverexperimentation.v1.AbortFaultConfig.toObject(message.abort, options);
                             if (options.oneofs)

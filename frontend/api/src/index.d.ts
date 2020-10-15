@@ -3344,9 +3344,6 @@ export namespace clutch {
                     /** TestConfig latency. */
                     public latency?: (clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null);
 
-                    /** TestConfig target. */
-                    public target?: "clusterPair";
-
                     /** TestConfig fault. */
                     public fault?: ("abort"|"latency");
 

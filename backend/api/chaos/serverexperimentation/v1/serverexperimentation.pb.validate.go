@@ -43,20 +43,14 @@ func (m *TestConfig) Validate() error {
 		return nil
 	}
 
-	switch m.Target.(type) {
-
-	case *TestConfig_ClusterPair:
-
-		if v, ok := interface{}(m.GetClusterPair()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return TestConfigValidationError{
-					field:  "ClusterPair",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
+	if v, ok := interface{}(m.GetClusterPair()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return TestConfigValidationError{
+				field:  "ClusterPair",
+				reason: "embedded message failed validation",
+				cause:  err,
 			}
 		}
-
 	}
 
 	switch m.Fault.(type) {
