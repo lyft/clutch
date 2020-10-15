@@ -7,8 +7,10 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/any"
 	"go.uber.org/zap"
 	rpcstatus "google.golang.org/genproto/googleapis/rpc/status"
+	"google.golang.org/protobuf/encoding/protojson"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
@@ -23,12 +25,18 @@ func (c *client) WriteRequestEvent(ctx context.Context, event *auditv1.RequestEv
 		return -1, ErrFailedFilters
 	}
 
+	reqBody, err := convertAPIBody(event.RequestMetadata.Body)
+	if err != nil {
+		return -1, err
+	}
+
 	dbEvent := &eventDetails{
 		Username:         event.Username,
 		Service:          event.ServiceName,
 		Method:           event.MethodName,
 		ActionType:       event.Type.String(),
 		RequestResources: convertResources(event.Resources),
+		RequestBody:      reqBody,
 	}
 	blob, err := json.Marshal(dbEvent)
 	if err != nil {
@@ -46,12 +54,18 @@ func (c *client) WriteRequestEvent(ctx context.Context, event *auditv1.RequestEv
 }
 
 func (c *client) UpdateRequestEvent(ctx context.Context, id int64, update *auditv1.RequestEvent) error {
+	respBody, err := convertAPIBody(update.ResponseMetadata.Body)
+	if err != nil {
+		return err
+	}
+
 	dbEvent := &eventDetails{
 		Status: status{
 			Code:    int(update.Status.Code),
 			Message: update.Status.Message,
 		},
 		ResponseResources: convertResources(update.Resources),
+		ResponseBody:      respBody,
 	}
 	blob, err := json.Marshal(dbEvent)
 	if err != nil {
@@ -133,7 +147,7 @@ func (c *client) query(ctx context.Context, query string, args ...interface{}) (
 		proto := &auditv1.Event{
 			OccurredAt: occurred,
 			EventType: &auditv1.Event_Event{
-				Event: row.RequestEventProto(),
+				Event: requestEventProto(c.logger, row),
 			},
 		}
 		events = append(events, proto)
@@ -160,13 +174,15 @@ type resource struct {
 }
 
 type eventDetails struct {
-	Username          string      `json:"user_name,omitempty"`
-	Service           string      `json:"service_name,omitempty"`
-	Method            string      `json:"method_name,omitempty"`
-	ActionType        string      `json:"type,omitempty"`
-	Status            status      `json:"status,omitempty"`
-	RequestResources  []*resource `json:"request_resources,omitempty"`
-	ResponseResources []*resource `json:"response_resources,omitempty"`
+	Username          string          `json:"user_name,omitempty"`
+	Service           string          `json:"service_name,omitempty"`
+	Method            string          `json:"method_name,omitempty"`
+	ActionType        string          `json:"type,omitempty"`
+	Status            status          `json:"status,omitempty"`
+	RequestResources  []*resource     `json:"request_resources,omitempty"`
+	ResponseResources []*resource     `json:"response_resources,omitempty"`
+	RequestBody       json.RawMessage `json:"request_body,omitempty"`
+	ResponseBody      json.RawMessage `json:"response_body,omitempty"`
 }
 
 func (e *eventDetails) ResourcesProto() []*auditv1.Resource {
@@ -197,7 +213,17 @@ type event struct {
 	Details    *eventDetails
 }
 
-func (e *event) RequestEventProto() *auditv1.RequestEvent {
+func requestEventProto(logger *zap.Logger, e *event) *auditv1.RequestEvent {
+	reqBody, err := apiBodyProto(e.Details.RequestBody)
+	if err != nil {
+		logger.Warn("unmarshallable object for RequestBody", zap.Error(err))
+	}
+
+	respBody, err := apiBodyProto(e.Details.ResponseBody)
+	if err != nil {
+		logger.Warn("unmarshallable object for ResponseBody", zap.Error(err))
+	}
+
 	return &auditv1.RequestEvent{
 		Username:    e.Details.Username,
 		ServiceName: e.Details.Service,
@@ -205,6 +231,12 @@ func (e *event) RequestEventProto() *auditv1.RequestEvent {
 		Type:        apiv1.ActionType(apiv1.ActionType_value[e.Details.ActionType]),
 		Status:      e.Details.Status.Status(),
 		Resources:   e.Details.ResourcesProto(),
+		RequestMetadata: &auditv1.RequestMetadata{
+			Body: reqBody,
+		},
+		ResponseMetadata: &auditv1.ResponseMetadata{
+			Body: respBody,
+		},
 	}
 }
 
@@ -214,4 +246,25 @@ func convertResources(proto []*auditv1.Resource) []*resource {
 		resources = append(resources, &resource{Id: p.Id, TypeUrl: p.TypeUrl})
 	}
 	return resources
+}
+
+// Encodes proto object in JSON format
+func convertAPIBody(body *any.Any) (json.RawMessage, error) {
+	b, err := protojson.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	return json.RawMessage(b), nil
+}
+
+// Decodes JSON to proto Any message
+func apiBodyProto(details json.RawMessage) (*any.Any, error) {
+	body := &any.Any{}
+
+	err := protojson.Unmarshal(details, body)
+	if err != nil {
+		return nil, err
+	}
+
+	return body, nil
 }
