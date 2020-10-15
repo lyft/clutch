@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
@@ -253,7 +252,7 @@ func convertResources(proto []*auditv1.Resource) []*resource {
 func convertAPIBody(body *any.Any) (json.RawMessage, error) {
 	b, err := protojson.Marshal(body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal Any proto %v in JSON format, %v", body, err)
+		return nil, err
 	}
 	return json.RawMessage(b), nil
 }
@@ -264,7 +263,7 @@ func apiBodyProto(details json.RawMessage) (*any.Any, error) {
 
 	err := protojson.Unmarshal(details, body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to unmarshal json.RawMessage to proto Any message, %v", err)
+		return nil, err
 	}
 
 	return body, nil
