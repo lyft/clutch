@@ -46,6 +46,7 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 		// across many clutch instances by having an a lock per service (e.g. AWS, k8s, etc)
 		if c.tryAdvisoryLock(ctx, conn, advisoryLockId) {
 			c.log.Info("acquired the advisory lock, starting to cache topology now...")
+			go c.expireCache(ctx)
 			c.startTopologyCache(ctx)
 		}
 	}
@@ -171,4 +172,33 @@ func (c *client) deleteCache(ctx context.Context, id string) error {
 
 	c.scope.SubScope("cache").Counter("delete.success").Inc(1)
 	return nil
+}
+
+func (c *client) expireCache(ctx context.Context) {
+	// Delete all entries that are older than two hours
+	const expireQuery = `
+		DELETE FROM topology_cache WHERE updated_at <= NOW() - INTERVAL '120m';
+	`
+
+	ticker := time.NewTicker(time.Minute * 20)
+
+	go func() {
+		<-ctx.Done()
+		ticker.Stop()
+	}()
+
+	for ; true; <-ticker.C {
+		result, err := c.db.ExecContext(ctx, expireQuery)
+		if err != nil {
+			c.log.Error("unable to expire cache", zap.Error(err))
+			continue
+		}
+
+		numOfItemsRemoved, err := result.RowsAffected()
+		if err != nil {
+			c.log.Error("unable to get rows removed from cache expiry query", zap.Error(err))
+		} else {
+			c.log.Info("successfully removed expired cache", zap.Int64("count", numOfItemsRemoved))
+		}
+	}
 }
