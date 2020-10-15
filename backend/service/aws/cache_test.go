@@ -4,15 +4,19 @@ import (
 	"context"
 	"testing"
 
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap/zaptest"
 	"golang.org/x/sync/semaphore"
+
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
 func TestStartTopologyCache(t *testing.T) {
+	log := zaptest.NewLogger(t)
 	c := client{
 		topologyObjectChan: make(chan *topologyv1.UpdateCacheRequest, topologyObjectChanBufferSize),
 		topologyLock:       semaphore.NewWeighted(1),
+		log:                log,
 	}
 
 	buff, err := c.StartTopologyCaching(context.Background())
