@@ -73,7 +73,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 
 			if auditErr := m.audit.UpdateRequestEvent(ctx, id, update); auditErr != nil {
 				m.logger.Warn("error updating audit event",
-					zap.Int64("auditId", id),
+					zap.Int64("auditID", id),
 					log.ProtoField("updateEvent", update),
 				)
 			}
