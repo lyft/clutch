@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Developing Clutch](#developing-clutch)
+  - [Backend](#backend)
+    - [Prerequisites](#prerequisites)
+    - [The Basics](#the-basics)
+    - [If you need a database](#if-you-need-a-database)
+    - [If you need a Kubernetes cluster](#if-you-need-a-kubernetes-cluster)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Developing Clutch
 
 ## Backend
@@ -100,11 +113,21 @@ Envoy `deployments` & `HPAs` will be created in a `envoy-staging` and `envoy-pro
 ```sh
 # This will start a local Kubernetes cluster that runs as a single docker container.
 # The cluster will be seeded with a few resources so you can start testing immediately.
-make k8s-start
+make dev-k8s-up
 
-# This exports a `KUBECONFIG` which is read by Clutch as well as kubectl
-eval $(make k8s-env)
+# The above command will ask you to export environment variables before starting clutch,
+# do that now before proceeding.
 
 # Runs the clutch backend
 make backend-dev
 ```
+
+When you are done with development you can stop the local Kubernetes cluster by running the down command.
+```sh
+make dev-k8s-down
+```
+
+Additionally you my point clutch to any set of Kubernetes clusters,
+you only need to export the relevant Kubernetes configuration via the `KUBECONFIG` environment variable.
+Clutch will read this in when it first boots and you will be able to take actions against those clusters,
+assuming you have taken care of any prerequisite authentication actions that may be necessary.

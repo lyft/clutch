@@ -159,20 +159,16 @@ verify: api-verify backend-verify frontend-verify
 yarn-ensure:
 	@./tools/install-yarn.sh
 
-.PHONY: k8s-start # Start a local k8s cluster
-k8s-start:
-	tools/kind.sh create cluster --name clutch || true
-	tools/kind.sh get kubeconfig --name clutch > $(PROJECT_ROOT_DIR)/build/kubeconfig-clutch
-	tools/kube-seed.sh
+.PHONY: dev-k8s-up # Start a local k8s cluster
+dev-k8s-up:
+	@tools/kind.sh create cluster --kubeconfig $(PROJECT_ROOT_DIR)/build/kubeconfig-clutch --name clutch-local || true
+	@tools/kind.sh seed
 
 	@echo
-	@echo "Run the follow command to export the environment variables:"
-	@echo '    eval $$(make k8s-env)'
+	@echo "Export these environment variables before starting development:"
+	@echo '    export KUBECONFIG=$(PROJECT_ROOT_DIR)/build/kubeconfig-clutch'
 
 .PHONY: k8s-stop
-k8s-stop:
-	tools/kind.sh delete cluster --name clutch
+dev-k8s-down:
+	tools/kind.sh delete cluster --name clutch-local
 
-.PHONY: k8s-env
-k8s-env:
-	export KUBECONFIG=$(PROJECT_ROOT_DIR)/build/kubeconfig-clutch

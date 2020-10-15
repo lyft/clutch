@@ -4,6 +4,7 @@ set -euo pipefail
 REPO_ROOT="${REPO_ROOT:-"$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"}"
 BUILD_ROOT="${REPO_ROOT}/build"
 BUILD_BIN="${BUILD_ROOT}/bin"
+KUBECONFIG=$BUILD_ROOT/kubeconfig-clutch
 
 
 NAME=kind
@@ -18,6 +19,11 @@ RELEASE_BINARY="${BUILD_BIN}/${NAME}-${RELEASE}"
 main() {
   cd "${REPO_ROOT}"
   ensure_binary
+
+  if [ "$1" == "seed" ]; then
+    seed
+    exit 0
+  fi
 
   "${RELEASE_BINARY}" "$@"
 }
@@ -44,6 +50,18 @@ ensure_binary() {
     mv "${release_archive}" "${RELEASE_BINARY}"
     chmod +x "${RELEASE_BINARY}"
   fi
+}
+
+seed() {
+  printf "\n\nCreating fake resources in clutch-local k8s cluster\n\n"
+  for env in staging production; do
+    # Creating namespaces
+    KUBECONFIG=$KUBECONFIG kubectl create ns "envoy-${env}" || true
+
+    # Creating resources in `envoy-*` namespace
+    KUBECONFIG=$KUBECONFIG kubectl create deployment envoy --image envoyproxy/envoy:v1.14-latest -n "envoy-${env}" || true
+    KUBECONFIG=$KUBECONFIG kubectl autoscale deployment envoy --cpu-percent=50 --min=1 --max=2 -n "envoy-${env}" || true
+  done
 }
 
 main "$@"
