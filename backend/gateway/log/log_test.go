@@ -14,7 +14,7 @@ import (
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 )
 
-func Test(t *testing.T) {
+func TestProtoField(t *testing.T) {
 	var b bytes.Buffer
 	w := bufio.NewWriter(&b)
 
