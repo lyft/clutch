@@ -11,11 +11,13 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"golang.org/x/sync/semaphore"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 	"k8s.io/client-go/tools/clientcmd"
 
 	k8sconfigv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/service"
 )
 
@@ -69,12 +71,20 @@ type Service interface {
 type svc struct {
 	manager ClientsetManager
 
-	log   *zap.Logger
-	scope tally.Scope
+	topologyObjectChan   chan *topologyv1.UpdateCacheRequest
+	topologyInformerLock *semaphore.Weighted
+	log                  *zap.Logger
+	scope                tally.Scope
 }
 
 func NewWithClientsetManager(manager ClientsetManager, logger *zap.Logger, scope tally.Scope) (Service, error) {
-	return &svc{manager: manager, log: logger, scope: scope}, nil
+	return &svc{
+		manager:              manager,
+		topologyObjectChan:   make(chan *topologyv1.UpdateCacheRequest, topologyObjectChanBufferSize),
+		topologyInformerLock: semaphore.NewWeighted(1),
+		log:                  logger,
+		scope:                scope,
+	}, nil
 }
 
 func (s *svc) Clientsets() []string {

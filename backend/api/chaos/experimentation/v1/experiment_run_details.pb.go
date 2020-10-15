@@ -86,7 +86,7 @@ func (x *ExperimentRunDetails) GetStatus() Experiment_Status {
 	if x != nil {
 		return x.Status
 	}
-	return Experiment_UNSPECIFIED
+	return Experiment_STATUS_UNSPECIFIED
 }
 
 func (x *ExperimentRunDetails) GetProperties() *PropertiesList {
