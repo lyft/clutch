@@ -293,8 +293,8 @@ func (m *Config) Validate() error {
 			}
 		}
 
-	case *Config_LocalAuditing:
-		// no validation rules for LocalAuditing
+	case *Config_InMemory:
+		// no validation rules for InMemory
 
 	}
 

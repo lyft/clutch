@@ -33,7 +33,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, err
 	}
 
-	storage, err := getStorageProvider(config, logger, scope)
+	storageProvider, err := getStorageProvider(config, logger, scope)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +42,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		logger: logger,
 		scope:  scope,
 
-		storage: storage,
+		storage: storageProvider,
 		marshaler: &jsonpb.Marshaler{
 			// Use the names from the .proto.
 			OrigName: true,
@@ -81,7 +81,7 @@ func getStorageProvider(cfg *auditconfigv1.Config, logger *zap.Logger, scope tal
 	switch cfg.GetStorageProvider().(type) {
 	case *auditconfigv1.Config_DbProvider:
 		return sql.New(cfg, logger, scope)
-	case *auditconfigv1.Config_LocalAuditing:
+	case *auditconfigv1.Config_InMemory:
 		return local.New(cfg, logger, scope)
 	}
 

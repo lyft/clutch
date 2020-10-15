@@ -4521,8 +4521,8 @@ export namespace clutch {
                         /** Config dbProvider */
                         dbProvider?: (string|null);
 
-                        /** Config localAuditing */
-                        localAuditing?: (boolean|null);
+                        /** Config inMemory */
+                        inMemory?: (boolean|null);
 
                         /** Config filter */
                         filter?: (clutch.config.service.audit.v1.IFilter|null);
@@ -4543,8 +4543,8 @@ export namespace clutch {
                         /** Config dbProvider. */
                         public dbProvider: string;
 
-                        /** Config localAuditing. */
-                        public localAuditing: boolean;
+                        /** Config inMemory. */
+                        public inMemory: boolean;
 
                         /** Config filter. */
                         public filter?: (clutch.config.service.audit.v1.IFilter|null);
@@ -4553,7 +4553,7 @@ export namespace clutch {
                         public sinks: string[];
 
                         /** Config storageProvider. */
-                        public storageProvider?: ("dbProvider"|"localAuditing");
+                        public storageProvider?: ("dbProvider"|"inMemory");
 
                         /**
                          * Verifies a Config message.

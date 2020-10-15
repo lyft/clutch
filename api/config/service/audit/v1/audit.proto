@@ -49,7 +49,7 @@ message Config {
 
     // A flag to store audit messages in-memory before flushing to sinks.
     // This is not recommended for production environments.
-    bool local_auditing = 2;
+    bool in_memory = 2;
   }
 
   // The rule to apply before between request ingress and the database.

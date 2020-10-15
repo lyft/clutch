@@ -16,7 +16,7 @@ import (
 
 func TestLocalstorage(t *testing.T) {
 	cfg := &auditconfigv1.Config{
-		StorageProvider: &auditconfigv1.Config_LocalAuditing{LocalAuditing: true},
+		StorageProvider: &auditconfigv1.Config_InMemory{InMemory: true},
 	}
 	log := zaptest.NewLogger(t)
 	scope := tally.NewTestScope("", nil)
