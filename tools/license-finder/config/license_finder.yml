@@ -1,0 +1,2 @@
+decisions_file: './config/license_dependency_decisions.yml'
+project_path: '../../backend'
