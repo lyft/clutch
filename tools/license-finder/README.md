@@ -17,7 +17,7 @@ $ docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -lc "cd /s
 $ docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -lc "cd /scan/tools/license-finder && license_finder approvals add '<dependency_to_add>'"
 ```
 
-When a license or dependecy is approved, the changes will be automatically added to [`license_dependency_decisions.yml`](./license_dependency_decisions.yml). Commit the file changes to the pull request.
+When a license or dependency is approved, the changes will be automatically added to [`license_dependency_decisions.yml`](./license_dependency_decisions.yml). Commit the file changes to the pull request.
 
 # Handling unknown licenses (preferred method)
 When License Finder reports that a dependency's license is 'unknown', the license should be manually researched. Then record it with:
@@ -26,6 +26,6 @@ When License Finder reports that a dependency's license is 'unknown', the licens
 $ docker run -v $PWD:/scan -it licensefinder/license_finder /bin/bash -lc "cd /scan/tools/license-finder && license_finder licenses add '<dependency>' '<license>'"
 ```
 
-Then you can procced with the command above to approve a dependency.
+Then you can proceed with the command above to approve a dependency.
 
 For additional usages not mentioned, please see [License Finder docs](https://github.com/pivotal/LicenseFinder).

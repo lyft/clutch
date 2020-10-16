@@ -1,3 +1,4 @@
+# If the job fails, see clutch/tools/license-finder for instructions on approving a dependency.
 name: license_review
 on:
   pull_request:
