@@ -5,7 +5,7 @@ go 1.13
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/aws/aws-sdk-go v1.35.7
-	github.com/bufbuild/buf v0.26.0
+	github.com/bufbuild/buf v0.27.1
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -39,6 +39,7 @@ require (
 	golang.org/x/sync v0.0.0-20201008141435-b3e1573b7520
 	google.golang.org/genproto v0.0.0-20201015140912-32ed001d685c
 	google.golang.org/grpc v1.33.0
+	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.0.0
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/square/go-jose.v2 v2.4.1 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776

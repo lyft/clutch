@@ -1244,6 +1244,216 @@ export const clutch = $root.clutch = (() => {
                 return Resource;
             })();
 
+            v1.RequestMetadata = (function() {
+
+                /**
+                 * Properties of a RequestMetadata.
+                 * @memberof clutch.audit.v1
+                 * @interface IRequestMetadata
+                 * @property {google.protobuf.IAny|null} [body] RequestMetadata body
+                 */
+
+                /**
+                 * Constructs a new RequestMetadata.
+                 * @memberof clutch.audit.v1
+                 * @classdesc Represents a RequestMetadata.
+                 * @implements IRequestMetadata
+                 * @constructor
+                 * @param {clutch.audit.v1.IRequestMetadata=} [properties] Properties to set
+                 */
+                function RequestMetadata(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * RequestMetadata body.
+                 * @member {google.protobuf.IAny|null|undefined} body
+                 * @memberof clutch.audit.v1.RequestMetadata
+                 * @instance
+                 */
+                RequestMetadata.prototype.body = null;
+
+                /**
+                 * Verifies a RequestMetadata message.
+                 * @function verify
+                 * @memberof clutch.audit.v1.RequestMetadata
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                RequestMetadata.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.body != null && message.hasOwnProperty("body")) {
+                        let error = $root.google.protobuf.Any.verify(message.body);
+                        if (error)
+                            return "body." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a RequestMetadata message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.audit.v1.RequestMetadata
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.audit.v1.RequestMetadata} RequestMetadata
+                 */
+                RequestMetadata.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.audit.v1.RequestMetadata)
+                        return object;
+                    let message = new $root.clutch.audit.v1.RequestMetadata();
+                    if (object.body != null) {
+                        if (typeof object.body !== "object")
+                            throw TypeError(".clutch.audit.v1.RequestMetadata.body: object expected");
+                        message.body = $root.google.protobuf.Any.fromObject(object.body);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a RequestMetadata message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.audit.v1.RequestMetadata
+                 * @static
+                 * @param {clutch.audit.v1.RequestMetadata} message RequestMetadata
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                RequestMetadata.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.body = null;
+                    if (message.body != null && message.hasOwnProperty("body"))
+                        object.body = $root.google.protobuf.Any.toObject(message.body, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this RequestMetadata to JSON.
+                 * @function toJSON
+                 * @memberof clutch.audit.v1.RequestMetadata
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                RequestMetadata.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return RequestMetadata;
+            })();
+
+            v1.ResponseMetadata = (function() {
+
+                /**
+                 * Properties of a ResponseMetadata.
+                 * @memberof clutch.audit.v1
+                 * @interface IResponseMetadata
+                 * @property {google.protobuf.IAny|null} [body] ResponseMetadata body
+                 */
+
+                /**
+                 * Constructs a new ResponseMetadata.
+                 * @memberof clutch.audit.v1
+                 * @classdesc Represents a ResponseMetadata.
+                 * @implements IResponseMetadata
+                 * @constructor
+                 * @param {clutch.audit.v1.IResponseMetadata=} [properties] Properties to set
+                 */
+                function ResponseMetadata(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ResponseMetadata body.
+                 * @member {google.protobuf.IAny|null|undefined} body
+                 * @memberof clutch.audit.v1.ResponseMetadata
+                 * @instance
+                 */
+                ResponseMetadata.prototype.body = null;
+
+                /**
+                 * Verifies a ResponseMetadata message.
+                 * @function verify
+                 * @memberof clutch.audit.v1.ResponseMetadata
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ResponseMetadata.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.body != null && message.hasOwnProperty("body")) {
+                        let error = $root.google.protobuf.Any.verify(message.body);
+                        if (error)
+                            return "body." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ResponseMetadata message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.audit.v1.ResponseMetadata
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.audit.v1.ResponseMetadata} ResponseMetadata
+                 */
+                ResponseMetadata.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.audit.v1.ResponseMetadata)
+                        return object;
+                    let message = new $root.clutch.audit.v1.ResponseMetadata();
+                    if (object.body != null) {
+                        if (typeof object.body !== "object")
+                            throw TypeError(".clutch.audit.v1.ResponseMetadata.body: object expected");
+                        message.body = $root.google.protobuf.Any.fromObject(object.body);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ResponseMetadata message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.audit.v1.ResponseMetadata
+                 * @static
+                 * @param {clutch.audit.v1.ResponseMetadata} message ResponseMetadata
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ResponseMetadata.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.body = null;
+                    if (message.body != null && message.hasOwnProperty("body"))
+                        object.body = $root.google.protobuf.Any.toObject(message.body, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this ResponseMetadata to JSON.
+                 * @function toJSON
+                 * @memberof clutch.audit.v1.ResponseMetadata
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ResponseMetadata.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ResponseMetadata;
+            })();
+
             v1.RequestEvent = (function() {
 
                 /**
@@ -1256,6 +1466,8 @@ export const clutch = $root.clutch = (() => {
                  * @property {clutch.api.v1.ActionType|null} [type] RequestEvent type
                  * @property {google.rpc.IStatus|null} [status] RequestEvent status
                  * @property {Array.<clutch.audit.v1.IResource>|null} [resources] RequestEvent resources
+                 * @property {clutch.audit.v1.IRequestMetadata|null} [requestMetadata] RequestEvent requestMetadata
+                 * @property {clutch.audit.v1.IResponseMetadata|null} [responseMetadata] RequestEvent responseMetadata
                  */
 
                 /**
@@ -1323,6 +1535,22 @@ export const clutch = $root.clutch = (() => {
                 RequestEvent.prototype.resources = $util.emptyArray;
 
                 /**
+                 * RequestEvent requestMetadata.
+                 * @member {clutch.audit.v1.IRequestMetadata|null|undefined} requestMetadata
+                 * @memberof clutch.audit.v1.RequestEvent
+                 * @instance
+                 */
+                RequestEvent.prototype.requestMetadata = null;
+
+                /**
+                 * RequestEvent responseMetadata.
+                 * @member {clutch.audit.v1.IResponseMetadata|null|undefined} responseMetadata
+                 * @memberof clutch.audit.v1.RequestEvent
+                 * @instance
+                 */
+                RequestEvent.prototype.responseMetadata = null;
+
+                /**
                  * Verifies a RequestEvent message.
                  * @function verify
                  * @memberof clutch.audit.v1.RequestEvent
@@ -1366,6 +1594,16 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "resources." + error;
                         }
+                    }
+                    if (message.requestMetadata != null && message.hasOwnProperty("requestMetadata")) {
+                        let error = $root.clutch.audit.v1.RequestMetadata.verify(message.requestMetadata);
+                        if (error)
+                            return "requestMetadata." + error;
+                    }
+                    if (message.responseMetadata != null && message.hasOwnProperty("responseMetadata")) {
+                        let error = $root.clutch.audit.v1.ResponseMetadata.verify(message.responseMetadata);
+                        if (error)
+                            return "responseMetadata." + error;
                     }
                     return null;
                 };
@@ -1425,6 +1663,16 @@ export const clutch = $root.clutch = (() => {
                             message.resources[i] = $root.clutch.audit.v1.Resource.fromObject(object.resources[i]);
                         }
                     }
+                    if (object.requestMetadata != null) {
+                        if (typeof object.requestMetadata !== "object")
+                            throw TypeError(".clutch.audit.v1.RequestEvent.requestMetadata: object expected");
+                        message.requestMetadata = $root.clutch.audit.v1.RequestMetadata.fromObject(object.requestMetadata);
+                    }
+                    if (object.responseMetadata != null) {
+                        if (typeof object.responseMetadata !== "object")
+                            throw TypeError(".clutch.audit.v1.RequestEvent.responseMetadata: object expected");
+                        message.responseMetadata = $root.clutch.audit.v1.ResponseMetadata.fromObject(object.responseMetadata);
+                    }
                     return message;
                 };
 
@@ -1449,6 +1697,8 @@ export const clutch = $root.clutch = (() => {
                         object.methodName = "";
                         object.type = options.enums === String ? "UNSPECIFIED" : 0;
                         object.status = null;
+                        object.requestMetadata = null;
+                        object.responseMetadata = null;
                     }
                     if (message.username != null && message.hasOwnProperty("username"))
                         object.username = message.username;
@@ -1465,6 +1715,10 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < message.resources.length; ++j)
                             object.resources[j] = $root.clutch.audit.v1.Resource.toObject(message.resources[j], options);
                     }
+                    if (message.requestMetadata != null && message.hasOwnProperty("requestMetadata"))
+                        object.requestMetadata = $root.clutch.audit.v1.RequestMetadata.toObject(message.requestMetadata, options);
+                    if (message.responseMetadata != null && message.hasOwnProperty("responseMetadata"))
+                        object.responseMetadata = $root.clutch.audit.v1.ResponseMetadata.toObject(message.responseMetadata, options);
                     return object;
                 };
 
@@ -7802,17 +8056,6 @@ export const clutch = $root.clutch = (() => {
                     let $oneOfFields;
 
                     /**
-                     * TestConfig target.
-                     * @member {"clusterPair"|undefined} target
-                     * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
-                     * @instance
-                     */
-                    Object.defineProperty(TestConfig.prototype, "target", {
-                        get: $util.oneOfGetter($oneOfFields = ["clusterPair"]),
-                        set: $util.oneOfSetter($oneOfFields)
-                    });
-
-                    /**
                      * TestConfig fault.
                      * @member {"abort"|"latency"|undefined} fault
                      * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
@@ -7836,12 +8079,9 @@ export const clutch = $root.clutch = (() => {
                             return "object expected";
                         let properties = {};
                         if (message.clusterPair != null && message.hasOwnProperty("clusterPair")) {
-                            properties.target = 1;
-                            {
-                                let error = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.verify(message.clusterPair);
-                                if (error)
-                                    return "clusterPair." + error;
-                            }
+                            let error = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.verify(message.clusterPair);
+                            if (error)
+                                return "clusterPair." + error;
                         }
                         if (message.abort != null && message.hasOwnProperty("abort")) {
                             properties.fault = 1;
@@ -7907,11 +8147,10 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (message.clusterPair != null && message.hasOwnProperty("clusterPair")) {
+                        if (options.defaults)
+                            object.clusterPair = null;
+                        if (message.clusterPair != null && message.hasOwnProperty("clusterPair"))
                             object.clusterPair = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.toObject(message.clusterPair, options);
-                            if (options.oneofs)
-                                object.target = "clusterPair";
-                        }
                         if (message.abort != null && message.hasOwnProperty("abort")) {
                             object.abort = $root.clutch.chaos.serverexperimentation.v1.AbortFaultConfig.toObject(message.abort, options);
                             if (options.oneofs)
@@ -11595,6 +11834,7 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.service.audit.v1
                          * @interface IConfig
                          * @property {string|null} [dbProvider] Config dbProvider
+                         * @property {boolean|null} [inMemory] Config inMemory
                          * @property {clutch.config.service.audit.v1.IFilter|null} [filter] Config filter
                          * @property {Array.<string>|null} [sinks] Config sinks
                          */
@@ -11624,6 +11864,14 @@ export const clutch = $root.clutch = (() => {
                         Config.prototype.dbProvider = "";
 
                         /**
+                         * Config inMemory.
+                         * @member {boolean} inMemory
+                         * @memberof clutch.config.service.audit.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.inMemory = false;
+
+                        /**
                          * Config filter.
                          * @member {clutch.config.service.audit.v1.IFilter|null|undefined} filter
                          * @memberof clutch.config.service.audit.v1.Config
@@ -11639,6 +11887,20 @@ export const clutch = $root.clutch = (() => {
                          */
                         Config.prototype.sinks = $util.emptyArray;
 
+                        // OneOf field names bound to virtual getters and setters
+                        let $oneOfFields;
+
+                        /**
+                         * Config storageProvider.
+                         * @member {"dbProvider"|"inMemory"|undefined} storageProvider
+                         * @memberof clutch.config.service.audit.v1.Config
+                         * @instance
+                         */
+                        Object.defineProperty(Config.prototype, "storageProvider", {
+                            get: $util.oneOfGetter($oneOfFields = ["dbProvider", "inMemory"]),
+                            set: $util.oneOfSetter($oneOfFields)
+                        });
+
                         /**
                          * Verifies a Config message.
                          * @function verify
@@ -11650,9 +11912,19 @@ export const clutch = $root.clutch = (() => {
                         Config.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
-                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider"))
+                            let properties = {};
+                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider")) {
+                                properties.storageProvider = 1;
                                 if (!$util.isString(message.dbProvider))
                                     return "dbProvider: string expected";
+                            }
+                            if (message.inMemory != null && message.hasOwnProperty("inMemory")) {
+                                if (properties.storageProvider === 1)
+                                    return "storageProvider: multiple values";
+                                properties.storageProvider = 1;
+                                if (typeof message.inMemory !== "boolean")
+                                    return "inMemory: boolean expected";
+                            }
                             if (message.filter != null && message.hasOwnProperty("filter")) {
                                 let error = $root.clutch.config.service.audit.v1.Filter.verify(message.filter);
                                 if (error)
@@ -11682,6 +11954,8 @@ export const clutch = $root.clutch = (() => {
                             let message = new $root.clutch.config.service.audit.v1.Config();
                             if (object.dbProvider != null)
                                 message.dbProvider = String(object.dbProvider);
+                            if (object.inMemory != null)
+                                message.inMemory = Boolean(object.inMemory);
                             if (object.filter != null) {
                                 if (typeof object.filter !== "object")
                                     throw TypeError(".clutch.config.service.audit.v1.Config.filter: object expected");
@@ -11712,12 +11986,18 @@ export const clutch = $root.clutch = (() => {
                             let object = {};
                             if (options.arrays || options.defaults)
                                 object.sinks = [];
-                            if (options.defaults) {
-                                object.dbProvider = "";
+                            if (options.defaults)
                                 object.filter = null;
-                            }
-                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider"))
+                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider")) {
                                 object.dbProvider = message.dbProvider;
+                                if (options.oneofs)
+                                    object.storageProvider = "dbProvider";
+                            }
+                            if (message.inMemory != null && message.hasOwnProperty("inMemory")) {
+                                object.inMemory = message.inMemory;
+                                if (options.oneofs)
+                                    object.storageProvider = "inMemory";
+                            }
                             if (message.filter != null && message.hasOwnProperty("filter"))
                                 object.filter = $root.clutch.config.service.audit.v1.Filter.toObject(message.filter, options);
                             if (message.sinks && message.sinks.length) {
@@ -39311,6 +39591,133 @@ export const google = $root.google = (() => {
             return GeneratedCodeInfo;
         })();
 
+        protobuf.Any = (function() {
+
+            /**
+             * Properties of an Any.
+             * @memberof google.protobuf
+             * @interface IAny
+             * @property {string|null} [type_url] Any type_url
+             * @property {Uint8Array|null} [value] Any value
+             */
+
+            /**
+             * Constructs a new Any.
+             * @memberof google.protobuf
+             * @classdesc Represents an Any.
+             * @implements IAny
+             * @constructor
+             * @param {google.protobuf.IAny=} [properties] Properties to set
+             */
+            function Any(properties) {
+                if (properties)
+                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * Any type_url.
+             * @member {string} type_url
+             * @memberof google.protobuf.Any
+             * @instance
+             */
+            Any.prototype.type_url = "";
+
+            /**
+             * Any value.
+             * @member {Uint8Array} value
+             * @memberof google.protobuf.Any
+             * @instance
+             */
+            Any.prototype.value = $util.newBuffer([]);
+
+            /**
+             * Verifies an Any message.
+             * @function verify
+             * @memberof google.protobuf.Any
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Any.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.type_url != null && message.hasOwnProperty("type_url"))
+                    if (!$util.isString(message.type_url))
+                        return "type_url: string expected";
+                if (message.value != null && message.hasOwnProperty("value"))
+                    if (!(message.value && typeof message.value.length === "number" || $util.isString(message.value)))
+                        return "value: buffer expected";
+                return null;
+            };
+
+            /**
+             * Creates an Any message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof google.protobuf.Any
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {google.protobuf.Any} Any
+             */
+            Any.fromObject = function fromObject(object) {
+                if (object instanceof $root.google.protobuf.Any)
+                    return object;
+                let message = new $root.google.protobuf.Any();
+                if (object.type_url != null)
+                    message.type_url = String(object.type_url);
+                if (object.value != null)
+                    if (typeof object.value === "string")
+                        $util.base64.decode(object.value, message.value = $util.newBuffer($util.base64.length(object.value)), 0);
+                    else if (object.value.length)
+                        message.value = object.value;
+                return message;
+            };
+
+            /**
+             * Creates a plain object from an Any message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof google.protobuf.Any
+             * @static
+             * @param {google.protobuf.Any} message Any
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Any.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                let object = {};
+                if (options.defaults) {
+                    object.type_url = "";
+                    if (options.bytes === String)
+                        object.value = "";
+                    else {
+                        object.value = [];
+                        if (options.bytes !== Array)
+                            object.value = $util.newBuffer(object.value);
+                    }
+                }
+                if (message.type_url != null && message.hasOwnProperty("type_url"))
+                    object.type_url = message.type_url;
+                if (message.value != null && message.hasOwnProperty("value"))
+                    object.value = options.bytes === String ? $util.base64.encode(message.value, 0, message.value.length) : options.bytes === Array ? Array.prototype.slice.call(message.value) : message.value;
+                return object;
+            };
+
+            /**
+             * Converts this Any to JSON.
+             * @function toJSON
+             * @memberof google.protobuf.Any
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Any.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return Any;
+        })();
+
         protobuf.Duration = (function() {
 
             /**
@@ -39573,133 +39980,6 @@ export const google = $root.google = (() => {
             };
 
             return Timestamp;
-        })();
-
-        protobuf.Any = (function() {
-
-            /**
-             * Properties of an Any.
-             * @memberof google.protobuf
-             * @interface IAny
-             * @property {string|null} [type_url] Any type_url
-             * @property {Uint8Array|null} [value] Any value
-             */
-
-            /**
-             * Constructs a new Any.
-             * @memberof google.protobuf
-             * @classdesc Represents an Any.
-             * @implements IAny
-             * @constructor
-             * @param {google.protobuf.IAny=} [properties] Properties to set
-             */
-            function Any(properties) {
-                if (properties)
-                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-
-            /**
-             * Any type_url.
-             * @member {string} type_url
-             * @memberof google.protobuf.Any
-             * @instance
-             */
-            Any.prototype.type_url = "";
-
-            /**
-             * Any value.
-             * @member {Uint8Array} value
-             * @memberof google.protobuf.Any
-             * @instance
-             */
-            Any.prototype.value = $util.newBuffer([]);
-
-            /**
-             * Verifies an Any message.
-             * @function verify
-             * @memberof google.protobuf.Any
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            Any.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.type_url != null && message.hasOwnProperty("type_url"))
-                    if (!$util.isString(message.type_url))
-                        return "type_url: string expected";
-                if (message.value != null && message.hasOwnProperty("value"))
-                    if (!(message.value && typeof message.value.length === "number" || $util.isString(message.value)))
-                        return "value: buffer expected";
-                return null;
-            };
-
-            /**
-             * Creates an Any message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof google.protobuf.Any
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {google.protobuf.Any} Any
-             */
-            Any.fromObject = function fromObject(object) {
-                if (object instanceof $root.google.protobuf.Any)
-                    return object;
-                let message = new $root.google.protobuf.Any();
-                if (object.type_url != null)
-                    message.type_url = String(object.type_url);
-                if (object.value != null)
-                    if (typeof object.value === "string")
-                        $util.base64.decode(object.value, message.value = $util.newBuffer($util.base64.length(object.value)), 0);
-                    else if (object.value.length)
-                        message.value = object.value;
-                return message;
-            };
-
-            /**
-             * Creates a plain object from an Any message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof google.protobuf.Any
-             * @static
-             * @param {google.protobuf.Any} message Any
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            Any.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                let object = {};
-                if (options.defaults) {
-                    object.type_url = "";
-                    if (options.bytes === String)
-                        object.value = "";
-                    else {
-                        object.value = [];
-                        if (options.bytes !== Array)
-                            object.value = $util.newBuffer(object.value);
-                    }
-                }
-                if (message.type_url != null && message.hasOwnProperty("type_url"))
-                    object.type_url = message.type_url;
-                if (message.value != null && message.hasOwnProperty("value"))
-                    object.value = options.bytes === String ? $util.base64.encode(message.value, 0, message.value.length) : options.bytes === Array ? Array.prototype.slice.call(message.value) : message.value;
-                return object;
-            };
-
-            /**
-             * Converts this Any to JSON.
-             * @function toJSON
-             * @memberof google.protobuf.Any
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            Any.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            return Any;
         })();
 
         protobuf.DoubleValue = (function() {
