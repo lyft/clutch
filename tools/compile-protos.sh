@@ -80,7 +80,7 @@ main() {
   prepare_build_environment
   discover_protos
 
-  grpc_gateway_include_path="$(modpath github.com/grpc-ecosystem/grpc-gateway)/third_party/googleapis"
+  grpc_gateway_include_path="$(modpath github.com/grpc-ecosystem/grpc-gateway/v2)/third_party/googleapis"
   pg_validate_include_path="$(modpath github.com/envoyproxy/protoc-gen-validate)"
 
   # Lint (fix) and exit if requested.
