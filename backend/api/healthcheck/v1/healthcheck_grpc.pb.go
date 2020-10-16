@@ -38,21 +38,19 @@ func (c *healthcheckAPIClient) Healthcheck(ctx context.Context, in *HealthcheckR
 }
 
 // HealthcheckAPIServer is the server API for HealthcheckAPI service.
-// All implementations must embed UnimplementedHealthcheckAPIServer
+// All implementations should embed UnimplementedHealthcheckAPIServer
 // for forward compatibility
 type HealthcheckAPIServer interface {
 	Healthcheck(context.Context, *HealthcheckRequest) (*HealthcheckResponse, error)
-	mustEmbedUnimplementedHealthcheckAPIServer()
 }
 
-// UnimplementedHealthcheckAPIServer must be embedded to have forward compatible implementations.
+// UnimplementedHealthcheckAPIServer should be embedded to have forward compatible implementations.
 type UnimplementedHealthcheckAPIServer struct {
 }
 
 func (UnimplementedHealthcheckAPIServer) Healthcheck(context.Context, *HealthcheckRequest) (*HealthcheckResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Healthcheck not implemented")
 }
-func (UnimplementedHealthcheckAPIServer) mustEmbedUnimplementedHealthcheckAPIServer() {}
 
 // UnsafeHealthcheckAPIServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to HealthcheckAPIServer will

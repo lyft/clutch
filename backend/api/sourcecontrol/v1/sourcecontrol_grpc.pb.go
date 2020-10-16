@@ -38,21 +38,19 @@ func (c *sourceControlAPIClient) CreateRepository(ctx context.Context, in *Creat
 }
 
 // SourceControlAPIServer is the server API for SourceControlAPI service.
-// All implementations must embed UnimplementedSourceControlAPIServer
+// All implementations should embed UnimplementedSourceControlAPIServer
 // for forward compatibility
 type SourceControlAPIServer interface {
 	CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error)
-	mustEmbedUnimplementedSourceControlAPIServer()
 }
 
-// UnimplementedSourceControlAPIServer must be embedded to have forward compatible implementations.
+// UnimplementedSourceControlAPIServer should be embedded to have forward compatible implementations.
 type UnimplementedSourceControlAPIServer struct {
 }
 
 func (UnimplementedSourceControlAPIServer) CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRepository not implemented")
 }
-func (UnimplementedSourceControlAPIServer) mustEmbedUnimplementedSourceControlAPIServer() {}
 
 // UnsafeSourceControlAPIServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to SourceControlAPIServer will

@@ -38,21 +38,19 @@ func (c *envoyTriageAPIClient) Read(ctx context.Context, in *ReadRequest, opts .
 }
 
 // EnvoyTriageAPIServer is the server API for EnvoyTriageAPI service.
-// All implementations must embed UnimplementedEnvoyTriageAPIServer
+// All implementations should embed UnimplementedEnvoyTriageAPIServer
 // for forward compatibility
 type EnvoyTriageAPIServer interface {
 	Read(context.Context, *ReadRequest) (*ReadResponse, error)
-	mustEmbedUnimplementedEnvoyTriageAPIServer()
 }
 
-// UnimplementedEnvoyTriageAPIServer must be embedded to have forward compatible implementations.
+// UnimplementedEnvoyTriageAPIServer should be embedded to have forward compatible implementations.
 type UnimplementedEnvoyTriageAPIServer struct {
 }
 
 func (UnimplementedEnvoyTriageAPIServer) Read(context.Context, *ReadRequest) (*ReadResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Read not implemented")
 }
-func (UnimplementedEnvoyTriageAPIServer) mustEmbedUnimplementedEnvoyTriageAPIServer() {}
 
 // UnsafeEnvoyTriageAPIServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to EnvoyTriageAPIServer will

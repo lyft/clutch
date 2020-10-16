@@ -58,16 +58,15 @@ func (c *eC2APIClient) ResizeAutoscalingGroup(ctx context.Context, in *ResizeAut
 }
 
 // EC2APIServer is the server API for EC2API service.
-// All implementations must embed UnimplementedEC2APIServer
+// All implementations should embed UnimplementedEC2APIServer
 // for forward compatibility
 type EC2APIServer interface {
 	GetInstance(context.Context, *GetInstanceRequest) (*GetInstanceResponse, error)
 	TerminateInstance(context.Context, *TerminateInstanceRequest) (*TerminateInstanceResponse, error)
 	ResizeAutoscalingGroup(context.Context, *ResizeAutoscalingGroupRequest) (*ResizeAutoscalingGroupResponse, error)
-	mustEmbedUnimplementedEC2APIServer()
 }
 
-// UnimplementedEC2APIServer must be embedded to have forward compatible implementations.
+// UnimplementedEC2APIServer should be embedded to have forward compatible implementations.
 type UnimplementedEC2APIServer struct {
 }
 
@@ -80,7 +79,6 @@ func (UnimplementedEC2APIServer) TerminateInstance(context.Context, *TerminateIn
 func (UnimplementedEC2APIServer) ResizeAutoscalingGroup(context.Context, *ResizeAutoscalingGroupRequest) (*ResizeAutoscalingGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ResizeAutoscalingGroup not implemented")
 }
-func (UnimplementedEC2APIServer) mustEmbedUnimplementedEC2APIServer() {}
 
 // UnsafeEC2APIServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to EC2APIServer will

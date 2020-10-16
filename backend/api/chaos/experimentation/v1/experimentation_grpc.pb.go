@@ -78,7 +78,7 @@ func (c *experimentsAPIClient) GetExperimentRunDetails(ctx context.Context, in *
 }
 
 // ExperimentsAPIServer is the server API for ExperimentsAPI service.
-// All implementations must embed UnimplementedExperimentsAPIServer
+// All implementations should embed UnimplementedExperimentsAPIServer
 // for forward compatibility
 type ExperimentsAPIServer interface {
 	CreateExperiment(context.Context, *CreateExperimentRequest) (*CreateExperimentResponse, error)
@@ -86,10 +86,9 @@ type ExperimentsAPIServer interface {
 	GetExperiments(context.Context, *GetExperimentsRequest) (*GetExperimentsResponse, error)
 	GetListView(context.Context, *GetListViewRequest) (*GetListViewResponse, error)
 	GetExperimentRunDetails(context.Context, *GetExperimentRunDetailsRequest) (*GetExperimentRunDetailsResponse, error)
-	mustEmbedUnimplementedExperimentsAPIServer()
 }
 
-// UnimplementedExperimentsAPIServer must be embedded to have forward compatible implementations.
+// UnimplementedExperimentsAPIServer should be embedded to have forward compatible implementations.
 type UnimplementedExperimentsAPIServer struct {
 }
 
@@ -108,7 +107,6 @@ func (UnimplementedExperimentsAPIServer) GetListView(context.Context, *GetListVi
 func (UnimplementedExperimentsAPIServer) GetExperimentRunDetails(context.Context, *GetExperimentRunDetailsRequest) (*GetExperimentRunDetailsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetExperimentRunDetails not implemented")
 }
-func (UnimplementedExperimentsAPIServer) mustEmbedUnimplementedExperimentsAPIServer() {}
 
 // UnsafeExperimentsAPIServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to ExperimentsAPIServer will

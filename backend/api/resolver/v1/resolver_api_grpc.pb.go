@@ -58,16 +58,15 @@ func (c *resolverAPIClient) Resolve(ctx context.Context, in *ResolveRequest, opt
 }
 
 // ResolverAPIServer is the server API for ResolverAPI service.
-// All implementations must embed UnimplementedResolverAPIServer
+// All implementations should embed UnimplementedResolverAPIServer
 // for forward compatibility
 type ResolverAPIServer interface {
 	GetObjectSchemas(context.Context, *GetObjectSchemasRequest) (*GetObjectSchemasResponse, error)
 	Search(context.Context, *SearchRequest) (*SearchResponse, error)
 	Resolve(context.Context, *ResolveRequest) (*ResolveResponse, error)
-	mustEmbedUnimplementedResolverAPIServer()
 }
 
-// UnimplementedResolverAPIServer must be embedded to have forward compatible implementations.
+// UnimplementedResolverAPIServer should be embedded to have forward compatible implementations.
 type UnimplementedResolverAPIServer struct {
 }
 
@@ -80,7 +79,6 @@ func (UnimplementedResolverAPIServer) Search(context.Context, *SearchRequest) (*
 func (UnimplementedResolverAPIServer) Resolve(context.Context, *ResolveRequest) (*ResolveResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Resolve not implemented")
 }
-func (UnimplementedResolverAPIServer) mustEmbedUnimplementedResolverAPIServer() {}
 
 // UnsafeResolverAPIServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to ResolverAPIServer will

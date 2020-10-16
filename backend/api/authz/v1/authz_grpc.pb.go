@@ -38,21 +38,19 @@ func (c *authzAPIClient) Check(ctx context.Context, in *CheckRequest, opts ...gr
 }
 
 // AuthzAPIServer is the server API for AuthzAPI service.
-// All implementations must embed UnimplementedAuthzAPIServer
+// All implementations should embed UnimplementedAuthzAPIServer
 // for forward compatibility
 type AuthzAPIServer interface {
 	Check(context.Context, *CheckRequest) (*CheckResponse, error)
-	mustEmbedUnimplementedAuthzAPIServer()
 }
 
-// UnimplementedAuthzAPIServer must be embedded to have forward compatible implementations.
+// UnimplementedAuthzAPIServer should be embedded to have forward compatible implementations.
 type UnimplementedAuthzAPIServer struct {
 }
 
 func (UnimplementedAuthzAPIServer) Check(context.Context, *CheckRequest) (*CheckResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
 }
-func (UnimplementedAuthzAPIServer) mustEmbedUnimplementedAuthzAPIServer() {}
 
 // UnsafeAuthzAPIServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to AuthzAPIServer will

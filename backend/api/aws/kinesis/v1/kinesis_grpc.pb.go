@@ -48,15 +48,14 @@ func (c *kinesisAPIClient) UpdateShardCount(ctx context.Context, in *UpdateShard
 }
 
 // KinesisAPIServer is the server API for KinesisAPI service.
-// All implementations must embed UnimplementedKinesisAPIServer
+// All implementations should embed UnimplementedKinesisAPIServer
 // for forward compatibility
 type KinesisAPIServer interface {
 	GetStream(context.Context, *GetStreamRequest) (*GetStreamResponse, error)
 	UpdateShardCount(context.Context, *UpdateShardCountRequest) (*UpdateShardCountResponse, error)
-	mustEmbedUnimplementedKinesisAPIServer()
 }
 
-// UnimplementedKinesisAPIServer must be embedded to have forward compatible implementations.
+// UnimplementedKinesisAPIServer should be embedded to have forward compatible implementations.
 type UnimplementedKinesisAPIServer struct {
 }
 
@@ -66,7 +65,6 @@ func (UnimplementedKinesisAPIServer) GetStream(context.Context, *GetStreamReques
 func (UnimplementedKinesisAPIServer) UpdateShardCount(context.Context, *UpdateShardCountRequest) (*UpdateShardCountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateShardCount not implemented")
 }
-func (UnimplementedKinesisAPIServer) mustEmbedUnimplementedKinesisAPIServer() {}
 
 // UnsafeKinesisAPIServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to KinesisAPIServer will

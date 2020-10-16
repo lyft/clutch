@@ -38,21 +38,19 @@ func (c *topologyAPIClient) GetTopology(ctx context.Context, in *GetTopologyRequ
 }
 
 // TopologyAPIServer is the server API for TopologyAPI service.
-// All implementations must embed UnimplementedTopologyAPIServer
+// All implementations should embed UnimplementedTopologyAPIServer
 // for forward compatibility
 type TopologyAPIServer interface {
 	GetTopology(context.Context, *GetTopologyRequest) (*GetTopologyResponse, error)
-	mustEmbedUnimplementedTopologyAPIServer()
 }
 
-// UnimplementedTopologyAPIServer must be embedded to have forward compatible implementations.
+// UnimplementedTopologyAPIServer should be embedded to have forward compatible implementations.
 type UnimplementedTopologyAPIServer struct {
 }
 
 func (UnimplementedTopologyAPIServer) GetTopology(context.Context, *GetTopologyRequest) (*GetTopologyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTopology not implemented")
 }
-func (UnimplementedTopologyAPIServer) mustEmbedUnimplementedTopologyAPIServer() {}
 
 // UnsafeTopologyAPIServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to TopologyAPIServer will

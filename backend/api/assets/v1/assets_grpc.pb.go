@@ -39,22 +39,20 @@ func (c *assetsAPIClient) Fetch(ctx context.Context, in *FetchRequest, opts ...g
 }
 
 // AssetsAPIServer is the server API for AssetsAPI service.
-// All implementations must embed UnimplementedAssetsAPIServer
+// All implementations should embed UnimplementedAssetsAPIServer
 // for forward compatibility
 type AssetsAPIServer interface {
 	// Fetch is a simple endpoint that is used to execute middleware (e.g. authentication) before serving an asset.
 	Fetch(context.Context, *FetchRequest) (*FetchResponse, error)
-	mustEmbedUnimplementedAssetsAPIServer()
 }
 
-// UnimplementedAssetsAPIServer must be embedded to have forward compatible implementations.
+// UnimplementedAssetsAPIServer should be embedded to have forward compatible implementations.
 type UnimplementedAssetsAPIServer struct {
 }
 
 func (UnimplementedAssetsAPIServer) Fetch(context.Context, *FetchRequest) (*FetchResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Fetch not implemented")
 }
-func (UnimplementedAssetsAPIServer) mustEmbedUnimplementedAssetsAPIServer() {}
 
 // UnsafeAssetsAPIServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to AssetsAPIServer will

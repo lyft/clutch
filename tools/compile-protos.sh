@@ -151,6 +151,7 @@ main() {
       --go_out="${proto_out_dir}" \
       --go_opt "${MFLAGS}" \
       --go-grpc_out="${proto_out_dir}" \
+      --go-grpc_opt=require_unimplemented_servers=false \
       --validate_out="${MFLAGS}"lang=go:"${proto_out_dir}" \
       --grpc-gateway_out="${proto_out_dir}" \
       --grpc-gateway_opt=warn_on_unbound_methods=true \

@@ -48,15 +48,14 @@ func (c *authnAPIClient) Callback(ctx context.Context, in *CallbackRequest, opts
 }
 
 // AuthnAPIServer is the server API for AuthnAPI service.
-// All implementations must embed UnimplementedAuthnAPIServer
+// All implementations should embed UnimplementedAuthnAPIServer
 // for forward compatibility
 type AuthnAPIServer interface {
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	Callback(context.Context, *CallbackRequest) (*CallbackResponse, error)
-	mustEmbedUnimplementedAuthnAPIServer()
 }
 
-// UnimplementedAuthnAPIServer must be embedded to have forward compatible implementations.
+// UnimplementedAuthnAPIServer should be embedded to have forward compatible implementations.
 type UnimplementedAuthnAPIServer struct {
 }
 
@@ -66,7 +65,6 @@ func (UnimplementedAuthnAPIServer) Login(context.Context, *LoginRequest) (*Login
 func (UnimplementedAuthnAPIServer) Callback(context.Context, *CallbackRequest) (*CallbackResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Callback not implemented")
 }
-func (UnimplementedAuthnAPIServer) mustEmbedUnimplementedAuthnAPIServer() {}
 
 // UnsafeAuthnAPIServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to AuthnAPIServer will

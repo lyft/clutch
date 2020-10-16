@@ -88,7 +88,7 @@ func (c *k8SAPIClient) UpdateDeployment(ctx context.Context, in *UpdateDeploymen
 }
 
 // K8SAPIServer is the server API for K8SAPI service.
-// All implementations must embed UnimplementedK8SAPIServer
+// All implementations should embed UnimplementedK8SAPIServer
 // for forward compatibility
 type K8SAPIServer interface {
 	DescribePod(context.Context, *DescribePodRequest) (*DescribePodResponse, error)
@@ -97,10 +97,9 @@ type K8SAPIServer interface {
 	UpdatePod(context.Context, *UpdatePodRequest) (*UpdatePodResponse, error)
 	ResizeHPA(context.Context, *ResizeHPARequest) (*ResizeHPAResponse, error)
 	UpdateDeployment(context.Context, *UpdateDeploymentRequest) (*UpdateDeploymentResponse, error)
-	mustEmbedUnimplementedK8SAPIServer()
 }
 
-// UnimplementedK8SAPIServer must be embedded to have forward compatible implementations.
+// UnimplementedK8SAPIServer should be embedded to have forward compatible implementations.
 type UnimplementedK8SAPIServer struct {
 }
 
@@ -122,7 +121,6 @@ func (UnimplementedK8SAPIServer) ResizeHPA(context.Context, *ResizeHPARequest) (
 func (UnimplementedK8SAPIServer) UpdateDeployment(context.Context, *UpdateDeploymentRequest) (*UpdateDeploymentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateDeployment not implemented")
 }
-func (UnimplementedK8SAPIServer) mustEmbedUnimplementedK8SAPIServer() {}
 
 // UnsafeK8SAPIServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to K8SAPIServer will
