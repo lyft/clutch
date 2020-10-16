@@ -253,7 +253,6 @@ install_protoc() {
     google.golang.org/protobuf/cmd/protoc-gen-go \
     google.golang.org/grpc/cmd/protoc-gen-go-grpc
 
-
   if [[ ! -f "${PROTOC_BIN}" || ! -d "${PROTOC_INCLUDE_DIR}" ]]; then
     echo "info: Downloading protoc-v${PROTOC_RELEASE} to build environment"
 
