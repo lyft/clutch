@@ -18,6 +18,7 @@ import (
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
+	"github.com/lyft/clutch/backend/gateway/log"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/audit/storage"
 	"github.com/lyft/clutch/backend/service/db/postgres"
@@ -111,7 +112,7 @@ func (c *client) UpdateRequestEvent(ctx context.Context, id int64, update *audit
 		c.logger.Warn(
 			"error updating audit row",
 			zap.Int64("row_id", id),
-			zap.Any("event", update),
+			log.ProtoField("event", update),
 			zap.Error(err),
 		)
 		return err
