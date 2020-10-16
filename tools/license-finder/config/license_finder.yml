@@ -1,2 +1,4 @@
+# Where the liscense decisions will be saved
 decisions_file: './config/license_dependency_decisions.yml'
+# Where the go.mod file is located
 project_path: '../../backend'
