@@ -124,24 +124,6 @@ main() {
   proto_out_dir="${REPO_ROOT}/backend/api"
   mkdir -p "${proto_out_dir}"
 
-  MFLAGS=""
-  package_dir="$(grep -m1 module go.mod | cut -d' ' -f2)/api"
-
-  for proto in "${PROTOS[@]}"; do
-    relative_path="${proto/#${API_ROOT}\/}"
-    MFLAGS+="M${relative_path}=$(dirname "${package_dir}/${relative_path}"),"
-  done
-
-  # Add MFLAGS for Clutch protos when this is running for a private gateway.
-  if [[ "${CLUTCH_API_ROOT}" != "${API_ROOT}" ]]; then
-    discover_core_protos
-    readonly CLUTCH_PREFIX="github.com/lyft/clutch/backend/api"
-    for proto in "${CLUTCH_PROTOS[@]}"; do
-      relative_path="${proto/#${CLUTCH_API_ROOT}\/}"
-      MFLAGS+="M${relative_path}=${CLUTCH_PREFIX}/$(dirname "${relative_path}"),"
-    done
-  fi
-
   echo "info: compiling go"
   for proto_dir in "${PROTO_DIRS[@]}"; do
     echo "${proto_dir}"
@@ -153,12 +135,12 @@ main() {
       --go-grpc_out "${proto_out_dir}" \
       --go-grpc_opt require_unimplemented_servers=false,paths=source_relative \
       --validate_out paths=source_relative,lang=go:"${proto_out_dir}" \
-      --grpc-gateway_out="${proto_out_dir}" \
-      --grpc-gateway_opt=warn_on_unbound_methods=true,paths=source_relative \
-      --plugin=protoc-gen-go="${GOBIN}/protoc-gen-go" \
-      --plugin=protoc-gen-go-grpc="${GOBIN}/protoc-gen-go-grpc" \
-      --plugin=protoc-gen-grpc-gateway="${GOBIN}/protoc-gen-grpc-gateway" \
-      --plugin=protoc-gen-validate="${GOBIN}/protoc-gen-validate" \
+      --grpc-gateway_out "${proto_out_dir}" \
+      --grpc-gateway_opt warn_on_unbound_methods=true,paths=source_relative \
+      --plugin protoc-gen-go="${GOBIN}/protoc-gen-go" \
+      --plugin protoc-gen-go-grpc="${GOBIN}/protoc-gen-go-grpc" \
+      --plugin protoc-gen-grpc-gateway="${GOBIN}/protoc-gen-grpc-gateway" \
+      --plugin protoc-gen-validate="${GOBIN}/protoc-gen-validate" \
       "${proto_dir}"/*.proto
   done
 
