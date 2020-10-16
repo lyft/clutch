@@ -12,6 +12,7 @@ import (
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	configv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
+	"github.com/lyft/clutch/backend/gateway/log"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/auditsink"
 )
@@ -37,7 +38,7 @@ type svc struct {
 
 func (s *svc) Write(event *auditv1.Event) error {
 	if auditsink.Filter(s.filter, event) {
-		s.logger.Info("new audit event", zap.Any("event", event))
+		s.logger.Info("new audit event", log.ProtoField("event", event))
 	}
 	return nil
 }

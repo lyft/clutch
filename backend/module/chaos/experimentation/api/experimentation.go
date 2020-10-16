@@ -43,7 +43,7 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 
 	experimentStore, ok := store.(experimentstore.Storer)
 	if !ok {
-		return nil, errors.New("service was not the correct type")
+		return nil, errors.New("could not find valid experiment store")
 	}
 
 	return &Service{
