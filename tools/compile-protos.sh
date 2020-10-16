@@ -148,13 +148,13 @@ main() {
     "${PROTOC_BIN}" \
       -I"${PROTOC_INCLUDE_DIR}" -I"${API_ROOT}" -I"${CLUTCH_API_ROOT}" \
       -I"${grpc_gateway_include_path}" -I"${pg_validate_include_path}" \
-      --go_out="${proto_out_dir}" \
-      --go_opt "${MFLAGS}" \
-      --go-grpc_out="${proto_out_dir}" \
-      --go-grpc_opt=require_unimplemented_servers=false \
-      --validate_out="${MFLAGS}"lang=go:"${proto_out_dir}" \
+      --go_out "${proto_out_dir}" \
+      --go_opt paths=source_relative \
+      --go-grpc_out "${proto_out_dir}" \
+      --go-grpc_opt require_unimplemented_servers=false,paths=source_relative \
+      --validate_out paths=source_relative,lang=go:"${proto_out_dir}" \
       --grpc-gateway_out="${proto_out_dir}" \
-      --grpc-gateway_opt=warn_on_unbound_methods=true \
+      --grpc-gateway_opt=warn_on_unbound_methods=true,paths=source_relative \
       --plugin=protoc-gen-go="${GOBIN}/protoc-gen-go" \
       --plugin=protoc-gen-go-grpc="${GOBIN}/protoc-gen-go-grpc" \
       --plugin=protoc-gen-grpc-gateway="${GOBIN}/protoc-gen-grpc-gateway" \
