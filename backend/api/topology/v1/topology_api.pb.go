@@ -7,16 +7,12 @@
 package topologyv1
 
 import (
-	context "context"
 	proto "github.com/golang/protobuf/proto"
 	any "github.com/golang/protobuf/ptypes/any"
 	_struct "github.com/golang/protobuf/ptypes/struct"
 	_ "github.com/lyft/clutch/backend/api/api/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	status "google.golang.org/genproto/googleapis/rpc/status"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status1 "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -1387,84 +1383,4 @@ func file_topology_v1_topology_api_proto_init() {
 	file_topology_v1_topology_api_proto_rawDesc = nil
 	file_topology_v1_topology_api_proto_goTypes = nil
 	file_topology_v1_topology_api_proto_depIdxs = nil
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConnInterface
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
-
-// TopologyAPIClient is the client API for TopologyAPI service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type TopologyAPIClient interface {
-	GetTopology(ctx context.Context, in *GetTopologyRequest, opts ...grpc.CallOption) (*GetTopologyResponse, error)
-}
-
-type topologyAPIClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewTopologyAPIClient(cc grpc.ClientConnInterface) TopologyAPIClient {
-	return &topologyAPIClient{cc}
-}
-
-func (c *topologyAPIClient) GetTopology(ctx context.Context, in *GetTopologyRequest, opts ...grpc.CallOption) (*GetTopologyResponse, error) {
-	out := new(GetTopologyResponse)
-	err := c.cc.Invoke(ctx, "/clutch.topology.v1.TopologyAPI/GetTopology", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// TopologyAPIServer is the server API for TopologyAPI service.
-type TopologyAPIServer interface {
-	GetTopology(context.Context, *GetTopologyRequest) (*GetTopologyResponse, error)
-}
-
-// UnimplementedTopologyAPIServer can be embedded to have forward compatible implementations.
-type UnimplementedTopologyAPIServer struct {
-}
-
-func (*UnimplementedTopologyAPIServer) GetTopology(context.Context, *GetTopologyRequest) (*GetTopologyResponse, error) {
-	return nil, status1.Errorf(codes.Unimplemented, "method GetTopology not implemented")
-}
-
-func RegisterTopologyAPIServer(s *grpc.Server, srv TopologyAPIServer) {
-	s.RegisterService(&_TopologyAPI_serviceDesc, srv)
-}
-
-func _TopologyAPI_GetTopology_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTopologyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TopologyAPIServer).GetTopology(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.topology.v1.TopologyAPI/GetTopology",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TopologyAPIServer).GetTopology(ctx, req.(*GetTopologyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _TopologyAPI_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "clutch.topology.v1.TopologyAPI",
-	HandlerType: (*TopologyAPIServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "GetTopology",
-			Handler:    _TopologyAPI_GetTopology_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "topology/v1/topology_api.proto",
 }

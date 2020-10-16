@@ -7,16 +7,12 @@
 package sourcecontrolv1
 
 import (
-	context "context"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	proto "github.com/golang/protobuf/proto"
 	any "github.com/golang/protobuf/ptypes/any"
 	_ "github.com/lyft/clutch/backend/api/api/v1"
 	v1 "github.com/lyft/clutch/backend/api/sourcecontrol/github/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -323,84 +319,4 @@ func file_sourcecontrol_v1_sourcecontrol_proto_init() {
 	file_sourcecontrol_v1_sourcecontrol_proto_rawDesc = nil
 	file_sourcecontrol_v1_sourcecontrol_proto_goTypes = nil
 	file_sourcecontrol_v1_sourcecontrol_proto_depIdxs = nil
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConnInterface
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
-
-// SourceControlAPIClient is the client API for SourceControlAPI service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type SourceControlAPIClient interface {
-	CreateRepository(ctx context.Context, in *CreateRepositoryRequest, opts ...grpc.CallOption) (*CreateRepositoryResponse, error)
-}
-
-type sourceControlAPIClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewSourceControlAPIClient(cc grpc.ClientConnInterface) SourceControlAPIClient {
-	return &sourceControlAPIClient{cc}
-}
-
-func (c *sourceControlAPIClient) CreateRepository(ctx context.Context, in *CreateRepositoryRequest, opts ...grpc.CallOption) (*CreateRepositoryResponse, error) {
-	out := new(CreateRepositoryResponse)
-	err := c.cc.Invoke(ctx, "/clutch.sourcecontrol.v1.SourceControlAPI/CreateRepository", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// SourceControlAPIServer is the server API for SourceControlAPI service.
-type SourceControlAPIServer interface {
-	CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error)
-}
-
-// UnimplementedSourceControlAPIServer can be embedded to have forward compatible implementations.
-type UnimplementedSourceControlAPIServer struct {
-}
-
-func (*UnimplementedSourceControlAPIServer) CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateRepository not implemented")
-}
-
-func RegisterSourceControlAPIServer(s *grpc.Server, srv SourceControlAPIServer) {
-	s.RegisterService(&_SourceControlAPI_serviceDesc, srv)
-}
-
-func _SourceControlAPI_CreateRepository_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateRepositoryRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SourceControlAPIServer).CreateRepository(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.sourcecontrol.v1.SourceControlAPI/CreateRepository",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SourceControlAPIServer).CreateRepository(ctx, req.(*CreateRepositoryRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _SourceControlAPI_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "clutch.sourcecontrol.v1.SourceControlAPI",
-	HandlerType: (*SourceControlAPIServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "CreateRepository",
-			Handler:    _SourceControlAPI_CreateRepository_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "sourcecontrol/v1/sourcecontrol.proto",
 }

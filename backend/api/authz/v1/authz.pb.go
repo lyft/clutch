@@ -7,14 +7,10 @@
 package authzv1
 
 import (
-	context "context"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	proto "github.com/golang/protobuf/proto"
 	v1 "github.com/lyft/clutch/backend/api/api/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -396,84 +392,4 @@ func file_authz_v1_authz_proto_init() {
 	file_authz_v1_authz_proto_rawDesc = nil
 	file_authz_v1_authz_proto_goTypes = nil
 	file_authz_v1_authz_proto_depIdxs = nil
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConnInterface
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
-
-// AuthzAPIClient is the client API for AuthzAPI service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type AuthzAPIClient interface {
-	Check(ctx context.Context, in *CheckRequest, opts ...grpc.CallOption) (*CheckResponse, error)
-}
-
-type authzAPIClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewAuthzAPIClient(cc grpc.ClientConnInterface) AuthzAPIClient {
-	return &authzAPIClient{cc}
-}
-
-func (c *authzAPIClient) Check(ctx context.Context, in *CheckRequest, opts ...grpc.CallOption) (*CheckResponse, error) {
-	out := new(CheckResponse)
-	err := c.cc.Invoke(ctx, "/clutch.authz.v1.AuthzAPI/Check", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// AuthzAPIServer is the server API for AuthzAPI service.
-type AuthzAPIServer interface {
-	Check(context.Context, *CheckRequest) (*CheckResponse, error)
-}
-
-// UnimplementedAuthzAPIServer can be embedded to have forward compatible implementations.
-type UnimplementedAuthzAPIServer struct {
-}
-
-func (*UnimplementedAuthzAPIServer) Check(context.Context, *CheckRequest) (*CheckResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
-}
-
-func RegisterAuthzAPIServer(s *grpc.Server, srv AuthzAPIServer) {
-	s.RegisterService(&_AuthzAPI_serviceDesc, srv)
-}
-
-func _AuthzAPI_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CheckRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthzAPIServer).Check(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.authz.v1.AuthzAPI/Check",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthzAPIServer).Check(ctx, req.(*CheckRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _AuthzAPI_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "clutch.authz.v1.AuthzAPI",
-	HandlerType: (*AuthzAPIServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "Check",
-			Handler:    _AuthzAPI_Check_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "authz/v1/authz.proto",
 }

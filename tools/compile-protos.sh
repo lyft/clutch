@@ -148,11 +148,14 @@ main() {
     "${PROTOC_BIN}" \
       -I"${PROTOC_INCLUDE_DIR}" -I"${API_ROOT}" -I"${CLUTCH_API_ROOT}" \
       -I"${grpc_gateway_include_path}" -I"${pg_validate_include_path}" \
-      --go_out="${MFLAGS}"plugins=grpc:"${proto_out_dir}" \
+      --go_out="${proto_out_dir}" \
+      --go_opt "${MFLAGS}" \
+      --go-grpc_out="${proto_out_dir}" \
       --validate_out="${MFLAGS}"lang=go:"${proto_out_dir}" \
       --grpc-gateway_out="${proto_out_dir}" \
       --grpc-gateway_opt=warn_on_unbound_methods=true \
       --plugin=protoc-gen-go="${GOBIN}/protoc-gen-go" \
+      --plugin=protoc-gen-go-grpc="${GOBIN}/protoc-gen-go-grpc" \
       --plugin=protoc-gen-grpc-gateway="${GOBIN}/protoc-gen-grpc-gateway" \
       --plugin=protoc-gen-validate="${GOBIN}/protoc-gen-validate" \
       "${proto_dir}"/*.proto
@@ -263,8 +266,10 @@ install_protoc() {
     github.com/bufbuild/buf/cmd/protoc-gen-buf-check-lint \
     github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
     github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
-    github.com/golang/protobuf/protoc-gen-go \
-    github.com/envoyproxy/protoc-gen-validate
+    github.com/envoyproxy/protoc-gen-validate \
+    google.golang.org/protobuf/cmd/protoc-gen-go \
+    google.golang.org/grpc/cmd/protoc-gen-go-grpc
+
 
   if [[ ! -f "${PROTOC_BIN}" || ! -d "${PROTOC_INCLUDE_DIR}" ]]; then
     echo "info: Downloading protoc-v${PROTOC_RELEASE} to build environment"

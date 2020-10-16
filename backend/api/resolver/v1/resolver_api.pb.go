@@ -7,16 +7,12 @@
 package resolverv1
 
 import (
-	context "context"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	proto "github.com/golang/protobuf/proto"
 	any "github.com/golang/protobuf/ptypes/any"
 	_ "github.com/lyft/clutch/backend/api/api/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	status "google.golang.org/genproto/googleapis/rpc/status"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status1 "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -607,156 +603,4 @@ func file_resolver_v1_resolver_api_proto_init() {
 	file_resolver_v1_resolver_api_proto_rawDesc = nil
 	file_resolver_v1_resolver_api_proto_goTypes = nil
 	file_resolver_v1_resolver_api_proto_depIdxs = nil
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConnInterface
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
-
-// ResolverAPIClient is the client API for ResolverAPI service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type ResolverAPIClient interface {
-	GetObjectSchemas(ctx context.Context, in *GetObjectSchemasRequest, opts ...grpc.CallOption) (*GetObjectSchemasResponse, error)
-	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error)
-	Resolve(ctx context.Context, in *ResolveRequest, opts ...grpc.CallOption) (*ResolveResponse, error)
-}
-
-type resolverAPIClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewResolverAPIClient(cc grpc.ClientConnInterface) ResolverAPIClient {
-	return &resolverAPIClient{cc}
-}
-
-func (c *resolverAPIClient) GetObjectSchemas(ctx context.Context, in *GetObjectSchemasRequest, opts ...grpc.CallOption) (*GetObjectSchemasResponse, error) {
-	out := new(GetObjectSchemasResponse)
-	err := c.cc.Invoke(ctx, "/clutch.resolver.v1.ResolverAPI/GetObjectSchemas", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *resolverAPIClient) Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error) {
-	out := new(SearchResponse)
-	err := c.cc.Invoke(ctx, "/clutch.resolver.v1.ResolverAPI/Search", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *resolverAPIClient) Resolve(ctx context.Context, in *ResolveRequest, opts ...grpc.CallOption) (*ResolveResponse, error) {
-	out := new(ResolveResponse)
-	err := c.cc.Invoke(ctx, "/clutch.resolver.v1.ResolverAPI/Resolve", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// ResolverAPIServer is the server API for ResolverAPI service.
-type ResolverAPIServer interface {
-	GetObjectSchemas(context.Context, *GetObjectSchemasRequest) (*GetObjectSchemasResponse, error)
-	Search(context.Context, *SearchRequest) (*SearchResponse, error)
-	Resolve(context.Context, *ResolveRequest) (*ResolveResponse, error)
-}
-
-// UnimplementedResolverAPIServer can be embedded to have forward compatible implementations.
-type UnimplementedResolverAPIServer struct {
-}
-
-func (*UnimplementedResolverAPIServer) GetObjectSchemas(context.Context, *GetObjectSchemasRequest) (*GetObjectSchemasResponse, error) {
-	return nil, status1.Errorf(codes.Unimplemented, "method GetObjectSchemas not implemented")
-}
-func (*UnimplementedResolverAPIServer) Search(context.Context, *SearchRequest) (*SearchResponse, error) {
-	return nil, status1.Errorf(codes.Unimplemented, "method Search not implemented")
-}
-func (*UnimplementedResolverAPIServer) Resolve(context.Context, *ResolveRequest) (*ResolveResponse, error) {
-	return nil, status1.Errorf(codes.Unimplemented, "method Resolve not implemented")
-}
-
-func RegisterResolverAPIServer(s *grpc.Server, srv ResolverAPIServer) {
-	s.RegisterService(&_ResolverAPI_serviceDesc, srv)
-}
-
-func _ResolverAPI_GetObjectSchemas_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetObjectSchemasRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ResolverAPIServer).GetObjectSchemas(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.resolver.v1.ResolverAPI/GetObjectSchemas",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResolverAPIServer).GetObjectSchemas(ctx, req.(*GetObjectSchemasRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ResolverAPI_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SearchRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ResolverAPIServer).Search(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.resolver.v1.ResolverAPI/Search",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResolverAPIServer).Search(ctx, req.(*SearchRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ResolverAPI_Resolve_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ResolveRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ResolverAPIServer).Resolve(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.resolver.v1.ResolverAPI/Resolve",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResolverAPIServer).Resolve(ctx, req.(*ResolveRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _ResolverAPI_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "clutch.resolver.v1.ResolverAPI",
-	HandlerType: (*ResolverAPIServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "GetObjectSchemas",
-			Handler:    _ResolverAPI_GetObjectSchemas_Handler,
-		},
-		{
-			MethodName: "Search",
-			Handler:    _ResolverAPI_Search_Handler,
-		},
-		{
-			MethodName: "Resolve",
-			Handler:    _ResolverAPI_Resolve_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "resolver/v1/resolver_api.proto",
 }
