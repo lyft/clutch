@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.config.service.github.v1;
 
-option go_package = "githubv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/service/github/v1;githubv1";
 
 import "validate/validate.proto";
 

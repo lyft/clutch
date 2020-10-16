@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.config.gateway.v1;
 
-option go_package = "gatewayv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/gateway/v1;gatewayv1";
 
 import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";

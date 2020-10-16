@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.config.service.auditsink.slack.v1;
 
-option go_package = "slackv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/service/auditsink/slack/v1;slackv1";
 
 import "config/service/audit/v1/audit.proto";
 import "validate/validate.proto";
