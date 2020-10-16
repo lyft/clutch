@@ -11834,6 +11834,7 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.service.audit.v1
                          * @interface IConfig
                          * @property {string|null} [dbProvider] Config dbProvider
+                         * @property {boolean|null} [inMemory] Config inMemory
                          * @property {clutch.config.service.audit.v1.IFilter|null} [filter] Config filter
                          * @property {Array.<string>|null} [sinks] Config sinks
                          */
@@ -11863,6 +11864,14 @@ export const clutch = $root.clutch = (() => {
                         Config.prototype.dbProvider = "";
 
                         /**
+                         * Config inMemory.
+                         * @member {boolean} inMemory
+                         * @memberof clutch.config.service.audit.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.inMemory = false;
+
+                        /**
                          * Config filter.
                          * @member {clutch.config.service.audit.v1.IFilter|null|undefined} filter
                          * @memberof clutch.config.service.audit.v1.Config
@@ -11878,6 +11887,20 @@ export const clutch = $root.clutch = (() => {
                          */
                         Config.prototype.sinks = $util.emptyArray;
 
+                        // OneOf field names bound to virtual getters and setters
+                        let $oneOfFields;
+
+                        /**
+                         * Config storageProvider.
+                         * @member {"dbProvider"|"inMemory"|undefined} storageProvider
+                         * @memberof clutch.config.service.audit.v1.Config
+                         * @instance
+                         */
+                        Object.defineProperty(Config.prototype, "storageProvider", {
+                            get: $util.oneOfGetter($oneOfFields = ["dbProvider", "inMemory"]),
+                            set: $util.oneOfSetter($oneOfFields)
+                        });
+
                         /**
                          * Verifies a Config message.
                          * @function verify
@@ -11889,9 +11912,19 @@ export const clutch = $root.clutch = (() => {
                         Config.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
-                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider"))
+                            let properties = {};
+                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider")) {
+                                properties.storageProvider = 1;
                                 if (!$util.isString(message.dbProvider))
                                     return "dbProvider: string expected";
+                            }
+                            if (message.inMemory != null && message.hasOwnProperty("inMemory")) {
+                                if (properties.storageProvider === 1)
+                                    return "storageProvider: multiple values";
+                                properties.storageProvider = 1;
+                                if (typeof message.inMemory !== "boolean")
+                                    return "inMemory: boolean expected";
+                            }
                             if (message.filter != null && message.hasOwnProperty("filter")) {
                                 let error = $root.clutch.config.service.audit.v1.Filter.verify(message.filter);
                                 if (error)
@@ -11921,6 +11954,8 @@ export const clutch = $root.clutch = (() => {
                             let message = new $root.clutch.config.service.audit.v1.Config();
                             if (object.dbProvider != null)
                                 message.dbProvider = String(object.dbProvider);
+                            if (object.inMemory != null)
+                                message.inMemory = Boolean(object.inMemory);
                             if (object.filter != null) {
                                 if (typeof object.filter !== "object")
                                     throw TypeError(".clutch.config.service.audit.v1.Config.filter: object expected");
@@ -11951,12 +11986,18 @@ export const clutch = $root.clutch = (() => {
                             let object = {};
                             if (options.arrays || options.defaults)
                                 object.sinks = [];
-                            if (options.defaults) {
-                                object.dbProvider = "";
+                            if (options.defaults)
                                 object.filter = null;
-                            }
-                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider"))
+                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider")) {
                                 object.dbProvider = message.dbProvider;
+                                if (options.oneofs)
+                                    object.storageProvider = "dbProvider";
+                            }
+                            if (message.inMemory != null && message.hasOwnProperty("inMemory")) {
+                                object.inMemory = message.inMemory;
+                                if (options.oneofs)
+                                    object.storageProvider = "inMemory";
+                            }
                             if (message.filter != null && message.hasOwnProperty("filter"))
                                 object.filter = $root.clutch.config.service.audit.v1.Filter.toObject(message.filter, options);
                             if (message.sinks && message.sinks.length) {

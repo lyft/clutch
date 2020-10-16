@@ -6,7 +6,7 @@ package audit
 
 import (
 	"context"
-	"database/sql"
+	"errors"
 	"fmt"
 	"time"
 
@@ -19,8 +19,10 @@ import (
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
 	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/audit/storage"
+	"github.com/lyft/clutch/backend/service/audit/storage/local"
+	"github.com/lyft/clutch/backend/service/audit/storage/sql"
 	"github.com/lyft/clutch/backend/service/auditsink"
-	"github.com/lyft/clutch/backend/service/db/postgres"
 )
 
 const Name = "clutch.service.audit"
@@ -31,29 +33,16 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, err
 	}
 
-	db, ok := service.Registry[config.DbProvider]
-	if !ok {
-		return nil, fmt.Errorf("no database registered for saving audit events")
-	}
-
-	// TODO(maybe): Expand to more DB providers including non-SQL.
-	sqlDB, ok := db.(postgres.Client)
-	if !ok {
-		return nil, fmt.Errorf("database in registry does not implement required interface")
-	}
-
-	// Ensure we have a non-nil set of Filters.
-	filter := config.Filter
-	if filter == nil {
-		filter = &auditconfigv1.Filter{}
+	storageProvider, err := getStorageProvider(config, logger, scope)
+	if err != nil {
+		return nil, err
 	}
 
 	c := &client{
 		logger: logger,
 		scope:  scope,
 
-		filter: filter,
-		db:     sqlDB.DB(),
+		storage: storageProvider,
 		marshaler: &jsonpb.Marshaler{
 			// Use the names from the .proto.
 			OrigName: true,
@@ -88,15 +77,52 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	return c, nil
 }
 
+func getStorageProvider(cfg *auditconfigv1.Config, logger *zap.Logger, scope tally.Scope) (storage.Storage, error) {
+	switch cfg.GetStorageProvider().(type) {
+	case *auditconfigv1.Config_DbProvider:
+		return sql.New(cfg, logger, scope)
+	case *auditconfigv1.Config_InMemory:
+		return local.New(cfg, logger, scope)
+	}
+
+	return nil, errors.New("reached end of non-exhaustive type switch looking for audit storage")
+}
+
 type client struct {
 	logger *zap.Logger
 	scope  tally.Scope
 
-	filter    *auditconfigv1.Filter
-	db        *sql.DB
-	marshaler *jsonpb.Marshaler
+	storage storage.Storage
+	filter  *auditconfigv1.Filter
 
-	sinks []auditsink.Sink
+	marshaler *jsonpb.Marshaler
+	sinks     []auditsink.Sink
+}
+
+func (c *client) Filter(event *auditv1.Event) bool {
+	return auditsink.Filter(c.filter, event)
+}
+
+func (c *client) filterRequest(req *auditv1.RequestEvent) bool {
+	return c.Filter(
+		&auditv1.Event{EventType: &auditv1.Event_Event{Event: req}},
+	)
+}
+
+func (c *client) WriteRequestEvent(ctx context.Context, req *auditv1.RequestEvent) (int64, error) {
+	if !c.filterRequest(req) {
+		return -1, ErrFailedFilters
+	}
+
+	return c.storage.WriteRequestEvent(ctx, req)
+}
+
+func (c *client) UpdateRequestEvent(ctx context.Context, id int64, update *auditv1.RequestEvent) error {
+	return c.storage.UpdateRequestEvent(ctx, id, update)
+}
+
+func (c *client) ReadEvents(ctx context.Context, start time.Time, end *time.Time) ([]*auditv1.Event, error) {
+	return c.storage.ReadEvents(ctx, start, end)
 }
 
 // This should be called via `go` in order to avoid blocking main exectuion.
@@ -106,7 +132,7 @@ func (c *client) poll(interval time.Duration) {
 		defer cancel()
 
 		// TODO(maybe): Backpressure on continued failure.
-		events, err := c.UnsentEvents(ctx)
+		events, err := c.storage.UnsentEvents(ctx)
 		if err != nil {
 			return
 		}
@@ -128,14 +154,4 @@ func (c *client) poll(interval time.Duration) {
 		<-ticker.C
 		readAndFanout()
 	}
-}
-
-func (c *client) Filter(event *auditv1.Event) bool {
-	return auditsink.Filter(c.filter, event)
-}
-
-func (c *client) filterRequest(req *auditv1.RequestEvent) bool {
-	return c.Filter(
-		&auditv1.Event{EventType: &auditv1.Event_Event{Event: req}},
-	)
 }

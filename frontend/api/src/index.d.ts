@@ -4986,6 +4986,9 @@ export namespace clutch {
                         /** Config dbProvider */
                         dbProvider?: (string|null);
 
+                        /** Config inMemory */
+                        inMemory?: (boolean|null);
+
                         /** Config filter */
                         filter?: (clutch.config.service.audit.v1.IFilter|null);
 
@@ -5005,11 +5008,17 @@ export namespace clutch {
                         /** Config dbProvider. */
                         public dbProvider: string;
 
+                        /** Config inMemory. */
+                        public inMemory: boolean;
+
                         /** Config filter. */
                         public filter?: (clutch.config.service.audit.v1.IFilter|null);
 
                         /** Config sinks. */
                         public sinks: string[];
+
+                        /** Config storageProvider. */
+                        public storageProvider?: ("dbProvider"|"inMemory");
 
                         /**
                          * Verifies a Config message.

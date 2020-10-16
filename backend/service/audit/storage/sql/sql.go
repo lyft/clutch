@@ -1,29 +1,59 @@
-package audit
+package sql
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	rpcstatus "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
+	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
 	"github.com/lyft/clutch/backend/gateway/log"
+	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/audit/storage"
+	"github.com/lyft/clutch/backend/service/db/postgres"
 )
+
+type client struct {
+	logger *zap.Logger
+	scope  tally.Scope
+
+	db *sql.DB
+}
+
+func New(cfg *auditconfigv1.Config, logger *zap.Logger, scope tally.Scope) (storage.Storage, error) {
+	db, ok := service.Registry[cfg.GetDbProvider()]
+	if !ok {
+		return nil, fmt.Errorf("no database registered for saving audit events")
+	}
+
+	// TODO(maybe): Expand to more DB providers, including non-SQL.
+	sqlDB, ok := db.(postgres.Client)
+	if !ok {
+		return nil, fmt.Errorf("database in registry does not implement required interface")
+	}
+
+	c := &client{
+		logger: logger,
+		scope:  scope,
+		db:     sqlDB.DB(),
+	}
+	return c, nil
+}
 
 func (c *client) WriteRequestEvent(ctx context.Context, event *auditv1.RequestEvent) (int64, error) {
 	if event == nil {
 		return -1, errors.New("cannot write empty event to table")
-	}
-
-	if !c.filterRequest(event) {
-		return -1, ErrFailedFilters
 	}
 
 	reqBody, err := convertAPIBody(event.RequestMetadata.Body)

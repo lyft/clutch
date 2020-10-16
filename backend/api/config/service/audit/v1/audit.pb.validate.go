@@ -272,13 +272,6 @@ func (m *Config) Validate() error {
 		return nil
 	}
 
-	if len(m.GetDbProvider()) < 1 {
-		return ConfigValidationError{
-			field:  "DbProvider",
-			reason: "value length must be at least 1 bytes",
-		}
-	}
-
 	if v, ok := interface{}(m.GetFilter()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ConfigValidationError{
@@ -287,6 +280,22 @@ func (m *Config) Validate() error {
 				cause:  err,
 			}
 		}
+	}
+
+	switch m.StorageProvider.(type) {
+
+	case *Config_DbProvider:
+
+		if len(m.GetDbProvider()) < 1 {
+			return ConfigValidationError{
+				field:  "DbProvider",
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+	case *Config_InMemory:
+		// no validation rules for InMemory
+
 	}
 
 	return nil
