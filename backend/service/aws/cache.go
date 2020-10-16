@@ -3,7 +3,6 @@ package aws
 import (
 	"context"
 	"errors"
-	"sync"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -25,37 +24,47 @@ func (c *client) CacheEnabled() bool {
 
 func (c *client) StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.UpdateCacheRequest, error) {
 	if !c.topologyLock.TryAcquire(topologyLockId) {
-		return nil, errors.New("TopologyCahing is already in progress")
+		return nil, errors.New("TopologyCaching is already in progress")
 	}
 
 	go func() {
 		<-ctx.Done()
+		close(c.topologyObjectChan)
 		c.topologyLock.Release(topologyLockId)
 	}()
 
-	go c.processRegionTopologyObjects(ctx)
+	c.processRegionTopologyObjects(ctx)
 	return c.topologyObjectChan, nil
 }
 
+// We process each resource and region individually, creating tickers for each.
+// If a single resource and region takes longer to process it will not block other resources.
+// Additionally this give us the flexibility to tune the frequency based on resource.
 func (c *client) processRegionTopologyObjects(ctx context.Context) {
-	ticker := time.NewTicker(time.Minute * 10)
-	for ; true; <-ticker.C {
-		wg := &sync.WaitGroup{}
-		for name, client := range c.clients {
-			c.log.Info("processing topology objects for region", zap.String("region", name))
-			go c.processAllEC2Instances(ctx, client, wg)
-			go c.processAllAutoScalingGroups(ctx, client, wg)
-			go c.processAllKinesisStreams(ctx, client, wg)
-		}
-		wg.Wait()
-		c.log.Info("finished processing all aws topology objects, waiting for next tick.")
+	for name, client := range c.clients {
+		c.log.Info("processing topology objects for region", zap.String("region", name))
+		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*5), client, c.processAllEC2Instances)
+		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*10), client, c.processAllAutoScalingGroups)
+		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*10), client, c.processAllKinesisStreams)
 	}
 }
 
-func (c *client) processAllAutoScalingGroups(ctx context.Context, client *regionalClient, wg *sync.WaitGroup) {
-	wg.Add(1)
+func (c *client) startTickerForCacheResource(ctx context.Context, duration time.Duration, client *regionalClient, resourceFunc func(context.Context, *regionalClient)) {
+	ticker := time.NewTicker(duration)
 
-	// 100 is the maximum amount of records allowed for this API
+	go func() {
+		<-ctx.Done()
+		ticker.Stop()
+	}()
+
+	for ; true; <-ticker.C {
+		resourceFunc(ctx, client)
+	}
+}
+
+func (c *client) processAllAutoScalingGroups(ctx context.Context, client *regionalClient) {
+	c.log.Info("starting to process auto scaling groups for region", zap.String("region", client.region))
+	// 100 is the maximum amount of records per page allowed for this API
 	input := autoscaling.DescribeAutoScalingGroupsInput{
 		MaxRecords: aws.Int64(100),
 	}
@@ -82,15 +91,13 @@ func (c *client) processAllAutoScalingGroups(ctx context.Context, client *region
 		})
 
 	if err != nil {
-		c.log.Error("unable to process auto scaling groups", zap.Error(err))
+		c.log.Error("unable to process auto scaling groups for region", zap.String("region", client.region), zap.Error(err))
 	}
-	wg.Done()
 }
 
-func (c *client) processAllEC2Instances(ctx context.Context, client *regionalClient, wg *sync.WaitGroup) {
-	wg.Add(1)
-
-	// 1000 is the maximum amount of records allowed for this API
+func (c *client) processAllEC2Instances(ctx context.Context, client *regionalClient) {
+	c.log.Info("starting to process ec2 instances for region", zap.String("region", client.region))
+	// 1000 is the maximum amount of records per page allowed for this API
 	input := ec2.DescribeInstancesInput{
 		MaxResults: aws.Int64(1000),
 	}
@@ -118,15 +125,13 @@ func (c *client) processAllEC2Instances(ctx context.Context, client *regionalCli
 		})
 
 	if err != nil {
-		c.log.Error("unable to process ec2 instances", zap.Error(err))
+		c.log.Error("unable to process ec2 instances for region", zap.String("region", client.region), zap.Error(err))
 	}
-	wg.Done()
 }
 
-func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalClient, wg *sync.WaitGroup) {
-	wg.Add(1)
-
-	// 100 is arbatrary, currently this API does not have a limit,
+func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalClient) {
+	c.log.Info("starting to process auto scaling groups for region", zap.String("region", client.region))
+	// 100 is arbatrary, currently this API does not have a per page limit,
 	// looking at other aws API limits this value felt safe.
 	input := kinesis.ListStreamsInput{
 		Limit: aws.Int64(100),
@@ -160,7 +165,6 @@ func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalC
 		})
 
 	if err != nil {
-		c.log.Error("unable to process kinesis streams", zap.Error(err))
+		c.log.Error("unable to process kinesis streams for region", zap.String("region", client.region), zap.Error(err))
 	}
-	wg.Done()
 }
