@@ -16,11 +16,11 @@ require (
 	github.com/go-git/go-git/v5 v5.2.0
 	github.com/gobwas/glob v0.2.3
 	github.com/golang-migrate/migrate/v4 v4.13.0
-	github.com/golang/protobuf v1.4.2
+	github.com/golang/protobuf v1.4.3
 	github.com/google/go-github/v32 v32.1.0
 	github.com/google/uuid v1.1.2
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.0.0
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.0.1-0.20201016175452-80a7a7ba0b7a
 	github.com/iancoleman/strcase v0.1.2
 	github.com/jhump/protoreflect v1.7.1-0.20200723220026-11eaaf73e0ec
 	github.com/lib/pq v1.8.0
@@ -37,7 +37,7 @@ require (
 	golang.org/x/net v0.0.0-20201010224723-4f7140c49acb
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43
 	golang.org/x/sync v0.0.0-20201008141435-b3e1573b7520
-	google.golang.org/genproto v0.0.0-20201014134559-03b6142f0dc9
+	google.golang.org/genproto v0.0.0-20201015140912-32ed001d685c
 	google.golang.org/grpc v1.33.0
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/square/go-jose.v2 v2.4.1 // indirect
