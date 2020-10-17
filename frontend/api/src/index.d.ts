@@ -3432,6 +3432,9 @@ export namespace clutch {
 
                     /** TestConfig latency */
                     latency?: (clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null);
+
+                    /** TestConfig faultInjectionType */
+                    faultInjectionType?: (clutch.chaos.serverexperimentation.v1.FaultInjectionType|null);
                 }
 
                 /** Represents a TestConfig. */
@@ -3451,6 +3454,9 @@ export namespace clutch {
 
                     /** TestConfig latency. */
                     public latency?: (clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null);
+
+                    /** TestConfig faultInjectionType. */
+                    public faultInjectionType: clutch.chaos.serverexperimentation.v1.FaultInjectionType;
 
                     /** TestConfig fault. */
                     public fault?: ("abort"|"latency");
@@ -3644,6 +3650,13 @@ export namespace clutch {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                /** FaultInjectionType enum. */
+                enum FaultInjectionType {
+                    FAULTINJECTIONTYPE_UNSPECIFIED = 0,
+                    FAULTINJECTIONTYPE_INGRESS = 1,
+                    FAULTINJECTIONTYPE_EGRESS = 2
                 }
             }
         }

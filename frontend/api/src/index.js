@@ -8011,6 +8011,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null} [clusterPair] TestConfig clusterPair
                      * @property {clutch.chaos.serverexperimentation.v1.IAbortFaultConfig|null} [abort] TestConfig abort
                      * @property {clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null} [latency] TestConfig latency
+                     * @property {clutch.chaos.serverexperimentation.v1.FaultInjectionType|null} [faultInjectionType] TestConfig faultInjectionType
                      */
 
                     /**
@@ -8051,6 +8052,14 @@ export const clutch = $root.clutch = (() => {
                      * @instance
                      */
                     TestConfig.prototype.latency = null;
+
+                    /**
+                     * TestConfig faultInjectionType.
+                     * @member {clutch.chaos.serverexperimentation.v1.FaultInjectionType} faultInjectionType
+                     * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
+                     * @instance
+                     */
+                    TestConfig.prototype.faultInjectionType = 0;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
@@ -8101,6 +8110,15 @@ export const clutch = $root.clutch = (() => {
                                     return "latency." + error;
                             }
                         }
+                        if (message.faultInjectionType != null && message.hasOwnProperty("faultInjectionType"))
+                            switch (message.faultInjectionType) {
+                            default:
+                                return "faultInjectionType: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                                break;
+                            }
                         return null;
                     };
 
@@ -8131,6 +8149,20 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.chaos.serverexperimentation.v1.TestConfig.latency: object expected");
                             message.latency = $root.clutch.chaos.serverexperimentation.v1.LatencyFaultConfig.fromObject(object.latency);
                         }
+                        switch (object.faultInjectionType) {
+                        case "FAULTINJECTIONTYPE_UNSPECIFIED":
+                        case 0:
+                            message.faultInjectionType = 0;
+                            break;
+                        case "FAULTINJECTIONTYPE_INGRESS":
+                        case 1:
+                            message.faultInjectionType = 1;
+                            break;
+                        case "FAULTINJECTIONTYPE_EGRESS":
+                        case 2:
+                            message.faultInjectionType = 2;
+                            break;
+                        }
                         return message;
                     };
 
@@ -8147,8 +8179,10 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.defaults)
+                        if (options.defaults) {
                             object.clusterPair = null;
+                            object.faultInjectionType = options.enums === String ? "FAULTINJECTIONTYPE_UNSPECIFIED" : 0;
+                        }
                         if (message.clusterPair != null && message.hasOwnProperty("clusterPair"))
                             object.clusterPair = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.toObject(message.clusterPair, options);
                         if (message.abort != null && message.hasOwnProperty("abort")) {
@@ -8161,6 +8195,8 @@ export const clutch = $root.clutch = (() => {
                             if (options.oneofs)
                                 object.fault = "latency";
                         }
+                        if (message.faultInjectionType != null && message.hasOwnProperty("faultInjectionType"))
+                            object.faultInjectionType = options.enums === String ? $root.clutch.chaos.serverexperimentation.v1.FaultInjectionType[message.faultInjectionType] : message.faultInjectionType;
                         return object;
                     };
 
@@ -8530,6 +8566,22 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return LatencyFaultConfig;
+                })();
+
+                /**
+                 * FaultInjectionType enum.
+                 * @name clutch.chaos.serverexperimentation.v1.FaultInjectionType
+                 * @enum {number}
+                 * @property {number} FAULTINJECTIONTYPE_UNSPECIFIED=0 FAULTINJECTIONTYPE_UNSPECIFIED value
+                 * @property {number} FAULTINJECTIONTYPE_INGRESS=1 FAULTINJECTIONTYPE_INGRESS value
+                 * @property {number} FAULTINJECTIONTYPE_EGRESS=2 FAULTINJECTIONTYPE_EGRESS value
+                 */
+                v1.FaultInjectionType = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "FAULTINJECTIONTYPE_UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "FAULTINJECTIONTYPE_INGRESS"] = 1;
+                    values[valuesById[2] = "FAULTINJECTIONTYPE_EGRESS"] = 2;
+                    return values;
                 })();
 
                 return v1;

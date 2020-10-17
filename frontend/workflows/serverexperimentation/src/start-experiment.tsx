@@ -1,5 +1,5 @@
 import React from "react";
-import type { clutch as IClutch } from "@clutch-sh/api";
+import { clutch as IClutch } from "@clutch-sh/api";
 import type { BaseWorkflowProps } from "@clutch-sh/core";
 import {
   ButtonGroup,
@@ -12,7 +12,57 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@material-ui/core";
 import * as yup from "yup";
+
+interface RadioControlItem {
+  label: string;
+  value: string;
+}
+
+interface RadioControlProps {
+  name: string;
+  label: string;
+  items: RadioControlItem[];
+  onChange: (value: string) => void;
+}
+
+const RadioControl: React.FC<RadioControlProps> = ({ name, label, items, onChange }) => {
+  return (
+    <FormControl key={name}>
+      <FormLabel component="legend">Upstream Cluster Type</FormLabel>
+      <RadioGroup
+        aria-label={label}
+        name={name}
+        defaultValue={items[0].value}
+        onChange={e => onChange(e.target.value)}
+      >
+        {items &&
+          items.map(item => {
+            return (
+              <FormControlLabel
+                key={item.value}
+                value={item.value}
+                control={<Radio />}
+                label={item.label}
+              />
+            );
+          })}
+      </RadioGroup>
+    </FormControl>
+  );
+};
+
+const faultInjectionTypeItems = [
+  {
+    label: "Internal",
+    value: IClutch.chaos.serverexperimentation.v1.FaultInjectionType.FAULTINJECTIONTYPE_INGRESS.toString(),
+  },
+  {
+    label: "External",
+    value: IClutch.chaos.serverexperimentation.v1.FaultInjectionType.FAULTINJECTIONTYPE_EGRESS.toString(),
+  },
+];
 
 const ClusterPairTargetDetails: React.FC<WizardChild> = () => {
   const { onSubmit } = useWizardContext();
@@ -41,6 +91,14 @@ const ClusterPairTargetDetails: React.FC<WizardChild> = () => {
             },
           },
         ]}
+      />
+      <RadioControl
+        name="upstream_service_type"
+        label="Upstream Service Type"
+        items={faultInjectionTypeItems}
+        onChange={(value: string) =>
+          clusterPairData.updateData("faultInjectionType", parseInt(value, 10))
+        }
       />
       <ButtonGroup
         buttons={[
@@ -152,7 +210,9 @@ const StartExperiment: React.FC<BaseWorkflowProps> = ({ heading }) => {
     startData: {
       deps: ["clusterPairTargetData", "experimentData"],
       hydrator: (
-        clusterPairTargetData: IClutch.chaos.serverexperimentation.v1.IClusterPairTarget,
+        clusterPairTargetData: IClutch.chaos.serverexperimentation.v1.IClusterPairTarget & {
+          faultInjectionType: IClutch.chaos.serverexperimentation.v1.FaultInjectionType;
+        },
         experimentData: IClutch.chaos.serverexperimentation.v1.AbortFaultConfig &
           IClutch.chaos.serverexperimentation.v1.LatencyFaultConfig & { type: FaultType }
       ) => {
@@ -166,6 +226,7 @@ const StartExperiment: React.FC<BaseWorkflowProps> = ({ heading }) => {
             downstreamCluster: clusterPairTargetData.downstreamCluster,
             upstreamCluster: clusterPairTargetData.upstreamCluster,
           },
+          faultInjectionType: clusterPairTargetData.faultInjectionType,
           ...fault,
         });
       },

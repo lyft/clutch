@@ -15,6 +15,10 @@ message TestConfig {
     AbortFaultConfig abort = 2;
     LatencyFaultConfig latency = 3;
   }
+
+  // The fault injection type that controls whether faults are
+  // injected on ingress or egress.
+  FaultInjectionType fault_injection_type = 4;
 }
 
 // Targets requests from downstream_cluster -> upstream_cluster.
@@ -40,4 +44,14 @@ message LatencyFaultConfig {
 
   // The latency duration in milliseconds.
   int32 duration_ms = 2 [ (validate.rules).int32.gt = 0 ];
+}
+
+enum FaultInjectionType {
+  // Fault injection type is unspecified. Faults should be injected
+  // on ingress if possible, on egress otherwise.
+  FAULTINJECTIONTYPE_UNSPECIFIED = 0;
+  // Faults are injected to ingress traffic by an upstream service(s).
+  FAULTINJECTIONTYPE_INGRESS = 1;
+  // Faults are injected to egress traffic by a downstream service(s).
+  FAULTINJECTIONTYPE_EGRESS = 2;
 }

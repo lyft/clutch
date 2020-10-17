@@ -53,6 +53,8 @@ func (m *TestConfig) Validate() error {
 		}
 	}
 
+	// no validation rules for FaultInjectionType
+
 	switch m.Fault.(type) {
 
 	case *TestConfig_Abort:
