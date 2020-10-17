@@ -11,7 +11,6 @@ import (
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
-	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/module/healthcheck"
 )
@@ -108,10 +107,4 @@ func TestResourceNames(t *testing.T) {
 			}
 		})
 	}
-}
-
-func TestAPIBody(t *testing.T) {
-	result, err := APIBody(&k8sv1.DeletePodRequest{})
-	assert.NotNil(t, result)
-	assert.NoError(t, err)
 }

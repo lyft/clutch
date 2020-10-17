@@ -5,7 +5,6 @@ package clutch.audit.v1;
 option go_package = "auditv1";
 
 import "google/api/annotations.proto";
-import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "google/rpc/status.proto";
@@ -46,14 +45,6 @@ message Resource {
   string id = 2;
 }
 
-message RequestMetadata {
-  google.protobuf.Any body = 1;
-}
-
-message ResponseMetadata {
-  google.protobuf.Any body = 1;
-}
-
 message RequestEvent {
   option (clutch.api.v1.reference).fields = "resources";
 
@@ -74,12 +65,6 @@ message RequestEvent {
 
   // The resources touched during the event.
   repeated Resource resources = 6;
-
-  // The API request saved as metadata for the event.
-  RequestMetadata request_metadata = 7;
-
-  // The API response saved as metadata for the event.
-  ResponseMetadata response_metadata = 8;
 }
 
 message Event {
