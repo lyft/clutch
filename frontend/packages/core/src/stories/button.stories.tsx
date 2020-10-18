@@ -1,8 +1,8 @@
 import React from "react";
 import type { Meta } from "@storybook/react";
 
-import type { ButtonProps } from "./button";
-import { Button } from "./button";
+import type { ButtonProps } from "../button";
+import { Button } from "../button";
 
 export default {
   title: "Core/Button",
@@ -16,7 +16,7 @@ const Template = (props: ButtonProps) => <Button {...props} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  text: "click here",
+  text: "continue",
 };
 
 export const Destructive = Template.bind({});
