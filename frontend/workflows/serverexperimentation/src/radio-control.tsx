@@ -39,4 +39,4 @@ const RadioControl: React.FC<RadioControlProps> = ({ name, label, items, onChang
   );
 };
 
-export { RadioControl };
+export default RadioControl;

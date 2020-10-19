@@ -14,7 +14,7 @@ import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import * as yup from "yup";
 
-import { RadioControl } from "./radio-control";
+import RadioControl from "./radio-control";
 
 const faultInjectionTypeItems = [
   {
