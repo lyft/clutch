@@ -8,7 +8,7 @@
     "swizzle": "docusaurus swizzle"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-alpha.65",
+    "@docusaurus/core": "2.0.0-alpha.66",
     "@docusaurus/plugin-debug": "2.0.0-alpha.65",
     "@docusaurus/preset-classic": "2.0.0-alpha.65",
     "classnames": "^2.2.6",
