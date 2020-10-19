@@ -17,7 +17,6 @@ ANGULAR_CLANG_FORMAT_RELEASE_MD5_OSX=c3ebe742599dcc38b9dc6544cacd69bb
 
 PROTOS=()
 PROTO_DIRS=()
-CLUTCH_PROTOS=()
 
 SCRIPT_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
 
@@ -176,13 +175,6 @@ discover_protos() {
     PROTO_DIRS+=("${proto_dirs}")
   done <  <(find "${API_ROOT}" -name '*.proto' -exec dirname {} \; | tr '\n' '\0' | sort -sdzu)
 }
-
-discover_core_protos() {
-  while IFS= read -r -d '' proto; do
-    CLUTCH_PROTOS+=("${proto}")
-  done <  <(find "${CLUTCH_API_ROOT}" -name '*.proto' -print0 | sort -sdzu)
-}
-
 
 # Get the directory that the go module is stored in and ensure that it's the correct version.
 modpath() {
