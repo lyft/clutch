@@ -20,7 +20,7 @@ const StyledButton = styled(MuiButton)`
 `;
 
 interface ButtonProps
-  extends Pick<MuiButtonProps, "endIcon" | "color" | "onClick" | "size" | "type" | "variant"> {
+  extends Pick<MuiButtonProps, "endIcon" | "onClick" | "size" | "type" | "variant"> {
   text: string;
   destructive?: boolean;
 }
