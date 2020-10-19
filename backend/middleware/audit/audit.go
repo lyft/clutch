@@ -52,11 +52,7 @@ type auditEntryContextKey struct{}
 
 func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-		event, err := m.eventFromRequest(ctx, req, info)
-		if err != nil {
-			return nil, err
-		}
-
+		event := m.eventFromRequest(ctx, req, info)
 		id, err := m.audit.WriteRequestEvent(ctx, event)
 		if err != nil && !errors.Is(err, auditservice.ErrFailedFilters) {
 			return nil, fmt.Errorf("could not make call %s because failed to audit: %w", info.FullMethod, err)
@@ -66,11 +62,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 		resp, err := handler(ctx, req)
 
 		if id != -1 {
-			update, err := m.eventFromResponse(resp, err)
-			if err != nil {
-				return nil, err
-			}
-
+			update := m.eventFromResponse(resp, err)
 			if auditErr := m.audit.UpdateRequestEvent(ctx, id, update); auditErr != nil {
 				m.logger.Warn("error updating audit event",
 					zap.Int64("auditID", id),
@@ -83,7 +75,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 	}
 }
 
-func (m *mid) eventFromRequest(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo) (*auditv1.RequestEvent, error) {
+func (m *mid) eventFromRequest(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo) *auditv1.RequestEvent {
 	svc, method, ok := middleware.SplitFullMethod(info.FullMethod)
 	if !ok {
 		m.logger.Warn("could not parse gRPC method", zap.String("fullMethod", info.FullMethod))
@@ -94,39 +86,23 @@ func (m *mid) eventFromRequest(ctx context.Context, req interface{}, info *grpc.
 		username = claims.Subject
 	}
 
-	reqBody, err := meta.APIBody(req)
-	if err != nil {
-		return nil, err
-	}
-
 	return &auditv1.RequestEvent{
 		Username:    username,
 		ServiceName: svc,
 		MethodName:  method,
 		Type:        meta.GetAction(info.FullMethod),
 		Resources:   meta.ResourceNames(req.(descriptor.Message)),
-		RequestMetadata: &auditv1.RequestMetadata{
-			Body: reqBody,
-		},
-	}, nil
+	}
 }
 
-func (m *mid) eventFromResponse(resp interface{}, err error) (*auditv1.RequestEvent, error) {
+func (m *mid) eventFromResponse(resp interface{}, err error) *auditv1.RequestEvent {
 	s := status.Convert(err)
 	if s == nil {
 		s = status.New(codes.OK, "")
 	}
 
-	respBody, err := meta.APIBody(resp)
-	if err != nil {
-		return nil, err
-	}
-
 	return &auditv1.RequestEvent{
 		Status:    s.Proto(),
 		Resources: meta.ResourceNames(resp.(descriptor.Message)),
-		ResponseMetadata: &auditv1.ResponseMetadata{
-			Body: respBody,
-		},
-	}, nil
+	}
 }
