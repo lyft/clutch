@@ -177,17 +177,11 @@ func (c *client) deleteCache(ctx context.Context, id string) error {
 func (c *client) expireCache(ctx context.Context) {
 	// Delete all entries that are older than two hours
 	const expireQuery = `
-		DELETE FROM topology_cache WHERE updated_at <= NOW() - INTERVAL '120m';
+		DELETE FROM topology_cache WHERE updated_at <= NOW() - INTERVAL '120minutes';
 	`
 
 	ticker := time.NewTicker(time.Minute * 20)
-
-	go func() {
-		<-ctx.Done()
-		ticker.Stop()
-	}()
-
-	for ; true; <-ticker.C {
+	for {
 		result, err := c.db.ExecContext(ctx, expireQuery)
 		if err != nil {
 			c.log.Error("unable to expire cache", zap.Error(err))
@@ -199,6 +193,14 @@ func (c *client) expireCache(ctx context.Context) {
 			c.log.Error("unable to get rows removed from cache expiry query", zap.Error(err))
 		} else {
 			c.log.Info("successfully removed expired cache", zap.Int64("count", numOfItemsRemoved))
+		}
+
+		select {
+		case <-ticker.C:
+			continue
+		case <-ctx.Done():
+			ticker.Stop()
+			return
 		}
 	}
 }
