@@ -84,7 +84,7 @@ const Select: React.FC<SelectProps> = ({
         fullWidth
       >
         {options.map(option => (
-          <MenuItem key={option.label} value={option?.value || option?.label}>
+          <MenuItem key={option.label} value={option?.value || option.label}>
             {option.label}
           </MenuItem>
         ))}
