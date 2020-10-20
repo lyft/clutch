@@ -2,6 +2,7 @@ package meta
 
 import (
 	"fmt"
+	"reflect"
 	"regexp"
 	"strings"
 
@@ -134,4 +135,19 @@ func resolvePattern(pb proto.Message, pattern *apiv1.Pattern) *auditv1.Resource 
 		resourceName = strings.Replace(resourceName, name[0], v.String(), 1)
 	}
 	return &auditv1.Resource{TypeUrl: pattern.TypeUrl, Id: resourceName}
+}
+
+// APIBody returns the API request/response interface (pointer value) as an anypb.Any message.
+func APIBody(body interface{}) (*any.Any, error) {
+	protomsg, ok := body.(proto.Message)
+	if !ok {
+		return nil, fmt.Errorf("could not use %s as proto.Message", reflect.TypeOf(body).Kind())
+	}
+
+	a, err := ptypes.MarshalAny(protomsg)
+	if err != nil {
+		return nil, err
+	}
+
+	return a, nil
 }
