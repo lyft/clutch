@@ -52,12 +52,6 @@ type Server struct {
 	// Name of the RTDS layer in Envoy config i.e. envoy.yaml
 	rtdsLayerName string
 
-	// Runtime prefix for ingress faults
-	ingressPrefix string
-
-	// Runtime prefix for egress faults
-	egressPrefix string
-
 	// Total number of open streams
 	totalStreams tally.Gauge
 
@@ -100,8 +94,6 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		return nil, errors.New("error parsing duration")
 	}
 	rtdsLayerName := config.GetRtdsLayerName()
-	ingressPrefix := config.GetIngressFaultsRuntimePrefix()
-	egressPrefix := config.GetEgressFaultRuntimePrefix()
 
 	store, ok := service.Registry[experimentstore.Name]
 	if !ok {
@@ -123,8 +115,6 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		snapshotCacheV3:      gcpCacheV3,
 		cacheRefreshInterval: cacheRefreshInterval,
 		rtdsLayerName:        rtdsLayerName,
-		ingressPrefix:        ingressPrefix,
-		egressPrefix:         egressPrefix,
 		totalStreams:         scope.Gauge("totalStreams"),
 		totalResourcesServed: scope.Counter("totalResourcesServed"),
 		logger:               logger.Sugar(),
