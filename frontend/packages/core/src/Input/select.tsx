@@ -11,7 +11,7 @@ const FormControl = styled(MuiFormControl)`
   ${({ theme, ...props }) => `
   display: flex;
   min-width: fit-content;
-  max-width: ${props["data-max-width"] || "500px"};
+  width: ${props["data-max-width"] || "500px"};
   .MuiInput-underline:after {
     border-bottom: 2px solid ${theme.palette.accent.main};
   }
