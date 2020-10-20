@@ -51,14 +51,16 @@ func (c *client) processRegionTopologyObjects(ctx context.Context) {
 
 func (c *client) startTickerForCacheResource(ctx context.Context, duration time.Duration, client *regionalClient, resourceFunc func(context.Context, *regionalClient)) {
 	ticker := time.NewTicker(duration)
-
-	go func() {
-		<-ctx.Done()
-		ticker.Stop()
-	}()
-
-	for ; true; <-ticker.C {
+	for {
 		resourceFunc(ctx, client)
+
+		select {
+		case <-ticker.C:
+			continue
+		case <-ctx.Done():
+			ticker.Stop()
+			return
+		}
 	}
 }
 
