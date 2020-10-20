@@ -24,8 +24,12 @@
   },
   "packageRules": [
     {
-      "packageNames": ["github.com/aws/aws-sdk-go", "google.golang.org/genproto"],
-      "extends": ["schedule:weekly"]
+      "extends": ["schedule:weekly"],
+      "packageNames": [
+        "github.com/aws/aws-sdk-go",
+        "golang.org/x/net",
+        "google.golang.org/genproto"
+      ]
     }
   ],
   "postUpdateOptions": [
