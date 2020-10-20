@@ -7,6 +7,8 @@ package timeouts
 import (
 	"context"
 	"fmt"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
@@ -57,6 +59,11 @@ func (m *mid) getDuration(service, method string) time.Duration {
 	return m.defaultTimeout
 }
 
+type ret struct {
+	resp interface{}
+	err error
+}
+
 func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		service, method, ok := middleware.SplitFullMethod(info.FullMethod)
@@ -68,7 +75,24 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 		ctx, cancel := context.WithTimeout(ctx, timeout)
 		defer cancel()
 
-		return handler(ctx, req)
+		resultChan := make(chan ret)
+		defer close(resultChan)
+
+		go func() {
+			resp, err := handler(ctx, req)
+			select {
+			case <- ctx.Done():
+			default:
+				resultChan <- ret{resp: resp, err: err}
+			}
+		}()
+
+		select {
+		case ret := <- resultChan:
+			return ret.resp, ret.err
+		case <- time.After(timeout):
+			return nil, status.New(codes.DeadlineExceeded, "deadline exceeded").Err()
+		}
 	}
 }
 
