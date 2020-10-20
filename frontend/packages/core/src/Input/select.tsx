@@ -64,7 +64,7 @@ const Select: React.FC<SelectProps> = ({
 
   const updateSelectedOption = (event: React.ChangeEvent<{ name?: string; value: string }>) => {
     const { value } = event.target;
-    const optionValues = options.map(o => o.value || o.label);
+    const optionValues = options.map(o => o?.value || o.label);
     setSelectedIdx(optionValues.indexOf(value));
     onChange(value);
   };
