@@ -184,14 +184,17 @@ func (c *client) expireCache(ctx context.Context) {
 	for {
 		result, err := c.db.ExecContext(ctx, expireQuery)
 		if err != nil {
+			c.scope.SubScope("cache").Counter("expire.failure").Inc(1)
 			c.log.Error("unable to expire cache", zap.Error(err))
 			continue
 		}
 
 		numOfItemsRemoved, err := result.RowsAffected()
 		if err != nil {
+			c.scope.SubScope("cache").Counter("expire.failure").Inc(1)
 			c.log.Error("unable to get rows removed from cache expiry query", zap.Error(err))
 		} else {
+			c.scope.SubScope("cache").Counter("expire.success").Inc(1)
 			c.log.Info("successfully removed expired cache", zap.Int64("count", numOfItemsRemoved))
 		}
 
