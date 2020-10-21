@@ -31,7 +31,9 @@ interface ClusterPairTargetDetailsProps extends WizardChild {
   upstreamClusterTypeSelectionEnabled: boolean;
 }
 
-const ClusterPairTargetDetails: React.FC<ClusterPairTargetDetailsProps> = ({upstreamClusterTypeSelectionEnabled}) => {
+const ClusterPairTargetDetails: React.FC<ClusterPairTargetDetailsProps> = ({
+  upstreamClusterTypeSelectionEnabled,
+}) => {
   const { onSubmit } = useWizardContext();
   const clusterPairData = useDataLayout("clusterPairTargetData");
   const clusterPair = clusterPairData.displayValue();
