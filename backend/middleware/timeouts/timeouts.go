@@ -59,7 +59,7 @@ func (m *mid) getDuration(service, method string) time.Duration {
 	return m.defaultTimeout
 }
 
-type ret struct {
+type unaryHandlerReturn struct {
 	resp interface{}
 	err error
 }
@@ -71,27 +71,34 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 			m.logger.Warn("could not parse gRPC method", zap.String("fullMethod", info.FullMethod))
 		}
 
+		// Compute timeout and set-up a context with timeout.
 		timeout := m.getDuration(service, method)
 		ctx, cancel := context.WithTimeout(ctx, timeout)
 		defer cancel()
 
-		resultChan := make(chan ret)
+		// Create a return channel for the goroutine.
+		resultChan := make(chan unaryHandlerReturn)
 		defer close(resultChan)
 
+		// Spawn the handler in a goroutine so we can return early on timeout if it doesn't complete.
 		go func() {
 			resp, err := handler(ctx, req)
 			select {
 			case <- ctx.Done():
+				m.logger.Warn("handler completed after timeout", zap.String("service", service), zap.String("method", method))
 			default:
-				resultChan <- ret{resp: resp, err: err}
+				resultChan <- unaryHandlerReturn{resp: resp, err: err}
 			}
 		}()
 
+		// Wait for timeout or handler to send result. The waiting period for timeout is boosted by 50ms to give the
+		// goroutine a chance to return if it's respecting the deadline.
+		wait := timeout + (time.Millisecond * 50)
 		select {
 		case ret := <- resultChan:
 			return ret.resp, ret.err
-		case <- time.After(timeout):
-			return nil, status.New(codes.DeadlineExceeded, "deadline exceeded").Err()
+		case <- time.After(wait):
+			return nil, status.New(codes.DeadlineExceeded, "timeout exceeded").Err()
 		}
 	}
 }

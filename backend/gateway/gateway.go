@@ -241,12 +241,20 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	addr := fmt.Sprintf("%s:%d", cfg.Gateway.Listener.GetTcp().Address, cfg.Gateway.Listener.GetTcp().Port)
 	logger.Info("listening", zap.Namespace("tcp"), zap.String("addr", addr))
 
-	// Figure out the maximum timeout and set as a backstop.
+	// Figure out the maximum global timeout and set as a backstop.
 	var timeout time.Duration
 	if cfg.Gateway.Timeouts != nil {
 		timeout = cfg.Gateway.Timeouts.Default.AsDuration()
 		for _, e := range cfg.Gateway.Timeouts.Overrides {
-			if e.Timeout.Seconds >
+			override := e.Timeout.AsDuration()
+			if timeout == 0  || override == 0 {
+				timeout = 0
+				break
+			}
+
+			if override > timeout {
+				timeout = override
+			}
 		}
 	}
 
