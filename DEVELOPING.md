@@ -134,7 +134,7 @@ resolvers:
 
 #### Using an exisiting KUBECONFIG
 
-  Additionally you may point clutch to any set of Kubernetes clusters,
+  Additionally you may point Clutch to any set of Kubernetes clusters,
   you only need to export the relevant Kubernetes configuration via the `KUBECONFIG` environment variable.
   Clutch will read this in when it first boots and you will be able to take actions against those clusters,
   assuming you have taken care of any prerequisite authentication actions that may be necessary.
