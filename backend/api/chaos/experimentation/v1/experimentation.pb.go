@@ -7,15 +7,11 @@
 package experimentationv1
 
 import (
-	context "context"
 	proto "github.com/golang/protobuf/proto"
 	any "github.com/golang/protobuf/ptypes/any"
 	timestamp "github.com/golang/protobuf/ptypes/timestamp"
 	_ "github.com/lyft/clutch/backend/api/api/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -706,9 +702,13 @@ var file_chaos_experimentation_v1_experimentation_proto_rawDesc = []byte{
 	0x2f, 0x76, 0x31, 0x2f, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2f, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69,
 	0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2f, 0x67, 0x65, 0x74, 0x45, 0x78, 0x70,
 	0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x75, 0x6e, 0x44, 0x65, 0x74, 0x61, 0x69, 0x6c,
-	0x73, 0x3a, 0x01, 0x2a, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x02, 0x42, 0x13, 0x5a, 0x11, 0x65, 0x78,
-	0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x76, 0x31, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x3a, 0x01, 0x2a, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x02, 0x42, 0x4f, 0x5a, 0x4d, 0x67, 0x69,
+	0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6c, 0x79, 0x66, 0x74, 0x2f, 0x63, 0x6c,
+	0x75, 0x74, 0x63, 0x68, 0x2f, 0x62, 0x61, 0x63, 0x6b, 0x65, 0x6e, 0x64, 0x2f, 0x61, 0x70, 0x69,
+	0x2f, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2f, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e,
+	0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2f, 0x76, 0x31, 0x3b, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69,
+	0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -918,228 +918,4 @@ func file_chaos_experimentation_v1_experimentation_proto_init() {
 	file_chaos_experimentation_v1_experimentation_proto_rawDesc = nil
 	file_chaos_experimentation_v1_experimentation_proto_goTypes = nil
 	file_chaos_experimentation_v1_experimentation_proto_depIdxs = nil
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConnInterface
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
-
-// ExperimentsAPIClient is the client API for ExperimentsAPI service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type ExperimentsAPIClient interface {
-	CreateExperiment(ctx context.Context, in *CreateExperimentRequest, opts ...grpc.CallOption) (*CreateExperimentResponse, error)
-	CancelExperimentRun(ctx context.Context, in *CancelExperimentRunRequest, opts ...grpc.CallOption) (*CancelExperimentRunResponse, error)
-	GetExperiments(ctx context.Context, in *GetExperimentsRequest, opts ...grpc.CallOption) (*GetExperimentsResponse, error)
-	GetListView(ctx context.Context, in *GetListViewRequest, opts ...grpc.CallOption) (*GetListViewResponse, error)
-	GetExperimentRunDetails(ctx context.Context, in *GetExperimentRunDetailsRequest, opts ...grpc.CallOption) (*GetExperimentRunDetailsResponse, error)
-}
-
-type experimentsAPIClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewExperimentsAPIClient(cc grpc.ClientConnInterface) ExperimentsAPIClient {
-	return &experimentsAPIClient{cc}
-}
-
-func (c *experimentsAPIClient) CreateExperiment(ctx context.Context, in *CreateExperimentRequest, opts ...grpc.CallOption) (*CreateExperimentResponse, error) {
-	out := new(CreateExperimentResponse)
-	err := c.cc.Invoke(ctx, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CreateExperiment", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *experimentsAPIClient) CancelExperimentRun(ctx context.Context, in *CancelExperimentRunRequest, opts ...grpc.CallOption) (*CancelExperimentRunResponse, error) {
-	out := new(CancelExperimentRunResponse)
-	err := c.cc.Invoke(ctx, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CancelExperimentRun", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *experimentsAPIClient) GetExperiments(ctx context.Context, in *GetExperimentsRequest, opts ...grpc.CallOption) (*GetExperimentsResponse, error) {
-	out := new(GetExperimentsResponse)
-	err := c.cc.Invoke(ctx, "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetExperiments", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *experimentsAPIClient) GetListView(ctx context.Context, in *GetListViewRequest, opts ...grpc.CallOption) (*GetListViewResponse, error) {
-	out := new(GetListViewResponse)
-	err := c.cc.Invoke(ctx, "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetListView", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *experimentsAPIClient) GetExperimentRunDetails(ctx context.Context, in *GetExperimentRunDetailsRequest, opts ...grpc.CallOption) (*GetExperimentRunDetailsResponse, error) {
-	out := new(GetExperimentRunDetailsResponse)
-	err := c.cc.Invoke(ctx, "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetExperimentRunDetails", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// ExperimentsAPIServer is the server API for ExperimentsAPI service.
-type ExperimentsAPIServer interface {
-	CreateExperiment(context.Context, *CreateExperimentRequest) (*CreateExperimentResponse, error)
-	CancelExperimentRun(context.Context, *CancelExperimentRunRequest) (*CancelExperimentRunResponse, error)
-	GetExperiments(context.Context, *GetExperimentsRequest) (*GetExperimentsResponse, error)
-	GetListView(context.Context, *GetListViewRequest) (*GetListViewResponse, error)
-	GetExperimentRunDetails(context.Context, *GetExperimentRunDetailsRequest) (*GetExperimentRunDetailsResponse, error)
-}
-
-// UnimplementedExperimentsAPIServer can be embedded to have forward compatible implementations.
-type UnimplementedExperimentsAPIServer struct {
-}
-
-func (*UnimplementedExperimentsAPIServer) CreateExperiment(context.Context, *CreateExperimentRequest) (*CreateExperimentResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateExperiment not implemented")
-}
-func (*UnimplementedExperimentsAPIServer) CancelExperimentRun(context.Context, *CancelExperimentRunRequest) (*CancelExperimentRunResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CancelExperimentRun not implemented")
-}
-func (*UnimplementedExperimentsAPIServer) GetExperiments(context.Context, *GetExperimentsRequest) (*GetExperimentsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetExperiments not implemented")
-}
-func (*UnimplementedExperimentsAPIServer) GetListView(context.Context, *GetListViewRequest) (*GetListViewResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetListView not implemented")
-}
-func (*UnimplementedExperimentsAPIServer) GetExperimentRunDetails(context.Context, *GetExperimentRunDetailsRequest) (*GetExperimentRunDetailsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetExperimentRunDetails not implemented")
-}
-
-func RegisterExperimentsAPIServer(s *grpc.Server, srv ExperimentsAPIServer) {
-	s.RegisterService(&_ExperimentsAPI_serviceDesc, srv)
-}
-
-func _ExperimentsAPI_CreateExperiment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateExperimentRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ExperimentsAPIServer).CreateExperiment(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.chaos.experimentation.v1.ExperimentsAPI/CreateExperiment",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExperimentsAPIServer).CreateExperiment(ctx, req.(*CreateExperimentRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ExperimentsAPI_CancelExperimentRun_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CancelExperimentRunRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ExperimentsAPIServer).CancelExperimentRun(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.chaos.experimentation.v1.ExperimentsAPI/CancelExperimentRun",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExperimentsAPIServer).CancelExperimentRun(ctx, req.(*CancelExperimentRunRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ExperimentsAPI_GetExperiments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetExperimentsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ExperimentsAPIServer).GetExperiments(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetExperiments",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExperimentsAPIServer).GetExperiments(ctx, req.(*GetExperimentsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ExperimentsAPI_GetListView_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetListViewRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ExperimentsAPIServer).GetListView(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetListView",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExperimentsAPIServer).GetListView(ctx, req.(*GetListViewRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ExperimentsAPI_GetExperimentRunDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetExperimentRunDetailsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ExperimentsAPIServer).GetExperimentRunDetails(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.chaos.experimentation.v1.ExperimentsAPI/GetExperimentRunDetails",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ExperimentsAPIServer).GetExperimentRunDetails(ctx, req.(*GetExperimentRunDetailsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _ExperimentsAPI_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "clutch.chaos.experimentation.v1.ExperimentsAPI",
-	HandlerType: (*ExperimentsAPIServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "CreateExperiment",
-			Handler:    _ExperimentsAPI_CreateExperiment_Handler,
-		},
-		{
-			MethodName: "CancelExperimentRun",
-			Handler:    _ExperimentsAPI_CancelExperimentRun_Handler,
-		},
-		{
-			MethodName: "GetExperiments",
-			Handler:    _ExperimentsAPI_GetExperiments_Handler,
-		},
-		{
-			MethodName: "GetListView",
-			Handler:    _ExperimentsAPI_GetListView_Handler,
-		},
-		{
-			MethodName: "GetExperimentRunDetails",
-			Handler:    _ExperimentsAPI_GetExperimentRunDetails_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "chaos/experimentation/v1/experimentation.proto",
 }

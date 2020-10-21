@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.config.service.envoyadmin.v1;
 
-option go_package = "envoyadminv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/service/envoyadmin/v1;envoyadminv1";
 
 import "validate/validate.proto";
 

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.resolver.aws.v1;
 
-option go_package = "awsv1";
+option go_package = "github.com/lyft/clutch/backend/api/resolver/aws/v1;awsv1";
 
 import "google/protobuf/descriptor.proto";
 

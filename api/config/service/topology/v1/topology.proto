@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.config.service.topology.v1;
 
-option go_package = "topologyv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/service/topology/v1;topologyv1";
 
 import "validate/validate.proto";
 import "google/protobuf/duration.proto";

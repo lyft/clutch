@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.sourcecontrol.github.v1;
 
-option go_package = "githubv1";
+option go_package = "github.com/lyft/clutch/backend/api/sourcecontrol/github/v1;githubv1";
 
 import "google/protobuf/wrappers.proto";
 import "validate/validate.proto";

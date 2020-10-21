@@ -11,7 +11,7 @@ import "chaos/experimentation/v1/experiment.proto";
 import "chaos/experimentation/v1/list_view_item.proto";
 import "chaos/experimentation/v1/experiment_run_details.proto";
 
-option go_package = "experimentationv1";
+option go_package = "github.com/lyft/clutch/backend/api/chaos/experimentation/v1;experimentationv1";
 
 message CreateExperimentRequest {
   // The experiment configuration specific to the type of experiment
