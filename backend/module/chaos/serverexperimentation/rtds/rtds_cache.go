@@ -147,7 +147,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 		} else if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
 			clusterFaultMap[downstreamCluster] = append(clusterFaultMap[downstreamCluster], experiment)
 		} else {
-			logger.Warnw("Invalid fault injection type found", "upstream", upstreamCluster, "downstream", downstreamCluster, "faultInjectionType", faultInjectionType)
+			logger.Errorw("Invalid fault injection type found", "upstream", upstreamCluster, "downstream", downstreamCluster, "faultInjectionType", faultInjectionType)
 		}
 	}
 
@@ -258,7 +258,7 @@ func createRuntimeKeys(testConfig *serverexperimentation.TestConfig, ingressPref
 		if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
 			percentageKey = fmt.Sprintf(HTTPPercentageForExternal, egressPrefix, target.UpstreamCluster)
 			faultKey = fmt.Sprintf(HTTPStatusForExternal, egressPrefix, target.UpstreamCluster)
-		} else {
+		} else if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS {
 			// Abort Internal Fault for all downstream services
 			if target.DownstreamCluster == "" {
 				percentageKey = fmt.Sprintf(HTTPPercentageWithoutDownstream, ingressPrefix)
@@ -278,7 +278,7 @@ func createRuntimeKeys(testConfig *serverexperimentation.TestConfig, ingressPref
 		if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
 			percentageKey = fmt.Sprintf(LatencyPercentageForExternal, egressPrefix, target.UpstreamCluster)
 			faultKey = fmt.Sprintf(LatencyDurationForExternal, egressPrefix, target.UpstreamCluster)
-		} else {
+		} else if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS {
 			// Latency Internal Fault for all downstream services
 			if target.DownstreamCluster == "" {
 				percentageKey = fmt.Sprintf(LatencyPercentageWithoutDownstream, ingressPrefix)
