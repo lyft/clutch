@@ -243,7 +243,10 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	logger.Info("listening", zap.Namespace("tcp"), zap.String("addr", addr))
 
 	// Figure out the maximum global timeout and set as a backstop (with 1s buffer).
-	timeout := computeMaximumTimeout(cfg.Gateway.Timeouts) + time.Second
+	timeout := computeMaximumTimeout(cfg.Gateway.Timeouts)
+	if timeout > 0 {
+		timeout += time.Second
+	}
 
 	srv := &http.Server{
 		Handler:      mux.InsecureHandler(rpcMux),
