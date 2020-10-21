@@ -20,6 +20,7 @@ import { Status } from "./icon";
 import Loadable from "./loading";
 import { client, ClientError } from "./network";
 import ExpansionPanel from "./panel";
+import RadioGroup from "./Input/radio-group";
 import Resolver from "./Resolver";
 import {
   ExpandableRow,
@@ -54,6 +55,7 @@ export {
   Note,
   NoteConfig,
   NotePanel,
+  RadioGroup,
   Resolver,
   Row,
   Select,
