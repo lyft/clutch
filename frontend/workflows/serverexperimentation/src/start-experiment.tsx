@@ -19,11 +19,11 @@ import RadioGroup from "./radio-control";
 const faultInjectionTypeItems = [
   {
     label: "Internal",
-    value: IClutch.chaos.serverexperimentation.v1.FaultInjectionType.FAULTINJECTIONTYPE_INGRESS.toString(),
+    value: IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster.FAULTINJECTIONCLUSTER_UPSTREAM.toString(),
   },
   {
     label: "External",
-    value: IClutch.chaos.serverexperimentation.v1.FaultInjectionType.FAULTINJECTIONTYPE_EGRESS.toString(),
+    value: IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster.FAULTINJECTIONCLUSTER_DOWNSTREAM.toString(),
   },
 ];
 
@@ -63,11 +63,11 @@ const ClusterPairTargetDetails: React.FC<ClusterPairTargetDetailsProps> = ({
       />
       {upstreamClusterTypeSelectionEnabled && (
         <RadioGroup
-          name="upstream_service_type"
-          label="Upstream Service Type"
+          name="upstream_cluster_type"
+          label="Upstream Cluster Type"
           options={faultInjectionTypeItems}
           onChange={(value: string) =>
-            clusterPairData.updateData("faultInjectionType", parseInt(value, 10))
+            clusterPairData.updateData("faultInjectionCluster", parseInt(value, 10))
           }
         />
       )}
@@ -188,9 +188,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
     startData: {
       deps: ["clusterPairTargetData", "experimentData"],
       hydrator: (
-        clusterPairTargetData: IClutch.chaos.serverexperimentation.v1.IClusterPairTarget & {
-          faultInjectionType: IClutch.chaos.serverexperimentation.v1.FaultInjectionType;
-        },
+        clusterPairTargetData: IClutch.chaos.serverexperimentation.v1.IClusterPairTarget,
         experimentData: IClutch.chaos.serverexperimentation.v1.AbortFaultConfig &
           IClutch.chaos.serverexperimentation.v1.LatencyFaultConfig & { type: FaultType }
       ) => {
@@ -199,12 +197,17 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
           ? { abort: { httpStatus: experimentData.httpStatus, percent: experimentData.percent } }
           : { latency: { durationMs: experimentData.durationMs, percent: experimentData.percent } };
 
+        const faultInjectionCluster =
+          clusterPairTargetData.faultInjectionCluster ||
+          IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster
+            .FAULTINJECTIONCLUSTER_UPSTREAM;
+
         return createExperiment({
           clusterPair: {
             downstreamCluster: clusterPairTargetData.downstreamCluster,
             upstreamCluster: clusterPairTargetData.upstreamCluster,
+            faultInjectionCluster,
           },
-          faultInjectionType: clusterPairTargetData.faultInjectionType,
           ...fault,
         });
       },

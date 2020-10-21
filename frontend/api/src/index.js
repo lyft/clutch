@@ -8011,7 +8011,6 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null} [clusterPair] TestConfig clusterPair
                      * @property {clutch.chaos.serverexperimentation.v1.IAbortFaultConfig|null} [abort] TestConfig abort
                      * @property {clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null} [latency] TestConfig latency
-                     * @property {clutch.chaos.serverexperimentation.v1.FaultInjectionType|null} [faultInjectionType] TestConfig faultInjectionType
                      */
 
                     /**
@@ -8052,14 +8051,6 @@ export const clutch = $root.clutch = (() => {
                      * @instance
                      */
                     TestConfig.prototype.latency = null;
-
-                    /**
-                     * TestConfig faultInjectionType.
-                     * @member {clutch.chaos.serverexperimentation.v1.FaultInjectionType} faultInjectionType
-                     * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
-                     * @instance
-                     */
-                    TestConfig.prototype.faultInjectionType = 0;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
@@ -8110,15 +8101,6 @@ export const clutch = $root.clutch = (() => {
                                     return "latency." + error;
                             }
                         }
-                        if (message.faultInjectionType != null && message.hasOwnProperty("faultInjectionType"))
-                            switch (message.faultInjectionType) {
-                            default:
-                                return "faultInjectionType: enum value expected";
-                            case 0:
-                            case 1:
-                            case 2:
-                                break;
-                            }
                         return null;
                     };
 
@@ -8149,20 +8131,6 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.chaos.serverexperimentation.v1.TestConfig.latency: object expected");
                             message.latency = $root.clutch.chaos.serverexperimentation.v1.LatencyFaultConfig.fromObject(object.latency);
                         }
-                        switch (object.faultInjectionType) {
-                        case "FAULTINJECTIONTYPE_UNSPECIFIED":
-                        case 0:
-                            message.faultInjectionType = 0;
-                            break;
-                        case "FAULTINJECTIONTYPE_INGRESS":
-                        case 1:
-                            message.faultInjectionType = 1;
-                            break;
-                        case "FAULTINJECTIONTYPE_EGRESS":
-                        case 2:
-                            message.faultInjectionType = 2;
-                            break;
-                        }
                         return message;
                     };
 
@@ -8179,10 +8147,8 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.defaults) {
+                        if (options.defaults)
                             object.clusterPair = null;
-                            object.faultInjectionType = options.enums === String ? "FAULTINJECTIONTYPE_UNSPECIFIED" : 0;
-                        }
                         if (message.clusterPair != null && message.hasOwnProperty("clusterPair"))
                             object.clusterPair = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.toObject(message.clusterPair, options);
                         if (message.abort != null && message.hasOwnProperty("abort")) {
@@ -8195,8 +8161,6 @@ export const clutch = $root.clutch = (() => {
                             if (options.oneofs)
                                 object.fault = "latency";
                         }
-                        if (message.faultInjectionType != null && message.hasOwnProperty("faultInjectionType"))
-                            object.faultInjectionType = options.enums === String ? $root.clutch.chaos.serverexperimentation.v1.FaultInjectionType[message.faultInjectionType] : message.faultInjectionType;
                         return object;
                     };
 
@@ -8222,6 +8186,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IClusterPairTarget
                      * @property {string|null} [downstreamCluster] ClusterPairTarget downstreamCluster
                      * @property {string|null} [upstreamCluster] ClusterPairTarget upstreamCluster
+                     * @property {clutch.chaos.serverexperimentation.v1.FaultInjectionCluster|null} [faultInjectionCluster] ClusterPairTarget faultInjectionCluster
                      */
 
                     /**
@@ -8256,6 +8221,14 @@ export const clutch = $root.clutch = (() => {
                     ClusterPairTarget.prototype.upstreamCluster = "";
 
                     /**
+                     * ClusterPairTarget faultInjectionCluster.
+                     * @member {clutch.chaos.serverexperimentation.v1.FaultInjectionCluster} faultInjectionCluster
+                     * @memberof clutch.chaos.serverexperimentation.v1.ClusterPairTarget
+                     * @instance
+                     */
+                    ClusterPairTarget.prototype.faultInjectionCluster = 0;
+
+                    /**
                      * Verifies a ClusterPairTarget message.
                      * @function verify
                      * @memberof clutch.chaos.serverexperimentation.v1.ClusterPairTarget
@@ -8272,6 +8245,15 @@ export const clutch = $root.clutch = (() => {
                         if (message.upstreamCluster != null && message.hasOwnProperty("upstreamCluster"))
                             if (!$util.isString(message.upstreamCluster))
                                 return "upstreamCluster: string expected";
+                        if (message.faultInjectionCluster != null && message.hasOwnProperty("faultInjectionCluster"))
+                            switch (message.faultInjectionCluster) {
+                            default:
+                                return "faultInjectionCluster: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                                break;
+                            }
                         return null;
                     };
 
@@ -8291,6 +8273,20 @@ export const clutch = $root.clutch = (() => {
                             message.downstreamCluster = String(object.downstreamCluster);
                         if (object.upstreamCluster != null)
                             message.upstreamCluster = String(object.upstreamCluster);
+                        switch (object.faultInjectionCluster) {
+                        case "FAULTINJECTIONCLUSTER_UNSPECIFIED":
+                        case 0:
+                            message.faultInjectionCluster = 0;
+                            break;
+                        case "FAULTINJECTIONCLUSTER_DOWNSTREAM":
+                        case 1:
+                            message.faultInjectionCluster = 1;
+                            break;
+                        case "FAULTINJECTIONCLUSTER_UPSTREAM":
+                        case 2:
+                            message.faultInjectionCluster = 2;
+                            break;
+                        }
                         return message;
                     };
 
@@ -8310,11 +8306,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.downstreamCluster = "";
                             object.upstreamCluster = "";
+                            object.faultInjectionCluster = options.enums === String ? "FAULTINJECTIONCLUSTER_UNSPECIFIED" : 0;
                         }
                         if (message.downstreamCluster != null && message.hasOwnProperty("downstreamCluster"))
                             object.downstreamCluster = message.downstreamCluster;
                         if (message.upstreamCluster != null && message.hasOwnProperty("upstreamCluster"))
                             object.upstreamCluster = message.upstreamCluster;
+                        if (message.faultInjectionCluster != null && message.hasOwnProperty("faultInjectionCluster"))
+                            object.faultInjectionCluster = options.enums === String ? $root.clutch.chaos.serverexperimentation.v1.FaultInjectionCluster[message.faultInjectionCluster] : message.faultInjectionCluster;
                         return object;
                     };
 
@@ -8569,18 +8568,18 @@ export const clutch = $root.clutch = (() => {
                 })();
 
                 /**
-                 * FaultInjectionType enum.
-                 * @name clutch.chaos.serverexperimentation.v1.FaultInjectionType
+                 * FaultInjectionCluster enum.
+                 * @name clutch.chaos.serverexperimentation.v1.FaultInjectionCluster
                  * @enum {number}
-                 * @property {number} FAULTINJECTIONTYPE_UNSPECIFIED=0 FAULTINJECTIONTYPE_UNSPECIFIED value
-                 * @property {number} FAULTINJECTIONTYPE_INGRESS=1 FAULTINJECTIONTYPE_INGRESS value
-                 * @property {number} FAULTINJECTIONTYPE_EGRESS=2 FAULTINJECTIONTYPE_EGRESS value
+                 * @property {number} FAULTINJECTIONCLUSTER_UNSPECIFIED=0 FAULTINJECTIONCLUSTER_UNSPECIFIED value
+                 * @property {number} FAULTINJECTIONCLUSTER_DOWNSTREAM=1 FAULTINJECTIONCLUSTER_DOWNSTREAM value
+                 * @property {number} FAULTINJECTIONCLUSTER_UPSTREAM=2 FAULTINJECTIONCLUSTER_UPSTREAM value
                  */
-                v1.FaultInjectionType = (function() {
+                v1.FaultInjectionCluster = (function() {
                     const valuesById = {}, values = Object.create(valuesById);
-                    values[valuesById[0] = "FAULTINJECTIONTYPE_UNSPECIFIED"] = 0;
-                    values[valuesById[1] = "FAULTINJECTIONTYPE_INGRESS"] = 1;
-                    values[valuesById[2] = "FAULTINJECTIONTYPE_EGRESS"] = 2;
+                    values[valuesById[0] = "FAULTINJECTIONCLUSTER_UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "FAULTINJECTIONCLUSTER_DOWNSTREAM"] = 1;
+                    values[valuesById[2] = "FAULTINJECTIONCLUSTER_UPSTREAM"] = 2;
                     return values;
                 })();
 

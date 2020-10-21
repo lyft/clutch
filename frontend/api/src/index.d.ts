@@ -3432,9 +3432,6 @@ export namespace clutch {
 
                     /** TestConfig latency */
                     latency?: (clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null);
-
-                    /** TestConfig faultInjectionType */
-                    faultInjectionType?: (clutch.chaos.serverexperimentation.v1.FaultInjectionType|null);
                 }
 
                 /** Represents a TestConfig. */
@@ -3454,9 +3451,6 @@ export namespace clutch {
 
                     /** TestConfig latency. */
                     public latency?: (clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null);
-
-                    /** TestConfig faultInjectionType. */
-                    public faultInjectionType: clutch.chaos.serverexperimentation.v1.FaultInjectionType;
 
                     /** TestConfig fault. */
                     public fault?: ("abort"|"latency");
@@ -3498,6 +3492,9 @@ export namespace clutch {
 
                     /** ClusterPairTarget upstreamCluster */
                     upstreamCluster?: (string|null);
+
+                    /** ClusterPairTarget faultInjectionCluster */
+                    faultInjectionCluster?: (clutch.chaos.serverexperimentation.v1.FaultInjectionCluster|null);
                 }
 
                 /** Represents a ClusterPairTarget. */
@@ -3514,6 +3511,9 @@ export namespace clutch {
 
                     /** ClusterPairTarget upstreamCluster. */
                     public upstreamCluster: string;
+
+                    /** ClusterPairTarget faultInjectionCluster. */
+                    public faultInjectionCluster: clutch.chaos.serverexperimentation.v1.FaultInjectionCluster;
 
                     /**
                      * Verifies a ClusterPairTarget message.
@@ -3652,11 +3652,11 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** FaultInjectionType enum. */
-                enum FaultInjectionType {
-                    FAULTINJECTIONTYPE_UNSPECIFIED = 0,
-                    FAULTINJECTIONTYPE_INGRESS = 1,
-                    FAULTINJECTIONTYPE_EGRESS = 2
+                /** FaultInjectionCluster enum. */
+                enum FaultInjectionCluster {
+                    FAULTINJECTIONCLUSTER_UNSPECIFIED = 0,
+                    FAULTINJECTIONCLUSTER_DOWNSTREAM = 1,
+                    FAULTINJECTIONCLUSTER_UPSTREAM = 2
                 }
             }
         }
