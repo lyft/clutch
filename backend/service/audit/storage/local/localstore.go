@@ -44,9 +44,7 @@ func (c *client) UnsentEvents(ctx context.Context) ([]*auditv1.Event, error) {
 	defer c.Unlock()
 
 	unsent := make([]*auditv1.Event, 0, len(c.events))
-	for _, v := range c.events {
-		unsent = append(unsent, v)
-	}
+	unsent = append(unsent, c.events...)
 	c.events = make([]*auditv1.Event, 0)
 
 	return unsent, nil
