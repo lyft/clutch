@@ -20,7 +20,7 @@ require (
 	github.com/google/go-github/v32 v32.1.0
 	github.com/google/uuid v1.1.2
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.0.1-0.20201016175452-80a7a7ba0b7a
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.0.1
 	github.com/iancoleman/strcase v0.1.2
 	github.com/jhump/protoreflect v1.7.1-0.20200723220026-11eaaf73e0ec
 	github.com/lib/pq v1.8.0
@@ -37,7 +37,7 @@ require (
 	golang.org/x/net v0.0.0-20201020065357-d65d470038a5
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43
 	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
-	google.golang.org/genproto v0.0.0-20201015140912-32ed001d685c
+	google.golang.org/genproto v0.0.0-20201019141844-1ed22bb0c154
 	google.golang.org/grpc v1.33.1
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.0.0
 	google.golang.org/protobuf v1.25.0
