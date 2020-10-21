@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.config.service.db.postgres.v1;
 
-option go_package = "postgresv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/service/db/postgres/v1;postgresv1";
 
 import "validate/validate.proto";
 

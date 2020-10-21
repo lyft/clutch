@@ -5,7 +5,7 @@ package clutch.chaos.experimentation.v1;
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 
-option go_package = "experimentationv1";
+option go_package = "github.com/lyft/clutch/backend/api/chaos/experimentation/v1;experimentationv1";
 
 message PropertiesList {
   // The ordered list of items.

@@ -554,102 +554,6 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a RequestMetadata. */
-            interface IRequestMetadata {
-
-                /** RequestMetadata body */
-                body?: (google.protobuf.IAny|null);
-            }
-
-            /** Represents a RequestMetadata. */
-            class RequestMetadata implements IRequestMetadata {
-
-                /**
-                 * Constructs a new RequestMetadata.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.audit.v1.IRequestMetadata);
-
-                /** RequestMetadata body. */
-                public body?: (google.protobuf.IAny|null);
-
-                /**
-                 * Verifies a RequestMetadata message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a RequestMetadata message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns RequestMetadata
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.audit.v1.RequestMetadata;
-
-                /**
-                 * Creates a plain object from a RequestMetadata message. Also converts values to other types if specified.
-                 * @param message RequestMetadata
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.audit.v1.RequestMetadata, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this RequestMetadata to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a ResponseMetadata. */
-            interface IResponseMetadata {
-
-                /** ResponseMetadata body */
-                body?: (google.protobuf.IAny|null);
-            }
-
-            /** Represents a ResponseMetadata. */
-            class ResponseMetadata implements IResponseMetadata {
-
-                /**
-                 * Constructs a new ResponseMetadata.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.audit.v1.IResponseMetadata);
-
-                /** ResponseMetadata body. */
-                public body?: (google.protobuf.IAny|null);
-
-                /**
-                 * Verifies a ResponseMetadata message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a ResponseMetadata message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns ResponseMetadata
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.audit.v1.ResponseMetadata;
-
-                /**
-                 * Creates a plain object from a ResponseMetadata message. Also converts values to other types if specified.
-                 * @param message ResponseMetadata
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.audit.v1.ResponseMetadata, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this ResponseMetadata to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
             /** Properties of a RequestEvent. */
             interface IRequestEvent {
 
@@ -670,12 +574,6 @@ export namespace clutch {
 
                 /** RequestEvent resources */
                 resources?: (clutch.audit.v1.IResource[]|null);
-
-                /** RequestEvent requestMetadata */
-                requestMetadata?: (clutch.audit.v1.IRequestMetadata|null);
-
-                /** RequestEvent responseMetadata */
-                responseMetadata?: (clutch.audit.v1.IResponseMetadata|null);
             }
 
             /** Represents a RequestEvent. */
@@ -704,12 +602,6 @@ export namespace clutch {
 
                 /** RequestEvent resources. */
                 public resources: clutch.audit.v1.IResource[];
-
-                /** RequestEvent requestMetadata. */
-                public requestMetadata?: (clutch.audit.v1.IRequestMetadata|null);
-
-                /** RequestEvent responseMetadata. */
-                public responseMetadata?: (clutch.audit.v1.IResponseMetadata|null);
 
                 /**
                  * Verifies a RequestEvent message.
@@ -15431,60 +15323,6 @@ export namespace google {
             }
         }
 
-        /** Properties of an Any. */
-        interface IAny {
-
-            /** Any type_url */
-            type_url?: (string|null);
-
-            /** Any value */
-            value?: (Uint8Array|null);
-        }
-
-        /** Represents an Any. */
-        class Any implements IAny {
-
-            /**
-             * Constructs a new Any.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: google.protobuf.IAny);
-
-            /** Any type_url. */
-            public type_url: string;
-
-            /** Any value. */
-            public value: Uint8Array;
-
-            /**
-             * Verifies an Any message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates an Any message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns Any
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.Any;
-
-            /**
-             * Creates a plain object from an Any message. Also converts values to other types if specified.
-             * @param message Any
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.Any, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this Any to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
         /** Properties of a Duration. */
         interface IDuration {
 
@@ -15588,6 +15426,60 @@ export namespace google {
 
             /**
              * Converts this Timestamp to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of an Any. */
+        interface IAny {
+
+            /** Any type_url */
+            type_url?: (string|null);
+
+            /** Any value */
+            value?: (Uint8Array|null);
+        }
+
+        /** Represents an Any. */
+        class Any implements IAny {
+
+            /**
+             * Constructs a new Any.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: google.protobuf.IAny);
+
+            /** Any type_url. */
+            public type_url: string;
+
+            /** Any value. */
+            public value: Uint8Array;
+
+            /**
+             * Verifies an Any message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Any message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Any
+             */
+            public static fromObject(object: { [k: string]: any }): google.protobuf.Any;
+
+            /**
+             * Creates a plain object from an Any message. Also converts values to other types if specified.
+             * @param message Any
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: google.protobuf.Any, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Any to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

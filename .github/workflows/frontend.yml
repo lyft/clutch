@@ -89,7 +89,7 @@ jobs:
         id: e2e
         run: make frontend-e2e
       - name: Upload end-to-end artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         if: failure() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots

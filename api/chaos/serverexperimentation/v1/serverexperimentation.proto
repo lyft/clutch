@@ -4,7 +4,7 @@ package clutch.chaos.serverexperimentation.v1;
 
 import "validate/validate.proto";
 
-option go_package = "serverexperimentationv1";
+option go_package = "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1;serverexperimentationv1";
 
 message TestConfig {
   // The pair of clusters specifying the origin and the destination of

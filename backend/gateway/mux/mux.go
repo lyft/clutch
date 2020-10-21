@@ -12,14 +12,15 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/golang/protobuf/proto"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -184,7 +185,7 @@ func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Ma
 		if len(referer) != 0 {
 			referer, err := url.Parse(referer)
 			if err != nil {
-				runtime.DefaultHTTPProtoErrorHandler(ctx, mux, m, w, req, err)
+				runtime.DefaultHTTPErrorHandler(ctx, mux, m, w, req, err)
 				return
 			}
 			if redirectPath != referer.Path {
@@ -195,21 +196,24 @@ func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Ma
 		http.Redirect(w, req, redirectPath, http.StatusFound)
 		return
 	}
-	runtime.DefaultHTTPProtoErrorHandler(ctx, mux, m, w, req, err)
+	runtime.DefaultHTTPErrorHandler(ctx, mux, m, w, req, err)
 }
 
 func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem, assetCfg *gatewayv1.Assets) (*Mux, error) {
 	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(unaryInterceptors...))
 	jsonGateway := runtime.NewServeMux(
 		runtime.WithForwardResponseOption(customResponseForwarder),
-		runtime.WithProtoErrorHandler(customErrorHandler),
+		runtime.WithErrorHandler(customErrorHandler),
 		runtime.WithMarshalerOption(
 			runtime.MIMEWildcard,
 			&runtime.JSONPb{
-				// Use camelCase for the JSON version.
-				OrigName: false,
-				// Transmit zero-values over the wire.
-				EmitDefaults: true,
+				MarshalOptions: protojson.MarshalOptions{
+					// Use camelCase for the JSON version.
+					UseProtoNames: false,
+					// Transmit zero-values over the wire.
+					EmitUnpopulated: true,
+				},
+				UnmarshalOptions: protojson.UnmarshalOptions{},
 			},
 		),
 	)
