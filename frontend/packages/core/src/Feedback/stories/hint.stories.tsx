@@ -8,12 +8,15 @@ export default {
   component: Hint,
 } as Meta;
 
-const Template = (props: { url: string; text: string }) => (
-  <Hint>
-    {props.url && <img src={props.url} />}
-    <div style={{ padding: "10px" }}>{props.text}</div>
-  </Hint>
-);
+const Template = (props: { url: string; text: string }) => {
+  const { text, url } = props;
+  return (
+    <Hint>
+      {url && <img alt="demo url" src={url} />}
+      <div style={{ padding: "10px" }}>{text}</div>
+    </Hint>
+  );
+};
 
 export const Primary = Template.bind({});
 Primary.args = {
