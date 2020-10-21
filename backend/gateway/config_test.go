@@ -2,15 +2,15 @@ package gateway
 
 import (
 	"fmt"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/lyft/clutch/backend/middleware/timeouts"
 	"os"
 	"testing"
 	"time"
 
+	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
+	"github.com/lyft/clutch/backend/middleware/timeouts"
 )
 
 func TestExecuteTemplate(t *testing.T) {
@@ -69,22 +69,21 @@ func TestNewLogger(t *testing.T) {
 	}
 }
 
-
 func TestComputeMaximumTimeout(t *testing.T) {
-	tests := []struct{
-		c *gatewayv1.Timeouts
+	tests := []struct {
+		c        *gatewayv1.Timeouts
 		expected time.Duration
 	}{
 		{
-			c: nil,
+			c:        nil,
 			expected: timeouts.DefaultTimeout,
 		},
 		{
-			c: &gatewayv1.Timeouts{Default: ptypes.DurationProto(0)},
+			c:        &gatewayv1.Timeouts{Default: ptypes.DurationProto(0)},
 			expected: 0,
 		},
 		{
-			c: &gatewayv1.Timeouts{Default: ptypes.DurationProto(time.Second)},
+			c:        &gatewayv1.Timeouts{Default: ptypes.DurationProto(time.Second)},
 			expected: time.Second,
 		},
 		{

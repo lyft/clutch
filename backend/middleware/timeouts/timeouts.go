@@ -22,7 +22,6 @@ import (
 
 const DefaultTimeout = time.Second * 15
 
-
 func New(config *gatewayv1.Timeouts, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
 	if config == nil {
 		config = &gatewayv1.Timeouts{Default: ptypes.DurationProto(DefaultTimeout)}

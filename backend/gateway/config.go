@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/lyft/clutch/backend/middleware/timeouts"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -22,8 +21,8 @@ import (
 	"gopkg.in/yaml.v3"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
+	"github.com/lyft/clutch/backend/middleware/timeouts"
 )
-
 
 type Flags struct {
 	ConfigPath string
