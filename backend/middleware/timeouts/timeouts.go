@@ -87,7 +87,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 			resp, err := handler(ctx, req)
 			select {
 			case <-ctx.Done():
-				m.logger.Warn("handler completed after timeout", zap.String("service", service), zap.String("method", method))
+				m.logger.Error("handler completed after timeout", zap.String("service", service), zap.String("method", method))
 			default:
 				resultChan <- unaryHandlerReturn{resp: resp, err: err}
 			}
