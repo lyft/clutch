@@ -131,43 +131,24 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 		allRunningExperiments = []*experimentation.Experiment{}
 	}
 
-	// INGRESS Faults
-	// Group faults by upstream cluster
-	upstreamClusterFaultMap := make(map[string][]*experimentation.Experiment)
-	for _, experiment := range allRunningExperiments {
-		testConfig := &serverexperimentation.TestConfig{}
-		if isFaultTest(experiment, testConfig) && testConfig.FaultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS {
-			clusterPair := testConfig.GetClusterPair()
-			upstreamClusterFaultMap[clusterPair.UpstreamCluster] =
-				append(upstreamClusterFaultMap[clusterPair.UpstreamCluster], experiment)
-		}
-	}
-
-	// EGRESS Faults
-	// Group faults by downstream cluster
-	downstreamClusterFaultMap := make(map[string][]*experimentation.Experiment)
-	for _, experiment := range allRunningExperiments {
-		testConfig := &serverexperimentation.TestConfig{}
-		if isFaultTest(experiment, testConfig) && testConfig.FaultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
-			clusterPair := testConfig.GetClusterPair()
-			downstreamClusterFaultMap[clusterPair.DownstreamCluster] =
-				append(downstreamClusterFaultMap[clusterPair.DownstreamCluster], experiment)
-		}
-	}
-
-	// Group ingress and egress faults by clusters
 	clusterFaultMap := make(map[string][]*experimentation.Experiment)
-	for upstreamCluster, upstreamFaults := range upstreamClusterFaultMap {
-		clusterFaultMap[upstreamCluster] = append(clusterFaultMap[upstreamCluster], upstreamFaults...)
-
-		if _, exist := downstreamClusterFaultMap[upstreamCluster]; exist {
-			clusterFaultMap[upstreamCluster] = append(clusterFaultMap[upstreamCluster], downstreamClusterFaultMap[upstreamCluster]...)
+	for _, experiment := range allRunningExperiments {
+		testConfig := &serverexperimentation.TestConfig{}
+		if !isFaultTest(experiment, testConfig) {
+			continue
 		}
-	}
 
-	// Get remaining clusters from downstreamClusterFaultMap
-	for downstreamCluster, downstreamFaults := range downstreamClusterFaultMap {
-		clusterFaultMap[downstreamCluster] = append(clusterFaultMap[downstreamCluster], downstreamFaults...)
+		upstreamCluster := testConfig.GetClusterPair().GetUpstreamCluster()
+		downstreamCluster := testConfig.GetClusterPair().GetDownstreamCluster()
+		faultInjectionType := testConfig.GetFaultInjectionType()
+
+		if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS {
+			clusterFaultMap[upstreamCluster] = append(clusterFaultMap[upstreamCluster], experiment)
+		} else if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
+			clusterFaultMap[downstreamCluster] = append(clusterFaultMap[downstreamCluster], experiment)
+		} else {
+			logger.Warnw("Invalid fault injection type found", "upstream", upstreamCluster, "downstream", downstreamCluster, "faultInjectionType", faultInjectionType)
+		}
 	}
 
 	// Settings snapshot with empty faults to remove the faults
@@ -265,7 +246,7 @@ func createRuntimeKeys(testConfig *serverexperimentation.TestConfig, ingressPref
 	var faultValue int32
 
 	target := testConfig.GetClusterPair()
-	isExternal := testConfig.FaultInjectionType
+	faultInjectionType := testConfig.FaultInjectionType
 
 	switch testConfig.GetFault().(type) {
 	case *serverexperimentation.TestConfig_Abort:
@@ -274,7 +255,7 @@ func createRuntimeKeys(testConfig *serverexperimentation.TestConfig, ingressPref
 		faultValue = abort.HttpStatus
 
 		// Abort External Fault
-		if isExternal == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
+		if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
 			percentageKey = fmt.Sprintf(HTTPPercentageForExternal, egressPrefix, target.UpstreamCluster)
 			faultKey = fmt.Sprintf(HTTPStatusForExternal, egressPrefix, target.UpstreamCluster)
 		} else {
@@ -294,7 +275,7 @@ func createRuntimeKeys(testConfig *serverexperimentation.TestConfig, ingressPref
 		faultValue = latency.DurationMs
 
 		// Latency External Fault
-		if isExternal == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
+		if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
 			percentageKey = fmt.Sprintf(LatencyPercentageForExternal, egressPrefix, target.UpstreamCluster)
 			faultKey = fmt.Sprintf(LatencyDurationForExternal, egressPrefix, target.UpstreamCluster)
 		} else {

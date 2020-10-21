@@ -21,12 +21,7 @@ import (
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 )
 
-func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent float32, httpStatus int32, isExternal bool) *experimentation.Experiment {
-	faultInjectionType := serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS
-	if isExternal {
-		faultInjectionType = serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS
-	}
-
+func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent float32, httpStatus int32, faultInjectionType serverexperimentation.FaultInjectionType) *experimentation.Experiment {
 	config := &serverexperimentation.TestConfig{
 		ClusterPair: &serverexperimentation.ClusterPairTarget{
 			DownstreamCluster: downstreamCluster,
@@ -49,12 +44,7 @@ func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamClust
 	return &experimentation.Experiment{Config: anyConfig}
 }
 
-func createLatencyExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, latencyPercent float32, duration int32, isExternal bool) *experimentation.Experiment {
-	faultInjectionType := serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS
-	if isExternal {
-		faultInjectionType = serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS
-	}
-
+func createLatencyExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, latencyPercent float32, duration int32, faultInjectionType serverexperimentation.FaultInjectionType) *experimentation.Experiment {
 	config := &serverexperimentation.TestConfig{
 		ClusterPair: &serverexperimentation.ClusterPairTarget{
 			DownstreamCluster: downstreamCluster,
@@ -80,22 +70,22 @@ func createLatencyExperiment(t *testing.T, upstreamCluster string, downstreamClu
 func mockGenerateFaultData(t *testing.T) []*experimentation.Experiment {
 	return []*experimentation.Experiment{
 		// Abort - Service B -> Service A (Internal)
-		createAbortExperiment(t, "serviceA", "serviceB", 10, 404, false),
+		createAbortExperiment(t, "serviceA", "serviceB", 10, 404, serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS),
 
 		// Abort - All downstream -> Service C (Internal)
-		createAbortExperiment(t, "serviceC", "", 20, 504, false),
+		createAbortExperiment(t, "serviceC", "", 20, 504, serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS),
 
 		// Latency - Service D -> Service A (Internal)
-		createLatencyExperiment(t, "serviceA", "serviceD", 30, 100, false),
+		createLatencyExperiment(t, "serviceA", "serviceD", 30, 100, serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS),
 
 		// Latency - All downstream -> Service E (Internal)
-		createLatencyExperiment(t, "serviceE", "", 40, 200, false),
+		createLatencyExperiment(t, "serviceE", "", 40, 200, serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS),
 
 		// Abort - Service A -> Service X (External)
-		createAbortExperiment(t, "serviceX", "serviceA", 65, 400, true),
+		createAbortExperiment(t, "serviceX", "serviceA", 65, 400, serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS),
 
 		// Latency - Service F -> Service Y (External)
-		createLatencyExperiment(t, "serviceY", "serviceF", 40, 200, true),
+		createLatencyExperiment(t, "serviceY", "serviceF", 40, 200, serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS),
 	}
 }
 
@@ -116,7 +106,7 @@ func TestSetSnapshotV2(t *testing.T) {
 		}
 
 		target := config.GetClusterPair()
-		if target.GetUpstreamCluster() == testCluster || target.DownstreamCluster == testCluster {
+		if target.GetUpstreamCluster() == testCluster || target.GetDownstreamCluster() == testCluster {
 			testClusterFaults = append(testClusterFaults, experiment)
 		}
 	}
