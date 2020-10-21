@@ -100,7 +100,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		return nil, errors.New("error parsing duration")
 	}
 	rtdsLayerName := config.GetRtdsLayerName()
-	ingressPrefix := config.GetIngressFaultsRuntimePrefix()
+	ingressPrefix := config.GetIngressFaultRuntimePrefix()
 	egressPrefix := config.GetEgressFaultRuntimePrefix()
 
 	store, ok := service.Registry[experimentstore.Name]
