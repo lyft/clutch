@@ -1,42 +1,97 @@
 import React from "react";
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@material-ui/core";
+import { FormControl as MuiFormControl, FormControlLabel, FormLabel as MuiFormLabel, Radio, RadioGroup as MuiRadioGroup } from "@material-ui/core";
+import styled from "styled-components";
 
-interface RadioControlItem {
+const FormLabel = styled(MuiFormLabel)`
+  ${({ theme }) => `
+  && {
+    color: ${theme.palette.text.primary};
+  }
+  `}
+`;
+
+const StyledRadioGroup = styled(MuiRadioGroup)`
+  ${({ ...props }) => `
+  display: flex;
+  width: 100%;
+  max-width: ${props["data-max-width"] || "500px"};
+  `}
+`;
+
+const FormControl = styled(MuiFormControl)`
+  ${({ theme, ...props }) => `
+  display: flex;
+  width: 100%;
+  margin: 16px 0;
+  max-width: ${props["data-max-width"] || "500px"};
+  .MuiInput-underline:after {
+    border-bottom: 2px solid ${theme.palette.accent.main};
+  }
+  `}
+`;
+
+interface RadioControlOption {
   label: string;
-  value: string;
+  value?: string;
 }
 
 interface RadioControlProps {
+  defaultOption?: number;
+  label?: string;
+  maxWidth?: string;
   name: string;
-  label: string;
-  items: RadioControlItem[];
+  options: RadioControlOption[];
   onChange: (value: string) => void;
 }
 
-const RadioControl: React.FC<RadioControlProps> = ({ name, label, items, onChange }) => {
+const RadioGroup: React.FC<RadioControlProps> = ({
+  defaultOption = 0,
+  label,
+  maxWidth,
+  name,
+  options,
+  onChange,
+}) => {
+  if (options.length === 0) {
+    return null;
+  }
+
+  const defaultIdx = defaultOption < options.length ? defaultOption : 0;
+  const [selectedIdx, setSelectedIdx] = React.useState(defaultIdx);
+
+  const updateSelectedOption = (event: React.ChangeEvent<{ name?: string; value: string }>) => {
+    const { value } = event.target;
+    const optionValues = options.map(o => o.value || o.label);
+    setSelectedIdx(optionValues.indexOf(value));
+    onChange(value);
+  };
+
+  React.useEffect(() => {
+    onChange(options[selectedIdx].value || options[selectedIdx].label);
+  }, []);
+
   return (
-    <FormControl key={name}>
-      <FormLabel component="legend">Upstream Cluster Type</FormLabel>
-      <RadioGroup
+    <FormControl key={name} data-max-width={maxWidth}>
+      {label && <FormLabel>{label}</FormLabel>}
+      <StyledRadioGroup
         aria-label={label}
         name={name}
-        defaultValue={items[0].value}
-        onChange={e => onChange(e.target.value)}
+        defaultValue={options[defaultIdx].value || options[defaultIdx].label}
+        onChange={updateSelectedOption}
       >
-        {items &&
-          items.map(item => {
-            return (
-              <FormControlLabel
-                key={item.value}
-                value={item.value}
-                control={<Radio />}
-                label={item.label}
-              />
-            );
-          })}
-      </RadioGroup>
+        {options.map(option => {
+          return (
+            <FormControlLabel
+              key={option.label}
+              value={option.value || option.label}
+              control={<Radio />}
+              label={option.label}
+            />
+          );
+        })}
+      </StyledRadioGroup>
     </FormControl>
   );
 };
 
-export default RadioControl;
+export default RadioGroup;

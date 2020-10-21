@@ -14,7 +14,7 @@ import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import * as yup from "yup";
 
-import RadioControl from "./radio-control";
+import RadioGroup from "./radio-control";
 
 const faultInjectionTypeItems = [
   {
@@ -55,10 +55,10 @@ const ClusterPairTargetDetails: React.FC<WizardChild> = () => {
           },
         ]}
       />
-      <RadioControl
+      <RadioGroup
         name="upstream_service_type"
         label="Upstream Service Type"
-        items={faultInjectionTypeItems}
+        options={faultInjectionTypeItems}
         onChange={(value: string) =>
           clusterPairData.updateData("faultInjectionType", parseInt(value, 10))
         }
