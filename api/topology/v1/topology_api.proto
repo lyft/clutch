@@ -21,6 +21,14 @@ service TopologyAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
+
+  rpc SearchTopology(SearchTopologyRequest) returns (SearchTopologyResponse) {
+    option (google.api.http) = {
+      post : "/v1/topology/search"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
 }
 
 message GetTopologyRequest {
@@ -29,6 +37,19 @@ message GetTopologyRequest {
 
 message GetTopologyResponse {
   repeated QueryResult results = 1;
+}
+
+message SearchTopologyRequest {
+  string sort = 1;
+  int64 skip = 2;
+  int64 limit = 3;
+  string search = 4;
+  string type_url = 5;
+  map<string, string> metadata_query = 6;
+}
+
+message SearchTopologyResponse {
+  repeated Resource Resources = 1;
 }
 
 // A query allows the user to specify multiple dimensions and the

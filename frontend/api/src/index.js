@@ -25145,6 +25145,39 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.topology.v1.TopologyAPI#searchTopology}.
+                 * @memberof clutch.topology.v1.TopologyAPI
+                 * @typedef SearchTopologyCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.topology.v1.SearchTopologyResponse} [response] SearchTopologyResponse
+                 */
+
+                /**
+                 * Calls SearchTopology.
+                 * @function searchTopology
+                 * @memberof clutch.topology.v1.TopologyAPI
+                 * @instance
+                 * @param {clutch.topology.v1.ISearchTopologyRequest} request SearchTopologyRequest message or plain object
+                 * @param {clutch.topology.v1.TopologyAPI.SearchTopologyCallback} callback Node-style callback called with the error, if any, and SearchTopologyResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(TopologyAPI.prototype.searchTopology = function searchTopology(request, callback) {
+                    return this.rpcCall(searchTopology, $root.clutch.topology.v1.SearchTopologyRequest, $root.clutch.topology.v1.SearchTopologyResponse, request, callback);
+                }, "name", { value: "SearchTopology" });
+
+                /**
+                 * Calls SearchTopology.
+                 * @function searchTopology
+                 * @memberof clutch.topology.v1.TopologyAPI
+                 * @instance
+                 * @param {clutch.topology.v1.ISearchTopologyRequest} request SearchTopologyRequest message or plain object
+                 * @returns {Promise<clutch.topology.v1.SearchTopologyResponse>} Promise
+                 * @variation 2
+                 */
+
                 return TopologyAPI;
             })();
 
@@ -25382,6 +25415,354 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return GetTopologyResponse;
+            })();
+
+            v1.SearchTopologyRequest = (function() {
+
+                /**
+                 * Properties of a SearchTopologyRequest.
+                 * @memberof clutch.topology.v1
+                 * @interface ISearchTopologyRequest
+                 * @property {string|null} [sort] SearchTopologyRequest sort
+                 * @property {number|Long|null} [skip] SearchTopologyRequest skip
+                 * @property {number|Long|null} [limit] SearchTopologyRequest limit
+                 * @property {string|null} [search] SearchTopologyRequest search
+                 * @property {string|null} [typeUrl] SearchTopologyRequest typeUrl
+                 * @property {Object.<string,string>|null} [metadataQuery] SearchTopologyRequest metadataQuery
+                 */
+
+                /**
+                 * Constructs a new SearchTopologyRequest.
+                 * @memberof clutch.topology.v1
+                 * @classdesc Represents a SearchTopologyRequest.
+                 * @implements ISearchTopologyRequest
+                 * @constructor
+                 * @param {clutch.topology.v1.ISearchTopologyRequest=} [properties] Properties to set
+                 */
+                function SearchTopologyRequest(properties) {
+                    this.metadataQuery = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * SearchTopologyRequest sort.
+                 * @member {string} sort
+                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @instance
+                 */
+                SearchTopologyRequest.prototype.sort = "";
+
+                /**
+                 * SearchTopologyRequest skip.
+                 * @member {number|Long} skip
+                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @instance
+                 */
+                SearchTopologyRequest.prototype.skip = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
+                 * SearchTopologyRequest limit.
+                 * @member {number|Long} limit
+                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @instance
+                 */
+                SearchTopologyRequest.prototype.limit = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                /**
+                 * SearchTopologyRequest search.
+                 * @member {string} search
+                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @instance
+                 */
+                SearchTopologyRequest.prototype.search = "";
+
+                /**
+                 * SearchTopologyRequest typeUrl.
+                 * @member {string} typeUrl
+                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @instance
+                 */
+                SearchTopologyRequest.prototype.typeUrl = "";
+
+                /**
+                 * SearchTopologyRequest metadataQuery.
+                 * @member {Object.<string,string>} metadataQuery
+                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @instance
+                 */
+                SearchTopologyRequest.prototype.metadataQuery = $util.emptyObject;
+
+                /**
+                 * Verifies a SearchTopologyRequest message.
+                 * @function verify
+                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                SearchTopologyRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.sort != null && message.hasOwnProperty("sort"))
+                        if (!$util.isString(message.sort))
+                            return "sort: string expected";
+                    if (message.skip != null && message.hasOwnProperty("skip"))
+                        if (!$util.isInteger(message.skip) && !(message.skip && $util.isInteger(message.skip.low) && $util.isInteger(message.skip.high)))
+                            return "skip: integer|Long expected";
+                    if (message.limit != null && message.hasOwnProperty("limit"))
+                        if (!$util.isInteger(message.limit) && !(message.limit && $util.isInteger(message.limit.low) && $util.isInteger(message.limit.high)))
+                            return "limit: integer|Long expected";
+                    if (message.search != null && message.hasOwnProperty("search"))
+                        if (!$util.isString(message.search))
+                            return "search: string expected";
+                    if (message.typeUrl != null && message.hasOwnProperty("typeUrl"))
+                        if (!$util.isString(message.typeUrl))
+                            return "typeUrl: string expected";
+                    if (message.metadataQuery != null && message.hasOwnProperty("metadataQuery")) {
+                        if (!$util.isObject(message.metadataQuery))
+                            return "metadataQuery: object expected";
+                        let key = Object.keys(message.metadataQuery);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.metadataQuery[key[i]]))
+                                return "metadataQuery: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a SearchTopologyRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.topology.v1.SearchTopologyRequest} SearchTopologyRequest
+                 */
+                SearchTopologyRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.SearchTopologyRequest)
+                        return object;
+                    let message = new $root.clutch.topology.v1.SearchTopologyRequest();
+                    if (object.sort != null)
+                        message.sort = String(object.sort);
+                    if (object.skip != null)
+                        if ($util.Long)
+                            (message.skip = $util.Long.fromValue(object.skip)).unsigned = false;
+                        else if (typeof object.skip === "string")
+                            message.skip = parseInt(object.skip, 10);
+                        else if (typeof object.skip === "number")
+                            message.skip = object.skip;
+                        else if (typeof object.skip === "object")
+                            message.skip = new $util.LongBits(object.skip.low >>> 0, object.skip.high >>> 0).toNumber();
+                    if (object.limit != null)
+                        if ($util.Long)
+                            (message.limit = $util.Long.fromValue(object.limit)).unsigned = false;
+                        else if (typeof object.limit === "string")
+                            message.limit = parseInt(object.limit, 10);
+                        else if (typeof object.limit === "number")
+                            message.limit = object.limit;
+                        else if (typeof object.limit === "object")
+                            message.limit = new $util.LongBits(object.limit.low >>> 0, object.limit.high >>> 0).toNumber();
+                    if (object.search != null)
+                        message.search = String(object.search);
+                    if (object.typeUrl != null)
+                        message.typeUrl = String(object.typeUrl);
+                    if (object.metadataQuery) {
+                        if (typeof object.metadataQuery !== "object")
+                            throw TypeError(".clutch.topology.v1.SearchTopologyRequest.metadataQuery: object expected");
+                        message.metadataQuery = {};
+                        for (let keys = Object.keys(object.metadataQuery), i = 0; i < keys.length; ++i)
+                            message.metadataQuery[keys[i]] = String(object.metadataQuery[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a SearchTopologyRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @static
+                 * @param {clutch.topology.v1.SearchTopologyRequest} message SearchTopologyRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                SearchTopologyRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults)
+                        object.metadataQuery = {};
+                    if (options.defaults) {
+                        object.sort = "";
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.skip = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.skip = options.longs === String ? "0" : 0;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.limit = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.limit = options.longs === String ? "0" : 0;
+                        object.search = "";
+                        object.typeUrl = "";
+                    }
+                    if (message.sort != null && message.hasOwnProperty("sort"))
+                        object.sort = message.sort;
+                    if (message.skip != null && message.hasOwnProperty("skip"))
+                        if (typeof message.skip === "number")
+                            object.skip = options.longs === String ? String(message.skip) : message.skip;
+                        else
+                            object.skip = options.longs === String ? $util.Long.prototype.toString.call(message.skip) : options.longs === Number ? new $util.LongBits(message.skip.low >>> 0, message.skip.high >>> 0).toNumber() : message.skip;
+                    if (message.limit != null && message.hasOwnProperty("limit"))
+                        if (typeof message.limit === "number")
+                            object.limit = options.longs === String ? String(message.limit) : message.limit;
+                        else
+                            object.limit = options.longs === String ? $util.Long.prototype.toString.call(message.limit) : options.longs === Number ? new $util.LongBits(message.limit.low >>> 0, message.limit.high >>> 0).toNumber() : message.limit;
+                    if (message.search != null && message.hasOwnProperty("search"))
+                        object.search = message.search;
+                    if (message.typeUrl != null && message.hasOwnProperty("typeUrl"))
+                        object.typeUrl = message.typeUrl;
+                    let keys2;
+                    if (message.metadataQuery && (keys2 = Object.keys(message.metadataQuery)).length) {
+                        object.metadataQuery = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.metadataQuery[keys2[j]] = message.metadataQuery[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this SearchTopologyRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                SearchTopologyRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return SearchTopologyRequest;
+            })();
+
+            v1.SearchTopologyResponse = (function() {
+
+                /**
+                 * Properties of a SearchTopologyResponse.
+                 * @memberof clutch.topology.v1
+                 * @interface ISearchTopologyResponse
+                 * @property {Array.<clutch.topology.v1.IResource>|null} [Resources] SearchTopologyResponse Resources
+                 */
+
+                /**
+                 * Constructs a new SearchTopologyResponse.
+                 * @memberof clutch.topology.v1
+                 * @classdesc Represents a SearchTopologyResponse.
+                 * @implements ISearchTopologyResponse
+                 * @constructor
+                 * @param {clutch.topology.v1.ISearchTopologyResponse=} [properties] Properties to set
+                 */
+                function SearchTopologyResponse(properties) {
+                    this.Resources = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * SearchTopologyResponse Resources.
+                 * @member {Array.<clutch.topology.v1.IResource>} Resources
+                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @instance
+                 */
+                SearchTopologyResponse.prototype.Resources = $util.emptyArray;
+
+                /**
+                 * Verifies a SearchTopologyResponse message.
+                 * @function verify
+                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                SearchTopologyResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.Resources != null && message.hasOwnProperty("Resources")) {
+                        if (!Array.isArray(message.Resources))
+                            return "Resources: array expected";
+                        for (let i = 0; i < message.Resources.length; ++i) {
+                            let error = $root.clutch.topology.v1.Resource.verify(message.Resources[i]);
+                            if (error)
+                                return "Resources." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a SearchTopologyResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.topology.v1.SearchTopologyResponse} SearchTopologyResponse
+                 */
+                SearchTopologyResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.SearchTopologyResponse)
+                        return object;
+                    let message = new $root.clutch.topology.v1.SearchTopologyResponse();
+                    if (object.Resources) {
+                        if (!Array.isArray(object.Resources))
+                            throw TypeError(".clutch.topology.v1.SearchTopologyResponse.Resources: array expected");
+                        message.Resources = [];
+                        for (let i = 0; i < object.Resources.length; ++i) {
+                            if (typeof object.Resources[i] !== "object")
+                                throw TypeError(".clutch.topology.v1.SearchTopologyResponse.Resources: object expected");
+                            message.Resources[i] = $root.clutch.topology.v1.Resource.fromObject(object.Resources[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a SearchTopologyResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @static
+                 * @param {clutch.topology.v1.SearchTopologyResponse} message SearchTopologyResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                SearchTopologyResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.Resources = [];
+                    if (message.Resources && message.Resources.length) {
+                        object.Resources = [];
+                        for (let j = 0; j < message.Resources.length; ++j)
+                            object.Resources[j] = $root.clutch.topology.v1.Resource.toObject(message.Resources[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this SearchTopologyResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                SearchTopologyResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return SearchTopologyResponse;
             })();
 
             v1.FeatureQuery = (function() {
