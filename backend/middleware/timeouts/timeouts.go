@@ -7,14 +7,13 @@ package timeouts
 import (
 	"context"
 	"fmt"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"time"
-
 	"github.com/golang/protobuf/ptypes"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/middleware"
@@ -61,7 +60,7 @@ func (m *mid) getDuration(service, method string) time.Duration {
 
 type unaryHandlerReturn struct {
 	resp interface{}
-	err error
+	err  error
 }
 
 func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
@@ -84,7 +83,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 		go func() {
 			resp, err := handler(ctx, req)
 			select {
-			case <- ctx.Done():
+			case <-ctx.Done():
 				m.logger.Warn("handler completed after timeout", zap.String("service", service), zap.String("method", method))
 			default:
 				resultChan <- unaryHandlerReturn{resp: resp, err: err}
@@ -95,9 +94,9 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 		// goroutine a chance to return if it's respecting the deadline.
 		wait := timeout + (time.Millisecond * 50)
 		select {
-		case ret := <- resultChan:
+		case ret := <-resultChan:
 			return ret.resp, ret.err
-		case <- time.After(wait):
+		case <-time.After(wait):
 			return nil, status.New(codes.DeadlineExceeded, "timeout exceeded").Err()
 		}
 	}

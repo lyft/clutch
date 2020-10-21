@@ -3,12 +3,12 @@ package gateway
 import (
 	"context"
 	"fmt"
-	"github.com/uber-go/tally"
-	"go.uber.org/zap"
-	"google.golang.org/grpc"
 	"net/http"
 	"strings"
 	"time"
+	"github.com/uber-go/tally"
+	"go.uber.org/zap"
+	"google.golang.org/grpc"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
@@ -247,7 +247,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		timeout = cfg.Gateway.Timeouts.Default.AsDuration()
 		for _, e := range cfg.Gateway.Timeouts.Overrides {
 			override := e.Timeout.AsDuration()
-			if timeout == 0  || override == 0 {
+			if timeout == 0 || override == 0 {
 				timeout = 0
 				break
 			}
@@ -261,7 +261,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	srv := &http.Server{
 		Handler:      mux.InsecureHandler(rpcMux),
 		Addr:         addr,
-		ReadTimeout: timeout,
+		ReadTimeout:  timeout,
 		WriteTimeout: timeout,
 	}
 	logger.Fatal("error bringing up listener", zap.Error(srv.ListenAndServe()))
