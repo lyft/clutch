@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.resolver.v1;
 
-option go_package = "resolverv1";
+option go_package = "github.com/lyft/clutch/backend/api/resolver/v1;resolverv1";
 
 import "google/protobuf/descriptor.proto";
 

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.api.v1;
 
-option go_package = "apiv1";
+option go_package = "github.com/lyft/clutch/backend/api/api/v1;apiv1";
 
 enum ActionType {
   UNSPECIFIED = 0;

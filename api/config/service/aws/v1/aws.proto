@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.config.service.aws.v1;
 
-option go_package = "awsv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/service/aws/v1;awsv1";
 
 import "validate/validate.proto";
 

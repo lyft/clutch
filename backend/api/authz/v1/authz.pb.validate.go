@@ -17,7 +17,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 
-	v1 "github.com/lyft/clutch/backend/api/api/v1"
+	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 )
 
 // ensure the imports are used
@@ -34,7 +34,7 @@ var (
 	_ = (*mail.Address)(nil)
 	_ = ptypes.DynamicAny{}
 
-	_ = v1.ActionType(0)
+	_ = apiv1.ActionType(0)
 )
 
 // define the regex for a UUID once up-front

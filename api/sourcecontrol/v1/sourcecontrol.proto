@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.sourcecontrol.v1;
 
-option go_package = "sourcecontrolv1";
+option go_package = "github.com/lyft/clutch/backend/api/sourcecontrol/v1;sourcecontrolv1";
 
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";

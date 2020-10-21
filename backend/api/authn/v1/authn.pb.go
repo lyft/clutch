@@ -7,13 +7,9 @@
 package authnv1
 
 import (
-	context "context"
 	proto "github.com/golang/protobuf/proto"
 	_ "github.com/lyft/clutch/backend/api/api/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -286,8 +282,11 @@ var file_authn_v1_authn_proto_rawDesc = []byte{
 	0x2e, 0x61, 0x75, 0x74, 0x68, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x61, 0x6c, 0x6c, 0x62, 0x61,
 	0x63, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x20, 0x82, 0xd3, 0xe4, 0x93,
 	0x02, 0x14, 0x12, 0x12, 0x2f, 0x76, 0x31, 0x2f, 0x61, 0x75, 0x74, 0x68, 0x6e, 0x2f, 0x63, 0x61,
-	0x6c, 0x6c, 0x62, 0x61, 0x63, 0x6b, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x01, 0x42, 0x09, 0x5a, 0x07,
-	0x61, 0x75, 0x74, 0x68, 0x6e, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6c, 0x6c, 0x62, 0x61, 0x63, 0x6b, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x01, 0x42, 0x35, 0x5a, 0x33,
+	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6c, 0x79, 0x66, 0x74, 0x2f,
+	0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2f, 0x62, 0x61, 0x63, 0x6b, 0x65, 0x6e, 0x64, 0x2f, 0x61,
+	0x70, 0x69, 0x2f, 0x61, 0x75, 0x74, 0x68, 0x6e, 0x2f, 0x76, 0x31, 0x3b, 0x61, 0x75, 0x74, 0x68,
+	0x6e, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -394,120 +393,4 @@ func file_authn_v1_authn_proto_init() {
 	file_authn_v1_authn_proto_rawDesc = nil
 	file_authn_v1_authn_proto_goTypes = nil
 	file_authn_v1_authn_proto_depIdxs = nil
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConnInterface
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
-
-// AuthnAPIClient is the client API for AuthnAPI service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type AuthnAPIClient interface {
-	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
-	Callback(ctx context.Context, in *CallbackRequest, opts ...grpc.CallOption) (*CallbackResponse, error)
-}
-
-type authnAPIClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewAuthnAPIClient(cc grpc.ClientConnInterface) AuthnAPIClient {
-	return &authnAPIClient{cc}
-}
-
-func (c *authnAPIClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
-	out := new(LoginResponse)
-	err := c.cc.Invoke(ctx, "/clutch.authn.v1.AuthnAPI/Login", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authnAPIClient) Callback(ctx context.Context, in *CallbackRequest, opts ...grpc.CallOption) (*CallbackResponse, error) {
-	out := new(CallbackResponse)
-	err := c.cc.Invoke(ctx, "/clutch.authn.v1.AuthnAPI/Callback", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// AuthnAPIServer is the server API for AuthnAPI service.
-type AuthnAPIServer interface {
-	Login(context.Context, *LoginRequest) (*LoginResponse, error)
-	Callback(context.Context, *CallbackRequest) (*CallbackResponse, error)
-}
-
-// UnimplementedAuthnAPIServer can be embedded to have forward compatible implementations.
-type UnimplementedAuthnAPIServer struct {
-}
-
-func (*UnimplementedAuthnAPIServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
-}
-func (*UnimplementedAuthnAPIServer) Callback(context.Context, *CallbackRequest) (*CallbackResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Callback not implemented")
-}
-
-func RegisterAuthnAPIServer(s *grpc.Server, srv AuthnAPIServer) {
-	s.RegisterService(&_AuthnAPI_serviceDesc, srv)
-}
-
-func _AuthnAPI_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LoginRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthnAPIServer).Login(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.authn.v1.AuthnAPI/Login",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthnAPIServer).Login(ctx, req.(*LoginRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _AuthnAPI_Callback_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CallbackRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthnAPIServer).Callback(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.authn.v1.AuthnAPI/Callback",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthnAPIServer).Callback(ctx, req.(*CallbackRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _AuthnAPI_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "clutch.authn.v1.AuthnAPI",
-	HandlerType: (*AuthnAPIServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "Login",
-			Handler:    _AuthnAPI_Login_Handler,
-		},
-		{
-			MethodName: "Callback",
-			Handler:    _AuthnAPI_Callback_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "authn/v1/authn.proto",
 }

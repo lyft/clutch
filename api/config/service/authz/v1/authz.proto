@@ -5,7 +5,7 @@ package clutch.config.service.authz.v1;
 import "api/v1/schema.proto";
 import "validate/validate.proto";
 
-option go_package = "authzv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/service/authz/v1;authzv1";
 
 message Principal {
   oneof type {
