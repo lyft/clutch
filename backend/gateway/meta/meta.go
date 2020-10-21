@@ -137,14 +137,34 @@ func resolvePattern(pb proto.Message, pattern *apiv1.Pattern) *auditv1.Resource 
 	return &auditv1.Resource{TypeUrl: pattern.TypeUrl, Id: resourceName}
 }
 
-// APIBody returns the API request/response interface (pointer value) as an anypb.Any message.
+// isValidInterface will return true if the type is proto.message and value is not nil
+func isValidInterface(body interface{}) bool {
+	switch v := body.(type) {
+	// type we want is proto.message
+	case proto.Message:
+		// want to use a value that is not nil
+		if !reflect.ValueOf(v).IsNil() {
+			return true
+		}
+		return false
+	default:
+		return false
+	}
+}
+
+// APIBody returns a API request/response interface as an anypb.Any message.
 func APIBody(body interface{}) (*any.Any, error) {
-	protomsg, ok := body.(proto.Message)
-	if !ok {
-		return nil, fmt.Errorf("could not use %s as proto.Message", reflect.TypeOf(body).Kind())
+	if !isValidInterface(body) {
+		// the interface does not match the type/value we want
+		return nil, nil
 	}
 
-	a, err := ptypes.MarshalAny(protomsg)
+	m, ok := body.(proto.Message)
+	if !ok {
+		return nil, fmt.Errorf("could not use type: %s", reflect.TypeOf(body).Kind())
+	}
+
+	a, err := ptypes.MarshalAny(m)
 	if err != nil {
 		return nil, err
 	}
