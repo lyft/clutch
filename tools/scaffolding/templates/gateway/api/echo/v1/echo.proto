@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package {{ .RepoOwner }}.echo.v1;
 
-option go_package = "echov1";
+option go_package = "{{ .RepoProvider}}/{{ .RepoOwner }}/{{ .RepoName}}/backend/api/echo/v1;echov1";
 
 import "google/api/annotations.proto";
 import "validate/validate.proto";
