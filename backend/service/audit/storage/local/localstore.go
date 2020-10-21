@@ -26,14 +26,14 @@ type client struct {
 	logger *zap.Logger
 	scope  tally.Scope
 
-	events map[int64]*auditv1.Event
+	events []*auditv1.Event
 }
 
 func New(cfg *auditconfigv1.Config, logger *zap.Logger, scope tally.Scope) (storage.Storage, error) {
 	c := &client{
 		logger: logger,
 		scope:  scope,
-		events: make(map[int64]*auditv1.Event),
+		events: make([]*auditv1.Event, 0),
 	}
 
 	return c, nil
@@ -47,7 +47,7 @@ func (c *client) UnsentEvents(ctx context.Context) ([]*auditv1.Event, error) {
 	for _, v := range c.events {
 		unsent = append(unsent, v)
 	}
-	c.events = make(map[int64]*auditv1.Event)
+	c.events = make([]*auditv1.Event, 0)
 
 	return unsent, nil
 }
@@ -57,10 +57,11 @@ func (c *client) WriteRequestEvent(ctx context.Context, req *auditv1.RequestEven
 	defer c.Unlock()
 
 	i := int64(len(c.events))
-	c.events[i] = &auditv1.Event{
-		OccurredAt: timestamppb.Now(),
-		EventType:  &auditv1.Event_Event{Event: req},
-	}
+	c.events = append(c.events,
+		&auditv1.Event{
+			OccurredAt: timestamppb.Now(),
+			EventType:  &auditv1.Event_Event{Event: req},
+		})
 	return i, nil
 }
 
@@ -68,12 +69,12 @@ func (c *client) UpdateRequestEvent(ctx context.Context, id int64, update *audit
 	c.RLock()
 	defer c.RUnlock()
 
-	event, ok := c.events[id]
-	if !ok {
+	if id >= int64(len(c.events)) || id < 0 {
 		return fmt.Errorf("cannot update event because cannot find by id: %d", id)
 	}
 
-	proto.Merge(proto.MessageV1(event.GetEvent()), proto.MessageV1(update))
+	event := c.events[id].GetEvent()
+	proto.Merge(proto.MessageV1(event), proto.MessageV1(update))
 	return nil
 }
 
