@@ -8,6 +8,8 @@
     - [The Basics](#the-basics)
     - [If you need a database](#if-you-need-a-database)
     - [If you need a Kubernetes cluster](#if-you-need-a-kubernetes-cluster)
+      - [Using a local Kubernetes Cluster](#using-a-local-kubernetes-cluster)
+      - [Using an exisiting KUBECONFIG](#using-an-exisiting-kubeconfig)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -106,28 +108,33 @@ resolvers:
   - name: clutch.resolver.k8s
 ```
 
-Running through the commands below will spin up a local Kubernetes cluster in docker.
-This will also create a few Kubernetes resources so you can immediately start testing against them.
-Envoy `deployments` & `HPAs` will be created in a `envoy-staging` and `envoy-production` namespace.
+#### Using a local Kubernetes Cluster
 
-```sh
-# This will start a local Kubernetes cluster that runs as a single docker container.
-# The cluster will be seeded with a few resources so you can start testing immediately.
-make dev-k8s-up
+  Running through the commands below will spin up a local Kubernetes cluster in docker.
+  This will also create a few Kubernetes resources so you can immediately start testing against them.
+  Envoy `deployments` & `HPAs` will be created in a `envoy-staging` and `envoy-production` namespace.
 
-# The above command will ask you to export environment variables before starting clutch,
-# do that now before proceeding.
+  ```sh
+  # This will start a local Kubernetes cluster that runs as a single docker container.
+  # The cluster will be seeded with a few resources so you can start testing immediately.
+  make dev-k8s-up
 
-# Runs the clutch backend
-make backend-dev
-```
+  # The above command will ask you to export environment variables before starting clutch,
+  # do that now before proceeding.
 
-When you are done with development you can stop the local Kubernetes cluster by running the down command.
-```sh
-make dev-k8s-down
-```
+  # Runs the clutch backend
+  make backend-dev
+  ```
 
-Additionally you my point clutch to any set of Kubernetes clusters,
-you only need to export the relevant Kubernetes configuration via the `KUBECONFIG` environment variable.
-Clutch will read this in when it first boots and you will be able to take actions against those clusters,
-assuming you have taken care of any prerequisite authentication actions that may be necessary.
+  When you are done with development you can stop the local Kubernetes cluster by running the down command.
+
+  ```sh
+  make dev-k8s-down
+  ```
+
+#### Using an exisiting KUBECONFIG
+
+  Additionally you may point clutch to any set of Kubernetes clusters,
+  you only need to export the relevant Kubernetes configuration via the `KUBECONFIG` environment variable.
+  Clutch will read this in when it first boots and you will be able to take actions against those clusters,
+  assuming you have taken care of any prerequisite authentication actions that may be necessary.
