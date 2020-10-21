@@ -6,7 +6,7 @@ gateway:
     flush_interval: 1s
     log_reporter: {}
   timeouts:
-    default: 60s
+    default: 15s
   middleware:
     - name: clutch.middleware.stats
     - name: clutch.middleware.validate
