@@ -9,7 +9,7 @@
     - [If you need a database](#if-you-need-a-database)
     - [If you need a Kubernetes cluster](#if-you-need-a-kubernetes-cluster)
       - [Using a local Kubernetes Cluster](#using-a-local-kubernetes-cluster)
-      - [Using an exisiting KUBECONFIG](#using-an-exisiting-kubeconfig)
+      - [Using an existing KUBECONFIG](#using-an-existing-kubeconfig)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -132,7 +132,7 @@ resolvers:
   make dev-k8s-down
   ```
 
-#### Using an exisiting KUBECONFIG
+#### Using an existing KUBECONFIG
 
   Additionally you may point Clutch to any set of Kubernetes clusters,
   you only need to export the relevant Kubernetes configuration via the `KUBECONFIG` environment variable.
