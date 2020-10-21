@@ -23,14 +23,25 @@ import (
 )
 
 const (
-	LatencyPercentageWithoutDownstream = `fault.http.delay.fixed_delay_percent`
-	LatencyPercentageWithDownstream    = `fault.http.%s.delay.fixed_delay_percent`
-	LatencyDurationWithoutDownstream   = `fault.http.delay.fixed_duration_ms`
-	LatencyDurationWithDownstream      = `fault.http.%s.delay.fixed_duration_ms`
-	HTTPPercentageWithoutDownstream    = `fault.http.abort.abort_percent`
-	HTTPPercentageWithDownstream       = `fault.http.%s.abort.abort_percent`
-	HTTPStatusWithoutDownstream        = `fault.http.abort.http_status`
-	HTTPStatusWithDownstream           = `fault.http.%s.abort.http_status`
+	// INTERNAL FAULT
+	// a given downstream service to a given upstream service faults
+	LatencyPercentageWithDownstream = `%s.%s.delay.fixed_delay_percent`
+	LatencyDurationWithDownstream   = `%s.%s.delay.fixed_duration_ms`
+	HTTPPercentageWithDownstream    = `%s.%s.abort.abort_percent`
+	HTTPStatusWithDownstream        = `%s.%s.abort.http_status`
+
+	// all downstream service to a given upstream faults
+	LatencyPercentageWithoutDownstream = `%s.delay.fixed_delay_percent`
+	LatencyDurationWithoutDownstream   = `%s.delay.fixed_duration_ms`
+	HTTPPercentageWithoutDownstream    = `%s.abort.abort_percent`
+	HTTPStatusWithoutDownstream        = `%s.abort.http_status`
+
+	// EXTERNAL FAULT
+	// a given downstream service to a given external upstream faults
+	LatencyPercentageForExternal = `%s.%s.delay.fixed_delay_percent`
+	LatencyDurationForExternal   = `%s.%s.delay.fixed_duration_ms`
+	HTTPPercentageForExternal    = `%s.%s.abort.abort_percent`
+	HTTPStatusForExternal        = `%s.%s.abort.http_status`
 )
 
 // cacheWrapper is a wrapper interface that abstracts away the cache operations to make it easier
@@ -104,27 +115,28 @@ func PeriodicallyRefreshCache(s *Server) {
 	go func() {
 		for range ticker.C {
 			s.logger.Info("Refreshing RTDS cache")
-			refreshCache(s.ctx, s.storer, &cacheWrapperV2{s.snapshotCacheV2}, s.rtdsLayerName, s.logger)
-			refreshCache(s.ctx, s.storer, &cacheWrapperV3{s.snapshotCacheV3}, s.rtdsLayerName, s.logger)
+			refreshCache(s.ctx, s.storer, &cacheWrapperV2{s.snapshotCacheV2}, s.rtdsLayerName, s.ingressPrefix, s.egressPrefix, s.logger)
+			refreshCache(s.ctx, s.storer, &cacheWrapperV3{s.snapshotCacheV3}, s.rtdsLayerName, s.ingressPrefix, s.egressPrefix, s.logger)
 		}
 	}()
 }
 
 func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCache cacheWrapper, rtdsLayerName string,
-	logger *zap.SugaredLogger) {
-	allExperiments, err := storer.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig", experimentation.GetExperimentsRequest_STATUS_RUNNING)
+	ingressPrefix string, egressPrefix string, logger *zap.SugaredLogger) {
+	allRunningExperiments, err := storer.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig", experimentation.GetExperimentsRequest_STATUS_RUNNING)
 	if err != nil {
 		logger.Errorw("Failed to get data from experiments store", "error", err)
 
 		// If failed to get data from DB, stop all ongoing faults.
-		allExperiments = []*experimentation.Experiment{}
+		allRunningExperiments = []*experimentation.Experiment{}
 	}
 
+	// INGRESS Faults
 	// Group faults by upstream cluster
 	upstreamClusterFaultMap := make(map[string][]*experimentation.Experiment)
-	for _, experiment := range allExperiments {
+	for _, experiment := range allRunningExperiments {
 		testConfig := &serverexperimentation.TestConfig{}
-		if !isFaultTest(experiment, testConfig) {
+		if !isFaultTest(experiment, testConfig) && testConfig.FaultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS {
 			continue
 		}
 		clusterPair := testConfig.GetClusterPair()
@@ -132,13 +144,41 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 			append(upstreamClusterFaultMap[clusterPair.UpstreamCluster], experiment)
 	}
 
+	// EGRESS Faults
+	// Group faults by downstream cluster
+	downstreamClusterFaultMap := make(map[string][]*experimentation.Experiment)
+	for _, experiment := range allRunningExperiments {
+		testConfig := &serverexperimentation.TestConfig{}
+		if !isFaultTest(experiment, testConfig) && testConfig.FaultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
+			continue
+		}
+		clusterPair := testConfig.GetClusterPair()
+		downstreamClusterFaultMap[clusterPair.DownstreamCluster] =
+			append(downstreamClusterFaultMap[clusterPair.DownstreamCluster], experiment)
+	}
+
+	// Group ingress and egress faults by clusters
+	clusterFaultMap := make(map[string][]*experimentation.Experiment)
+	for upstreamCluster, upstreamFaults := range upstreamClusterFaultMap {
+		clusterFaultMap[upstreamCluster] = append(clusterFaultMap[upstreamCluster], upstreamFaults...)
+
+		if _, exist := downstreamClusterFaultMap[upstreamCluster]; exist {
+			clusterFaultMap[upstreamCluster] = append(clusterFaultMap[upstreamCluster], downstreamClusterFaultMap[upstreamCluster]...)
+		}
+	}
+
+	// Get remaining clusters from downstreamClusterFaultMap
+	for downstreamCluster, downstreamFaults := range downstreamClusterFaultMap {
+		clusterFaultMap[downstreamCluster] = append(clusterFaultMap[downstreamCluster], downstreamFaults...)
+	}
+
 	// Settings snapshot with empty faults to remove the faults
-	for _, upstreamCluster := range snapshotCache.GetStatusKeys() {
-		if _, exist := upstreamClusterFaultMap[upstreamCluster]; !exist {
-			logger.Infow("Removing faults for upstream cluster", "cluster", upstreamCluster)
-			err = setSnapshot(snapshotCache, rtdsLayerName, upstreamCluster, []*experimentation.Experiment{}, logger)
+	for _, cluster := range snapshotCache.GetStatusKeys() {
+		if _, exist := clusterFaultMap[cluster]; !exist {
+			logger.Infow("Removing faults for cluster", "cluster", cluster)
+			err = setSnapshot(snapshotCache, rtdsLayerName, cluster, ingressPrefix, egressPrefix, []*experimentation.Experiment{}, logger)
 			if err != nil {
-				logger.Errorw("Unable to unset the fault for upstream cluster", "cluster", upstreamCluster,
+				logger.Errorw("Unable to unset the fault for cluster", "cluster", cluster,
 					"error", err)
 				panic(err)
 			}
@@ -146,19 +186,19 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 	}
 
 	// Create/Update faults
-	for upstreamCluster, faults := range upstreamClusterFaultMap {
-		logger.Infow("Injecting fault for upstream cluster", "cluster", upstreamCluster)
-		err := setSnapshot(snapshotCache, rtdsLayerName, upstreamCluster, faults, logger)
+	for cluster, faults := range clusterFaultMap {
+		logger.Infow("Injecting fault for cluster", "cluster", cluster)
+		err := setSnapshot(snapshotCache, rtdsLayerName, cluster, ingressPrefix, egressPrefix, faults, logger)
 		if err != nil {
-			logger.Errorw("Unable to set the fault for upstream cluster", "cluster", upstreamCluster,
+			logger.Errorw("Unable to set the fault for cluster", "cluster", cluster,
 				"error", err)
 			panic(err)
 		}
 	}
 }
 
-func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, upstreamCluster string,
-	experiments []*experimentation.Experiment, logger *zap.SugaredLogger) error {
+func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, cluster string,
+	ingressPrefix string, egressPrefix string, experiments []*experimentation.Experiment, logger *zap.SugaredLogger) error {
 	var fieldMap = map[string]*pstruct.Value{}
 
 	// No experiments meaning clear all experiments for the given upstream cluster
@@ -168,7 +208,7 @@ func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, upstreamClust
 			if !isFaultTest(experiment, testConfig) {
 				continue
 			}
-			percentageKey, percentageValue, faultKey, faultValue := createRuntimeKeys(testConfig, logger)
+			percentageKey, percentageValue, faultKey, faultValue := createRuntimeKeys(testConfig, ingressPrefix, egressPrefix, logger)
 
 			fieldMap[percentageKey] = &pstruct.Value{
 				Kind: &pstruct.Value_NumberValue{
@@ -187,7 +227,8 @@ func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, upstreamClust
 				"downstream_cluster", clusterPair.DownstreamCluster,
 				"fault_type", faultKey,
 				"percentage", percentageValue,
-				"value", faultValue)
+				"value", faultValue,
+				"fault_injection_type", testConfig.FaultInjectionType)
 		}
 	}
 
@@ -201,16 +242,16 @@ func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, upstreamClust
 		return err
 	}
 
-	currentSnapshotVersion, err := snapshotCache.GetSnapshotVersion(upstreamCluster)
+	currentSnapshotVersion, err := snapshotCache.GetSnapshotVersion(cluster)
 	if err == nil {
 		if currentSnapshotVersion == computedVersion {
-			// No change in snapshot of this upstream cluster
-			logger.Debugw("Fault exists for upstream cluster", "cluster", upstreamCluster)
+			// No change in snapshot of this cluster
+			logger.Debugw("Fault exists for cluster", "cluster", cluster)
 			return nil
 		}
 	}
 
-	err = snapshotCache.SetRuntimeLayer(upstreamCluster, rtdsLayerName, runtimeLayer, computedVersion)
+	err = snapshotCache.SetRuntimeLayer(cluster, rtdsLayerName, runtimeLayer, computedVersion)
 	if err != nil {
 		logger.Errorw("Error setting snapshot", "error", err)
 		return err
@@ -219,37 +260,55 @@ func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, upstreamClust
 	return nil
 }
 
-func createRuntimeKeys(testConfig *serverexperimentation.TestConfig, logger *zap.SugaredLogger) (string, float32, string, int32) {
+func createRuntimeKeys(testConfig *serverexperimentation.TestConfig, ingressPrefix string, egressPrefix string, logger *zap.SugaredLogger) (string, float32, string, int32) {
 	var percentageKey string
 	var percentageValue float32
 	var faultKey string
 	var faultValue int32
 
 	target := testConfig.GetClusterPair()
+	isExternal := testConfig.FaultInjectionType
+
 	switch testConfig.GetFault().(type) {
 	case *serverexperimentation.TestConfig_Abort:
 		abort := testConfig.GetAbort()
 		percentageValue = abort.Percent
 		faultValue = abort.HttpStatus
 
-		if target.DownstreamCluster == "" {
-			percentageKey = HTTPPercentageWithoutDownstream
-			faultKey = HTTPStatusWithoutDownstream
+		// Abort External Fault
+		if isExternal == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
+			percentageKey = fmt.Sprintf(HTTPPercentageForExternal, egressPrefix, target.UpstreamCluster)
+			faultKey = fmt.Sprintf(HTTPStatusForExternal, egressPrefix, target.UpstreamCluster)
 		} else {
-			percentageKey = fmt.Sprintf(HTTPPercentageWithDownstream, target.DownstreamCluster)
-			faultKey = fmt.Sprintf(HTTPStatusWithDownstream, target.DownstreamCluster)
+			// Abort Internal Fault for all downstream services
+			if target.DownstreamCluster == "" {
+				percentageKey = fmt.Sprintf(HTTPPercentageWithoutDownstream, ingressPrefix)
+				faultKey = fmt.Sprintf(HTTPStatusWithoutDownstream, ingressPrefix)
+			} else {
+				// Abort Internal Fault for a given downstream services
+				percentageKey = fmt.Sprintf(HTTPPercentageWithDownstream, ingressPrefix, target.DownstreamCluster)
+				faultKey = fmt.Sprintf(HTTPStatusWithDownstream, ingressPrefix, target.DownstreamCluster)
+			}
 		}
 	case *serverexperimentation.TestConfig_Latency:
 		latency := testConfig.GetLatency()
 		percentageValue = latency.Percent
 		faultValue = latency.DurationMs
 
-		if target.DownstreamCluster == "" {
-			percentageKey = LatencyPercentageWithoutDownstream
-			faultKey = LatencyDurationWithoutDownstream
+		// Latency External Fault
+		if isExternal == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
+			percentageKey = fmt.Sprintf(LatencyPercentageForExternal, egressPrefix, target.UpstreamCluster)
+			faultKey = fmt.Sprintf(LatencyDurationForExternal, egressPrefix, target.UpstreamCluster)
 		} else {
-			percentageKey = fmt.Sprintf(LatencyPercentageWithDownstream, target.DownstreamCluster)
-			faultKey = fmt.Sprintf(LatencyDurationWithDownstream, target.DownstreamCluster)
+			// Latency Internal Fault for all downstream services
+			if target.DownstreamCluster == "" {
+				percentageKey = fmt.Sprintf(LatencyPercentageWithoutDownstream, ingressPrefix)
+				faultKey = fmt.Sprintf(LatencyDurationWithoutDownstream, ingressPrefix)
+			} else {
+				// Latency Internal Fault for a given downstream services
+				percentageKey = fmt.Sprintf(LatencyPercentageWithDownstream, ingressPrefix, target.DownstreamCluster)
+				faultKey = fmt.Sprintf(LatencyDurationWithDownstream, ingressPrefix, target.DownstreamCluster)
+			}
 		}
 	default:
 		logger.Errorw("Unknown fault type: %t", testConfig)
