@@ -11128,6 +11128,8 @@ export const clutch = $root.clutch = (() => {
                                  * @interface IConfig
                                  * @property {string|null} [rtdsLayerName] Config rtdsLayerName
                                  * @property {google.protobuf.IDuration|null} [cacheRefreshInterval] Config cacheRefreshInterval
+                                 * @property {string|null} [ingressFaultRuntimePrefix] Config ingressFaultRuntimePrefix
+                                 * @property {string|null} [egressFaultRuntimePrefix] Config egressFaultRuntimePrefix
                                  */
 
                                 /**
@@ -11162,6 +11164,22 @@ export const clutch = $root.clutch = (() => {
                                 Config.prototype.cacheRefreshInterval = null;
 
                                 /**
+                                 * Config ingressFaultRuntimePrefix.
+                                 * @member {string} ingressFaultRuntimePrefix
+                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.ingressFaultRuntimePrefix = "";
+
+                                /**
+                                 * Config egressFaultRuntimePrefix.
+                                 * @member {string} egressFaultRuntimePrefix
+                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.egressFaultRuntimePrefix = "";
+
+                                /**
                                  * Verifies a Config message.
                                  * @function verify
                                  * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
@@ -11180,6 +11198,12 @@ export const clutch = $root.clutch = (() => {
                                         if (error)
                                             return "cacheRefreshInterval." + error;
                                     }
+                                    if (message.ingressFaultRuntimePrefix != null && message.hasOwnProperty("ingressFaultRuntimePrefix"))
+                                        if (!$util.isString(message.ingressFaultRuntimePrefix))
+                                            return "ingressFaultRuntimePrefix: string expected";
+                                    if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
+                                        if (!$util.isString(message.egressFaultRuntimePrefix))
+                                            return "egressFaultRuntimePrefix: string expected";
                                     return null;
                                 };
 
@@ -11202,6 +11226,10 @@ export const clutch = $root.clutch = (() => {
                                             throw TypeError(".clutch.config.module.chaos.experimentation.rtds.v1.Config.cacheRefreshInterval: object expected");
                                         message.cacheRefreshInterval = $root.google.protobuf.Duration.fromObject(object.cacheRefreshInterval);
                                     }
+                                    if (object.ingressFaultRuntimePrefix != null)
+                                        message.ingressFaultRuntimePrefix = String(object.ingressFaultRuntimePrefix);
+                                    if (object.egressFaultRuntimePrefix != null)
+                                        message.egressFaultRuntimePrefix = String(object.egressFaultRuntimePrefix);
                                     return message;
                                 };
 
@@ -11221,11 +11249,17 @@ export const clutch = $root.clutch = (() => {
                                     if (options.defaults) {
                                         object.rtdsLayerName = "";
                                         object.cacheRefreshInterval = null;
+                                        object.ingressFaultRuntimePrefix = "";
+                                        object.egressFaultRuntimePrefix = "";
                                     }
                                     if (message.rtdsLayerName != null && message.hasOwnProperty("rtdsLayerName"))
                                         object.rtdsLayerName = message.rtdsLayerName;
                                     if (message.cacheRefreshInterval != null && message.hasOwnProperty("cacheRefreshInterval"))
                                         object.cacheRefreshInterval = $root.google.protobuf.Duration.toObject(message.cacheRefreshInterval, options);
+                                    if (message.ingressFaultRuntimePrefix != null && message.hasOwnProperty("ingressFaultRuntimePrefix"))
+                                        object.ingressFaultRuntimePrefix = message.ingressFaultRuntimePrefix;
+                                    if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
+                                        object.egressFaultRuntimePrefix = message.egressFaultRuntimePrefix;
                                     return object;
                                 };
 

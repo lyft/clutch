@@ -4691,6 +4691,12 @@ export namespace clutch {
 
                                 /** Config cacheRefreshInterval */
                                 cacheRefreshInterval?: (google.protobuf.IDuration|null);
+
+                                /** Config ingressFaultRuntimePrefix */
+                                ingressFaultRuntimePrefix?: (string|null);
+
+                                /** Config egressFaultRuntimePrefix */
+                                egressFaultRuntimePrefix?: (string|null);
                             }
 
                             /** Represents a Config. */
@@ -4707,6 +4713,12 @@ export namespace clutch {
 
                                 /** Config cacheRefreshInterval. */
                                 public cacheRefreshInterval?: (google.protobuf.IDuration|null);
+
+                                /** Config ingressFaultRuntimePrefix. */
+                                public ingressFaultRuntimePrefix: string;
+
+                                /** Config egressFaultRuntimePrefix. */
+                                public egressFaultRuntimePrefix: string;
 
                                 /**
                                  * Verifies a Config message.
