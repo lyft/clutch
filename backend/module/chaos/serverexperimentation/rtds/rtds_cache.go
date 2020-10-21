@@ -136,12 +136,11 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 	upstreamClusterFaultMap := make(map[string][]*experimentation.Experiment)
 	for _, experiment := range allRunningExperiments {
 		testConfig := &serverexperimentation.TestConfig{}
-		if !isFaultTest(experiment, testConfig) && testConfig.FaultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS {
-			continue
+		if isFaultTest(experiment, testConfig) && testConfig.FaultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS {
+			clusterPair := testConfig.GetClusterPair()
+			upstreamClusterFaultMap[clusterPair.UpstreamCluster] =
+				append(upstreamClusterFaultMap[clusterPair.UpstreamCluster], experiment)
 		}
-		clusterPair := testConfig.GetClusterPair()
-		upstreamClusterFaultMap[clusterPair.UpstreamCluster] =
-			append(upstreamClusterFaultMap[clusterPair.UpstreamCluster], experiment)
 	}
 
 	// EGRESS Faults
@@ -149,12 +148,11 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 	downstreamClusterFaultMap := make(map[string][]*experimentation.Experiment)
 	for _, experiment := range allRunningExperiments {
 		testConfig := &serverexperimentation.TestConfig{}
-		if !isFaultTest(experiment, testConfig) && testConfig.FaultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
-			continue
+		if isFaultTest(experiment, testConfig) && testConfig.FaultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
+			clusterPair := testConfig.GetClusterPair()
+			downstreamClusterFaultMap[clusterPair.DownstreamCluster] =
+				append(downstreamClusterFaultMap[clusterPair.DownstreamCluster], experiment)
 		}
-		clusterPair := testConfig.GetClusterPair()
-		downstreamClusterFaultMap[clusterPair.DownstreamCluster] =
-			append(downstreamClusterFaultMap[clusterPair.DownstreamCluster], experiment)
 	}
 
 	// Group ingress and egress faults by clusters
