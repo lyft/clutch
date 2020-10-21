@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/lyft/clutch/backend/middleware/timeouts"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -22,6 +23,7 @@ import (
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 )
+
 
 type Flags struct {
 	ConfigPath string
@@ -181,6 +183,27 @@ func newTmpLogger() *zap.Logger {
 
 type validator interface {
 	Validate() error
+}
+
+// Returns maximum timeout, where 0 is considered maximum (i.e. no timeout).
+func computeMaximumTimeout(cfg *gatewayv1.Timeouts) time.Duration {
+	if cfg == nil {
+		return timeouts.DefaultTimeout
+	}
+
+	ret := cfg.Default.AsDuration()
+	for _, e := range cfg.Overrides {
+		override := e.Timeout.AsDuration()
+		if ret == 0 || override == 0 {
+			return 0
+		}
+
+		if override > ret {
+			ret = override
+		}
+	}
+
+	return ret
 }
 
 func validateAny(a *any.Any) error {

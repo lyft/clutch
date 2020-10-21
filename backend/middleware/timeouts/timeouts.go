@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"time"
+
 	"github.com/golang/protobuf/ptypes"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -19,9 +20,12 @@ import (
 	"github.com/lyft/clutch/backend/middleware"
 )
 
+const DefaultTimeout = time.Second * 15
+
+
 func New(config *gatewayv1.Timeouts, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
 	if config == nil {
-		config = &gatewayv1.Timeouts{Default: ptypes.DurationProto(time.Second * 15)}
+		config = &gatewayv1.Timeouts{Default: ptypes.DurationProto(DefaultTimeout)}
 	}
 
 	defaultTimeout, err := ptypes.Duration(config.Default)

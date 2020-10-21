@@ -2,8 +2,11 @@ package gateway
 
 import (
 	"fmt"
+	"github.com/golang/protobuf/ptypes"
+	"github.com/lyft/clutch/backend/middleware/timeouts"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -62,6 +65,63 @@ func TestNewLogger(t *testing.T) {
 			l, err := newLogger(tc)
 			assert.NotNil(t, l)
 			assert.NoError(t, err)
+		})
+	}
+}
+
+
+func TestComputeMaximumTimeout(t *testing.T) {
+	tests := []struct{
+		c *gatewayv1.Timeouts
+		expected time.Duration
+	}{
+		{
+			c: nil,
+			expected: timeouts.DefaultTimeout,
+		},
+		{
+			c: &gatewayv1.Timeouts{Default: ptypes.DurationProto(0)},
+			expected: 0,
+		},
+		{
+			c: &gatewayv1.Timeouts{Default: ptypes.DurationProto(time.Second)},
+			expected: time.Second,
+		},
+		{
+			c: &gatewayv1.Timeouts{
+				Default: ptypes.DurationProto(time.Second),
+				Overrides: []*gatewayv1.Timeouts_Entry{
+					{Timeout: ptypes.DurationProto(time.Second * 10)},
+				},
+			},
+			expected: 10 * time.Second,
+		},
+		{
+			c: &gatewayv1.Timeouts{
+				Default: ptypes.DurationProto(time.Second),
+				Overrides: []*gatewayv1.Timeouts_Entry{
+					{Timeout: ptypes.DurationProto(0)},
+				},
+			},
+			expected: 0,
+		},
+		{
+			c: &gatewayv1.Timeouts{
+				Default: ptypes.DurationProto(time.Second),
+				Overrides: []*gatewayv1.Timeouts_Entry{
+					{Timeout: ptypes.DurationProto(time.Millisecond)},
+				},
+			},
+			expected: time.Second,
+		},
+	}
+
+	for idx, tt := range tests {
+		tt := tt // Pin!
+		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
+			t.Parallel()
+			result := computeMaximumTimeout(tt.c)
+			assert.Equal(t, tt.expected, result)
 		})
 	}
 }
