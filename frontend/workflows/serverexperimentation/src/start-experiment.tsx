@@ -27,7 +27,11 @@ const faultInjectionTypeItems = [
   },
 ];
 
-const ClusterPairTargetDetails: React.FC<WizardChild> = () => {
+interface ClusterPairTargetDetailsProps extends WizardChild {
+  upstreamClusterTypeSelectionEnabled: boolean;
+}
+
+const ClusterPairTargetDetails: React.FC<ClusterPairTargetDetailsProps> = ({upstreamClusterTypeSelectionEnabled}) => {
   const { onSubmit } = useWizardContext();
   const clusterPairData = useDataLayout("clusterPairTargetData");
   const clusterPair = clusterPairData.displayValue();
@@ -55,14 +59,16 @@ const ClusterPairTargetDetails: React.FC<WizardChild> = () => {
           },
         ]}
       />
-      <RadioGroup
-        name="upstream_service_type"
-        label="Upstream Service Type"
-        options={faultInjectionTypeItems}
-        onChange={(value: string) =>
-          clusterPairData.updateData("faultInjectionType", parseInt(value, 10))
-        }
-      />
+      {upstreamClusterTypeSelectionEnabled && (
+        <RadioGroup
+          name="upstream_service_type"
+          label="Upstream Service Type"
+          options={faultInjectionTypeItems}
+          onChange={(value: string) =>
+            clusterPairData.updateData("faultInjectionType", parseInt(value, 10))
+          }
+        />
+      )}
       <ButtonGroup
         buttons={[
           {
@@ -157,7 +163,14 @@ const Confirm: React.FC<WizardChild> = () => {
   );
 };
 
-const StartExperiment: React.FC<BaseWorkflowProps> = ({ heading }) => {
+interface StartExperimentProps extends BaseWorkflowProps {
+  upstreamClusterTypeSelectionEnabled?: boolean;
+}
+
+const StartExperiment: React.FC<StartExperimentProps> = ({
+  heading,
+  upstreamClusterTypeSelectionEnabled = false,
+}) => {
   const createExperiment = (data: IClutch.chaos.serverexperimentation.v1.ITestConfig) => {
     const testConfig = data;
     testConfig["@type"] = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig";
@@ -198,7 +211,10 @@ const StartExperiment: React.FC<BaseWorkflowProps> = ({ heading }) => {
 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
-      <ClusterPairTargetDetails name="Target" />
+      <ClusterPairTargetDetails
+        name="Target"
+        upstreamClusterTypeSelectionEnabled={upstreamClusterTypeSelectionEnabled}
+      />
       <ExperimentDetails name="Experiment Data" />
       <Confirm name="Confirmation" />
     </Wizard>

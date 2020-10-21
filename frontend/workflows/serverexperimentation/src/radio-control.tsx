@@ -1,5 +1,11 @@
 import React from "react";
-import { FormControl as MuiFormControl, FormControlLabel, FormLabel as MuiFormLabel, Radio, RadioGroup as MuiRadioGroup } from "@material-ui/core";
+import {
+  FormControl as MuiFormControl,
+  FormControlLabel as MuiFormControlLabel,
+  FormLabel as MuiFormLabel,
+  Radio,
+  RadioGroup as MuiRadioGroup,
+} from "@material-ui/core";
 import styled from "styled-components";
 
 const FormLabel = styled(MuiFormLabel)`
@@ -8,6 +14,14 @@ const FormLabel = styled(MuiFormLabel)`
     color: ${theme.palette.text.primary};
   }
   `}
+`;
+
+const FormControlLabel = styled(MuiFormControlLabel)`
+  ${({ theme }) => `
+&& {
+  color: ${theme.palette.text.primary};
+}
+`}
 `;
 
 const StyledRadioGroup = styled(MuiRadioGroup)`
