@@ -3011,8 +3011,8 @@ export namespace clutch {
                 /** Properties of a ListViewItem. */
                 interface IListViewItem {
 
-                    /** ListViewItem identifier */
-                    identifier?: (number|Long|null);
+                    /** ListViewItem id */
+                    id?: (number|Long|null);
 
                     /** ListViewItem properties */
                     properties?: (clutch.chaos.experimentation.v1.IPropertiesMap|null);
@@ -3027,8 +3027,8 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.experimentation.v1.IListViewItem);
 
-                    /** ListViewItem identifier. */
-                    public identifier: (number|Long);
+                    /** ListViewItem id. */
+                    public id: (number|Long);
 
                     /** ListViewItem properties. */
                     public properties?: (clutch.chaos.experimentation.v1.IPropertiesMap|null);

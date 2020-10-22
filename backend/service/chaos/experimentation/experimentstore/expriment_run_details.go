@@ -15,12 +15,18 @@ func NewRunDetails(run *ExperimentRun, config *ExperimentConfig, transformer *Tr
 		return nil, err
 	}
 
-	configProperties, err := config.CreateProperties(transformer)
+	configProperties, err := config.CreateProperties()
+	if err != nil {
+		return nil, err
+	}
+
+	transformerProperties, err := transformer.CreateProperties(run, config)
 	if err != nil {
 		return nil, err
 	}
 
 	properties := append(runProperties, configProperties...)
+	properties = append(properties, transformerProperties...)
 
 	if err != nil {
 		return nil, err

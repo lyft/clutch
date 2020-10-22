@@ -42,11 +42,11 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 }
 
 func (s *Service) Register(r module.Registrar) error {
-	transformation := experimentstore.Transformation{ConfigTypeUrl: "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig", ConfigTransform: s.transform}
+	transformation := experimentstore.Transformation{ConfigTypeUrl: "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig", RunTransform: s.transform}
 	return s.storer.RegisterTransformation(transformation)
 }
 
-func (s *Service) transform(config *experimentstore.ExperimentConfig) ([]*experimentation.Property, error) {
+func (s *Service) transform(run *experimentstore.ExperimentRun, config *experimentstore.ExperimentConfig) ([]*experimentation.Property, error) {
 	var experimentConfig = serverexperimentation.TestConfig{}
 	if err := ptypes.UnmarshalAny(config.Config, &experimentConfig); err != nil {
 		return []*experimentation.Property{}, err
@@ -75,6 +75,11 @@ func (s *Service) transform(config *experimentstore.ExperimentConfig) ([]*experi
 			Id:    "fault_types",
 			Label: "Fault Types",
 			Value: &experimentation.Property_StringValue{StringValue: faultsDescription},
+		},
+		{
+			Id:    "test",
+			Label: "Testing link",
+			Value: &experimentation.Property_StringValue{StringValue: "https://grafana.lyft.net/d/vUeli5UZk/rider-app-health-monitoring?orgId=1&refresh=1m"},
 		},
 	}, nil
 }

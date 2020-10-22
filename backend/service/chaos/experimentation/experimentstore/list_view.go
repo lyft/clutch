@@ -7,24 +7,30 @@ import (
 )
 
 func NewRunListView(run *ExperimentRun, config *ExperimentConfig, transformer *Transformer, now time.Time) (*experimentation.ListViewItem, error) {
-	runProperties, err := run.CreateProperties(time.Now())
+	runProperties, err := run.CreateProperties(now)
 	if err != nil {
 		return nil, err
 	}
 
-	configProperties, err := config.CreateProperties(transformer)
+	configProperties, err := config.CreateProperties()
+	if err != nil {
+		return nil, err
+	}
+
+	transformerProperties, err := transformer.CreateProperties(run, config)
 	if err != nil {
 		return nil, err
 	}
 
 	properties := append(runProperties, configProperties...)
+	properties = append(properties, transformerProperties...)
 	propertiesMapItems := make(map[string]*experimentation.Property)
 	for _, p := range properties {
 		propertiesMapItems[p.Id] = p
 	}
 
 	return &experimentation.ListViewItem{
-		Identifier: run.id,
+		Id:         run.id,
 		Properties: &experimentation.PropertiesMap{Items: propertiesMapItems},
 	}, nil
 }

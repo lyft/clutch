@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestRunningRunPropertiesWithNoRegisteredTransform(t *testing.T) {
+func TestRunningExperimentRunProperties(t *testing.T) {
 	run := &ExperimentRun{id: 1, startTime: startTime, endTime: sql.NullTime{}, cancellationTime: sql.NullTime{}, creationTime: creationTime}
 	properties, err := run.CreateProperties(time.Now())
 
