@@ -7,8 +7,8 @@ package authz
 import (
 	"context"
 	"errors"
+	"google.golang.org/protobuf/proto"
 
-	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -79,7 +79,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 		}
 
 		actionType := meta.GetAction(info.FullMethod)
-		resources := meta.ResourceNames(req.(descriptor.Message))
+		resources := meta.ResourceNames(req.(proto.Message))
 
 		subject := &authzv1.Subject{
 			User:   claims.Subject,

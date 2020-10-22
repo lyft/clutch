@@ -8,9 +8,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/golang/protobuf/descriptor"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -28,7 +28,7 @@ import (
 
 const Name = "clutch.middleware.audit"
 
-func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
+func New(_ *anypb.Any, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
 	svc, ok := service.Registry[auditservice.Name]
 	if !ok {
 		return nil, fmt.Errorf("no audit svc with path '%s' registered for middleware", auditservice.Name)
@@ -91,7 +91,7 @@ func (m *mid) eventFromRequest(ctx context.Context, req interface{}, info *grpc.
 		ServiceName: svc,
 		MethodName:  method,
 		Type:        meta.GetAction(info.FullMethod),
-		Resources:   meta.ResourceNames(req.(descriptor.Message)),
+		Resources:   meta.ResourceNames(req.(proto.Message)),
 	}
 }
 
@@ -103,6 +103,6 @@ func (m *mid) eventFromResponse(resp interface{}, err error) *auditv1.RequestEve
 
 	return &auditv1.RequestEvent{
 		Status:    s.Proto(),
-		Resources: meta.ResourceNames(resp.(descriptor.Message)),
+		Resources: meta.ResourceNames(resp.(proto.Message)),
 	}
 }
