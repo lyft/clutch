@@ -76,7 +76,7 @@ func ResourceNames(pb proto.Message) []*auditv1.Resource {
 		v := opts.Get(referenceTypeDescriptor)
 		ref := v.Message().Interface().(*apiv1.Reference)
 
-		// Best effort to avoid reallocations.
+		// Best effort sizing to avoid reallocations.
 		names := make([]*auditv1.Resource, 0, len(ref.Fields))
 		for _, field := range ref.Fields {
 			for _, resolved := range resolveField(pb, field) {
@@ -96,6 +96,9 @@ func ResourceNames(pb proto.Message) []*auditv1.Resource {
 func resolveField(pb proto.Message, name string) []*auditv1.Resource {
 	m := pb.ProtoReflect()
 	fd := m.Descriptor().Fields().ByName(protoreflect.Name(name))
+	if fd == nil {
+		return nil
+	}
 
 	v := m.Get(fd)
 
@@ -127,10 +130,8 @@ func resolvePattern(pb proto.Message, pattern *apiv1.Pattern) *auditv1.Resource 
 		if fd == nil {
 			continue
 		}
-		if m.Has(fd) {
-			v := m.Get(fd)
-			resourceName = strings.Replace(resourceName, name[0], v.String(), 1)
-		}
+		v := m.Get(fd)
+		resourceName = strings.Replace(resourceName, name[0], v.String(), 1)
 	}
 	return &auditv1.Resource{TypeUrl: pattern.TypeUrl, Id: resourceName}
 }

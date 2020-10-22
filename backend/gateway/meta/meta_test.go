@@ -38,6 +38,9 @@ func TestGetAction(t *testing.T) {
 	_ = &healthcheckv1.HealthcheckRequest{} // Ensure it's imported.
 	action := GetAction("/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck")
 	assert.Equal(t, apiv1.ActionType_READ, action)
+
+	action = GetAction("/nonexistent/doesnotexist")
+	assert.Equal(t, apiv1.ActionType_UNSPECIFIED, action)
 }
 
 func TestResourceNames(t *testing.T) {
