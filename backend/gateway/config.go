@@ -117,13 +117,13 @@ func parseYAML(contents []byte, pb proto.Message) error {
 	}
 
 	// Encode YAML to JSON.
-	jsonBuffer := new(bytes.Buffer)
-	if err := json.NewEncoder(jsonBuffer).Encode(rawConfig); err != nil {
+	rawJSON, err := json.Marshal(rawConfig)
+	if err != nil {
 		return err
 	}
 
 	// Unmarshal JSON to proto object.
-	if err := protojson.Unmarshal(jsonBuffer.Bytes(), pb); err != nil {
+	if err := protojson.Unmarshal(rawJSON, pb); err != nil {
 		return err
 	}
 
