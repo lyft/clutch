@@ -142,11 +142,8 @@ func isValidInterface(body interface{}) bool {
 	switch v := body.(type) {
 	// type we want is proto.message
 	case proto.Message:
-		// want to use a value that is not nil
-		if !reflect.ValueOf(v).IsNil() {
-			return true
-		}
-		return false
+		// // want to use a value that is not nil
+		return !reflect.ValueOf(v).IsNil()
 	default:
 		return false
 	}

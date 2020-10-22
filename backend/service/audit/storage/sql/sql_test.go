@@ -16,7 +16,7 @@ func TestConvertAPIBody(t *testing.T) {
 
 	// case: input type Any that has a nil value
 	b, err := convertAPIBody(p1)
-	assert.Nil(t, p1)
+	assert.Nil(t, b)
 	assert.NoError(t, err)
 
 	// set up
