@@ -36,21 +36,21 @@ const FormControl = styled(MuiFormControl)`
   `}
 `;
 
-interface RadioControlOption {
+interface RadioGroupOption {
   label: string;
   value?: string;
 }
 
-interface RadioControlProps {
+interface RadioGroupProps {
   defaultOption?: number;
   label?: string;
   maxWidth?: string;
   name: string;
-  options: RadioControlOption[];
+  options: RadioGroupOption[];
   onChange: (value: string) => void;
 }
 
-const RadioGroup: React.FC<RadioControlProps> = ({
+const RadioGroup: React.FC<RadioGroupProps> = ({
   defaultOption = 0,
   label,
   maxWidth,
@@ -69,11 +69,15 @@ const RadioGroup: React.FC<RadioControlProps> = ({
     const { value } = event.target;
     const optionValues = options.map(o => o.value || o.label);
     setSelectedIdx(optionValues.indexOf(value));
-    onChange(value);
+    if (onChange !== undefined) {
+      onChange(value);
+    }
   };
 
   React.useEffect(() => {
-    onChange(options[selectedIdx].value || options[selectedIdx].label);
+    if (onChange !== undefined) {
+      onChange(options[selectedIdx].value || options[selectedIdx].label);
+    }
   }, []);
 
   return (
@@ -100,4 +104,4 @@ const RadioGroup: React.FC<RadioControlProps> = ({
   );
 };
 
-export default RadioGroup;
+export { RadioGroup, RadioGroupProps };
