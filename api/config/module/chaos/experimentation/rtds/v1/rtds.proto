@@ -15,9 +15,9 @@ message Config {
   // Interval in seconds between refreshes of RTDS data from the backing store
   google.protobuf.Duration cache_refresh_interval = 2;
 
-  // A prefix to use for runtime variables if a fault type is equal to ingress (see FaultInjectionType)
+  // A prefix to use for runtime variables if a fault type is equal to ingress (see FaultInjectionCluster)
   string ingress_fault_runtime_prefix = 3;
 
-  // A prefix to use for runtime variables if a fault type is equal to egress (see FaultInjectionType)
+  // A prefix to use for runtime variables if a fault type is equal to egress (see FaultInjectionCluster)
   string egress_fault_runtime_prefix = 4;
 }

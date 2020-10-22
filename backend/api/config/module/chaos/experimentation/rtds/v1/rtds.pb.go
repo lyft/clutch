@@ -37,9 +37,9 @@ type Config struct {
 	RtdsLayerName string `protobuf:"bytes,1,opt,name=rtds_layer_name,json=rtdsLayerName,proto3" json:"rtds_layer_name,omitempty"`
 	// Interval in seconds between refreshes of RTDS data from the backing store
 	CacheRefreshInterval *duration.Duration `protobuf:"bytes,2,opt,name=cache_refresh_interval,json=cacheRefreshInterval,proto3" json:"cache_refresh_interval,omitempty"`
-	// A prefix to use for runtime variables if a fault type is equal to ingress (see FaultInjectionType)
+	// A prefix to use for runtime variables if a fault type is equal to ingress (see FaultInjectionCluster)
 	IngressFaultRuntimePrefix string `protobuf:"bytes,3,opt,name=ingress_fault_runtime_prefix,json=ingressFaultRuntimePrefix,proto3" json:"ingress_fault_runtime_prefix,omitempty"`
-	// A prefix to use for runtime variables if a fault type is equal to egress (see FaultInjectionType)
+	// A prefix to use for runtime variables if a fault type is equal to egress (see FaultInjectionCluster)
 	EgressFaultRuntimePrefix string `protobuf:"bytes,4,opt,name=egress_fault_runtime_prefix,json=egressFaultRuntimePrefix,proto3" json:"egress_fault_runtime_prefix,omitempty"`
 }
 
