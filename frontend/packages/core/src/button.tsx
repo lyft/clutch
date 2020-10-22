@@ -96,4 +96,4 @@ const ClipboardButton: React.FC<ClipboardButtonProps> = ({
   );
 };
 
-export { AdvanceButton, Button, ButtonGroup, ButtonProps, ClipboardButton, DestructiveButton };
+export { AdvanceButton, Button, ButtonGroup, ButtonGroupProps, ButtonProps, ClipboardButton, DestructiveButton };
