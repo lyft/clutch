@@ -3,6 +3,7 @@ package topology
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -21,7 +22,10 @@ import (
 
 const Name = "clutch.service.topology"
 
-type Service interface{}
+type Service interface {
+	GetTopology(ctx context.Context, request *topologyv1.GetTopologyRequest) error
+	SearchTopology(ctx context.Context, request *topologyv1.SearchTopologyRequest) error
+}
 
 type client struct {
 	config *topologyv1cfg.Config
@@ -78,4 +82,8 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	go c.acquireTopologyCacheLock(ctx)
 
 	return c, err
+}
+
+func (c *client) SearchTopology(ctx context.Context, request *topologyv1.SearchTopologyRequest) error {
+	return fmt.Errorf("not yet implemented")
 }
