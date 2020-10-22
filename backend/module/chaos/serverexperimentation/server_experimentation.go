@@ -76,11 +76,6 @@ func (s *Service) transform(run *experimentstore.ExperimentRun, config *experime
 			Label: "Fault Types",
 			Value: &experimentation.Property_StringValue{StringValue: faultsDescription},
 		},
-		{
-			Id:    "test",
-			Label: "Testing link",
-			Value: &experimentation.Property_StringValue{StringValue: "https://grafana.lyft.net/d/vUeli5UZk/rider-app-health-monitoring?orgId=1&refresh=1m"},
-		},
 	}, nil
 }
 
