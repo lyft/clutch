@@ -7,13 +7,9 @@
 package healthcheckv1
 
 import (
-	context "context"
 	proto "github.com/golang/protobuf/proto"
 	_ "github.com/lyft/clutch/backend/api/api/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -130,8 +126,12 @@ var file_healthcheck_v1_healthcheck_proto_rawDesc = []byte{
 	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2d, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x21,
 	0x12, 0x0f, 0x2f, 0x76, 0x31, 0x2f, 0x68, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x63, 0x68, 0x65, 0x63,
 	0x6b, 0x5a, 0x0e, 0x12, 0x0c, 0x2f, 0x68, 0x65, 0x61, 0x6c, 0x74, 0x68, 0x63, 0x68, 0x65, 0x63,
-	0x6b, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x02, 0x42, 0x0f, 0x5a, 0x0d, 0x68, 0x65, 0x61, 0x6c, 0x74,
-	0x68, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6b, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x02, 0x42, 0x41, 0x5a, 0x3f, 0x67, 0x69, 0x74, 0x68, 0x75,
+	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6c, 0x79, 0x66, 0x74, 0x2f, 0x63, 0x6c, 0x75, 0x74, 0x63,
+	0x68, 0x2f, 0x62, 0x61, 0x63, 0x6b, 0x65, 0x6e, 0x64, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x68, 0x65,
+	0x61, 0x6c, 0x74, 0x68, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x2f, 0x76, 0x31, 0x3b, 0x68, 0x65, 0x61,
+	0x6c, 0x74, 0x68, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (
@@ -210,84 +210,4 @@ func file_healthcheck_v1_healthcheck_proto_init() {
 	file_healthcheck_v1_healthcheck_proto_rawDesc = nil
 	file_healthcheck_v1_healthcheck_proto_goTypes = nil
 	file_healthcheck_v1_healthcheck_proto_depIdxs = nil
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConnInterface
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
-
-// HealthcheckAPIClient is the client API for HealthcheckAPI service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type HealthcheckAPIClient interface {
-	Healthcheck(ctx context.Context, in *HealthcheckRequest, opts ...grpc.CallOption) (*HealthcheckResponse, error)
-}
-
-type healthcheckAPIClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewHealthcheckAPIClient(cc grpc.ClientConnInterface) HealthcheckAPIClient {
-	return &healthcheckAPIClient{cc}
-}
-
-func (c *healthcheckAPIClient) Healthcheck(ctx context.Context, in *HealthcheckRequest, opts ...grpc.CallOption) (*HealthcheckResponse, error) {
-	out := new(HealthcheckResponse)
-	err := c.cc.Invoke(ctx, "/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// HealthcheckAPIServer is the server API for HealthcheckAPI service.
-type HealthcheckAPIServer interface {
-	Healthcheck(context.Context, *HealthcheckRequest) (*HealthcheckResponse, error)
-}
-
-// UnimplementedHealthcheckAPIServer can be embedded to have forward compatible implementations.
-type UnimplementedHealthcheckAPIServer struct {
-}
-
-func (*UnimplementedHealthcheckAPIServer) Healthcheck(context.Context, *HealthcheckRequest) (*HealthcheckResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Healthcheck not implemented")
-}
-
-func RegisterHealthcheckAPIServer(s *grpc.Server, srv HealthcheckAPIServer) {
-	s.RegisterService(&_HealthcheckAPI_serviceDesc, srv)
-}
-
-func _HealthcheckAPI_Healthcheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HealthcheckRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(HealthcheckAPIServer).Healthcheck(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HealthcheckAPIServer).Healthcheck(ctx, req.(*HealthcheckRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _HealthcheckAPI_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "clutch.healthcheck.v1.HealthcheckAPI",
-	HandlerType: (*HealthcheckAPIServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "Healthcheck",
-			Handler:    _HealthcheckAPI_Healthcheck_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "healthcheck/v1/healthcheck.proto",
 }

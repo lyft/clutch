@@ -4,7 +4,7 @@ package clutch.chaos.experimentation.v1;
 
 import "chaos/experimentation/v1/properties.proto";
 
-option go_package = "experimentationv1";
+option go_package = "github.com/lyft/clutch/backend/api/chaos/experimentation/v1;experimentationv1";
 
 // ListViewItem an abstraction for a list item.
 message ListViewItem {

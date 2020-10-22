@@ -4,21 +4,19 @@ package clutch.chaos.serverexperimentation.v1;
 
 import "validate/validate.proto";
 
-option go_package = "serverexperimentationv1";
+option go_package = "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1;serverexperimentationv1";
 
 message TestConfig {
   // The pair of clusters specifying the origin and the destination of
   // the traffic that faults should be applied to.
-  ClusterPairTarget cluster_pair = 1;
+  ClusterPairTarget cluster_pair = 1 [ (validate.rules).message.required = true ];
 
   oneof fault {
+    option (validate.required) = true;
+
     AbortFaultConfig abort = 2;
     LatencyFaultConfig latency = 3;
   }
-
-  // The fault injection type that controls whether faults are
-  // injected on ingress or egress.
-  FaultInjectionType fault_injection_type = 4;
 }
 
 // Targets requests from downstream_cluster -> upstream_cluster.
@@ -28,6 +26,10 @@ message ClusterPairTarget {
 
   // The name of the upstream cluster.
   string upstream_cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+
+  // The fault injection cluster that controls whether faults are
+  // injected by downstream or upstream cluster.
+  FaultInjectionCluster fault_injection_cluster = 3 [ (validate.rules).enum.defined_only = true ];
 }
 
 message AbortFaultConfig {
@@ -46,12 +48,11 @@ message LatencyFaultConfig {
   int32 duration_ms = 2 [ (validate.rules).int32.gt = 0 ];
 }
 
-enum FaultInjectionType {
-  // Fault injection type is unspecified. Faults should be injected
-  // on ingress if possible, on egress otherwise.
-  FAULTINJECTIONTYPE_UNSPECIFIED = 0;
-  // Faults are injected to ingress traffic by an upstream service(s).
-  FAULTINJECTIONTYPE_INGRESS = 1;
+enum FaultInjectionCluster {
+  // Fault injection cluster is unspecified. Faults are not injected.
+  FAULTINJECTIONCLUSTER_UNSPECIFIED = 0;
   // Faults are injected to egress traffic by a downstream service(s).
-  FAULTINJECTIONTYPE_EGRESS = 2;
+  FAULTINJECTIONCLUSTER_DOWNSTREAM = 1;
+  // Faults are injected to ingesss traffic by an upstream service(s).
+  FAULTINJECTIONCLUSTER_UPSTREAM = 2;
 }

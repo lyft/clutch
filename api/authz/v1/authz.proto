@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.authz.v1;
 
-option go_package = "authzv1";
+option go_package = "github.com/lyft/clutch/backend/api/authz/v1;authzv1";
 
 import "google/api/annotations.proto";
 import "api/v1/annotations.proto";

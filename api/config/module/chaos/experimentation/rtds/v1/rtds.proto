@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.config.module.chaos.experimentation.rtds.v1;
 
-option go_package = "rtdsv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/rtds/v1;rtdsv1";
 
 import "validate/validate.proto";
 import "google/protobuf/duration.proto";
