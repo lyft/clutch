@@ -140,14 +140,18 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 
 		upstreamCluster := testConfig.GetClusterPair().GetUpstreamCluster()
 		downstreamCluster := testConfig.GetClusterPair().GetDownstreamCluster()
-		faultInjectionType := testConfig.GetFaultInjectionType()
+		faultInjectionCluster := testConfig.GetClusterPair().GetFaultInjectionCluster()
 
-		if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS {
+		switch faultInjectionCluster {
+		case serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_UPSTREAM:
 			clusterFaultMap[upstreamCluster] = append(clusterFaultMap[upstreamCluster], experiment)
-		} else if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
+
+		case serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_DOWNSTREAM:
 			clusterFaultMap[downstreamCluster] = append(clusterFaultMap[downstreamCluster], experiment)
-		} else {
-			logger.Errorw("Invalid fault injection type found", "upstream", upstreamCluster, "downstream", downstreamCluster, "faultInjectionType", faultInjectionType)
+
+		default:
+			logger.Errorw("Invalid fault injection cluster found", "upstream", upstreamCluster, "downstream", downstreamCluster, "faultInjectionCluster", faultInjectionCluster)
+			panic("Unknown fault injection cluster")
 		}
 	}
 
@@ -202,12 +206,12 @@ func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, cluster strin
 			}
 			clusterPair := testConfig.GetClusterPair()
 			logger.Debugw("Fault details",
-				"upstream_cluster", clusterPair.UpstreamCluster,
-				"downstream_cluster", clusterPair.DownstreamCluster,
+				"upstream_cluster", clusterPair.GetUpstreamCluster(),
+				"downstream_cluster", clusterPair.GetDownstreamCluster(),
 				"fault_type", faultKey,
 				"percentage", percentageValue,
 				"value", faultValue,
-				"fault_injection_type", testConfig.FaultInjectionType)
+				"fault_injection_type", testConfig.GetClusterPair().GetFaultInjectionCluster())
 		}
 	}
 
@@ -246,7 +250,7 @@ func createRuntimeKeys(testConfig *serverexperimentation.TestConfig, ingressPref
 	var faultValue int32
 
 	target := testConfig.GetClusterPair()
-	faultInjectionType := testConfig.FaultInjectionType
+	faultInjectionCluster := testConfig.GetClusterPair().GetFaultInjectionCluster()
 
 	switch testConfig.GetFault().(type) {
 	case *serverexperimentation.TestConfig_Abort:
@@ -254,41 +258,55 @@ func createRuntimeKeys(testConfig *serverexperimentation.TestConfig, ingressPref
 		percentageValue = abort.Percent
 		faultValue = abort.HttpStatus
 
-		// Abort External Fault
-		if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
-			percentageKey = fmt.Sprintf(HTTPPercentageForExternal, egressPrefix, target.UpstreamCluster)
-			faultKey = fmt.Sprintf(HTTPStatusForExternal, egressPrefix, target.UpstreamCluster)
-		} else if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS {
+		switch faultInjectionCluster {
+		case serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_DOWNSTREAM:
+			// Abort External Fault
+			percentageKey = fmt.Sprintf(HTTPPercentageForExternal, egressPrefix, target.GetUpstreamCluster())
+			faultKey = fmt.Sprintf(HTTPStatusForExternal, egressPrefix, target.GetUpstreamCluster())
+
+		case serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_UPSTREAM:
 			// Abort Internal Fault for all downstream services
-			if target.DownstreamCluster == "" {
+			if target.GetDownstreamCluster() == "" {
 				percentageKey = fmt.Sprintf(HTTPPercentageWithoutDownstream, ingressPrefix)
 				faultKey = fmt.Sprintf(HTTPStatusWithoutDownstream, ingressPrefix)
 			} else {
 				// Abort Internal Fault for a given downstream services
-				percentageKey = fmt.Sprintf(HTTPPercentageWithDownstream, ingressPrefix, target.DownstreamCluster)
-				faultKey = fmt.Sprintf(HTTPStatusWithDownstream, ingressPrefix, target.DownstreamCluster)
+				percentageKey = fmt.Sprintf(HTTPPercentageWithDownstream, ingressPrefix, target.GetDownstreamCluster())
+				faultKey = fmt.Sprintf(HTTPStatusWithDownstream, ingressPrefix, target.GetDownstreamCluster())
 			}
+
+		default:
+			logger.Errorw("Invalid fault injection cluster found", "upstream", target.GetUpstreamCluster(), "downstream", target.GetDownstreamCluster(), "faultInjectionCluster", faultInjectionCluster)
+			panic("Unknown fault injection cluster")
 		}
+
 	case *serverexperimentation.TestConfig_Latency:
 		latency := testConfig.GetLatency()
 		percentageValue = latency.Percent
 		faultValue = latency.DurationMs
 
-		// Latency External Fault
-		if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
-			percentageKey = fmt.Sprintf(LatencyPercentageForExternal, egressPrefix, target.UpstreamCluster)
-			faultKey = fmt.Sprintf(LatencyDurationForExternal, egressPrefix, target.UpstreamCluster)
-		} else if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS {
+		switch faultInjectionCluster {
+		case serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_DOWNSTREAM:
+			// Latency External Fault
+			percentageKey = fmt.Sprintf(LatencyPercentageForExternal, egressPrefix, target.GetUpstreamCluster())
+			faultKey = fmt.Sprintf(LatencyDurationForExternal, egressPrefix, target.GetUpstreamCluster())
+
+		case serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_UPSTREAM:
 			// Latency Internal Fault for all downstream services
-			if target.DownstreamCluster == "" {
+			if target.GetDownstreamCluster() == "" {
 				percentageKey = fmt.Sprintf(LatencyPercentageWithoutDownstream, ingressPrefix)
 				faultKey = fmt.Sprintf(LatencyDurationWithoutDownstream, ingressPrefix)
 			} else {
 				// Latency Internal Fault for a given downstream services
-				percentageKey = fmt.Sprintf(LatencyPercentageWithDownstream, ingressPrefix, target.DownstreamCluster)
-				faultKey = fmt.Sprintf(LatencyDurationWithDownstream, ingressPrefix, target.DownstreamCluster)
+				percentageKey = fmt.Sprintf(LatencyPercentageWithDownstream, ingressPrefix, target.GetDownstreamCluster())
+				faultKey = fmt.Sprintf(LatencyDurationWithDownstream, ingressPrefix, target.GetDownstreamCluster())
 			}
+
+		default:
+			logger.Errorw("Invalid fault injection cluster found", "upstream", target.GetUpstreamCluster(), "downstream", target.GetDownstreamCluster(), "faultInjectionCluster", faultInjectionCluster)
+			panic("Unknown fault injection cluster")
 		}
+
 	default:
 		logger.Errorw("Unknown fault type: %t", testConfig)
 		panic("Unknown fault type")

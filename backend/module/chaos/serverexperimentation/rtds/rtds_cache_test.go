@@ -21,11 +21,12 @@ import (
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 )
 
-func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent float32, httpStatus int32, faultInjectionType serverexperimentation.FaultInjectionType) *experimentation.Experiment {
+func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, faultPercent float32, httpStatus int32, faultInjectionCluster serverexperimentation.FaultInjectionCluster) *experimentation.Experiment {
 	config := &serverexperimentation.TestConfig{
 		ClusterPair: &serverexperimentation.ClusterPairTarget{
-			DownstreamCluster: downstreamCluster,
-			UpstreamCluster:   upstreamCluster,
+			DownstreamCluster:     downstreamCluster,
+			UpstreamCluster:       upstreamCluster,
+			FaultInjectionCluster: faultInjectionCluster,
 		},
 		Fault: &serverexperimentation.TestConfig_Abort{
 			Abort: &serverexperimentation.AbortFaultConfig{
@@ -33,7 +34,6 @@ func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamClust
 				HttpStatus: httpStatus,
 			},
 		},
-		FaultInjectionType: faultInjectionType,
 	}
 
 	anyConfig, err := ptypes.MarshalAny(config)
@@ -44,11 +44,12 @@ func createAbortExperiment(t *testing.T, upstreamCluster string, downstreamClust
 	return &experimentation.Experiment{Config: anyConfig}
 }
 
-func createLatencyExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, latencyPercent float32, duration int32, faultInjectionType serverexperimentation.FaultInjectionType) *experimentation.Experiment {
+func createLatencyExperiment(t *testing.T, upstreamCluster string, downstreamCluster string, latencyPercent float32, duration int32, faultInjectionCluster serverexperimentation.FaultInjectionCluster) *experimentation.Experiment {
 	config := &serverexperimentation.TestConfig{
 		ClusterPair: &serverexperimentation.ClusterPairTarget{
-			DownstreamCluster: downstreamCluster,
-			UpstreamCluster:   upstreamCluster,
+			DownstreamCluster:     downstreamCluster,
+			UpstreamCluster:       upstreamCluster,
+			FaultInjectionCluster: faultInjectionCluster,
 		},
 		Fault: &serverexperimentation.TestConfig_Latency{
 			Latency: &serverexperimentation.LatencyFaultConfig{
@@ -56,7 +57,6 @@ func createLatencyExperiment(t *testing.T, upstreamCluster string, downstreamClu
 				DurationMs: duration,
 			},
 		},
-		FaultInjectionType: faultInjectionType,
 	}
 
 	anyConfig, err := ptypes.MarshalAny(config)
@@ -70,22 +70,22 @@ func createLatencyExperiment(t *testing.T, upstreamCluster string, downstreamClu
 func mockGenerateFaultData(t *testing.T) []*experimentation.Experiment {
 	return []*experimentation.Experiment{
 		// Abort - Service B -> Service A (Internal)
-		createAbortExperiment(t, "serviceA", "serviceB", 10, 404, serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS),
+		createAbortExperiment(t, "serviceA", "serviceB", 10, 404, serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_UPSTREAM),
 
 		// Abort - All downstream -> Service C (Internal)
-		createAbortExperiment(t, "serviceC", "", 20, 504, serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS),
+		createAbortExperiment(t, "serviceC", "", 20, 504, serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_UPSTREAM),
 
 		// Latency - Service D -> Service A (Internal)
-		createLatencyExperiment(t, "serviceA", "serviceD", 30, 100, serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS),
+		createLatencyExperiment(t, "serviceA", "serviceD", 30, 100, serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_UPSTREAM),
 
 		// Latency - All downstream -> Service E (Internal)
-		createLatencyExperiment(t, "serviceE", "", 40, 200, serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_INGRESS),
+		createLatencyExperiment(t, "serviceE", "", 40, 200, serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_UPSTREAM),
 
 		// Abort - Service A -> Service X (External)
-		createAbortExperiment(t, "serviceX", "serviceA", 65, 400, serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS),
+		createAbortExperiment(t, "serviceX", "serviceA", 65, 400, serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_DOWNSTREAM),
 
 		// Latency - Service F -> Service Y (External)
-		createLatencyExperiment(t, "serviceY", "serviceF", 40, 200, serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS),
+		createLatencyExperiment(t, "serviceY", "serviceF", 40, 200, serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_DOWNSTREAM),
 	}
 }
 
@@ -220,7 +220,7 @@ func TestCreateRuntimeKeys(t *testing.T) {
 		}
 
 		target := config.GetClusterPair()
-		faultInjectionType := config.FaultInjectionType
+		faultInjectionType := target.GetFaultInjectionCluster()
 
 		switch config.GetFault().(type) {
 		case *serverexperimentation.TestConfig_Abort:
@@ -228,10 +228,10 @@ func TestCreateRuntimeKeys(t *testing.T) {
 			expectedFaultValue = abort.HttpStatus
 			expectedPercentageValue = abort.Percent
 
-			if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
+			if faultInjectionType == serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_DOWNSTREAM {
 				expectedPercentageKey = fmt.Sprintf(HTTPPercentageForExternal, egressPrefix, target.UpstreamCluster)
 				expectedFaultKey = fmt.Sprintf(HTTPStatusForExternal, egressPrefix, target.UpstreamCluster)
-			} else {
+			} else if faultInjectionType == serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_UPSTREAM {
 				if target.DownstreamCluster == "" {
 					expectedPercentageKey = fmt.Sprintf(HTTPPercentageWithoutDownstream, ingressPrefix)
 					expectedFaultKey = fmt.Sprintf(HTTPStatusWithoutDownstream, ingressPrefix)
@@ -245,10 +245,10 @@ func TestCreateRuntimeKeys(t *testing.T) {
 			expectedFaultValue = latency.DurationMs
 			expectedPercentageValue = latency.Percent
 
-			if faultInjectionType == serverexperimentation.FaultInjectionType_FAULTINJECTIONTYPE_EGRESS {
+			if faultInjectionType == serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_DOWNSTREAM {
 				expectedPercentageKey = fmt.Sprintf(LatencyPercentageForExternal, egressPrefix, target.UpstreamCluster)
 				expectedFaultKey = fmt.Sprintf(LatencyDurationForExternal, egressPrefix, target.UpstreamCluster)
-			} else {
+			} else if faultInjectionType == serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_UPSTREAM {
 				if target.DownstreamCluster == "" {
 					expectedPercentageKey = fmt.Sprintf(LatencyPercentageWithoutDownstream, ingressPrefix)
 					expectedFaultKey = fmt.Sprintf(LatencyDurationWithoutDownstream, ingressPrefix)
