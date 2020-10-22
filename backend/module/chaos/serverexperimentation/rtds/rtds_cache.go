@@ -151,7 +151,6 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 
 		default:
 			logger.Errorw("Invalid fault injection cluster found", "upstream", upstreamCluster, "downstream", downstreamCluster, "faultInjectionCluster", faultInjectionCluster)
-			panic("Unknown fault injection cluster")
 		}
 	}
 
@@ -277,7 +276,6 @@ func createRuntimeKeys(testConfig *serverexperimentation.TestConfig, ingressPref
 
 		default:
 			logger.Errorw("Invalid fault injection cluster found", "upstream", target.GetUpstreamCluster(), "downstream", target.GetDownstreamCluster(), "faultInjectionCluster", faultInjectionCluster)
-			panic("Unknown fault injection cluster")
 		}
 
 	case *serverexperimentation.TestConfig_Latency:
@@ -304,7 +302,6 @@ func createRuntimeKeys(testConfig *serverexperimentation.TestConfig, ingressPref
 
 		default:
 			logger.Errorw("Invalid fault injection cluster found", "upstream", target.GetUpstreamCluster(), "downstream", target.GetDownstreamCluster(), "faultInjectionCluster", faultInjectionCluster)
-			panic("Unknown fault injection cluster")
 		}
 
 	default:
