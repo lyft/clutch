@@ -18,6 +18,5 @@ export const Primary = Template.bind({});
 Primary.args = {
   name: "continue",
   label: "Favorite color",
-  options: [{label: "red"}, {label: "green"}, {label: "blue"}]
+  options: [{ label: "red" }, { label: "green" }, { label: "blue" }],
 };
-
