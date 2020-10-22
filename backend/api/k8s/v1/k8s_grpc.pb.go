@@ -23,6 +23,7 @@ type K8SAPIClient interface {
 	UpdatePod(ctx context.Context, in *UpdatePodRequest, opts ...grpc.CallOption) (*UpdatePodResponse, error)
 	ResizeHPA(ctx context.Context, in *ResizeHPARequest, opts ...grpc.CallOption) (*ResizeHPAResponse, error)
 	UpdateDeployment(ctx context.Context, in *UpdateDeploymentRequest, opts ...grpc.CallOption) (*UpdateDeploymentResponse, error)
+	DeleteDeployment(ctx context.Context, in *DeleteDeploymentRequest, opts ...grpc.CallOption) (*DeleteDeploymentResponse, error)
 }
 
 type k8SAPIClient struct {
@@ -87,6 +88,15 @@ func (c *k8SAPIClient) UpdateDeployment(ctx context.Context, in *UpdateDeploymen
 	return out, nil
 }
 
+func (c *k8SAPIClient) DeleteDeployment(ctx context.Context, in *DeleteDeploymentRequest, opts ...grpc.CallOption) (*DeleteDeploymentResponse, error) {
+	out := new(DeleteDeploymentResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/DeleteDeployment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // K8SAPIServer is the server API for K8SAPI service.
 // All implementations should embed UnimplementedK8SAPIServer
 // for forward compatibility
@@ -97,6 +107,7 @@ type K8SAPIServer interface {
 	UpdatePod(context.Context, *UpdatePodRequest) (*UpdatePodResponse, error)
 	ResizeHPA(context.Context, *ResizeHPARequest) (*ResizeHPAResponse, error)
 	UpdateDeployment(context.Context, *UpdateDeploymentRequest) (*UpdateDeploymentResponse, error)
+	DeleteDeployment(context.Context, *DeleteDeploymentRequest) (*DeleteDeploymentResponse, error)
 }
 
 // UnimplementedK8SAPIServer should be embedded to have forward compatible implementations.
@@ -120,6 +131,9 @@ func (UnimplementedK8SAPIServer) ResizeHPA(context.Context, *ResizeHPARequest) (
 }
 func (UnimplementedK8SAPIServer) UpdateDeployment(context.Context, *UpdateDeploymentRequest) (*UpdateDeploymentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateDeployment not implemented")
+}
+func (UnimplementedK8SAPIServer) DeleteDeployment(context.Context, *DeleteDeploymentRequest) (*DeleteDeploymentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteDeployment not implemented")
 }
 
 // UnsafeK8SAPIServer may be embedded to opt out of forward compatibility for this service.
@@ -241,6 +255,24 @@ func _K8SAPI_UpdateDeployment_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _K8SAPI_DeleteDeployment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteDeploymentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).DeleteDeployment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/DeleteDeployment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).DeleteDeployment(ctx, req.(*DeleteDeploymentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _K8SAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "clutch.k8s.v1.K8sAPI",
 	HandlerType: (*K8SAPIServer)(nil),
@@ -268,6 +300,10 @@ var _K8SAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateDeployment",
 			Handler:    _K8SAPI_UpdateDeployment_Handler,
+		},
+		{
+			MethodName: "DeleteDeployment",
+			Handler:    _K8SAPI_DeleteDeployment_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

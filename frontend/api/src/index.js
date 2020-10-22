@@ -17452,6 +17452,39 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteDeployment}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DeleteDeploymentCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DeleteDeploymentResponse} [response] DeleteDeploymentResponse
+                 */
+
+                /**
+                 * Calls DeleteDeployment.
+                 * @function deleteDeployment
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteDeploymentRequest} request DeleteDeploymentRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DeleteDeploymentCallback} callback Node-style callback called with the error, if any, and DeleteDeploymentResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.deleteDeployment = function deleteDeployment(request, callback) {
+                    return this.rpcCall(deleteDeployment, $root.clutch.k8s.v1.DeleteDeploymentRequest, $root.clutch.k8s.v1.DeleteDeploymentResponse, request, callback);
+                }, "name", { value: "DeleteDeployment" });
+
+                /**
+                 * Calls DeleteDeployment.
+                 * @function deleteDeployment
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteDeploymentRequest} request DeleteDeploymentRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DeleteDeploymentResponse>} Promise
+                 * @variation 2
+                 */
+
                 return K8sAPI;
             })();
 
@@ -20566,6 +20599,236 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return UpdateDeploymentResponse;
+            })();
+
+            v1.DeleteDeploymentRequest = (function() {
+
+                /**
+                 * Properties of a DeleteDeploymentRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteDeploymentRequest
+                 * @property {string|null} [clientset] DeleteDeploymentRequest clientset
+                 * @property {string|null} [cluster] DeleteDeploymentRequest cluster
+                 * @property {string|null} [namespace] DeleteDeploymentRequest namespace
+                 * @property {string|null} [name] DeleteDeploymentRequest name
+                 */
+
+                /**
+                 * Constructs a new DeleteDeploymentRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteDeploymentRequest.
+                 * @implements IDeleteDeploymentRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteDeploymentRequest=} [properties] Properties to set
+                 */
+                function DeleteDeploymentRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DeleteDeploymentRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @instance
+                 */
+                DeleteDeploymentRequest.prototype.clientset = "";
+
+                /**
+                 * DeleteDeploymentRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @instance
+                 */
+                DeleteDeploymentRequest.prototype.cluster = "";
+
+                /**
+                 * DeleteDeploymentRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @instance
+                 */
+                DeleteDeploymentRequest.prototype.namespace = "";
+
+                /**
+                 * DeleteDeploymentRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @instance
+                 */
+                DeleteDeploymentRequest.prototype.name = "";
+
+                /**
+                 * Verifies a DeleteDeploymentRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteDeploymentRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteDeploymentRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteDeploymentRequest} DeleteDeploymentRequest
+                 */
+                DeleteDeploymentRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteDeploymentRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DeleteDeploymentRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DeleteDeploymentRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteDeploymentRequest} message DeleteDeploymentRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteDeploymentRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    return object;
+                };
+
+                /**
+                 * Converts this DeleteDeploymentRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteDeploymentRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteDeploymentRequest;
+            })();
+
+            v1.DeleteDeploymentResponse = (function() {
+
+                /**
+                 * Properties of a DeleteDeploymentResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteDeploymentResponse
+                 */
+
+                /**
+                 * Constructs a new DeleteDeploymentResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteDeploymentResponse.
+                 * @implements IDeleteDeploymentResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteDeploymentResponse=} [properties] Properties to set
+                 */
+                function DeleteDeploymentResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies a DeleteDeploymentResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteDeploymentResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteDeploymentResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteDeploymentResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteDeploymentResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteDeploymentResponse} DeleteDeploymentResponse
+                 */
+                DeleteDeploymentResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteDeploymentResponse)
+                        return object;
+                    return new $root.clutch.k8s.v1.DeleteDeploymentResponse();
+                };
+
+                /**
+                 * Creates a plain object from a DeleteDeploymentResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteDeploymentResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteDeploymentResponse} message DeleteDeploymentResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteDeploymentResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this DeleteDeploymentResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteDeploymentResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteDeploymentResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteDeploymentResponse;
             })();
 
             v1.NullableString = (function() {

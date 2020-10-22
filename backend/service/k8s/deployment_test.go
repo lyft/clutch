@@ -28,7 +28,6 @@ func testDeploymentClientset() k8s.Interface {
 }
 
 func TestUpdateDeployment(t *testing.T) {
-	t.Parallel()
 	cs := testDeploymentClientset()
 	s := &svc{
 		manager: &managerImpl{
@@ -46,6 +45,30 @@ func TestUpdateDeployment(t *testing.T) {
 
 	err = s.UpdateDeployment(context.Background(), "foo", "core-testing", "testing-namespace", "testing-deployment-name", &k8sapiv1.UpdateDeploymentRequest_Fields{})
 	assert.NoError(t, err)
+}
+
+func TestDeleteDeployment(t *testing.T) {
+	cs := testDeploymentClientset()
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "default",
+				cluster:   "core-testing",
+			}},
+		},
+	}
+
+	// Not found.
+	err := s.DeleteDeployment(context.Background(), "foo", "core-testing", "testing-namespace", "abc")
+	assert.Error(t, err)
+
+	err = s.DeleteDeployment(context.Background(), "foo", "core-testing", "testing-namespace", "testing-deployment-name")
+	assert.NoError(t, err)
+
+	// Not found.
+	_, err = s.DescribeDeployment(context.Background(), "foo", "core-testing", "testing-namespace", "testing-deployment-name")
+	assert.Error(t, err)
 }
 
 func TestMergeLabelsAndAnnotations(t *testing.T) {
