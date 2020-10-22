@@ -3,7 +3,8 @@ package meta
 import (
 	"testing"
 
-	"github.com/golang/protobuf/descriptor"
+	"google.golang.org/protobuf/proto"
+
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 
@@ -50,7 +51,7 @@ func TestResourceNames(t *testing.T) {
 
 	tests := []struct {
 		id      string
-		message descriptor.Message
+		message proto.Message
 		names   []*auditv1.Resource
 	}{
 		{
@@ -99,7 +100,6 @@ func TestResourceNames(t *testing.T) {
 		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
-
 			resolvedNames := ResourceNames(tt.message)
 			assert.Len(t, resolvedNames, len(tt.names))
 			for i := range resolvedNames {
