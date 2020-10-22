@@ -2,7 +2,7 @@ import React from "react";
 import type { Meta } from "@storybook/react";
 
 import type { NoteProps } from "../note";
-import { Note, NotePanel } from "../note";
+import { Note } from "../note";
 
 export default {
   title: "Core/Feedback/Note",
