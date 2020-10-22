@@ -6,8 +6,9 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
-	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	"github.com/stretchr/testify/assert"
+
+	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 )
 
 func TestConvertAPIBody(t *testing.T) {
