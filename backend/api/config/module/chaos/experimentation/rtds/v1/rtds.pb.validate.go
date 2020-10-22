@@ -60,6 +60,10 @@ func (m *Config) Validate() error {
 		}
 	}
 
+	// no validation rules for IngressFaultRuntimePrefix
+
+	// no validation rules for EgressFaultRuntimePrefix
+
 	return nil
 }
 
