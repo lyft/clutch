@@ -3,10 +3,9 @@ package meta
 import (
 	"testing"
 
-	"google.golang.org/protobuf/proto"
-
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/proto"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"

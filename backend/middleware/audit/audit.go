@@ -8,14 +8,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/types/known/anypb"
 
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	"github.com/lyft/clutch/backend/gateway/log"
