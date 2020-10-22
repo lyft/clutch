@@ -2,7 +2,7 @@ import React from "react";
 import type { Meta } from "@storybook/react";
 
 import type { ButtonGroupProps } from "../button";
-import { ButtonGroup, useWizardContext } from "@clutch-sh/core";
+import { ButtonGroup } from "../button";
 
 export default {
   title: "Core/Button Group",
@@ -23,7 +23,7 @@ Default.args = {
     {
       text: "Next",
     },
-  ]
+  ],
 };
 
 export const Destructive = Template.bind({});
@@ -36,5 +36,5 @@ Destructive.args = {
       text: "Delete",
       destructive: true,
     },
-  ]
+  ],
 };
