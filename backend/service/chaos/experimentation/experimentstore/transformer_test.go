@@ -38,6 +38,21 @@ func TestNoMatchingRegisteredRunConfigTransform(t *testing.T) {
 	assert.Equal(t, 0, len(properties))
 }
 
+func TestMatchingRegisteredRunConfigTransformWithNullTransform(t *testing.T) {
+	logger := zaptest.NewLogger(t).Sugar()
+
+	run := &ExperimentRun{id: 123}
+	config := &ExperimentConfig{id: 1, Config: &any.Any{TypeUrl: "test"}}
+
+	transformation := Transformation{ConfigTypeUrl: "test"}
+	transformer := NewTransformer(logger)
+	assert.NoError(t, transformer.Register(transformation))
+
+	properties, err := transformer.CreateProperties(run, config)
+	assert.NoError(t, err)
+	assert.Equal(t, 0, len(properties))
+}
+
 func TestMatchingRegisteredRunConfigTransform(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 
@@ -64,7 +79,7 @@ func TestMatchingRegisteredRunConfigTransform(t *testing.T) {
 	assert.Equal(t, expectedProperty, properties[0])
 }
 
-func TestMatchingMultipleRegisteredRunConfigTransform(t *testing.T) {
+func TestMatchingMultipleRegisteredRunConfigTransforms(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 
 	expectedRun := &ExperimentRun{id: 123}
