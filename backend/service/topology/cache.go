@@ -31,15 +31,9 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 	}
 	defer conn.Close()
 
-	go func() {
-		<-ctx.Done()
-		ticker.Stop()
-		c.unlockAdvisoryLock(context.Background(), conn, advisoryLockId)
-	}()
-
 	// Infinitely try to acquire the advisory lock
 	// Once the lock is acquired we start caching, this is a blocking operation
-	for ; true; <-ticker.C {
+	for {
 		c.log.Info("trying to acquire advisory lock")
 
 		// TODO: We could in the future spread the load of the topology caching
@@ -48,6 +42,15 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 			c.log.Info("acquired the advisory lock, starting to cache topology now...")
 			go c.expireCache(ctx)
 			c.startTopologyCache(ctx)
+		}
+
+		select {
+		case <-ticker.C:
+			continue
+		case <-ctx.Done():
+			ticker.Stop()
+			c.unlockAdvisoryLock(context.Background(), conn, advisoryLockId)
+			return
 		}
 	}
 }
