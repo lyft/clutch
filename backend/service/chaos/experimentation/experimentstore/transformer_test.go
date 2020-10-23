@@ -38,7 +38,7 @@ func TestNoMatchingRegisteredRunConfigTransform(t *testing.T) {
 	assert.Equal(t, 0, len(properties))
 }
 
-func TestMatchingRegisteredRunConfigTransformWithNullTransform(t *testing.T) {
+func TestMatchingRegisteredNullRunConfigTransform(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 
 	run := &ExperimentRun{id: 123}
