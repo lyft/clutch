@@ -13,7 +13,7 @@ const FormLabel = styled(MuiFormLabel)`
   && {
     color: ${theme.palette.text.primary};
   }
-  font-weigh: bold;
+  font-weight: bold;
   position: relative;
   `}
 `;
@@ -28,6 +28,7 @@ const StyledRadioGroup = styled(MuiRadioGroup)`
 const FormControl = styled(MuiFormControl)`
   ${({ ...props }) => `
   display: flex;
+  margin: 16px 0;
   min-width: fit-content;
   width: ${props["data-max-width"] || "500px"};
   `}
