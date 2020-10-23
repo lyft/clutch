@@ -9,12 +9,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/durationpb"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/middleware"
@@ -24,21 +24,14 @@ const DefaultTimeout = time.Second * 15
 
 func New(config *gatewayv1.Timeouts, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
 	if config == nil {
-		config = &gatewayv1.Timeouts{Default: ptypes.DurationProto(DefaultTimeout)}
+		config = &gatewayv1.Timeouts{Default: durationpb.New(DefaultTimeout)}
 	}
 
-	defaultTimeout, err := ptypes.Duration(config.Default)
-	if err != nil {
-		return nil, fmt.Errorf("error in deadline config: %w", err)
-	}
+	defaultTimeout := config.Default.AsDuration()
 
 	overrides := make(map[string]time.Duration, len(config.Overrides))
-	for i, entry := range config.Overrides {
-		override, err := ptypes.Duration(entry.Timeout)
-		if err != nil {
-			return nil, fmt.Errorf("error in %d entry in deadline config: %w", i, err)
-		}
-		overrides[join(entry.Service, entry.Method)] = override
+	for _, entry := range config.Overrides {
+		overrides[join(entry.Service, entry.Method)] = entry.Timeout.AsDuration()
 	}
 
 	return &mid{

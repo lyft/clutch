@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/durationpb"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 )
@@ -16,7 +16,7 @@ func TestNew(t *testing.T) {
 		config *gatewayv1.Timeouts
 	}{
 		{config: nil},
-		{config: &gatewayv1.Timeouts{Default: ptypes.DurationProto(time.Second)}},
+		{config: &gatewayv1.Timeouts{Default: durationpb.New(time.Second)}},
 	}
 
 	for idx, tt := range tests {
