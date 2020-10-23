@@ -30,7 +30,7 @@
     "react-dom": "^16.8.0",
     "react-router": "^6.0.0-beta",
     "react-router-dom": "^6.0.0-beta",
-    "react-scripts": "^3.4.0"
+    "react-scripts": "^4.0.0"
   },
   "workspaces": [
     "clutch/frontend/api",
