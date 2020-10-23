@@ -12,8 +12,9 @@ const FormLabel = styled(MuiFormLabel)`
   ${({ theme }) => `
   && {
     color: ${theme.palette.text.primary};
-    font-weight: bold;
   }
+  font-weigh: bold;
+  position: relative;
   `}
 `;
 
