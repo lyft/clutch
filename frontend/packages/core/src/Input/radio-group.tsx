@@ -20,7 +20,6 @@ const FormLabel = styled(MuiFormLabel)`
 const StyledRadioGroup = styled(MuiRadioGroup)`
   ${({ ...props }) => `
   display: flex;
-  width: 100%;
   max-width: ${props["data-max-width"] || "500px"};
   `}
 `;
