@@ -66,14 +66,14 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 			m.logger.Warn("could not parse gRPC method", zap.String("fullMethod", info.FullMethod))
 		}
 
+		// Create a return channel for the goroutine.
+		resultChan := make(chan unaryHandlerReturn)
+		defer close(resultChan)
+
 		// Compute timeout and set-up a context with timeout.
 		timeout := m.getDuration(service, method)
 		ctx, cancel := context.WithTimeout(ctx, timeout)
 		defer cancel()
-
-		// Create a return channel for the goroutine.
-		resultChan := make(chan unaryHandlerReturn)
-		defer close(resultChan)
 
 		// Spawn the handler in a goroutine so we can return early on timeout if it doesn't complete.
 		go func() {
