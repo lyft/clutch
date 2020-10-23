@@ -31,22 +31,26 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 	}
 	defer conn.Close()
 
-	go func() {
-		<-ctx.Done()
-		ticker.Stop()
-		c.unlockAdvisoryLock(context.Background(), conn, advisoryLockId)
-	}()
-
 	// Infinitely try to acquire the advisory lock
 	// Once the lock is acquired we start caching, this is a blocking operation
-	for ; true; <-ticker.C {
+	for {
 		c.log.Info("trying to acquire advisory lock")
 
 		// TODO: We could in the future spread the load of the topology caching
 		// across many clutch instances by having an a lock per service (e.g. AWS, k8s, etc)
 		if c.tryAdvisoryLock(ctx, conn, advisoryLockId) {
 			c.log.Info("acquired the advisory lock, starting to cache topology now...")
+			go c.expireCache(ctx)
 			c.startTopologyCache(ctx)
+		}
+
+		select {
+		case <-ticker.C:
+			continue
+		case <-ctx.Done():
+			ticker.Stop()
+			c.unlockAdvisoryLock(context.Background(), conn, advisoryLockId)
+			return
 		}
 	}
 }
@@ -171,4 +175,38 @@ func (c *client) deleteCache(ctx context.Context, id string) error {
 
 	c.scope.SubScope("cache").Counter("delete.success").Inc(1)
 	return nil
+}
+
+func (c *client) expireCache(ctx context.Context) {
+	// Delete all entries that are older than two hours
+	const expireQuery = `
+		DELETE FROM topology_cache WHERE updated_at <= NOW() - INTERVAL '120minutes';
+	`
+
+	ticker := time.NewTicker(time.Minute * 20)
+	for {
+		result, err := c.db.ExecContext(ctx, expireQuery)
+		if err != nil {
+			c.scope.SubScope("cache").Counter("expire.failure").Inc(1)
+			c.log.Error("unable to expire cache", zap.Error(err))
+			continue
+		}
+
+		numOfItemsRemoved, err := result.RowsAffected()
+		if err != nil {
+			c.scope.SubScope("cache").Counter("expire.failure").Inc(1)
+			c.log.Error("unable to get rows removed from cache expiry query", zap.Error(err))
+		} else {
+			c.scope.SubScope("cache").Counter("expire.success").Inc(1)
+			c.log.Info("successfully removed expired cache", zap.Int64("count", numOfItemsRemoved))
+		}
+
+		select {
+		case <-ticker.C:
+			continue
+		case <-ctx.Done():
+			ticker.Stop()
+			return
+		}
+	}
 }

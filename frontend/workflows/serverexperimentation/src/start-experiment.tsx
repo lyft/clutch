@@ -14,15 +14,15 @@ import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import * as yup from "yup";
 
-import RadioGroup from "./radio-control";
+import RadioGroup from "./radio-group";
 
 const faultInjectionTypeItems = [
   {
-    label: "Internal",
+    label: "Internal (Lyft owned)",
     value: IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster.FAULTINJECTIONCLUSTER_UPSTREAM.toString(),
   },
   {
-    label: "External",
+    label: "External (3rd party)",
     value: IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster.FAULTINJECTIONCLUSTER_DOWNSTREAM.toString(),
   },
 ];
