@@ -76,7 +76,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
 
   React.useEffect(() => {
     if (onChange !== undefined) {
-      onChange(options[selectedIdx].value || options[selectedIdx].label);
+      onChange(options[selectedIdx]?.value || options[selectedIdx].label);
     }
   }, []);
 
