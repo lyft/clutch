@@ -39,7 +39,7 @@ func (s *svc) StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.Upda
 	// There should only ever be one instances of all the informers for topology caching
 	// We lock here until the context is closed
 	if !s.topologyInformerLock.TryAcquire(topologyInformerLockId) {
-		return nil, errors.New("TopologyCahing is already in progress")
+		return nil, errors.New("TopologyCaching is already in progress")
 	}
 
 	for name, cs := range s.manager.Clientsets() {

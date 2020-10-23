@@ -1,65 +1,49 @@
 import React from "react";
 import { Grid, Paper } from "@material-ui/core";
 import type { Color } from "@material-ui/lab/Alert";
-import Alert from "@material-ui/lab/Alert";
+import MuiAlert from "@material-ui/lab/Alert";
 import styled from "styled-components";
 
 const Container = styled(Paper)`
-  ${({ ...props }) => `
   margin: 1%;
-  width: 100%;
-  max-width: ${props["data-max-width"]};
-  `}
 `;
 
-interface NoteProps {
+const Alert = styled(MuiAlert)`
+  align-items: center;
+`;
+
+export interface NoteProps {
   severity?: Color;
-  maxWidth?: string;
-  direction?: "row" | "column";
 }
 
 export interface NoteConfig extends NoteProps {
   text: string;
 }
 
-interface NotePanelProps {
+export interface NotePanelProps {
   direction?: "row" | "column";
   notes?: NoteConfig[];
 }
 
-const NotePanel: React.FC<NotePanelProps> = ({ direction = "column", notes, children }) => {
-  const isColumnLayout = direction === "column";
-  const maxWidth = isColumnLayout ? "100%" : "300px";
-  const noteDirection = isColumnLayout ? "row" : "column";
-  return (
-    <Grid
-      container
-      direction={direction}
-      justify="center"
-      alignContent="space-between"
-      wrap="nowrap"
-    >
-      {notes?.map((note: NoteConfig) => (
-        <Note
-          key={note.text}
-          severity={note.severity}
-          maxWidth={maxWidth}
-          direction={noteDirection}
-        >
-          {note.text}
-        </Note>
-      ))}
-      {children}
-    </Grid>
-  );
-};
+const NotePanel: React.FC<NotePanelProps> = ({ direction = "column", notes, children }) => (
+  <Grid container direction={direction} justify="center" alignContent="space-between" wrap="nowrap">
+    {notes?.map((note: NoteConfig) => (
+      <Note key={note.text} severity={note.severity}>
+        {note.text}
+      </Note>
+    ))}
+    {children}
+  </Grid>
+);
 
-const Note: React.FC<NoteProps> = ({ severity = "info", maxWidth, direction, children }) => {
+const Note: React.FC<NoteProps> = ({ severity = "info", children }) => {
   return (
-    <Container elevation={0} data-max-width={maxWidth}>
-      <Grid container justify="center" alignItems="center" direction={direction}>
-        <Alert severity={severity}>{children}</Alert>
-      </Grid>
+    <Container elevation={0}>
+      <Alert severity={severity}>
+        <Grid container justify="center" alignItems="center">
+          {children}
+        </Grid>
+      </Alert>
     </Container>
   );
 };
