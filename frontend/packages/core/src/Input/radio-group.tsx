@@ -86,7 +86,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
       <StyledRadioGroup
         aria-label={label}
         name={name}
-        defaultValue={options[defaultIdx].value || options[defaultIdx].label}
+        defaultValue={options[defaultIdx]?.value || options[defaultIdx].label}
         onChange={updateSelectedOption}
       >
         {options.map(option => {
