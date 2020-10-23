@@ -26,5 +26,9 @@ export const WithLabelsAndUniqueValues = Template.bind({});
 WithLabelsAndUniqueValues.args = {
   name: "colorOptionsWithValues",
   label: "Favorite color",
-  options: [{ label: "red", value: "#FF0000" }, { label: "green", value: "#00FF00" }, { label: "blue", value: "#0000FF" }],
+  options: [
+    { label: "red", value: "#FF0000" },
+    { label: "green", value: "#00FF00" },
+    { label: "blue", value: "#0000FF" },
+  ],
 };
