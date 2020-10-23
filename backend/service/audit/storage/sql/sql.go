@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"reflect"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
@@ -282,11 +281,6 @@ func convertResources(proto []*auditv1.Resource) []*resource {
 
 // Encodes proto object in JSON format
 func convertAPIBody(body *any.Any) (json.RawMessage, error) {
-	// possible for Any to have a nil value
-	if reflect.ValueOf(body).IsNil() {
-		return nil, nil
-	}
-
 	b, err := protojson.Marshal(body)
 	if err != nil {
 		return nil, err
@@ -296,7 +290,6 @@ func convertAPIBody(body *any.Any) (json.RawMessage, error) {
 
 // Decodes JSON to proto Any message
 func apiBodyProto(details json.RawMessage) (*any.Any, error) {
-	// possible for json.RawMessage to be nil
 	if details == nil {
 		return nil, nil
 	}

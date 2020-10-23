@@ -9,42 +9,58 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func TestConvertAPIBody(t *testing.T) {
-	// set up
-	p1 := (*any.Any)(nil)
+	// set up for TestConvertAPIBody
+	a1 := (*any.Any)(nil)
 
-	// case: input type Any that has a nil value
-	b, err := convertAPIBody(p1)
-	assert.Nil(t, b)
-	assert.NoError(t, err)
+	p1 := &ec2v1.Instance{InstanceId: "i-123456789abcdef0"}
+	a2, _ := ptypes.MarshalAny(p1)
 
-	// set up
-	p2 := &ec2v1.Instance{InstanceId: "i-123456789abcdef0"}
-	a, err := ptypes.MarshalAny(p2)
-	assert.NoError(t, err)
+	p2 := &k8sapiv1.ResizeHPAResponse{}
+	a3, _ := ptypes.MarshalAny(p2)
 
-	// case: input type Any that is a non-nil value
-	b, err = convertAPIBody(a)
-	assert.NotNil(t, b)
-	assert.NoError(t, err)
+	tests := []struct {
+		input *any.Any
+	}{
+		{input: nil},
+		// case: input is a typed nil
+		{input: a1},
+		// case: input is typed with non-nil value
+		{input: a2},
+		// case: input is an empty proto message object
+		{input: a3},
+	}
+
+	for _, test := range tests {
+		b, err := convertAPIBody(test.input)
+		assert.NotNil(t, b)
+		assert.NoError(t, err)
+	}
 }
 
 func TestAPIBodyProto(t *testing.T) {
-	// set up
 	var nilJSON json.RawMessage
 
-	// case: input that is a nil value
-	result, err := apiBodyProto(nilJSON)
-	assert.Nil(t, result)
-	assert.NoError(t, err)
+	tests := []struct {
+		input     json.RawMessage
+		expectNil bool
+	}{
+		{input: nil, expectNil: true},
+		{input: nilJSON, expectNil: true},
+		{input: []byte(`{}`)},
+		{input: []byte(`{"@type":"type.googleapis.com/clutch.audit.v1.RequestEvent"}`)},
+	}
 
-	// set up
-	details := `{"@type":"type.googleapis.com/clutch.audit.v1.RequestEvent"}`
-
-	// case: input is not nil value
-	a, err := apiBodyProto([]byte(details))
-	assert.NotNil(t, a)
-	assert.NoError(t, err)
+	for _, test := range tests {
+		a, err := apiBodyProto(test.input)
+		if test.expectNil {
+			assert.Nil(t, a)
+		} else {
+			assert.NotNil(t, a)
+		}
+		assert.NoError(t, err)
+	}
 }
