@@ -7932,6 +7932,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IClusterPairTarget
                      * @property {string|null} [downstreamCluster] ClusterPairTarget downstreamCluster
                      * @property {string|null} [upstreamCluster] ClusterPairTarget upstreamCluster
+                     * @property {clutch.chaos.serverexperimentation.v1.FaultInjectionCluster|null} [faultInjectionCluster] ClusterPairTarget faultInjectionCluster
                      */
 
                     /**
@@ -7966,6 +7967,14 @@ export const clutch = $root.clutch = (() => {
                     ClusterPairTarget.prototype.upstreamCluster = "";
 
                     /**
+                     * ClusterPairTarget faultInjectionCluster.
+                     * @member {clutch.chaos.serverexperimentation.v1.FaultInjectionCluster} faultInjectionCluster
+                     * @memberof clutch.chaos.serverexperimentation.v1.ClusterPairTarget
+                     * @instance
+                     */
+                    ClusterPairTarget.prototype.faultInjectionCluster = 0;
+
+                    /**
                      * Verifies a ClusterPairTarget message.
                      * @function verify
                      * @memberof clutch.chaos.serverexperimentation.v1.ClusterPairTarget
@@ -7982,6 +7991,15 @@ export const clutch = $root.clutch = (() => {
                         if (message.upstreamCluster != null && message.hasOwnProperty("upstreamCluster"))
                             if (!$util.isString(message.upstreamCluster))
                                 return "upstreamCluster: string expected";
+                        if (message.faultInjectionCluster != null && message.hasOwnProperty("faultInjectionCluster"))
+                            switch (message.faultInjectionCluster) {
+                            default:
+                                return "faultInjectionCluster: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                                break;
+                            }
                         return null;
                     };
 
@@ -8001,6 +8019,20 @@ export const clutch = $root.clutch = (() => {
                             message.downstreamCluster = String(object.downstreamCluster);
                         if (object.upstreamCluster != null)
                             message.upstreamCluster = String(object.upstreamCluster);
+                        switch (object.faultInjectionCluster) {
+                        case "FAULTINJECTIONCLUSTER_UNSPECIFIED":
+                        case 0:
+                            message.faultInjectionCluster = 0;
+                            break;
+                        case "FAULTINJECTIONCLUSTER_DOWNSTREAM":
+                        case 1:
+                            message.faultInjectionCluster = 1;
+                            break;
+                        case "FAULTINJECTIONCLUSTER_UPSTREAM":
+                        case 2:
+                            message.faultInjectionCluster = 2;
+                            break;
+                        }
                         return message;
                     };
 
@@ -8020,11 +8052,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.downstreamCluster = "";
                             object.upstreamCluster = "";
+                            object.faultInjectionCluster = options.enums === String ? "FAULTINJECTIONCLUSTER_UNSPECIFIED" : 0;
                         }
                         if (message.downstreamCluster != null && message.hasOwnProperty("downstreamCluster"))
                             object.downstreamCluster = message.downstreamCluster;
                         if (message.upstreamCluster != null && message.hasOwnProperty("upstreamCluster"))
                             object.upstreamCluster = message.upstreamCluster;
+                        if (message.faultInjectionCluster != null && message.hasOwnProperty("faultInjectionCluster"))
+                            object.faultInjectionCluster = options.enums === String ? $root.clutch.chaos.serverexperimentation.v1.FaultInjectionCluster[message.faultInjectionCluster] : message.faultInjectionCluster;
                         return object;
                     };
 
@@ -8276,6 +8311,22 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return LatencyFaultConfig;
+                })();
+
+                /**
+                 * FaultInjectionCluster enum.
+                 * @name clutch.chaos.serverexperimentation.v1.FaultInjectionCluster
+                 * @enum {number}
+                 * @property {number} FAULTINJECTIONCLUSTER_UNSPECIFIED=0 FAULTINJECTIONCLUSTER_UNSPECIFIED value
+                 * @property {number} FAULTINJECTIONCLUSTER_DOWNSTREAM=1 FAULTINJECTIONCLUSTER_DOWNSTREAM value
+                 * @property {number} FAULTINJECTIONCLUSTER_UPSTREAM=2 FAULTINJECTIONCLUSTER_UPSTREAM value
+                 */
+                v1.FaultInjectionCluster = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "FAULTINJECTIONCLUSTER_UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "FAULTINJECTIONCLUSTER_DOWNSTREAM"] = 1;
+                    values[valuesById[2] = "FAULTINJECTIONCLUSTER_UPSTREAM"] = 2;
+                    return values;
                 })();
 
                 return v1;
@@ -10822,6 +10873,8 @@ export const clutch = $root.clutch = (() => {
                                  * @interface IConfig
                                  * @property {string|null} [rtdsLayerName] Config rtdsLayerName
                                  * @property {google.protobuf.IDuration|null} [cacheRefreshInterval] Config cacheRefreshInterval
+                                 * @property {string|null} [ingressFaultRuntimePrefix] Config ingressFaultRuntimePrefix
+                                 * @property {string|null} [egressFaultRuntimePrefix] Config egressFaultRuntimePrefix
                                  */
 
                                 /**
@@ -10856,6 +10909,22 @@ export const clutch = $root.clutch = (() => {
                                 Config.prototype.cacheRefreshInterval = null;
 
                                 /**
+                                 * Config ingressFaultRuntimePrefix.
+                                 * @member {string} ingressFaultRuntimePrefix
+                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.ingressFaultRuntimePrefix = "";
+
+                                /**
+                                 * Config egressFaultRuntimePrefix.
+                                 * @member {string} egressFaultRuntimePrefix
+                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.egressFaultRuntimePrefix = "";
+
+                                /**
                                  * Verifies a Config message.
                                  * @function verify
                                  * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
@@ -10874,6 +10943,12 @@ export const clutch = $root.clutch = (() => {
                                         if (error)
                                             return "cacheRefreshInterval." + error;
                                     }
+                                    if (message.ingressFaultRuntimePrefix != null && message.hasOwnProperty("ingressFaultRuntimePrefix"))
+                                        if (!$util.isString(message.ingressFaultRuntimePrefix))
+                                            return "ingressFaultRuntimePrefix: string expected";
+                                    if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
+                                        if (!$util.isString(message.egressFaultRuntimePrefix))
+                                            return "egressFaultRuntimePrefix: string expected";
                                     return null;
                                 };
 
@@ -10896,6 +10971,10 @@ export const clutch = $root.clutch = (() => {
                                             throw TypeError(".clutch.config.module.chaos.experimentation.rtds.v1.Config.cacheRefreshInterval: object expected");
                                         message.cacheRefreshInterval = $root.google.protobuf.Duration.fromObject(object.cacheRefreshInterval);
                                     }
+                                    if (object.ingressFaultRuntimePrefix != null)
+                                        message.ingressFaultRuntimePrefix = String(object.ingressFaultRuntimePrefix);
+                                    if (object.egressFaultRuntimePrefix != null)
+                                        message.egressFaultRuntimePrefix = String(object.egressFaultRuntimePrefix);
                                     return message;
                                 };
 
@@ -10915,11 +10994,17 @@ export const clutch = $root.clutch = (() => {
                                     if (options.defaults) {
                                         object.rtdsLayerName = "";
                                         object.cacheRefreshInterval = null;
+                                        object.ingressFaultRuntimePrefix = "";
+                                        object.egressFaultRuntimePrefix = "";
                                     }
                                     if (message.rtdsLayerName != null && message.hasOwnProperty("rtdsLayerName"))
                                         object.rtdsLayerName = message.rtdsLayerName;
                                     if (message.cacheRefreshInterval != null && message.hasOwnProperty("cacheRefreshInterval"))
                                         object.cacheRefreshInterval = $root.google.protobuf.Duration.toObject(message.cacheRefreshInterval, options);
+                                    if (message.ingressFaultRuntimePrefix != null && message.hasOwnProperty("ingressFaultRuntimePrefix"))
+                                        object.ingressFaultRuntimePrefix = message.ingressFaultRuntimePrefix;
+                                    if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
+                                        object.egressFaultRuntimePrefix = message.egressFaultRuntimePrefix;
                                     return object;
                                 };
 
