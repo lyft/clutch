@@ -42,7 +42,7 @@ func (tr *Transformer) CreateProperties(run *ExperimentRun, config *ExperimentCo
 
 		currentTransformationProperties, err := t.RunTransform(run, config)
 		if err != nil {
-			tr.logger.Errorw("error while creating properties out of config",
+			tr.logger.Errorw("error while creating properties from run and config",
 				"error", err, "config", config, "run", run)
 			return nil, err
 		}
