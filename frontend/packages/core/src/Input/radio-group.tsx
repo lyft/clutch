@@ -28,12 +28,8 @@ const StyledRadioGroup = styled(MuiRadioGroup)`
 const FormControl = styled(MuiFormControl)`
   ${({ theme, ...props }) => `
   display: flex;
-  width: 100%;
-  margin: 16px 0;
-  max-width: ${props["data-max-width"] || "500px"};
-  .MuiInput-underline:after {
-    border-bottom: 2px solid ${theme.palette.accent.main};
-  }
+  min-width: fit-content;
+  width: ${props["data-max-width"] || "500px"};
   `}
 `;
 
