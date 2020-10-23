@@ -7,32 +7,30 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 
-const InputLabel = styled(MuiInputLabel)`
-  ${({ theme }) => `
-  && {
-    color: ${theme.palette.text.primary};
-  }
-  `}
-`;
-
 const FormControl = styled(MuiFormControl)`
   ${({ theme, ...props }) => `
   display: flex;
-  width: 100%;
-  max-width: ${props["data-max-width"] || "500px"};
+  min-width: fit-content;
+  width: ${props["data-max-width"] || "500px"};
   .MuiInput-underline:after {
     border-bottom: 2px solid ${theme.palette.accent.main};
   }
   `}
 `;
 
-const StyledSelect = styled(MuiSelect)`
-  ${({ ...props }) => `
-  display: flex;
-  margin: 16px 0;
-  width: 100%;
-  max-width: ${props["data-max-width"] || "500px"};
+const InputLabel = styled(MuiInputLabel)`
+  ${({ theme }) => `
+  && {
+    color: ${theme.palette.text.primary};
+  }
+  position: relative;
   `}
+`;
+
+const StyledSelect = styled(MuiSelect)`
+  && {
+    margin-top: 0px;
+  }
 `;
 
 interface SelectOption {
@@ -40,9 +38,9 @@ interface SelectOption {
   value?: string;
 }
 
-interface SelectProps {
+export interface SelectProps {
   defaultOption?: number;
-  label: string;
+  label?: string;
   maxWidth?: string;
   name: string;
   options: SelectOption[];
@@ -66,24 +64,27 @@ const Select: React.FC<SelectProps> = ({
 
   const updateSelectedOption = (event: React.ChangeEvent<{ name?: string; value: string }>) => {
     const { value } = event.target;
-    const optionValues = options.map(o => o.value || o.label);
+    const optionValues = options.map(o => o?.value || o.label);
     setSelectedIdx(optionValues.indexOf(value));
     onChange(value);
   };
 
   React.useEffect(() => {
-    onChange(options[selectedIdx].value || options[selectedIdx].label);
+    onChange(options[selectedIdx]?.value || options[selectedIdx].label);
   }, []);
 
   return (
     <FormControl key={name} data-max-width={maxWidth}>
-      <InputLabel color="secondary">{label}</InputLabel>
+      <InputLabel shrink color="secondary">
+        {label}
+      </InputLabel>
       <StyledSelect
-        value={options[selectedIdx].value || options[selectedIdx].label}
+        value={options[selectedIdx]?.value || options[selectedIdx].label}
         onChange={updateSelectedOption}
+        fullWidth
       >
         {options.map(option => (
-          <MenuItem key={option.label} value={option.value || option.label}>
+          <MenuItem key={option.label} value={option?.value || option.label}>
             {option.label}
           </MenuItem>
         ))}

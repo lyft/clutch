@@ -76,7 +76,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 			Reporter: reporter,
 			Prefix:   "clutch",
 		},
-		duration(cfg.Gateway.Stats.FlushInterval),
+		cfg.Gateway.Stats.FlushInterval.AsDuration(),
 	)
 	defer func() {
 		if err := scopeCloser.Close(); err != nil {

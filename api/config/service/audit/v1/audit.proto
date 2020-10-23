@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.config.service.audit.v1;
 
-option go_package = "auditv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/service/audit/v1;auditv1";
 
 import "validate/validate.proto";
 

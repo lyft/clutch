@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.aws.ec2.v1;
 
-option go_package = "ec2v1";
+option go_package = "github.com/lyft/clutch/backend/api/aws/ec2/v1;ec2v1";
 
 import "google/api/annotations.proto";
 import "validate/validate.proto";

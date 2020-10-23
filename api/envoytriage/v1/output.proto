@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.envoytriage.v1;
 
-option go_package = "envoytriagev1";
+option go_package = "github.com/lyft/clutch/backend/api/envoytriage/v1;envoytriagev1";
 
 import "google/protobuf/struct.proto";
 

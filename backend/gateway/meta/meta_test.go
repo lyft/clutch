@@ -3,9 +3,9 @@ package meta
 import (
 	"testing"
 
-	"github.com/golang/protobuf/descriptor"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/proto"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
@@ -38,6 +38,9 @@ func TestGetAction(t *testing.T) {
 	_ = &healthcheckv1.HealthcheckRequest{} // Ensure it's imported.
 	action := GetAction("/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck")
 	assert.Equal(t, apiv1.ActionType_READ, action)
+
+	action = GetAction("/nonexistent/doesnotexist")
+	assert.Equal(t, apiv1.ActionType_UNSPECIFIED, action)
 }
 
 func TestResourceNames(t *testing.T) {
@@ -50,7 +53,7 @@ func TestResourceNames(t *testing.T) {
 
 	tests := []struct {
 		id      string
-		message descriptor.Message
+		message proto.Message
 		names   []*auditv1.Resource
 	}{
 		{
@@ -99,7 +102,6 @@ func TestResourceNames(t *testing.T) {
 		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
-
 			resolvedNames := ResourceNames(tt.message)
 			assert.Len(t, resolvedNames, len(tt.names))
 			for i := range resolvedNames {

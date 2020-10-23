@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.audit.v1;
 
-option go_package = "auditv1";
+option go_package = "github.com/lyft/clutch/backend/api/audit/v1;auditv1";
 
 import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";

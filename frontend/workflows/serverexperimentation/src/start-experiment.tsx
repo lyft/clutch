@@ -1,5 +1,5 @@
 import React from "react";
-import type { clutch as IClutch } from "@clutch-sh/api";
+import { clutch as IClutch } from "@clutch-sh/api";
 import type { BaseWorkflowProps } from "@clutch-sh/core";
 import {
   ButtonGroup,
@@ -14,7 +14,26 @@ import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import * as yup from "yup";
 
-const ClusterPairTargetDetails: React.FC<WizardChild> = () => {
+import RadioGroup from "./radio-group";
+
+const faultInjectionTypeItems = [
+  {
+    label: "Internal (Lyft owned)",
+    value: IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster.FAULTINJECTIONCLUSTER_UPSTREAM.toString(),
+  },
+  {
+    label: "External (3rd party)",
+    value: IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster.FAULTINJECTIONCLUSTER_DOWNSTREAM.toString(),
+  },
+];
+
+interface ClusterPairTargetDetailsProps extends WizardChild {
+  upstreamClusterTypeSelectionEnabled: boolean;
+}
+
+const ClusterPairTargetDetails: React.FC<ClusterPairTargetDetailsProps> = ({
+  upstreamClusterTypeSelectionEnabled,
+}) => {
   const { onSubmit } = useWizardContext();
   const clusterPairData = useDataLayout("clusterPairTargetData");
   const clusterPair = clusterPairData.displayValue();
@@ -42,6 +61,16 @@ const ClusterPairTargetDetails: React.FC<WizardChild> = () => {
           },
         ]}
       />
+      {upstreamClusterTypeSelectionEnabled && (
+        <RadioGroup
+          name="upstream_cluster_type"
+          label="Upstream Cluster Type"
+          options={faultInjectionTypeItems}
+          onChange={(value: string) =>
+            clusterPairData.updateData("faultInjectionCluster", parseInt(value, 10))
+          }
+        />
+      )}
       <ButtonGroup
         buttons={[
           {
@@ -136,7 +165,14 @@ const Confirm: React.FC<WizardChild> = () => {
   );
 };
 
-const StartExperiment: React.FC<BaseWorkflowProps> = ({ heading }) => {
+interface StartExperimentProps extends BaseWorkflowProps {
+  upstreamClusterTypeSelectionEnabled?: boolean;
+}
+
+const StartExperiment: React.FC<StartExperimentProps> = ({
+  heading,
+  upstreamClusterTypeSelectionEnabled = false,
+}) => {
   const createExperiment = (data: IClutch.chaos.serverexperimentation.v1.ITestConfig) => {
     const testConfig = data;
     testConfig["@type"] = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig";
@@ -161,10 +197,16 @@ const StartExperiment: React.FC<BaseWorkflowProps> = ({ heading }) => {
           ? { abort: { httpStatus: experimentData.httpStatus, percent: experimentData.percent } }
           : { latency: { durationMs: experimentData.durationMs, percent: experimentData.percent } };
 
+        const faultInjectionCluster =
+          clusterPairTargetData.faultInjectionCluster ||
+          IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster
+            .FAULTINJECTIONCLUSTER_UPSTREAM;
+
         return createExperiment({
           clusterPair: {
             downstreamCluster: clusterPairTargetData.downstreamCluster,
             upstreamCluster: clusterPairTargetData.upstreamCluster,
+            faultInjectionCluster,
           },
           ...fault,
         });
@@ -174,7 +216,10 @@ const StartExperiment: React.FC<BaseWorkflowProps> = ({ heading }) => {
 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
-      <ClusterPairTargetDetails name="Target" />
+      <ClusterPairTargetDetails
+        name="Target"
+        upstreamClusterTypeSelectionEnabled={upstreamClusterTypeSelectionEnabled}
+      />
       <ExperimentDetails name="Experiment Data" />
       <Confirm name="Confirmation" />
     </Wizard>

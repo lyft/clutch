@@ -195,7 +195,7 @@ services:
   - name: clutch.service.audit
     typed_config:
       "@type": types.google.com/clutch.config.service.audit.v1.Config
-      local_auditing: true
+      in_memory: true
       filter:
         denylist: true
         rules:

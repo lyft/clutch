@@ -3384,6 +3384,9 @@ export namespace clutch {
 
                     /** ClusterPairTarget upstreamCluster */
                     upstreamCluster?: (string|null);
+
+                    /** ClusterPairTarget faultInjectionCluster */
+                    faultInjectionCluster?: (clutch.chaos.serverexperimentation.v1.FaultInjectionCluster|null);
                 }
 
                 /** Represents a ClusterPairTarget. */
@@ -3400,6 +3403,9 @@ export namespace clutch {
 
                     /** ClusterPairTarget upstreamCluster. */
                     public upstreamCluster: string;
+
+                    /** ClusterPairTarget faultInjectionCluster. */
+                    public faultInjectionCluster: clutch.chaos.serverexperimentation.v1.FaultInjectionCluster;
 
                     /**
                      * Verifies a ClusterPairTarget message.
@@ -3536,6 +3542,13 @@ export namespace clutch {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                /** FaultInjectionCluster enum. */
+                enum FaultInjectionCluster {
+                    FAULTINJECTIONCLUSTER_UNSPECIFIED = 0,
+                    FAULTINJECTIONCLUSTER_DOWNSTREAM = 1,
+                    FAULTINJECTIONCLUSTER_UPSTREAM = 2
                 }
             }
         }
@@ -4570,6 +4583,12 @@ export namespace clutch {
 
                                 /** Config cacheRefreshInterval */
                                 cacheRefreshInterval?: (google.protobuf.IDuration|null);
+
+                                /** Config ingressFaultRuntimePrefix */
+                                ingressFaultRuntimePrefix?: (string|null);
+
+                                /** Config egressFaultRuntimePrefix */
+                                egressFaultRuntimePrefix?: (string|null);
                             }
 
                             /** Represents a Config. */
@@ -4586,6 +4605,12 @@ export namespace clutch {
 
                                 /** Config cacheRefreshInterval. */
                                 public cacheRefreshInterval?: (google.protobuf.IDuration|null);
+
+                                /** Config ingressFaultRuntimePrefix. */
+                                public ingressFaultRuntimePrefix: string;
+
+                                /** Config egressFaultRuntimePrefix. */
+                                public egressFaultRuntimePrefix: string;
 
                                 /**
                                  * Verifies a Config message.

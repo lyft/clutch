@@ -7,13 +7,9 @@
 package assetsv1
 
 import (
-	context "context"
 	proto "github.com/golang/protobuf/proto"
 	_ "github.com/lyft/clutch/backend/api/api/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -125,8 +121,11 @@ var file_assets_v1_assets_proto_rawDesc = []byte{
 	0x63, 0x68, 0x2e, 0x61, 0x73, 0x73, 0x65, 0x74, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x46, 0x65, 0x74,
 	0x63, 0x68, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1e, 0x82, 0xd3, 0xe4, 0x93,
 	0x02, 0x12, 0x12, 0x10, 0x2f, 0x76, 0x31, 0x2f, 0x61, 0x73, 0x73, 0x65, 0x74, 0x73, 0x2f, 0x66,
-	0x65, 0x74, 0x63, 0x68, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x02, 0x42, 0x0a, 0x5a, 0x08, 0x61, 0x73,
-	0x73, 0x65, 0x74, 0x73, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x74, 0x63, 0x68, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x02, 0x42, 0x37, 0x5a, 0x35, 0x67, 0x69,
+	0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6c, 0x79, 0x66, 0x74, 0x2f, 0x63, 0x6c,
+	0x75, 0x74, 0x63, 0x68, 0x2f, 0x62, 0x61, 0x63, 0x6b, 0x65, 0x6e, 0x64, 0x2f, 0x61, 0x70, 0x69,
+	0x2f, 0x61, 0x73, 0x73, 0x65, 0x74, 0x73, 0x2f, 0x76, 0x31, 0x3b, 0x61, 0x73, 0x73, 0x65, 0x74,
+	0x73, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -205,86 +204,4 @@ func file_assets_v1_assets_proto_init() {
 	file_assets_v1_assets_proto_rawDesc = nil
 	file_assets_v1_assets_proto_goTypes = nil
 	file_assets_v1_assets_proto_depIdxs = nil
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConnInterface
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
-
-// AssetsAPIClient is the client API for AssetsAPI service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type AssetsAPIClient interface {
-	// Fetch is a simple endpoint that is used to execute middleware (e.g. authentication) before serving an asset.
-	Fetch(ctx context.Context, in *FetchRequest, opts ...grpc.CallOption) (*FetchResponse, error)
-}
-
-type assetsAPIClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewAssetsAPIClient(cc grpc.ClientConnInterface) AssetsAPIClient {
-	return &assetsAPIClient{cc}
-}
-
-func (c *assetsAPIClient) Fetch(ctx context.Context, in *FetchRequest, opts ...grpc.CallOption) (*FetchResponse, error) {
-	out := new(FetchResponse)
-	err := c.cc.Invoke(ctx, "/clutch.assets.v1.AssetsAPI/Fetch", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// AssetsAPIServer is the server API for AssetsAPI service.
-type AssetsAPIServer interface {
-	// Fetch is a simple endpoint that is used to execute middleware (e.g. authentication) before serving an asset.
-	Fetch(context.Context, *FetchRequest) (*FetchResponse, error)
-}
-
-// UnimplementedAssetsAPIServer can be embedded to have forward compatible implementations.
-type UnimplementedAssetsAPIServer struct {
-}
-
-func (*UnimplementedAssetsAPIServer) Fetch(context.Context, *FetchRequest) (*FetchResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Fetch not implemented")
-}
-
-func RegisterAssetsAPIServer(s *grpc.Server, srv AssetsAPIServer) {
-	s.RegisterService(&_AssetsAPI_serviceDesc, srv)
-}
-
-func _AssetsAPI_Fetch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FetchRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AssetsAPIServer).Fetch(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.assets.v1.AssetsAPI/Fetch",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AssetsAPIServer).Fetch(ctx, req.(*FetchRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _AssetsAPI_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "clutch.assets.v1.AssetsAPI",
-	HandlerType: (*AssetsAPIServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "Fetch",
-			Handler:    _AssetsAPI_Fetch_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "assets/v1/assets.proto",
 }

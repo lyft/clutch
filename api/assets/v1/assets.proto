@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.assets.v1;
 
-option go_package = "assetsv1";
+option go_package = "github.com/lyft/clutch/backend/api/assets/v1;assetsv1";
 
 import "google/api/annotations.proto";
 

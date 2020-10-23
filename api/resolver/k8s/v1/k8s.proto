@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.resolver.k8s.v1;
 
-option go_package = "k8sv1";
+option go_package = "github.com/lyft/clutch/backend/api/resolver/k8s/v1;k8sv1";
 
 import "google/protobuf/descriptor.proto";
 
