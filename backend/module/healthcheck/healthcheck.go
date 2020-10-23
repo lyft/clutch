@@ -6,6 +6,7 @@ package healthcheck
 
 import (
 	"context"
+	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -41,6 +42,7 @@ func newAPI() healthcheckv1.HealthcheckAPIServer {
 
 type healthcheckAPI struct{}
 
-func (a *healthcheckAPI) Healthcheck(context.Context, *healthcheckv1.HealthcheckRequest) (*healthcheckv1.HealthcheckResponse, error) {
+func (a *healthcheckAPI) Healthcheck(ctx context.Context, _ *healthcheckv1.HealthcheckRequest) (*healthcheckv1.HealthcheckResponse, error) {
+	time.Sleep(30 * time.Second)
 	return &healthcheckv1.HealthcheckResponse{}, nil
 }
