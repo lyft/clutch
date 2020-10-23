@@ -3,7 +3,7 @@ import {
   FormControl as MuiFormControl,
   FormControlLabel,
   FormLabel as MuiFormLabel,
-  Radio,
+  Radio as MuiRadio,
   RadioGroup as MuiRadioGroup,
 } from "@material-ui/core";
 import styled from "styled-components";
@@ -26,10 +26,18 @@ const StyledRadioGroup = styled(MuiRadioGroup)`
 `;
 
 const FormControl = styled(MuiFormControl)`
-  ${({ theme, ...props }) => `
+  ${({ ...props }) => `
   display: flex;
   min-width: fit-content;
   width: ${props["data-max-width"] || "500px"};
+  `}
+`;
+
+const Radio = styled(MuiRadio)`
+  ${({ theme }) => `
+  &.Mui-checked {
+    color: ${theme.palette.accent.main};
+  }
   `}
 `;
 
