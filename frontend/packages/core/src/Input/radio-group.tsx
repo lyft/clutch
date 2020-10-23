@@ -93,7 +93,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
           return (
             <FormControlLabel
               key={option.label}
-              value={option.value || option.label}
+              value={option?.value || option.label}
               control={<Radio />}
               label={option.label}
             />
