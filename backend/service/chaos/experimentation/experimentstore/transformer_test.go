@@ -14,7 +14,7 @@ func TestNoRegisteredTransformation(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 	transformer := NewTransformer(logger)
 	config := &ExperimentConfig{id: 1, Config: &any.Any{}}
-	_, err := transformer.CreateProperties(&ExperimentRun{id: 123}, config)
+	_, err := transformer.CreateProperties(&ExperimentRun{Id: 123}, config)
 
 	assert.NoError(t, err)
 }
@@ -32,7 +32,7 @@ func TestNoMatchingRegisteredRunConfigTransform(t *testing.T) {
 	}
 	transformation := Transformation{ConfigTypeUrl: "bar", RunTransform: transform}
 	assert.NoError(t, transformer.Register(transformation))
-	properties, err := transformer.CreateProperties(&ExperimentRun{id: 123}, config)
+	properties, err := transformer.CreateProperties(&ExperimentRun{Id: 123}, config)
 
 	assert.NoError(t, err)
 	assert.Equal(t, 0, len(properties))
@@ -41,7 +41,7 @@ func TestNoMatchingRegisteredRunConfigTransform(t *testing.T) {
 func TestMatchingRegisteredNullRunConfigTransform(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 
-	run := &ExperimentRun{id: 123}
+	run := &ExperimentRun{Id: 123}
 	config := &ExperimentConfig{id: 1, Config: &any.Any{TypeUrl: "test"}}
 
 	transformation := Transformation{ConfigTypeUrl: "test"}
@@ -56,7 +56,7 @@ func TestMatchingRegisteredNullRunConfigTransform(t *testing.T) {
 func TestMatchingRegisteredRunConfigTransform(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 
-	expectedRun := &ExperimentRun{id: 123}
+	expectedRun := &ExperimentRun{Id: 123}
 	expectedConfig := &ExperimentConfig{id: 1, Config: &any.Any{TypeUrl: "test"}}
 	expectedProperty := &experimentation.Property{
 		Id:    "foo",
@@ -82,7 +82,7 @@ func TestMatchingRegisteredRunConfigTransform(t *testing.T) {
 func TestMatchingMultipleRegisteredRunConfigTransforms(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 
-	expectedRun := &ExperimentRun{id: 123}
+	expectedRun := &ExperimentRun{Id: 123}
 	expectedConfig := &ExperimentConfig{id: 1, Config: &any.Any{TypeUrl: "foo"}}
 	expectedProperty1 := &experimentation.Property{
 		Id:    "foo1",

@@ -23,7 +23,7 @@ func TestScheduledExperiment(t *testing.T) {
 	cancellation := sql.NullTime{Valid: false}
 	now := startTime.AddDate(0, 0, -1)
 
-	run := &ExperimentRun{id: 1, startTime: startTime, endTime: end, cancellationTime: cancellation, creationTime: creationTime}
+	run := &ExperimentRun{Id: 1, StartTime: startTime, EndTime: end, CancellationTime: cancellation, creationTime: creationTime}
 	config := &ExperimentConfig{id: 2, Config: &any.Any{}}
 	transformer := NewTransformer(logger)
 
@@ -43,7 +43,7 @@ func TestCanceledExperiment(t *testing.T) {
 		Valid: true,
 	}
 
-	run := &ExperimentRun{id: 1, startTime: startTime, endTime: end, cancellationTime: cancellation, creationTime: creationTime}
+	run := &ExperimentRun{Id: 1, StartTime: startTime, EndTime: end, CancellationTime: cancellation, creationTime: creationTime}
 	config := &ExperimentConfig{id: 2, Config: &any.Any{}}
 	transformer := NewTransformer(logger)
 
@@ -61,7 +61,7 @@ func TestRunningExperiment(t *testing.T) {
 	cancellation := sql.NullTime{Valid: false}
 	now := startTime.AddDate(0, 0, 1)
 
-	run := &ExperimentRun{id: 1, startTime: startTime, endTime: end, cancellationTime: cancellation, creationTime: creationTime}
+	run := &ExperimentRun{Id: 1, StartTime: startTime, EndTime: end, CancellationTime: cancellation, creationTime: creationTime}
 	config := &ExperimentConfig{id: 2, Config: &any.Any{}}
 	transformer := NewTransformer(logger)
 
@@ -84,7 +84,7 @@ func TestStoppedExperiment(t *testing.T) {
 		Valid: true,
 	}
 
-	run := &ExperimentRun{id: 1, startTime: startTime, endTime: end, cancellationTime: cancellation, creationTime: creationTime}
+	run := &ExperimentRun{Id: 1, StartTime: startTime, EndTime: end, CancellationTime: cancellation, creationTime: creationTime}
 	config := &ExperimentConfig{id: 2, Config: &any.Any{}}
 	transformer := NewTransformer(logger)
 
@@ -107,7 +107,7 @@ func TestCompletedExperiment(t *testing.T) {
 	}
 	now := endTime.AddDate(0, 0, 1)
 
-	run := &ExperimentRun{id: 1, startTime: startTime, endTime: end, cancellationTime: cancellation, creationTime: creationTime}
+	run := &ExperimentRun{Id: 1, StartTime: startTime, EndTime: end, CancellationTime: cancellation, creationTime: creationTime}
 	config := &ExperimentConfig{id: 2, Config: &any.Any{}}
 	transformer := NewTransformer(logger)
 

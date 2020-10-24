@@ -30,7 +30,7 @@ func NewRunListView(run *ExperimentRun, config *ExperimentConfig, transformer *T
 	}
 
 	return &experimentation.ListViewItem{
-		Id:         run.id,
+		Id:         run.Id,
 		Properties: &experimentation.PropertiesMap{Items: propertiesMapItems},
 	}, nil
 }

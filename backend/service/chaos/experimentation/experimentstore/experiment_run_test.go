@@ -9,7 +9,7 @@ import (
 )
 
 func TestRunningExperimentRunProperties(t *testing.T) {
-	run := &ExperimentRun{id: 1, startTime: startTime, endTime: sql.NullTime{}, cancellationTime: sql.NullTime{}, creationTime: creationTime}
+	run := &ExperimentRun{Id: 1, StartTime: startTime, EndTime: sql.NullTime{}, CancellationTime: sql.NullTime{}, creationTime: creationTime}
 	properties, err := run.CreateProperties(time.Now())
 
 	assert := assert.New(t)

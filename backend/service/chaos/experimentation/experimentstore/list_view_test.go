@@ -14,7 +14,7 @@ import (
 
 func TestListViewRunningExperimentRunProperties(t *testing.T) {
 	startTime := time.Now()
-	expectedRun := &ExperimentRun{id: 1, startTime: startTime, endTime: sql.NullTime{}, cancellationTime: sql.NullTime{}, creationTime: creationTime}
+	expectedRun := &ExperimentRun{Id: 1, StartTime: startTime, EndTime: sql.NullTime{}, CancellationTime: sql.NullTime{}, creationTime: creationTime}
 	expectedConfig := &ExperimentConfig{id: 2, Config: &any.Any{TypeUrl: "foo"}}
 
 	expectedProperty := &experimentation.Property{
