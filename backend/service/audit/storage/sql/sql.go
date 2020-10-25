@@ -247,12 +247,12 @@ type event struct {
 func requestEventProto(logger *zap.Logger, e *event) *auditv1.RequestEvent {
 	reqBody, err := apiBodyProto(e.Details.RequestBody)
 	if err != nil {
-		logger.Warn("unmarshallable object for RequestBody", zap.Error(err))
+		logger.Error("unmarshallable object for RequestBody", zap.Error(err))
 	}
 
 	respBody, err := apiBodyProto(e.Details.ResponseBody)
 	if err != nil {
-		logger.Warn("unmarshallable object for ResponseBody", zap.Error(err))
+		logger.Error("unmarshallable object for ResponseBody", zap.Error(err))
 	}
 
 	return &auditv1.RequestEvent{
