@@ -9,11 +9,11 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	rpcstatus "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
@@ -280,7 +280,7 @@ func convertResources(proto []*auditv1.Resource) []*resource {
 }
 
 // Encodes proto object in JSON format
-func convertAPIBody(body *any.Any) (json.RawMessage, error) {
+func convertAPIBody(body *anypb.Any) (json.RawMessage, error) {
 	b, err := protojson.Marshal(body)
 	if err != nil {
 		return nil, err
@@ -289,12 +289,12 @@ func convertAPIBody(body *any.Any) (json.RawMessage, error) {
 }
 
 // Decodes JSON to proto Any message
-func apiBodyProto(details json.RawMessage) (*any.Any, error) {
+func apiBodyProto(details json.RawMessage) (*anypb.Any, error) {
 	if details == nil {
 		return nil, nil
 	}
 
-	body := &any.Any{}
+	body := &anypb.Any{}
 
 	err := protojson.Unmarshal(details, body)
 	if err != nil {

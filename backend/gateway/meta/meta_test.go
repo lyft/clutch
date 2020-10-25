@@ -11,6 +11,8 @@ import (
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
+
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/module/healthcheck"
 )
@@ -114,7 +116,7 @@ func TestResourceNames(t *testing.T) {
 // proto.message with nil value
 var m = (*ec2v1.Instance)(nil)
 
-// test scenarious used in both TestIsValidInterface and TestAPIBody
+// test cases used in both TestIsValidInterface and TestAPIBody
 var tests = []struct {
 	input     interface{}
 	isValid   bool // checked in TestIsValidInterface
@@ -123,6 +125,12 @@ var tests = []struct {
 	// case: type is proto.message and value is not nil
 	{
 		input:     &ec2v1.Instance{InstanceId: "i-123456789abcdef0"},
+		isValid:   true,
+		expectNil: false,
+	},
+	// case: type is proto.message and value is not nil
+	{
+		input:     &k8sapiv1.ResizeHPAResponse{},
 		isValid:   true,
 		expectNil: false,
 	},

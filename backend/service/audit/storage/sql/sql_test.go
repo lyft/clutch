@@ -4,9 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
@@ -14,23 +13,23 @@ import (
 
 func TestConvertAPIBody(t *testing.T) {
 	// set up for TestConvertAPIBody
-	a1 := (*any.Any)(nil)
+	a1 := (*anypb.Any)(nil)
 
 	p1 := &ec2v1.Instance{InstanceId: "i-123456789abcdef0"}
-	a2, _ := ptypes.MarshalAny(p1)
+	a2, _ := anypb.New(p1)
 
 	p2 := &k8sapiv1.ResizeHPAResponse{}
-	a3, _ := ptypes.MarshalAny(p2)
+	a3, _ := anypb.New(p2)
 
 	tests := []struct {
-		input *any.Any
+		input *anypb.Any
 	}{
 		{input: nil},
 		// case: input is a typed nil
 		{input: a1},
 		// case: input is typed with non-nil value
 		{input: a2},
-		// case: input is an empty proto message object
+		// case: input is typed with non-nil value
 		{input: a3},
 	}
 

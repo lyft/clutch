@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
@@ -142,15 +143,15 @@ func isValidInterface(body interface{}) bool {
 	switch v := body.(type) {
 	// type we want is proto.message
 	case proto.Message:
-		// // want to use a value that is not nil
-		return !reflect.ValueOf(v).IsNil()
+		// want to use a value that is not nil
+		return v.ProtoReflect().IsValid()
 	default:
 		return false
 	}
 }
 
 // APIBody returns a API request/response interface as an anypb.Any message.
-func APIBody(body interface{}) (*any.Any, error) {
+func APIBody(body interface{}) (*anypb.Any, error) {
 	if !isValidInterface(body) {
 		// the interface does not match the type/value we want
 		return nil, nil
@@ -158,10 +159,10 @@ func APIBody(body interface{}) (*any.Any, error) {
 
 	m, ok := body.(proto.Message)
 	if !ok {
-		return nil, fmt.Errorf("could not use type: %s", reflect.TypeOf(body).Kind())
+		return nil, fmt.Errorf("could not use %s as proto.Message", reflect.TypeOf(body).Kind())
 	}
 
-	a, err := ptypes.MarshalAny(m)
+	a, err := anypb.New(m)
 	if err != nil {
 		return nil, err
 	}
