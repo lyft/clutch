@@ -12,7 +12,6 @@ import (
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
-
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/module/healthcheck"
 )
