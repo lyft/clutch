@@ -1,5 +1,5 @@
 import React from "react";
-import { action } from "@storybook/addon-actions";
+import { action } from "@storybook/addon-actions"; // eslint-disable-line import/no-extraneous-dependencies
 import type { Meta } from "@storybook/react";
 
 import type { ButtonGroupProps } from "../button";
@@ -12,16 +12,15 @@ export default {
 
 const Template = (props: ButtonGroupProps) => <ButtonGroup {...props} />;
 
+const sharedArgs = [{ text: "Back", onClick: action("onClick event") }, action("onClick event")];
+
 export const Default = Template.bind({});
 Default.args = {
   buttons: [
-    {
-      text: "Back",
-      onClick: action("onClick event"),
-    },
+    sharedArgs[0],
     {
       text: "Next",
-      onClick: action("onClick event"),
+      onClick: sharedArgs[1],
     },
   ],
 };
@@ -29,14 +28,11 @@ Default.args = {
 export const Destructive = Template.bind({});
 Destructive.args = {
   buttons: [
-    {
-      text: "Back",
-      onClick: action("onClick event"),
-    },
+    sharedArgs[0],
     {
       text: "Delete",
       destructive: true,
-      onClick: action("onClick event"),
+      onClick: sharedArgs[1],
     },
   ],
 };
