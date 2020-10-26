@@ -148,3 +148,21 @@ func TestTimeoutBlockForMoreThanBoost(t *testing.T) {
 
 	assert.Equal(t, "handler completed after timeout", recorded.All()[0].Message)
 }
+
+func TestInfiniteTimeout(t *testing.T) {
+	cfg := &gatewayv1.Timeouts{Default: durationpb.New(0)}
+
+	m, err := New(cfg, nil, nil)
+	assert.NoError(t, err)
+
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		time.Sleep(boost + time.Millisecond)
+		return &healthcheckv1.HealthcheckResponse{}, nil
+	}
+
+	midFn := m.UnaryInterceptor()
+	resp, err := midFn(context.Background(), nil, &grpc.UnaryServerInfo{FullMethod: "/zip/zoom"}, handler)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
