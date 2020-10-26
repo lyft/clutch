@@ -7337,6 +7337,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public updateDeployment(request: clutch.k8s.v1.IUpdateDeploymentRequest): Promise<clutch.k8s.v1.UpdateDeploymentResponse>;
+
+                /**
+                 * Calls DeleteDeployment.
+                 * @param request DeleteDeploymentRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DeleteDeploymentResponse
+                 */
+                public deleteDeployment(request: clutch.k8s.v1.IDeleteDeploymentRequest, callback: clutch.k8s.v1.K8sAPI.DeleteDeploymentCallback): void;
+
+                /**
+                 * Calls DeleteDeployment.
+                 * @param request DeleteDeploymentRequest message or plain object
+                 * @returns Promise
+                 */
+                public deleteDeployment(request: clutch.k8s.v1.IDeleteDeploymentRequest): Promise<clutch.k8s.v1.DeleteDeploymentResponse>;
             }
 
             namespace K8sAPI {
@@ -7382,6 +7396,13 @@ export namespace clutch {
                  * @param [response] UpdateDeploymentResponse
                  */
                 type UpdateDeploymentCallback = (error: (Error|null), response?: clutch.k8s.v1.UpdateDeploymentResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteDeployment}.
+                 * @param error Error, if any
+                 * @param [response] DeleteDeploymentResponse
+                 */
+                type DeleteDeploymentCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteDeploymentResponse) => void;
             }
 
             /** Properties of a DescribePodRequest. */
@@ -8649,6 +8670,114 @@ export namespace clutch {
 
                 /**
                  * Converts this UpdateDeploymentResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteDeploymentRequest. */
+            interface IDeleteDeploymentRequest {
+
+                /** DeleteDeploymentRequest clientset */
+                clientset?: (string|null);
+
+                /** DeleteDeploymentRequest cluster */
+                cluster?: (string|null);
+
+                /** DeleteDeploymentRequest namespace */
+                namespace?: (string|null);
+
+                /** DeleteDeploymentRequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a DeleteDeploymentRequest. */
+            class DeleteDeploymentRequest implements IDeleteDeploymentRequest {
+
+                /**
+                 * Constructs a new DeleteDeploymentRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteDeploymentRequest);
+
+                /** DeleteDeploymentRequest clientset. */
+                public clientset: string;
+
+                /** DeleteDeploymentRequest cluster. */
+                public cluster: string;
+
+                /** DeleteDeploymentRequest namespace. */
+                public namespace: string;
+
+                /** DeleteDeploymentRequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a DeleteDeploymentRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteDeploymentRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteDeploymentRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteDeploymentRequest;
+
+                /**
+                 * Creates a plain object from a DeleteDeploymentRequest message. Also converts values to other types if specified.
+                 * @param message DeleteDeploymentRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteDeploymentRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteDeploymentRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteDeploymentResponse. */
+            interface IDeleteDeploymentResponse {
+            }
+
+            /** Represents a DeleteDeploymentResponse. */
+            class DeleteDeploymentResponse implements IDeleteDeploymentResponse {
+
+                /**
+                 * Constructs a new DeleteDeploymentResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteDeploymentResponse);
+
+                /**
+                 * Verifies a DeleteDeploymentResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteDeploymentResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteDeploymentResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteDeploymentResponse;
+
+                /**
+                 * Creates a plain object from a DeleteDeploymentResponse message. Also converts values to other types if specified.
+                 * @param message DeleteDeploymentResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteDeploymentResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteDeploymentResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

@@ -13,3 +13,11 @@ func (a *k8sAPI) UpdateDeployment(ctx context.Context, req *k8sapiv1.UpdateDeplo
 	}
 	return &k8sapiv1.UpdateDeploymentResponse{}, nil
 }
+
+func (a *k8sAPI) DeleteDeployment(ctx context.Context, req *k8sapiv1.DeleteDeploymentRequest) (*k8sapiv1.DeleteDeploymentResponse, error) {
+	err := a.k8s.DeleteDeployment(ctx, req.Clientset, req.Cluster, req.Namespace, req.Name)
+	if err != nil {
+		return nil, err
+	}
+	return &k8sapiv1.DeleteDeploymentResponse{}, nil
+}
