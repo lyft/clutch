@@ -20,7 +20,12 @@ import (
 	"github.com/lyft/clutch/backend/middleware"
 )
 
-const DefaultTimeout = time.Second * 15
+const (
+	DefaultTimeout = time.Second * 15
+
+	// Boost is added to the timeout to give a handler that respects the deadline the opportunity to return an error.
+	boost = time.Millisecond * 50
+)
 
 func New(config *gatewayv1.Timeouts, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
 	if config == nil {
@@ -96,7 +101,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 
 		// Wait for timeout or handler to send result. The waiting period for timeout is boosted by 50ms to give the
 		// goroutine a chance to return if it's respecting the deadline.
-		wait := time.NewTimer(timeout + (time.Millisecond * 50))
+		wait := time.NewTimer(timeout + boost)
 		defer wait.Stop()
 		select {
 		case ret := <-resultChan:
