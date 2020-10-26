@@ -14,8 +14,8 @@ import {
 } from "./button";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
-import { Error, Warning } from "./error";
-import { Hint, Note, NoteConfig, NotePanel } from "./Feedback";
+import { Error } from "./error";
+import { Hint, Note, NoteConfig, NotePanel, Warning } from "./Feedback";
 import { Status } from "./icon";
 import Loadable from "./loading";
 import { client, ClientError } from "./network";
