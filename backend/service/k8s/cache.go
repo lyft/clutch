@@ -69,35 +69,49 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 	// deploymentInformer.AddEventHandler(informerHandlers)
 	// hpaInformer.AddEventHandler(informerHandlers)
 
-	_, podInformer := cache.NewInformer(
-		cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "pods", v1.NamespaceAll, fields.Everything()),
-		&v1.Pod{},
-		informerResyncTime,
-		informerHandlers,
-	)
-	_, deploymentInformer := cache.NewInformer(
-		cache.NewListWatchFromClient(cs.AppsV1().RESTClient(), "deployments", v1.NamespaceAll, fields.Everything()),
-		&appsv1.Deployment{},
-		informerResyncTime,
-		informerHandlers,
-	)
-
-	_, hpaInformer := cache.NewInformer(
-		cache.NewListWatchFromClient(cs.AutoscalingV1().RESTClient(), "horizontalpodautoscalers", v1.NamespaceAll, fields.Everything()),
-		&autoscalingv1.HorizontalPodAutoscaler{},
-		informerResyncTime,
-		informerHandlers,
-	)
-
-	// idx, informer := cache.NewIndexerInformer(
+	// _, podInformer := cache.NewInformer(
 	// 	cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "pods", v1.NamespaceAll, fields.Everything()),
 	// 	&v1.Pod{},
 	// 	informerResyncTime,
 	// 	informerHandlers,
-	// 	// empty indexer? do nothing? idk
-	// 	cache.Indexers{},
 	// )
-	// go informer.Run(stop)
+	// _, deploymentInformer := cache.NewInformer(
+	// 	cache.NewListWatchFromClient(cs.AppsV1().RESTClient(), "deployments", v1.NamespaceAll, fields.Everything()),
+	// 	&appsv1.Deployment{},
+	// 	informerResyncTime,
+	// 	informerHandlers,
+	// )
+
+	// _, hpaInformer := cache.NewInformer(
+	// 	cache.NewListWatchFromClient(cs.AutoscalingV1().RESTClient(), "horizontalpodautoscalers", v1.NamespaceAll, fields.Everything()),
+	// 	&autoscalingv1.HorizontalPodAutoscaler{},
+	// 	informerResyncTime,
+	// 	informerHandlers,
+	// )
+
+	_, podInformer := cache.NewIndexerInformer(
+		cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "pods", v1.NamespaceAll, fields.Everything()),
+		&v1.Pod{},
+		informerResyncTime,
+		informerHandlers,
+		cache.Indexers{},
+	)
+
+	_, deploymentInformer := cache.NewIndexerInformer(
+		cache.NewListWatchFromClient(cs.AppsV1().RESTClient(), "deployments", v1.NamespaceAll, fields.Everything()),
+		&appsv1.Deployment{},
+		informerResyncTime,
+		informerHandlers,
+		cache.Indexers{},
+	)
+
+	_, hpaInformer := cache.NewIndexerInformer(
+		cache.NewListWatchFromClient(cs.AutoscalingV1().RESTClient(), "horizontalpodautoscalers", v1.NamespaceAll, fields.Everything()),
+		&autoscalingv1.HorizontalPodAutoscaler{},
+		informerResyncTime,
+		informerHandlers,
+		cache.Indexers{},
+	)
 
 	go podInformer.Run(stop)
 	go deploymentInformer.Run(stop)
