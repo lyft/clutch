@@ -30,7 +30,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, links }) => 
   const navigate = useNavigate();
 
   const handleRowSelection = (event: any, item: IClutch.chaos.experimentation.v1.ListViewItem) => {
-    navigate(`/experimentation/run/${item.identifier}`);
+    navigate(`/experimentation/run/${item.id}`);
   };
 
   React.useEffect(() => {

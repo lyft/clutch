@@ -9,34 +9,46 @@ import (
 type Transformation struct {
 	ConfigTypeUrl   string
 	ConfigTransform func(config *ExperimentConfig) ([]*experimentation.Property, error)
+	RunTransform    func(run *ExperimentRun, config *ExperimentConfig) ([]*experimentation.Property, error)
 }
 
 type Transformer struct {
-	logger                   *zap.SugaredLogger
-	nameToConfigTransformMap map[string]*Transformation
+	logger             *zap.SugaredLogger
+	nameToTransformMap map[string][]*Transformation
 }
 
 func NewTransformer(logger *zap.SugaredLogger) Transformer {
-	t := Transformer{logger, map[string]*Transformation{}}
-	t.nameToConfigTransformMap = map[string]*Transformation{}
+	t := Transformer{logger, map[string][]*Transformation{}}
+	t.nameToTransformMap = map[string][]*Transformation{}
 	return t
 }
 
-func (t *Transformer) Register(transformation Transformation) error {
-	t.nameToConfigTransformMap[transformation.ConfigTypeUrl] = &transformation
+func (tr *Transformer) Register(transformation Transformation) error {
+	tr.nameToTransformMap[transformation.ConfigTypeUrl] = append(tr.nameToTransformMap[transformation.ConfigTypeUrl], &transformation)
 	return nil
 }
 
-func (t *Transformer) CreateProperties(config *ExperimentConfig) ([]*experimentation.Property, error) {
-	transform, exists := t.nameToConfigTransformMap[config.Config.TypeUrl]
+func (tr *Transformer) CreateProperties(run *ExperimentRun, config *ExperimentConfig) ([]*experimentation.Property, error) {
+	transformations, exists := tr.nameToTransformMap[config.Config.TypeUrl]
 	if !exists {
 		return []*experimentation.Property{}, nil
 	}
 
-	properties, err := transform.ConfigTransform(config)
-	if err != nil {
-		t.logger.Errorw("error while creating properties", "error", err, "config", config)
+	var properties = []*experimentation.Property{}
+	for _, t := range transformations {
+		if t.RunTransform == nil {
+			continue
+		}
+
+		currentTransformationProperties, err := t.RunTransform(run, config)
+		if err != nil {
+			tr.logger.Errorw("error while creating properties from run and config",
+				"error", err, "config", config, "run", run)
+			return nil, err
+		}
+
+		properties = append(properties, currentTransformationProperties...)
 	}
 
-	return properties, err
+	return properties, nil
 }

@@ -44,7 +44,7 @@ func (m *ListViewItem) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Identifier
+	// no validation rules for Id
 
 	if v, ok := interface{}(m.GetProperties()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
