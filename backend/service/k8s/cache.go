@@ -12,7 +12,8 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	corev1 "k8s.io/api/core/v1"
-	"k8s.io/client-go/informers"
+	v1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/client-go/tools/cache"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
@@ -51,12 +52,12 @@ func (s *svc) StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.Upda
 }
 
 func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
-	factory := informers.NewSharedInformerFactoryWithOptions(cs, informerResyncTime)
+	// factory := informers.NewSharedInformerFactoryWithOptions(cs, informerResyncTime)
 	stop := make(chan struct{})
 
-	podInformer := factory.Core().V1().Pods().Informer()
-	deploymentInformer := factory.Apps().V1().Deployments().Informer()
-	hpaInformer := factory.Autoscaling().V1().HorizontalPodAutoscalers().Informer()
+	// podInformer := factory.Core().V1().Pods().Informer()
+	// deploymentInformer := factory.Apps().V1().Deployments().Informer()
+	// hpaInformer := factory.Autoscaling().V1().HorizontalPodAutoscalers().Informer()
 
 	informerHandlers := cache.ResourceEventHandlerFuncs{
 		AddFunc:    s.informerAddHandler,
@@ -64,9 +65,39 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 		DeleteFunc: s.informerDeleteHandler,
 	}
 
-	podInformer.AddEventHandler(informerHandlers)
-	deploymentInformer.AddEventHandler(informerHandlers)
-	hpaInformer.AddEventHandler(informerHandlers)
+	// podInformer.AddEventHandler(informerHandlers)
+	// deploymentInformer.AddEventHandler(informerHandlers)
+	// hpaInformer.AddEventHandler(informerHandlers)
+
+	_, podInformer := cache.NewInformer(
+		cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "pods", v1.NamespaceAll, fields.Everything()),
+		&v1.Pod{},
+		informerResyncTime,
+		informerHandlers,
+	)
+	_, deploymentInformer := cache.NewInformer(
+		cache.NewListWatchFromClient(cs.AppsV1().RESTClient(), "deployments", v1.NamespaceAll, fields.Everything()),
+		&appsv1.Deployment{},
+		informerResyncTime,
+		informerHandlers,
+	)
+
+	_, hpaInformer := cache.NewInformer(
+		cache.NewListWatchFromClient(cs.AutoscalingV1().RESTClient(), "horizontalpodautoscalers", v1.NamespaceAll, fields.Everything()),
+		&autoscalingv1.HorizontalPodAutoscaler{},
+		informerResyncTime,
+		informerHandlers,
+	)
+
+	// idx, informer := cache.NewIndexerInformer(
+	// 	cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "pods", v1.NamespaceAll, fields.Everything()),
+	// 	&v1.Pod{},
+	// 	informerResyncTime,
+	// 	informerHandlers,
+	// 	// empty indexer? do nothing? idk
+	// 	cache.Indexers{},
+	// )
+	// go informer.Run(stop)
 
 	go podInformer.Run(stop)
 	go deploymentInformer.Run(stop)
