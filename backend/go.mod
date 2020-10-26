@@ -34,7 +34,7 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/uber-go/tally v3.3.17+incompatible
 	go.uber.org/zap v1.16.0
-	golang.org/x/net v0.0.0-20201020065357-d65d470038a5
+	golang.org/x/net v0.0.0-20201026091529-146b70c837a4
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43
 	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
 	google.golang.org/genproto v0.0.0-20201021134325-0d71844de594
