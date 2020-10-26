@@ -46,7 +46,7 @@ func (s *Service) Register(r module.Registrar) error {
 	return s.storer.RegisterTransformation(transformation)
 }
 
-func (s *Service) transform(run *experimentstore.ExperimentRun, config *experimentstore.ExperimentConfig) ([]*experimentation.Property, error) {
+func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experimentstore.ExperimentConfig) ([]*experimentation.Property, error) {
 	var experimentConfig = serverexperimentation.TestConfig{}
 	if err := ptypes.UnmarshalAny(config.Config, &experimentConfig); err != nil {
 		return []*experimentation.Property{}, err
