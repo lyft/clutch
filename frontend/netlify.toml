@@ -1,5 +1,5 @@
 [build]
-  ignore = "/bin/bash -c \"if [[ \"$(git rev-parse --abbrev-ref HEAD)\" == \"main\" ]]; then ROOT=HEAD^; else ROOT=main; fi && echo $ROOT && git diff --quiet $ROOT HEAD -- '*.ts*' '*.js' 'yarn.lock'\""
+  ignore = "/bin/bash -c \"git diff --quiet $(if [[ \"$(git rev-parse --abbrev-ref HEAD)\" == \"main\" ]]; then echo HEAD^; else echo main; fi) HEAD -- '*.ts*' '*.js' 'yarn.lock'\""
 
 [[headers]]
   # Define which paths this specific [[headers]] block will cover.
