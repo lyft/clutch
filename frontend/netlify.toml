@@ -3,7 +3,7 @@
   ignore = "git diff --quiet $(/bin/bash -c 'if [ \"$(git rev-parse --abbrev-ref HEAD)\" == \"main\" ]; then echo HEAD^; else echo main; fi')...HEAD -- '*.ts*' '*.js' 'yarn.lock'"
   
 [build.environment]
-  NETLIFY_USE_YARN = false
+  NETLIFY_USE_YARN = "false"
 
 [[headers]]
   # Define which paths this specific [[headers]] block will cover.
