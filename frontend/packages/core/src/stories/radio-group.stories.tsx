@@ -14,18 +14,27 @@ export default {
 
 const Template = (props: RadioGroupProps) => <RadioGroup {...props} />;
 
-export const WithLabelsOnly = Template.bind({});
-WithLabelsOnly.args = {
+export const Primary = Template.bind({});
+const options = [{ label: "red" }, { label: "green" }, { label: "blue" }];
+Primary.argTypes = {
+  defaultOption: {
+    control: {
+      type: "select",
+      options: options.map((_: any, i: number) => i),
+    },
+  },
+};
+Primary.args = {
   defaultOption: 1,
   name: "colorOptions",
   label: "Favorite color",
-  options: [{ label: "red" }, { label: "green" }, { label: "blue" }],
+  options,
 };
 
-export const WithLabelsAndUniqueValues = Template.bind({});
-WithLabelsAndUniqueValues.args = {
-  name: "colorOptionsWithValues",
-  label: "Favorite color",
+export const UniqueValues = Template.bind({});
+UniqueValues.argTypes = Primary.argTypes;
+UniqueValues.args = {
+  ...Primary.args,
   options: [
     { label: "red", value: "#FF0000" },
     { label: "green", value: "#00FF00" },
