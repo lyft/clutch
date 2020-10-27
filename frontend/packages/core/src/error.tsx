@@ -59,7 +59,7 @@ const Accordion = styled(MuiAccordion)`
 export interface CompressedErrorProps {
   title?: string;
   message: string;
-};
+}
 
 const findBreakpoint = (message: string): number => {
   // n.b. if no breakpoint this will return -1 and become 0.
@@ -78,7 +78,7 @@ const findBreakpoint = (message: string): number => {
     breakpoint = letterCount || BREAKPOINT_LENGTH;
   }
   return breakpoint;
-}
+};
 
 const CompressedError: React.FC<CompressedErrorProps> = ({ title, message }) => {
   const [open, setOpen] = React.useState(message !== "");
