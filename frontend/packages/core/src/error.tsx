@@ -15,19 +15,19 @@ import styled from "styled-components";
 
 const PANEL_MESSAGE_BREAKPOINT = 150;
 
-interface ErrorProps {
+export interface ErrorProps {
   message: string;
-  retry?: () => void;
+  onRetry?: () => void;
 }
 
 const Alert = styled(MuiAlert)`
   margin: 5px;
 `;
 
-const Error: React.FC<ErrorProps> = ({ message, retry }) => {
+const Error: React.FC<ErrorProps> = ({ message, onRetry }) => {
   const action =
-    retry !== undefined ? (
-      <IconButton aria-label="retry" color="inherit" size="small" onClick={() => retry()}>
+    onRetry !== undefined ? (
+      <IconButton aria-label="retry" color="inherit" size="small" onClick={() => onRetry()}>
         <RefreshIcon />
       </IconButton>
     ) : null;
