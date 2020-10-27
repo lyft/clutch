@@ -6,6 +6,7 @@ import {
   client,
   Confirmation,
   MetadataTable,
+  RadioGroup
   Select,
   useWizardContext,
 } from "@clutch-sh/core";
@@ -13,8 +14,6 @@ import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import * as yup from "yup";
-
-import RadioGroup from "./radio-group";
 
 const faultInjectionTypeItems = [
   {
