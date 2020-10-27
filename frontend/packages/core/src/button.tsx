@@ -103,5 +103,6 @@ export {
   ButtonGroupProps,
   ButtonProps,
   ClipboardButton,
+  ClipboardButtonProps,
   DestructiveButton,
 };
