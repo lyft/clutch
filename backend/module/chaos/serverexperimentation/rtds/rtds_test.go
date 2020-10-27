@@ -11,15 +11,16 @@ import (
 	gcpDiscoveryV3 "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v3"
 	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	"github.com/golang/protobuf/ptypes"
+	"github.com/stretchr/testify/assert"
+	"github.com/uber-go/tally"
+	"go.uber.org/zap"
+	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
+	"google.golang.org/grpc"
+
 	rtdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/rtds/v1"
 	"github.com/lyft/clutch/backend/module/moduletest"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
-	"github.com/stretchr/testify/assert"
-	"github.com/uber-go/tally"
-	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
-	"go.uber.org/zap"
-	"google.golang.org/grpc"
 )
 
 func awaitCounterEquals(t *testing.T, scope tally.TestScope, counter string, value int64) {
@@ -38,10 +39,10 @@ func awaitCounterEquals(t *testing.T, scope tally.TestScope, counter string, val
 		}
 
 		select {
-		case <- timeout.C:
+		case <-timeout.C:
 			t.Errorf("timed out waiting for %s to become %d, last value %d", counter, value, v)
 			return
-		case <- time.After(100 * time.Millisecond):
+		case <-time.After(100 * time.Millisecond):
 			break
 		}
 	}
@@ -52,11 +53,11 @@ func TestServerStats(t *testing.T) {
 	// Set up a test server listening to :9000.
 	config := &rtdsconfigv1.Config{
 		RtdsLayerName:             "tests",
-		CacheRefreshInterval: ptypes.DurationProto(time.Second),
+		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
 		IngressFaultRuntimePrefix: "ingress",
 		EgressFaultRuntimePrefix:  "egress",
 	}
-	
+
 	any, err := ptypes.MarshalAny(config)
 	assert.NoError(t, err)
 	zap.NewNop()
@@ -73,7 +74,10 @@ func TestServerStats(t *testing.T) {
 	l, err := net.Listen("tcp", "localhost:9000")
 	assert.NoError(t, err)
 
-	go registrar.GRPCServer().Serve(l)
+	go func() {
+		err := registrar.GRPCServer().Serve(l)
+		assert.NoError(t, err)
+	}()
 	defer registrar.GRPCServer().Stop()
 
 	// Connect to the test server.
@@ -87,7 +91,10 @@ func TestServerStats(t *testing.T) {
 	v3Client := gcpRuntimeServiceV3.NewRuntimeDiscoveryServiceClient(conn)
 	v3Stream, err := v3Client.StreamRuntime(ctx)
 	assert.NoError(t, err)
-	defer v3Stream.CloseSend()
+	defer func() {
+		err := v3Stream.CloseSend()
+		assert.NoError(t, err)
+	}()
 
 	// Regular flow.
 	err = v3Stream.Send(&gcpDiscoveryV3.DiscoveryRequest{})
@@ -112,7 +119,10 @@ func TestServerStats(t *testing.T) {
 	v2Client := gcpDiscoveryV2.NewRuntimeDiscoveryServiceClient(conn)
 	v2Stream, err := v2Client.StreamRuntime(ctx)
 	assert.NoError(t, err)
-	defer v2Stream.CloseSend()
+	defer func() {
+		err := v3Stream.CloseSend()
+		assert.NoError(t, err)
+	}()
 
 	// Regular flow.
 	err = v2Stream.Send(&envoy_api_v2.DiscoveryRequest{})
