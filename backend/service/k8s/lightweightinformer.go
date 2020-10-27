@@ -11,7 +11,7 @@ import (
 	"k8s.io/client-go/tools/cache"
 )
 
-type lightweightObj struct {
+type lightWeightCacheObject struct {
 	metav1.Object
 	UID        types.UID
 	Name       string
@@ -20,12 +20,12 @@ type lightweightObj struct {
 	Labels     map[string]string
 }
 
-func (cl *lightweightObj) GetUID() types.UID             { return cl.UID }
-func (cl *lightweightObj) SetUID(uid types.UID)          { cl.UID = uid }
-func (cl *lightweightObj) GetName() string               { return cl.Name }
-func (cl *lightweightObj) SetName(name string)           { cl.Name = name }
-func (cl *lightweightObj) GetNamespace() string          { return cl.Namespace }
-func (cl *lightweightObj) SetNamespace(namespace string) { cl.Namespace = namespace }
+func (cl *lightWeightCacheObject) GetUID() types.UID             { return cl.UID }
+func (cl *lightWeightCacheObject) SetUID(uid types.UID)          { cl.UID = uid }
+func (cl *lightWeightCacheObject) GetName() string               { return cl.Name }
+func (cl *lightWeightCacheObject) SetName(name string)           { cl.Name = name }
+func (cl *lightWeightCacheObject) GetNamespace() string          { return cl.Namespace }
+func (cl *lightWeightCacheObject) SetNamespace(namespace string) { cl.Namespace = namespace }
 
 func NewLightweightInformer(
 	cs ContextClientset,
@@ -67,26 +67,26 @@ func NewLightweightInformer(
 			for _, d := range obj.(cache.Deltas) {
 
 				incomeingObjectMeta, _ := meta.Accessor(d.Object)
-				lightweightObj := &lightweightObj{}
+				lightweightObj := &lightWeightCacheObject{}
 				lightweightObj.SetUID(incomeingObjectMeta.GetUID())
 				lightweightObj.SetName(incomeingObjectMeta.GetName())
 				lightweightObj.SetNamespace(incomeingObjectMeta.GetNamespace())
 
 				switch d.Type {
 				case cache.Sync, cache.Replaced, cache.Added, cache.Updated:
-					if _, exists, err := cacheStore.Get(d.Object); err == nil && exists {
+					if _, exists, err := cacheStore.Get(lightweightObj); err == nil && exists {
 						if err := cacheStore.Update(d.Object); err != nil {
 							log.Printf("error updating %v", err)
 						}
 						h.OnUpdate(nil, d.Object)
 					} else {
-						if err := cacheStore.Add(d.Object); err != nil {
+						if err := cacheStore.Add(lightweightObj); err != nil {
 							log.Printf("error adding %v", err)
 						}
 						h.OnAdd(d.Object)
 					}
 				case cache.Deleted:
-					if err := cacheStore.Delete(d.Object); err != nil {
+					if err := cacheStore.Delete(lightweightObj); err != nil {
 						return err
 					}
 					h.OnDelete(d.Object)
