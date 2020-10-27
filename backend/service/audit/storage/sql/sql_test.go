@@ -50,8 +50,8 @@ func TestAPIBodyProto(t *testing.T) {
 	}{
 		{input: nil, expectNil: true},
 		{input: nilJSON, expectNil: true},
-		{input: []byte(`{}`)},
-		{input: []byte(`{"@type":"type.googleapis.com/clutch.audit.v1.RequestEvent"}`)},
+		{input: []byte(`{}`), expectNil: false},
+		{input: []byte(`{"@type":"type.googleapis.com/clutch.k8s.v1.Pod"}`), expectNil: false},
 	}
 
 	for _, test := range tests {
