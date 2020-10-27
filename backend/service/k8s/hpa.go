@@ -87,3 +87,13 @@ func normalizeHPAChanges(hpa *autoscalingv1.HorizontalPodAutoscaler, sizing *k8s
 		hpa.Spec.MaxReplicas = *hpa.Spec.MinReplicas
 	}
 }
+
+func (s *svc) DeleteHPA(ctx context.Context, clientset, cluster, namespace, name string) error {
+	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	if err != nil {
+		return err
+	}
+
+	opts := metav1.DeleteOptions{}
+	return cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Delete(ctx, name, opts)
+}
