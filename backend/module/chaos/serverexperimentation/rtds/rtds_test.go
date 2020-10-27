@@ -23,31 +23,6 @@ import (
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
-func awaitCounterEquals(t *testing.T, scope tally.TestScope, counter string, value int64) {
-	t.Helper()
-
-	timeout := time.NewTimer(time.Second)
-	for {
-		v := int64(0)
-		c, ok := scope.Snapshot().Counters()[counter]
-		if ok {
-			v = c.Value()
-		}
-
-		if value == v {
-			return
-		}
-
-		select {
-		case <-timeout.C:
-			t.Errorf("timed out waiting for %s to become %d, last value %d", counter, value, v)
-			return
-		case <-time.After(100 * time.Millisecond):
-			break
-		}
-	}
-}
-
 func TestServerStats(t *testing.T) {
 	service.Registry[experimentstore.Name] = &mockStorer{}
 	// Set up a test server listening to :9000.
@@ -141,4 +116,29 @@ func TestServerStats(t *testing.T) {
 	// Async verification here since it appears that we don't get a response back in this case, so we
 	// aren't able to synchronize on the response.
 	awaitCounterEquals(t, scope, "test.v2.totalErrorsReceived+", 1)
+}
+
+func awaitCounterEquals(t *testing.T, scope tally.TestScope, counter string, value int64) {
+	t.Helper()
+
+	timeout := time.NewTimer(time.Second)
+	for {
+		v := int64(0)
+		c, ok := scope.Snapshot().Counters()[counter]
+		if ok {
+			v = c.Value()
+		}
+
+		if value == v {
+			return
+		}
+
+		select {
+		case <-timeout.C:
+			t.Errorf("timed out waiting for %s to become %d, last value %d", counter, value, v)
+			return
+		case <-time.After(100 * time.Millisecond):
+			break
+		}
+	}
 }
