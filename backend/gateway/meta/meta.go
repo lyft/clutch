@@ -145,10 +145,5 @@ func APIBody(body interface{}) (*anypb.Any, error) {
 		return nil, nil
 	}
 
-	a, err := anypb.New(m)
-	if err != nil {
-		return nil, err
-	}
-
-	return a, nil
+	return anypb.New(m)
 }
