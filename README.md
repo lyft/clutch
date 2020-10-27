@@ -4,8 +4,6 @@
   </a>
 </h1>
 
-testing
-
 <div align="center">
   <a href="http://www.clutch.sh/">
     <img src="https://user-images.githubusercontent.com/1004789/86159195-d054ea80-babe-11ea-997f-a309b1b43040.png" alt="Clutch" width="300">
