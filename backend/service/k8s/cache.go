@@ -58,7 +58,7 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 		DeleteFunc: s.informerDeleteHandler,
 	}
 
-	podInformer := NewCachelessInformer(
+	podInformer := NewLightweightInformer(
 		cs,
 		cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "pods", v1.NamespaceAll, fields.Everything()),
 		&v1.Pod{},
@@ -66,7 +66,7 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 		informerHandlers,
 	)
 
-	deploymentInformer := NewCachelessInformer(
+	deploymentInformer := NewLightweightInformer(
 		cs,
 		cache.NewListWatchFromClient(cs.AppsV1().RESTClient(), "deployments", v1.NamespaceAll, fields.Everything()),
 		&appsv1.Deployment{},
@@ -74,7 +74,7 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 		informerHandlers,
 	)
 
-	hpaInformer := NewCachelessInformer(
+	hpaInformer := NewLightweightInformer(
 		cs,
 		cache.NewListWatchFromClient(cs.AutoscalingV1().RESTClient(), "horizontalpodautoscalers", v1.NamespaceAll, fields.Everything()),
 		&autoscalingv1.HorizontalPodAutoscaler{},

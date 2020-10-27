@@ -13,9 +13,11 @@ import (
 
 type lightweightObj struct {
 	metav1.Object
-	UID       types.UID
-	Name      string
-	Namespace string
+	UID        types.UID
+	Name       string
+	Namespace  string
+	Finalizers []string
+	Labels     map[string]string
 }
 
 func (cl *lightweightObj) GetUID() types.UID             { return cl.UID }
@@ -32,17 +34,27 @@ func NewLightweightInformer(
 	resync time.Duration,
 	h cache.ResourceEventHandler,
 ) cache.Controller {
-	cacheStore := cache.NewIndexer(cache.DeletionHandlingMetaNamespaceKeyFunc, cache.Indexers{})
+	keyFunc := func(obj interface{}) (string, error) {
+		theMeta, err := meta.Accessor(obj)
+		if err != nil {
+			return "", err
+		}
+		return string(theMeta.GetUID()), nil
+	}
+
+	deletehandler := func(obj interface{}) (string, error) {
+		if d, ok := obj.(cache.DeletedFinalStateUnknown); ok {
+			return d.Key, nil
+		}
+
+		return keyFunc(obj)
+	}
+
+	cacheStore := cache.NewIndexer(deletehandler, cache.Indexers{})
 	fifo := cache.NewDeltaFIFOWithOptions(cache.DeltaFIFOOptions{
 		KnownObjects:          cacheStore,
 		EmitDeltaTypeReplaced: true,
-		KeyFunction: func(obj interface{}) (string, error) {
-			theMeta, err := meta.Accessor(obj)
-			if err != nil {
-				return "", err
-			}
-			return string(theMeta.GetUID()), nil
-		},
+		KeyFunction:           keyFunc,
 	})
 
 	return cache.New(&cache.Config{
@@ -62,22 +74,19 @@ func NewLightweightInformer(
 
 				switch d.Type {
 				case cache.Sync, cache.Replaced, cache.Added, cache.Updated:
-					if _, exists, err := cacheStore.Get(lightweightObj); err == nil && exists {
-						if err := cacheStore.Update(lightweightObj); err != nil {
+					if _, exists, err := cacheStore.Get(d.Object); err == nil && exists {
+						if err := cacheStore.Update(d.Object); err != nil {
 							log.Printf("error updating %v", err)
 						}
-						log.Print("trying to update")
 						h.OnUpdate(nil, d.Object)
 					} else {
-						if err := cacheStore.Add(lightweightObj); err != nil {
+						if err := cacheStore.Add(d.Object); err != nil {
 							log.Printf("error adding %v", err)
 						}
-						log.Print("trying to add")
 						h.OnAdd(d.Object)
 					}
 				case cache.Deleted:
-					log.Print("delete event")
-					if err := cacheStore.Delete(lightweightObj); err != nil {
+					if err := cacheStore.Delete(d.Object); err != nil {
 						return err
 					}
 					h.OnDelete(d.Object)
