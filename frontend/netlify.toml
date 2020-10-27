@@ -1,4 +1,5 @@
 [build]
+  # Only build clutch-components site if frontend files change.
   ignore = "/bin/bash -c \"git diff --quiet $(if [[ \"$(git rev-parse --abbrev-ref HEAD)\" == \"main\" ]]; then echo HEAD^; else echo main; fi) HEAD -- '*.ts*' '*.js' 'yarn.lock'\""
 
 [[headers]]
