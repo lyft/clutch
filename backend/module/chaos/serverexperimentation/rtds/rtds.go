@@ -24,6 +24,7 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
 
 	rtdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/rtds/v1"
 	"github.com/lyft/clutch/backend/module"
@@ -58,11 +59,7 @@ type Server struct {
 	// Runtime prefix for egress faults
 	egressPrefix string
 
-	// Total number of open streams
-	totalStreams tally.Gauge
-
-	// Total runtime resources served
-	totalResourcesServed tally.Counter
+	rtdsScope tally.Scope
 
 	logger *zap.SugaredLogger
 }
@@ -125,51 +122,79 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		rtdsLayerName:        rtdsLayerName,
 		ingressPrefix:        ingressPrefix,
 		egressPrefix:         egressPrefix,
-		totalStreams:         scope.Gauge("totalStreams"),
-		totalResourcesServed: scope.Counter("totalResourcesServed"),
+		rtdsScope:            scope,
 		logger:               logger.Sugar(),
 	}, nil
 }
 
+type serverStats struct {
+	totalStreams         tally.Gauge
+	totalResourcesServed tally.Counter
+	totalErrorsReceived  tally.Counter
+}
+
+func (s *Server) newScopedStats(subScope string) serverStats {
+	scope := s.rtdsScope.SubScope(subScope)
+	return serverStats{
+		totalStreams:         scope.Gauge("totalStreams"),
+		totalResourcesServed: scope.Counter("totalResourcesServed"),
+		totalErrorsReceived:  scope.Counter("totalErrorsReceived"),
+	}
+}
+
 func (s *Server) Register(r module.Registrar) error {
 	PeriodicallyRefreshCache(s)
-	xdsServerV2 := gcpServerV2.NewServer(s.ctx, s.snapshotCacheV2, &callbacksV2{s.totalStreams,
-		s.totalResourcesServed, s.logger, 0})
-	xdsServerV3 := gcpServerV3.NewServer(s.ctx, s.snapshotCacheV3, &callbacksV3{s.totalStreams,
-		s.totalResourcesServed, s.logger, 0})
+	xdsServerV2 := gcpServerV2.NewServer(s.ctx, s.snapshotCacheV2, &callbacksV2{callbacksBase{s.newScopedStats("v2"), s.logger, 0}})
+	xdsServerV3 := gcpServerV3.NewServer(s.ctx, s.snapshotCacheV3, &callbacksV3{callbacksBase{s.newScopedStats("v3"),
+		s.logger, 0}})
 	gcpRuntimeServiceV3.RegisterRuntimeDiscoveryServiceServer(r.GRPCServer(), xdsServerV3)
 	gcpDiscoveryV2.RegisterRuntimeDiscoveryServiceServer(r.GRPCServer(), xdsServerV2)
 	return nil
 }
 
-type callbacksV3 struct {
-	totalStreams         tally.Gauge
-	totalResourcesServed tally.Counter
-	logger               *zap.SugaredLogger
-	numStreams           int32
+type callbacksBase struct {
+	serverStats serverStats
+	logger      *zap.SugaredLogger
+	numStreams  int32
 }
 
-func (c *callbacksV3) OnStreamOpen(_ context.Context, streamID int64, typeURL string) error {
+type callbacksV3 struct {
+	callbacksBase
+}
+
+func (c *callbacksBase) OnStreamOpen(_ context.Context, streamID int64, typeURL string) error {
 	c.logger.Debugw("RTDS onStreamOpen", "streamID", streamID, "typeURL", typeURL)
 	numStreams := atomic.AddInt32(&c.numStreams, 1)
-	c.totalStreams.Update(float64(numStreams))
+	c.serverStats.totalStreams.Update(float64(numStreams))
 	return nil
 }
 
-func (c *callbacksV3) OnStreamClosed(streamID int64) {
+func (c *callbacksBase) OnStreamClosed(streamID int64) {
 	c.logger.Debugw("RTDS onStreamClosed", "streamID", streamID)
 	numStreams := atomic.AddInt32(&c.numStreams, -1)
-	c.totalStreams.Update(float64(numStreams))
+	c.serverStats.totalStreams.Update(float64(numStreams))
+}
+
+func (c *callbacksBase) onStreamRequest(streamID int64, cluster string, errorDetail *rpc_status.Status) {
+	c.logger.Debugw("RTDS OnStreamRequest", "streamID", streamID, "cluster", cluster)
+	if errorDetail != nil {
+		c.serverStats.totalErrorsReceived.Inc(1)
+		c.logger.Errorw("RTDS Error Request", "error", errorDetail.GetDetails())
+	}
+}
+
+func (c *callbacksBase) onStreamResponse(streamID int64, cluster string, version string) {
+	c.serverStats.totalResourcesServed.Inc(1)
+	c.logger.Debugw("RTDS OnStreamResponse", "streamID", streamID, "cluster", cluster, "version", version)
 }
 
 func (c *callbacksV3) OnStreamRequest(streamID int64, request *gcpDiscoveryV3.DiscoveryRequest) error {
-	c.logger.Debugw("RTDS OnStreamRequest", "streamID", streamID, "cluster", request.Node.Cluster)
+	c.onStreamRequest(streamID, request.Node.Cluster, request.ErrorDetail)
 	return nil
 }
 
 func (c *callbacksV3) OnStreamResponse(streamID int64, request *gcpDiscoveryV3.DiscoveryRequest, response *gcpDiscoveryV3.DiscoveryResponse) {
-	c.totalResourcesServed.Inc(1)
-	c.logger.Debugw("RTDS OnStreamResponse", "streamID", streamID, "cluster", request.Node.Cluster, "version", response.VersionInfo)
+	c.onStreamResponse(streamID, request.Node.Cluster, request.VersionInfo)
 }
 
 func (c *callbacksV3) OnFetchRequest(context.Context, *gcpDiscoveryV3.DiscoveryRequest) error {
@@ -182,33 +207,16 @@ func (c *callbacksV3) OnFetchResponse(*gcpDiscoveryV3.DiscoveryRequest, *gcpDisc
 }
 
 type callbacksV2 struct {
-	totalStreams         tally.Gauge
-	totalResourcesServed tally.Counter
-	logger               *zap.SugaredLogger
-	numStreams           int32
-}
-
-func (c *callbacksV2) OnStreamOpen(_ context.Context, streamID int64, typeURL string) error {
-	c.logger.Debugw("RTDS onStreamOpen", "streamID", streamID, "typeURL", typeURL)
-	numStreams := atomic.AddInt32(&c.numStreams, 1)
-	c.totalStreams.Update(float64(numStreams))
-	return nil
-}
-
-func (c *callbacksV2) OnStreamClosed(streamID int64) {
-	c.logger.Debugw("RTDS onStreamClosed", "streamID", streamID)
-	numStreams := atomic.AddInt32(&c.numStreams, -1)
-	c.totalStreams.Update(float64(numStreams))
+	callbacksBase
 }
 
 func (c *callbacksV2) OnStreamRequest(streamID int64, request *gcpV2.DiscoveryRequest) error {
-	c.logger.Debugw("RTDS OnStreamRequest", "streamID", streamID, "cluster", request.Node.Cluster)
+	c.onStreamRequest(streamID, request.Node.Cluster, request.ErrorDetail)
 	return nil
 }
 
 func (c *callbacksV2) OnStreamResponse(streamID int64, request *gcpV2.DiscoveryRequest, response *gcpV2.DiscoveryResponse) {
-	c.totalResourcesServed.Inc(1)
-	c.logger.Debugw("RTDS OnStreamResponse", "streamID", streamID, "cluster", request.Node.Cluster, "version", response.VersionInfo)
+	c.onStreamResponse(streamID, request.Node.Cluster, request.VersionInfo)
 }
 
 func (c *callbacksV2) OnFetchRequest(context.Context, *gcpV2.DiscoveryRequest) error {
