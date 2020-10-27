@@ -118,7 +118,21 @@ func (m *mid) eventFromResponse(resp interface{}, err error) (*auditv1.RequestEv
 		s = status.New(codes.OK, "")
 	}
 
-	respBody, err := meta.APIBody(resp)
+	var resources []*auditv1.Resource
+	var respBody *anypb.Any
+	// if err is returned from handler, discard the primary value for the resp
+	// and return an empty list for resources and a nil Any message for respBody
+	if err != nil {
+		return &auditv1.RequestEvent{
+			Status:    s.Proto(),
+			Resources: resources,
+			ResponseMetadata: &auditv1.ResponseMetadata{
+				Body: respBody,
+			},
+		}, nil
+	}
+
+	respBody, err = meta.APIBody(resp)
 	if err != nil {
 		return nil, err
 	}

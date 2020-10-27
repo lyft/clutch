@@ -281,6 +281,8 @@ func convertResources(proto []*auditv1.Resource) []*resource {
 
 // Encodes proto object in JSON format
 func convertAPIBody(body *anypb.Any) (json.RawMessage, error) {
+	// gracefully handles untyped and typed nils
+	// returns empty object if input is untyped or type nil
 	b, err := protojson.Marshal(body)
 	if err != nil {
 		return nil, err
@@ -288,8 +290,9 @@ func convertAPIBody(body *anypb.Any) (json.RawMessage, error) {
 	return json.RawMessage(b), nil
 }
 
-// Decodes JSON to proto Any message
+// apiBodyProto reads the given []byte into the Any proto msg
 func apiBodyProto(details json.RawMessage) (*anypb.Any, error) {
+	// protojson.Marshal does not gracefully handle nil values
 	if details == nil {
 		return nil, nil
 	}
