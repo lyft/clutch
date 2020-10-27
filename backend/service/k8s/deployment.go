@@ -65,7 +65,7 @@ func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespac
 	newDeployment := oldDeployment.DeepCopy()
 	mergeDeploymentLabelsAndAnnotations(newDeployment, fields)
 
-	patchBytes, err := generateDeploymentStrategicPatch(oldDeployment, newDeployment)
+	patchBytes, err := GenerateStrategicPatch(oldDeployment, newDeployment, appsv1.Deployment{})
 	if err != nil {
 		return err
 	}

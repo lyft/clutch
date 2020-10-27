@@ -1,7 +1,6 @@
 package k8s
 
 import (
-	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -91,12 +90,7 @@ func TestGenerateStrategicPatch(t *testing.T) {
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
-			oldBytes, err := json.Marshal(tt.old)
-			assert.NoError(t, err)
-			newBytes, err := json.Marshal(tt.new)
-			assert.NoError(t, err)
-			actualPatchBytes, err := GenerateStrategicPatch(oldBytes, newBytes)
-
+			actualPatchBytes, err := GenerateStrategicPatch(tt.old, tt.new, appsv1.Deployment{})
 			assert.NoError(t, err)
 			assert.Equal(t, []byte(tt.expected), actualPatchBytes)
 		})

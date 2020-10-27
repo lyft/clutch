@@ -65,7 +65,7 @@ func (s *svc) UpdateStatefulSet(ctx context.Context, clientset, cluster, namespa
 	newStatefulSet := oldStatefulSet.DeepCopy()
 	mergeStatefulSetLabelsAndAnnotations(newStatefulSet, fields)
 
-	patchBytes, err := generateStatefulSetStrategicPatch(oldStatefulSet, newStatefulSet)
+	patchBytes, err := GenerateStrategicPatch(oldStatefulSet, newStatefulSet, appsv1.StatefulSet{})
 	if err != nil {
 		return err
 	}
