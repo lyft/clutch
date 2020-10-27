@@ -24,6 +24,7 @@ func TestConvertAPIBody(t *testing.T) {
 	tests := []struct {
 		input *anypb.Any
 	}{
+		// case: untyped nil
 		{input: nil},
 		// case: input is a typed nil
 		{input: a1},

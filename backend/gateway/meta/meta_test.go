@@ -129,7 +129,7 @@ func TestAPIBody(t *testing.T) {
 		{input: m, expectNil: false},
 		// case: type is struct
 		{input: ec2v1.Instance{InstanceId: "i-123456789abcdef0"}, expectNil: true},
-		// case: type/value is nil
+		// case: untyped nil
 		{input: nil, expectNil: true},
 		// case: type is string
 		{input: "foo", expectNil: true},
