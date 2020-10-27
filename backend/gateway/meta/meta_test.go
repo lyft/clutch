@@ -121,36 +121,18 @@ func TestAPIBody(t *testing.T) {
 		expectNil bool
 	}{
 		// case: type is proto.message
-		{
-			input:     &ec2v1.Instance{InstanceId: "i-123456789abcdef0"},
-			expectNil: false,
-		},
+		{input: &ec2v1.Instance{InstanceId: "i-123456789abcdef0"}, expectNil: false},
 		// case: type is proto.message
-		{
-			input:     &k8sapiv1.ResizeHPAResponse{},
-			expectNil: false,
-		},
+		{input: &k8sapiv1.ResizeHPAResponse{}, expectNil: false},
 		// case: type is proto.message
-		{
-			input: m,
-			// anypb.New gracefully hanldes (*myProtoStruct)(nil)
-			expectNil: false,
-		},
+		// anypb.New gracefully hanldes (*myProtoStruct)(nil)
+		{input: m, expectNil: false},
 		// case: type is struct
-		{
-			input:     ec2v1.Instance{InstanceId: "i-123456789abcdef0"},
-			expectNil: true,
-		},
+		{input: ec2v1.Instance{InstanceId: "i-123456789abcdef0"}, expectNil: true},
 		// case: type/value is nil
-		{
-			input:     nil,
-			expectNil: true,
-		},
+		{input: nil, expectNil: true},
 		// case: type is string
-		{
-			input:     "foo",
-			expectNil: true,
-		},
+		{input: "foo", expectNil: true},
 	}
 
 	for _, test := range tests {
