@@ -112,69 +112,55 @@ func TestResourceNames(t *testing.T) {
 	}
 }
 
-// proto.message with nil value
-var m = (*ec2v1.Instance)(nil)
-
-// test cases used in both TestIsValidInterface and TestAPIBody
-var tests = []struct {
-	input     interface{}
-	isValid   bool // checked in TestIsValidInterface
-	expectNil bool // checked in TestAPIBody
-}{
-	// case: type is proto.message and value is not nil
-	{
-		input:     &ec2v1.Instance{InstanceId: "i-123456789abcdef0"},
-		isValid:   true,
-		expectNil: false,
-	},
-	// case: type is proto.message and value is not nil
-	{
-		input:     &k8sapiv1.ResizeHPAResponse{},
-		isValid:   true,
-		expectNil: false,
-	},
-	// case: type is proto.message and value is nil
-	{
-		input:     m,
-		isValid:   false,
-		expectNil: true,
-	},
-	// case: type is struct
-	{
-		input:     ec2v1.Instance{InstanceId: "i-123456789abcdef0"},
-		isValid:   false,
-		expectNil: true,
-	},
-	// case: type/value is nil
-	{
-		input:     nil,
-		isValid:   false,
-		expectNil: true,
-	},
-	// case: type is string
-	{
-		input:     "foo",
-		isValid:   false,
-		expectNil: true,
-	},
-}
-
-func TestIsValidInterface(t *testing.T) {
-	for _, test := range tests {
-		output := isValidInterface(test.input)
-		assert.Equal(t, test.isValid, output)
-	}
-}
-
 func TestAPIBody(t *testing.T) {
+	// proto.message with nil value
+	m := (*ec2v1.Instance)(nil)
+
+	var tests = []struct {
+		input     interface{}
+		expectNil bool
+	}{
+		// case: type is proto.message
+		{
+			input:     &ec2v1.Instance{InstanceId: "i-123456789abcdef0"},
+			expectNil: false,
+		},
+		// case: type is proto.message
+		{
+			input:     &k8sapiv1.ResizeHPAResponse{},
+			expectNil: false,
+		},
+		// case: type is proto.message
+		{
+			input: m,
+			// anypb.New gracefully hanldes (*myProtoStruct)(nil)
+			expectNil: false,
+		},
+		// case: type is struct
+		{
+			input:     ec2v1.Instance{InstanceId: "i-123456789abcdef0"},
+			expectNil: true,
+		},
+		// case: type/value is nil
+		{
+			input:     nil,
+			expectNil: true,
+		},
+		// case: type is string
+		{
+			input:     "foo",
+			expectNil: true,
+		},
+	}
+
 	for _, test := range tests {
 		result, err := APIBody(test.input)
 		if test.expectNil {
 			assert.Nil(t, result)
-			assert.NoError(t, err)
 		} else {
 			assert.NotNil(t, result)
-			assert.NoError(t, err)
 		}
+
+		assert.NoError(t, err)
 	}
 }

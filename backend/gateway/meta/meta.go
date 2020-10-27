@@ -2,7 +2,6 @@ package meta
 
 import (
 	"fmt"
-	"reflect"
 	"regexp"
 	"strings"
 
@@ -138,28 +137,12 @@ func resolvePattern(pb proto.Message, pattern *apiv1.Pattern) *auditv1.Resource 
 	return &auditv1.Resource{TypeUrl: pattern.TypeUrl, Id: resourceName}
 }
 
-// isValidInterface will return true if the type is proto.message and value is not nil
-func isValidInterface(body interface{}) bool {
-	switch v := body.(type) {
-	// type we want is proto.message
-	case proto.Message:
-		// want to use a value that is not nil
-		return v.ProtoReflect().IsValid()
-	default:
-		return false
-	}
-}
-
 // APIBody returns a API request/response interface as an anypb.Any message.
 func APIBody(body interface{}) (*anypb.Any, error) {
-	if !isValidInterface(body) {
-		// the interface does not match the type/value we want
-		return nil, nil
-	}
-
 	m, ok := body.(proto.Message)
 	if !ok {
-		return nil, fmt.Errorf("could not use %s as proto.Message", reflect.TypeOf(body).Kind())
+		// body is not the type/value we want to process
+		return nil, nil
 	}
 
 	a, err := anypb.New(m)
