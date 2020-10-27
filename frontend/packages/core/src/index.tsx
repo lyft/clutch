@@ -1,6 +1,7 @@
 // @ts-ignore
 import { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 import CheckboxPanel from "./Input/checkbox";
+import { RadioGroup } from "./Input/radio-group";
 import Select from "./Input/select";
 import TextField from "./Input/text-field";
 import ClutchApp from "./AppProvider";
@@ -54,6 +55,7 @@ export {
   Note,
   NoteConfig,
   NotePanel,
+  RadioGroup,
   Resolver,
   Row,
   Select,
