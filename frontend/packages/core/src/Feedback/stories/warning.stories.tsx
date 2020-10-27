@@ -8,7 +8,7 @@ import type { WarningProps } from "../warning";
 import Warning from "../warning";
 
 export default {
-  title: "Core/Warning",
+  title: "Core/Feedback/Warning",
   component: Warning,
 } as Meta;
 
