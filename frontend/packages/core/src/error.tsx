@@ -1,9 +1,9 @@
 import React from "react";
 import {
+  Accordion as MuiAccordion,
   AccordionDetails,
   AccordionSummary,
   Collapse as MuiCollapse,
-  ExpansionPanel,
   IconButton,
   Snackbar,
   Typography,
@@ -13,7 +13,8 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import { Alert as MuiAlert, AlertTitle } from "@material-ui/lab";
 import styled from "styled-components";
 
-const PANEL_MESSAGE_BREAKPOINT = 150;
+const BREAKPOINT_LENGTH = 100;
+const BREAKPOINT_REGEX = /[\.\n]/g;
 
 interface ErrorProps {
   message: string;
@@ -22,6 +23,8 @@ interface ErrorProps {
 
 const Alert = styled(MuiAlert)`
   margin: 5px;
+  min-width: fit-content;
+  max-width: 45vw;
 `;
 
 const Error: React.FC<ErrorProps> = ({ message, retry }) => {
@@ -48,13 +51,36 @@ const ErrorText = styled(Typography)`
   font-size: 0.875rem;
 `;
 
-const ErrorPanel = styled(ExpansionPanel)`
+const Accordion = styled(MuiAccordion)`
   background-color: inherit;
   padding: 0px;
-  width: 100%;
 `;
 
-const CompressedError = ({ title, message }) => {
+export interface CompressedErrorProps {
+  title?: string;
+  message: string;
+};
+
+const findBreakpoint = (message: string): number => {
+  // n.b. if no breakpoint this will return -1 and become 0.
+  let breakpoint = message.search(BREAKPOINT_REGEX) + 1;
+  if (breakpoint === 0) {
+    let letterCount = 0;
+    message.split(" ").some((word: string): boolean => {
+      // n.b. add 1 to account for the space
+      const newCount = letterCount + word.length + 1;
+      if (newCount > BREAKPOINT_LENGTH) {
+        return true;
+      }
+      letterCount = newCount;
+      return false;
+    });
+    breakpoint = letterCount || BREAKPOINT_LENGTH;
+  }
+  return breakpoint;
+}
+
+const CompressedError: React.FC<CompressedErrorProps> = ({ title, message }) => {
   const [open, setOpen] = React.useState(message !== "");
   const [errorMsg, setErrorMsg] = React.useState("");
 
@@ -65,23 +91,24 @@ const CompressedError = ({ title, message }) => {
     setOpen(message !== "");
   }, [message]);
 
+  const breakpoint = findBreakpoint(errorMsg);
   return (
     <Collapse in={open}>
       <Alert severity="error">
         <AlertTitle>{title || "Error"}</AlertTitle>
-        {(errorMsg?.length || 0) > PANEL_MESSAGE_BREAKPOINT ? (
-          <ErrorPanel elevation={0}>
+        {(errorMsg?.length || 0) > BREAKPOINT_LENGTH ? (
+          <Accordion elevation={0}>
             <AccordionSummary
               style={{ padding: "0px" }}
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
             >
-              <ErrorText>{errorMsg.slice(0, PANEL_MESSAGE_BREAKPOINT)}</ErrorText>
+              <ErrorText>{errorMsg.slice(0, breakpoint)}</ErrorText>
             </AccordionSummary>
-            <AccordionDetails style={{ padding: "0px" }}>
-              <ErrorText>{errorMsg.slice(PANEL_MESSAGE_BREAKPOINT)}</ErrorText>
+            <AccordionDetails style={{ padding: "0px", overflowWrap: "anywhere" }}>
+              <ErrorText>{errorMsg.slice(breakpoint)}</ErrorText>
             </AccordionDetails>
-          </ErrorPanel>
+          </Accordion>
         ) : (
           errorMsg
         )}
