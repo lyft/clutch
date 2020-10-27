@@ -19,7 +19,7 @@ jobs:
           DOCKER_IMAGE=lyft/clutch
           VERSION=latest
           TAGS="${DOCKER_IMAGE}:${VERSION}"
-          TAGS="$TAGS,${DOCKER_IMAGE}:sha-${GITHUB_SHA::8}"
+          TAGS="$TAGS,${DOCKER_IMAGE}:sha-${GITHUB_SHA::7}"
           echo ::set-output name=tags::${TAGS}
       - name: build
         uses: docker/build-push-action@v2.0.1
