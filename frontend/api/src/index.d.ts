@@ -7618,6 +7618,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public deleteService(request: clutch.k8s.v1.IDeleteServiceRequest): Promise<clutch.k8s.v1.DeleteServiceResponse>;
+
+                /**
+                 * Calls UpdateStatefulSet.
+                 * @param request UpdateStatefulSetRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and UpdateStatefulSetResponse
+                 */
+                public updateStatefulSet(request: clutch.k8s.v1.IUpdateStatefulSetRequest, callback: clutch.k8s.v1.K8sAPI.UpdateStatefulSetCallback): void;
+
+                /**
+                 * Calls UpdateStatefulSet.
+                 * @param request UpdateStatefulSetRequest message or plain object
+                 * @returns Promise
+                 */
+                public updateStatefulSet(request: clutch.k8s.v1.IUpdateStatefulSetRequest): Promise<clutch.k8s.v1.UpdateStatefulSetResponse>;
             }
 
             namespace K8sAPI {
@@ -7691,6 +7705,13 @@ export namespace clutch {
                  * @param [response] DeleteServiceResponse
                  */
                 type DeleteServiceCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteServiceResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateStatefulSet}.
+                 * @param error Error, if any
+                 * @param [response] UpdateStatefulSetResponse
+                 */
+                type UpdateStatefulSetCallback = (error: (Error|null), response?: clutch.k8s.v1.UpdateStatefulSetResponse) => void;
             }
 
             /** Properties of a DescribePodRequest. */
@@ -9174,6 +9195,249 @@ export namespace clutch {
 
                 /**
                  * Converts this DeleteDeploymentResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a StatefulSet. */
+            interface IStatefulSet {
+
+                /** StatefulSet cluster */
+                cluster?: (string|null);
+
+                /** StatefulSet namespace */
+                namespace?: (string|null);
+
+                /** StatefulSet name */
+                name?: (string|null);
+
+                /** StatefulSet labels */
+                labels?: ({ [k: string]: string }|null);
+
+                /** StatefulSet annotations */
+                annotations?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a StatefulSet. */
+            class StatefulSet implements IStatefulSet {
+
+                /**
+                 * Constructs a new StatefulSet.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IStatefulSet);
+
+                /** StatefulSet cluster. */
+                public cluster: string;
+
+                /** StatefulSet namespace. */
+                public namespace: string;
+
+                /** StatefulSet name. */
+                public name: string;
+
+                /** StatefulSet labels. */
+                public labels: { [k: string]: string };
+
+                /** StatefulSet annotations. */
+                public annotations: { [k: string]: string };
+
+                /**
+                 * Verifies a StatefulSet message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a StatefulSet message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns StatefulSet
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.StatefulSet;
+
+                /**
+                 * Creates a plain object from a StatefulSet message. Also converts values to other types if specified.
+                 * @param message StatefulSet
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.StatefulSet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this StatefulSet to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an UpdateStatefulSetRequest. */
+            interface IUpdateStatefulSetRequest {
+
+                /** UpdateStatefulSetRequest clientset */
+                clientset?: (string|null);
+
+                /** UpdateStatefulSetRequest cluster */
+                cluster?: (string|null);
+
+                /** UpdateStatefulSetRequest namespace */
+                namespace?: (string|null);
+
+                /** UpdateStatefulSetRequest name */
+                name?: (string|null);
+
+                /** UpdateStatefulSetRequest fields */
+                fields?: (clutch.k8s.v1.UpdateStatefulSetRequest.IFields|null);
+            }
+
+            /** Represents an UpdateStatefulSetRequest. */
+            class UpdateStatefulSetRequest implements IUpdateStatefulSetRequest {
+
+                /**
+                 * Constructs a new UpdateStatefulSetRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IUpdateStatefulSetRequest);
+
+                /** UpdateStatefulSetRequest clientset. */
+                public clientset: string;
+
+                /** UpdateStatefulSetRequest cluster. */
+                public cluster: string;
+
+                /** UpdateStatefulSetRequest namespace. */
+                public namespace: string;
+
+                /** UpdateStatefulSetRequest name. */
+                public name: string;
+
+                /** UpdateStatefulSetRequest fields. */
+                public fields?: (clutch.k8s.v1.UpdateStatefulSetRequest.IFields|null);
+
+                /**
+                 * Verifies an UpdateStatefulSetRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an UpdateStatefulSetRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns UpdateStatefulSetRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateStatefulSetRequest;
+
+                /**
+                 * Creates a plain object from an UpdateStatefulSetRequest message. Also converts values to other types if specified.
+                 * @param message UpdateStatefulSetRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.UpdateStatefulSetRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this UpdateStatefulSetRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace UpdateStatefulSetRequest {
+
+                /** Properties of a Fields. */
+                interface IFields {
+
+                    /** Fields labels */
+                    labels?: ({ [k: string]: string }|null);
+
+                    /** Fields annotations */
+                    annotations?: ({ [k: string]: string }|null);
+                }
+
+                /** Represents a Fields. */
+                class Fields implements IFields {
+
+                    /**
+                     * Constructs a new Fields.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.k8s.v1.UpdateStatefulSetRequest.IFields);
+
+                    /** Fields labels. */
+                    public labels: { [k: string]: string };
+
+                    /** Fields annotations. */
+                    public annotations: { [k: string]: string };
+
+                    /**
+                     * Verifies a Fields message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Fields message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Fields
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateStatefulSetRequest.Fields;
+
+                    /**
+                     * Creates a plain object from a Fields message. Also converts values to other types if specified.
+                     * @param message Fields
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.k8s.v1.UpdateStatefulSetRequest.Fields, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Fields to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+
+            /** Properties of an UpdateStatefulSetResponse. */
+            interface IUpdateStatefulSetResponse {
+            }
+
+            /** Represents an UpdateStatefulSetResponse. */
+            class UpdateStatefulSetResponse implements IUpdateStatefulSetResponse {
+
+                /**
+                 * Constructs a new UpdateStatefulSetResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IUpdateStatefulSetResponse);
+
+                /**
+                 * Verifies an UpdateStatefulSetResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an UpdateStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns UpdateStatefulSetResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateStatefulSetResponse;
+
+                /**
+                 * Creates a plain object from an UpdateStatefulSetResponse message. Also converts values to other types if specified.
+                 * @param message UpdateStatefulSetResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.UpdateStatefulSetResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this UpdateStatefulSetResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -10947,6 +11211,66 @@ export namespace clutch {
 
                     /**
                      * Converts this Deployment to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a StatefulSet. */
+                interface IStatefulSet {
+
+                    /** StatefulSet name */
+                    name?: (string|null);
+
+                    /** StatefulSet clientset */
+                    clientset?: (string|null);
+
+                    /** StatefulSet namespace */
+                    namespace?: (string|null);
+                }
+
+                /** Represents a StatefulSet. */
+                class StatefulSet implements IStatefulSet {
+
+                    /**
+                     * Constructs a new StatefulSet.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.k8s.v1.IStatefulSet);
+
+                    /** StatefulSet name. */
+                    public name: string;
+
+                    /** StatefulSet clientset. */
+                    public clientset: string;
+
+                    /** StatefulSet namespace. */
+                    public namespace: string;
+
+                    /**
+                     * Verifies a StatefulSet message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a StatefulSet message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns StatefulSet
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.k8s.v1.StatefulSet;
+
+                    /**
+                     * Creates a plain object from a StatefulSet message. Also converts values to other types if specified.
+                     * @param message StatefulSet
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.k8s.v1.StatefulSet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this StatefulSet to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

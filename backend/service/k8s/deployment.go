@@ -63,7 +63,7 @@ func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespac
 	}
 
 	newDeployment := oldDeployment.DeepCopy()
-	mergeLabelsAndAnnotations(newDeployment, fields)
+	mergeDeploymentLabelsAndAnnotations(newDeployment, fields)
 
 	patchBytes, err := generateDeploymentStrategicPatch(oldDeployment, newDeployment)
 	if err != nil {
@@ -87,7 +87,7 @@ func (s *svc) DeleteDeployment(ctx context.Context, clientset, cluster, namespac
 	return cs.AppsV1().Deployments(cs.Namespace()).Delete(ctx, name, opts)
 }
 
-func mergeLabelsAndAnnotations(deployment *appsv1.Deployment, fields *k8sapiv1.UpdateDeploymentRequest_Fields) {
+func mergeDeploymentLabelsAndAnnotations(deployment *appsv1.Deployment, fields *k8sapiv1.UpdateDeploymentRequest_Fields) {
 	if len(fields.Labels) > 0 {
 		for k, v := range fields.Labels {
 			deployment.Labels[k] = v

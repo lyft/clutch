@@ -14,21 +14,22 @@ import (
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
-func testDeploymentClientset() k8s.Interface {
-	deployment := &appsv1.Deployment{
+func testStatefulSetClientset() k8s.Interface {
+	statefulSet := &appsv1.StatefulSet{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:        "testing-deployment-name",
+			Name:        "testing-statefulSet-name",
 			Namespace:   "testing-namespace",
 			Labels:      map[string]string{"foo": "bar"},
 			Annotations: map[string]string{"baz": "quuz"},
 		},
 	}
 
-	return fake.NewSimpleClientset(deployment)
+	return fake.NewSimpleClientset(statefulSet)
 }
 
-func TestUpdateDeployment(t *testing.T) {
-	cs := testDeploymentClientset()
+func TestUpdateStatefulSet(t *testing.T) {
+	t.Parallel()
+	cs := testStatefulSetClientset()
 	s := &svc{
 		manager: &managerImpl{
 			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
@@ -40,49 +41,25 @@ func TestUpdateDeployment(t *testing.T) {
 	}
 
 	// Not found.
-	err := s.UpdateDeployment(context.Background(), "", "", "", "", nil)
+	err := s.UpdateStatefulSet(context.Background(), "", "", "", "", nil)
 	assert.Error(t, err)
 
-	err = s.UpdateDeployment(context.Background(), "foo", "core-testing", "testing-namespace", "testing-deployment-name", &k8sapiv1.UpdateDeploymentRequest_Fields{})
+	err = s.UpdateStatefulSet(context.Background(), "foo", "core-testing", "testing-namespace", "testing-statefulSet-name", &k8sapiv1.UpdateStatefulSetRequest_Fields{})
 	assert.NoError(t, err)
 }
 
-func TestDeleteDeployment(t *testing.T) {
-	cs := testDeploymentClientset()
-	s := &svc{
-		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
-				Interface: cs,
-				namespace: "default",
-				cluster:   "core-testing",
-			}},
-		},
-	}
-
-	// Not found.
-	err := s.DeleteDeployment(context.Background(), "foo", "core-testing", "testing-namespace", "abc")
-	assert.Error(t, err)
-
-	err = s.DeleteDeployment(context.Background(), "foo", "core-testing", "testing-namespace", "testing-deployment-name")
-	assert.NoError(t, err)
-
-	// Not found.
-	_, err = s.DescribeDeployment(context.Background(), "foo", "core-testing", "testing-namespace", "testing-deployment-name")
-	assert.Error(t, err)
-}
-
-func TestMergeDeploymentLabelsAndAnnotations(t *testing.T) {
+func TestMergeStatefulSetLabelsAndAnnotations(t *testing.T) {
 	t.Parallel()
 
-	var mergeDeploymentLabelAnnotationsTestCases = []struct {
+	var mergeLabelAnnotationsTestCases = []struct {
 		id     string
-		fields *k8sapiv1.UpdateDeploymentRequest_Fields
-		expect *appsv1.Deployment
+		fields *k8sapiv1.UpdateStatefulSetRequest_Fields
+		expect *appsv1.StatefulSet
 	}{
 		{
 			id:     "no changes",
-			fields: &k8sapiv1.UpdateDeploymentRequest_Fields{},
-			expect: &appsv1.Deployment{
+			fields: &k8sapiv1.UpdateStatefulSetRequest_Fields{},
+			expect: &appsv1.StatefulSet{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels:      map[string]string{"foo": "bar"},
 					Annotations: map[string]string{"baz": "quuz"},
@@ -91,10 +68,10 @@ func TestMergeDeploymentLabelsAndAnnotations(t *testing.T) {
 		},
 		{
 			id: "Adding labels",
-			fields: &k8sapiv1.UpdateDeploymentRequest_Fields{
+			fields: &k8sapiv1.UpdateStatefulSetRequest_Fields{
 				Labels: map[string]string{"field1": "field1val"},
 			},
-			expect: &appsv1.Deployment{
+			expect: &appsv1.StatefulSet{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
 						"foo":    "bar",
@@ -108,10 +85,10 @@ func TestMergeDeploymentLabelsAndAnnotations(t *testing.T) {
 		},
 		{
 			id: "Adding annotations",
-			fields: &k8sapiv1.UpdateDeploymentRequest_Fields{
+			fields: &k8sapiv1.UpdateStatefulSetRequest_Fields{
 				Annotations: map[string]string{"field1": "field1val"},
 			},
-			expect: &appsv1.Deployment{
+			expect: &appsv1.StatefulSet{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
 						"foo": "bar",
@@ -125,11 +102,11 @@ func TestMergeDeploymentLabelsAndAnnotations(t *testing.T) {
 		},
 		{
 			id: "Adding both labels and annotations",
-			fields: &k8sapiv1.UpdateDeploymentRequest_Fields{
+			fields: &k8sapiv1.UpdateStatefulSetRequest_Fields{
 				Labels:      map[string]string{"label1": "label1val"},
 				Annotations: map[string]string{"annotation1": "annotation1val"},
 			},
-			expect: &appsv1.Deployment{
+			expect: &appsv1.StatefulSet{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
 						"foo":    "bar",
@@ -144,31 +121,31 @@ func TestMergeDeploymentLabelsAndAnnotations(t *testing.T) {
 		},
 	}
 
-	for _, tt := range mergeDeploymentLabelAnnotationsTestCases {
+	for _, tt := range mergeLabelAnnotationsTestCases {
 		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
-			deployment := &appsv1.Deployment{
+			statefulSet := &appsv1.StatefulSet{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels:      map[string]string{"foo": "bar"},
 					Annotations: map[string]string{"baz": "quuz"},
 				},
 			}
 
-			mergeDeploymentLabelsAndAnnotations(deployment, tt.fields)
-			assert.Equal(t, tt.expect.ObjectMeta, deployment.ObjectMeta)
+			mergeStatefulSetLabelsAndAnnotations(statefulSet, tt.fields)
+			assert.Equal(t, tt.expect.ObjectMeta, statefulSet.ObjectMeta)
 		})
 	}
 }
 
-func TestGenerateDeploymentStrategicPatch(t *testing.T) {
+func TestGenerateStatefulSetStrategicPatch(t *testing.T) {
 	t.Parallel()
 
-	var deploymentStrategicPatchTest = []struct {
+	var statefulSetStrategicPatchTest = []struct {
 		id       string
-		old      *appsv1.Deployment
-		new      *appsv1.Deployment
+		old      *appsv1.StatefulSet
+		new      *appsv1.StatefulSet
 		expected string
 	}{
 		{
@@ -179,11 +156,11 @@ func TestGenerateDeploymentStrategicPatch(t *testing.T) {
 		},
 		{
 			id: "Adding Annotations",
-			old: &appsv1.Deployment{
+			old: &appsv1.StatefulSet{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{"foo": "bar"},
 				},
-				Spec: appsv1.DeploymentSpec{
+				Spec: appsv1.StatefulSetSpec{
 					Template: corev1.PodTemplateSpec{
 						ObjectMeta: metav1.ObjectMeta{
 							Labels: map[string]string{"foo": "bar"},
@@ -191,12 +168,12 @@ func TestGenerateDeploymentStrategicPatch(t *testing.T) {
 					},
 				},
 			},
-			new: &appsv1.Deployment{
+			new: &appsv1.StatefulSet{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels:      map[string]string{"foo": "bar"},
 					Annotations: map[string]string{"baz": "quuz"},
 				},
-				Spec: appsv1.DeploymentSpec{
+				Spec: appsv1.StatefulSetSpec{
 					Template: corev1.PodTemplateSpec{
 						ObjectMeta: metav1.ObjectMeta{
 							Labels:      map[string]string{"foo": "bar"},
@@ -209,11 +186,11 @@ func TestGenerateDeploymentStrategicPatch(t *testing.T) {
 		},
 		{
 			id: "Adding both Labels and Annotations",
-			old: &appsv1.Deployment{
+			old: &appsv1.StatefulSet{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{"foo": "bar"},
 				},
-				Spec: appsv1.DeploymentSpec{
+				Spec: appsv1.StatefulSetSpec{
 					Template: corev1.PodTemplateSpec{
 						ObjectMeta: metav1.ObjectMeta{
 							Labels: map[string]string{"foo": "bar"},
@@ -221,12 +198,12 @@ func TestGenerateDeploymentStrategicPatch(t *testing.T) {
 					},
 				},
 			},
-			new: &appsv1.Deployment{
+			new: &appsv1.StatefulSet{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels:      map[string]string{"label1": "label1val"},
 					Annotations: map[string]string{"annotations1": "annotations1val"},
 				},
-				Spec: appsv1.DeploymentSpec{
+				Spec: appsv1.StatefulSetSpec{
 					Template: corev1.PodTemplateSpec{
 						ObjectMeta: metav1.ObjectMeta{
 							Labels:      map[string]string{"label1": "label1val"},
@@ -238,12 +215,12 @@ func TestGenerateDeploymentStrategicPatch(t *testing.T) {
 			expected: `{"metadata":{"annotations":{"annotations1":"annotations1val"},"labels":{"foo":null,"label1":"label1val"}},"spec":{"template":{"metadata":{"annotations":{"annotations1":"annotations1val"},"labels":{"foo":null,"label1":"label1val"}}}}}`,
 		},
 	}
-	for _, tt := range deploymentStrategicPatchTest {
+	for _, tt := range statefulSetStrategicPatchTest {
 		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
-			actualPatchBytes, err := generateDeploymentStrategicPatch(tt.old, tt.new)
+			actualPatchBytes, err := generateStatefulSetStrategicPatch(tt.old, tt.new)
 
 			assert.NoError(t, err)
 			assert.Equal(t, []byte(tt.expected), actualPatchBytes)
@@ -251,20 +228,20 @@ func TestGenerateDeploymentStrategicPatch(t *testing.T) {
 	}
 }
 
-func TestProtoForDeploymentClusterName(t *testing.T) {
+func TestProtoForStatefulSetClusterName(t *testing.T) {
 	t.Parallel()
 
-	var deploymentTestCases = []struct {
+	var statefulSetTestCases = []struct {
 		id                  string
 		inputClusterName    string
 		expectedClusterName string
-		deployment          *appsv1.Deployment
+		statefulSet         *appsv1.StatefulSet
 	}{
 		{
 			id:                  "clustername already set",
 			inputClusterName:    "notprod",
 			expectedClusterName: "production",
-			deployment: &appsv1.Deployment{
+			statefulSet: &appsv1.StatefulSet{
 				ObjectMeta: metav1.ObjectMeta{
 					ClusterName: "production",
 				},
@@ -274,7 +251,7 @@ func TestProtoForDeploymentClusterName(t *testing.T) {
 			id:                  "custername is not set",
 			inputClusterName:    "staging",
 			expectedClusterName: "staging",
-			deployment: &appsv1.Deployment{
+			statefulSet: &appsv1.StatefulSet{
 				ObjectMeta: metav1.ObjectMeta{
 					ClusterName: "",
 				},
@@ -282,13 +259,13 @@ func TestProtoForDeploymentClusterName(t *testing.T) {
 		},
 	}
 
-	for _, tt := range deploymentTestCases {
+	for _, tt := range statefulSetTestCases {
 		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
-			deployment := ProtoForDeployment(tt.inputClusterName, tt.deployment)
-			assert.Equal(t, tt.expectedClusterName, deployment.Cluster)
+			statefulSet := ProtoForStatefulSet(tt.inputClusterName, tt.statefulSet)
+			assert.Equal(t, tt.expectedClusterName, statefulSet.Cluster)
 		})
 	}
 }

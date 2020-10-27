@@ -103,6 +103,20 @@ func (*svc) DeleteDeployment(ctx context.Context, clientset, cluster, namespace,
 	return nil
 }
 
+func (*svc) DescribeStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) (*k8sv1.StatefulSet, error) {
+	return &k8sv1.StatefulSet{
+		Cluster:     cluster,
+		Namespace:   namespace,
+		Name:        "statefulset1",
+		Labels:      map[string]string{"Key": "value"},
+		Annotations: map[string]string{"Key": "value"},
+	}, nil
+}
+
+func (*svc) UpdateStatefulSet(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sv1.UpdateStatefulSetRequest_Fields) error {
+	return nil
+}
+
 func (*svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error {
 	return nil
 }
