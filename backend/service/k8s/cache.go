@@ -52,67 +52,37 @@ func (s *svc) StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.Upda
 }
 
 func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
-	// factory := informers.NewSharedInformerFactoryWithOptions(cs, informerResyncTime)
-	stop := make(chan struct{})
-
-	// podInformer := factory.Core().V1().Pods().Informer()
-	// deploymentInformer := factory.Apps().V1().Deployments().Informer()
-	// hpaInformer := factory.Autoscaling().V1().HorizontalPodAutoscalers().Informer()
-
 	informerHandlers := cache.ResourceEventHandlerFuncs{
 		AddFunc:    s.informerAddHandler,
 		UpdateFunc: s.informerUpdateHandler,
 		DeleteFunc: s.informerDeleteHandler,
 	}
 
-	// podInformer.AddEventHandler(informerHandlers)
-	// deploymentInformer.AddEventHandler(informerHandlers)
-	// hpaInformer.AddEventHandler(informerHandlers)
-
-	// _, podInformer := cache.NewInformer(
-	// 	cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "pods", v1.NamespaceAll, fields.Everything()),
-	// 	&v1.Pod{},
-	// 	informerResyncTime,
-	// 	informerHandlers,
-	// )
-	// _, deploymentInformer := cache.NewInformer(
-	// 	cache.NewListWatchFromClient(cs.AppsV1().RESTClient(), "deployments", v1.NamespaceAll, fields.Everything()),
-	// 	&appsv1.Deployment{},
-	// 	informerResyncTime,
-	// 	informerHandlers,
-	// )
-
-	// _, hpaInformer := cache.NewInformer(
-	// 	cache.NewListWatchFromClient(cs.AutoscalingV1().RESTClient(), "horizontalpodautoscalers", v1.NamespaceAll, fields.Everything()),
-	// 	&autoscalingv1.HorizontalPodAutoscaler{},
-	// 	informerResyncTime,
-	// 	informerHandlers,
-	// )
-
-	_, podInformer := cache.NewIndexerInformer(
+	podInformer := NewCachelessInformer(
+		cs,
 		cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "pods", v1.NamespaceAll, fields.Everything()),
 		&v1.Pod{},
 		informerResyncTime,
 		informerHandlers,
-		cache.Indexers{},
 	)
 
-	_, deploymentInformer := cache.NewIndexerInformer(
+	deploymentInformer := NewCachelessInformer(
+		cs,
 		cache.NewListWatchFromClient(cs.AppsV1().RESTClient(), "deployments", v1.NamespaceAll, fields.Everything()),
 		&appsv1.Deployment{},
 		informerResyncTime,
 		informerHandlers,
-		cache.Indexers{},
 	)
 
-	_, hpaInformer := cache.NewIndexerInformer(
+	hpaInformer := NewCachelessInformer(
+		cs,
 		cache.NewListWatchFromClient(cs.AutoscalingV1().RESTClient(), "horizontalpodautoscalers", v1.NamespaceAll, fields.Everything()),
 		&autoscalingv1.HorizontalPodAutoscaler{},
 		informerResyncTime,
 		informerHandlers,
-		cache.Indexers{},
 	)
 
+	stop := make(chan struct{})
 	go podInformer.Run(stop)
 	go deploymentInformer.Run(stop)
 	go hpaInformer.Run(stop)
