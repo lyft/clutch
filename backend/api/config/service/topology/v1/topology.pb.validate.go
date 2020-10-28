@@ -117,6 +117,8 @@ func (m *Cache) Validate() error {
 		return nil
 	}
 
+	// no validation rules for Disable
+
 	if d := m.GetTtl(); d != nil {
 		dur, err := ptypes.Duration(d)
 		if err != nil {

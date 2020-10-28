@@ -12,6 +12,8 @@ message Config {
 }
 
 message Cache {
-  // The time to live (ttl) for an item in cache, the default is 1 hour (3600 seconds).
-  google.protobuf.Duration ttl = 1 [ (validate.rules).duration.gt.seconds = 1 ];
+  // This disables the caching functionality completely, all other aspects of the topology will continue to function.
+  bool disable = 1;
+  // The time to live (ttl) for an item in cache, the default is 2 hours (7200 seconds).
+  google.protobuf.Duration ttl = 2 [ (validate.rules).duration.gt.seconds = 1 ];
 }

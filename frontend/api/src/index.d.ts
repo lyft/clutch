@@ -5957,6 +5957,9 @@ export namespace clutch {
                     /** Properties of a Cache. */
                     interface ICache {
 
+                        /** Cache disable */
+                        disable?: (boolean|null);
+
                         /** Cache ttl */
                         ttl?: (google.protobuf.IDuration|null);
                     }
@@ -5969,6 +5972,9 @@ export namespace clutch {
                          * @param [properties] Properties to set
                          */
                         constructor(properties?: clutch.config.service.topology.v1.ICache);
+
+                        /** Cache disable. */
+                        public disable: boolean;
 
                         /** Cache ttl. */
                         public ttl?: (google.protobuf.IDuration|null);
