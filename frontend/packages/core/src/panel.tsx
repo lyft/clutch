@@ -12,7 +12,7 @@ const FullWidthExpansionPanel = styled(MuiExpansionPanel)`
   width: 100%;
 `;
 
-interface ExpansionPanelProps {
+export interface ExpansionPanelProps {
   heading: string;
   summary: string;
   expanded?: boolean;
@@ -25,7 +25,7 @@ const ExpansionPanel: React.FC<ExpansionPanelProps> = ({
   children,
 }) => {
   return (
-    <FullWidthExpansionPanel expanded={expanded}>
+    <FullWidthExpansionPanel defaultExpanded={expanded}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>{heading}</Typography>
         <div style={{ flexGrow: 1 }} />
