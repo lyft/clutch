@@ -24,6 +24,22 @@ func testServiceClientset() k8s.Interface {
 	return fake.NewSimpleClientset(svc)
 }
 
+func TestDescribeService(t *testing.T) {
+	cs := testServiceClientset()
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "default",
+				cluster:   "core-testing",
+			}},
+		},
+	}
+
+	_, err := s.DescribeService(context.Background(), "foo", "core-testing", "testing-namespace", "testing-service-name")
+	assert.NoError(t, err)
+}
+
 func TestDeleteService(t *testing.T) {
 	cs := testServiceClientset()
 	s := &svc{
