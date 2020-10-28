@@ -16,6 +16,12 @@ module.exports = {
           }
         ],
       }
-    }
+    },
+    {
+      files: ["**/*.stories.*"],
+      rules: {
+        "import/no-extraneous-dependencies": ["off"],
+      }
+    },
   ]
 };
