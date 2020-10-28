@@ -159,7 +159,7 @@ message RebootInstanceRequest {
   string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
-message RebootInstanceResponse{
+message RebootInstanceResponse {
 }
 
 message Instance {
