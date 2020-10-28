@@ -10,6 +10,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/lyft/clutch/backend/gateway/log"
+
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
@@ -18,6 +20,7 @@ import (
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
+	"github.com/lyft/clutch/backend/gateway/log"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/audit/storage"
 	"github.com/lyft/clutch/backend/service/audit/storage/local"
@@ -148,6 +151,7 @@ func (c *client) poll(interval time.Duration) {
 					c.logger.Error(
 						"error writing audit event to sink",
 						zap.String("sink", s.name),
+						log.ProtoField("event", event),
 						zap.Error(err),
 					)
 				}
