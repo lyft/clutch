@@ -1,6 +1,7 @@
 import type { BaseWorkflowProps, NoteConfig, WorkflowConfiguration } from "@clutch-sh/core";
 import type { WizardChild } from "@clutch-sh/wizard";
 
+import RebootInstance from "./reboot-instance";
 import ResizeAutoscalingGroup from "./resize-asg";
 import TerminateInstance from "./terminate-instance";
 
@@ -31,6 +32,13 @@ const register = (): WorkflowConfiguration => {
         displayName: "Terminate Instance",
         description: "Terminate an EC2 instance.",
         component: TerminateInstance,
+        requiredConfigProps: ["resolverType"],
+      },
+      rebootInstance: {
+        path: "instance/reboot",
+        displayName: "Reboot Instance",
+        description: "Reboot an EC2 Instance",
+        component: RebootInstance,
         requiredConfigProps: ["resolverType"],
       },
       resizeAutoscalingGroup: {
