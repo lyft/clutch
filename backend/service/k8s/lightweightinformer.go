@@ -1,32 +1,41 @@
 package k8s
 
 import (
-	"log"
 	"time"
 
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/tools/cache"
 )
 
-type lightWeightCacheObject struct {
+type lightweightCacheObject struct {
 	metav1.Object
-	UID        types.UID
-	Name       string
-	Namespace  string
-	Finalizers []string
-	Labels     map[string]string
+	Name      string
+	Namespace string
 }
 
-func (cl *lightWeightCacheObject) GetUID() types.UID             { return cl.UID }
-func (cl *lightWeightCacheObject) SetUID(uid types.UID)          { cl.UID = uid }
-func (cl *lightWeightCacheObject) GetName() string               { return cl.Name }
-func (cl *lightWeightCacheObject) SetName(name string)           { cl.Name = name }
-func (cl *lightWeightCacheObject) GetNamespace() string          { return cl.Namespace }
-func (cl *lightWeightCacheObject) SetNamespace(namespace string) { cl.Namespace = namespace }
+func (lw *lightweightCacheObject) GetName() string      { return lw.Name }
+func (lw *lightweightCacheObject) GetNamespace() string { return lw.Namespace }
 
+// The LightweightInformer is an informer thats optimized for memory usage with drawbacks.
+//
+// The reduction in memory consumption does come at a cost, to achieve this we store small objects
+// in the informers cache store. We do this by utilizing storing `lightweightCacheObject` instead
+// of the full Kubernetes object.
+// `lightweightCacheObject` has just enough metadata for the cache store and DeltaFIFO components to operate normally.
+//
+// There are drawbacks too using a LightweightInformer and its does not fit all use cases.
+// For the Topology Caching this type of solution helped to reduce memory footprint significantly
+// for large scale Kubernetes deployments.
+//
+// Also to note the memory footprint of the cache store is only part of the story.
+// While the informers controller is receiving Kubernetes objects it stores that full object in the DeltaFIFO queue.
+// This queue while processed quickly does store a vast amount objects at any given time and contributes to memory usage greatly.
+//
+// Drawbacks
+// - Update resource event handler does not function as expected, old objects will always return nil.
+//   This is because we dont cache the full k8s object to compute deltas as we are using lightweightCacheObjects instead.
 func NewLightweightInformer(
 	cs ContextClientset,
 	lw cache.ListerWatcher,
@@ -34,27 +43,10 @@ func NewLightweightInformer(
 	resync time.Duration,
 	h cache.ResourceEventHandler,
 ) cache.Controller {
-	keyFunc := func(obj interface{}) (string, error) {
-		theMeta, err := meta.Accessor(obj)
-		if err != nil {
-			return "", err
-		}
-		return string(theMeta.GetUID()), nil
-	}
-
-	deletehandler := func(obj interface{}) (string, error) {
-		if d, ok := obj.(cache.DeletedFinalStateUnknown); ok {
-			return d.Key, nil
-		}
-
-		return keyFunc(obj)
-	}
-
-	cacheStore := cache.NewIndexer(deletehandler, cache.Indexers{})
+	cacheStore := cache.NewIndexer(cache.DeletionHandlingMetaNamespaceKeyFunc, cache.Indexers{})
 	fifo := cache.NewDeltaFIFOWithOptions(cache.DeltaFIFOOptions{
 		KnownObjects:          cacheStore,
 		EmitDeltaTypeReplaced: true,
-		KeyFunction:           keyFunc,
 	})
 
 	return cache.New(&cache.Config{
@@ -66,22 +58,26 @@ func NewLightweightInformer(
 		Process: func(obj interface{}) error {
 			for _, d := range obj.(cache.Deltas) {
 
-				incomeingObjectMeta, _ := meta.Accessor(d.Object)
-				lightweightObj := &lightWeightCacheObject{}
-				lightweightObj.SetUID(incomeingObjectMeta.GetUID())
-				lightweightObj.SetName(incomeingObjectMeta.GetName())
-				lightweightObj.SetNamespace(incomeingObjectMeta.GetNamespace())
+				incomeingObjectMeta, err := meta.Accessor(d.Object)
+				if err != nil {
+					return err
+				}
+
+				lightweightObj := &lightweightCacheObject{
+					Name:      incomeingObjectMeta.GetName(),
+					Namespace: incomeingObjectMeta.GetNamespace(),
+				}
 
 				switch d.Type {
 				case cache.Sync, cache.Replaced, cache.Added, cache.Updated:
 					if _, exists, err := cacheStore.Get(lightweightObj); err == nil && exists {
 						if err := cacheStore.Update(d.Object); err != nil {
-							log.Printf("error updating %v", err)
+							return err
 						}
 						h.OnUpdate(nil, d.Object)
 					} else {
 						if err := cacheStore.Add(lightweightObj); err != nil {
-							log.Printf("error adding %v", err)
+							return err
 						}
 						h.OnAdd(d.Object)
 					}
