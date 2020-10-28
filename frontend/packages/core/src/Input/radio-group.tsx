@@ -110,4 +110,4 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   );
 };
 
-export default RadioGroup;
+export { RadioGroup, RadioGroupProps };

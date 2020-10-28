@@ -170,3 +170,27 @@ func TestProtoForHPAClusterName(t *testing.T) {
 		})
 	}
 }
+
+func TestDeleteHPA(t *testing.T) {
+	cs := testHPAClientset()
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "default",
+				cluster:   "core-testing",
+			}},
+		},
+	}
+
+	// Not found.
+	err := s.DeleteHPA(context.Background(), "foo", "core-testing", "testing-namespace", "abc")
+	assert.Error(t, err)
+
+	err = s.DeleteHPA(context.Background(), "foo", "core-testing", "testing-namespace", "testing-hpa-name")
+	assert.NoError(t, err)
+
+	// Not found.
+	_, err = s.DescribeHPA(context.Background(), "foo", "core-testing", "testing-namespace", "testing-hpa-name")
+	assert.Error(t, err)
+}

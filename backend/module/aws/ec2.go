@@ -43,3 +43,12 @@ func (a *ec2API) GetInstance(ctx context.Context, req *ec2v1.GetInstanceRequest)
 
 	return &ec2v1.GetInstanceResponse{Instance: instances[0]}, nil
 }
+
+func (a *ec2API) RebootInstance(ctx context.Context, req *ec2v1.RebootInstanceRequest) (*ec2v1.RebootInstanceResponse, error) {
+	err := a.client.RebootInstances(ctx, req.Region, []string{req.InstanceId})
+	if err != nil {
+		return nil, err
+	}
+
+	return &ec2v1.RebootInstanceResponse{}, nil
+}

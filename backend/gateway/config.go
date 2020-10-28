@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"text/template"
+	"time"
 
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -18,6 +19,7 @@ import (
 	"gopkg.in/yaml.v3"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
+	"github.com/lyft/clutch/backend/middleware/timeouts"
 )
 
 type Flags struct {
@@ -168,6 +170,27 @@ func newTmpLogger() *zap.Logger {
 
 type validator interface {
 	Validate() error
+}
+
+// Returns maximum timeout, where 0 is considered maximum (i.e. no timeout).
+func computeMaximumTimeout(cfg *gatewayv1.Timeouts) time.Duration {
+	if cfg == nil {
+		return timeouts.DefaultTimeout
+	}
+
+	ret := cfg.Default.AsDuration()
+	for _, e := range cfg.Overrides {
+		override := e.Timeout.AsDuration()
+		if ret == 0 || override == 0 {
+			return 0
+		}
+
+		if override > ret {
+			ret = override
+		}
+	}
+
+	return ret
 }
 
 func validateAny(a *anypb.Any) error {

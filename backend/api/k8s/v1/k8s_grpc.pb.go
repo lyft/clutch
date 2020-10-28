@@ -22,6 +22,7 @@ type K8SAPIClient interface {
 	DeletePod(ctx context.Context, in *DeletePodRequest, opts ...grpc.CallOption) (*DeletePodResponse, error)
 	UpdatePod(ctx context.Context, in *UpdatePodRequest, opts ...grpc.CallOption) (*UpdatePodResponse, error)
 	ResizeHPA(ctx context.Context, in *ResizeHPARequest, opts ...grpc.CallOption) (*ResizeHPAResponse, error)
+	DeleteHPA(ctx context.Context, in *DeleteHPARequest, opts ...grpc.CallOption) (*DeleteHPAResponse, error)
 	UpdateDeployment(ctx context.Context, in *UpdateDeploymentRequest, opts ...grpc.CallOption) (*UpdateDeploymentResponse, error)
 	DeleteDeployment(ctx context.Context, in *DeleteDeploymentRequest, opts ...grpc.CallOption) (*DeleteDeploymentResponse, error)
 }
@@ -79,6 +80,15 @@ func (c *k8SAPIClient) ResizeHPA(ctx context.Context, in *ResizeHPARequest, opts
 	return out, nil
 }
 
+func (c *k8SAPIClient) DeleteHPA(ctx context.Context, in *DeleteHPARequest, opts ...grpc.CallOption) (*DeleteHPAResponse, error) {
+	out := new(DeleteHPAResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/DeleteHPA", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *k8SAPIClient) UpdateDeployment(ctx context.Context, in *UpdateDeploymentRequest, opts ...grpc.CallOption) (*UpdateDeploymentResponse, error) {
 	out := new(UpdateDeploymentResponse)
 	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/UpdateDeployment", in, out, opts...)
@@ -106,6 +116,7 @@ type K8SAPIServer interface {
 	DeletePod(context.Context, *DeletePodRequest) (*DeletePodResponse, error)
 	UpdatePod(context.Context, *UpdatePodRequest) (*UpdatePodResponse, error)
 	ResizeHPA(context.Context, *ResizeHPARequest) (*ResizeHPAResponse, error)
+	DeleteHPA(context.Context, *DeleteHPARequest) (*DeleteHPAResponse, error)
 	UpdateDeployment(context.Context, *UpdateDeploymentRequest) (*UpdateDeploymentResponse, error)
 	DeleteDeployment(context.Context, *DeleteDeploymentRequest) (*DeleteDeploymentResponse, error)
 }
@@ -128,6 +139,9 @@ func (UnimplementedK8SAPIServer) UpdatePod(context.Context, *UpdatePodRequest) (
 }
 func (UnimplementedK8SAPIServer) ResizeHPA(context.Context, *ResizeHPARequest) (*ResizeHPAResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ResizeHPA not implemented")
+}
+func (UnimplementedK8SAPIServer) DeleteHPA(context.Context, *DeleteHPARequest) (*DeleteHPAResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteHPA not implemented")
 }
 func (UnimplementedK8SAPIServer) UpdateDeployment(context.Context, *UpdateDeploymentRequest) (*UpdateDeploymentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateDeployment not implemented")
@@ -237,6 +251,24 @@ func _K8SAPI_ResizeHPA_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _K8SAPI_DeleteHPA_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteHPARequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).DeleteHPA(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/DeleteHPA",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).DeleteHPA(ctx, req.(*DeleteHPARequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _K8SAPI_UpdateDeployment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateDeploymentRequest)
 	if err := dec(in); err != nil {
@@ -296,6 +328,10 @@ var _K8SAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ResizeHPA",
 			Handler:    _K8SAPI_ResizeHPA_Handler,
+		},
+		{
+			MethodName: "DeleteHPA",
+			Handler:    _K8SAPI_DeleteHPA_Handler,
 		},
 		{
 			MethodName: "UpdateDeployment",

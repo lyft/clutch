@@ -18,6 +18,7 @@ import (
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
+	"github.com/lyft/clutch/backend/gateway/log"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/audit/storage"
 	"github.com/lyft/clutch/backend/service/audit/storage/local"
@@ -68,7 +69,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 			)
 		}
 
-		c.sinks = append(c.sinks, sink)
+		c.sinks = append(c.sinks, registeredSink{Sink: sink, name: sinkName})
 	}
 
 	// Start polling loop against database.
@@ -88,6 +89,11 @@ func getStorageProvider(cfg *auditconfigv1.Config, logger *zap.Logger, scope tal
 	return nil, errors.New("reached end of non-exhaustive type switch looking for audit storage")
 }
 
+type registeredSink struct {
+	auditsink.Sink
+	name string
+}
+
 type client struct {
 	logger *zap.Logger
 	scope  tally.Scope
@@ -96,7 +102,7 @@ type client struct {
 	filter  *auditconfigv1.Filter
 
 	marshaler *jsonpb.Marshaler
-	sinks     []auditsink.Sink
+	sinks     []registeredSink
 }
 
 func (c *client) Filter(event *auditv1.Event) bool {
@@ -142,6 +148,8 @@ func (c *client) poll(interval time.Duration) {
 				if err := s.Write(event); err != nil {
 					c.logger.Error(
 						"error writing audit event to sink",
+						zap.String("sink", s.name),
+						log.ProtoField("event", event),
 						zap.Error(err),
 					)
 				}

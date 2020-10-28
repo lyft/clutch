@@ -1294,6 +1294,20 @@ export namespace clutch {
                      * @returns Promise
                      */
                     public resizeAutoscalingGroup(request: clutch.aws.ec2.v1.IResizeAutoscalingGroupRequest): Promise<clutch.aws.ec2.v1.ResizeAutoscalingGroupResponse>;
+
+                    /**
+                     * Calls RebootInstance.
+                     * @param request RebootInstanceRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and RebootInstanceResponse
+                     */
+                    public rebootInstance(request: clutch.aws.ec2.v1.IRebootInstanceRequest, callback: clutch.aws.ec2.v1.EC2API.RebootInstanceCallback): void;
+
+                    /**
+                     * Calls RebootInstance.
+                     * @param request RebootInstanceRequest message or plain object
+                     * @returns Promise
+                     */
+                    public rebootInstance(request: clutch.aws.ec2.v1.IRebootInstanceRequest): Promise<clutch.aws.ec2.v1.RebootInstanceResponse>;
                 }
 
                 namespace EC2API {
@@ -1318,6 +1332,13 @@ export namespace clutch {
                      * @param [response] ResizeAutoscalingGroupResponse
                      */
                     type ResizeAutoscalingGroupCallback = (error: (Error|null), response?: clutch.aws.ec2.v1.ResizeAutoscalingGroupResponse) => void;
+
+                    /**
+                     * Callback as used by {@link clutch.aws.ec2.v1.EC2API#rebootInstance}.
+                     * @param error Error, if any
+                     * @param [response] RebootInstanceResponse
+                     */
+                    type RebootInstanceCallback = (error: (Error|null), response?: clutch.aws.ec2.v1.RebootInstanceResponse) => void;
                 }
 
                 /** Properties of an AutoscalingGroupSize. */
@@ -1863,6 +1884,102 @@ export namespace clutch {
 
                     /**
                      * Converts this TerminateInstanceResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a RebootInstanceRequest. */
+                interface IRebootInstanceRequest {
+
+                    /** RebootInstanceRequest instanceId */
+                    instanceId?: (string|null);
+
+                    /** RebootInstanceRequest region */
+                    region?: (string|null);
+                }
+
+                /** Represents a RebootInstanceRequest. */
+                class RebootInstanceRequest implements IRebootInstanceRequest {
+
+                    /**
+                     * Constructs a new RebootInstanceRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.aws.ec2.v1.IRebootInstanceRequest);
+
+                    /** RebootInstanceRequest instanceId. */
+                    public instanceId: string;
+
+                    /** RebootInstanceRequest region. */
+                    public region: string;
+
+                    /**
+                     * Verifies a RebootInstanceRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a RebootInstanceRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns RebootInstanceRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.ec2.v1.RebootInstanceRequest;
+
+                    /**
+                     * Creates a plain object from a RebootInstanceRequest message. Also converts values to other types if specified.
+                     * @param message RebootInstanceRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.aws.ec2.v1.RebootInstanceRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this RebootInstanceRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a RebootInstanceResponse. */
+                interface IRebootInstanceResponse {
+                }
+
+                /** Represents a RebootInstanceResponse. */
+                class RebootInstanceResponse implements IRebootInstanceResponse {
+
+                    /**
+                     * Constructs a new RebootInstanceResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.aws.ec2.v1.IRebootInstanceResponse);
+
+                    /**
+                     * Verifies a RebootInstanceResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a RebootInstanceResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns RebootInstanceResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.ec2.v1.RebootInstanceResponse;
+
+                    /**
+                     * Creates a plain object from a RebootInstanceResponse message. Also converts values to other types if specified.
+                     * @param message RebootInstanceResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.aws.ec2.v1.RebootInstanceResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this RebootInstanceResponse to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -3011,8 +3128,8 @@ export namespace clutch {
                 /** Properties of a ListViewItem. */
                 interface IListViewItem {
 
-                    /** ListViewItem identifier */
-                    identifier?: (number|Long|null);
+                    /** ListViewItem id */
+                    id?: (number|Long|null);
 
                     /** ListViewItem properties */
                     properties?: (clutch.chaos.experimentation.v1.IPropertiesMap|null);
@@ -3027,8 +3144,8 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.experimentation.v1.IListViewItem);
 
-                    /** ListViewItem identifier. */
-                    public identifier: (number|Long);
+                    /** ListViewItem id. */
+                    public id: (number|Long);
 
                     /** ListViewItem properties. */
                     public properties?: (clutch.chaos.experimentation.v1.IPropertiesMap|null);
@@ -7325,6 +7442,20 @@ export namespace clutch {
                 public resizeHPA(request: clutch.k8s.v1.IResizeHPARequest): Promise<clutch.k8s.v1.ResizeHPAResponse>;
 
                 /**
+                 * Calls DeleteHPA.
+                 * @param request DeleteHPARequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DeleteHPAResponse
+                 */
+                public deleteHPA(request: clutch.k8s.v1.IDeleteHPARequest, callback: clutch.k8s.v1.K8sAPI.DeleteHPACallback): void;
+
+                /**
+                 * Calls DeleteHPA.
+                 * @param request DeleteHPARequest message or plain object
+                 * @returns Promise
+                 */
+                public deleteHPA(request: clutch.k8s.v1.IDeleteHPARequest): Promise<clutch.k8s.v1.DeleteHPAResponse>;
+
+                /**
                  * Calls UpdateDeployment.
                  * @param request UpdateDeploymentRequest message or plain object
                  * @param callback Node-style callback called with the error, if any, and UpdateDeploymentResponse
@@ -7389,6 +7520,13 @@ export namespace clutch {
                  * @param [response] ResizeHPAResponse
                  */
                 type ResizeHPACallback = (error: (Error|null), response?: clutch.k8s.v1.ResizeHPAResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteHPA}.
+                 * @param error Error, if any
+                 * @param [response] DeleteHPAResponse
+                 */
+                type DeleteHPACallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteHPAResponse) => void;
 
                 /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateDeployment}.
@@ -8427,6 +8565,114 @@ export namespace clutch {
 
                 /**
                  * Converts this ResizeHPAResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteHPARequest. */
+            interface IDeleteHPARequest {
+
+                /** DeleteHPARequest clientset */
+                clientset?: (string|null);
+
+                /** DeleteHPARequest cluster */
+                cluster?: (string|null);
+
+                /** DeleteHPARequest namespace */
+                namespace?: (string|null);
+
+                /** DeleteHPARequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a DeleteHPARequest. */
+            class DeleteHPARequest implements IDeleteHPARequest {
+
+                /**
+                 * Constructs a new DeleteHPARequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteHPARequest);
+
+                /** DeleteHPARequest clientset. */
+                public clientset: string;
+
+                /** DeleteHPARequest cluster. */
+                public cluster: string;
+
+                /** DeleteHPARequest namespace. */
+                public namespace: string;
+
+                /** DeleteHPARequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a DeleteHPARequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteHPARequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteHPARequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteHPARequest;
+
+                /**
+                 * Creates a plain object from a DeleteHPARequest message. Also converts values to other types if specified.
+                 * @param message DeleteHPARequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteHPARequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteHPARequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteHPAResponse. */
+            interface IDeleteHPAResponse {
+            }
+
+            /** Represents a DeleteHPAResponse. */
+            class DeleteHPAResponse implements IDeleteHPAResponse {
+
+                /**
+                 * Constructs a new DeleteHPAResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteHPAResponse);
+
+                /**
+                 * Verifies a DeleteHPAResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteHPAResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteHPAResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteHPAResponse;
+
+                /**
+                 * Creates a plain object from a DeleteHPAResponse message. Also converts values to other types if specified.
+                 * @param message DeleteHPAResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteHPAResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteHPAResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
