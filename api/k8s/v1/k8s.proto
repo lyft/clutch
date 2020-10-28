@@ -350,7 +350,6 @@ message Service {
   map<string, string> annotations = 6;
 }
 
-
 message DescribeServiceRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.Service",
