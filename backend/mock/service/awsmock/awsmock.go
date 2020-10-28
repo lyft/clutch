@@ -93,6 +93,10 @@ func (s *svc) TerminateInstances(ctx context.Context, region string, ids []strin
 	return nil
 }
 
+func (s *svc) RebootInstances(ctx context.Context, region string, ids []string) error {
+	return nil
+}
+
 func (s *svc) S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error) {
 	panic("implement me")
 }

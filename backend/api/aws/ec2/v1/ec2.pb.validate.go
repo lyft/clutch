@@ -676,6 +676,154 @@ var _ interface {
 	ErrorName() string
 } = TerminateInstanceResponseValidationError{}
 
+// Validate checks the field values on RebootInstanceRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *RebootInstanceRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetInstanceId()) < 1 {
+		return RebootInstanceRequestValidationError{
+			field:  "InstanceId",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetRegion()) < 1 {
+		return RebootInstanceRequestValidationError{
+			field:  "Region",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	return nil
+}
+
+// RebootInstanceRequestValidationError is the validation error returned by
+// RebootInstanceRequest.Validate if the designated constraints aren't met.
+type RebootInstanceRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RebootInstanceRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RebootInstanceRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RebootInstanceRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RebootInstanceRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RebootInstanceRequestValidationError) ErrorName() string {
+	return "RebootInstanceRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RebootInstanceRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRebootInstanceRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RebootInstanceRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RebootInstanceRequestValidationError{}
+
+// Validate checks the field values on RebootInstanceResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *RebootInstanceResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// RebootInstanceResponseValidationError is the validation error returned by
+// RebootInstanceResponse.Validate if the designated constraints aren't met.
+type RebootInstanceResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RebootInstanceResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RebootInstanceResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RebootInstanceResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RebootInstanceResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RebootInstanceResponseValidationError) ErrorName() string {
+	return "RebootInstanceResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RebootInstanceResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRebootInstanceResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RebootInstanceResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RebootInstanceResponseValidationError{}
+
 // Validate checks the field values on Instance with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *Instance) Validate() error {

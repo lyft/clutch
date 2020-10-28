@@ -20,6 +20,7 @@ type EC2APIClient interface {
 	GetInstance(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*GetInstanceResponse, error)
 	TerminateInstance(ctx context.Context, in *TerminateInstanceRequest, opts ...grpc.CallOption) (*TerminateInstanceResponse, error)
 	ResizeAutoscalingGroup(ctx context.Context, in *ResizeAutoscalingGroupRequest, opts ...grpc.CallOption) (*ResizeAutoscalingGroupResponse, error)
+	RebootInstance(ctx context.Context, in *RebootInstanceRequest, opts ...grpc.CallOption) (*RebootInstanceResponse, error)
 }
 
 type eC2APIClient struct {
@@ -57,6 +58,15 @@ func (c *eC2APIClient) ResizeAutoscalingGroup(ctx context.Context, in *ResizeAut
 	return out, nil
 }
 
+func (c *eC2APIClient) RebootInstance(ctx context.Context, in *RebootInstanceRequest, opts ...grpc.CallOption) (*RebootInstanceResponse, error) {
+	out := new(RebootInstanceResponse)
+	err := c.cc.Invoke(ctx, "/clutch.aws.ec2.v1.EC2API/RebootInstance", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // EC2APIServer is the server API for EC2API service.
 // All implementations should embed UnimplementedEC2APIServer
 // for forward compatibility
@@ -64,6 +74,7 @@ type EC2APIServer interface {
 	GetInstance(context.Context, *GetInstanceRequest) (*GetInstanceResponse, error)
 	TerminateInstance(context.Context, *TerminateInstanceRequest) (*TerminateInstanceResponse, error)
 	ResizeAutoscalingGroup(context.Context, *ResizeAutoscalingGroupRequest) (*ResizeAutoscalingGroupResponse, error)
+	RebootInstance(context.Context, *RebootInstanceRequest) (*RebootInstanceResponse, error)
 }
 
 // UnimplementedEC2APIServer should be embedded to have forward compatible implementations.
@@ -78,6 +89,9 @@ func (UnimplementedEC2APIServer) TerminateInstance(context.Context, *TerminateIn
 }
 func (UnimplementedEC2APIServer) ResizeAutoscalingGroup(context.Context, *ResizeAutoscalingGroupRequest) (*ResizeAutoscalingGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ResizeAutoscalingGroup not implemented")
+}
+func (UnimplementedEC2APIServer) RebootInstance(context.Context, *RebootInstanceRequest) (*RebootInstanceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RebootInstance not implemented")
 }
 
 // UnsafeEC2APIServer may be embedded to opt out of forward compatibility for this service.
@@ -145,6 +159,24 @@ func _EC2API_ResizeAutoscalingGroup_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _EC2API_RebootInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RebootInstanceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EC2APIServer).RebootInstance(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.aws.ec2.v1.EC2API/RebootInstance",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EC2APIServer).RebootInstance(ctx, req.(*RebootInstanceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _EC2API_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "clutch.aws.ec2.v1.EC2API",
 	HandlerType: (*EC2APIServer)(nil),
@@ -160,6 +192,10 @@ var _EC2API_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ResizeAutoscalingGroup",
 			Handler:    _EC2API_ResizeAutoscalingGroup_Handler,
+		},
+		{
+			MethodName: "RebootInstance",
+			Handler:    _EC2API_RebootInstance_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
