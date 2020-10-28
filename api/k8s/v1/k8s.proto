@@ -75,6 +75,22 @@ service K8sAPI {
     };
     option (clutch.api.v1.action).type = DELETE;
   }
+
+  rpc DescribeService(DescribeServiceRequest) returns (DescribeServiceResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/describeService"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
+  rpc DeleteService(DeleteServiceRequest) returns (DeleteServiceResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/deleteService"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = DELETE;
+  }
 }
 
 message DescribePodRequest {
@@ -317,6 +333,57 @@ message DeleteDeploymentRequest {
 }
 
 message DeleteDeploymentResponse {
+}
+
+message Service {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Service",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string cluster = 1;
+  string namespace = 2;
+  string name = 3;
+  string type = 4;
+
+  map<string, string> labels = 5;
+  map<string, string> annotations = 6;
+}
+
+
+message DescribeServiceRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Service",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+
+  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+}
+
+message DescribeServiceResponse {
+  option (clutch.api.v1.reference).fields = "service";
+
+  Service service = 1;
+}
+
+message DeleteServiceRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Service",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message DeleteServiceResponse {
 }
 
 // This message type is used to add support for nullable strings and is an
