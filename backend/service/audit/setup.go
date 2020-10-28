@@ -10,8 +10,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/lyft/clutch/backend/gateway/log"
-
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
