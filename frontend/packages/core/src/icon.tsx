@@ -12,10 +12,15 @@ const StatusIcon = styled(FiberManualRecordTwoToneIcon)`
 
 export interface StatusProps {
   variant?: "neutral" | "success" | "failure";
-  align?: "right" | "center";
+  align?: "left" | "center" | "right";
 }
 
-const Status: React.FC<StatusProps> = ({ children, variant = "neutral", align, ...props }) => {
+const Status: React.FC<StatusProps> = ({
+  children,
+  variant = "neutral",
+  align = "left",
+  ...props
+}) => {
   let justifyContent: GridJustification = "flex-start";
   if (align === "right") {
     justifyContent = "flex-end";
