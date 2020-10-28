@@ -75,6 +75,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 type Client interface {
 	DescribeInstances(ctx context.Context, region string, ids []string) ([]*ec2v1.Instance, error)
 	TerminateInstances(ctx context.Context, region string, ids []string) error
+	RebootInstances(ctx context.Context, region string, ids []string) error
 
 	DescribeAutoscalingGroups(ctx context.Context, region string, names []string) ([]*ec2v1.AutoscalingGroup, error)
 	ResizeAutoscalingGroup(ctx context.Context, region string, name string, size *ec2v1.AutoscalingGroupSize) error
@@ -245,6 +246,18 @@ func (c *client) TerminateInstances(ctx context.Context, region string, ids []st
 
 	input := &ec2.TerminateInstancesInput{InstanceIds: aws.StringSlice(ids)}
 	_, err := cl.ec2.TerminateInstancesWithContext(ctx, input)
+
+	return err
+}
+
+func (c *client) RebootInstances(ctx context.Context, region string, ids []string) error {
+	cl, ok := c.clients[region]
+	if !ok {
+		return fmt.Errorf("no client found for region '%s'", region)
+	}
+
+	input := &ec2.RebootInstancesInput{InstanceIds: aws.StringSlice(ids)}
+	_, err := cl.ec2.RebootInstancesWithContext(ctx, input)
 
 	return err
 }
