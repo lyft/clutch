@@ -7325,6 +7325,20 @@ export namespace clutch {
                 public resizeHPA(request: clutch.k8s.v1.IResizeHPARequest): Promise<clutch.k8s.v1.ResizeHPAResponse>;
 
                 /**
+                 * Calls DeleteHPA.
+                 * @param request DeleteHPARequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DeleteHPAResponse
+                 */
+                public deleteHPA(request: clutch.k8s.v1.IDeleteHPARequest, callback: clutch.k8s.v1.K8sAPI.DeleteHPACallback): void;
+
+                /**
+                 * Calls DeleteHPA.
+                 * @param request DeleteHPARequest message or plain object
+                 * @returns Promise
+                 */
+                public deleteHPA(request: clutch.k8s.v1.IDeleteHPARequest): Promise<clutch.k8s.v1.DeleteHPAResponse>;
+
+                /**
                  * Calls UpdateDeployment.
                  * @param request UpdateDeploymentRequest message or plain object
                  * @param callback Node-style callback called with the error, if any, and UpdateDeploymentResponse
@@ -7389,6 +7403,13 @@ export namespace clutch {
                  * @param [response] ResizeHPAResponse
                  */
                 type ResizeHPACallback = (error: (Error|null), response?: clutch.k8s.v1.ResizeHPAResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteHPA}.
+                 * @param error Error, if any
+                 * @param [response] DeleteHPAResponse
+                 */
+                type DeleteHPACallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteHPAResponse) => void;
 
                 /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateDeployment}.
@@ -8427,6 +8448,114 @@ export namespace clutch {
 
                 /**
                  * Converts this ResizeHPAResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteHPARequest. */
+            interface IDeleteHPARequest {
+
+                /** DeleteHPARequest clientset */
+                clientset?: (string|null);
+
+                /** DeleteHPARequest cluster */
+                cluster?: (string|null);
+
+                /** DeleteHPARequest namespace */
+                namespace?: (string|null);
+
+                /** DeleteHPARequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a DeleteHPARequest. */
+            class DeleteHPARequest implements IDeleteHPARequest {
+
+                /**
+                 * Constructs a new DeleteHPARequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteHPARequest);
+
+                /** DeleteHPARequest clientset. */
+                public clientset: string;
+
+                /** DeleteHPARequest cluster. */
+                public cluster: string;
+
+                /** DeleteHPARequest namespace. */
+                public namespace: string;
+
+                /** DeleteHPARequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a DeleteHPARequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteHPARequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteHPARequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteHPARequest;
+
+                /**
+                 * Creates a plain object from a DeleteHPARequest message. Also converts values to other types if specified.
+                 * @param message DeleteHPARequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteHPARequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteHPARequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteHPAResponse. */
+            interface IDeleteHPAResponse {
+            }
+
+            /** Represents a DeleteHPAResponse. */
+            class DeleteHPAResponse implements IDeleteHPAResponse {
+
+                /**
+                 * Constructs a new DeleteHPAResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteHPAResponse);
+
+                /**
+                 * Verifies a DeleteHPAResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteHPAResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteHPAResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteHPAResponse;
+
+                /**
+                 * Creates a plain object from a DeleteHPAResponse message. Also converts values to other types if specified.
+                 * @param message DeleteHPAResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteHPAResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteHPAResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

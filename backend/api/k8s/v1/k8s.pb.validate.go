@@ -1263,6 +1263,166 @@ var _ interface {
 	ErrorName() string
 } = ResizeHPAResponseValidationError{}
 
+// Validate checks the field values on DeleteHPARequest with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *DeleteHPARequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return DeleteHPARequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return DeleteHPARequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return DeleteHPARequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetName()) < 1 {
+		return DeleteHPARequestValidationError{
+			field:  "Name",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	return nil
+}
+
+// DeleteHPARequestValidationError is the validation error returned by
+// DeleteHPARequest.Validate if the designated constraints aren't met.
+type DeleteHPARequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeleteHPARequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeleteHPARequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeleteHPARequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeleteHPARequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeleteHPARequestValidationError) ErrorName() string { return "DeleteHPARequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e DeleteHPARequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeleteHPARequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeleteHPARequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeleteHPARequestValidationError{}
+
+// Validate checks the field values on DeleteHPAResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *DeleteHPAResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// DeleteHPAResponseValidationError is the validation error returned by
+// DeleteHPAResponse.Validate if the designated constraints aren't met.
+type DeleteHPAResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeleteHPAResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeleteHPAResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeleteHPAResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeleteHPAResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeleteHPAResponseValidationError) ErrorName() string {
+	return "DeleteHPAResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeleteHPAResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeleteHPAResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeleteHPAResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeleteHPAResponseValidationError{}
+
 // Validate checks the field values on Deployment with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *Deployment) Validate() error {
