@@ -217,7 +217,7 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 		var details string
 		run := ExperimentRun{}
 		config := ExperimentConfig{Config: &any.Any{}}
-		err = rows.Scan(&run.id, &run.startTime, &run.endTime, &run.cancellationTime, &run.creationTime, &config.id, &details)
+		err = rows.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.creationTime, &config.id, &details)
 		if err != nil {
 			return nil, err
 		}
@@ -259,7 +259,7 @@ func (s *storer) GetExperimentRunDetails(ctx context.Context, id uint64) (*exper
 	var details string
 	run := ExperimentRun{}
 	config := ExperimentConfig{Config: &any.Any{}}
-	err := row.Scan(&run.id, &run.startTime, &run.endTime, &run.cancellationTime, &run.creationTime, &config.id, &details)
+	err := row.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.creationTime, &config.id, &details)
 	if err != nil {
 		return nil, err
 	}

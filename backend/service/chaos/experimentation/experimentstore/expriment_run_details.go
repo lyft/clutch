@@ -8,26 +8,32 @@ import (
 )
 
 func NewRunDetails(run *ExperimentRun, config *ExperimentConfig, transformer *Transformer, now time.Time) (*experimentation.ExperimentRunDetails, error) {
-	status := timesToStatus(run.startTime, run.endTime, run.cancellationTime, now)
+	status := timesToStatus(run.StartTime, run.EndTime, run.CancellationTime, now)
 
 	runProperties, err := run.CreateProperties(time.Now())
 	if err != nil {
 		return nil, err
 	}
 
-	configProperties, err := config.CreateProperties(transformer)
+	configProperties, err := config.CreateProperties()
+	if err != nil {
+		return nil, err
+	}
+
+	transformerProperties, err := transformer.CreateProperties(run, config)
 	if err != nil {
 		return nil, err
 	}
 
 	properties := append(runProperties, configProperties...)
+	properties = append(properties, transformerProperties...)
 
 	if err != nil {
 		return nil, err
 	}
 
 	return &experimentation.ExperimentRunDetails{
-		RunId:      run.id,
+		RunId:      run.Id,
 		Status:     status,
 		Properties: &experimentation.PropertiesList{Items: properties},
 		Config:     config.Config,

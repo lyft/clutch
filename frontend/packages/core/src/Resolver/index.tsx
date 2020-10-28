@@ -117,7 +117,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
   return (
     <Loadable isLoading={state.schemasLoading}>
       {state.schemaFetchError !== "" ? (
-        <Error message={state.schemaFetchError} retry={() => loadSchemas(type, dispatch)} />
+        <Error message={state.schemaFetchError} onRetry={() => loadSchemas(type, dispatch)} />
       ) : (
         <Loadable variant="overlay" isLoading={state.resolverLoading}>
           {process.env.REACT_APP_DEBUG_FORMS === "true" && <DevTool control={validation.control} />}

@@ -9,32 +9,34 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/durationpb"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/middleware"
 )
 
+const (
+	DefaultTimeout = time.Second * 15
+
+	// Boost is added to the timeout to give a handler that respects the deadline the opportunity to return an error.
+	boost = time.Millisecond * 50
+)
+
 func New(config *gatewayv1.Timeouts, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
 	if config == nil {
-		config = &gatewayv1.Timeouts{Default: ptypes.DurationProto(time.Second * 15)}
+		config = &gatewayv1.Timeouts{Default: durationpb.New(DefaultTimeout)}
 	}
 
-	defaultTimeout, err := ptypes.Duration(config.Default)
-	if err != nil {
-		return nil, fmt.Errorf("error in deadline config: %w", err)
-	}
+	defaultTimeout := config.Default.AsDuration()
 
 	overrides := make(map[string]time.Duration, len(config.Overrides))
-	for i, entry := range config.Overrides {
-		override, err := ptypes.Duration(entry.Timeout)
-		if err != nil {
-			return nil, fmt.Errorf("error in %d entry in deadline config: %w", i, err)
-		}
-		overrides[join(entry.Service, entry.Method)] = override
+	for _, entry := range config.Overrides {
+		overrides[join(entry.Service, entry.Method)] = entry.Timeout.AsDuration()
 	}
 
 	return &mid{
@@ -57,6 +59,11 @@ func (m *mid) getDuration(service, method string) time.Duration {
 	return m.defaultTimeout
 }
 
+type unaryHandlerReturn struct {
+	resp interface{}
+	err  error
+}
+
 func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		service, method, ok := middleware.SplitFullMethod(info.FullMethod)
@@ -64,11 +71,52 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 			m.logger.Warn("could not parse gRPC method", zap.String("fullMethod", info.FullMethod))
 		}
 
-		timeout := m.getDuration(service, method)
-		ctx, cancel := context.WithTimeout(ctx, timeout)
-		defer cancel()
+		// Create a return channel for the goroutine.
+		resultChan := make(chan unaryHandlerReturn)
+		defer close(resultChan)
 
-		return handler(ctx, req)
+		// Create a channel to track when the timeout error has already been returned and the return channel is closed.
+		done := make(chan struct{})
+		defer close(done)
+
+		// Compute timeout and set-up a context with timeout.
+		timeout := m.getDuration(service, method)
+		if timeout != 0 {
+			var cancel context.CancelFunc
+			ctx, cancel = context.WithTimeout(ctx, timeout)
+			defer cancel()
+		}
+
+		// Spawn the handler in a goroutine so we can return early on timeout if it doesn't complete.
+		go func() {
+			resp, err := handler(ctx, req)
+			select {
+			case <-done:
+				m.logger.Error(
+					"handler completed after timeout",
+					zap.String("service", service),
+					zap.String("method", method),
+					zap.Error(err))
+			default:
+				resultChan <- unaryHandlerReturn{resp: resp, err: err}
+			}
+		}()
+
+		// Wait for timeout or handler to send result. The waiting period for timeout is boosted by 50ms to give the
+		// goroutine a chance to return if it's respecting the deadline. If timeout is infinite it will never trigger.
+		var timeoutCh <-chan time.Time
+		if timeout != 0 {
+			timer := time.NewTimer(timeout + boost)
+			defer timer.Stop()
+			timeoutCh = timer.C
+		}
+
+		select {
+		case ret := <-resultChan:
+			return ret.resp, ret.err
+		case <-timeoutCh:
+			return nil, status.New(codes.DeadlineExceeded, "timeout exceeded").Err()
+		}
 	}
 }
 

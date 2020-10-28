@@ -3011,8 +3011,8 @@ export namespace clutch {
                 /** Properties of a ListViewItem. */
                 interface IListViewItem {
 
-                    /** ListViewItem identifier */
-                    identifier?: (number|Long|null);
+                    /** ListViewItem id */
+                    id?: (number|Long|null);
 
                     /** ListViewItem properties */
                     properties?: (clutch.chaos.experimentation.v1.IPropertiesMap|null);
@@ -3027,8 +3027,8 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.experimentation.v1.IListViewItem);
 
-                    /** ListViewItem identifier. */
-                    public identifier: (number|Long);
+                    /** ListViewItem id. */
+                    public id: (number|Long);
 
                     /** ListViewItem properties. */
                     public properties?: (clutch.chaos.experimentation.v1.IPropertiesMap|null);
@@ -7325,6 +7325,20 @@ export namespace clutch {
                 public resizeHPA(request: clutch.k8s.v1.IResizeHPARequest): Promise<clutch.k8s.v1.ResizeHPAResponse>;
 
                 /**
+                 * Calls DeleteHPA.
+                 * @param request DeleteHPARequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DeleteHPAResponse
+                 */
+                public deleteHPA(request: clutch.k8s.v1.IDeleteHPARequest, callback: clutch.k8s.v1.K8sAPI.DeleteHPACallback): void;
+
+                /**
+                 * Calls DeleteHPA.
+                 * @param request DeleteHPARequest message or plain object
+                 * @returns Promise
+                 */
+                public deleteHPA(request: clutch.k8s.v1.IDeleteHPARequest): Promise<clutch.k8s.v1.DeleteHPAResponse>;
+
+                /**
                  * Calls UpdateDeployment.
                  * @param request UpdateDeploymentRequest message or plain object
                  * @param callback Node-style callback called with the error, if any, and UpdateDeploymentResponse
@@ -7337,6 +7351,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public updateDeployment(request: clutch.k8s.v1.IUpdateDeploymentRequest): Promise<clutch.k8s.v1.UpdateDeploymentResponse>;
+
+                /**
+                 * Calls DeleteDeployment.
+                 * @param request DeleteDeploymentRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DeleteDeploymentResponse
+                 */
+                public deleteDeployment(request: clutch.k8s.v1.IDeleteDeploymentRequest, callback: clutch.k8s.v1.K8sAPI.DeleteDeploymentCallback): void;
+
+                /**
+                 * Calls DeleteDeployment.
+                 * @param request DeleteDeploymentRequest message or plain object
+                 * @returns Promise
+                 */
+                public deleteDeployment(request: clutch.k8s.v1.IDeleteDeploymentRequest): Promise<clutch.k8s.v1.DeleteDeploymentResponse>;
             }
 
             namespace K8sAPI {
@@ -7377,11 +7405,25 @@ export namespace clutch {
                 type ResizeHPACallback = (error: (Error|null), response?: clutch.k8s.v1.ResizeHPAResponse) => void;
 
                 /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteHPA}.
+                 * @param error Error, if any
+                 * @param [response] DeleteHPAResponse
+                 */
+                type DeleteHPACallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteHPAResponse) => void;
+
+                /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateDeployment}.
                  * @param error Error, if any
                  * @param [response] UpdateDeploymentResponse
                  */
                 type UpdateDeploymentCallback = (error: (Error|null), response?: clutch.k8s.v1.UpdateDeploymentResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteDeployment}.
+                 * @param error Error, if any
+                 * @param [response] DeleteDeploymentResponse
+                 */
+                type DeleteDeploymentCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteDeploymentResponse) => void;
             }
 
             /** Properties of a DescribePodRequest. */
@@ -8411,6 +8453,114 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a DeleteHPARequest. */
+            interface IDeleteHPARequest {
+
+                /** DeleteHPARequest clientset */
+                clientset?: (string|null);
+
+                /** DeleteHPARequest cluster */
+                cluster?: (string|null);
+
+                /** DeleteHPARequest namespace */
+                namespace?: (string|null);
+
+                /** DeleteHPARequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a DeleteHPARequest. */
+            class DeleteHPARequest implements IDeleteHPARequest {
+
+                /**
+                 * Constructs a new DeleteHPARequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteHPARequest);
+
+                /** DeleteHPARequest clientset. */
+                public clientset: string;
+
+                /** DeleteHPARequest cluster. */
+                public cluster: string;
+
+                /** DeleteHPARequest namespace. */
+                public namespace: string;
+
+                /** DeleteHPARequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a DeleteHPARequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteHPARequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteHPARequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteHPARequest;
+
+                /**
+                 * Creates a plain object from a DeleteHPARequest message. Also converts values to other types if specified.
+                 * @param message DeleteHPARequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteHPARequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteHPARequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteHPAResponse. */
+            interface IDeleteHPAResponse {
+            }
+
+            /** Represents a DeleteHPAResponse. */
+            class DeleteHPAResponse implements IDeleteHPAResponse {
+
+                /**
+                 * Constructs a new DeleteHPAResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteHPAResponse);
+
+                /**
+                 * Verifies a DeleteHPAResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteHPAResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteHPAResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteHPAResponse;
+
+                /**
+                 * Creates a plain object from a DeleteHPAResponse message. Also converts values to other types if specified.
+                 * @param message DeleteHPAResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteHPAResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteHPAResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a Deployment. */
             interface IDeployment {
 
@@ -8649,6 +8799,114 @@ export namespace clutch {
 
                 /**
                  * Converts this UpdateDeploymentResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteDeploymentRequest. */
+            interface IDeleteDeploymentRequest {
+
+                /** DeleteDeploymentRequest clientset */
+                clientset?: (string|null);
+
+                /** DeleteDeploymentRequest cluster */
+                cluster?: (string|null);
+
+                /** DeleteDeploymentRequest namespace */
+                namespace?: (string|null);
+
+                /** DeleteDeploymentRequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a DeleteDeploymentRequest. */
+            class DeleteDeploymentRequest implements IDeleteDeploymentRequest {
+
+                /**
+                 * Constructs a new DeleteDeploymentRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteDeploymentRequest);
+
+                /** DeleteDeploymentRequest clientset. */
+                public clientset: string;
+
+                /** DeleteDeploymentRequest cluster. */
+                public cluster: string;
+
+                /** DeleteDeploymentRequest namespace. */
+                public namespace: string;
+
+                /** DeleteDeploymentRequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a DeleteDeploymentRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteDeploymentRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteDeploymentRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteDeploymentRequest;
+
+                /**
+                 * Creates a plain object from a DeleteDeploymentRequest message. Also converts values to other types if specified.
+                 * @param message DeleteDeploymentRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteDeploymentRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteDeploymentRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteDeploymentResponse. */
+            interface IDeleteDeploymentResponse {
+            }
+
+            /** Represents a DeleteDeploymentResponse. */
+            class DeleteDeploymentResponse implements IDeleteDeploymentResponse {
+
+                /**
+                 * Constructs a new DeleteDeploymentResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteDeploymentResponse);
+
+                /**
+                 * Verifies a DeleteDeploymentResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteDeploymentResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteDeploymentResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteDeploymentResponse;
+
+                /**
+                 * Creates a plain object from a DeleteDeploymentResponse message. Also converts values to other types if specified.
+                 * @param message DeleteDeploymentResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteDeploymentResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteDeploymentResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

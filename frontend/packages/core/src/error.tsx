@@ -5,7 +5,6 @@ import {
   Collapse as MuiCollapse,
   ExpansionPanel,
   IconButton,
-  Snackbar,
   Typography,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -15,19 +14,19 @@ import styled from "styled-components";
 
 const PANEL_MESSAGE_BREAKPOINT = 150;
 
-interface ErrorProps {
+export interface ErrorProps {
   message: string;
-  retry?: () => void;
+  onRetry?: () => void;
 }
 
 const Alert = styled(MuiAlert)`
   margin: 5px;
 `;
 
-const Error: React.FC<ErrorProps> = ({ message, retry }) => {
+const Error: React.FC<ErrorProps> = ({ message, onRetry }) => {
   const action =
-    retry !== undefined ? (
-      <IconButton aria-label="retry" color="inherit" size="small" onClick={() => retry()}>
+    onRetry !== undefined ? (
+      <IconButton aria-label="retry" color="inherit" size="small" onClick={() => onRetry()}>
         <RefreshIcon />
       </IconButton>
     ) : null;
@@ -90,34 +89,4 @@ const CompressedError = ({ title, message }) => {
   );
 };
 
-interface WarningProps {
-  message: any;
-  onClose?: () => void;
-}
-
-const Warning: React.FC<WarningProps> = ({ message, onClose }) => {
-  const [open, setOpen] = React.useState(true);
-
-  const onDismiss = () => {
-    if (onClose !== undefined) {
-      onClose();
-    }
-    setOpen(false);
-  };
-
-  return (
-    <Snackbar
-      open={open}
-      autoHideDuration={6000}
-      onExit={onDismiss}
-      onClose={() => setOpen(false)}
-      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-    >
-      <Alert elevation={6} variant="filled" onClose={onDismiss} severity="warning">
-        {message}
-      </Alert>
-    </Snackbar>
-  );
-};
-
-export { CompressedError, Error, Warning };
+export { CompressedError, Error };

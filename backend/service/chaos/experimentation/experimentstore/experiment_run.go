@@ -10,16 +10,16 @@ import (
 )
 
 type ExperimentRun struct {
-	id               uint64
-	startTime        time.Time
-	endTime          sql.NullTime
-	cancellationTime sql.NullTime
+	Id               uint64
+	StartTime        time.Time
+	EndTime          sql.NullTime
+	CancellationTime sql.NullTime
 	creationTime     time.Time
 }
 
 func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Property, error) {
-	status := timesToStatus(er.startTime, er.endTime, er.cancellationTime, now)
-	startTimeTimestamp, err := ptypes.TimestampProto(er.startTime)
+	status := timesToStatus(er.StartTime, er.EndTime, er.CancellationTime, now)
+	startTimeTimestamp, err := ptypes.TimestampProto(er.StartTime)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Pro
 		{
 			Id:    "run_identifier",
 			Label: "Run Identifier",
-			Value: &experimentation.Property_IntValue{IntValue: int64(er.id)},
+			Value: &experimentation.Property_IntValue{IntValue: int64(er.Id)},
 		},
 		{
 			Id:    "status",
@@ -53,10 +53,10 @@ func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Pro
 	}
 
 	var time sql.NullTime
-	if er.endTime.Valid {
-		time = er.endTime
-	} else if er.cancellationTime.Valid {
-		time = er.cancellationTime
+	if er.EndTime.Valid {
+		time = er.EndTime
+	} else if er.CancellationTime.Valid {
+		time = er.CancellationTime
 	}
 
 	endTimeTimestamp, err := TimeToPropertyDateValue(time)
@@ -70,7 +70,7 @@ func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Pro
 		Value: endTimeTimestamp,
 	})
 
-	cancelationTimeTimestamp, err := TimeToPropertyDateValue(er.cancellationTime)
+	cancelationTimeTimestamp, err := TimeToPropertyDateValue(er.CancellationTime)
 	if err != nil {
 		return nil, err
 	}

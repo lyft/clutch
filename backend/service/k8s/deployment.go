@@ -77,6 +77,16 @@ func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespac
 	return retryErr
 }
 
+func (s *svc) DeleteDeployment(ctx context.Context, clientset, cluster, namespace, name string) error {
+	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	if err != nil {
+		return err
+	}
+
+	opts := metav1.DeleteOptions{}
+	return cs.AppsV1().Deployments(cs.Namespace()).Delete(ctx, name, opts)
+}
+
 func mergeLabelsAndAnnotations(deployment *appsv1.Deployment, fields *k8sapiv1.UpdateDeploymentRequest_Fields) {
 	if len(fields.Labels) > 0 {
 		for k, v := range fields.Labels {

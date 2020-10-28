@@ -36,6 +36,10 @@ func (*svc) ResizeHPA(ctx context.Context, clientset, cluster, namespace, name s
 	return nil
 }
 
+func (*svc) DeleteHPA(ctx context.Context, clientset, cluster, namespace, name string) error {
+	return nil
+}
+
 func (*svc) Manager() k8sservice.ClientsetManager {
 	return nil
 }
@@ -92,6 +96,10 @@ func (*svc) DescribeDeployment(ctx context.Context, clientset, cluster, namespac
 }
 
 func (*svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sv1.UpdateDeploymentRequest_Fields) error {
+	return nil
+}
+
+func (*svc) DeleteDeployment(ctx context.Context, clientset, cluster, namespace, name string) error {
 	return nil
 }
 

@@ -52,12 +52,28 @@ service K8sAPI {
     option (clutch.api.v1.action).type = UPDATE;
   }
 
+  rpc DeleteHPA(DeleteHPARequest) returns (DeleteHPAResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/deleteHPA"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = DELETE;
+  }
+
   rpc UpdateDeployment(UpdateDeploymentRequest) returns (UpdateDeploymentResponse) {
     option (google.api.http) = {
       post : "/v1/k8s/updateDeployment"
       body : "*"
     };
     option (clutch.api.v1.action).type = UPDATE;
+  }
+
+  rpc DeleteDeployment(DeleteDeploymentRequest) returns (DeleteDeploymentResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/deleteDeployment"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = DELETE;
   }
 }
 
@@ -232,6 +248,21 @@ message ResizeHPARequest {
 message ResizeHPAResponse {
 }
 
+message DeleteHPARequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.HPA",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message DeleteHPAResponse {
+}
+
 message Deployment {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.Deployment",
@@ -271,6 +302,21 @@ message UpdateDeploymentRequest {
 }
 
 message UpdateDeploymentResponse {
+}
+
+message DeleteDeploymentRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Deployment",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message DeleteDeploymentResponse {
 }
 
 // This message type is used to add support for nullable strings and is an

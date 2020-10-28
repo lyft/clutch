@@ -159,7 +159,7 @@ const ListView: React.FC<ListViewProps> = ({ columns, items, onRowSelection }) =
                       <TableRow
                         hover
                         onClick={event => handleClick(event, item)}
-                        key={item.identifier.toString()}
+                        key={item.id.toString()}
                       >
                         {columns &&
                           columns.map(column => {
