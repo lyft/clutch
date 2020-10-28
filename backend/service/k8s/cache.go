@@ -12,7 +12,6 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	corev1 "k8s.io/api/core/v1"
-	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/client-go/tools/cache"
 
@@ -60,15 +59,15 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 
 	podInformer := NewLightweightInformer(
 		cs,
-		cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "pods", v1.NamespaceAll, fields.Everything()),
-		&v1.Pod{},
+		cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "pods", corev1.NamespaceAll, fields.Everything()),
+		&corev1.Pod{},
 		informerResyncTime,
 		informerHandlers,
 	)
 
 	deploymentInformer := NewLightweightInformer(
 		cs,
-		cache.NewListWatchFromClient(cs.AppsV1().RESTClient(), "deployments", v1.NamespaceAll, fields.Everything()),
+		cache.NewListWatchFromClient(cs.AppsV1().RESTClient(), "deployments", corev1.NamespaceAll, fields.Everything()),
 		&appsv1.Deployment{},
 		informerResyncTime,
 		informerHandlers,
@@ -76,7 +75,7 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 
 	hpaInformer := NewLightweightInformer(
 		cs,
-		cache.NewListWatchFromClient(cs.AutoscalingV1().RESTClient(), "horizontalpodautoscalers", v1.NamespaceAll, fields.Everything()),
+		cache.NewListWatchFromClient(cs.AutoscalingV1().RESTClient(), "horizontalpodautoscalers", corev1.NamespaceAll, fields.Everything()),
 		&autoscalingv1.HorizontalPodAutoscaler{},
 		informerResyncTime,
 		informerHandlers,

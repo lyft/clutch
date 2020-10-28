@@ -21,19 +21,19 @@ func TestLightweightInformer(t *testing.T) {
 		}},
 	}
 
-	numAddActions := 0
-	numUpdateActions := 0
-	numDeleteActions := 0
+	addActionChan := make(chan int)
+	updateActionChan := make(chan int)
+	deleteActionChan := make(chan int)
 
 	informerHandlers := cache.ResourceEventHandlerFuncs{
 		AddFunc: func(obj interface{}) {
-			numAddActions++
+			addActionChan <- 1
 		},
 		UpdateFunc: func(oldObj, newObj interface{}) {
-			numUpdateActions++
+			updateActionChan <- 1
 		},
 		DeleteFunc: func(obj interface{}) {
-			numDeleteActions++
+			deleteActionChan <- 1
 		},
 	}
 
@@ -41,6 +41,8 @@ func TestLightweightInformer(t *testing.T) {
 	fc := fakecontroller.NewFakeControllerSource()
 
 	stop := make(chan struct{})
+	defer close(stop)
+
 	podInformer := NewLightweightInformer(
 		csm.clientsets["foo"],
 		fc,
@@ -53,14 +55,14 @@ func TestLightweightInformer(t *testing.T) {
 
 	// We sleep below to give some time for the informer to get the event and hit a handler
 	fc.Add(&v1.Pod{})
-	time.Sleep(time.Millisecond * 10)
-	assert.Greater(t, numAddActions, 0)
+	time.Sleep(time.Millisecond * 50)
+	assert.Greater(t, <-addActionChan, 0)
 
 	fc.Modify(&v1.Pod{})
-	time.Sleep(time.Millisecond * 10)
-	assert.Greater(t, numUpdateActions, 0)
+	time.Sleep(time.Millisecond * 50)
+	assert.Greater(t, <-updateActionChan, 0)
 
 	fc.Delete(&v1.Pod{})
-	time.Sleep(time.Millisecond * 10)
-	assert.Greater(t, numDeleteActions, 0)
+	time.Sleep(time.Millisecond * 50)
+	assert.Greater(t, <-deleteActionChan, 0)
 }
