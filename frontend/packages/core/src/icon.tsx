@@ -48,11 +48,13 @@ const Status: React.FC<StatusProps> = ({
   );
 };
 
-const TrendingUpIcon = styled(MuiTrendingUpIcon)`
+const StyledTrendingUpIcon = styled(MuiTrendingUpIcon)`
   ${({ theme }) => `
   color: ${theme.palette.accent.main};
   margin: 1%;
   `}
 `;
+
+const TrendingUpIcon: React.FC = () => <StyledTrendingUpIcon />;
 
 export { Status, TrendingUpIcon };
