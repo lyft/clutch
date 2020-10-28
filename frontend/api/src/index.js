@@ -2988,6 +2988,39 @@ export const clutch = $root.clutch = (() => {
                      * @variation 2
                      */
 
+                    /**
+                     * Callback as used by {@link clutch.aws.ec2.v1.EC2API#rebootInstance}.
+                     * @memberof clutch.aws.ec2.v1.EC2API
+                     * @typedef RebootInstanceCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {clutch.aws.ec2.v1.RebootInstanceResponse} [response] RebootInstanceResponse
+                     */
+
+                    /**
+                     * Calls RebootInstance.
+                     * @function rebootInstance
+                     * @memberof clutch.aws.ec2.v1.EC2API
+                     * @instance
+                     * @param {clutch.aws.ec2.v1.IRebootInstanceRequest} request RebootInstanceRequest message or plain object
+                     * @param {clutch.aws.ec2.v1.EC2API.RebootInstanceCallback} callback Node-style callback called with the error, if any, and RebootInstanceResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(EC2API.prototype.rebootInstance = function rebootInstance(request, callback) {
+                        return this.rpcCall(rebootInstance, $root.clutch.aws.ec2.v1.RebootInstanceRequest, $root.clutch.aws.ec2.v1.RebootInstanceResponse, request, callback);
+                    }, "name", { value: "RebootInstance" });
+
+                    /**
+                     * Calls RebootInstance.
+                     * @function rebootInstance
+                     * @memberof clutch.aws.ec2.v1.EC2API
+                     * @instance
+                     * @param {clutch.aws.ec2.v1.IRebootInstanceRequest} request RebootInstanceRequest message or plain object
+                     * @returns {Promise<clutch.aws.ec2.v1.RebootInstanceResponse>} Promise
+                     * @variation 2
+                     */
+
                     return EC2API;
                 })();
 
@@ -4363,6 +4396,202 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return TerminateInstanceResponse;
+                })();
+
+                v1.RebootInstanceRequest = (function() {
+
+                    /**
+                     * Properties of a RebootInstanceRequest.
+                     * @memberof clutch.aws.ec2.v1
+                     * @interface IRebootInstanceRequest
+                     * @property {string|null} [instanceId] RebootInstanceRequest instanceId
+                     * @property {string|null} [region] RebootInstanceRequest region
+                     */
+
+                    /**
+                     * Constructs a new RebootInstanceRequest.
+                     * @memberof clutch.aws.ec2.v1
+                     * @classdesc Represents a RebootInstanceRequest.
+                     * @implements IRebootInstanceRequest
+                     * @constructor
+                     * @param {clutch.aws.ec2.v1.IRebootInstanceRequest=} [properties] Properties to set
+                     */
+                    function RebootInstanceRequest(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * RebootInstanceRequest instanceId.
+                     * @member {string} instanceId
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
+                     * @instance
+                     */
+                    RebootInstanceRequest.prototype.instanceId = "";
+
+                    /**
+                     * RebootInstanceRequest region.
+                     * @member {string} region
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
+                     * @instance
+                     */
+                    RebootInstanceRequest.prototype.region = "";
+
+                    /**
+                     * Verifies a RebootInstanceRequest message.
+                     * @function verify
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    RebootInstanceRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.instanceId != null && message.hasOwnProperty("instanceId"))
+                            if (!$util.isString(message.instanceId))
+                                return "instanceId: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a RebootInstanceRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.ec2.v1.RebootInstanceRequest} RebootInstanceRequest
+                     */
+                    RebootInstanceRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.ec2.v1.RebootInstanceRequest)
+                            return object;
+                        let message = new $root.clutch.aws.ec2.v1.RebootInstanceRequest();
+                        if (object.instanceId != null)
+                            message.instanceId = String(object.instanceId);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a RebootInstanceRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
+                     * @static
+                     * @param {clutch.aws.ec2.v1.RebootInstanceRequest} message RebootInstanceRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    RebootInstanceRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.instanceId = "";
+                            object.region = "";
+                        }
+                        if (message.instanceId != null && message.hasOwnProperty("instanceId"))
+                            object.instanceId = message.instanceId;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this RebootInstanceRequest to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    RebootInstanceRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return RebootInstanceRequest;
+                })();
+
+                v1.RebootInstanceResponse = (function() {
+
+                    /**
+                     * Properties of a RebootInstanceResponse.
+                     * @memberof clutch.aws.ec2.v1
+                     * @interface IRebootInstanceResponse
+                     */
+
+                    /**
+                     * Constructs a new RebootInstanceResponse.
+                     * @memberof clutch.aws.ec2.v1
+                     * @classdesc Represents a RebootInstanceResponse.
+                     * @implements IRebootInstanceResponse
+                     * @constructor
+                     * @param {clutch.aws.ec2.v1.IRebootInstanceResponse=} [properties] Properties to set
+                     */
+                    function RebootInstanceResponse(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Verifies a RebootInstanceResponse message.
+                     * @function verify
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    RebootInstanceResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a RebootInstanceResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.ec2.v1.RebootInstanceResponse} RebootInstanceResponse
+                     */
+                    RebootInstanceResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.ec2.v1.RebootInstanceResponse)
+                            return object;
+                        return new $root.clutch.aws.ec2.v1.RebootInstanceResponse();
+                    };
+
+                    /**
+                     * Creates a plain object from a RebootInstanceResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceResponse
+                     * @static
+                     * @param {clutch.aws.ec2.v1.RebootInstanceResponse} message RebootInstanceResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    RebootInstanceResponse.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this RebootInstanceResponse to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    RebootInstanceResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return RebootInstanceResponse;
                 })();
 
                 v1.Instance = (function() {

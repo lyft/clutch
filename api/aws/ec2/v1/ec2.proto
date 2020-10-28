@@ -33,6 +33,14 @@ service EC2API {
     };
     option (clutch.api.v1.action).type = UPDATE;
   }
+
+  rpc RebootInstance(RebootInstanceRequest) returns (RebootInstanceResponse) {
+    option (google.api.http) = {
+      post : "/v1/aws/ec2/rebootInstance"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = UPDATE;
+  }
 }
 
 message AutoscalingGroupSize {
@@ -139,6 +147,19 @@ message TerminateInstanceRequest {
 }
 
 message TerminateInstanceResponse {
+}
+
+message RebootInstanceRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.aws.ec2.v1.Instance",
+    pattern : "{region}/{instance_id}"
+  };
+
+  string instance_id = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message RebootInstanceResponse{
 }
 
 message Instance {
