@@ -14,7 +14,7 @@ import { Alert as MuiAlert, AlertTitle } from "@material-ui/lab";
 import styled from "styled-components";
 
 const BREAKPOINT_LENGTH = 100;
-const BREAKPOINT_REGEX = /[\.\n]/g;
+const BREAKPOINT_REGEX = /[.\n]/g;
 
 interface ErrorProps {
   message: string;

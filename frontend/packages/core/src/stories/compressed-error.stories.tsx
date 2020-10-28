@@ -20,7 +20,8 @@ const options = {
   "Without Stops": longMessageNoStops,
 };
 const Template = (props: CompressedErrorProps) => {
-  const selectedMessage = options[props.message] || props.message;
+  const { message } = props;
+  const selectedMessage = options[message] || message;
   return <CompressedError {...props} message={selectedMessage} />;
 };
 
