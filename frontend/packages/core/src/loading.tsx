@@ -19,7 +19,6 @@ const Overlay = styled(Paper)`
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
 `;
 const LoadingOveray = () => (
   <Overlay square elevation={0}>
@@ -27,14 +26,15 @@ const LoadingOveray = () => (
   </Overlay>
 );
 
-interface LoadableProps {
+export interface LoadableProps {
   isLoading: boolean;
-  variant?: "overlay";
+  overlay?: boolean;
 }
-const Loadable: React.FC<LoadableProps> = ({ isLoading, variant, children }) => {
-  if (variant === "overlay") {
+
+const Loadable: React.FC<LoadableProps> = ({ isLoading, overlay = false, children }) => {
+  if (overlay) {
     return (
-      <ContentContainer container direction="column" justify="center" alignItems="center">
+      <ContentContainer container>
         {children}
         {isLoading && <LoadingOveray />}
       </ContentContainer>

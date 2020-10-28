@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
+import { Grid } from "@material-ui/core";
 import _ from "lodash";
 import styled from "styled-components";
 
@@ -119,35 +120,39 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
       {state.schemaFetchError !== "" ? (
         <Error message={state.schemaFetchError} onRetry={() => loadSchemas(type, dispatch)} />
       ) : (
-        <Loadable variant="overlay" isLoading={state.resolverLoading}>
-          {process.env.REACT_APP_DEBUG_FORMS === "true" && <DevTool control={validation.control} />}
-          {(variant === "dual" || variant === "query") && (
-            <Form onSubmit={validation.handleSubmit(submitHandler)} noValidate>
-              <QueryResolver
-                schemas={state.searchableSchemas}
-                onChange={updateResolverData}
-                validation={queryValidation}
-              />
-            </Form>
+        <Loadable overlay isLoading={state.resolverLoading}>
+          {process.env.REACT_APP_DEBUG_FORMS === "true" && (
+            <DevTool control={validation.control} />
           )}
-          {variant === "dual" && (
-            <>
-              <Spacer />- OR -
-            </>
-          )}
-          {(variant === "dual" || variant === "schema") && (
-            <Form onSubmit={validation.handleSubmit(submitHandler)} noValidate>
-              <SchemaResolver
-                schemas={state.allSchemas}
-                selectedSchema={state.selectedSchema}
-                onSelect={setSelectedSchema}
-                onChange={updateResolverData}
-                validation={schemaValidation}
-              />
-            </Form>
-          )}
-          <AdvanceButton text="Continue" onClick={validation.handleSubmit(submitHandler)} />
-          <CompressedError title="Error" message={state.resolverFetchError} />
+          <Grid container direction="column" alignItems="center">
+            {(variant === "dual" || variant === "query") && (
+              <Form onSubmit={validation.handleSubmit(submitHandler)} noValidate>
+                <QueryResolver
+                  schemas={state.searchableSchemas}
+                  onChange={updateResolverData}
+                  validation={queryValidation}
+                />
+              </Form>
+            )}
+            {variant === "dual" && (
+              <>
+                <Spacer />- OR -
+              </>
+            )}
+            {(variant === "dual" || variant === "schema") && (
+              <Form onSubmit={validation.handleSubmit(submitHandler)} noValidate>
+                <SchemaResolver
+                  schemas={state.allSchemas}
+                  selectedSchema={state.selectedSchema}
+                  onSelect={setSelectedSchema}
+                  onChange={updateResolverData}
+                  validation={schemaValidation}
+                />
+              </Form>
+            )}
+            <AdvanceButton text="Continue" onClick={validation.handleSubmit(submitHandler)} />
+            <CompressedError title="Error" message={state.resolverFetchError} />
+          </Grid>
         </Loadable>
       )}
     </Loadable>
