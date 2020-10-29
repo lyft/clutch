@@ -5,12 +5,12 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/protobuf/proto"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
-	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/module/healthcheck"
@@ -33,12 +33,18 @@ func TestGetAction(t *testing.T) {
 	r := &mockRegistrar{s: grpc.NewServer()}
 	err = hc.Register(r)
 	assert.NoError(t, err)
+
+	// Register a non-Clutch endpoint with no annotations.
+	grpc_health_v1.RegisterHealthServer(r.GRPCServer(), &grpc_health_v1.UnimplementedHealthServer{})
+
 	err = GenerateGRPCMetadata(r.s)
 	assert.NoError(t, err)
 
-	_ = &healthcheckv1.HealthcheckRequest{} // Ensure it's imported.
 	action := GetAction("/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck")
 	assert.Equal(t, apiv1.ActionType_READ, action)
+
+	action = GetAction("/grpc.health.v1.Health/Check")
+	assert.Equal(t, apiv1.ActionType_UNSPECIFIED, action)
 
 	action = GetAction("/nonexistent/doesnotexist")
 	assert.Equal(t, apiv1.ActionType_UNSPECIFIED, action)
