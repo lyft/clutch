@@ -74,12 +74,13 @@ func (x *Config) GetCache() *Cache {
 	return nil
 }
 
+// To enable topology caching you must specific the cache configuration below, by default it is disabled.
 type Cache struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The time to live (ttl) for an item in cache, the default is 1 hour (3600 seconds).
+	// The time to live (ttl) for an item in cache, the default is 2 hours (7200 seconds).
 	Ttl *duration.Duration `protobuf:"bytes,1,opt,name=ttl,proto3" json:"ttl,omitempty"`
 }
 

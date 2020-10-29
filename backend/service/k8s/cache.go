@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
@@ -43,7 +42,7 @@ func (s *svc) StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.Upda
 	}
 
 	for name, cs := range s.manager.Clientsets() {
-		log.Printf("starting informer for cluster: %s", name)
+		s.log.Info("starting informer for", zap.String("cluster", name))
 		go s.startInformers(ctx, cs)
 	}
 
