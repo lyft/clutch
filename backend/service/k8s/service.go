@@ -3,6 +3,7 @@ package k8s
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -50,8 +51,18 @@ func ProtoForService(cluster string, k8sservice *corev1.Service) *k8sapiv1.Servi
 		Cluster:     clusterName,
 		Namespace:   k8sservice.Namespace,
 		Name:        k8sservice.Name,
-		Type:        string(k8sservice.Spec.Type),
+		Type:        protoForServiceType(k8sservice.Spec.Type),
 		Labels:      k8sservice.Labels,
 		Annotations: k8sservice.Annotations,
 	}
+}
+
+func protoForServiceType(serviceType corev1.ServiceType) k8sapiv1.Service_Type {
+	// Look up value in generated enum map after ensuring consistent case with generated code.
+	val, ok := k8sapiv1.Service_Type_value[strings.ToUpper(string(serviceType))]
+	if !ok {
+		return k8sapiv1.Service_UNSPECIFIED
+	}
+
+	return k8sapiv1.Service_Type(val)
 }

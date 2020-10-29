@@ -116,7 +116,7 @@ func (s *svc) DescribeService(_ context.Context, clientset, cluster, namespace, 
 		Cluster:     "fake-cluster-name",
 		Namespace:   namespace,
 		Name:        name,
-		Type:        "ClusterIP",
+		Type:        k8sv1.Service_Type(rand.Intn(len(k8sv1.Service_Type_value))),
 		Labels:      map[string]string{"Key": "value"},
 		Annotations: map[string]string{"Key": "value"},
 	}, nil

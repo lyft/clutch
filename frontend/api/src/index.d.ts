@@ -8967,7 +8967,7 @@ export namespace clutch {
                 name?: (string|null);
 
                 /** Service type */
-                type?: (string|null);
+                type?: (clutch.k8s.v1.Service.Type|null);
 
                 /** Service labels */
                 labels?: ({ [k: string]: string }|null);
@@ -8995,7 +8995,7 @@ export namespace clutch {
                 public name: string;
 
                 /** Service type. */
-                public type: string;
+                public type: clutch.k8s.v1.Service.Type;
 
                 /** Service labels. */
                 public labels: { [k: string]: string };
@@ -9030,6 +9030,18 @@ export namespace clutch {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace Service {
+
+                /** Type enum. */
+                enum Type {
+                    UNSPECIFIED = 0,
+                    CLUSTERIP = 1,
+                    NODEPORT = 2,
+                    LOADBALANCER = 3,
+                    EXTERNALNAME = 4
+                }
             }
 
             /** Properties of a DescribeServiceRequest. */

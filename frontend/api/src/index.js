@@ -21254,7 +21254,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [cluster] Service cluster
                  * @property {string|null} [namespace] Service namespace
                  * @property {string|null} [name] Service name
-                 * @property {string|null} [type] Service type
+                 * @property {clutch.k8s.v1.Service.Type|null} [type] Service type
                  * @property {Object.<string,string>|null} [labels] Service labels
                  * @property {Object.<string,string>|null} [annotations] Service annotations
                  */
@@ -21302,11 +21302,11 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * Service type.
-                 * @member {string} type
+                 * @member {clutch.k8s.v1.Service.Type} type
                  * @memberof clutch.k8s.v1.Service
                  * @instance
                  */
-                Service.prototype.type = "";
+                Service.prototype.type = 0;
 
                 /**
                  * Service labels.
@@ -21345,8 +21345,16 @@ export const clutch = $root.clutch = (() => {
                         if (!$util.isString(message.name))
                             return "name: string expected";
                     if (message.type != null && message.hasOwnProperty("type"))
-                        if (!$util.isString(message.type))
-                            return "type: string expected";
+                        switch (message.type) {
+                        default:
+                            return "type: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                            break;
+                        }
                     if (message.labels != null && message.hasOwnProperty("labels")) {
                         if (!$util.isObject(message.labels))
                             return "labels: object expected";
@@ -21384,8 +21392,28 @@ export const clutch = $root.clutch = (() => {
                         message.namespace = String(object.namespace);
                     if (object.name != null)
                         message.name = String(object.name);
-                    if (object.type != null)
-                        message.type = String(object.type);
+                    switch (object.type) {
+                    case "UNSPECIFIED":
+                    case 0:
+                        message.type = 0;
+                        break;
+                    case "CLUSTERIP":
+                    case 1:
+                        message.type = 1;
+                        break;
+                    case "NODEPORT":
+                    case 2:
+                        message.type = 2;
+                        break;
+                    case "LOADBALANCER":
+                    case 3:
+                        message.type = 3;
+                        break;
+                    case "EXTERNALNAME":
+                    case 4:
+                        message.type = 4;
+                        break;
+                    }
                     if (object.labels) {
                         if (typeof object.labels !== "object")
                             throw TypeError(".clutch.k8s.v1.Service.labels: object expected");
@@ -21424,7 +21452,7 @@ export const clutch = $root.clutch = (() => {
                         object.cluster = "";
                         object.namespace = "";
                         object.name = "";
-                        object.type = "";
+                        object.type = options.enums === String ? "UNSPECIFIED" : 0;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -21433,7 +21461,7 @@ export const clutch = $root.clutch = (() => {
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
                     if (message.type != null && message.hasOwnProperty("type"))
-                        object.type = message.type;
+                        object.type = options.enums === String ? $root.clutch.k8s.v1.Service.Type[message.type] : message.type;
                     let keys2;
                     if (message.labels && (keys2 = Object.keys(message.labels)).length) {
                         object.labels = {};
@@ -21458,6 +21486,26 @@ export const clutch = $root.clutch = (() => {
                 Service.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
+
+                /**
+                 * Type enum.
+                 * @name clutch.k8s.v1.Service.Type
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} CLUSTERIP=1 CLUSTERIP value
+                 * @property {number} NODEPORT=2 NODEPORT value
+                 * @property {number} LOADBALANCER=3 LOADBALANCER value
+                 * @property {number} EXTERNALNAME=4 EXTERNALNAME value
+                 */
+                Service.Type = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "CLUSTERIP"] = 1;
+                    values[valuesById[2] = "NODEPORT"] = 2;
+                    values[valuesById[3] = "LOADBALANCER"] = 3;
+                    values[valuesById[4] = "EXTERNALNAME"] = 4;
+                    return values;
+                })();
 
                 return Service;
             })();
