@@ -50,10 +50,12 @@ func GetAction(method string) apiv1.ActionType {
 	if !ok {
 		return apiv1.ActionType_UNSPECIFIED
 	}
-	opts := md.GetMethodOptions()
+	opts := md.GetMethodOptions().ProtoReflect()
 
-	v := opts.ProtoReflect().Get(actionTypeDescriptor)
-	return v.Message().Interface().(*apiv1.Action).Type
+	if !opts.Has(actionTypeDescriptor) {
+		return apiv1.ActionType_UNSPECIFIED
+	}
+	return opts.Get(actionTypeDescriptor).Message().Interface().(*apiv1.Action).Type
 }
 
 func ResourceNames(pb proto.Message) []*auditv1.Resource {
