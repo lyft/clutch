@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
@@ -134,4 +135,15 @@ func resolvePattern(pb proto.Message, pattern *apiv1.Pattern) *auditv1.Resource 
 		resourceName = strings.Replace(resourceName, name[0], v.String(), 1)
 	}
 	return &auditv1.Resource{TypeUrl: pattern.TypeUrl, Id: resourceName}
+}
+
+// APIBody returns a API request/response interface as an anypb.Any message.
+func APIBody(body interface{}) (*anypb.Any, error) {
+	m, ok := body.(proto.Message)
+	if !ok {
+		// body is not the type/value we want to process
+		return nil, nil
+	}
+
+	return anypb.New(m)
 }

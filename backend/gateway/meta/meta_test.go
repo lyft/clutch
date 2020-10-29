@@ -11,6 +11,7 @@ import (
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/module/healthcheck"
 )
@@ -108,5 +109,40 @@ func TestResourceNames(t *testing.T) {
 				assert.Equal(t, tt.names[i], resolvedNames[i])
 			}
 		})
+	}
+}
+
+func TestAPIBody(t *testing.T) {
+	// proto.message with nil value
+	m := (*ec2v1.Instance)(nil)
+
+	var tests = []struct {
+		input     interface{}
+		expectNil bool
+	}{
+		// case: type is proto.message
+		{input: &ec2v1.Instance{InstanceId: "i-123456789abcdef0"}, expectNil: false},
+		// case: type is proto.message
+		{input: &k8sapiv1.ResizeHPAResponse{}, expectNil: false},
+		// case: type is proto.message
+		// anypb.New gracefully hanldes (*myProtoStruct)(nil)
+		{input: m, expectNil: false},
+		// case: type is struct
+		{input: ec2v1.Instance{InstanceId: "i-123456789abcdef0"}, expectNil: true},
+		// case: untyped nil
+		{input: nil, expectNil: true},
+		// case: type is string
+		{input: "foo", expectNil: true},
+	}
+
+	for _, test := range tests {
+		result, err := APIBody(test.input)
+		if test.expectNil {
+			assert.Nil(t, result)
+		} else {
+			assert.NotNil(t, result)
+		}
+
+		assert.NoError(t, err)
 	}
 }
