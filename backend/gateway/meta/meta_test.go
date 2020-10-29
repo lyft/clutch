@@ -1,11 +1,11 @@
 package meta
 
 import (
-	"google.golang.org/grpc/health/grpc_health_v1"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/protobuf/proto"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
