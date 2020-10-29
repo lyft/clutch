@@ -31,7 +31,7 @@ func (lw *lightweightCacheObject) GetNamespace() string { return lw.Namespace }
 //
 // Also to note the memory footprint of the cache store is only part of the story.
 // While the informers controller is receiving Kubernetes objects it stores that full object in the DeltaFIFO queue.
-// This queue while processed quickly does store a vast amount objects at any given time and contributes to memory usage greatly.
+// This queue while processed quickly does store a vast amount of objects at any given time and contributes to memory usage greatly.
 //
 // Drawbacks
 // - Update resource event handler does not function as expected, old objects will always return nil.
@@ -70,7 +70,7 @@ func NewLightweightInformer(
 				switch d.Type {
 				case cache.Sync, cache.Replaced, cache.Added, cache.Updated:
 					if _, exists, err := cacheStore.Get(lightweightObj); err == nil && exists {
-						if err := cacheStore.Update(d.Object); err != nil {
+						if err := cacheStore.Update(lightweightObj); err != nil {
 							return err
 						}
 						h.OnUpdate(nil, d.Object)

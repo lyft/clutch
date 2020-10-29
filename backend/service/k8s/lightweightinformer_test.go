@@ -53,16 +53,12 @@ func TestLightweightInformer(t *testing.T) {
 
 	go podInformer.Run(stop)
 
-	// We sleep below to give some time for the informer to get the event and hit a handler
 	fc.Add(&v1.Pod{})
-	time.Sleep(time.Millisecond * 50)
 	assert.Greater(t, <-addActionChan, 0)
 
 	fc.Modify(&v1.Pod{})
-	time.Sleep(time.Millisecond * 50)
 	assert.Greater(t, <-updateActionChan, 0)
 
 	fc.Delete(&v1.Pod{})
-	time.Sleep(time.Millisecond * 50)
 	assert.Greater(t, <-deleteActionChan, 0)
 }
