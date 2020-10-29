@@ -61,7 +61,7 @@ func protoForServiceType(serviceType corev1.ServiceType) k8sapiv1.Service_Type {
 	// Look up value in generated enum map after ensuring consistent case with generated code.
 	val, ok := k8sapiv1.Service_Type_value[strings.ToUpper(string(serviceType))]
 	if !ok {
-		return k8sapiv1.Service_UNSPECIFIED
+		return k8sapiv1.Service_UNKNOWN
 	}
 
 	return k8sapiv1.Service_Type(val)

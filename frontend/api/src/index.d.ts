@@ -9037,10 +9037,11 @@ export namespace clutch {
                 /** Type enum. */
                 enum Type {
                     UNSPECIFIED = 0,
-                    CLUSTERIP = 1,
-                    NODEPORT = 2,
-                    LOADBALANCER = 3,
-                    EXTERNALNAME = 4
+                    UNKNOWN = 1,
+                    CLUSTER_IP = 2,
+                    NODE_PORT = 3,
+                    LOAD_BALANCER = 4,
+                    EXTERNAL_NAME = 5
                 }
             }
 

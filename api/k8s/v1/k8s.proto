@@ -347,10 +347,11 @@ message Service {
 
   enum Type {
     UNSPECIFIED = 0;
-    CLUSTER_IP = 1;
-    NODE_PORT = 2;
-    LOAD_BALANCER = 3;
-    EXTERNAL_NAME = 4;
+    UNKNOWN = 1;
+    CLUSTER_IP = 2;
+    NODE_PORT = 3;
+    LOAD_BALANCER = 4;
+    EXTERNAL_NAME = 5;
   }
   Type type = 4;
 

@@ -21353,6 +21353,7 @@ export const clutch = $root.clutch = (() => {
                         case 2:
                         case 3:
                         case 4:
+                        case 5:
                             break;
                         }
                     if (message.labels != null && message.hasOwnProperty("labels")) {
@@ -21397,21 +21398,25 @@ export const clutch = $root.clutch = (() => {
                     case 0:
                         message.type = 0;
                         break;
-                    case "CLUSTERIP":
+                    case "UNKNOWN":
                     case 1:
                         message.type = 1;
                         break;
-                    case "NODEPORT":
+                    case "CLUSTER_IP":
                     case 2:
                         message.type = 2;
                         break;
-                    case "LOADBALANCER":
+                    case "NODE_PORT":
                     case 3:
                         message.type = 3;
                         break;
-                    case "EXTERNALNAME":
+                    case "LOAD_BALANCER":
                     case 4:
                         message.type = 4;
+                        break;
+                    case "EXTERNAL_NAME":
+                    case 5:
+                        message.type = 5;
                         break;
                     }
                     if (object.labels) {
@@ -21492,18 +21497,20 @@ export const clutch = $root.clutch = (() => {
                  * @name clutch.k8s.v1.Service.Type
                  * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
-                 * @property {number} CLUSTERIP=1 CLUSTERIP value
-                 * @property {number} NODEPORT=2 NODEPORT value
-                 * @property {number} LOADBALANCER=3 LOADBALANCER value
-                 * @property {number} EXTERNALNAME=4 EXTERNALNAME value
+                 * @property {number} UNKNOWN=1 UNKNOWN value
+                 * @property {number} CLUSTER_IP=2 CLUSTER_IP value
+                 * @property {number} NODE_PORT=3 NODE_PORT value
+                 * @property {number} LOAD_BALANCER=4 LOAD_BALANCER value
+                 * @property {number} EXTERNAL_NAME=5 EXTERNAL_NAME value
                  */
                 Service.Type = (function() {
                     const valuesById = {}, values = Object.create(valuesById);
                     values[valuesById[0] = "UNSPECIFIED"] = 0;
-                    values[valuesById[1] = "CLUSTERIP"] = 1;
-                    values[valuesById[2] = "NODEPORT"] = 2;
-                    values[valuesById[3] = "LOADBALANCER"] = 3;
-                    values[valuesById[4] = "EXTERNALNAME"] = 4;
+                    values[valuesById[1] = "UNKNOWN"] = 1;
+                    values[valuesById[2] = "CLUSTER_IP"] = 2;
+                    values[valuesById[3] = "NODE_PORT"] = 3;
+                    values[valuesById[4] = "LOAD_BALANCER"] = 4;
+                    values[valuesById[5] = "EXTERNAL_NAME"] = 5;
                     return values;
                 })();
 
