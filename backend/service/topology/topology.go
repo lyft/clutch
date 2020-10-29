@@ -66,8 +66,8 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		scope:  scope,
 	}, nil
 
-	if topologyConfig.Cache != nil && topologyConfig.Cache.Disable {
-		c.log.Info("Topology caching has been disabled")
+	if topologyConfig.Cache == nil {
+		c.log.Info("Topology caching is disabled")
 		return c, err
 	}
 
@@ -80,6 +80,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		ctxCancelFunc()
 	}()
 
+	c.log.Info("Topology caching is enabled")
 	go c.acquireTopologyCacheLock(ctx)
 
 	return c, err

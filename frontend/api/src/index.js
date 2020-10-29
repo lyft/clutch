@@ -14372,7 +14372,6 @@ export const clutch = $root.clutch = (() => {
                          * Properties of a Cache.
                          * @memberof clutch.config.service.topology.v1
                          * @interface ICache
-                         * @property {boolean|null} [disable] Cache disable
                          * @property {google.protobuf.IDuration|null} [ttl] Cache ttl
                          */
 
@@ -14390,14 +14389,6 @@ export const clutch = $root.clutch = (() => {
                                     if (properties[keys[i]] != null)
                                         this[keys[i]] = properties[keys[i]];
                         }
-
-                        /**
-                         * Cache disable.
-                         * @member {boolean} disable
-                         * @memberof clutch.config.service.topology.v1.Cache
-                         * @instance
-                         */
-                        Cache.prototype.disable = false;
 
                         /**
                          * Cache ttl.
@@ -14418,9 +14409,6 @@ export const clutch = $root.clutch = (() => {
                         Cache.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
-                            if (message.disable != null && message.hasOwnProperty("disable"))
-                                if (typeof message.disable !== "boolean")
-                                    return "disable: boolean expected";
                             if (message.ttl != null && message.hasOwnProperty("ttl")) {
                                 let error = $root.google.protobuf.Duration.verify(message.ttl);
                                 if (error)
@@ -14441,8 +14429,6 @@ export const clutch = $root.clutch = (() => {
                             if (object instanceof $root.clutch.config.service.topology.v1.Cache)
                                 return object;
                             let message = new $root.clutch.config.service.topology.v1.Cache();
-                            if (object.disable != null)
-                                message.disable = Boolean(object.disable);
                             if (object.ttl != null) {
                                 if (typeof object.ttl !== "object")
                                     throw TypeError(".clutch.config.service.topology.v1.Cache.ttl: object expected");
@@ -14464,12 +14450,8 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.defaults) {
-                                object.disable = false;
+                            if (options.defaults)
                                 object.ttl = null;
-                            }
-                            if (message.disable != null && message.hasOwnProperty("disable"))
-                                object.disable = message.disable;
                             if (message.ttl != null && message.hasOwnProperty("ttl"))
                                 object.ttl = $root.google.protobuf.Duration.toObject(message.ttl, options);
                             return object;
