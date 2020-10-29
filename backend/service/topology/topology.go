@@ -59,16 +59,16 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, errors.New("Unable to get the datastore client")
 	}
 
-	c, err := &client{
+	c := &client{
 		config: topologyConfig,
 		db:     dbClient.DB(),
 		log:    logger,
 		scope:  scope,
-	}, nil
+	}
 
 	if topologyConfig.Cache == nil {
 		c.log.Info("Topology caching is disabled")
-		return c, err
+		return c, nil
 	}
 
 	ctx, ctxCancelFunc := context.WithCancel(context.Background())
@@ -83,5 +83,5 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	c.log.Info("Topology caching is enabled")
 	go c.acquireTopologyCacheLock(ctx)
 
-	return c, err
+	return c, nil
 }
