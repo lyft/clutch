@@ -2,13 +2,11 @@ package k8s
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	appsv1 "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/apimachinery/pkg/util/strategicpatch"
 	"k8s.io/client-go/util/retry"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
@@ -111,23 +109,4 @@ func mergeDeploymentLabelsAndAnnotations(deployment *appsv1.Deployment, fields *
 			deployment.Spec.Template.ObjectMeta.Annotations[k] = v
 		}
 	}
-}
-
-func generateDeploymentStrategicPatch(oldDeployment, newDeployment *appsv1.Deployment) ([]byte, error) {
-	old, err := json.Marshal(oldDeployment)
-	if err != nil {
-		return nil, err
-	}
-
-	new, err := json.Marshal(newDeployment)
-	if err != nil {
-		return nil, err
-	}
-
-	patchBytes, err := strategicpatch.CreateTwoWayMergePatch(old, new, appsv1.Deployment{})
-	if err != nil {
-		return nil, err
-	}
-
-	return patchBytes, nil
 }

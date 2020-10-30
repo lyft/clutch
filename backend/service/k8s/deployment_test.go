@@ -6,7 +6,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	appsv1 "k8s.io/api/apps/v1"
-	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
@@ -158,95 +157,6 @@ func TestMergeDeploymentLabelsAndAnnotations(t *testing.T) {
 
 			mergeDeploymentLabelsAndAnnotations(deployment, tt.fields)
 			assert.Equal(t, tt.expect.ObjectMeta, deployment.ObjectMeta)
-		})
-	}
-}
-
-func TestGenerateDeploymentStrategicPatch(t *testing.T) {
-	t.Parallel()
-
-	var deploymentStrategicPatchTest = []struct {
-		id       string
-		old      *appsv1.Deployment
-		new      *appsv1.Deployment
-		expected string
-	}{
-		{
-			id:       "no change",
-			old:      nil,
-			new:      nil,
-			expected: `{}`,
-		},
-		{
-			id: "Adding Annotations",
-			old: &appsv1.Deployment{
-				ObjectMeta: metav1.ObjectMeta{
-					Labels: map[string]string{"foo": "bar"},
-				},
-				Spec: appsv1.DeploymentSpec{
-					Template: corev1.PodTemplateSpec{
-						ObjectMeta: metav1.ObjectMeta{
-							Labels: map[string]string{"foo": "bar"},
-						},
-					},
-				},
-			},
-			new: &appsv1.Deployment{
-				ObjectMeta: metav1.ObjectMeta{
-					Labels:      map[string]string{"foo": "bar"},
-					Annotations: map[string]string{"baz": "quuz"},
-				},
-				Spec: appsv1.DeploymentSpec{
-					Template: corev1.PodTemplateSpec{
-						ObjectMeta: metav1.ObjectMeta{
-							Labels:      map[string]string{"foo": "bar"},
-							Annotations: map[string]string{"baz": "quuz"},
-						},
-					},
-				},
-			},
-			expected: `{"metadata":{"annotations":{"baz":"quuz"}},"spec":{"template":{"metadata":{"annotations":{"baz":"quuz"}}}}}`,
-		},
-		{
-			id: "Adding both Labels and Annotations",
-			old: &appsv1.Deployment{
-				ObjectMeta: metav1.ObjectMeta{
-					Labels: map[string]string{"foo": "bar"},
-				},
-				Spec: appsv1.DeploymentSpec{
-					Template: corev1.PodTemplateSpec{
-						ObjectMeta: metav1.ObjectMeta{
-							Labels: map[string]string{"foo": "bar"},
-						},
-					},
-				},
-			},
-			new: &appsv1.Deployment{
-				ObjectMeta: metav1.ObjectMeta{
-					Labels:      map[string]string{"label1": "label1val"},
-					Annotations: map[string]string{"annotations1": "annotations1val"},
-				},
-				Spec: appsv1.DeploymentSpec{
-					Template: corev1.PodTemplateSpec{
-						ObjectMeta: metav1.ObjectMeta{
-							Labels:      map[string]string{"label1": "label1val"},
-							Annotations: map[string]string{"annotations1": "annotations1val"},
-						},
-					},
-				},
-			},
-			expected: `{"metadata":{"annotations":{"annotations1":"annotations1val"},"labels":{"foo":null,"label1":"label1val"}},"spec":{"template":{"metadata":{"annotations":{"annotations1":"annotations1val"},"labels":{"foo":null,"label1":"label1val"}}}}}`,
-		},
-	}
-	for _, tt := range deploymentStrategicPatchTest {
-		tt := tt
-		t.Run(tt.id, func(t *testing.T) {
-			t.Parallel()
-
-			actualPatchBytes, err := generateDeploymentStrategicPatch(tt.old, tt.new)
-
-			assert.NoError(t, err)
-			assert.Equal(t, []byte(tt.expected), actualPatchBytes)
 		})
 	}
 }
