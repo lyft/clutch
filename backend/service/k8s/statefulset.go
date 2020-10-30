@@ -6,6 +6,7 @@ import (
 
 	appsv1 "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/util/retry"
 
@@ -34,6 +35,7 @@ func (s *svc) DescribeStatefulSet(ctx context.Context, clientset, cluster, names
 	return nil, fmt.Errorf("Unable to locate StatefulSet")
 }
 
+// ProtoForStatefulSet maps a Kubernetes Stateful Set object to a k8sapiv1 object
 func ProtoForStatefulSet(cluster string, statefulSet *appsv1.StatefulSet) *k8sapiv1.StatefulSet {
 	clusterName := statefulSet.ClusterName
 	if clusterName == "" {
@@ -77,32 +79,12 @@ func (s *svc) UpdateStatefulSet(ctx context.Context, clientset, cluster, namespa
 
 func mergeStatefulSetLabelsAndAnnotations(statefulSet *appsv1.StatefulSet, fields *k8sapiv1.UpdateStatefulSetRequest_Fields) {
 	if len(fields.Labels) > 0 {
-		if statefulSet.Labels == nil {
-			statefulSet.Labels = make(map[string]string)
-		}
-		for k, v := range fields.Labels {
-			statefulSet.Labels[k] = v
-
-			if statefulSet.Spec.Template.ObjectMeta.Labels == nil {
-				statefulSet.Spec.Template.ObjectMeta.Labels = make(map[string]string)
-			}
-
-			statefulSet.Spec.Template.ObjectMeta.Labels[k] = v
-		}
+		statefulSet.Labels = labels.Merge(labels.Set(statefulSet.Labels), labels.Set(fields.Labels))
+		statefulSet.Spec.Template.ObjectMeta.Labels = labels.Merge(labels.Set(statefulSet.Spec.Template.ObjectMeta.Labels), labels.Set(fields.Labels))
 	}
 
 	if len(fields.Annotations) > 0 {
-		if statefulSet.Annotations == nil {
-			statefulSet.Annotations = make(map[string]string)
-		}
-		for k, v := range fields.Annotations {
-			statefulSet.Annotations[k] = v
-
-			if statefulSet.Spec.Template.ObjectMeta.Annotations == nil {
-				statefulSet.Spec.Template.ObjectMeta.Annotations = make(map[string]string)
-			}
-
-			statefulSet.Spec.Template.ObjectMeta.Annotations[k] = v
-		}
+		statefulSet.Annotations = labels.Merge(labels.Set(statefulSet.Annotations), labels.Set(fields.Annotations))
+		statefulSet.Spec.Template.ObjectMeta.Annotations = labels.Merge(labels.Set(statefulSet.Spec.Template.ObjectMeta.Annotations), labels.Set(fields.Annotations))
 	}
 }

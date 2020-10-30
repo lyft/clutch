@@ -6,6 +6,7 @@ import (
 
 	appsv1 "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/util/retry"
 
@@ -87,26 +88,12 @@ func (s *svc) DeleteDeployment(ctx context.Context, clientset, cluster, namespac
 
 func mergeDeploymentLabelsAndAnnotations(deployment *appsv1.Deployment, fields *k8sapiv1.UpdateDeploymentRequest_Fields) {
 	if len(fields.Labels) > 0 {
-		for k, v := range fields.Labels {
-			deployment.Labels[k] = v
-
-			if deployment.Spec.Template.ObjectMeta.Labels == nil {
-				deployment.Spec.Template.ObjectMeta.Labels = make(map[string]string)
-			}
-
-			deployment.Spec.Template.ObjectMeta.Labels[k] = v
-		}
+		deployment.Labels = labels.Merge(labels.Set(deployment.Labels), labels.Set(fields.Labels))
+		deployment.Spec.Template.ObjectMeta.Labels = labels.Merge(labels.Set(deployment.Spec.Template.ObjectMeta.Labels), labels.Set(fields.Labels))
 	}
 
 	if len(fields.Annotations) > 0 {
-		for k, v := range fields.Annotations {
-			deployment.Annotations[k] = v
-
-			if deployment.Spec.Template.ObjectMeta.Annotations == nil {
-				deployment.Spec.Template.ObjectMeta.Annotations = make(map[string]string)
-			}
-
-			deployment.Spec.Template.ObjectMeta.Annotations[k] = v
-		}
+		deployment.Annotations = labels.Merge(labels.Set(deployment.Annotations), labels.Set(fields.Annotations))
+		deployment.Spec.Template.ObjectMeta.Annotations = labels.Merge(labels.Set(deployment.Spec.Template.ObjectMeta.Annotations), labels.Set(fields.Annotations))
 	}
 }
