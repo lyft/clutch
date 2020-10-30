@@ -3,8 +3,8 @@ package k8s
 import (
 	"context"
 	"fmt"
-	"strings"
 
+	"github.com/iancoleman/strcase"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -59,10 +59,9 @@ func ProtoForService(cluster string, k8sservice *corev1.Service) *k8sapiv1.Servi
 
 func protoForServiceType(serviceType corev1.ServiceType) k8sapiv1.Service_Type {
 	// Look up value in generated enum map after ensuring consistent case with generated code.
-	val, ok := k8sapiv1.Service_Type_value[strings.ToUpper(string(serviceType))]
+	val, ok := k8sapiv1.Service_Type_value[strcase.ToScreamingSnake(string(serviceType))]
 	if !ok {
 		return k8sapiv1.Service_UNKNOWN
 	}
-
 	return k8sapiv1.Service_Type(val)
 }

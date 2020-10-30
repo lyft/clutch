@@ -9,6 +9,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
+
+	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func testServiceClientset() k8s.Interface {
@@ -104,4 +106,11 @@ func TestProtoForServiceClusterName(t *testing.T) {
 			assert.Equal(t, tt.expectedClusterName, service.Cluster)
 		})
 	}
+}
+
+func TestProtoForServiceType(t *testing.T) {
+	assert.Equal(t, k8sv1.Service_CLUSTER_IP, protoForServiceType(corev1.ServiceTypeClusterIP))
+	assert.Equal(t, k8sv1.Service_NODE_PORT, protoForServiceType(corev1.ServiceTypeNodePort))
+	assert.Equal(t, k8sv1.Service_LOAD_BALANCER, protoForServiceType(corev1.ServiceTypeLoadBalancer))
+	assert.Equal(t, k8sv1.Service_EXTERNAL_NAME, protoForServiceType(corev1.ServiceTypeExternalName))
 }
