@@ -1,6 +1,7 @@
 package k8s
 
 import (
+	"fmt"
 	"time"
 
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -37,7 +38,6 @@ func (lw *lightweightCacheObject) GetNamespace() string { return lw.Namespace }
 // - Update resource event handler does not function as expected, old objects will always return nil.
 //   This is because we dont cache the full k8s object to compute deltas as we are using lightweightCacheObjects instead.
 func NewLightweightInformer(
-	cs ContextClientset,
 	lw cache.ListerWatcher,
 	objType runtime.Object,
 	resync time.Duration,
@@ -57,14 +57,14 @@ func NewLightweightInformer(
 		RetryOnError:     false,
 		Process: func(obj interface{}) error {
 			for _, d := range obj.(cache.Deltas) {
-				incomeingObjectMeta, err := meta.Accessor(d.Object)
+				incomingObjectMeta, err := meta.Accessor(d.Object)
 				if err != nil {
 					return err
 				}
 
 				lightweightObj := &lightweightCacheObject{
-					Name:      incomeingObjectMeta.GetName(),
-					Namespace: incomeingObjectMeta.GetNamespace(),
+					Name:      incomingObjectMeta.GetName(),
+					Namespace: incomingObjectMeta.GetNamespace(),
 				}
 
 				switch d.Type {
@@ -85,6 +85,8 @@ func NewLightweightInformer(
 						return err
 					}
 					h.OnDelete(d.Object)
+				default:
+					return fmt.Errorf("Cache type not supported: %s", d.Type)
 				}
 			}
 			return nil

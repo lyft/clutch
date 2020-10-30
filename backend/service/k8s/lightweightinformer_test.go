@@ -6,21 +6,11 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/client-go/kubernetes/fake"
 	"k8s.io/client-go/tools/cache"
 	fakecontroller "k8s.io/client-go/tools/cache/testing"
 )
 
 func TestLightweightInformer(t *testing.T) {
-	cs := fake.NewSimpleClientset()
-	csm := &managerImpl{
-		clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
-			Interface: cs,
-			namespace: "default",
-			cluster:   "core-testing",
-		}},
-	}
-
 	addActionChan := make(chan int)
 	updateActionChan := make(chan int)
 	deleteActionChan := make(chan int)
@@ -44,7 +34,6 @@ func TestLightweightInformer(t *testing.T) {
 	defer close(stop)
 
 	podInformer := NewLightweightInformer(
-		csm.clientsets["foo"],
 		fc,
 		&v1.Pod{},
 		time.Minute,

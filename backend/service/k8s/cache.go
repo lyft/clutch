@@ -58,7 +58,6 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 	}
 
 	podInformer := NewLightweightInformer(
-		cs,
 		cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "pods", corev1.NamespaceAll, fields.Everything()),
 		&corev1.Pod{},
 		informerResyncTime,
@@ -66,7 +65,6 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 	)
 
 	deploymentInformer := NewLightweightInformer(
-		cs,
 		cache.NewListWatchFromClient(cs.AppsV1().RESTClient(), "deployments", corev1.NamespaceAll, fields.Everything()),
 		&appsv1.Deployment{},
 		informerResyncTime,
@@ -74,7 +72,6 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 	)
 
 	hpaInformer := NewLightweightInformer(
-		cs,
 		cache.NewListWatchFromClient(cs.AutoscalingV1().RESTClient(), "horizontalpodautoscalers", corev1.NamespaceAll, fields.Everything()),
 		&autoscalingv1.HorizontalPodAutoscaler{},
 		informerResyncTime,
