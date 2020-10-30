@@ -24,6 +24,79 @@ import (
 )
 
 func TestServerStats(t *testing.T) {
+	server := newTestServer(t)
+	defer server.Stop()
+
+	conn, err := server.dial()
+	assert.NoError(t, err)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	// Verify V3 stats.
+	v3Client := gcpRuntimeServiceV3.NewRuntimeDiscoveryServiceClient(conn)
+	v3Stream, err := v3Client.StreamRuntime(ctx)
+	assert.NoError(t, err)
+	defer func() {
+		err := v3Stream.CloseSend()
+		assert.NoError(t, err)
+	}()
+
+	// Regular flow.
+	err = v3Stream.Send(&gcpDiscoveryV3.DiscoveryRequest{})
+	assert.NoError(t, err)
+
+	_, err = v3Stream.Recv()
+	assert.NoError(t, err)
+
+	assert.Equal(t, int64(1), server.stats.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
+	assert.Equal(t, int64(0), server.stats.Snapshot().Counters()["test.v3.totalErrorsReceived+"].Value())
+
+	// Error response from xDS client.
+	err = v3Stream.Send(&gcpDiscoveryV3.DiscoveryRequest{ErrorDetail: &rpc_status.Status{}})
+	assert.NoError(t, err)
+
+	assert.Equal(t, int64(1), server.stats.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
+	// Async verification here since it appears that we don't get a response back in this case, so we
+	// aren't able to synchronize on the response.
+	awaitCounterEquals(t, server.stats, "test.v3.totalErrorsReceived+", 1)
+
+	// Verify V2 stats.
+	v2Client := gcpDiscoveryV2.NewRuntimeDiscoveryServiceClient(conn)
+	v2Stream, err := v2Client.StreamRuntime(ctx)
+	assert.NoError(t, err)
+	defer func() {
+		err := v3Stream.CloseSend()
+		assert.NoError(t, err)
+	}()
+
+	// Regular flow.
+	err = v2Stream.Send(&envoy_api_v2.DiscoveryRequest{})
+	assert.NoError(t, err)
+
+	_, err = v2Stream.Recv()
+	assert.NoError(t, err)
+
+	assert.Equal(t, int64(1), server.stats.Snapshot().Counters()["test.v2.totalResourcesServed+"].Value())
+
+	// Error response from xDS client.
+	err = v2Stream.Send(&envoy_api_v2.DiscoveryRequest{ErrorDetail: &rpc_status.Status{}})
+	assert.NoError(t, err)
+
+	assert.Equal(t, int64(1), server.stats.Snapshot().Counters()["test.v2.totalResourcesServed+"].Value())
+	// Async verification here since it appears that we don't get a response back in this case, so we
+	// aren't able to synchronize on the response.
+	awaitCounterEquals(t, server.stats, "test.v2.totalErrorsReceived+", 1)
+}
+
+type testServer struct {
+	registrar *moduletest.TestRegistrar
+	stats     tally.TestScope
+}
+
+func newTestServer(t *testing.T) testServer {
+	t.Helper()
+
 	service.Registry[experimentstore.Name] = &mockStorer{}
 	// Set up a test server listening to :9000.
 	config := &rtdsconfigv1.Config{
@@ -53,69 +126,16 @@ func TestServerStats(t *testing.T) {
 		err := registrar.GRPCServer().Serve(l)
 		assert.NoError(t, err)
 	}()
-	defer registrar.GRPCServer().Stop()
 
-	// Connect to the test server.
-	conn, err := grpc.Dial("localhost:9000", grpc.WithInsecure())
-	assert.NoError(t, err)
+	return testServer{registrar: registrar, stats: scope}
+}
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+func (t testServer) Stop() {
+	t.registrar.GRPCServer().Stop()
+}
 
-	// Verify V3 stats.
-	v3Client := gcpRuntimeServiceV3.NewRuntimeDiscoveryServiceClient(conn)
-	v3Stream, err := v3Client.StreamRuntime(ctx)
-	assert.NoError(t, err)
-	defer func() {
-		err := v3Stream.CloseSend()
-		assert.NoError(t, err)
-	}()
-
-	// Regular flow.
-	err = v3Stream.Send(&gcpDiscoveryV3.DiscoveryRequest{})
-	assert.NoError(t, err)
-
-	_, err = v3Stream.Recv()
-	assert.NoError(t, err)
-
-	assert.Equal(t, int64(1), scope.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
-	assert.Equal(t, int64(0), scope.Snapshot().Counters()["test.v3.totalErrorsReceived+"].Value())
-
-	// Error response from xDS client.
-	err = v3Stream.Send(&gcpDiscoveryV3.DiscoveryRequest{ErrorDetail: &rpc_status.Status{}})
-	assert.NoError(t, err)
-
-	assert.Equal(t, int64(1), scope.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
-	// Async verification here since it appears that we don't get a response back in this case, so we
-	// aren't able to synchronize on the response.
-	awaitCounterEquals(t, scope, "test.v3.totalErrorsReceived+", 1)
-
-	// Verify V2 stats.
-	v2Client := gcpDiscoveryV2.NewRuntimeDiscoveryServiceClient(conn)
-	v2Stream, err := v2Client.StreamRuntime(ctx)
-	assert.NoError(t, err)
-	defer func() {
-		err := v3Stream.CloseSend()
-		assert.NoError(t, err)
-	}()
-
-	// Regular flow.
-	err = v2Stream.Send(&envoy_api_v2.DiscoveryRequest{})
-	assert.NoError(t, err)
-
-	_, err = v2Stream.Recv()
-	assert.NoError(t, err)
-
-	assert.Equal(t, int64(1), scope.Snapshot().Counters()["test.v2.totalResourcesServed+"].Value())
-
-	// Error response from xDS client.
-	err = v2Stream.Send(&envoy_api_v2.DiscoveryRequest{ErrorDetail: &rpc_status.Status{}})
-	assert.NoError(t, err)
-
-	assert.Equal(t, int64(1), scope.Snapshot().Counters()["test.v2.totalResourcesServed+"].Value())
-	// Async verification here since it appears that we don't get a response back in this case, so we
-	// aren't able to synchronize on the response.
-	awaitCounterEquals(t, scope, "test.v2.totalErrorsReceived+", 1)
+func (t testServer) dial() (*grpc.ClientConn, error) {
+	return grpc.Dial("localhost:9000", grpc.WithInsecure())
 }
 
 func awaitCounterEquals(t *testing.T, scope tally.TestScope, counter string, value int64) {
