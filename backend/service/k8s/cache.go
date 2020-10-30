@@ -11,7 +11,7 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	corev1 "k8s.io/api/core/v1"
-	"k8s.io/client-go/informers"
+	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/client-go/tools/cache"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
@@ -50,23 +50,34 @@ func (s *svc) StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.Upda
 }
 
 func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
-	factory := informers.NewSharedInformerFactoryWithOptions(cs, informerResyncTime)
-	stop := make(chan struct{})
-
-	podInformer := factory.Core().V1().Pods().Informer()
-	deploymentInformer := factory.Apps().V1().Deployments().Informer()
-	hpaInformer := factory.Autoscaling().V1().HorizontalPodAutoscalers().Informer()
-
 	informerHandlers := cache.ResourceEventHandlerFuncs{
 		AddFunc:    s.informerAddHandler,
 		UpdateFunc: s.informerUpdateHandler,
 		DeleteFunc: s.informerDeleteHandler,
 	}
 
-	podInformer.AddEventHandler(informerHandlers)
-	deploymentInformer.AddEventHandler(informerHandlers)
-	hpaInformer.AddEventHandler(informerHandlers)
+	podInformer := NewLightweightInformer(
+		cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "pods", corev1.NamespaceAll, fields.Everything()),
+		&corev1.Pod{},
+		informerResyncTime,
+		informerHandlers,
+	)
 
+	deploymentInformer := NewLightweightInformer(
+		cache.NewListWatchFromClient(cs.AppsV1().RESTClient(), "deployments", corev1.NamespaceAll, fields.Everything()),
+		&appsv1.Deployment{},
+		informerResyncTime,
+		informerHandlers,
+	)
+
+	hpaInformer := NewLightweightInformer(
+		cache.NewListWatchFromClient(cs.AutoscalingV1().RESTClient(), "horizontalpodautoscalers", corev1.NamespaceAll, fields.Everything()),
+		&autoscalingv1.HorizontalPodAutoscaler{},
+		informerResyncTime,
+		informerHandlers,
+	)
+
+	stop := make(chan struct{})
 	go podInformer.Run(stop)
 	go deploymentInformer.Run(stop)
 	go hpaInformer.Run(stop)
