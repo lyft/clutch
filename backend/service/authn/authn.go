@@ -15,12 +15,11 @@ import (
 
 	"github.com/coreos/go-oidc"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/google/uuid"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"golang.org/x/oauth2"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -36,11 +35,12 @@ var scopes = []string{
 
 const Name = "clutch.service.authn"
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	config := &authnv1.Config{}
-	if err := ptypes.UnmarshalAny(cfg, config); err != nil {
+	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err
 	}
+
 	return NewProvider(config)
 }
 
@@ -71,6 +71,7 @@ type OIDCProvider struct {
 	sessionSecret string
 
 	cryptographer *cryptographer
+	db            *repository
 
 	claimsFromOIDCToken ClaimsFromOIDCTokenFunc
 }
@@ -154,9 +155,14 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 		return nil, err
 	}
 
-	// TODO: Store the encrypted refresh token in the database.
+	// Encrypt and store the refresh token.
 	if p.cryptographer != nil {
-		if _, err := p.cryptographer.Encrypt([]byte(token.RefreshToken)); err != nil {
+		t, err := p.cryptographer.Encrypt([]byte(token.RefreshToken))
+		if err != nil {
+			return nil, err
+		}
+
+		if _, err := p.db.createOrUpdateUser(ctx, claims.Subject, t); err != nil {
 			return nil, err
 		}
 	}
@@ -286,6 +292,12 @@ func NewProvider(config *authnv1.Config) (Provider, error) {
 			return nil, err
 		}
 		p.cryptographer = c
+
+		db, err := newRepository()
+		if err != nil {
+			return nil, err
+		}
+		p.db = db
 	}
 
 	return p, nil
