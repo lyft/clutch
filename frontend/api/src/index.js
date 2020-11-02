@@ -18086,6 +18086,72 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeService}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DescribeServiceCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DescribeServiceResponse} [response] DescribeServiceResponse
+                 */
+
+                /**
+                 * Calls DescribeService.
+                 * @function describeService
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeServiceRequest} request DescribeServiceRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DescribeServiceCallback} callback Node-style callback called with the error, if any, and DescribeServiceResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.describeService = function describeService(request, callback) {
+                    return this.rpcCall(describeService, $root.clutch.k8s.v1.DescribeServiceRequest, $root.clutch.k8s.v1.DescribeServiceResponse, request, callback);
+                }, "name", { value: "DescribeService" });
+
+                /**
+                 * Calls DescribeService.
+                 * @function describeService
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeServiceRequest} request DescribeServiceRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DescribeServiceResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteService}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DeleteServiceCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DeleteServiceResponse} [response] DeleteServiceResponse
+                 */
+
+                /**
+                 * Calls DeleteService.
+                 * @function deleteService
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteServiceRequest} request DeleteServiceRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DeleteServiceCallback} callback Node-style callback called with the error, if any, and DeleteServiceResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.deleteService = function deleteService(request, callback) {
+                    return this.rpcCall(deleteService, $root.clutch.k8s.v1.DeleteServiceRequest, $root.clutch.k8s.v1.DeleteServiceResponse, request, callback);
+                }, "name", { value: "DeleteService" });
+
+                /**
+                 * Calls DeleteService.
+                 * @function deleteService
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteServiceRequest} request DeleteServiceRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DeleteServiceResponse>} Promise
+                 * @variation 2
+                 */
+
                 return K8sAPI;
             })();
 
@@ -21662,6 +21728,798 @@ export const clutch = $root.clutch = (() => {
                 return DeleteDeploymentResponse;
             })();
 
+            v1.Service = (function() {
+
+                /**
+                 * Properties of a Service.
+                 * @memberof clutch.k8s.v1
+                 * @interface IService
+                 * @property {string|null} [cluster] Service cluster
+                 * @property {string|null} [namespace] Service namespace
+                 * @property {string|null} [name] Service name
+                 * @property {clutch.k8s.v1.Service.Type|null} [type] Service type
+                 * @property {Object.<string,string>|null} [labels] Service labels
+                 * @property {Object.<string,string>|null} [annotations] Service annotations
+                 */
+
+                /**
+                 * Constructs a new Service.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a Service.
+                 * @implements IService
+                 * @constructor
+                 * @param {clutch.k8s.v1.IService=} [properties] Properties to set
+                 */
+                function Service(properties) {
+                    this.labels = {};
+                    this.annotations = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Service cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.Service
+                 * @instance
+                 */
+                Service.prototype.cluster = "";
+
+                /**
+                 * Service namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.Service
+                 * @instance
+                 */
+                Service.prototype.namespace = "";
+
+                /**
+                 * Service name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.Service
+                 * @instance
+                 */
+                Service.prototype.name = "";
+
+                /**
+                 * Service type.
+                 * @member {clutch.k8s.v1.Service.Type} type
+                 * @memberof clutch.k8s.v1.Service
+                 * @instance
+                 */
+                Service.prototype.type = 0;
+
+                /**
+                 * Service labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.Service
+                 * @instance
+                 */
+                Service.prototype.labels = $util.emptyObject;
+
+                /**
+                 * Service annotations.
+                 * @member {Object.<string,string>} annotations
+                 * @memberof clutch.k8s.v1.Service
+                 * @instance
+                 */
+                Service.prototype.annotations = $util.emptyObject;
+
+                /**
+                 * Verifies a Service message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.Service
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Service.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        switch (message.type) {
+                        default:
+                            return "type: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+                            break;
+                        }
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                        if (!$util.isObject(message.annotations))
+                            return "annotations: object expected";
+                        let key = Object.keys(message.annotations);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.annotations[key[i]]))
+                                return "annotations: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Service message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.Service
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.Service} Service
+                 */
+                Service.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.Service)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.Service();
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    switch (object.type) {
+                    case "UNSPECIFIED":
+                    case 0:
+                        message.type = 0;
+                        break;
+                    case "UNKNOWN":
+                    case 1:
+                        message.type = 1;
+                        break;
+                    case "CLUSTER_IP":
+                    case 2:
+                        message.type = 2;
+                        break;
+                    case "NODE_PORT":
+                    case 3:
+                        message.type = 3;
+                        break;
+                    case "LOAD_BALANCER":
+                    case 4:
+                        message.type = 4;
+                        break;
+                    case "EXTERNAL_NAME":
+                    case 5:
+                        message.type = 5;
+                        break;
+                    }
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.Service.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    if (object.annotations) {
+                        if (typeof object.annotations !== "object")
+                            throw TypeError(".clutch.k8s.v1.Service.annotations: object expected");
+                        message.annotations = {};
+                        for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
+                            message.annotations[keys[i]] = String(object.annotations[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Service message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.Service
+                 * @static
+                 * @param {clutch.k8s.v1.Service} message Service
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Service.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults) {
+                        object.labels = {};
+                        object.annotations = {};
+                    }
+                    if (options.defaults) {
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                        object.type = options.enums === String ? "UNSPECIFIED" : 0;
+                    }
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        object.type = options.enums === String ? $root.clutch.k8s.v1.Service.Type[message.type] : message.type;
+                    let keys2;
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
+                        object.annotations = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this Service to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.Service
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Service.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Type enum.
+                 * @name clutch.k8s.v1.Service.Type
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} UNKNOWN=1 UNKNOWN value
+                 * @property {number} CLUSTER_IP=2 CLUSTER_IP value
+                 * @property {number} NODE_PORT=3 NODE_PORT value
+                 * @property {number} LOAD_BALANCER=4 LOAD_BALANCER value
+                 * @property {number} EXTERNAL_NAME=5 EXTERNAL_NAME value
+                 */
+                Service.Type = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "UNKNOWN"] = 1;
+                    values[valuesById[2] = "CLUSTER_IP"] = 2;
+                    values[valuesById[3] = "NODE_PORT"] = 3;
+                    values[valuesById[4] = "LOAD_BALANCER"] = 4;
+                    values[valuesById[5] = "EXTERNAL_NAME"] = 5;
+                    return values;
+                })();
+
+                return Service;
+            })();
+
+            v1.DescribeServiceRequest = (function() {
+
+                /**
+                 * Properties of a DescribeServiceRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeServiceRequest
+                 * @property {string|null} [clientset] DescribeServiceRequest clientset
+                 * @property {string|null} [cluster] DescribeServiceRequest cluster
+                 * @property {string|null} [namespace] DescribeServiceRequest namespace
+                 * @property {string|null} [name] DescribeServiceRequest name
+                 * @property {Object.<string,string>|null} [labels] DescribeServiceRequest labels
+                 */
+
+                /**
+                 * Constructs a new DescribeServiceRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeServiceRequest.
+                 * @implements IDescribeServiceRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeServiceRequest=} [properties] Properties to set
+                 */
+                function DescribeServiceRequest(properties) {
+                    this.labels = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeServiceRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @instance
+                 */
+                DescribeServiceRequest.prototype.clientset = "";
+
+                /**
+                 * DescribeServiceRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @instance
+                 */
+                DescribeServiceRequest.prototype.cluster = "";
+
+                /**
+                 * DescribeServiceRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @instance
+                 */
+                DescribeServiceRequest.prototype.namespace = "";
+
+                /**
+                 * DescribeServiceRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @instance
+                 */
+                DescribeServiceRequest.prototype.name = "";
+
+                /**
+                 * DescribeServiceRequest labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @instance
+                 */
+                DescribeServiceRequest.prototype.labels = $util.emptyObject;
+
+                /**
+                 * Verifies a DescribeServiceRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeServiceRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeServiceRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeServiceRequest} DescribeServiceRequest
+                 */
+                DescribeServiceRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeServiceRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeServiceRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeServiceRequest.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeServiceRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeServiceRequest} message DescribeServiceRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeServiceRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults)
+                        object.labels = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    let keys2;
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeServiceRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeServiceRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeServiceRequest;
+            })();
+
+            v1.DescribeServiceResponse = (function() {
+
+                /**
+                 * Properties of a DescribeServiceResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeServiceResponse
+                 * @property {clutch.k8s.v1.IService|null} [service] DescribeServiceResponse service
+                 */
+
+                /**
+                 * Constructs a new DescribeServiceResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeServiceResponse.
+                 * @implements IDescribeServiceResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeServiceResponse=} [properties] Properties to set
+                 */
+                function DescribeServiceResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeServiceResponse service.
+                 * @member {clutch.k8s.v1.IService|null|undefined} service
+                 * @memberof clutch.k8s.v1.DescribeServiceResponse
+                 * @instance
+                 */
+                DescribeServiceResponse.prototype.service = null;
+
+                /**
+                 * Verifies a DescribeServiceResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeServiceResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeServiceResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.service != null && message.hasOwnProperty("service")) {
+                        let error = $root.clutch.k8s.v1.Service.verify(message.service);
+                        if (error)
+                            return "service." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeServiceResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeServiceResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeServiceResponse} DescribeServiceResponse
+                 */
+                DescribeServiceResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeServiceResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeServiceResponse();
+                    if (object.service != null) {
+                        if (typeof object.service !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeServiceResponse.service: object expected");
+                        message.service = $root.clutch.k8s.v1.Service.fromObject(object.service);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeServiceResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeServiceResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeServiceResponse} message DescribeServiceResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeServiceResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.service = null;
+                    if (message.service != null && message.hasOwnProperty("service"))
+                        object.service = $root.clutch.k8s.v1.Service.toObject(message.service, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeServiceResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeServiceResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeServiceResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeServiceResponse;
+            })();
+
+            v1.DeleteServiceRequest = (function() {
+
+                /**
+                 * Properties of a DeleteServiceRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteServiceRequest
+                 * @property {string|null} [clientset] DeleteServiceRequest clientset
+                 * @property {string|null} [cluster] DeleteServiceRequest cluster
+                 * @property {string|null} [namespace] DeleteServiceRequest namespace
+                 * @property {string|null} [name] DeleteServiceRequest name
+                 */
+
+                /**
+                 * Constructs a new DeleteServiceRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteServiceRequest.
+                 * @implements IDeleteServiceRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteServiceRequest=} [properties] Properties to set
+                 */
+                function DeleteServiceRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DeleteServiceRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @instance
+                 */
+                DeleteServiceRequest.prototype.clientset = "";
+
+                /**
+                 * DeleteServiceRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @instance
+                 */
+                DeleteServiceRequest.prototype.cluster = "";
+
+                /**
+                 * DeleteServiceRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @instance
+                 */
+                DeleteServiceRequest.prototype.namespace = "";
+
+                /**
+                 * DeleteServiceRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @instance
+                 */
+                DeleteServiceRequest.prototype.name = "";
+
+                /**
+                 * Verifies a DeleteServiceRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteServiceRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteServiceRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteServiceRequest} DeleteServiceRequest
+                 */
+                DeleteServiceRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteServiceRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DeleteServiceRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DeleteServiceRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteServiceRequest} message DeleteServiceRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteServiceRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    return object;
+                };
+
+                /**
+                 * Converts this DeleteServiceRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteServiceRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteServiceRequest;
+            })();
+
+            v1.DeleteServiceResponse = (function() {
+
+                /**
+                 * Properties of a DeleteServiceResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteServiceResponse
+                 */
+
+                /**
+                 * Constructs a new DeleteServiceResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteServiceResponse.
+                 * @implements IDeleteServiceResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteServiceResponse=} [properties] Properties to set
+                 */
+                function DeleteServiceResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies a DeleteServiceResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteServiceResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteServiceResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteServiceResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteServiceResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteServiceResponse} DeleteServiceResponse
+                 */
+                DeleteServiceResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteServiceResponse)
+                        return object;
+                    return new $root.clutch.k8s.v1.DeleteServiceResponse();
+                };
+
+                /**
+                 * Creates a plain object from a DeleteServiceResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteServiceResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteServiceResponse} message DeleteServiceResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteServiceResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this DeleteServiceResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteServiceResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteServiceResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteServiceResponse;
+            })();
+
             v1.NullableString = (function() {
 
                 /**
@@ -25156,6 +26014,141 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return Deployment;
+                })();
+
+                v1.Service = (function() {
+
+                    /**
+                     * Properties of a Service.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @interface IService
+                     * @property {string|null} [name] Service name
+                     * @property {string|null} [clientset] Service clientset
+                     * @property {string|null} [namespace] Service namespace
+                     */
+
+                    /**
+                     * Constructs a new Service.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @classdesc Represents a Service.
+                     * @implements IService
+                     * @constructor
+                     * @param {clutch.resolver.k8s.v1.IService=} [properties] Properties to set
+                     */
+                    function Service(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Service name.
+                     * @member {string} name
+                     * @memberof clutch.resolver.k8s.v1.Service
+                     * @instance
+                     */
+                    Service.prototype.name = "";
+
+                    /**
+                     * Service clientset.
+                     * @member {string} clientset
+                     * @memberof clutch.resolver.k8s.v1.Service
+                     * @instance
+                     */
+                    Service.prototype.clientset = "";
+
+                    /**
+                     * Service namespace.
+                     * @member {string} namespace
+                     * @memberof clutch.resolver.k8s.v1.Service
+                     * @instance
+                     */
+                    Service.prototype.namespace = "";
+
+                    /**
+                     * Verifies a Service message.
+                     * @function verify
+                     * @memberof clutch.resolver.k8s.v1.Service
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Service.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            if (!$util.isString(message.clientset))
+                                return "clientset: string expected";
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            if (!$util.isString(message.namespace))
+                                return "namespace: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Service message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.resolver.k8s.v1.Service
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.resolver.k8s.v1.Service} Service
+                     */
+                    Service.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.resolver.k8s.v1.Service)
+                            return object;
+                        let message = new $root.clutch.resolver.k8s.v1.Service();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.clientset != null)
+                            message.clientset = String(object.clientset);
+                        if (object.namespace != null)
+                            message.namespace = String(object.namespace);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Service message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.resolver.k8s.v1.Service
+                     * @static
+                     * @param {clutch.resolver.k8s.v1.Service} message Service
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Service.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.clientset = "";
+                            object.namespace = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            object.clientset = message.clientset;
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            object.namespace = message.namespace;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Service to JSON.
+                     * @function toJSON
+                     * @memberof clutch.resolver.k8s.v1.Service
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Service.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Service;
                 })();
 
                 return v1;
