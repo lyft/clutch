@@ -111,6 +111,21 @@ func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name
 	return nil
 }
 
+func (s *svc) DescribeService(_ context.Context, clientset, cluster, namespace, name string) (*k8sv1.Service, error) {
+	return &k8sv1.Service{
+		Cluster:     "fake-cluster-name",
+		Namespace:   namespace,
+		Name:        name,
+		Type:        k8sv1.Service_Type(rand.Intn(len(k8sv1.Service_Type_value))),
+		Labels:      map[string]string{"Key": "value"},
+		Annotations: map[string]string{"Key": "value"},
+	}, nil
+}
+
+func (*svc) DeleteService(ctx context.Context, clientset, cluster, namespace, name string) error {
+	return nil
+}
+
 func (*svc) Clientsets() []string {
 	return []string{"fake-user@fake-cluster"}
 }

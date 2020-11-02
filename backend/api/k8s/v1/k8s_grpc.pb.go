@@ -25,6 +25,8 @@ type K8SAPIClient interface {
 	DeleteHPA(ctx context.Context, in *DeleteHPARequest, opts ...grpc.CallOption) (*DeleteHPAResponse, error)
 	UpdateDeployment(ctx context.Context, in *UpdateDeploymentRequest, opts ...grpc.CallOption) (*UpdateDeploymentResponse, error)
 	DeleteDeployment(ctx context.Context, in *DeleteDeploymentRequest, opts ...grpc.CallOption) (*DeleteDeploymentResponse, error)
+	DescribeService(ctx context.Context, in *DescribeServiceRequest, opts ...grpc.CallOption) (*DescribeServiceResponse, error)
+	DeleteService(ctx context.Context, in *DeleteServiceRequest, opts ...grpc.CallOption) (*DeleteServiceResponse, error)
 }
 
 type k8SAPIClient struct {
@@ -107,6 +109,24 @@ func (c *k8SAPIClient) DeleteDeployment(ctx context.Context, in *DeleteDeploymen
 	return out, nil
 }
 
+func (c *k8SAPIClient) DescribeService(ctx context.Context, in *DescribeServiceRequest, opts ...grpc.CallOption) (*DescribeServiceResponse, error) {
+	out := new(DescribeServiceResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/DescribeService", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *k8SAPIClient) DeleteService(ctx context.Context, in *DeleteServiceRequest, opts ...grpc.CallOption) (*DeleteServiceResponse, error) {
+	out := new(DeleteServiceResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/DeleteService", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // K8SAPIServer is the server API for K8SAPI service.
 // All implementations should embed UnimplementedK8SAPIServer
 // for forward compatibility
@@ -119,6 +139,8 @@ type K8SAPIServer interface {
 	DeleteHPA(context.Context, *DeleteHPARequest) (*DeleteHPAResponse, error)
 	UpdateDeployment(context.Context, *UpdateDeploymentRequest) (*UpdateDeploymentResponse, error)
 	DeleteDeployment(context.Context, *DeleteDeploymentRequest) (*DeleteDeploymentResponse, error)
+	DescribeService(context.Context, *DescribeServiceRequest) (*DescribeServiceResponse, error)
+	DeleteService(context.Context, *DeleteServiceRequest) (*DeleteServiceResponse, error)
 }
 
 // UnimplementedK8SAPIServer should be embedded to have forward compatible implementations.
@@ -148,6 +170,12 @@ func (UnimplementedK8SAPIServer) UpdateDeployment(context.Context, *UpdateDeploy
 }
 func (UnimplementedK8SAPIServer) DeleteDeployment(context.Context, *DeleteDeploymentRequest) (*DeleteDeploymentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteDeployment not implemented")
+}
+func (UnimplementedK8SAPIServer) DescribeService(context.Context, *DescribeServiceRequest) (*DescribeServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DescribeService not implemented")
+}
+func (UnimplementedK8SAPIServer) DeleteService(context.Context, *DeleteServiceRequest) (*DeleteServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteService not implemented")
 }
 
 // UnsafeK8SAPIServer may be embedded to opt out of forward compatibility for this service.
@@ -305,6 +333,42 @@ func _K8SAPI_DeleteDeployment_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _K8SAPI_DescribeService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DescribeServiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).DescribeService(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/DescribeService",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).DescribeService(ctx, req.(*DescribeServiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _K8SAPI_DeleteService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteServiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).DeleteService(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/DeleteService",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).DeleteService(ctx, req.(*DeleteServiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _K8SAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "clutch.k8s.v1.K8sAPI",
 	HandlerType: (*K8SAPIServer)(nil),
@@ -340,6 +404,14 @@ var _K8SAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteDeployment",
 			Handler:    _K8SAPI_DeleteDeployment_Handler,
+		},
+		{
+			MethodName: "DescribeService",
+			Handler:    _K8SAPI_DescribeService_Handler,
+		},
+		{
+			MethodName: "DeleteService",
+			Handler:    _K8SAPI_DeleteService_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

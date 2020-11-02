@@ -7590,6 +7590,34 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public deleteDeployment(request: clutch.k8s.v1.IDeleteDeploymentRequest): Promise<clutch.k8s.v1.DeleteDeploymentResponse>;
+
+                /**
+                 * Calls DescribeService.
+                 * @param request DescribeServiceRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DescribeServiceResponse
+                 */
+                public describeService(request: clutch.k8s.v1.IDescribeServiceRequest, callback: clutch.k8s.v1.K8sAPI.DescribeServiceCallback): void;
+
+                /**
+                 * Calls DescribeService.
+                 * @param request DescribeServiceRequest message or plain object
+                 * @returns Promise
+                 */
+                public describeService(request: clutch.k8s.v1.IDescribeServiceRequest): Promise<clutch.k8s.v1.DescribeServiceResponse>;
+
+                /**
+                 * Calls DeleteService.
+                 * @param request DeleteServiceRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DeleteServiceResponse
+                 */
+                public deleteService(request: clutch.k8s.v1.IDeleteServiceRequest, callback: clutch.k8s.v1.K8sAPI.DeleteServiceCallback): void;
+
+                /**
+                 * Calls DeleteService.
+                 * @param request DeleteServiceRequest message or plain object
+                 * @returns Promise
+                 */
+                public deleteService(request: clutch.k8s.v1.IDeleteServiceRequest): Promise<clutch.k8s.v1.DeleteServiceResponse>;
             }
 
             namespace K8sAPI {
@@ -7649,6 +7677,20 @@ export namespace clutch {
                  * @param [response] DeleteDeploymentResponse
                  */
                 type DeleteDeploymentCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteDeploymentResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeService}.
+                 * @param error Error, if any
+                 * @param [response] DescribeServiceResponse
+                 */
+                type DescribeServiceCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribeServiceResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteService}.
+                 * @param error Error, if any
+                 * @param [response] DeleteServiceResponse
+                 */
+                type DeleteServiceCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteServiceResponse) => void;
             }
 
             /** Properties of a DescribePodRequest. */
@@ -9137,6 +9179,325 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a Service. */
+            interface IService {
+
+                /** Service cluster */
+                cluster?: (string|null);
+
+                /** Service namespace */
+                namespace?: (string|null);
+
+                /** Service name */
+                name?: (string|null);
+
+                /** Service type */
+                type?: (clutch.k8s.v1.Service.Type|null);
+
+                /** Service labels */
+                labels?: ({ [k: string]: string }|null);
+
+                /** Service annotations */
+                annotations?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a Service. */
+            class Service implements IService {
+
+                /**
+                 * Constructs a new Service.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IService);
+
+                /** Service cluster. */
+                public cluster: string;
+
+                /** Service namespace. */
+                public namespace: string;
+
+                /** Service name. */
+                public name: string;
+
+                /** Service type. */
+                public type: clutch.k8s.v1.Service.Type;
+
+                /** Service labels. */
+                public labels: { [k: string]: string };
+
+                /** Service annotations. */
+                public annotations: { [k: string]: string };
+
+                /**
+                 * Verifies a Service message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Service message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Service
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Service;
+
+                /**
+                 * Creates a plain object from a Service message. Also converts values to other types if specified.
+                 * @param message Service
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.Service, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Service to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace Service {
+
+                /** Type enum. */
+                enum Type {
+                    UNSPECIFIED = 0,
+                    UNKNOWN = 1,
+                    CLUSTER_IP = 2,
+                    NODE_PORT = 3,
+                    LOAD_BALANCER = 4,
+                    EXTERNAL_NAME = 5
+                }
+            }
+
+            /** Properties of a DescribeServiceRequest. */
+            interface IDescribeServiceRequest {
+
+                /** DescribeServiceRequest clientset */
+                clientset?: (string|null);
+
+                /** DescribeServiceRequest cluster */
+                cluster?: (string|null);
+
+                /** DescribeServiceRequest namespace */
+                namespace?: (string|null);
+
+                /** DescribeServiceRequest name */
+                name?: (string|null);
+
+                /** DescribeServiceRequest labels */
+                labels?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a DescribeServiceRequest. */
+            class DescribeServiceRequest implements IDescribeServiceRequest {
+
+                /**
+                 * Constructs a new DescribeServiceRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeServiceRequest);
+
+                /** DescribeServiceRequest clientset. */
+                public clientset: string;
+
+                /** DescribeServiceRequest cluster. */
+                public cluster: string;
+
+                /** DescribeServiceRequest namespace. */
+                public namespace: string;
+
+                /** DescribeServiceRequest name. */
+                public name: string;
+
+                /** DescribeServiceRequest labels. */
+                public labels: { [k: string]: string };
+
+                /**
+                 * Verifies a DescribeServiceRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeServiceRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeServiceRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeServiceRequest;
+
+                /**
+                 * Creates a plain object from a DescribeServiceRequest message. Also converts values to other types if specified.
+                 * @param message DescribeServiceRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeServiceRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeServiceRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DescribeServiceResponse. */
+            interface IDescribeServiceResponse {
+
+                /** DescribeServiceResponse service */
+                service?: (clutch.k8s.v1.IService|null);
+            }
+
+            /** Represents a DescribeServiceResponse. */
+            class DescribeServiceResponse implements IDescribeServiceResponse {
+
+                /**
+                 * Constructs a new DescribeServiceResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeServiceResponse);
+
+                /** DescribeServiceResponse service. */
+                public service?: (clutch.k8s.v1.IService|null);
+
+                /**
+                 * Verifies a DescribeServiceResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeServiceResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeServiceResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeServiceResponse;
+
+                /**
+                 * Creates a plain object from a DescribeServiceResponse message. Also converts values to other types if specified.
+                 * @param message DescribeServiceResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeServiceResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeServiceResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteServiceRequest. */
+            interface IDeleteServiceRequest {
+
+                /** DeleteServiceRequest clientset */
+                clientset?: (string|null);
+
+                /** DeleteServiceRequest cluster */
+                cluster?: (string|null);
+
+                /** DeleteServiceRequest namespace */
+                namespace?: (string|null);
+
+                /** DeleteServiceRequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a DeleteServiceRequest. */
+            class DeleteServiceRequest implements IDeleteServiceRequest {
+
+                /**
+                 * Constructs a new DeleteServiceRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteServiceRequest);
+
+                /** DeleteServiceRequest clientset. */
+                public clientset: string;
+
+                /** DeleteServiceRequest cluster. */
+                public cluster: string;
+
+                /** DeleteServiceRequest namespace. */
+                public namespace: string;
+
+                /** DeleteServiceRequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a DeleteServiceRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteServiceRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteServiceRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteServiceRequest;
+
+                /**
+                 * Creates a plain object from a DeleteServiceRequest message. Also converts values to other types if specified.
+                 * @param message DeleteServiceRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteServiceRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteServiceRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteServiceResponse. */
+            interface IDeleteServiceResponse {
+            }
+
+            /** Represents a DeleteServiceResponse. */
+            class DeleteServiceResponse implements IDeleteServiceResponse {
+
+                /**
+                 * Constructs a new DeleteServiceResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteServiceResponse);
+
+                /**
+                 * Verifies a DeleteServiceResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteServiceResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteServiceResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteServiceResponse;
+
+                /**
+                 * Creates a plain object from a DeleteServiceResponse message. Also converts values to other types if specified.
+                 * @param message DeleteServiceResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteServiceResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteServiceResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a NullableString. */
             interface INullableString {
 
@@ -10586,6 +10947,66 @@ export namespace clutch {
 
                     /**
                      * Converts this Deployment to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a Service. */
+                interface IService {
+
+                    /** Service name */
+                    name?: (string|null);
+
+                    /** Service clientset */
+                    clientset?: (string|null);
+
+                    /** Service namespace */
+                    namespace?: (string|null);
+                }
+
+                /** Represents a Service. */
+                class Service implements IService {
+
+                    /**
+                     * Constructs a new Service.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.k8s.v1.IService);
+
+                    /** Service name. */
+                    public name: string;
+
+                    /** Service clientset. */
+                    public clientset: string;
+
+                    /** Service namespace. */
+                    public namespace: string;
+
+                    /**
+                     * Verifies a Service message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Service message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Service
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.k8s.v1.Service;
+
+                    /**
+                     * Creates a plain object from a Service message. Also converts values to other types if specified.
+                     * @param message Service
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.k8s.v1.Service, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Service to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
