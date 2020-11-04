@@ -5,7 +5,6 @@ import { clutch as IClutch } from "@clutch-sh/api";
 import type { BaseWorkflowProps } from "@clutch-sh/core";
 import { ButtonGroup, client } from "@clutch-sh/core";
 import { yupResolver } from "@hookform/resolvers/yup";
-import styled from "styled-components";
 import * as yup from "yup";
 
 import Dialog from "./dialog";
@@ -16,13 +15,6 @@ enum FaultType {
   ABORT = "Abort",
   LATENCY = "Latency",
 }
-
-const StyledForm = styled.form`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
 
 const faultInjectionTypeItems = [
   {
@@ -132,7 +124,7 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   });
 
   return (
-    <StyledForm onSubmit={handleSubmit(handleOnSubmit)}>
+    <form onSubmit={handleSubmit(handleOnSubmit)}>
       <FormContent state={experimentDataState} items={fields} register={register} errors={errors} />
       <ButtonGroup
         buttons={[
@@ -148,7 +140,7 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
           },
         ]}
       />
-    </StyledForm>
+    </form>
   );
 };
 
