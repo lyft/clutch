@@ -5,7 +5,7 @@ import type { ButtonProps } from "../button";
 import { Button } from "../button";
 
 export default {
-  title: "Core/Button",
+  title: "Core/Buttons/Button",
   component: Button,
   argTypes: {
     onClick: { action: "onClick event" },
