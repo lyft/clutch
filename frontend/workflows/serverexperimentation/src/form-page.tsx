@@ -30,9 +30,7 @@ const FormPage: React.FC<FormPageProps> = ({ heading, error, children }) => {
         <Heading variant="h5">
           <strong>{heading}</strong>
         </Heading>
-        <SizedGrid>
-          <SizedGrid>{children}</SizedGrid>
-        </SizedGrid>
+        <SizedGrid>{children}</SizedGrid>
       </Container>
     </Spacer>
   );
