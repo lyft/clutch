@@ -1838,6 +1838,260 @@ var _ interface {
 	ErrorName() string
 } = DeleteDeploymentResponseValidationError{}
 
+// Validate checks the field values on StatefulSet with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *StatefulSet) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Cluster
+
+	// no validation rules for Namespace
+
+	// no validation rules for Name
+
+	// no validation rules for Labels
+
+	// no validation rules for Annotations
+
+	return nil
+}
+
+// StatefulSetValidationError is the validation error returned by
+// StatefulSet.Validate if the designated constraints aren't met.
+type StatefulSetValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StatefulSetValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StatefulSetValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StatefulSetValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StatefulSetValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StatefulSetValidationError) ErrorName() string { return "StatefulSetValidationError" }
+
+// Error satisfies the builtin error interface
+func (e StatefulSetValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStatefulSet.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StatefulSetValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StatefulSetValidationError{}
+
+// Validate checks the field values on UpdateStatefulSetRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpdateStatefulSetRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return UpdateStatefulSetRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return UpdateStatefulSetRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return UpdateStatefulSetRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetName()) < 1 {
+		return UpdateStatefulSetRequestValidationError{
+			field:  "Name",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if m.GetFields() == nil {
+		return UpdateStatefulSetRequestValidationError{
+			field:  "Fields",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetFields()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateStatefulSetRequestValidationError{
+				field:  "Fields",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// UpdateStatefulSetRequestValidationError is the validation error returned by
+// UpdateStatefulSetRequest.Validate if the designated constraints aren't met.
+type UpdateStatefulSetRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateStatefulSetRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateStatefulSetRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateStatefulSetRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateStatefulSetRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateStatefulSetRequestValidationError) ErrorName() string {
+	return "UpdateStatefulSetRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateStatefulSetRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateStatefulSetRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateStatefulSetRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateStatefulSetRequestValidationError{}
+
+// Validate checks the field values on UpdateStatefulSetResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpdateStatefulSetResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// UpdateStatefulSetResponseValidationError is the validation error returned by
+// UpdateStatefulSetResponse.Validate if the designated constraints aren't met.
+type UpdateStatefulSetResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateStatefulSetResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateStatefulSetResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateStatefulSetResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateStatefulSetResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateStatefulSetResponseValidationError) ErrorName() string {
+	return "UpdateStatefulSetResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateStatefulSetResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateStatefulSetResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateStatefulSetResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateStatefulSetResponseValidationError{}
+
 // Validate checks the field values on Service with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *Service) Validate() error {
@@ -2875,3 +3129,97 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = UpdateDeploymentRequest_FieldsValidationError{}
+
+// Validate checks the field values on UpdateStatefulSetRequest_Fields with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpdateStatefulSetRequest_Fields) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for key, val := range m.GetLabels() {
+		_ = val
+
+		if len(key) < 1 {
+			return UpdateStatefulSetRequest_FieldsValidationError{
+				field:  fmt.Sprintf("Labels[%v]", key),
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+		// no validation rules for Labels[key]
+	}
+
+	for key, val := range m.GetAnnotations() {
+		_ = val
+
+		if len(key) < 1 {
+			return UpdateStatefulSetRequest_FieldsValidationError{
+				field:  fmt.Sprintf("Annotations[%v]", key),
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+		// no validation rules for Annotations[key]
+	}
+
+	return nil
+}
+
+// UpdateStatefulSetRequest_FieldsValidationError is the validation error
+// returned by UpdateStatefulSetRequest_Fields.Validate if the designated
+// constraints aren't met.
+type UpdateStatefulSetRequest_FieldsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateStatefulSetRequest_FieldsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateStatefulSetRequest_FieldsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateStatefulSetRequest_FieldsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateStatefulSetRequest_FieldsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateStatefulSetRequest_FieldsValidationError) ErrorName() string {
+	return "UpdateStatefulSetRequest_FieldsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateStatefulSetRequest_FieldsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateStatefulSetRequest_Fields.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateStatefulSetRequest_FieldsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateStatefulSetRequest_FieldsValidationError{}

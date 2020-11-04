@@ -91,6 +91,14 @@ service K8sAPI {
     };
     option (clutch.api.v1.action).type = DELETE;
   }
+
+  rpc UpdateStatefulSet(UpdateStatefulSetRequest) returns (UpdateStatefulSetResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/updateStatefulSet"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = UPDATE;
+  }
 }
 
 message DescribePodRequest {
@@ -335,6 +343,47 @@ message DeleteDeploymentRequest {
 message DeleteDeploymentResponse {
 }
 
+message StatefulSet {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.StatefulSet",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string cluster = 1;
+  string namespace = 2;
+  string name = 3;
+
+  map<string, string> labels = 4;
+  map<string, string> annotations = 5;
+}
+
+message UpdateStatefulSetRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.StatefulSet",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+
+  // Fields are merged with the existing statefulset object, existing
+  // labels and annotations are not deleted in the update process.
+  // Currently this api does not support removing Fields from the statefulset object.
+  // A two way strategic merge is done on the old and new statefulset objects.
+  // https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-a-json-merge-patch-to-update-a-deployment
+  message Fields {
+    map<string, string> labels = 1 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+    map<string, string> annotations = 2 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+  }
+
+  Fields fields = 5 [ (validate.rules).message = {required : true} ];
+}
+
+message UpdateStatefulSetResponse {
+}
+
 message Service {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.Service",
@@ -378,7 +427,6 @@ message DescribeServiceResponse {
 
   Service service = 1;
 }
-
 message DeleteServiceRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.Service",

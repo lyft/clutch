@@ -18152,6 +18152,39 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateStatefulSet}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef UpdateStatefulSetCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.UpdateStatefulSetResponse} [response] UpdateStatefulSetResponse
+                 */
+
+                /**
+                 * Calls UpdateStatefulSet.
+                 * @function updateStatefulSet
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IUpdateStatefulSetRequest} request UpdateStatefulSetRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.UpdateStatefulSetCallback} callback Node-style callback called with the error, if any, and UpdateStatefulSetResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.updateStatefulSet = function updateStatefulSet(request, callback) {
+                    return this.rpcCall(updateStatefulSet, $root.clutch.k8s.v1.UpdateStatefulSetRequest, $root.clutch.k8s.v1.UpdateStatefulSetResponse, request, callback);
+                }, "name", { value: "UpdateStatefulSet" });
+
+                /**
+                 * Calls UpdateStatefulSet.
+                 * @function updateStatefulSet
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IUpdateStatefulSetRequest} request UpdateStatefulSetRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.UpdateStatefulSetResponse>} Promise
+                 * @variation 2
+                 */
+
                 return K8sAPI;
             })();
 
@@ -21726,6 +21759,605 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return DeleteDeploymentResponse;
+            })();
+
+            v1.StatefulSet = (function() {
+
+                /**
+                 * Properties of a StatefulSet.
+                 * @memberof clutch.k8s.v1
+                 * @interface IStatefulSet
+                 * @property {string|null} [cluster] StatefulSet cluster
+                 * @property {string|null} [namespace] StatefulSet namespace
+                 * @property {string|null} [name] StatefulSet name
+                 * @property {Object.<string,string>|null} [labels] StatefulSet labels
+                 * @property {Object.<string,string>|null} [annotations] StatefulSet annotations
+                 */
+
+                /**
+                 * Constructs a new StatefulSet.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a StatefulSet.
+                 * @implements IStatefulSet
+                 * @constructor
+                 * @param {clutch.k8s.v1.IStatefulSet=} [properties] Properties to set
+                 */
+                function StatefulSet(properties) {
+                    this.labels = {};
+                    this.annotations = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * StatefulSet cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @instance
+                 */
+                StatefulSet.prototype.cluster = "";
+
+                /**
+                 * StatefulSet namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @instance
+                 */
+                StatefulSet.prototype.namespace = "";
+
+                /**
+                 * StatefulSet name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @instance
+                 */
+                StatefulSet.prototype.name = "";
+
+                /**
+                 * StatefulSet labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @instance
+                 */
+                StatefulSet.prototype.labels = $util.emptyObject;
+
+                /**
+                 * StatefulSet annotations.
+                 * @member {Object.<string,string>} annotations
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @instance
+                 */
+                StatefulSet.prototype.annotations = $util.emptyObject;
+
+                /**
+                 * Verifies a StatefulSet message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                StatefulSet.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                        if (!$util.isObject(message.annotations))
+                            return "annotations: object expected";
+                        let key = Object.keys(message.annotations);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.annotations[key[i]]))
+                                return "annotations: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a StatefulSet message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.StatefulSet} StatefulSet
+                 */
+                StatefulSet.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.StatefulSet)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.StatefulSet();
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.StatefulSet.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    if (object.annotations) {
+                        if (typeof object.annotations !== "object")
+                            throw TypeError(".clutch.k8s.v1.StatefulSet.annotations: object expected");
+                        message.annotations = {};
+                        for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
+                            message.annotations[keys[i]] = String(object.annotations[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a StatefulSet message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @static
+                 * @param {clutch.k8s.v1.StatefulSet} message StatefulSet
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                StatefulSet.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults) {
+                        object.labels = {};
+                        object.annotations = {};
+                    }
+                    if (options.defaults) {
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    let keys2;
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
+                        object.annotations = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this StatefulSet to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                StatefulSet.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return StatefulSet;
+            })();
+
+            v1.UpdateStatefulSetRequest = (function() {
+
+                /**
+                 * Properties of an UpdateStatefulSetRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IUpdateStatefulSetRequest
+                 * @property {string|null} [clientset] UpdateStatefulSetRequest clientset
+                 * @property {string|null} [cluster] UpdateStatefulSetRequest cluster
+                 * @property {string|null} [namespace] UpdateStatefulSetRequest namespace
+                 * @property {string|null} [name] UpdateStatefulSetRequest name
+                 * @property {clutch.k8s.v1.UpdateStatefulSetRequest.IFields|null} [fields] UpdateStatefulSetRequest fields
+                 */
+
+                /**
+                 * Constructs a new UpdateStatefulSetRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an UpdateStatefulSetRequest.
+                 * @implements IUpdateStatefulSetRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IUpdateStatefulSetRequest=} [properties] Properties to set
+                 */
+                function UpdateStatefulSetRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * UpdateStatefulSetRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @instance
+                 */
+                UpdateStatefulSetRequest.prototype.clientset = "";
+
+                /**
+                 * UpdateStatefulSetRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @instance
+                 */
+                UpdateStatefulSetRequest.prototype.cluster = "";
+
+                /**
+                 * UpdateStatefulSetRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @instance
+                 */
+                UpdateStatefulSetRequest.prototype.namespace = "";
+
+                /**
+                 * UpdateStatefulSetRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @instance
+                 */
+                UpdateStatefulSetRequest.prototype.name = "";
+
+                /**
+                 * UpdateStatefulSetRequest fields.
+                 * @member {clutch.k8s.v1.UpdateStatefulSetRequest.IFields|null|undefined} fields
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @instance
+                 */
+                UpdateStatefulSetRequest.prototype.fields = null;
+
+                /**
+                 * Verifies an UpdateStatefulSetRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                UpdateStatefulSetRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.fields != null && message.hasOwnProperty("fields")) {
+                        let error = $root.clutch.k8s.v1.UpdateStatefulSetRequest.Fields.verify(message.fields);
+                        if (error)
+                            return "fields." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates an UpdateStatefulSetRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.UpdateStatefulSetRequest} UpdateStatefulSetRequest
+                 */
+                UpdateStatefulSetRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.UpdateStatefulSetRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.UpdateStatefulSetRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.fields != null) {
+                        if (typeof object.fields !== "object")
+                            throw TypeError(".clutch.k8s.v1.UpdateStatefulSetRequest.fields: object expected");
+                        message.fields = $root.clutch.k8s.v1.UpdateStatefulSetRequest.Fields.fromObject(object.fields);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an UpdateStatefulSetRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @static
+                 * @param {clutch.k8s.v1.UpdateStatefulSetRequest} message UpdateStatefulSetRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                UpdateStatefulSetRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                        object.fields = null;
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.fields != null && message.hasOwnProperty("fields"))
+                        object.fields = $root.clutch.k8s.v1.UpdateStatefulSetRequest.Fields.toObject(message.fields, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this UpdateStatefulSetRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                UpdateStatefulSetRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                UpdateStatefulSetRequest.Fields = (function() {
+
+                    /**
+                     * Properties of a Fields.
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                     * @interface IFields
+                     * @property {Object.<string,string>|null} [labels] Fields labels
+                     * @property {Object.<string,string>|null} [annotations] Fields annotations
+                     */
+
+                    /**
+                     * Constructs a new Fields.
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                     * @classdesc Represents a Fields.
+                     * @implements IFields
+                     * @constructor
+                     * @param {clutch.k8s.v1.UpdateStatefulSetRequest.IFields=} [properties] Properties to set
+                     */
+                    function Fields(properties) {
+                        this.labels = {};
+                        this.annotations = {};
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Fields labels.
+                     * @member {Object.<string,string>} labels
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+                     * @instance
+                     */
+                    Fields.prototype.labels = $util.emptyObject;
+
+                    /**
+                     * Fields annotations.
+                     * @member {Object.<string,string>} annotations
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+                     * @instance
+                     */
+                    Fields.prototype.annotations = $util.emptyObject;
+
+                    /**
+                     * Verifies a Fields message.
+                     * @function verify
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Fields.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.labels != null && message.hasOwnProperty("labels")) {
+                            if (!$util.isObject(message.labels))
+                                return "labels: object expected";
+                            let key = Object.keys(message.labels);
+                            for (let i = 0; i < key.length; ++i)
+                                if (!$util.isString(message.labels[key[i]]))
+                                    return "labels: string{k:string} expected";
+                        }
+                        if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                            if (!$util.isObject(message.annotations))
+                                return "annotations: object expected";
+                            let key = Object.keys(message.annotations);
+                            for (let i = 0; i < key.length; ++i)
+                                if (!$util.isString(message.annotations[key[i]]))
+                                    return "annotations: string{k:string} expected";
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Fields message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.k8s.v1.UpdateStatefulSetRequest.Fields} Fields
+                     */
+                    Fields.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.k8s.v1.UpdateStatefulSetRequest.Fields)
+                            return object;
+                        let message = new $root.clutch.k8s.v1.UpdateStatefulSetRequest.Fields();
+                        if (object.labels) {
+                            if (typeof object.labels !== "object")
+                                throw TypeError(".clutch.k8s.v1.UpdateStatefulSetRequest.Fields.labels: object expected");
+                            message.labels = {};
+                            for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                                message.labels[keys[i]] = String(object.labels[keys[i]]);
+                        }
+                        if (object.annotations) {
+                            if (typeof object.annotations !== "object")
+                                throw TypeError(".clutch.k8s.v1.UpdateStatefulSetRequest.Fields.annotations: object expected");
+                            message.annotations = {};
+                            for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
+                                message.annotations[keys[i]] = String(object.annotations[keys[i]]);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Fields message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+                     * @static
+                     * @param {clutch.k8s.v1.UpdateStatefulSetRequest.Fields} message Fields
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Fields.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.objects || options.defaults) {
+                            object.labels = {};
+                            object.annotations = {};
+                        }
+                        let keys2;
+                        if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                            object.labels = {};
+                            for (let j = 0; j < keys2.length; ++j)
+                                object.labels[keys2[j]] = message.labels[keys2[j]];
+                        }
+                        if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
+                            object.annotations = {};
+                            for (let j = 0; j < keys2.length; ++j)
+                                object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Fields to JSON.
+                     * @function toJSON
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Fields.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Fields;
+                })();
+
+                return UpdateStatefulSetRequest;
+            })();
+
+            v1.UpdateStatefulSetResponse = (function() {
+
+                /**
+                 * Properties of an UpdateStatefulSetResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IUpdateStatefulSetResponse
+                 */
+
+                /**
+                 * Constructs a new UpdateStatefulSetResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an UpdateStatefulSetResponse.
+                 * @implements IUpdateStatefulSetResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IUpdateStatefulSetResponse=} [properties] Properties to set
+                 */
+                function UpdateStatefulSetResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies an UpdateStatefulSetResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                UpdateStatefulSetResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an UpdateStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.UpdateStatefulSetResponse} UpdateStatefulSetResponse
+                 */
+                UpdateStatefulSetResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.UpdateStatefulSetResponse)
+                        return object;
+                    return new $root.clutch.k8s.v1.UpdateStatefulSetResponse();
+                };
+
+                /**
+                 * Creates a plain object from an UpdateStatefulSetResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetResponse
+                 * @static
+                 * @param {clutch.k8s.v1.UpdateStatefulSetResponse} message UpdateStatefulSetResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                UpdateStatefulSetResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this UpdateStatefulSetResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                UpdateStatefulSetResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return UpdateStatefulSetResponse;
             })();
 
             v1.Service = (function() {
@@ -26014,6 +26646,141 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return Deployment;
+                })();
+
+                v1.StatefulSet = (function() {
+
+                    /**
+                     * Properties of a StatefulSet.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @interface IStatefulSet
+                     * @property {string|null} [name] StatefulSet name
+                     * @property {string|null} [clientset] StatefulSet clientset
+                     * @property {string|null} [namespace] StatefulSet namespace
+                     */
+
+                    /**
+                     * Constructs a new StatefulSet.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @classdesc Represents a StatefulSet.
+                     * @implements IStatefulSet
+                     * @constructor
+                     * @param {clutch.resolver.k8s.v1.IStatefulSet=} [properties] Properties to set
+                     */
+                    function StatefulSet(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * StatefulSet name.
+                     * @member {string} name
+                     * @memberof clutch.resolver.k8s.v1.StatefulSet
+                     * @instance
+                     */
+                    StatefulSet.prototype.name = "";
+
+                    /**
+                     * StatefulSet clientset.
+                     * @member {string} clientset
+                     * @memberof clutch.resolver.k8s.v1.StatefulSet
+                     * @instance
+                     */
+                    StatefulSet.prototype.clientset = "";
+
+                    /**
+                     * StatefulSet namespace.
+                     * @member {string} namespace
+                     * @memberof clutch.resolver.k8s.v1.StatefulSet
+                     * @instance
+                     */
+                    StatefulSet.prototype.namespace = "";
+
+                    /**
+                     * Verifies a StatefulSet message.
+                     * @function verify
+                     * @memberof clutch.resolver.k8s.v1.StatefulSet
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    StatefulSet.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            if (!$util.isString(message.clientset))
+                                return "clientset: string expected";
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            if (!$util.isString(message.namespace))
+                                return "namespace: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a StatefulSet message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.resolver.k8s.v1.StatefulSet
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.resolver.k8s.v1.StatefulSet} StatefulSet
+                     */
+                    StatefulSet.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.resolver.k8s.v1.StatefulSet)
+                            return object;
+                        let message = new $root.clutch.resolver.k8s.v1.StatefulSet();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.clientset != null)
+                            message.clientset = String(object.clientset);
+                        if (object.namespace != null)
+                            message.namespace = String(object.namespace);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a StatefulSet message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.resolver.k8s.v1.StatefulSet
+                     * @static
+                     * @param {clutch.resolver.k8s.v1.StatefulSet} message StatefulSet
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    StatefulSet.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.clientset = "";
+                            object.namespace = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            object.clientset = message.clientset;
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            object.namespace = message.namespace;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this StatefulSet to JSON.
+                     * @function toJSON
+                     * @memberof clutch.resolver.k8s.v1.StatefulSet
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    StatefulSet.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return StatefulSet;
                 })();
 
                 v1.Service = (function() {
