@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { clutch as IClutch } from "@clutch-sh/api";
-import { BaseWorkflowProps, ButtonGroup, client, Error, TextField } from "@clutch-sh/core";
-import { PageLayout } from "@clutch-sh/experimentation";
+import { BaseWorkflowProps, ButtonGroup, client, TextField } from "@clutch-sh/core";
 import styled from "styled-components";
 
+import PageLayout from "./core/page-layout";
 import { propertyToString } from "./property-helpers";
 
 export const Form = styled.form`

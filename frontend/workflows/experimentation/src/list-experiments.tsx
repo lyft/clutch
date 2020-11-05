@@ -1,16 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { BaseWorkflowProps, ButtonGroup, client, Error } from "@clutch-sh/core";
-import { PageLayout } from "@clutch-sh/experimentation";
-import { Container } from "@material-ui/core";
-import styled from "styled-components";
+import { BaseWorkflowProps, ButtonGroup, client } from "@clutch-sh/core";
 
+import PageLayout from "./core/page-layout";
 import { Column, ListView } from "./list-view";
-
-const Layout = styled(Container)`
-  padding: 5% 0;
-`;
 
 interface ExperimentTypeLinkProps {
   displayName: string;
