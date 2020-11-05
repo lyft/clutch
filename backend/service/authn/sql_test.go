@@ -10,9 +10,7 @@ import (
 
 func TestCreateOrUpdateUser(t *testing.T) {
 	db, mock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
-	if err != nil {
-		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
-	}
+	assert.NoError(t, err)
 	defer db.Close()
 
 	id := "foo@example.com"
