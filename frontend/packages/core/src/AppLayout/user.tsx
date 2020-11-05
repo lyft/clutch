@@ -33,6 +33,10 @@ const Initials = styled(Typography)`
   `}
 `;
 
+interface JwtToken {
+  sub: string;
+}
+
 const userId = (): string => {
   // Check JWT token for subject and display if available.
   const token = Cookies.get("token");
@@ -41,7 +45,7 @@ const userId = (): string => {
   }
   let subject = "Unknown user";
   try {
-    const decoded = jwtDecode(token);
+    const decoded = jwtDecode(token) as JwtToken;
     if (decoded?.sub) {
       subject = decoded.sub;
     }
