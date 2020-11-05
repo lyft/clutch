@@ -15,6 +15,7 @@
     {"path": "../../api"},
     {"path": "../../packages/core"},
     {"path": "../../packages/data-layout"},
+    {"path": "../../packages/experimentation"},
     {"path": "../../packages/wizard"},
   ]
 }
