@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { ButtonGroup, client, Error } from "@clutch-sh/core";
+import { BaseWorkflowProps, ButtonGroup, client, Error } from "@clutch-sh/core";
+import { PageLayout } from "@clutch-sh/experimentation";
 import { Container } from "@material-ui/core";
 import styled from "styled-components";
 
@@ -16,12 +17,12 @@ interface ExperimentTypeLinkProps {
   path: string;
 }
 
-interface ListExperimentsProps {
+interface ListExperimentsProps extends BaseWorkflowProps {
   columns: Column[];
   links: ExperimentTypeLinkProps[];
 }
 
-const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, links }) => {
+const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, links }) => {
   const [experiments, setExperiments] = useState<
     IClutch.chaos.experimentation.v1.ListViewItem[] | undefined
   >(undefined);
@@ -52,8 +53,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, links }) => 
   });
 
   return (
-    <Layout>
-      {error && <Error message={error} />}
+    <PageLayout heading={heading} error={error}>
       <ButtonGroup buttons={buttons} />
       <ListView
         columns={columns}
@@ -62,7 +62,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, links }) => 
           handleRowSelection(event, item);
         }}
       />
-    </Layout>
+    </PageLayout>
   );
 };
 
