@@ -19,14 +19,15 @@ type repository struct {
 }
 
 func newRepository() (*repository, error) {
-	svc, ok := service.Registry[postgres.Name]
+	svcName := postgres.Name
+	svc, ok := service.Registry[svcName]
 	if !ok {
-		return nil, fmt.Errorf("no database registered")
+		return nil, fmt.Errorf("database '%s' not registered", svcName)
 	}
 
 	pg, ok := svc.(postgres.Client)
 	if !ok {
-		return nil, fmt.Errorf("database in does not implement the required interface")
+		return nil, fmt.Errorf("database does not implement the required interface")
 	}
 
 	return &repository{db: pg.DB()}, nil
