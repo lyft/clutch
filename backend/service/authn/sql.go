@@ -34,7 +34,7 @@ func newRepository() (*repository, error) {
 }
 
 const createOrUpdateUser = `
-INSERT INTO authn_users (id, provider_refresh_token) VALUES ($1, $2)
+INSERT INTO authn_tokens (id, provider_refresh_token) VALUES ($1, $2)
 ON CONFLICT (id)
 DO UPDATE SET
     provider_refresh_token = EXCLUDED.provider_refresh_token
