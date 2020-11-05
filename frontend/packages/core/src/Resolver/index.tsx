@@ -121,9 +121,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
         <Error message={state.schemaFetchError} onRetry={() => loadSchemas(type, dispatch)} />
       ) : (
         <Loadable overlay isLoading={state.resolverLoading}>
-          {process.env.REACT_APP_DEBUG_FORMS === "true" && (
-            <DevTool control={validation.control} />
-          )}
+          {process.env.REACT_APP_DEBUG_FORMS === "true" && <DevTool control={validation.control} />}
           <Grid container direction="column" alignItems="center">
             {(variant === "dual" || variant === "query") && (
               <Form onSubmit={validation.handleSubmit(submitHandler)} noValidate>
