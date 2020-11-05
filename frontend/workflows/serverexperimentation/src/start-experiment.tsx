@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { clutch as IClutch } from "@clutch-sh/api";
 import type { BaseWorkflowProps } from "@clutch-sh/core";
 import { ButtonGroup, client } from "@clutch-sh/core";
+import { PageLayout } from "@clutch-sh/experimentation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 import Dialog from "./dialog";
 import { FormContent } from "./form-content";
-import FormPage from "./form-page";
 
 enum FaultType {
   ABORT = "Abort",
@@ -195,7 +195,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
   };
 
   return (
-    <FormPage heading={heading} error={error}>
+    <PageLayout heading={heading} error={error}>
       <ExperimentDetails
         upstreamClusterTypeSelectionEnabled={upstreamClusterTypeSelectionEnabled}
         onStart={experimentDetails => setExperimentData(experimentDetails)}
@@ -215,7 +215,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
           { label: "No", onAction: () => setExperimentData(undefined) },
         ]}
       />
-    </FormPage>
+    </PageLayout>
   );
 };
 

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { clutch as IClutch } from "@clutch-sh/api";
-import { ButtonGroup, client, Error, TextField } from "@clutch-sh/core";
+import { BaseWorkflowProps, ButtonGroup, client, TextField } from "@clutch-sh/core";
 import styled from "styled-components";
 
+import PageLayout from "./core/page-layout";
 import { propertyToString } from "./property-helpers";
 
 export const Form = styled.form`
@@ -13,7 +14,7 @@ export const Form = styled.form`
   width: 100%;
 `;
 
-const ViewExperimentRun: React.FC = () => {
+const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
   const [experiment, setExperiment] = useState<
     IClutch.chaos.experimentation.v1.ExperimentRunDetails | undefined
   >(undefined);
@@ -77,28 +78,29 @@ const ViewExperimentRun: React.FC = () => {
   }
 
   return (
-    <Form>
-      {error && <Error message={error} />}
-      {experiment && (
-        <>
-          {experiment.properties.items.map(property => (
+    <PageLayout heading={heading} error={error}>
+      <Form>
+        {experiment && (
+          <>
+            {experiment.properties.items.map(property => (
+              <TextField
+                key={property.label}
+                label={property.label}
+                defaultValue={propertyToString(property)}
+                InputProps={{ readOnly: true }}
+              />
+            ))}
             <TextField
-              key={property.label}
-              label={property.label}
-              defaultValue={propertyToString(property)}
+              multiline
+              label="Config"
+              defaultValue={JSON.stringify(experiment.config, null, 4)}
               InputProps={{ readOnly: true }}
             />
-          ))}
-          <TextField
-            multiline
-            label="Config"
-            defaultValue={JSON.stringify(experiment.config, null, 4)}
-            InputProps={{ readOnly: true }}
-          />
-          <ButtonGroup buttons={makeButtons()} />
-        </>
-      )}
-    </Form>
+            <ButtonGroup buttons={makeButtons()} />
+          </>
+        )}
+      </Form>
+    </PageLayout>
   );
 };
 

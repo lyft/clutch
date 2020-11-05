@@ -16,12 +16,12 @@ const SizedGrid = styled(Grid)`
   padding: 24px;
 `;
 
-interface FormPageProps {
+interface PageLayoutProps {
   heading: string;
-  error: any;
+  error?: any;
 }
 
-const FormPage: React.FC<FormPageProps> = ({ heading, error, children }) => {
+const PageLayout: React.FC<PageLayoutProps> = ({ heading, error, children }) => {
   const hasError = error !== undefined && error !== "" && error !== null;
   return (
     <Spacer>
@@ -36,4 +36,4 @@ const FormPage: React.FC<FormPageProps> = ({ heading, error, children }) => {
   );
 };
 
-export default FormPage;
+export default PageLayout;

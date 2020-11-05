@@ -12,6 +12,7 @@
     "src/tests/**/*"
   ],
   "references": [
+    {"path": "../experimentation"},
     {"path": "../../api"},
     {"path": "../../packages/core"},
     {"path": "../../packages/data-layout"},
