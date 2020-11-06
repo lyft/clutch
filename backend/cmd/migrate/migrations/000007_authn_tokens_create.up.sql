@@ -1,10 +1,11 @@
-CREATE TYPE token_type AS ENUM ('oidc');
-
 CREATE TABLE authn_tokens(
-  id text,
+  user_id text,
   provider text,
-  type token_type,
+
+  token_type text,
+  id_token bytea,
+  access_token bytea,
   refresh_token bytea,
 
-  PRIMARY KEY(id, provider)
+  PRIMARY KEY(user_id, provider)
 );

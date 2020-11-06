@@ -9,9 +9,14 @@ import (
 	"github.com/lyft/clutch/backend/service/db/postgres"
 )
 
-type authnUser struct {
-	id                   string
-	providerRefreshToken []byte
+type authnToken struct {
+	userID   string
+	provider string
+
+	tokenType    string
+	idToken      []byte
+	accessToken  []byte
+	refreshToken []byte
 }
 
 type repository struct {
@@ -33,22 +38,20 @@ func newRepository() (*repository, error) {
 	return &repository{db: pg.DB()}, nil
 }
 
-const createOrUpdateUser = `
-INSERT INTO authn_tokens (id, provider_refresh_token) VALUES ($1, $2)
-ON CONFLICT (id)
-DO UPDATE SET
-    provider_refresh_token = EXCLUDED.provider_refresh_token
-RETURNING id, provider_refresh_token
+const createOrUpdateProviderToken = `
+INSERT INTO authn_tokens (user_id, provider, token_type, id_token, access_token, refresh_token) VALUES ($1, $2, $3, $4, $5, $6)
+ON CONFLICT DO UPDATE SET
+    user_id = EXCLUDED.user_id,
+    provider = EXCLUDED.provider,
+    token_type = EXCLUDED.token_type,
+    id_token = EXCLUDED.id_token,
+    access_token = EXCLUDED.access_token,
+    refresh_token = EXCLUDED.refresh_token
 `
 
-func (r *repository) createOrUpdateUser(ctx context.Context, id string, providerRefreshToken []byte) (*authnUser, error) {
-	q := r.db.QueryRowContext(ctx, createOrUpdateUser, id, providerRefreshToken)
+func (r *repository) createOrUpdateProviderToken(ctx context.Context, token *authnToken) error {
+	_, err := r.db.ExecContext(ctx, createOrUpdateProviderToken,
+		token.userID, token.provider, token.tokenType, token.idToken, token.accessToken, token.refreshToken)
 
-	ret := &authnUser{}
-	err := q.Scan(&ret.id, &ret.providerRefreshToken)
-	if err != nil {
-		return nil, err
-	}
-
-	return ret, nil
+	return err
 }

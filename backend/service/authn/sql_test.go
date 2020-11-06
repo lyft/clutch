@@ -13,16 +13,21 @@ func TestCreateOrUpdateUser(t *testing.T) {
 	assert.NoError(t, err)
 	defer db.Close()
 
-	id := "foo@example.com"
-	refreshToken := []byte("abdcdefgzzz")
+	tok := &authnToken{
+		userID:       "foo@example.com",
+		provider:     "okta",
+		tokenType:    "oidc",
+		idToken:      []byte("id"),
+		accessToken:  []byte("access"),
+		refreshToken: []byte("refresh"),
+	}
+
+	mock.ExpectExec(createOrUpdateProviderToken).
+		WithArgs(tok.userID, tok.provider, tok.tokenType, tok.idToken, tok.accessToken, tok.refreshToken).
+		WillReturnResult(sqlmock.NewResult(0, 1))
 
 	r := &repository{db: db}
-	mock.ExpectQuery(createOrUpdateUser).
-		WithArgs(id, refreshToken).
-		WillReturnRows(sqlmock.NewRows([]string{"id", "provider_refresh_token"}).AddRow(id, refreshToken))
-
-	u, err := r.createOrUpdateUser(context.Background(), id, refreshToken)
+	err = r.createOrUpdateProviderToken(context.Background(), tok)
 	assert.NoError(t, err)
-	assert.Equal(t, id, u.id)
-	assert.Equal(t, refreshToken, u.providerRefreshToken)
+	//assert.NoError(t, mock.ExpectationsWereMet())
 }

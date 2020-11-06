@@ -8,6 +8,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net"
 	"net/http"
 	"net/url"
 	"strings"
@@ -69,6 +70,7 @@ type OIDCProvider struct {
 	httpClient *http.Client
 
 	sessionSecret string
+	issuer        string
 
 	cryptographer *cryptographer
 	db            *repository
@@ -157,12 +159,31 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 
 	// Encrypt and store the refresh token.
 	if p.cryptographer != nil {
-		t, err := p.cryptographer.Encrypt([]byte(token.RefreshToken))
+		rt, err := p.cryptographer.Encrypt([]byte(token.RefreshToken))
 		if err != nil {
 			return nil, err
 		}
 
-		if _, err := p.db.createOrUpdateUser(ctx, claims.Subject, t); err != nil {
+		it, err := p.cryptographer.Encrypt([]byte(rawIDToken))
+		if err != nil {
+			return nil, err
+		}
+
+		at, err := p.cryptographer.Encrypt([]byte(token.AccessToken))
+		if err != nil {
+			return nil, err
+		}
+
+		tok := &authnToken{
+			userID:       claims.Subject,
+			provider:     p.issuer,
+			tokenType:    "oidc",
+			idToken:      it,
+			accessToken:  at,
+			refreshToken: rt,
+		}
+
+		if err := p.db.createOrUpdateProviderToken(ctx, tok); err != nil {
 			return nil, err
 		}
 	}
@@ -277,12 +298,23 @@ func NewProvider(config *authnv1.Config) (Provider, error) {
 		return nil, err
 	}
 
+	// Parse issuer for domain.
+	u, err := url.Parse(c.Issuer)
+	if err != nil {
+		return nil, err
+	}
+	issuingHost, _, err := net.SplitHostPort(u.Host)
+	if err != nil {
+		return nil, err
+	}
+
 	p := &OIDCProvider{
 		provider:            provider,
 		verifier:            verifier,
 		oauth2:              oc,
 		httpClient:          httpClient,
 		sessionSecret:       config.SessionSecret,
+		issuer:              issuingHost,
 		claimsFromOIDCToken: DefaultClaimsFromOIDCToken,
 	}
 
