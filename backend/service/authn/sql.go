@@ -38,6 +38,7 @@ func newRepository() (*repository, error) {
 	return &repository{db: pg.DB()}, nil
 }
 
+// #nosec G101
 const createOrUpdateProviderToken = `
 INSERT INTO authn_tokens (user_id, provider, token_type, id_token, access_token, refresh_token) VALUES ($1, $2, $3, $4, $5, $6)
 ON CONFLICT DO UPDATE SET

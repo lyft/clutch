@@ -29,5 +29,5 @@ func TestCreateOrUpdateUser(t *testing.T) {
 	r := &repository{db: db}
 	err = r.createOrUpdateProviderToken(context.Background(), tok)
 	assert.NoError(t, err)
-	//assert.NoError(t, mock.ExpectationsWereMet())
+	assert.NoError(t, mock.ExpectationsWereMet())
 }
