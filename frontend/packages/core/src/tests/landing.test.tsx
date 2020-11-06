@@ -10,7 +10,11 @@ describe("Landing component", () => {
 
   beforeAll(() => {
     appContext.useAppContext = jest.fn().mockReturnValue({ workflows: [] });
-    component = shallow(<MemoryRouter><Landing /></MemoryRouter>);
+    component = shallow(
+      <MemoryRouter>
+        <Landing />
+      </MemoryRouter>
+    );
   });
 
   it("renders correctly", () => {
