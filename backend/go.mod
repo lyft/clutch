@@ -6,7 +6,7 @@ require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/aws/aws-sdk-go v1.35.19
 	github.com/bufbuild/buf v0.30.0
-	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
+	github.com/cactus/go-statsd-client/statsd/v4/v4 v4.0.0
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/envoyproxy/go-control-plane v0.9.7
