@@ -1,59 +1,18 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, CardActionArea, CardContent, Grid, Link, Paper } from "@material-ui/core";
+import { Grid, Link, Paper } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import styled from "styled-components";
 
 import { userId } from "./AppLayout/user";
+import Card from "./card";
 import { useAppContext } from "./Contexts";
 import { TrendingUpIcon } from "./icon";
 
 const GridContainer = styled(Grid)`
   margin-top: 20px;
 `;
-
-const SizedCard = styled(CardContent)`
-  ${({ theme }) => `
-  height: 150px;
-  width: 300px;
-  background: linear-gradient(340deg, ${theme.palette.accent.main} 0%, ${theme.palette.secondary.main} 90%);
-  `};
-`;
-
-const CardTitle = styled(Typography)`
-  color: #ffffff;
-`;
-
-interface MediaCardProps {
-  title: string;
-  description: string;
-  path: string;
-}
-
-const MediaCard: React.FC<MediaCardProps> = ({ title, description, path }) => {
-  const navigate = useNavigate();
-  const navigateTo = () => {
-    navigate(path);
-  };
-
-  return (
-    <Grid item>
-      <Card raised>
-        <CardActionArea onClick={navigateTo}>
-          <SizedCard>
-            <CardTitle gutterBottom variant="h6">
-              {title}
-            </CardTitle>
-            <Typography variant="body2" color="textSecondary">
-              {description}
-            </Typography>
-          </SizedCard>
-        </CardActionArea>
-      </Card>
-    </Grid>
-  );
-};
 
 const Content = styled(Paper)`
   padding: 1.5%;
@@ -87,6 +46,7 @@ const GitHubLink = styled(Link)`
 `;
 
 const Landing: React.FC<{}> = () => {
+  const navigate = useNavigate();
   const { workflows } = useAppContext();
   const trendingWorkflows = [];
   workflows.forEach(workflow => {
@@ -103,6 +63,10 @@ const Landing: React.FC<{}> = () => {
       }
     });
   });
+
+  const navigateTo = (path: string) => {
+    navigate(path);
+  };
 
   return (
     <Content id="landing" elevation={0}>
@@ -130,12 +94,14 @@ const Landing: React.FC<{}> = () => {
 
               <GridContainer justify="center" container direction="row" spacing={3}>
                 {trendingWorkflows.map(workflow => (
-                  <MediaCard
-                    title={workflow.title}
-                    description={workflow.description}
-                    path={workflow.path}
-                    key={workflow.path}
-                  />
+                  <Grid item>
+                    <Card
+                      title={workflow.title}
+                      description={workflow.description}
+                      onClick={() => navigateTo(workflow.path)}
+                      key={workflow.path}
+                    />
+                  </Grid>
                 ))}
               </GridContainer>
             </>
