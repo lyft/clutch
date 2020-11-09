@@ -59,7 +59,7 @@ type UnsafeHealthcheckAPIServer interface {
 	mustEmbedUnimplementedHealthcheckAPIServer()
 }
 
-func RegisterHealthcheckAPIServer(s *grpc.Server, srv HealthcheckAPIServer) {
+func RegisterHealthcheckAPIServer(s grpc.ServiceRegistrar, srv HealthcheckAPIServer) {
 	s.RegisterService(&_HealthcheckAPI_serviceDesc, srv)
 }
 

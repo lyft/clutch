@@ -59,7 +59,7 @@ type UnsafeEnvoyTriageAPIServer interface {
 	mustEmbedUnimplementedEnvoyTriageAPIServer()
 }
 
-func RegisterEnvoyTriageAPIServer(s *grpc.Server, srv EnvoyTriageAPIServer) {
+func RegisterEnvoyTriageAPIServer(s grpc.ServiceRegistrar, srv EnvoyTriageAPIServer) {
 	s.RegisterService(&_EnvoyTriageAPI_serviceDesc, srv)
 }
 

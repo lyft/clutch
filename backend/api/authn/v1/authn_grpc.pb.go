@@ -73,7 +73,7 @@ type UnsafeAuthnAPIServer interface {
 	mustEmbedUnimplementedAuthnAPIServer()
 }
 
-func RegisterAuthnAPIServer(s *grpc.Server, srv AuthnAPIServer) {
+func RegisterAuthnAPIServer(s grpc.ServiceRegistrar, srv AuthnAPIServer) {
 	s.RegisterService(&_AuthnAPI_serviceDesc, srv)
 }
 

@@ -199,7 +199,7 @@ type UnsafeK8SAPIServer interface {
 	mustEmbedUnimplementedK8SAPIServer()
 }
 
-func RegisterK8SAPIServer(s *grpc.Server, srv K8SAPIServer) {
+func RegisterK8SAPIServer(s grpc.ServiceRegistrar, srv K8SAPIServer) {
 	s.RegisterService(&_K8SAPI_serviceDesc, srv)
 }
 
