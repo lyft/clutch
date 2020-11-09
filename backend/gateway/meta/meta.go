@@ -24,8 +24,15 @@ var (
 
 	actionTypeDescriptor     = apiv1.E_Action.TypeDescriptor()
 	identifierTypeDescriptor = apiv1.E_Id.TypeDescriptor()
+	redactedTypeDescriptor   = apiv1.E_Redacted.TypeDescriptor()
 	referenceTypeDescriptor  = apiv1.E_Reference.TypeDescriptor()
 )
+
+const typePrefix = "type.googleapis.com/"
+
+func TypeURL(pb proto.Message) string {
+	return typePrefix + string(pb.ProtoReflect().Descriptor().FullName())
+}
 
 func GenerateGRPCMetadata(server *grpc.Server) error {
 	serviceDescriptors, err := grpcreflect.LoadServiceDescriptors(server)
@@ -56,6 +63,12 @@ func GetAction(method string) apiv1.ActionType {
 		return apiv1.ActionType_UNSPECIFIED
 	}
 	return opts.Get(actionTypeDescriptor).Message().Interface().(*apiv1.Action).Type
+}
+
+func IsRedacted(pb proto.Message) bool {
+	m := pb.ProtoReflect()
+	opts := m.Descriptor().Options().ProtoReflect()
+	return opts.Has(redactedTypeDescriptor) && opts.Get(redactedTypeDescriptor).Bool()
 }
 
 func ResourceNames(pb proto.Message) []*auditv1.Resource {
@@ -145,6 +158,10 @@ func APIBody(body interface{}) (*anypb.Any, error) {
 	if !ok {
 		// body is not the type/value we want to process
 		return nil, nil
+	}
+
+	if IsRedacted(m) {
+		return anypb.New(&apiv1.Redacted{RedactedTypeUrl: TypeURL(m)})
 	}
 
 	return anypb.New(m)

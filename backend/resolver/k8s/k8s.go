@@ -22,6 +22,7 @@ import (
 	k8sv1api "github.com/lyft/clutch/backend/api/k8s/v1"
 	k8sv1resolver "github.com/lyft/clutch/backend/api/resolver/k8s/v1"
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/resolver"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/k8s"
@@ -29,8 +30,8 @@ import (
 
 const Name = "clutch.resolver.k8s"
 
-var typeURLPod = resolver.TypeURL((*k8sv1api.Pod)(nil))
-var typeURLHPA = resolver.TypeURL((*k8sv1api.HPA)(nil))
+var typeURLPod = meta.TypeURL((*k8sv1api.Pod)(nil))
+var typeURLHPA = meta.TypeURL((*k8sv1api.HPA)(nil))
 
 var typeSchemas = map[string][]descriptor.Message{
 	typeURLPod: {
