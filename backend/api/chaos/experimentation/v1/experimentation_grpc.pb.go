@@ -115,7 +115,7 @@ type UnsafeExperimentsAPIServer interface {
 	mustEmbedUnimplementedExperimentsAPIServer()
 }
 
-func RegisterExperimentsAPIServer(s *grpc.Server, srv ExperimentsAPIServer) {
+func RegisterExperimentsAPIServer(s grpc.ServiceRegistrar, srv ExperimentsAPIServer) {
 	s.RegisterService(&_ExperimentsAPI_serviceDesc, srv)
 }
 

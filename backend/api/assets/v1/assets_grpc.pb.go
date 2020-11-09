@@ -61,7 +61,7 @@ type UnsafeAssetsAPIServer interface {
 	mustEmbedUnimplementedAssetsAPIServer()
 }
 
-func RegisterAssetsAPIServer(s *grpc.Server, srv AssetsAPIServer) {
+func RegisterAssetsAPIServer(s grpc.ServiceRegistrar, srv AssetsAPIServer) {
 	s.RegisterService(&_AssetsAPI_serviceDesc, srv)
 }
 
