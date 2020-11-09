@@ -216,6 +216,48 @@ export namespace clutch {
                  */
                 public toJSON(): { [k: string]: any };
             }
+
+            /** Properties of a Redacted. */
+            interface IRedacted {
+            }
+
+            /** Represents a Redacted. */
+            class Redacted implements IRedacted {
+
+                /**
+                 * Constructs a new Redacted.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.api.v1.IRedacted);
+
+                /**
+                 * Verifies a Redacted message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Redacted message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Redacted
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.api.v1.Redacted;
+
+                /**
+                 * Creates a plain object from a Redacted message. Also converts values to other types if specified.
+                 * @param message Redacted
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.api.v1.Redacted, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Redacted to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
         }
     }
 
@@ -15719,6 +15761,9 @@ export namespace google {
 
             /** MessageOptions .clutch.api.v1.id */
             ".clutch.api.v1.id"?: (clutch.api.v1.IIdentifier|null);
+
+            /** MessageOptions .clutch.api.v1.redacted */
+            ".clutch.api.v1.redacted"?: (boolean|null);
 
             /** MessageOptions .validate.disabled */
             ".validate.disabled"?: (boolean|null);

@@ -533,6 +533,84 @@ export const clutch = $root.clutch = (() => {
                 return Reference;
             })();
 
+            v1.Redacted = (function() {
+
+                /**
+                 * Properties of a Redacted.
+                 * @memberof clutch.api.v1
+                 * @interface IRedacted
+                 */
+
+                /**
+                 * Constructs a new Redacted.
+                 * @memberof clutch.api.v1
+                 * @classdesc Represents a Redacted.
+                 * @implements IRedacted
+                 * @constructor
+                 * @param {clutch.api.v1.IRedacted=} [properties] Properties to set
+                 */
+                function Redacted(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies a Redacted message.
+                 * @function verify
+                 * @memberof clutch.api.v1.Redacted
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Redacted.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a Redacted message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.api.v1.Redacted
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.api.v1.Redacted} Redacted
+                 */
+                Redacted.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.api.v1.Redacted)
+                        return object;
+                    return new $root.clutch.api.v1.Redacted();
+                };
+
+                /**
+                 * Creates a plain object from a Redacted message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.api.v1.Redacted
+                 * @static
+                 * @param {clutch.api.v1.Redacted} message Redacted
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Redacted.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this Redacted to JSON.
+                 * @function toJSON
+                 * @memberof clutch.api.v1.Redacted
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Redacted.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Redacted;
+            })();
+
             return v1;
         })();
 
@@ -39818,6 +39896,7 @@ export const google = $root.google = (() => {
              * @property {Array.<google.protobuf.IUninterpretedOption>|null} [uninterpretedOption] MessageOptions uninterpretedOption
              * @property {clutch.api.v1.IReference|null} [".clutch.api.v1.reference"] MessageOptions .clutch.api.v1.reference
              * @property {clutch.api.v1.IIdentifier|null} [".clutch.api.v1.id"] MessageOptions .clutch.api.v1.id
+             * @property {boolean|null} [".clutch.api.v1.redacted"] MessageOptions .clutch.api.v1.redacted
              * @property {boolean|null} [".validate.disabled"] MessageOptions .validate.disabled
              * @property {clutch.resolver.v1.ISchemaMetadata|null} [".clutch.resolver.v1.schema"] MessageOptions .clutch.resolver.v1.schema
              */
@@ -39895,6 +39974,14 @@ export const google = $root.google = (() => {
             MessageOptions.prototype[".clutch.api.v1.id"] = null;
 
             /**
+             * MessageOptions .clutch.api.v1.redacted.
+             * @member {boolean} .clutch.api.v1.redacted
+             * @memberof google.protobuf.MessageOptions
+             * @instance
+             */
+            MessageOptions.prototype[".clutch.api.v1.redacted"] = false;
+
+            /**
              * MessageOptions .validate.disabled.
              * @member {boolean} .validate.disabled
              * @memberof google.protobuf.MessageOptions
@@ -39952,6 +40039,9 @@ export const google = $root.google = (() => {
                     if (error)
                         return ".clutch.api.v1.id." + error;
                 }
+                if (message[".clutch.api.v1.redacted"] != null && message.hasOwnProperty(".clutch.api.v1.redacted"))
+                    if (typeof message[".clutch.api.v1.redacted"] !== "boolean")
+                        return ".clutch.api.v1.redacted: boolean expected";
                 if (message[".validate.disabled"] != null && message.hasOwnProperty(".validate.disabled"))
                     if (typeof message[".validate.disabled"] !== "boolean")
                         return ".validate.disabled: boolean expected";
@@ -40003,6 +40093,8 @@ export const google = $root.google = (() => {
                         throw TypeError(".google.protobuf.MessageOptions..clutch.api.v1.id: object expected");
                     message[".clutch.api.v1.id"] = $root.clutch.api.v1.Identifier.fromObject(object[".clutch.api.v1.id"]);
                 }
+                if (object[".clutch.api.v1.redacted"] != null)
+                    message[".clutch.api.v1.redacted"] = Boolean(object[".clutch.api.v1.redacted"]);
                 if (object[".validate.disabled"] != null)
                     message[".validate.disabled"] = Boolean(object[".validate.disabled"]);
                 if (object[".clutch.resolver.v1.schema"] != null) {
@@ -40036,6 +40128,7 @@ export const google = $root.google = (() => {
                     object[".validate.disabled"] = false;
                     object[".clutch.api.v1.reference"] = null;
                     object[".clutch.api.v1.id"] = null;
+                    object[".clutch.api.v1.redacted"] = false;
                     object[".clutch.resolver.v1.schema"] = null;
                 }
                 if (message.messageSetWireFormat != null && message.hasOwnProperty("messageSetWireFormat"))
@@ -40057,6 +40150,8 @@ export const google = $root.google = (() => {
                     object[".clutch.api.v1.reference"] = $root.clutch.api.v1.Reference.toObject(message[".clutch.api.v1.reference"], options);
                 if (message[".clutch.api.v1.id"] != null && message.hasOwnProperty(".clutch.api.v1.id"))
                     object[".clutch.api.v1.id"] = $root.clutch.api.v1.Identifier.toObject(message[".clutch.api.v1.id"], options);
+                if (message[".clutch.api.v1.redacted"] != null && message.hasOwnProperty(".clutch.api.v1.redacted"))
+                    object[".clutch.api.v1.redacted"] = message[".clutch.api.v1.redacted"];
                 if (message[".clutch.resolver.v1.schema"] != null && message.hasOwnProperty(".clutch.resolver.v1.schema"))
                     object[".clutch.resolver.v1.schema"] = $root.clutch.resolver.v1.SchemaMetadata.toObject(message[".clutch.resolver.v1.schema"], options);
                 return object;

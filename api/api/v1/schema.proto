@@ -35,3 +35,6 @@ message Reference {
   // identify resources contained in the message.
   repeated string fields = 1;
 }
+
+// Message used to represent redacted messages.
+message Redacted {}

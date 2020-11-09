@@ -24,6 +24,7 @@ var (
 
 	actionTypeDescriptor     = apiv1.E_Action.TypeDescriptor()
 	identifierTypeDescriptor = apiv1.E_Id.TypeDescriptor()
+	redactedTypeDescriptor   = apiv1.E_Redacted.TypeDescriptor()
 	referenceTypeDescriptor  = apiv1.E_Reference.TypeDescriptor()
 )
 
@@ -56,6 +57,12 @@ func GetAction(method string) apiv1.ActionType {
 		return apiv1.ActionType_UNSPECIFIED
 	}
 	return opts.Get(actionTypeDescriptor).Message().Interface().(*apiv1.Action).Type
+}
+
+func IsRedacted(pb proto.Message) bool {
+	m := pb.ProtoReflect()
+	opts := m.Descriptor().Options().ProtoReflect()
+	return opts.Has(redactedTypeDescriptor) && opts.Get(redactedTypeDescriptor).Bool()
 }
 
 func ResourceNames(pb proto.Message) []*auditv1.Resource {
