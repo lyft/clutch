@@ -28,6 +28,12 @@ var (
 	referenceTypeDescriptor  = apiv1.E_Reference.TypeDescriptor()
 )
 
+const typePrefix = "type.googleapis.com/"
+
+func TypeURL(pb proto.Message) string {
+	return typePrefix + string(pb.ProtoReflect().Descriptor().FullName())
+}
+
 func GenerateGRPCMetadata(server *grpc.Server) error {
 	serviceDescriptors, err := grpcreflect.LoadServiceDescriptors(server)
 	if err != nil {
@@ -155,7 +161,7 @@ func APIBody(body interface{}) (*anypb.Any, error) {
 	}
 
 	if IsRedacted(m) {
-		return anypb.New(&apiv1.Redacted{})
+		return anypb.New(&apiv1.Redacted{RedactedTypeUrl: TypeURL(m)})
 	}
 
 	return anypb.New(m)

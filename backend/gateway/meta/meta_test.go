@@ -3,6 +3,7 @@ package meta
 import (
 	"testing"
 
+
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health/grpc_health_v1"
@@ -10,7 +11,9 @@ import (
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
+	authnv1 "github.com/lyft/clutch/backend/api/authn/v1"
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
+	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/module/healthcheck"
@@ -118,6 +121,22 @@ func TestResourceNames(t *testing.T) {
 	}
 }
 
+func TestIsRedacted(t *testing.T) {
+	assert.True(t, IsRedacted(&authnv1.CallbackResponse{}))
+	assert.False(t, IsRedacted(&healthcheckv1.HealthcheckRequest{}))
+}
+
+func TestAPIBodyRedaction(t *testing.T) {
+	b, err := APIBody(&authnv1.CallbackResponse{AccessToken: "secret"})
+	assert.NoError(t, err)
+
+	m, err := b.UnmarshalNew()
+	assert.IsType(t, (*apiv1.Redacted)(nil), m)
+
+	r := m.(*apiv1.Redacted)
+	assert.Equal(t, r.RedactedTypeUrl, "type.googleapis.com/clutch.authn.v1.CallbackResponse")
+}
+
 func TestAPIBody(t *testing.T) {
 	// proto.message with nil value
 	m := (*ec2v1.Instance)(nil)
@@ -131,7 +150,7 @@ func TestAPIBody(t *testing.T) {
 		// case: type is proto.message
 		{input: &k8sapiv1.ResizeHPAResponse{}, expectNil: false},
 		// case: type is proto.message
-		// anypb.New gracefully hanldes (*myProtoStruct)(nil)
+		// anypb.New gracefully handles (*myProtoStruct)(nil)
 		{input: m, expectNil: false},
 		// case: type is struct
 		{input: ec2v1.Instance{InstanceId: "i-123456789abcdef0"}, expectNil: true},

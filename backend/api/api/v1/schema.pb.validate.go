@@ -320,6 +320,8 @@ func (m *Redacted) Validate() error {
 		return nil
 	}
 
+	// no validation rules for RedactedTypeUrl
+
 	return nil
 }
 

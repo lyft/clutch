@@ -219,6 +219,9 @@ export namespace clutch {
 
             /** Properties of a Redacted. */
             interface IRedacted {
+
+                /** Redacted redactedTypeUrl */
+                redactedTypeUrl?: (string|null);
             }
 
             /** Represents a Redacted. */
@@ -229,6 +232,9 @@ export namespace clutch {
                  * @param [properties] Properties to set
                  */
                 constructor(properties?: clutch.api.v1.IRedacted);
+
+                /** Redacted redactedTypeUrl. */
+                public redactedTypeUrl: string;
 
                 /**
                  * Verifies a Redacted message.

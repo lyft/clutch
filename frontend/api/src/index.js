@@ -539,6 +539,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a Redacted.
                  * @memberof clutch.api.v1
                  * @interface IRedacted
+                 * @property {string|null} [redactedTypeUrl] Redacted redactedTypeUrl
                  */
 
                 /**
@@ -557,6 +558,14 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
+                 * Redacted redactedTypeUrl.
+                 * @member {string} redactedTypeUrl
+                 * @memberof clutch.api.v1.Redacted
+                 * @instance
+                 */
+                Redacted.prototype.redactedTypeUrl = "";
+
+                /**
                  * Verifies a Redacted message.
                  * @function verify
                  * @memberof clutch.api.v1.Redacted
@@ -567,6 +576,9 @@ export const clutch = $root.clutch = (() => {
                 Redacted.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
+                    if (message.redactedTypeUrl != null && message.hasOwnProperty("redactedTypeUrl"))
+                        if (!$util.isString(message.redactedTypeUrl))
+                            return "redactedTypeUrl: string expected";
                     return null;
                 };
 
@@ -581,7 +593,10 @@ export const clutch = $root.clutch = (() => {
                 Redacted.fromObject = function fromObject(object) {
                     if (object instanceof $root.clutch.api.v1.Redacted)
                         return object;
-                    return new $root.clutch.api.v1.Redacted();
+                    let message = new $root.clutch.api.v1.Redacted();
+                    if (object.redactedTypeUrl != null)
+                        message.redactedTypeUrl = String(object.redactedTypeUrl);
+                    return message;
                 };
 
                 /**
@@ -593,8 +608,15 @@ export const clutch = $root.clutch = (() => {
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                Redacted.toObject = function toObject() {
-                    return {};
+                Redacted.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.redactedTypeUrl = "";
+                    if (message.redactedTypeUrl != null && message.hasOwnProperty("redactedTypeUrl"))
+                        object.redactedTypeUrl = message.redactedTypeUrl;
+                    return object;
                 };
 
                 /**

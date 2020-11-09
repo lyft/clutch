@@ -43,6 +43,7 @@ type Resolver interface {
 
 const typePrefix = "type.googleapis.com/"
 
+// Deprecated: use meta.TypeURL instead, will require moving to new proto APIs.
 func TypeURL(m proto.Message) string {
 	return typePrefix + string(proto.MessageReflect(m).Descriptor().FullName())
 }

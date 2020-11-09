@@ -38,4 +38,5 @@ message Reference {
 
 // Message used to represent redacted messages.
 message Redacted {
+  string redacted_type_url = 1;
 }
