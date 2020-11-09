@@ -37,4 +37,5 @@ message Reference {
 }
 
 // Message used to represent redacted messages.
-message Redacted {}
+message Redacted {
+}
