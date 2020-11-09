@@ -554,6 +554,102 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a RequestMetadata. */
+            interface IRequestMetadata {
+
+                /** RequestMetadata body */
+                body?: (google.protobuf.IAny|null);
+            }
+
+            /** Represents a RequestMetadata. */
+            class RequestMetadata implements IRequestMetadata {
+
+                /**
+                 * Constructs a new RequestMetadata.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.audit.v1.IRequestMetadata);
+
+                /** RequestMetadata body. */
+                public body?: (google.protobuf.IAny|null);
+
+                /**
+                 * Verifies a RequestMetadata message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a RequestMetadata message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns RequestMetadata
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.audit.v1.RequestMetadata;
+
+                /**
+                 * Creates a plain object from a RequestMetadata message. Also converts values to other types if specified.
+                 * @param message RequestMetadata
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.audit.v1.RequestMetadata, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this RequestMetadata to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ResponseMetadata. */
+            interface IResponseMetadata {
+
+                /** ResponseMetadata body */
+                body?: (google.protobuf.IAny|null);
+            }
+
+            /** Represents a ResponseMetadata. */
+            class ResponseMetadata implements IResponseMetadata {
+
+                /**
+                 * Constructs a new ResponseMetadata.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.audit.v1.IResponseMetadata);
+
+                /** ResponseMetadata body. */
+                public body?: (google.protobuf.IAny|null);
+
+                /**
+                 * Verifies a ResponseMetadata message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ResponseMetadata message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ResponseMetadata
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.audit.v1.ResponseMetadata;
+
+                /**
+                 * Creates a plain object from a ResponseMetadata message. Also converts values to other types if specified.
+                 * @param message ResponseMetadata
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.audit.v1.ResponseMetadata, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ResponseMetadata to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a RequestEvent. */
             interface IRequestEvent {
 
@@ -574,6 +670,12 @@ export namespace clutch {
 
                 /** RequestEvent resources */
                 resources?: (clutch.audit.v1.IResource[]|null);
+
+                /** RequestEvent requestMetadata */
+                requestMetadata?: (clutch.audit.v1.IRequestMetadata|null);
+
+                /** RequestEvent responseMetadata */
+                responseMetadata?: (clutch.audit.v1.IResponseMetadata|null);
             }
 
             /** Represents a RequestEvent. */
@@ -602,6 +704,12 @@ export namespace clutch {
 
                 /** RequestEvent resources. */
                 public resources: clutch.audit.v1.IResource[];
+
+                /** RequestEvent requestMetadata. */
+                public requestMetadata?: (clutch.audit.v1.IRequestMetadata|null);
+
+                /** RequestEvent responseMetadata. */
+                public responseMetadata?: (clutch.audit.v1.IResponseMetadata|null);
 
                 /**
                  * Verifies a RequestEvent message.
@@ -967,8 +1075,8 @@ export namespace clutch {
             /** Properties of a CallbackResponse. */
             interface ICallbackResponse {
 
-                /** CallbackResponse token */
-                token?: (string|null);
+                /** CallbackResponse accessToken */
+                accessToken?: (string|null);
             }
 
             /** Represents a CallbackResponse. */
@@ -980,8 +1088,8 @@ export namespace clutch {
                  */
                 constructor(properties?: clutch.authn.v1.ICallbackResponse);
 
-                /** CallbackResponse token. */
-                public token: string;
+                /** CallbackResponse accessToken. */
+                public accessToken: string;
 
                 /**
                  * Verifies a CallbackResponse message.
@@ -1294,6 +1402,20 @@ export namespace clutch {
                      * @returns Promise
                      */
                     public resizeAutoscalingGroup(request: clutch.aws.ec2.v1.IResizeAutoscalingGroupRequest): Promise<clutch.aws.ec2.v1.ResizeAutoscalingGroupResponse>;
+
+                    /**
+                     * Calls RebootInstance.
+                     * @param request RebootInstanceRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and RebootInstanceResponse
+                     */
+                    public rebootInstance(request: clutch.aws.ec2.v1.IRebootInstanceRequest, callback: clutch.aws.ec2.v1.EC2API.RebootInstanceCallback): void;
+
+                    /**
+                     * Calls RebootInstance.
+                     * @param request RebootInstanceRequest message or plain object
+                     * @returns Promise
+                     */
+                    public rebootInstance(request: clutch.aws.ec2.v1.IRebootInstanceRequest): Promise<clutch.aws.ec2.v1.RebootInstanceResponse>;
                 }
 
                 namespace EC2API {
@@ -1318,6 +1440,13 @@ export namespace clutch {
                      * @param [response] ResizeAutoscalingGroupResponse
                      */
                     type ResizeAutoscalingGroupCallback = (error: (Error|null), response?: clutch.aws.ec2.v1.ResizeAutoscalingGroupResponse) => void;
+
+                    /**
+                     * Callback as used by {@link clutch.aws.ec2.v1.EC2API#rebootInstance}.
+                     * @param error Error, if any
+                     * @param [response] RebootInstanceResponse
+                     */
+                    type RebootInstanceCallback = (error: (Error|null), response?: clutch.aws.ec2.v1.RebootInstanceResponse) => void;
                 }
 
                 /** Properties of an AutoscalingGroupSize. */
@@ -1868,6 +1997,102 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
+                /** Properties of a RebootInstanceRequest. */
+                interface IRebootInstanceRequest {
+
+                    /** RebootInstanceRequest instanceId */
+                    instanceId?: (string|null);
+
+                    /** RebootInstanceRequest region */
+                    region?: (string|null);
+                }
+
+                /** Represents a RebootInstanceRequest. */
+                class RebootInstanceRequest implements IRebootInstanceRequest {
+
+                    /**
+                     * Constructs a new RebootInstanceRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.aws.ec2.v1.IRebootInstanceRequest);
+
+                    /** RebootInstanceRequest instanceId. */
+                    public instanceId: string;
+
+                    /** RebootInstanceRequest region. */
+                    public region: string;
+
+                    /**
+                     * Verifies a RebootInstanceRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a RebootInstanceRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns RebootInstanceRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.ec2.v1.RebootInstanceRequest;
+
+                    /**
+                     * Creates a plain object from a RebootInstanceRequest message. Also converts values to other types if specified.
+                     * @param message RebootInstanceRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.aws.ec2.v1.RebootInstanceRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this RebootInstanceRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a RebootInstanceResponse. */
+                interface IRebootInstanceResponse {
+                }
+
+                /** Represents a RebootInstanceResponse. */
+                class RebootInstanceResponse implements IRebootInstanceResponse {
+
+                    /**
+                     * Constructs a new RebootInstanceResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.aws.ec2.v1.IRebootInstanceResponse);
+
+                    /**
+                     * Verifies a RebootInstanceResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a RebootInstanceResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns RebootInstanceResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.aws.ec2.v1.RebootInstanceResponse;
+
+                    /**
+                     * Creates a plain object from a RebootInstanceResponse message. Also converts values to other types if specified.
+                     * @param message RebootInstanceResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.aws.ec2.v1.RebootInstanceResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this RebootInstanceResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
                 /** Properties of an Instance. */
                 interface IInstance {
 
@@ -2314,151 +2539,109 @@ export namespace clutch {
             /** Namespace v1. */
             namespace v1 {
 
-                /** Properties of an Experiment. */
-                interface IExperiment {
+                /** Properties of a CreateExperimentRequest. */
+                interface ICreateExperimentRequest {
 
-                    /** Experiment id */
-                    id?: (number|Long|null);
-
-                    /** Experiment config */
+                    /** CreateExperimentRequest config */
                     config?: (google.protobuf.IAny|null);
+
+                    /** CreateExperimentRequest startTime */
+                    startTime?: (google.protobuf.ITimestamp|null);
+
+                    /** CreateExperimentRequest endTime */
+                    endTime?: (google.protobuf.ITimestamp|null);
                 }
 
-                /** Represents an Experiment. */
-                class Experiment implements IExperiment {
+                /** Represents a CreateExperimentRequest. */
+                class CreateExperimentRequest implements ICreateExperimentRequest {
 
                     /**
-                     * Constructs a new Experiment.
+                     * Constructs a new CreateExperimentRequest.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.experimentation.v1.IExperiment);
+                    constructor(properties?: clutch.chaos.experimentation.v1.ICreateExperimentRequest);
 
-                    /** Experiment id. */
-                    public id: (number|Long);
-
-                    /** Experiment config. */
+                    /** CreateExperimentRequest config. */
                     public config?: (google.protobuf.IAny|null);
 
+                    /** CreateExperimentRequest startTime. */
+                    public startTime?: (google.protobuf.ITimestamp|null);
+
+                    /** CreateExperimentRequest endTime. */
+                    public endTime?: (google.protobuf.ITimestamp|null);
+
                     /**
-                     * Verifies an Experiment message.
+                     * Verifies a CreateExperimentRequest message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates an Experiment message from a plain object. Also converts values to their respective internal types.
+                     * Creates a CreateExperimentRequest message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns Experiment
+                     * @returns CreateExperimentRequest
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.Experiment;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.CreateExperimentRequest;
 
                     /**
-                     * Creates a plain object from an Experiment message. Also converts values to other types if specified.
-                     * @param message Experiment
+                     * Creates a plain object from a CreateExperimentRequest message. Also converts values to other types if specified.
+                     * @param message CreateExperimentRequest
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.experimentation.v1.Experiment, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.experimentation.v1.CreateExperimentRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this Experiment to JSON.
+                     * Converts this CreateExperimentRequest to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a CreateExperimentsRequest. */
-                interface ICreateExperimentsRequest {
+                /** Properties of a CreateExperimentResponse. */
+                interface ICreateExperimentResponse {
 
-                    /** CreateExperimentsRequest experiments */
-                    experiments?: (clutch.chaos.experimentation.v1.IExperiment[]|null);
+                    /** CreateExperimentResponse experiment */
+                    experiment?: (clutch.chaos.experimentation.v1.IExperiment|null);
                 }
 
-                /** Represents a CreateExperimentsRequest. */
-                class CreateExperimentsRequest implements ICreateExperimentsRequest {
+                /** Represents a CreateExperimentResponse. */
+                class CreateExperimentResponse implements ICreateExperimentResponse {
 
                     /**
-                     * Constructs a new CreateExperimentsRequest.
+                     * Constructs a new CreateExperimentResponse.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.experimentation.v1.ICreateExperimentsRequest);
+                    constructor(properties?: clutch.chaos.experimentation.v1.ICreateExperimentResponse);
 
-                    /** CreateExperimentsRequest experiments. */
-                    public experiments: clutch.chaos.experimentation.v1.IExperiment[];
+                    /** CreateExperimentResponse experiment. */
+                    public experiment?: (clutch.chaos.experimentation.v1.IExperiment|null);
 
                     /**
-                     * Verifies a CreateExperimentsRequest message.
+                     * Verifies a CreateExperimentResponse message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a CreateExperimentsRequest message from a plain object. Also converts values to their respective internal types.
+                     * Creates a CreateExperimentResponse message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns CreateExperimentsRequest
+                     * @returns CreateExperimentResponse
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.CreateExperimentsRequest;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.CreateExperimentResponse;
 
                     /**
-                     * Creates a plain object from a CreateExperimentsRequest message. Also converts values to other types if specified.
-                     * @param message CreateExperimentsRequest
+                     * Creates a plain object from a CreateExperimentResponse message. Also converts values to other types if specified.
+                     * @param message CreateExperimentResponse
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.experimentation.v1.CreateExperimentsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.experimentation.v1.CreateExperimentResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this CreateExperimentsRequest to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a CreateExperimentsResponse. */
-                interface ICreateExperimentsResponse {
-
-                    /** CreateExperimentsResponse experiments */
-                    experiments?: (clutch.chaos.experimentation.v1.IExperiment[]|null);
-                }
-
-                /** Represents a CreateExperimentsResponse. */
-                class CreateExperimentsResponse implements ICreateExperimentsResponse {
-
-                    /**
-                     * Constructs a new CreateExperimentsResponse.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.experimentation.v1.ICreateExperimentsResponse);
-
-                    /** CreateExperimentsResponse experiments. */
-                    public experiments: clutch.chaos.experimentation.v1.IExperiment[];
-
-                    /**
-                     * Verifies a CreateExperimentsResponse message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a CreateExperimentsResponse message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns CreateExperimentsResponse
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.CreateExperimentsResponse;
-
-                    /**
-                     * Creates a plain object from a CreateExperimentsResponse message. Also converts values to other types if specified.
-                     * @param message CreateExperimentsResponse
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.experimentation.v1.CreateExperimentsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this CreateExperimentsResponse to JSON.
+                     * Converts this CreateExperimentResponse to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -2467,8 +2650,11 @@ export namespace clutch {
                 /** Properties of a GetExperimentsRequest. */
                 interface IGetExperimentsRequest {
 
-                    /** GetExperimentsRequest ids */
-                    ids?: ((number|Long)[]|null);
+                    /** GetExperimentsRequest configType */
+                    configType?: (string|null);
+
+                    /** GetExperimentsRequest status */
+                    status?: (clutch.chaos.experimentation.v1.GetExperimentsRequest.Status|null);
                 }
 
                 /** Represents a GetExperimentsRequest. */
@@ -2480,8 +2666,11 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.experimentation.v1.IGetExperimentsRequest);
 
-                    /** GetExperimentsRequest ids. */
-                    public ids: (number|Long)[];
+                    /** GetExperimentsRequest configType. */
+                    public configType: string;
+
+                    /** GetExperimentsRequest status. */
+                    public status: clutch.chaos.experimentation.v1.GetExperimentsRequest.Status;
 
                     /**
                      * Verifies a GetExperimentsRequest message.
@@ -2510,6 +2699,15 @@ export namespace clutch {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                namespace GetExperimentsRequest {
+
+                    /** Status enum. */
+                    enum Status {
+                        STATUS_UNSPECIFIED = 0,
+                        STATUS_RUNNING = 1
+                    }
                 }
 
                 /** Properties of a GetExperimentsResponse. */
@@ -2560,91 +2758,277 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a StopExperimentsRequest. */
-                interface IStopExperimentsRequest {
+                /** Properties of a CancelExperimentRunRequest. */
+                interface ICancelExperimentRunRequest {
 
-                    /** StopExperimentsRequest ids */
-                    ids?: ((number|Long)[]|null);
+                    /** CancelExperimentRunRequest id */
+                    id?: (number|Long|null);
                 }
 
-                /** Represents a StopExperimentsRequest. */
-                class StopExperimentsRequest implements IStopExperimentsRequest {
+                /** Represents a CancelExperimentRunRequest. */
+                class CancelExperimentRunRequest implements ICancelExperimentRunRequest {
 
                     /**
-                     * Constructs a new StopExperimentsRequest.
+                     * Constructs a new CancelExperimentRunRequest.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.experimentation.v1.IStopExperimentsRequest);
+                    constructor(properties?: clutch.chaos.experimentation.v1.ICancelExperimentRunRequest);
 
-                    /** StopExperimentsRequest ids. */
-                    public ids: (number|Long)[];
+                    /** CancelExperimentRunRequest id. */
+                    public id: (number|Long);
 
                     /**
-                     * Verifies a StopExperimentsRequest message.
+                     * Verifies a CancelExperimentRunRequest message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a StopExperimentsRequest message from a plain object. Also converts values to their respective internal types.
+                     * Creates a CancelExperimentRunRequest message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns StopExperimentsRequest
+                     * @returns CancelExperimentRunRequest
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.StopExperimentsRequest;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.CancelExperimentRunRequest;
 
                     /**
-                     * Creates a plain object from a StopExperimentsRequest message. Also converts values to other types if specified.
-                     * @param message StopExperimentsRequest
+                     * Creates a plain object from a CancelExperimentRunRequest message. Also converts values to other types if specified.
+                     * @param message CancelExperimentRunRequest
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.experimentation.v1.StopExperimentsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.experimentation.v1.CancelExperimentRunRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this StopExperimentsRequest to JSON.
+                     * Converts this CancelExperimentRunRequest to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a StopExperimentsResponse. */
-                interface IStopExperimentsResponse {
+                /** Properties of a CancelExperimentRunResponse. */
+                interface ICancelExperimentRunResponse {
                 }
 
-                /** Represents a StopExperimentsResponse. */
-                class StopExperimentsResponse implements IStopExperimentsResponse {
+                /** Represents a CancelExperimentRunResponse. */
+                class CancelExperimentRunResponse implements ICancelExperimentRunResponse {
 
                     /**
-                     * Constructs a new StopExperimentsResponse.
+                     * Constructs a new CancelExperimentRunResponse.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.experimentation.v1.IStopExperimentsResponse);
+                    constructor(properties?: clutch.chaos.experimentation.v1.ICancelExperimentRunResponse);
 
                     /**
-                     * Verifies a StopExperimentsResponse message.
+                     * Verifies a CancelExperimentRunResponse message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a StopExperimentsResponse message from a plain object. Also converts values to their respective internal types.
+                     * Creates a CancelExperimentRunResponse message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns StopExperimentsResponse
+                     * @returns CancelExperimentRunResponse
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.StopExperimentsResponse;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.CancelExperimentRunResponse;
 
                     /**
-                     * Creates a plain object from a StopExperimentsResponse message. Also converts values to other types if specified.
-                     * @param message StopExperimentsResponse
+                     * Creates a plain object from a CancelExperimentRunResponse message. Also converts values to other types if specified.
+                     * @param message CancelExperimentRunResponse
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.experimentation.v1.StopExperimentsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.experimentation.v1.CancelExperimentRunResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this StopExperimentsResponse to JSON.
+                     * Converts this CancelExperimentRunResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a GetListViewRequest. */
+                interface IGetListViewRequest {
+                }
+
+                /** Represents a GetListViewRequest. */
+                class GetListViewRequest implements IGetListViewRequest {
+
+                    /**
+                     * Constructs a new GetListViewRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.experimentation.v1.IGetListViewRequest);
+
+                    /**
+                     * Verifies a GetListViewRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a GetListViewRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns GetListViewRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.GetListViewRequest;
+
+                    /**
+                     * Creates a plain object from a GetListViewRequest message. Also converts values to other types if specified.
+                     * @param message GetListViewRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.experimentation.v1.GetListViewRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this GetListViewRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a GetListViewResponse. */
+                interface IGetListViewResponse {
+
+                    /** GetListViewResponse items */
+                    items?: (clutch.chaos.experimentation.v1.IListViewItem[]|null);
+                }
+
+                /** Represents a GetListViewResponse. */
+                class GetListViewResponse implements IGetListViewResponse {
+
+                    /**
+                     * Constructs a new GetListViewResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.experimentation.v1.IGetListViewResponse);
+
+                    /** GetListViewResponse items. */
+                    public items: clutch.chaos.experimentation.v1.IListViewItem[];
+
+                    /**
+                     * Verifies a GetListViewResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a GetListViewResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns GetListViewResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.GetListViewResponse;
+
+                    /**
+                     * Creates a plain object from a GetListViewResponse message. Also converts values to other types if specified.
+                     * @param message GetListViewResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.experimentation.v1.GetListViewResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this GetListViewResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a GetExperimentRunDetailsRequest. */
+                interface IGetExperimentRunDetailsRequest {
+
+                    /** GetExperimentRunDetailsRequest id */
+                    id?: (number|Long|null);
+                }
+
+                /** Represents a GetExperimentRunDetailsRequest. */
+                class GetExperimentRunDetailsRequest implements IGetExperimentRunDetailsRequest {
+
+                    /**
+                     * Constructs a new GetExperimentRunDetailsRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest);
+
+                    /** GetExperimentRunDetailsRequest id. */
+                    public id: (number|Long);
+
+                    /**
+                     * Verifies a GetExperimentRunDetailsRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a GetExperimentRunDetailsRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns GetExperimentRunDetailsRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest;
+
+                    /**
+                     * Creates a plain object from a GetExperimentRunDetailsRequest message. Also converts values to other types if specified.
+                     * @param message GetExperimentRunDetailsRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this GetExperimentRunDetailsRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a GetExperimentRunDetailsResponse. */
+                interface IGetExperimentRunDetailsResponse {
+
+                    /** GetExperimentRunDetailsResponse runDetails */
+                    runDetails?: (clutch.chaos.experimentation.v1.IExperimentRunDetails|null);
+                }
+
+                /** Represents a GetExperimentRunDetailsResponse. */
+                class GetExperimentRunDetailsResponse implements IGetExperimentRunDetailsResponse {
+
+                    /**
+                     * Constructs a new GetExperimentRunDetailsResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.experimentation.v1.IGetExperimentRunDetailsResponse);
+
+                    /** GetExperimentRunDetailsResponse runDetails. */
+                    public runDetails?: (clutch.chaos.experimentation.v1.IExperimentRunDetails|null);
+
+                    /**
+                     * Verifies a GetExperimentRunDetailsResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a GetExperimentRunDetailsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns GetExperimentRunDetailsResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse;
+
+                    /**
+                     * Creates a plain object from a GetExperimentRunDetailsResponse message. Also converts values to other types if specified.
+                     * @param message GetExperimentRunDetailsResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this GetExperimentRunDetailsResponse to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -2662,18 +3046,32 @@ export namespace clutch {
                     constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
 
                     /**
-                     * Calls CreateExperiments.
-                     * @param request CreateExperimentsRequest message or plain object
-                     * @param callback Node-style callback called with the error, if any, and CreateExperimentsResponse
+                     * Calls CreateExperiment.
+                     * @param request CreateExperimentRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and CreateExperimentResponse
                      */
-                    public createExperiments(request: clutch.chaos.experimentation.v1.ICreateExperimentsRequest, callback: clutch.chaos.experimentation.v1.ExperimentsAPI.CreateExperimentsCallback): void;
+                    public createExperiment(request: clutch.chaos.experimentation.v1.ICreateExperimentRequest, callback: clutch.chaos.experimentation.v1.ExperimentsAPI.CreateExperimentCallback): void;
 
                     /**
-                     * Calls CreateExperiments.
-                     * @param request CreateExperimentsRequest message or plain object
+                     * Calls CreateExperiment.
+                     * @param request CreateExperimentRequest message or plain object
                      * @returns Promise
                      */
-                    public createExperiments(request: clutch.chaos.experimentation.v1.ICreateExperimentsRequest): Promise<clutch.chaos.experimentation.v1.CreateExperimentsResponse>;
+                    public createExperiment(request: clutch.chaos.experimentation.v1.ICreateExperimentRequest): Promise<clutch.chaos.experimentation.v1.CreateExperimentResponse>;
+
+                    /**
+                     * Calls CancelExperimentRun.
+                     * @param request CancelExperimentRunRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and CancelExperimentRunResponse
+                     */
+                    public cancelExperimentRun(request: clutch.chaos.experimentation.v1.ICancelExperimentRunRequest, callback: clutch.chaos.experimentation.v1.ExperimentsAPI.CancelExperimentRunCallback): void;
+
+                    /**
+                     * Calls CancelExperimentRun.
+                     * @param request CancelExperimentRunRequest message or plain object
+                     * @returns Promise
+                     */
+                    public cancelExperimentRun(request: clutch.chaos.experimentation.v1.ICancelExperimentRunRequest): Promise<clutch.chaos.experimentation.v1.CancelExperimentRunResponse>;
 
                     /**
                      * Calls GetExperiments.
@@ -2690,28 +3088,49 @@ export namespace clutch {
                     public getExperiments(request: clutch.chaos.experimentation.v1.IGetExperimentsRequest): Promise<clutch.chaos.experimentation.v1.GetExperimentsResponse>;
 
                     /**
-                     * Calls StopExperiments.
-                     * @param request StopExperimentsRequest message or plain object
-                     * @param callback Node-style callback called with the error, if any, and StopExperimentsResponse
+                     * Calls GetListView.
+                     * @param request GetListViewRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and GetListViewResponse
                      */
-                    public stopExperiments(request: clutch.chaos.experimentation.v1.IStopExperimentsRequest, callback: clutch.chaos.experimentation.v1.ExperimentsAPI.StopExperimentsCallback): void;
+                    public getListView(request: clutch.chaos.experimentation.v1.IGetListViewRequest, callback: clutch.chaos.experimentation.v1.ExperimentsAPI.GetListViewCallback): void;
 
                     /**
-                     * Calls StopExperiments.
-                     * @param request StopExperimentsRequest message or plain object
+                     * Calls GetListView.
+                     * @param request GetListViewRequest message or plain object
                      * @returns Promise
                      */
-                    public stopExperiments(request: clutch.chaos.experimentation.v1.IStopExperimentsRequest): Promise<clutch.chaos.experimentation.v1.StopExperimentsResponse>;
+                    public getListView(request: clutch.chaos.experimentation.v1.IGetListViewRequest): Promise<clutch.chaos.experimentation.v1.GetListViewResponse>;
+
+                    /**
+                     * Calls GetExperimentRunDetails.
+                     * @param request GetExperimentRunDetailsRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and GetExperimentRunDetailsResponse
+                     */
+                    public getExperimentRunDetails(request: clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest, callback: clutch.chaos.experimentation.v1.ExperimentsAPI.GetExperimentRunDetailsCallback): void;
+
+                    /**
+                     * Calls GetExperimentRunDetails.
+                     * @param request GetExperimentRunDetailsRequest message or plain object
+                     * @returns Promise
+                     */
+                    public getExperimentRunDetails(request: clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest): Promise<clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse>;
                 }
 
                 namespace ExperimentsAPI {
 
                     /**
-                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#createExperiments}.
+                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#createExperiment}.
                      * @param error Error, if any
-                     * @param [response] CreateExperimentsResponse
+                     * @param [response] CreateExperimentResponse
                      */
-                    type CreateExperimentsCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.CreateExperimentsResponse) => void;
+                    type CreateExperimentCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.CreateExperimentResponse) => void;
+
+                    /**
+                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#cancelExperimentRun}.
+                     * @param error Error, if any
+                     * @param [response] CancelExperimentRunResponse
+                     */
+                    type CancelExperimentRunCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.CancelExperimentRunResponse) => void;
 
                     /**
                      * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#getExperiments}.
@@ -2721,11 +3140,394 @@ export namespace clutch {
                     type GetExperimentsCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.GetExperimentsResponse) => void;
 
                     /**
-                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#stopExperiments}.
+                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#getListView}.
                      * @param error Error, if any
-                     * @param [response] StopExperimentsResponse
+                     * @param [response] GetListViewResponse
                      */
-                    type StopExperimentsCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.StopExperimentsResponse) => void;
+                    type GetListViewCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.GetListViewResponse) => void;
+
+                    /**
+                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#getExperimentRunDetails}.
+                     * @param error Error, if any
+                     * @param [response] GetExperimentRunDetailsResponse
+                     */
+                    type GetExperimentRunDetailsCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse) => void;
+                }
+
+                /** Properties of an Experiment. */
+                interface IExperiment {
+
+                    /** Experiment id */
+                    id?: (number|Long|null);
+
+                    /** Experiment config */
+                    config?: (google.protobuf.IAny|null);
+
+                    /** Experiment startTime */
+                    startTime?: (google.protobuf.ITimestamp|null);
+
+                    /** Experiment endTime */
+                    endTime?: (google.protobuf.ITimestamp|null);
+                }
+
+                /** Represents an Experiment. */
+                class Experiment implements IExperiment {
+
+                    /**
+                     * Constructs a new Experiment.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.experimentation.v1.IExperiment);
+
+                    /** Experiment id. */
+                    public id: (number|Long);
+
+                    /** Experiment config. */
+                    public config?: (google.protobuf.IAny|null);
+
+                    /** Experiment startTime. */
+                    public startTime?: (google.protobuf.ITimestamp|null);
+
+                    /** Experiment endTime. */
+                    public endTime?: (google.protobuf.ITimestamp|null);
+
+                    /**
+                     * Verifies an Experiment message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an Experiment message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Experiment
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.Experiment;
+
+                    /**
+                     * Creates a plain object from an Experiment message. Also converts values to other types if specified.
+                     * @param message Experiment
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.experimentation.v1.Experiment, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Experiment to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                namespace Experiment {
+
+                    /** Status enum. */
+                    enum Status {
+                        STATUS_UNSPECIFIED = 0,
+                        STATUS_SCHEDULED = 1,
+                        STATUS_RUNNING = 2,
+                        STATUS_COMPLETED = 3,
+                        STATUS_CANCELED = 4,
+                        STATUS_STOPPED = 5
+                    }
+                }
+
+                /** Properties of a ListViewItem. */
+                interface IListViewItem {
+
+                    /** ListViewItem id */
+                    id?: (number|Long|null);
+
+                    /** ListViewItem properties */
+                    properties?: (clutch.chaos.experimentation.v1.IPropertiesMap|null);
+                }
+
+                /** Represents a ListViewItem. */
+                class ListViewItem implements IListViewItem {
+
+                    /**
+                     * Constructs a new ListViewItem.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.experimentation.v1.IListViewItem);
+
+                    /** ListViewItem id. */
+                    public id: (number|Long);
+
+                    /** ListViewItem properties. */
+                    public properties?: (clutch.chaos.experimentation.v1.IPropertiesMap|null);
+
+                    /**
+                     * Verifies a ListViewItem message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ListViewItem message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ListViewItem
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.ListViewItem;
+
+                    /**
+                     * Creates a plain object from a ListViewItem message. Also converts values to other types if specified.
+                     * @param message ListViewItem
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.experimentation.v1.ListViewItem, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ListViewItem to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a PropertiesList. */
+                interface IPropertiesList {
+
+                    /** PropertiesList items */
+                    items?: (clutch.chaos.experimentation.v1.IProperty[]|null);
+                }
+
+                /** Represents a PropertiesList. */
+                class PropertiesList implements IPropertiesList {
+
+                    /**
+                     * Constructs a new PropertiesList.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.experimentation.v1.IPropertiesList);
+
+                    /** PropertiesList items. */
+                    public items: clutch.chaos.experimentation.v1.IProperty[];
+
+                    /**
+                     * Verifies a PropertiesList message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a PropertiesList message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns PropertiesList
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.PropertiesList;
+
+                    /**
+                     * Creates a plain object from a PropertiesList message. Also converts values to other types if specified.
+                     * @param message PropertiesList
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.experimentation.v1.PropertiesList, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this PropertiesList to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a PropertiesMap. */
+                interface IPropertiesMap {
+
+                    /** PropertiesMap items */
+                    items?: ({ [k: string]: clutch.chaos.experimentation.v1.IProperty }|null);
+                }
+
+                /** Represents a PropertiesMap. */
+                class PropertiesMap implements IPropertiesMap {
+
+                    /**
+                     * Constructs a new PropertiesMap.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.experimentation.v1.IPropertiesMap);
+
+                    /** PropertiesMap items. */
+                    public items: { [k: string]: clutch.chaos.experimentation.v1.IProperty };
+
+                    /**
+                     * Verifies a PropertiesMap message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a PropertiesMap message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns PropertiesMap
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.PropertiesMap;
+
+                    /**
+                     * Creates a plain object from a PropertiesMap message. Also converts values to other types if specified.
+                     * @param message PropertiesMap
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.experimentation.v1.PropertiesMap, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this PropertiesMap to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a Property. */
+                interface IProperty {
+
+                    /** Property id */
+                    id?: (string|null);
+
+                    /** Property label */
+                    label?: (string|null);
+
+                    /** Property displayValue */
+                    displayValue?: (google.protobuf.IStringValue|null);
+
+                    /** Property dateValue */
+                    dateValue?: (google.protobuf.ITimestamp|null);
+
+                    /** Property stringValue */
+                    stringValue?: (string|null);
+
+                    /** Property intValue */
+                    intValue?: (number|Long|null);
+                }
+
+                /** Represents a Property. */
+                class Property implements IProperty {
+
+                    /**
+                     * Constructs a new Property.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.experimentation.v1.IProperty);
+
+                    /** Property id. */
+                    public id: string;
+
+                    /** Property label. */
+                    public label: string;
+
+                    /** Property displayValue. */
+                    public displayValue?: (google.protobuf.IStringValue|null);
+
+                    /** Property dateValue. */
+                    public dateValue?: (google.protobuf.ITimestamp|null);
+
+                    /** Property stringValue. */
+                    public stringValue: string;
+
+                    /** Property intValue. */
+                    public intValue: (number|Long);
+
+                    /** Property value. */
+                    public value?: ("dateValue"|"stringValue"|"intValue");
+
+                    /**
+                     * Verifies a Property message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Property message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Property
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.Property;
+
+                    /**
+                     * Creates a plain object from a Property message. Also converts values to other types if specified.
+                     * @param message Property
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.experimentation.v1.Property, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Property to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an ExperimentRunDetails. */
+                interface IExperimentRunDetails {
+
+                    /** ExperimentRunDetails runId */
+                    runId?: (number|Long|null);
+
+                    /** ExperimentRunDetails status */
+                    status?: (clutch.chaos.experimentation.v1.Experiment.Status|null);
+
+                    /** ExperimentRunDetails properties */
+                    properties?: (clutch.chaos.experimentation.v1.IPropertiesList|null);
+
+                    /** ExperimentRunDetails config */
+                    config?: (google.protobuf.IAny|null);
+                }
+
+                /** Represents an ExperimentRunDetails. */
+                class ExperimentRunDetails implements IExperimentRunDetails {
+
+                    /**
+                     * Constructs a new ExperimentRunDetails.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.experimentation.v1.IExperimentRunDetails);
+
+                    /** ExperimentRunDetails runId. */
+                    public runId: (number|Long);
+
+                    /** ExperimentRunDetails status. */
+                    public status: clutch.chaos.experimentation.v1.Experiment.Status;
+
+                    /** ExperimentRunDetails properties. */
+                    public properties?: (clutch.chaos.experimentation.v1.IPropertiesList|null);
+
+                    /** ExperimentRunDetails config. */
+                    public config?: (google.protobuf.IAny|null);
+
+                    /**
+                     * Verifies an ExperimentRunDetails message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an ExperimentRunDetails message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ExperimentRunDetails
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.ExperimentRunDetails;
+
+                    /**
+                     * Creates a plain object from an ExperimentRunDetails message. Also converts values to other types if specified.
+                     * @param message ExperimentRunDetails
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.experimentation.v1.ExperimentRunDetails, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ExperimentRunDetails to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
                 }
             }
         }
@@ -2767,9 +3569,6 @@ export namespace clutch {
                     /** TestConfig latency. */
                     public latency?: (clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null);
 
-                    /** TestConfig target. */
-                    public target?: "clusterPair";
-
                     /** TestConfig fault. */
                     public fault?: ("abort"|"latency");
 
@@ -2810,6 +3609,9 @@ export namespace clutch {
 
                     /** ClusterPairTarget upstreamCluster */
                     upstreamCluster?: (string|null);
+
+                    /** ClusterPairTarget faultInjectionCluster */
+                    faultInjectionCluster?: (clutch.chaos.serverexperimentation.v1.FaultInjectionCluster|null);
                 }
 
                 /** Represents a ClusterPairTarget. */
@@ -2826,6 +3628,9 @@ export namespace clutch {
 
                     /** ClusterPairTarget upstreamCluster. */
                     public upstreamCluster: string;
+
+                    /** ClusterPairTarget faultInjectionCluster. */
+                    public faultInjectionCluster: clutch.chaos.serverexperimentation.v1.FaultInjectionCluster;
 
                     /**
                      * Verifies a ClusterPairTarget message.
@@ -2962,6 +3767,13 @@ export namespace clutch {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                /** FaultInjectionCluster enum. */
+                enum FaultInjectionCluster {
+                    FAULTINJECTIONCLUSTER_UNSPECIFIED = 0,
+                    FAULTINJECTIONCLUSTER_DOWNSTREAM = 1,
+                    FAULTINJECTIONCLUSTER_UPSTREAM = 2
                 }
             }
         }
@@ -3506,6 +4318,9 @@ export namespace clutch {
 
                     /** GatewayOptions middleware */
                     middleware?: (clutch.config.gateway.v1.IMiddleware[]|null);
+
+                    /** GatewayOptions assets */
+                    assets?: (clutch.config.gateway.v1.IAssets|null);
                 }
 
                 /** Represents a GatewayOptions. */
@@ -3535,6 +4350,9 @@ export namespace clutch {
                     /** GatewayOptions middleware. */
                     public middleware: clutch.config.gateway.v1.IMiddleware[];
 
+                    /** GatewayOptions assets. */
+                    public assets?: (clutch.config.gateway.v1.IAssets|null);
+
                     /**
                      * Verifies a GatewayOptions message.
                      * @param message Plain object to verify
@@ -3562,6 +4380,120 @@ export namespace clutch {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an Assets. */
+                interface IAssets {
+
+                    /** Assets s3 */
+                    s3?: (clutch.config.gateway.v1.Assets.IS3Provider|null);
+                }
+
+                /** Represents an Assets. */
+                class Assets implements IAssets {
+
+                    /**
+                     * Constructs a new Assets.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.config.gateway.v1.IAssets);
+
+                    /** Assets s3. */
+                    public s3?: (clutch.config.gateway.v1.Assets.IS3Provider|null);
+
+                    /** Assets provider. */
+                    public provider?: "s3";
+
+                    /**
+                     * Verifies an Assets message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an Assets message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Assets
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.config.gateway.v1.Assets;
+
+                    /**
+                     * Creates a plain object from an Assets message. Also converts values to other types if specified.
+                     * @param message Assets
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.config.gateway.v1.Assets, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Assets to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                namespace Assets {
+
+                    /** Properties of a S3Provider. */
+                    interface IS3Provider {
+
+                        /** S3Provider region */
+                        region?: (string|null);
+
+                        /** S3Provider bucket */
+                        bucket?: (string|null);
+
+                        /** S3Provider key */
+                        key?: (string|null);
+                    }
+
+                    /** Represents a S3Provider. */
+                    class S3Provider implements IS3Provider {
+
+                        /**
+                         * Constructs a new S3Provider.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.gateway.v1.Assets.IS3Provider);
+
+                        /** S3Provider region. */
+                        public region: string;
+
+                        /** S3Provider bucket. */
+                        public bucket: string;
+
+                        /** S3Provider key. */
+                        public key: string;
+
+                        /**
+                         * Verifies a S3Provider message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a S3Provider message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns S3Provider
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.gateway.v1.Assets.S3Provider;
+
+                        /**
+                         * Creates a plain object from a S3Provider message. Also converts values to other types if specified.
+                         * @param message S3Provider
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.gateway.v1.Assets.S3Provider, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this S3Provider to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
                 }
 
                 /** Properties of a Logger. */
@@ -3876,6 +4808,12 @@ export namespace clutch {
 
                                 /** Config cacheRefreshInterval */
                                 cacheRefreshInterval?: (google.protobuf.IDuration|null);
+
+                                /** Config ingressFaultRuntimePrefix */
+                                ingressFaultRuntimePrefix?: (string|null);
+
+                                /** Config egressFaultRuntimePrefix */
+                                egressFaultRuntimePrefix?: (string|null);
                             }
 
                             /** Represents a Config. */
@@ -3892,6 +4830,12 @@ export namespace clutch {
 
                                 /** Config cacheRefreshInterval. */
                                 public cacheRefreshInterval?: (google.protobuf.IDuration|null);
+
+                                /** Config ingressFaultRuntimePrefix. */
+                                public ingressFaultRuntimePrefix: string;
+
+                                /** Config egressFaultRuntimePrefix. */
+                                public egressFaultRuntimePrefix: string;
 
                                 /**
                                  * Verifies a Config message.
@@ -4184,6 +5128,9 @@ export namespace clutch {
                         /** Config dbProvider */
                         dbProvider?: (string|null);
 
+                        /** Config inMemory */
+                        inMemory?: (boolean|null);
+
                         /** Config filter */
                         filter?: (clutch.config.service.audit.v1.IFilter|null);
 
@@ -4203,11 +5150,17 @@ export namespace clutch {
                         /** Config dbProvider. */
                         public dbProvider: string;
 
+                        /** Config inMemory. */
+                        public inMemory: boolean;
+
                         /** Config filter. */
                         public filter?: (clutch.config.service.audit.v1.IFilter|null);
 
                         /** Config sinks. */
                         public sinks: string[];
+
+                        /** Config storageProvider. */
+                        public storageProvider?: ("dbProvider"|"inMemory");
 
                         /**
                          * Verifies a Config message.
@@ -4312,6 +5265,54 @@ export namespace clutch {
                         public toJSON(): { [k: string]: any };
                     }
 
+                    /** Properties of a Storage. */
+                    interface IStorage {
+
+                        /** Storage encryptionPassphrase */
+                        encryptionPassphrase?: (string|null);
+                    }
+
+                    /** Represents a Storage. */
+                    class Storage implements IStorage {
+
+                        /**
+                         * Constructs a new Storage.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.authn.v1.IStorage);
+
+                        /** Storage encryptionPassphrase. */
+                        public encryptionPassphrase: string;
+
+                        /**
+                         * Verifies a Storage message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Storage message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Storage
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.authn.v1.Storage;
+
+                        /**
+                         * Creates a plain object from a Storage message. Also converts values to other types if specified.
+                         * @param message Storage
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.authn.v1.Storage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Storage to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
                     /** Properties of a Config. */
                     interface IConfig {
 
@@ -4320,6 +5321,9 @@ export namespace clutch {
 
                         /** Config oidc */
                         oidc?: (clutch.config.service.authn.v1.IOIDC|null);
+
+                        /** Config storage */
+                        storage?: (clutch.config.service.authn.v1.IStorage|null);
                     }
 
                     /** Represents a Config. */
@@ -4336,6 +5340,9 @@ export namespace clutch {
 
                         /** Config oidc. */
                         public oidc?: (clutch.config.service.authn.v1.IOIDC|null);
+
+                        /** Config storage. */
+                        public storage?: (clutch.config.service.authn.v1.IStorage|null);
 
                         /** Config type. */
                         public type?: "oidc";
@@ -5111,6 +6118,110 @@ export namespace clutch {
 
                         /**
                          * Converts this RestClientConfig to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
+
+            /** Namespace topology. */
+            namespace topology {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+
+                        /** Config cache */
+                        cache?: (clutch.config.service.topology.v1.ICache|null);
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.topology.v1.IConfig);
+
+                        /** Config cache. */
+                        public cache?: (clutch.config.service.topology.v1.ICache|null);
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.topology.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.topology.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a Cache. */
+                    interface ICache {
+
+                        /** Cache ttl */
+                        ttl?: (google.protobuf.IDuration|null);
+                    }
+
+                    /** Represents a Cache. */
+                    class Cache implements ICache {
+
+                        /**
+                         * Constructs a new Cache.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.topology.v1.ICache);
+
+                        /** Cache ttl. */
+                        public ttl?: (google.protobuf.IDuration|null);
+
+                        /**
+                         * Verifies a Cache message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Cache message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Cache
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.topology.v1.Cache;
+
+                        /**
+                         * Creates a plain object from a Cache message. Also converts values to other types if specified.
+                         * @param message Cache
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.topology.v1.Cache, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Cache to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };
@@ -6439,6 +7550,20 @@ export namespace clutch {
                 public resizeHPA(request: clutch.k8s.v1.IResizeHPARequest): Promise<clutch.k8s.v1.ResizeHPAResponse>;
 
                 /**
+                 * Calls DeleteHPA.
+                 * @param request DeleteHPARequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DeleteHPAResponse
+                 */
+                public deleteHPA(request: clutch.k8s.v1.IDeleteHPARequest, callback: clutch.k8s.v1.K8sAPI.DeleteHPACallback): void;
+
+                /**
+                 * Calls DeleteHPA.
+                 * @param request DeleteHPARequest message or plain object
+                 * @returns Promise
+                 */
+                public deleteHPA(request: clutch.k8s.v1.IDeleteHPARequest): Promise<clutch.k8s.v1.DeleteHPAResponse>;
+
+                /**
                  * Calls UpdateDeployment.
                  * @param request UpdateDeploymentRequest message or plain object
                  * @param callback Node-style callback called with the error, if any, and UpdateDeploymentResponse
@@ -6451,6 +7576,62 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public updateDeployment(request: clutch.k8s.v1.IUpdateDeploymentRequest): Promise<clutch.k8s.v1.UpdateDeploymentResponse>;
+
+                /**
+                 * Calls DeleteDeployment.
+                 * @param request DeleteDeploymentRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DeleteDeploymentResponse
+                 */
+                public deleteDeployment(request: clutch.k8s.v1.IDeleteDeploymentRequest, callback: clutch.k8s.v1.K8sAPI.DeleteDeploymentCallback): void;
+
+                /**
+                 * Calls DeleteDeployment.
+                 * @param request DeleteDeploymentRequest message or plain object
+                 * @returns Promise
+                 */
+                public deleteDeployment(request: clutch.k8s.v1.IDeleteDeploymentRequest): Promise<clutch.k8s.v1.DeleteDeploymentResponse>;
+
+                /**
+                 * Calls DescribeService.
+                 * @param request DescribeServiceRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DescribeServiceResponse
+                 */
+                public describeService(request: clutch.k8s.v1.IDescribeServiceRequest, callback: clutch.k8s.v1.K8sAPI.DescribeServiceCallback): void;
+
+                /**
+                 * Calls DescribeService.
+                 * @param request DescribeServiceRequest message or plain object
+                 * @returns Promise
+                 */
+                public describeService(request: clutch.k8s.v1.IDescribeServiceRequest): Promise<clutch.k8s.v1.DescribeServiceResponse>;
+
+                /**
+                 * Calls DeleteService.
+                 * @param request DeleteServiceRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DeleteServiceResponse
+                 */
+                public deleteService(request: clutch.k8s.v1.IDeleteServiceRequest, callback: clutch.k8s.v1.K8sAPI.DeleteServiceCallback): void;
+
+                /**
+                 * Calls DeleteService.
+                 * @param request DeleteServiceRequest message or plain object
+                 * @returns Promise
+                 */
+                public deleteService(request: clutch.k8s.v1.IDeleteServiceRequest): Promise<clutch.k8s.v1.DeleteServiceResponse>;
+
+                /**
+                 * Calls UpdateStatefulSet.
+                 * @param request UpdateStatefulSetRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and UpdateStatefulSetResponse
+                 */
+                public updateStatefulSet(request: clutch.k8s.v1.IUpdateStatefulSetRequest, callback: clutch.k8s.v1.K8sAPI.UpdateStatefulSetCallback): void;
+
+                /**
+                 * Calls UpdateStatefulSet.
+                 * @param request UpdateStatefulSetRequest message or plain object
+                 * @returns Promise
+                 */
+                public updateStatefulSet(request: clutch.k8s.v1.IUpdateStatefulSetRequest): Promise<clutch.k8s.v1.UpdateStatefulSetResponse>;
             }
 
             namespace K8sAPI {
@@ -6491,11 +7672,46 @@ export namespace clutch {
                 type ResizeHPACallback = (error: (Error|null), response?: clutch.k8s.v1.ResizeHPAResponse) => void;
 
                 /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteHPA}.
+                 * @param error Error, if any
+                 * @param [response] DeleteHPAResponse
+                 */
+                type DeleteHPACallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteHPAResponse) => void;
+
+                /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateDeployment}.
                  * @param error Error, if any
                  * @param [response] UpdateDeploymentResponse
                  */
                 type UpdateDeploymentCallback = (error: (Error|null), response?: clutch.k8s.v1.UpdateDeploymentResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteDeployment}.
+                 * @param error Error, if any
+                 * @param [response] DeleteDeploymentResponse
+                 */
+                type DeleteDeploymentCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteDeploymentResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeService}.
+                 * @param error Error, if any
+                 * @param [response] DescribeServiceResponse
+                 */
+                type DescribeServiceCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribeServiceResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteService}.
+                 * @param error Error, if any
+                 * @param [response] DeleteServiceResponse
+                 */
+                type DeleteServiceCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteServiceResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateStatefulSet}.
+                 * @param error Error, if any
+                 * @param [response] UpdateStatefulSetResponse
+                 */
+                type UpdateStatefulSetCallback = (error: (Error|null), response?: clutch.k8s.v1.UpdateStatefulSetResponse) => void;
             }
 
             /** Properties of a DescribePodRequest. */
@@ -7525,6 +8741,114 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a DeleteHPARequest. */
+            interface IDeleteHPARequest {
+
+                /** DeleteHPARequest clientset */
+                clientset?: (string|null);
+
+                /** DeleteHPARequest cluster */
+                cluster?: (string|null);
+
+                /** DeleteHPARequest namespace */
+                namespace?: (string|null);
+
+                /** DeleteHPARequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a DeleteHPARequest. */
+            class DeleteHPARequest implements IDeleteHPARequest {
+
+                /**
+                 * Constructs a new DeleteHPARequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteHPARequest);
+
+                /** DeleteHPARequest clientset. */
+                public clientset: string;
+
+                /** DeleteHPARequest cluster. */
+                public cluster: string;
+
+                /** DeleteHPARequest namespace. */
+                public namespace: string;
+
+                /** DeleteHPARequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a DeleteHPARequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteHPARequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteHPARequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteHPARequest;
+
+                /**
+                 * Creates a plain object from a DeleteHPARequest message. Also converts values to other types if specified.
+                 * @param message DeleteHPARequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteHPARequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteHPARequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteHPAResponse. */
+            interface IDeleteHPAResponse {
+            }
+
+            /** Represents a DeleteHPAResponse. */
+            class DeleteHPAResponse implements IDeleteHPAResponse {
+
+                /**
+                 * Constructs a new DeleteHPAResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteHPAResponse);
+
+                /**
+                 * Verifies a DeleteHPAResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteHPAResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteHPAResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteHPAResponse;
+
+                /**
+                 * Creates a plain object from a DeleteHPAResponse message. Also converts values to other types if specified.
+                 * @param message DeleteHPAResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteHPAResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteHPAResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a Deployment. */
             interface IDeployment {
 
@@ -7768,14 +9092,741 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a DeleteDeploymentRequest. */
+            interface IDeleteDeploymentRequest {
+
+                /** DeleteDeploymentRequest clientset */
+                clientset?: (string|null);
+
+                /** DeleteDeploymentRequest cluster */
+                cluster?: (string|null);
+
+                /** DeleteDeploymentRequest namespace */
+                namespace?: (string|null);
+
+                /** DeleteDeploymentRequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a DeleteDeploymentRequest. */
+            class DeleteDeploymentRequest implements IDeleteDeploymentRequest {
+
+                /**
+                 * Constructs a new DeleteDeploymentRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteDeploymentRequest);
+
+                /** DeleteDeploymentRequest clientset. */
+                public clientset: string;
+
+                /** DeleteDeploymentRequest cluster. */
+                public cluster: string;
+
+                /** DeleteDeploymentRequest namespace. */
+                public namespace: string;
+
+                /** DeleteDeploymentRequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a DeleteDeploymentRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteDeploymentRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteDeploymentRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteDeploymentRequest;
+
+                /**
+                 * Creates a plain object from a DeleteDeploymentRequest message. Also converts values to other types if specified.
+                 * @param message DeleteDeploymentRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteDeploymentRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteDeploymentRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteDeploymentResponse. */
+            interface IDeleteDeploymentResponse {
+            }
+
+            /** Represents a DeleteDeploymentResponse. */
+            class DeleteDeploymentResponse implements IDeleteDeploymentResponse {
+
+                /**
+                 * Constructs a new DeleteDeploymentResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteDeploymentResponse);
+
+                /**
+                 * Verifies a DeleteDeploymentResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteDeploymentResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteDeploymentResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteDeploymentResponse;
+
+                /**
+                 * Creates a plain object from a DeleteDeploymentResponse message. Also converts values to other types if specified.
+                 * @param message DeleteDeploymentResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteDeploymentResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteDeploymentResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a StatefulSet. */
+            interface IStatefulSet {
+
+                /** StatefulSet cluster */
+                cluster?: (string|null);
+
+                /** StatefulSet namespace */
+                namespace?: (string|null);
+
+                /** StatefulSet name */
+                name?: (string|null);
+
+                /** StatefulSet labels */
+                labels?: ({ [k: string]: string }|null);
+
+                /** StatefulSet annotations */
+                annotations?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a StatefulSet. */
+            class StatefulSet implements IStatefulSet {
+
+                /**
+                 * Constructs a new StatefulSet.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IStatefulSet);
+
+                /** StatefulSet cluster. */
+                public cluster: string;
+
+                /** StatefulSet namespace. */
+                public namespace: string;
+
+                /** StatefulSet name. */
+                public name: string;
+
+                /** StatefulSet labels. */
+                public labels: { [k: string]: string };
+
+                /** StatefulSet annotations. */
+                public annotations: { [k: string]: string };
+
+                /**
+                 * Verifies a StatefulSet message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a StatefulSet message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns StatefulSet
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.StatefulSet;
+
+                /**
+                 * Creates a plain object from a StatefulSet message. Also converts values to other types if specified.
+                 * @param message StatefulSet
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.StatefulSet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this StatefulSet to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an UpdateStatefulSetRequest. */
+            interface IUpdateStatefulSetRequest {
+
+                /** UpdateStatefulSetRequest clientset */
+                clientset?: (string|null);
+
+                /** UpdateStatefulSetRequest cluster */
+                cluster?: (string|null);
+
+                /** UpdateStatefulSetRequest namespace */
+                namespace?: (string|null);
+
+                /** UpdateStatefulSetRequest name */
+                name?: (string|null);
+
+                /** UpdateStatefulSetRequest fields */
+                fields?: (clutch.k8s.v1.UpdateStatefulSetRequest.IFields|null);
+            }
+
+            /** Represents an UpdateStatefulSetRequest. */
+            class UpdateStatefulSetRequest implements IUpdateStatefulSetRequest {
+
+                /**
+                 * Constructs a new UpdateStatefulSetRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IUpdateStatefulSetRequest);
+
+                /** UpdateStatefulSetRequest clientset. */
+                public clientset: string;
+
+                /** UpdateStatefulSetRequest cluster. */
+                public cluster: string;
+
+                /** UpdateStatefulSetRequest namespace. */
+                public namespace: string;
+
+                /** UpdateStatefulSetRequest name. */
+                public name: string;
+
+                /** UpdateStatefulSetRequest fields. */
+                public fields?: (clutch.k8s.v1.UpdateStatefulSetRequest.IFields|null);
+
+                /**
+                 * Verifies an UpdateStatefulSetRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an UpdateStatefulSetRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns UpdateStatefulSetRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateStatefulSetRequest;
+
+                /**
+                 * Creates a plain object from an UpdateStatefulSetRequest message. Also converts values to other types if specified.
+                 * @param message UpdateStatefulSetRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.UpdateStatefulSetRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this UpdateStatefulSetRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace UpdateStatefulSetRequest {
+
+                /** Properties of a Fields. */
+                interface IFields {
+
+                    /** Fields labels */
+                    labels?: ({ [k: string]: string }|null);
+
+                    /** Fields annotations */
+                    annotations?: ({ [k: string]: string }|null);
+                }
+
+                /** Represents a Fields. */
+                class Fields implements IFields {
+
+                    /**
+                     * Constructs a new Fields.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.k8s.v1.UpdateStatefulSetRequest.IFields);
+
+                    /** Fields labels. */
+                    public labels: { [k: string]: string };
+
+                    /** Fields annotations. */
+                    public annotations: { [k: string]: string };
+
+                    /**
+                     * Verifies a Fields message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Fields message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Fields
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateStatefulSetRequest.Fields;
+
+                    /**
+                     * Creates a plain object from a Fields message. Also converts values to other types if specified.
+                     * @param message Fields
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.k8s.v1.UpdateStatefulSetRequest.Fields, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Fields to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+
+            /** Properties of an UpdateStatefulSetResponse. */
+            interface IUpdateStatefulSetResponse {
+            }
+
+            /** Represents an UpdateStatefulSetResponse. */
+            class UpdateStatefulSetResponse implements IUpdateStatefulSetResponse {
+
+                /**
+                 * Constructs a new UpdateStatefulSetResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IUpdateStatefulSetResponse);
+
+                /**
+                 * Verifies an UpdateStatefulSetResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an UpdateStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns UpdateStatefulSetResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.UpdateStatefulSetResponse;
+
+                /**
+                 * Creates a plain object from an UpdateStatefulSetResponse message. Also converts values to other types if specified.
+                 * @param message UpdateStatefulSetResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.UpdateStatefulSetResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this UpdateStatefulSetResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Service. */
+            interface IService {
+
+                /** Service cluster */
+                cluster?: (string|null);
+
+                /** Service namespace */
+                namespace?: (string|null);
+
+                /** Service name */
+                name?: (string|null);
+
+                /** Service type */
+                type?: (clutch.k8s.v1.Service.Type|null);
+
+                /** Service labels */
+                labels?: ({ [k: string]: string }|null);
+
+                /** Service annotations */
+                annotations?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a Service. */
+            class Service implements IService {
+
+                /**
+                 * Constructs a new Service.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IService);
+
+                /** Service cluster. */
+                public cluster: string;
+
+                /** Service namespace. */
+                public namespace: string;
+
+                /** Service name. */
+                public name: string;
+
+                /** Service type. */
+                public type: clutch.k8s.v1.Service.Type;
+
+                /** Service labels. */
+                public labels: { [k: string]: string };
+
+                /** Service annotations. */
+                public annotations: { [k: string]: string };
+
+                /**
+                 * Verifies a Service message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Service message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Service
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Service;
+
+                /**
+                 * Creates a plain object from a Service message. Also converts values to other types if specified.
+                 * @param message Service
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.Service, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Service to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace Service {
+
+                /** Type enum. */
+                enum Type {
+                    UNSPECIFIED = 0,
+                    UNKNOWN = 1,
+                    CLUSTER_IP = 2,
+                    NODE_PORT = 3,
+                    LOAD_BALANCER = 4,
+                    EXTERNAL_NAME = 5
+                }
+            }
+
+            /** Properties of a DescribeServiceRequest. */
+            interface IDescribeServiceRequest {
+
+                /** DescribeServiceRequest clientset */
+                clientset?: (string|null);
+
+                /** DescribeServiceRequest cluster */
+                cluster?: (string|null);
+
+                /** DescribeServiceRequest namespace */
+                namespace?: (string|null);
+
+                /** DescribeServiceRequest name */
+                name?: (string|null);
+
+                /** DescribeServiceRequest labels */
+                labels?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a DescribeServiceRequest. */
+            class DescribeServiceRequest implements IDescribeServiceRequest {
+
+                /**
+                 * Constructs a new DescribeServiceRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeServiceRequest);
+
+                /** DescribeServiceRequest clientset. */
+                public clientset: string;
+
+                /** DescribeServiceRequest cluster. */
+                public cluster: string;
+
+                /** DescribeServiceRequest namespace. */
+                public namespace: string;
+
+                /** DescribeServiceRequest name. */
+                public name: string;
+
+                /** DescribeServiceRequest labels. */
+                public labels: { [k: string]: string };
+
+                /**
+                 * Verifies a DescribeServiceRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeServiceRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeServiceRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeServiceRequest;
+
+                /**
+                 * Creates a plain object from a DescribeServiceRequest message. Also converts values to other types if specified.
+                 * @param message DescribeServiceRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeServiceRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeServiceRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DescribeServiceResponse. */
+            interface IDescribeServiceResponse {
+
+                /** DescribeServiceResponse service */
+                service?: (clutch.k8s.v1.IService|null);
+            }
+
+            /** Represents a DescribeServiceResponse. */
+            class DescribeServiceResponse implements IDescribeServiceResponse {
+
+                /**
+                 * Constructs a new DescribeServiceResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeServiceResponse);
+
+                /** DescribeServiceResponse service. */
+                public service?: (clutch.k8s.v1.IService|null);
+
+                /**
+                 * Verifies a DescribeServiceResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeServiceResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeServiceResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeServiceResponse;
+
+                /**
+                 * Creates a plain object from a DescribeServiceResponse message. Also converts values to other types if specified.
+                 * @param message DescribeServiceResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeServiceResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeServiceResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteServiceRequest. */
+            interface IDeleteServiceRequest {
+
+                /** DeleteServiceRequest clientset */
+                clientset?: (string|null);
+
+                /** DeleteServiceRequest cluster */
+                cluster?: (string|null);
+
+                /** DeleteServiceRequest namespace */
+                namespace?: (string|null);
+
+                /** DeleteServiceRequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a DeleteServiceRequest. */
+            class DeleteServiceRequest implements IDeleteServiceRequest {
+
+                /**
+                 * Constructs a new DeleteServiceRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteServiceRequest);
+
+                /** DeleteServiceRequest clientset. */
+                public clientset: string;
+
+                /** DeleteServiceRequest cluster. */
+                public cluster: string;
+
+                /** DeleteServiceRequest namespace. */
+                public namespace: string;
+
+                /** DeleteServiceRequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a DeleteServiceRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteServiceRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteServiceRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteServiceRequest;
+
+                /**
+                 * Creates a plain object from a DeleteServiceRequest message. Also converts values to other types if specified.
+                 * @param message DeleteServiceRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteServiceRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteServiceRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteServiceResponse. */
+            interface IDeleteServiceResponse {
+            }
+
+            /** Represents a DeleteServiceResponse. */
+            class DeleteServiceResponse implements IDeleteServiceResponse {
+
+                /**
+                 * Constructs a new DeleteServiceResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteServiceResponse);
+
+                /**
+                 * Verifies a DeleteServiceResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteServiceResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteServiceResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteServiceResponse;
+
+                /**
+                 * Creates a plain object from a DeleteServiceResponse message. Also converts values to other types if specified.
+                 * @param message DeleteServiceResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteServiceResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteServiceResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a NullableString. */
+            interface INullableString {
+
+                /** NullableString null */
+                "null"?: (google.protobuf.NullValue|null);
+
+                /** NullableString value */
+                value?: (string|null);
+            }
+
+            /** Represents a NullableString. */
+            class NullableString implements INullableString {
+
+                /**
+                 * Constructs a new NullableString.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.INullableString);
+
+                /** NullableString null. */
+                public null: google.protobuf.NullValue;
+
+                /** NullableString value. */
+                public value: string;
+
+                /** NullableString kind. */
+                public kind?: ("null"|"value");
+
+                /**
+                 * Verifies a NullableString message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a NullableString message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns NullableString
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.NullableString;
+
+                /**
+                 * Creates a plain object from a NullableString message. Also converts values to other types if specified.
+                 * @param message NullableString
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.NullableString, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this NullableString to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of an ExpectedObjectMetaFields. */
             interface IExpectedObjectMetaFields {
 
                 /** ExpectedObjectMetaFields labels */
-                labels?: ({ [k: string]: google.protobuf.IStringValue }|null);
+                labels?: ({ [k: string]: clutch.k8s.v1.INullableString }|null);
 
                 /** ExpectedObjectMetaFields annotations */
-                annotations?: ({ [k: string]: google.protobuf.IStringValue }|null);
+                annotations?: ({ [k: string]: clutch.k8s.v1.INullableString }|null);
             }
 
             /** Represents an ExpectedObjectMetaFields. */
@@ -7788,10 +9839,10 @@ export namespace clutch {
                 constructor(properties?: clutch.k8s.v1.IExpectedObjectMetaFields);
 
                 /** ExpectedObjectMetaFields labels. */
-                public labels: { [k: string]: google.protobuf.IStringValue };
+                public labels: { [k: string]: clutch.k8s.v1.INullableString };
 
                 /** ExpectedObjectMetaFields annotations. */
-                public annotations: { [k: string]: google.protobuf.IStringValue };
+                public annotations: { [k: string]: clutch.k8s.v1.INullableString };
 
                 /**
                  * Verifies an ExpectedObjectMetaFields message.
@@ -9164,6 +11215,126 @@ export namespace clutch {
                      */
                     public toJSON(): { [k: string]: any };
                 }
+
+                /** Properties of a StatefulSet. */
+                interface IStatefulSet {
+
+                    /** StatefulSet name */
+                    name?: (string|null);
+
+                    /** StatefulSet clientset */
+                    clientset?: (string|null);
+
+                    /** StatefulSet namespace */
+                    namespace?: (string|null);
+                }
+
+                /** Represents a StatefulSet. */
+                class StatefulSet implements IStatefulSet {
+
+                    /**
+                     * Constructs a new StatefulSet.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.k8s.v1.IStatefulSet);
+
+                    /** StatefulSet name. */
+                    public name: string;
+
+                    /** StatefulSet clientset. */
+                    public clientset: string;
+
+                    /** StatefulSet namespace. */
+                    public namespace: string;
+
+                    /**
+                     * Verifies a StatefulSet message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a StatefulSet message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns StatefulSet
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.k8s.v1.StatefulSet;
+
+                    /**
+                     * Creates a plain object from a StatefulSet message. Also converts values to other types if specified.
+                     * @param message StatefulSet
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.k8s.v1.StatefulSet, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this StatefulSet to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a Service. */
+                interface IService {
+
+                    /** Service name */
+                    name?: (string|null);
+
+                    /** Service clientset */
+                    clientset?: (string|null);
+
+                    /** Service namespace */
+                    namespace?: (string|null);
+                }
+
+                /** Represents a Service. */
+                class Service implements IService {
+
+                    /**
+                     * Constructs a new Service.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.k8s.v1.IService);
+
+                    /** Service name. */
+                    public name: string;
+
+                    /** Service clientset. */
+                    public clientset: string;
+
+                    /** Service namespace. */
+                    public namespace: string;
+
+                    /**
+                     * Verifies a Service message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Service message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Service
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.k8s.v1.Service;
+
+                    /**
+                     * Creates a plain object from a Service message. Also converts values to other types if specified.
+                     * @param message Service
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.k8s.v1.Service, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Service to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
             }
         }
     }
@@ -10196,6 +12367,130 @@ export namespace clutch {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Resource. */
+            interface IResource {
+
+                /** Resource id */
+                id?: (string|null);
+
+                /** Resource pb */
+                pb?: (google.protobuf.IAny|null);
+
+                /** Resource metadata */
+                metadata?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a Resource. */
+            class Resource implements IResource {
+
+                /**
+                 * Constructs a new Resource.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.topology.v1.IResource);
+
+                /** Resource id. */
+                public id: string;
+
+                /** Resource pb. */
+                public pb?: (google.protobuf.IAny|null);
+
+                /** Resource metadata. */
+                public metadata: { [k: string]: string };
+
+                /**
+                 * Verifies a Resource message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Resource message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Resource
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.Resource;
+
+                /**
+                 * Creates a plain object from a Resource message. Also converts values to other types if specified.
+                 * @param message Resource
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.topology.v1.Resource, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Resource to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an UpdateCacheRequest. */
+            interface IUpdateCacheRequest {
+
+                /** UpdateCacheRequest resource */
+                resource?: (clutch.topology.v1.IResource|null);
+
+                /** UpdateCacheRequest action */
+                action?: (clutch.topology.v1.UpdateCacheRequest.Action|null);
+            }
+
+            /** Represents an UpdateCacheRequest. */
+            class UpdateCacheRequest implements IUpdateCacheRequest {
+
+                /**
+                 * Constructs a new UpdateCacheRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.topology.v1.IUpdateCacheRequest);
+
+                /** UpdateCacheRequest resource. */
+                public resource?: (clutch.topology.v1.IResource|null);
+
+                /** UpdateCacheRequest action. */
+                public action: clutch.topology.v1.UpdateCacheRequest.Action;
+
+                /**
+                 * Verifies an UpdateCacheRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an UpdateCacheRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns UpdateCacheRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.UpdateCacheRequest;
+
+                /**
+                 * Creates a plain object from an UpdateCacheRequest message. Also converts values to other types if specified.
+                 * @param message UpdateCacheRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.topology.v1.UpdateCacheRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this UpdateCacheRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace UpdateCacheRequest {
+
+                /** Action enum. */
+                enum Action {
+                    UNSPECIFIED = 0,
+                    CREATE_OR_UPDATE = 1,
+                    DELETE = 2
+                }
             }
         }
     }
@@ -14268,6 +16563,60 @@ export namespace google {
             }
         }
 
+        /** Properties of an Any. */
+        interface IAny {
+
+            /** Any type_url */
+            type_url?: (string|null);
+
+            /** Any value */
+            value?: (Uint8Array|null);
+        }
+
+        /** Represents an Any. */
+        class Any implements IAny {
+
+            /**
+             * Constructs a new Any.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: google.protobuf.IAny);
+
+            /** Any type_url. */
+            public type_url: string;
+
+            /** Any value. */
+            public value: Uint8Array;
+
+            /**
+             * Verifies an Any message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates an Any message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Any
+             */
+            public static fromObject(object: { [k: string]: any }): google.protobuf.Any;
+
+            /**
+             * Creates a plain object from an Any message. Also converts values to other types if specified.
+             * @param message Any
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: google.protobuf.Any, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Any to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a Duration. */
         interface IDuration {
 
@@ -14371,242 +16720,6 @@ export namespace google {
 
             /**
              * Converts this Timestamp to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of an Any. */
-        interface IAny {
-
-            /** Any type_url */
-            type_url?: (string|null);
-
-            /** Any value */
-            value?: (Uint8Array|null);
-        }
-
-        /** Represents an Any. */
-        class Any implements IAny {
-
-            /**
-             * Constructs a new Any.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: google.protobuf.IAny);
-
-            /** Any type_url. */
-            public type_url: string;
-
-            /** Any value. */
-            public value: Uint8Array;
-
-            /**
-             * Verifies an Any message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates an Any message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns Any
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.Any;
-
-            /**
-             * Creates a plain object from an Any message. Also converts values to other types if specified.
-             * @param message Any
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.Any, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this Any to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a Struct. */
-        interface IStruct {
-
-            /** Struct fields */
-            fields?: ({ [k: string]: google.protobuf.IValue }|null);
-        }
-
-        /** Represents a Struct. */
-        class Struct implements IStruct {
-
-            /**
-             * Constructs a new Struct.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: google.protobuf.IStruct);
-
-            /** Struct fields. */
-            public fields: { [k: string]: google.protobuf.IValue };
-
-            /**
-             * Verifies a Struct message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a Struct message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns Struct
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.Struct;
-
-            /**
-             * Creates a plain object from a Struct message. Also converts values to other types if specified.
-             * @param message Struct
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.Struct, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this Struct to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a Value. */
-        interface IValue {
-
-            /** Value nullValue */
-            nullValue?: (google.protobuf.NullValue|null);
-
-            /** Value numberValue */
-            numberValue?: (number|null);
-
-            /** Value stringValue */
-            stringValue?: (string|null);
-
-            /** Value boolValue */
-            boolValue?: (boolean|null);
-
-            /** Value structValue */
-            structValue?: (google.protobuf.IStruct|null);
-
-            /** Value listValue */
-            listValue?: (google.protobuf.IListValue|null);
-        }
-
-        /** Represents a Value. */
-        class Value implements IValue {
-
-            /**
-             * Constructs a new Value.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: google.protobuf.IValue);
-
-            /** Value nullValue. */
-            public nullValue: google.protobuf.NullValue;
-
-            /** Value numberValue. */
-            public numberValue: number;
-
-            /** Value stringValue. */
-            public stringValue: string;
-
-            /** Value boolValue. */
-            public boolValue: boolean;
-
-            /** Value structValue. */
-            public structValue?: (google.protobuf.IStruct|null);
-
-            /** Value listValue. */
-            public listValue?: (google.protobuf.IListValue|null);
-
-            /** Value kind. */
-            public kind?: ("nullValue"|"numberValue"|"stringValue"|"boolValue"|"structValue"|"listValue");
-
-            /**
-             * Verifies a Value message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a Value message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns Value
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.Value;
-
-            /**
-             * Creates a plain object from a Value message. Also converts values to other types if specified.
-             * @param message Value
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.Value, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this Value to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** NullValue enum. */
-        enum NullValue {
-            NULL_VALUE = 0
-        }
-
-        /** Properties of a ListValue. */
-        interface IListValue {
-
-            /** ListValue values */
-            values?: (google.protobuf.IValue[]|null);
-        }
-
-        /** Represents a ListValue. */
-        class ListValue implements IListValue {
-
-            /**
-             * Constructs a new ListValue.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: google.protobuf.IListValue);
-
-            /** ListValue values. */
-            public values: google.protobuf.IValue[];
-
-            /**
-             * Verifies a ListValue message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a ListValue message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns ListValue
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.ListValue;
-
-            /**
-             * Creates a plain object from a ListValue message. Also converts values to other types if specified.
-             * @param message ListValue
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.ListValue, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this ListValue to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
@@ -15039,6 +17152,188 @@ export namespace google {
 
             /**
              * Converts this BytesValue to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a Struct. */
+        interface IStruct {
+
+            /** Struct fields */
+            fields?: ({ [k: string]: google.protobuf.IValue }|null);
+        }
+
+        /** Represents a Struct. */
+        class Struct implements IStruct {
+
+            /**
+             * Constructs a new Struct.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: google.protobuf.IStruct);
+
+            /** Struct fields. */
+            public fields: { [k: string]: google.protobuf.IValue };
+
+            /**
+             * Verifies a Struct message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Struct message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Struct
+             */
+            public static fromObject(object: { [k: string]: any }): google.protobuf.Struct;
+
+            /**
+             * Creates a plain object from a Struct message. Also converts values to other types if specified.
+             * @param message Struct
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: google.protobuf.Struct, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Struct to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a Value. */
+        interface IValue {
+
+            /** Value nullValue */
+            nullValue?: (google.protobuf.NullValue|null);
+
+            /** Value numberValue */
+            numberValue?: (number|null);
+
+            /** Value stringValue */
+            stringValue?: (string|null);
+
+            /** Value boolValue */
+            boolValue?: (boolean|null);
+
+            /** Value structValue */
+            structValue?: (google.protobuf.IStruct|null);
+
+            /** Value listValue */
+            listValue?: (google.protobuf.IListValue|null);
+        }
+
+        /** Represents a Value. */
+        class Value implements IValue {
+
+            /**
+             * Constructs a new Value.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: google.protobuf.IValue);
+
+            /** Value nullValue. */
+            public nullValue: google.protobuf.NullValue;
+
+            /** Value numberValue. */
+            public numberValue: number;
+
+            /** Value stringValue. */
+            public stringValue: string;
+
+            /** Value boolValue. */
+            public boolValue: boolean;
+
+            /** Value structValue. */
+            public structValue?: (google.protobuf.IStruct|null);
+
+            /** Value listValue. */
+            public listValue?: (google.protobuf.IListValue|null);
+
+            /** Value kind. */
+            public kind?: ("nullValue"|"numberValue"|"stringValue"|"boolValue"|"structValue"|"listValue");
+
+            /**
+             * Verifies a Value message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Value message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Value
+             */
+            public static fromObject(object: { [k: string]: any }): google.protobuf.Value;
+
+            /**
+             * Creates a plain object from a Value message. Also converts values to other types if specified.
+             * @param message Value
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: google.protobuf.Value, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Value to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** NullValue enum. */
+        enum NullValue {
+            NULL_VALUE = 0
+        }
+
+        /** Properties of a ListValue. */
+        interface IListValue {
+
+            /** ListValue values */
+            values?: (google.protobuf.IValue[]|null);
+        }
+
+        /** Represents a ListValue. */
+        class ListValue implements IListValue {
+
+            /**
+             * Constructs a new ListValue.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: google.protobuf.IListValue);
+
+            /** ListValue values. */
+            public values: google.protobuf.IValue[];
+
+            /**
+             * Verifies a ListValue message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a ListValue message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ListValue
+             */
+            public static fromObject(object: { [k: string]: any }): google.protobuf.ListValue;
+
+            /**
+             * Creates a plain object from a ListValue message. Also converts values to other types if specified.
+             * @param message ListValue
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: google.protobuf.ListValue, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ListValue to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };

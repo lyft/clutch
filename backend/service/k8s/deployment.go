@@ -2,13 +2,12 @@ package k8s
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	appsv1 "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/apimachinery/pkg/util/strategicpatch"
 	"k8s.io/client-go/util/retry"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
@@ -20,7 +19,7 @@ func (s *svc) DescribeDeployment(ctx context.Context, clientset, cluster, namesp
 		return nil, err
 	}
 
-	deployments, err := cs.AppsV1().Deployments(cs.Namespace()).List(metav1.ListOptions{
+	deployments, err := cs.AppsV1().Deployments(cs.Namespace()).List(ctx, metav1.ListOptions{
 		FieldSelector: "metadata.name=" + name,
 	})
 	if err != nil {
@@ -57,67 +56,44 @@ func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespac
 	}
 
 	getOpts := metav1.GetOptions{}
-	oldDeployment, err := cs.AppsV1().Deployments(cs.Namespace()).Get(name, getOpts)
+	oldDeployment, err := cs.AppsV1().Deployments(cs.Namespace()).Get(ctx, name, getOpts)
 	if err != nil {
 		return err
 	}
 
 	newDeployment := oldDeployment.DeepCopy()
-	mergeLabelsAndAnnotations(newDeployment, fields)
+	mergeDeploymentLabelsAndAnnotations(newDeployment, fields)
 
-	patchBytes, err := generateDeploymentStrategicPatch(oldDeployment, newDeployment)
+	patchBytes, err := GenerateStrategicPatch(oldDeployment, newDeployment, appsv1.Deployment{})
 	if err != nil {
 		return err
 	}
 
 	retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
-		_, err := cs.AppsV1().Deployments(cs.Namespace()).Patch(oldDeployment.Name, types.StrategicMergePatchType, patchBytes)
+		_, err := cs.AppsV1().Deployments(cs.Namespace()).Patch(ctx, oldDeployment.Name, types.StrategicMergePatchType, patchBytes, metav1.PatchOptions{})
 		return err
 	})
 	return retryErr
 }
 
-func mergeLabelsAndAnnotations(deployment *appsv1.Deployment, fields *k8sapiv1.UpdateDeploymentRequest_Fields) {
+func (s *svc) DeleteDeployment(ctx context.Context, clientset, cluster, namespace, name string) error {
+	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	if err != nil {
+		return err
+	}
+
+	opts := metav1.DeleteOptions{}
+	return cs.AppsV1().Deployments(cs.Namespace()).Delete(ctx, name, opts)
+}
+
+func mergeDeploymentLabelsAndAnnotations(deployment *appsv1.Deployment, fields *k8sapiv1.UpdateDeploymentRequest_Fields) {
 	if len(fields.Labels) > 0 {
-		for k, v := range fields.Labels {
-			deployment.Labels[k] = v
-
-			if deployment.Spec.Template.ObjectMeta.Labels == nil {
-				deployment.Spec.Template.ObjectMeta.Labels = make(map[string]string)
-			}
-
-			deployment.Spec.Template.ObjectMeta.Labels[k] = v
-		}
+		deployment.Labels = labels.Merge(labels.Set(deployment.Labels), labels.Set(fields.Labels))
+		deployment.Spec.Template.ObjectMeta.Labels = labels.Merge(labels.Set(deployment.Spec.Template.ObjectMeta.Labels), labels.Set(fields.Labels))
 	}
 
 	if len(fields.Annotations) > 0 {
-		for k, v := range fields.Annotations {
-			deployment.Annotations[k] = v
-
-			if deployment.Spec.Template.ObjectMeta.Annotations == nil {
-				deployment.Spec.Template.ObjectMeta.Annotations = make(map[string]string)
-			}
-
-			deployment.Spec.Template.ObjectMeta.Annotations[k] = v
-		}
+		deployment.Annotations = labels.Merge(labels.Set(deployment.Annotations), labels.Set(fields.Annotations))
+		deployment.Spec.Template.ObjectMeta.Annotations = labels.Merge(labels.Set(deployment.Spec.Template.ObjectMeta.Annotations), labels.Set(fields.Annotations))
 	}
-}
-
-func generateDeploymentStrategicPatch(oldDeployment, newDeployment *appsv1.Deployment) ([]byte, error) {
-	old, err := json.Marshal(oldDeployment)
-	if err != nil {
-		return nil, err
-	}
-
-	new, err := json.Marshal(newDeployment)
-	if err != nil {
-		return nil, err
-	}
-
-	patchBytes, err := strategicpatch.CreateTwoWayMergePatch(old, new, appsv1.Deployment{})
-	if err != nil {
-		return nil, err
-	}
-
-	return patchBytes, nil
 }

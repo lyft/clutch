@@ -37,7 +37,9 @@
     "lint:packages:fix": "sort-package-json package.json packages/**/package.json",
     "package": "func() { yarn workspace @clutch-sh/\"$@\"; }; func",
     "publishBeta": "lerna run compile && lerna run publishBeta --no-bail",
-    "start": "yarn compile:watch & yarn workspace @clutch-sh/app start",
+    "start": "yarn compile:watch & FORCE_COLOR=true yarn workspace @clutch-sh/app start | cat",
+    "storybook": "start-storybook -p 6006",
+    "storybook:build": "build-storybook --no-dll -o netlify/storybook-static",
     "test": "lerna run test --stream --no-bail --",
     "test:coverage": "lerna run test:coverage --stream --no-bail --",
     "test:e2e": "lerna run test:e2e",
@@ -57,13 +59,27 @@
       "last 1 safari version"
     ]
   },
-  "dependencies": {
-    "protobufjs": "6.10.1"
-  },
   "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@material-ui/core": "^4.11.0",
+    "@storybook/addon-actions": "^6.0.21",
+    "@storybook/addon-essentials": "^6.0.21",
+    "@storybook/addon-links": "^6.0.21",
+    "@storybook/node-logger": "^6.0.21",
+    "@storybook/preset-typescript": "^3.0.0",
+    "@storybook/react": "^6.0.21",
+    "@storybook/theming": "^6.0.22",
+    "babel-loader": "^8.1.0",
     "lerna": "^3.22.1",
     "license-checker": "^25.0.1",
-    "sort-package-json": "^1.44.0"
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "react-is": "^16.8.0",
+    "react-scripts": "^3.4.1",
+    "sort-package-json": "^1.44.0",
+    "styled-components": "^5.1.1",
+    "typescript": "^3.8.0",
+    "webpack": "4.42.0"
   },
   "engines": {
     "node": ">=12.0.0"

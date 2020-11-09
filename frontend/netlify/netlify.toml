@@ -1,0 +1,10 @@
+[build]
+  # Only build clutch-components site if frontend files change.
+  ignore = "cd .. && git diff --quiet $(/bin/bash -c 'if [ \"$(git rev-parse --abbrev-ref HEAD)\" == \"main\" ]; then echo HEAD^; else echo main; fi')...HEAD -- '*.ts*' '*.js' 'yarn.lock'"
+
+[[headers]]
+  # Define which paths this specific [[headers]] block will cover.
+  for = "/*"
+
+  [headers.values]
+    X-XSS-Protection = "1; mode=block"

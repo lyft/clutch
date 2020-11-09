@@ -1,11 +1,10 @@
 import React from "react";
 import {
+  AccordionDetails,
+  AccordionSummary,
   Collapse as MuiCollapse,
   ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
   IconButton,
-  Snackbar,
   Typography,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -15,19 +14,19 @@ import styled from "styled-components";
 
 const PANEL_MESSAGE_BREAKPOINT = 150;
 
-interface ErrorProps {
+export interface ErrorProps {
   message: string;
-  retry?: () => void;
+  onRetry?: () => void;
 }
 
 const Alert = styled(MuiAlert)`
   margin: 5px;
 `;
 
-const Error: React.FC<ErrorProps> = ({ message, retry }) => {
+const Error: React.FC<ErrorProps> = ({ message, onRetry }) => {
   const action =
-    retry !== undefined ? (
-      <IconButton aria-label="retry" color="inherit" size="small" onClick={() => retry()}>
+    onRetry !== undefined ? (
+      <IconButton aria-label="retry" color="inherit" size="small" onClick={() => onRetry()}>
         <RefreshIcon />
       </IconButton>
     ) : null;
@@ -71,16 +70,16 @@ const CompressedError = ({ title, message }) => {
         <AlertTitle>{title || "Error"}</AlertTitle>
         {(errorMsg?.length || 0) > PANEL_MESSAGE_BREAKPOINT ? (
           <ErrorPanel elevation={0}>
-            <ExpansionPanelSummary
+            <AccordionSummary
               style={{ padding: "0px" }}
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
             >
               <ErrorText>{errorMsg.slice(0, PANEL_MESSAGE_BREAKPOINT)}</ErrorText>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails style={{ padding: "0px" }}>
+            </AccordionSummary>
+            <AccordionDetails style={{ padding: "0px" }}>
               <ErrorText>{errorMsg.slice(PANEL_MESSAGE_BREAKPOINT)}</ErrorText>
-            </ExpansionPanelDetails>
+            </AccordionDetails>
           </ErrorPanel>
         ) : (
           errorMsg
@@ -90,21 +89,4 @@ const CompressedError = ({ title, message }) => {
   );
 };
 
-const Warning = ({ message }) => {
-  const [open, setOpen] = React.useState(true);
-
-  return (
-    <Snackbar
-      open={open}
-      autoHideDuration={6000}
-      onClose={() => setOpen(false)}
-      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-    >
-      <Alert elevation={6} variant="filled" onClose={() => setOpen(false)} severity="warning">
-        {message}
-      </Alert>
-    </Snackbar>
-  );
-};
-
-export { CompressedError, Error, Warning };
+export { CompressedError, Error };

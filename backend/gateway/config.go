@@ -12,15 +12,14 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/golang/protobuf/jsonpb"
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
-	durpb "github.com/golang/protobuf/ptypes/duration"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 	"gopkg.in/yaml.v3"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
+	"github.com/lyft/clutch/backend/middleware/timeouts"
 )
 
 type Flags struct {
@@ -120,28 +119,18 @@ func parseYAML(contents []byte, pb proto.Message) error {
 	}
 
 	// Encode YAML to JSON.
-	jsonBuffer := new(bytes.Buffer)
-	if err := json.NewEncoder(jsonBuffer).Encode(rawConfig); err != nil {
+	rawJSON, err := json.Marshal(rawConfig)
+	if err != nil {
 		return err
 	}
 
 	// Unmarshal JSON to proto object.
-	if err := jsonpb.Unmarshal(jsonBuffer, pb); err != nil {
+	if err := protojson.Unmarshal(rawJSON, pb); err != nil {
 		return err
 	}
 
 	// All good!
 	return nil
-}
-
-// Helper "must" function to convert proto durations to Go durations. This should only be called during bootstrap where
-// a panic is not a problem. Config validation should also prevent the panic from ever occurring.
-func duration(p *durpb.Duration) time.Duration {
-	d, err := ptypes.Duration(p)
-	if err != nil {
-		panic(err)
-	}
-	return d
 }
 
 func newLogger(msg *gatewayv1.Logger) (*zap.Logger, error) {
@@ -183,15 +172,38 @@ type validator interface {
 	Validate() error
 }
 
-func validateAny(a *any.Any) error {
+// Returns maximum timeout, where 0 is considered maximum (i.e. no timeout).
+func computeMaximumTimeout(cfg *gatewayv1.Timeouts) time.Duration {
+	if cfg == nil {
+		return timeouts.DefaultTimeout
+	}
+
+	ret := cfg.Default.AsDuration()
+	for _, e := range cfg.Overrides {
+		override := e.Timeout.AsDuration()
+		if ret == 0 || override == 0 {
+			return 0
+		}
+
+		if override > ret {
+			ret = override
+		}
+	}
+
+	return ret
+}
+
+func validateAny(a *anypb.Any) error {
 	if a == nil {
 		return nil
 	}
-	var pb ptypes.DynamicAny
-	if err := ptypes.UnmarshalAny(a, &pb); err != nil {
+
+	m, err := a.UnmarshalNew()
+	if err != nil {
 		return err
 	}
-	if v, ok := pb.Message.(validator); ok {
+
+	if v, ok := m.(validator); ok {
 		return v.Validate()
 	}
 	return nil

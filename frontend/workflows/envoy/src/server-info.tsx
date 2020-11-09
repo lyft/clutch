@@ -11,16 +11,25 @@ interface ServerInformation {
   state: string;
 }
 
+const INFORMATION_KEYS = [
+  "hot_restart_version",
+  "uptime_all_epochs",
+  "uptime_current_epoch",
+  "version",
+];
+
 const ServerInfo: React.FC<{ info: IClutch.envoytriage.v1.IServerInfo }> = ({ info }) => {
-  const serverInfo = { ...info.value } as ServerInformation;
-  const cliOptions = serverInfo.command_line_options;
-  delete serverInfo.command_line_options;
+  const rawServerInfo = { ...info.value } as ServerInformation;
+  const information = INFORMATION_KEYS.reduce((filteredInfo, key) => {
+    const localInfo = filteredInfo;
+    localInfo[key] = rawServerInfo[key];
+    return localInfo;
+  }, {});
+  const cliOptions = rawServerInfo.command_line_options;
+  const status = `(${rawServerInfo.state.toLowerCase()})`;
 
-  const status = `(${serverInfo.state.toLowerCase()})`;
-  delete serverInfo.state;
-
-  const serverData = Object.keys(serverInfo).map(key => {
-    return { name: key, value: serverInfo[key] };
+  const serverData = Object.keys(information).map(key => {
+    return { name: key, value: information[key] };
   });
   serverData.push({ name: "Command Line Options", value: "" });
   const cliOptionMetadata = Object.keys(cliOptions).map(key => {

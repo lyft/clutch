@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # https://github.com/protocolbuffers/protobuf/releases
-PROTOC_RELEASE=3.12.4
-PROTO_ZIP_RELEASE_MD5_LINUX=e5912ab0534094f27731e2fe818d1ea7
-PROTO_ZIP_RELEASE_MD5_OSX=338ddd3ca26aef12448db2b0e912263e
+PROTOC_RELEASE=3.13.0
+PROTO_ZIP_RELEASE_MD5_LINUX=20a5326fbc666e1fd069eaa80875fcac
+PROTO_ZIP_RELEASE_MD5_OSX=a545b7fb818dba564aa161e4232e69f5
 
 # https://github.com/protobufjs/protobuf.js/releases
 # NOTE: should match frontend/package.json
@@ -17,7 +17,6 @@ ANGULAR_CLANG_FORMAT_RELEASE_MD5_OSX=c3ebe742599dcc38b9dc6544cacd69bb
 
 PROTOS=()
 PROTO_DIRS=()
-CLUTCH_PROTOS=()
 
 SCRIPT_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
 
@@ -80,7 +79,7 @@ main() {
   prepare_build_environment
   discover_protos
 
-  grpc_gateway_include_path="$(modpath github.com/grpc-ecosystem/grpc-gateway)/third_party/googleapis"
+  grpc_gateway_include_path="$(modpath github.com/grpc-ecosystem/grpc-gateway/v2)/third_party/googleapis"
   pg_validate_include_path="$(modpath github.com/envoyproxy/protoc-gen-validate)"
 
   # Lint (fix) and exit if requested.
@@ -124,36 +123,23 @@ main() {
   proto_out_dir="${REPO_ROOT}/backend/api"
   mkdir -p "${proto_out_dir}"
 
-  MFLAGS=""
-  package_dir="$(grep -m1 module go.mod | cut -d' ' -f2)/api"
-
-  for proto in "${PROTOS[@]}"; do
-    relative_path="${proto/#${API_ROOT}\/}"
-    MFLAGS+="M${relative_path}=$(dirname "${package_dir}/${relative_path}"),"
-  done
-
-  # Add MFLAGS for Clutch protos when this is running for a private gateway.
-  if [[ "${CLUTCH_API_ROOT}" != "${API_ROOT}" ]]; then
-    discover_core_protos
-    readonly CLUTCH_PREFIX="github.com/lyft/clutch/backend/api"
-    for proto in "${CLUTCH_PROTOS[@]}"; do
-      relative_path="${proto/#${CLUTCH_API_ROOT}\/}"
-      MFLAGS+="M${relative_path}=${CLUTCH_PREFIX}/$(dirname "${relative_path}"),"
-    done
-  fi
-
   echo "info: compiling go"
   for proto_dir in "${PROTO_DIRS[@]}"; do
     echo "${proto_dir}"
     "${PROTOC_BIN}" \
       -I"${PROTOC_INCLUDE_DIR}" -I"${API_ROOT}" -I"${CLUTCH_API_ROOT}" \
       -I"${grpc_gateway_include_path}" -I"${pg_validate_include_path}" \
-      --go_out="${MFLAGS}"plugins=grpc:"${proto_out_dir}" \
-      --validate_out="${MFLAGS}"lang=go:"${proto_out_dir}" \
-      --grpc-gateway_out="${proto_out_dir}" \
-      --plugin=protoc-gen-go="${GOBIN}/protoc-gen-go" \
-      --plugin=protoc-gen-grpc-gateway="${GOBIN}/protoc-gen-grpc-gateway" \
-      --plugin=protoc-gen-validate="${GOBIN}/protoc-gen-validate" \
+      --go_out "${proto_out_dir}" \
+      --go_opt paths=source_relative \
+      --go-grpc_out "${proto_out_dir}" \
+      --go-grpc_opt require_unimplemented_servers=false,paths=source_relative \
+      --validate_out paths=source_relative,lang=go:"${proto_out_dir}" \
+      --grpc-gateway_out "${proto_out_dir}" \
+      --grpc-gateway_opt warn_on_unbound_methods=true,paths=source_relative \
+      --plugin protoc-gen-go="${GOBIN}/protoc-gen-go" \
+      --plugin protoc-gen-go-grpc="${GOBIN}/protoc-gen-go-grpc" \
+      --plugin protoc-gen-grpc-gateway="${GOBIN}/protoc-gen-grpc-gateway" \
+      --plugin protoc-gen-validate="${GOBIN}/protoc-gen-validate" \
       "${proto_dir}"/*.proto
   done
 
@@ -189,13 +175,6 @@ discover_protos() {
     PROTO_DIRS+=("${proto_dirs}")
   done <  <(find "${API_ROOT}" -name '*.proto' -exec dirname {} \; | tr '\n' '\0' | sort -sdzu)
 }
-
-discover_core_protos() {
-  while IFS= read -r -d '' proto; do
-    CLUTCH_PROTOS+=("${proto}")
-  done <  <(find "${CLUTCH_API_ROOT}" -name '*.proto' -print0 | sort -sdzu)
-}
-
 
 # Get the directory that the go module is stored in and ensure that it's the correct version.
 modpath() {
@@ -260,11 +239,11 @@ install_protoc() {
 
   go install \
     github.com/bufbuild/buf/cmd/protoc-gen-buf-check-lint \
-    github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway \
-    github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger \
-    github.com/golang/protobuf/protoc-gen-go \
-    github.com/go-swagger/go-swagger/cmd/swagger \
-    github.com/envoyproxy/protoc-gen-validate
+    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
+    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
+    github.com/envoyproxy/protoc-gen-validate \
+    google.golang.org/protobuf/cmd/protoc-gen-go \
+    google.golang.org/grpc/cmd/protoc-gen-go-grpc
 
   if [[ ! -f "${PROTOC_BIN}" || ! -d "${PROTOC_INCLUDE_DIR}" ]]; then
     echo "info: Downloading protoc-v${PROTOC_RELEASE} to build environment"

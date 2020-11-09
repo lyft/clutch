@@ -1244,6 +1244,216 @@ export const clutch = $root.clutch = (() => {
                 return Resource;
             })();
 
+            v1.RequestMetadata = (function() {
+
+                /**
+                 * Properties of a RequestMetadata.
+                 * @memberof clutch.audit.v1
+                 * @interface IRequestMetadata
+                 * @property {google.protobuf.IAny|null} [body] RequestMetadata body
+                 */
+
+                /**
+                 * Constructs a new RequestMetadata.
+                 * @memberof clutch.audit.v1
+                 * @classdesc Represents a RequestMetadata.
+                 * @implements IRequestMetadata
+                 * @constructor
+                 * @param {clutch.audit.v1.IRequestMetadata=} [properties] Properties to set
+                 */
+                function RequestMetadata(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * RequestMetadata body.
+                 * @member {google.protobuf.IAny|null|undefined} body
+                 * @memberof clutch.audit.v1.RequestMetadata
+                 * @instance
+                 */
+                RequestMetadata.prototype.body = null;
+
+                /**
+                 * Verifies a RequestMetadata message.
+                 * @function verify
+                 * @memberof clutch.audit.v1.RequestMetadata
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                RequestMetadata.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.body != null && message.hasOwnProperty("body")) {
+                        let error = $root.google.protobuf.Any.verify(message.body);
+                        if (error)
+                            return "body." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a RequestMetadata message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.audit.v1.RequestMetadata
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.audit.v1.RequestMetadata} RequestMetadata
+                 */
+                RequestMetadata.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.audit.v1.RequestMetadata)
+                        return object;
+                    let message = new $root.clutch.audit.v1.RequestMetadata();
+                    if (object.body != null) {
+                        if (typeof object.body !== "object")
+                            throw TypeError(".clutch.audit.v1.RequestMetadata.body: object expected");
+                        message.body = $root.google.protobuf.Any.fromObject(object.body);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a RequestMetadata message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.audit.v1.RequestMetadata
+                 * @static
+                 * @param {clutch.audit.v1.RequestMetadata} message RequestMetadata
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                RequestMetadata.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.body = null;
+                    if (message.body != null && message.hasOwnProperty("body"))
+                        object.body = $root.google.protobuf.Any.toObject(message.body, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this RequestMetadata to JSON.
+                 * @function toJSON
+                 * @memberof clutch.audit.v1.RequestMetadata
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                RequestMetadata.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return RequestMetadata;
+            })();
+
+            v1.ResponseMetadata = (function() {
+
+                /**
+                 * Properties of a ResponseMetadata.
+                 * @memberof clutch.audit.v1
+                 * @interface IResponseMetadata
+                 * @property {google.protobuf.IAny|null} [body] ResponseMetadata body
+                 */
+
+                /**
+                 * Constructs a new ResponseMetadata.
+                 * @memberof clutch.audit.v1
+                 * @classdesc Represents a ResponseMetadata.
+                 * @implements IResponseMetadata
+                 * @constructor
+                 * @param {clutch.audit.v1.IResponseMetadata=} [properties] Properties to set
+                 */
+                function ResponseMetadata(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ResponseMetadata body.
+                 * @member {google.protobuf.IAny|null|undefined} body
+                 * @memberof clutch.audit.v1.ResponseMetadata
+                 * @instance
+                 */
+                ResponseMetadata.prototype.body = null;
+
+                /**
+                 * Verifies a ResponseMetadata message.
+                 * @function verify
+                 * @memberof clutch.audit.v1.ResponseMetadata
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ResponseMetadata.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.body != null && message.hasOwnProperty("body")) {
+                        let error = $root.google.protobuf.Any.verify(message.body);
+                        if (error)
+                            return "body." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ResponseMetadata message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.audit.v1.ResponseMetadata
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.audit.v1.ResponseMetadata} ResponseMetadata
+                 */
+                ResponseMetadata.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.audit.v1.ResponseMetadata)
+                        return object;
+                    let message = new $root.clutch.audit.v1.ResponseMetadata();
+                    if (object.body != null) {
+                        if (typeof object.body !== "object")
+                            throw TypeError(".clutch.audit.v1.ResponseMetadata.body: object expected");
+                        message.body = $root.google.protobuf.Any.fromObject(object.body);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ResponseMetadata message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.audit.v1.ResponseMetadata
+                 * @static
+                 * @param {clutch.audit.v1.ResponseMetadata} message ResponseMetadata
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ResponseMetadata.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.body = null;
+                    if (message.body != null && message.hasOwnProperty("body"))
+                        object.body = $root.google.protobuf.Any.toObject(message.body, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this ResponseMetadata to JSON.
+                 * @function toJSON
+                 * @memberof clutch.audit.v1.ResponseMetadata
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ResponseMetadata.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ResponseMetadata;
+            })();
+
             v1.RequestEvent = (function() {
 
                 /**
@@ -1256,6 +1466,8 @@ export const clutch = $root.clutch = (() => {
                  * @property {clutch.api.v1.ActionType|null} [type] RequestEvent type
                  * @property {google.rpc.IStatus|null} [status] RequestEvent status
                  * @property {Array.<clutch.audit.v1.IResource>|null} [resources] RequestEvent resources
+                 * @property {clutch.audit.v1.IRequestMetadata|null} [requestMetadata] RequestEvent requestMetadata
+                 * @property {clutch.audit.v1.IResponseMetadata|null} [responseMetadata] RequestEvent responseMetadata
                  */
 
                 /**
@@ -1323,6 +1535,22 @@ export const clutch = $root.clutch = (() => {
                 RequestEvent.prototype.resources = $util.emptyArray;
 
                 /**
+                 * RequestEvent requestMetadata.
+                 * @member {clutch.audit.v1.IRequestMetadata|null|undefined} requestMetadata
+                 * @memberof clutch.audit.v1.RequestEvent
+                 * @instance
+                 */
+                RequestEvent.prototype.requestMetadata = null;
+
+                /**
+                 * RequestEvent responseMetadata.
+                 * @member {clutch.audit.v1.IResponseMetadata|null|undefined} responseMetadata
+                 * @memberof clutch.audit.v1.RequestEvent
+                 * @instance
+                 */
+                RequestEvent.prototype.responseMetadata = null;
+
+                /**
                  * Verifies a RequestEvent message.
                  * @function verify
                  * @memberof clutch.audit.v1.RequestEvent
@@ -1366,6 +1594,16 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "resources." + error;
                         }
+                    }
+                    if (message.requestMetadata != null && message.hasOwnProperty("requestMetadata")) {
+                        let error = $root.clutch.audit.v1.RequestMetadata.verify(message.requestMetadata);
+                        if (error)
+                            return "requestMetadata." + error;
+                    }
+                    if (message.responseMetadata != null && message.hasOwnProperty("responseMetadata")) {
+                        let error = $root.clutch.audit.v1.ResponseMetadata.verify(message.responseMetadata);
+                        if (error)
+                            return "responseMetadata." + error;
                     }
                     return null;
                 };
@@ -1425,6 +1663,16 @@ export const clutch = $root.clutch = (() => {
                             message.resources[i] = $root.clutch.audit.v1.Resource.fromObject(object.resources[i]);
                         }
                     }
+                    if (object.requestMetadata != null) {
+                        if (typeof object.requestMetadata !== "object")
+                            throw TypeError(".clutch.audit.v1.RequestEvent.requestMetadata: object expected");
+                        message.requestMetadata = $root.clutch.audit.v1.RequestMetadata.fromObject(object.requestMetadata);
+                    }
+                    if (object.responseMetadata != null) {
+                        if (typeof object.responseMetadata !== "object")
+                            throw TypeError(".clutch.audit.v1.RequestEvent.responseMetadata: object expected");
+                        message.responseMetadata = $root.clutch.audit.v1.ResponseMetadata.fromObject(object.responseMetadata);
+                    }
                     return message;
                 };
 
@@ -1449,6 +1697,8 @@ export const clutch = $root.clutch = (() => {
                         object.methodName = "";
                         object.type = options.enums === String ? "UNSPECIFIED" : 0;
                         object.status = null;
+                        object.requestMetadata = null;
+                        object.responseMetadata = null;
                     }
                     if (message.username != null && message.hasOwnProperty("username"))
                         object.username = message.username;
@@ -1465,6 +1715,10 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < message.resources.length; ++j)
                             object.resources[j] = $root.clutch.audit.v1.Resource.toObject(message.resources[j], options);
                     }
+                    if (message.requestMetadata != null && message.hasOwnProperty("requestMetadata"))
+                        object.requestMetadata = $root.clutch.audit.v1.RequestMetadata.toObject(message.requestMetadata, options);
+                    if (message.responseMetadata != null && message.hasOwnProperty("responseMetadata"))
+                        object.responseMetadata = $root.clutch.audit.v1.ResponseMetadata.toObject(message.responseMetadata, options);
                     return object;
                 };
 
@@ -2216,7 +2470,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of a CallbackResponse.
                  * @memberof clutch.authn.v1
                  * @interface ICallbackResponse
-                 * @property {string|null} [token] CallbackResponse token
+                 * @property {string|null} [accessToken] CallbackResponse accessToken
                  */
 
                 /**
@@ -2235,12 +2489,12 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * CallbackResponse token.
-                 * @member {string} token
+                 * CallbackResponse accessToken.
+                 * @member {string} accessToken
                  * @memberof clutch.authn.v1.CallbackResponse
                  * @instance
                  */
-                CallbackResponse.prototype.token = "";
+                CallbackResponse.prototype.accessToken = "";
 
                 /**
                  * Verifies a CallbackResponse message.
@@ -2253,9 +2507,9 @@ export const clutch = $root.clutch = (() => {
                 CallbackResponse.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
-                    if (message.token != null && message.hasOwnProperty("token"))
-                        if (!$util.isString(message.token))
-                            return "token: string expected";
+                    if (message.accessToken != null && message.hasOwnProperty("accessToken"))
+                        if (!$util.isString(message.accessToken))
+                            return "accessToken: string expected";
                     return null;
                 };
 
@@ -2271,8 +2525,8 @@ export const clutch = $root.clutch = (() => {
                     if (object instanceof $root.clutch.authn.v1.CallbackResponse)
                         return object;
                     let message = new $root.clutch.authn.v1.CallbackResponse();
-                    if (object.token != null)
-                        message.token = String(object.token);
+                    if (object.accessToken != null)
+                        message.accessToken = String(object.accessToken);
                     return message;
                 };
 
@@ -2290,9 +2544,9 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.defaults)
-                        object.token = "";
-                    if (message.token != null && message.hasOwnProperty("token"))
-                        object.token = message.token;
+                        object.accessToken = "";
+                    if (message.accessToken != null && message.hasOwnProperty("accessToken"))
+                        object.accessToken = message.accessToken;
                     return object;
                 };
 
@@ -2985,6 +3239,39 @@ export const clutch = $root.clutch = (() => {
                      * @instance
                      * @param {clutch.aws.ec2.v1.IResizeAutoscalingGroupRequest} request ResizeAutoscalingGroupRequest message or plain object
                      * @returns {Promise<clutch.aws.ec2.v1.ResizeAutoscalingGroupResponse>} Promise
+                     * @variation 2
+                     */
+
+                    /**
+                     * Callback as used by {@link clutch.aws.ec2.v1.EC2API#rebootInstance}.
+                     * @memberof clutch.aws.ec2.v1.EC2API
+                     * @typedef RebootInstanceCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {clutch.aws.ec2.v1.RebootInstanceResponse} [response] RebootInstanceResponse
+                     */
+
+                    /**
+                     * Calls RebootInstance.
+                     * @function rebootInstance
+                     * @memberof clutch.aws.ec2.v1.EC2API
+                     * @instance
+                     * @param {clutch.aws.ec2.v1.IRebootInstanceRequest} request RebootInstanceRequest message or plain object
+                     * @param {clutch.aws.ec2.v1.EC2API.RebootInstanceCallback} callback Node-style callback called with the error, if any, and RebootInstanceResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(EC2API.prototype.rebootInstance = function rebootInstance(request, callback) {
+                        return this.rpcCall(rebootInstance, $root.clutch.aws.ec2.v1.RebootInstanceRequest, $root.clutch.aws.ec2.v1.RebootInstanceResponse, request, callback);
+                    }, "name", { value: "RebootInstance" });
+
+                    /**
+                     * Calls RebootInstance.
+                     * @function rebootInstance
+                     * @memberof clutch.aws.ec2.v1.EC2API
+                     * @instance
+                     * @param {clutch.aws.ec2.v1.IRebootInstanceRequest} request RebootInstanceRequest message or plain object
+                     * @returns {Promise<clutch.aws.ec2.v1.RebootInstanceResponse>} Promise
                      * @variation 2
                      */
 
@@ -4365,6 +4652,202 @@ export const clutch = $root.clutch = (() => {
                     return TerminateInstanceResponse;
                 })();
 
+                v1.RebootInstanceRequest = (function() {
+
+                    /**
+                     * Properties of a RebootInstanceRequest.
+                     * @memberof clutch.aws.ec2.v1
+                     * @interface IRebootInstanceRequest
+                     * @property {string|null} [instanceId] RebootInstanceRequest instanceId
+                     * @property {string|null} [region] RebootInstanceRequest region
+                     */
+
+                    /**
+                     * Constructs a new RebootInstanceRequest.
+                     * @memberof clutch.aws.ec2.v1
+                     * @classdesc Represents a RebootInstanceRequest.
+                     * @implements IRebootInstanceRequest
+                     * @constructor
+                     * @param {clutch.aws.ec2.v1.IRebootInstanceRequest=} [properties] Properties to set
+                     */
+                    function RebootInstanceRequest(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * RebootInstanceRequest instanceId.
+                     * @member {string} instanceId
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
+                     * @instance
+                     */
+                    RebootInstanceRequest.prototype.instanceId = "";
+
+                    /**
+                     * RebootInstanceRequest region.
+                     * @member {string} region
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
+                     * @instance
+                     */
+                    RebootInstanceRequest.prototype.region = "";
+
+                    /**
+                     * Verifies a RebootInstanceRequest message.
+                     * @function verify
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    RebootInstanceRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.instanceId != null && message.hasOwnProperty("instanceId"))
+                            if (!$util.isString(message.instanceId))
+                                return "instanceId: string expected";
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            if (!$util.isString(message.region))
+                                return "region: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a RebootInstanceRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.ec2.v1.RebootInstanceRequest} RebootInstanceRequest
+                     */
+                    RebootInstanceRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.ec2.v1.RebootInstanceRequest)
+                            return object;
+                        let message = new $root.clutch.aws.ec2.v1.RebootInstanceRequest();
+                        if (object.instanceId != null)
+                            message.instanceId = String(object.instanceId);
+                        if (object.region != null)
+                            message.region = String(object.region);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a RebootInstanceRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
+                     * @static
+                     * @param {clutch.aws.ec2.v1.RebootInstanceRequest} message RebootInstanceRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    RebootInstanceRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.instanceId = "";
+                            object.region = "";
+                        }
+                        if (message.instanceId != null && message.hasOwnProperty("instanceId"))
+                            object.instanceId = message.instanceId;
+                        if (message.region != null && message.hasOwnProperty("region"))
+                            object.region = message.region;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this RebootInstanceRequest to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    RebootInstanceRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return RebootInstanceRequest;
+                })();
+
+                v1.RebootInstanceResponse = (function() {
+
+                    /**
+                     * Properties of a RebootInstanceResponse.
+                     * @memberof clutch.aws.ec2.v1
+                     * @interface IRebootInstanceResponse
+                     */
+
+                    /**
+                     * Constructs a new RebootInstanceResponse.
+                     * @memberof clutch.aws.ec2.v1
+                     * @classdesc Represents a RebootInstanceResponse.
+                     * @implements IRebootInstanceResponse
+                     * @constructor
+                     * @param {clutch.aws.ec2.v1.IRebootInstanceResponse=} [properties] Properties to set
+                     */
+                    function RebootInstanceResponse(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Verifies a RebootInstanceResponse message.
+                     * @function verify
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    RebootInstanceResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a RebootInstanceResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.aws.ec2.v1.RebootInstanceResponse} RebootInstanceResponse
+                     */
+                    RebootInstanceResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.aws.ec2.v1.RebootInstanceResponse)
+                            return object;
+                        return new $root.clutch.aws.ec2.v1.RebootInstanceResponse();
+                    };
+
+                    /**
+                     * Creates a plain object from a RebootInstanceResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceResponse
+                     * @static
+                     * @param {clutch.aws.ec2.v1.RebootInstanceResponse} message RebootInstanceResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    RebootInstanceResponse.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this RebootInstanceResponse to JSON.
+                     * @function toJSON
+                     * @memberof clutch.aws.ec2.v1.RebootInstanceResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    RebootInstanceResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return RebootInstanceResponse;
+                })();
+
                 v1.Instance = (function() {
 
                     /**
@@ -5388,25 +5871,26 @@ export const clutch = $root.clutch = (() => {
                  */
                 const v1 = {};
 
-                v1.Experiment = (function() {
+                v1.CreateExperimentRequest = (function() {
 
                     /**
-                     * Properties of an Experiment.
+                     * Properties of a CreateExperimentRequest.
                      * @memberof clutch.chaos.experimentation.v1
-                     * @interface IExperiment
-                     * @property {number|Long|null} [id] Experiment id
-                     * @property {google.protobuf.IAny|null} [config] Experiment config
+                     * @interface ICreateExperimentRequest
+                     * @property {google.protobuf.IAny|null} [config] CreateExperimentRequest config
+                     * @property {google.protobuf.ITimestamp|null} [startTime] CreateExperimentRequest startTime
+                     * @property {google.protobuf.ITimestamp|null} [endTime] CreateExperimentRequest endTime
                      */
 
                     /**
-                     * Constructs a new Experiment.
+                     * Constructs a new CreateExperimentRequest.
                      * @memberof clutch.chaos.experimentation.v1
-                     * @classdesc Represents an Experiment.
-                     * @implements IExperiment
+                     * @classdesc Represents a CreateExperimentRequest.
+                     * @implements ICreateExperimentRequest
                      * @constructor
-                     * @param {clutch.chaos.experimentation.v1.IExperiment=} [properties] Properties to set
+                     * @param {clutch.chaos.experimentation.v1.ICreateExperimentRequest=} [properties] Properties to set
                      */
-                    function Experiment(properties) {
+                    function CreateExperimentRequest(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -5414,136 +5898,147 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * Experiment id.
-                     * @member {number|Long} id
-                     * @memberof clutch.chaos.experimentation.v1.Experiment
-                     * @instance
-                     */
-                    Experiment.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-                    /**
-                     * Experiment config.
+                     * CreateExperimentRequest config.
                      * @member {google.protobuf.IAny|null|undefined} config
-                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentRequest
                      * @instance
                      */
-                    Experiment.prototype.config = null;
+                    CreateExperimentRequest.prototype.config = null;
 
                     /**
-                     * Verifies an Experiment message.
+                     * CreateExperimentRequest startTime.
+                     * @member {google.protobuf.ITimestamp|null|undefined} startTime
+                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentRequest
+                     * @instance
+                     */
+                    CreateExperimentRequest.prototype.startTime = null;
+
+                    /**
+                     * CreateExperimentRequest endTime.
+                     * @member {google.protobuf.ITimestamp|null|undefined} endTime
+                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentRequest
+                     * @instance
+                     */
+                    CreateExperimentRequest.prototype.endTime = null;
+
+                    /**
+                     * Verifies a CreateExperimentRequest message.
                      * @function verify
-                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentRequest
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    Experiment.verify = function verify(message) {
+                    CreateExperimentRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.id != null && message.hasOwnProperty("id"))
-                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                                return "id: integer|Long expected";
                         if (message.config != null && message.hasOwnProperty("config")) {
                             let error = $root.google.protobuf.Any.verify(message.config);
                             if (error)
                                 return "config." + error;
                         }
+                        if (message.startTime != null && message.hasOwnProperty("startTime")) {
+                            let error = $root.google.protobuf.Timestamp.verify(message.startTime);
+                            if (error)
+                                return "startTime." + error;
+                        }
+                        if (message.endTime != null && message.hasOwnProperty("endTime")) {
+                            let error = $root.google.protobuf.Timestamp.verify(message.endTime);
+                            if (error)
+                                return "endTime." + error;
+                        }
                         return null;
                     };
 
                     /**
-                     * Creates an Experiment message from a plain object. Also converts values to their respective internal types.
+                     * Creates a CreateExperimentRequest message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentRequest
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.experimentation.v1.Experiment} Experiment
+                     * @returns {clutch.chaos.experimentation.v1.CreateExperimentRequest} CreateExperimentRequest
                      */
-                    Experiment.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.experimentation.v1.Experiment)
+                    CreateExperimentRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.CreateExperimentRequest)
                             return object;
-                        let message = new $root.clutch.chaos.experimentation.v1.Experiment();
-                        if (object.id != null)
-                            if ($util.Long)
-                                (message.id = $util.Long.fromValue(object.id)).unsigned = false;
-                            else if (typeof object.id === "string")
-                                message.id = parseInt(object.id, 10);
-                            else if (typeof object.id === "number")
-                                message.id = object.id;
-                            else if (typeof object.id === "object")
-                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber();
+                        let message = new $root.clutch.chaos.experimentation.v1.CreateExperimentRequest();
                         if (object.config != null) {
                             if (typeof object.config !== "object")
-                                throw TypeError(".clutch.chaos.experimentation.v1.Experiment.config: object expected");
+                                throw TypeError(".clutch.chaos.experimentation.v1.CreateExperimentRequest.config: object expected");
                             message.config = $root.google.protobuf.Any.fromObject(object.config);
+                        }
+                        if (object.startTime != null) {
+                            if (typeof object.startTime !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.CreateExperimentRequest.startTime: object expected");
+                            message.startTime = $root.google.protobuf.Timestamp.fromObject(object.startTime);
+                        }
+                        if (object.endTime != null) {
+                            if (typeof object.endTime !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.CreateExperimentRequest.endTime: object expected");
+                            message.endTime = $root.google.protobuf.Timestamp.fromObject(object.endTime);
                         }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from an Experiment message. Also converts values to other types if specified.
+                     * Creates a plain object from a CreateExperimentRequest message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentRequest
                      * @static
-                     * @param {clutch.chaos.experimentation.v1.Experiment} message Experiment
+                     * @param {clutch.chaos.experimentation.v1.CreateExperimentRequest} message CreateExperimentRequest
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    Experiment.toObject = function toObject(message, options) {
+                    CreateExperimentRequest.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
                         if (options.defaults) {
-                            if ($util.Long) {
-                                let long = new $util.Long(0, 0, false);
-                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                            } else
-                                object.id = options.longs === String ? "0" : 0;
                             object.config = null;
+                            object.startTime = null;
+                            object.endTime = null;
                         }
-                        if (message.id != null && message.hasOwnProperty("id"))
-                            if (typeof message.id === "number")
-                                object.id = options.longs === String ? String(message.id) : message.id;
-                            else
-                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber() : message.id;
                         if (message.config != null && message.hasOwnProperty("config"))
                             object.config = $root.google.protobuf.Any.toObject(message.config, options);
+                        if (message.startTime != null && message.hasOwnProperty("startTime"))
+                            object.startTime = $root.google.protobuf.Timestamp.toObject(message.startTime, options);
+                        if (message.endTime != null && message.hasOwnProperty("endTime"))
+                            object.endTime = $root.google.protobuf.Timestamp.toObject(message.endTime, options);
                         return object;
                     };
 
                     /**
-                     * Converts this Experiment to JSON.
+                     * Converts this CreateExperimentRequest to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentRequest
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    Experiment.prototype.toJSON = function toJSON() {
+                    CreateExperimentRequest.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return Experiment;
+                    return CreateExperimentRequest;
                 })();
 
-                v1.CreateExperimentsRequest = (function() {
+                v1.CreateExperimentResponse = (function() {
 
                     /**
-                     * Properties of a CreateExperimentsRequest.
+                     * Properties of a CreateExperimentResponse.
                      * @memberof clutch.chaos.experimentation.v1
-                     * @interface ICreateExperimentsRequest
-                     * @property {Array.<clutch.chaos.experimentation.v1.IExperiment>|null} [experiments] CreateExperimentsRequest experiments
+                     * @interface ICreateExperimentResponse
+                     * @property {clutch.chaos.experimentation.v1.IExperiment|null} [experiment] CreateExperimentResponse experiment
                      */
 
                     /**
-                     * Constructs a new CreateExperimentsRequest.
+                     * Constructs a new CreateExperimentResponse.
                      * @memberof clutch.chaos.experimentation.v1
-                     * @classdesc Represents a CreateExperimentsRequest.
-                     * @implements ICreateExperimentsRequest
+                     * @classdesc Represents a CreateExperimentResponse.
+                     * @implements ICreateExperimentResponse
                      * @constructor
-                     * @param {clutch.chaos.experimentation.v1.ICreateExperimentsRequest=} [properties] Properties to set
+                     * @param {clutch.chaos.experimentation.v1.ICreateExperimentResponse=} [properties] Properties to set
                      */
-                    function CreateExperimentsRequest(properties) {
-                        this.experiments = [];
+                    function CreateExperimentResponse(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -5551,214 +6046,84 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * CreateExperimentsRequest experiments.
-                     * @member {Array.<clutch.chaos.experimentation.v1.IExperiment>} experiments
-                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentsRequest
+                     * CreateExperimentResponse experiment.
+                     * @member {clutch.chaos.experimentation.v1.IExperiment|null|undefined} experiment
+                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentResponse
                      * @instance
                      */
-                    CreateExperimentsRequest.prototype.experiments = $util.emptyArray;
+                    CreateExperimentResponse.prototype.experiment = null;
 
                     /**
-                     * Verifies a CreateExperimentsRequest message.
+                     * Verifies a CreateExperimentResponse message.
                      * @function verify
-                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentsRequest
+                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentResponse
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    CreateExperimentsRequest.verify = function verify(message) {
+                    CreateExperimentResponse.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.experiments != null && message.hasOwnProperty("experiments")) {
-                            if (!Array.isArray(message.experiments))
-                                return "experiments: array expected";
-                            for (let i = 0; i < message.experiments.length; ++i) {
-                                let error = $root.clutch.chaos.experimentation.v1.Experiment.verify(message.experiments[i]);
-                                if (error)
-                                    return "experiments." + error;
-                            }
+                        if (message.experiment != null && message.hasOwnProperty("experiment")) {
+                            let error = $root.clutch.chaos.experimentation.v1.Experiment.verify(message.experiment);
+                            if (error)
+                                return "experiment." + error;
                         }
                         return null;
                     };
 
                     /**
-                     * Creates a CreateExperimentsRequest message from a plain object. Also converts values to their respective internal types.
+                     * Creates a CreateExperimentResponse message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentsRequest
+                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentResponse
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.experimentation.v1.CreateExperimentsRequest} CreateExperimentsRequest
+                     * @returns {clutch.chaos.experimentation.v1.CreateExperimentResponse} CreateExperimentResponse
                      */
-                    CreateExperimentsRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.experimentation.v1.CreateExperimentsRequest)
+                    CreateExperimentResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.CreateExperimentResponse)
                             return object;
-                        let message = new $root.clutch.chaos.experimentation.v1.CreateExperimentsRequest();
-                        if (object.experiments) {
-                            if (!Array.isArray(object.experiments))
-                                throw TypeError(".clutch.chaos.experimentation.v1.CreateExperimentsRequest.experiments: array expected");
-                            message.experiments = [];
-                            for (let i = 0; i < object.experiments.length; ++i) {
-                                if (typeof object.experiments[i] !== "object")
-                                    throw TypeError(".clutch.chaos.experimentation.v1.CreateExperimentsRequest.experiments: object expected");
-                                message.experiments[i] = $root.clutch.chaos.experimentation.v1.Experiment.fromObject(object.experiments[i]);
-                            }
+                        let message = new $root.clutch.chaos.experimentation.v1.CreateExperimentResponse();
+                        if (object.experiment != null) {
+                            if (typeof object.experiment !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.CreateExperimentResponse.experiment: object expected");
+                            message.experiment = $root.clutch.chaos.experimentation.v1.Experiment.fromObject(object.experiment);
                         }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from a CreateExperimentsRequest message. Also converts values to other types if specified.
+                     * Creates a plain object from a CreateExperimentResponse message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentsRequest
+                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentResponse
                      * @static
-                     * @param {clutch.chaos.experimentation.v1.CreateExperimentsRequest} message CreateExperimentsRequest
+                     * @param {clutch.chaos.experimentation.v1.CreateExperimentResponse} message CreateExperimentResponse
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    CreateExperimentsRequest.toObject = function toObject(message, options) {
+                    CreateExperimentResponse.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.arrays || options.defaults)
-                            object.experiments = [];
-                        if (message.experiments && message.experiments.length) {
-                            object.experiments = [];
-                            for (let j = 0; j < message.experiments.length; ++j)
-                                object.experiments[j] = $root.clutch.chaos.experimentation.v1.Experiment.toObject(message.experiments[j], options);
-                        }
+                        if (options.defaults)
+                            object.experiment = null;
+                        if (message.experiment != null && message.hasOwnProperty("experiment"))
+                            object.experiment = $root.clutch.chaos.experimentation.v1.Experiment.toObject(message.experiment, options);
                         return object;
                     };
 
                     /**
-                     * Converts this CreateExperimentsRequest to JSON.
+                     * Converts this CreateExperimentResponse to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentsRequest
+                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentResponse
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    CreateExperimentsRequest.prototype.toJSON = function toJSON() {
+                    CreateExperimentResponse.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return CreateExperimentsRequest;
-                })();
-
-                v1.CreateExperimentsResponse = (function() {
-
-                    /**
-                     * Properties of a CreateExperimentsResponse.
-                     * @memberof clutch.chaos.experimentation.v1
-                     * @interface ICreateExperimentsResponse
-                     * @property {Array.<clutch.chaos.experimentation.v1.IExperiment>|null} [experiments] CreateExperimentsResponse experiments
-                     */
-
-                    /**
-                     * Constructs a new CreateExperimentsResponse.
-                     * @memberof clutch.chaos.experimentation.v1
-                     * @classdesc Represents a CreateExperimentsResponse.
-                     * @implements ICreateExperimentsResponse
-                     * @constructor
-                     * @param {clutch.chaos.experimentation.v1.ICreateExperimentsResponse=} [properties] Properties to set
-                     */
-                    function CreateExperimentsResponse(properties) {
-                        this.experiments = [];
-                        if (properties)
-                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * CreateExperimentsResponse experiments.
-                     * @member {Array.<clutch.chaos.experimentation.v1.IExperiment>} experiments
-                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentsResponse
-                     * @instance
-                     */
-                    CreateExperimentsResponse.prototype.experiments = $util.emptyArray;
-
-                    /**
-                     * Verifies a CreateExperimentsResponse message.
-                     * @function verify
-                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentsResponse
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    CreateExperimentsResponse.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        if (message.experiments != null && message.hasOwnProperty("experiments")) {
-                            if (!Array.isArray(message.experiments))
-                                return "experiments: array expected";
-                            for (let i = 0; i < message.experiments.length; ++i) {
-                                let error = $root.clutch.chaos.experimentation.v1.Experiment.verify(message.experiments[i]);
-                                if (error)
-                                    return "experiments." + error;
-                            }
-                        }
-                        return null;
-                    };
-
-                    /**
-                     * Creates a CreateExperimentsResponse message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentsResponse
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.experimentation.v1.CreateExperimentsResponse} CreateExperimentsResponse
-                     */
-                    CreateExperimentsResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.experimentation.v1.CreateExperimentsResponse)
-                            return object;
-                        let message = new $root.clutch.chaos.experimentation.v1.CreateExperimentsResponse();
-                        if (object.experiments) {
-                            if (!Array.isArray(object.experiments))
-                                throw TypeError(".clutch.chaos.experimentation.v1.CreateExperimentsResponse.experiments: array expected");
-                            message.experiments = [];
-                            for (let i = 0; i < object.experiments.length; ++i) {
-                                if (typeof object.experiments[i] !== "object")
-                                    throw TypeError(".clutch.chaos.experimentation.v1.CreateExperimentsResponse.experiments: object expected");
-                                message.experiments[i] = $root.clutch.chaos.experimentation.v1.Experiment.fromObject(object.experiments[i]);
-                            }
-                        }
-                        return message;
-                    };
-
-                    /**
-                     * Creates a plain object from a CreateExperimentsResponse message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentsResponse
-                     * @static
-                     * @param {clutch.chaos.experimentation.v1.CreateExperimentsResponse} message CreateExperimentsResponse
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    CreateExperimentsResponse.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        let object = {};
-                        if (options.arrays || options.defaults)
-                            object.experiments = [];
-                        if (message.experiments && message.experiments.length) {
-                            object.experiments = [];
-                            for (let j = 0; j < message.experiments.length; ++j)
-                                object.experiments[j] = $root.clutch.chaos.experimentation.v1.Experiment.toObject(message.experiments[j], options);
-                        }
-                        return object;
-                    };
-
-                    /**
-                     * Converts this CreateExperimentsResponse to JSON.
-                     * @function toJSON
-                     * @memberof clutch.chaos.experimentation.v1.CreateExperimentsResponse
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    CreateExperimentsResponse.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return CreateExperimentsResponse;
+                    return CreateExperimentResponse;
                 })();
 
                 v1.GetExperimentsRequest = (function() {
@@ -5767,7 +6132,8 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a GetExperimentsRequest.
                      * @memberof clutch.chaos.experimentation.v1
                      * @interface IGetExperimentsRequest
-                     * @property {Array.<number|Long>|null} [ids] GetExperimentsRequest ids
+                     * @property {string|null} [configType] GetExperimentsRequest configType
+                     * @property {clutch.chaos.experimentation.v1.GetExperimentsRequest.Status|null} [status] GetExperimentsRequest status
                      */
 
                     /**
@@ -5779,7 +6145,6 @@ export const clutch = $root.clutch = (() => {
                      * @param {clutch.chaos.experimentation.v1.IGetExperimentsRequest=} [properties] Properties to set
                      */
                     function GetExperimentsRequest(properties) {
-                        this.ids = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -5787,12 +6152,20 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * GetExperimentsRequest ids.
-                     * @member {Array.<number|Long>} ids
+                     * GetExperimentsRequest configType.
+                     * @member {string} configType
                      * @memberof clutch.chaos.experimentation.v1.GetExperimentsRequest
                      * @instance
                      */
-                    GetExperimentsRequest.prototype.ids = $util.emptyArray;
+                    GetExperimentsRequest.prototype.configType = "";
+
+                    /**
+                     * GetExperimentsRequest status.
+                     * @member {clutch.chaos.experimentation.v1.GetExperimentsRequest.Status} status
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentsRequest
+                     * @instance
+                     */
+                    GetExperimentsRequest.prototype.status = 0;
 
                     /**
                      * Verifies a GetExperimentsRequest message.
@@ -5805,13 +6178,17 @@ export const clutch = $root.clutch = (() => {
                     GetExperimentsRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.ids != null && message.hasOwnProperty("ids")) {
-                            if (!Array.isArray(message.ids))
-                                return "ids: array expected";
-                            for (let i = 0; i < message.ids.length; ++i)
-                                if (!$util.isInteger(message.ids[i]) && !(message.ids[i] && $util.isInteger(message.ids[i].low) && $util.isInteger(message.ids[i].high)))
-                                    return "ids: integer|Long[] expected";
-                        }
+                        if (message.configType != null && message.hasOwnProperty("configType"))
+                            if (!$util.isString(message.configType))
+                                return "configType: string expected";
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            switch (message.status) {
+                            default:
+                                return "status: enum value expected";
+                            case 0:
+                            case 1:
+                                break;
+                            }
                         return null;
                     };
 
@@ -5827,19 +6204,17 @@ export const clutch = $root.clutch = (() => {
                         if (object instanceof $root.clutch.chaos.experimentation.v1.GetExperimentsRequest)
                             return object;
                         let message = new $root.clutch.chaos.experimentation.v1.GetExperimentsRequest();
-                        if (object.ids) {
-                            if (!Array.isArray(object.ids))
-                                throw TypeError(".clutch.chaos.experimentation.v1.GetExperimentsRequest.ids: array expected");
-                            message.ids = [];
-                            for (let i = 0; i < object.ids.length; ++i)
-                                if ($util.Long)
-                                    (message.ids[i] = $util.Long.fromValue(object.ids[i])).unsigned = true;
-                                else if (typeof object.ids[i] === "string")
-                                    message.ids[i] = parseInt(object.ids[i], 10);
-                                else if (typeof object.ids[i] === "number")
-                                    message.ids[i] = object.ids[i];
-                                else if (typeof object.ids[i] === "object")
-                                    message.ids[i] = new $util.LongBits(object.ids[i].low >>> 0, object.ids[i].high >>> 0).toNumber(true);
+                        if (object.configType != null)
+                            message.configType = String(object.configType);
+                        switch (object.status) {
+                        case "STATUS_UNSPECIFIED":
+                        case 0:
+                            message.status = 0;
+                            break;
+                        case "STATUS_RUNNING":
+                        case 1:
+                            message.status = 1;
+                            break;
                         }
                         return message;
                     };
@@ -5857,16 +6232,14 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.arrays || options.defaults)
-                            object.ids = [];
-                        if (message.ids && message.ids.length) {
-                            object.ids = [];
-                            for (let j = 0; j < message.ids.length; ++j)
-                                if (typeof message.ids[j] === "number")
-                                    object.ids[j] = options.longs === String ? String(message.ids[j]) : message.ids[j];
-                                else
-                                    object.ids[j] = options.longs === String ? $util.Long.prototype.toString.call(message.ids[j]) : options.longs === Number ? new $util.LongBits(message.ids[j].low >>> 0, message.ids[j].high >>> 0).toNumber(true) : message.ids[j];
+                        if (options.defaults) {
+                            object.configType = "";
+                            object.status = options.enums === String ? "STATUS_UNSPECIFIED" : 0;
                         }
+                        if (message.configType != null && message.hasOwnProperty("configType"))
+                            object.configType = message.configType;
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            object.status = options.enums === String ? $root.clutch.chaos.experimentation.v1.GetExperimentsRequest.Status[message.status] : message.status;
                         return object;
                     };
 
@@ -5880,6 +6253,20 @@ export const clutch = $root.clutch = (() => {
                     GetExperimentsRequest.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
+
+                    /**
+                     * Status enum.
+                     * @name clutch.chaos.experimentation.v1.GetExperimentsRequest.Status
+                     * @enum {number}
+                     * @property {number} STATUS_UNSPECIFIED=0 STATUS_UNSPECIFIED value
+                     * @property {number} STATUS_RUNNING=1 STATUS_RUNNING value
+                     */
+                    GetExperimentsRequest.Status = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "STATUS_UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "STATUS_RUNNING"] = 1;
+                        return values;
+                    })();
 
                     return GetExperimentsRequest;
                 })();
@@ -6002,25 +6389,24 @@ export const clutch = $root.clutch = (() => {
                     return GetExperimentsResponse;
                 })();
 
-                v1.StopExperimentsRequest = (function() {
+                v1.CancelExperimentRunRequest = (function() {
 
                     /**
-                     * Properties of a StopExperimentsRequest.
+                     * Properties of a CancelExperimentRunRequest.
                      * @memberof clutch.chaos.experimentation.v1
-                     * @interface IStopExperimentsRequest
-                     * @property {Array.<number|Long>|null} [ids] StopExperimentsRequest ids
+                     * @interface ICancelExperimentRunRequest
+                     * @property {number|Long|null} [id] CancelExperimentRunRequest id
                      */
 
                     /**
-                     * Constructs a new StopExperimentsRequest.
+                     * Constructs a new CancelExperimentRunRequest.
                      * @memberof clutch.chaos.experimentation.v1
-                     * @classdesc Represents a StopExperimentsRequest.
-                     * @implements IStopExperimentsRequest
+                     * @classdesc Represents a CancelExperimentRunRequest.
+                     * @implements ICancelExperimentRunRequest
                      * @constructor
-                     * @param {clutch.chaos.experimentation.v1.IStopExperimentsRequest=} [properties] Properties to set
+                     * @param {clutch.chaos.experimentation.v1.ICancelExperimentRunRequest=} [properties] Properties to set
                      */
-                    function StopExperimentsRequest(properties) {
-                        this.ids = [];
+                    function CancelExperimentRunRequest(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -6028,120 +6414,387 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * StopExperimentsRequest ids.
-                     * @member {Array.<number|Long>} ids
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsRequest
+                     * CancelExperimentRunRequest id.
+                     * @member {number|Long} id
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunRequest
                      * @instance
                      */
-                    StopExperimentsRequest.prototype.ids = $util.emptyArray;
+                    CancelExperimentRunRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
 
                     /**
-                     * Verifies a StopExperimentsRequest message.
+                     * Verifies a CancelExperimentRunRequest message.
                      * @function verify
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsRequest
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunRequest
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    StopExperimentsRequest.verify = function verify(message) {
+                    CancelExperimentRunRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.ids != null && message.hasOwnProperty("ids")) {
-                            if (!Array.isArray(message.ids))
-                                return "ids: array expected";
-                            for (let i = 0; i < message.ids.length; ++i)
-                                if (!$util.isInteger(message.ids[i]) && !(message.ids[i] && $util.isInteger(message.ids[i].low) && $util.isInteger(message.ids[i].high)))
-                                    return "ids: integer|Long[] expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                                return "id: integer|Long expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a CancelExperimentRunRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.CancelExperimentRunRequest} CancelExperimentRunRequest
+                     */
+                    CancelExperimentRunRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.CancelExperimentRunRequest)
+                            return object;
+                        let message = new $root.clutch.chaos.experimentation.v1.CancelExperimentRunRequest();
+                        if (object.id != null)
+                            if ($util.Long)
+                                (message.id = $util.Long.fromValue(object.id)).unsigned = true;
+                            else if (typeof object.id === "string")
+                                message.id = parseInt(object.id, 10);
+                            else if (typeof object.id === "number")
+                                message.id = object.id;
+                            else if (typeof object.id === "object")
+                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a CancelExperimentRunRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunRequest
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.CancelExperimentRunRequest} message CancelExperimentRunRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    CancelExperimentRunRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, true);
+                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.id = options.longs === String ? "0" : 0;
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (typeof message.id === "number")
+                                object.id = options.longs === String ? String(message.id) : message.id;
+                            else
+                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this CancelExperimentRunRequest to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    CancelExperimentRunRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return CancelExperimentRunRequest;
+                })();
+
+                v1.CancelExperimentRunResponse = (function() {
+
+                    /**
+                     * Properties of a CancelExperimentRunResponse.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface ICancelExperimentRunResponse
+                     */
+
+                    /**
+                     * Constructs a new CancelExperimentRunResponse.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents a CancelExperimentRunResponse.
+                     * @implements ICancelExperimentRunResponse
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.ICancelExperimentRunResponse=} [properties] Properties to set
+                     */
+                    function CancelExperimentRunResponse(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Verifies a CancelExperimentRunResponse message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    CancelExperimentRunResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a CancelExperimentRunResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.CancelExperimentRunResponse} CancelExperimentRunResponse
+                     */
+                    CancelExperimentRunResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.CancelExperimentRunResponse)
+                            return object;
+                        return new $root.clutch.chaos.experimentation.v1.CancelExperimentRunResponse();
+                    };
+
+                    /**
+                     * Creates a plain object from a CancelExperimentRunResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunResponse
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.CancelExperimentRunResponse} message CancelExperimentRunResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    CancelExperimentRunResponse.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this CancelExperimentRunResponse to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    CancelExperimentRunResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return CancelExperimentRunResponse;
+                })();
+
+                v1.GetListViewRequest = (function() {
+
+                    /**
+                     * Properties of a GetListViewRequest.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface IGetListViewRequest
+                     */
+
+                    /**
+                     * Constructs a new GetListViewRequest.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents a GetListViewRequest.
+                     * @implements IGetListViewRequest
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.IGetListViewRequest=} [properties] Properties to set
+                     */
+                    function GetListViewRequest(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Verifies a GetListViewRequest message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.GetListViewRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetListViewRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetListViewRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.GetListViewRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.GetListViewRequest} GetListViewRequest
+                     */
+                    GetListViewRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.GetListViewRequest)
+                            return object;
+                        return new $root.clutch.chaos.experimentation.v1.GetListViewRequest();
+                    };
+
+                    /**
+                     * Creates a plain object from a GetListViewRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.GetListViewRequest
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.GetListViewRequest} message GetListViewRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetListViewRequest.toObject = function toObject() {
+                        return {};
+                    };
+
+                    /**
+                     * Converts this GetListViewRequest to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.GetListViewRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetListViewRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetListViewRequest;
+                })();
+
+                v1.GetListViewResponse = (function() {
+
+                    /**
+                     * Properties of a GetListViewResponse.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface IGetListViewResponse
+                     * @property {Array.<clutch.chaos.experimentation.v1.IListViewItem>|null} [items] GetListViewResponse items
+                     */
+
+                    /**
+                     * Constructs a new GetListViewResponse.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents a GetListViewResponse.
+                     * @implements IGetListViewResponse
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.IGetListViewResponse=} [properties] Properties to set
+                     */
+                    function GetListViewResponse(properties) {
+                        this.items = [];
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetListViewResponse items.
+                     * @member {Array.<clutch.chaos.experimentation.v1.IListViewItem>} items
+                     * @memberof clutch.chaos.experimentation.v1.GetListViewResponse
+                     * @instance
+                     */
+                    GetListViewResponse.prototype.items = $util.emptyArray;
+
+                    /**
+                     * Verifies a GetListViewResponse message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.GetListViewResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetListViewResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.items != null && message.hasOwnProperty("items")) {
+                            if (!Array.isArray(message.items))
+                                return "items: array expected";
+                            for (let i = 0; i < message.items.length; ++i) {
+                                let error = $root.clutch.chaos.experimentation.v1.ListViewItem.verify(message.items[i]);
+                                if (error)
+                                    return "items." + error;
+                            }
                         }
                         return null;
                     };
 
                     /**
-                     * Creates a StopExperimentsRequest message from a plain object. Also converts values to their respective internal types.
+                     * Creates a GetListViewResponse message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsRequest
+                     * @memberof clutch.chaos.experimentation.v1.GetListViewResponse
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.experimentation.v1.StopExperimentsRequest} StopExperimentsRequest
+                     * @returns {clutch.chaos.experimentation.v1.GetListViewResponse} GetListViewResponse
                      */
-                    StopExperimentsRequest.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.experimentation.v1.StopExperimentsRequest)
+                    GetListViewResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.GetListViewResponse)
                             return object;
-                        let message = new $root.clutch.chaos.experimentation.v1.StopExperimentsRequest();
-                        if (object.ids) {
-                            if (!Array.isArray(object.ids))
-                                throw TypeError(".clutch.chaos.experimentation.v1.StopExperimentsRequest.ids: array expected");
-                            message.ids = [];
-                            for (let i = 0; i < object.ids.length; ++i)
-                                if ($util.Long)
-                                    (message.ids[i] = $util.Long.fromValue(object.ids[i])).unsigned = true;
-                                else if (typeof object.ids[i] === "string")
-                                    message.ids[i] = parseInt(object.ids[i], 10);
-                                else if (typeof object.ids[i] === "number")
-                                    message.ids[i] = object.ids[i];
-                                else if (typeof object.ids[i] === "object")
-                                    message.ids[i] = new $util.LongBits(object.ids[i].low >>> 0, object.ids[i].high >>> 0).toNumber(true);
+                        let message = new $root.clutch.chaos.experimentation.v1.GetListViewResponse();
+                        if (object.items) {
+                            if (!Array.isArray(object.items))
+                                throw TypeError(".clutch.chaos.experimentation.v1.GetListViewResponse.items: array expected");
+                            message.items = [];
+                            for (let i = 0; i < object.items.length; ++i) {
+                                if (typeof object.items[i] !== "object")
+                                    throw TypeError(".clutch.chaos.experimentation.v1.GetListViewResponse.items: object expected");
+                                message.items[i] = $root.clutch.chaos.experimentation.v1.ListViewItem.fromObject(object.items[i]);
+                            }
                         }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from a StopExperimentsRequest message. Also converts values to other types if specified.
+                     * Creates a plain object from a GetListViewResponse message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsRequest
+                     * @memberof clutch.chaos.experimentation.v1.GetListViewResponse
                      * @static
-                     * @param {clutch.chaos.experimentation.v1.StopExperimentsRequest} message StopExperimentsRequest
+                     * @param {clutch.chaos.experimentation.v1.GetListViewResponse} message GetListViewResponse
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    StopExperimentsRequest.toObject = function toObject(message, options) {
+                    GetListViewResponse.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
                         if (options.arrays || options.defaults)
-                            object.ids = [];
-                        if (message.ids && message.ids.length) {
-                            object.ids = [];
-                            for (let j = 0; j < message.ids.length; ++j)
-                                if (typeof message.ids[j] === "number")
-                                    object.ids[j] = options.longs === String ? String(message.ids[j]) : message.ids[j];
-                                else
-                                    object.ids[j] = options.longs === String ? $util.Long.prototype.toString.call(message.ids[j]) : options.longs === Number ? new $util.LongBits(message.ids[j].low >>> 0, message.ids[j].high >>> 0).toNumber(true) : message.ids[j];
+                            object.items = [];
+                        if (message.items && message.items.length) {
+                            object.items = [];
+                            for (let j = 0; j < message.items.length; ++j)
+                                object.items[j] = $root.clutch.chaos.experimentation.v1.ListViewItem.toObject(message.items[j], options);
                         }
                         return object;
                     };
 
                     /**
-                     * Converts this StopExperimentsRequest to JSON.
+                     * Converts this GetListViewResponse to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsRequest
+                     * @memberof clutch.chaos.experimentation.v1.GetListViewResponse
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    StopExperimentsRequest.prototype.toJSON = function toJSON() {
+                    GetListViewResponse.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return StopExperimentsRequest;
+                    return GetListViewResponse;
                 })();
 
-                v1.StopExperimentsResponse = (function() {
+                v1.GetExperimentRunDetailsRequest = (function() {
 
                     /**
-                     * Properties of a StopExperimentsResponse.
+                     * Properties of a GetExperimentRunDetailsRequest.
                      * @memberof clutch.chaos.experimentation.v1
-                     * @interface IStopExperimentsResponse
+                     * @interface IGetExperimentRunDetailsRequest
+                     * @property {number|Long|null} [id] GetExperimentRunDetailsRequest id
                      */
 
                     /**
-                     * Constructs a new StopExperimentsResponse.
+                     * Constructs a new GetExperimentRunDetailsRequest.
                      * @memberof clutch.chaos.experimentation.v1
-                     * @classdesc Represents a StopExperimentsResponse.
-                     * @implements IStopExperimentsResponse
+                     * @classdesc Represents a GetExperimentRunDetailsRequest.
+                     * @implements IGetExperimentRunDetailsRequest
                      * @constructor
-                     * @param {clutch.chaos.experimentation.v1.IStopExperimentsResponse=} [properties] Properties to set
+                     * @param {clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest=} [properties] Properties to set
                      */
-                    function StopExperimentsResponse(properties) {
+                    function GetExperimentRunDetailsRequest(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -6149,58 +6802,198 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * Verifies a StopExperimentsResponse message.
+                     * GetExperimentRunDetailsRequest id.
+                     * @member {number|Long} id
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest
+                     * @instance
+                     */
+                    GetExperimentRunDetailsRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+                    /**
+                     * Verifies a GetExperimentRunDetailsRequest message.
                      * @function verify
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsResponse
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    StopExperimentsResponse.verify = function verify(message) {
+                    GetExperimentRunDetailsRequest.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                                return "id: integer|Long expected";
                         return null;
                     };
 
                     /**
-                     * Creates a StopExperimentsResponse message from a plain object. Also converts values to their respective internal types.
+                     * Creates a GetExperimentRunDetailsRequest message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsResponse
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.experimentation.v1.StopExperimentsResponse} StopExperimentsResponse
+                     * @returns {clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest} GetExperimentRunDetailsRequest
                      */
-                    StopExperimentsResponse.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.experimentation.v1.StopExperimentsResponse)
+                    GetExperimentRunDetailsRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest)
                             return object;
-                        return new $root.clutch.chaos.experimentation.v1.StopExperimentsResponse();
+                        let message = new $root.clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest();
+                        if (object.id != null)
+                            if ($util.Long)
+                                (message.id = $util.Long.fromValue(object.id)).unsigned = true;
+                            else if (typeof object.id === "string")
+                                message.id = parseInt(object.id, 10);
+                            else if (typeof object.id === "number")
+                                message.id = object.id;
+                            else if (typeof object.id === "object")
+                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
+                        return message;
                     };
 
                     /**
-                     * Creates a plain object from a StopExperimentsResponse message. Also converts values to other types if specified.
+                     * Creates a plain object from a GetExperimentRunDetailsRequest message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsResponse
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest
                      * @static
-                     * @param {clutch.chaos.experimentation.v1.StopExperimentsResponse} message StopExperimentsResponse
+                     * @param {clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest} message GetExperimentRunDetailsRequest
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    StopExperimentsResponse.toObject = function toObject() {
-                        return {};
+                    GetExperimentRunDetailsRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, true);
+                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.id = options.longs === String ? "0" : 0;
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (typeof message.id === "number")
+                                object.id = options.longs === String ? String(message.id) : message.id;
+                            else
+                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
+                        return object;
                     };
 
                     /**
-                     * Converts this StopExperimentsResponse to JSON.
+                     * Converts this GetExperimentRunDetailsRequest to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.experimentation.v1.StopExperimentsResponse
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    StopExperimentsResponse.prototype.toJSON = function toJSON() {
+                    GetExperimentRunDetailsRequest.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return StopExperimentsResponse;
+                    return GetExperimentRunDetailsRequest;
+                })();
+
+                v1.GetExperimentRunDetailsResponse = (function() {
+
+                    /**
+                     * Properties of a GetExperimentRunDetailsResponse.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface IGetExperimentRunDetailsResponse
+                     * @property {clutch.chaos.experimentation.v1.IExperimentRunDetails|null} [runDetails] GetExperimentRunDetailsResponse runDetails
+                     */
+
+                    /**
+                     * Constructs a new GetExperimentRunDetailsResponse.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents a GetExperimentRunDetailsResponse.
+                     * @implements IGetExperimentRunDetailsResponse
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.IGetExperimentRunDetailsResponse=} [properties] Properties to set
+                     */
+                    function GetExperimentRunDetailsResponse(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * GetExperimentRunDetailsResponse runDetails.
+                     * @member {clutch.chaos.experimentation.v1.IExperimentRunDetails|null|undefined} runDetails
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse
+                     * @instance
+                     */
+                    GetExperimentRunDetailsResponse.prototype.runDetails = null;
+
+                    /**
+                     * Verifies a GetExperimentRunDetailsResponse message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    GetExperimentRunDetailsResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.runDetails != null && message.hasOwnProperty("runDetails")) {
+                            let error = $root.clutch.chaos.experimentation.v1.ExperimentRunDetails.verify(message.runDetails);
+                            if (error)
+                                return "runDetails." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a GetExperimentRunDetailsResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse} GetExperimentRunDetailsResponse
+                     */
+                    GetExperimentRunDetailsResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse)
+                            return object;
+                        let message = new $root.clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse();
+                        if (object.runDetails != null) {
+                            if (typeof object.runDetails !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse.runDetails: object expected");
+                            message.runDetails = $root.clutch.chaos.experimentation.v1.ExperimentRunDetails.fromObject(object.runDetails);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a GetExperimentRunDetailsResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse} message GetExperimentRunDetailsResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    GetExperimentRunDetailsResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            object.runDetails = null;
+                        if (message.runDetails != null && message.hasOwnProperty("runDetails"))
+                            object.runDetails = $root.clutch.chaos.experimentation.v1.ExperimentRunDetails.toObject(message.runDetails, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this GetExperimentRunDetailsResponse to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    GetExperimentRunDetailsResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return GetExperimentRunDetailsResponse;
                 })();
 
                 v1.ExperimentsAPI = (function() {
@@ -6222,35 +7015,68 @@ export const clutch = $root.clutch = (() => {
                     (ExperimentsAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = ExperimentsAPI;
 
                     /**
-                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#createExperiments}.
+                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#createExperiment}.
                      * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
-                     * @typedef CreateExperimentsCallback
+                     * @typedef CreateExperimentCallback
                      * @type {function}
                      * @param {Error|null} error Error, if any
-                     * @param {clutch.chaos.experimentation.v1.CreateExperimentsResponse} [response] CreateExperimentsResponse
+                     * @param {clutch.chaos.experimentation.v1.CreateExperimentResponse} [response] CreateExperimentResponse
                      */
 
                     /**
-                     * Calls CreateExperiments.
-                     * @function createExperiments
+                     * Calls CreateExperiment.
+                     * @function createExperiment
                      * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
                      * @instance
-                     * @param {clutch.chaos.experimentation.v1.ICreateExperimentsRequest} request CreateExperimentsRequest message or plain object
-                     * @param {clutch.chaos.experimentation.v1.ExperimentsAPI.CreateExperimentsCallback} callback Node-style callback called with the error, if any, and CreateExperimentsResponse
+                     * @param {clutch.chaos.experimentation.v1.ICreateExperimentRequest} request CreateExperimentRequest message or plain object
+                     * @param {clutch.chaos.experimentation.v1.ExperimentsAPI.CreateExperimentCallback} callback Node-style callback called with the error, if any, and CreateExperimentResponse
                      * @returns {undefined}
                      * @variation 1
                      */
-                    Object.defineProperty(ExperimentsAPI.prototype.createExperiments = function createExperiments(request, callback) {
-                        return this.rpcCall(createExperiments, $root.clutch.chaos.experimentation.v1.CreateExperimentsRequest, $root.clutch.chaos.experimentation.v1.CreateExperimentsResponse, request, callback);
-                    }, "name", { value: "CreateExperiments" });
+                    Object.defineProperty(ExperimentsAPI.prototype.createExperiment = function createExperiment(request, callback) {
+                        return this.rpcCall(createExperiment, $root.clutch.chaos.experimentation.v1.CreateExperimentRequest, $root.clutch.chaos.experimentation.v1.CreateExperimentResponse, request, callback);
+                    }, "name", { value: "CreateExperiment" });
 
                     /**
-                     * Calls CreateExperiments.
-                     * @function createExperiments
+                     * Calls CreateExperiment.
+                     * @function createExperiment
                      * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
                      * @instance
-                     * @param {clutch.chaos.experimentation.v1.ICreateExperimentsRequest} request CreateExperimentsRequest message or plain object
-                     * @returns {Promise<clutch.chaos.experimentation.v1.CreateExperimentsResponse>} Promise
+                     * @param {clutch.chaos.experimentation.v1.ICreateExperimentRequest} request CreateExperimentRequest message or plain object
+                     * @returns {Promise<clutch.chaos.experimentation.v1.CreateExperimentResponse>} Promise
+                     * @variation 2
+                     */
+
+                    /**
+                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#cancelExperimentRun}.
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
+                     * @typedef CancelExperimentRunCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {clutch.chaos.experimentation.v1.CancelExperimentRunResponse} [response] CancelExperimentRunResponse
+                     */
+
+                    /**
+                     * Calls CancelExperimentRun.
+                     * @function cancelExperimentRun
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
+                     * @instance
+                     * @param {clutch.chaos.experimentation.v1.ICancelExperimentRunRequest} request CancelExperimentRunRequest message or plain object
+                     * @param {clutch.chaos.experimentation.v1.ExperimentsAPI.CancelExperimentRunCallback} callback Node-style callback called with the error, if any, and CancelExperimentRunResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(ExperimentsAPI.prototype.cancelExperimentRun = function cancelExperimentRun(request, callback) {
+                        return this.rpcCall(cancelExperimentRun, $root.clutch.chaos.experimentation.v1.CancelExperimentRunRequest, $root.clutch.chaos.experimentation.v1.CancelExperimentRunResponse, request, callback);
+                    }, "name", { value: "CancelExperimentRun" });
+
+                    /**
+                     * Calls CancelExperimentRun.
+                     * @function cancelExperimentRun
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
+                     * @instance
+                     * @param {clutch.chaos.experimentation.v1.ICancelExperimentRunRequest} request CancelExperimentRunRequest message or plain object
+                     * @returns {Promise<clutch.chaos.experimentation.v1.CancelExperimentRunResponse>} Promise
                      * @variation 2
                      */
 
@@ -6288,39 +7114,1097 @@ export const clutch = $root.clutch = (() => {
                      */
 
                     /**
-                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#stopExperiments}.
+                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#getListView}.
                      * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
-                     * @typedef StopExperimentsCallback
+                     * @typedef GetListViewCallback
                      * @type {function}
                      * @param {Error|null} error Error, if any
-                     * @param {clutch.chaos.experimentation.v1.StopExperimentsResponse} [response] StopExperimentsResponse
+                     * @param {clutch.chaos.experimentation.v1.GetListViewResponse} [response] GetListViewResponse
                      */
 
                     /**
-                     * Calls StopExperiments.
-                     * @function stopExperiments
+                     * Calls GetListView.
+                     * @function getListView
                      * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
                      * @instance
-                     * @param {clutch.chaos.experimentation.v1.IStopExperimentsRequest} request StopExperimentsRequest message or plain object
-                     * @param {clutch.chaos.experimentation.v1.ExperimentsAPI.StopExperimentsCallback} callback Node-style callback called with the error, if any, and StopExperimentsResponse
+                     * @param {clutch.chaos.experimentation.v1.IGetListViewRequest} request GetListViewRequest message or plain object
+                     * @param {clutch.chaos.experimentation.v1.ExperimentsAPI.GetListViewCallback} callback Node-style callback called with the error, if any, and GetListViewResponse
                      * @returns {undefined}
                      * @variation 1
                      */
-                    Object.defineProperty(ExperimentsAPI.prototype.stopExperiments = function stopExperiments(request, callback) {
-                        return this.rpcCall(stopExperiments, $root.clutch.chaos.experimentation.v1.StopExperimentsRequest, $root.clutch.chaos.experimentation.v1.StopExperimentsResponse, request, callback);
-                    }, "name", { value: "StopExperiments" });
+                    Object.defineProperty(ExperimentsAPI.prototype.getListView = function getListView(request, callback) {
+                        return this.rpcCall(getListView, $root.clutch.chaos.experimentation.v1.GetListViewRequest, $root.clutch.chaos.experimentation.v1.GetListViewResponse, request, callback);
+                    }, "name", { value: "GetListView" });
 
                     /**
-                     * Calls StopExperiments.
-                     * @function stopExperiments
+                     * Calls GetListView.
+                     * @function getListView
                      * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
                      * @instance
-                     * @param {clutch.chaos.experimentation.v1.IStopExperimentsRequest} request StopExperimentsRequest message or plain object
-                     * @returns {Promise<clutch.chaos.experimentation.v1.StopExperimentsResponse>} Promise
+                     * @param {clutch.chaos.experimentation.v1.IGetListViewRequest} request GetListViewRequest message or plain object
+                     * @returns {Promise<clutch.chaos.experimentation.v1.GetListViewResponse>} Promise
+                     * @variation 2
+                     */
+
+                    /**
+                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#getExperimentRunDetails}.
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
+                     * @typedef GetExperimentRunDetailsCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse} [response] GetExperimentRunDetailsResponse
+                     */
+
+                    /**
+                     * Calls GetExperimentRunDetails.
+                     * @function getExperimentRunDetails
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
+                     * @instance
+                     * @param {clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest} request GetExperimentRunDetailsRequest message or plain object
+                     * @param {clutch.chaos.experimentation.v1.ExperimentsAPI.GetExperimentRunDetailsCallback} callback Node-style callback called with the error, if any, and GetExperimentRunDetailsResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(ExperimentsAPI.prototype.getExperimentRunDetails = function getExperimentRunDetails(request, callback) {
+                        return this.rpcCall(getExperimentRunDetails, $root.clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest, $root.clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse, request, callback);
+                    }, "name", { value: "GetExperimentRunDetails" });
+
+                    /**
+                     * Calls GetExperimentRunDetails.
+                     * @function getExperimentRunDetails
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentsAPI
+                     * @instance
+                     * @param {clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest} request GetExperimentRunDetailsRequest message or plain object
+                     * @returns {Promise<clutch.chaos.experimentation.v1.GetExperimentRunDetailsResponse>} Promise
                      * @variation 2
                      */
 
                     return ExperimentsAPI;
+                })();
+
+                v1.Experiment = (function() {
+
+                    /**
+                     * Properties of an Experiment.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface IExperiment
+                     * @property {number|Long|null} [id] Experiment id
+                     * @property {google.protobuf.IAny|null} [config] Experiment config
+                     * @property {google.protobuf.ITimestamp|null} [startTime] Experiment startTime
+                     * @property {google.protobuf.ITimestamp|null} [endTime] Experiment endTime
+                     */
+
+                    /**
+                     * Constructs a new Experiment.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents an Experiment.
+                     * @implements IExperiment
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.IExperiment=} [properties] Properties to set
+                     */
+                    function Experiment(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Experiment id.
+                     * @member {number|Long} id
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @instance
+                     */
+                    Experiment.prototype.id = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+                    /**
+                     * Experiment config.
+                     * @member {google.protobuf.IAny|null|undefined} config
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @instance
+                     */
+                    Experiment.prototype.config = null;
+
+                    /**
+                     * Experiment startTime.
+                     * @member {google.protobuf.ITimestamp|null|undefined} startTime
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @instance
+                     */
+                    Experiment.prototype.startTime = null;
+
+                    /**
+                     * Experiment endTime.
+                     * @member {google.protobuf.ITimestamp|null|undefined} endTime
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @instance
+                     */
+                    Experiment.prototype.endTime = null;
+
+                    /**
+                     * Verifies an Experiment message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Experiment.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                                return "id: integer|Long expected";
+                        if (message.config != null && message.hasOwnProperty("config")) {
+                            let error = $root.google.protobuf.Any.verify(message.config);
+                            if (error)
+                                return "config." + error;
+                        }
+                        if (message.startTime != null && message.hasOwnProperty("startTime")) {
+                            let error = $root.google.protobuf.Timestamp.verify(message.startTime);
+                            if (error)
+                                return "startTime." + error;
+                        }
+                        if (message.endTime != null && message.hasOwnProperty("endTime")) {
+                            let error = $root.google.protobuf.Timestamp.verify(message.endTime);
+                            if (error)
+                                return "endTime." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates an Experiment message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.Experiment} Experiment
+                     */
+                    Experiment.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.Experiment)
+                            return object;
+                        let message = new $root.clutch.chaos.experimentation.v1.Experiment();
+                        if (object.id != null)
+                            if ($util.Long)
+                                (message.id = $util.Long.fromValue(object.id)).unsigned = true;
+                            else if (typeof object.id === "string")
+                                message.id = parseInt(object.id, 10);
+                            else if (typeof object.id === "number")
+                                message.id = object.id;
+                            else if (typeof object.id === "object")
+                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
+                        if (object.config != null) {
+                            if (typeof object.config !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.Experiment.config: object expected");
+                            message.config = $root.google.protobuf.Any.fromObject(object.config);
+                        }
+                        if (object.startTime != null) {
+                            if (typeof object.startTime !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.Experiment.startTime: object expected");
+                            message.startTime = $root.google.protobuf.Timestamp.fromObject(object.startTime);
+                        }
+                        if (object.endTime != null) {
+                            if (typeof object.endTime !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.Experiment.endTime: object expected");
+                            message.endTime = $root.google.protobuf.Timestamp.fromObject(object.endTime);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an Experiment message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.Experiment} message Experiment
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Experiment.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, true);
+                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.id = options.longs === String ? "0" : 0;
+                            object.config = null;
+                            object.startTime = null;
+                            object.endTime = null;
+                        }
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (typeof message.id === "number")
+                                object.id = options.longs === String ? String(message.id) : message.id;
+                            else
+                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
+                        if (message.config != null && message.hasOwnProperty("config"))
+                            object.config = $root.google.protobuf.Any.toObject(message.config, options);
+                        if (message.startTime != null && message.hasOwnProperty("startTime"))
+                            object.startTime = $root.google.protobuf.Timestamp.toObject(message.startTime, options);
+                        if (message.endTime != null && message.hasOwnProperty("endTime"))
+                            object.endTime = $root.google.protobuf.Timestamp.toObject(message.endTime, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Experiment to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.Experiment
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Experiment.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    /**
+                     * Status enum.
+                     * @name clutch.chaos.experimentation.v1.Experiment.Status
+                     * @enum {number}
+                     * @property {number} STATUS_UNSPECIFIED=0 STATUS_UNSPECIFIED value
+                     * @property {number} STATUS_SCHEDULED=1 STATUS_SCHEDULED value
+                     * @property {number} STATUS_RUNNING=2 STATUS_RUNNING value
+                     * @property {number} STATUS_COMPLETED=3 STATUS_COMPLETED value
+                     * @property {number} STATUS_CANCELED=4 STATUS_CANCELED value
+                     * @property {number} STATUS_STOPPED=5 STATUS_STOPPED value
+                     */
+                    Experiment.Status = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "STATUS_UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "STATUS_SCHEDULED"] = 1;
+                        values[valuesById[2] = "STATUS_RUNNING"] = 2;
+                        values[valuesById[3] = "STATUS_COMPLETED"] = 3;
+                        values[valuesById[4] = "STATUS_CANCELED"] = 4;
+                        values[valuesById[5] = "STATUS_STOPPED"] = 5;
+                        return values;
+                    })();
+
+                    return Experiment;
+                })();
+
+                v1.ListViewItem = (function() {
+
+                    /**
+                     * Properties of a ListViewItem.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface IListViewItem
+                     * @property {number|Long|null} [id] ListViewItem id
+                     * @property {clutch.chaos.experimentation.v1.IPropertiesMap|null} [properties] ListViewItem properties
+                     */
+
+                    /**
+                     * Constructs a new ListViewItem.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents a ListViewItem.
+                     * @implements IListViewItem
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.IListViewItem=} [properties] Properties to set
+                     */
+                    function ListViewItem(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ListViewItem id.
+                     * @member {number|Long} id
+                     * @memberof clutch.chaos.experimentation.v1.ListViewItem
+                     * @instance
+                     */
+                    ListViewItem.prototype.id = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+                    /**
+                     * ListViewItem properties.
+                     * @member {clutch.chaos.experimentation.v1.IPropertiesMap|null|undefined} properties
+                     * @memberof clutch.chaos.experimentation.v1.ListViewItem
+                     * @instance
+                     */
+                    ListViewItem.prototype.properties = null;
+
+                    /**
+                     * Verifies a ListViewItem message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.ListViewItem
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ListViewItem.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                                return "id: integer|Long expected";
+                        if (message.properties != null && message.hasOwnProperty("properties")) {
+                            let error = $root.clutch.chaos.experimentation.v1.PropertiesMap.verify(message.properties);
+                            if (error)
+                                return "properties." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ListViewItem message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.ListViewItem
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.ListViewItem} ListViewItem
+                     */
+                    ListViewItem.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.ListViewItem)
+                            return object;
+                        let message = new $root.clutch.chaos.experimentation.v1.ListViewItem();
+                        if (object.id != null)
+                            if ($util.Long)
+                                (message.id = $util.Long.fromValue(object.id)).unsigned = true;
+                            else if (typeof object.id === "string")
+                                message.id = parseInt(object.id, 10);
+                            else if (typeof object.id === "number")
+                                message.id = object.id;
+                            else if (typeof object.id === "object")
+                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
+                        if (object.properties != null) {
+                            if (typeof object.properties !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.ListViewItem.properties: object expected");
+                            message.properties = $root.clutch.chaos.experimentation.v1.PropertiesMap.fromObject(object.properties);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ListViewItem message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.ListViewItem
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.ListViewItem} message ListViewItem
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ListViewItem.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, true);
+                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.id = options.longs === String ? "0" : 0;
+                            object.properties = null;
+                        }
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (typeof message.id === "number")
+                                object.id = options.longs === String ? String(message.id) : message.id;
+                            else
+                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
+                        if (message.properties != null && message.hasOwnProperty("properties"))
+                            object.properties = $root.clutch.chaos.experimentation.v1.PropertiesMap.toObject(message.properties, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ListViewItem to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.ListViewItem
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ListViewItem.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ListViewItem;
+                })();
+
+                v1.PropertiesList = (function() {
+
+                    /**
+                     * Properties of a PropertiesList.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface IPropertiesList
+                     * @property {Array.<clutch.chaos.experimentation.v1.IProperty>|null} [items] PropertiesList items
+                     */
+
+                    /**
+                     * Constructs a new PropertiesList.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents a PropertiesList.
+                     * @implements IPropertiesList
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.IPropertiesList=} [properties] Properties to set
+                     */
+                    function PropertiesList(properties) {
+                        this.items = [];
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * PropertiesList items.
+                     * @member {Array.<clutch.chaos.experimentation.v1.IProperty>} items
+                     * @memberof clutch.chaos.experimentation.v1.PropertiesList
+                     * @instance
+                     */
+                    PropertiesList.prototype.items = $util.emptyArray;
+
+                    /**
+                     * Verifies a PropertiesList message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.PropertiesList
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    PropertiesList.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.items != null && message.hasOwnProperty("items")) {
+                            if (!Array.isArray(message.items))
+                                return "items: array expected";
+                            for (let i = 0; i < message.items.length; ++i) {
+                                let error = $root.clutch.chaos.experimentation.v1.Property.verify(message.items[i]);
+                                if (error)
+                                    return "items." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a PropertiesList message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.PropertiesList
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.PropertiesList} PropertiesList
+                     */
+                    PropertiesList.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.PropertiesList)
+                            return object;
+                        let message = new $root.clutch.chaos.experimentation.v1.PropertiesList();
+                        if (object.items) {
+                            if (!Array.isArray(object.items))
+                                throw TypeError(".clutch.chaos.experimentation.v1.PropertiesList.items: array expected");
+                            message.items = [];
+                            for (let i = 0; i < object.items.length; ++i) {
+                                if (typeof object.items[i] !== "object")
+                                    throw TypeError(".clutch.chaos.experimentation.v1.PropertiesList.items: object expected");
+                                message.items[i] = $root.clutch.chaos.experimentation.v1.Property.fromObject(object.items[i]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a PropertiesList message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.PropertiesList
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.PropertiesList} message PropertiesList
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    PropertiesList.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.arrays || options.defaults)
+                            object.items = [];
+                        if (message.items && message.items.length) {
+                            object.items = [];
+                            for (let j = 0; j < message.items.length; ++j)
+                                object.items[j] = $root.clutch.chaos.experimentation.v1.Property.toObject(message.items[j], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this PropertiesList to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.PropertiesList
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    PropertiesList.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return PropertiesList;
+                })();
+
+                v1.PropertiesMap = (function() {
+
+                    /**
+                     * Properties of a PropertiesMap.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface IPropertiesMap
+                     * @property {Object.<string,clutch.chaos.experimentation.v1.IProperty>|null} [items] PropertiesMap items
+                     */
+
+                    /**
+                     * Constructs a new PropertiesMap.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents a PropertiesMap.
+                     * @implements IPropertiesMap
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.IPropertiesMap=} [properties] Properties to set
+                     */
+                    function PropertiesMap(properties) {
+                        this.items = {};
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * PropertiesMap items.
+                     * @member {Object.<string,clutch.chaos.experimentation.v1.IProperty>} items
+                     * @memberof clutch.chaos.experimentation.v1.PropertiesMap
+                     * @instance
+                     */
+                    PropertiesMap.prototype.items = $util.emptyObject;
+
+                    /**
+                     * Verifies a PropertiesMap message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.PropertiesMap
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    PropertiesMap.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.items != null && message.hasOwnProperty("items")) {
+                            if (!$util.isObject(message.items))
+                                return "items: object expected";
+                            let key = Object.keys(message.items);
+                            for (let i = 0; i < key.length; ++i) {
+                                let error = $root.clutch.chaos.experimentation.v1.Property.verify(message.items[key[i]]);
+                                if (error)
+                                    return "items." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a PropertiesMap message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.PropertiesMap
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.PropertiesMap} PropertiesMap
+                     */
+                    PropertiesMap.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.PropertiesMap)
+                            return object;
+                        let message = new $root.clutch.chaos.experimentation.v1.PropertiesMap();
+                        if (object.items) {
+                            if (typeof object.items !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.PropertiesMap.items: object expected");
+                            message.items = {};
+                            for (let keys = Object.keys(object.items), i = 0; i < keys.length; ++i) {
+                                if (typeof object.items[keys[i]] !== "object")
+                                    throw TypeError(".clutch.chaos.experimentation.v1.PropertiesMap.items: object expected");
+                                message.items[keys[i]] = $root.clutch.chaos.experimentation.v1.Property.fromObject(object.items[keys[i]]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a PropertiesMap message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.PropertiesMap
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.PropertiesMap} message PropertiesMap
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    PropertiesMap.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.objects || options.defaults)
+                            object.items = {};
+                        let keys2;
+                        if (message.items && (keys2 = Object.keys(message.items)).length) {
+                            object.items = {};
+                            for (let j = 0; j < keys2.length; ++j)
+                                object.items[keys2[j]] = $root.clutch.chaos.experimentation.v1.Property.toObject(message.items[keys2[j]], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this PropertiesMap to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.PropertiesMap
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    PropertiesMap.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return PropertiesMap;
+                })();
+
+                v1.Property = (function() {
+
+                    /**
+                     * Properties of a Property.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface IProperty
+                     * @property {string|null} [id] Property id
+                     * @property {string|null} [label] Property label
+                     * @property {google.protobuf.IStringValue|null} [displayValue] Property displayValue
+                     * @property {google.protobuf.ITimestamp|null} [dateValue] Property dateValue
+                     * @property {string|null} [stringValue] Property stringValue
+                     * @property {number|Long|null} [intValue] Property intValue
+                     */
+
+                    /**
+                     * Constructs a new Property.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents a Property.
+                     * @implements IProperty
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.IProperty=} [properties] Properties to set
+                     */
+                    function Property(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Property id.
+                     * @member {string} id
+                     * @memberof clutch.chaos.experimentation.v1.Property
+                     * @instance
+                     */
+                    Property.prototype.id = "";
+
+                    /**
+                     * Property label.
+                     * @member {string} label
+                     * @memberof clutch.chaos.experimentation.v1.Property
+                     * @instance
+                     */
+                    Property.prototype.label = "";
+
+                    /**
+                     * Property displayValue.
+                     * @member {google.protobuf.IStringValue|null|undefined} displayValue
+                     * @memberof clutch.chaos.experimentation.v1.Property
+                     * @instance
+                     */
+                    Property.prototype.displayValue = null;
+
+                    /**
+                     * Property dateValue.
+                     * @member {google.protobuf.ITimestamp|null|undefined} dateValue
+                     * @memberof clutch.chaos.experimentation.v1.Property
+                     * @instance
+                     */
+                    Property.prototype.dateValue = null;
+
+                    /**
+                     * Property stringValue.
+                     * @member {string} stringValue
+                     * @memberof clutch.chaos.experimentation.v1.Property
+                     * @instance
+                     */
+                    Property.prototype.stringValue = "";
+
+                    /**
+                     * Property intValue.
+                     * @member {number|Long} intValue
+                     * @memberof clutch.chaos.experimentation.v1.Property
+                     * @instance
+                     */
+                    Property.prototype.intValue = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    // OneOf field names bound to virtual getters and setters
+                    let $oneOfFields;
+
+                    /**
+                     * Property value.
+                     * @member {"dateValue"|"stringValue"|"intValue"|undefined} value
+                     * @memberof clutch.chaos.experimentation.v1.Property
+                     * @instance
+                     */
+                    Object.defineProperty(Property.prototype, "value", {
+                        get: $util.oneOfGetter($oneOfFields = ["dateValue", "stringValue", "intValue"]),
+                        set: $util.oneOfSetter($oneOfFields)
+                    });
+
+                    /**
+                     * Verifies a Property message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.Property
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Property.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        let properties = {};
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isString(message.id))
+                                return "id: string expected";
+                        if (message.label != null && message.hasOwnProperty("label"))
+                            if (!$util.isString(message.label))
+                                return "label: string expected";
+                        if (message.displayValue != null && message.hasOwnProperty("displayValue")) {
+                            let error = $root.google.protobuf.StringValue.verify(message.displayValue);
+                            if (error)
+                                return "displayValue." + error;
+                        }
+                        if (message.dateValue != null && message.hasOwnProperty("dateValue")) {
+                            properties.value = 1;
+                            {
+                                let error = $root.google.protobuf.Timestamp.verify(message.dateValue);
+                                if (error)
+                                    return "dateValue." + error;
+                            }
+                        }
+                        if (message.stringValue != null && message.hasOwnProperty("stringValue")) {
+                            if (properties.value === 1)
+                                return "value: multiple values";
+                            properties.value = 1;
+                            if (!$util.isString(message.stringValue))
+                                return "stringValue: string expected";
+                        }
+                        if (message.intValue != null && message.hasOwnProperty("intValue")) {
+                            if (properties.value === 1)
+                                return "value: multiple values";
+                            properties.value = 1;
+                            if (!$util.isInteger(message.intValue) && !(message.intValue && $util.isInteger(message.intValue.low) && $util.isInteger(message.intValue.high)))
+                                return "intValue: integer|Long expected";
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Property message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.Property
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.Property} Property
+                     */
+                    Property.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.Property)
+                            return object;
+                        let message = new $root.clutch.chaos.experimentation.v1.Property();
+                        if (object.id != null)
+                            message.id = String(object.id);
+                        if (object.label != null)
+                            message.label = String(object.label);
+                        if (object.displayValue != null) {
+                            if (typeof object.displayValue !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.Property.displayValue: object expected");
+                            message.displayValue = $root.google.protobuf.StringValue.fromObject(object.displayValue);
+                        }
+                        if (object.dateValue != null) {
+                            if (typeof object.dateValue !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.Property.dateValue: object expected");
+                            message.dateValue = $root.google.protobuf.Timestamp.fromObject(object.dateValue);
+                        }
+                        if (object.stringValue != null)
+                            message.stringValue = String(object.stringValue);
+                        if (object.intValue != null)
+                            if ($util.Long)
+                                (message.intValue = $util.Long.fromValue(object.intValue)).unsigned = false;
+                            else if (typeof object.intValue === "string")
+                                message.intValue = parseInt(object.intValue, 10);
+                            else if (typeof object.intValue === "number")
+                                message.intValue = object.intValue;
+                            else if (typeof object.intValue === "object")
+                                message.intValue = new $util.LongBits(object.intValue.low >>> 0, object.intValue.high >>> 0).toNumber();
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Property message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.Property
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.Property} message Property
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Property.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.id = "";
+                            object.label = "";
+                            object.displayValue = null;
+                        }
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            object.id = message.id;
+                        if (message.label != null && message.hasOwnProperty("label"))
+                            object.label = message.label;
+                        if (message.displayValue != null && message.hasOwnProperty("displayValue"))
+                            object.displayValue = $root.google.protobuf.StringValue.toObject(message.displayValue, options);
+                        if (message.dateValue != null && message.hasOwnProperty("dateValue")) {
+                            object.dateValue = $root.google.protobuf.Timestamp.toObject(message.dateValue, options);
+                            if (options.oneofs)
+                                object.value = "dateValue";
+                        }
+                        if (message.stringValue != null && message.hasOwnProperty("stringValue")) {
+                            object.stringValue = message.stringValue;
+                            if (options.oneofs)
+                                object.value = "stringValue";
+                        }
+                        if (message.intValue != null && message.hasOwnProperty("intValue")) {
+                            if (typeof message.intValue === "number")
+                                object.intValue = options.longs === String ? String(message.intValue) : message.intValue;
+                            else
+                                object.intValue = options.longs === String ? $util.Long.prototype.toString.call(message.intValue) : options.longs === Number ? new $util.LongBits(message.intValue.low >>> 0, message.intValue.high >>> 0).toNumber() : message.intValue;
+                            if (options.oneofs)
+                                object.value = "intValue";
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Property to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.Property
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Property.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Property;
+                })();
+
+                v1.ExperimentRunDetails = (function() {
+
+                    /**
+                     * Properties of an ExperimentRunDetails.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @interface IExperimentRunDetails
+                     * @property {number|Long|null} [runId] ExperimentRunDetails runId
+                     * @property {clutch.chaos.experimentation.v1.Experiment.Status|null} [status] ExperimentRunDetails status
+                     * @property {clutch.chaos.experimentation.v1.IPropertiesList|null} [properties] ExperimentRunDetails properties
+                     * @property {google.protobuf.IAny|null} [config] ExperimentRunDetails config
+                     */
+
+                    /**
+                     * Constructs a new ExperimentRunDetails.
+                     * @memberof clutch.chaos.experimentation.v1
+                     * @classdesc Represents an ExperimentRunDetails.
+                     * @implements IExperimentRunDetails
+                     * @constructor
+                     * @param {clutch.chaos.experimentation.v1.IExperimentRunDetails=} [properties] Properties to set
+                     */
+                    function ExperimentRunDetails(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ExperimentRunDetails runId.
+                     * @member {number|Long} runId
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunDetails
+                     * @instance
+                     */
+                    ExperimentRunDetails.prototype.runId = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * ExperimentRunDetails status.
+                     * @member {clutch.chaos.experimentation.v1.Experiment.Status} status
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunDetails
+                     * @instance
+                     */
+                    ExperimentRunDetails.prototype.status = 0;
+
+                    /**
+                     * ExperimentRunDetails properties.
+                     * @member {clutch.chaos.experimentation.v1.IPropertiesList|null|undefined} properties
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunDetails
+                     * @instance
+                     */
+                    ExperimentRunDetails.prototype.properties = null;
+
+                    /**
+                     * ExperimentRunDetails config.
+                     * @member {google.protobuf.IAny|null|undefined} config
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunDetails
+                     * @instance
+                     */
+                    ExperimentRunDetails.prototype.config = null;
+
+                    /**
+                     * Verifies an ExperimentRunDetails message.
+                     * @function verify
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunDetails
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ExperimentRunDetails.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.runId != null && message.hasOwnProperty("runId"))
+                            if (!$util.isInteger(message.runId) && !(message.runId && $util.isInteger(message.runId.low) && $util.isInteger(message.runId.high)))
+                                return "runId: integer|Long expected";
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            switch (message.status) {
+                            default:
+                                return "status: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                            case 5:
+                                break;
+                            }
+                        if (message.properties != null && message.hasOwnProperty("properties")) {
+                            let error = $root.clutch.chaos.experimentation.v1.PropertiesList.verify(message.properties);
+                            if (error)
+                                return "properties." + error;
+                        }
+                        if (message.config != null && message.hasOwnProperty("config")) {
+                            let error = $root.google.protobuf.Any.verify(message.config);
+                            if (error)
+                                return "config." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates an ExperimentRunDetails message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunDetails
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.experimentation.v1.ExperimentRunDetails} ExperimentRunDetails
+                     */
+                    ExperimentRunDetails.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.experimentation.v1.ExperimentRunDetails)
+                            return object;
+                        let message = new $root.clutch.chaos.experimentation.v1.ExperimentRunDetails();
+                        if (object.runId != null)
+                            if ($util.Long)
+                                (message.runId = $util.Long.fromValue(object.runId)).unsigned = false;
+                            else if (typeof object.runId === "string")
+                                message.runId = parseInt(object.runId, 10);
+                            else if (typeof object.runId === "number")
+                                message.runId = object.runId;
+                            else if (typeof object.runId === "object")
+                                message.runId = new $util.LongBits(object.runId.low >>> 0, object.runId.high >>> 0).toNumber();
+                        switch (object.status) {
+                        case "STATUS_UNSPECIFIED":
+                        case 0:
+                            message.status = 0;
+                            break;
+                        case "STATUS_SCHEDULED":
+                        case 1:
+                            message.status = 1;
+                            break;
+                        case "STATUS_RUNNING":
+                        case 2:
+                            message.status = 2;
+                            break;
+                        case "STATUS_COMPLETED":
+                        case 3:
+                            message.status = 3;
+                            break;
+                        case "STATUS_CANCELED":
+                        case 4:
+                            message.status = 4;
+                            break;
+                        case "STATUS_STOPPED":
+                        case 5:
+                            message.status = 5;
+                            break;
+                        }
+                        if (object.properties != null) {
+                            if (typeof object.properties !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.ExperimentRunDetails.properties: object expected");
+                            message.properties = $root.clutch.chaos.experimentation.v1.PropertiesList.fromObject(object.properties);
+                        }
+                        if (object.config != null) {
+                            if (typeof object.config !== "object")
+                                throw TypeError(".clutch.chaos.experimentation.v1.ExperimentRunDetails.config: object expected");
+                            message.config = $root.google.protobuf.Any.fromObject(object.config);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an ExperimentRunDetails message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunDetails
+                     * @static
+                     * @param {clutch.chaos.experimentation.v1.ExperimentRunDetails} message ExperimentRunDetails
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ExperimentRunDetails.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.runId = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.runId = options.longs === String ? "0" : 0;
+                            object.status = options.enums === String ? "STATUS_UNSPECIFIED" : 0;
+                            object.properties = null;
+                            object.config = null;
+                        }
+                        if (message.runId != null && message.hasOwnProperty("runId"))
+                            if (typeof message.runId === "number")
+                                object.runId = options.longs === String ? String(message.runId) : message.runId;
+                            else
+                                object.runId = options.longs === String ? $util.Long.prototype.toString.call(message.runId) : options.longs === Number ? new $util.LongBits(message.runId.low >>> 0, message.runId.high >>> 0).toNumber() : message.runId;
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            object.status = options.enums === String ? $root.clutch.chaos.experimentation.v1.Experiment.Status[message.status] : message.status;
+                        if (message.properties != null && message.hasOwnProperty("properties"))
+                            object.properties = $root.clutch.chaos.experimentation.v1.PropertiesList.toObject(message.properties, options);
+                        if (message.config != null && message.hasOwnProperty("config"))
+                            object.config = $root.google.protobuf.Any.toObject(message.config, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ExperimentRunDetails to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.experimentation.v1.ExperimentRunDetails
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ExperimentRunDetails.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ExperimentRunDetails;
                 })();
 
                 return v1;
@@ -6401,17 +8285,6 @@ export const clutch = $root.clutch = (() => {
                     let $oneOfFields;
 
                     /**
-                     * TestConfig target.
-                     * @member {"clusterPair"|undefined} target
-                     * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
-                     * @instance
-                     */
-                    Object.defineProperty(TestConfig.prototype, "target", {
-                        get: $util.oneOfGetter($oneOfFields = ["clusterPair"]),
-                        set: $util.oneOfSetter($oneOfFields)
-                    });
-
-                    /**
                      * TestConfig fault.
                      * @member {"abort"|"latency"|undefined} fault
                      * @memberof clutch.chaos.serverexperimentation.v1.TestConfig
@@ -6435,12 +8308,9 @@ export const clutch = $root.clutch = (() => {
                             return "object expected";
                         let properties = {};
                         if (message.clusterPair != null && message.hasOwnProperty("clusterPair")) {
-                            properties.target = 1;
-                            {
-                                let error = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.verify(message.clusterPair);
-                                if (error)
-                                    return "clusterPair." + error;
-                            }
+                            let error = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.verify(message.clusterPair);
+                            if (error)
+                                return "clusterPair." + error;
                         }
                         if (message.abort != null && message.hasOwnProperty("abort")) {
                             properties.fault = 1;
@@ -6506,11 +8376,10 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (message.clusterPair != null && message.hasOwnProperty("clusterPair")) {
+                        if (options.defaults)
+                            object.clusterPair = null;
+                        if (message.clusterPair != null && message.hasOwnProperty("clusterPair"))
                             object.clusterPair = $root.clutch.chaos.serverexperimentation.v1.ClusterPairTarget.toObject(message.clusterPair, options);
-                            if (options.oneofs)
-                                object.target = "clusterPair";
-                        }
                         if (message.abort != null && message.hasOwnProperty("abort")) {
                             object.abort = $root.clutch.chaos.serverexperimentation.v1.AbortFaultConfig.toObject(message.abort, options);
                             if (options.oneofs)
@@ -6546,6 +8415,7 @@ export const clutch = $root.clutch = (() => {
                      * @interface IClusterPairTarget
                      * @property {string|null} [downstreamCluster] ClusterPairTarget downstreamCluster
                      * @property {string|null} [upstreamCluster] ClusterPairTarget upstreamCluster
+                     * @property {clutch.chaos.serverexperimentation.v1.FaultInjectionCluster|null} [faultInjectionCluster] ClusterPairTarget faultInjectionCluster
                      */
 
                     /**
@@ -6580,6 +8450,14 @@ export const clutch = $root.clutch = (() => {
                     ClusterPairTarget.prototype.upstreamCluster = "";
 
                     /**
+                     * ClusterPairTarget faultInjectionCluster.
+                     * @member {clutch.chaos.serverexperimentation.v1.FaultInjectionCluster} faultInjectionCluster
+                     * @memberof clutch.chaos.serverexperimentation.v1.ClusterPairTarget
+                     * @instance
+                     */
+                    ClusterPairTarget.prototype.faultInjectionCluster = 0;
+
+                    /**
                      * Verifies a ClusterPairTarget message.
                      * @function verify
                      * @memberof clutch.chaos.serverexperimentation.v1.ClusterPairTarget
@@ -6596,6 +8474,15 @@ export const clutch = $root.clutch = (() => {
                         if (message.upstreamCluster != null && message.hasOwnProperty("upstreamCluster"))
                             if (!$util.isString(message.upstreamCluster))
                                 return "upstreamCluster: string expected";
+                        if (message.faultInjectionCluster != null && message.hasOwnProperty("faultInjectionCluster"))
+                            switch (message.faultInjectionCluster) {
+                            default:
+                                return "faultInjectionCluster: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                                break;
+                            }
                         return null;
                     };
 
@@ -6615,6 +8502,20 @@ export const clutch = $root.clutch = (() => {
                             message.downstreamCluster = String(object.downstreamCluster);
                         if (object.upstreamCluster != null)
                             message.upstreamCluster = String(object.upstreamCluster);
+                        switch (object.faultInjectionCluster) {
+                        case "FAULTINJECTIONCLUSTER_UNSPECIFIED":
+                        case 0:
+                            message.faultInjectionCluster = 0;
+                            break;
+                        case "FAULTINJECTIONCLUSTER_DOWNSTREAM":
+                        case 1:
+                            message.faultInjectionCluster = 1;
+                            break;
+                        case "FAULTINJECTIONCLUSTER_UPSTREAM":
+                        case 2:
+                            message.faultInjectionCluster = 2;
+                            break;
+                        }
                         return message;
                     };
 
@@ -6634,11 +8535,14 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.downstreamCluster = "";
                             object.upstreamCluster = "";
+                            object.faultInjectionCluster = options.enums === String ? "FAULTINJECTIONCLUSTER_UNSPECIFIED" : 0;
                         }
                         if (message.downstreamCluster != null && message.hasOwnProperty("downstreamCluster"))
                             object.downstreamCluster = message.downstreamCluster;
                         if (message.upstreamCluster != null && message.hasOwnProperty("upstreamCluster"))
                             object.upstreamCluster = message.upstreamCluster;
+                        if (message.faultInjectionCluster != null && message.hasOwnProperty("faultInjectionCluster"))
+                            object.faultInjectionCluster = options.enums === String ? $root.clutch.chaos.serverexperimentation.v1.FaultInjectionCluster[message.faultInjectionCluster] : message.faultInjectionCluster;
                         return object;
                     };
 
@@ -6890,6 +8794,22 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return LatencyFaultConfig;
+                })();
+
+                /**
+                 * FaultInjectionCluster enum.
+                 * @name clutch.chaos.serverexperimentation.v1.FaultInjectionCluster
+                 * @enum {number}
+                 * @property {number} FAULTINJECTIONCLUSTER_UNSPECIFIED=0 FAULTINJECTIONCLUSTER_UNSPECIFIED value
+                 * @property {number} FAULTINJECTIONCLUSTER_DOWNSTREAM=1 FAULTINJECTIONCLUSTER_DOWNSTREAM value
+                 * @property {number} FAULTINJECTIONCLUSTER_UPSTREAM=2 FAULTINJECTIONCLUSTER_UPSTREAM value
+                 */
+                v1.FaultInjectionCluster = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "FAULTINJECTIONCLUSTER_UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "FAULTINJECTIONCLUSTER_DOWNSTREAM"] = 1;
+                    values[valuesById[2] = "FAULTINJECTIONCLUSTER_UPSTREAM"] = 2;
+                    return values;
                 })();
 
                 return v1;
@@ -8188,6 +10108,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.config.gateway.v1.IStats|null} [stats] GatewayOptions stats
                      * @property {clutch.config.gateway.v1.ITimeouts|null} [timeouts] GatewayOptions timeouts
                      * @property {Array.<clutch.config.gateway.v1.IMiddleware>|null} [middleware] GatewayOptions middleware
+                     * @property {clutch.config.gateway.v1.IAssets|null} [assets] GatewayOptions assets
                      */
 
                     /**
@@ -8255,6 +10176,14 @@ export const clutch = $root.clutch = (() => {
                     GatewayOptions.prototype.middleware = $util.emptyArray;
 
                     /**
+                     * GatewayOptions assets.
+                     * @member {clutch.config.gateway.v1.IAssets|null|undefined} assets
+                     * @memberof clutch.config.gateway.v1.GatewayOptions
+                     * @instance
+                     */
+                    GatewayOptions.prototype.assets = null;
+
+                    /**
                      * Verifies a GatewayOptions message.
                      * @function verify
                      * @memberof clutch.config.gateway.v1.GatewayOptions
@@ -8298,6 +10227,11 @@ export const clutch = $root.clutch = (() => {
                                 if (error)
                                     return "middleware." + error;
                             }
+                        }
+                        if (message.assets != null && message.hasOwnProperty("assets")) {
+                            let error = $root.clutch.config.gateway.v1.Assets.verify(message.assets);
+                            if (error)
+                                return "assets." + error;
                         }
                         return null;
                     };
@@ -8349,6 +10283,11 @@ export const clutch = $root.clutch = (() => {
                                 message.middleware[i] = $root.clutch.config.gateway.v1.Middleware.fromObject(object.middleware[i]);
                             }
                         }
+                        if (object.assets != null) {
+                            if (typeof object.assets !== "object")
+                                throw TypeError(".clutch.config.gateway.v1.GatewayOptions.assets: object expected");
+                            message.assets = $root.clutch.config.gateway.v1.Assets.fromObject(object.assets);
+                        }
                         return message;
                     };
 
@@ -8373,6 +10312,7 @@ export const clutch = $root.clutch = (() => {
                             object.logger = null;
                             object.stats = null;
                             object.timeouts = null;
+                            object.assets = null;
                         }
                         if (message.listener != null && message.hasOwnProperty("listener"))
                             object.listener = $root.clutch.config.gateway.v1.Listener.toObject(message.listener, options);
@@ -8389,6 +10329,8 @@ export const clutch = $root.clutch = (() => {
                             for (let j = 0; j < message.middleware.length; ++j)
                                 object.middleware[j] = $root.clutch.config.gateway.v1.Middleware.toObject(message.middleware[j], options);
                         }
+                        if (message.assets != null && message.hasOwnProperty("assets"))
+                            object.assets = $root.clutch.config.gateway.v1.Assets.toObject(message.assets, options);
                         return object;
                     };
 
@@ -8404,6 +10346,265 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return GatewayOptions;
+                })();
+
+                v1.Assets = (function() {
+
+                    /**
+                     * Properties of an Assets.
+                     * @memberof clutch.config.gateway.v1
+                     * @interface IAssets
+                     * @property {clutch.config.gateway.v1.Assets.IS3Provider|null} [s3] Assets s3
+                     */
+
+                    /**
+                     * Constructs a new Assets.
+                     * @memberof clutch.config.gateway.v1
+                     * @classdesc Represents an Assets.
+                     * @implements IAssets
+                     * @constructor
+                     * @param {clutch.config.gateway.v1.IAssets=} [properties] Properties to set
+                     */
+                    function Assets(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Assets s3.
+                     * @member {clutch.config.gateway.v1.Assets.IS3Provider|null|undefined} s3
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @instance
+                     */
+                    Assets.prototype.s3 = null;
+
+                    // OneOf field names bound to virtual getters and setters
+                    let $oneOfFields;
+
+                    /**
+                     * Assets provider.
+                     * @member {"s3"|undefined} provider
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @instance
+                     */
+                    Object.defineProperty(Assets.prototype, "provider", {
+                        get: $util.oneOfGetter($oneOfFields = ["s3"]),
+                        set: $util.oneOfSetter($oneOfFields)
+                    });
+
+                    /**
+                     * Verifies an Assets message.
+                     * @function verify
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Assets.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        let properties = {};
+                        if (message.s3 != null && message.hasOwnProperty("s3")) {
+                            properties.provider = 1;
+                            {
+                                let error = $root.clutch.config.gateway.v1.Assets.S3Provider.verify(message.s3);
+                                if (error)
+                                    return "s3." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates an Assets message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.config.gateway.v1.Assets} Assets
+                     */
+                    Assets.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.config.gateway.v1.Assets)
+                            return object;
+                        let message = new $root.clutch.config.gateway.v1.Assets();
+                        if (object.s3 != null) {
+                            if (typeof object.s3 !== "object")
+                                throw TypeError(".clutch.config.gateway.v1.Assets.s3: object expected");
+                            message.s3 = $root.clutch.config.gateway.v1.Assets.S3Provider.fromObject(object.s3);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an Assets message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @static
+                     * @param {clutch.config.gateway.v1.Assets} message Assets
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Assets.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (message.s3 != null && message.hasOwnProperty("s3")) {
+                            object.s3 = $root.clutch.config.gateway.v1.Assets.S3Provider.toObject(message.s3, options);
+                            if (options.oneofs)
+                                object.provider = "s3";
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Assets to JSON.
+                     * @function toJSON
+                     * @memberof clutch.config.gateway.v1.Assets
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Assets.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    Assets.S3Provider = (function() {
+
+                        /**
+                         * Properties of a S3Provider.
+                         * @memberof clutch.config.gateway.v1.Assets
+                         * @interface IS3Provider
+                         * @property {string|null} [region] S3Provider region
+                         * @property {string|null} [bucket] S3Provider bucket
+                         * @property {string|null} [key] S3Provider key
+                         */
+
+                        /**
+                         * Constructs a new S3Provider.
+                         * @memberof clutch.config.gateway.v1.Assets
+                         * @classdesc Represents a S3Provider.
+                         * @implements IS3Provider
+                         * @constructor
+                         * @param {clutch.config.gateway.v1.Assets.IS3Provider=} [properties] Properties to set
+                         */
+                        function S3Provider(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * S3Provider region.
+                         * @member {string} region
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @instance
+                         */
+                        S3Provider.prototype.region = "";
+
+                        /**
+                         * S3Provider bucket.
+                         * @member {string} bucket
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @instance
+                         */
+                        S3Provider.prototype.bucket = "";
+
+                        /**
+                         * S3Provider key.
+                         * @member {string} key
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @instance
+                         */
+                        S3Provider.prototype.key = "";
+
+                        /**
+                         * Verifies a S3Provider message.
+                         * @function verify
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        S3Provider.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.region != null && message.hasOwnProperty("region"))
+                                if (!$util.isString(message.region))
+                                    return "region: string expected";
+                            if (message.bucket != null && message.hasOwnProperty("bucket"))
+                                if (!$util.isString(message.bucket))
+                                    return "bucket: string expected";
+                            if (message.key != null && message.hasOwnProperty("key"))
+                                if (!$util.isString(message.key))
+                                    return "key: string expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a S3Provider message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.gateway.v1.Assets.S3Provider} S3Provider
+                         */
+                        S3Provider.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.gateway.v1.Assets.S3Provider)
+                                return object;
+                            let message = new $root.clutch.config.gateway.v1.Assets.S3Provider();
+                            if (object.region != null)
+                                message.region = String(object.region);
+                            if (object.bucket != null)
+                                message.bucket = String(object.bucket);
+                            if (object.key != null)
+                                message.key = String(object.key);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a S3Provider message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @static
+                         * @param {clutch.config.gateway.v1.Assets.S3Provider} message S3Provider
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        S3Provider.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.region = "";
+                                object.bucket = "";
+                                object.key = "";
+                            }
+                            if (message.region != null && message.hasOwnProperty("region"))
+                                object.region = message.region;
+                            if (message.bucket != null && message.hasOwnProperty("bucket"))
+                                object.bucket = message.bucket;
+                            if (message.key != null && message.hasOwnProperty("key"))
+                                object.key = message.key;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this S3Provider to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.gateway.v1.Assets.S3Provider
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        S3Provider.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return S3Provider;
+                    })();
+
+                    return Assets;
                 })();
 
                 v1.Logger = (function() {
@@ -9155,6 +11356,8 @@ export const clutch = $root.clutch = (() => {
                                  * @interface IConfig
                                  * @property {string|null} [rtdsLayerName] Config rtdsLayerName
                                  * @property {google.protobuf.IDuration|null} [cacheRefreshInterval] Config cacheRefreshInterval
+                                 * @property {string|null} [ingressFaultRuntimePrefix] Config ingressFaultRuntimePrefix
+                                 * @property {string|null} [egressFaultRuntimePrefix] Config egressFaultRuntimePrefix
                                  */
 
                                 /**
@@ -9189,6 +11392,22 @@ export const clutch = $root.clutch = (() => {
                                 Config.prototype.cacheRefreshInterval = null;
 
                                 /**
+                                 * Config ingressFaultRuntimePrefix.
+                                 * @member {string} ingressFaultRuntimePrefix
+                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.ingressFaultRuntimePrefix = "";
+
+                                /**
+                                 * Config egressFaultRuntimePrefix.
+                                 * @member {string} egressFaultRuntimePrefix
+                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.egressFaultRuntimePrefix = "";
+
+                                /**
                                  * Verifies a Config message.
                                  * @function verify
                                  * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
@@ -9207,6 +11426,12 @@ export const clutch = $root.clutch = (() => {
                                         if (error)
                                             return "cacheRefreshInterval." + error;
                                     }
+                                    if (message.ingressFaultRuntimePrefix != null && message.hasOwnProperty("ingressFaultRuntimePrefix"))
+                                        if (!$util.isString(message.ingressFaultRuntimePrefix))
+                                            return "ingressFaultRuntimePrefix: string expected";
+                                    if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
+                                        if (!$util.isString(message.egressFaultRuntimePrefix))
+                                            return "egressFaultRuntimePrefix: string expected";
                                     return null;
                                 };
 
@@ -9229,6 +11454,10 @@ export const clutch = $root.clutch = (() => {
                                             throw TypeError(".clutch.config.module.chaos.experimentation.rtds.v1.Config.cacheRefreshInterval: object expected");
                                         message.cacheRefreshInterval = $root.google.protobuf.Duration.fromObject(object.cacheRefreshInterval);
                                     }
+                                    if (object.ingressFaultRuntimePrefix != null)
+                                        message.ingressFaultRuntimePrefix = String(object.ingressFaultRuntimePrefix);
+                                    if (object.egressFaultRuntimePrefix != null)
+                                        message.egressFaultRuntimePrefix = String(object.egressFaultRuntimePrefix);
                                     return message;
                                 };
 
@@ -9248,11 +11477,17 @@ export const clutch = $root.clutch = (() => {
                                     if (options.defaults) {
                                         object.rtdsLayerName = "";
                                         object.cacheRefreshInterval = null;
+                                        object.ingressFaultRuntimePrefix = "";
+                                        object.egressFaultRuntimePrefix = "";
                                     }
                                     if (message.rtdsLayerName != null && message.hasOwnProperty("rtdsLayerName"))
                                         object.rtdsLayerName = message.rtdsLayerName;
                                     if (message.cacheRefreshInterval != null && message.hasOwnProperty("cacheRefreshInterval"))
                                         object.cacheRefreshInterval = $root.google.protobuf.Duration.toObject(message.cacheRefreshInterval, options);
+                                    if (message.ingressFaultRuntimePrefix != null && message.hasOwnProperty("ingressFaultRuntimePrefix"))
+                                        object.ingressFaultRuntimePrefix = message.ingressFaultRuntimePrefix;
+                                    if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
+                                        object.egressFaultRuntimePrefix = message.egressFaultRuntimePrefix;
                                     return object;
                                 };
 
@@ -9913,6 +12148,7 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.service.audit.v1
                          * @interface IConfig
                          * @property {string|null} [dbProvider] Config dbProvider
+                         * @property {boolean|null} [inMemory] Config inMemory
                          * @property {clutch.config.service.audit.v1.IFilter|null} [filter] Config filter
                          * @property {Array.<string>|null} [sinks] Config sinks
                          */
@@ -9942,6 +12178,14 @@ export const clutch = $root.clutch = (() => {
                         Config.prototype.dbProvider = "";
 
                         /**
+                         * Config inMemory.
+                         * @member {boolean} inMemory
+                         * @memberof clutch.config.service.audit.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.inMemory = false;
+
+                        /**
                          * Config filter.
                          * @member {clutch.config.service.audit.v1.IFilter|null|undefined} filter
                          * @memberof clutch.config.service.audit.v1.Config
@@ -9957,6 +12201,20 @@ export const clutch = $root.clutch = (() => {
                          */
                         Config.prototype.sinks = $util.emptyArray;
 
+                        // OneOf field names bound to virtual getters and setters
+                        let $oneOfFields;
+
+                        /**
+                         * Config storageProvider.
+                         * @member {"dbProvider"|"inMemory"|undefined} storageProvider
+                         * @memberof clutch.config.service.audit.v1.Config
+                         * @instance
+                         */
+                        Object.defineProperty(Config.prototype, "storageProvider", {
+                            get: $util.oneOfGetter($oneOfFields = ["dbProvider", "inMemory"]),
+                            set: $util.oneOfSetter($oneOfFields)
+                        });
+
                         /**
                          * Verifies a Config message.
                          * @function verify
@@ -9968,9 +12226,19 @@ export const clutch = $root.clutch = (() => {
                         Config.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
-                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider"))
+                            let properties = {};
+                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider")) {
+                                properties.storageProvider = 1;
                                 if (!$util.isString(message.dbProvider))
                                     return "dbProvider: string expected";
+                            }
+                            if (message.inMemory != null && message.hasOwnProperty("inMemory")) {
+                                if (properties.storageProvider === 1)
+                                    return "storageProvider: multiple values";
+                                properties.storageProvider = 1;
+                                if (typeof message.inMemory !== "boolean")
+                                    return "inMemory: boolean expected";
+                            }
                             if (message.filter != null && message.hasOwnProperty("filter")) {
                                 let error = $root.clutch.config.service.audit.v1.Filter.verify(message.filter);
                                 if (error)
@@ -10000,6 +12268,8 @@ export const clutch = $root.clutch = (() => {
                             let message = new $root.clutch.config.service.audit.v1.Config();
                             if (object.dbProvider != null)
                                 message.dbProvider = String(object.dbProvider);
+                            if (object.inMemory != null)
+                                message.inMemory = Boolean(object.inMemory);
                             if (object.filter != null) {
                                 if (typeof object.filter !== "object")
                                     throw TypeError(".clutch.config.service.audit.v1.Config.filter: object expected");
@@ -10030,12 +12300,18 @@ export const clutch = $root.clutch = (() => {
                             let object = {};
                             if (options.arrays || options.defaults)
                                 object.sinks = [];
-                            if (options.defaults) {
-                                object.dbProvider = "";
+                            if (options.defaults)
                                 object.filter = null;
-                            }
-                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider"))
+                            if (message.dbProvider != null && message.hasOwnProperty("dbProvider")) {
                                 object.dbProvider = message.dbProvider;
+                                if (options.oneofs)
+                                    object.storageProvider = "dbProvider";
+                            }
+                            if (message.inMemory != null && message.hasOwnProperty("inMemory")) {
+                                object.inMemory = message.inMemory;
+                                if (options.oneofs)
+                                    object.storageProvider = "inMemory";
+                            }
                             if (message.filter != null && message.hasOwnProperty("filter"))
                                 object.filter = $root.clutch.config.service.audit.v1.Filter.toObject(message.filter, options);
                             if (message.sinks && message.sinks.length) {
@@ -10236,6 +12512,106 @@ export const clutch = $root.clutch = (() => {
                         return OIDC;
                     })();
 
+                    v1.Storage = (function() {
+
+                        /**
+                         * Properties of a Storage.
+                         * @memberof clutch.config.service.authn.v1
+                         * @interface IStorage
+                         * @property {string|null} [encryptionPassphrase] Storage encryptionPassphrase
+                         */
+
+                        /**
+                         * Constructs a new Storage.
+                         * @memberof clutch.config.service.authn.v1
+                         * @classdesc Represents a Storage.
+                         * @implements IStorage
+                         * @constructor
+                         * @param {clutch.config.service.authn.v1.IStorage=} [properties] Properties to set
+                         */
+                        function Storage(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Storage encryptionPassphrase.
+                         * @member {string} encryptionPassphrase
+                         * @memberof clutch.config.service.authn.v1.Storage
+                         * @instance
+                         */
+                        Storage.prototype.encryptionPassphrase = "";
+
+                        /**
+                         * Verifies a Storage message.
+                         * @function verify
+                         * @memberof clutch.config.service.authn.v1.Storage
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Storage.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.encryptionPassphrase != null && message.hasOwnProperty("encryptionPassphrase"))
+                                if (!$util.isString(message.encryptionPassphrase))
+                                    return "encryptionPassphrase: string expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Storage message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.authn.v1.Storage
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.authn.v1.Storage} Storage
+                         */
+                        Storage.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.authn.v1.Storage)
+                                return object;
+                            let message = new $root.clutch.config.service.authn.v1.Storage();
+                            if (object.encryptionPassphrase != null)
+                                message.encryptionPassphrase = String(object.encryptionPassphrase);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Storage message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.authn.v1.Storage
+                         * @static
+                         * @param {clutch.config.service.authn.v1.Storage} message Storage
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Storage.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults)
+                                object.encryptionPassphrase = "";
+                            if (message.encryptionPassphrase != null && message.hasOwnProperty("encryptionPassphrase"))
+                                object.encryptionPassphrase = message.encryptionPassphrase;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Storage to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.authn.v1.Storage
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Storage.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Storage;
+                    })();
+
                     v1.Config = (function() {
 
                         /**
@@ -10244,6 +12620,7 @@ export const clutch = $root.clutch = (() => {
                          * @interface IConfig
                          * @property {string|null} [sessionSecret] Config sessionSecret
                          * @property {clutch.config.service.authn.v1.IOIDC|null} [oidc] Config oidc
+                         * @property {clutch.config.service.authn.v1.IStorage|null} [storage] Config storage
                          */
 
                         /**
@@ -10276,6 +12653,14 @@ export const clutch = $root.clutch = (() => {
                          * @instance
                          */
                         Config.prototype.oidc = null;
+
+                        /**
+                         * Config storage.
+                         * @member {clutch.config.service.authn.v1.IStorage|null|undefined} storage
+                         * @memberof clutch.config.service.authn.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.storage = null;
 
                         // OneOf field names bound to virtual getters and setters
                         let $oneOfFields;
@@ -10314,6 +12699,11 @@ export const clutch = $root.clutch = (() => {
                                         return "oidc." + error;
                                 }
                             }
+                            if (message.storage != null && message.hasOwnProperty("storage")) {
+                                let error = $root.clutch.config.service.authn.v1.Storage.verify(message.storage);
+                                if (error)
+                                    return "storage." + error;
+                            }
                             return null;
                         };
 
@@ -10336,6 +12726,11 @@ export const clutch = $root.clutch = (() => {
                                     throw TypeError(".clutch.config.service.authn.v1.Config.oidc: object expected");
                                 message.oidc = $root.clutch.config.service.authn.v1.OIDC.fromObject(object.oidc);
                             }
+                            if (object.storage != null) {
+                                if (typeof object.storage !== "object")
+                                    throw TypeError(".clutch.config.service.authn.v1.Config.storage: object expected");
+                                message.storage = $root.clutch.config.service.authn.v1.Storage.fromObject(object.storage);
+                            }
                             return message;
                         };
 
@@ -10352,8 +12747,10 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.defaults)
+                            if (options.defaults) {
                                 object.sessionSecret = "";
+                                object.storage = null;
+                            }
                             if (message.sessionSecret != null && message.hasOwnProperty("sessionSecret"))
                                 object.sessionSecret = message.sessionSecret;
                             if (message.oidc != null && message.hasOwnProperty("oidc")) {
@@ -10361,6 +12758,8 @@ export const clutch = $root.clutch = (() => {
                                 if (options.oneofs)
                                     object.type = "oidc";
                             }
+                            if (message.storage != null && message.hasOwnProperty("storage"))
+                                object.storage = $root.clutch.config.service.authn.v1.Storage.toObject(message.storage, options);
                             return object;
                         };
 
@@ -12325,6 +14724,240 @@ export const clutch = $root.clutch = (() => {
                 })();
 
                 return k8s;
+            })();
+
+            service.topology = (function() {
+
+                /**
+                 * Namespace topology.
+                 * @memberof clutch.config.service
+                 * @namespace
+                 */
+                const topology = {};
+
+                topology.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.service.topology
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.service.topology.v1
+                         * @interface IConfig
+                         * @property {clutch.config.service.topology.v1.ICache|null} [cache] Config cache
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.service.topology.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.service.topology.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Config cache.
+                         * @member {clutch.config.service.topology.v1.ICache|null|undefined} cache
+                         * @memberof clutch.config.service.topology.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.cache = null;
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.service.topology.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.cache != null && message.hasOwnProperty("cache")) {
+                                let error = $root.clutch.config.service.topology.v1.Cache.verify(message.cache);
+                                if (error)
+                                    return "cache." + error;
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.topology.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.topology.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.topology.v1.Config)
+                                return object;
+                            let message = new $root.clutch.config.service.topology.v1.Config();
+                            if (object.cache != null) {
+                                if (typeof object.cache !== "object")
+                                    throw TypeError(".clutch.config.service.topology.v1.Config.cache: object expected");
+                                message.cache = $root.clutch.config.service.topology.v1.Cache.fromObject(object.cache);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.topology.v1.Config
+                         * @static
+                         * @param {clutch.config.service.topology.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults)
+                                object.cache = null;
+                            if (message.cache != null && message.hasOwnProperty("cache"))
+                                object.cache = $root.clutch.config.service.topology.v1.Cache.toObject(message.cache, options);
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.topology.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    v1.Cache = (function() {
+
+                        /**
+                         * Properties of a Cache.
+                         * @memberof clutch.config.service.topology.v1
+                         * @interface ICache
+                         * @property {google.protobuf.IDuration|null} [ttl] Cache ttl
+                         */
+
+                        /**
+                         * Constructs a new Cache.
+                         * @memberof clutch.config.service.topology.v1
+                         * @classdesc Represents a Cache.
+                         * @implements ICache
+                         * @constructor
+                         * @param {clutch.config.service.topology.v1.ICache=} [properties] Properties to set
+                         */
+                        function Cache(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Cache ttl.
+                         * @member {google.protobuf.IDuration|null|undefined} ttl
+                         * @memberof clutch.config.service.topology.v1.Cache
+                         * @instance
+                         */
+                        Cache.prototype.ttl = null;
+
+                        /**
+                         * Verifies a Cache message.
+                         * @function verify
+                         * @memberof clutch.config.service.topology.v1.Cache
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Cache.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.ttl != null && message.hasOwnProperty("ttl")) {
+                                let error = $root.google.protobuf.Duration.verify(message.ttl);
+                                if (error)
+                                    return "ttl." + error;
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Cache message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.topology.v1.Cache
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.topology.v1.Cache} Cache
+                         */
+                        Cache.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.topology.v1.Cache)
+                                return object;
+                            let message = new $root.clutch.config.service.topology.v1.Cache();
+                            if (object.ttl != null) {
+                                if (typeof object.ttl !== "object")
+                                    throw TypeError(".clutch.config.service.topology.v1.Cache.ttl: object expected");
+                                message.ttl = $root.google.protobuf.Duration.fromObject(object.ttl);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Cache message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.topology.v1.Cache
+                         * @static
+                         * @param {clutch.config.service.topology.v1.Cache} message Cache
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Cache.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults)
+                                object.ttl = null;
+                            if (message.ttl != null && message.hasOwnProperty("ttl"))
+                                object.ttl = $root.google.protobuf.Duration.toObject(message.ttl, options);
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Cache to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.topology.v1.Cache
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Cache.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Cache;
+                    })();
+
+                    return v1;
+                })();
+
+                return topology;
             })();
 
             return service;
@@ -15355,6 +17988,39 @@ export const clutch = $root.clutch = (() => {
                  */
 
                 /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteHPA}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DeleteHPACallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DeleteHPAResponse} [response] DeleteHPAResponse
+                 */
+
+                /**
+                 * Calls DeleteHPA.
+                 * @function deleteHPA
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteHPARequest} request DeleteHPARequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DeleteHPACallback} callback Node-style callback called with the error, if any, and DeleteHPAResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.deleteHPA = function deleteHPA(request, callback) {
+                    return this.rpcCall(deleteHPA, $root.clutch.k8s.v1.DeleteHPARequest, $root.clutch.k8s.v1.DeleteHPAResponse, request, callback);
+                }, "name", { value: "DeleteHPA" });
+
+                /**
+                 * Calls DeleteHPA.
+                 * @function deleteHPA
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteHPARequest} request DeleteHPARequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DeleteHPAResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateDeployment}.
                  * @memberof clutch.k8s.v1.K8sAPI
                  * @typedef UpdateDeploymentCallback
@@ -15384,6 +18050,138 @@ export const clutch = $root.clutch = (() => {
                  * @instance
                  * @param {clutch.k8s.v1.IUpdateDeploymentRequest} request UpdateDeploymentRequest message or plain object
                  * @returns {Promise<clutch.k8s.v1.UpdateDeploymentResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteDeployment}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DeleteDeploymentCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DeleteDeploymentResponse} [response] DeleteDeploymentResponse
+                 */
+
+                /**
+                 * Calls DeleteDeployment.
+                 * @function deleteDeployment
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteDeploymentRequest} request DeleteDeploymentRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DeleteDeploymentCallback} callback Node-style callback called with the error, if any, and DeleteDeploymentResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.deleteDeployment = function deleteDeployment(request, callback) {
+                    return this.rpcCall(deleteDeployment, $root.clutch.k8s.v1.DeleteDeploymentRequest, $root.clutch.k8s.v1.DeleteDeploymentResponse, request, callback);
+                }, "name", { value: "DeleteDeployment" });
+
+                /**
+                 * Calls DeleteDeployment.
+                 * @function deleteDeployment
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteDeploymentRequest} request DeleteDeploymentRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DeleteDeploymentResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeService}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DescribeServiceCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DescribeServiceResponse} [response] DescribeServiceResponse
+                 */
+
+                /**
+                 * Calls DescribeService.
+                 * @function describeService
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeServiceRequest} request DescribeServiceRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DescribeServiceCallback} callback Node-style callback called with the error, if any, and DescribeServiceResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.describeService = function describeService(request, callback) {
+                    return this.rpcCall(describeService, $root.clutch.k8s.v1.DescribeServiceRequest, $root.clutch.k8s.v1.DescribeServiceResponse, request, callback);
+                }, "name", { value: "DescribeService" });
+
+                /**
+                 * Calls DescribeService.
+                 * @function describeService
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeServiceRequest} request DescribeServiceRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DescribeServiceResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteService}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DeleteServiceCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DeleteServiceResponse} [response] DeleteServiceResponse
+                 */
+
+                /**
+                 * Calls DeleteService.
+                 * @function deleteService
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteServiceRequest} request DeleteServiceRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DeleteServiceCallback} callback Node-style callback called with the error, if any, and DeleteServiceResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.deleteService = function deleteService(request, callback) {
+                    return this.rpcCall(deleteService, $root.clutch.k8s.v1.DeleteServiceRequest, $root.clutch.k8s.v1.DeleteServiceResponse, request, callback);
+                }, "name", { value: "DeleteService" });
+
+                /**
+                 * Calls DeleteService.
+                 * @function deleteService
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteServiceRequest} request DeleteServiceRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DeleteServiceResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateStatefulSet}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef UpdateStatefulSetCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.UpdateStatefulSetResponse} [response] UpdateStatefulSetResponse
+                 */
+
+                /**
+                 * Calls UpdateStatefulSet.
+                 * @function updateStatefulSet
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IUpdateStatefulSetRequest} request UpdateStatefulSetRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.UpdateStatefulSetCallback} callback Node-style callback called with the error, if any, and UpdateStatefulSetResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.updateStatefulSet = function updateStatefulSet(request, callback) {
+                    return this.rpcCall(updateStatefulSet, $root.clutch.k8s.v1.UpdateStatefulSetRequest, $root.clutch.k8s.v1.UpdateStatefulSetResponse, request, callback);
+                }, "name", { value: "UpdateStatefulSet" });
+
+                /**
+                 * Calls UpdateStatefulSet.
+                 * @function updateStatefulSet
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IUpdateStatefulSetRequest} request UpdateStatefulSetRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.UpdateStatefulSetResponse>} Promise
                  * @variation 2
                  */
 
@@ -17904,6 +20702,236 @@ export const clutch = $root.clutch = (() => {
                 return ResizeHPAResponse;
             })();
 
+            v1.DeleteHPARequest = (function() {
+
+                /**
+                 * Properties of a DeleteHPARequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteHPARequest
+                 * @property {string|null} [clientset] DeleteHPARequest clientset
+                 * @property {string|null} [cluster] DeleteHPARequest cluster
+                 * @property {string|null} [namespace] DeleteHPARequest namespace
+                 * @property {string|null} [name] DeleteHPARequest name
+                 */
+
+                /**
+                 * Constructs a new DeleteHPARequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteHPARequest.
+                 * @implements IDeleteHPARequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteHPARequest=} [properties] Properties to set
+                 */
+                function DeleteHPARequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DeleteHPARequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DeleteHPARequest
+                 * @instance
+                 */
+                DeleteHPARequest.prototype.clientset = "";
+
+                /**
+                 * DeleteHPARequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DeleteHPARequest
+                 * @instance
+                 */
+                DeleteHPARequest.prototype.cluster = "";
+
+                /**
+                 * DeleteHPARequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.DeleteHPARequest
+                 * @instance
+                 */
+                DeleteHPARequest.prototype.namespace = "";
+
+                /**
+                 * DeleteHPARequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DeleteHPARequest
+                 * @instance
+                 */
+                DeleteHPARequest.prototype.name = "";
+
+                /**
+                 * Verifies a DeleteHPARequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteHPARequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteHPARequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteHPARequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteHPARequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteHPARequest} DeleteHPARequest
+                 */
+                DeleteHPARequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteHPARequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DeleteHPARequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DeleteHPARequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteHPARequest
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteHPARequest} message DeleteHPARequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteHPARequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    return object;
+                };
+
+                /**
+                 * Converts this DeleteHPARequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteHPARequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteHPARequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteHPARequest;
+            })();
+
+            v1.DeleteHPAResponse = (function() {
+
+                /**
+                 * Properties of a DeleteHPAResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteHPAResponse
+                 */
+
+                /**
+                 * Constructs a new DeleteHPAResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteHPAResponse.
+                 * @implements IDeleteHPAResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteHPAResponse=} [properties] Properties to set
+                 */
+                function DeleteHPAResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies a DeleteHPAResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteHPAResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteHPAResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteHPAResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteHPAResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteHPAResponse} DeleteHPAResponse
+                 */
+                DeleteHPAResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteHPAResponse)
+                        return object;
+                    return new $root.clutch.k8s.v1.DeleteHPAResponse();
+                };
+
+                /**
+                 * Creates a plain object from a DeleteHPAResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteHPAResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteHPAResponse} message DeleteHPAResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteHPAResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this DeleteHPAResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteHPAResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteHPAResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteHPAResponse;
+            })();
+
             v1.Deployment = (function() {
 
                 /**
@@ -18503,14 +21531,1784 @@ export const clutch = $root.clutch = (() => {
                 return UpdateDeploymentResponse;
             })();
 
+            v1.DeleteDeploymentRequest = (function() {
+
+                /**
+                 * Properties of a DeleteDeploymentRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteDeploymentRequest
+                 * @property {string|null} [clientset] DeleteDeploymentRequest clientset
+                 * @property {string|null} [cluster] DeleteDeploymentRequest cluster
+                 * @property {string|null} [namespace] DeleteDeploymentRequest namespace
+                 * @property {string|null} [name] DeleteDeploymentRequest name
+                 */
+
+                /**
+                 * Constructs a new DeleteDeploymentRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteDeploymentRequest.
+                 * @implements IDeleteDeploymentRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteDeploymentRequest=} [properties] Properties to set
+                 */
+                function DeleteDeploymentRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DeleteDeploymentRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @instance
+                 */
+                DeleteDeploymentRequest.prototype.clientset = "";
+
+                /**
+                 * DeleteDeploymentRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @instance
+                 */
+                DeleteDeploymentRequest.prototype.cluster = "";
+
+                /**
+                 * DeleteDeploymentRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @instance
+                 */
+                DeleteDeploymentRequest.prototype.namespace = "";
+
+                /**
+                 * DeleteDeploymentRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @instance
+                 */
+                DeleteDeploymentRequest.prototype.name = "";
+
+                /**
+                 * Verifies a DeleteDeploymentRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteDeploymentRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteDeploymentRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteDeploymentRequest} DeleteDeploymentRequest
+                 */
+                DeleteDeploymentRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteDeploymentRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DeleteDeploymentRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DeleteDeploymentRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteDeploymentRequest} message DeleteDeploymentRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteDeploymentRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    return object;
+                };
+
+                /**
+                 * Converts this DeleteDeploymentRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteDeploymentRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteDeploymentRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteDeploymentRequest;
+            })();
+
+            v1.DeleteDeploymentResponse = (function() {
+
+                /**
+                 * Properties of a DeleteDeploymentResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteDeploymentResponse
+                 */
+
+                /**
+                 * Constructs a new DeleteDeploymentResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteDeploymentResponse.
+                 * @implements IDeleteDeploymentResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteDeploymentResponse=} [properties] Properties to set
+                 */
+                function DeleteDeploymentResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies a DeleteDeploymentResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteDeploymentResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteDeploymentResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteDeploymentResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteDeploymentResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteDeploymentResponse} DeleteDeploymentResponse
+                 */
+                DeleteDeploymentResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteDeploymentResponse)
+                        return object;
+                    return new $root.clutch.k8s.v1.DeleteDeploymentResponse();
+                };
+
+                /**
+                 * Creates a plain object from a DeleteDeploymentResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteDeploymentResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteDeploymentResponse} message DeleteDeploymentResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteDeploymentResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this DeleteDeploymentResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteDeploymentResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteDeploymentResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteDeploymentResponse;
+            })();
+
+            v1.StatefulSet = (function() {
+
+                /**
+                 * Properties of a StatefulSet.
+                 * @memberof clutch.k8s.v1
+                 * @interface IStatefulSet
+                 * @property {string|null} [cluster] StatefulSet cluster
+                 * @property {string|null} [namespace] StatefulSet namespace
+                 * @property {string|null} [name] StatefulSet name
+                 * @property {Object.<string,string>|null} [labels] StatefulSet labels
+                 * @property {Object.<string,string>|null} [annotations] StatefulSet annotations
+                 */
+
+                /**
+                 * Constructs a new StatefulSet.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a StatefulSet.
+                 * @implements IStatefulSet
+                 * @constructor
+                 * @param {clutch.k8s.v1.IStatefulSet=} [properties] Properties to set
+                 */
+                function StatefulSet(properties) {
+                    this.labels = {};
+                    this.annotations = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * StatefulSet cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @instance
+                 */
+                StatefulSet.prototype.cluster = "";
+
+                /**
+                 * StatefulSet namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @instance
+                 */
+                StatefulSet.prototype.namespace = "";
+
+                /**
+                 * StatefulSet name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @instance
+                 */
+                StatefulSet.prototype.name = "";
+
+                /**
+                 * StatefulSet labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @instance
+                 */
+                StatefulSet.prototype.labels = $util.emptyObject;
+
+                /**
+                 * StatefulSet annotations.
+                 * @member {Object.<string,string>} annotations
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @instance
+                 */
+                StatefulSet.prototype.annotations = $util.emptyObject;
+
+                /**
+                 * Verifies a StatefulSet message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                StatefulSet.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                        if (!$util.isObject(message.annotations))
+                            return "annotations: object expected";
+                        let key = Object.keys(message.annotations);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.annotations[key[i]]))
+                                return "annotations: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a StatefulSet message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.StatefulSet} StatefulSet
+                 */
+                StatefulSet.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.StatefulSet)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.StatefulSet();
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.StatefulSet.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    if (object.annotations) {
+                        if (typeof object.annotations !== "object")
+                            throw TypeError(".clutch.k8s.v1.StatefulSet.annotations: object expected");
+                        message.annotations = {};
+                        for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
+                            message.annotations[keys[i]] = String(object.annotations[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a StatefulSet message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @static
+                 * @param {clutch.k8s.v1.StatefulSet} message StatefulSet
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                StatefulSet.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults) {
+                        object.labels = {};
+                        object.annotations = {};
+                    }
+                    if (options.defaults) {
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    let keys2;
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
+                        object.annotations = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this StatefulSet to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.StatefulSet
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                StatefulSet.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return StatefulSet;
+            })();
+
+            v1.UpdateStatefulSetRequest = (function() {
+
+                /**
+                 * Properties of an UpdateStatefulSetRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IUpdateStatefulSetRequest
+                 * @property {string|null} [clientset] UpdateStatefulSetRequest clientset
+                 * @property {string|null} [cluster] UpdateStatefulSetRequest cluster
+                 * @property {string|null} [namespace] UpdateStatefulSetRequest namespace
+                 * @property {string|null} [name] UpdateStatefulSetRequest name
+                 * @property {clutch.k8s.v1.UpdateStatefulSetRequest.IFields|null} [fields] UpdateStatefulSetRequest fields
+                 */
+
+                /**
+                 * Constructs a new UpdateStatefulSetRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an UpdateStatefulSetRequest.
+                 * @implements IUpdateStatefulSetRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IUpdateStatefulSetRequest=} [properties] Properties to set
+                 */
+                function UpdateStatefulSetRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * UpdateStatefulSetRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @instance
+                 */
+                UpdateStatefulSetRequest.prototype.clientset = "";
+
+                /**
+                 * UpdateStatefulSetRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @instance
+                 */
+                UpdateStatefulSetRequest.prototype.cluster = "";
+
+                /**
+                 * UpdateStatefulSetRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @instance
+                 */
+                UpdateStatefulSetRequest.prototype.namespace = "";
+
+                /**
+                 * UpdateStatefulSetRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @instance
+                 */
+                UpdateStatefulSetRequest.prototype.name = "";
+
+                /**
+                 * UpdateStatefulSetRequest fields.
+                 * @member {clutch.k8s.v1.UpdateStatefulSetRequest.IFields|null|undefined} fields
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @instance
+                 */
+                UpdateStatefulSetRequest.prototype.fields = null;
+
+                /**
+                 * Verifies an UpdateStatefulSetRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                UpdateStatefulSetRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.fields != null && message.hasOwnProperty("fields")) {
+                        let error = $root.clutch.k8s.v1.UpdateStatefulSetRequest.Fields.verify(message.fields);
+                        if (error)
+                            return "fields." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates an UpdateStatefulSetRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.UpdateStatefulSetRequest} UpdateStatefulSetRequest
+                 */
+                UpdateStatefulSetRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.UpdateStatefulSetRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.UpdateStatefulSetRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.fields != null) {
+                        if (typeof object.fields !== "object")
+                            throw TypeError(".clutch.k8s.v1.UpdateStatefulSetRequest.fields: object expected");
+                        message.fields = $root.clutch.k8s.v1.UpdateStatefulSetRequest.Fields.fromObject(object.fields);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an UpdateStatefulSetRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @static
+                 * @param {clutch.k8s.v1.UpdateStatefulSetRequest} message UpdateStatefulSetRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                UpdateStatefulSetRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                        object.fields = null;
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.fields != null && message.hasOwnProperty("fields"))
+                        object.fields = $root.clutch.k8s.v1.UpdateStatefulSetRequest.Fields.toObject(message.fields, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this UpdateStatefulSetRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                UpdateStatefulSetRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                UpdateStatefulSetRequest.Fields = (function() {
+
+                    /**
+                     * Properties of a Fields.
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                     * @interface IFields
+                     * @property {Object.<string,string>|null} [labels] Fields labels
+                     * @property {Object.<string,string>|null} [annotations] Fields annotations
+                     */
+
+                    /**
+                     * Constructs a new Fields.
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest
+                     * @classdesc Represents a Fields.
+                     * @implements IFields
+                     * @constructor
+                     * @param {clutch.k8s.v1.UpdateStatefulSetRequest.IFields=} [properties] Properties to set
+                     */
+                    function Fields(properties) {
+                        this.labels = {};
+                        this.annotations = {};
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Fields labels.
+                     * @member {Object.<string,string>} labels
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+                     * @instance
+                     */
+                    Fields.prototype.labels = $util.emptyObject;
+
+                    /**
+                     * Fields annotations.
+                     * @member {Object.<string,string>} annotations
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+                     * @instance
+                     */
+                    Fields.prototype.annotations = $util.emptyObject;
+
+                    /**
+                     * Verifies a Fields message.
+                     * @function verify
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Fields.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.labels != null && message.hasOwnProperty("labels")) {
+                            if (!$util.isObject(message.labels))
+                                return "labels: object expected";
+                            let key = Object.keys(message.labels);
+                            for (let i = 0; i < key.length; ++i)
+                                if (!$util.isString(message.labels[key[i]]))
+                                    return "labels: string{k:string} expected";
+                        }
+                        if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                            if (!$util.isObject(message.annotations))
+                                return "annotations: object expected";
+                            let key = Object.keys(message.annotations);
+                            for (let i = 0; i < key.length; ++i)
+                                if (!$util.isString(message.annotations[key[i]]))
+                                    return "annotations: string{k:string} expected";
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Fields message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.k8s.v1.UpdateStatefulSetRequest.Fields} Fields
+                     */
+                    Fields.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.k8s.v1.UpdateStatefulSetRequest.Fields)
+                            return object;
+                        let message = new $root.clutch.k8s.v1.UpdateStatefulSetRequest.Fields();
+                        if (object.labels) {
+                            if (typeof object.labels !== "object")
+                                throw TypeError(".clutch.k8s.v1.UpdateStatefulSetRequest.Fields.labels: object expected");
+                            message.labels = {};
+                            for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                                message.labels[keys[i]] = String(object.labels[keys[i]]);
+                        }
+                        if (object.annotations) {
+                            if (typeof object.annotations !== "object")
+                                throw TypeError(".clutch.k8s.v1.UpdateStatefulSetRequest.Fields.annotations: object expected");
+                            message.annotations = {};
+                            for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
+                                message.annotations[keys[i]] = String(object.annotations[keys[i]]);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Fields message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+                     * @static
+                     * @param {clutch.k8s.v1.UpdateStatefulSetRequest.Fields} message Fields
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Fields.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.objects || options.defaults) {
+                            object.labels = {};
+                            object.annotations = {};
+                        }
+                        let keys2;
+                        if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                            object.labels = {};
+                            for (let j = 0; j < keys2.length; ++j)
+                                object.labels[keys2[j]] = message.labels[keys2[j]];
+                        }
+                        if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
+                            object.annotations = {};
+                            for (let j = 0; j < keys2.length; ++j)
+                                object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Fields to JSON.
+                     * @function toJSON
+                     * @memberof clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Fields.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Fields;
+                })();
+
+                return UpdateStatefulSetRequest;
+            })();
+
+            v1.UpdateStatefulSetResponse = (function() {
+
+                /**
+                 * Properties of an UpdateStatefulSetResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IUpdateStatefulSetResponse
+                 */
+
+                /**
+                 * Constructs a new UpdateStatefulSetResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents an UpdateStatefulSetResponse.
+                 * @implements IUpdateStatefulSetResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IUpdateStatefulSetResponse=} [properties] Properties to set
+                 */
+                function UpdateStatefulSetResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies an UpdateStatefulSetResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                UpdateStatefulSetResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an UpdateStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.UpdateStatefulSetResponse} UpdateStatefulSetResponse
+                 */
+                UpdateStatefulSetResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.UpdateStatefulSetResponse)
+                        return object;
+                    return new $root.clutch.k8s.v1.UpdateStatefulSetResponse();
+                };
+
+                /**
+                 * Creates a plain object from an UpdateStatefulSetResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetResponse
+                 * @static
+                 * @param {clutch.k8s.v1.UpdateStatefulSetResponse} message UpdateStatefulSetResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                UpdateStatefulSetResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this UpdateStatefulSetResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.UpdateStatefulSetResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                UpdateStatefulSetResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return UpdateStatefulSetResponse;
+            })();
+
+            v1.Service = (function() {
+
+                /**
+                 * Properties of a Service.
+                 * @memberof clutch.k8s.v1
+                 * @interface IService
+                 * @property {string|null} [cluster] Service cluster
+                 * @property {string|null} [namespace] Service namespace
+                 * @property {string|null} [name] Service name
+                 * @property {clutch.k8s.v1.Service.Type|null} [type] Service type
+                 * @property {Object.<string,string>|null} [labels] Service labels
+                 * @property {Object.<string,string>|null} [annotations] Service annotations
+                 */
+
+                /**
+                 * Constructs a new Service.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a Service.
+                 * @implements IService
+                 * @constructor
+                 * @param {clutch.k8s.v1.IService=} [properties] Properties to set
+                 */
+                function Service(properties) {
+                    this.labels = {};
+                    this.annotations = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Service cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.Service
+                 * @instance
+                 */
+                Service.prototype.cluster = "";
+
+                /**
+                 * Service namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.Service
+                 * @instance
+                 */
+                Service.prototype.namespace = "";
+
+                /**
+                 * Service name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.Service
+                 * @instance
+                 */
+                Service.prototype.name = "";
+
+                /**
+                 * Service type.
+                 * @member {clutch.k8s.v1.Service.Type} type
+                 * @memberof clutch.k8s.v1.Service
+                 * @instance
+                 */
+                Service.prototype.type = 0;
+
+                /**
+                 * Service labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.Service
+                 * @instance
+                 */
+                Service.prototype.labels = $util.emptyObject;
+
+                /**
+                 * Service annotations.
+                 * @member {Object.<string,string>} annotations
+                 * @memberof clutch.k8s.v1.Service
+                 * @instance
+                 */
+                Service.prototype.annotations = $util.emptyObject;
+
+                /**
+                 * Verifies a Service message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.Service
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Service.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        switch (message.type) {
+                        default:
+                            return "type: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+                            break;
+                        }
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                        if (!$util.isObject(message.annotations))
+                            return "annotations: object expected";
+                        let key = Object.keys(message.annotations);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.annotations[key[i]]))
+                                return "annotations: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Service message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.Service
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.Service} Service
+                 */
+                Service.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.Service)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.Service();
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    switch (object.type) {
+                    case "UNSPECIFIED":
+                    case 0:
+                        message.type = 0;
+                        break;
+                    case "UNKNOWN":
+                    case 1:
+                        message.type = 1;
+                        break;
+                    case "CLUSTER_IP":
+                    case 2:
+                        message.type = 2;
+                        break;
+                    case "NODE_PORT":
+                    case 3:
+                        message.type = 3;
+                        break;
+                    case "LOAD_BALANCER":
+                    case 4:
+                        message.type = 4;
+                        break;
+                    case "EXTERNAL_NAME":
+                    case 5:
+                        message.type = 5;
+                        break;
+                    }
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.Service.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    if (object.annotations) {
+                        if (typeof object.annotations !== "object")
+                            throw TypeError(".clutch.k8s.v1.Service.annotations: object expected");
+                        message.annotations = {};
+                        for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
+                            message.annotations[keys[i]] = String(object.annotations[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Service message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.Service
+                 * @static
+                 * @param {clutch.k8s.v1.Service} message Service
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Service.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults) {
+                        object.labels = {};
+                        object.annotations = {};
+                    }
+                    if (options.defaults) {
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                        object.type = options.enums === String ? "UNSPECIFIED" : 0;
+                    }
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        object.type = options.enums === String ? $root.clutch.k8s.v1.Service.Type[message.type] : message.type;
+                    let keys2;
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
+                        object.annotations = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this Service to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.Service
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Service.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Type enum.
+                 * @name clutch.k8s.v1.Service.Type
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} UNKNOWN=1 UNKNOWN value
+                 * @property {number} CLUSTER_IP=2 CLUSTER_IP value
+                 * @property {number} NODE_PORT=3 NODE_PORT value
+                 * @property {number} LOAD_BALANCER=4 LOAD_BALANCER value
+                 * @property {number} EXTERNAL_NAME=5 EXTERNAL_NAME value
+                 */
+                Service.Type = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "UNKNOWN"] = 1;
+                    values[valuesById[2] = "CLUSTER_IP"] = 2;
+                    values[valuesById[3] = "NODE_PORT"] = 3;
+                    values[valuesById[4] = "LOAD_BALANCER"] = 4;
+                    values[valuesById[5] = "EXTERNAL_NAME"] = 5;
+                    return values;
+                })();
+
+                return Service;
+            })();
+
+            v1.DescribeServiceRequest = (function() {
+
+                /**
+                 * Properties of a DescribeServiceRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeServiceRequest
+                 * @property {string|null} [clientset] DescribeServiceRequest clientset
+                 * @property {string|null} [cluster] DescribeServiceRequest cluster
+                 * @property {string|null} [namespace] DescribeServiceRequest namespace
+                 * @property {string|null} [name] DescribeServiceRequest name
+                 * @property {Object.<string,string>|null} [labels] DescribeServiceRequest labels
+                 */
+
+                /**
+                 * Constructs a new DescribeServiceRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeServiceRequest.
+                 * @implements IDescribeServiceRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeServiceRequest=} [properties] Properties to set
+                 */
+                function DescribeServiceRequest(properties) {
+                    this.labels = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeServiceRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @instance
+                 */
+                DescribeServiceRequest.prototype.clientset = "";
+
+                /**
+                 * DescribeServiceRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @instance
+                 */
+                DescribeServiceRequest.prototype.cluster = "";
+
+                /**
+                 * DescribeServiceRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @instance
+                 */
+                DescribeServiceRequest.prototype.namespace = "";
+
+                /**
+                 * DescribeServiceRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @instance
+                 */
+                DescribeServiceRequest.prototype.name = "";
+
+                /**
+                 * DescribeServiceRequest labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @instance
+                 */
+                DescribeServiceRequest.prototype.labels = $util.emptyObject;
+
+                /**
+                 * Verifies a DescribeServiceRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeServiceRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeServiceRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeServiceRequest} DescribeServiceRequest
+                 */
+                DescribeServiceRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeServiceRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeServiceRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeServiceRequest.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeServiceRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeServiceRequest} message DescribeServiceRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeServiceRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults)
+                        object.labels = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    let keys2;
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeServiceRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeServiceRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeServiceRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeServiceRequest;
+            })();
+
+            v1.DescribeServiceResponse = (function() {
+
+                /**
+                 * Properties of a DescribeServiceResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeServiceResponse
+                 * @property {clutch.k8s.v1.IService|null} [service] DescribeServiceResponse service
+                 */
+
+                /**
+                 * Constructs a new DescribeServiceResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeServiceResponse.
+                 * @implements IDescribeServiceResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeServiceResponse=} [properties] Properties to set
+                 */
+                function DescribeServiceResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeServiceResponse service.
+                 * @member {clutch.k8s.v1.IService|null|undefined} service
+                 * @memberof clutch.k8s.v1.DescribeServiceResponse
+                 * @instance
+                 */
+                DescribeServiceResponse.prototype.service = null;
+
+                /**
+                 * Verifies a DescribeServiceResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeServiceResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeServiceResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.service != null && message.hasOwnProperty("service")) {
+                        let error = $root.clutch.k8s.v1.Service.verify(message.service);
+                        if (error)
+                            return "service." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeServiceResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeServiceResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeServiceResponse} DescribeServiceResponse
+                 */
+                DescribeServiceResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeServiceResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeServiceResponse();
+                    if (object.service != null) {
+                        if (typeof object.service !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeServiceResponse.service: object expected");
+                        message.service = $root.clutch.k8s.v1.Service.fromObject(object.service);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeServiceResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeServiceResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeServiceResponse} message DescribeServiceResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeServiceResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.service = null;
+                    if (message.service != null && message.hasOwnProperty("service"))
+                        object.service = $root.clutch.k8s.v1.Service.toObject(message.service, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeServiceResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeServiceResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeServiceResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeServiceResponse;
+            })();
+
+            v1.DeleteServiceRequest = (function() {
+
+                /**
+                 * Properties of a DeleteServiceRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteServiceRequest
+                 * @property {string|null} [clientset] DeleteServiceRequest clientset
+                 * @property {string|null} [cluster] DeleteServiceRequest cluster
+                 * @property {string|null} [namespace] DeleteServiceRequest namespace
+                 * @property {string|null} [name] DeleteServiceRequest name
+                 */
+
+                /**
+                 * Constructs a new DeleteServiceRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteServiceRequest.
+                 * @implements IDeleteServiceRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteServiceRequest=} [properties] Properties to set
+                 */
+                function DeleteServiceRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DeleteServiceRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @instance
+                 */
+                DeleteServiceRequest.prototype.clientset = "";
+
+                /**
+                 * DeleteServiceRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @instance
+                 */
+                DeleteServiceRequest.prototype.cluster = "";
+
+                /**
+                 * DeleteServiceRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @instance
+                 */
+                DeleteServiceRequest.prototype.namespace = "";
+
+                /**
+                 * DeleteServiceRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @instance
+                 */
+                DeleteServiceRequest.prototype.name = "";
+
+                /**
+                 * Verifies a DeleteServiceRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteServiceRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteServiceRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteServiceRequest} DeleteServiceRequest
+                 */
+                DeleteServiceRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteServiceRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DeleteServiceRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DeleteServiceRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteServiceRequest} message DeleteServiceRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteServiceRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    return object;
+                };
+
+                /**
+                 * Converts this DeleteServiceRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteServiceRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteServiceRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteServiceRequest;
+            })();
+
+            v1.DeleteServiceResponse = (function() {
+
+                /**
+                 * Properties of a DeleteServiceResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteServiceResponse
+                 */
+
+                /**
+                 * Constructs a new DeleteServiceResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteServiceResponse.
+                 * @implements IDeleteServiceResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteServiceResponse=} [properties] Properties to set
+                 */
+                function DeleteServiceResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies a DeleteServiceResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteServiceResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteServiceResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteServiceResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteServiceResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteServiceResponse} DeleteServiceResponse
+                 */
+                DeleteServiceResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteServiceResponse)
+                        return object;
+                    return new $root.clutch.k8s.v1.DeleteServiceResponse();
+                };
+
+                /**
+                 * Creates a plain object from a DeleteServiceResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteServiceResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteServiceResponse} message DeleteServiceResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteServiceResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this DeleteServiceResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteServiceResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteServiceResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteServiceResponse;
+            })();
+
+            v1.NullableString = (function() {
+
+                /**
+                 * Properties of a NullableString.
+                 * @memberof clutch.k8s.v1
+                 * @interface INullableString
+                 * @property {google.protobuf.NullValue|null} ["null"] NullableString null
+                 * @property {string|null} [value] NullableString value
+                 */
+
+                /**
+                 * Constructs a new NullableString.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a NullableString.
+                 * @implements INullableString
+                 * @constructor
+                 * @param {clutch.k8s.v1.INullableString=} [properties] Properties to set
+                 */
+                function NullableString(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * NullableString null.
+                 * @member {google.protobuf.NullValue} null
+                 * @memberof clutch.k8s.v1.NullableString
+                 * @instance
+                 */
+                NullableString.prototype["null"] = 0;
+
+                /**
+                 * NullableString value.
+                 * @member {string} value
+                 * @memberof clutch.k8s.v1.NullableString
+                 * @instance
+                 */
+                NullableString.prototype.value = "";
+
+                // OneOf field names bound to virtual getters and setters
+                let $oneOfFields;
+
+                /**
+                 * NullableString kind.
+                 * @member {"null"|"value"|undefined} kind
+                 * @memberof clutch.k8s.v1.NullableString
+                 * @instance
+                 */
+                Object.defineProperty(NullableString.prototype, "kind", {
+                    get: $util.oneOfGetter($oneOfFields = ["null", "value"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Verifies a NullableString message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.NullableString
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                NullableString.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    let properties = {};
+                    if (message["null"] != null && message.hasOwnProperty("null")) {
+                        properties.kind = 1;
+                        switch (message["null"]) {
+                        default:
+                            return "null: enum value expected";
+                        case 0:
+                            break;
+                        }
+                    }
+                    if (message.value != null && message.hasOwnProperty("value")) {
+                        if (properties.kind === 1)
+                            return "kind: multiple values";
+                        properties.kind = 1;
+                        if (!$util.isString(message.value))
+                            return "value: string expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a NullableString message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.NullableString
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.NullableString} NullableString
+                 */
+                NullableString.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.NullableString)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.NullableString();
+                    switch (object["null"]) {
+                    case "NULL_VALUE":
+                    case 0:
+                        message["null"] = 0;
+                        break;
+                    }
+                    if (object.value != null)
+                        message.value = String(object.value);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a NullableString message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.NullableString
+                 * @static
+                 * @param {clutch.k8s.v1.NullableString} message NullableString
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                NullableString.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (message["null"] != null && message.hasOwnProperty("null")) {
+                        object["null"] = options.enums === String ? $root.google.protobuf.NullValue[message["null"]] : message["null"];
+                        if (options.oneofs)
+                            object.kind = "null";
+                    }
+                    if (message.value != null && message.hasOwnProperty("value")) {
+                        object.value = message.value;
+                        if (options.oneofs)
+                            object.kind = "value";
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this NullableString to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.NullableString
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                NullableString.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return NullableString;
+            })();
+
             v1.ExpectedObjectMetaFields = (function() {
 
                 /**
                  * Properties of an ExpectedObjectMetaFields.
                  * @memberof clutch.k8s.v1
                  * @interface IExpectedObjectMetaFields
-                 * @property {Object.<string,google.protobuf.IStringValue>|null} [labels] ExpectedObjectMetaFields labels
-                 * @property {Object.<string,google.protobuf.IStringValue>|null} [annotations] ExpectedObjectMetaFields annotations
+                 * @property {Object.<string,clutch.k8s.v1.INullableString>|null} [labels] ExpectedObjectMetaFields labels
+                 * @property {Object.<string,clutch.k8s.v1.INullableString>|null} [annotations] ExpectedObjectMetaFields annotations
                  */
 
                 /**
@@ -18532,7 +23330,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * ExpectedObjectMetaFields labels.
-                 * @member {Object.<string,google.protobuf.IStringValue>} labels
+                 * @member {Object.<string,clutch.k8s.v1.INullableString>} labels
                  * @memberof clutch.k8s.v1.ExpectedObjectMetaFields
                  * @instance
                  */
@@ -18540,7 +23338,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * ExpectedObjectMetaFields annotations.
-                 * @member {Object.<string,google.protobuf.IStringValue>} annotations
+                 * @member {Object.<string,clutch.k8s.v1.INullableString>} annotations
                  * @memberof clutch.k8s.v1.ExpectedObjectMetaFields
                  * @instance
                  */
@@ -18562,7 +23360,7 @@ export const clutch = $root.clutch = (() => {
                             return "labels: object expected";
                         let key = Object.keys(message.labels);
                         for (let i = 0; i < key.length; ++i) {
-                            let error = $root.google.protobuf.StringValue.verify(message.labels[key[i]]);
+                            let error = $root.clutch.k8s.v1.NullableString.verify(message.labels[key[i]]);
                             if (error)
                                 return "labels." + error;
                         }
@@ -18572,7 +23370,7 @@ export const clutch = $root.clutch = (() => {
                             return "annotations: object expected";
                         let key = Object.keys(message.annotations);
                         for (let i = 0; i < key.length; ++i) {
-                            let error = $root.google.protobuf.StringValue.verify(message.annotations[key[i]]);
+                            let error = $root.clutch.k8s.v1.NullableString.verify(message.annotations[key[i]]);
                             if (error)
                                 return "annotations." + error;
                         }
@@ -18599,7 +23397,7 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i) {
                             if (typeof object.labels[keys[i]] !== "object")
                                 throw TypeError(".clutch.k8s.v1.ExpectedObjectMetaFields.labels: object expected");
-                            message.labels[keys[i]] = $root.google.protobuf.StringValue.fromObject(object.labels[keys[i]]);
+                            message.labels[keys[i]] = $root.clutch.k8s.v1.NullableString.fromObject(object.labels[keys[i]]);
                         }
                     }
                     if (object.annotations) {
@@ -18609,7 +23407,7 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i) {
                             if (typeof object.annotations[keys[i]] !== "object")
                                 throw TypeError(".clutch.k8s.v1.ExpectedObjectMetaFields.annotations: object expected");
-                            message.annotations[keys[i]] = $root.google.protobuf.StringValue.fromObject(object.annotations[keys[i]]);
+                            message.annotations[keys[i]] = $root.clutch.k8s.v1.NullableString.fromObject(object.annotations[keys[i]]);
                         }
                     }
                     return message;
@@ -18636,12 +23434,12 @@ export const clutch = $root.clutch = (() => {
                     if (message.labels && (keys2 = Object.keys(message.labels)).length) {
                         object.labels = {};
                         for (let j = 0; j < keys2.length; ++j)
-                            object.labels[keys2[j]] = $root.google.protobuf.StringValue.toObject(message.labels[keys2[j]], options);
+                            object.labels[keys2[j]] = $root.clutch.k8s.v1.NullableString.toObject(message.labels[keys2[j]], options);
                     }
                     if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
                         object.annotations = {};
                         for (let j = 0; j < keys2.length; ++j)
-                            object.annotations[keys2[j]] = $root.google.protobuf.StringValue.toObject(message.annotations[keys2[j]], options);
+                            object.annotations[keys2[j]] = $root.clutch.k8s.v1.NullableString.toObject(message.annotations[keys2[j]], options);
                     }
                     return object;
                 };
@@ -21850,6 +26648,276 @@ export const clutch = $root.clutch = (() => {
                     return Deployment;
                 })();
 
+                v1.StatefulSet = (function() {
+
+                    /**
+                     * Properties of a StatefulSet.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @interface IStatefulSet
+                     * @property {string|null} [name] StatefulSet name
+                     * @property {string|null} [clientset] StatefulSet clientset
+                     * @property {string|null} [namespace] StatefulSet namespace
+                     */
+
+                    /**
+                     * Constructs a new StatefulSet.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @classdesc Represents a StatefulSet.
+                     * @implements IStatefulSet
+                     * @constructor
+                     * @param {clutch.resolver.k8s.v1.IStatefulSet=} [properties] Properties to set
+                     */
+                    function StatefulSet(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * StatefulSet name.
+                     * @member {string} name
+                     * @memberof clutch.resolver.k8s.v1.StatefulSet
+                     * @instance
+                     */
+                    StatefulSet.prototype.name = "";
+
+                    /**
+                     * StatefulSet clientset.
+                     * @member {string} clientset
+                     * @memberof clutch.resolver.k8s.v1.StatefulSet
+                     * @instance
+                     */
+                    StatefulSet.prototype.clientset = "";
+
+                    /**
+                     * StatefulSet namespace.
+                     * @member {string} namespace
+                     * @memberof clutch.resolver.k8s.v1.StatefulSet
+                     * @instance
+                     */
+                    StatefulSet.prototype.namespace = "";
+
+                    /**
+                     * Verifies a StatefulSet message.
+                     * @function verify
+                     * @memberof clutch.resolver.k8s.v1.StatefulSet
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    StatefulSet.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            if (!$util.isString(message.clientset))
+                                return "clientset: string expected";
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            if (!$util.isString(message.namespace))
+                                return "namespace: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a StatefulSet message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.resolver.k8s.v1.StatefulSet
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.resolver.k8s.v1.StatefulSet} StatefulSet
+                     */
+                    StatefulSet.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.resolver.k8s.v1.StatefulSet)
+                            return object;
+                        let message = new $root.clutch.resolver.k8s.v1.StatefulSet();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.clientset != null)
+                            message.clientset = String(object.clientset);
+                        if (object.namespace != null)
+                            message.namespace = String(object.namespace);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a StatefulSet message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.resolver.k8s.v1.StatefulSet
+                     * @static
+                     * @param {clutch.resolver.k8s.v1.StatefulSet} message StatefulSet
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    StatefulSet.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.clientset = "";
+                            object.namespace = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            object.clientset = message.clientset;
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            object.namespace = message.namespace;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this StatefulSet to JSON.
+                     * @function toJSON
+                     * @memberof clutch.resolver.k8s.v1.StatefulSet
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    StatefulSet.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return StatefulSet;
+                })();
+
+                v1.Service = (function() {
+
+                    /**
+                     * Properties of a Service.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @interface IService
+                     * @property {string|null} [name] Service name
+                     * @property {string|null} [clientset] Service clientset
+                     * @property {string|null} [namespace] Service namespace
+                     */
+
+                    /**
+                     * Constructs a new Service.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @classdesc Represents a Service.
+                     * @implements IService
+                     * @constructor
+                     * @param {clutch.resolver.k8s.v1.IService=} [properties] Properties to set
+                     */
+                    function Service(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Service name.
+                     * @member {string} name
+                     * @memberof clutch.resolver.k8s.v1.Service
+                     * @instance
+                     */
+                    Service.prototype.name = "";
+
+                    /**
+                     * Service clientset.
+                     * @member {string} clientset
+                     * @memberof clutch.resolver.k8s.v1.Service
+                     * @instance
+                     */
+                    Service.prototype.clientset = "";
+
+                    /**
+                     * Service namespace.
+                     * @member {string} namespace
+                     * @memberof clutch.resolver.k8s.v1.Service
+                     * @instance
+                     */
+                    Service.prototype.namespace = "";
+
+                    /**
+                     * Verifies a Service message.
+                     * @function verify
+                     * @memberof clutch.resolver.k8s.v1.Service
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Service.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            if (!$util.isString(message.clientset))
+                                return "clientset: string expected";
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            if (!$util.isString(message.namespace))
+                                return "namespace: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Service message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.resolver.k8s.v1.Service
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.resolver.k8s.v1.Service} Service
+                     */
+                    Service.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.resolver.k8s.v1.Service)
+                            return object;
+                        let message = new $root.clutch.resolver.k8s.v1.Service();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.clientset != null)
+                            message.clientset = String(object.clientset);
+                        if (object.namespace != null)
+                            message.namespace = String(object.namespace);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Service message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.resolver.k8s.v1.Service
+                     * @static
+                     * @param {clutch.resolver.k8s.v1.Service} message Service
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Service.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.clientset = "";
+                            object.namespace = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            object.clientset = message.clientset;
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            object.namespace = message.namespace;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Service to JSON.
+                     * @function toJSON
+                     * @memberof clutch.resolver.k8s.v1.Service
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Service.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Service;
+                })();
+
                 return v1;
             })();
 
@@ -24552,6 +29620,319 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return Edge;
+            })();
+
+            v1.Resource = (function() {
+
+                /**
+                 * Properties of a Resource.
+                 * @memberof clutch.topology.v1
+                 * @interface IResource
+                 * @property {string|null} [id] Resource id
+                 * @property {google.protobuf.IAny|null} [pb] Resource pb
+                 * @property {Object.<string,string>|null} [metadata] Resource metadata
+                 */
+
+                /**
+                 * Constructs a new Resource.
+                 * @memberof clutch.topology.v1
+                 * @classdesc Represents a Resource.
+                 * @implements IResource
+                 * @constructor
+                 * @param {clutch.topology.v1.IResource=} [properties] Properties to set
+                 */
+                function Resource(properties) {
+                    this.metadata = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Resource id.
+                 * @member {string} id
+                 * @memberof clutch.topology.v1.Resource
+                 * @instance
+                 */
+                Resource.prototype.id = "";
+
+                /**
+                 * Resource pb.
+                 * @member {google.protobuf.IAny|null|undefined} pb
+                 * @memberof clutch.topology.v1.Resource
+                 * @instance
+                 */
+                Resource.prototype.pb = null;
+
+                /**
+                 * Resource metadata.
+                 * @member {Object.<string,string>} metadata
+                 * @memberof clutch.topology.v1.Resource
+                 * @instance
+                 */
+                Resource.prototype.metadata = $util.emptyObject;
+
+                /**
+                 * Verifies a Resource message.
+                 * @function verify
+                 * @memberof clutch.topology.v1.Resource
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Resource.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (!$util.isString(message.id))
+                            return "id: string expected";
+                    if (message.pb != null && message.hasOwnProperty("pb")) {
+                        let error = $root.google.protobuf.Any.verify(message.pb);
+                        if (error)
+                            return "pb." + error;
+                    }
+                    if (message.metadata != null && message.hasOwnProperty("metadata")) {
+                        if (!$util.isObject(message.metadata))
+                            return "metadata: object expected";
+                        let key = Object.keys(message.metadata);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.metadata[key[i]]))
+                                return "metadata: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Resource message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.topology.v1.Resource
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.topology.v1.Resource} Resource
+                 */
+                Resource.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.Resource)
+                        return object;
+                    let message = new $root.clutch.topology.v1.Resource();
+                    if (object.id != null)
+                        message.id = String(object.id);
+                    if (object.pb != null) {
+                        if (typeof object.pb !== "object")
+                            throw TypeError(".clutch.topology.v1.Resource.pb: object expected");
+                        message.pb = $root.google.protobuf.Any.fromObject(object.pb);
+                    }
+                    if (object.metadata) {
+                        if (typeof object.metadata !== "object")
+                            throw TypeError(".clutch.topology.v1.Resource.metadata: object expected");
+                        message.metadata = {};
+                        for (let keys = Object.keys(object.metadata), i = 0; i < keys.length; ++i)
+                            message.metadata[keys[i]] = String(object.metadata[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Resource message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.topology.v1.Resource
+                 * @static
+                 * @param {clutch.topology.v1.Resource} message Resource
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Resource.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults)
+                        object.metadata = {};
+                    if (options.defaults) {
+                        object.id = "";
+                        object.pb = null;
+                    }
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        object.id = message.id;
+                    if (message.pb != null && message.hasOwnProperty("pb"))
+                        object.pb = $root.google.protobuf.Any.toObject(message.pb, options);
+                    let keys2;
+                    if (message.metadata && (keys2 = Object.keys(message.metadata)).length) {
+                        object.metadata = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.metadata[keys2[j]] = message.metadata[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this Resource to JSON.
+                 * @function toJSON
+                 * @memberof clutch.topology.v1.Resource
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Resource.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Resource;
+            })();
+
+            v1.UpdateCacheRequest = (function() {
+
+                /**
+                 * Properties of an UpdateCacheRequest.
+                 * @memberof clutch.topology.v1
+                 * @interface IUpdateCacheRequest
+                 * @property {clutch.topology.v1.IResource|null} [resource] UpdateCacheRequest resource
+                 * @property {clutch.topology.v1.UpdateCacheRequest.Action|null} [action] UpdateCacheRequest action
+                 */
+
+                /**
+                 * Constructs a new UpdateCacheRequest.
+                 * @memberof clutch.topology.v1
+                 * @classdesc Represents an UpdateCacheRequest.
+                 * @implements IUpdateCacheRequest
+                 * @constructor
+                 * @param {clutch.topology.v1.IUpdateCacheRequest=} [properties] Properties to set
+                 */
+                function UpdateCacheRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * UpdateCacheRequest resource.
+                 * @member {clutch.topology.v1.IResource|null|undefined} resource
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @instance
+                 */
+                UpdateCacheRequest.prototype.resource = null;
+
+                /**
+                 * UpdateCacheRequest action.
+                 * @member {clutch.topology.v1.UpdateCacheRequest.Action} action
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @instance
+                 */
+                UpdateCacheRequest.prototype.action = 0;
+
+                /**
+                 * Verifies an UpdateCacheRequest message.
+                 * @function verify
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                UpdateCacheRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.resource != null && message.hasOwnProperty("resource")) {
+                        let error = $root.clutch.topology.v1.Resource.verify(message.resource);
+                        if (error)
+                            return "resource." + error;
+                    }
+                    if (message.action != null && message.hasOwnProperty("action"))
+                        switch (message.action) {
+                        default:
+                            return "action: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                            break;
+                        }
+                    return null;
+                };
+
+                /**
+                 * Creates an UpdateCacheRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.topology.v1.UpdateCacheRequest} UpdateCacheRequest
+                 */
+                UpdateCacheRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.UpdateCacheRequest)
+                        return object;
+                    let message = new $root.clutch.topology.v1.UpdateCacheRequest();
+                    if (object.resource != null) {
+                        if (typeof object.resource !== "object")
+                            throw TypeError(".clutch.topology.v1.UpdateCacheRequest.resource: object expected");
+                        message.resource = $root.clutch.topology.v1.Resource.fromObject(object.resource);
+                    }
+                    switch (object.action) {
+                    case "UNSPECIFIED":
+                    case 0:
+                        message.action = 0;
+                        break;
+                    case "CREATE_OR_UPDATE":
+                    case 1:
+                        message.action = 1;
+                        break;
+                    case "DELETE":
+                    case 2:
+                        message.action = 2;
+                        break;
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an UpdateCacheRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @static
+                 * @param {clutch.topology.v1.UpdateCacheRequest} message UpdateCacheRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                UpdateCacheRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.resource = null;
+                        object.action = options.enums === String ? "UNSPECIFIED" : 0;
+                    }
+                    if (message.resource != null && message.hasOwnProperty("resource"))
+                        object.resource = $root.clutch.topology.v1.Resource.toObject(message.resource, options);
+                    if (message.action != null && message.hasOwnProperty("action"))
+                        object.action = options.enums === String ? $root.clutch.topology.v1.UpdateCacheRequest.Action[message.action] : message.action;
+                    return object;
+                };
+
+                /**
+                 * Converts this UpdateCacheRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.topology.v1.UpdateCacheRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                UpdateCacheRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Action enum.
+                 * @name clutch.topology.v1.UpdateCacheRequest.Action
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} CREATE_OR_UPDATE=1 CREATE_OR_UPDATE value
+                 * @property {number} DELETE=2 DELETE value
+                 */
+                UpdateCacheRequest.Action = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "CREATE_OR_UPDATE"] = 1;
+                    values[valuesById[2] = "DELETE"] = 2;
+                    return values;
+                })();
+
+                return UpdateCacheRequest;
             })();
 
             return v1;
@@ -36810,6 +42191,133 @@ export const google = $root.google = (() => {
             return GeneratedCodeInfo;
         })();
 
+        protobuf.Any = (function() {
+
+            /**
+             * Properties of an Any.
+             * @memberof google.protobuf
+             * @interface IAny
+             * @property {string|null} [type_url] Any type_url
+             * @property {Uint8Array|null} [value] Any value
+             */
+
+            /**
+             * Constructs a new Any.
+             * @memberof google.protobuf
+             * @classdesc Represents an Any.
+             * @implements IAny
+             * @constructor
+             * @param {google.protobuf.IAny=} [properties] Properties to set
+             */
+            function Any(properties) {
+                if (properties)
+                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * Any type_url.
+             * @member {string} type_url
+             * @memberof google.protobuf.Any
+             * @instance
+             */
+            Any.prototype.type_url = "";
+
+            /**
+             * Any value.
+             * @member {Uint8Array} value
+             * @memberof google.protobuf.Any
+             * @instance
+             */
+            Any.prototype.value = $util.newBuffer([]);
+
+            /**
+             * Verifies an Any message.
+             * @function verify
+             * @memberof google.protobuf.Any
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Any.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.type_url != null && message.hasOwnProperty("type_url"))
+                    if (!$util.isString(message.type_url))
+                        return "type_url: string expected";
+                if (message.value != null && message.hasOwnProperty("value"))
+                    if (!(message.value && typeof message.value.length === "number" || $util.isString(message.value)))
+                        return "value: buffer expected";
+                return null;
+            };
+
+            /**
+             * Creates an Any message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof google.protobuf.Any
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {google.protobuf.Any} Any
+             */
+            Any.fromObject = function fromObject(object) {
+                if (object instanceof $root.google.protobuf.Any)
+                    return object;
+                let message = new $root.google.protobuf.Any();
+                if (object.type_url != null)
+                    message.type_url = String(object.type_url);
+                if (object.value != null)
+                    if (typeof object.value === "string")
+                        $util.base64.decode(object.value, message.value = $util.newBuffer($util.base64.length(object.value)), 0);
+                    else if (object.value.length)
+                        message.value = object.value;
+                return message;
+            };
+
+            /**
+             * Creates a plain object from an Any message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof google.protobuf.Any
+             * @static
+             * @param {google.protobuf.Any} message Any
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Any.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                let object = {};
+                if (options.defaults) {
+                    object.type_url = "";
+                    if (options.bytes === String)
+                        object.value = "";
+                    else {
+                        object.value = [];
+                        if (options.bytes !== Array)
+                            object.value = $util.newBuffer(object.value);
+                    }
+                }
+                if (message.type_url != null && message.hasOwnProperty("type_url"))
+                    object.type_url = message.type_url;
+                if (message.value != null && message.hasOwnProperty("value"))
+                    object.value = options.bytes === String ? $util.base64.encode(message.value, 0, message.value.length) : options.bytes === Array ? Array.prototype.slice.call(message.value) : message.value;
+                return object;
+            };
+
+            /**
+             * Converts this Any to JSON.
+             * @function toJSON
+             * @memberof google.protobuf.Any
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Any.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return Any;
+        })();
+
         protobuf.Duration = (function() {
 
             /**
@@ -37072,636 +42580,6 @@ export const google = $root.google = (() => {
             };
 
             return Timestamp;
-        })();
-
-        protobuf.Any = (function() {
-
-            /**
-             * Properties of an Any.
-             * @memberof google.protobuf
-             * @interface IAny
-             * @property {string|null} [type_url] Any type_url
-             * @property {Uint8Array|null} [value] Any value
-             */
-
-            /**
-             * Constructs a new Any.
-             * @memberof google.protobuf
-             * @classdesc Represents an Any.
-             * @implements IAny
-             * @constructor
-             * @param {google.protobuf.IAny=} [properties] Properties to set
-             */
-            function Any(properties) {
-                if (properties)
-                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-
-            /**
-             * Any type_url.
-             * @member {string} type_url
-             * @memberof google.protobuf.Any
-             * @instance
-             */
-            Any.prototype.type_url = "";
-
-            /**
-             * Any value.
-             * @member {Uint8Array} value
-             * @memberof google.protobuf.Any
-             * @instance
-             */
-            Any.prototype.value = $util.newBuffer([]);
-
-            /**
-             * Verifies an Any message.
-             * @function verify
-             * @memberof google.protobuf.Any
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            Any.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.type_url != null && message.hasOwnProperty("type_url"))
-                    if (!$util.isString(message.type_url))
-                        return "type_url: string expected";
-                if (message.value != null && message.hasOwnProperty("value"))
-                    if (!(message.value && typeof message.value.length === "number" || $util.isString(message.value)))
-                        return "value: buffer expected";
-                return null;
-            };
-
-            /**
-             * Creates an Any message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof google.protobuf.Any
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {google.protobuf.Any} Any
-             */
-            Any.fromObject = function fromObject(object) {
-                if (object instanceof $root.google.protobuf.Any)
-                    return object;
-                let message = new $root.google.protobuf.Any();
-                if (object.type_url != null)
-                    message.type_url = String(object.type_url);
-                if (object.value != null)
-                    if (typeof object.value === "string")
-                        $util.base64.decode(object.value, message.value = $util.newBuffer($util.base64.length(object.value)), 0);
-                    else if (object.value.length)
-                        message.value = object.value;
-                return message;
-            };
-
-            /**
-             * Creates a plain object from an Any message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof google.protobuf.Any
-             * @static
-             * @param {google.protobuf.Any} message Any
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            Any.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                let object = {};
-                if (options.defaults) {
-                    object.type_url = "";
-                    if (options.bytes === String)
-                        object.value = "";
-                    else {
-                        object.value = [];
-                        if (options.bytes !== Array)
-                            object.value = $util.newBuffer(object.value);
-                    }
-                }
-                if (message.type_url != null && message.hasOwnProperty("type_url"))
-                    object.type_url = message.type_url;
-                if (message.value != null && message.hasOwnProperty("value"))
-                    object.value = options.bytes === String ? $util.base64.encode(message.value, 0, message.value.length) : options.bytes === Array ? Array.prototype.slice.call(message.value) : message.value;
-                return object;
-            };
-
-            /**
-             * Converts this Any to JSON.
-             * @function toJSON
-             * @memberof google.protobuf.Any
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            Any.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            return Any;
-        })();
-
-        protobuf.Struct = (function() {
-
-            /**
-             * Properties of a Struct.
-             * @memberof google.protobuf
-             * @interface IStruct
-             * @property {Object.<string,google.protobuf.IValue>|null} [fields] Struct fields
-             */
-
-            /**
-             * Constructs a new Struct.
-             * @memberof google.protobuf
-             * @classdesc Represents a Struct.
-             * @implements IStruct
-             * @constructor
-             * @param {google.protobuf.IStruct=} [properties] Properties to set
-             */
-            function Struct(properties) {
-                this.fields = {};
-                if (properties)
-                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-
-            /**
-             * Struct fields.
-             * @member {Object.<string,google.protobuf.IValue>} fields
-             * @memberof google.protobuf.Struct
-             * @instance
-             */
-            Struct.prototype.fields = $util.emptyObject;
-
-            /**
-             * Verifies a Struct message.
-             * @function verify
-             * @memberof google.protobuf.Struct
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            Struct.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.fields != null && message.hasOwnProperty("fields")) {
-                    if (!$util.isObject(message.fields))
-                        return "fields: object expected";
-                    let key = Object.keys(message.fields);
-                    for (let i = 0; i < key.length; ++i) {
-                        let error = $root.google.protobuf.Value.verify(message.fields[key[i]]);
-                        if (error)
-                            return "fields." + error;
-                    }
-                }
-                return null;
-            };
-
-            /**
-             * Creates a Struct message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof google.protobuf.Struct
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {google.protobuf.Struct} Struct
-             */
-            Struct.fromObject = function fromObject(object) {
-                if (object instanceof $root.google.protobuf.Struct)
-                    return object;
-                let message = new $root.google.protobuf.Struct();
-                if (object.fields) {
-                    if (typeof object.fields !== "object")
-                        throw TypeError(".google.protobuf.Struct.fields: object expected");
-                    message.fields = {};
-                    for (let keys = Object.keys(object.fields), i = 0; i < keys.length; ++i) {
-                        if (typeof object.fields[keys[i]] !== "object")
-                            throw TypeError(".google.protobuf.Struct.fields: object expected");
-                        message.fields[keys[i]] = $root.google.protobuf.Value.fromObject(object.fields[keys[i]]);
-                    }
-                }
-                return message;
-            };
-
-            /**
-             * Creates a plain object from a Struct message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof google.protobuf.Struct
-             * @static
-             * @param {google.protobuf.Struct} message Struct
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            Struct.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                let object = {};
-                if (options.objects || options.defaults)
-                    object.fields = {};
-                let keys2;
-                if (message.fields && (keys2 = Object.keys(message.fields)).length) {
-                    object.fields = {};
-                    for (let j = 0; j < keys2.length; ++j)
-                        object.fields[keys2[j]] = $root.google.protobuf.Value.toObject(message.fields[keys2[j]], options);
-                }
-                return object;
-            };
-
-            /**
-             * Converts this Struct to JSON.
-             * @function toJSON
-             * @memberof google.protobuf.Struct
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            Struct.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            return Struct;
-        })();
-
-        protobuf.Value = (function() {
-
-            /**
-             * Properties of a Value.
-             * @memberof google.protobuf
-             * @interface IValue
-             * @property {google.protobuf.NullValue|null} [nullValue] Value nullValue
-             * @property {number|null} [numberValue] Value numberValue
-             * @property {string|null} [stringValue] Value stringValue
-             * @property {boolean|null} [boolValue] Value boolValue
-             * @property {google.protobuf.IStruct|null} [structValue] Value structValue
-             * @property {google.protobuf.IListValue|null} [listValue] Value listValue
-             */
-
-            /**
-             * Constructs a new Value.
-             * @memberof google.protobuf
-             * @classdesc Represents a Value.
-             * @implements IValue
-             * @constructor
-             * @param {google.protobuf.IValue=} [properties] Properties to set
-             */
-            function Value(properties) {
-                if (properties)
-                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-
-            /**
-             * Value nullValue.
-             * @member {google.protobuf.NullValue} nullValue
-             * @memberof google.protobuf.Value
-             * @instance
-             */
-            Value.prototype.nullValue = 0;
-
-            /**
-             * Value numberValue.
-             * @member {number} numberValue
-             * @memberof google.protobuf.Value
-             * @instance
-             */
-            Value.prototype.numberValue = 0;
-
-            /**
-             * Value stringValue.
-             * @member {string} stringValue
-             * @memberof google.protobuf.Value
-             * @instance
-             */
-            Value.prototype.stringValue = "";
-
-            /**
-             * Value boolValue.
-             * @member {boolean} boolValue
-             * @memberof google.protobuf.Value
-             * @instance
-             */
-            Value.prototype.boolValue = false;
-
-            /**
-             * Value structValue.
-             * @member {google.protobuf.IStruct|null|undefined} structValue
-             * @memberof google.protobuf.Value
-             * @instance
-             */
-            Value.prototype.structValue = null;
-
-            /**
-             * Value listValue.
-             * @member {google.protobuf.IListValue|null|undefined} listValue
-             * @memberof google.protobuf.Value
-             * @instance
-             */
-            Value.prototype.listValue = null;
-
-            // OneOf field names bound to virtual getters and setters
-            let $oneOfFields;
-
-            /**
-             * Value kind.
-             * @member {"nullValue"|"numberValue"|"stringValue"|"boolValue"|"structValue"|"listValue"|undefined} kind
-             * @memberof google.protobuf.Value
-             * @instance
-             */
-            Object.defineProperty(Value.prototype, "kind", {
-                get: $util.oneOfGetter($oneOfFields = ["nullValue", "numberValue", "stringValue", "boolValue", "structValue", "listValue"]),
-                set: $util.oneOfSetter($oneOfFields)
-            });
-
-            /**
-             * Verifies a Value message.
-             * @function verify
-             * @memberof google.protobuf.Value
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            Value.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                let properties = {};
-                if (message.nullValue != null && message.hasOwnProperty("nullValue")) {
-                    properties.kind = 1;
-                    switch (message.nullValue) {
-                    default:
-                        return "nullValue: enum value expected";
-                    case 0:
-                        break;
-                    }
-                }
-                if (message.numberValue != null && message.hasOwnProperty("numberValue")) {
-                    if (properties.kind === 1)
-                        return "kind: multiple values";
-                    properties.kind = 1;
-                    if (typeof message.numberValue !== "number")
-                        return "numberValue: number expected";
-                }
-                if (message.stringValue != null && message.hasOwnProperty("stringValue")) {
-                    if (properties.kind === 1)
-                        return "kind: multiple values";
-                    properties.kind = 1;
-                    if (!$util.isString(message.stringValue))
-                        return "stringValue: string expected";
-                }
-                if (message.boolValue != null && message.hasOwnProperty("boolValue")) {
-                    if (properties.kind === 1)
-                        return "kind: multiple values";
-                    properties.kind = 1;
-                    if (typeof message.boolValue !== "boolean")
-                        return "boolValue: boolean expected";
-                }
-                if (message.structValue != null && message.hasOwnProperty("structValue")) {
-                    if (properties.kind === 1)
-                        return "kind: multiple values";
-                    properties.kind = 1;
-                    {
-                        let error = $root.google.protobuf.Struct.verify(message.structValue);
-                        if (error)
-                            return "structValue." + error;
-                    }
-                }
-                if (message.listValue != null && message.hasOwnProperty("listValue")) {
-                    if (properties.kind === 1)
-                        return "kind: multiple values";
-                    properties.kind = 1;
-                    {
-                        let error = $root.google.protobuf.ListValue.verify(message.listValue);
-                        if (error)
-                            return "listValue." + error;
-                    }
-                }
-                return null;
-            };
-
-            /**
-             * Creates a Value message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof google.protobuf.Value
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {google.protobuf.Value} Value
-             */
-            Value.fromObject = function fromObject(object) {
-                if (object instanceof $root.google.protobuf.Value)
-                    return object;
-                let message = new $root.google.protobuf.Value();
-                switch (object.nullValue) {
-                case "NULL_VALUE":
-                case 0:
-                    message.nullValue = 0;
-                    break;
-                }
-                if (object.numberValue != null)
-                    message.numberValue = Number(object.numberValue);
-                if (object.stringValue != null)
-                    message.stringValue = String(object.stringValue);
-                if (object.boolValue != null)
-                    message.boolValue = Boolean(object.boolValue);
-                if (object.structValue != null) {
-                    if (typeof object.structValue !== "object")
-                        throw TypeError(".google.protobuf.Value.structValue: object expected");
-                    message.structValue = $root.google.protobuf.Struct.fromObject(object.structValue);
-                }
-                if (object.listValue != null) {
-                    if (typeof object.listValue !== "object")
-                        throw TypeError(".google.protobuf.Value.listValue: object expected");
-                    message.listValue = $root.google.protobuf.ListValue.fromObject(object.listValue);
-                }
-                return message;
-            };
-
-            /**
-             * Creates a plain object from a Value message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof google.protobuf.Value
-             * @static
-             * @param {google.protobuf.Value} message Value
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            Value.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                let object = {};
-                if (message.nullValue != null && message.hasOwnProperty("nullValue")) {
-                    object.nullValue = options.enums === String ? $root.google.protobuf.NullValue[message.nullValue] : message.nullValue;
-                    if (options.oneofs)
-                        object.kind = "nullValue";
-                }
-                if (message.numberValue != null && message.hasOwnProperty("numberValue")) {
-                    object.numberValue = options.json && !isFinite(message.numberValue) ? String(message.numberValue) : message.numberValue;
-                    if (options.oneofs)
-                        object.kind = "numberValue";
-                }
-                if (message.stringValue != null && message.hasOwnProperty("stringValue")) {
-                    object.stringValue = message.stringValue;
-                    if (options.oneofs)
-                        object.kind = "stringValue";
-                }
-                if (message.boolValue != null && message.hasOwnProperty("boolValue")) {
-                    object.boolValue = message.boolValue;
-                    if (options.oneofs)
-                        object.kind = "boolValue";
-                }
-                if (message.structValue != null && message.hasOwnProperty("structValue")) {
-                    object.structValue = $root.google.protobuf.Struct.toObject(message.structValue, options);
-                    if (options.oneofs)
-                        object.kind = "structValue";
-                }
-                if (message.listValue != null && message.hasOwnProperty("listValue")) {
-                    object.listValue = $root.google.protobuf.ListValue.toObject(message.listValue, options);
-                    if (options.oneofs)
-                        object.kind = "listValue";
-                }
-                return object;
-            };
-
-            /**
-             * Converts this Value to JSON.
-             * @function toJSON
-             * @memberof google.protobuf.Value
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            Value.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            return Value;
-        })();
-
-        /**
-         * NullValue enum.
-         * @name google.protobuf.NullValue
-         * @enum {number}
-         * @property {number} NULL_VALUE=0 NULL_VALUE value
-         */
-        protobuf.NullValue = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
-            values[valuesById[0] = "NULL_VALUE"] = 0;
-            return values;
-        })();
-
-        protobuf.ListValue = (function() {
-
-            /**
-             * Properties of a ListValue.
-             * @memberof google.protobuf
-             * @interface IListValue
-             * @property {Array.<google.protobuf.IValue>|null} [values] ListValue values
-             */
-
-            /**
-             * Constructs a new ListValue.
-             * @memberof google.protobuf
-             * @classdesc Represents a ListValue.
-             * @implements IListValue
-             * @constructor
-             * @param {google.protobuf.IListValue=} [properties] Properties to set
-             */
-            function ListValue(properties) {
-                this.values = [];
-                if (properties)
-                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-
-            /**
-             * ListValue values.
-             * @member {Array.<google.protobuf.IValue>} values
-             * @memberof google.protobuf.ListValue
-             * @instance
-             */
-            ListValue.prototype.values = $util.emptyArray;
-
-            /**
-             * Verifies a ListValue message.
-             * @function verify
-             * @memberof google.protobuf.ListValue
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            ListValue.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.values != null && message.hasOwnProperty("values")) {
-                    if (!Array.isArray(message.values))
-                        return "values: array expected";
-                    for (let i = 0; i < message.values.length; ++i) {
-                        let error = $root.google.protobuf.Value.verify(message.values[i]);
-                        if (error)
-                            return "values." + error;
-                    }
-                }
-                return null;
-            };
-
-            /**
-             * Creates a ListValue message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof google.protobuf.ListValue
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {google.protobuf.ListValue} ListValue
-             */
-            ListValue.fromObject = function fromObject(object) {
-                if (object instanceof $root.google.protobuf.ListValue)
-                    return object;
-                let message = new $root.google.protobuf.ListValue();
-                if (object.values) {
-                    if (!Array.isArray(object.values))
-                        throw TypeError(".google.protobuf.ListValue.values: array expected");
-                    message.values = [];
-                    for (let i = 0; i < object.values.length; ++i) {
-                        if (typeof object.values[i] !== "object")
-                            throw TypeError(".google.protobuf.ListValue.values: object expected");
-                        message.values[i] = $root.google.protobuf.Value.fromObject(object.values[i]);
-                    }
-                }
-                return message;
-            };
-
-            /**
-             * Creates a plain object from a ListValue message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof google.protobuf.ListValue
-             * @static
-             * @param {google.protobuf.ListValue} message ListValue
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            ListValue.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                let object = {};
-                if (options.arrays || options.defaults)
-                    object.values = [];
-                if (message.values && message.values.length) {
-                    object.values = [];
-                    for (let j = 0; j < message.values.length; ++j)
-                        object.values[j] = $root.google.protobuf.Value.toObject(message.values[j], options);
-                }
-                return object;
-            };
-
-            /**
-             * Converts this ListValue to JSON.
-             * @function toJSON
-             * @memberof google.protobuf.ListValue
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            ListValue.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            return ListValue;
         })();
 
         protobuf.DoubleValue = (function() {
@@ -38639,6 +43517,509 @@ export const google = $root.google = (() => {
             };
 
             return BytesValue;
+        })();
+
+        protobuf.Struct = (function() {
+
+            /**
+             * Properties of a Struct.
+             * @memberof google.protobuf
+             * @interface IStruct
+             * @property {Object.<string,google.protobuf.IValue>|null} [fields] Struct fields
+             */
+
+            /**
+             * Constructs a new Struct.
+             * @memberof google.protobuf
+             * @classdesc Represents a Struct.
+             * @implements IStruct
+             * @constructor
+             * @param {google.protobuf.IStruct=} [properties] Properties to set
+             */
+            function Struct(properties) {
+                this.fields = {};
+                if (properties)
+                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * Struct fields.
+             * @member {Object.<string,google.protobuf.IValue>} fields
+             * @memberof google.protobuf.Struct
+             * @instance
+             */
+            Struct.prototype.fields = $util.emptyObject;
+
+            /**
+             * Verifies a Struct message.
+             * @function verify
+             * @memberof google.protobuf.Struct
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Struct.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.fields != null && message.hasOwnProperty("fields")) {
+                    if (!$util.isObject(message.fields))
+                        return "fields: object expected";
+                    let key = Object.keys(message.fields);
+                    for (let i = 0; i < key.length; ++i) {
+                        let error = $root.google.protobuf.Value.verify(message.fields[key[i]]);
+                        if (error)
+                            return "fields." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Struct message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof google.protobuf.Struct
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {google.protobuf.Struct} Struct
+             */
+            Struct.fromObject = function fromObject(object) {
+                if (object instanceof $root.google.protobuf.Struct)
+                    return object;
+                let message = new $root.google.protobuf.Struct();
+                if (object.fields) {
+                    if (typeof object.fields !== "object")
+                        throw TypeError(".google.protobuf.Struct.fields: object expected");
+                    message.fields = {};
+                    for (let keys = Object.keys(object.fields), i = 0; i < keys.length; ++i) {
+                        if (typeof object.fields[keys[i]] !== "object")
+                            throw TypeError(".google.protobuf.Struct.fields: object expected");
+                        message.fields[keys[i]] = $root.google.protobuf.Value.fromObject(object.fields[keys[i]]);
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Struct message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof google.protobuf.Struct
+             * @static
+             * @param {google.protobuf.Struct} message Struct
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Struct.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                let object = {};
+                if (options.objects || options.defaults)
+                    object.fields = {};
+                let keys2;
+                if (message.fields && (keys2 = Object.keys(message.fields)).length) {
+                    object.fields = {};
+                    for (let j = 0; j < keys2.length; ++j)
+                        object.fields[keys2[j]] = $root.google.protobuf.Value.toObject(message.fields[keys2[j]], options);
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Struct to JSON.
+             * @function toJSON
+             * @memberof google.protobuf.Struct
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Struct.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return Struct;
+        })();
+
+        protobuf.Value = (function() {
+
+            /**
+             * Properties of a Value.
+             * @memberof google.protobuf
+             * @interface IValue
+             * @property {google.protobuf.NullValue|null} [nullValue] Value nullValue
+             * @property {number|null} [numberValue] Value numberValue
+             * @property {string|null} [stringValue] Value stringValue
+             * @property {boolean|null} [boolValue] Value boolValue
+             * @property {google.protobuf.IStruct|null} [structValue] Value structValue
+             * @property {google.protobuf.IListValue|null} [listValue] Value listValue
+             */
+
+            /**
+             * Constructs a new Value.
+             * @memberof google.protobuf
+             * @classdesc Represents a Value.
+             * @implements IValue
+             * @constructor
+             * @param {google.protobuf.IValue=} [properties] Properties to set
+             */
+            function Value(properties) {
+                if (properties)
+                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * Value nullValue.
+             * @member {google.protobuf.NullValue} nullValue
+             * @memberof google.protobuf.Value
+             * @instance
+             */
+            Value.prototype.nullValue = 0;
+
+            /**
+             * Value numberValue.
+             * @member {number} numberValue
+             * @memberof google.protobuf.Value
+             * @instance
+             */
+            Value.prototype.numberValue = 0;
+
+            /**
+             * Value stringValue.
+             * @member {string} stringValue
+             * @memberof google.protobuf.Value
+             * @instance
+             */
+            Value.prototype.stringValue = "";
+
+            /**
+             * Value boolValue.
+             * @member {boolean} boolValue
+             * @memberof google.protobuf.Value
+             * @instance
+             */
+            Value.prototype.boolValue = false;
+
+            /**
+             * Value structValue.
+             * @member {google.protobuf.IStruct|null|undefined} structValue
+             * @memberof google.protobuf.Value
+             * @instance
+             */
+            Value.prototype.structValue = null;
+
+            /**
+             * Value listValue.
+             * @member {google.protobuf.IListValue|null|undefined} listValue
+             * @memberof google.protobuf.Value
+             * @instance
+             */
+            Value.prototype.listValue = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            /**
+             * Value kind.
+             * @member {"nullValue"|"numberValue"|"stringValue"|"boolValue"|"structValue"|"listValue"|undefined} kind
+             * @memberof google.protobuf.Value
+             * @instance
+             */
+            Object.defineProperty(Value.prototype, "kind", {
+                get: $util.oneOfGetter($oneOfFields = ["nullValue", "numberValue", "stringValue", "boolValue", "structValue", "listValue"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Verifies a Value message.
+             * @function verify
+             * @memberof google.protobuf.Value
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Value.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                let properties = {};
+                if (message.nullValue != null && message.hasOwnProperty("nullValue")) {
+                    properties.kind = 1;
+                    switch (message.nullValue) {
+                    default:
+                        return "nullValue: enum value expected";
+                    case 0:
+                        break;
+                    }
+                }
+                if (message.numberValue != null && message.hasOwnProperty("numberValue")) {
+                    if (properties.kind === 1)
+                        return "kind: multiple values";
+                    properties.kind = 1;
+                    if (typeof message.numberValue !== "number")
+                        return "numberValue: number expected";
+                }
+                if (message.stringValue != null && message.hasOwnProperty("stringValue")) {
+                    if (properties.kind === 1)
+                        return "kind: multiple values";
+                    properties.kind = 1;
+                    if (!$util.isString(message.stringValue))
+                        return "stringValue: string expected";
+                }
+                if (message.boolValue != null && message.hasOwnProperty("boolValue")) {
+                    if (properties.kind === 1)
+                        return "kind: multiple values";
+                    properties.kind = 1;
+                    if (typeof message.boolValue !== "boolean")
+                        return "boolValue: boolean expected";
+                }
+                if (message.structValue != null && message.hasOwnProperty("structValue")) {
+                    if (properties.kind === 1)
+                        return "kind: multiple values";
+                    properties.kind = 1;
+                    {
+                        let error = $root.google.protobuf.Struct.verify(message.structValue);
+                        if (error)
+                            return "structValue." + error;
+                    }
+                }
+                if (message.listValue != null && message.hasOwnProperty("listValue")) {
+                    if (properties.kind === 1)
+                        return "kind: multiple values";
+                    properties.kind = 1;
+                    {
+                        let error = $root.google.protobuf.ListValue.verify(message.listValue);
+                        if (error)
+                            return "listValue." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Value message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof google.protobuf.Value
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {google.protobuf.Value} Value
+             */
+            Value.fromObject = function fromObject(object) {
+                if (object instanceof $root.google.protobuf.Value)
+                    return object;
+                let message = new $root.google.protobuf.Value();
+                switch (object.nullValue) {
+                case "NULL_VALUE":
+                case 0:
+                    message.nullValue = 0;
+                    break;
+                }
+                if (object.numberValue != null)
+                    message.numberValue = Number(object.numberValue);
+                if (object.stringValue != null)
+                    message.stringValue = String(object.stringValue);
+                if (object.boolValue != null)
+                    message.boolValue = Boolean(object.boolValue);
+                if (object.structValue != null) {
+                    if (typeof object.structValue !== "object")
+                        throw TypeError(".google.protobuf.Value.structValue: object expected");
+                    message.structValue = $root.google.protobuf.Struct.fromObject(object.structValue);
+                }
+                if (object.listValue != null) {
+                    if (typeof object.listValue !== "object")
+                        throw TypeError(".google.protobuf.Value.listValue: object expected");
+                    message.listValue = $root.google.protobuf.ListValue.fromObject(object.listValue);
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Value message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof google.protobuf.Value
+             * @static
+             * @param {google.protobuf.Value} message Value
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Value.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                let object = {};
+                if (message.nullValue != null && message.hasOwnProperty("nullValue")) {
+                    object.nullValue = options.enums === String ? $root.google.protobuf.NullValue[message.nullValue] : message.nullValue;
+                    if (options.oneofs)
+                        object.kind = "nullValue";
+                }
+                if (message.numberValue != null && message.hasOwnProperty("numberValue")) {
+                    object.numberValue = options.json && !isFinite(message.numberValue) ? String(message.numberValue) : message.numberValue;
+                    if (options.oneofs)
+                        object.kind = "numberValue";
+                }
+                if (message.stringValue != null && message.hasOwnProperty("stringValue")) {
+                    object.stringValue = message.stringValue;
+                    if (options.oneofs)
+                        object.kind = "stringValue";
+                }
+                if (message.boolValue != null && message.hasOwnProperty("boolValue")) {
+                    object.boolValue = message.boolValue;
+                    if (options.oneofs)
+                        object.kind = "boolValue";
+                }
+                if (message.structValue != null && message.hasOwnProperty("structValue")) {
+                    object.structValue = $root.google.protobuf.Struct.toObject(message.structValue, options);
+                    if (options.oneofs)
+                        object.kind = "structValue";
+                }
+                if (message.listValue != null && message.hasOwnProperty("listValue")) {
+                    object.listValue = $root.google.protobuf.ListValue.toObject(message.listValue, options);
+                    if (options.oneofs)
+                        object.kind = "listValue";
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Value to JSON.
+             * @function toJSON
+             * @memberof google.protobuf.Value
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Value.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return Value;
+        })();
+
+        /**
+         * NullValue enum.
+         * @name google.protobuf.NullValue
+         * @enum {number}
+         * @property {number} NULL_VALUE=0 NULL_VALUE value
+         */
+        protobuf.NullValue = (function() {
+            const valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "NULL_VALUE"] = 0;
+            return values;
+        })();
+
+        protobuf.ListValue = (function() {
+
+            /**
+             * Properties of a ListValue.
+             * @memberof google.protobuf
+             * @interface IListValue
+             * @property {Array.<google.protobuf.IValue>|null} [values] ListValue values
+             */
+
+            /**
+             * Constructs a new ListValue.
+             * @memberof google.protobuf
+             * @classdesc Represents a ListValue.
+             * @implements IListValue
+             * @constructor
+             * @param {google.protobuf.IListValue=} [properties] Properties to set
+             */
+            function ListValue(properties) {
+                this.values = [];
+                if (properties)
+                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * ListValue values.
+             * @member {Array.<google.protobuf.IValue>} values
+             * @memberof google.protobuf.ListValue
+             * @instance
+             */
+            ListValue.prototype.values = $util.emptyArray;
+
+            /**
+             * Verifies a ListValue message.
+             * @function verify
+             * @memberof google.protobuf.ListValue
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            ListValue.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.values != null && message.hasOwnProperty("values")) {
+                    if (!Array.isArray(message.values))
+                        return "values: array expected";
+                    for (let i = 0; i < message.values.length; ++i) {
+                        let error = $root.google.protobuf.Value.verify(message.values[i]);
+                        if (error)
+                            return "values." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a ListValue message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof google.protobuf.ListValue
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {google.protobuf.ListValue} ListValue
+             */
+            ListValue.fromObject = function fromObject(object) {
+                if (object instanceof $root.google.protobuf.ListValue)
+                    return object;
+                let message = new $root.google.protobuf.ListValue();
+                if (object.values) {
+                    if (!Array.isArray(object.values))
+                        throw TypeError(".google.protobuf.ListValue.values: array expected");
+                    message.values = [];
+                    for (let i = 0; i < object.values.length; ++i) {
+                        if (typeof object.values[i] !== "object")
+                            throw TypeError(".google.protobuf.ListValue.values: object expected");
+                        message.values[i] = $root.google.protobuf.Value.fromObject(object.values[i]);
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a ListValue message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof google.protobuf.ListValue
+             * @static
+             * @param {google.protobuf.ListValue} message ListValue
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            ListValue.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                let object = {};
+                if (options.arrays || options.defaults)
+                    object.values = [];
+                if (message.values && message.values.length) {
+                    object.values = [];
+                    for (let j = 0; j < message.values.length; ++j)
+                        object.values[j] = $root.google.protobuf.Value.toObject(message.values[j], options);
+                }
+                return object;
+            };
+
+            /**
+             * Converts this ListValue to JSON.
+             * @function toJSON
+             * @memberof google.protobuf.ListValue
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            ListValue.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return ListValue;
         })();
 
         return protobuf;

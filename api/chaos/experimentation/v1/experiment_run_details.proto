@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package clutch.chaos.experimentation.v1;
+
+import "google/protobuf/any.proto";
+import "chaos/experimentation/v1/properties.proto";
+import "chaos/experimentation/v1/experiment.proto";
+
+option go_package = "github.com/lyft/clutch/backend/api/chaos/experimentation/v1;experimentationv1";
+
+// ExperimentRunDetails frontend-renderable details of an experiment run and experiment config associated with it.
+message ExperimentRunDetails {
+  // The unique identifier of an experiment run.
+  fixed64 run_id = 1;
+  // The status of an experiment run.
+  Experiment.Status status = 2;
+  // The list of properties associated with the receiver that's created as a combination
+  // of properties for a given experiment run and an experiment config for the run.
+  PropertiesList properties = 3;
+  // The raw experiment configuration associated with an experiment run.
+  google.protobuf.Any config = 4;
+}

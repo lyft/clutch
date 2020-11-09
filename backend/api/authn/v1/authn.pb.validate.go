@@ -251,7 +251,7 @@ func (m *CallbackResponse) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Token
+	// no validation rules for AccessToken
 
 	return nil
 }

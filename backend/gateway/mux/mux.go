@@ -7,23 +7,31 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"path"
 	"regexp"
 	"strconv"
 	"strings"
 
-	"github.com/golang/protobuf/proto"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
+
+	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
+	"github.com/lyft/clutch/backend/service"
+	awsservice "github.com/lyft/clutch/backend/service/aws"
 )
 
 var apiPattern = regexp.MustCompile(`^/v\d+/`)
 
 type assetHandler struct {
+	assetCfg *gatewayv1.Assets
+
 	next       http.Handler
 	fileSystem http.FileSystem
 	fileServer http.Handler
@@ -62,12 +70,81 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// Serve!
 	if f, err := a.fileSystem.Open(r.URL.Path); err != nil {
+		// If not a known static asset and an asset provider is configured, try streaming from the configured provider.
+		if a.assetCfg != nil && a.assetCfg.Provider != nil && strings.HasPrefix(r.URL.Path, "/static/") {
+			// We attach this header simply for observability purposes.
+			// Otherwise its difficult to know if the assets are being served from the configured provider.
+			w.Header().Set("x-clutch-asset-passthrough", "true")
+
+			asset, err := a.assetProviderHandler(r.Context(), r.URL.Path)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				_, _ = w.Write([]byte(fmt.Sprintf("Error getting assets from the configured asset provider: %v", err)))
+				return
+			}
+			defer asset.Close()
+
+			_, err = io.Copy(w, asset)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				_, _ = w.Write([]byte(fmt.Sprintf("Error getting assets from the configured asset provider: %v", err)))
+				return
+			}
+			return
+		}
+
 		// If not a known static asset serve the SPA.
 		r.URL.Path = "/"
 	} else {
 		_ = f.Close()
 	}
+
 	a.fileServer.ServeHTTP(w, r)
+}
+
+func (a *assetHandler) assetProviderHandler(ctx context.Context, urlPath string) (io.ReadCloser, error) {
+	switch a.assetCfg.Provider.(type) {
+	case *gatewayv1.Assets_S3:
+		aws, err := getAssetProviderService(a.assetCfg)
+		if err != nil {
+			return nil, err
+		}
+
+		awsClient, ok := aws.(awsservice.Client)
+		if !ok {
+			return nil, fmt.Errorf("Unable to aquire the aws client")
+		}
+
+		return awsClient.S3StreamingGet(
+			ctx,
+			a.assetCfg.GetS3().Region,
+			a.assetCfg.GetS3().Bucket,
+			path.Join(a.assetCfg.GetS3().Key, strings.TrimPrefix(urlPath, "/static")),
+		)
+	default:
+		return nil, fmt.Errorf("configured asset provider has not been implemented")
+	}
+}
+
+// getAssetProviderService is used in two different contexts
+// Its invoked in the mux constructor which checks if the necessary service has been configured,
+// if there is an asset provider which requires ones.
+//
+// Otherwise its used to get the service for an asset provider in assetProviderHandler() if necessary.
+func getAssetProviderService(assetCfg *gatewayv1.Assets) (service.Service, error) {
+	switch assetCfg.Provider.(type) {
+	case *gatewayv1.Assets_S3:
+		aws, ok := service.Registry[awsservice.Name]
+		if !ok {
+			return nil, fmt.Errorf("The AWS service must be configured to use the asset s3 provider.")
+		}
+		return aws, nil
+
+	default:
+		// An asset provider does not necessarily require a service to function properly
+		// if there is nothing configured for a provider type we cant necessarily throw an error here.
+		return nil, nil
+	}
 }
 
 func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp proto.Message) error {
@@ -108,7 +185,7 @@ func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Ma
 		if len(referer) != 0 {
 			referer, err := url.Parse(referer)
 			if err != nil {
-				runtime.DefaultHTTPProtoErrorHandler(ctx, mux, m, w, req, err)
+				runtime.DefaultHTTPErrorHandler(ctx, mux, m, w, req, err)
 				return
 			}
 			if redirectPath != referer.Path {
@@ -119,27 +196,40 @@ func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Ma
 		http.Redirect(w, req, redirectPath, http.StatusFound)
 		return
 	}
-	runtime.DefaultHTTPProtoErrorHandler(ctx, mux, m, w, req, err)
+	runtime.DefaultHTTPErrorHandler(ctx, mux, m, w, req, err)
 }
 
-func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem) *Mux {
+func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem, assetCfg *gatewayv1.Assets) (*Mux, error) {
 	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(unaryInterceptors...))
 	jsonGateway := runtime.NewServeMux(
 		runtime.WithForwardResponseOption(customResponseForwarder),
-		runtime.WithProtoErrorHandler(customErrorHandler),
+		runtime.WithErrorHandler(customErrorHandler),
 		runtime.WithMarshalerOption(
 			runtime.MIMEWildcard,
 			&runtime.JSONPb{
-				// Use camelCase for the JSON version.
-				OrigName: false,
-				// Transmit zero-values over the wire.
-				EmitDefaults: true,
+				MarshalOptions: protojson.MarshalOptions{
+					// Use camelCase for the JSON version.
+					UseProtoNames: false,
+					// Transmit zero-values over the wire.
+					EmitUnpopulated: true,
+				},
+				UnmarshalOptions: protojson.UnmarshalOptions{},
 			},
 		),
 	)
 
+	// If there is a configured asset provider, we check to see if the service is configured before proceeding.
+	// Bailing out early during the startup process instead of hitting this error at runtime when serving assets.
+	if assetCfg != nil && assetCfg.Provider != nil {
+		_, err := getAssetProviderService(assetCfg)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	httpMux := http.NewServeMux()
 	httpMux.Handle("/", &assetHandler{
+		assetCfg:   assetCfg,
 		next:       jsonGateway,
 		fileSystem: assets,
 		fileServer: http.FileServer(assets),
@@ -150,7 +240,7 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 		JSONGateway: jsonGateway,
 		HTTPMux:     httpMux,
 	}
-	return mux
+	return mux, nil
 }
 
 // Mux allows sharing one port between gRPC and the corresponding JSON gateway via header-based multiplexing.

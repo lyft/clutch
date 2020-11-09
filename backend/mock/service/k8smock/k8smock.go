@@ -36,6 +36,10 @@ func (*svc) ResizeHPA(ctx context.Context, clientset, cluster, namespace, name s
 	return nil
 }
 
+func (*svc) DeleteHPA(ctx context.Context, clientset, cluster, namespace, name string) error {
+	return nil
+}
+
 func (*svc) Manager() k8sservice.ClientsetManager {
 	return nil
 }
@@ -95,11 +99,44 @@ func (*svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespace,
 	return nil
 }
 
+func (*svc) DeleteDeployment(ctx context.Context, clientset, cluster, namespace, name string) error {
+	return nil
+}
+
+func (*svc) DescribeStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) (*k8sv1.StatefulSet, error) {
+	return &k8sv1.StatefulSet{
+		Cluster:     cluster,
+		Namespace:   namespace,
+		Name:        "statefulset1",
+		Labels:      map[string]string{"Key": "value"},
+		Annotations: map[string]string{"Key": "value"},
+	}, nil
+}
+
+func (*svc) UpdateStatefulSet(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sv1.UpdateStatefulSetRequest_Fields) error {
+	return nil
+}
+
 func (*svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error {
 	return nil
 }
 
 func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name string, expectedObjectMetaFields *k8sv1.ExpectedObjectMetaFields, objectMetaFields *k8sv1.ObjectMetaFields, removeObjectMetaFields *k8sv1.RemoveObjectMetaFields) error {
+	return nil
+}
+
+func (s *svc) DescribeService(_ context.Context, clientset, cluster, namespace, name string) (*k8sv1.Service, error) {
+	return &k8sv1.Service{
+		Cluster:     "fake-cluster-name",
+		Namespace:   namespace,
+		Name:        name,
+		Type:        k8sv1.Service_Type(rand.Intn(len(k8sv1.Service_Type_value))),
+		Labels:      map[string]string{"Key": "value"},
+		Annotations: map[string]string{"Key": "value"},
+	}, nil
+}
+
+func (*svc) DeleteService(ctx context.Context, clientset, cluster, namespace, name string) error {
 	return nil
 }
 

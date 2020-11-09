@@ -6,6 +6,12 @@ module.exports = {
         resolverType: "clutch.aws.ec2.v1.Instance",
       },
     },
+    rebootInstance: {
+      hideNav: true,
+      componentProps: {
+        resolverType: "clutch.aws.ec2.v1.Instance",
+      },
+    },
     resizeAutoscalingGroup: {
       componentProps: {
         resolverType: "clutch.aws.ec2.v1.AutoscalingGroup",

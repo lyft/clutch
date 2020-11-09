@@ -73,6 +73,9 @@ func TestMissingRegionOnEachServiceCall(t *testing.T) {
 
 	err = c.TerminateInstances(context.Background(), "us-north-5", nil)
 	assert.EqualError(t, err, "no client found for region 'us-north-5'")
+
+	err = c.RebootInstances(context.Background(), "us-north-5", nil)
+	assert.EqualError(t, err, "no client found for region 'us-north-5'")
 }
 
 var testInstance = &ec2.Instance{
@@ -148,6 +151,20 @@ func TestTerminateInstances(t *testing.T) {
 	assert.EqualError(t, err, "yikes")
 }
 
+func TestRebootInstances(t *testing.T) {
+	m := &mockEC2{}
+	c := &client{
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", ec2: m}},
+	}
+
+	err := c.RebootInstances(context.Background(), "us-east-1", nil)
+	assert.NoError(t, err)
+
+	m.rebootErr = errors.New("ohno")
+	err = c.RebootInstances(context.Background(), "us-east-1", nil)
+	assert.EqualError(t, err, "ohno")
+}
+
 type mockEC2 struct {
 	ec2iface.EC2API // satisfies interface
 
@@ -156,6 +173,7 @@ type mockEC2 struct {
 
 	terminateResult []*ec2.InstanceStateChange
 	terminateErr    error
+	rebootErr       error
 }
 
 func (m *mockEC2) DescribeInstancesWithContext(ctx context.Context, input *ec2.DescribeInstancesInput, opts ...request.Option) (*ec2.DescribeInstancesOutput, error) {
@@ -183,4 +201,11 @@ func (m *mockEC2) TerminateInstancesWithContext(ctx context.Context, input *ec2.
 		TerminatingInstances: m.terminateResult,
 	}
 	return ret, nil
+}
+
+func (m *mockEC2) RebootInstancesWithContext(aws.Context, *ec2.RebootInstancesInput, ...request.Option) (*ec2.RebootInstancesOutput, error) {
+	if m.rebootErr != nil {
+		return nil, m.rebootErr
+	}
+	return &ec2.RebootInstancesOutput{}, nil
 }

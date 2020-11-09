@@ -19,7 +19,7 @@ const Checkbox = styled(MuiCheckbox)`
   `}
 `;
 
-interface CheckboxPanelProps {
+export interface CheckboxPanelProps {
   header?: string;
   options: {
     [option: string]: boolean;
@@ -52,25 +52,52 @@ const CheckboxPanel: React.FC<CheckboxPanelProps> = ({ header, options, onChange
     onChange(callbackOptions);
   };
 
+  const optionKeys = Object.keys(allOptions);
+  const column1Keys = [...optionKeys].splice(0, Math.ceil(optionKeys.length / 2));
+  const column2Keys = [...optionKeys].splice(column1Keys.length, optionKeys.length);
+
   return (
     <FormControl>
       <Grid container direction="column">
-        <FormLabel color="secondary" component="legend">
+        <FormLabel color="secondary" focused>
           {header}
         </FormLabel>
-        <FormGroup row>
-          {Object.keys(allOptions).map(option => (
-            <FormGroup row key={option}>
-              <FormControlLabel
-                key={option}
-                control={
-                  <Checkbox checked={selected[option].checked} onChange={onToggle} name={option} />
-                }
-                label={option}
-              />
-            </FormGroup>
-          ))}
-        </FormGroup>
+        <Grid container direction="row">
+          <FormGroup>
+            {column1Keys.map(option => (
+              <FormGroup row key={option}>
+                <FormControlLabel
+                  key={option}
+                  control={
+                    <Checkbox
+                      checked={selected[option].checked}
+                      onChange={onToggle}
+                      name={option}
+                    />
+                  }
+                  label={option}
+                />
+              </FormGroup>
+            ))}
+          </FormGroup>
+          <FormGroup>
+            {column2Keys.map(option => (
+              <FormGroup row key={option}>
+                <FormControlLabel
+                  key={option}
+                  control={
+                    <Checkbox
+                      checked={selected[option].checked}
+                      onChange={onToggle}
+                      name={option}
+                    />
+                  }
+                  label={option}
+                />
+              </FormGroup>
+            ))}
+          </FormGroup>
+        </Grid>
       </Grid>
     </FormControl>
   );

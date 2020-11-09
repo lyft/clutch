@@ -311,3 +311,144 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeploymentValidationError{}
+
+// Validate checks the field values on StatefulSet with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *StatefulSet) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Name
+
+	// no validation rules for Clientset
+
+	// no validation rules for Namespace
+
+	return nil
+}
+
+// StatefulSetValidationError is the validation error returned by
+// StatefulSet.Validate if the designated constraints aren't met.
+type StatefulSetValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StatefulSetValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StatefulSetValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StatefulSetValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StatefulSetValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StatefulSetValidationError) ErrorName() string { return "StatefulSetValidationError" }
+
+// Error satisfies the builtin error interface
+func (e StatefulSetValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStatefulSet.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StatefulSetValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StatefulSetValidationError{}
+
+// Validate checks the field values on Service with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Service) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Name
+
+	// no validation rules for Clientset
+
+	// no validation rules for Namespace
+
+	return nil
+}
+
+// ServiceValidationError is the validation error returned by Service.Validate
+// if the designated constraints aren't met.
+type ServiceValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ServiceValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ServiceValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ServiceValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ServiceValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ServiceValidationError) ErrorName() string { return "ServiceValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ServiceValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sService.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ServiceValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ServiceValidationError{}

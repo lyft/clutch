@@ -1,6 +1,6 @@
 import type { WorkflowConfiguration } from "@clutch-sh/core";
 
-import { StartAbortExperiment, StartLatencyExperiment } from "./start-experiment";
+import StartExperiment from "./start-experiment";
 
 const register = (): WorkflowConfiguration => {
   return {
@@ -10,19 +10,13 @@ const register = (): WorkflowConfiguration => {
     },
     path: "server-experimentation",
     group: "Experimentation",
-    displayName: "Server Experimentation",
+    displayName: "Server Fault Injection",
     routes: {
-      startAbortExperiment: {
-        path: "startabort",
-        displayName: "Start Abort Experiment",
-        description: "Start Abort Experiment.",
-        component: StartAbortExperiment,
-      },
-      startLatencyExperiment: {
-        path: "startlatency",
-        displayName: "Start Latency Experiment",
-        description: "Start Latency Experiment.",
-        component: StartLatencyExperiment,
+      startExperiment: {
+        path: "start",
+        displayName: "Start Experiment",
+        description: "Start Server Experiment.",
+        component: StartExperiment,
       },
     },
   };

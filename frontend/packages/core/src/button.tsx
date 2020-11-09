@@ -1,6 +1,8 @@
 import React from "react";
 import type { ButtonProps as MuiButtonProps, GridJustification } from "@material-ui/core";
-import { Button as MuiButton, emphasize, fade, Grid } from "@material-ui/core";
+import { Button as MuiButton, emphasize, fade, Grid, IconButton } from "@material-ui/core";
+import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
+import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 import styled from "styled-components";
 
 const StyledButton = styled(MuiButton)`
@@ -17,7 +19,11 @@ const StyledButton = styled(MuiButton)`
   `}
 `;
 
-interface ButtonProps extends MuiButtonProps {
+interface ButtonProps
+  extends Pick<
+    MuiButtonProps,
+    "disabled" | "endIcon" | "onClick" | "size" | "startIcon" | "type" | "variant"
+  > {
   text: string;
   destructive?: boolean;
 }
@@ -48,4 +54,55 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({ buttons, justify = "center" }
   </Grid>
 );
 
-export { AdvanceButton, Button, ButtonGroup, DestructiveButton };
+interface ClipboardButtonProps {
+  primary?: boolean;
+  size?: "small" | "medium";
+  text: string;
+}
+
+// ClipboardButton is a button that copies text to the clipboard and briefly displays a checkmark
+// after being clicked to let the user know that clicking actually did something and sent the
+// provided value to the clipboard.
+const ClipboardButton: React.FC<ClipboardButtonProps> = ({
+  text,
+  primary = false,
+  size = "small",
+  ...props
+}) => {
+  const [clicked, setClicked] = React.useState(false);
+  React.useEffect(() => {
+    if (clicked) {
+      const ticker = setTimeout(() => {
+        setClicked(false);
+      }, 1000);
+      return () => clearTimeout(ticker);
+    }
+
+    return () => {};
+  }, [clicked]);
+
+  return (
+    <IconButton
+      color={primary ? "primary" : "secondary"}
+      onClick={() => {
+        setClicked(true);
+        navigator.clipboard.writeText(text);
+      }}
+      size={size}
+      {...props}
+    >
+      {clicked ? <CheckCircleOutlinedIcon /> : <FileCopyOutlinedIcon />}
+    </IconButton>
+  );
+};
+
+export {
+  AdvanceButton,
+  Button,
+  ButtonGroup,
+  ButtonGroupProps,
+  ButtonProps,
+  ClipboardButton,
+  ClipboardButtonProps,
+  DestructiveButton,
+};

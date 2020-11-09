@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.resolver.k8s.v1;
 
-option go_package = "k8sv1";
+option go_package = "github.com/lyft/clutch/backend/api/resolver/k8s/v1;k8sv1";
 
 import "google/protobuf/descriptor.proto";
 
@@ -92,6 +92,64 @@ message Deployment {
     required : true,
     string_field : {
       placeholder : "my-deployment-name",
+    },
+  } ];
+
+  string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Clientset",
+    required : true,
+    option_field : {include_dynamic_options : "clientset"},
+  } ];
+
+  string namespace = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Namespace",
+    required : true,
+    string_field : {
+      placeholder : "my-namespace",
+    },
+  } ];
+}
+
+message StatefulSet {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "name"
+    searchable : true
+  };
+
+  string name = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Name",
+    required : true,
+    string_field : {
+      placeholder : "my-statefulset-name",
+    },
+  } ];
+
+  string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Clientset",
+    required : true,
+    option_field : {include_dynamic_options : "clientset"},
+  } ];
+
+  string namespace = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Namespace",
+    required : true,
+    string_field : {
+      placeholder : "my-namespace",
+    },
+  } ];
+}
+
+message Service {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "name"
+    searchable : true
+  };
+
+  string name = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Name",
+    required : true,
+    string_field : {
+      placeholder : "my-service-name",
     },
   } ];
 

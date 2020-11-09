@@ -5,12 +5,12 @@
   "scripts": {
     "start": "docusaurus start",
     "build": "docusaurus build",
-    "swizzle": "docusaurus swizzle",
-    "netlify": "netlify"
+    "swizzle": "docusaurus swizzle"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-alpha.61",
-    "@docusaurus/preset-classic": "2.0.0-alpha.61",
+    "@docusaurus/core": "^2.0.0-alpha.66",
+    "@docusaurus/plugin-debug": "^2.0.0-alpha.66",
+    "@docusaurus/preset-classic": "^2.0.0-alpha.66",
     "classnames": "^2.2.6",
     "prismjs": "^1.21.0",
     "react": "^16.8.4",
@@ -29,7 +29,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "netlify-cli": "^2.58.0"
-  }
+  "devDependencies": {}
 }

@@ -9,15 +9,16 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/golang/protobuf/descriptor"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
+	"github.com/lyft/clutch/backend/gateway/log"
 	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/middleware"
 	"github.com/lyft/clutch/backend/service"
@@ -27,7 +28,7 @@ import (
 
 const Name = "clutch.middleware.audit"
 
-func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
+func New(_ *anypb.Any, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
 	svc, ok := service.Registry[auditservice.Name]
 	if !ok {
 		return nil, fmt.Errorf("no audit svc with path '%s' registered for middleware", auditservice.Name)
@@ -51,7 +52,11 @@ type auditEntryContextKey struct{}
 
 func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-		event := m.eventFromRequest(ctx, req, info)
+		event, err := m.eventFromRequest(ctx, req, info)
+		if err != nil {
+			return nil, err
+		}
+
 		id, err := m.audit.WriteRequestEvent(ctx, event)
 		if err != nil && !errors.Is(err, auditservice.ErrFailedFilters) {
 			return nil, fmt.Errorf("could not make call %s because failed to audit: %w", info.FullMethod, err)
@@ -60,12 +65,17 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 		ctx = context.WithValue(ctx, auditEntryContextKey{}, id)
 		resp, err := handler(ctx, req)
 
+		// TODO (sperry): move the response recording into a goroutine so it's async
 		if id != -1 {
-			update := m.eventFromResponse(resp, err)
+			update, err := m.eventFromResponse(resp, err)
+			if err != nil {
+				return nil, err
+			}
+
 			if auditErr := m.audit.UpdateRequestEvent(ctx, id, update); auditErr != nil {
 				m.logger.Warn("error updating audit event",
 					zap.Int64("auditID", id),
-					zap.Any("update event", update),
+					log.ProtoField("updateEvent", update),
 				)
 			}
 		}
@@ -74,7 +84,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 	}
 }
 
-func (m *mid) eventFromRequest(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo) *auditv1.RequestEvent {
+func (m *mid) eventFromRequest(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo) (*auditv1.RequestEvent, error) {
 	svc, method, ok := middleware.SplitFullMethod(info.FullMethod)
 	if !ok {
 		m.logger.Warn("could not parse gRPC method", zap.String("fullMethod", info.FullMethod))
@@ -85,23 +95,51 @@ func (m *mid) eventFromRequest(ctx context.Context, req interface{}, info *grpc.
 		username = claims.Subject
 	}
 
+	reqBody, err := meta.APIBody(req)
+	if err != nil {
+		return nil, err
+	}
+
 	return &auditv1.RequestEvent{
 		Username:    username,
 		ServiceName: svc,
 		MethodName:  method,
 		Type:        meta.GetAction(info.FullMethod),
-		Resources:   meta.ResourceNames(req.(descriptor.Message)),
-	}
+		Resources:   meta.ResourceNames(req.(proto.Message)),
+		RequestMetadata: &auditv1.RequestMetadata{
+			Body: reqBody,
+		},
+	}, nil
 }
 
-func (m *mid) eventFromResponse(resp interface{}, err error) *auditv1.RequestEvent {
+func (m *mid) eventFromResponse(resp interface{}, err error) (*auditv1.RequestEvent, error) {
 	s := status.Convert(err)
 	if s == nil {
 		s = status.New(codes.OK, "")
 	}
 
+	// if err is returned from handler, discard the primary value for the resp
+	// and return an empty list for resources and a nil Any message for respBody
+	if err != nil {
+		return &auditv1.RequestEvent{
+			Status:    s.Proto(),
+			Resources: nil,
+			ResponseMetadata: &auditv1.ResponseMetadata{
+				Body: nil,
+			},
+		}, nil
+	}
+
+	respBody, err := meta.APIBody(resp)
+	if err != nil {
+		return nil, err
+	}
+
 	return &auditv1.RequestEvent{
 		Status:    s.Proto(),
-		Resources: meta.ResourceNames(resp.(descriptor.Message)),
-	}
+		Resources: meta.ResourceNames(resp.(proto.Message)),
+		ResponseMetadata: &auditv1.ResponseMetadata{
+			Body: respBody,
+		},
+	}, nil
 }

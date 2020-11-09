@@ -43,20 +43,21 @@ func (m *TestConfig) Validate() error {
 		return nil
 	}
 
-	switch m.Target.(type) {
+	if m.GetClusterPair() == nil {
+		return TestConfigValidationError{
+			field:  "ClusterPair",
+			reason: "value is required",
+		}
+	}
 
-	case *TestConfig_ClusterPair:
-
-		if v, ok := interface{}(m.GetClusterPair()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return TestConfigValidationError{
-					field:  "ClusterPair",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
+	if v, ok := interface{}(m.GetClusterPair()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return TestConfigValidationError{
+				field:  "ClusterPair",
+				reason: "embedded message failed validation",
+				cause:  err,
 			}
 		}
-
 	}
 
 	switch m.Fault.(type) {
@@ -83,6 +84,12 @@ func (m *TestConfig) Validate() error {
 					cause:  err,
 				}
 			}
+		}
+
+	default:
+		return TestConfigValidationError{
+			field:  "Fault",
+			reason: "value is required",
 		}
 
 	}
@@ -163,6 +170,13 @@ func (m *ClusterPairTarget) Validate() error {
 		return ClusterPairTargetValidationError{
 			field:  "UpstreamCluster",
 			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if _, ok := FaultInjectionCluster_name[int32(m.GetFaultInjectionCluster())]; !ok {
+		return ClusterPairTargetValidationError{
+			field:  "FaultInjectionCluster",
+			reason: "value must be one of the defined enum values",
 		}
 	}
 

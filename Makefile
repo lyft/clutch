@@ -141,6 +141,14 @@ scaffold-gateway:
 scaffold-workflow:
 	cd tools/scaffolding && go run scaffolder.go -m frontend-plugin
 
+.PHONY: storybook # Start storybook locally.
+storybook: yarn-ensure
+	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend storybook
+
+.PHONY: storybook-build # Build storybook assets for deploy.
+storybook-build: yarn-ensure
+	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend storybook:build
+
 .PHONY: test # Unit test all of the code.
 test: backend-test frontend-test
 
@@ -150,3 +158,17 @@ verify: api-verify backend-verify frontend-verify
 .PHONY: yarn-ensure # Install the pinned version of yarn.
 yarn-ensure:
 	@./tools/install-yarn.sh
+
+.PHONY: dev-k8s-up # Start a local k8s cluster
+dev-k8s-up:
+	@tools/kind.sh create cluster --kubeconfig $(PROJECT_ROOT_DIR)/build/kubeconfig-clutch --name clutch-local || true
+	@tools/kind.sh seed
+
+	@echo
+	@echo "Export these environment variables before starting development:"
+	@echo '    export KUBECONFIG=$(PROJECT_ROOT_DIR)/build/kubeconfig-clutch'
+
+.PHONY: k8s-stop
+dev-k8s-down:
+	tools/kind.sh delete cluster --name clutch-local
+

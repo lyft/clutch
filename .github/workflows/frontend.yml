@@ -16,9 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2-beta
         with:
           node-version: '14.x'
+          check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
       - name: Get yarn cache
@@ -37,9 +38,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2-beta
         with:
           node-version: '14.x'
+          check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
       - name: Get yarn cache
@@ -64,9 +66,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2-beta
         with:
           node-version: '14.x'
+          check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
       - name: Get yarn cache
@@ -89,7 +92,7 @@ jobs:
         id: e2e
         run: make frontend-e2e
       - name: Upload end-to-end artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         if: failure() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots
@@ -101,9 +104,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2-beta
         with:
           node-version: '14.x'
+          check-latest: true
           registry-url: 'https://registry.npmjs.org'
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh

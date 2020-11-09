@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.aws.ec2.v1;
 
-option go_package = "ec2v1";
+option go_package = "github.com/lyft/clutch/backend/api/aws/ec2/v1;ec2v1";
 
 import "google/api/annotations.proto";
 import "validate/validate.proto";
@@ -29,6 +29,14 @@ service EC2API {
   rpc ResizeAutoscalingGroup(ResizeAutoscalingGroupRequest) returns (ResizeAutoscalingGroupResponse) {
     option (google.api.http) = {
       post : "/v1/aws/ec2/resizeAutoscalingGroup"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = UPDATE;
+  }
+
+  rpc RebootInstance(RebootInstanceRequest) returns (RebootInstanceResponse) {
+    option (google.api.http) = {
+      post : "/v1/aws/ec2/rebootInstance"
       body : "*"
     };
     option (clutch.api.v1.action).type = UPDATE;
@@ -139,6 +147,19 @@ message TerminateInstanceRequest {
 }
 
 message TerminateInstanceResponse {
+}
+
+message RebootInstanceRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.aws.ec2.v1.Instance",
+    pattern : "{region}/{instance_id}"
+  };
+
+  string instance_id = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string region = 2 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message RebootInstanceResponse {
 }
 
 message Instance {

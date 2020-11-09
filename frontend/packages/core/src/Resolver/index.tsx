@@ -69,11 +69,16 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
   React.useEffect(() => loadSchemas(type, dispatch), []);
 
   const submitHandler = () => {
+    // Move to loading state.
     dispatch({ type: ResolverAction.RESOLVING });
-    const data = {
-      ...state.queryData,
-      "@type": state.allSchemas[state.selectedSchema]?.typeUrl,
-    };
+
+    // Copy incoming data, trimming whitespace from any string values (usually artifact of cut and paste into tool).
+    const data = _.mapValues(state.queryData, v => (_.isString(v) && _.trim(v)) || v);
+
+    // Set desired type.
+    data["@type"] = state.allSchemas[state.selectedSchema]?.typeUrl;
+
+    // Resolve!
     resolveResource(
       type,
       searchLimit,
@@ -112,7 +117,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
   return (
     <Loadable isLoading={state.schemasLoading}>
       {state.schemaFetchError !== "" ? (
-        <Error message={state.schemaFetchError} retry={() => loadSchemas(type, dispatch)} />
+        <Error message={state.schemaFetchError} onRetry={() => loadSchemas(type, dispatch)} />
       ) : (
         <Loadable variant="overlay" isLoading={state.resolverLoading}>
           {process.env.REACT_APP_DEBUG_FORMS === "true" && <DevTool control={validation.control} />}

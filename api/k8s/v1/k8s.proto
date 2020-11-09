@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package clutch.k8s.v1;
 
-option go_package = "k8sv1";
+option go_package = "github.com/lyft/clutch/backend/api/k8s/v1;k8sv1";
 
 import "google/api/annotations.proto";
-import "google/protobuf/wrappers.proto";
+import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
@@ -52,9 +52,49 @@ service K8sAPI {
     option (clutch.api.v1.action).type = UPDATE;
   }
 
+  rpc DeleteHPA(DeleteHPARequest) returns (DeleteHPAResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/deleteHPA"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = DELETE;
+  }
+
   rpc UpdateDeployment(UpdateDeploymentRequest) returns (UpdateDeploymentResponse) {
     option (google.api.http) = {
       post : "/v1/k8s/updateDeployment"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = UPDATE;
+  }
+
+  rpc DeleteDeployment(DeleteDeploymentRequest) returns (DeleteDeploymentResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/deleteDeployment"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = DELETE;
+  }
+
+  rpc DescribeService(DescribeServiceRequest) returns (DescribeServiceResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/describeService"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
+  rpc DeleteService(DeleteServiceRequest) returns (DeleteServiceResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/deleteService"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = DELETE;
+  }
+
+  rpc UpdateStatefulSet(UpdateStatefulSetRequest) returns (UpdateStatefulSetResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/updateStatefulSet"
       body : "*"
     };
     option (clutch.api.v1.action).type = UPDATE;
@@ -232,6 +272,21 @@ message ResizeHPARequest {
 message ResizeHPAResponse {
 }
 
+message DeleteHPARequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.HPA",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message DeleteHPAResponse {
+}
+
 message Deployment {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.Deployment",
@@ -273,12 +328,137 @@ message UpdateDeploymentRequest {
 message UpdateDeploymentResponse {
 }
 
+message DeleteDeploymentRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Deployment",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message DeleteDeploymentResponse {
+}
+
+message StatefulSet {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.StatefulSet",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string cluster = 1;
+  string namespace = 2;
+  string name = 3;
+
+  map<string, string> labels = 4;
+  map<string, string> annotations = 5;
+}
+
+message UpdateStatefulSetRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.StatefulSet",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+
+  // Fields are merged with the existing statefulset object, existing
+  // labels and annotations are not deleted in the update process.
+  // Currently this api does not support removing Fields from the statefulset object.
+  // A two way strategic merge is done on the old and new statefulset objects.
+  // https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-a-json-merge-patch-to-update-a-deployment
+  message Fields {
+    map<string, string> labels = 1 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+    map<string, string> annotations = 2 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+  }
+
+  Fields fields = 5 [ (validate.rules).message = {required : true} ];
+}
+
+message UpdateStatefulSetResponse {
+}
+
+message Service {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Service",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string cluster = 1;
+  string namespace = 2;
+  string name = 3;
+
+  enum Type {
+    UNSPECIFIED = 0;
+    UNKNOWN = 1;
+    CLUSTER_IP = 2;
+    NODE_PORT = 3;
+    LOAD_BALANCER = 4;
+    EXTERNAL_NAME = 5;
+  }
+  Type type = 4;
+
+  map<string, string> labels = 5;
+  map<string, string> annotations = 6;
+}
+
+message DescribeServiceRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Service",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+
+  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+}
+
+message DescribeServiceResponse {
+  option (clutch.api.v1.reference).fields = "service";
+
+  Service service = 1;
+}
+message DeleteServiceRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Service",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message DeleteServiceResponse {
+}
+
+// This message type is used to add support for nullable strings and is an
+// alternative to the well-known `StringValue` type. We need it, because the
+// grpc-gateway used by Clutch deserializes a null `StringValue` as an empty
+// string.
+message NullableString {
+  oneof kind {
+    google.protobuf.NullValue null = 1;
+    string value = 2;
+  }
+}
+
 // Preconditions to check before updating an object's metadata.
 //
-// Note: An empty StringValue signals that the label/annotation should not be set.
+// Note: A `null` NullableString means that the label/annotation should not be set.
 message ExpectedObjectMetaFields {
-  map<string, google.protobuf.StringValue> labels = 1 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
-  map<string, google.protobuf.StringValue> annotations = 2 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+  map<string, NullableString> labels = 1 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+  map<string, NullableString> annotations = 2 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 // Metadata fields to update when updating an object

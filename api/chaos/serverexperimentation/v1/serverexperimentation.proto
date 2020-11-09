@@ -2,31 +2,34 @@ syntax = "proto3";
 
 package clutch.chaos.serverexperimentation.v1;
 
-import "google/api/annotations.proto";
 import "validate/validate.proto";
 
-import "api/v1/annotations.proto";
-
-option go_package = "serverexperimentationv1";
+option go_package = "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1;serverexperimentationv1";
 
 message TestConfig {
-  oneof target {
-    ClusterPairTarget cluster_pair = 1;
-  }
+  // The pair of clusters specifying the origin and the destination of
+  // the traffic that faults should be applied to.
+  ClusterPairTarget cluster_pair = 1 [ (validate.rules).message.required = true ];
 
   oneof fault {
+    option (validate.required) = true;
+
     AbortFaultConfig abort = 2;
     LatencyFaultConfig latency = 3;
   }
 }
 
-// Targets requests from downstream_cluster -> upstream_cluster
+// Targets requests from downstream_cluster -> upstream_cluster.
 message ClusterPairTarget {
-  // The name of the downstream cluster
+  // The name of the downstream cluster.
   string downstream_cluster = 1 [ (validate.rules).string = {min_bytes : 1} ];
 
-  // The name of the upstream cluster
+  // The name of the upstream cluster.
   string upstream_cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+
+  // The fault injection cluster that controls whether faults are
+  // injected by downstream or upstream cluster.
+  FaultInjectionCluster fault_injection_cluster = 3 [ (validate.rules).enum.defined_only = true ];
 }
 
 message AbortFaultConfig {
@@ -43,4 +46,13 @@ message LatencyFaultConfig {
 
   // The latency duration in milliseconds.
   int32 duration_ms = 2 [ (validate.rules).int32.gt = 0 ];
+}
+
+enum FaultInjectionCluster {
+  // Fault injection cluster is unspecified. Faults are not injected.
+  FAULTINJECTIONCLUSTER_UNSPECIFIED = 0;
+  // Faults are injected to egress traffic by a downstream service(s).
+  FAULTINJECTIONCLUSTER_DOWNSTREAM = 1;
+  // Faults are injected to ingesss traffic by an upstream service(s).
+  FAULTINJECTIONCLUSTER_UPSTREAM = 2;
 }

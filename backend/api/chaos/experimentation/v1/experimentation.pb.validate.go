@@ -36,19 +36,38 @@ var (
 // define the regex for a UUID once up-front
 var _experimentation_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
-// Validate checks the field values on Experiment with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Experiment) Validate() error {
+// Validate checks the field values on CreateExperimentRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *CreateExperimentRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	// no validation rules for Id
-
 	if v, ok := interface{}(m.GetConfig()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return ExperimentValidationError{
+			return CreateExperimentRequestValidationError{
 				field:  "Config",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetStartTime()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateExperimentRequestValidationError{
+				field:  "StartTime",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetEndTime()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateExperimentRequestValidationError{
+				field:  "EndTime",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -58,9 +77,9 @@ func (m *Experiment) Validate() error {
 	return nil
 }
 
-// ExperimentValidationError is the validation error returned by
-// Experiment.Validate if the designated constraints aren't met.
-type ExperimentValidationError struct {
+// CreateExperimentRequestValidationError is the validation error returned by
+// CreateExperimentRequest.Validate if the designated constraints aren't met.
+type CreateExperimentRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -68,22 +87,24 @@ type ExperimentValidationError struct {
 }
 
 // Field function returns field value.
-func (e ExperimentValidationError) Field() string { return e.field }
+func (e CreateExperimentRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ExperimentValidationError) Reason() string { return e.reason }
+func (e CreateExperimentRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ExperimentValidationError) Cause() error { return e.cause }
+func (e CreateExperimentRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ExperimentValidationError) Key() bool { return e.key }
+func (e CreateExperimentRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ExperimentValidationError) ErrorName() string { return "ExperimentValidationError" }
+func (e CreateExperimentRequestValidationError) ErrorName() string {
+	return "CreateExperimentRequestValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e ExperimentValidationError) Error() string {
+func (e CreateExperimentRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -95,14 +116,14 @@ func (e ExperimentValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sExperiment.%s: %s%s",
+		"invalid %sCreateExperimentRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ExperimentValidationError{}
+var _ error = CreateExperimentRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -110,44 +131,32 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ExperimentValidationError{}
+} = CreateExperimentRequestValidationError{}
 
-// Validate checks the field values on CreateExperimentsRequest with the rules
+// Validate checks the field values on CreateExperimentResponse with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *CreateExperimentsRequest) Validate() error {
+func (m *CreateExperimentResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
 
-	if len(m.GetExperiments()) < 1 {
-		return CreateExperimentsRequestValidationError{
-			field:  "Experiments",
-			reason: "value must contain at least 1 item(s)",
-		}
-	}
-
-	for idx, item := range m.GetExperiments() {
-		_, _ = idx, item
-
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return CreateExperimentsRequestValidationError{
-					field:  fmt.Sprintf("Experiments[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
+	if v, ok := interface{}(m.GetExperiment()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateExperimentResponseValidationError{
+				field:  "Experiment",
+				reason: "embedded message failed validation",
+				cause:  err,
 			}
 		}
-
 	}
 
 	return nil
 }
 
-// CreateExperimentsRequestValidationError is the validation error returned by
-// CreateExperimentsRequest.Validate if the designated constraints aren't met.
-type CreateExperimentsRequestValidationError struct {
+// CreateExperimentResponseValidationError is the validation error returned by
+// CreateExperimentResponse.Validate if the designated constraints aren't met.
+type CreateExperimentResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -155,24 +164,24 @@ type CreateExperimentsRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e CreateExperimentsRequestValidationError) Field() string { return e.field }
+func (e CreateExperimentResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e CreateExperimentsRequestValidationError) Reason() string { return e.reason }
+func (e CreateExperimentResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e CreateExperimentsRequestValidationError) Cause() error { return e.cause }
+func (e CreateExperimentResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e CreateExperimentsRequestValidationError) Key() bool { return e.key }
+func (e CreateExperimentResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e CreateExperimentsRequestValidationError) ErrorName() string {
-	return "CreateExperimentsRequestValidationError"
+func (e CreateExperimentResponseValidationError) ErrorName() string {
+	return "CreateExperimentResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e CreateExperimentsRequestValidationError) Error() string {
+func (e CreateExperimentResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -184,14 +193,14 @@ func (e CreateExperimentsRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sCreateExperimentsRequest.%s: %s%s",
+		"invalid %sCreateExperimentResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = CreateExperimentsRequestValidationError{}
+var _ error = CreateExperimentResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -199,89 +208,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = CreateExperimentsRequestValidationError{}
-
-// Validate checks the field values on CreateExperimentsResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *CreateExperimentsResponse) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	for idx, item := range m.GetExperiments() {
-		_, _ = idx, item
-
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return CreateExperimentsResponseValidationError{
-					field:  fmt.Sprintf("Experiments[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// CreateExperimentsResponseValidationError is the validation error returned by
-// CreateExperimentsResponse.Validate if the designated constraints aren't met.
-type CreateExperimentsResponseValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e CreateExperimentsResponseValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e CreateExperimentsResponseValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e CreateExperimentsResponseValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e CreateExperimentsResponseValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e CreateExperimentsResponseValidationError) ErrorName() string {
-	return "CreateExperimentsResponseValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e CreateExperimentsResponseValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sCreateExperimentsResponse.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = CreateExperimentsResponseValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = CreateExperimentsResponseValidationError{}
+} = CreateExperimentResponseValidationError{}
 
 // Validate checks the field values on GetExperimentsRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -290,6 +217,10 @@ func (m *GetExperimentsRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
+
+	// no validation rules for ConfigType
+
+	// no validation rules for Status
 
 	return nil
 }
@@ -432,20 +363,22 @@ var _ interface {
 	ErrorName() string
 } = GetExperimentsResponseValidationError{}
 
-// Validate checks the field values on StopExperimentsRequest with the rules
-// defined in the proto definition for this message. If any rules are
+// Validate checks the field values on CancelExperimentRunRequest with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *StopExperimentsRequest) Validate() error {
+func (m *CancelExperimentRunRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
 
+	// no validation rules for Id
+
 	return nil
 }
 
-// StopExperimentsRequestValidationError is the validation error returned by
-// StopExperimentsRequest.Validate if the designated constraints aren't met.
-type StopExperimentsRequestValidationError struct {
+// CancelExperimentRunRequestValidationError is the validation error returned
+// by CancelExperimentRunRequest.Validate if the designated constraints aren't met.
+type CancelExperimentRunRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -453,24 +386,24 @@ type StopExperimentsRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e StopExperimentsRequestValidationError) Field() string { return e.field }
+func (e CancelExperimentRunRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e StopExperimentsRequestValidationError) Reason() string { return e.reason }
+func (e CancelExperimentRunRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e StopExperimentsRequestValidationError) Cause() error { return e.cause }
+func (e CancelExperimentRunRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e StopExperimentsRequestValidationError) Key() bool { return e.key }
+func (e CancelExperimentRunRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e StopExperimentsRequestValidationError) ErrorName() string {
-	return "StopExperimentsRequestValidationError"
+func (e CancelExperimentRunRequestValidationError) ErrorName() string {
+	return "CancelExperimentRunRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e StopExperimentsRequestValidationError) Error() string {
+func (e CancelExperimentRunRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -482,14 +415,14 @@ func (e StopExperimentsRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sStopExperimentsRequest.%s: %s%s",
+		"invalid %sCancelExperimentRunRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = StopExperimentsRequestValidationError{}
+var _ error = CancelExperimentRunRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -497,12 +430,12 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = StopExperimentsRequestValidationError{}
+} = CancelExperimentRunRequestValidationError{}
 
-// Validate checks the field values on StopExperimentsResponse with the rules
-// defined in the proto definition for this message. If any rules are
+// Validate checks the field values on CancelExperimentRunResponse with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *StopExperimentsResponse) Validate() error {
+func (m *CancelExperimentRunResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -510,9 +443,10 @@ func (m *StopExperimentsResponse) Validate() error {
 	return nil
 }
 
-// StopExperimentsResponseValidationError is the validation error returned by
-// StopExperimentsResponse.Validate if the designated constraints aren't met.
-type StopExperimentsResponseValidationError struct {
+// CancelExperimentRunResponseValidationError is the validation error returned
+// by CancelExperimentRunResponse.Validate if the designated constraints
+// aren't met.
+type CancelExperimentRunResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -520,24 +454,24 @@ type StopExperimentsResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e StopExperimentsResponseValidationError) Field() string { return e.field }
+func (e CancelExperimentRunResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e StopExperimentsResponseValidationError) Reason() string { return e.reason }
+func (e CancelExperimentRunResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e StopExperimentsResponseValidationError) Cause() error { return e.cause }
+func (e CancelExperimentRunResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e StopExperimentsResponseValidationError) Key() bool { return e.key }
+func (e CancelExperimentRunResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e StopExperimentsResponseValidationError) ErrorName() string {
-	return "StopExperimentsResponseValidationError"
+func (e CancelExperimentRunResponseValidationError) ErrorName() string {
+	return "CancelExperimentRunResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e StopExperimentsResponseValidationError) Error() string {
+func (e CancelExperimentRunResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -549,14 +483,14 @@ func (e StopExperimentsResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sStopExperimentsResponse.%s: %s%s",
+		"invalid %sCancelExperimentRunResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = StopExperimentsResponseValidationError{}
+var _ error = CancelExperimentRunResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -564,4 +498,301 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = StopExperimentsResponseValidationError{}
+} = CancelExperimentRunResponseValidationError{}
+
+// Validate checks the field values on GetListViewRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *GetListViewRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// GetListViewRequestValidationError is the validation error returned by
+// GetListViewRequest.Validate if the designated constraints aren't met.
+type GetListViewRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetListViewRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetListViewRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetListViewRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetListViewRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetListViewRequestValidationError) ErrorName() string {
+	return "GetListViewRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetListViewRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetListViewRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetListViewRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetListViewRequestValidationError{}
+
+// Validate checks the field values on GetListViewResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *GetListViewResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for idx, item := range m.GetItems() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return GetListViewResponseValidationError{
+					field:  fmt.Sprintf("Items[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// GetListViewResponseValidationError is the validation error returned by
+// GetListViewResponse.Validate if the designated constraints aren't met.
+type GetListViewResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetListViewResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetListViewResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetListViewResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetListViewResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetListViewResponseValidationError) ErrorName() string {
+	return "GetListViewResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetListViewResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetListViewResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetListViewResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetListViewResponseValidationError{}
+
+// Validate checks the field values on GetExperimentRunDetailsRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *GetExperimentRunDetailsRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Id
+
+	return nil
+}
+
+// GetExperimentRunDetailsRequestValidationError is the validation error
+// returned by GetExperimentRunDetailsRequest.Validate if the designated
+// constraints aren't met.
+type GetExperimentRunDetailsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetExperimentRunDetailsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetExperimentRunDetailsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetExperimentRunDetailsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetExperimentRunDetailsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetExperimentRunDetailsRequestValidationError) ErrorName() string {
+	return "GetExperimentRunDetailsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetExperimentRunDetailsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetExperimentRunDetailsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetExperimentRunDetailsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetExperimentRunDetailsRequestValidationError{}
+
+// Validate checks the field values on GetExperimentRunDetailsResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *GetExperimentRunDetailsResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetRunDetails()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetExperimentRunDetailsResponseValidationError{
+				field:  "RunDetails",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// GetExperimentRunDetailsResponseValidationError is the validation error
+// returned by GetExperimentRunDetailsResponse.Validate if the designated
+// constraints aren't met.
+type GetExperimentRunDetailsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetExperimentRunDetailsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetExperimentRunDetailsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetExperimentRunDetailsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetExperimentRunDetailsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetExperimentRunDetailsResponseValidationError) ErrorName() string {
+	return "GetExperimentRunDetailsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetExperimentRunDetailsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetExperimentRunDetailsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetExperimentRunDetailsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetExperimentRunDetailsResponseValidationError{}

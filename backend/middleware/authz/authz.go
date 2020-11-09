@@ -8,13 +8,13 @@ import (
 	"context"
 	"errors"
 
-	"github.com/golang/protobuf/descriptor"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	authzv1 "github.com/lyft/clutch/backend/api/authz/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
@@ -33,7 +33,7 @@ var allowlist = []string{
 	"/clutch.healthcheck.v1.HealthcheckAPI/*",
 }
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
 	svc, ok := service.Registry["clutch.service.authz"]
 	if !ok {
 		return nil, errors.New("unable to get authz service")
@@ -79,7 +79,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 		}
 
 		actionType := meta.GetAction(info.FullMethod)
-		resources := meta.ResourceNames(req.(descriptor.Message))
+		resources := meta.ResourceNames(req.(proto.Message))
 
 		subject := &authzv1.Subject{
 			User:   claims.Subject,

@@ -45,7 +45,7 @@ func (m *migrateLogger) Verbose() bool {
 	return true
 }
 
-func main() {
+func Run() {
 	// Read flags and config.
 	f := &MigrateFlags{}
 	f.Link()
@@ -128,7 +128,11 @@ func main() {
 	// Apply migrations!
 	logger.Info("applying migrations", zap.String("migrationDir", migrationDir))
 	err = m.Up()
-	if err != nil {
+	if err != nil && err != migrate.ErrNoChange {
 		logger.Fatal("failed running migrations", zap.Error(err))
 	}
+}
+
+func main() {
+	Run()
 }

@@ -7,6 +7,7 @@ package aws
 import (
 	"context"
 	"fmt"
+	"io"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -17,15 +18,19 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
 	"github.com/aws/aws-sdk-go/service/kinesis"
 	"github.com/aws/aws-sdk-go/service/kinesis/kinesisiface"
+	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/iancoleman/strcase"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"golang.org/x/sync/semaphore"
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/service"
 )
 
@@ -41,9 +46,11 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	}
 
 	c := &client{
-		clients: make(map[string]*regionalClient, len(ac.Regions)),
-		log:     logger,
-		scope:   scope,
+		clients:            make(map[string]*regionalClient, len(ac.Regions)),
+		topologyObjectChan: make(chan *topologyv1.UpdateCacheRequest, topologyObjectChanBufferSize),
+		topologyLock:       semaphore.NewWeighted(1),
+		log:                logger,
+		scope:              scope,
 	}
 
 	for _, region := range ac.Regions {
@@ -55,6 +62,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 
 		c.clients[region] = &regionalClient{
 			region:      region,
+			s3:          s3.New(awsSession),
 			kinesis:     kinesis.New(awsSession),
 			ec2:         ec2.New(awsSession),
 			autoscaling: autoscaling.New(awsSession),
@@ -67,6 +75,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 type Client interface {
 	DescribeInstances(ctx context.Context, region string, ids []string) ([]*ec2v1.Instance, error)
 	TerminateInstances(ctx context.Context, region string, ids []string) error
+	RebootInstances(ctx context.Context, region string, ids []string) error
 
 	DescribeAutoscalingGroups(ctx context.Context, region string, names []string) ([]*ec2v1.AutoscalingGroup, error)
 	ResizeAutoscalingGroup(ctx context.Context, region string, name string, size *ec2v1.AutoscalingGroupSize) error
@@ -74,14 +83,17 @@ type Client interface {
 	DescribeKinesisStream(ctx context.Context, region string, streamName string) (*kinesisv1.Stream, error)
 	UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount uint32) error
 
+	S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error)
+
 	Regions() []string
 }
 
 type client struct {
-	clients map[string]*regionalClient
-
-	log   *zap.Logger
-	scope tally.Scope
+	clients            map[string]*regionalClient
+	topologyObjectChan chan *topologyv1.UpdateCacheRequest
+	topologyLock       *semaphore.Weighted
+	log                *zap.Logger
+	scope              tally.Scope
 }
 
 func (c *client) ResizeAutoscalingGroup(ctx context.Context, region string, name string, size *ec2v1.AutoscalingGroupSize) error {
@@ -197,6 +209,7 @@ func (c *client) Regions() []string {
 type regionalClient struct {
 	region string
 
+	s3          s3iface.S3API
 	kinesis     kinesisiface.KinesisAPI
 	ec2         ec2iface.EC2API
 	autoscaling autoscalingiface.AutoScalingAPI
@@ -233,6 +246,18 @@ func (c *client) TerminateInstances(ctx context.Context, region string, ids []st
 
 	input := &ec2.TerminateInstancesInput{InstanceIds: aws.StringSlice(ids)}
 	_, err := cl.ec2.TerminateInstancesWithContext(ctx, input)
+
+	return err
+}
+
+func (c *client) RebootInstances(ctx context.Context, region string, ids []string) error {
+	cl, ok := c.clients[region]
+	if !ok {
+		return fmt.Errorf("no client found for region '%s'", region)
+	}
+
+	input := &ec2.RebootInstancesInput{InstanceIds: aws.StringSlice(ids)}
+	_, err := cl.ec2.RebootInstancesWithContext(ctx, input)
 
 	return err
 }
