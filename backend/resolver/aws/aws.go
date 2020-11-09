@@ -21,6 +21,7 @@ import (
 	kinesisv1api "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	awsv1resolver "github.com/lyft/clutch/backend/api/resolver/aws/v1"
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/resolver"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/aws"
@@ -29,9 +30,9 @@ import (
 const Name = "clutch.resolver.aws"
 
 // Output types (want).
-var typeURLInstance = resolver.TypeURL((*ec2v1api.Instance)(nil))
-var typeURLAutoscalingGroup = resolver.TypeURL((*ec2v1api.AutoscalingGroup)(nil))
-var typeURLKinesisStream = resolver.TypeURL((*kinesisv1api.Stream)(nil))
+var typeURLInstance = meta.TypeURL((*ec2v1api.Instance)(nil))
+var typeURLAutoscalingGroup = meta.TypeURL((*ec2v1api.AutoscalingGroup)(nil))
+var typeURLKinesisStream = meta.TypeURL((*kinesisv1api.Stream)(nil))
 
 var typeSchemas = map[string][]descriptor.Message{
 	typeURLInstance: {

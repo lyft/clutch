@@ -3,7 +3,6 @@ package meta
 import (
 	"testing"
 
-
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health/grpc_health_v1"
@@ -131,6 +130,7 @@ func TestAPIBodyRedaction(t *testing.T) {
 	assert.NoError(t, err)
 
 	m, err := b.UnmarshalNew()
+	assert.NoError(t, err)
 	assert.IsType(t, (*apiv1.Redacted)(nil), m)
 
 	r := m.(*apiv1.Redacted)
