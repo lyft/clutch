@@ -17,7 +17,6 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	"github.com/lyft/clutch/backend/gateway/log"
 	"github.com/lyft/clutch/backend/gateway/meta"
@@ -96,15 +95,9 @@ func (m *mid) eventFromRequest(ctx context.Context, req interface{}, info *grpc.
 		username = claims.Subject
 	}
 
-	var reqBody *anypb.Any
-	if meta.IsRedacted(req.(proto.Message)) {
-		reqBody, _ = anypb.New(&apiv1.Redacted{})
-	} else {
-		var err error
-		reqBody, err = meta.APIBody(req)
-		if err != nil {
-			return nil, err
-		}
+	reqBody, err := meta.APIBody(req)
+	if err != nil {
+		return nil, err
 	}
 
 	return &auditv1.RequestEvent{

@@ -154,5 +154,9 @@ func APIBody(body interface{}) (*anypb.Any, error) {
 		return nil, nil
 	}
 
+	if IsRedacted(m) {
+		return anypb.New(&apiv1.Redacted{})
+	}
+
 	return anypb.New(m)
 }
