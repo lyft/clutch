@@ -59,7 +59,7 @@ type UnsafeAuthzAPIServer interface {
 	mustEmbedUnimplementedAuthzAPIServer()
 }
 
-func RegisterAuthzAPIServer(s *grpc.Server, srv AuthzAPIServer) {
+func RegisterAuthzAPIServer(s grpc.ServiceRegistrar, srv AuthzAPIServer) {
 	s.RegisterService(&_AuthzAPI_serviceDesc, srv)
 }
 

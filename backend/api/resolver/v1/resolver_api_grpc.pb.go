@@ -87,7 +87,7 @@ type UnsafeResolverAPIServer interface {
 	mustEmbedUnimplementedResolverAPIServer()
 }
 
-func RegisterResolverAPIServer(s *grpc.Server, srv ResolverAPIServer) {
+func RegisterResolverAPIServer(s grpc.ServiceRegistrar, srv ResolverAPIServer) {
 	s.RegisterService(&_ResolverAPI_serviceDesc, srv)
 }
 

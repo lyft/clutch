@@ -73,7 +73,7 @@ type UnsafeKinesisAPIServer interface {
 	mustEmbedUnimplementedKinesisAPIServer()
 }
 
-func RegisterKinesisAPIServer(s *grpc.Server, srv KinesisAPIServer) {
+func RegisterKinesisAPIServer(s grpc.ServiceRegistrar, srv KinesisAPIServer) {
 	s.RegisterService(&_KinesisAPI_serviceDesc, srv)
 }
 

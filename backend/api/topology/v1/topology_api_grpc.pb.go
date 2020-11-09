@@ -59,7 +59,7 @@ type UnsafeTopologyAPIServer interface {
 	mustEmbedUnimplementedTopologyAPIServer()
 }
 
-func RegisterTopologyAPIServer(s *grpc.Server, srv TopologyAPIServer) {
+func RegisterTopologyAPIServer(s grpc.ServiceRegistrar, srv TopologyAPIServer) {
 	s.RegisterService(&_TopologyAPI_serviceDesc, srv)
 }
 

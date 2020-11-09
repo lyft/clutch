@@ -59,7 +59,7 @@ type UnsafeAuditAPIServer interface {
 	mustEmbedUnimplementedAuditAPIServer()
 }
 
-func RegisterAuditAPIServer(s *grpc.Server, srv AuditAPIServer) {
+func RegisterAuditAPIServer(s grpc.ServiceRegistrar, srv AuditAPIServer) {
 	s.RegisterService(&_AuditAPI_serviceDesc, srv)
 }
 
