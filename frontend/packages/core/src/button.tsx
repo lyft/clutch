@@ -5,43 +5,57 @@ import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 import styled from "styled-components";
 
+const COLORS = {
+  neutral: {
+    background: "#FFFFFF",
+    font: "#0D1030",
+  },
+  primary: {
+    background: "#3B73E0",
+    font: "#FFFFFF",
+  },
+  caution: {
+    background: "#DA1707",
+    font: "#FFFFFF",
+  },
+};
+
 const StyledButton = styled(MuiButton)`
   ${({ theme, ...props }) => `
   margin: 15px;
-  background-color: ${
-    props["data-destructive"] === "true"
-      ? theme.palette.destructive.main
-      : fade(theme.palette.secondary.main, 0.3)
-  };
+  background-color: ${props["data-color"].background};
+  color: ${props["data-color"].font};
+  font-weight: 600;
+  text-transform: none;
+  height: 3rem;
+  width: 8.875rem;
+  margin: 2rem .875rem;
   &:hover {
-    background-color: ${emphasize(theme.palette.secondary.main, 0.3)};
+    background-color: ${emphasize(props["data-color"].background, 0.2)};
+  };
+  &:disabled {
+    color: ${props["data-color"].font};
+    background-color: ${emphasize(props["data-color"].background, 0.6)};
   };
   `}
 `;
 
-interface ButtonProps
+export interface ButtonProps
   extends Pick<
     MuiButtonProps,
-    "disabled" | "endIcon" | "onClick" | "size" | "startIcon" | "type" | "variant"
+    "disabled" | "endIcon" | "onClick" | "size" | "startIcon" | "type"
   > {
   text: string;
-  destructive?: boolean;
+  variant?: "neutral" | "primary" | "caution";
 }
 
-const Button: React.FC<ButtonProps> = ({ text, destructive = false, ...props }) => (
-  <StyledButton variant="contained" data-destructive={destructive.toString()} {...props}>
+const Button: React.FC<ButtonProps> = ({ text, variant = "primary", ...props }) => (
+  <StyledButton variant="contained" data-color={COLORS[variant]} {...props}>
     {text}
   </StyledButton>
 );
 
-const AdvanceButton: React.FC<ButtonProps> = ({ text, ...props }) => (
-  <Button destructive={false} text={text} {...props} />
-);
-const DestructiveButton: React.FC<ButtonProps> = ({ text, ...props }) => (
-  <Button destructive text={text} {...props} />
-);
-
-interface ButtonGroupProps {
+export interface ButtonGroupProps {
   buttons: ButtonProps[];
   justify?: GridJustification;
 }
@@ -54,7 +68,7 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({ buttons, justify = "center" }
   </Grid>
 );
 
-interface ClipboardButtonProps {
+export interface ClipboardButtonProps {
   primary?: boolean;
   size?: "small" | "medium";
   text: string;
@@ -96,13 +110,4 @@ const ClipboardButton: React.FC<ClipboardButtonProps> = ({
   );
 };
 
-export {
-  AdvanceButton,
-  Button,
-  ButtonGroup,
-  ButtonGroupProps,
-  ButtonProps,
-  ClipboardButton,
-  ClipboardButtonProps,
-  DestructiveButton,
-};
+export { Button, ButtonGroup, ClipboardButton };
