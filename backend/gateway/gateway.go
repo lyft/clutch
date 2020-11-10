@@ -170,12 +170,6 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	}
 	ctx := context.TODO()
 
-	// Start collecting go runtime stats if enabled
-	if cfg.Gateway.Stats != nil && cfg.Gateway.Stats.CollectGoRuntimeStats {
-		runtimeStats := stats.NewRuntimeStats(scope)
-		go runtimeStats.Collect(ctx)
-	}
-
 	// Create a client connection for the registrar to make grpc-gateway's handlers available.
 	// TODO: stand up a private loopback listener for the grpcServer and connect to that instead.
 	conn, err := grpc.Dial(fmt.Sprintf("%s:%d", cfg.Gateway.Listener.GetTcp().Address, cfg.Gateway.Listener.GetTcp().Port), grpc.WithInsecure())
@@ -252,6 +246,12 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	timeout := computeMaximumTimeout(cfg.Gateway.Timeouts)
 	if timeout > 0 {
 		timeout += time.Second
+	}
+
+	// Start collecting go runtime stats if enabled
+	if cfg.Gateway.Stats != nil && cfg.Gateway.Stats.CollectGoRuntimeStats {
+		runtimeStats := stats.NewRuntimeStats(scope)
+		go runtimeStats.Collect(ctx)
 	}
 
 	srv := &http.Server{

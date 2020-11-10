@@ -9,12 +9,81 @@ import (
 )
 
 type RuntimeStatCollector struct {
-	scope tally.Scope
+	runtimeMetrics runtimeMetrics
+}
+
+type runtimeMetrics struct {
+	cpuGoroutines tally.Gauge
+	cpuCgoCalls   tally.Gauge
+
+	memoryAlloc   tally.Gauge
+	memoryTotal   tally.Gauge
+	memorySys     tally.Gauge
+	memoryLookups tally.Gauge
+	memoryMalloc  tally.Gauge
+	memoryFrees   tally.Gauge
+
+	memoryHeapAlloc    tally.Gauge
+	memoryHeapSys      tally.Gauge
+	memoryHeapIdle     tally.Gauge
+	memoryHeapInuse    tally.Gauge
+	memoryHeapReleased tally.Gauge
+	memoryHeapObjects  tally.Gauge
+
+	memoryStackInuse       tally.Gauge
+	memoryStackSys         tally.Gauge
+	memoryStackMSpanInuse  tally.Gauge
+	memoryStackMSpanSys    tally.Gauge
+	memoryStackMCacheInuse tally.Gauge
+	memoryStackMCacheSys   tally.Gauge
+
+	memoryOtherSys tally.Gauge
+
+	memoryGCSys        tally.Gauge
+	memoryGCNext       tally.Gauge
+	memoryGCLast       tally.Gauge
+	memoryGCPauseTotal tally.Gauge
+	memoryGCCount      tally.Gauge
 }
 
 func NewRuntimeStats(scope tally.Scope) *RuntimeStatCollector {
+	runtimeScope := scope.SubScope("runtime")
+	runtimeMetrics := runtimeMetrics{
+		// cpu
+		cpuGoroutines: runtimeScope.Gauge("cpu.goroutines"),
+		cpuCgoCalls:   runtimeScope.Gauge("cpu.cgo_calls"),
+		// memory
+		memoryAlloc:   runtimeScope.Gauge("memory.alloc"),
+		memoryTotal:   runtimeScope.Gauge("memory.total"),
+		memorySys:     runtimeScope.Gauge("memory.sys"),
+		memoryLookups: runtimeScope.Gauge("memory.lookups"),
+		memoryMalloc:  runtimeScope.Gauge("memory.malloc"),
+		memoryFrees:   runtimeScope.Gauge("memory.frees"),
+		// heap
+		memoryHeapAlloc:    runtimeScope.Gauge("memory.heap.alloc"),
+		memoryHeapSys:      runtimeScope.Gauge("memory.heap.sys"),
+		memoryHeapIdle:     runtimeScope.Gauge("memory.heap.idle"),
+		memoryHeapInuse:    runtimeScope.Gauge("memory.heap.inuse"),
+		memoryHeapReleased: runtimeScope.Gauge("memory.heap.released"),
+		memoryHeapObjects:  runtimeScope.Gauge("memory.heap.objects"),
+		// stack
+		memoryStackInuse:       runtimeScope.Gauge("memory.stack.inuse"),
+		memoryStackSys:         runtimeScope.Gauge("memory.stack.sys"),
+		memoryStackMSpanInuse:  runtimeScope.Gauge("memory.stack.mspan_inuse"),
+		memoryStackMSpanSys:    runtimeScope.Gauge("memory.stack.sys"),
+		memoryStackMCacheInuse: runtimeScope.Gauge("memory.stack.mcache_inuse"),
+		memoryStackMCacheSys:   runtimeScope.Gauge("memory.stack.mcache_sys"),
+		memoryOtherSys:         runtimeScope.Gauge("memory.othersys"),
+		// GC
+		memoryGCSys:        runtimeScope.Gauge("memory.gc.sys"),
+		memoryGCNext:       runtimeScope.Gauge("memory.gc.next"),
+		memoryGCLast:       runtimeScope.Gauge("memory.gc.last"),
+		memoryGCPauseTotal: runtimeScope.Gauge("memory.gc.pause_total"),
+		memoryGCCount:      runtimeScope.Gauge("memory.gc.count"),
+	}
+
 	return &RuntimeStatCollector{
-		scope: scope.SubScope("runtime"),
+		runtimeMetrics: runtimeMetrics,
 	}
 }
 
@@ -34,44 +103,43 @@ func (r *RuntimeStatCollector) Collect(ctx context.Context) {
 }
 
 func (r *RuntimeStatCollector) collectCPUStats() {
-	r.scope.Gauge("cpu.goroutines").Update(float64(runtime.NumGoroutine()))
-	r.scope.Gauge("cpu.cgo_calls").Update(float64(runtime.NumCgoCall()))
+	r.runtimeMetrics.cpuGoroutines.Update(float64(runtime.NumGoroutine()))
+	r.runtimeMetrics.cpuCgoCalls.Update(float64(runtime.NumCgoCall()))
 }
 
 func (r *RuntimeStatCollector) collectMemStats() {
 	var memStats runtime.MemStats
 	runtime.ReadMemStats(&memStats)
 
-	// General Stats
-	r.scope.Gauge("memory.alloc").Update(float64(memStats.Alloc))
-	r.scope.Gauge("memory.total").Update(float64(memStats.TotalAlloc))
-	r.scope.Gauge("memory.sys").Update(float64(memStats.Sys))
-	r.scope.Gauge("memory.lookups").Update(float64(memStats.Lookups))
-	r.scope.Gauge("memory.malloc").Update(float64(memStats.Mallocs))
-	r.scope.Gauge("memory.frees").Update(float64(memStats.Frees))
+	// general
+	r.runtimeMetrics.memoryAlloc.Update(float64(memStats.Alloc))
+	r.runtimeMetrics.memoryTotal.Update(float64(memStats.TotalAlloc))
+	r.runtimeMetrics.memorySys.Update(float64(memStats.Sys))
+	r.runtimeMetrics.memoryLookups.Update(float64(memStats.Lookups))
+	r.runtimeMetrics.memoryMalloc.Update(float64(memStats.Mallocs))
+	r.runtimeMetrics.memoryFrees.Update(float64(memStats.Frees))
 
-	// Heap Stats
-	r.scope.Gauge("memory.heap.alloc").Update(float64(memStats.HeapAlloc))
-	r.scope.Gauge("memory.heap.sys").Update(float64(memStats.HeapSys))
-	r.scope.Gauge("memory.heap.idle").Update(float64(memStats.HeapIdle))
-	r.scope.Gauge("memory.heap.inuse").Update(float64(memStats.HeapInuse))
-	r.scope.Gauge("memory.heap.released").Update(float64(memStats.HeapReleased))
-	r.scope.Gauge("memory.heap.objects").Update(float64(memStats.HeapObjects))
+	// heap
+	r.runtimeMetrics.memoryHeapAlloc.Update(float64(memStats.HeapAlloc))
+	r.runtimeMetrics.memoryHeapSys.Update(float64(memStats.HeapSys))
+	r.runtimeMetrics.memoryHeapIdle.Update(float64(memStats.HeapIdle))
+	r.runtimeMetrics.memoryHeapInuse.Update(float64(memStats.HeapInuse))
+	r.runtimeMetrics.memoryHeapReleased.Update(float64(memStats.HeapReleased))
+	r.runtimeMetrics.memoryHeapObjects.Update(float64(memStats.HeapObjects))
 
-	// Stack Stats
-	r.scope.Gauge("memory.stack.inuse").Update(float64(memStats.StackInuse))
-	r.scope.Gauge("memory.stack.sys").Update(float64(memStats.StackSys))
-	r.scope.Gauge("memory.stack.mspan_inuse").Update(float64(memStats.MSpanInuse))
-	r.scope.Gauge("memory.stack.mspan_sys").Update(float64(memStats.MSpanSys))
-	r.scope.Gauge("memory.stack.mcache_inuse").Update(float64(memStats.MCacheInuse))
-	r.scope.Gauge("memory.stack.mcache_sys").Update(float64(memStats.MCacheSys))
+	// stack
+	r.runtimeMetrics.memoryStackInuse.Update(float64(memStats.StackInuse))
+	r.runtimeMetrics.memoryStackSys.Update(float64(memStats.StackSys))
+	r.runtimeMetrics.memoryStackMSpanInuse.Update(float64(memStats.MSpanInuse))
+	r.runtimeMetrics.memoryStackMSpanSys.Update(float64(memStats.MSpanSys))
+	r.runtimeMetrics.memoryStackMCacheInuse.Update(float64(memStats.MCacheInuse))
+	r.runtimeMetrics.memoryStackMCacheSys.Update(float64(memStats.MCacheSys))
+	r.runtimeMetrics.memoryOtherSys.Update(float64(memStats.OtherSys))
 
-	r.scope.Gauge("memory.othersys").Update(float64(memStats.OtherSys))
-
-	// GC Stats
-	r.scope.Gauge("memory.gc.sys").Update(float64(memStats.GCSys))
-	r.scope.Gauge("memory.gc.next").Update(float64(memStats.NextGC))
-	r.scope.Gauge("memory.gc.last").Update(float64(memStats.LastGC))
-	r.scope.Gauge("memory.gc.pause_total").Update(float64(memStats.PauseTotalNs))
-	r.scope.Gauge("memory.gc.count").Update(float64(memStats.NumGC))
+	// GC
+	r.runtimeMetrics.memoryGCSys.Update(float64(memStats.GCSys))
+	r.runtimeMetrics.memoryGCNext.Update(float64(memStats.NextGC))
+	r.runtimeMetrics.memoryGCLast.Update(float64(memStats.LastGC))
+	r.runtimeMetrics.memoryGCPauseTotal.Update(float64(memStats.PauseTotalNs))
+	r.runtimeMetrics.memoryGCCount.Update(float64(memStats.NumGC))
 }
