@@ -170,6 +170,10 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	}
 	ctx := context.TODO()
 
+	// Start Collecting go runtime stats
+	runtimeStats := stats.NewRuntimeStats(scope)
+	go runtimeStats.Collect(ctx)
+
 	// Create a client connection for the registrar to make grpc-gateway's handlers available.
 	// TODO: stand up a private loopback listener for the grpcServer and connect to that instead.
 	conn, err := grpc.Dial(fmt.Sprintf("%s:%d", cfg.Gateway.Listener.GetTcp().Address, cfg.Gateway.Listener.GetTcp().Port), grpc.WithInsecure())
