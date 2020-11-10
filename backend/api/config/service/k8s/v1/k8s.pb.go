@@ -32,6 +32,14 @@ type Config struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// A list of paths for `kubeconfig` files. Each config will be read and each context will become a clientset
+	// in the clientset manager. If no files are provided, the service will use the K8s SDK default loading rules
+	// which are detailed here: https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/,
+	// i.e. look for configs:
+	// - in a comma-separated `KUBECONFIG` environment variable
+	// - else `$HOME/.kube/config`
+	// - else in-cluster config
+	// https://github.com/kubernetes/client-go/tree/master/examples/in-cluster-client-configuration
 	Kubeconfigs      []string          `protobuf:"bytes,1,rep,name=kubeconfigs,proto3" json:"kubeconfigs,omitempty"`
 	RestClientConfig *RestClientConfig `protobuf:"bytes,2,opt,name=rest_client_config,json=restClientConfig,proto3" json:"rest_client_config,omitempty"`
 }
