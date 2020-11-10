@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/core",
-  "version": "0.0.0-beta",
+  "version": "1.0.0-beta",
   "description": "Clutch Core Components",
   "homepage": "https://clutch.sh/docs/development/frontend#clutch-shcore",
   "license": "Apache-2.0",
