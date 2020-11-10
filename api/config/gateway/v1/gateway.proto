@@ -56,8 +56,13 @@ message Stats {
     //  TODO: Prometheus support.
   }
 
+  message GoRuntimeStats {
+    // Collection interval defaults to 10 seconds
+    google.protobuf.Duration collection_interval = 1 [ (validate.rules).duration.gte.nanos = 100000000 ];
+  }
+  
   // Collect go runtime stats, this is disabled by default.
-  bool collect_go_runtime_stats = 4;
+  GoRuntimeStats go_runtime_stats = 4;
 }
 
 message Timeouts {

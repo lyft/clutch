@@ -249,8 +249,8 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	}
 
 	// Start collecting go runtime stats if enabled
-	if cfg.Gateway.Stats != nil && cfg.Gateway.Stats.CollectGoRuntimeStats {
-		runtimeStats := stats.NewRuntimeStats(scope)
+	if cfg.Gateway.Stats != nil && cfg.Gateway.Stats.GoRuntimeStats != nil {
+		runtimeStats := stats.NewRuntimeStats(scope, cfg.Gateway.Stats.GoRuntimeStats)
 		go runtimeStats.Collect(ctx)
 	}
 

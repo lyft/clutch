@@ -6,10 +6,12 @@ import (
 	"time"
 
 	"github.com/uber-go/tally"
+
 )
 
 type RuntimeStatCollector struct {
-	runtimeMetrics runtimeMetrics
+	collectInterval time.Duration
+	runtimeMetrics  runtimeMetrics
 }
 
 type runtimeMetrics struct {
@@ -46,7 +48,7 @@ type runtimeMetrics struct {
 	memoryGCCount      tally.Gauge
 }
 
-func NewRuntimeStats(scope tally.Scope) *RuntimeStatCollector {
+func NewRuntimeStats(scope tally.Scope, cfg *gatewayv1.Stats_GoRuntimeStats) *RuntimeStatCollector {
 	runtimeScope := scope.SubScope("runtime")
 	runtimeMetrics := runtimeMetrics{
 		// cpu
@@ -82,13 +84,19 @@ func NewRuntimeStats(scope tally.Scope) *RuntimeStatCollector {
 		memoryGCCount:      runtimeScope.Gauge("memory.gc.count"),
 	}
 
+	collectInterval := time.Second * 10
+	if cfg.CollectionInterval != nil {
+		collectInterval = cfg.CollectionInterval.AsDuration()
+	}
+
 	return &RuntimeStatCollector{
-		runtimeMetrics: runtimeMetrics,
+		collectInterval: collectInterval,
+		runtimeMetrics:  runtimeMetrics,
 	}
 }
 
 func (r *RuntimeStatCollector) Collect(ctx context.Context) {
-	ticker := time.NewTicker(time.Second * 10)
+	ticker := time.NewTicker(r.collectInterval)
 	for {
 		r.collectCPUStats()
 		r.collectMemStats()

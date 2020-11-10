@@ -9428,7 +9428,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {google.protobuf.IDuration|null} [flushInterval] Stats flushInterval
                      * @property {clutch.config.gateway.v1.Stats.ILogReporter|null} [logReporter] Stats logReporter
                      * @property {clutch.config.gateway.v1.Stats.IStatsdReporter|null} [statsdReporter] Stats statsdReporter
-                     * @property {boolean|null} [collectGoRuntimeStats] Stats collectGoRuntimeStats
+                     * @property {clutch.config.gateway.v1.Stats.IGoRuntimeStats|null} [goRuntimeStats] Stats goRuntimeStats
                      */
 
                     /**
@@ -9471,12 +9471,12 @@ export const clutch = $root.clutch = (() => {
                     Stats.prototype.statsdReporter = null;
 
                     /**
-                     * Stats collectGoRuntimeStats.
-                     * @member {boolean} collectGoRuntimeStats
+                     * Stats goRuntimeStats.
+                     * @member {clutch.config.gateway.v1.Stats.IGoRuntimeStats|null|undefined} goRuntimeStats
                      * @memberof clutch.config.gateway.v1.Stats
                      * @instance
                      */
-                    Stats.prototype.collectGoRuntimeStats = false;
+                    Stats.prototype.goRuntimeStats = null;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
@@ -9527,9 +9527,11 @@ export const clutch = $root.clutch = (() => {
                                     return "statsdReporter." + error;
                             }
                         }
-                        if (message.collectGoRuntimeStats != null && message.hasOwnProperty("collectGoRuntimeStats"))
-                            if (typeof message.collectGoRuntimeStats !== "boolean")
-                                return "collectGoRuntimeStats: boolean expected";
+                        if (message.goRuntimeStats != null && message.hasOwnProperty("goRuntimeStats")) {
+                            let error = $root.clutch.config.gateway.v1.Stats.GoRuntimeStats.verify(message.goRuntimeStats);
+                            if (error)
+                                return "goRuntimeStats." + error;
+                        }
                         return null;
                     };
 
@@ -9560,8 +9562,11 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.config.gateway.v1.Stats.statsdReporter: object expected");
                             message.statsdReporter = $root.clutch.config.gateway.v1.Stats.StatsdReporter.fromObject(object.statsdReporter);
                         }
-                        if (object.collectGoRuntimeStats != null)
-                            message.collectGoRuntimeStats = Boolean(object.collectGoRuntimeStats);
+                        if (object.goRuntimeStats != null) {
+                            if (typeof object.goRuntimeStats !== "object")
+                                throw TypeError(".clutch.config.gateway.v1.Stats.goRuntimeStats: object expected");
+                            message.goRuntimeStats = $root.clutch.config.gateway.v1.Stats.GoRuntimeStats.fromObject(object.goRuntimeStats);
+                        }
                         return message;
                     };
 
@@ -9580,7 +9585,7 @@ export const clutch = $root.clutch = (() => {
                         let object = {};
                         if (options.defaults) {
                             object.flushInterval = null;
-                            object.collectGoRuntimeStats = false;
+                            object.goRuntimeStats = null;
                         }
                         if (message.flushInterval != null && message.hasOwnProperty("flushInterval"))
                             object.flushInterval = $root.google.protobuf.Duration.toObject(message.flushInterval, options);
@@ -9594,8 +9599,8 @@ export const clutch = $root.clutch = (() => {
                             if (options.oneofs)
                                 object.reporter = "statsdReporter";
                         }
-                        if (message.collectGoRuntimeStats != null && message.hasOwnProperty("collectGoRuntimeStats"))
-                            object.collectGoRuntimeStats = message.collectGoRuntimeStats;
+                        if (message.goRuntimeStats != null && message.hasOwnProperty("goRuntimeStats"))
+                            object.goRuntimeStats = $root.clutch.config.gateway.v1.Stats.GoRuntimeStats.toObject(message.goRuntimeStats, options);
                         return object;
                     };
 
@@ -9928,6 +9933,111 @@ export const clutch = $root.clutch = (() => {
                         })();
 
                         return StatsdReporter;
+                    })();
+
+                    Stats.GoRuntimeStats = (function() {
+
+                        /**
+                         * Properties of a GoRuntimeStats.
+                         * @memberof clutch.config.gateway.v1.Stats
+                         * @interface IGoRuntimeStats
+                         * @property {google.protobuf.IDuration|null} [collectionInterval] GoRuntimeStats collectionInterval
+                         */
+
+                        /**
+                         * Constructs a new GoRuntimeStats.
+                         * @memberof clutch.config.gateway.v1.Stats
+                         * @classdesc Represents a GoRuntimeStats.
+                         * @implements IGoRuntimeStats
+                         * @constructor
+                         * @param {clutch.config.gateway.v1.Stats.IGoRuntimeStats=} [properties] Properties to set
+                         */
+                        function GoRuntimeStats(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * GoRuntimeStats collectionInterval.
+                         * @member {google.protobuf.IDuration|null|undefined} collectionInterval
+                         * @memberof clutch.config.gateway.v1.Stats.GoRuntimeStats
+                         * @instance
+                         */
+                        GoRuntimeStats.prototype.collectionInterval = null;
+
+                        /**
+                         * Verifies a GoRuntimeStats message.
+                         * @function verify
+                         * @memberof clutch.config.gateway.v1.Stats.GoRuntimeStats
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        GoRuntimeStats.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.collectionInterval != null && message.hasOwnProperty("collectionInterval")) {
+                                let error = $root.google.protobuf.Duration.verify(message.collectionInterval);
+                                if (error)
+                                    return "collectionInterval." + error;
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a GoRuntimeStats message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.gateway.v1.Stats.GoRuntimeStats
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.gateway.v1.Stats.GoRuntimeStats} GoRuntimeStats
+                         */
+                        GoRuntimeStats.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.gateway.v1.Stats.GoRuntimeStats)
+                                return object;
+                            let message = new $root.clutch.config.gateway.v1.Stats.GoRuntimeStats();
+                            if (object.collectionInterval != null) {
+                                if (typeof object.collectionInterval !== "object")
+                                    throw TypeError(".clutch.config.gateway.v1.Stats.GoRuntimeStats.collectionInterval: object expected");
+                                message.collectionInterval = $root.google.protobuf.Duration.fromObject(object.collectionInterval);
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a GoRuntimeStats message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.gateway.v1.Stats.GoRuntimeStats
+                         * @static
+                         * @param {clutch.config.gateway.v1.Stats.GoRuntimeStats} message GoRuntimeStats
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        GoRuntimeStats.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults)
+                                object.collectionInterval = null;
+                            if (message.collectionInterval != null && message.hasOwnProperty("collectionInterval"))
+                                object.collectionInterval = $root.google.protobuf.Duration.toObject(message.collectionInterval, options);
+                            return object;
+                        };
+
+                        /**
+                         * Converts this GoRuntimeStats to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.gateway.v1.Stats.GoRuntimeStats
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        GoRuntimeStats.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return GoRuntimeStats;
                     })();
 
                     return Stats;
