@@ -7,6 +7,7 @@ import (
 
 	"github.com/uber-go/tally"
 
+	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 )
 
 func TestNewRuntimeStatsCancelTicker(t *testing.T) {

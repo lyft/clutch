@@ -7,11 +7,12 @@ import (
 
 	"github.com/uber-go/tally"
 
+	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 )
 
 type RuntimeStatCollector struct {
-	collectInterval time.Duration
-	runtimeMetrics  runtimeMetrics
+	collectionInterval time.Duration
+	runtimeMetrics     runtimeMetrics
 }
 
 type runtimeMetrics struct {
@@ -84,19 +85,19 @@ func NewRuntimeStats(scope tally.Scope, cfg *gatewayv1.Stats_GoRuntimeStats) *Ru
 		memoryGCCount:      runtimeScope.Gauge("memory.gc.count"),
 	}
 
-	collectInterval := time.Second * 10
+	collectionInterval := time.Second * 10
 	if cfg.CollectionInterval != nil {
-		collectInterval = cfg.CollectionInterval.AsDuration()
+		collectionInterval = cfg.CollectionInterval.AsDuration()
 	}
 
 	return &RuntimeStatCollector{
-		collectInterval: collectInterval,
-		runtimeMetrics:  runtimeMetrics,
+		collectionInterval: collectionInterval,
+		runtimeMetrics:     runtimeMetrics,
 	}
 }
 
 func (r *RuntimeStatCollector) Collect(ctx context.Context) {
-	ticker := time.NewTicker(r.collectInterval)
+	ticker := time.NewTicker(r.collectionInterval)
 	for {
 		r.collectCPUStats()
 		r.collectMemStats()
