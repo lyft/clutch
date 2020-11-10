@@ -55,6 +55,9 @@ message Stats {
     StatsdReporter statsd_reporter = 3;
     //  TODO: Prometheus support.
   }
+
+  // Collect go runtime stats, by default this is enabled.
+  bool collect_go_runtime_stats = 4;
 }
 
 message Timeouts {

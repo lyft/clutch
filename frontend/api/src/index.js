@@ -9428,6 +9428,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {google.protobuf.IDuration|null} [flushInterval] Stats flushInterval
                      * @property {clutch.config.gateway.v1.Stats.ILogReporter|null} [logReporter] Stats logReporter
                      * @property {clutch.config.gateway.v1.Stats.IStatsdReporter|null} [statsdReporter] Stats statsdReporter
+                     * @property {boolean|null} [collectGoRuntimeStats] Stats collectGoRuntimeStats
                      */
 
                     /**
@@ -9468,6 +9469,14 @@ export const clutch = $root.clutch = (() => {
                      * @instance
                      */
                     Stats.prototype.statsdReporter = null;
+
+                    /**
+                     * Stats collectGoRuntimeStats.
+                     * @member {boolean} collectGoRuntimeStats
+                     * @memberof clutch.config.gateway.v1.Stats
+                     * @instance
+                     */
+                    Stats.prototype.collectGoRuntimeStats = false;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
@@ -9518,6 +9527,9 @@ export const clutch = $root.clutch = (() => {
                                     return "statsdReporter." + error;
                             }
                         }
+                        if (message.collectGoRuntimeStats != null && message.hasOwnProperty("collectGoRuntimeStats"))
+                            if (typeof message.collectGoRuntimeStats !== "boolean")
+                                return "collectGoRuntimeStats: boolean expected";
                         return null;
                     };
 
@@ -9548,6 +9560,8 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.config.gateway.v1.Stats.statsdReporter: object expected");
                             message.statsdReporter = $root.clutch.config.gateway.v1.Stats.StatsdReporter.fromObject(object.statsdReporter);
                         }
+                        if (object.collectGoRuntimeStats != null)
+                            message.collectGoRuntimeStats = Boolean(object.collectGoRuntimeStats);
                         return message;
                     };
 
@@ -9564,8 +9578,10 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.defaults)
+                        if (options.defaults) {
                             object.flushInterval = null;
+                            object.collectGoRuntimeStats = false;
+                        }
                         if (message.flushInterval != null && message.hasOwnProperty("flushInterval"))
                             object.flushInterval = $root.google.protobuf.Duration.toObject(message.flushInterval, options);
                         if (message.logReporter != null && message.hasOwnProperty("logReporter")) {
@@ -9578,6 +9594,8 @@ export const clutch = $root.clutch = (() => {
                             if (options.oneofs)
                                 object.reporter = "statsdReporter";
                         }
+                        if (message.collectGoRuntimeStats != null && message.hasOwnProperty("collectGoRuntimeStats"))
+                            object.collectGoRuntimeStats = message.collectGoRuntimeStats;
                         return object;
                     };
 

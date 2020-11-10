@@ -356,6 +356,8 @@ func (m *Stats) Validate() error {
 
 	}
 
+	// no validation rules for CollectGoRuntimeStats
+
 	switch m.Reporter.(type) {
 
 	case *Stats_LogReporter_:

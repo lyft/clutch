@@ -4024,6 +4024,9 @@ export namespace clutch {
 
                     /** Stats statsdReporter */
                     statsdReporter?: (clutch.config.gateway.v1.Stats.IStatsdReporter|null);
+
+                    /** Stats collectGoRuntimeStats */
+                    collectGoRuntimeStats?: (boolean|null);
                 }
 
                 /** Represents a Stats. */
@@ -4043,6 +4046,9 @@ export namespace clutch {
 
                     /** Stats statsdReporter. */
                     public statsdReporter?: (clutch.config.gateway.v1.Stats.IStatsdReporter|null);
+
+                    /** Stats collectGoRuntimeStats. */
+                    public collectGoRuntimeStats: boolean;
 
                     /** Stats reporter. */
                     public reporter?: ("logReporter"|"statsdReporter");
