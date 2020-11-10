@@ -101,7 +101,7 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientCo
 			lookup[inCluster] = &ctxClientsetImpl{Interface: clientset, namespace: "default", cluster: inCluster}
 		case rest.ErrNotInCluster:
 			// Warn but allow to continue.
-			logger.Warn("not in a kubernetes cluster, unable to configure kube clientset")
+			logger.Warn("unable to load configuration for kube clientset")
 		default:
 			return nil, fmt.Errorf("encountered unexpected issue with InClusterConfig, config detected but incomplete: %w", err)
 		}
