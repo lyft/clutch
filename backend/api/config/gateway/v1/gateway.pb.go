@@ -302,7 +302,7 @@ type Stats struct {
 	//	*Stats_LogReporter_
 	//	*Stats_StatsdReporter_
 	Reporter isStats_Reporter `protobuf_oneof:"reporter"`
-	// Collect go runtime stats, by default this is enabled.
+	// Collect go runtime stats, this is disabled by default.
 	CollectGoRuntimeStats bool `protobuf:"varint,4,opt,name=collect_go_runtime_stats,json=collectGoRuntimeStats,proto3" json:"collect_go_runtime_stats,omitempty"`
 }
 

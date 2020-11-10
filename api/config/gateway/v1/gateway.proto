@@ -56,7 +56,7 @@ message Stats {
     //  TODO: Prometheus support.
   }
 
-  // Collect go runtime stats, by default this is enabled.
+  // Collect go runtime stats, this is disabled by default.
   bool collect_go_runtime_stats = 4;
 }
 
