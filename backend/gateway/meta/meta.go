@@ -22,10 +22,11 @@ var (
 
 	fieldNameRegexp = regexp.MustCompile(`{(\w+)}`)
 
-	actionTypeDescriptor     = apiv1.E_Action.TypeDescriptor()
-	identifierTypeDescriptor = apiv1.E_Id.TypeDescriptor()
-	redactedTypeDescriptor   = apiv1.E_Redacted.TypeDescriptor()
-	referenceTypeDescriptor  = apiv1.E_Reference.TypeDescriptor()
+	actionTypeDescriptor        = apiv1.E_Action.TypeDescriptor()
+	auditDisabledTypeDescriptor = apiv1.E_DisableAudit.TypeDescriptor()
+	identifierTypeDescriptor    = apiv1.E_Id.TypeDescriptor()
+	redactedTypeDescriptor      = apiv1.E_Redacted.TypeDescriptor()
+	referenceTypeDescriptor     = apiv1.E_Reference.TypeDescriptor()
 )
 
 const typePrefix = "type.googleapis.com/"
@@ -63,6 +64,15 @@ func GetAction(method string) apiv1.ActionType {
 		return apiv1.ActionType_UNSPECIFIED
 	}
 	return opts.Get(actionTypeDescriptor).Message().Interface().(*apiv1.Action).Type
+}
+
+func IsAuditDisabled(method string) bool {
+	md, ok := methodDescriptors[method]
+	if !ok {
+		return false
+	}
+	opts := md.GetMethodOptions().ProtoReflect()
+	return opts.Has(auditDisabledTypeDescriptor) && opts.Get(auditDisabledTypeDescriptor).Bool()
 }
 
 func IsRedacted(pb proto.Message) bool {
