@@ -1,6 +1,7 @@
 package meta
 
 import (
+	"github.com/lyft/clutch/backend/module/assets"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -170,4 +171,27 @@ func TestAPIBody(t *testing.T) {
 
 		assert.NoError(t, err)
 	}
+}
+
+func TestAuditDisabled(t *testing.T) {
+	r := &mockRegistrar{s: grpc.NewServer()}
+
+	hc, err := healthcheck.New(nil, nil, nil)
+	assert.NoError(t, err)
+	assert.NoError(t, hc.Register(r))
+
+	a, err := assets.New(nil, nil, nil)
+	assert.NoError(t, err)
+	assert.NoError(t, a.Register(r))
+
+	assert.NoError(t, GenerateGRPCMetadata(r.s))
+
+	result := IsAuditDisabled("/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck")
+	assert.True(t, result)
+
+	result = IsAuditDisabled("/clutch.assets.v1.AssetsAPI/Fetch")
+	assert.False(t, result)
+
+	result = IsAuditDisabled("/nonexistent/doesnotexist")
+	assert.False(t, result)
 }
