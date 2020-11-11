@@ -16226,6 +16226,9 @@ export namespace google {
             /** MethodOptions .clutch.api.v1.action */
             ".clutch.api.v1.action"?: (clutch.api.v1.IAction|null);
 
+            /** MethodOptions .clutch.api.v1.disableAudit */
+            ".clutch.api.v1.disableAudit"?: (boolean|null);
+
             /** MethodOptions .google.api.http */
             ".google.api.http"?: (google.api.IHttpRule|null);
         }

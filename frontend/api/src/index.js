@@ -41227,6 +41227,7 @@ export const google = $root.google = (() => {
              * @property {google.protobuf.MethodOptions.IdempotencyLevel|null} [idempotencyLevel] MethodOptions idempotencyLevel
              * @property {Array.<google.protobuf.IUninterpretedOption>|null} [uninterpretedOption] MethodOptions uninterpretedOption
              * @property {clutch.api.v1.IAction|null} [".clutch.api.v1.action"] MethodOptions .clutch.api.v1.action
+             * @property {boolean|null} [".clutch.api.v1.disableAudit"] MethodOptions .clutch.api.v1.disableAudit
              * @property {google.api.IHttpRule|null} [".google.api.http"] MethodOptions .google.api.http
              */
 
@@ -41279,6 +41280,14 @@ export const google = $root.google = (() => {
             MethodOptions.prototype[".clutch.api.v1.action"] = null;
 
             /**
+             * MethodOptions .clutch.api.v1.disableAudit.
+             * @member {boolean} .clutch.api.v1.disableAudit
+             * @memberof google.protobuf.MethodOptions
+             * @instance
+             */
+            MethodOptions.prototype[".clutch.api.v1.disableAudit"] = false;
+
+            /**
              * MethodOptions .google.api.http.
              * @member {google.api.IHttpRule|null|undefined} .google.api.http
              * @memberof google.protobuf.MethodOptions
@@ -41323,6 +41332,9 @@ export const google = $root.google = (() => {
                     if (error)
                         return ".clutch.api.v1.action." + error;
                 }
+                if (message[".clutch.api.v1.disableAudit"] != null && message.hasOwnProperty(".clutch.api.v1.disableAudit"))
+                    if (typeof message[".clutch.api.v1.disableAudit"] !== "boolean")
+                        return ".clutch.api.v1.disableAudit: boolean expected";
                 if (message[".google.api.http"] != null && message.hasOwnProperty(".google.api.http")) {
                     let error = $root.google.api.HttpRule.verify(message[".google.api.http"]);
                     if (error)
@@ -41374,6 +41386,8 @@ export const google = $root.google = (() => {
                         throw TypeError(".google.protobuf.MethodOptions..clutch.api.v1.action: object expected");
                     message[".clutch.api.v1.action"] = $root.clutch.api.v1.Action.fromObject(object[".clutch.api.v1.action"]);
                 }
+                if (object[".clutch.api.v1.disableAudit"] != null)
+                    message[".clutch.api.v1.disableAudit"] = Boolean(object[".clutch.api.v1.disableAudit"]);
                 if (object[".google.api.http"] != null) {
                     if (typeof object[".google.api.http"] !== "object")
                         throw TypeError(".google.protobuf.MethodOptions..google.api.http: object expected");
@@ -41401,6 +41415,7 @@ export const google = $root.google = (() => {
                     object.deprecated = false;
                     object.idempotencyLevel = options.enums === String ? "IDEMPOTENCY_UNKNOWN" : 0;
                     object[".clutch.api.v1.action"] = null;
+                    object[".clutch.api.v1.disableAudit"] = false;
                     object[".google.api.http"] = null;
                 }
                 if (message.deprecated != null && message.hasOwnProperty("deprecated"))
@@ -41414,6 +41429,8 @@ export const google = $root.google = (() => {
                 }
                 if (message[".clutch.api.v1.action"] != null && message.hasOwnProperty(".clutch.api.v1.action"))
                     object[".clutch.api.v1.action"] = $root.clutch.api.v1.Action.toObject(message[".clutch.api.v1.action"], options);
+                if (message[".clutch.api.v1.disableAudit"] != null && message.hasOwnProperty(".clutch.api.v1.disableAudit"))
+                    object[".clutch.api.v1.disableAudit"] = message[".clutch.api.v1.disableAudit"];
                 if (message[".google.api.http"] != null && message.hasOwnProperty(".google.api.http"))
                     object[".google.api.http"] = $root.google.api.HttpRule.toObject(message[".google.api.http"], options);
                 return object;
