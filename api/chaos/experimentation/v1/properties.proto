@@ -30,5 +30,6 @@ message Property {
     google.protobuf.Timestamp date_value = 4;
     string string_value = 5;
     int64 int_value = 6;
+    string url_value = 7;
   }
 }

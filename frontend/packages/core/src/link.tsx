@@ -15,4 +15,4 @@ const Link: React.FC<LinkProps> = ({ href, children }) => (
   </StyledLink>
 );
 
-export { Link };
+export default Link;

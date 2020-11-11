@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { clutch as IClutch } from "@clutch-sh/api";
-import { BaseWorkflowProps, ButtonGroup, client, TextField } from "@clutch-sh/core";
+import { BaseWorkflowProps, ButtonGroup, client, TextField, Link } from "@clutch-sh/core";
 import styled from "styled-components";
 
 import PageLayout from "./core/page-layout";
@@ -82,14 +82,18 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
       <Form>
         {experiment && (
           <>
-            {experiment.properties.items.map(property => (
-              <TextField
-                key={property.label}
-                label={property.label}
-                defaultValue={propertyToString(property)}
-                InputProps={{ readOnly: true }}
-              />
-            ))}
+            {experiment.properties.items.map(property =>
+              property.urlValue !== undefined ? (
+                <Link href={property.urlValue}>property.label</Link>
+              ) : (
+                <TextField
+                  key={property.label}
+                  label={property.label}
+                  defaultValue={propertyToString(property)}
+                  InputProps={{ readOnly: true }}
+                />
+              )
+            )}
             <TextField
               multiline
               label="Config"

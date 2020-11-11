@@ -22,6 +22,8 @@ import Loadable from "./loading";
 import { client, ClientError } from "./network";
 import ExpansionPanel from "./panel";
 import Resolver from "./Resolver";
+import Link from "./link";
+
 import {
   ExpandableRow,
   ExpandableTable,
@@ -50,6 +52,7 @@ export {
   ExpandableTable,
   ExpansionPanel,
   Hint,
+  Link,
   Loadable,
   MetadataTable,
   Note,
