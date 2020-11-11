@@ -1,7 +1,6 @@
 package meta
 
 import (
-	"github.com/lyft/clutch/backend/module/assets"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -15,32 +14,23 @@ import (
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
-	"github.com/lyft/clutch/backend/module"
+	modulemock "github.com/lyft/clutch/backend/mock/module"
+	"github.com/lyft/clutch/backend/module/assets"
 	"github.com/lyft/clutch/backend/module/healthcheck"
 )
-
-type mockRegistrar struct {
-	s *grpc.Server
-}
-
-func (m *mockRegistrar) GRPCServer() *grpc.Server { return m.s }
-
-func (m *mockRegistrar) RegisterJSONGateway(handlerFunc module.GatewayRegisterAPIHandlerFunc) error {
-	return nil
-}
 
 func TestGetAction(t *testing.T) {
 	hc, err := healthcheck.New(nil, nil, nil)
 	assert.NoError(t, err)
 
-	r := &mockRegistrar{s: grpc.NewServer()}
+	r := &modulemock.MockRegistrar{Server: grpc.NewServer()}
 	err = hc.Register(r)
 	assert.NoError(t, err)
 
 	// Register a non-Clutch endpoint with no annotations.
 	grpc_health_v1.RegisterHealthServer(r.GRPCServer(), &grpc_health_v1.UnimplementedHealthServer{})
 
-	err = GenerateGRPCMetadata(r.s)
+	err = GenerateGRPCMetadata(r.GRPCServer())
 	assert.NoError(t, err)
 
 	action := GetAction("/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck")
@@ -174,7 +164,7 @@ func TestAPIBody(t *testing.T) {
 }
 
 func TestAuditDisabled(t *testing.T) {
-	r := &mockRegistrar{s: grpc.NewServer()}
+	r := &modulemock.MockRegistrar{Server: grpc.NewServer()}
 
 	hc, err := healthcheck.New(nil, nil, nil)
 	assert.NoError(t, err)
@@ -184,7 +174,7 @@ func TestAuditDisabled(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NoError(t, a.Register(r))
 
-	assert.NoError(t, GenerateGRPCMetadata(r.s))
+	assert.NoError(t, GenerateGRPCMetadata(r.GRPCServer()))
 
 	result := IsAuditDisabled("/clutch.healthcheck.v1.HealthcheckAPI/Healthcheck")
 	assert.True(t, result)
