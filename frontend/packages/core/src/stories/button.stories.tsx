@@ -22,7 +22,13 @@ Primary.args = {
 export const Destructive = Template.bind({});
 Destructive.args = {
   text: "Delete",
-  variant: "caution",
+  variant: "destructive",
+};
+
+export const Danger = Template.bind({});
+Danger.args = {
+  text: "Rotate",
+  variant: "danger",
 };
 
 export const Disabled = Template.bind({});

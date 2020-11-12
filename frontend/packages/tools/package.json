@@ -20,6 +20,7 @@
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-react": "^7.7.4",
     "@babel/preset-typescript": "^7.1.0",
+    "@emotion/eslint-plugin": "^11.0.0",
     "@types/enzyme": "^3.10.5",
     "@types/jest": "^26.0.0",
     "@types/mocha": "^8.0.1",

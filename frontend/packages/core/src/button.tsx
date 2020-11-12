@@ -1,9 +1,9 @@
 import React from "react";
+import styled from "@emotion/styled";
 import type { ButtonProps as MuiButtonProps, GridJustification } from "@material-ui/core";
-import { Button as MuiButton, emphasize, fade, Grid, IconButton } from "@material-ui/core";
+import { Button as MuiButton, emphasize, Grid, IconButton } from "@material-ui/core";
 import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
-import styled from "styled-components";
 
 const COLORS = {
   neutral: {
@@ -14,46 +14,53 @@ const COLORS = {
     background: "#3B73E0",
     font: "#FFFFFF",
   },
-  caution: {
+  danger: {
     background: "#DA1707",
     font: "#FFFFFF",
   },
 };
 
-const StyledButton = styled(MuiButton)`
-  ${({ theme, ...props }) => `
-  margin: 15px;
-  background-color: ${props["data-color"].background};
-  color: ${props["data-color"].font};
-  font-weight: 600;
-  text-transform: none;
-  height: 3rem;
-  width: 8.875rem;
-  margin: 2rem .875rem;
-  &:hover {
-    background-color: ${emphasize(props["data-color"].background, 0.2)};
-  };
-  &:disabled {
-    color: ${props["data-color"].font};
-    background-color: ${emphasize(props["data-color"].background, 0.6)};
-  };
-  `}
-`;
+const StyledButton = styled(MuiButton)(
+  {
+    fontWeight: 600,
+    textTransform: "none",
+    height: "3rem",
+    width: "8.875rem",
+    margin: "2rem .875rem",
+  },
+  props => ({
+    color: props["data-color"].font,
+    backgroundColor: props["data-color"].background,
+    "&:hover": {
+      backgroundColor: emphasize(props["data-color"].background, 0.2),
+    },
+    "&:disabled": {
+      color: props["data-color"].font,
+      backgroundColor: emphasize(props["data-color"].background, 0.6),
+    },
+  })
+);
 
 export interface ButtonProps
-  extends Pick<
-    MuiButtonProps,
-    "disabled" | "endIcon" | "onClick" | "size" | "startIcon" | "type"
-  > {
+  extends Pick<MuiButtonProps, "disabled" | "endIcon" | "onClick" | "size" | "startIcon" | "type"> {
+  // Case-sensitive button text.
   text: string;
-  variant?: "neutral" | "primary" | "caution";
+  // Provides feedback to the user in regards to the action of the button.
+  variant?: "neutral" | "primary" | "danger" | "destructive";
 }
 
-const Button: React.FC<ButtonProps> = ({ text, variant = "primary", ...props }) => (
-  <StyledButton variant="contained" data-color={COLORS[variant]} {...props}>
-    {text}
-  </StyledButton>
-);
+/**
+ * A button with default themes based on use case.
+ */
+const Button: React.FC<ButtonProps> = ({ text, variant = "primary", ...props }) => {
+  const color = variant === "destructive" ? "danger" : variant;
+
+  return (
+    <StyledButton variant="contained" data-color={COLORS[color]} {...props}>
+      {text}
+    </StyledButton>
+  );
+};
 
 export interface ButtonGroupProps {
   buttons: ButtonProps[];
