@@ -18,12 +18,11 @@ import { useWizardContext, WizardContext } from "./Contexts";
 import { Error } from "./error";
 import { Hint, Note, NoteConfig, NotePanel, Warning } from "./Feedback";
 import { Status } from "./icon";
+import Link from "./link";
 import Loadable from "./loading";
 import { client, ClientError } from "./network";
 import ExpansionPanel from "./panel";
 import Resolver from "./Resolver";
-import Link from "./link";
-
 import {
   ExpandableRow,
   ExpandableTable,
