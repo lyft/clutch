@@ -56,7 +56,7 @@ const PodDetails: React.FC<WizardChild> = () => {
           {
             text: "Delete",
             onClick: onSubmit,
-            destructive: true,
+            variant: "destructive",
           },
         ]}
       />

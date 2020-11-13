@@ -74,7 +74,7 @@ const HPADetails: React.FC<WizardChild> = () => {
           {
             text: "Resize",
             onClick: onSubmit,
-            destructive: true,
+            variant: "destructive",
           },
         ]}
       />

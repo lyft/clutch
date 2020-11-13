@@ -50,7 +50,7 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
         : "Cancel Experiment Run";
     const destructiveButton = {
       text: title,
-      destructive: true,
+      variant: "destructive",
       onClick: () => {
         client
           .post("/v1/chaos/experimentation/cancelExperimentRun", { id: runID })
