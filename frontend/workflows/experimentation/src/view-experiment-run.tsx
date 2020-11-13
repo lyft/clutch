@@ -85,7 +85,7 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
             {experiment.properties.items.map(property =>
               property.urlValue !== undefined ? (
                 <Link
-                  style={{ width: "100%", display: "flex", maxWidth: "500px" }}
+                  maxWidth="500px"
                   href={property.urlValue}
                 >
                   {property.label}

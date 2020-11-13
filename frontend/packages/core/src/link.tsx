@@ -4,13 +4,20 @@ import { Link as MuiLink } from "@material-ui/core";
 import styled from "styled-components";
 
 const StyledLink = styled(MuiLink)`
+  ${({...props}) => `
   padding-left: 5px;
+  display: flex;
+  ${props["data-max-width"] && "width: 100%;"}
+  max-width: ${props["data-max-width"] || "fit-content"};
+  `}
 `;
 
-export interface LinkProps extends Pick<MuiLinkProps, "href"> {}
+export interface LinkProps extends Pick<MuiLinkProps, "href"> {
+  maxWidth?: string;
+}
 
-const Link: React.FC<LinkProps> = ({ href, children }) => (
-  <StyledLink href={href} target="_blank" rel="noopener noreferrer">
+const Link: React.FC<LinkProps> = ({ href, maxWidth, children }) => (
+  <StyledLink href={href} target="_blank" rel="noopener noreferrer" data-max-width={maxWidth}>
     {children}
   </StyledLink>
 );
