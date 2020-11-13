@@ -3,12 +3,11 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { clutch as IClutch } from "@clutch-sh/api";
 import type { BaseWorkflowProps } from "@clutch-sh/core";
-import { ButtonGroup, client } from "@clutch-sh/core";
+import { Button, ButtonGroup, client, Dialog } from "@clutch-sh/core";
 import { PageLayout } from "@clutch-sh/experimentation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import Dialog from "./dialog";
 import FormFields from "./form-fields";
 
 enum FaultType {
@@ -214,16 +213,15 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
         content="Are you sure you want to start an experiment? The experiment will start immediately and you will be moved to experiment details view page."
         open={experimentData !== undefined}
         onClose={() => setExperimentData(undefined)}
-        buttons={[
-          {
-            label: "Yes",
-            onAction: () => {
-              createExperiment(experimentData);
-            },
-          },
-          { label: "No", onAction: () => setExperimentData(undefined) },
-        ]}
-      />
+      >
+        <Button
+          text="Yes"
+          onClick={() => {
+            createExperiment(experimentData);
+          }}
+        />
+        <Button text="No" onClick={() => setExperimentData(undefined)} />
+      </Dialog>
     </PageLayout>
   );
 };
