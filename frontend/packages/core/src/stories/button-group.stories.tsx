@@ -17,8 +17,8 @@ const sharedArgs = [
   action("onClick event"),
 ];
 
-export const Default = Template.bind({});
-Default.args = {
+export const Primary = Template.bind({});
+Primary.args = {
   buttons: [
     sharedArgs[0],
     {
@@ -28,12 +28,12 @@ Default.args = {
   ],
 };
 
-export const Caution = Template.bind({});
-Caution.args = {
+export const Destructive = Template.bind({});
+Destructive.args = {
   buttons: [
     sharedArgs[0],
     {
-      text: "Delete",
+      text: "Terminate",
       variant: "destructive",
       onClick: sharedArgs[1],
     },

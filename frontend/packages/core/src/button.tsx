@@ -11,21 +11,21 @@ const COLORS = {
     font: "#0D1030",
   },
   primary: {
-    background: "#3B73E0",
+    background: "#3548D4",
     font: "#FFFFFF",
   },
   danger: {
-    background: "#DA1707",
+    background: "#DB3615",
     font: "#FFFFFF",
   },
 };
 
 const StyledButton = styled(MuiButton)(
   {
+    borderRadius: "4px",
     fontWeight: 600,
     textTransform: "none",
-    height: "3rem",
-    width: "8.875rem",
+    padding: "0.875rem 2rem",
     margin: "2rem .875rem",
   },
   props => ({
@@ -41,6 +41,10 @@ const StyledButton = styled(MuiButton)(
   })
 );
 
+const OutlinedButton = styled(StyledButton)({
+  border: "1px solid #0D1030",
+});
+
 export interface ButtonProps
   extends Pick<MuiButtonProps, "disabled" | "endIcon" | "onClick" | "size" | "startIcon" | "type"> {
   // Case-sensitive button text.
@@ -55,10 +59,11 @@ export interface ButtonProps
 const Button: React.FC<ButtonProps> = ({ text, variant = "primary", ...props }) => {
   const color = variant === "destructive" ? "danger" : variant;
 
+  const Button = variant === "neutral" ? OutlinedButton : StyledButton;
   return (
-    <StyledButton variant="contained" data-color={COLORS[color]} {...props}>
+    <Button variant="contained" disableElevation data-color={COLORS[color]} {...props}>
       {text}
-    </StyledButton>
+    </Button>
   );
 };
 
