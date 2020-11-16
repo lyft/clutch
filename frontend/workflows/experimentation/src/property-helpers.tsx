@@ -9,6 +9,9 @@ const propertyToString = (property: IClutch.chaos.experimentation.v1.IProperty):
   if (property.displayValue !== undefined && property.displayValue != null) {
     return property.displayValue.value;
   }
+  if (property.urlValue !== undefined && property.urlValue != null) {
+    return property.urlValue.toString();
+  }
   if (property.intValue !== undefined && property.intValue != null) {
     return property.intValue.toString();
   }
