@@ -4030,6 +4030,9 @@ export namespace clutch {
 
                     /** Stats statsdReporter */
                     statsdReporter?: (clutch.config.gateway.v1.Stats.IStatsdReporter|null);
+
+                    /** Stats goRuntimeStats */
+                    goRuntimeStats?: (clutch.config.gateway.v1.Stats.IGoRuntimeStats|null);
                 }
 
                 /** Represents a Stats. */
@@ -4049,6 +4052,9 @@ export namespace clutch {
 
                     /** Stats statsdReporter. */
                     public statsdReporter?: (clutch.config.gateway.v1.Stats.IStatsdReporter|null);
+
+                    /** Stats goRuntimeStats. */
+                    public goRuntimeStats?: (clutch.config.gateway.v1.Stats.IGoRuntimeStats|null);
 
                     /** Stats reporter. */
                     public reporter?: ("logReporter"|"statsdReporter");
@@ -4232,6 +4238,54 @@ export namespace clutch {
                              */
                             public toJSON(): { [k: string]: any };
                         }
+                    }
+
+                    /** Properties of a GoRuntimeStats. */
+                    interface IGoRuntimeStats {
+
+                        /** GoRuntimeStats collectionInterval */
+                        collectionInterval?: (google.protobuf.IDuration|null);
+                    }
+
+                    /** Represents a GoRuntimeStats. */
+                    class GoRuntimeStats implements IGoRuntimeStats {
+
+                        /**
+                         * Constructs a new GoRuntimeStats.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.gateway.v1.Stats.IGoRuntimeStats);
+
+                        /** GoRuntimeStats collectionInterval. */
+                        public collectionInterval?: (google.protobuf.IDuration|null);
+
+                        /**
+                         * Verifies a GoRuntimeStats message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a GoRuntimeStats message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns GoRuntimeStats
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.gateway.v1.Stats.GoRuntimeStats;
+
+                        /**
+                         * Creates a plain object from a GoRuntimeStats message. Also converts values to other types if specified.
+                         * @param message GoRuntimeStats
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.gateway.v1.Stats.GoRuntimeStats, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this GoRuntimeStats to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
                     }
                 }
 
@@ -16177,6 +16231,9 @@ export namespace google {
 
             /** MethodOptions .clutch.api.v1.action */
             ".clutch.api.v1.action"?: (clutch.api.v1.IAction|null);
+
+            /** MethodOptions .clutch.api.v1.disableAudit */
+            ".clutch.api.v1.disableAudit"?: (boolean|null);
 
             /** MethodOptions .google.api.http */
             ".google.api.http"?: (google.api.IHttpRule|null);

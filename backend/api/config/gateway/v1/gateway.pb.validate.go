@@ -356,6 +356,16 @@ func (m *Stats) Validate() error {
 
 	}
 
+	if v, ok := interface{}(m.GetGoRuntimeStats()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StatsValidationError{
+				field:  "GoRuntimeStats",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	switch m.Reporter.(type) {
 
 	case *Stats_LogReporter_:
@@ -1337,6 +1347,94 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = Stats_StatsdReporterValidationError{}
+
+// Validate checks the field values on Stats_GoRuntimeStats with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *Stats_GoRuntimeStats) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if d := m.GetCollectionInterval(); d != nil {
+		dur, err := ptypes.Duration(d)
+		if err != nil {
+			return Stats_GoRuntimeStatsValidationError{
+				field:  "CollectionInterval",
+				reason: "value is not a valid duration",
+				cause:  err,
+			}
+		}
+
+		gte := time.Duration(0*time.Second + 100000000*time.Nanosecond)
+
+		if dur < gte {
+			return Stats_GoRuntimeStatsValidationError{
+				field:  "CollectionInterval",
+				reason: "value must be greater than or equal to 100ms",
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Stats_GoRuntimeStatsValidationError is the validation error returned by
+// Stats_GoRuntimeStats.Validate if the designated constraints aren't met.
+type Stats_GoRuntimeStatsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Stats_GoRuntimeStatsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Stats_GoRuntimeStatsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Stats_GoRuntimeStatsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Stats_GoRuntimeStatsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Stats_GoRuntimeStatsValidationError) ErrorName() string {
+	return "Stats_GoRuntimeStatsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Stats_GoRuntimeStatsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStats_GoRuntimeStats.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Stats_GoRuntimeStatsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Stats_GoRuntimeStatsValidationError{}
 
 // Validate checks the field values on Stats_StatsdReporter_PointTags with the
 // rules defined in the proto definition for this message. If any rules are

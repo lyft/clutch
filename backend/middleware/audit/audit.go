@@ -52,6 +52,10 @@ type auditEntryContextKey struct{}
 
 func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+		if meta.IsAuditDisabled(info.FullMethod) {
+			return handler(ctx, req)
+		}
+
 		event, err := m.eventFromRequest(ctx, req, info)
 		if err != nil {
 			return nil, err

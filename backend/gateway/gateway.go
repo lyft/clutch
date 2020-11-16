@@ -248,6 +248,12 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		timeout += time.Second
 	}
 
+	// Start collecting go runtime stats if enabled
+	if cfg.Gateway.Stats != nil && cfg.Gateway.Stats.GoRuntimeStats != nil {
+		runtimeStats := stats.NewRuntimeStats(scope, cfg.Gateway.Stats.GoRuntimeStats)
+		go runtimeStats.Collect(ctx)
+	}
+
 	srv := &http.Server{
 		Handler:      mux.InsecureHandler(rpcMux),
 		Addr:         addr,
