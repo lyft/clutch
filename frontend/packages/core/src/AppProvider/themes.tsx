@@ -1,4 +1,5 @@
 import React from "react";
+import { ThemeProvider as EmotionThemeProvider } from "@emotion/react";
 import { createMuiTheme, CssBaseline, MuiThemeProvider, ThemeOptions } from "@material-ui/core";
 import { useTheme as useMuiTheme } from "@material-ui/core/styles";
 import type { PaletteOptions } from "@material-ui/core/styles/createPalette";
@@ -62,8 +63,8 @@ const lightTheme = () => {
     props: {
       MuiButtonBase: {
         // https://material-ui.com/getting-started/faq/#how-can-i-disable-the-ripple-effect-globally
-        disableRipple: true
-      }
+        disableRipple: true,
+      },
     },
     overrides: {
       MuiTypography: {
@@ -95,10 +96,12 @@ const Theme: React.FC<ThemeProps> = ({ children }) => {
   const theme = lightTheme;
   return (
     <MuiThemeProvider theme={theme()}>
-      <StyledThemeProvider theme={theme()}>
-        <CssBaseline />
-        <StylesProvider injectFirst>{children}</StylesProvider>
-      </StyledThemeProvider>
+      <EmotionThemeProvider theme={theme()}>
+        <StyledThemeProvider theme={theme()}>
+          <CssBaseline />
+          <StylesProvider injectFirst>{children}</StylesProvider>
+        </StyledThemeProvider>
+      </EmotionThemeProvider>
     </MuiThemeProvider>
   );
 };

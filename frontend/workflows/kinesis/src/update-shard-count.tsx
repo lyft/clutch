@@ -82,7 +82,7 @@ const StreamDetails: React.FC<WizardChild> = () => {
       </form>
       <Grid container justify="center">
         <Button text="Back" onClick={onBack} />
-        <Button text="Update" destructive onClick={onSubmit} />
+        <Button text="Update" variant="destructive" onClick={onSubmit} />
       </Grid>
       <NotePanel
         notes={[

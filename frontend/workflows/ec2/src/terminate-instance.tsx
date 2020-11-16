@@ -60,7 +60,7 @@ const InstanceDetails: React.FC<WizardChild> = () => {
           {
             text: "Terminate",
             onClick: onSubmit,
-            destructive: true,
+            variant: "destructive",
           },
         ]}
       />

@@ -5,14 +5,7 @@ import { RadioGroup } from "./Input/radio-group";
 import Select from "./Input/select";
 import TextField from "./Input/text-field";
 import ClutchApp from "./AppProvider";
-import {
-  AdvanceButton,
-  Button,
-  ButtonGroup,
-  ButtonProps,
-  ClipboardButton,
-  DestructiveButton,
-} from "./button";
+import { Button, ButtonGroup, ButtonProps, ClipboardButton } from "./button";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
 import Dialog from "./dialog";
@@ -35,7 +28,6 @@ import {
 
 export {
   ClutchApp,
-  AdvanceButton,
   BaseWorkflowProps,
   Button,
   ButtonGroup,
@@ -45,7 +37,6 @@ export {
   ClientError,
   ClipboardButton,
   Confirmation,
-  DestructiveButton,
   Dialog,
   Error,
   ExpandableRow,
