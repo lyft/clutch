@@ -23,7 +23,7 @@ const COLORS = {
 const StyledButton = styled(MuiButton)(
   {
     borderRadius: "4px",
-    fontWeight: 600,
+    fontWeight: 700,
     textTransform: "none",
     padding: "0.875rem 2rem",
     margin: "2rem .875rem",
