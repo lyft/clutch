@@ -46,7 +46,7 @@ const OutlinedButton = styled(StyledButton)({
 });
 
 export interface ButtonProps
-  extends Pick<MuiButtonProps, "disabled" | "endIcon" | "onClick" | "size" | "startIcon" | "type"> {
+  extends Pick<MuiButtonProps, "disabled" | "endIcon" | "onClick" | "startIcon" | "type"> {
   // Case-sensitive button text.
   text: string;
   // Provides feedback to the user in regards to the action of the button.
@@ -59,11 +59,11 @@ export interface ButtonProps
 const Button: React.FC<ButtonProps> = ({ text, variant = "primary", ...props }) => {
   const color = variant === "destructive" ? "danger" : variant;
 
-  const Button = variant === "neutral" ? OutlinedButton : StyledButton;
+  const ButtonVariant = variant === "neutral" ? OutlinedButton : StyledButton;
   return (
-    <Button variant="contained" disableElevation data-color={COLORS[color]} {...props}>
+    <ButtonVariant variant="contained" disableElevation data-color={COLORS[color]} {...props}>
       {text}
-    </Button>
+    </ButtonVariant>
   );
 };
 
