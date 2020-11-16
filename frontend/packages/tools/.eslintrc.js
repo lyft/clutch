@@ -16,8 +16,7 @@ module.exports = {
     "plugin:prettier/recommended"
   ],
   plugins: [
-    "simple-import-sort",
-    "@emotion"
+    "simple-import-sort"
   ],
   env: {
     "browser": true,
