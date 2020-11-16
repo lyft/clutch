@@ -2,7 +2,8 @@ import React from "react";
 import type { Meta } from "@storybook/react";
 
 import { Button } from "../button";
-import { Dialog, DialogProps } from "../dialog";
+import type { DialogProps } from "../dialog";
+import Dialog from "../dialog";
 
 export default {
   title: "Core/Dialog",
