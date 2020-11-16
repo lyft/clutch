@@ -33,6 +33,6 @@
     "yup": "^0.29.0"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "0.0.0-beta"
+    "@clutch-sh/tools": "^0.0.0-beta"
   }
 }

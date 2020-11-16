@@ -4,7 +4,7 @@ import { DevTool } from "@hookform/devtools";
 import _ from "lodash";
 import styled from "styled-components";
 
-import { AdvanceButton } from "../button";
+import { Button } from "../button";
 import { useWizardContext } from "../Contexts";
 import { CompressedError, Error } from "../error";
 import Loadable from "../loading";
@@ -146,7 +146,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
               />
             </Form>
           )}
-          <AdvanceButton text="Continue" onClick={validation.handleSubmit(submitHandler)} />
+          <Button text="Continue" onClick={validation.handleSubmit(submitHandler)} />
           <CompressedError title="Error" message={state.resolverFetchError} />
         </Loadable>
       )}

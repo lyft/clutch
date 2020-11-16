@@ -12,10 +12,13 @@ export default {
 
 const Template = (props: ButtonGroupProps) => <ButtonGroup {...props} />;
 
-const sharedArgs = [{ text: "Back", onClick: action("onClick event") }, action("onClick event")];
+const sharedArgs = [
+  { text: "Back", variant: "neutral", onClick: action("onClick event") },
+  action("onClick event"),
+];
 
-export const Default = Template.bind({});
-Default.args = {
+export const Primary = Template.bind({});
+Primary.args = {
   buttons: [
     sharedArgs[0],
     {
@@ -30,8 +33,8 @@ Destructive.args = {
   buttons: [
     sharedArgs[0],
     {
-      text: "Delete",
-      destructive: true,
+      text: "Terminate",
+      variant: "destructive",
       onClick: sharedArgs[1],
     },
   ],
