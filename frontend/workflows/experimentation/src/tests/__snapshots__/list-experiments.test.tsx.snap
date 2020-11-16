@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`List Experiments workflow renders correctly 1`] = `
+"<PageLayout heading={[undefined]} error=\\"\\">
+  <ButtonGroup buttons={{...}} />
+  <ListView columns={{...}} items={[undefined]} onRowSelection={[Function: onRowSelection]} />
+</PageLayout>"
+`;

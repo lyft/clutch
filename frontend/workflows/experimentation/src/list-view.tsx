@@ -104,7 +104,7 @@ const EnhancedTableHead: React.FC<EnhancedTableHeadProps> = ({
 interface Column {
   id: string;
   header: string;
-  sortable: boolean;
+  sortable?: boolean;
 }
 
 interface ListViewProps {
