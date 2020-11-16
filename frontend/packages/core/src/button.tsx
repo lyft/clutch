@@ -1,21 +1,36 @@
 import React from "react";
 import styled from "@emotion/styled";
 import type { ButtonProps as MuiButtonProps, GridJustification } from "@material-ui/core";
-import { Button as MuiButton, emphasize, Grid, IconButton } from "@material-ui/core";
+import { Button as MuiButton, Grid, IconButton } from "@material-ui/core";
 import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 
 const COLORS = {
   neutral: {
-    background: "#FFFFFF",
+    background: {
+      primary: "#FFFFFF",
+      hover: "#EFF0F2",
+      active: "#CFD3D7",
+      disabled: "#FFFFFF",
+    },
     font: "#0D1030",
   },
   primary: {
-    background: "#3548D4",
+    background: {
+      primary: "#3548D4",
+      hover: "#7680E8",
+      active: "#1B31C6",
+      disabled: "#7680E8",
+    },
     font: "#FFFFFF",
   },
   danger: {
-    background: "#DB3615",
+    background: {
+      primary: "#DB3615",
+      hover: "#FF6441",
+      active: "#E32E11",
+      disabled: "#FF3E1C",
+    },
     font: "#FFFFFF",
   },
 };
@@ -30,13 +45,17 @@ const StyledButton = styled(MuiButton)(
   },
   props => ({
     color: props["data-color"].font,
-    backgroundColor: props["data-color"].background,
+    backgroundColor: props["data-color"].background.primary,
     "&:hover": {
-      backgroundColor: emphasize(props["data-color"].background, 0.2),
+      backgroundColor: props["data-color"].background.hover,
+    },
+    "&:active": {
+      backgroundColor: props["data-color"].background.active,
     },
     "&:disabled": {
       color: props["data-color"].font,
-      backgroundColor: emphasize(props["data-color"].background, 0.6),
+      backgroundColor: props["data-color"].background.disabled,
+      opacity: "0.38",
     },
   })
 );
