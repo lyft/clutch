@@ -5,7 +5,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Typography from "@material-ui/core/Typography";
 
-interface DialogProps {
+export interface DialogProps {
   title: string;
   content: string;
   open: boolean;
