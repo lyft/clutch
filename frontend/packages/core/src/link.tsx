@@ -4,7 +4,7 @@ import { Link as MuiLink } from "@material-ui/core";
 import styled from "styled-components";
 
 const StyledLink = styled(MuiLink)`
-  ${({...props}) => `
+  ${({ ...props }) => `
   padding-left: 5px;
   display: flex;
   ${props["data-max-width"] && "width: 100%;"}
