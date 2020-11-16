@@ -56,7 +56,7 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn --cwd frontend install
+        run: yarn --cwd frontend install --frozen-lockfile
       - name: Compile packages
         run: yarn --cwd frontend compile
       - run: make frontend-lint
@@ -84,7 +84,7 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn --cwd frontend install
+        run: yarn --cwd frontend install --frozen-lockfile
       - name: Compile packages
         run: yarn --cwd frontend compile
       - name: Test [unit]
