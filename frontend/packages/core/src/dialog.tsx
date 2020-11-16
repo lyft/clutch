@@ -24,4 +24,4 @@ const Dialog: React.FC<DialogProps> = ({ title, content, open, onClose, children
   );
 };
 
-export { Dialog, DialogProps };
+export default Dialog;
