@@ -6,7 +6,6 @@ on:
   pull_request:
     branches:
     - main
-    - UIV2
     paths:
     - 'frontend/**'
     - .github/workflows/frontend.yml
@@ -56,7 +55,7 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn --cwd frontend install --frozen-lockfile
+        run: yarn --cwd frontend install
       - name: Compile packages
         run: yarn --cwd frontend compile
       - run: make frontend-lint
@@ -84,7 +83,7 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn --cwd frontend install --frozen-lockfile
+        run: yarn --cwd frontend install
       - name: Compile packages
         run: yarn --cwd frontend compile
       - name: Test [unit]
