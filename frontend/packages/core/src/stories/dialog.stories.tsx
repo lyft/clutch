@@ -12,14 +12,12 @@ export default {
   },
 } as Meta;
 
-const Template = (props: DialogProps) => {
-  return (
-    <Dialog {...props}>
-      <Button text="Yes" />
-      <Button text="No" />
-    </Dialog>
-  );
-};
+const Template = (props: DialogProps) => (
+  <Dialog {...props}>
+    <Button text="Yes" />
+    <Button text="No" />
+  </Dialog>
+);
 
 export const Primary = Template.bind({});
 Primary.args = {
