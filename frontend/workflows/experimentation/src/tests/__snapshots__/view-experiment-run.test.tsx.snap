@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`View Experiment Run workflow renders correctly 1`] = `
+"<PageLayout heading={[undefined]} error=\\"\\">
+  <styled.form />
+</PageLayout>"
+`;
