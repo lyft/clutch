@@ -59,6 +59,12 @@ const lightPalette = (): ClutchPalette => {
 const lightTheme = () => {
   return createMuiTheme({
     palette: lightPalette(),
+    props: {
+      MuiButtonBase: {
+        // https://material-ui.com/getting-started/faq/#how-can-i-disable-the-ripple-effect-globally
+        disableRipple: true
+      }
+    },
     overrides: {
       MuiTypography: {
         colorPrimary: {
