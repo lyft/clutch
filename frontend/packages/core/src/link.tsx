@@ -5,7 +5,8 @@ import styled from "styled-components";
 
 const StyledLink = styled(MuiLink)`
   ${({ ...props }) => `
-  padding-left: 5px;
+  padding-top: 10px;
+  font-size: 16px;
   display: flex;
   ${props["data-max-width"] && "width: 100%;"}
   max-width: ${props["data-max-width"] || "fit-content"};
