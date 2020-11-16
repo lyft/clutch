@@ -15,7 +15,7 @@ import {
 } from "./button";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
-import { Dialog } from "./dialog";
+import Dialog from "./dialog";
 import { Error } from "./error";
 import { Hint, Note, NoteConfig, NotePanel, Warning } from "./Feedback";
 import { Status } from "./icon";
