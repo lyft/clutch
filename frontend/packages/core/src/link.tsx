@@ -5,21 +5,29 @@ import styled from "styled-components";
 
 const StyledLink = styled(MuiLink)`
   ${({ ...props }) => `
-  padding-left: 5px;
-  padding-top: 10px;
-  font-size: 16px;
   display: flex;
   ${props["data-max-width"] && "width: 100%;"}
   max-width: ${props["data-max-width"] || "fit-content"};
+  font-size: ${props["data-font-size"] || ""};
+  padding: ${props["data-padding"] || "0 0 0 5px"};
   `}
 `;
 
 export interface LinkProps extends Pick<MuiLinkProps, "href"> {
   maxWidth?: string;
+  fontSize?: string;
+  padding?: string;
 }
 
-const Link: React.FC<LinkProps> = ({ href, maxWidth, children }) => (
-  <StyledLink href={href} target="_blank" rel="noopener noreferrer" data-max-width={maxWidth}>
+const Link: React.FC<LinkProps> = ({ href, maxWidth, fontSize, padding, children }) => (
+  <StyledLink
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    data-max-width={maxWidth}
+    data-font-size={fontSize}
+    data-padding={padding}
+  >
     {children}
   </StyledLink>
 );
