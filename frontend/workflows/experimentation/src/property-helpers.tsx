@@ -47,8 +47,8 @@ const compareProperties = (
     return 0;
   }
 
-  const aValue = a.stringValue ?? a.intValue ?? a.dateValue;
-  const bValue = b.stringValue ?? b.intValue ?? b.dateValue;
+  const aValue = a.stringValue ?? a.urlValue ?? a.intValue ?? a.dateValue;
+  const bValue = b.stringValue ?? a.urlValue ?? b.intValue ?? b.dateValue;
 
   if (aValue !== undefined && aValue != null) {
     if (aValue > bValue) {
