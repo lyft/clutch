@@ -64,7 +64,6 @@ const lightTheme = () => {
       create: () => "none"
     },
     props: {
-
       MuiButtonBase: {
         // https://material-ui.com/getting-started/faq/#how-can-i-disable-the-ripple-effect-globally
         disableRipple: true,
