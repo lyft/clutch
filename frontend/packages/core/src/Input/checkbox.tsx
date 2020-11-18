@@ -1,4 +1,6 @@
 import React from "react";
+import styled from "@emotion/styled";
+import type { CheckboxProps } from "@material-ui/core";
 import {
   Checkbox as MuiCheckbox,
   FormControl as MuiFormControl,
@@ -7,19 +9,34 @@ import {
   FormLabel,
   Grid,
 } from "@material-ui/core";
-import styled from "styled-components";
 
 const FormControl = styled(MuiFormControl)`
   width: 75%;
 `;
 
 const Checkbox = styled(MuiCheckbox)`
-  ${({ theme }) => `
-  color: ${theme.palette.text.primary};
-  `}
+  &.MuiCheckbox-root {
+    color: #0d1030;
+    &:hover {
+      color: #3548d4;
+      background-color: transparent;
+    }
+  }
+
+  &.Mui-checked {
+    color: #3548d4;
+    &:hover {
+      background-color: transparent;
+    }
+  }
+
+  &.Mui-disabled {
+    color: #0d1030;
+    opacity: 0.38;
+  }
 `;
 
-export interface CheckboxPanelProps {
+export interface CheckboxPanelProps extends Pick<CheckboxProps, "disabled"> {
   header?: string;
   options: {
     [option: string]: boolean;
@@ -27,7 +44,7 @@ export interface CheckboxPanelProps {
   onChange: (state: { [option: string]: boolean }) => void;
 }
 
-const CheckboxPanel: React.FC<CheckboxPanelProps> = ({ header, options, onChange }) => {
+const CheckboxPanel: React.FC<CheckboxPanelProps> = ({ header, options, onChange, ...props }) => {
   const allOptions = {};
   Object.keys(options).forEach(option => {
     allOptions[option] = { checked: options[option], value: option };
@@ -73,6 +90,7 @@ const CheckboxPanel: React.FC<CheckboxPanelProps> = ({ header, options, onChange
                       checked={selected[option].checked}
                       onChange={onToggle}
                       name={option}
+                      {...props}
                     />
                   }
                   label={option}
@@ -90,6 +108,7 @@ const CheckboxPanel: React.FC<CheckboxPanelProps> = ({ header, options, onChange
                       checked={selected[option].checked}
                       onChange={onToggle}
                       name={option}
+                      {...props}
                     />
                   }
                   label={option}

@@ -23,3 +23,9 @@ Primary.args = {
     "Option 3": false,
   },
 };
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+  ...Primary.args,
+  disabled: true,
+};
