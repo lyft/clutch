@@ -10,6 +10,6 @@
     "publishBeta": "../../tools/publish-frontend.sh api"
   },
   "dependencies": {
-    "protobufjs": "6.10.1"
+    "protobufjs": "6.10.2"
   }
 }
