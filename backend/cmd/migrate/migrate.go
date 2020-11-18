@@ -47,6 +47,13 @@ func (m *migrateLogger) Verbose() bool {
 	return true
 }
 
+// Migrator handles all migration operations both up and down.
+type Migrator struct {
+	log   *zap.Logger
+	flags *MigrateFlags
+	cfg   *gatewayv1.Config
+}
+
 func (m *Migrator) setupSqlClient() (*sql.DB, string) {
 	// Find the database in config and instantiate the service.
 	var sqlDB *sql.DB
@@ -129,13 +136,6 @@ func (m *Migrator) Up() {
 	if err != nil && err != migrate.ErrNoChange {
 		m.log.Fatal("failed running migrations", zap.Error(err))
 	}
-}
-
-// Migrator handles all migration operations both up and down.
-type Migrator struct {
-	log   *zap.Logger
-	flags *MigrateFlags
-	cfg   *gatewayv1.Config
 }
 
 func main() {
