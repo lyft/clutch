@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -13,6 +14,7 @@ import (
 	"strings"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"go.uber.org/zap"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"google.golang.org/grpc"
@@ -35,12 +37,19 @@ type assetHandler struct {
 	next       http.Handler
 	fileSystem http.FileSystem
 	fileServer http.Handler
+	logger     *zap.Logger
 }
 
-func copyHTTPResponse(resp *http.Response, w http.ResponseWriter) {
+func copyHTTPResponse(resp *http.Response, w http.ResponseWriter, logger *zap.Logger) {
 	for key, values := range resp.Header {
 		for _, val := range values {
 			w.Header().Add(key, val)
+		}
+	}
+	if resp.StatusCode >= 500 && resp.StatusCode <= 599 {
+		body, _ := ioutil.ReadAll(resp.Body)
+		if len(body) > 0 {
+			logger.Error("HTTP 5xx error:", zap.Int("status code", resp.StatusCode), zap.String("response body", string(body)))
 		}
 	}
 	w.WriteHeader(resp.StatusCode)
@@ -61,7 +70,7 @@ func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	a.next.ServeHTTP(rec, r)
 
 	if rec.Code != http.StatusOK {
-		copyHTTPResponse(rec.Result(), w)
+		copyHTTPResponse(rec.Result(), w, a.logger)
 		return
 	}
 
@@ -136,7 +145,7 @@ func getAssetProviderService(assetCfg *gatewayv1.Assets) (service.Service, error
 	case *gatewayv1.Assets_S3:
 		aws, ok := service.Registry[awsservice.Name]
 		if !ok {
-			return nil, fmt.Errorf("The AWS service must be configured to use the asset s3 provider.")
+			return nil, fmt.Errorf("the AWS service must be configured to use the asset s3 provider")
 		}
 		return aws, nil
 
@@ -199,7 +208,7 @@ func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Ma
 	runtime.DefaultHTTPErrorHandler(ctx, mux, m, w, req, err)
 }
 
-func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem, assetCfg *gatewayv1.Assets) (*Mux, error) {
+func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem, assetCfg *gatewayv1.Assets, logger *zap.Logger) (*Mux, error) {
 	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(unaryInterceptors...))
 	jsonGateway := runtime.NewServeMux(
 		runtime.WithForwardResponseOption(customResponseForwarder),
@@ -233,6 +242,7 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 		next:       jsonGateway,
 		fileSystem: assets,
 		fileServer: http.FileServer(assets),
+		logger:     logger,
 	})
 
 	mux := &Mux{
