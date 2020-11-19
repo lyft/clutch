@@ -87,7 +87,8 @@ func (m *Migrator) setupSqlClient() (*sql.DB, string) {
 
 // Asks the user to confrim an action, this can be skipped by using the force flag.
 // If the input is not 'y' we log fatal and exit.
-func (m *Migrator) confirmWithUser(msg string, hostInfo string) {
+func (m *Migrator) confirmWithUser(msg string) {
+	_, hostInfo := m.setupSqlClient()
 	// Verify that user wants to continue (unless -f for force is passed as a flag).
 	m.log.Info("using database", zap.String("hostInfo", hostInfo))
 	if !m.flags.Force {
@@ -105,11 +106,9 @@ func (m *Migrator) confirmWithUser(msg string, hostInfo string) {
 	}
 }
 
-func (m *Migrator) Up() {
-	sqlDB, hostInfo := m.setupSqlClient()
-
-	msg := "migration has the potential to cause irrevocable data loss, verify host information above"
-	m.confirmWithUser(msg, hostInfo)
+// Sets up the sql migrator while also perfomring some pre flight checks such as a db ping.
+func (m *Migrator) setupSqlMigrator() *migrate.Migrate {
+	sqlDB, _ := m.setupSqlClient()
 
 	// Ping database and bring up driver.
 	if err := sqlDB.Ping(); err != nil {
@@ -127,6 +126,7 @@ func (m *Migrator) Up() {
 		m.log.Fatal("could not get working dir", zap.Error(err))
 	}
 	migrationDir = filepath.Join(migrationDir, "migrations")
+	m.log.Info("Utilizing migration directory:", zap.String("migrationDir", migrationDir))
 
 	sqlMigrate, err := migrate.NewWithDatabaseInstance(
 		fmt.Sprintf("file://%s", migrationDir),
@@ -139,52 +139,32 @@ func (m *Migrator) Up() {
 		logger: m.log.Sugar(),
 	}
 
+	return sqlMigrate
+}
+
+func (m *Migrator) Up() {
+	msg := "migration has the potential to cause irrevocable data loss, verify host information above"
+	m.confirmWithUser(msg)
+
+	sqlMigrate := m.setupSqlMigrator()
+
 	// Apply migrations!
-	m.log.Info("applying migrations", zap.String("migrationDir", migrationDir))
-	err = sqlMigrate.Up()
+	m.log.Info("applying up migrations")
+	err := sqlMigrate.Up()
 	if err != nil && err != migrate.ErrNoChange {
 		m.log.Fatal("failed running migrations", zap.Error(err))
 	}
 }
 
 func (m *Migrator) Down() {
-	sqlDB, hostInfo := m.setupSqlClient()
-
 	msg := "Migrating DOWN by ONE version this migration has the potential to cause irrevocable data loss, verify host information above"
-	m.confirmWithUser(msg, hostInfo)
+	m.confirmWithUser(msg)
 
-	// Ping database and bring up driver.
-	if err := sqlDB.Ping(); err != nil {
-		m.log.Fatal("error pinging db", zap.Error(err))
-	}
-
-	driver, err := postgres.WithInstance(sqlDB, &postgres.Config{})
-	if err != nil {
-		m.log.Fatal("error creating pg driver", zap.Error(err))
-	}
-
-	// Create migrator.
-	migrationDir, err := os.Getwd()
-	if err != nil {
-		m.log.Fatal("could not get working dir", zap.Error(err))
-	}
-	migrationDir = filepath.Join(migrationDir, "migrations")
-
-	sqlMigrate, err := migrate.NewWithDatabaseInstance(
-		fmt.Sprintf("file://%s", migrationDir),
-		"postgres", driver)
-	if err != nil {
-		m.log.Fatal("error creating migrator", zap.Error(err))
-	}
-
-	sqlMigrate.Log = &migrateLogger{
-		logger: m.log.Sugar(),
-	}
+	sqlMigrate := m.setupSqlMigrator()
 
 	// Migrate back by 1
-	m.log.Info("applying migrations down", zap.String("migrationDir", migrationDir))
-	err = sqlMigrate.Steps(-1)
-	log.Printf("%v", err)
+	m.log.Info("applying migrations down")
+	err := sqlMigrate.Steps(-1)
 	if err != nil && err != migrate.ErrNoChange {
 		m.log.Fatal("failed running migrations", zap.Error(err))
 	}
