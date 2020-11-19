@@ -25,6 +25,7 @@ import (
 
 type MigrateFlags struct {
 	Force     bool
+	Down      bool
 	BaseFlags *gateway.Flags
 }
 
@@ -33,6 +34,7 @@ func (m *MigrateFlags) Link() {
 	m.BaseFlags.Link()
 
 	flag.BoolVar(&m.Force, "f", false, "do not ask user for confirmation")
+	flag.BoolVar(&m.Down, "d", false, "migrates down by one version")
 }
 
 type migrateLogger struct {
@@ -145,6 +147,49 @@ func (m *Migrator) Up() {
 	}
 }
 
+func (m *Migrator) Down() {
+	sqlDB, hostInfo := m.setupSqlClient()
+
+	msg := "Migrating DOWN by ONE version this migration has the potential to cause irrevocable data loss, verify host information above"
+	m.confirmWithUser(msg, hostInfo)
+
+	// Ping database and bring up driver.
+	if err := sqlDB.Ping(); err != nil {
+		m.log.Fatal("error pinging db", zap.Error(err))
+	}
+
+	driver, err := postgres.WithInstance(sqlDB, &postgres.Config{})
+	if err != nil {
+		m.log.Fatal("error creating pg driver", zap.Error(err))
+	}
+
+	// Create migrator.
+	migrationDir, err := os.Getwd()
+	if err != nil {
+		m.log.Fatal("could not get working dir", zap.Error(err))
+	}
+	migrationDir = filepath.Join(migrationDir, "migrations")
+
+	sqlMigrate, err := migrate.NewWithDatabaseInstance(
+		fmt.Sprintf("file://%s", migrationDir),
+		"postgres", driver)
+	if err != nil {
+		m.log.Fatal("error creating migrator", zap.Error(err))
+	}
+
+	sqlMigrate.Log = &migrateLogger{
+		logger: m.log.Sugar(),
+	}
+
+	// Migrate back by 1
+	m.log.Info("applying migrations down", zap.String("migrationDir", migrationDir))
+	err = sqlMigrate.Steps(-1)
+	log.Printf("%v", err)
+	if err != nil && err != migrate.ErrNoChange {
+		m.log.Fatal("failed running migrations", zap.Error(err))
+	}
+}
+
 func main() {
 	f := &MigrateFlags{}
 	f.Link()
@@ -161,5 +206,9 @@ func main() {
 		cfg:   cfg,
 	}
 
-	migrator.Up()
+	if f.Down {
+		migrator.Down()
+	} else {
+		migrator.Up()
+	}
 }
