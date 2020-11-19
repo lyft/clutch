@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap/zaptest"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 )
@@ -26,7 +27,7 @@ func TestCopyHTTPResponse(t *testing.T) {
 	}
 
 	rec := httptest.NewRecorder()
-	copyHTTPResponse(resp, rec)
+	copyHTTPResponse(resp, rec, zaptest.NewLogger(t))
 	result := rec.Result()
 	assert.Equal(t, status, result.StatusCode)
 	assert.Equal(t, headers, rec.Header())

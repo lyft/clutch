@@ -46,14 +46,14 @@ func copyHTTPResponse(resp *http.Response, w http.ResponseWriter, logger *zap.Lo
 			w.Header().Add(key, val)
 		}
 	}
+	w.WriteHeader(resp.StatusCode)
+	_, _ = io.Copy(w, resp.Body)
 	if resp.StatusCode >= 500 && resp.StatusCode <= 599 {
 		body, _ := ioutil.ReadAll(resp.Body)
 		if len(body) > 0 {
 			logger.Error("HTTP 5xx error:", zap.Int("status code", resp.StatusCode), zap.String("response body", string(body)))
 		}
 	}
-	w.WriteHeader(resp.StatusCode)
-	_, _ = io.Copy(w, resp.Body)
 }
 
 func (a *assetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
