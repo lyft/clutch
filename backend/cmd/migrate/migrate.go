@@ -83,13 +83,13 @@ func (m *Migrator) setupSqlClient() (*sql.DB, string) {
 	return sqlDB, hostInfo
 }
 
-func (m *Migrator) Up() {
-	sqlDB, hostInfo := m.setupSqlClient()
-
+// Asks the user to confrim an action, this can be skipped by using the force flag.
+// If the input is not 'y' we log fatal and exit.
+func (m *Migrator) confirmWithUser(msg string, hostInfo string) {
 	// Verify that user wants to continue (unless -f for force is passed as a flag).
 	m.log.Info("using database", zap.String("hostInfo", hostInfo))
 	if !m.flags.Force {
-		m.log.Warn("migration has the potential to cause irrevocable data loss, verify host information above")
+		m.log.Warn(msg)
 
 		fmt.Printf("\n*** Continue with migration? [y/N] ")
 		var answer string
@@ -101,6 +101,13 @@ func (m *Migrator) Up() {
 		}
 		fmt.Println()
 	}
+}
+
+func (m *Migrator) Up() {
+	sqlDB, hostInfo := m.setupSqlClient()
+
+	msg := "migration has the potential to cause irrevocable data loss, verify host information above"
+	m.confirmWithUser(msg, hostInfo)
 
 	// Ping database and bring up driver.
 	if err := sqlDB.Ping(); err != nil {
