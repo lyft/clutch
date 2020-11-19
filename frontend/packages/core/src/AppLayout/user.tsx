@@ -1,8 +1,9 @@
 import React from "react";
+import styled from "@emotion/styled";
 import {
   Avatar as MuiAvatar,
+  Box,
   ClickAwayListener,
-  Grid,
   Grow,
   IconButton,
   MenuList,
@@ -12,25 +13,21 @@ import {
 } from "@material-ui/core";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
-import styled from "styled-components";
 
 const UserPhoto = styled(IconButton)`
-  ${({ theme }) => `
-  padding: 1px 0 ${theme.spacing(0.5)}px 12px;
-  margin-right: ${theme.spacing(0.5)}px;
-  `}
+  padding: 1px 0 4px 12px;
+  margin-right: 4px;
 `;
 
 const Avatar = styled(MuiAvatar)`
-  ${({ theme }) => `
-  background-color: ${theme.palette.text.secondary}
-  `}
+  background-color: #d7dadb;
+  height: 32px;
+  width: 32px;
 `;
 
 const Initials = styled(Typography)`
-  ${({ theme }) => `
-  color: ${theme.palette.accent.main}
-  `}
+  color: #02acbe;
+  font-size: 1rem;
 `;
 
 interface JwtToken {
@@ -76,8 +73,7 @@ const UserInformation: React.FC = () => {
   }
 
   return (
-    <Grid container alignItems="center" justify="flex-end">
-      <div>{userId()}</div>
+    <Box>
       <UserPhoto
         ref={anchorRef}
         edge="end"
@@ -103,7 +99,7 @@ const UserInformation: React.FC = () => {
           </Grow>
         )}
       </Popper>
-    </Grid>
+    </Box>
   );
 };
 
