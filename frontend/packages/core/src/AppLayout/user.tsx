@@ -15,14 +15,14 @@ import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 
 const UserPhoto = styled(IconButton)`
-  padding: 1px 0 4px 12px;
-  margin-right: 4px;
+  padding: 0.06rem 0rem 0.25rem 0.75rem;
+  margin-right: 0.25rem;
 `;
 
 const Avatar = styled(MuiAvatar)`
   background-color: #d7dadb;
-  height: 32px;
-  width: 32px;
+  height: 2rem;
+  width: 2rem;
 `;
 
 const Initials = styled(Typography)`

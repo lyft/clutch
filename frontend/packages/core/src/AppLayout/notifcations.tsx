@@ -6,6 +6,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 const StyledNotificationsIcon = styled(Icon)`
   color: #ffffff;
   opacity: 0.87;
+  margin-right: 1rem;
 `;
 
 const Notifications: React.FC = () => {

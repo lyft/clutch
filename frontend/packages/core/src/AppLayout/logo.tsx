@@ -11,9 +11,9 @@ const rotate = keyframes`
 `;
 
 const StyledSvg = styled.svg`
-  height: 32px;
-  width: 32px;
-  margin-right: 16px;
+  height: 2rem;
+  width: 2rem;
+  margin-right: 1rem;
   &:hover {
     animation: ${rotate} 5s linear;
   }
