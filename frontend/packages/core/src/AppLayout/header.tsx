@@ -1,28 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  AppBar as MuiAppBar,
-  Box,
-  Divider as MuiDivider,
-  IconButton,
-  Toolbar,
-  Typography,
-} from "@material-ui/core";
+import styled from "@emotion/styled";
+import { AppBar as MuiAppBar, Box, Grid, IconButton, Toolbar, Typography } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import styled from "styled-components";
 
 import Drawer from "./drawer";
 import Logo from "./logo";
+import Notifications from "./notifcations";
 import SearchField from "./search";
 import { UserInformation } from "./user";
 
 const AppBar = styled(MuiAppBar)`
-  ${({ theme }) => `
   min-width: fit-content;
-  background-color: ${theme.palette.secondary.main};
-  color: ${theme.palette.primary.main};
+  background: linear-gradient(90deg, #38106b 4.58%, #131c5f 89.31%);
   min-width: fit-content;
-  `}
 `;
 
 const MenuButton = styled(IconButton)`
@@ -32,14 +23,11 @@ const MenuButton = styled(IconButton)`
 
 const Title = styled(Typography)`
   margin-right: 25px;
-  font-weight: bolder;
-`;
-
-const Divider = styled(MuiDivider)`
-  ${({ theme }) => `
-  background-color: ${theme.palette.primary.main};
-  margin: 16px 8px;
-  `}
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  color: #ffffff;
+  opacity: 0.87;
 `;
 
 const Header: React.FC = () => {
@@ -76,12 +64,14 @@ const Header: React.FC = () => {
           <Link to="/">
             <Logo />
           </Link>
-          <Divider orientation="vertical" flexItem />
-          <Title variant="h5">clutch</Title>
+          <Title>clutch</Title>
           <Box />
           <SearchField />
           <Box />
-          <UserInformation />
+          <Grid container alignItems="center" justify="flex-end">
+            <Notifications />
+            <UserInformation />
+          </Grid>
         </Toolbar>
       </AppBar>
       <Drawer open={drawerOpen} onClose={onDrawerClose} />
