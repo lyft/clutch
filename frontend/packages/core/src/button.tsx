@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import styled from "@emotion/styled";
 import type { ButtonProps as MuiButtonProps, GridJustification } from "@material-ui/core";
 import { Button as MuiButton, Grid, IconButton } from "@material-ui/core";
