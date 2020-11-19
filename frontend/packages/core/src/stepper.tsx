@@ -34,15 +34,15 @@ const DefaultIcon = styled.div((props: { font: string }) => ({
   lineHeight: "1.125rem",
 }));
 
-const CheckIcon = styled(MuiCheckIcon)({
-  fill: "#FFFFFF",
+const CheckIcon = styled(MuiCheckIcon)((props: { font: string}) => ({
+  fill: props.font,
   padding: "0.5rem",
-});
+}));
 
-const ClearIcon = styled(MuiClearIcon)({
-  fill: "#FFFFFF",
+const ClearIcon = styled(MuiClearIcon)((props: { font: string}) => ({
+  fill: props.font,
   padding: "0.5rem",
-});
+}));
 
 const StepConnector = styled(MuiStepConnector)((props: { completed?: boolean }) => ({
   ".MuiStepConnector-line": {
@@ -78,12 +78,12 @@ const stepIconVariants = {
   success: {
     background: "#3548D4",
     border: "#3548D4",
-    font: "#3548D4",
+    font: "#FFFFFF",
   },
   failed: {
     background: "#DB3615",
     border: "#DB3615",
-    font: "#DB3615",
+    font: "#FFFFFF",
   },
 };
 
@@ -91,9 +91,9 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant }) => {
   const color = stepIconVariants[variant || "pending"];
   let Icon = <>{index}</>;
   if (variant === "success") {
-    Icon = <CheckIcon fontSize="large" />;
+    Icon = <CheckIcon font={color.font} fontSize="large" />;
   } else if (variant === "failed") {
-    Icon = <ClearIcon fontSize="large" />;
+    Icon = <ClearIcon font={color.font} fontSize="large" />;
   }
   return (
     <Circle background={color.background} border={color.border}>
