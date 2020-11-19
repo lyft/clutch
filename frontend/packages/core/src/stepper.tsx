@@ -17,9 +17,9 @@ const Circle = styled.div((props: { background: string; border: string }) => ({
   border: props.border,
   boxSizing: "border-box",
   borderRadius: "50%",
-  height: "24px",
-  width: "24px",
-  top: "24px",
+  height: "1.5rem",
+  width: "1.5rem",
+  top: "1.5rem",
 }));
 
 const DefaultIcon = styled.div((props: { font: string }) => ({
@@ -30,24 +30,24 @@ const DefaultIcon = styled.div((props: { font: string }) => ({
   alignItems: "center",
   textAlign: "center",
   justifyContent: "center",
-  fontSize: "14px",
+  fontSize: "0.875rem",
   fontWeight: 500,
-  lineHeight: "18px",
+  lineHeight: "1.125rem",
 }));
 
 const CheckIcon = styled(MuiCheckIcon)({
   fill: "#FFFFFF",
-  padding: "8px",
+  padding: "0.5rem",
 });
 
 const ClearIcon = styled(MuiClearIcon)({
   fill: "#FFFFFF",
-  padding: "8px",
+  padding: "0.5rem",
 });
 
 const StepConnector = styled(MuiStepConnector)((props: { completed?: boolean }) => ({
   ".MuiStepConnector-line": {
-    height: "5px",
+    height: "0.313rem",
     background: props.completed ? "#3548D4" : "rgba(13, 16, 48, 0.12)",
     border: "0",
   },
@@ -68,7 +68,7 @@ export interface StepIconProps {
 const stepIconVariants = {
   active: {
     background: "#FFFFFF",
-    border: "1px solid #3548D4",
+    border: "0.063rem solid #3548D4",
     font: "#3548D4",
   },
   pending: {
@@ -105,8 +105,8 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant }) => {
 
 const StepLabel = styled(Grid)({
   fontWeight: 500,
-  fontSize: "14px",
-  lineHeight: "18px",
+  fontSize: "0.875rem",
+  lineHeight: "1.125rem",
 });
 
 export interface StepProps {
@@ -158,7 +158,7 @@ const Stepper: React.FC<StepperProps> = ({ children }) => {
           );
         })}
       </MuiStepper>
-      <Grid style={{ padding: "0 24px 24px 24px" }} container justify="space-between">
+      <Grid style={{ padding: "0 1.5rem 1.5rem 1.5rem" }} container justify="space-between">
         {React.Children.map(children, (step: any) => (
           <StepLabel item>{step.props.label}</StepLabel>
         ))}
