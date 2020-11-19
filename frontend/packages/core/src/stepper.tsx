@@ -28,7 +28,6 @@ const DefaultIcon = styled.div((props: { font: string }) => ({
   color: props.font,
   display: "flex",
   alignItems: "center",
-  textAlign: "center",
   justifyContent: "center",
   fontSize: "0.875rem",
   fontWeight: 500,
