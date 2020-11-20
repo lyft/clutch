@@ -43,7 +43,7 @@ module.exports = {
   },
   reportUnusedDisableDirectives: true,
   rules: {
-    "simple-import-sort/sort": [
+    "simple-import-sort/imports": [
       "error",
       {
         // Groups taken from example, plus internal packages since plugin doesn't do import resolution.
