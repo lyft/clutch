@@ -22,7 +22,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.0.1
 	github.com/iancoleman/strcase v0.1.2
-	github.com/jhump/protoreflect v1.7.1-0.20200723220026-11eaaf73e0ec
+	github.com/jhump/protoreflect v1.7.1
 	github.com/lib/pq v1.8.0
 	github.com/mitchellh/hashstructure v1.0.0
 	github.com/pquerna/cachecontrol v0.0.0-20180517163645-1555304b9b35 // indirect
