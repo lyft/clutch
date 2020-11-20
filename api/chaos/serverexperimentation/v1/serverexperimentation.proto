@@ -56,3 +56,104 @@ enum FaultInjectionCluster {
   // Faults are injected to ingesss traffic by an upstream service(s).
   FAULTINJECTIONCLUSTER_UPSTREAM = 2;
 }
+
+message Config {
+  oneof fault {
+    option (validate.required) = true;
+
+    // Request percentage based faults injected by a downstream cluster. 
+    // A decision as to whether inject a fault for a given request is made for 
+    // each request separately.
+    DownstreamClusterRequestFault downstream_cluster_request_fault = 1;
+
+    // Request percentage based faults injected by an upstream cluster. 
+    // A decision as to whether inject a fault for a given request is made for 
+    // each request separately.
+    UpstreamClusterRequestFault upstream_cluster_request_fault = 2;
+
+    // Host percentage based fault injection by an upstream cluster. A decision 
+    // as to whether inject a fault is made on per-host basis. If a given host is 
+    // selected all requests handled by the host have faults injected for them.
+    UpstreamClusterHostFault upstream_cluster_host_fault = 3;
+  }
+}
+
+message DownstreamClusterRequestFault {
+  // The pair of clusters specifying the origin and the destination of
+  // the traffic that faults should be applied to.
+  ClusterPair cluster_pair = 1 [(validate.rules).message.required = true];
+
+  oneof fault {
+    option (validate.required) = true;
+
+    AbortRequestFault abort = 2;
+    LatencyRequestFault latency = 3;
+  }
+}
+
+message UpstreamClusterRequestFault {
+  // The pair of clusters specifying the origin and the destination of
+  // the traffic that faults should be applied to.
+  ClusterPair cluster_pair = 1 [(validate.rules).message.required = true];
+
+  oneof fault {
+    option (validate.required) = true;
+
+    AbortRequestFault abort = 2;
+    LatencyRequestFault latency = 3;
+  }
+}
+
+message UpstreamClusterHostFault {
+  // The pair of clusters specifying the origin and the destination of
+  // the traffic that faults should be applied to.
+  ClusterPair cluster_pair = 1 [(validate.rules).message.required = true];
+
+  oneof fault {
+    option (validate.required) = true;
+
+    AbortHostFault abort = 2;
+    LatencyHostFault latency = 3;
+  }
+}
+
+// The cluster pair used for targetting of fault experiments.
+message ClusterPair {
+  // The name of the downstream cluster.
+  string downstream_cluster = 1 [ (validate.rules).string = {min_bytes : 1} ];
+
+  // The name of the upstream cluster.
+  string upstream_cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message AbortRequestFault {
+  // The percentage of requests to slow down.
+  float percentage = 1 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
+
+  // The abort HTTP status to return.
+  int32 http_status = 2 [ (validate.rules).int32 = {gt : 99, lt : 600} ];
+}
+
+message LatencyRequestFault {
+    // The percentage of requests to slow down.
+    float percentage = 1 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
+
+    // The latency duration in milliseconds to apply.
+    int32 duration_ms = 2 [ (validate.rules).int32.gt = 0 ];
+}
+
+message AbortHostFault {
+    // The percentage of hosts to have aborts fault injected into all of their requests.
+    float percentage = 1 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
+
+    // The abort HTTP status to return.
+    int32 http_status = 2 [ (validate.rules).int32 = {gt : 99, lt : 600} ];
+}
+
+message LatencyHostFault {
+    // The percentage of hosts to have latency fault injected into all of their requests.
+    float percentage = 1 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
+
+    // The latency duration in milliseconds to apply.
+    int32 duration_ms = 2 [ (validate.rules).int32.gt = 0 ];
+}

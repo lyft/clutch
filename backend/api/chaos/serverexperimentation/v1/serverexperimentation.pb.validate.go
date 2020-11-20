@@ -398,3 +398,868 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = LatencyFaultConfigValidationError{}
+
+// Validate checks the field values on Config with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Config) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	switch m.Fault.(type) {
+
+	case *Config_DownstreamClusterRequestFault:
+
+		if v, ok := interface{}(m.GetDownstreamClusterRequestFault()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ConfigValidationError{
+					field:  "DownstreamClusterRequestFault",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *Config_UpstreamClusterRequestFault:
+
+		if v, ok := interface{}(m.GetUpstreamClusterRequestFault()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ConfigValidationError{
+					field:  "UpstreamClusterRequestFault",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *Config_UpstreamClusterHostFault:
+
+		if v, ok := interface{}(m.GetUpstreamClusterHostFault()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ConfigValidationError{
+					field:  "UpstreamClusterHostFault",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return ConfigValidationError{
+			field:  "Fault",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// ConfigValidationError is the validation error returned by Config.Validate if
+// the designated constraints aren't met.
+type ConfigValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ConfigValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ConfigValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ConfigValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ConfigValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ConfigValidationError) ErrorName() string { return "ConfigValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ConfigValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sConfig.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ConfigValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ConfigValidationError{}
+
+// Validate checks the field values on DownstreamClusterRequestFault with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DownstreamClusterRequestFault) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetClusterPair() == nil {
+		return DownstreamClusterRequestFaultValidationError{
+			field:  "ClusterPair",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetClusterPair()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DownstreamClusterRequestFaultValidationError{
+				field:  "ClusterPair",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	switch m.Fault.(type) {
+
+	case *DownstreamClusterRequestFault_Abort:
+
+		if v, ok := interface{}(m.GetAbort()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return DownstreamClusterRequestFaultValidationError{
+					field:  "Abort",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *DownstreamClusterRequestFault_Latency:
+
+		if v, ok := interface{}(m.GetLatency()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return DownstreamClusterRequestFaultValidationError{
+					field:  "Latency",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return DownstreamClusterRequestFaultValidationError{
+			field:  "Fault",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// DownstreamClusterRequestFaultValidationError is the validation error
+// returned by DownstreamClusterRequestFault.Validate if the designated
+// constraints aren't met.
+type DownstreamClusterRequestFaultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DownstreamClusterRequestFaultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DownstreamClusterRequestFaultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DownstreamClusterRequestFaultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DownstreamClusterRequestFaultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DownstreamClusterRequestFaultValidationError) ErrorName() string {
+	return "DownstreamClusterRequestFaultValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DownstreamClusterRequestFaultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDownstreamClusterRequestFault.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DownstreamClusterRequestFaultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DownstreamClusterRequestFaultValidationError{}
+
+// Validate checks the field values on UpstreamClusterRequestFault with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpstreamClusterRequestFault) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetClusterPair() == nil {
+		return UpstreamClusterRequestFaultValidationError{
+			field:  "ClusterPair",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetClusterPair()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpstreamClusterRequestFaultValidationError{
+				field:  "ClusterPair",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	switch m.Fault.(type) {
+
+	case *UpstreamClusterRequestFault_Abort:
+
+		if v, ok := interface{}(m.GetAbort()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return UpstreamClusterRequestFaultValidationError{
+					field:  "Abort",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *UpstreamClusterRequestFault_Latency:
+
+		if v, ok := interface{}(m.GetLatency()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return UpstreamClusterRequestFaultValidationError{
+					field:  "Latency",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return UpstreamClusterRequestFaultValidationError{
+			field:  "Fault",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// UpstreamClusterRequestFaultValidationError is the validation error returned
+// by UpstreamClusterRequestFault.Validate if the designated constraints
+// aren't met.
+type UpstreamClusterRequestFaultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpstreamClusterRequestFaultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpstreamClusterRequestFaultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpstreamClusterRequestFaultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpstreamClusterRequestFaultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpstreamClusterRequestFaultValidationError) ErrorName() string {
+	return "UpstreamClusterRequestFaultValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpstreamClusterRequestFaultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpstreamClusterRequestFault.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpstreamClusterRequestFaultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpstreamClusterRequestFaultValidationError{}
+
+// Validate checks the field values on UpstreamClusterHostFault with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpstreamClusterHostFault) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetClusterPair() == nil {
+		return UpstreamClusterHostFaultValidationError{
+			field:  "ClusterPair",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetClusterPair()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpstreamClusterHostFaultValidationError{
+				field:  "ClusterPair",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	switch m.Fault.(type) {
+
+	case *UpstreamClusterHostFault_Abort:
+
+		if v, ok := interface{}(m.GetAbort()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return UpstreamClusterHostFaultValidationError{
+					field:  "Abort",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *UpstreamClusterHostFault_Latency:
+
+		if v, ok := interface{}(m.GetLatency()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return UpstreamClusterHostFaultValidationError{
+					field:  "Latency",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return UpstreamClusterHostFaultValidationError{
+			field:  "Fault",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// UpstreamClusterHostFaultValidationError is the validation error returned by
+// UpstreamClusterHostFault.Validate if the designated constraints aren't met.
+type UpstreamClusterHostFaultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpstreamClusterHostFaultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpstreamClusterHostFaultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpstreamClusterHostFaultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpstreamClusterHostFaultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpstreamClusterHostFaultValidationError) ErrorName() string {
+	return "UpstreamClusterHostFaultValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpstreamClusterHostFaultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpstreamClusterHostFault.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpstreamClusterHostFaultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpstreamClusterHostFaultValidationError{}
+
+// Validate checks the field values on ClusterPair with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *ClusterPair) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetDownstreamCluster()) < 1 {
+		return ClusterPairValidationError{
+			field:  "DownstreamCluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetUpstreamCluster()) < 1 {
+		return ClusterPairValidationError{
+			field:  "UpstreamCluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	return nil
+}
+
+// ClusterPairValidationError is the validation error returned by
+// ClusterPair.Validate if the designated constraints aren't met.
+type ClusterPairValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ClusterPairValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ClusterPairValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ClusterPairValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ClusterPairValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ClusterPairValidationError) ErrorName() string { return "ClusterPairValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ClusterPairValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sClusterPair.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ClusterPairValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ClusterPairValidationError{}
+
+// Validate checks the field values on AbortRequestFault with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *AbortRequestFault) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if val := m.GetPercentage(); val <= 0 || val > 100 {
+		return AbortRequestFaultValidationError{
+			field:  "Percentage",
+			reason: "value must be inside range (0, 100]",
+		}
+	}
+
+	if val := m.GetHttpStatus(); val <= 99 || val >= 600 {
+		return AbortRequestFaultValidationError{
+			field:  "HttpStatus",
+			reason: "value must be inside range (99, 600)",
+		}
+	}
+
+	return nil
+}
+
+// AbortRequestFaultValidationError is the validation error returned by
+// AbortRequestFault.Validate if the designated constraints aren't met.
+type AbortRequestFaultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AbortRequestFaultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AbortRequestFaultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AbortRequestFaultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AbortRequestFaultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AbortRequestFaultValidationError) ErrorName() string {
+	return "AbortRequestFaultValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e AbortRequestFaultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAbortRequestFault.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AbortRequestFaultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AbortRequestFaultValidationError{}
+
+// Validate checks the field values on LatencyRequestFault with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *LatencyRequestFault) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if val := m.GetPercentage(); val <= 0 || val > 100 {
+		return LatencyRequestFaultValidationError{
+			field:  "Percentage",
+			reason: "value must be inside range (0, 100]",
+		}
+	}
+
+	if m.GetDurationMs() <= 0 {
+		return LatencyRequestFaultValidationError{
+			field:  "DurationMs",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	return nil
+}
+
+// LatencyRequestFaultValidationError is the validation error returned by
+// LatencyRequestFault.Validate if the designated constraints aren't met.
+type LatencyRequestFaultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e LatencyRequestFaultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e LatencyRequestFaultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e LatencyRequestFaultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e LatencyRequestFaultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e LatencyRequestFaultValidationError) ErrorName() string {
+	return "LatencyRequestFaultValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e LatencyRequestFaultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sLatencyRequestFault.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = LatencyRequestFaultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = LatencyRequestFaultValidationError{}
+
+// Validate checks the field values on AbortHostFault with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *AbortHostFault) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if val := m.GetPercentage(); val <= 0 || val > 100 {
+		return AbortHostFaultValidationError{
+			field:  "Percentage",
+			reason: "value must be inside range (0, 100]",
+		}
+	}
+
+	if val := m.GetHttpStatus(); val <= 99 || val >= 600 {
+		return AbortHostFaultValidationError{
+			field:  "HttpStatus",
+			reason: "value must be inside range (99, 600)",
+		}
+	}
+
+	return nil
+}
+
+// AbortHostFaultValidationError is the validation error returned by
+// AbortHostFault.Validate if the designated constraints aren't met.
+type AbortHostFaultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AbortHostFaultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AbortHostFaultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AbortHostFaultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AbortHostFaultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AbortHostFaultValidationError) ErrorName() string { return "AbortHostFaultValidationError" }
+
+// Error satisfies the builtin error interface
+func (e AbortHostFaultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAbortHostFault.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AbortHostFaultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AbortHostFaultValidationError{}
+
+// Validate checks the field values on LatencyHostFault with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *LatencyHostFault) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if val := m.GetPercentage(); val <= 0 || val > 100 {
+		return LatencyHostFaultValidationError{
+			field:  "Percentage",
+			reason: "value must be inside range (0, 100]",
+		}
+	}
+
+	if m.GetDurationMs() <= 0 {
+		return LatencyHostFaultValidationError{
+			field:  "DurationMs",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	return nil
+}
+
+// LatencyHostFaultValidationError is the validation error returned by
+// LatencyHostFault.Validate if the designated constraints aren't met.
+type LatencyHostFaultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e LatencyHostFaultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e LatencyHostFaultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e LatencyHostFaultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e LatencyHostFaultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e LatencyHostFaultValidationError) ErrorName() string { return "LatencyHostFaultValidationError" }
+
+// Error satisfies the builtin error interface
+func (e LatencyHostFaultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sLatencyHostFault.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = LatencyHostFaultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = LatencyHostFaultValidationError{}
