@@ -10,8 +10,6 @@ import {
 import MuiCheckIcon from "@material-ui/icons/Check";
 import MuiClearIcon from "@material-ui/icons/Clear";
 
-import { Button } from "./button";
-
 const Circle = styled.div((props: { background: string; border: string }) => ({
   backgroundColor: props.background,
   border: props.border,
@@ -34,15 +32,12 @@ const DefaultIcon = styled.div((props: { font: string }) => ({
   lineHeight: "1.125rem",
 }));
 
-const CheckIcon = styled(MuiCheckIcon)((props: { font: string}) => ({
+const CheckIcon = styled(MuiCheckIcon)((props: { font: string }) => ({
   fill: props.font,
   padding: "0.5rem",
 }));
 
-const ClearIcon = styled(MuiClearIcon)((props: { font: string}) => ({
-  fill: props.font,
-  padding: "0.5rem",
-}));
+const ClearIcon = CheckIcon.withComponent(MuiClearIcon);
 
 const StepConnector = styled(MuiStepConnector)((props: { completed?: boolean }) => ({
   ".MuiStepConnector-line": {
@@ -116,26 +111,11 @@ export interface StepProps {
 const Step: React.FC<StepProps> = ({ children }) => <>{children}</>;
 
 export interface StepperProps {
+  activeStep: number;
   children?: React.ReactElement<StepProps>[] | React.ReactElement<StepProps>;
 }
 
-const Stepper: React.FC<StepperProps> = ({ children }) => {
-  const [activeStep, setActiveStep] = React.useState(0);
-  const steps = React.Children.toArray(children) as React.ReactElement<StepProps>[];
-  const stepCount = steps.length - 1;
-
-  const handleNext = () => {
-    setActiveStep(prevActiveStep => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep(prevActiveStep => prevActiveStep - 1);
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
-
+const Stepper: React.FC<StepperProps> = ({ activeStep, children }) => {
   return (
     <div>
       <MuiStepper activeStep={activeStep + 1} connector={<StepConnector />}>
@@ -162,23 +142,6 @@ const Stepper: React.FC<StepperProps> = ({ children }) => {
           <StepLabel item>{step.props.label}</StepLabel>
         ))}
       </Grid>
-
-      <div>
-        {steps[activeStep]}
-        {activeStep === stepCount || steps[(activeStep || 1) - 1].props.error ? (
-          <Button onClick={handleReset} text="Reset" variant="neutral" />
-        ) : (
-          <div>
-            <Button
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              text="Back"
-              variant="neutral"
-            />
-            <Button onClick={handleNext} text={activeStep === stepCount ? "Finish" : "Next"} />
-          </div>
-        )}
-      </div>
     </div>
   );
 };
