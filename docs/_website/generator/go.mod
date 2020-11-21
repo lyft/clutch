@@ -13,7 +13,7 @@ require (
 	github.com/mitchellh/copystructure v1.0.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.1 // indirect
 	github.com/stretchr/testify v1.6.1 // indirect
-	github.com/yoheimuta/go-protoparser/v4 v4.2.0
+	github.com/yoheimuta/go-protoparser/v4 v4.2.1
 	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de // indirect
 	gopkg.in/yaml.v2 v2.3.0
 )
