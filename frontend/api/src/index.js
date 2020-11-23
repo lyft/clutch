@@ -8912,25 +8912,25 @@ export const clutch = $root.clutch = (() => {
                     return values;
                 })();
 
-                v1.Config = (function() {
+                v1.HTTPFaultConfig = (function() {
 
                     /**
-                     * Properties of a Config.
+                     * Properties of a HTTPFaultConfig.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @interface IConfig
-                     * @property {clutch.chaos.serverexperimentation.v1.IAbort|null} [abort] Config abort
-                     * @property {clutch.chaos.serverexperimentation.v1.ILatency|null} [latency] Config latency
+                     * @interface IHTTPFaultConfig
+                     * @property {clutch.chaos.serverexperimentation.v1.IAbort|null} [abort] HTTPFaultConfig abort
+                     * @property {clutch.chaos.serverexperimentation.v1.ILatency|null} [latency] HTTPFaultConfig latency
                      */
 
                     /**
-                     * Constructs a new Config.
+                     * Constructs a new HTTPFaultConfig.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @classdesc Represents a Config.
-                     * @implements IConfig
+                     * @classdesc Represents a HTTPFaultConfig.
+                     * @implements IHTTPFaultConfig
                      * @constructor
-                     * @param {clutch.chaos.serverexperimentation.v1.IConfig=} [properties] Properties to set
+                     * @param {clutch.chaos.serverexperimentation.v1.IHTTPFaultConfig=} [properties] Properties to set
                      */
-                    function Config(properties) {
+                    function HTTPFaultConfig(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -8938,44 +8938,44 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * Config abort.
+                     * HTTPFaultConfig abort.
                      * @member {clutch.chaos.serverexperimentation.v1.IAbort|null|undefined} abort
-                     * @memberof clutch.chaos.serverexperimentation.v1.Config
+                     * @memberof clutch.chaos.serverexperimentation.v1.HTTPFaultConfig
                      * @instance
                      */
-                    Config.prototype.abort = null;
+                    HTTPFaultConfig.prototype.abort = null;
 
                     /**
-                     * Config latency.
+                     * HTTPFaultConfig latency.
                      * @member {clutch.chaos.serverexperimentation.v1.ILatency|null|undefined} latency
-                     * @memberof clutch.chaos.serverexperimentation.v1.Config
+                     * @memberof clutch.chaos.serverexperimentation.v1.HTTPFaultConfig
                      * @instance
                      */
-                    Config.prototype.latency = null;
+                    HTTPFaultConfig.prototype.latency = null;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
 
                     /**
-                     * Config fault.
+                     * HTTPFaultConfig fault.
                      * @member {"abort"|"latency"|undefined} fault
-                     * @memberof clutch.chaos.serverexperimentation.v1.Config
+                     * @memberof clutch.chaos.serverexperimentation.v1.HTTPFaultConfig
                      * @instance
                      */
-                    Object.defineProperty(Config.prototype, "fault", {
+                    Object.defineProperty(HTTPFaultConfig.prototype, "fault", {
                         get: $util.oneOfGetter($oneOfFields = ["abort", "latency"]),
                         set: $util.oneOfSetter($oneOfFields)
                     });
 
                     /**
-                     * Verifies a Config message.
+                     * Verifies a HTTPFaultConfig message.
                      * @function verify
-                     * @memberof clutch.chaos.serverexperimentation.v1.Config
+                     * @memberof clutch.chaos.serverexperimentation.v1.HTTPFaultConfig
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    Config.verify = function verify(message) {
+                    HTTPFaultConfig.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         let properties = {};
@@ -9001,40 +9001,40 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                     * Creates a HTTPFaultConfig message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.Config
+                     * @memberof clutch.chaos.serverexperimentation.v1.HTTPFaultConfig
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.serverexperimentation.v1.Config} Config
+                     * @returns {clutch.chaos.serverexperimentation.v1.HTTPFaultConfig} HTTPFaultConfig
                      */
-                    Config.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.Config)
+                    HTTPFaultConfig.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.HTTPFaultConfig)
                             return object;
-                        let message = new $root.clutch.chaos.serverexperimentation.v1.Config();
+                        let message = new $root.clutch.chaos.serverexperimentation.v1.HTTPFaultConfig();
                         if (object.abort != null) {
                             if (typeof object.abort !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.Config.abort: object expected");
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.HTTPFaultConfig.abort: object expected");
                             message.abort = $root.clutch.chaos.serverexperimentation.v1.Abort.fromObject(object.abort);
                         }
                         if (object.latency != null) {
                             if (typeof object.latency !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.Config.latency: object expected");
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.HTTPFaultConfig.latency: object expected");
                             message.latency = $root.clutch.chaos.serverexperimentation.v1.Latency.fromObject(object.latency);
                         }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from a Config message. Also converts values to other types if specified.
+                     * Creates a plain object from a HTTPFaultConfig message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.Config
+                     * @memberof clutch.chaos.serverexperimentation.v1.HTTPFaultConfig
                      * @static
-                     * @param {clutch.chaos.serverexperimentation.v1.Config} message Config
+                     * @param {clutch.chaos.serverexperimentation.v1.HTTPFaultConfig} message HTTPFaultConfig
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    Config.toObject = function toObject(message, options) {
+                    HTTPFaultConfig.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
@@ -9052,17 +9052,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this Config to JSON.
+                     * Converts this HTTPFaultConfig to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.serverexperimentation.v1.Config
+                     * @memberof clutch.chaos.serverexperimentation.v1.HTTPFaultConfig
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    Config.prototype.toJSON = function toJSON() {
+                    HTTPFaultConfig.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return Config;
+                    return HTTPFaultConfig;
                 })();
 
                 v1.Abort = (function() {
@@ -9409,8 +9409,8 @@ export const clutch = $root.clutch = (() => {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.percentage != null && message.hasOwnProperty("percentage"))
-                            if (typeof message.percentage !== "number")
-                                return "percentage: number expected";
+                            if (!$util.isInteger(message.percentage))
+                                return "percentage: integer expected";
                         return null;
                     };
 
@@ -9427,7 +9427,7 @@ export const clutch = $root.clutch = (() => {
                             return object;
                         let message = new $root.clutch.chaos.serverexperimentation.v1.FaultPercentage();
                         if (object.percentage != null)
-                            message.percentage = Number(object.percentage);
+                            message.percentage = object.percentage >>> 0;
                         return message;
                     };
 
@@ -9447,7 +9447,7 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults)
                             object.percentage = 0;
                         if (message.percentage != null && message.hasOwnProperty("percentage"))
-                            object.percentage = options.json && !isFinite(message.percentage) ? String(message.percentage) : message.percentage;
+                            object.percentage = message.percentage;
                         return object;
                     };
 
@@ -9527,7 +9527,7 @@ export const clutch = $root.clutch = (() => {
                             return object;
                         let message = new $root.clutch.chaos.serverexperimentation.v1.AbortStatus();
                         if (object.httpStatusCode != null)
-                            message.httpStatusCode = object.httpStatusCode | 0;
+                            message.httpStatusCode = object.httpStatusCode >>> 0;
                         return message;
                     };
 
@@ -9571,7 +9571,7 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a LatencyDuration.
                      * @memberof clutch.chaos.serverexperimentation.v1
                      * @interface ILatencyDuration
-                     * @property {number|null} [durationMs] LatencyDuration durationMs
+                     * @property {number|null} [fixedDurationMs] LatencyDuration fixedDurationMs
                      */
 
                     /**
@@ -9590,12 +9590,12 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * LatencyDuration durationMs.
-                     * @member {number} durationMs
+                     * LatencyDuration fixedDurationMs.
+                     * @member {number} fixedDurationMs
                      * @memberof clutch.chaos.serverexperimentation.v1.LatencyDuration
                      * @instance
                      */
-                    LatencyDuration.prototype.durationMs = 0;
+                    LatencyDuration.prototype.fixedDurationMs = 0;
 
                     /**
                      * Verifies a LatencyDuration message.
@@ -9608,9 +9608,9 @@ export const clutch = $root.clutch = (() => {
                     LatencyDuration.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.durationMs != null && message.hasOwnProperty("durationMs"))
-                            if (!$util.isInteger(message.durationMs))
-                                return "durationMs: integer expected";
+                        if (message.fixedDurationMs != null && message.hasOwnProperty("fixedDurationMs"))
+                            if (!$util.isInteger(message.fixedDurationMs))
+                                return "fixedDurationMs: integer expected";
                         return null;
                     };
 
@@ -9626,8 +9626,8 @@ export const clutch = $root.clutch = (() => {
                         if (object instanceof $root.clutch.chaos.serverexperimentation.v1.LatencyDuration)
                             return object;
                         let message = new $root.clutch.chaos.serverexperimentation.v1.LatencyDuration();
-                        if (object.durationMs != null)
-                            message.durationMs = object.durationMs | 0;
+                        if (object.fixedDurationMs != null)
+                            message.fixedDurationMs = object.fixedDurationMs >>> 0;
                         return message;
                     };
 
@@ -9645,9 +9645,9 @@ export const clutch = $root.clutch = (() => {
                             options = {};
                         let object = {};
                         if (options.defaults)
-                            object.durationMs = 0;
-                        if (message.durationMs != null && message.hasOwnProperty("durationMs"))
-                            object.durationMs = message.durationMs;
+                            object.fixedDurationMs = 0;
+                        if (message.fixedDurationMs != null && message.hasOwnProperty("fixedDurationMs"))
+                            object.fixedDurationMs = message.fixedDurationMs;
                         return object;
                     };
 
@@ -9872,23 +9872,23 @@ export const clutch = $root.clutch = (() => {
                     let $oneOfFields;
 
                     /**
-                     * UpstreamEnforcing upstream.
-                     * @member {"upstreamCluster"|"upstreamPartialSingleCluster"|undefined} upstream
+                     * UpstreamEnforcing upstreamType.
+                     * @member {"upstreamCluster"|"upstreamPartialSingleCluster"|undefined} upstreamType
                      * @memberof clutch.chaos.serverexperimentation.v1.UpstreamEnforcing
                      * @instance
                      */
-                    Object.defineProperty(UpstreamEnforcing.prototype, "upstream", {
+                    Object.defineProperty(UpstreamEnforcing.prototype, "upstreamType", {
                         get: $util.oneOfGetter($oneOfFields = ["upstreamCluster", "upstreamPartialSingleCluster"]),
                         set: $util.oneOfSetter($oneOfFields)
                     });
 
                     /**
-                     * UpstreamEnforcing downstream.
-                     * @member {"downstreamCluster"|undefined} downstream
+                     * UpstreamEnforcing downstreamType.
+                     * @member {"downstreamCluster"|undefined} downstreamType
                      * @memberof clutch.chaos.serverexperimentation.v1.UpstreamEnforcing
                      * @instance
                      */
-                    Object.defineProperty(UpstreamEnforcing.prototype, "downstream", {
+                    Object.defineProperty(UpstreamEnforcing.prototype, "downstreamType", {
                         get: $util.oneOfGetter($oneOfFields = ["downstreamCluster"]),
                         set: $util.oneOfSetter($oneOfFields)
                     });
@@ -9906,7 +9906,7 @@ export const clutch = $root.clutch = (() => {
                             return "object expected";
                         let properties = {};
                         if (message.upstreamCluster != null && message.hasOwnProperty("upstreamCluster")) {
-                            properties.upstream = 1;
+                            properties.upstreamType = 1;
                             {
                                 let error = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.verify(message.upstreamCluster);
                                 if (error)
@@ -9914,9 +9914,9 @@ export const clutch = $root.clutch = (() => {
                             }
                         }
                         if (message.upstreamPartialSingleCluster != null && message.hasOwnProperty("upstreamPartialSingleCluster")) {
-                            if (properties.upstream === 1)
-                                return "upstream: multiple values";
-                            properties.upstream = 1;
+                            if (properties.upstreamType === 1)
+                                return "upstreamType: multiple values";
+                            properties.upstreamType = 1;
                             {
                                 let error = $root.clutch.chaos.serverexperimentation.v1.PartialSingleCluster.verify(message.upstreamPartialSingleCluster);
                                 if (error)
@@ -9924,7 +9924,7 @@ export const clutch = $root.clutch = (() => {
                             }
                         }
                         if (message.downstreamCluster != null && message.hasOwnProperty("downstreamCluster")) {
-                            properties.downstream = 1;
+                            properties.downstreamType = 1;
                             {
                                 let error = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.verify(message.downstreamCluster);
                                 if (error)
@@ -9980,17 +9980,17 @@ export const clutch = $root.clutch = (() => {
                         if (message.upstreamCluster != null && message.hasOwnProperty("upstreamCluster")) {
                             object.upstreamCluster = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.toObject(message.upstreamCluster, options);
                             if (options.oneofs)
-                                object.upstream = "upstreamCluster";
+                                object.upstreamType = "upstreamCluster";
                         }
                         if (message.upstreamPartialSingleCluster != null && message.hasOwnProperty("upstreamPartialSingleCluster")) {
                             object.upstreamPartialSingleCluster = $root.clutch.chaos.serverexperimentation.v1.PartialSingleCluster.toObject(message.upstreamPartialSingleCluster, options);
                             if (options.oneofs)
-                                object.upstream = "upstreamPartialSingleCluster";
+                                object.upstreamType = "upstreamPartialSingleCluster";
                         }
                         if (message.downstreamCluster != null && message.hasOwnProperty("downstreamCluster")) {
                             object.downstreamCluster = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.toObject(message.downstreamCluster, options);
                             if (options.oneofs)
-                                object.downstream = "downstreamCluster";
+                                object.downstreamType = "downstreamCluster";
                         }
                         return object;
                     };
@@ -10054,23 +10054,23 @@ export const clutch = $root.clutch = (() => {
                     let $oneOfFields;
 
                     /**
-                     * DownstreamEnforcing upstream.
-                     * @member {"upstreamCluster"|undefined} upstream
+                     * DownstreamEnforcing upstreamType.
+                     * @member {"upstreamCluster"|undefined} upstreamType
                      * @memberof clutch.chaos.serverexperimentation.v1.DownstreamEnforcing
                      * @instance
                      */
-                    Object.defineProperty(DownstreamEnforcing.prototype, "upstream", {
+                    Object.defineProperty(DownstreamEnforcing.prototype, "upstreamType", {
                         get: $util.oneOfGetter($oneOfFields = ["upstreamCluster"]),
                         set: $util.oneOfSetter($oneOfFields)
                     });
 
                     /**
-                     * DownstreamEnforcing downstream.
-                     * @member {"downstreamCluster"|undefined} downstream
+                     * DownstreamEnforcing downstreamType.
+                     * @member {"downstreamCluster"|undefined} downstreamType
                      * @memberof clutch.chaos.serverexperimentation.v1.DownstreamEnforcing
                      * @instance
                      */
-                    Object.defineProperty(DownstreamEnforcing.prototype, "downstream", {
+                    Object.defineProperty(DownstreamEnforcing.prototype, "downstreamType", {
                         get: $util.oneOfGetter($oneOfFields = ["downstreamCluster"]),
                         set: $util.oneOfSetter($oneOfFields)
                     });
@@ -10088,7 +10088,7 @@ export const clutch = $root.clutch = (() => {
                             return "object expected";
                         let properties = {};
                         if (message.upstreamCluster != null && message.hasOwnProperty("upstreamCluster")) {
-                            properties.upstream = 1;
+                            properties.upstreamType = 1;
                             {
                                 let error = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.verify(message.upstreamCluster);
                                 if (error)
@@ -10096,7 +10096,7 @@ export const clutch = $root.clutch = (() => {
                             }
                         }
                         if (message.downstreamCluster != null && message.hasOwnProperty("downstreamCluster")) {
-                            properties.downstream = 1;
+                            properties.downstreamType = 1;
                             {
                                 let error = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.verify(message.downstreamCluster);
                                 if (error)
@@ -10147,12 +10147,12 @@ export const clutch = $root.clutch = (() => {
                         if (message.upstreamCluster != null && message.hasOwnProperty("upstreamCluster")) {
                             object.upstreamCluster = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.toObject(message.upstreamCluster, options);
                             if (options.oneofs)
-                                object.upstream = "upstreamCluster";
+                                object.upstreamType = "upstreamCluster";
                         }
                         if (message.downstreamCluster != null && message.hasOwnProperty("downstreamCluster")) {
                             object.downstreamCluster = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.toObject(message.downstreamCluster, options);
                             if (options.oneofs)
-                                object.downstream = "downstreamCluster";
+                                object.downstreamType = "downstreamCluster";
                         }
                         return object;
                     };

@@ -3824,58 +3824,58 @@ export namespace clutch {
                     FAULTINJECTIONCLUSTER_UPSTREAM = 2
                 }
 
-                /** Properties of a Config. */
-                interface IConfig {
+                /** Properties of a HTTPFaultConfig. */
+                interface IHTTPFaultConfig {
 
-                    /** Config abort */
+                    /** HTTPFaultConfig abort */
                     abort?: (clutch.chaos.serverexperimentation.v1.IAbort|null);
 
-                    /** Config latency */
+                    /** HTTPFaultConfig latency */
                     latency?: (clutch.chaos.serverexperimentation.v1.ILatency|null);
                 }
 
-                /** Represents a Config. */
-                class Config implements IConfig {
+                /** Represents a HTTPFaultConfig. */
+                class HTTPFaultConfig implements IHTTPFaultConfig {
 
                     /**
-                     * Constructs a new Config.
+                     * Constructs a new HTTPFaultConfig.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IConfig);
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IHTTPFaultConfig);
 
-                    /** Config abort. */
+                    /** HTTPFaultConfig abort. */
                     public abort?: (clutch.chaos.serverexperimentation.v1.IAbort|null);
 
-                    /** Config latency. */
+                    /** HTTPFaultConfig latency. */
                     public latency?: (clutch.chaos.serverexperimentation.v1.ILatency|null);
 
-                    /** Config fault. */
+                    /** HTTPFaultConfig fault. */
                     public fault?: ("abort"|"latency");
 
                     /**
-                     * Verifies a Config message.
+                     * Verifies a HTTPFaultConfig message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                     * Creates a HTTPFaultConfig message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns Config
+                     * @returns HTTPFaultConfig
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.Config;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.HTTPFaultConfig;
 
                     /**
-                     * Creates a plain object from a Config message. Also converts values to other types if specified.
-                     * @param message Config
+                     * Creates a plain object from a HTTPFaultConfig message. Also converts values to other types if specified.
+                     * @param message HTTPFaultConfig
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.HTTPFaultConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this Config to JSON.
+                     * Converts this HTTPFaultConfig to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -4100,8 +4100,8 @@ export namespace clutch {
                 /** Properties of a LatencyDuration. */
                 interface ILatencyDuration {
 
-                    /** LatencyDuration durationMs */
-                    durationMs?: (number|null);
+                    /** LatencyDuration fixedDurationMs */
+                    fixedDurationMs?: (number|null);
                 }
 
                 /** Represents a LatencyDuration. */
@@ -4113,8 +4113,8 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.serverexperimentation.v1.ILatencyDuration);
 
-                    /** LatencyDuration durationMs. */
-                    public durationMs: number;
+                    /** LatencyDuration fixedDurationMs. */
+                    public fixedDurationMs: number;
 
                     /**
                      * Verifies a LatencyDuration message.
@@ -4233,11 +4233,11 @@ export namespace clutch {
                     /** UpstreamEnforcing downstreamCluster. */
                     public downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
 
-                    /** UpstreamEnforcing upstream. */
-                    public upstream?: ("upstreamCluster"|"upstreamPartialSingleCluster");
+                    /** UpstreamEnforcing upstreamType. */
+                    public upstreamType?: ("upstreamCluster"|"upstreamPartialSingleCluster");
 
-                    /** UpstreamEnforcing downstream. */
-                    public downstream?: "downstreamCluster";
+                    /** UpstreamEnforcing downstreamType. */
+                    public downstreamType?: "downstreamCluster";
 
                     /**
                      * Verifies an UpstreamEnforcing message.
@@ -4293,11 +4293,11 @@ export namespace clutch {
                     /** DownstreamEnforcing downstreamCluster. */
                     public downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
 
-                    /** DownstreamEnforcing upstream. */
-                    public upstream?: "upstreamCluster";
+                    /** DownstreamEnforcing upstreamType. */
+                    public upstreamType?: "upstreamCluster";
 
-                    /** DownstreamEnforcing downstream. */
-                    public downstream?: "downstreamCluster";
+                    /** DownstreamEnforcing downstreamType. */
+                    public downstreamType?: "downstreamCluster";
 
                     /**
                      * Verifies a DownstreamEnforcing message.

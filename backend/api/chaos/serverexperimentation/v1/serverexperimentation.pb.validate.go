@@ -399,20 +399,21 @@ var _ interface {
 	ErrorName() string
 } = LatencyFaultConfigValidationError{}
 
-// Validate checks the field values on Config with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *Config) Validate() error {
+// Validate checks the field values on HTTPFaultConfig with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *HTTPFaultConfig) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	switch m.Fault.(type) {
 
-	case *Config_Abort:
+	case *HTTPFaultConfig_Abort:
 
 		if v, ok := interface{}(m.GetAbort()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return ConfigValidationError{
+				return HTTPFaultConfigValidationError{
 					field:  "Abort",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -420,11 +421,11 @@ func (m *Config) Validate() error {
 			}
 		}
 
-	case *Config_Latency:
+	case *HTTPFaultConfig_Latency:
 
 		if v, ok := interface{}(m.GetLatency()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return ConfigValidationError{
+				return HTTPFaultConfigValidationError{
 					field:  "Latency",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -433,7 +434,7 @@ func (m *Config) Validate() error {
 		}
 
 	default:
-		return ConfigValidationError{
+		return HTTPFaultConfigValidationError{
 			field:  "Fault",
 			reason: "value is required",
 		}
@@ -443,9 +444,9 @@ func (m *Config) Validate() error {
 	return nil
 }
 
-// ConfigValidationError is the validation error returned by Config.Validate if
-// the designated constraints aren't met.
-type ConfigValidationError struct {
+// HTTPFaultConfigValidationError is the validation error returned by
+// HTTPFaultConfig.Validate if the designated constraints aren't met.
+type HTTPFaultConfigValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -453,22 +454,22 @@ type ConfigValidationError struct {
 }
 
 // Field function returns field value.
-func (e ConfigValidationError) Field() string { return e.field }
+func (e HTTPFaultConfigValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ConfigValidationError) Reason() string { return e.reason }
+func (e HTTPFaultConfigValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ConfigValidationError) Cause() error { return e.cause }
+func (e HTTPFaultConfigValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ConfigValidationError) Key() bool { return e.key }
+func (e HTTPFaultConfigValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ConfigValidationError) ErrorName() string { return "ConfigValidationError" }
+func (e HTTPFaultConfigValidationError) ErrorName() string { return "HTTPFaultConfigValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ConfigValidationError) Error() string {
+func (e HTTPFaultConfigValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -480,14 +481,14 @@ func (e ConfigValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sConfig.%s: %s%s",
+		"invalid %sHTTPFaultConfig.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ConfigValidationError{}
+var _ error = HTTPFaultConfigValidationError{}
 
 var _ interface {
 	Field() string
@@ -495,7 +496,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ConfigValidationError{}
+} = HTTPFaultConfigValidationError{}
 
 // Validate checks the field values on Abort with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
@@ -879,9 +880,9 @@ func (m *LatencyDuration) Validate() error {
 		return nil
 	}
 
-	if m.GetDurationMs() <= 0 {
+	if m.GetFixedDurationMs() <= 0 {
 		return LatencyDurationValidationError{
-			field:  "DurationMs",
+			field:  "FixedDurationMs",
 			reason: "value must be greater than 0",
 		}
 	}
@@ -1050,7 +1051,7 @@ func (m *UpstreamEnforcing) Validate() error {
 		return nil
 	}
 
-	switch m.Upstream.(type) {
+	switch m.UpstreamType.(type) {
 
 	case *UpstreamEnforcing_UpstreamCluster:
 
@@ -1078,13 +1079,13 @@ func (m *UpstreamEnforcing) Validate() error {
 
 	default:
 		return UpstreamEnforcingValidationError{
-			field:  "Upstream",
+			field:  "UpstreamType",
 			reason: "value is required",
 		}
 
 	}
 
-	switch m.Downstream.(type) {
+	switch m.DownstreamType.(type) {
 
 	case *UpstreamEnforcing_DownstreamCluster:
 
@@ -1100,7 +1101,7 @@ func (m *UpstreamEnforcing) Validate() error {
 
 	default:
 		return UpstreamEnforcingValidationError{
-			field:  "Downstream",
+			field:  "DownstreamType",
 			reason: "value is required",
 		}
 
@@ -1173,7 +1174,7 @@ func (m *DownstreamEnforcing) Validate() error {
 		return nil
 	}
 
-	switch m.Upstream.(type) {
+	switch m.UpstreamType.(type) {
 
 	case *DownstreamEnforcing_UpstreamCluster:
 
@@ -1189,13 +1190,13 @@ func (m *DownstreamEnforcing) Validate() error {
 
 	default:
 		return DownstreamEnforcingValidationError{
-			field:  "Upstream",
+			field:  "UpstreamType",
 			reason: "value is required",
 		}
 
 	}
 
-	switch m.Downstream.(type) {
+	switch m.DownstreamType.(type) {
 
 	case *DownstreamEnforcing_DownstreamCluster:
 
@@ -1211,7 +1212,7 @@ func (m *DownstreamEnforcing) Validate() error {
 
 	default:
 		return DownstreamEnforcingValidationError{
-			field:  "Downstream",
+			field:  "DownstreamType",
 			reason: "value is required",
 		}
 

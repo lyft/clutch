@@ -57,7 +57,7 @@ enum FaultInjectionCluster {
   FAULTINJECTIONCLUSTER_UPSTREAM = 2;
 }
 
-message Config {
+message HTTPFaultConfig {
   oneof fault {
     option (validate.required) = true;
 
@@ -79,15 +79,15 @@ message Latency {
 }
 
 message FaultPercentage {
-  float percentage = 1 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
+  uint32 percentage = 1 [ (validate.rules).uint32 = {gt : 0, lte : 100} ];
 }
 
 message AbortStatus {
-  int32 http_status_code = 1 [ (validate.rules).int32 = {gt : 99, lt : 600} ];
+  uint32 http_status_code = 1 [ (validate.rules).uint32 = {gt : 99, lt : 600} ];
 }
 
 message LatencyDuration {
-  int32 duration_ms = 1 [ (validate.rules).int32.gt = 0 ];
+  uint32 fixed_duration_ms = 1 [ (validate.rules).uint32.gt = 0 ];
 }
 
 message FaultTargeting {
@@ -100,14 +100,14 @@ message FaultTargeting {
 }
 
 message UpstreamEnforcing {
-  oneof upstream {
+  oneof upstream_type {
     option (validate.required) = true;
 
     SingleCluster upstream_cluster = 1;
     PartialSingleCluster upstream_partial_single_cluster = 2;
   }
 
-  oneof downstream {
+  oneof downstream_type {
     option (validate.required) = true;
 
     SingleCluster downstream_cluster = 3;
@@ -115,13 +115,13 @@ message UpstreamEnforcing {
 }
 
 message DownstreamEnforcing {
-  oneof upstream {
+  oneof upstream_type {
     option (validate.required) = true;
 
     SingleCluster upstream_cluster = 1;
   }
 
-  oneof downstream {
+  oneof downstream_type {
     option (validate.required) = true;
 
     SingleCluster downstream_cluster = 2;
