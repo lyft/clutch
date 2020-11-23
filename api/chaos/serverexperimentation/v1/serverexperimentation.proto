@@ -104,31 +104,40 @@ message FaultTargeting {
 
 /// Enforce faults on an upstream.
 message UpstreamEnforcing {
+  // An upstream responsible for enforcing a fault.
   oneof upstream_type {
     option (validate.required) = true;
 
+    // A single upstream cluster.
     SingleCluster upstream_cluster = 1;
+    // A partial single upstream cluster.
     PartialSingleCluster upstream_partial_single_cluster = 2;
   }
 
+  // A downstream responsible for enforcing a fault.
   oneof downstream_type {
     option (validate.required) = true;
 
+    // A single downstream cluster.
     SingleCluster downstream_cluster = 3;
   }
 }
 
 /// Enforce faults on a downstream.
 message DownstreamEnforcing {
+  // An upstream responsible for enforcing a fault.
   oneof upstream_type {
     option (validate.required) = true;
 
+    // A single upstream cluster.
     SingleCluster upstream_cluster = 1;
   }
 
+  // A downstream responsible for enforcing a fault.
   oneof downstream_type {
     option (validate.required) = true;
 
+    // A single downstream cluster.
     SingleCluster downstream_cluster = 2;
   }
 }
