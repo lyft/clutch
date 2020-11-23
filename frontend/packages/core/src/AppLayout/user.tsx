@@ -6,8 +6,11 @@ import {
   ClickAwayListener,
   Grow,
   IconButton,
+  ListItemIcon,
+  ListItemText,
+  MenuItem as MuiMenuItem,
   MenuList,
-  Paper,
+  Paper as MuiPaper,
   Popper,
   Typography,
 } from "@material-ui/core";
@@ -30,6 +33,24 @@ const Initials = styled(Typography)`
   font-size: 1rem;
 `;
 
+const ItemText = styled(Typography)`
+  color: #0D1030;
+  font-size: 0.875rem;
+  opacity: 0.6;
+`;
+
+const Paper = styled(MuiPaper)`
+  width: 250px;
+  border: 1px solid #E2E2E6;
+  box-shadow: 0px 5px 15px rgba(53, 72, 212, 0.2);
+`;
+
+const UserAccountMenuItem = styled(MuiMenuItem)`
+  &:focus{
+    background: transparent;
+  }
+`
+
 interface JwtToken {
   sub: string;
 }
@@ -48,6 +69,14 @@ const userId = (): string => {
     }
   } catch {}
   return subject;
+};
+
+const UserAvatar: React.FC = () => {
+  return (
+    <Avatar>
+    <Initials>{userId().slice(0, 2).toUpperCase()}</Initials>
+  </Avatar>
+  );
 };
 
 const UserInformation: React.FC = () => {
@@ -79,13 +108,23 @@ const UserInformation: React.FC = () => {
         edge="end"
         aria-controls={open ? "account-options" : undefined}
         aria-haspopup="true"
-        onClick={handleToggle}
+        onMouseEnter={handleToggle}
       >
-        <Avatar>
-          <Initials variant="h6">{userId().slice(0, 2).toUpperCase()}</Initials>
-        </Avatar>
+        <UserAvatar/>
       </UserPhoto>
-      <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition>
+      <Popper
+        open={open}
+        anchorEl={anchorRef.current}
+        role={undefined}
+        transition
+        popperOptions={{
+          modifiers: {
+             offset: {
+                 offset: '-105,0',
+             },
+          },
+        }}
+      >
         {({ TransitionProps, placement }) => (
           <Grow
             {...TransitionProps}
@@ -93,7 +132,16 @@ const UserInformation: React.FC = () => {
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
-                <MenuList autoFocusItem={open} id="account-options" onKeyDown={handleListKeyDown} />
+                <MenuList autoFocusItem={open} id="account-options" onKeyDown={handleListKeyDown}>
+                  <UserAccountMenuItem>
+                    <ListItemIcon>
+                      <UserAvatar/>
+                    </ListItemIcon>
+                    <ListItemText>
+                      <ItemText>{userId()}</ItemText>
+                    </ListItemText>
+                  </UserAccountMenuItem>
+                </MenuList>
               </ClickAwayListener>
             </Paper>
           </Grow>

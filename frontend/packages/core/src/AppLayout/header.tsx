@@ -55,7 +55,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <AppBar position="static" color="secondary">
+      <AppBar position="static" color="secondary" elevation={0}>
         <Toolbar>
           <MenuButton onClick={openDrawer} edge="start" color="primary" data-qa="menuBtn">
             <MenuIcon />
