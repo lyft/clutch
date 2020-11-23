@@ -8918,8 +8918,8 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a HTTPFaultConfig.
                      * @memberof clutch.chaos.serverexperimentation.v1
                      * @interface IHTTPFaultConfig
-                     * @property {clutch.chaos.serverexperimentation.v1.IAbort|null} [abort] HTTPFaultConfig abort
-                     * @property {clutch.chaos.serverexperimentation.v1.ILatency|null} [latency] HTTPFaultConfig latency
+                     * @property {clutch.chaos.serverexperimentation.v1.IAbortFault|null} [abortFault] HTTPFaultConfig abortFault
+                     * @property {clutch.chaos.serverexperimentation.v1.ILatencyFault|null} [latencyFault] HTTPFaultConfig latencyFault
                      */
 
                     /**
@@ -8938,32 +8938,32 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * HTTPFaultConfig abort.
-                     * @member {clutch.chaos.serverexperimentation.v1.IAbort|null|undefined} abort
+                     * HTTPFaultConfig abortFault.
+                     * @member {clutch.chaos.serverexperimentation.v1.IAbortFault|null|undefined} abortFault
                      * @memberof clutch.chaos.serverexperimentation.v1.HTTPFaultConfig
                      * @instance
                      */
-                    HTTPFaultConfig.prototype.abort = null;
+                    HTTPFaultConfig.prototype.abortFault = null;
 
                     /**
-                     * HTTPFaultConfig latency.
-                     * @member {clutch.chaos.serverexperimentation.v1.ILatency|null|undefined} latency
+                     * HTTPFaultConfig latencyFault.
+                     * @member {clutch.chaos.serverexperimentation.v1.ILatencyFault|null|undefined} latencyFault
                      * @memberof clutch.chaos.serverexperimentation.v1.HTTPFaultConfig
                      * @instance
                      */
-                    HTTPFaultConfig.prototype.latency = null;
+                    HTTPFaultConfig.prototype.latencyFault = null;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
 
                     /**
                      * HTTPFaultConfig fault.
-                     * @member {"abort"|"latency"|undefined} fault
+                     * @member {"abortFault"|"latencyFault"|undefined} fault
                      * @memberof clutch.chaos.serverexperimentation.v1.HTTPFaultConfig
                      * @instance
                      */
                     Object.defineProperty(HTTPFaultConfig.prototype, "fault", {
-                        get: $util.oneOfGetter($oneOfFields = ["abort", "latency"]),
+                        get: $util.oneOfGetter($oneOfFields = ["abortFault", "latencyFault"]),
                         set: $util.oneOfSetter($oneOfFields)
                     });
 
@@ -8979,22 +8979,22 @@ export const clutch = $root.clutch = (() => {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         let properties = {};
-                        if (message.abort != null && message.hasOwnProperty("abort")) {
+                        if (message.abortFault != null && message.hasOwnProperty("abortFault")) {
                             properties.fault = 1;
                             {
-                                let error = $root.clutch.chaos.serverexperimentation.v1.Abort.verify(message.abort);
+                                let error = $root.clutch.chaos.serverexperimentation.v1.AbortFault.verify(message.abortFault);
                                 if (error)
-                                    return "abort." + error;
+                                    return "abortFault." + error;
                             }
                         }
-                        if (message.latency != null && message.hasOwnProperty("latency")) {
+                        if (message.latencyFault != null && message.hasOwnProperty("latencyFault")) {
                             if (properties.fault === 1)
                                 return "fault: multiple values";
                             properties.fault = 1;
                             {
-                                let error = $root.clutch.chaos.serverexperimentation.v1.Latency.verify(message.latency);
+                                let error = $root.clutch.chaos.serverexperimentation.v1.LatencyFault.verify(message.latencyFault);
                                 if (error)
-                                    return "latency." + error;
+                                    return "latencyFault." + error;
                             }
                         }
                         return null;
@@ -9012,15 +9012,15 @@ export const clutch = $root.clutch = (() => {
                         if (object instanceof $root.clutch.chaos.serverexperimentation.v1.HTTPFaultConfig)
                             return object;
                         let message = new $root.clutch.chaos.serverexperimentation.v1.HTTPFaultConfig();
-                        if (object.abort != null) {
-                            if (typeof object.abort !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.HTTPFaultConfig.abort: object expected");
-                            message.abort = $root.clutch.chaos.serverexperimentation.v1.Abort.fromObject(object.abort);
+                        if (object.abortFault != null) {
+                            if (typeof object.abortFault !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.HTTPFaultConfig.abortFault: object expected");
+                            message.abortFault = $root.clutch.chaos.serverexperimentation.v1.AbortFault.fromObject(object.abortFault);
                         }
-                        if (object.latency != null) {
-                            if (typeof object.latency !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.HTTPFaultConfig.latency: object expected");
-                            message.latency = $root.clutch.chaos.serverexperimentation.v1.Latency.fromObject(object.latency);
+                        if (object.latencyFault != null) {
+                            if (typeof object.latencyFault !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.HTTPFaultConfig.latencyFault: object expected");
+                            message.latencyFault = $root.clutch.chaos.serverexperimentation.v1.LatencyFault.fromObject(object.latencyFault);
                         }
                         return message;
                     };
@@ -9038,15 +9038,15 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (message.abort != null && message.hasOwnProperty("abort")) {
-                            object.abort = $root.clutch.chaos.serverexperimentation.v1.Abort.toObject(message.abort, options);
+                        if (message.abortFault != null && message.hasOwnProperty("abortFault")) {
+                            object.abortFault = $root.clutch.chaos.serverexperimentation.v1.AbortFault.toObject(message.abortFault, options);
                             if (options.oneofs)
-                                object.fault = "abort";
+                                object.fault = "abortFault";
                         }
-                        if (message.latency != null && message.hasOwnProperty("latency")) {
-                            object.latency = $root.clutch.chaos.serverexperimentation.v1.Latency.toObject(message.latency, options);
+                        if (message.latencyFault != null && message.hasOwnProperty("latencyFault")) {
+                            object.latencyFault = $root.clutch.chaos.serverexperimentation.v1.LatencyFault.toObject(message.latencyFault, options);
                             if (options.oneofs)
-                                object.fault = "latency";
+                                object.fault = "latencyFault";
                         }
                         return object;
                     };
@@ -9065,26 +9065,26 @@ export const clutch = $root.clutch = (() => {
                     return HTTPFaultConfig;
                 })();
 
-                v1.Abort = (function() {
+                v1.AbortFault = (function() {
 
                     /**
-                     * Properties of an Abort.
+                     * Properties of an AbortFault.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @interface IAbort
-                     * @property {clutch.chaos.serverexperimentation.v1.IFaultTargeting|null} [faultTargeting] Abort faultTargeting
-                     * @property {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null} [faultParcentage] Abort faultParcentage
-                     * @property {clutch.chaos.serverexperimentation.v1.IFaultAbortStatus|null} [faultAbortStatus] Abort faultAbortStatus
+                     * @interface IAbortFault
+                     * @property {clutch.chaos.serverexperimentation.v1.IFaultTargeting|null} [faultTargeting] AbortFault faultTargeting
+                     * @property {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null} [faultParcentage] AbortFault faultParcentage
+                     * @property {clutch.chaos.serverexperimentation.v1.IFaultAbortStatus|null} [faultAbortStatus] AbortFault faultAbortStatus
                      */
 
                     /**
-                     * Constructs a new Abort.
+                     * Constructs a new AbortFault.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @classdesc Represents an Abort.
-                     * @implements IAbort
+                     * @classdesc Represents an AbortFault.
+                     * @implements IAbortFault
                      * @constructor
-                     * @param {clutch.chaos.serverexperimentation.v1.IAbort=} [properties] Properties to set
+                     * @param {clutch.chaos.serverexperimentation.v1.IAbortFault=} [properties] Properties to set
                      */
-                    function Abort(properties) {
+                    function AbortFault(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -9092,38 +9092,38 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * Abort faultTargeting.
+                     * AbortFault faultTargeting.
                      * @member {clutch.chaos.serverexperimentation.v1.IFaultTargeting|null|undefined} faultTargeting
-                     * @memberof clutch.chaos.serverexperimentation.v1.Abort
+                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
                      * @instance
                      */
-                    Abort.prototype.faultTargeting = null;
+                    AbortFault.prototype.faultTargeting = null;
 
                     /**
-                     * Abort faultParcentage.
+                     * AbortFault faultParcentage.
                      * @member {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null|undefined} faultParcentage
-                     * @memberof clutch.chaos.serverexperimentation.v1.Abort
+                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
                      * @instance
                      */
-                    Abort.prototype.faultParcentage = null;
+                    AbortFault.prototype.faultParcentage = null;
 
                     /**
-                     * Abort faultAbortStatus.
+                     * AbortFault faultAbortStatus.
                      * @member {clutch.chaos.serverexperimentation.v1.IFaultAbortStatus|null|undefined} faultAbortStatus
-                     * @memberof clutch.chaos.serverexperimentation.v1.Abort
+                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
                      * @instance
                      */
-                    Abort.prototype.faultAbortStatus = null;
+                    AbortFault.prototype.faultAbortStatus = null;
 
                     /**
-                     * Verifies an Abort message.
+                     * Verifies an AbortFault message.
                      * @function verify
-                     * @memberof clutch.chaos.serverexperimentation.v1.Abort
+                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    Abort.verify = function verify(message) {
+                    AbortFault.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.faultTargeting != null && message.hasOwnProperty("faultTargeting")) {
@@ -9145,45 +9145,45 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates an Abort message from a plain object. Also converts values to their respective internal types.
+                     * Creates an AbortFault message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.Abort
+                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.serverexperimentation.v1.Abort} Abort
+                     * @returns {clutch.chaos.serverexperimentation.v1.AbortFault} AbortFault
                      */
-                    Abort.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.Abort)
+                    AbortFault.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.AbortFault)
                             return object;
-                        let message = new $root.clutch.chaos.serverexperimentation.v1.Abort();
+                        let message = new $root.clutch.chaos.serverexperimentation.v1.AbortFault();
                         if (object.faultTargeting != null) {
                             if (typeof object.faultTargeting !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.Abort.faultTargeting: object expected");
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.AbortFault.faultTargeting: object expected");
                             message.faultTargeting = $root.clutch.chaos.serverexperimentation.v1.FaultTargeting.fromObject(object.faultTargeting);
                         }
                         if (object.faultParcentage != null) {
                             if (typeof object.faultParcentage !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.Abort.faultParcentage: object expected");
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.AbortFault.faultParcentage: object expected");
                             message.faultParcentage = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.fromObject(object.faultParcentage);
                         }
                         if (object.faultAbortStatus != null) {
                             if (typeof object.faultAbortStatus !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.Abort.faultAbortStatus: object expected");
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.AbortFault.faultAbortStatus: object expected");
                             message.faultAbortStatus = $root.clutch.chaos.serverexperimentation.v1.FaultAbortStatus.fromObject(object.faultAbortStatus);
                         }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from an Abort message. Also converts values to other types if specified.
+                     * Creates a plain object from an AbortFault message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.Abort
+                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
                      * @static
-                     * @param {clutch.chaos.serverexperimentation.v1.Abort} message Abort
+                     * @param {clutch.chaos.serverexperimentation.v1.AbortFault} message AbortFault
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    Abort.toObject = function toObject(message, options) {
+                    AbortFault.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
@@ -9202,39 +9202,39 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this Abort to JSON.
+                     * Converts this AbortFault to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.serverexperimentation.v1.Abort
+                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    Abort.prototype.toJSON = function toJSON() {
+                    AbortFault.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return Abort;
+                    return AbortFault;
                 })();
 
-                v1.Latency = (function() {
+                v1.LatencyFault = (function() {
 
                     /**
-                     * Properties of a Latency.
+                     * Properties of a LatencyFault.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @interface ILatency
-                     * @property {clutch.chaos.serverexperimentation.v1.IFaultTargeting|null} [faultTargeting] Latency faultTargeting
-                     * @property {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null} [faultParcentage] Latency faultParcentage
-                     * @property {clutch.chaos.serverexperimentation.v1.IFaultLatencyDuration|null} [faultLatencyDuration] Latency faultLatencyDuration
+                     * @interface ILatencyFault
+                     * @property {clutch.chaos.serverexperimentation.v1.IFaultTargeting|null} [faultTargeting] LatencyFault faultTargeting
+                     * @property {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null} [faultParcentage] LatencyFault faultParcentage
+                     * @property {clutch.chaos.serverexperimentation.v1.IFaultLatencyDuration|null} [faultLatencyDuration] LatencyFault faultLatencyDuration
                      */
 
                     /**
-                     * Constructs a new Latency.
+                     * Constructs a new LatencyFault.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @classdesc Represents a Latency.
-                     * @implements ILatency
+                     * @classdesc Represents a LatencyFault.
+                     * @implements ILatencyFault
                      * @constructor
-                     * @param {clutch.chaos.serverexperimentation.v1.ILatency=} [properties] Properties to set
+                     * @param {clutch.chaos.serverexperimentation.v1.ILatencyFault=} [properties] Properties to set
                      */
-                    function Latency(properties) {
+                    function LatencyFault(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -9242,38 +9242,38 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * Latency faultTargeting.
+                     * LatencyFault faultTargeting.
                      * @member {clutch.chaos.serverexperimentation.v1.IFaultTargeting|null|undefined} faultTargeting
-                     * @memberof clutch.chaos.serverexperimentation.v1.Latency
+                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
                      * @instance
                      */
-                    Latency.prototype.faultTargeting = null;
+                    LatencyFault.prototype.faultTargeting = null;
 
                     /**
-                     * Latency faultParcentage.
+                     * LatencyFault faultParcentage.
                      * @member {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null|undefined} faultParcentage
-                     * @memberof clutch.chaos.serverexperimentation.v1.Latency
+                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
                      * @instance
                      */
-                    Latency.prototype.faultParcentage = null;
+                    LatencyFault.prototype.faultParcentage = null;
 
                     /**
-                     * Latency faultLatencyDuration.
+                     * LatencyFault faultLatencyDuration.
                      * @member {clutch.chaos.serverexperimentation.v1.IFaultLatencyDuration|null|undefined} faultLatencyDuration
-                     * @memberof clutch.chaos.serverexperimentation.v1.Latency
+                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
                      * @instance
                      */
-                    Latency.prototype.faultLatencyDuration = null;
+                    LatencyFault.prototype.faultLatencyDuration = null;
 
                     /**
-                     * Verifies a Latency message.
+                     * Verifies a LatencyFault message.
                      * @function verify
-                     * @memberof clutch.chaos.serverexperimentation.v1.Latency
+                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    Latency.verify = function verify(message) {
+                    LatencyFault.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.faultTargeting != null && message.hasOwnProperty("faultTargeting")) {
@@ -9295,45 +9295,45 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a Latency message from a plain object. Also converts values to their respective internal types.
+                     * Creates a LatencyFault message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.Latency
+                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.serverexperimentation.v1.Latency} Latency
+                     * @returns {clutch.chaos.serverexperimentation.v1.LatencyFault} LatencyFault
                      */
-                    Latency.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.Latency)
+                    LatencyFault.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.LatencyFault)
                             return object;
-                        let message = new $root.clutch.chaos.serverexperimentation.v1.Latency();
+                        let message = new $root.clutch.chaos.serverexperimentation.v1.LatencyFault();
                         if (object.faultTargeting != null) {
                             if (typeof object.faultTargeting !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.Latency.faultTargeting: object expected");
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.LatencyFault.faultTargeting: object expected");
                             message.faultTargeting = $root.clutch.chaos.serverexperimentation.v1.FaultTargeting.fromObject(object.faultTargeting);
                         }
                         if (object.faultParcentage != null) {
                             if (typeof object.faultParcentage !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.Latency.faultParcentage: object expected");
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.LatencyFault.faultParcentage: object expected");
                             message.faultParcentage = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.fromObject(object.faultParcentage);
                         }
                         if (object.faultLatencyDuration != null) {
                             if (typeof object.faultLatencyDuration !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.Latency.faultLatencyDuration: object expected");
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.LatencyFault.faultLatencyDuration: object expected");
                             message.faultLatencyDuration = $root.clutch.chaos.serverexperimentation.v1.FaultLatencyDuration.fromObject(object.faultLatencyDuration);
                         }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from a Latency message. Also converts values to other types if specified.
+                     * Creates a plain object from a LatencyFault message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.Latency
+                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
                      * @static
-                     * @param {clutch.chaos.serverexperimentation.v1.Latency} message Latency
+                     * @param {clutch.chaos.serverexperimentation.v1.LatencyFault} message LatencyFault
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    Latency.toObject = function toObject(message, options) {
+                    LatencyFault.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
@@ -9352,17 +9352,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this Latency to JSON.
+                     * Converts this LatencyFault to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.serverexperimentation.v1.Latency
+                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    Latency.prototype.toJSON = function toJSON() {
+                    LatencyFault.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return Latency;
+                    return LatencyFault;
                 })();
 
                 v1.FaultTargeting = (function() {

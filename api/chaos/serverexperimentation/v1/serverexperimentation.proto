@@ -63,14 +63,14 @@ message HTTPFaultConfig {
     option (validate.required) = true;
 
     // The abort fault.
-    Abort abort = 1;
+    AbortFault abort_fault = 1;
     // The latency fault.
-    Latency latency = 2;
+    LatencyFault latency_fault = 2;
   }
 }
 
 // The definition of an abort fault.
-message Abort {
+message AbortFault {
   // The targeting of the fault describing what requests faults should be applied to.
   FaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
   // The percentage of requests the fault should be applied to.
@@ -80,7 +80,7 @@ message Abort {
 }
 
 // The definition of a latency fault.
-message Latency {
+message LatencyFault {
   // The targeting of the fault describing where the faults should be applied.
   FaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
   // The percentage of requests the fault should be applied to.
