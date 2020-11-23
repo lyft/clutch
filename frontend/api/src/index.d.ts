@@ -4429,48 +4429,6 @@ export namespace clutch {
                      */
                     public toJSON(): { [k: string]: any };
                 }
-
-                /** Properties of an AllClusters. */
-                interface IAllClusters {
-                }
-
-                /** Represents an AllClusters. */
-                class AllClusters implements IAllClusters {
-
-                    /**
-                     * Constructs a new AllClusters.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IAllClusters);
-
-                    /**
-                     * Verifies an AllClusters message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates an AllClusters message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns AllClusters
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.AllClusters;
-
-                    /**
-                     * Creates a plain object from an AllClusters message. Also converts values to other types if specified.
-                     * @param message AllClusters
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.AllClusters, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this AllClusters to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
             }
         }
     }
