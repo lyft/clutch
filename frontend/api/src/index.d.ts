@@ -4383,7 +4383,7 @@ export namespace clutch {
                     name?: (string|null);
 
                     /** PartialSingleCluster percentage */
-                    percentage?: (clutch.chaos.serverexperimentation.v1.IHostsPercentage|null);
+                    percentage?: (clutch.chaos.serverexperimentation.v1.IHostPercentage|null);
                 }
 
                 /** Represents a PartialSingleCluster. */
@@ -4399,7 +4399,7 @@ export namespace clutch {
                     public name: string;
 
                     /** PartialSingleCluster percentage. */
-                    public percentage?: (clutch.chaos.serverexperimentation.v1.IHostsPercentage|null);
+                    public percentage?: (clutch.chaos.serverexperimentation.v1.IHostPercentage|null);
 
                     /**
                      * Verifies a PartialSingleCluster message.
@@ -4430,49 +4430,49 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a HostsPercentage. */
-                interface IHostsPercentage {
+                /** Properties of a HostPercentage. */
+                interface IHostPercentage {
 
-                    /** HostsPercentage percentage */
+                    /** HostPercentage percentage */
                     percentage?: (number|null);
                 }
 
-                /** Represents a HostsPercentage. */
-                class HostsPercentage implements IHostsPercentage {
+                /** Represents a HostPercentage. */
+                class HostPercentage implements IHostPercentage {
 
                     /**
-                     * Constructs a new HostsPercentage.
+                     * Constructs a new HostPercentage.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IHostsPercentage);
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IHostPercentage);
 
-                    /** HostsPercentage percentage. */
+                    /** HostPercentage percentage. */
                     public percentage: number;
 
                     /**
-                     * Verifies a HostsPercentage message.
+                     * Verifies a HostPercentage message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a HostsPercentage message from a plain object. Also converts values to their respective internal types.
+                     * Creates a HostPercentage message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns HostsPercentage
+                     * @returns HostPercentage
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.HostsPercentage;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.HostPercentage;
 
                     /**
-                     * Creates a plain object from a HostsPercentage message. Also converts values to other types if specified.
-                     * @param message HostsPercentage
+                     * Creates a plain object from a HostPercentage message. Also converts values to other types if specified.
+                     * @param message HostPercentage
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.HostsPercentage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.HostPercentage, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this HostsPercentage to JSON.
+                     * Converts this HostPercentage to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

@@ -1440,16 +1440,16 @@ var _ interface {
 	ErrorName() string
 } = PartialSingleClusterValidationError{}
 
-// Validate checks the field values on HostsPercentage with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *HostsPercentage) Validate() error {
+// Validate checks the field values on HostPercentage with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *HostPercentage) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if val := m.GetPercentage(); val <= 0 || val > 100 {
-		return HostsPercentageValidationError{
+		return HostPercentageValidationError{
 			field:  "Percentage",
 			reason: "value must be inside range (0, 100]",
 		}
@@ -1458,9 +1458,9 @@ func (m *HostsPercentage) Validate() error {
 	return nil
 }
 
-// HostsPercentageValidationError is the validation error returned by
-// HostsPercentage.Validate if the designated constraints aren't met.
-type HostsPercentageValidationError struct {
+// HostPercentageValidationError is the validation error returned by
+// HostPercentage.Validate if the designated constraints aren't met.
+type HostPercentageValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1468,22 +1468,22 @@ type HostsPercentageValidationError struct {
 }
 
 // Field function returns field value.
-func (e HostsPercentageValidationError) Field() string { return e.field }
+func (e HostPercentageValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e HostsPercentageValidationError) Reason() string { return e.reason }
+func (e HostPercentageValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e HostsPercentageValidationError) Cause() error { return e.cause }
+func (e HostPercentageValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e HostsPercentageValidationError) Key() bool { return e.key }
+func (e HostPercentageValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e HostsPercentageValidationError) ErrorName() string { return "HostsPercentageValidationError" }
+func (e HostPercentageValidationError) ErrorName() string { return "HostPercentageValidationError" }
 
 // Error satisfies the builtin error interface
-func (e HostsPercentageValidationError) Error() string {
+func (e HostPercentageValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1495,14 +1495,14 @@ func (e HostsPercentageValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sHostsPercentage.%s: %s%s",
+		"invalid %sHostPercentage.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = HostsPercentageValidationError{}
+var _ error = HostPercentageValidationError{}
 
 var _ interface {
 	Field() string
@@ -1510,4 +1510,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = HostsPercentageValidationError{}
+} = HostPercentageValidationError{}

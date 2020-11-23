@@ -139,9 +139,9 @@ message SingleCluster {
 
 message PartialSingleCluster {
   string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
-  HostsPercentage percentage = 2 [ (validate.rules).message.required = true ];
+  HostPercentage percentage = 2 [ (validate.rules).message.required = true ];
 }
 
-message HostsPercentage {
+message HostPercentage {
   uint32 percentage = 1 [ (validate.rules).uint32 = {gt : 0, lte : 100} ];
 }

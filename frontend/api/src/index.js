@@ -10278,7 +10278,7 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.chaos.serverexperimentation.v1
                      * @interface IPartialSingleCluster
                      * @property {string|null} [name] PartialSingleCluster name
-                     * @property {clutch.chaos.serverexperimentation.v1.IHostsPercentage|null} [percentage] PartialSingleCluster percentage
+                     * @property {clutch.chaos.serverexperimentation.v1.IHostPercentage|null} [percentage] PartialSingleCluster percentage
                      */
 
                     /**
@@ -10306,7 +10306,7 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * PartialSingleCluster percentage.
-                     * @member {clutch.chaos.serverexperimentation.v1.IHostsPercentage|null|undefined} percentage
+                     * @member {clutch.chaos.serverexperimentation.v1.IHostPercentage|null|undefined} percentage
                      * @memberof clutch.chaos.serverexperimentation.v1.PartialSingleCluster
                      * @instance
                      */
@@ -10327,7 +10327,7 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.name))
                                 return "name: string expected";
                         if (message.percentage != null && message.hasOwnProperty("percentage")) {
-                            let error = $root.clutch.chaos.serverexperimentation.v1.HostsPercentage.verify(message.percentage);
+                            let error = $root.clutch.chaos.serverexperimentation.v1.HostPercentage.verify(message.percentage);
                             if (error)
                                 return "percentage." + error;
                         }
@@ -10351,7 +10351,7 @@ export const clutch = $root.clutch = (() => {
                         if (object.percentage != null) {
                             if (typeof object.percentage !== "object")
                                 throw TypeError(".clutch.chaos.serverexperimentation.v1.PartialSingleCluster.percentage: object expected");
-                            message.percentage = $root.clutch.chaos.serverexperimentation.v1.HostsPercentage.fromObject(object.percentage);
+                            message.percentage = $root.clutch.chaos.serverexperimentation.v1.HostPercentage.fromObject(object.percentage);
                         }
                         return message;
                     };
@@ -10376,7 +10376,7 @@ export const clutch = $root.clutch = (() => {
                         if (message.name != null && message.hasOwnProperty("name"))
                             object.name = message.name;
                         if (message.percentage != null && message.hasOwnProperty("percentage"))
-                            object.percentage = $root.clutch.chaos.serverexperimentation.v1.HostsPercentage.toObject(message.percentage, options);
+                            object.percentage = $root.clutch.chaos.serverexperimentation.v1.HostPercentage.toObject(message.percentage, options);
                         return object;
                     };
 
@@ -10394,24 +10394,24 @@ export const clutch = $root.clutch = (() => {
                     return PartialSingleCluster;
                 })();
 
-                v1.HostsPercentage = (function() {
+                v1.HostPercentage = (function() {
 
                     /**
-                     * Properties of a HostsPercentage.
+                     * Properties of a HostPercentage.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @interface IHostsPercentage
-                     * @property {number|null} [percentage] HostsPercentage percentage
+                     * @interface IHostPercentage
+                     * @property {number|null} [percentage] HostPercentage percentage
                      */
 
                     /**
-                     * Constructs a new HostsPercentage.
+                     * Constructs a new HostPercentage.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @classdesc Represents a HostsPercentage.
-                     * @implements IHostsPercentage
+                     * @classdesc Represents a HostPercentage.
+                     * @implements IHostPercentage
                      * @constructor
-                     * @param {clutch.chaos.serverexperimentation.v1.IHostsPercentage=} [properties] Properties to set
+                     * @param {clutch.chaos.serverexperimentation.v1.IHostPercentage=} [properties] Properties to set
                      */
-                    function HostsPercentage(properties) {
+                    function HostPercentage(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -10419,22 +10419,22 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * HostsPercentage percentage.
+                     * HostPercentage percentage.
                      * @member {number} percentage
-                     * @memberof clutch.chaos.serverexperimentation.v1.HostsPercentage
+                     * @memberof clutch.chaos.serverexperimentation.v1.HostPercentage
                      * @instance
                      */
-                    HostsPercentage.prototype.percentage = 0;
+                    HostPercentage.prototype.percentage = 0;
 
                     /**
-                     * Verifies a HostsPercentage message.
+                     * Verifies a HostPercentage message.
                      * @function verify
-                     * @memberof clutch.chaos.serverexperimentation.v1.HostsPercentage
+                     * @memberof clutch.chaos.serverexperimentation.v1.HostPercentage
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    HostsPercentage.verify = function verify(message) {
+                    HostPercentage.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.percentage != null && message.hasOwnProperty("percentage"))
@@ -10444,32 +10444,32 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a HostsPercentage message from a plain object. Also converts values to their respective internal types.
+                     * Creates a HostPercentage message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.HostsPercentage
+                     * @memberof clutch.chaos.serverexperimentation.v1.HostPercentage
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.serverexperimentation.v1.HostsPercentage} HostsPercentage
+                     * @returns {clutch.chaos.serverexperimentation.v1.HostPercentage} HostPercentage
                      */
-                    HostsPercentage.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.HostsPercentage)
+                    HostPercentage.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.HostPercentage)
                             return object;
-                        let message = new $root.clutch.chaos.serverexperimentation.v1.HostsPercentage();
+                        let message = new $root.clutch.chaos.serverexperimentation.v1.HostPercentage();
                         if (object.percentage != null)
                             message.percentage = object.percentage >>> 0;
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from a HostsPercentage message. Also converts values to other types if specified.
+                     * Creates a plain object from a HostPercentage message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.serverexperimentation.v1.HostsPercentage
+                     * @memberof clutch.chaos.serverexperimentation.v1.HostPercentage
                      * @static
-                     * @param {clutch.chaos.serverexperimentation.v1.HostsPercentage} message HostsPercentage
+                     * @param {clutch.chaos.serverexperimentation.v1.HostPercentage} message HostPercentage
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    HostsPercentage.toObject = function toObject(message, options) {
+                    HostPercentage.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
@@ -10481,17 +10481,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this HostsPercentage to JSON.
+                     * Converts this HostPercentage to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.serverexperimentation.v1.HostsPercentage
+                     * @memberof clutch.chaos.serverexperimentation.v1.HostPercentage
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    HostsPercentage.prototype.toJSON = function toJSON() {
+                    HostPercentage.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return HostsPercentage;
+                    return HostPercentage;
                 })();
 
                 return v1;
