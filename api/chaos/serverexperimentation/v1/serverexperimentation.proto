@@ -136,5 +136,3 @@ message PartialSingleCluster {
   string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
   float percentage = 2 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
 }
-
-message AllClusters {}
