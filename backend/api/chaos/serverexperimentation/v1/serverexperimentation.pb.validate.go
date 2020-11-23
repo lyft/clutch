@@ -539,17 +539,17 @@ func (m *Abort) Validate() error {
 		}
 	}
 
-	if m.GetAbortStatus() == nil {
+	if m.GetFaultAbortStatus() == nil {
 		return AbortValidationError{
-			field:  "AbortStatus",
+			field:  "FaultAbortStatus",
 			reason: "value is required",
 		}
 	}
 
-	if v, ok := interface{}(m.GetAbortStatus()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetFaultAbortStatus()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return AbortValidationError{
-				field:  "AbortStatus",
+				field:  "FaultAbortStatus",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -654,17 +654,17 @@ func (m *Latency) Validate() error {
 		}
 	}
 
-	if m.GetLatencyDuration() == nil {
+	if m.GetFaultLatencyDuration() == nil {
 		return LatencyValidationError{
-			field:  "LatencyDuration",
+			field:  "FaultLatencyDuration",
 			reason: "value is required",
 		}
 	}
 
-	if v, ok := interface{}(m.GetLatencyDuration()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetFaultLatencyDuration()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return LatencyValidationError{
-				field:  "LatencyDuration",
+				field:  "FaultLatencyDuration",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -727,6 +727,105 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = LatencyValidationError{}
+
+// Validate checks the field values on FaultTargeting with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *FaultTargeting) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	switch m.Enforcer.(type) {
+
+	case *FaultTargeting_Upstream:
+
+		if v, ok := interface{}(m.GetUpstream()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return FaultTargetingValidationError{
+					field:  "Upstream",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *FaultTargeting_Downstream:
+
+		if v, ok := interface{}(m.GetDownstream()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return FaultTargetingValidationError{
+					field:  "Downstream",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return FaultTargetingValidationError{
+			field:  "Enforcer",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// FaultTargetingValidationError is the validation error returned by
+// FaultTargeting.Validate if the designated constraints aren't met.
+type FaultTargetingValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e FaultTargetingValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e FaultTargetingValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e FaultTargetingValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e FaultTargetingValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e FaultTargetingValidationError) ErrorName() string { return "FaultTargetingValidationError" }
+
+// Error satisfies the builtin error interface
+func (e FaultTargetingValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sFaultTargeting.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = FaultTargetingValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = FaultTargetingValidationError{}
 
 // Validate checks the field values on UpstreamEnforcing with the rules defined
 // in the proto definition for this message. If any rules are violated, an
@@ -1199,105 +1298,6 @@ var _ interface {
 	ErrorName() string
 } = ClusterPercentageValidationError{}
 
-// Validate checks the field values on FaultTargeting with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *FaultTargeting) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	switch m.Enforcer.(type) {
-
-	case *FaultTargeting_Upstream:
-
-		if v, ok := interface{}(m.GetUpstream()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return FaultTargetingValidationError{
-					field:  "Upstream",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	case *FaultTargeting_Downstream:
-
-		if v, ok := interface{}(m.GetDownstream()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return FaultTargetingValidationError{
-					field:  "Downstream",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	default:
-		return FaultTargetingValidationError{
-			field:  "Enforcer",
-			reason: "value is required",
-		}
-
-	}
-
-	return nil
-}
-
-// FaultTargetingValidationError is the validation error returned by
-// FaultTargeting.Validate if the designated constraints aren't met.
-type FaultTargetingValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e FaultTargetingValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e FaultTargetingValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e FaultTargetingValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e FaultTargetingValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e FaultTargetingValidationError) ErrorName() string { return "FaultTargetingValidationError" }
-
-// Error satisfies the builtin error interface
-func (e FaultTargetingValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sFaultTargeting.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = FaultTargetingValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = FaultTargetingValidationError{}
-
 // Validate checks the field values on FaultPercentage with the rules defined
 // in the proto definition for this message. If any rules are violated, an
 // error is returned.
@@ -1370,16 +1370,16 @@ var _ interface {
 	ErrorName() string
 } = FaultPercentageValidationError{}
 
-// Validate checks the field values on AbortStatus with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *AbortStatus) Validate() error {
+// Validate checks the field values on FaultAbortStatus with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *FaultAbortStatus) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if val := m.GetHttpStatusCode(); val <= 99 || val >= 600 {
-		return AbortStatusValidationError{
+		return FaultAbortStatusValidationError{
 			field:  "HttpStatusCode",
 			reason: "value must be inside range (99, 600)",
 		}
@@ -1388,9 +1388,9 @@ func (m *AbortStatus) Validate() error {
 	return nil
 }
 
-// AbortStatusValidationError is the validation error returned by
-// AbortStatus.Validate if the designated constraints aren't met.
-type AbortStatusValidationError struct {
+// FaultAbortStatusValidationError is the validation error returned by
+// FaultAbortStatus.Validate if the designated constraints aren't met.
+type FaultAbortStatusValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1398,22 +1398,22 @@ type AbortStatusValidationError struct {
 }
 
 // Field function returns field value.
-func (e AbortStatusValidationError) Field() string { return e.field }
+func (e FaultAbortStatusValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e AbortStatusValidationError) Reason() string { return e.reason }
+func (e FaultAbortStatusValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e AbortStatusValidationError) Cause() error { return e.cause }
+func (e FaultAbortStatusValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e AbortStatusValidationError) Key() bool { return e.key }
+func (e FaultAbortStatusValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e AbortStatusValidationError) ErrorName() string { return "AbortStatusValidationError" }
+func (e FaultAbortStatusValidationError) ErrorName() string { return "FaultAbortStatusValidationError" }
 
 // Error satisfies the builtin error interface
-func (e AbortStatusValidationError) Error() string {
+func (e FaultAbortStatusValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1425,14 +1425,14 @@ func (e AbortStatusValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sAbortStatus.%s: %s%s",
+		"invalid %sFaultAbortStatus.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = AbortStatusValidationError{}
+var _ error = FaultAbortStatusValidationError{}
 
 var _ interface {
 	Field() string
@@ -1440,18 +1440,18 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = AbortStatusValidationError{}
+} = FaultAbortStatusValidationError{}
 
-// Validate checks the field values on LatencyDuration with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *LatencyDuration) Validate() error {
+// Validate checks the field values on FaultLatencyDuration with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *FaultLatencyDuration) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if m.GetFixedDurationMs() <= 0 {
-		return LatencyDurationValidationError{
+		return FaultLatencyDurationValidationError{
 			field:  "FixedDurationMs",
 			reason: "value must be greater than 0",
 		}
@@ -1460,9 +1460,9 @@ func (m *LatencyDuration) Validate() error {
 	return nil
 }
 
-// LatencyDurationValidationError is the validation error returned by
-// LatencyDuration.Validate if the designated constraints aren't met.
-type LatencyDurationValidationError struct {
+// FaultLatencyDurationValidationError is the validation error returned by
+// FaultLatencyDuration.Validate if the designated constraints aren't met.
+type FaultLatencyDurationValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1470,22 +1470,24 @@ type LatencyDurationValidationError struct {
 }
 
 // Field function returns field value.
-func (e LatencyDurationValidationError) Field() string { return e.field }
+func (e FaultLatencyDurationValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e LatencyDurationValidationError) Reason() string { return e.reason }
+func (e FaultLatencyDurationValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e LatencyDurationValidationError) Cause() error { return e.cause }
+func (e FaultLatencyDurationValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e LatencyDurationValidationError) Key() bool { return e.key }
+func (e FaultLatencyDurationValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e LatencyDurationValidationError) ErrorName() string { return "LatencyDurationValidationError" }
+func (e FaultLatencyDurationValidationError) ErrorName() string {
+	return "FaultLatencyDurationValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e LatencyDurationValidationError) Error() string {
+func (e FaultLatencyDurationValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1497,14 +1499,14 @@ func (e LatencyDurationValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sLatencyDuration.%s: %s%s",
+		"invalid %sFaultLatencyDuration.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = LatencyDurationValidationError{}
+var _ error = FaultLatencyDurationValidationError{}
 
 var _ interface {
 	Field() string
@@ -1512,4 +1514,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = LatencyDurationValidationError{}
+} = FaultLatencyDurationValidationError{}
