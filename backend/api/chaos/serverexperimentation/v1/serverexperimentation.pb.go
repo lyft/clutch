@@ -658,10 +658,14 @@ type UpstreamEnforcing struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// An upstream responsible for enforcing a fault.
+	//
 	// Types that are assignable to UpstreamType:
 	//	*UpstreamEnforcing_UpstreamCluster
 	//	*UpstreamEnforcing_UpstreamPartialSingleCluster
 	UpstreamType isUpstreamEnforcing_UpstreamType `protobuf_oneof:"upstream_type"`
+	// A downstream responsible for enforcing a fault.
+	//
 	// Types that are assignable to DownstreamType:
 	//	*UpstreamEnforcing_DownstreamCluster
 	DownstreamType isUpstreamEnforcing_DownstreamType `protobuf_oneof:"downstream_type"`
@@ -739,10 +743,12 @@ type isUpstreamEnforcing_UpstreamType interface {
 }
 
 type UpstreamEnforcing_UpstreamCluster struct {
+	// A single upstream cluster.
 	UpstreamCluster *SingleCluster `protobuf:"bytes,1,opt,name=upstream_cluster,json=upstreamCluster,proto3,oneof"`
 }
 
 type UpstreamEnforcing_UpstreamPartialSingleCluster struct {
+	// A partial single upstream cluster.
 	UpstreamPartialSingleCluster *PartialSingleCluster `protobuf:"bytes,2,opt,name=upstream_partial_single_cluster,json=upstreamPartialSingleCluster,proto3,oneof"`
 }
 
@@ -755,6 +761,7 @@ type isUpstreamEnforcing_DownstreamType interface {
 }
 
 type UpstreamEnforcing_DownstreamCluster struct {
+	// A single downstream cluster.
 	DownstreamCluster *SingleCluster `protobuf:"bytes,3,opt,name=downstream_cluster,json=downstreamCluster,proto3,oneof"`
 }
 
@@ -766,9 +773,13 @@ type DownstreamEnforcing struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// An upstream responsible for enforcing a fault.
+	//
 	// Types that are assignable to UpstreamType:
 	//	*DownstreamEnforcing_UpstreamCluster
 	UpstreamType isDownstreamEnforcing_UpstreamType `protobuf_oneof:"upstream_type"`
+	// A downstream responsible for enforcing a fault.
+	//
 	// Types that are assignable to DownstreamType:
 	//	*DownstreamEnforcing_DownstreamCluster
 	DownstreamType isDownstreamEnforcing_DownstreamType `protobuf_oneof:"downstream_type"`
@@ -839,6 +850,7 @@ type isDownstreamEnforcing_UpstreamType interface {
 }
 
 type DownstreamEnforcing_UpstreamCluster struct {
+	// A single upstream cluster.
 	UpstreamCluster *SingleCluster `protobuf:"bytes,1,opt,name=upstream_cluster,json=upstreamCluster,proto3,oneof"`
 }
 
@@ -849,6 +861,7 @@ type isDownstreamEnforcing_DownstreamType interface {
 }
 
 type DownstreamEnforcing_DownstreamCluster struct {
+	// A single downstream cluster.
 	DownstreamCluster *SingleCluster `protobuf:"bytes,2,opt,name=downstream_cluster,json=downstreamCluster,proto3,oneof"`
 }
 
