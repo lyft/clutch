@@ -83,27 +83,6 @@ message Latency {
   LatencyDuration latency_duration = 3 [ (validate.rules).message.required = true ];
 }
 
-message FaultPercentage {
-  uint32 percentage = 1 [ (validate.rules).uint32 = {gt : 0, lte : 100} ];
-}
-
-message AbortStatus {
-  uint32 http_status_code = 1 [ (validate.rules).uint32 = {gt : 99, lt : 600} ];
-}
-
-message LatencyDuration {
-  uint32 fixed_duration_ms = 1 [ (validate.rules).uint32.gt = 0 ];
-}
-
-message FaultTargeting {
-  oneof enforcer {
-    option (validate.required) = true;
-
-    UpstreamEnforcing upstream = 1;
-    DownstreamEnforcing downstream = 2;
-  }
-}
-
 message UpstreamEnforcing {
   oneof upstream_type {
     option (validate.required) = true;
@@ -139,9 +118,30 @@ message SingleCluster {
 
 message PartialSingleCluster {
   string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
-  HostPercentage percentage = 2 [ (validate.rules).message.required = true ];
+  ClusterPercentage cluster_percentage = 2 [ (validate.rules).message.required = true ];
 }
 
-message HostPercentage {
+message ClusterPercentage {
   uint32 percentage = 1 [ (validate.rules).uint32 = {gt : 0, lte : 100} ];
+}
+
+message FaultTargeting {
+  oneof enforcer {
+    option (validate.required) = true;
+
+    UpstreamEnforcing upstream = 1;
+    DownstreamEnforcing downstream = 2;
+  }
+}
+
+message FaultPercentage {
+  uint32 percentage = 1 [ (validate.rules).uint32 = {gt : 0, lte : 100} ];
+}
+
+message AbortStatus {
+  uint32 http_status_code = 1 [ (validate.rules).uint32 = {gt : 99, lt : 600} ];
+}
+
+message LatencyDuration {
+  uint32 fixed_duration_ms = 1 [ (validate.rules).uint32.gt = 0 ];
 }
