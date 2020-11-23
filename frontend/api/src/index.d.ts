@@ -4001,207 +4001,6 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a FaultPercentage. */
-                interface IFaultPercentage {
-
-                    /** FaultPercentage percentage */
-                    percentage?: (number|null);
-                }
-
-                /** Represents a FaultPercentage. */
-                class FaultPercentage implements IFaultPercentage {
-
-                    /**
-                     * Constructs a new FaultPercentage.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IFaultPercentage);
-
-                    /** FaultPercentage percentage. */
-                    public percentage: number;
-
-                    /**
-                     * Verifies a FaultPercentage message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a FaultPercentage message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns FaultPercentage
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.FaultPercentage;
-
-                    /**
-                     * Creates a plain object from a FaultPercentage message. Also converts values to other types if specified.
-                     * @param message FaultPercentage
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.FaultPercentage, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this FaultPercentage to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of an AbortStatus. */
-                interface IAbortStatus {
-
-                    /** AbortStatus httpStatusCode */
-                    httpStatusCode?: (number|null);
-                }
-
-                /** Represents an AbortStatus. */
-                class AbortStatus implements IAbortStatus {
-
-                    /**
-                     * Constructs a new AbortStatus.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IAbortStatus);
-
-                    /** AbortStatus httpStatusCode. */
-                    public httpStatusCode: number;
-
-                    /**
-                     * Verifies an AbortStatus message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates an AbortStatus message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns AbortStatus
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.AbortStatus;
-
-                    /**
-                     * Creates a plain object from an AbortStatus message. Also converts values to other types if specified.
-                     * @param message AbortStatus
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.AbortStatus, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this AbortStatus to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a LatencyDuration. */
-                interface ILatencyDuration {
-
-                    /** LatencyDuration fixedDurationMs */
-                    fixedDurationMs?: (number|null);
-                }
-
-                /** Represents a LatencyDuration. */
-                class LatencyDuration implements ILatencyDuration {
-
-                    /**
-                     * Constructs a new LatencyDuration.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.ILatencyDuration);
-
-                    /** LatencyDuration fixedDurationMs. */
-                    public fixedDurationMs: number;
-
-                    /**
-                     * Verifies a LatencyDuration message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a LatencyDuration message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns LatencyDuration
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.LatencyDuration;
-
-                    /**
-                     * Creates a plain object from a LatencyDuration message. Also converts values to other types if specified.
-                     * @param message LatencyDuration
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.LatencyDuration, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this LatencyDuration to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a FaultTargeting. */
-                interface IFaultTargeting {
-
-                    /** FaultTargeting upstream */
-                    upstream?: (clutch.chaos.serverexperimentation.v1.IUpstreamEnforcing|null);
-
-                    /** FaultTargeting downstream */
-                    downstream?: (clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing|null);
-                }
-
-                /** Represents a FaultTargeting. */
-                class FaultTargeting implements IFaultTargeting {
-
-                    /**
-                     * Constructs a new FaultTargeting.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IFaultTargeting);
-
-                    /** FaultTargeting upstream. */
-                    public upstream?: (clutch.chaos.serverexperimentation.v1.IUpstreamEnforcing|null);
-
-                    /** FaultTargeting downstream. */
-                    public downstream?: (clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing|null);
-
-                    /** FaultTargeting enforcer. */
-                    public enforcer?: ("upstream"|"downstream");
-
-                    /**
-                     * Verifies a FaultTargeting message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a FaultTargeting message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns FaultTargeting
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.FaultTargeting;
-
-                    /**
-                     * Creates a plain object from a FaultTargeting message. Also converts values to other types if specified.
-                     * @param message FaultTargeting
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.FaultTargeting, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this FaultTargeting to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
                 /** Properties of an UpstreamEnforcing. */
                 interface IUpstreamEnforcing {
 
@@ -4382,8 +4181,8 @@ export namespace clutch {
                     /** PartialSingleCluster name */
                     name?: (string|null);
 
-                    /** PartialSingleCluster percentage */
-                    percentage?: (clutch.chaos.serverexperimentation.v1.IHostPercentage|null);
+                    /** PartialSingleCluster clusterPercentage */
+                    clusterPercentage?: (clutch.chaos.serverexperimentation.v1.IClusterPercentage|null);
                 }
 
                 /** Represents a PartialSingleCluster. */
@@ -4398,8 +4197,8 @@ export namespace clutch {
                     /** PartialSingleCluster name. */
                     public name: string;
 
-                    /** PartialSingleCluster percentage. */
-                    public percentage?: (clutch.chaos.serverexperimentation.v1.IHostPercentage|null);
+                    /** PartialSingleCluster clusterPercentage. */
+                    public clusterPercentage?: (clutch.chaos.serverexperimentation.v1.IClusterPercentage|null);
 
                     /**
                      * Verifies a PartialSingleCluster message.
@@ -4430,49 +4229,250 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a HostPercentage. */
-                interface IHostPercentage {
+                /** Properties of a ClusterPercentage. */
+                interface IClusterPercentage {
 
-                    /** HostPercentage percentage */
+                    /** ClusterPercentage percentage */
                     percentage?: (number|null);
                 }
 
-                /** Represents a HostPercentage. */
-                class HostPercentage implements IHostPercentage {
+                /** Represents a ClusterPercentage. */
+                class ClusterPercentage implements IClusterPercentage {
 
                     /**
-                     * Constructs a new HostPercentage.
+                     * Constructs a new ClusterPercentage.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IHostPercentage);
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IClusterPercentage);
 
-                    /** HostPercentage percentage. */
+                    /** ClusterPercentage percentage. */
                     public percentage: number;
 
                     /**
-                     * Verifies a HostPercentage message.
+                     * Verifies a ClusterPercentage message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a HostPercentage message from a plain object. Also converts values to their respective internal types.
+                     * Creates a ClusterPercentage message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns HostPercentage
+                     * @returns ClusterPercentage
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.HostPercentage;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.ClusterPercentage;
 
                     /**
-                     * Creates a plain object from a HostPercentage message. Also converts values to other types if specified.
-                     * @param message HostPercentage
+                     * Creates a plain object from a ClusterPercentage message. Also converts values to other types if specified.
+                     * @param message ClusterPercentage
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.HostPercentage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.ClusterPercentage, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this HostPercentage to JSON.
+                     * Converts this ClusterPercentage to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a FaultTargeting. */
+                interface IFaultTargeting {
+
+                    /** FaultTargeting upstream */
+                    upstream?: (clutch.chaos.serverexperimentation.v1.IUpstreamEnforcing|null);
+
+                    /** FaultTargeting downstream */
+                    downstream?: (clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing|null);
+                }
+
+                /** Represents a FaultTargeting. */
+                class FaultTargeting implements IFaultTargeting {
+
+                    /**
+                     * Constructs a new FaultTargeting.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IFaultTargeting);
+
+                    /** FaultTargeting upstream. */
+                    public upstream?: (clutch.chaos.serverexperimentation.v1.IUpstreamEnforcing|null);
+
+                    /** FaultTargeting downstream. */
+                    public downstream?: (clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing|null);
+
+                    /** FaultTargeting enforcer. */
+                    public enforcer?: ("upstream"|"downstream");
+
+                    /**
+                     * Verifies a FaultTargeting message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a FaultTargeting message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns FaultTargeting
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.FaultTargeting;
+
+                    /**
+                     * Creates a plain object from a FaultTargeting message. Also converts values to other types if specified.
+                     * @param message FaultTargeting
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.FaultTargeting, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this FaultTargeting to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a FaultPercentage. */
+                interface IFaultPercentage {
+
+                    /** FaultPercentage percentage */
+                    percentage?: (number|null);
+                }
+
+                /** Represents a FaultPercentage. */
+                class FaultPercentage implements IFaultPercentage {
+
+                    /**
+                     * Constructs a new FaultPercentage.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IFaultPercentage);
+
+                    /** FaultPercentage percentage. */
+                    public percentage: number;
+
+                    /**
+                     * Verifies a FaultPercentage message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a FaultPercentage message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns FaultPercentage
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.FaultPercentage;
+
+                    /**
+                     * Creates a plain object from a FaultPercentage message. Also converts values to other types if specified.
+                     * @param message FaultPercentage
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.FaultPercentage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this FaultPercentage to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an AbortStatus. */
+                interface IAbortStatus {
+
+                    /** AbortStatus httpStatusCode */
+                    httpStatusCode?: (number|null);
+                }
+
+                /** Represents an AbortStatus. */
+                class AbortStatus implements IAbortStatus {
+
+                    /**
+                     * Constructs a new AbortStatus.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IAbortStatus);
+
+                    /** AbortStatus httpStatusCode. */
+                    public httpStatusCode: number;
+
+                    /**
+                     * Verifies an AbortStatus message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an AbortStatus message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns AbortStatus
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.AbortStatus;
+
+                    /**
+                     * Creates a plain object from an AbortStatus message. Also converts values to other types if specified.
+                     * @param message AbortStatus
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.AbortStatus, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this AbortStatus to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a LatencyDuration. */
+                interface ILatencyDuration {
+
+                    /** LatencyDuration fixedDurationMs */
+                    fixedDurationMs?: (number|null);
+                }
+
+                /** Represents a LatencyDuration. */
+                class LatencyDuration implements ILatencyDuration {
+
+                    /**
+                     * Constructs a new LatencyDuration.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.ILatencyDuration);
+
+                    /** LatencyDuration fixedDurationMs. */
+                    public fixedDurationMs: number;
+
+                    /**
+                     * Verifies a LatencyDuration message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a LatencyDuration message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns LatencyDuration
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.LatencyDuration;
+
+                    /**
+                     * Creates a plain object from a LatencyDuration message. Also converts values to other types if specified.
+                     * @param message LatencyDuration
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.LatencyDuration, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this LatencyDuration to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
