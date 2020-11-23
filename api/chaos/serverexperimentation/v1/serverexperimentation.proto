@@ -158,14 +158,14 @@ message PartialSingleCluster {
 
 // The percentage controlling what portion of a given cluster should be applying faults.
 message ClusterPercentage {
-  // The numerator of a percentage with a fixed denumerator equal to 100 
+  // The numerator of a percentage with a fixed denumerator equal to 100
   // (i.e. percentage equal to 50 results in 50/100 = 50%)
   uint32 percentage = 1 [ (validate.rules).uint32 = {gt : 0, lte : 100} ];
 }
 
 // The fault percentage controlling how often a given fault should be applied.
 message FaultPercentage {
-  // The numerator of a percentage with a fixed denumerator equal to 100 
+  // The numerator of a percentage with a fixed denumerator equal to 100
   // (i.e. percentage equal to 50 results in 50/100 = 50%)
   uint32 percentage = 1 [ (validate.rules).uint32 = {gt : 0, lte : 100} ];
 }
