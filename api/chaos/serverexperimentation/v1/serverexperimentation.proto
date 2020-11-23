@@ -57,21 +57,26 @@ enum FaultInjectionCluster {
   FAULTINJECTIONCLUSTER_UPSTREAM = 2;
 }
 
+// The configuration of http fault.
 message HTTPFaultConfig {
   oneof fault {
     option (validate.required) = true;
 
+    // The abort fault.
     Abort abort = 1;
+    // The latency fault.
     Latency latency = 2;
   }
 }
 
+// The definition of abort fault - its targeting, percentage and status that's supposed to be applied.
 message Abort {
   FaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
   FaultPercentage fault_parcentage = 2 [ (validate.rules).message.required = true ];
   AbortStatus abort_status = 3 [ (validate.rules).message.required = true ];
 }
 
+// The definition of latency fault - its targeting, percentage and latency that's supposed to be applied.
 message Latency {
   FaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
   FaultPercentage fault_parcentage = 2 [ (validate.rules).message.required = true ];
@@ -134,5 +139,9 @@ message SingleCluster {
 
 message PartialSingleCluster {
   string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
-  float percentage = 2 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
+  HostsPercentage percentage = 2 [ (validate.rules).message.required = true ];
+}
+
+message HostsPercentage {
+  uint32 percentage = 1 [ (validate.rules).uint32 = {gt : 0, lte : 100} ];
 }

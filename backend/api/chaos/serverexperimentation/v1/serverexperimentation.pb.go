@@ -350,6 +350,7 @@ func (x *LatencyFaultConfig) GetDurationMs() int32 {
 	return 0
 }
 
+// The configuration of http fault.
 type HTTPFaultConfig struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -419,10 +420,12 @@ type isHTTPFaultConfig_Fault interface {
 }
 
 type HTTPFaultConfig_Abort struct {
+	// The abort fault.
 	Abort *Abort `protobuf:"bytes,1,opt,name=abort,proto3,oneof"`
 }
 
 type HTTPFaultConfig_Latency struct {
+	// The latency fault.
 	Latency *Latency `protobuf:"bytes,2,opt,name=latency,proto3,oneof"`
 }
 
@@ -430,6 +433,7 @@ func (*HTTPFaultConfig_Abort) isHTTPFaultConfig_Fault() {}
 
 func (*HTTPFaultConfig_Latency) isHTTPFaultConfig_Fault() {}
 
+// The definition of abort fault - its targeting, percentage and status that's supposed to be applied.
 type Abort struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -493,6 +497,7 @@ func (x *Abort) GetAbortStatus() *AbortStatus {
 	return nil
 }
 
+// The definition of latency fault - its targeting, percentage and latency that's supposed to be applied.
 type Latency struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -1029,8 +1034,8 @@ type PartialSingleCluster struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name       string  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Percentage float32 `protobuf:"fixed32,2,opt,name=percentage,proto3" json:"percentage,omitempty"`
+	Name       string           `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Percentage *HostsPercentage `protobuf:"bytes,2,opt,name=percentage,proto3" json:"percentage,omitempty"`
 }
 
 func (x *PartialSingleCluster) Reset() {
@@ -1072,7 +1077,54 @@ func (x *PartialSingleCluster) GetName() string {
 	return ""
 }
 
-func (x *PartialSingleCluster) GetPercentage() float32 {
+func (x *PartialSingleCluster) GetPercentage() *HostsPercentage {
+	if x != nil {
+		return x.Percentage
+	}
+	return nil
+}
+
+type HostsPercentage struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Percentage uint32 `protobuf:"varint,1,opt,name=percentage,proto3" json:"percentage,omitempty"`
+}
+
+func (x *HostsPercentage) Reset() {
+	*x = HostsPercentage{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[15]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *HostsPercentage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HostsPercentage) ProtoMessage() {}
+
+func (x *HostsPercentage) ProtoReflect() protoreflect.Message {
+	mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[15]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HostsPercentage.ProtoReflect.Descriptor instead.
+func (*HostsPercentage) Descriptor() ([]byte, []int) {
+	return file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *HostsPercentage) GetPercentage() uint32 {
 	if x != nil {
 		return x.Percentage
 	}
@@ -1262,12 +1314,19 @@ var file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDesc = []
 	0x01, 0x22, 0x2c, 0x0a, 0x0d, 0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x43, 0x6c, 0x75, 0x73, 0x74,
 	0x65, 0x72, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
 	0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x22,
-	0x64, 0x0a, 0x14, 0x50, 0x61, 0x72, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65,
-	0x43, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x04,
-	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x2f, 0x0a, 0x0a, 0x70, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74, 0x61,
-	0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x02, 0x42, 0x0f, 0xfa, 0x42, 0x0c, 0x0a, 0x0a, 0x1d,
-	0x00, 0x00, 0xc8, 0x42, 0x25, 0x00, 0x00, 0x00, 0x00, 0x52, 0x0a, 0x70, 0x65, 0x72, 0x63, 0x65,
+	0x95, 0x01, 0x0a, 0x14, 0x50, 0x61, 0x72, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x69, 0x6e, 0x67, 0x6c,
+	0x65, 0x43, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52,
+	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x60, 0x0a, 0x0a, 0x70, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74,
+	0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x36, 0x2e, 0x63, 0x6c, 0x75, 0x74,
+	0x63, 0x68, 0x2e, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x65,
+	0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76,
+	0x31, 0x2e, 0x48, 0x6f, 0x73, 0x74, 0x73, 0x50, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74, 0x61, 0x67,
+	0x65, 0x42, 0x08, 0xfa, 0x42, 0x05, 0x8a, 0x01, 0x02, 0x10, 0x01, 0x52, 0x0a, 0x70, 0x65, 0x72,
+	0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x22, 0x3c, 0x0a, 0x0f, 0x48, 0x6f, 0x73, 0x74, 0x73,
+	0x50, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x12, 0x29, 0x0a, 0x0a, 0x70, 0x65,
+	0x72, 0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x09,
+	0xfa, 0x42, 0x06, 0x2a, 0x04, 0x18, 0x64, 0x20, 0x00, 0x52, 0x0a, 0x70, 0x65, 0x72, 0x63, 0x65,
 	0x6e, 0x74, 0x61, 0x67, 0x65, 0x2a, 0x88, 0x01, 0x0a, 0x15, 0x46, 0x61, 0x75, 0x6c, 0x74, 0x49,
 	0x6e, 0x6a, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x12,
 	0x25, 0x0a, 0x21, 0x46, 0x41, 0x55, 0x4c, 0x54, 0x49, 0x4e, 0x4a, 0x45, 0x43, 0x54, 0x49, 0x4f,
@@ -1299,7 +1358,7 @@ func file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDescGZIP
 }
 
 var file_chaos_serverexperimentation_v1_serverexperimentation_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_chaos_serverexperimentation_v1_serverexperimentation_proto_goTypes = []interface{}{
 	(FaultInjectionCluster)(0),   // 0: clutch.chaos.serverexperimentation.v1.FaultInjectionCluster
 	(*TestConfig)(nil),           // 1: clutch.chaos.serverexperimentation.v1.TestConfig
@@ -1317,6 +1376,7 @@ var file_chaos_serverexperimentation_v1_serverexperimentation_proto_goTypes = []
 	(*DownstreamEnforcing)(nil),  // 13: clutch.chaos.serverexperimentation.v1.DownstreamEnforcing
 	(*SingleCluster)(nil),        // 14: clutch.chaos.serverexperimentation.v1.SingleCluster
 	(*PartialSingleCluster)(nil), // 15: clutch.chaos.serverexperimentation.v1.PartialSingleCluster
+	(*HostsPercentage)(nil),      // 16: clutch.chaos.serverexperimentation.v1.HostsPercentage
 }
 var file_chaos_serverexperimentation_v1_serverexperimentation_proto_depIdxs = []int32{
 	2,  // 0: clutch.chaos.serverexperimentation.v1.TestConfig.cluster_pair:type_name -> clutch.chaos.serverexperimentation.v1.ClusterPairTarget
@@ -1338,11 +1398,12 @@ var file_chaos_serverexperimentation_v1_serverexperimentation_proto_depIdxs = []
 	14, // 16: clutch.chaos.serverexperimentation.v1.UpstreamEnforcing.downstream_cluster:type_name -> clutch.chaos.serverexperimentation.v1.SingleCluster
 	14, // 17: clutch.chaos.serverexperimentation.v1.DownstreamEnforcing.upstream_cluster:type_name -> clutch.chaos.serverexperimentation.v1.SingleCluster
 	14, // 18: clutch.chaos.serverexperimentation.v1.DownstreamEnforcing.downstream_cluster:type_name -> clutch.chaos.serverexperimentation.v1.SingleCluster
-	19, // [19:19] is the sub-list for method output_type
-	19, // [19:19] is the sub-list for method input_type
-	19, // [19:19] is the sub-list for extension type_name
-	19, // [19:19] is the sub-list for extension extendee
-	0,  // [0:19] is the sub-list for field type_name
+	16, // 19: clutch.chaos.serverexperimentation.v1.PartialSingleCluster.percentage:type_name -> clutch.chaos.serverexperimentation.v1.HostsPercentage
+	20, // [20:20] is the sub-list for method output_type
+	20, // [20:20] is the sub-list for method input_type
+	20, // [20:20] is the sub-list for extension type_name
+	20, // [20:20] is the sub-list for extension extendee
+	0,  // [0:20] is the sub-list for field type_name
 }
 
 func init() { file_chaos_serverexperimentation_v1_serverexperimentation_proto_init() }
@@ -1531,6 +1592,18 @@ func file_chaos_serverexperimentation_v1_serverexperimentation_proto_init() {
 				return nil
 			}
 		}
+		file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*HostsPercentage); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[0].OneofWrappers = []interface{}{
 		(*TestConfig_Abort)(nil),
@@ -1559,7 +1632,7 @@ func file_chaos_serverexperimentation_v1_serverexperimentation_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   15,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
