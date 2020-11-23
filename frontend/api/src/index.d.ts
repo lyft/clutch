@@ -3827,11 +3827,11 @@ export namespace clutch {
                 /** Properties of a HTTPFaultConfig. */
                 interface IHTTPFaultConfig {
 
-                    /** HTTPFaultConfig abort */
-                    abort?: (clutch.chaos.serverexperimentation.v1.IAbort|null);
+                    /** HTTPFaultConfig abortFault */
+                    abortFault?: (clutch.chaos.serverexperimentation.v1.IAbortFault|null);
 
-                    /** HTTPFaultConfig latency */
-                    latency?: (clutch.chaos.serverexperimentation.v1.ILatency|null);
+                    /** HTTPFaultConfig latencyFault */
+                    latencyFault?: (clutch.chaos.serverexperimentation.v1.ILatencyFault|null);
                 }
 
                 /** Represents a HTTPFaultConfig. */
@@ -3843,14 +3843,14 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.serverexperimentation.v1.IHTTPFaultConfig);
 
-                    /** HTTPFaultConfig abort. */
-                    public abort?: (clutch.chaos.serverexperimentation.v1.IAbort|null);
+                    /** HTTPFaultConfig abortFault. */
+                    public abortFault?: (clutch.chaos.serverexperimentation.v1.IAbortFault|null);
 
-                    /** HTTPFaultConfig latency. */
-                    public latency?: (clutch.chaos.serverexperimentation.v1.ILatency|null);
+                    /** HTTPFaultConfig latencyFault. */
+                    public latencyFault?: (clutch.chaos.serverexperimentation.v1.ILatencyFault|null);
 
                     /** HTTPFaultConfig fault. */
-                    public fault?: ("abort"|"latency");
+                    public fault?: ("abortFault"|"latencyFault");
 
                     /**
                      * Verifies a HTTPFaultConfig message.
@@ -3881,121 +3881,121 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of an Abort. */
-                interface IAbort {
+                /** Properties of an AbortFault. */
+                interface IAbortFault {
 
-                    /** Abort faultTargeting */
+                    /** AbortFault faultTargeting */
                     faultTargeting?: (clutch.chaos.serverexperimentation.v1.IFaultTargeting|null);
 
-                    /** Abort faultParcentage */
+                    /** AbortFault faultParcentage */
                     faultParcentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
 
-                    /** Abort faultAbortStatus */
+                    /** AbortFault faultAbortStatus */
                     faultAbortStatus?: (clutch.chaos.serverexperimentation.v1.IFaultAbortStatus|null);
                 }
 
-                /** Represents an Abort. */
-                class Abort implements IAbort {
+                /** Represents an AbortFault. */
+                class AbortFault implements IAbortFault {
 
                     /**
-                     * Constructs a new Abort.
+                     * Constructs a new AbortFault.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IAbort);
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IAbortFault);
 
-                    /** Abort faultTargeting. */
+                    /** AbortFault faultTargeting. */
                     public faultTargeting?: (clutch.chaos.serverexperimentation.v1.IFaultTargeting|null);
 
-                    /** Abort faultParcentage. */
+                    /** AbortFault faultParcentage. */
                     public faultParcentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
 
-                    /** Abort faultAbortStatus. */
+                    /** AbortFault faultAbortStatus. */
                     public faultAbortStatus?: (clutch.chaos.serverexperimentation.v1.IFaultAbortStatus|null);
 
                     /**
-                     * Verifies an Abort message.
+                     * Verifies an AbortFault message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates an Abort message from a plain object. Also converts values to their respective internal types.
+                     * Creates an AbortFault message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns Abort
+                     * @returns AbortFault
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.Abort;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.AbortFault;
 
                     /**
-                     * Creates a plain object from an Abort message. Also converts values to other types if specified.
-                     * @param message Abort
+                     * Creates a plain object from an AbortFault message. Also converts values to other types if specified.
+                     * @param message AbortFault
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.Abort, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.AbortFault, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this Abort to JSON.
+                     * Converts this AbortFault to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a Latency. */
-                interface ILatency {
+                /** Properties of a LatencyFault. */
+                interface ILatencyFault {
 
-                    /** Latency faultTargeting */
+                    /** LatencyFault faultTargeting */
                     faultTargeting?: (clutch.chaos.serverexperimentation.v1.IFaultTargeting|null);
 
-                    /** Latency faultParcentage */
+                    /** LatencyFault faultParcentage */
                     faultParcentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
 
-                    /** Latency faultLatencyDuration */
+                    /** LatencyFault faultLatencyDuration */
                     faultLatencyDuration?: (clutch.chaos.serverexperimentation.v1.IFaultLatencyDuration|null);
                 }
 
-                /** Represents a Latency. */
-                class Latency implements ILatency {
+                /** Represents a LatencyFault. */
+                class LatencyFault implements ILatencyFault {
 
                     /**
-                     * Constructs a new Latency.
+                     * Constructs a new LatencyFault.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.ILatency);
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.ILatencyFault);
 
-                    /** Latency faultTargeting. */
+                    /** LatencyFault faultTargeting. */
                     public faultTargeting?: (clutch.chaos.serverexperimentation.v1.IFaultTargeting|null);
 
-                    /** Latency faultParcentage. */
+                    /** LatencyFault faultParcentage. */
                     public faultParcentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
 
-                    /** Latency faultLatencyDuration. */
+                    /** LatencyFault faultLatencyDuration. */
                     public faultLatencyDuration?: (clutch.chaos.serverexperimentation.v1.IFaultLatencyDuration|null);
 
                     /**
-                     * Verifies a Latency message.
+                     * Verifies a LatencyFault message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a Latency message from a plain object. Also converts values to their respective internal types.
+                     * Creates a LatencyFault message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns Latency
+                     * @returns LatencyFault
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.Latency;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.LatencyFault;
 
                     /**
-                     * Creates a plain object from a Latency message. Also converts values to other types if specified.
-                     * @param message Latency
+                     * Creates a plain object from a LatencyFault message. Also converts values to other types if specified.
+                     * @param message LatencyFault
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.Latency, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.LatencyFault, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this Latency to JSON.
+                     * Converts this LatencyFault to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -4071,7 +4071,7 @@ export namespace clutch {
                     downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
                 }
 
-                /** Represents an UpstreamEnforcing. */
+                /** Enforce faults on an upstream. */
                 class UpstreamEnforcing implements IUpstreamEnforcing {
 
                     /**
@@ -4134,7 +4134,7 @@ export namespace clutch {
                     downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
                 }
 
-                /** Represents a DownstreamEnforcing. */
+                /** Enforce faults on a downstream. */
                 class DownstreamEnforcing implements IDownstreamEnforcing {
 
                     /**

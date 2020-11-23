@@ -57,7 +57,7 @@ enum FaultInjectionCluster {
   FAULTINJECTIONCLUSTER_UPSTREAM = 2;
 }
 
-// The configuration of http fault.
+// The configuration of an HTTP fault.
 message HTTPFaultConfig {
   oneof fault {
     option (validate.required) = true;
@@ -75,7 +75,7 @@ message AbortFault {
   FaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
   // The percentage of requests the fault should be applied to.
   FaultPercentage fault_parcentage = 2 [ (validate.rules).message.required = true ];
-  // The status code to apply.
+  // The abort status to apply.
   FaultAbortStatus fault_abort_status = 3 [ (validate.rules).message.required = true ];
 }
 
@@ -85,21 +85,24 @@ message LatencyFault {
   FaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
   // The percentage of requests the fault should be applied to.
   FaultPercentage fault_parcentage = 2 [ (validate.rules).message.required = true ];
-  // The latency to apply.
+  // The latency duration to apply.
   FaultLatencyDuration fault_latency_duration = 3 [ (validate.rules).message.required = true ];
 }
 
-// The fault targeting that describes
+// The fault targeting that describes a part of the system that's responsible for enforcing a fault.
 message FaultTargeting {
+  // A fault enforcer.
   oneof enforcer {
     option (validate.required) = true;
 
+    // Enforce a fault on an upstream.
     UpstreamEnforcing upstream = 1;
+    // Enfore a fault on a downstream.
     DownstreamEnforcing downstream = 2;
   }
 }
 
-///
+/// Enforce faults on an upstream.
 message UpstreamEnforcing {
   oneof upstream_type {
     option (validate.required) = true;
@@ -115,6 +118,7 @@ message UpstreamEnforcing {
   }
 }
 
+/// Enforce faults on a downstream.
 message DownstreamEnforcing {
   oneof upstream_type {
     option (validate.required) = true;
@@ -129,20 +133,31 @@ message DownstreamEnforcing {
   }
 }
 
+// A single cluster.
 message SingleCluster {
+  // The name of a cluster.
   string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
+// A partial single cluster - the part of a single cluster.
 message PartialSingleCluster {
+  // The name of a cluster.
   string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  // The percentage controlling what part of a cluster should be included.
   ClusterPercentage cluster_percentage = 2 [ (validate.rules).message.required = true ];
 }
 
+// The percentage controlling what portion of a given cluster should be applying faults.
 message ClusterPercentage {
+  // The numerator of a percentage with a fixed denumerator equal to 100 
+  // (i.e. percentage equal to 50 results in 50/100 = 50%)
   uint32 percentage = 1 [ (validate.rules).uint32 = {gt : 0, lte : 100} ];
 }
 
+// The fault percentage controlling how often a given fault should be applied.
 message FaultPercentage {
+  // The numerator of a percentage with a fixed denumerator equal to 100 
+  // (i.e. percentage equal to 50 results in 50/100 = 50%)
   uint32 percentage = 1 [ (validate.rules).uint32 = {gt : 0, lte : 100} ];
 }
 

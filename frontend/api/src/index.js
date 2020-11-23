@@ -9532,7 +9532,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Constructs a new UpstreamEnforcing.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @classdesc Represents an UpstreamEnforcing.
+                     * @classdesc Enforce faults on an upstream.
                      * @implements IUpstreamEnforcing
                      * @constructor
                      * @param {clutch.chaos.serverexperimentation.v1.IUpstreamEnforcing=} [properties] Properties to set
@@ -9722,7 +9722,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Constructs a new DownstreamEnforcing.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @classdesc Represents a DownstreamEnforcing.
+                     * @classdesc Enforce faults on a downstream.
                      * @implements IDownstreamEnforcing
                      * @constructor
                      * @param {clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing=} [properties] Properties to set

@@ -350,7 +350,7 @@ func (x *LatencyFaultConfig) GetDurationMs() int32 {
 	return 0
 }
 
-// The configuration of http fault.
+// The configuration of an HTTP fault.
 type HTTPFaultConfig struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -443,7 +443,7 @@ type AbortFault struct {
 	FaultTargeting *FaultTargeting `protobuf:"bytes,1,opt,name=fault_targeting,json=faultTargeting,proto3" json:"fault_targeting,omitempty"`
 	// The percentage of requests the fault should be applied to.
 	FaultParcentage *FaultPercentage `protobuf:"bytes,2,opt,name=fault_parcentage,json=faultParcentage,proto3" json:"fault_parcentage,omitempty"`
-	// The status code to apply.
+	// The abort status to apply.
 	FaultAbortStatus *FaultAbortStatus `protobuf:"bytes,3,opt,name=fault_abort_status,json=faultAbortStatus,proto3" json:"fault_abort_status,omitempty"`
 }
 
@@ -510,7 +510,7 @@ type LatencyFault struct {
 	FaultTargeting *FaultTargeting `protobuf:"bytes,1,opt,name=fault_targeting,json=faultTargeting,proto3" json:"fault_targeting,omitempty"`
 	// The percentage of requests the fault should be applied to.
 	FaultParcentage *FaultPercentage `protobuf:"bytes,2,opt,name=fault_parcentage,json=faultParcentage,proto3" json:"fault_parcentage,omitempty"`
-	// The latency to apply.
+	// The latency duration to apply.
 	FaultLatencyDuration *FaultLatencyDuration `protobuf:"bytes,3,opt,name=fault_latency_duration,json=faultLatencyDuration,proto3" json:"fault_latency_duration,omitempty"`
 }
 
@@ -567,12 +567,14 @@ func (x *LatencyFault) GetFaultLatencyDuration() *FaultLatencyDuration {
 	return nil
 }
 
-// The fault targeting that describes
+// The fault targeting that describes a part of the system that's responsible for enforcing a fault.
 type FaultTargeting struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// A fault enforcer.
+	//
 	// Types that are assignable to Enforcer:
 	//	*FaultTargeting_Upstream
 	//	*FaultTargeting_Downstream
@@ -637,10 +639,12 @@ type isFaultTargeting_Enforcer interface {
 }
 
 type FaultTargeting_Upstream struct {
+	// Enforce a fault on an upstream.
 	Upstream *UpstreamEnforcing `protobuf:"bytes,1,opt,name=upstream,proto3,oneof"`
 }
 
 type FaultTargeting_Downstream struct {
+	// Enfore a fault on a downstream.
 	Downstream *DownstreamEnforcing `protobuf:"bytes,2,opt,name=downstream,proto3,oneof"`
 }
 
@@ -648,7 +652,7 @@ func (*FaultTargeting_Upstream) isFaultTargeting_Enforcer() {}
 
 func (*FaultTargeting_Downstream) isFaultTargeting_Enforcer() {}
 
-///
+/// Enforce faults on an upstream.
 type UpstreamEnforcing struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -756,6 +760,7 @@ type UpstreamEnforcing_DownstreamCluster struct {
 
 func (*UpstreamEnforcing_DownstreamCluster) isUpstreamEnforcing_DownstreamType() {}
 
+/// Enforce faults on a downstream.
 type DownstreamEnforcing struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -849,11 +854,13 @@ type DownstreamEnforcing_DownstreamCluster struct {
 
 func (*DownstreamEnforcing_DownstreamCluster) isDownstreamEnforcing_DownstreamType() {}
 
+// A single cluster.
 type SingleCluster struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// The name of a cluster.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 }
 
@@ -896,12 +903,15 @@ func (x *SingleCluster) GetName() string {
 	return ""
 }
 
+// A partial single cluster - the part of a single cluster.
 type PartialSingleCluster struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name              string             `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// The name of a cluster.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// The percentage controlling what part of a cluster should be included.
 	ClusterPercentage *ClusterPercentage `protobuf:"bytes,2,opt,name=cluster_percentage,json=clusterPercentage,proto3" json:"cluster_percentage,omitempty"`
 }
 
@@ -951,11 +961,14 @@ func (x *PartialSingleCluster) GetClusterPercentage() *ClusterPercentage {
 	return nil
 }
 
+// The percentage controlling what portion of a given cluster should be applying faults.
 type ClusterPercentage struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// The numerator of a percentage with a fixed denumerator equal to 100
+	// (i.e. percentage equal to 50 results in 50/100 = 50%)
 	Percentage uint32 `protobuf:"varint,1,opt,name=percentage,proto3" json:"percentage,omitempty"`
 }
 
@@ -998,11 +1011,14 @@ func (x *ClusterPercentage) GetPercentage() uint32 {
 	return 0
 }
 
+// The fault percentage controlling how often a given fault should be applied.
 type FaultPercentage struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// The numerator of a percentage with a fixed denumerator equal to 100
+	// (i.e. percentage equal to 50 results in 50/100 = 50%)
 	Percentage uint32 `protobuf:"varint,1,opt,name=percentage,proto3" json:"percentage,omitempty"`
 }
 
