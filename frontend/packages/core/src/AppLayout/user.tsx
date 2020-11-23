@@ -34,22 +34,22 @@ const Initials = styled(Typography)`
 `;
 
 const ItemText = styled(Typography)`
-  color: #0D1030;
+  color: #0d1030;
   font-size: 0.875rem;
   opacity: 0.6;
 `;
 
 const Paper = styled(MuiPaper)`
   width: 250px;
-  border: 1px solid #E2E2E6;
+  border: 1px solid #e2e2e6;
   box-shadow: 0px 5px 15px rgba(53, 72, 212, 0.2);
 `;
 
 const UserAccountMenuItem = styled(MuiMenuItem)`
-  &:focus{
+  &:focus {
     background: transparent;
   }
-`
+`;
 
 interface JwtToken {
   sub: string;
@@ -74,8 +74,8 @@ const userId = (): string => {
 const UserAvatar: React.FC = () => {
   return (
     <Avatar>
-    <Initials>{userId().slice(0, 2).toUpperCase()}</Initials>
-  </Avatar>
+      <Initials>{userId().slice(0, 2).toUpperCase()}</Initials>
+    </Avatar>
   );
 };
 
@@ -110,7 +110,7 @@ const UserInformation: React.FC = () => {
         aria-haspopup="true"
         onMouseEnter={handleToggle}
       >
-        <UserAvatar/>
+        <UserAvatar />
       </UserPhoto>
       <Popper
         open={open}
@@ -119,9 +119,9 @@ const UserInformation: React.FC = () => {
         transition
         popperOptions={{
           modifiers: {
-             offset: {
-                 offset: '-105,0',
-             },
+            offset: {
+              offset: "-105,0",
+            },
           },
         }}
       >
@@ -135,7 +135,7 @@ const UserInformation: React.FC = () => {
                 <MenuList autoFocusItem={open} id="account-options" onKeyDown={handleListKeyDown}>
                   <UserAccountMenuItem>
                     <ListItemIcon>
-                      <UserAvatar/>
+                      <UserAvatar />
                     </ListItemIcon>
                     <ListItemText>
                       <ItemText>{userId()}</ItemText>
