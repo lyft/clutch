@@ -67,15 +67,15 @@ message Config {
 }
 
 message Abort {
-  FaultTargeting fault_targeting = 1 [(validate.rules).message.required = true];
-  FaultPercentage fault_parcentage = 2 [(validate.rules).message.required = true];
-  AbortStatus abort_status = 3 [(validate.rules).message.required = true];
+  FaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
+  FaultPercentage fault_parcentage = 2 [ (validate.rules).message.required = true ];
+  AbortStatus abort_status = 3 [ (validate.rules).message.required = true ];
 }
 
 message Latency {
-  FaultTargeting fault_targeting = 1 [(validate.rules).message.required = true];
-  FaultPercentage fault_parcentage = 2 [(validate.rules).message.required = true];
-  LatencyDuration latency_duration = 3 [(validate.rules).message.required = true];
+  FaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
+  FaultPercentage fault_parcentage = 2 [ (validate.rules).message.required = true ];
+  LatencyDuration latency_duration = 3 [ (validate.rules).message.required = true ];
 }
 
 message FaultPercentage {
