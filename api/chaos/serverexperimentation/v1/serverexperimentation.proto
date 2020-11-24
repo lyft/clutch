@@ -76,7 +76,7 @@ message HTTPFaultConfig {
 message AbortFault {
   // The percentage of requests the fault should be applied to.
   FaultPercentage percentage = 1 [ (validate.rules).message.required = true ];
-  // The abort status to apply.
+  // The HTTP status code to insert when applying an abort fault.
   FaultAbortStatus abort_status = 2 [ (validate.rules).message.required = true ];
 }
 
@@ -84,7 +84,7 @@ message AbortFault {
 message LatencyFault {
   // The percentage of requests the fault should be applied to.
   FaultPercentage percentage = 1 [ (validate.rules).message.required = true ];
-  // The latency duration to apply.
+  // The latency duration to apply when applying a latency fault.
   FaultLatencyDuration latency_duration = 2 [ (validate.rules).message.required = true ];
 }
 
