@@ -929,7 +929,7 @@ type PartialSingleCluster struct {
 	// any given part of a cluster should be either included or excluded for the whole duration of
 	// a given fault injection test. In other words, for every part of the cluster, we toss a
 	// coin once to decide whether it should participate in a given fault injection test or not
-	// and we stick to our choice.
+	// and we stick to our decision.
 	ClusterPercentage *ClusterPercentage `protobuf:"bytes,2,opt,name=cluster_percentage,json=clusterPercentage,proto3" json:"cluster_percentage,omitempty"`
 }
 
