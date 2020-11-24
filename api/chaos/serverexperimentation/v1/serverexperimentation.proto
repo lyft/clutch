@@ -98,9 +98,9 @@ message FaultTargeting {
     option (validate.required) = true;
 
     // Enforce a fault on an upstream.
-    UpstreamEnforcing upstream = 1;
+    UpstreamEnforcing upstream_enforcing = 1;
     // Enfore a fault on a downstream.
-    DownstreamEnforcing downstream = 2;
+    DownstreamEnforcing downstream_enforcing = 2;
   }
 }
 

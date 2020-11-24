@@ -3998,11 +3998,11 @@ export namespace clutch {
                 /** Properties of a FaultTargeting. */
                 interface IFaultTargeting {
 
-                    /** FaultTargeting upstream */
-                    upstream?: (clutch.chaos.serverexperimentation.v1.IUpstreamEnforcing|null);
+                    /** FaultTargeting upstreamEnforcing */
+                    upstreamEnforcing?: (clutch.chaos.serverexperimentation.v1.IUpstreamEnforcing|null);
 
-                    /** FaultTargeting downstream */
-                    downstream?: (clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing|null);
+                    /** FaultTargeting downstreamEnforcing */
+                    downstreamEnforcing?: (clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing|null);
                 }
 
                 /** Represents a FaultTargeting. */
@@ -4014,14 +4014,14 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.serverexperimentation.v1.IFaultTargeting);
 
-                    /** FaultTargeting upstream. */
-                    public upstream?: (clutch.chaos.serverexperimentation.v1.IUpstreamEnforcing|null);
+                    /** FaultTargeting upstreamEnforcing. */
+                    public upstreamEnforcing?: (clutch.chaos.serverexperimentation.v1.IUpstreamEnforcing|null);
 
-                    /** FaultTargeting downstream. */
-                    public downstream?: (clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing|null);
+                    /** FaultTargeting downstreamEnforcing. */
+                    public downstreamEnforcing?: (clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing|null);
 
                     /** FaultTargeting enforcer. */
-                    public enforcer?: ("upstream"|"downstream");
+                    public enforcer?: ("upstreamEnforcing"|"downstreamEnforcing");
 
                     /**
                      * Verifies a FaultTargeting message.

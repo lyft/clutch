@@ -722,24 +722,24 @@ func (m *FaultTargeting) Validate() error {
 
 	switch m.Enforcer.(type) {
 
-	case *FaultTargeting_Upstream:
+	case *FaultTargeting_UpstreamEnforcing:
 
-		if v, ok := interface{}(m.GetUpstream()).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(m.GetUpstreamEnforcing()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return FaultTargetingValidationError{
-					field:  "Upstream",
+					field:  "UpstreamEnforcing",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
 			}
 		}
 
-	case *FaultTargeting_Downstream:
+	case *FaultTargeting_DownstreamEnforcing:
 
-		if v, ok := interface{}(m.GetDownstream()).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(m.GetDownstreamEnforcing()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return FaultTargetingValidationError{
-					field:  "Downstream",
+					field:  "DownstreamEnforcing",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}

@@ -9350,8 +9350,8 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a FaultTargeting.
                      * @memberof clutch.chaos.serverexperimentation.v1
                      * @interface IFaultTargeting
-                     * @property {clutch.chaos.serverexperimentation.v1.IUpstreamEnforcing|null} [upstream] FaultTargeting upstream
-                     * @property {clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing|null} [downstream] FaultTargeting downstream
+                     * @property {clutch.chaos.serverexperimentation.v1.IUpstreamEnforcing|null} [upstreamEnforcing] FaultTargeting upstreamEnforcing
+                     * @property {clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing|null} [downstreamEnforcing] FaultTargeting downstreamEnforcing
                      */
 
                     /**
@@ -9370,32 +9370,32 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * FaultTargeting upstream.
-                     * @member {clutch.chaos.serverexperimentation.v1.IUpstreamEnforcing|null|undefined} upstream
+                     * FaultTargeting upstreamEnforcing.
+                     * @member {clutch.chaos.serverexperimentation.v1.IUpstreamEnforcing|null|undefined} upstreamEnforcing
                      * @memberof clutch.chaos.serverexperimentation.v1.FaultTargeting
                      * @instance
                      */
-                    FaultTargeting.prototype.upstream = null;
+                    FaultTargeting.prototype.upstreamEnforcing = null;
 
                     /**
-                     * FaultTargeting downstream.
-                     * @member {clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing|null|undefined} downstream
+                     * FaultTargeting downstreamEnforcing.
+                     * @member {clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing|null|undefined} downstreamEnforcing
                      * @memberof clutch.chaos.serverexperimentation.v1.FaultTargeting
                      * @instance
                      */
-                    FaultTargeting.prototype.downstream = null;
+                    FaultTargeting.prototype.downstreamEnforcing = null;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
 
                     /**
                      * FaultTargeting enforcer.
-                     * @member {"upstream"|"downstream"|undefined} enforcer
+                     * @member {"upstreamEnforcing"|"downstreamEnforcing"|undefined} enforcer
                      * @memberof clutch.chaos.serverexperimentation.v1.FaultTargeting
                      * @instance
                      */
                     Object.defineProperty(FaultTargeting.prototype, "enforcer", {
-                        get: $util.oneOfGetter($oneOfFields = ["upstream", "downstream"]),
+                        get: $util.oneOfGetter($oneOfFields = ["upstreamEnforcing", "downstreamEnforcing"]),
                         set: $util.oneOfSetter($oneOfFields)
                     });
 
@@ -9411,22 +9411,22 @@ export const clutch = $root.clutch = (() => {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         let properties = {};
-                        if (message.upstream != null && message.hasOwnProperty("upstream")) {
+                        if (message.upstreamEnforcing != null && message.hasOwnProperty("upstreamEnforcing")) {
                             properties.enforcer = 1;
                             {
-                                let error = $root.clutch.chaos.serverexperimentation.v1.UpstreamEnforcing.verify(message.upstream);
+                                let error = $root.clutch.chaos.serverexperimentation.v1.UpstreamEnforcing.verify(message.upstreamEnforcing);
                                 if (error)
-                                    return "upstream." + error;
+                                    return "upstreamEnforcing." + error;
                             }
                         }
-                        if (message.downstream != null && message.hasOwnProperty("downstream")) {
+                        if (message.downstreamEnforcing != null && message.hasOwnProperty("downstreamEnforcing")) {
                             if (properties.enforcer === 1)
                                 return "enforcer: multiple values";
                             properties.enforcer = 1;
                             {
-                                let error = $root.clutch.chaos.serverexperimentation.v1.DownstreamEnforcing.verify(message.downstream);
+                                let error = $root.clutch.chaos.serverexperimentation.v1.DownstreamEnforcing.verify(message.downstreamEnforcing);
                                 if (error)
-                                    return "downstream." + error;
+                                    return "downstreamEnforcing." + error;
                             }
                         }
                         return null;
@@ -9444,15 +9444,15 @@ export const clutch = $root.clutch = (() => {
                         if (object instanceof $root.clutch.chaos.serverexperimentation.v1.FaultTargeting)
                             return object;
                         let message = new $root.clutch.chaos.serverexperimentation.v1.FaultTargeting();
-                        if (object.upstream != null) {
-                            if (typeof object.upstream !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.FaultTargeting.upstream: object expected");
-                            message.upstream = $root.clutch.chaos.serverexperimentation.v1.UpstreamEnforcing.fromObject(object.upstream);
+                        if (object.upstreamEnforcing != null) {
+                            if (typeof object.upstreamEnforcing !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.FaultTargeting.upstreamEnforcing: object expected");
+                            message.upstreamEnforcing = $root.clutch.chaos.serverexperimentation.v1.UpstreamEnforcing.fromObject(object.upstreamEnforcing);
                         }
-                        if (object.downstream != null) {
-                            if (typeof object.downstream !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.FaultTargeting.downstream: object expected");
-                            message.downstream = $root.clutch.chaos.serverexperimentation.v1.DownstreamEnforcing.fromObject(object.downstream);
+                        if (object.downstreamEnforcing != null) {
+                            if (typeof object.downstreamEnforcing !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.FaultTargeting.downstreamEnforcing: object expected");
+                            message.downstreamEnforcing = $root.clutch.chaos.serverexperimentation.v1.DownstreamEnforcing.fromObject(object.downstreamEnforcing);
                         }
                         return message;
                     };
@@ -9470,15 +9470,15 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (message.upstream != null && message.hasOwnProperty("upstream")) {
-                            object.upstream = $root.clutch.chaos.serverexperimentation.v1.UpstreamEnforcing.toObject(message.upstream, options);
+                        if (message.upstreamEnforcing != null && message.hasOwnProperty("upstreamEnforcing")) {
+                            object.upstreamEnforcing = $root.clutch.chaos.serverexperimentation.v1.UpstreamEnforcing.toObject(message.upstreamEnforcing, options);
                             if (options.oneofs)
-                                object.enforcer = "upstream";
+                                object.enforcer = "upstreamEnforcing";
                         }
-                        if (message.downstream != null && message.hasOwnProperty("downstream")) {
-                            object.downstream = $root.clutch.chaos.serverexperimentation.v1.DownstreamEnforcing.toObject(message.downstream, options);
+                        if (message.downstreamEnforcing != null && message.hasOwnProperty("downstreamEnforcing")) {
+                            object.downstreamEnforcing = $root.clutch.chaos.serverexperimentation.v1.DownstreamEnforcing.toObject(message.downstreamEnforcing, options);
                             if (options.oneofs)
-                                object.enforcer = "downstream";
+                                object.enforcer = "downstreamEnforcing";
                         }
                         return object;
                     };
