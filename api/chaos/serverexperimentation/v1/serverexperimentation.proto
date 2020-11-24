@@ -106,7 +106,8 @@ message FaultTargeting {
 
 // Enforce faults on an upstream.
 message UpstreamEnforcing {
-  // An upstream responsible for enforcing a fault.
+  // An upstream responsible for enforcing a fault. Only requests that are handled
+  // by the specified upstream are considered for the fault injection.
   oneof upstream_type {
     option (validate.required) = true;
 
@@ -116,7 +117,8 @@ message UpstreamEnforcing {
     PartialSingleCluster upstream_partial_single_cluster = 2;
   }
 
-  // A downstream responsible for enforcing a fault.
+  // A downstream responsible for enforcing a fault. Only requests that are started
+  // by the specified downstream are considered for the fault injection.
   oneof downstream_type {
     option (validate.required) = true;
 
@@ -127,7 +129,8 @@ message UpstreamEnforcing {
 
 // Enforce faults on a downstream.
 message DownstreamEnforcing {
-  // An upstream responsible for enforcing a fault.
+  // An upstream responsible for enforcing a fault. Only requests that are handled
+  // by the specified upstream are considered for the fault injection.
   oneof upstream_type {
     option (validate.required) = true;
 
@@ -135,7 +138,8 @@ message DownstreamEnforcing {
     SingleCluster upstream_cluster = 1;
   }
 
-  // A downstream responsible for enforcing a fault.
+  // A downstream responsible for enforcing a fault. Only requests that are started
+  // by the specified downstream are considered for fault injection.
   oneof downstream_type {
     option (validate.required) = true;
 
