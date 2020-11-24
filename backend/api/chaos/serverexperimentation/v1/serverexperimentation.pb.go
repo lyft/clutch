@@ -450,7 +450,7 @@ type AbortFault struct {
 
 	// The percentage of requests the fault should be applied to.
 	Percentage *FaultPercentage `protobuf:"bytes,1,opt,name=percentage,proto3" json:"percentage,omitempty"`
-	// The abort status to apply.
+	// The HTTP status code to insert when applying an abort fault.
 	AbortStatus *FaultAbortStatus `protobuf:"bytes,2,opt,name=abort_status,json=abortStatus,proto3" json:"abort_status,omitempty"`
 }
 
@@ -508,7 +508,7 @@ type LatencyFault struct {
 
 	// The percentage of requests the fault should be applied to.
 	Percentage *FaultPercentage `protobuf:"bytes,1,opt,name=percentage,proto3" json:"percentage,omitempty"`
-	// The latency duration to apply.
+	// The latency duration to apply when applying a latency fault.
 	LatencyDuration *FaultLatencyDuration `protobuf:"bytes,2,opt,name=latency_duration,json=latencyDuration,proto3" json:"latency_duration,omitempty"`
 }
 
@@ -560,7 +560,7 @@ func (x *LatencyFault) GetLatencyDuration() *FaultLatencyDuration {
 
 // The fault targeting that allows us to control which requests are considered for
 // fault injection and what part of the system is responsible for applying faults.
-// The `enforcer` abstraction allows us to define different list of matching criteria
+// The `enforcer` abstraction allows us to define a different list of matching criteria
 // depending on whether faults are applied on the upstream or downstream.
 type FaultTargeting struct {
 	state         protoimpl.MessageState
@@ -652,13 +652,15 @@ type UpstreamEnforcing struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// An upstream responsible for enforcing a fault.
+	// An upstream responsible for enforcing a fault. Only requests that are handled
+	// by the specified upstream are considered for the fault injection.
 	//
 	// Types that are assignable to UpstreamType:
 	//	*UpstreamEnforcing_UpstreamCluster
 	//	*UpstreamEnforcing_UpstreamPartialSingleCluster
 	UpstreamType isUpstreamEnforcing_UpstreamType `protobuf_oneof:"upstream_type"`
-	// A downstream responsible for enforcing a fault.
+	// A downstream responsible for enforcing a fault. Only requests that are started
+	// by the specified downstream are considered for the fault injection.
 	//
 	// Types that are assignable to DownstreamType:
 	//	*UpstreamEnforcing_DownstreamCluster
@@ -767,12 +769,14 @@ type DownstreamEnforcing struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// An upstream responsible for enforcing a fault.
+	// An upstream responsible for enforcing a fault. Only requests that are handled
+	// by the specified upstream are considered for the fault injection.
 	//
 	// Types that are assignable to UpstreamType:
 	//	*DownstreamEnforcing_UpstreamCluster
 	UpstreamType isDownstreamEnforcing_UpstreamType `protobuf_oneof:"upstream_type"`
-	// A downstream responsible for enforcing a fault.
+	// A downstream responsible for enforcing a fault. Only requests that are started
+	// by the specified downstream are considered for a fault injection.
 	//
 	// Types that are assignable to DownstreamType:
 	//	*DownstreamEnforcing_DownstreamCluster
@@ -912,7 +916,7 @@ func (x *SingleCluster) GetName() string {
 
 // A partial single cluster - the part of a single cluster that's partaking
 // in the fault injection. It allows the user of the API to specify the subset
-// of the cluster whose requets should be considered for fault injection.
+// of the cluster whose requests should be considered for a fault injection.
 type PartialSingleCluster struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -920,7 +924,12 @@ type PartialSingleCluster struct {
 
 	// The name of a cluster.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// The percentage controlling what part of a cluster should be included.
+	// The percentage controlling what part of a cluster should be considered for fault
+	// injection. The portion of the cluster is supposed to be consistent, meaning that
+	// any given part of a cluster should be either included or excluded for the whole duration of
+	// a given fault injection test. In other words, for every part of the cluster, we toss a
+	// coin once to decide whether it should participate in a given fault injection test or not
+	// and we stick to our choice.
 	ClusterPercentage *ClusterPercentage `protobuf:"bytes,2,opt,name=cluster_percentage,json=clusterPercentage,proto3" json:"cluster_percentage,omitempty"`
 }
 
@@ -1020,7 +1029,8 @@ func (x *ClusterPercentage) GetPercentage() uint32 {
 	return 0
 }
 
-// The fault percentage controlling how often a given fault should be applied.
+// The fault percentage controlling what percentage of requests considered for a fault injection
+// should have the fault applied.
 type FaultPercentage struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
