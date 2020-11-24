@@ -18719,6 +18719,17 @@ yup@^0.30.0:
     property-expr "^2.0.4"
     toposort "^2.0.2"
 
+yup@^0.31.0:
+  version "0.31.0"
+  resolved "https://registry.yarnpkg.com/yup/-/yup-0.31.0.tgz#e882ab42940a15a980ab8d9cc19f2489418253d2"
+  integrity sha512-t4nFalWdyIZW2n9wgJVracCe/VPbFmh0/fKaKz40gxcZHCZPOhm4akWYg08t0OOiBhV5xvqLY+fnqzCnLh+ItQ==
+  dependencies:
+    "@babel/runtime" "^7.10.5"
+    lodash "^4.17.20"
+    lodash-es "^4.17.11"
+    property-expr "^2.0.4"
+    toposort "^2.0.2"
+
 zwitch@^1.0.0:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/zwitch/-/zwitch-1.0.5.tgz#d11d7381ffed16b742f6af7b3f223d5cd9fe9920"
