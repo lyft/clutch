@@ -59,37 +59,39 @@ enum FaultInjectionCluster {
 
 // The configuration of an HTTP fault.
 message HTTPFaultConfig {
+  // The targeting of the fault describing what requests are being considered for faults.
+  FaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
+
   oneof fault {
     option (validate.required) = true;
 
     // The abort fault.
-    AbortFault abort_fault = 1;
+    AbortFault abort_fault = 2;
     // The latency fault.
-    LatencyFault latency_fault = 2;
+    LatencyFault latency_fault = 3;
   }
 }
 
 // The definition of an abort fault.
 message AbortFault {
-  // The targeting of the fault describing what requests faults should be applied to.
-  FaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
   // The percentage of requests the fault should be applied to.
-  FaultPercentage fault_parcentage = 2 [ (validate.rules).message.required = true ];
+  FaultPercentage percentage = 2 [ (validate.rules).message.required = true ];
   // The abort status to apply.
-  FaultAbortStatus fault_abort_status = 3 [ (validate.rules).message.required = true ];
+  FaultAbortStatus abort_status = 3 [ (validate.rules).message.required = true ];
 }
 
 // The definition of a latency fault.
 message LatencyFault {
-  // The targeting of the fault describing where the faults should be applied.
-  FaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
   // The percentage of requests the fault should be applied to.
-  FaultPercentage fault_parcentage = 2 [ (validate.rules).message.required = true ];
+  FaultPercentage percentage = 2 [ (validate.rules).message.required = true ];
   // The latency duration to apply.
-  FaultLatencyDuration fault_latency_duration = 3 [ (validate.rules).message.required = true ];
+  FaultLatencyDuration latency_duration = 3 [ (validate.rules).message.required = true ];
 }
 
-// The fault targeting that describes a part of the system that's responsible for enforcing a fault.
+// The fault targeting that allows us to control which requests are considered for
+// fault injection and what part of the system is responsible for applying faults.
+// The `enforcer` abstraction allows us to define different list of matching criteria
+// depending on whether faults are applied on the upstream or downstream.
 message FaultTargeting {
   // A fault enforcer.
   oneof enforcer {
@@ -102,7 +104,7 @@ message FaultTargeting {
   }
 }
 
-/// Enforce faults on an upstream.
+// Enforce faults on an upstream.
 message UpstreamEnforcing {
   // An upstream responsible for enforcing a fault.
   oneof upstream_type {
@@ -123,7 +125,7 @@ message UpstreamEnforcing {
   }
 }
 
-/// Enforce faults on a downstream.
+// Enforce faults on a downstream.
 message DownstreamEnforcing {
   // An upstream responsible for enforcing a fault.
   oneof upstream_type {
@@ -142,13 +144,15 @@ message DownstreamEnforcing {
   }
 }
 
-// A single cluster.
+// A single cluster that is partaking in the fault injection.
 message SingleCluster {
   // The name of a cluster.
   string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
-// A partial single cluster - the part of a single cluster.
+// A partial single cluster - the part of a single cluster that's partaking
+// in the fault injection. It allows the user of the API to specify the subset
+// of the cluster whose requets should be considered for fault injection.
 message PartialSingleCluster {
   // The name of a cluster.
   string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
