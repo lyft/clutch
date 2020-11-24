@@ -139,7 +139,7 @@ message DownstreamEnforcing {
   }
 
   // A downstream responsible for enforcing a fault. Only requests that are started
-  // by the specified downstream are considered for fault injection.
+  // by the specified downstream are considered for a fault injection.
   oneof downstream_type {
     option (validate.required) = true;
 
@@ -156,7 +156,7 @@ message SingleCluster {
 
 // A partial single cluster - the part of a single cluster that's partaking
 // in the fault injection. It allows the user of the API to specify the subset
-// of the cluster whose requests should be considered for fault injection.
+// of the cluster whose requests should be considered for a fault injection.
 message PartialSingleCluster {
   // The name of a cluster.
   string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
@@ -176,7 +176,7 @@ message ClusterPercentage {
   uint32 percentage = 1 [ (validate.rules).uint32 = {gt : 0, lte : 100} ];
 }
 
-// The fault percentage controlling what percentage of requests considered for fault injection
+// The fault percentage controlling what percentage of requests considered for a fault injection
 // should have the fault applied.
 message FaultPercentage {
   // The numerator of a percentage with a fixed denumerator equal to 100
