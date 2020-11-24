@@ -75,17 +75,17 @@ message HTTPFaultConfig {
 // The definition of an abort fault.
 message AbortFault {
   // The percentage of requests the fault should be applied to.
-  FaultPercentage percentage = 2 [ (validate.rules).message.required = true ];
+  FaultPercentage percentage = 1 [ (validate.rules).message.required = true ];
   // The abort status to apply.
-  FaultAbortStatus abort_status = 3 [ (validate.rules).message.required = true ];
+  FaultAbortStatus abort_status = 2 [ (validate.rules).message.required = true ];
 }
 
 // The definition of a latency fault.
 message LatencyFault {
   // The percentage of requests the fault should be applied to.
-  FaultPercentage percentage = 2 [ (validate.rules).message.required = true ];
+  FaultPercentage percentage = 1 [ (validate.rules).message.required = true ];
   // The latency duration to apply.
-  FaultLatencyDuration latency_duration = 3 [ (validate.rules).message.required = true ];
+  FaultLatencyDuration latency_duration = 2 [ (validate.rules).message.required = true ];
 }
 
 // The fault targeting that allows us to control which requests are considered for

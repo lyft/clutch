@@ -8918,6 +8918,7 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a HTTPFaultConfig.
                      * @memberof clutch.chaos.serverexperimentation.v1
                      * @interface IHTTPFaultConfig
+                     * @property {clutch.chaos.serverexperimentation.v1.IFaultTargeting|null} [faultTargeting] HTTPFaultConfig faultTargeting
                      * @property {clutch.chaos.serverexperimentation.v1.IAbortFault|null} [abortFault] HTTPFaultConfig abortFault
                      * @property {clutch.chaos.serverexperimentation.v1.ILatencyFault|null} [latencyFault] HTTPFaultConfig latencyFault
                      */
@@ -8936,6 +8937,14 @@ export const clutch = $root.clutch = (() => {
                                 if (properties[keys[i]] != null)
                                     this[keys[i]] = properties[keys[i]];
                     }
+
+                    /**
+                     * HTTPFaultConfig faultTargeting.
+                     * @member {clutch.chaos.serverexperimentation.v1.IFaultTargeting|null|undefined} faultTargeting
+                     * @memberof clutch.chaos.serverexperimentation.v1.HTTPFaultConfig
+                     * @instance
+                     */
+                    HTTPFaultConfig.prototype.faultTargeting = null;
 
                     /**
                      * HTTPFaultConfig abortFault.
@@ -8979,6 +8988,11 @@ export const clutch = $root.clutch = (() => {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         let properties = {};
+                        if (message.faultTargeting != null && message.hasOwnProperty("faultTargeting")) {
+                            let error = $root.clutch.chaos.serverexperimentation.v1.FaultTargeting.verify(message.faultTargeting);
+                            if (error)
+                                return "faultTargeting." + error;
+                        }
                         if (message.abortFault != null && message.hasOwnProperty("abortFault")) {
                             properties.fault = 1;
                             {
@@ -9012,6 +9026,11 @@ export const clutch = $root.clutch = (() => {
                         if (object instanceof $root.clutch.chaos.serverexperimentation.v1.HTTPFaultConfig)
                             return object;
                         let message = new $root.clutch.chaos.serverexperimentation.v1.HTTPFaultConfig();
+                        if (object.faultTargeting != null) {
+                            if (typeof object.faultTargeting !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.HTTPFaultConfig.faultTargeting: object expected");
+                            message.faultTargeting = $root.clutch.chaos.serverexperimentation.v1.FaultTargeting.fromObject(object.faultTargeting);
+                        }
                         if (object.abortFault != null) {
                             if (typeof object.abortFault !== "object")
                                 throw TypeError(".clutch.chaos.serverexperimentation.v1.HTTPFaultConfig.abortFault: object expected");
@@ -9038,6 +9057,10 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
+                        if (options.defaults)
+                            object.faultTargeting = null;
+                        if (message.faultTargeting != null && message.hasOwnProperty("faultTargeting"))
+                            object.faultTargeting = $root.clutch.chaos.serverexperimentation.v1.FaultTargeting.toObject(message.faultTargeting, options);
                         if (message.abortFault != null && message.hasOwnProperty("abortFault")) {
                             object.abortFault = $root.clutch.chaos.serverexperimentation.v1.AbortFault.toObject(message.abortFault, options);
                             if (options.oneofs)
@@ -9071,9 +9094,8 @@ export const clutch = $root.clutch = (() => {
                      * Properties of an AbortFault.
                      * @memberof clutch.chaos.serverexperimentation.v1
                      * @interface IAbortFault
-                     * @property {clutch.chaos.serverexperimentation.v1.IFaultTargeting|null} [faultTargeting] AbortFault faultTargeting
-                     * @property {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null} [faultParcentage] AbortFault faultParcentage
-                     * @property {clutch.chaos.serverexperimentation.v1.IFaultAbortStatus|null} [faultAbortStatus] AbortFault faultAbortStatus
+                     * @property {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null} [percentage] AbortFault percentage
+                     * @property {clutch.chaos.serverexperimentation.v1.IFaultAbortStatus|null} [abortStatus] AbortFault abortStatus
                      */
 
                     /**
@@ -9092,28 +9114,20 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * AbortFault faultTargeting.
-                     * @member {clutch.chaos.serverexperimentation.v1.IFaultTargeting|null|undefined} faultTargeting
+                     * AbortFault percentage.
+                     * @member {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null|undefined} percentage
                      * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
                      * @instance
                      */
-                    AbortFault.prototype.faultTargeting = null;
+                    AbortFault.prototype.percentage = null;
 
                     /**
-                     * AbortFault faultParcentage.
-                     * @member {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null|undefined} faultParcentage
+                     * AbortFault abortStatus.
+                     * @member {clutch.chaos.serverexperimentation.v1.IFaultAbortStatus|null|undefined} abortStatus
                      * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
                      * @instance
                      */
-                    AbortFault.prototype.faultParcentage = null;
-
-                    /**
-                     * AbortFault faultAbortStatus.
-                     * @member {clutch.chaos.serverexperimentation.v1.IFaultAbortStatus|null|undefined} faultAbortStatus
-                     * @memberof clutch.chaos.serverexperimentation.v1.AbortFault
-                     * @instance
-                     */
-                    AbortFault.prototype.faultAbortStatus = null;
+                    AbortFault.prototype.abortStatus = null;
 
                     /**
                      * Verifies an AbortFault message.
@@ -9126,20 +9140,15 @@ export const clutch = $root.clutch = (() => {
                     AbortFault.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.faultTargeting != null && message.hasOwnProperty("faultTargeting")) {
-                            let error = $root.clutch.chaos.serverexperimentation.v1.FaultTargeting.verify(message.faultTargeting);
+                        if (message.percentage != null && message.hasOwnProperty("percentage")) {
+                            let error = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.verify(message.percentage);
                             if (error)
-                                return "faultTargeting." + error;
+                                return "percentage." + error;
                         }
-                        if (message.faultParcentage != null && message.hasOwnProperty("faultParcentage")) {
-                            let error = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.verify(message.faultParcentage);
+                        if (message.abortStatus != null && message.hasOwnProperty("abortStatus")) {
+                            let error = $root.clutch.chaos.serverexperimentation.v1.FaultAbortStatus.verify(message.abortStatus);
                             if (error)
-                                return "faultParcentage." + error;
-                        }
-                        if (message.faultAbortStatus != null && message.hasOwnProperty("faultAbortStatus")) {
-                            let error = $root.clutch.chaos.serverexperimentation.v1.FaultAbortStatus.verify(message.faultAbortStatus);
-                            if (error)
-                                return "faultAbortStatus." + error;
+                                return "abortStatus." + error;
                         }
                         return null;
                     };
@@ -9156,20 +9165,15 @@ export const clutch = $root.clutch = (() => {
                         if (object instanceof $root.clutch.chaos.serverexperimentation.v1.AbortFault)
                             return object;
                         let message = new $root.clutch.chaos.serverexperimentation.v1.AbortFault();
-                        if (object.faultTargeting != null) {
-                            if (typeof object.faultTargeting !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.AbortFault.faultTargeting: object expected");
-                            message.faultTargeting = $root.clutch.chaos.serverexperimentation.v1.FaultTargeting.fromObject(object.faultTargeting);
+                        if (object.percentage != null) {
+                            if (typeof object.percentage !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.AbortFault.percentage: object expected");
+                            message.percentage = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.fromObject(object.percentage);
                         }
-                        if (object.faultParcentage != null) {
-                            if (typeof object.faultParcentage !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.AbortFault.faultParcentage: object expected");
-                            message.faultParcentage = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.fromObject(object.faultParcentage);
-                        }
-                        if (object.faultAbortStatus != null) {
-                            if (typeof object.faultAbortStatus !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.AbortFault.faultAbortStatus: object expected");
-                            message.faultAbortStatus = $root.clutch.chaos.serverexperimentation.v1.FaultAbortStatus.fromObject(object.faultAbortStatus);
+                        if (object.abortStatus != null) {
+                            if (typeof object.abortStatus !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.AbortFault.abortStatus: object expected");
+                            message.abortStatus = $root.clutch.chaos.serverexperimentation.v1.FaultAbortStatus.fromObject(object.abortStatus);
                         }
                         return message;
                     };
@@ -9188,16 +9192,13 @@ export const clutch = $root.clutch = (() => {
                             options = {};
                         let object = {};
                         if (options.defaults) {
-                            object.faultTargeting = null;
-                            object.faultParcentage = null;
-                            object.faultAbortStatus = null;
+                            object.percentage = null;
+                            object.abortStatus = null;
                         }
-                        if (message.faultTargeting != null && message.hasOwnProperty("faultTargeting"))
-                            object.faultTargeting = $root.clutch.chaos.serverexperimentation.v1.FaultTargeting.toObject(message.faultTargeting, options);
-                        if (message.faultParcentage != null && message.hasOwnProperty("faultParcentage"))
-                            object.faultParcentage = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.toObject(message.faultParcentage, options);
-                        if (message.faultAbortStatus != null && message.hasOwnProperty("faultAbortStatus"))
-                            object.faultAbortStatus = $root.clutch.chaos.serverexperimentation.v1.FaultAbortStatus.toObject(message.faultAbortStatus, options);
+                        if (message.percentage != null && message.hasOwnProperty("percentage"))
+                            object.percentage = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.toObject(message.percentage, options);
+                        if (message.abortStatus != null && message.hasOwnProperty("abortStatus"))
+                            object.abortStatus = $root.clutch.chaos.serverexperimentation.v1.FaultAbortStatus.toObject(message.abortStatus, options);
                         return object;
                     };
 
@@ -9221,9 +9222,8 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a LatencyFault.
                      * @memberof clutch.chaos.serverexperimentation.v1
                      * @interface ILatencyFault
-                     * @property {clutch.chaos.serverexperimentation.v1.IFaultTargeting|null} [faultTargeting] LatencyFault faultTargeting
-                     * @property {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null} [faultParcentage] LatencyFault faultParcentage
-                     * @property {clutch.chaos.serverexperimentation.v1.IFaultLatencyDuration|null} [faultLatencyDuration] LatencyFault faultLatencyDuration
+                     * @property {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null} [percentage] LatencyFault percentage
+                     * @property {clutch.chaos.serverexperimentation.v1.IFaultLatencyDuration|null} [latencyDuration] LatencyFault latencyDuration
                      */
 
                     /**
@@ -9242,28 +9242,20 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * LatencyFault faultTargeting.
-                     * @member {clutch.chaos.serverexperimentation.v1.IFaultTargeting|null|undefined} faultTargeting
+                     * LatencyFault percentage.
+                     * @member {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null|undefined} percentage
                      * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
                      * @instance
                      */
-                    LatencyFault.prototype.faultTargeting = null;
+                    LatencyFault.prototype.percentage = null;
 
                     /**
-                     * LatencyFault faultParcentage.
-                     * @member {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null|undefined} faultParcentage
+                     * LatencyFault latencyDuration.
+                     * @member {clutch.chaos.serverexperimentation.v1.IFaultLatencyDuration|null|undefined} latencyDuration
                      * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
                      * @instance
                      */
-                    LatencyFault.prototype.faultParcentage = null;
-
-                    /**
-                     * LatencyFault faultLatencyDuration.
-                     * @member {clutch.chaos.serverexperimentation.v1.IFaultLatencyDuration|null|undefined} faultLatencyDuration
-                     * @memberof clutch.chaos.serverexperimentation.v1.LatencyFault
-                     * @instance
-                     */
-                    LatencyFault.prototype.faultLatencyDuration = null;
+                    LatencyFault.prototype.latencyDuration = null;
 
                     /**
                      * Verifies a LatencyFault message.
@@ -9276,20 +9268,15 @@ export const clutch = $root.clutch = (() => {
                     LatencyFault.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
-                        if (message.faultTargeting != null && message.hasOwnProperty("faultTargeting")) {
-                            let error = $root.clutch.chaos.serverexperimentation.v1.FaultTargeting.verify(message.faultTargeting);
+                        if (message.percentage != null && message.hasOwnProperty("percentage")) {
+                            let error = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.verify(message.percentage);
                             if (error)
-                                return "faultTargeting." + error;
+                                return "percentage." + error;
                         }
-                        if (message.faultParcentage != null && message.hasOwnProperty("faultParcentage")) {
-                            let error = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.verify(message.faultParcentage);
+                        if (message.latencyDuration != null && message.hasOwnProperty("latencyDuration")) {
+                            let error = $root.clutch.chaos.serverexperimentation.v1.FaultLatencyDuration.verify(message.latencyDuration);
                             if (error)
-                                return "faultParcentage." + error;
-                        }
-                        if (message.faultLatencyDuration != null && message.hasOwnProperty("faultLatencyDuration")) {
-                            let error = $root.clutch.chaos.serverexperimentation.v1.FaultLatencyDuration.verify(message.faultLatencyDuration);
-                            if (error)
-                                return "faultLatencyDuration." + error;
+                                return "latencyDuration." + error;
                         }
                         return null;
                     };
@@ -9306,20 +9293,15 @@ export const clutch = $root.clutch = (() => {
                         if (object instanceof $root.clutch.chaos.serverexperimentation.v1.LatencyFault)
                             return object;
                         let message = new $root.clutch.chaos.serverexperimentation.v1.LatencyFault();
-                        if (object.faultTargeting != null) {
-                            if (typeof object.faultTargeting !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.LatencyFault.faultTargeting: object expected");
-                            message.faultTargeting = $root.clutch.chaos.serverexperimentation.v1.FaultTargeting.fromObject(object.faultTargeting);
+                        if (object.percentage != null) {
+                            if (typeof object.percentage !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.LatencyFault.percentage: object expected");
+                            message.percentage = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.fromObject(object.percentage);
                         }
-                        if (object.faultParcentage != null) {
-                            if (typeof object.faultParcentage !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.LatencyFault.faultParcentage: object expected");
-                            message.faultParcentage = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.fromObject(object.faultParcentage);
-                        }
-                        if (object.faultLatencyDuration != null) {
-                            if (typeof object.faultLatencyDuration !== "object")
-                                throw TypeError(".clutch.chaos.serverexperimentation.v1.LatencyFault.faultLatencyDuration: object expected");
-                            message.faultLatencyDuration = $root.clutch.chaos.serverexperimentation.v1.FaultLatencyDuration.fromObject(object.faultLatencyDuration);
+                        if (object.latencyDuration != null) {
+                            if (typeof object.latencyDuration !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.LatencyFault.latencyDuration: object expected");
+                            message.latencyDuration = $root.clutch.chaos.serverexperimentation.v1.FaultLatencyDuration.fromObject(object.latencyDuration);
                         }
                         return message;
                     };
@@ -9338,16 +9320,13 @@ export const clutch = $root.clutch = (() => {
                             options = {};
                         let object = {};
                         if (options.defaults) {
-                            object.faultTargeting = null;
-                            object.faultParcentage = null;
-                            object.faultLatencyDuration = null;
+                            object.percentage = null;
+                            object.latencyDuration = null;
                         }
-                        if (message.faultTargeting != null && message.hasOwnProperty("faultTargeting"))
-                            object.faultTargeting = $root.clutch.chaos.serverexperimentation.v1.FaultTargeting.toObject(message.faultTargeting, options);
-                        if (message.faultParcentage != null && message.hasOwnProperty("faultParcentage"))
-                            object.faultParcentage = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.toObject(message.faultParcentage, options);
-                        if (message.faultLatencyDuration != null && message.hasOwnProperty("faultLatencyDuration"))
-                            object.faultLatencyDuration = $root.clutch.chaos.serverexperimentation.v1.FaultLatencyDuration.toObject(message.faultLatencyDuration, options);
+                        if (message.percentage != null && message.hasOwnProperty("percentage"))
+                            object.percentage = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.toObject(message.percentage, options);
+                        if (message.latencyDuration != null && message.hasOwnProperty("latencyDuration"))
+                            object.latencyDuration = $root.clutch.chaos.serverexperimentation.v1.FaultLatencyDuration.toObject(message.latencyDuration, options);
                         return object;
                     };
 
@@ -9532,7 +9511,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Constructs a new UpstreamEnforcing.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @classdesc Enforce faults on an upstream.
+                     * @classdesc Represents an UpstreamEnforcing.
                      * @implements IUpstreamEnforcing
                      * @constructor
                      * @param {clutch.chaos.serverexperimentation.v1.IUpstreamEnforcing=} [properties] Properties to set
@@ -9722,7 +9701,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Constructs a new DownstreamEnforcing.
                      * @memberof clutch.chaos.serverexperimentation.v1
-                     * @classdesc Enforce faults on a downstream.
+                     * @classdesc Represents a DownstreamEnforcing.
                      * @implements IDownstreamEnforcing
                      * @constructor
                      * @param {clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing=} [properties] Properties to set

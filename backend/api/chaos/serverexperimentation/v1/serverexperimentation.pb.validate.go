@@ -407,6 +407,23 @@ func (m *HTTPFaultConfig) Validate() error {
 		return nil
 	}
 
+	if m.GetFaultTargeting() == nil {
+		return HTTPFaultConfigValidationError{
+			field:  "FaultTargeting",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetFaultTargeting()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return HTTPFaultConfigValidationError{
+				field:  "FaultTargeting",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	switch m.Fault.(type) {
 
 	case *HTTPFaultConfig_AbortFault:
@@ -505,51 +522,34 @@ func (m *AbortFault) Validate() error {
 		return nil
 	}
 
-	if m.GetFaultTargeting() == nil {
+	if m.GetPercentage() == nil {
 		return AbortFaultValidationError{
-			field:  "FaultTargeting",
+			field:  "Percentage",
 			reason: "value is required",
 		}
 	}
 
-	if v, ok := interface{}(m.GetFaultTargeting()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetPercentage()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return AbortFaultValidationError{
-				field:  "FaultTargeting",
+				field:  "Percentage",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
 		}
 	}
 
-	if m.GetFaultParcentage() == nil {
+	if m.GetAbortStatus() == nil {
 		return AbortFaultValidationError{
-			field:  "FaultParcentage",
+			field:  "AbortStatus",
 			reason: "value is required",
 		}
 	}
 
-	if v, ok := interface{}(m.GetFaultParcentage()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetAbortStatus()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return AbortFaultValidationError{
-				field:  "FaultParcentage",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetFaultAbortStatus() == nil {
-		return AbortFaultValidationError{
-			field:  "FaultAbortStatus",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetFaultAbortStatus()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return AbortFaultValidationError{
-				field:  "FaultAbortStatus",
+				field:  "AbortStatus",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -621,51 +621,34 @@ func (m *LatencyFault) Validate() error {
 		return nil
 	}
 
-	if m.GetFaultTargeting() == nil {
+	if m.GetPercentage() == nil {
 		return LatencyFaultValidationError{
-			field:  "FaultTargeting",
+			field:  "Percentage",
 			reason: "value is required",
 		}
 	}
 
-	if v, ok := interface{}(m.GetFaultTargeting()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetPercentage()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return LatencyFaultValidationError{
-				field:  "FaultTargeting",
+				field:  "Percentage",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
 		}
 	}
 
-	if m.GetFaultParcentage() == nil {
+	if m.GetLatencyDuration() == nil {
 		return LatencyFaultValidationError{
-			field:  "FaultParcentage",
+			field:  "LatencyDuration",
 			reason: "value is required",
 		}
 	}
 
-	if v, ok := interface{}(m.GetFaultParcentage()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetLatencyDuration()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return LatencyFaultValidationError{
-				field:  "FaultParcentage",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if m.GetFaultLatencyDuration() == nil {
-		return LatencyFaultValidationError{
-			field:  "FaultLatencyDuration",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetFaultLatencyDuration()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return LatencyFaultValidationError{
-				field:  "FaultLatencyDuration",
+				field:  "LatencyDuration",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
