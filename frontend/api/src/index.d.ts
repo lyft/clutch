@@ -3827,6 +3827,9 @@ export namespace clutch {
                 /** Properties of a HTTPFaultConfig. */
                 interface IHTTPFaultConfig {
 
+                    /** HTTPFaultConfig faultTargeting */
+                    faultTargeting?: (clutch.chaos.serverexperimentation.v1.IFaultTargeting|null);
+
                     /** HTTPFaultConfig abortFault */
                     abortFault?: (clutch.chaos.serverexperimentation.v1.IAbortFault|null);
 
@@ -3842,6 +3845,9 @@ export namespace clutch {
                      * @param [properties] Properties to set
                      */
                     constructor(properties?: clutch.chaos.serverexperimentation.v1.IHTTPFaultConfig);
+
+                    /** HTTPFaultConfig faultTargeting. */
+                    public faultTargeting?: (clutch.chaos.serverexperimentation.v1.IFaultTargeting|null);
 
                     /** HTTPFaultConfig abortFault. */
                     public abortFault?: (clutch.chaos.serverexperimentation.v1.IAbortFault|null);
@@ -3884,14 +3890,11 @@ export namespace clutch {
                 /** Properties of an AbortFault. */
                 interface IAbortFault {
 
-                    /** AbortFault faultTargeting */
-                    faultTargeting?: (clutch.chaos.serverexperimentation.v1.IFaultTargeting|null);
+                    /** AbortFault percentage */
+                    percentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
 
-                    /** AbortFault faultParcentage */
-                    faultParcentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
-
-                    /** AbortFault faultAbortStatus */
-                    faultAbortStatus?: (clutch.chaos.serverexperimentation.v1.IFaultAbortStatus|null);
+                    /** AbortFault abortStatus */
+                    abortStatus?: (clutch.chaos.serverexperimentation.v1.IFaultAbortStatus|null);
                 }
 
                 /** Represents an AbortFault. */
@@ -3903,14 +3906,11 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.serverexperimentation.v1.IAbortFault);
 
-                    /** AbortFault faultTargeting. */
-                    public faultTargeting?: (clutch.chaos.serverexperimentation.v1.IFaultTargeting|null);
+                    /** AbortFault percentage. */
+                    public percentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
 
-                    /** AbortFault faultParcentage. */
-                    public faultParcentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
-
-                    /** AbortFault faultAbortStatus. */
-                    public faultAbortStatus?: (clutch.chaos.serverexperimentation.v1.IFaultAbortStatus|null);
+                    /** AbortFault abortStatus. */
+                    public abortStatus?: (clutch.chaos.serverexperimentation.v1.IFaultAbortStatus|null);
 
                     /**
                      * Verifies an AbortFault message.
@@ -3944,14 +3944,11 @@ export namespace clutch {
                 /** Properties of a LatencyFault. */
                 interface ILatencyFault {
 
-                    /** LatencyFault faultTargeting */
-                    faultTargeting?: (clutch.chaos.serverexperimentation.v1.IFaultTargeting|null);
+                    /** LatencyFault percentage */
+                    percentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
 
-                    /** LatencyFault faultParcentage */
-                    faultParcentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
-
-                    /** LatencyFault faultLatencyDuration */
-                    faultLatencyDuration?: (clutch.chaos.serverexperimentation.v1.IFaultLatencyDuration|null);
+                    /** LatencyFault latencyDuration */
+                    latencyDuration?: (clutch.chaos.serverexperimentation.v1.IFaultLatencyDuration|null);
                 }
 
                 /** Represents a LatencyFault. */
@@ -3963,14 +3960,11 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.serverexperimentation.v1.ILatencyFault);
 
-                    /** LatencyFault faultTargeting. */
-                    public faultTargeting?: (clutch.chaos.serverexperimentation.v1.IFaultTargeting|null);
+                    /** LatencyFault percentage. */
+                    public percentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
 
-                    /** LatencyFault faultParcentage. */
-                    public faultParcentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
-
-                    /** LatencyFault faultLatencyDuration. */
-                    public faultLatencyDuration?: (clutch.chaos.serverexperimentation.v1.IFaultLatencyDuration|null);
+                    /** LatencyFault latencyDuration. */
+                    public latencyDuration?: (clutch.chaos.serverexperimentation.v1.IFaultLatencyDuration|null);
 
                     /**
                      * Verifies a LatencyFault message.
@@ -4071,7 +4065,7 @@ export namespace clutch {
                     downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
                 }
 
-                /** Enforce faults on an upstream. */
+                /** Represents an UpstreamEnforcing. */
                 class UpstreamEnforcing implements IUpstreamEnforcing {
 
                     /**
@@ -4134,7 +4128,7 @@ export namespace clutch {
                     downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
                 }
 
-                /** Enforce faults on a downstream. */
+                /** Represents a DownstreamEnforcing. */
                 class DownstreamEnforcing implements IDownstreamEnforcing {
 
                     /**

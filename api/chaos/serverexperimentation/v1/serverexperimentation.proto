@@ -90,7 +90,7 @@ message LatencyFault {
 
 // The fault targeting that allows us to control which requests are considered for
 // fault injection and what part of the system is responsible for applying faults.
-// The `enforcer` abstraction allows us to define different list of matching criteria
+// The `enforcer` abstraction allows us to define a different list of matching criteria
 // depending on whether faults are applied on the upstream or downstream.
 message FaultTargeting {
   // A fault enforcer.
@@ -152,11 +152,16 @@ message SingleCluster {
 
 // A partial single cluster - the part of a single cluster that's partaking
 // in the fault injection. It allows the user of the API to specify the subset
-// of the cluster whose requets should be considered for fault injection.
+// of the cluster whose requests should be considered for fault injection.
 message PartialSingleCluster {
   // The name of a cluster.
   string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
-  // The percentage controlling what part of a cluster should be included.
+  // The percentage controlling what part of a cluster should be considered for fault
+  // injection. The portion of the cluster is supposed to be consistent, meaning that
+  // any given part of a cluster should be either included or excluded for the whole duration of
+  // a given fault injection test. In other words, for every part of the cluster, we toss a
+  // coin once to decide whether it should participate in a given fault injection test or not
+  // and we stick to our choice.
   ClusterPercentage cluster_percentage = 2 [ (validate.rules).message.required = true ];
 }
 
