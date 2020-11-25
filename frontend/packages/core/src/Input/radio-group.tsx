@@ -6,7 +6,6 @@ import {
   Radio as MuiRadio,
   RadioGroup as MuiRadioGroup,
 } from "@material-ui/core";
-import { fade } from "@material-ui/core/styles/colorManipulator";
 import styled from "styled-components";
 
 const FormLabel = styled(MuiFormLabel)`
