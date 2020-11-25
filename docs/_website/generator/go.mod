@@ -15,5 +15,5 @@ require (
 	github.com/stretchr/testify v1.6.1 // indirect
 	github.com/yoheimuta/go-protoparser/v4 v4.2.0
 	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de // indirect
-	gopkg.in/yaml.v2 v2.3.0
+	gopkg.in/yaml.v2 v2.4.0
 )
