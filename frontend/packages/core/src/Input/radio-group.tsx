@@ -6,6 +6,7 @@ import {
   Radio as MuiRadio,
   RadioGroup as MuiRadioGroup,
 } from "@material-ui/core";
+import { fade } from "@material-ui/core/styles/colorManipulator";
 import styled from "styled-components";
 
 const FormLabel = styled(MuiFormLabel)`
@@ -39,12 +40,16 @@ const Radio = styled(MuiRadio)`
   &.Mui-checked {
     color: ${theme.palette.accent.main};
   }
+  &.Mui-disabled {
+    opacity: 0.5;
+  }
   `}
 `;
 
 interface RadioGroupOption {
   label: string;
   value?: string;
+  disabled?: boolean;
 }
 
 interface RadioGroupProps {
@@ -100,6 +105,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
             <FormControlLabel
               key={option.label}
               value={option?.value || option.label}
+              disabled={option.disabled}
               control={<Radio />}
               label={option.label}
             />
