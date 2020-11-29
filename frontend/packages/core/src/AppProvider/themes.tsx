@@ -19,7 +19,8 @@ interface ClutchTheme extends ThemeOptions {
 }
 
 declare module "styled-components" {
-  export interface ClutchTheme extends ThemeOptions {
+  export interface ClutchTheme // eslint-disable-line @typescript-eslint/no-shadow
+    extends ThemeOptions {
     palette: ClutchPalette;
   }
 }
