@@ -62,7 +62,7 @@ const lightTheme = () => {
     palette: lightPalette(),
     transitions: {
       // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
-      create: () => "none"
+      create: () => "none",
     },
     props: {
       MuiButtonBase: {
