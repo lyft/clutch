@@ -12,22 +12,32 @@ jest.mock("react-router-dom", () => {
 
 describe("Start Experiment workflow", () => {
   it("renders correctly", () => {
-    const component = shallow(<StartExperiment heading="Start Experiment"/>);
+    const component = shallow(<StartExperiment heading="Start Experiment" />);
     expect(component.debug()).toMatchSnapshot();
   });
 
   it("renders correctly with upstream cluster type selection enabled", () => {
-    const component = shallow(<StartExperiment heading="Start Experiment" upstreamClusterTypeSelectionEnabled/>);
+    const component = shallow(
+      <StartExperiment heading="Start Experiment" upstreamClusterTypeSelectionEnabled />
+    );
     expect(component.debug()).toMatchSnapshot();
   });
 
   it("renders correctly with host percentage based faults enabled", () => {
-    const component = shallow(<StartExperiment heading="Start Experiment" hostsPercentageBasedTargeting/>);
+    const component = shallow(
+      <StartExperiment heading="Start Experiment" hostsPercentageBasedTargeting />
+    );
     expect(component.debug()).toMatchSnapshot();
   });
 
   it("renders correctly with host percentage based faults and upstream cluster type selecion enabled", () => {
-    const component = shallow(<StartExperiment heading="Start Experiment" upstreamClusterTypeSelectionEnabled hostsPercentageBasedTargeting/>);
+    const component = shallow(
+      <StartExperiment
+        heading="Start Experiment"
+        upstreamClusterTypeSelectionEnabled
+        hostsPercentageBasedTargeting
+      />
+    );
     expect(component.debug()).toMatchSnapshot();
   });
 });

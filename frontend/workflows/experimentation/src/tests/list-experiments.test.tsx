@@ -34,7 +34,9 @@ describe("List Experiments workflow", () => {
   });
 
   it("renders correctly", () => {
-    const component = shallow(<ListExperiments heading="List Experiments" columns={columns} links={links} />);
+    const component = shallow(
+      <ListExperiments heading="List Experiments" columns={columns} links={links} />
+    );
     expect(component.debug()).toMatchSnapshot();
   });
 });
