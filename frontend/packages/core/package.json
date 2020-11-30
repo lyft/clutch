@@ -47,7 +47,7 @@
     "react-router-dom": "^6.0.0-beta",
     "styled-components": "^5.1.1",
     "superstruct": "~0.8.4",
-    "yup": "^0.30.0"
+    "yup": "^0.31.0"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^0.0.0-beta"

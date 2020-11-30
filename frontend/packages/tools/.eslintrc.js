@@ -55,7 +55,7 @@ module.exports = {
           ],
           [
             // Internal packages.
-            "^(components|workflows)(/.*|$)"
+            "^(packages|workflows)(/.*|$)"
           ],
           [
             "^\\u0000"
@@ -75,9 +75,7 @@ module.exports = {
         ]
       }
     ],
-    "consistent-return": [
-      "off"
-    ],
+    "consistent-return": ["off"],
     "jest/expect-expect": [
       "error",
       {
@@ -98,27 +96,19 @@ module.exports = {
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": ["**/*.config.js"],
+        "devDependencies": ["**/*.config.js", ".eslintrc.js"],
       }
     ],
-    "no-console": [
-      "error"
-    ],
-    "no-empty": [
-      "off"
-    ],
-    "no-nested-ternary": [
-      "off"
-    ],
+    "no-console": ["error"],
+    "no-empty": ["off"],
+    "no-nested-ternary": ["off"],
     "react/jsx-filename-extension": [
       1,
       {
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     ],
-    "react-hooks/exhaustive-deps": [
-      "off"
-    ],
+    "react-hooks/exhaustive-deps": ["off"],
     "react/jsx-no-duplicate-props": [
       1,
       {
@@ -126,9 +116,7 @@ module.exports = {
         "ignoreCase": false,
       }
     ],
-    "react/prop-types": [
-      "off"
-    ],
+    "react/prop-types": ["off"],
     "react/jsx-props-no-spreading": [
       "off",
       {
@@ -147,7 +135,7 @@ module.exports = {
           ]
         }
       }
-    ]
+    ],
   },
   overrides: [
     {
@@ -157,9 +145,13 @@ module.exports = {
         "@typescript-eslint"
       ],
       rules: {
-        "no-undef": "off",
-        "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": ["error"]
+        "no-undef": ["off"],
+        "no-unused-vars": ["off"],
+        "@typescript-eslint/no-unused-vars": ["error"],
+        "no-use-before-define": ["off"],
+        "@typescript-eslint/no-use-before-define": ["error"],
+        "no-shadow": ["off"],
+        "@typescript-eslint/no-shadow": ["error"],
       }
     },
   ]
