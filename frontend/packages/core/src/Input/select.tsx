@@ -1,11 +1,13 @@
 import * as React from "react";
+import type {
+  SelectProps as MuiSelectProps,
+} from "@material-ui/core";
 import {
   FormControl as MuiFormControl,
   FormHelperText as MuiFormHelperText,
   InputLabel as MuiInputLabel,
   MenuItem,
   Select as MuiSelect,
-  SelectProps as MuiSelectProps,
 } from "@material-ui/core";
 import styled from "@emotion/styled";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
