@@ -3451,6 +3451,9 @@ export namespace clutch {
 
                     /** Property intValue */
                     intValue?: (number|Long|null);
+
+                    /** Property urlValue */
+                    urlValue?: (string|null);
                 }
 
                 /** Represents a Property. */
@@ -3480,8 +3483,11 @@ export namespace clutch {
                     /** Property intValue. */
                     public intValue: (number|Long);
 
+                    /** Property urlValue. */
+                    public urlValue: string;
+
                     /** Property value. */
-                    public value?: ("dateValue"|"stringValue"|"intValue");
+                    public value?: ("dateValue"|"stringValue"|"intValue"|"urlValue");
 
                     /**
                      * Verifies a Property message.

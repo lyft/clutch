@@ -239,6 +239,9 @@ func (m *Property) Validate() error {
 	case *Property_IntValue:
 		// no validation rules for IntValue
 
+	case *Property_UrlValue:
+		// no validation rules for UrlValue
+
 	}
 
 	return nil
