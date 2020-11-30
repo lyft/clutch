@@ -90,18 +90,13 @@ const EditableRow: React.FC<EditableRowProps> = ({
           id={data.id}
           name={data.name}
           defaultValue={data.value}
-          size="small"
           type={data?.input?.type}
-          InputProps={{ margin: "dense", color: "secondary", name: data.name }}
-          inputProps={data?.input}
           onChange={onUpdate}
           onReturn={onReturn}
           onFocus={onUpdate}
           inputRef={validation.register}
           helperText={error?.message || ""}
           error={!!error || false}
-          maxWidth="50%"
-          style={{ marginLeft: 0 }}
         />
       </TableCell>
     </TableRow>

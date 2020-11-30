@@ -1,37 +1,122 @@
-import React from "react";
-import type { InputLabelProps, TextFieldProps as MuiTextFieldProps } from "@material-ui/core";
-import { TextField as MuiTextField } from "@material-ui/core";
-import styled from "styled-components";
+import * as React from "react";
+import styled from "@emotion/styled";
+import {
+  InputProps as MuiInputProps,
+  MuiStandardTextFieldProps,
+  TextField as MuiTextField,
+} from "@material-ui/core";
+import ErrorIcon from "@material-ui/icons/Error";
+import _ from "lodash";
 
 const KEY_ENTER = 13;
-const StyledTextField = styled(MuiTextField)`
-  ${({ theme, ...props }) => `
-  display: flex;
-  width: 100%;
-  max-width: ${props["data-max-width"] || "500px"};
-  margin: 15px;
-  .MuiInputLabel-root {
-    color: ${theme.palette.text.primary};
-  }
-  .MuiInput-underline:after {
-    border-bottom: 2px solid ${theme.palette.accent.main};
-  }
-  `}
-`;
 
-export interface TextFieldProps {
-  maxWidth?: string;
+const BaseTextField = ({ InputProps, InputLabelProps, ...props }: MuiStandardTextFieldProps) => (
+  <MuiTextField
+    InputLabelProps={{ ...InputLabelProps, shrink: true }}
+    InputProps={{ ...InputProps, disableUnderline: true }}
+    fullWidth
+    {...props}
+  />
+);
+
+const StyledTextField = styled(BaseTextField)({
+  ".MuiInputLabel-root": {
+    fontSize: "13px",
+    fontWeight: "bold",
+    transform: "scale(1)",
+  },
+
+  ".MuiInputLabel-root, .MuiInputLabel-root.Mui-focused": {
+    color: "rgba(13, 16, 48, 0.6)",
+  },
+
+  ".MuiInputLabel-root.Mui-disabled": {
+    color: "rgba(13, 16, 48, 0.38)",
+  },
+
+  ".MuiInputLabel-root.Mui-error": {
+    color: "#db3615",
+  },
+
+  ".MuiInputBase-root": {
+    border: "1px solid rgba(13, 16, 48, 0.38)",
+    borderRadius: "4px",
+    fontSize: "16px",
+    padding: "14px 16px",
+  },
+
+  "label + .MuiInput-formControl": {
+    marginTop: "20px",
+  },
+
+  ".MuiInputBase-root.Mui-focused": {
+    borderColor: "#3548d4",
+  },
+
+  ".MuiInputBase-root.Mui-disabled": {
+    backgroundColor: "rgba(13, 16, 48, 0.12)",
+  },
+
+  ".MuiInput-input": {
+    padding: "0",
+    height: "20px",
+  },
+
+  ".MuiFormHelperText-root": {
+    verticalAlign: "middle",
+    display: "flex",
+    position: "relative",
+    fontSize: "12px",
+    marginTop: "7px",
+  },
+
+  ".MuiFormHelperText-root.Mui-error": {
+    color: "#db3615",
+  },
+
+  ".MuiInputBase-root.Mui-error": {
+    borderColor: "#db3615",
+  },
+
+  ".MuiFormHelperText-root > svg": {
+    height: "16px",
+    width: "16px",
+    marginRight: "5px",
+  },
+});
+
+export interface TextFieldProps
+  extends Pick<
+      MuiStandardTextFieldProps,
+      | "defaultValue"
+      | "disabled"
+      | "error"
+      | "helperText"
+      | "id"
+      | "inputRef"
+      | "label"
+      | "multiline"
+      | "name"
+      | "onChange"
+      | "onFocus"
+      | "onKeyDown"
+      | "placeholder"
+      | "required"
+      | "type"
+      | "value"
+    >,
+    Pick<MuiInputProps, "readOnly"> {
   onReturn?: () => void;
 }
 
-const TextField: React.FC<TextFieldProps & MuiTextFieldProps> = ({
+export const TextField = ({
   onChange,
   onReturn,
-  maxWidth,
-  placeholder,
-  type,
+  error,
+  helperText,
+  readOnly,
   ...props
-}) => {
+}: TextFieldProps) => {
   const onKeyDown = (
     e: React.KeyboardEvent<HTMLDivElement | HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -43,26 +128,24 @@ const TextField: React.FC<TextFieldProps & MuiTextFieldProps> = ({
     }
   };
 
-  const inputLabelProps = {
-    color: "secondary",
-  } as Partial<InputLabelProps>;
-
-  const placeholderInputTypes = ["date", "datetime-local", "month", "time", "week"];
-  const hasInputPlaceholder = placeholderInputTypes.indexOf(type) !== -1;
-  if (placeholder || hasInputPlaceholder) {
-    inputLabelProps.shrink = true;
+  // Prepend a '!' icon to helperText displayed below the form if the form is in an error state.
+  if (error) {
+    helperText = (
+      <>
+        <ErrorIcon />
+        {helperText}
+      </>
+    );
   }
 
   return (
     <StyledTextField
-      data-max-width={maxWidth}
-      color="secondary"
-      InputLabelProps={inputLabelProps}
       onKeyDown={e => onKeyDown(e)}
       onFocus={onChange}
       onBlur={onChange}
-      placeholder={placeholder}
-      type={type}
+      error={error}
+      helperText={helperText}
+      InputProps={{ readOnly }}
       {...props}
     />
   );
