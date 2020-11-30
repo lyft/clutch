@@ -15,7 +15,7 @@ require (
 	github.com/go-git/go-billy/v5 v5.0.0
 	github.com/go-git/go-git/v5 v5.2.0
 	github.com/gobwas/glob v0.2.3
-	github.com/golang-migrate/migrate/v4 v4.13.0
+	github.com/golang-migrate/migrate/v4 v4.14.1
 	github.com/golang/protobuf v1.4.3
 	github.com/google/go-github/v32 v32.1.0
 	github.com/google/uuid v1.1.2
