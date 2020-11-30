@@ -1,10 +1,10 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import {
+import type {
   InputProps as MuiInputProps,
   StandardTextFieldProps as MuiStandardTextFieldProps,
-  TextField as MuiTextField,
 } from "@material-ui/core";
+import { TextField as MuiTextField } from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/Error";
 import _ from "lodash";
 
