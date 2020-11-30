@@ -1,8 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Start Experiment workflow renders correctly 1`] = `
-"<PageLayout heading={[undefined]} error={[undefined]}>
-  <ExperimentDetails upstreamClusterTypeSelectionEnabled={true} onStart={[Function: onStart]} />
+"<PageLayout heading=\\"Start Experiment\\" error={[undefined]}>
+  <ExperimentDetails upstreamClusterTypeSelectionEnabled={false} hostsPercentageBasedTargeting={false} onStart={[Function: onStart]} />
+  <Dialog title=\\"Experiment Start Confirmation\\" content=\\"Are you sure you want to start an experiment? The experiment will start immediately and you will be moved to experiment details view page.\\" open={false} onClose={[Function: onClose]}>
+    <Button text=\\"Yes\\" onClick={[Function: onClick]} />
+    <Button text=\\"No\\" onClick={[Function: onClick]} />
+  </Dialog>
+</PageLayout>"
+`;
+
+exports[`Start Experiment workflow renders correctly with all features enabled 1`] = `
+"<PageLayout heading=\\"Start Experiment\\" error={[undefined]}>
+  <ExperimentDetails upstreamClusterTypeSelectionEnabled={true} hostsPercentageBasedTargeting={true} onStart={[Function: onStart]} />
+  <Dialog title=\\"Experiment Start Confirmation\\" content=\\"Are you sure you want to start an experiment? The experiment will start immediately and you will be moved to experiment details view page.\\" open={false} onClose={[Function: onClose]}>
+    <Button text=\\"Yes\\" onClick={[Function: onClick]} />
+    <Button text=\\"No\\" onClick={[Function: onClick]} />
+  </Dialog>
+</PageLayout>"
+`;
+
+exports[`Start Experiment workflow renders correctly with host percentage based faults enabled 1`] = `
+"<PageLayout heading=\\"Start Experiment\\" error={[undefined]}>
+  <ExperimentDetails upstreamClusterTypeSelectionEnabled={false} hostsPercentageBasedTargeting={true} onStart={[Function: onStart]} />
+  <Dialog title=\\"Experiment Start Confirmation\\" content=\\"Are you sure you want to start an experiment? The experiment will start immediately and you will be moved to experiment details view page.\\" open={false} onClose={[Function: onClose]}>
+    <Button text=\\"Yes\\" onClick={[Function: onClick]} />
+    <Button text=\\"No\\" onClick={[Function: onClick]} />
+  </Dialog>
+</PageLayout>"
+`;
+
+exports[`Start Experiment workflow renders correctly with upstream cluster type selection enabled 1`] = `
+"<PageLayout heading=\\"Start Experiment\\" error={[undefined]}>
+  <ExperimentDetails upstreamClusterTypeSelectionEnabled={true} hostsPercentageBasedTargeting={false} onStart={[Function: onStart]} />
   <Dialog title=\\"Experiment Start Confirmation\\" content=\\"Are you sure you want to start an experiment? The experiment will start immediately and you will be moved to experiment details view page.\\" open={false} onClose={[Function: onClose]}>
     <Button text=\\"Yes\\" onClick={[Function: onClick]} />
     <Button text=\\"No\\" onClick={[Function: onClick]} />

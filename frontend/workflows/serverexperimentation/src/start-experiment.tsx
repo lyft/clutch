@@ -140,7 +140,7 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
     },
     {
       name: "requestsPercentage",
-      label: "Percentage of Requests Requests Served by All Hosts",
+      label: "Percentage of Requests Served by All Hosts",
       type: "number",
       validation: yup.number().label("Percentage").integer().min(1).max(100).required(),
       visible: experimentData.targetType === TargetType.REQUESTS,
@@ -357,4 +357,4 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
   );
 };
 
-export default StartExperiment;
+export { StartExperiment, ExperimentDetails };
