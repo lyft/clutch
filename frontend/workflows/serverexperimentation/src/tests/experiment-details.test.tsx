@@ -31,10 +31,4 @@ describe("Start Experiment workflow", () => {
     const component = shallow(<ExperimentDetails upstreamClusterTypeSelectionEnabled={true} hostsPercentageBasedTargeting={true} onStart={() => {}} />);
     expect(component.find(FormFields).dive().debug()).toMatchSnapshot();
   });
-
-  it("renders correctly with host percentage based faults selected and upstream cluster type selecion enabled", () => {
-    const component = shallow(<ExperimentDetails upstreamClusterTypeSelectionEnabled={true} hostsPercentageBasedTargeting={true} onStart={() => {}} />);
-    component.find(FormFields).dive().find("Select").find({ name: 'targetType' }).simulate("change", { target: { value: "hosts" }})
-    expect(component.find(FormFields).dive().debug()).toMatchSnapshot();
-  });
 });

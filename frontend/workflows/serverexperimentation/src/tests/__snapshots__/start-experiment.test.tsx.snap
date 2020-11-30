@@ -10,7 +10,7 @@ exports[`Start Experiment workflow renders correctly 1`] = `
 </PageLayout>"
 `;
 
-exports[`Start Experiment workflow renders correctly with all features enabled 1`] = `
+exports[`Start Experiment workflow renders correctly with host percentage based faults and upstream cluster type selecion enabled 1`] = `
 "<PageLayout heading=\\"Start Experiment\\" error={[undefined]}>
   <ExperimentDetails upstreamClusterTypeSelectionEnabled={true} hostsPercentageBasedTargeting={true} onStart={[Function: onStart]} />
   <Dialog title=\\"Experiment Start Confirmation\\" content=\\"Are you sure you want to start an experiment? The experiment will start immediately and you will be moved to experiment details view page.\\" open={false} onClose={[Function: onClose]}>
