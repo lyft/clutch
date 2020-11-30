@@ -45,7 +45,7 @@ interface FormItem {
   name?: string;
   label: string;
   type: string;
-  fieldValidation?: any;
+  validation?: any;
   visible?: boolean;
   inputProps?: SelectProps | TextFieldProps;
 }
@@ -134,4 +134,4 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
   );
 };
 
-export default FormFields;
+export { FormFields, FormItem };

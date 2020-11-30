@@ -8,7 +8,7 @@ import { PageLayout } from "@clutch-sh/experimentation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import FormFields from "./form-fields";
+import { FormFields, FormItem } from "./form-fields";
 
 enum FaultType {
   ABORT = "Abort",
@@ -39,13 +39,13 @@ type ExperimentData = {
 
 interface ExperimentDetailsProps {
   upstreamClusterTypeSelectionEnabled: boolean;
-  hostsPercentageBasedTargeting: boolean;
+  hostsPercentageBasedTargetingEnabled: boolean;
   onStart: (ExperimentData) => void;
 }
 
 const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   upstreamClusterTypeSelectionEnabled,
-  hostsPercentageBasedTargeting,
+  hostsPercentageBasedTargetingEnabled,
   onStart,
 }) => {
   const initialExperimentData = {
@@ -123,7 +123,7 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
       name: "targetType",
       label: "Target Type",
       type: "select",
-      visible: hostsPercentageBasedTargeting,
+      visible: hostsPercentageBasedTargetingEnabled,
       inputProps: {
         options: [
           {
@@ -186,7 +186,7 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
       visible: !isAbort,
       inputProps: { defaultValue: experimentData.durationMs?.toString() },
     },
-  ];
+  ] as FormItem[];
 
   const schema: { [name: string]: yup.StringSchema | yup.NumberSchema } = {};
   const visibleFields = fields.filter(field => field.visible !== false);
@@ -231,13 +231,13 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
 
 interface StartExperimentProps extends BaseWorkflowProps {
   upstreamClusterTypeSelectionEnabled?: boolean;
-  hostsPercentageBasedTargeting?: boolean;
+  hostsPercentageBasedTargetingEnabled?: boolean;
 }
 
 const StartExperiment: React.FC<StartExperimentProps> = ({
   heading,
   upstreamClusterTypeSelectionEnabled = false,
-  hostsPercentageBasedTargeting = false,
+  hostsPercentageBasedTargetingEnabled = false,
 }) => {
   const navigate = useNavigate();
   const [error, setError] = useState(undefined);
@@ -336,7 +336,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
     <PageLayout heading={heading} error={error}>
       <ExperimentDetails
         upstreamClusterTypeSelectionEnabled={upstreamClusterTypeSelectionEnabled}
-        hostsPercentageBasedTargeting={hostsPercentageBasedTargeting}
+        hostsPercentageBasedTargetingEnabled={hostsPercentageBasedTargetingEnabled}
         onStart={experimentDetails => setExperimentData(experimentDetails)}
       />
       <Dialog
