@@ -16,7 +16,7 @@ describe("Start Experiment workflow", () => {
     const component = shallow(
       <ExperimentDetails
         upstreamClusterTypeSelectionEnabled={false}
-        hostsPercentageBasedTargeting={false}
+        hostsPercentageBasedTargetingEnabled={false}
         onStart={() => {}}
       />
     );
@@ -27,7 +27,7 @@ describe("Start Experiment workflow", () => {
     const component = shallow(
       <ExperimentDetails
         upstreamClusterTypeSelectionEnabled
-        hostsPercentageBasedTargeting={false}
+        hostsPercentageBasedTargetingEnabled={false}
         onStart={() => {}}
       />
     );
@@ -38,7 +38,7 @@ describe("Start Experiment workflow", () => {
     const component = shallow(
       <ExperimentDetails
         upstreamClusterTypeSelectionEnabled={false}
-        hostsPercentageBasedTargeting={false}
+        hostsPercentageBasedTargetingEnabled={false}
         onStart={() => {}}
       />
     );
@@ -49,7 +49,7 @@ describe("Start Experiment workflow", () => {
     const component = shallow(
       <ExperimentDetails
         upstreamClusterTypeSelectionEnabled
-        hostsPercentageBasedTargeting
+        hostsPercentageBasedTargetingEnabled
         onStart={() => {}}
       />
     );

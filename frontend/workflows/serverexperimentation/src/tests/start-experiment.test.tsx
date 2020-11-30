@@ -25,7 +25,7 @@ describe("Start Experiment workflow", () => {
 
   it("renders correctly with host percentage based faults enabled", () => {
     const component = shallow(
-      <StartExperiment heading="Start Experiment" hostsPercentageBasedTargeting />
+      <StartExperiment heading="Start Experiment" hostsPercentageBasedTargetingEnabled />
     );
     expect(component.debug()).toMatchSnapshot();
   });
@@ -35,7 +35,7 @@ describe("Start Experiment workflow", () => {
       <StartExperiment
         heading="Start Experiment"
         upstreamClusterTypeSelectionEnabled
-        hostsPercentageBasedTargeting
+        hostsPercentageBasedTargetingEnabled
       />
     );
     expect(component.debug()).toMatchSnapshot();
