@@ -9,6 +9,9 @@ const propertyToString = (property: IClutch.chaos.experimentation.v1.IProperty):
   if (property.displayValue !== undefined && property.displayValue != null) {
     return property.displayValue.value;
   }
+  if (property.urlValue !== undefined && property.urlValue != null) {
+    return property.urlValue.toString();
+  }
   if (property.intValue !== undefined && property.intValue != null) {
     return property.intValue.toString();
   }
@@ -44,8 +47,8 @@ const compareProperties = (
     return 0;
   }
 
-  const aValue = a.stringValue ?? a.intValue ?? a.dateValue;
-  const bValue = b.stringValue ?? b.intValue ?? b.dateValue;
+  const aValue = a.stringValue ?? a.urlValue ?? a.intValue ?? a.dateValue;
+  const bValue = b.stringValue ?? a.urlValue ?? b.intValue ?? b.dateValue;
 
   if (aValue !== undefined && aValue != null) {
     if (aValue > bValue) {

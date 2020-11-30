@@ -25,17 +25,6 @@ export interface NotePanelProps {
   notes?: NoteConfig[];
 }
 
-const NotePanel: React.FC<NotePanelProps> = ({ direction = "column", notes, children }) => (
-  <Grid container direction={direction} justify="center" alignContent="space-between" wrap="nowrap">
-    {notes?.map((note: NoteConfig) => (
-      <Note key={note.text} severity={note.severity}>
-        {note.text}
-      </Note>
-    ))}
-    {children}
-  </Grid>
-);
-
 const Note: React.FC<NoteProps> = ({ severity = "info", children }) => {
   return (
     <Container elevation={0}>
@@ -47,5 +36,16 @@ const Note: React.FC<NoteProps> = ({ severity = "info", children }) => {
     </Container>
   );
 };
+
+const NotePanel: React.FC<NotePanelProps> = ({ direction = "column", notes, children }) => (
+  <Grid container direction={direction} justify="center" alignContent="space-between" wrap="nowrap">
+    {notes?.map((note: NoteConfig) => (
+      <Note key={note.text} severity={note.severity}>
+        {note.text}
+      </Note>
+    ))}
+    {children}
+  </Grid>
+);
 
 export { Note, NotePanel };
