@@ -4,34 +4,87 @@ import {
   InputLabel as MuiInputLabel,
   MenuItem,
   Select as MuiSelect,
+  SelectProps as MuiSelectProps,
 } from "@material-ui/core";
-import styled from "styled-components";
+import styled from "@emotion/styled";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-const FormControl = styled(MuiFormControl)`
-  ${({ theme, ...props }) => `
-  display: flex;
-  min-width: fit-content;
-  width: ${props["data-max-width"] || "500px"};
-  .MuiInput-underline:after {
-    border-bottom: 2px solid ${theme.palette.accent.main};
-  }
-  `}
-`;
 
-const InputLabel = styled(MuiInputLabel)`
-  ${({ theme }) => `
-  && {
-    color: ${theme.palette.text.primary};
+const StyledFormControl = styled(MuiFormControl)({
+  "label + .MuiInput-formControl": {
+    marginTop: "21px",
   }
-  position: relative;
-  `}
-`;
+});
 
-const StyledSelect = styled(MuiSelect)`
-  && {
-    margin-top: 0px;
+const StyledInputLabel = styled(MuiInputLabel)({
+  fontWeight: "bold",
+  fontSize: "13px",
+  transform: "scale(1)",
+  marginBottom: "10px",
+  color: "grey",
+  "&.Mui-focused": {
+    "color": "grey"
   }
-`;
+});
+
+const SelectIcon = (props: any) => {
+  return (
+    <div {...props}>
+      <ExpandMoreIcon />
+    </div>
+  );
+};
+
+
+const BaseSelect = ({ ...props }: MuiSelectProps) => (
+  <MuiSelect
+    disableUnderline
+    fullWidth
+    IconComponent={SelectIcon}
+    MenuProps={{
+      style: { marginTop: "2px" },
+      anchorOrigin: { vertical: "bottom", horizontal: "left" },
+      transformOrigin: { vertical: "top", horizontal: "left" },
+      getContentAnchorEl: null
+    }}
+    {...props}
+  />
+)
+
+const StyledSelect = styled(BaseSelect)({
+  border: "1px solid rgba(13, 16, 48, 0.38)",
+  borderRadius: "4px",
+  padding: "0",
+  marginTop: "6px",
+
+  ".MuiSelect-root": {
+    padding: "14px 16px"
+  },
+
+  ".MuiSelect-icon": {
+    height: "100%",
+    width: "50px",
+    top: "unset",
+    borderLeft: "1px solid rgba(13, 16, 48, 0.38)",
+    transform: "unset"
+  },
+
+  ".MuiSelect-icon > svg": {
+    color: "black",
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%, -50%)"
+  },
+
+  ".MuiSelect-icon.MuiSelect-iconOpen > svg": {
+    transform: "translate(-50%, -50%) rotate(180deg)"
+  },
+
+  ".MuiSelect-select:focus": {
+    backgroundColor: "inherit"
+  }
+})
 
 interface SelectOption {
   label: string;
@@ -50,7 +103,6 @@ export interface SelectProps {
 const Select: React.FC<SelectProps> = ({
   defaultOption = 0,
   label,
-  maxWidth,
   name,
   options,
   onChange,
@@ -74,14 +126,11 @@ const Select: React.FC<SelectProps> = ({
   }, []);
 
   return (
-    <FormControl key={name} data-max-width={maxWidth}>
-      <InputLabel shrink color="secondary">
-        {label}
-      </InputLabel>
+    <StyledFormControl key={name} fullWidth>
+      {label && <StyledInputLabel>{label}</StyledInputLabel>}
       <StyledSelect
         value={options[selectedIdx]?.value || options[selectedIdx].label}
         onChange={updateSelectedOption}
-        fullWidth
       >
         {options.map(option => (
           <MenuItem key={option.label} value={option?.value || option.label}>
@@ -89,7 +138,7 @@ const Select: React.FC<SelectProps> = ({
           </MenuItem>
         ))}
       </StyledSelect>
-    </FormControl>
+    </StyledFormControl>
   );
 };
 
