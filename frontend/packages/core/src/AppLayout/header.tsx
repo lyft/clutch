@@ -6,7 +6,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 
 import Drawer from "./drawer";
 import Logo from "./logo";
-import Notifications from "./notifcations";
+import Notifications from "./notifications";
 import SearchField from "./search";
 import { UserInformation } from "./user";
 
