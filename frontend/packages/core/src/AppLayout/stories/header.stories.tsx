@@ -9,7 +9,7 @@ export default {
   title: "Core/AppLayout/Header",
   component: Header,
   decorators: [
-    Header => (
+    () => (
       <MemoryRouter>
         <Header />
       </MemoryRouter>

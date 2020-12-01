@@ -14,6 +14,14 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 const StyledNotificationsIcon = styled(IconButton)`
   color: #ffffff;
   margin-right: 1rem;
+  border-radius: 8px;
+  padding: 8px;
+  &:hover {
+    background: #2d3db4;
+  }
+  &:active {
+    background: #2938a5;
+  }
 `;
 
 const Notifications: React.FC = () => {
