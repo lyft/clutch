@@ -22,7 +22,7 @@ const MenuButton = styled(IconButton)`
 `;
 
 const Title = styled(Typography)`
-  margin-right: 1.6rem;
+  margin-right: 1.563rem;
   font-weight: bold;
   font-size: 1.25rem;
   color: #ffffff;
