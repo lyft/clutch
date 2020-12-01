@@ -32,14 +32,14 @@ export const Disabled = Template.bind({});
 Disabled.args = {
   ...Basic.args,
   disabled: true,
-}
+};
 
 export const Error = Template.bind({});
 Error.args = {
   ...Basic.args,
   error: true,
-  helperText: "There was a problem!"
-}
+  helperText: "There was a problem!",
+};
 
 export const CustomValues = Template.bind({});
 CustomValues.args = {
@@ -59,5 +59,5 @@ CustomValues.args = {
 export const WithoutLabel = Template.bind({});
 WithoutLabel.args = {
   ...Basic.args,
-  label: null
+  label: null,
 };

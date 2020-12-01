@@ -1,7 +1,6 @@
 import * as React from "react";
-import type {
-  SelectProps as MuiSelectProps,
-} from "@material-ui/core";
+import styled from "@emotion/styled";
+import type { SelectProps as MuiSelectProps } from "@material-ui/core";
 import {
   FormControl as MuiFormControl,
   FormHelperText as MuiFormHelperText,
@@ -9,9 +8,8 @@ import {
   MenuItem,
   Select as MuiSelect,
 } from "@material-ui/core";
-import styled from "@emotion/styled";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ErrorIcon from "@material-ui/icons/Error";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const StyledFormControl = styled(MuiFormControl)({
   "label + .MuiInput-formControl": {
@@ -32,11 +30,11 @@ const StyledFormHelperText = styled(MuiFormHelperText)({
     color: "#db3615",
   },
 
-  "svg": {
+  svg: {
     height: "16px",
     width: "16px",
     marginRight: "4px",
-  }
+  },
 });
 
 const StyledInputLabel = styled(MuiInputLabel)({
@@ -47,19 +45,18 @@ const StyledInputLabel = styled(MuiInputLabel)({
   marginBottom: "10px",
   color: "rgba(13, 16, 48, 0.6)",
   "&.Mui-focused": {
-    color: "rgba(13, 16, 48, 0.6)"
+    color: "rgba(13, 16, 48, 0.6)",
   },
   "&.Mui-error": {
     color: "#db3615",
-  }
+  },
 });
 
 const SelectIcon = (props: any) => (
-    <div {...props}>
-      <ExpandMoreIcon />
-    </div>
-  );
-
+  <div {...props}>
+    <ExpandMoreIcon />
+  </div>
+);
 
 const BaseSelect = ({ ...props }: MuiSelectProps) => (
   <MuiSelect
@@ -70,11 +67,11 @@ const BaseSelect = ({ ...props }: MuiSelectProps) => (
       style: { marginTop: "2px" },
       anchorOrigin: { vertical: "bottom", horizontal: "left" },
       transformOrigin: { vertical: "top", horizontal: "left" },
-      getContentAnchorEl: null
+      getContentAnchorEl: null,
     }}
     {...props}
   />
-)
+);
 
 const StyledSelect = styled(BaseSelect)({
   padding: "0",
@@ -86,7 +83,7 @@ const StyledSelect = styled(BaseSelect)({
   },
 
   "&.Mui-error": {
-    borderColor: "#db3615"
+    borderColor: "#db3615",
   },
 
   ".MuiSelect-root": {
@@ -117,7 +114,7 @@ const StyledSelect = styled(BaseSelect)({
   },
 
   ".MuiSelect-icon.Mui-disabled > svg": {
-    color: "rgba(13, 16, 48, 0.6)"
+    color: "rgba(13, 16, 48, 0.6)",
   },
 
   ".MuiSelect-icon > svg": {
@@ -134,9 +131,9 @@ const StyledSelect = styled(BaseSelect)({
   },
 
   ".MuiSelect-select:focus": {
-    backgroundColor: "inherit"
-  }
-})
+    backgroundColor: "inherit",
+  },
+});
 
 interface SelectOption {
   label: string;
@@ -193,7 +190,12 @@ export const Select = ({
           </MenuItem>
         ))}
       </StyledSelect>
-      {helperText && <StyledFormHelperText>{error && <ErrorIcon />}{helperText}</StyledFormHelperText>}
+      {helperText && (
+        <StyledFormHelperText>
+          {error && <ErrorIcon />}
+          {helperText}
+        </StyledFormHelperText>
+      )}
     </StyledFormControl>
   );
 };
