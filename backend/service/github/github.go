@@ -69,7 +69,7 @@ type File struct {
 type Client interface {
 	GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, error)
 	CreateBranch(ctx context.Context, req *CreateBranchRequest) error
-	CreatePullRequest(ctx context.Context, ref *RemoteRef, title, base, body string) (*PullRequestInfo, error)
+	CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title, body string) (*PullRequestInfo, error)
 	CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error)
 	CreateIssueComment(ctx context.Context, ref *RemoteRef, number int, body string) error
 	CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error)
