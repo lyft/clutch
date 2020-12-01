@@ -18,7 +18,7 @@ import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 
 const UserPhoto = styled(IconButton)`
-  padding: 0.06rem 0rem 0.25rem 0.75rem;
+  padding: 0.06rem 0rem 0rem 0.75rem;
   margin-right: 0.25rem;
 `;
 
@@ -43,6 +43,7 @@ const Paper = styled(MuiPaper)`
   width: 16.63rem;
   border: 0.06rem solid #e2e2e6;
   box-shadow: 0rem 0.31rem 0.94rem rgba(53, 72, 212, 0.2);
+  border: 0.06rem solid #e2e2e6;
 `;
 
 const AvatarMenuItem = styled(MuiMenuItem)`

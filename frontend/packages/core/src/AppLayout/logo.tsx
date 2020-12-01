@@ -17,6 +17,7 @@ const StyledSvg = styled.svg`
   &:hover {
     animation: ${rotate} 5s linear;
   }
+  vertical-align: middle;
 `;
 
 const Logo: React.FC = () => (
