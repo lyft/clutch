@@ -15,7 +15,7 @@ import ErrorIcon from "@material-ui/icons/Error";
 
 const StyledFormControl = styled(MuiFormControl)({
   "label + .MuiInput-formControl": {
-    marginTop: "21px",
+    marginTop: "20px",
   },
 });
 
@@ -24,6 +24,7 @@ const StyledFormHelperText = styled(MuiFormHelperText)({
   display: "flex",
   position: "relative",
   fontSize: "12px",
+  lineHeight: "16px",
   marginTop: "7px",
   color: "grey",
 
@@ -34,13 +35,14 @@ const StyledFormHelperText = styled(MuiFormHelperText)({
   "svg": {
     height: "16px",
     width: "16px",
-    marginRight: "5px",
+    marginRight: "4px",
   }
 });
 
 const StyledInputLabel = styled(MuiInputLabel)({
-  fontWeight: "bold",
-  fontSize: "13px",
+  marginLeft: "2px",
+  fontWeight: 500,
+  fontSize: "14px",
   transform: "scale(1)",
   marginBottom: "10px",
   color: "rgba(13, 16, 48, 0.6)",
@@ -52,13 +54,11 @@ const StyledInputLabel = styled(MuiInputLabel)({
   }
 });
 
-const SelectIcon = (props: any) => {
-  return (
+const SelectIcon = (props: any) => (
     <div {...props}>
       <ExpandMoreIcon />
     </div>
   );
-};
 
 
 const BaseSelect = ({ ...props }: MuiSelectProps) => (
@@ -77,21 +77,22 @@ const BaseSelect = ({ ...props }: MuiSelectProps) => (
 )
 
 const StyledSelect = styled(BaseSelect)({
-  border: "1px solid rgba(13, 16, 48, 0.38)",
-  borderRadius: "4px",
   padding: "0",
-  marginTop: "6px",
+  boxSizing: "content-box",
 
-  "&.Mui-focused": {
+  "&.Mui-focused > .MuiSelect-root": {
     borderColor: "#3548d4",
   },
 
-  "&.Mui-error": {
+  "&.Mui-error > .MuiSelect-root": {
     borderColor: "#db3615"
   },
 
   ".MuiSelect-root": {
-    padding: "14px 16px",
+    padding: "15px 60px 13px 16px",
+    borderRadius: "4px",
+    border: "1px solid rgba(13, 16, 48, 0.38)",
+    height: "20px",
   },
 
   ".MuiSelect-root.Mui-disabled": {
@@ -106,6 +107,10 @@ const StyledSelect = styled(BaseSelect)({
     width: "48px",
     top: "unset",
     transform: "unset",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    boxSizing: "border-box",
   },
 
   ".MuiSelect-icon.Mui-disabled > svg": {
@@ -115,9 +120,6 @@ const StyledSelect = styled(BaseSelect)({
   ".MuiSelect-icon > svg": {
     color: "rgba(13, 16, 48, 0.6)",
     position: "absolute",
-    left: "50%",
-    top: "50%",
-    transform: "translate(-50%, -50%)"
   },
 
   "&.Mui-focused > .MuiSelect-icon > svg": {
@@ -125,8 +127,7 @@ const StyledSelect = styled(BaseSelect)({
   },
 
   ".MuiSelect-icon.MuiSelect-iconOpen > svg": {
-    transform: "translate(-50%, -50%) rotate(180deg)",
-
+    transform: "rotate(180deg)",
   },
 
   ".MuiSelect-select:focus": {
