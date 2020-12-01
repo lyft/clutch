@@ -27,7 +27,7 @@ func (s svc) CreateBranch(ctx context.Context, req *github.CreateBranchRequest) 
 	panic("implement me")
 }
 
-func (s svc) CreatePullRequest(ctx context.Context, ref *github.RemoteRef, title, base, body string) (*github.PullRequestInfo, error) {
+func (s svc) CreatePullRequest(ctx context.Context, ref *github.RemoteRef, base, title, body string) (*github.PullRequestInfo, error) {
 	panic("implement me")
 }
 

@@ -129,7 +129,7 @@ func boolPtr(b bool) *bool {
 	return &b
 }
 
-func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, title, base, body string) (*PullRequestInfo, error) {
+func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title, body string) (*PullRequestInfo, error) {
 	req := &githubv3.NewPullRequest{
 		Title:               strPtr(title),
 		Head:                strPtr(ref.Ref),
