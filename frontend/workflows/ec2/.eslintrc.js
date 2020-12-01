@@ -1,6 +1,5 @@
 const baseConfig = require("@clutch-sh/tools/.eslintrc.js");
 
-
 module.exports = {
   ...baseConfig,
   overrides: [

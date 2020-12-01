@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import {
   FormControl as MuiFormControl,
   FormControlLabel,
@@ -15,6 +15,9 @@ const FormLabel = styled(MuiFormLabel)`
   }
   font-weight: bold;
   position: relative;
+  &.Mui-disabled {
+    opacity: 0.75;
+  }
   `}
 `;
 
@@ -39,6 +42,9 @@ const Radio = styled(MuiRadio)`
   &.Mui-checked {
     color: ${theme.palette.accent.main};
   }
+  &.Mui-disabled {
+    opacity: 0.75;
+  }
   `}
 `;
 
@@ -50,6 +56,7 @@ interface RadioGroupOption {
 interface RadioGroupProps {
   defaultOption?: number;
   label?: string;
+  disabled?: boolean;
   maxWidth?: string;
   name: string;
   options: RadioGroupOption[];
@@ -59,6 +66,7 @@ interface RadioGroupProps {
 const RadioGroup: React.FC<RadioGroupProps> = ({
   defaultOption = 0,
   label,
+  disabled,
   maxWidth,
   name,
   options,
@@ -87,7 +95,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   }, []);
 
   return (
-    <FormControl key={name} data-max-width={maxWidth}>
+    <FormControl key={name} disabled={disabled} data-max-width={maxWidth}>
       {label && <FormLabel>{label}</FormLabel>}
       <StyledRadioGroup
         aria-label={label}
