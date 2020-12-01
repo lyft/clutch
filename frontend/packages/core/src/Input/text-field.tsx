@@ -21,9 +21,10 @@ const BaseTextField = ({ InputProps, InputLabelProps, ...props }: MuiStandardTex
 
 const StyledTextField = styled(BaseTextField)({
   ".MuiInputLabel-root": {
-    fontSize: "13px",
-    fontWeight: "bold",
+    fontSize: "14px",
+    fontWeight: 500,
     transform: "scale(1)",
+    marginLeft: "2px",
   },
 
   ".MuiInputLabel-root, .MuiInputLabel-root.Mui-focused": {
@@ -62,12 +63,18 @@ const StyledTextField = styled(BaseTextField)({
     height: "20px",
   },
 
+  ".MuiInput-input::placeholder": {
+    color: "rgba(13, 16, 48, 0.38)",
+    opacity: 1,
+  },
+
   ".MuiFormHelperText-root": {
-    verticalAlign: "middle",
+    alignItems: "center",
     display: "flex",
     position: "relative",
     fontSize: "12px",
     marginTop: "7px",
+    lineHeight: "16px",
   },
 
   ".MuiFormHelperText-root.Mui-error": {
@@ -81,7 +88,8 @@ const StyledTextField = styled(BaseTextField)({
   ".MuiFormHelperText-root > svg": {
     height: "16px",
     width: "16px",
-    marginRight: "5px",
+    marginRight: "4px",
+    // alignSelf: "baseline",
   },
 });
 

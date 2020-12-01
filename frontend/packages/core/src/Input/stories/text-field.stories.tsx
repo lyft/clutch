@@ -11,34 +11,34 @@ export default {
 
 const Template = (props: TextFieldProps) => <TextField {...props} />;
 
-export const Basic = Template.bind({});
-Basic.args = {
+export const Primary = Template.bind({});
+Primary.args = {
   label: "My Label",
   placeholder: "This is a placeholder, start typing",
 };
 
 export const Disabled = Template.bind({});
 Disabled.args = {
-  ...Basic.args,
+  ...Primary.args,
   disabled: true,
 };
 
 export const Error = Template.bind({});
 Error.args = {
-  ...Basic.args,
+  ...Primary.args,
   error: true,
   helperText: "There was a problem!",
 };
 
 export const WithoutLabel = Template.bind({});
 WithoutLabel.args = {
-  ...Basic.args,
+  ...Primary.args,
   label: null,
 };
 
 export const MultipleLines = Template.bind({});
 MultipleLines.args = {
-  ...Basic.args,
+  ...Primary.args,
   multiline: true,
   defaultValue: "This is\nan example\nof multiline content",
 };
