@@ -21,6 +21,7 @@ const StyledHorizontalRule = styled(HorizontalRuleBase)({
   alignItems: "center",
   display: "flex",
   flexDirection: "row",
+  width: "100%",
 
   ".line": {
     flex: "1 1 auto",
