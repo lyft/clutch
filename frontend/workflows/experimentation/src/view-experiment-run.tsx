@@ -84,17 +84,17 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
           <>
             {experiment.properties.items.map(property => (
               <TextField
+                readOnly
                 key={property.label}
                 label={property.label}
                 defaultValue={propertyToString(property)}
-                InputProps={{ readOnly: true }}
               />
             ))}
             <TextField
               multiline
+              readOnly
               label="Config"
               defaultValue={JSON.stringify(experiment.config, null, 4)}
-              InputProps={{ readOnly: true }}
             />
             <ButtonGroup buttons={makeButtons()} />
           </>
