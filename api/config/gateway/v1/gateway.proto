@@ -95,6 +95,8 @@ message GatewayOptions {
   repeated Middleware middleware = 6;
 
   Assets assets = 7;
+
+  bool enable_pprof = 8;
 }
 
 // Assets configuration provide a passthrough host for frontend static assets.
