@@ -89,7 +89,6 @@ const StyledTextField = styled(BaseTextField)({
     height: "16px",
     width: "16px",
     marginRight: "4px",
-    // alignSelf: "baseline",
   },
 });
 
