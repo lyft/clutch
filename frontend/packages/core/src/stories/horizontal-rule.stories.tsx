@@ -28,4 +28,3 @@ WithIcon.args = {
 };
 
 export const WithoutText = Template.bind({});
-WithoutText.args = {};
