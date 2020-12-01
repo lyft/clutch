@@ -15,8 +15,8 @@ export default {
 
 const Template = (props: SelectProps) => <Select name="demo" {...props} />;
 
-export const Primary = Template.bind({});
-Primary.args = {
+export const Basic = Template.bind({});
+Basic.args = {
   options: [
     {
       label: "option 1",
@@ -46,12 +46,12 @@ WithLabel.argTypes = {
   defaultOption: {
     control: {
       type: "select",
-      options: Primary.args.options.map((_: any, i: number) => i),
+      options: Basic.args.options.map((_: any, i: number) => i),
     },
   },
 };
 WithLabel.args = {
-  ...Primary.args,
+  ...Basic.args,
   defaultOption: 0,
   label: "Please select one",
   maxWidth: "100px",
