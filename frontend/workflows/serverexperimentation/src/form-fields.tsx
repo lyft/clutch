@@ -70,9 +70,6 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
               inputRef={register}
               error={!!errors[field.name]}
               helperText={errors[field.name] ? errors[field.name].message : ""}
-              InputLabelProps={{
-                shrink: true,
-              }}
             />
           );
         }

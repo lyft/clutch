@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import type { Meta } from "@storybook/react";
 
 import type { TextFieldProps } from "../text-field";
@@ -7,29 +7,38 @@ import TextField from "../text-field";
 export default {
   title: "Core/Input/TextField",
   component: TextField,
-  argTypes: {
-    onReturn: { action: "onReturn event" },
-    onChange: { action: "onChange event" },
-  },
 } as Meta;
 
 const Template = (props: TextFieldProps) => <TextField {...props} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
-  maxWidth: "",
+  label: "My Label",
+  placeholder: "This is a placeholder, start typing",
 };
 
-export const WithLabel = Template.bind({});
-WithLabel.args = {
+export const Disabled = Template.bind({});
+Disabled.args = {
   ...Primary.args,
-  placeholder: "",
-  label: "TextField",
+  disabled: true,
 };
 
-export const WithType = Template.bind({});
-WithType.args = {
+export const Error = Template.bind({});
+Error.args = {
   ...Primary.args,
-  label: "Date",
-  type: "datetime-local",
+  error: true,
+  helperText: "There was a problem!",
+};
+
+export const WithoutLabel = Template.bind({});
+WithoutLabel.args = {
+  ...Primary.args,
+  label: null,
+};
+
+export const MultipleLines = Template.bind({});
+MultipleLines.args = {
+  ...Primary.args,
+  multiline: true,
+  defaultValue: "This is\nan example\nof multiline content",
 };

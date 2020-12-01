@@ -68,7 +68,6 @@ const StringField = (
 
   return (
     <TextField
-      color="secondary"
       key={field.metadata.displayName || field.name}
       placeholder={field.metadata.stringField.placeholder}
       defaultValue={field.metadata.stringField.defaultValue || null}
