@@ -44,6 +44,7 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-hook-form": "^6.9.2",
+    "react-icons": "^4.1.0",
     "react-is": "^16.8.0",
     "react-router": "^6.0.0-beta",
     "react-router-dom": "^6.0.0-beta",

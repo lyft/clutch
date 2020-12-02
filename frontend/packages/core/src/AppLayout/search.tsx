@@ -1,4 +1,5 @@
 import React from "react";
+import { FiSearch } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import {
@@ -12,7 +13,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import SearchIcon from "@material-ui/icons/Search";
 import type { AutocompleteRenderInputParams } from "@material-ui/lab/Autocomplete";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import type { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
@@ -50,6 +50,7 @@ const ResultLabel = styled(Typography)({
 
 const SearchIconButton = styled(IconButton)({
   color: "#ffffff",
+  fontSize: "20px",
   padding: "8px",
   "&:hover": {
     background: "#2d3db4",
@@ -216,7 +217,7 @@ const SearchField: React.FC = () => {
         </Container>
       ) : (
         <SearchIconButton onClick={handleOpen}>
-          <SearchIcon />
+          <FiSearch />
         </SearchIconButton>
       )}
     </Grid>
