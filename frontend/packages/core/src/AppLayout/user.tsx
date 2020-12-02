@@ -17,46 +17,46 @@ import {
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 
-const UserPhoto = styled(IconButton)`
-  padding: 0.063rem 0rem 0rem 0.75rem;
-  margin-right: 0.25rem;
-`;
+const UserPhoto = styled(IconButton)({
+  padding: "0.063rem 0rem 0rem 0.75rem",
+  marginRight: "0.25rem",
+});
 
-const Avatar = styled(MuiAvatar)`
-  background-color: #d7dadb;
-  height: 2rem;
-  width: 2rem;
-`;
+const Avatar = styled(MuiAvatar)({
+  backgroundColor: "#d7dadb",
+  height: "2rem",
+  width: "2rem",
+});
 
-const Initials = styled(Typography)`
-  color: #02acbe;
-  font-size: 1rem;
-`;
+const Initials = styled(Typography)({
+  color: "#02acbe",
+  fontSize: "1rem",
+});
 
-const ItemText = styled(Typography)`
-  color: #0d1030;
-  font-size: 0.875rem;
-  opacity: 0.6;
-`;
+const ItemText = styled(Typography)({
+  color: "#0d1030",
+  fontSize: "0.875rem",
+  opacity: "0.6",
+});
 
-const Paper = styled(MuiPaper)`
-  width: 16.625rem;
-  border: 0.063rem solid #e2e2e6;
-  box-shadow: 0rem 0.313rem 0.938rem rgba(53, 72, 212, 0.2);
-`;
+const Paper = styled(MuiPaper)({
+  width: "16.625rem",
+  border: "0.063rem solid #e2e2e6",
+  boxShadow: "0rem 0.313rem 0.938rem rgba(53, 72, 212, 0.2)",
+});
 
-const AvatarMenuItem = styled(MuiMenuItem)`
-  &:focus {
-    background: transparent;
-  }
-  &:hover {
-    background: transparent;
-  }
-`;
+const AvatarMenuItem = styled(MuiMenuItem)({
+  "&:focus": {
+    background: "transparent",
+  },
+  "&:hover": {
+    background: "transparent",
+  },
+});
 
-const AvatarListItemIcon = styled(ListItemIcon)`
-  margin-left: 0.5rem;
-`;
+const AvatarListItemIcon = styled(ListItemIcon)({
+  marginLeft: "0.5rem",
+});
 
 interface JwtToken {
   sub: string;
@@ -115,7 +115,7 @@ const UserInformation: React.FC = () => {
         edge="end"
         aria-controls={open ? "account-options" : undefined}
         aria-haspopup="true"
-        onMouseEnter={handleToggle}
+        onClick={handleToggle}
       >
         <UserAvatar />
       </UserPhoto>

@@ -10,24 +10,25 @@ import Notifications from "./notifications";
 import SearchField from "./search";
 import { UserInformation } from "./user";
 
-const AppBar = styled(MuiAppBar)`
-  min-width: fit-content;
-  background: linear-gradient(90deg, #38106b 4.58%, #131c5f 89.31%);
-  min-width: fit-content;
-`;
+const AppBar = styled(MuiAppBar)({
+  minWidth: "fit-content",
+  background: "linear-gradient(90deg, #38106b 4.58%, #131c5f 89.31%)",
+});
 
-const MenuButton = styled(IconButton)`
-  padding: 12px;
-  margin-left: -12px;
-`;
+const MenuButton = styled(IconButton)({
+  padding: "12px",
+  marginLeft: "-12px",
+});
 
-const Title = styled(Typography)`
-  margin-right: 1.563rem;
-  font-weight: bold;
-  font-size: 1.25rem;
-  color: #ffffff;
-  opacity: 0.87;
-`;
+// TODO (sperry): remove marginRight in new search bar design
+const Title = styled(Typography)({
+  marginRight: "1.563rem",
+  marginLeft: "8px",
+  fontWeight: "bold",
+  fontSize: "1.25rem",
+  color: "#ffffff",
+  opacity: "0.87",
+});
 
 const Header: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
