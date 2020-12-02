@@ -21,10 +21,10 @@ const StyledRadio = styled(MuiRadio)(
 
 const Icon = styled.div(
   {
-    height: "1.5rem",
-    width: "1.5rem",
+    height: "24px",
+    width: "24px",
     border: "1px solid rgba(13, 16, 48, 0.38)",
-    borderRadius: "6.25rem",
+    borderRadius: "100px",
     boxSizing: "border-box",
   },
   props => ({
@@ -33,21 +33,21 @@ const Icon = styled.div(
 );
 
 const SelectedIcon = styled.div({
-  height: "1.5rem",
-  width: "1.5rem",
+  height: "24px",
+  width: "24px",
   background: "#2E45DC",
   border: "1px solid #283CD2",
-  borderRadius: "6.25rem",
+  borderRadius: "100px",
   boxSizing: "border-box",
 });
 
 const SelectedCenter = styled.div({
-  height: "0.75rem",
-  width: "0.75rem",
+  height: "12px",
+  width: "12px",
   background: "#FFFFFF",
-  borderRadius: "6.25rem",
+  borderRadius: "100px",
   boxSizing: "border-box",
-  margin: "0.313rem 0.313rem",
+  margin: "5px 5px",
 });
 
 export interface RadioProps extends Pick<MuiRadioProps, "disabled" | "value"> {
