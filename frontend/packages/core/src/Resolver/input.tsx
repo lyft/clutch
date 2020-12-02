@@ -4,7 +4,7 @@ import type { clutch } from "@clutch-sh/api";
 import { MenuItem, Select } from "@material-ui/core";
 
 import { Error } from "../error";
-import TextField from "../Input/text-field";
+import { TextField } from "../Input/text-field";
 
 import type { ChangeEventTarget, ResolverChangeEvent } from "./hydrator";
 import { convertChangeEvent, FormControl, hydrateField, InputLabel } from "./hydrator";
