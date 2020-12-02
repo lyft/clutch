@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Grid } from "@material-ui/core";
 import type { Meta } from "@storybook/react";
 
 import { UserInformation } from "../user";
@@ -11,8 +12,12 @@ export default {
       default: "clutch",
       values: [{ name: "clutch", value: "#131C5F" }],
     },
-    layout: "centered",
   },
 } as Meta;
 
-export const Primary: React.FC<{}> = () => <UserInformation />;
+const Template = () => (
+  <Grid container alignItems="center" justify="flex-end">
+    <UserInformation />
+  </Grid>
+);
+export const Primary = Template.bind({});

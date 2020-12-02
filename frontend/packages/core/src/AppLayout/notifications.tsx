@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import {
   Box,
   ClickAwayListener,
-  Grow,
+  Grow as MuiGrow,
   IconButton,
   MenuList,
   Paper,
@@ -13,8 +13,8 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 
 const StyledNotificationsIcon = styled(IconButton)({
   color: "#ffffff",
-  marginRight: "1rem",
-  padding: "8px",
+  marginRight: "0.5rem",
+  padding: "0.5rem",
   "&:hover": {
     background: "#2d3db4",
   },
@@ -22,6 +22,10 @@ const StyledNotificationsIcon = styled(IconButton)({
     background: "#2938a5",
   },
 });
+
+const Grow = styled(MuiGrow)((props: { placement: string }) => ({
+  transformOrigin: props.placement,
+}));
 
 const Notifications: React.FC = () => {
   const [open, setOpen] = React.useState(false);
@@ -60,7 +64,7 @@ const Notifications: React.FC = () => {
         {({ TransitionProps, placement }) => (
           <Grow
             {...TransitionProps}
-            style={{ transformOrigin: placement === "bottom" ? "center top" : "center bottom" }}
+            placement={placement === "bottom" ? "center top" : "center bottom"}
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>

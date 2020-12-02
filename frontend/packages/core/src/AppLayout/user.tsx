@@ -19,7 +19,8 @@ import jwtDecode from "jwt-decode";
 
 const UserPhoto = styled(IconButton)({
   padding: "0.5rem",
-  marginRight: "0.25rem",
+  marginLeft: "0.5rem",
+  marginRight: "0.5rem",
   "&:hover": {
     background: "#2d3db4",
   },
@@ -29,13 +30,13 @@ const UserPhoto = styled(IconButton)({
 });
 
 const Avatar = styled(MuiAvatar)({
-  backgroundColor: "#DCE7F4",
+  backgroundColor: "#dce7f4",
   height: "1.75rem",
   width: "1.75rem",
 });
 
 const AvatarBackdrop = styled(MuiAvatar)({
-  backgroundColor: "#F6FAFF",
+  backgroundColor: "#f6faff",
   height: "2rem",
   width: "2rem",
 });
@@ -47,19 +48,13 @@ const Initials = styled(Typography)({
   fontWeight: 500,
 });
 
-const ItemText = styled(Typography)({
-  color: "#0d1030",
-  fontSize: "0.875rem",
-  opacity: "0.6",
-});
-
 const Paper = styled(MuiPaper)({
   width: "16.625rem",
   border: "0.063rem solid #e2e2e6",
   boxShadow: "0rem 0.313rem 0.938rem rgba(53, 72, 212, 0.2)",
 });
 
-const AvatarMenuItem = styled(MuiMenuItem)({
+const UserProfileMenuItem = styled(MuiMenuItem)({
   "&:focus": {
     background: "transparent",
   },
@@ -70,6 +65,12 @@ const AvatarMenuItem = styled(MuiMenuItem)({
 
 const AvatarListItemIcon = styled(ListItemIcon)({
   marginLeft: "0.5rem",
+});
+
+const AvatarListItemText = styled(Typography)({
+  color: "#0d1030",
+  fontSize: "0.875rem",
+  opacity: "0.6",
 });
 
 const Grow = styled(MuiGrow)((props: { placement: string }) => ({
@@ -160,14 +161,14 @@ const UserInformation: React.FC = () => {
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList autoFocusItem={open} id="account-options" onKeyDown={handleListKeyDown}>
-                  <AvatarMenuItem>
+                  <UserProfileMenuItem>
                     <AvatarListItemIcon>
                       <UserAvatar />
                     </AvatarListItemIcon>
                     <ListItemText>
-                      <ItemText>{userId()}</ItemText>
+                      <AvatarListItemText>{userId()}</AvatarListItemText>
                     </ListItemText>
-                  </AvatarMenuItem>
+                  </UserProfileMenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
