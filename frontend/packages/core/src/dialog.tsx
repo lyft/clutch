@@ -45,21 +45,17 @@ export interface DialogProps extends Pick<MuiDialogProps, "open"> {
   onClose: () => void;
 }
 
-export const Dialog = ({ title, children, open, onClose, actions }: DialogProps) => {
-  console.log(open)
-  return (
+export const Dialog = ({ title, children, open, onClose, actions }: DialogProps) => (
   <MuiDialog open={open} onClose={onClose}>
     <DialogTitle disableTypography>
-      <div>
-        {title}
-      </div>
+      <div>{title}</div>
       <IconButton onClick={onClose}>
-        <CloseIcon fontSize="small"/>
+        <CloseIcon fontSize="small" />
       </IconButton>
     </DialogTitle>
     <DialogContent>{children}</DialogContent>
     <DialogActions>{actions}</DialogActions>
   </MuiDialog>
 );
-  };
+
 export default Dialog;

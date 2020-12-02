@@ -212,7 +212,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
         title="Experiment Start Confirmation"
         open={experimentData !== undefined}
         onClose={() => setExperimentData(undefined)}
-        actions={(
+        actions={
           <>
             <Button variant="neutral" text="No" onClick={() => setExperimentData(undefined)} />
             <Button
@@ -222,9 +222,10 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
               }}
             />
           </>
-        )}
+        }
       >
-        Are you sure you want to start an experiment? The experiment will start immediately and you will be moved to experiment details view page.
+        Are you sure you want to start an experiment? The experiment will start immediately and you
+        will be moved to experiment details view page.
       </Dialog>
     </PageLayout>
   );

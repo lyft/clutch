@@ -18,7 +18,7 @@ const Template = ({ children, open, ...props }: DialogProps) => {
   const [isOpen, setIsOpen] = React.useState(open);
   const onClose = () => {
     setIsOpen(!isOpen);
-  }
+  };
   return (
     <Dialog
       actions={
