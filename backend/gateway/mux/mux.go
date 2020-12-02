@@ -235,6 +235,8 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 		fileServer: http.FileServer(assets),
 	})
 
+	pprofHandlers(httpMux)
+
 	mux := &Mux{
 		GRPCServer:  grpcServer,
 		JSONGateway: jsonGateway,
