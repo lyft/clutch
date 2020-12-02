@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 
-import TextField from "../Input/text-field";
+import { TextField } from "../Input/text-field";
 
 const maxWidth = "500px";
 const InputLabel = styled(MuiInputLabel)`
@@ -68,7 +68,6 @@ const StringField = (
 
   return (
     <TextField
-      color="secondary"
       key={field.metadata.displayName || field.name}
       placeholder={field.metadata.stringField.placeholder}
       defaultValue={field.metadata.stringField.defaultValue || null}
