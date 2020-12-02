@@ -62,6 +62,9 @@ const SearchIconButton = styled(IconButton)({
 
 const StyledCloseIcon = styled(Icon)({
   color: "#0c0b31",
+  ".MuiSvgIcon-root": {
+    fontSize: "18px",
+  },
 });
 
 const Popper = styled(MuiPopper)({
@@ -83,7 +86,7 @@ const renderPopper = props => {
 const CustomCloseIcon: React.FC = () => {
   return (
     <StyledCloseIcon>
-      <CloseIcon fontSize="small" />
+      <CloseIcon />
     </StyledCloseIcon>
   );
 };
