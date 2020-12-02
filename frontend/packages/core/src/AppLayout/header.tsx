@@ -65,7 +65,7 @@ const Header: React.FC = () => {
           </Link>
           <Title>clutch</Title>
           <Box />
-            <SearchField />
+          <SearchField />
           <Box />
           <Grid container alignItems="center" justify="flex-end">
             <Notifications />
