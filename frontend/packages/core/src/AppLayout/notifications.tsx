@@ -14,7 +14,6 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 const StyledNotificationsIcon = styled(IconButton)({
   color: "#ffffff",
   marginRight: "1rem",
-  borderRadius: "8px",
   padding: "8px",
   "&:hover": {
     background: "#2d3db4",

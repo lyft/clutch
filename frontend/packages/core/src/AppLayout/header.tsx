@@ -20,7 +20,7 @@ const MenuButton = styled(IconButton)({
   marginLeft: "-12px",
 });
 
-// TODO (sperry): remove marginRight in new search bar design
+// TODO (sperry): remove marginRight in new searchbar design
 const Title = styled(Typography)({
   marginRight: "1.563rem",
   marginLeft: "8px",

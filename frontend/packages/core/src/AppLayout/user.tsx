@@ -4,7 +4,7 @@ import {
   Avatar as MuiAvatar,
   Box,
   ClickAwayListener,
-  Grow,
+  Grow as MuiGrow,
   IconButton,
   ListItemIcon,
   ListItemText,
@@ -18,19 +18,33 @@ import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 
 const UserPhoto = styled(IconButton)({
-  padding: "0.063rem 0rem 0rem 0.75rem",
+  padding: "0.5rem",
   marginRight: "0.25rem",
+  "&:hover": {
+    background: "#2d3db4",
+  },
+  "&:active": {
+    background: "#2938a5",
+  },
 });
 
 const Avatar = styled(MuiAvatar)({
-  backgroundColor: "#d7dadb",
+  backgroundColor: "#DCE7F4",
+  height: "1.75rem",
+  width: "1.75rem",
+});
+
+const AvatarBackdrop = styled(MuiAvatar)({
+  background: "#F6FAFF",
   height: "2rem",
   width: "2rem",
 });
 
 const Initials = styled(Typography)({
-  color: "#02acbe",
-  fontSize: "1rem",
+  color: "#0d1030",
+  opacity: 0.6,
+  fontSize: "0.875rem",
+  fontWeight: 500,
 });
 
 const ItemText = styled(Typography)({
@@ -58,6 +72,10 @@ const AvatarListItemIcon = styled(ListItemIcon)({
   marginLeft: "0.5rem",
 });
 
+const Grow = styled(MuiGrow)((props: { placement: string }) => ({
+  transformOrigin: props.placement,
+}));
+
 interface JwtToken {
   sub: string;
 }
@@ -80,9 +98,11 @@ const userId = (): string => {
 
 const UserAvatar: React.FC = () => {
   return (
-    <Avatar>
-      <Initials>{userId().slice(0, 2).toUpperCase()}</Initials>
-    </Avatar>
+    <AvatarBackdrop>
+      <Avatar>
+        <Initials>{userId().slice(0, 2).toUpperCase()}</Initials>
+      </Avatar>
+    </AvatarBackdrop>
   );
 };
 
@@ -135,7 +155,7 @@ const UserInformation: React.FC = () => {
         {({ TransitionProps, placement }) => (
           <Grow
             {...TransitionProps}
-            style={{ transformOrigin: placement === "bottom" ? "center top" : "center bottom" }}
+            placement={placement === "bottom" ? "center top" : "center bottom"}
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
