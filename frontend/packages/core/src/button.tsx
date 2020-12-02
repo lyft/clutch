@@ -40,8 +40,8 @@ const StyledButton = styled(MuiButton)(
     borderRadius: "4px",
     fontWeight: 700,
     textTransform: "none",
-    padding: "0.875rem 2rem",
-    margin: "2rem .875rem",
+    margin: "16px 8px",
+    padding: "14px 32px",
   },
   props => ({
     color: props["data-color"].font,

@@ -1,27 +1,50 @@
-import React from "react";
-import MuiDialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Typography from "@material-ui/core/Typography";
+import * as React from "react";
+import styled from "@emotion/styled";
+import {
+  Dialog as MuiDialog,
+  DialogActions as MuiDialogActions,
+  DialogContent as MuiDialogContent,
+  DialogTitle as MuiDialogTitle,
+} from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+
+const DialogTitle = styled(MuiDialogTitle)({
+  display: "flex",
+  justifyContent: "space-between",
+  fontSize: "16px",
+  padding: "16px 16px 0 16px",
+  fontWeight: 400,
+});
+
+const DialogContent = styled(MuiDialogContent)({
+  padding: "8px 16px",
+  fontSize: "12px",
+  fontWeight: 400,
+  color: "rgba(13, 16, 48, 0.6)",
+});
+
+const DialogActions = styled(MuiDialogActions)({
+  borderTop: "1px solid rgba(13, 16, 48, 0.12)",
+  padding: "0 8px",
+});
 
 export interface DialogProps {
   title: string;
-  content: string;
+  children: React.ReactNode;
+  actions: React.ReactNode;
   open: boolean;
   onClose: () => void;
 }
 
-const Dialog: React.FC<DialogProps> = ({ title, content, open, onClose, children }) => {
-  return (
-    <MuiDialog open={open} onClose={onClose}>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        <Typography gutterBottom>{content}</Typography>
-      </DialogContent>
-      <DialogActions>{children}</DialogActions>
-    </MuiDialog>
-  );
-};
+export const Dialog = ({ title, children, open, onClose, actions }: DialogProps) => (
+  <MuiDialog open={open} onClose={onClose}>
+    <DialogTitle disableTypography>
+      {title}
+      <CloseIcon />
+    </DialogTitle>
+    <DialogContent>{children}</DialogContent>
+    <DialogActions>{actions}</DialogActions>
+  </MuiDialog>
+);
 
 export default Dialog;

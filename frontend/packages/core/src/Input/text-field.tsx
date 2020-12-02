@@ -20,11 +20,13 @@ const BaseTextField = ({ InputProps, InputLabelProps, ...props }: MuiStandardTex
 );
 
 const StyledTextField = styled(BaseTextField)({
+  padding: "8px 0",
   ".MuiInputLabel-root": {
     fontSize: "14px",
     fontWeight: 500,
     transform: "scale(1)",
     marginLeft: "2px",
+    padding: "8px 0",
   },
 
   ".MuiInputLabel-root, .MuiInputLabel-root.Mui-focused": {
