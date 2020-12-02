@@ -50,7 +50,7 @@ const Notifications: React.FC = () => {
       <StyledNotificationsIcon
         ref={anchorRef}
         edge="end"
-        aria-controls={open ? "notifcation-options" : undefined}
+        aria-controls={open ? "notification-options" : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
       >
@@ -66,7 +66,7 @@ const Notifications: React.FC = () => {
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList
                   autoFocusItem={open}
-                  id="notifcation-options"
+                  id="notification-options"
                   onKeyDown={handleListKeyDown}
                 />
               </ClickAwayListener>

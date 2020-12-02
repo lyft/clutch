@@ -35,7 +35,7 @@ const Avatar = styled(MuiAvatar)({
 });
 
 const AvatarBackdrop = styled(MuiAvatar)({
-  background: "#F6FAFF",
+  backgroundColor: "#F6FAFF",
   height: "2rem",
   width: "2rem",
 });
@@ -147,7 +147,7 @@ const UserInformation: React.FC = () => {
         popperOptions={{
           modifiers: {
             offset: {
-              offset: "-115,5",
+              offset: "-118, -108",
             },
           },
         }}
