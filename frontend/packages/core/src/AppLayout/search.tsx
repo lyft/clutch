@@ -1,13 +1,12 @@
 import React from "react";
+import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
-import { Box, Grid, TextField, Typography, useTheme } from "@material-ui/core";
-import { fade } from "@material-ui/core/styles";
+import { Box, ClickAwayListener, Grid, IconButton, TextField, Typography, useTheme } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import type { AutocompleteRenderInputParams } from "@material-ui/lab/Autocomplete";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import type { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
 import _ from "lodash";
-import styled from "styled-components";
 
 import { useAppContext } from "../Contexts";
 
@@ -16,29 +15,43 @@ import { searchIndexes } from "./utils";
 
 const hotKey = "/";
 
-const Container = styled(Box)`
-  ${({ theme }) => `
-  border-radius: ${theme.shape.borderRadius}px;
-  margin-left: 0px;
-  margin-right: ${theme.spacing(2)}px;
-  background-color: ${fade(theme.palette.primary.main, 0.15)};
-  &:hover {
-    background-color: ${fade(theme.palette.primary.main, 0.25)};
-  }
-  `}
-`;
+const Container = styled(Box)({
+  borderRadius: "0.25rem",
+  marginRight: "0.5rem",
+  backgroundColor: "#ffffff",
+});
 
-const InputField = styled(TextField)`
-  max-width: 300px;
-  min-width: 300px;
-  @media screen and (max-width: 800px) {
-    min-width: 125px;
-  }
-`;
+const InputField = styled(TextField)({
+  maxWidth: "31.563rem",
+  minWidth: "31.563rem",
+  "@media screen and (max-width: 50rem)": {
+    minWidth: "7.813rem",
+  },
+  ".MuiAutocomplete-input": {
+    color: "#0d1030",
+  },
+});
 
-const InputIcon = styled(SearchIcon)`
-  margin-top: -3px;
-`;
+const ResultLabel = styled(Typography)({
+  color: "rgba(13, 16, 48, 0.6)",
+  fontWeight: 500,
+  fontSize: "0.875rem",
+  background: "#ffffff",
+  "&:hover": {
+    background: "linear-gradient(0deg, rgba(53, 72, 212, 0.1), rgba(53, 72, 212, 0.1)), #ffffff",
+  },
+});
+
+const SearchIconButton = styled(IconButton)({
+  color: "#ffffff",
+  padding: "0.5rem",
+  "&:hover": {
+    background: "#2d3db4",
+  },
+  "&:active": {
+    background: "#2938a5",
+  },
+})
 
 const ResultLabel = styled(Typography)`
   ${({ theme }) => `
@@ -71,7 +84,6 @@ const Input = (params: AutocompleteRenderInputParams): React.ReactNode => {
   return (
     <InputField
       {...params}
-      label={<InputIcon />}
       placeholder="Search..."
       variant="outlined"
       fullWidth
@@ -90,9 +102,6 @@ const Result: React.FC<ResultProps> = ({ option, handleSelection }) => (
   <Grid container alignItems="center" onClick={handleSelection}>
     <Grid item xs>
       <ResultLabel>{option.label}</ResultLabel>
-      <Typography variant="body2" color="textSecondary">
-        {option.category}
-      </Typography>
     </Grid>
   </Grid>
 );
@@ -109,7 +118,7 @@ const SearchField: React.FC = () => {
   const options = searchIndexes(workflows);
   const [inputValue, setInputValue] = React.useState("");
   const [showOptions, setShowOptions] = React.useState(false);
-  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
 
   const renderResult = (option: SearchIndex) => {
     const handleSelection = () => {
@@ -153,26 +162,41 @@ const SearchField: React.FC = () => {
     setInputValue("");
   };
 
+  const handleOpen = () => {
+    setOpen(!open);
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <Container>
-      <Autocomplete
-        autoComplete
-        freeSolo
-        selectOnFocus
-        size="small"
-        inputValue={inputValue}
-        renderInput={Input}
-        renderOption={renderResult}
-        onInputChange={onInputChange}
-        open={showOptions}
-        onOpen={onOptionsOpen}
-        onClose={onOptionsClose}
-        options={options}
-        filterOptions={filterResults}
-        getOptionLabel={x => x.label}
-        ListboxProps={{ style: { backgroundColor: fade(theme.palette.secondary.main, 0.75) } }}
-      />
-    </Container>
+    <Grid container alignItems="center">
+      { open ? (
+        <Container>
+          <ClickAwayListener onClickAway={handleClose}>
+            <Autocomplete
+              autoComplete
+              freeSolo
+              selectOnFocus
+              size="small"
+              inputValue={inputValue}
+              renderInput={Input}
+              renderOption={renderResult}
+              onInputChange={onInputChange}
+              open={showOptions}
+              onOpen={onOptionsOpen}
+              onClose={onOptionsClose}
+              options={options}
+              filterOptions={filterResults}
+              getOptionLabel={x => x.label}
+              ListboxProps={{ style: { backgroundColor: "#ffffff" } }}
+            />
+          </ClickAwayListener>
+        </Container>
+      ) : <SearchIconButton onClick={handleOpen}><SearchIcon/></SearchIconButton>}
+    </Grid>
+
   );
 };
 
