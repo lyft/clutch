@@ -3,7 +3,7 @@ import type { Meta } from "@storybook/react";
 
 import { WizardContext } from "../../Contexts";
 import type { MetadataTableProps } from "../metadata-table";
-import MetadataTable from "../metadata-table";
+import { MetadataTable } from "../metadata-table";
 
 export default {
   title: "Core/Table/Metadata Table",
