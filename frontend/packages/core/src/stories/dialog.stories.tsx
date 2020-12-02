@@ -14,19 +14,27 @@ export default {
   },
 } as Meta;
 
-const Template = ({ children, ...props }: DialogProps) => (
-  <Dialog
-    actions={
-      <>
-        <Button text="Back" variant="neutral" />
-        <Button text="Continue" />
-      </>
-    }
-    {...props}
-  >
-    {children}
-  </Dialog>
-);
+const Template = ({ children, open, ...props }: DialogProps) => {
+  const [isOpen, setIsOpen] = React.useState(open);
+  const onClose = () => {
+    setIsOpen(!isOpen);
+  }
+  return (
+    <Dialog
+      actions={
+        <>
+          <Button text="Back" variant="neutral" />
+          <Button text="Continue" />
+        </>
+      }
+      onClose={onClose}
+      open={isOpen}
+      {...props}
+    >
+      {children}
+    </Dialog>
+  );
+};
 
 export const Primary = Template.bind({});
 Primary.args = {

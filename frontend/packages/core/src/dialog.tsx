@@ -1,10 +1,12 @@
 import * as React from "react";
 import styled from "@emotion/styled";
+import type { DialogProps as MuiDialogProps } from "@material-ui/core";
 import {
   Dialog as MuiDialog,
   DialogActions as MuiDialogActions,
   DialogContent as MuiDialogContent,
   DialogTitle as MuiDialogTitle,
+  IconButton as MuiIconButton,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
@@ -14,6 +16,14 @@ const DialogTitle = styled(MuiDialogTitle)({
   fontSize: "16px",
   padding: "16px 16px 0 16px",
   fontWeight: 400,
+  color: "#000000",
+});
+
+const IconButton = styled(MuiIconButton)({
+  height: "16px",
+  width: "16px",
+  padding: "0",
+  color: "#000000",
 });
 
 const DialogContent = styled(MuiDialogContent)({
@@ -28,23 +38,28 @@ const DialogActions = styled(MuiDialogActions)({
   padding: "0 8px",
 });
 
-export interface DialogProps {
+export interface DialogProps extends Pick<MuiDialogProps, "open"> {
   title: string;
   children: React.ReactNode;
   actions: React.ReactNode;
-  open: boolean;
   onClose: () => void;
 }
 
-export const Dialog = ({ title, children, open, onClose, actions }: DialogProps) => (
+export const Dialog = ({ title, children, open, onClose, actions }: DialogProps) => {
+  console.log(open)
+  return (
   <MuiDialog open={open} onClose={onClose}>
     <DialogTitle disableTypography>
-      {title}
-      <CloseIcon />
+      <div>
+        {title}
+      </div>
+      <IconButton onClick={onClose}>
+        <CloseIcon fontSize="small"/>
+      </IconButton>
     </DialogTitle>
     <DialogContent>{children}</DialogContent>
     <DialogActions>{actions}</DialogActions>
   </MuiDialog>
 );
-
+  };
 export default Dialog;
