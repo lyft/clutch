@@ -157,14 +157,21 @@ func (m *Migrator) Up() {
 }
 
 func (m *Migrator) Down() {
-	msg := "Migrating DOWN by ONE version this migration has the potential to cause irrevocable data loss, verify host information above"
-	m.confirmWithUser(msg)
-
 	sqlMigrate := m.setupSqlMigrator()
+	version, _, err := sqlMigrate.Version()
+	if err != nil {
+		m.log.Fatal("failed to aquire migration version", zap.Error(err))
+	}
+
+	msg := fmt.Sprintf(
+		"Migrating DOWN by ONE version from (%d -> %d) this migration has the potential to cause irrevocable data loss, verify host information above",
+		version, (version - 1))
+
+	m.confirmWithUser(msg)
 
 	// Migrate back by 1
 	m.log.Info("applying migrations down")
-	err := sqlMigrate.Steps(-1)
+	err = sqlMigrate.Steps(-1)
 	if err != nil && err != migrate.ErrNoChange {
 		m.log.Fatal("failed running migrations", zap.Error(err))
 	}
