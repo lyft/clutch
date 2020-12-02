@@ -9,7 +9,7 @@ export default {
   title: "Core/AppLayout/Search Field",
   component: SearchField,
   decorators: [
-    SearchField => (
+    () => (
       <MemoryRouter>
         <SearchField />
       </MemoryRouter>

@@ -194,8 +194,6 @@ const SearchField: React.FC = () => {
     setOpen(false);
   };
 
-  debugger;
-
   return (
     <Grid container alignItems="center">
       {open ? (
