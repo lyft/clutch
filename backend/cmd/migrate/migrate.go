@@ -34,7 +34,7 @@ func (m *MigrateFlags) Link() {
 	m.BaseFlags.Link()
 
 	flag.BoolVar(&m.Force, "f", false, "do not ask user for confirmation")
-	flag.BoolVar(&m.Down, "d", false, "migrates down by one version")
+	flag.BoolVar(&m.Down, "down", false, "migrates down by one version")
 }
 
 type migrateLogger struct {

@@ -25,12 +25,12 @@ Migrate also accepts an `-f` option to skip user confirmation of migration (usef
 
 ## Migrating Down
 
-To migrate down supply the `-d` flag.
+To migrate down supply the `-down` flag.
 
 A single invocation of the migrate down will only ever migrate one version down.
 If you need to migrate down multiple versions, invoke the tool until you reach the desired version.
 
 ```
 cd backend/cmd/migrate
-go run migrate.go -template -d -c path/to/my/clutch-config.yaml
+go run migrate.go -template -down -c path/to/my/clutch-config.yaml
 ```
