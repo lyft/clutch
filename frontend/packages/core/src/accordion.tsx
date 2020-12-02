@@ -3,10 +3,10 @@ import styled from "@emotion/styled";
 import type { AccordionProps as MuiAccordionProps } from "@material-ui/core";
 import {
   Accordion as MuiAccordion,
-  AccordionActions,
-  AccordionDetails,
+  AccordionActions as MuiAccordionActions,
+  AccordionDetails as MuiAccordionDetails,
   AccordionSummary as MuiAccordionSummary,
-  Divider,
+  Divider as MuiDivider,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
@@ -41,35 +41,11 @@ const StyledAccordion = styled(MuiAccordion)({
   },
 });
 
-export interface AccordionProps extends Pick<MuiAccordionProps, "defaultExpanded"> {
-  title?: string;
-  collapsible?: boolean;
-  children: React.ReactNode[];
-}
-
-export const Accordion = ({
-  title,
-  collapsible,
-  defaultExpanded,
-  children,
-  ...props
-}: AccordionProps) => (
-  <StyledAccordion defaultExpanded={defaultExpanded} {...props}>
-    <StyledAccordionSummary defaultExpanded={defaultExpanded} collapsible={collapsible}>
-      {title}
-    </StyledAccordionSummary>
-    {children}
-  </StyledAccordion>
-);
-
-const AccordionSummaryBase = ({ children, collapsible, defaultExpanded, ...props }) => {
-  const [expanded, setExpanded] = React.useState(defaultExpanded);
-
+const AccordionSummaryBase = ({ children, collapsible, expanded, ...props }) => {
   return (
     <MuiAccordionSummary
-      {...props}
       expandIcon={collapsible ? expanded ? <RemoveIcon /> : <AddIcon /> : null}
-      onClick={() => setExpanded((v: boolean) => !v)}
+      {...props}
     >
       {children}
     </MuiAccordionSummary>
@@ -101,4 +77,36 @@ export const StyledAccordionSummary = styled(AccordionSummaryBase)({
   },
 });
 
-export { AccordionActions, AccordionDetails, Divider as AccordionDivider };
+export interface AccordionProps extends Pick<MuiAccordionProps, "defaultExpanded"> {
+  title?: string;
+  collapsible?: boolean;
+  children: React.ReactNode[];
+}
+
+export const Accordion = ({
+  title,
+  collapsible = true,
+  defaultExpanded,
+  children,
+  ...props
+}: AccordionProps) => {
+  const [expanded, setExpanded] = React.useState(defaultExpanded);
+
+  return (
+    <StyledAccordion defaultExpanded={defaultExpanded} expanded={expanded} {...props}>
+      <StyledAccordionSummary
+        expanded={expanded}
+        defaultExpanded={defaultExpanded}
+        collapsible={collapsible}
+        onClick={() => collapsible && setExpanded(v => !v)}
+      >
+        {title}
+      </StyledAccordionSummary>
+      {children}
+    </StyledAccordion>
+  );
+};
+
+export const AccordionActions = MuiAccordionActions;
+export const AccordionDetails = MuiAccordionDetails;
+export const AccordionDivider = MuiDivider;
