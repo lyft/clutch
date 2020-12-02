@@ -1,11 +1,18 @@
-import React from "react";
+import * as React from "react";
 import { useForm } from "react-hook-form";
+import styled from "@emotion/styled";
 import { DevTool } from "@hookform/devtools";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Table, TableBody, TableCell, TableContainer, TableRow } from "@material-ui/core";
-import type { Size } from "@material-ui/core/TableCell";
+import type { Size } from "@material-ui/core";
+import {
+  Table as MuiTable,
+  TableBody,
+  TableCell as MuiTableCell,
+  TableContainer as MuiTableContainer,
+  TableRow,
+  Typography,
+} from "@material-ui/core";
 import _ from "lodash";
-import styled from "styled-components";
 import type { Schema } from "yup";
 import { object } from "yup";
 
@@ -26,66 +33,126 @@ interface IdentifiableRowData extends RowData {
   id: string;
 }
 
+const TableContainer = styled(MuiTableContainer)({
+  borderWidth: "0",
+  border: "0",
+  padding: "16px 32px",
+});
+
+const Table = styled(MuiTable)({
+  border: "1px solid rgba(13, 16, 48, 0.12)",
+  borderRadius: "4px",
+  borderCollapse: "unset",
+});
+
+const BORDERS = {
+  first: {
+    borderBottom: "",
+    key: {
+      borderTopLeftRadius: "3px",
+    },
+    value: {
+      borderTopRightRadius: "3px",
+    },
+  },
+  middle: {
+    borderBottom: "",
+    key: {},
+    value: {},
+  },
+  last: {
+    borderBottom: "0",
+    key: {
+      borderBottomLeftRadius: "3px",
+    },
+    value: {
+      borderBottomRightRadius: "3px",
+    },
+  },
+};
+
+const TableCell = styled(MuiTableCell)(
+  {
+    color: "#0D1030",
+    fontSize: "14px",
+    fontWeight: "normal",
+  },
+  props => ({
+    borderBottom: BORDERS[props["data-position"]].borderBottom,
+    ...BORDERS[props["data-position"]].value,
+  })
+);
+
+const KeyCellContainer = styled(TableCell)(
+  {
+    width: "45%",
+    background: "rgba(13, 16, 48, 0.03)",
+    fontWeight: 500,
+  },
+  props => ({
+    borderBottom: BORDERS[props["data-position"]].borderBottom,
+    ...BORDERS[props["data-position"]].key,
+  })
+);
+
+type RowPosition = "first" | "middle" | "last";
+
 interface KeyCellProps {
   data: IdentifiableRowData;
   size: Size;
+  isLast?: boolean;
+  position: RowPosition;
 }
 
-const StyledKeyCell = styled(TableCell)`
-  width: 50%;
-`;
-
-const KeyCell: React.FC<KeyCellProps> = ({ data, size }) => {
+const KeyCell: React.FC<KeyCellProps> = ({ data, size, position }) => {
   let { name } = data;
   if (data.value instanceof Array && data.value.length > 1) {
     name = `${data.name}s`;
   }
   return (
-    <StyledKeyCell size={size}>
-      <strong>{name}</strong>
-    </StyledKeyCell>
+    <KeyCellContainer size={size} data-position={position}>
+      {name}
+    </KeyCellContainer>
   );
 };
 
-interface ViewOnlyRowProps {
-  data: IdentifiableRowData;
-  size: Size;
-}
+interface ImmutableRowProps extends KeyCellProps {}
 
-const ViewOnlyRow: React.FC<ViewOnlyRowProps> = ({ data, size }) => {
+const ImmutableRow: React.FC<ImmutableRowProps> = ({ data, size, position }) => {
   let { value } = data;
   if (data.value instanceof Array && data.value.length > 1) {
     value = data.value.join(", ");
   }
   return (
     <TableRow key={data.id}>
-      <KeyCell data={data} size={size} />
-      <TableCell size={size}>{value}</TableCell>
+      <KeyCell data={data} size={size} position={position} />
+      <TableCell size={size} data-position={position}>
+        {value}
+      </TableCell>
     </TableRow>
   );
 };
 
-interface EditableRowProps {
-  data: IdentifiableRowData;
+interface MutableRowProps extends ImmutableRowProps {
   onUpdate: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
   onReturn: () => void;
   validation: any;
-  size: Size;
 }
 
-const EditableRow: React.FC<EditableRowProps> = ({
+const MutableRow: React.FC<MutableRowProps> = ({
   data,
   onUpdate,
   onReturn,
   validation,
   size,
+  position,
 }) => {
   const error = validation.errors?.[data.name];
 
   return (
     <TableRow key={data.id}>
-      <KeyCell data={data} size={size} />
-      <TableCell size={size}>
+      <KeyCell data={data} size={size} position={position} />
+      <TableCell size={size} data-position={position}>
         <TextField
           id={data.id}
           name={data.name}
@@ -103,18 +170,17 @@ const EditableRow: React.FC<EditableRowProps> = ({
   );
 };
 
-interface MetadataTableProps {
+export interface MetadataTableProps {
   data: RowData[];
   onUpdate?: (id: string, value: unknown) => void;
   variant?: Size;
 }
 
-const MetadataTable: React.FC<MetadataTableProps> = ({
+export const MetadataTable: React.FC<MetadataTableProps> = ({
   data,
   onUpdate,
   children,
   variant,
-  ...props
 }) => {
   const displayVariant = variant || "medium";
   const { onSubmit, setOnSubmit } = useWizardContext();
@@ -145,22 +211,29 @@ const MetadataTable: React.FC<MetadataTableProps> = ({
   }, []);
 
   return (
-    <TableContainer {...props}>
+    <TableContainer>
       {process.env.REACT_APP_DEBUG_FORMS && onUpdate !== undefined && <DevTool control={control} />}
-      <Table {...props}>
+      <Table>
         <TableBody>
-          {rows.map((row: IdentifiableRowData) => {
+          {rows.map((row: IdentifiableRowData, idx: number) => {
+            let position = "middle" as RowPosition;
+            if (idx === 0) {
+              position = "first";
+            } else if (idx === rows.length - 1) {
+              position = "last";
+            }
             return row.input !== undefined && onUpdate ? (
-              <EditableRow
+              <MutableRow
                 data={row}
                 onUpdate={e => onUpdate(e.target.id, e.target.value)}
                 onReturn={onSubmit}
                 key={row.id}
                 validation={validation}
                 size={displayVariant}
+                position={position}
               />
             ) : (
-              <ViewOnlyRow data={row} key={row.id} size={displayVariant} />
+              <ImmutableRow data={row} key={row.id} size={displayVariant} position={position} />
             );
           })}
           {children}
