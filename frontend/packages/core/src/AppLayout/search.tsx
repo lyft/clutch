@@ -65,6 +65,10 @@ const StyledCloseIcon = styled(Icon)({
 });
 
 const Popper = styled(MuiPopper)({
+  ".MuiAutocomplete-paper": {
+    border: "1px solid rgba(13, 16, 48, 0.12)",
+    boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
+  },
   ".MuiAutocomplete-option": {
     "&:hover": {
       background: "linear-gradient(0deg, rgba(53, 72, 212, 0.1), rgba(53, 72, 212, 0.1)), #ffffff",
@@ -189,6 +193,8 @@ const SearchField: React.FC = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  debugger;
 
   return (
     <Grid container alignItems="center">
