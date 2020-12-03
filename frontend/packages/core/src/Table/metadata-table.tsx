@@ -81,7 +81,6 @@ const KeyCellContainer = styled(TableCell)({
 interface KeyCellProps {
   data: IdentifiableRowData;
   size: Size;
-  isLast?: boolean;
 }
 
 const KeyCell: React.FC<KeyCellProps> = ({ data, size }) => {
