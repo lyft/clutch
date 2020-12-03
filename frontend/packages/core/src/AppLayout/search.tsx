@@ -3,11 +3,11 @@ import { FiSearch } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import {
-  Box,
   ClickAwayListener,
   Grid,
   Icon,
   IconButton,
+  InputAdornment as MuiInputAdornment,
   Popper as MuiPopper,
   TextField,
   Typography,
@@ -25,17 +25,18 @@ import { searchIndexes } from "./utils";
 
 const hotKey = "/";
 
-const Container = styled(Box)({
-  borderRadius: "4px",
-  marginRight: "8px",
-  backgroundColor: "#ffffff",
-});
-
 const InputField = styled(TextField)({
-  maxWidth: "504px",
-  minWidth: "504px",
-  "@media screen and (max-width: 800px)": {
+  maxWidth: "551px",
+  minWidth: "551px",
+  "@media screen and (max-width: 880px)": {
     minWidth: "125px",
+  },
+
+  ".MuiInputBase-root": {
+    height: "46px",
+    border: "2px solid rgba(13, 16, 48, 0.1)",
+    borderRadius: "4px",
+    background: "white",
   },
   ".MuiAutocomplete-input": {
     color: "#0d1030",
@@ -51,7 +52,7 @@ const ResultLabel = styled(Typography)({
 const SearchIconButton = styled(IconButton)({
   color: "#ffffff",
   fontSize: "20px",
-  padding: "8px",
+  padding: "12px",
   "&:hover": {
     background: "#2d3db4",
   },
@@ -59,6 +60,11 @@ const SearchIconButton = styled(IconButton)({
     background: "#2938a5",
   },
 });
+
+const InputAdornment = styled(MuiInputAdornment)({
+  color: "#0c0b31",
+  marginLeft: "12px",
+})
 
 const StyledCloseIcon = styled(Icon)({
   color: "#0c0b31",
@@ -73,9 +79,13 @@ const Popper = styled(MuiPopper)({
     boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
   },
   ".MuiAutocomplete-option": {
-    "&:hover": {
+    height: "48px",
+  },
+  ".MuiAutocomplete-option[data-focus='true']": {
       background: "linear-gradient(0deg, rgba(53, 72, 212, 0.1), rgba(53, 72, 212, 0.1)), #ffffff",
-    },
+      "&:hover": {
+        background: "#e7e7ea",
+      },
   },
 });
 
@@ -113,9 +123,20 @@ const Input = (params: AutocompleteRenderInputParams): React.ReactNode => {
     <InputField
       {...params}
       placeholder="Search..."
-      variant="outlined"
       fullWidth
       inputRef={searchRef}
+      InputProps={{
+        ...params.InputProps,
+        disableUnderline: true,
+        startAdornment: (
+          <>
+            <InputAdornment position="start">
+              <FiSearch />
+            </InputAdornment>
+            {params.InputProps.startAdornment}
+          </>
+        ),
+      }}
     />
   );
 };
@@ -200,7 +221,6 @@ const SearchField: React.FC = () => {
   return (
     <Grid container alignItems="center">
       {open ? (
-        <Container>
           <ClickAwayListener onClickAway={handleClose}>
             <Autocomplete
               autoComplete
@@ -221,7 +241,6 @@ const SearchField: React.FC = () => {
               closeIcon={<CustomCloseIcon />}
             />
           </ClickAwayListener>
-        </Container>
       ) : (
         <SearchIconButton onClick={handleOpen}>
           <FiSearch />

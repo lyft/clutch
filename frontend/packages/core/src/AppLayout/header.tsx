@@ -64,10 +64,10 @@ const Header: React.FC = () => {
             <Logo />
           </Link>
           <Title>clutch</Title>
-          <Box />
-          <SearchField />
-          <Box />
           <Grid container alignItems="center" justify="flex-end">
+            <Box>
+            <SearchField />
+            </Box>
             <Notifications />
             <UserInformation />
           </Grid>
