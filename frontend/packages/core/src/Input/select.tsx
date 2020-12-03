@@ -1,60 +1,159 @@
-import React from "react";
+import * as React from "react";
+import styled from "@emotion/styled";
+import type { SelectProps as MuiSelectProps } from "@material-ui/core";
 import {
   FormControl as MuiFormControl,
+  FormHelperText as MuiFormHelperText,
   InputLabel as MuiInputLabel,
   MenuItem,
   Select as MuiSelect,
 } from "@material-ui/core";
-import styled from "styled-components";
+import ErrorIcon from "@material-ui/icons/Error";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-const FormControl = styled(MuiFormControl)`
-  ${({ theme, ...props }) => `
-  display: flex;
-  min-width: fit-content;
-  width: ${props["data-max-width"] || "500px"};
-  .MuiInput-underline:after {
-    border-bottom: 2px solid ${theme.palette.accent.main};
-  }
-  `}
-`;
+const StyledFormControl = styled(MuiFormControl)({
+  "label + .MuiInput-formControl": {
+    marginTop: "20px",
+  },
+});
 
-const InputLabel = styled(MuiInputLabel)`
-  ${({ theme }) => `
-  && {
-    color: ${theme.palette.text.primary};
-  }
-  position: relative;
-  `}
-`;
+const StyledFormHelperText = styled(MuiFormHelperText)({
+  verticalAlign: "middle",
+  display: "flex",
+  position: "relative",
+  fontSize: "12px",
+  lineHeight: "16px",
+  marginTop: "7px",
+  color: "grey",
 
-const StyledSelect = styled(MuiSelect)`
-  && {
-    margin-top: 0px;
-  }
-`;
+  "&.Mui-error": {
+    color: "#db3615",
+  },
+
+  svg: {
+    height: "16px",
+    width: "16px",
+    marginRight: "4px",
+  },
+});
+
+const StyledInputLabel = styled(MuiInputLabel)({
+  marginLeft: "2px",
+  fontWeight: 500,
+  fontSize: "14px",
+  transform: "scale(1)",
+  marginBottom: "10px",
+  color: "rgba(13, 16, 48, 0.6)",
+  "&.Mui-focused": {
+    color: "rgba(13, 16, 48, 0.6)",
+  },
+  "&.Mui-error": {
+    color: "#db3615",
+  },
+});
+
+const SelectIcon = (props: any) => (
+  <div {...props}>
+    <ExpandMoreIcon />
+  </div>
+);
+
+const BaseSelect = ({ ...props }: MuiSelectProps) => (
+  <MuiSelect
+    disableUnderline
+    fullWidth
+    IconComponent={SelectIcon}
+    MenuProps={{
+      style: { marginTop: "2px" },
+      anchorOrigin: { vertical: "bottom", horizontal: "left" },
+      transformOrigin: { vertical: "top", horizontal: "left" },
+      getContentAnchorEl: null,
+    }}
+    {...props}
+  />
+);
+
+const StyledSelect = styled(BaseSelect)({
+  padding: "0",
+
+  ".MuiSelect-root": {
+    padding: "15px 60px 13px 16px",
+    borderRadius: "4px",
+    borderStyle: "solid",
+    borderWidth: "1px",
+    borderColor: "rgba(13, 16, 48, 0.38)",
+    height: "20px",
+  },
+
+  "&.Mui-focused > .MuiSelect-root": {
+    borderColor: "#3548d4",
+  },
+
+  "&.Mui-error > .MuiSelect-root": {
+    borderColor: "#db3615",
+  },
+
+  ".MuiSelect-root.Mui-disabled": {
+    backgroundColor: "rgba(13, 16, 48, 0.12)",
+  },
+
+  ".MuiSelect-icon": {
+    height: "100%",
+    width: "48px",
+    top: "unset",
+    transform: "unset",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    boxSizing: "border-box",
+  },
+
+  ".MuiSelect-icon.Mui-disabled > svg": {
+    color: "rgba(13, 16, 48, 0.6)",
+  },
+
+  ".MuiSelect-icon > svg": {
+    color: "rgba(13, 16, 48, 0.6)",
+    position: "absolute",
+  },
+
+  "&.Mui-focused > .MuiSelect-icon > svg": {
+    color: "#0d1030",
+  },
+
+  ".MuiSelect-icon.MuiSelect-iconOpen > svg": {
+    transform: "rotate(180deg)",
+  },
+
+  ".MuiSelect-select:focus": {
+    backgroundColor: "inherit",
+  },
+});
 
 interface SelectOption {
   label: string;
   value?: string;
 }
 
-export interface SelectProps {
+export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> {
   defaultOption?: number;
+  helperText?: string;
   label?: string;
-  maxWidth?: string;
   name: string;
   options: SelectOption[];
   onChange: (value: string) => void;
 }
 
-const Select: React.FC<SelectProps> = ({
+export const Select = ({
   defaultOption = 0,
+  disabled,
+  error,
+  helperText,
   label,
-  maxWidth,
   name,
   options,
   onChange,
-}) => {
+}: SelectProps) => {
   if (options.length === 0) {
     return null;
   }
@@ -74,14 +173,11 @@ const Select: React.FC<SelectProps> = ({
   }, []);
 
   return (
-    <FormControl key={name} data-max-width={maxWidth}>
-      <InputLabel shrink color="secondary">
-        {label}
-      </InputLabel>
+    <StyledFormControl key={name} fullWidth disabled={disabled} error={error}>
+      {label && <StyledInputLabel>{label}</StyledInputLabel>}
       <StyledSelect
         value={options[selectedIdx]?.value || options[selectedIdx].label}
         onChange={updateSelectedOption}
-        fullWidth
       >
         {options.map(option => (
           <MenuItem key={option.label} value={option?.value || option.label}>
@@ -89,7 +185,13 @@ const Select: React.FC<SelectProps> = ({
           </MenuItem>
         ))}
       </StyledSelect>
-    </FormControl>
+      {helperText && (
+        <StyledFormHelperText>
+          {error && <ErrorIcon />}
+          {helperText}
+        </StyledFormHelperText>
+      )}
+    </StyledFormControl>
   );
 };
 
