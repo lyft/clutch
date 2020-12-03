@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import type { Size } from "@material-ui/core";
 import {
   Table as MuiTable,
-  TableBody,
+  TableBody as MuiTableBody,
   TableCell as MuiTableCell,
   TableContainer as MuiTableContainer,
   TableRow,
@@ -44,90 +44,65 @@ const Table = styled(MuiTable)({
   borderCollapse: "unset",
 });
 
-const BORDERS = {
-  first: {
-    borderBottom: "",
-    key: {
+const TableBody = styled(MuiTableBody)({
+  "tr:first-child": {
+    "*:first-child": {
       borderTopLeftRadius: "3px",
     },
-    value: {
+    "*:last-child": {
       borderTopRightRadius: "3px",
     },
   },
-  middle: {
-    borderBottom: "",
-    key: {},
-    value: {},
-  },
-  last: {
-    borderBottom: "0",
-    key: {
+  "tr:last-child": {
+    "*": {
+      borderBottom: "0",
+    },
+    "*:first-child": {
       borderBottomLeftRadius: "3px",
     },
-    value: {
+    "*:last-child": {
       borderBottomRightRadius: "3px",
     },
   },
-};
+});
 
-const TableCell = styled(MuiTableCell)(
-  {
-    color: "#0D1030",
-    fontSize: "14px",
-    fontWeight: "normal",
-  },
-  props => ({
-    borderBottom: BORDERS[props["data-position"]].borderBottom,
-    ...BORDERS[props["data-position"]].value,
-  })
-);
+const TableCell = styled(MuiTableCell)({
+  color: "#0D1030",
+  fontSize: "14px",
+  fontWeight: "normal",
+});
 
-const KeyCellContainer = styled(TableCell)(
-  {
-    width: "45%",
-    background: "rgba(13, 16, 48, 0.03)",
-    fontWeight: 500,
-  },
-  props => ({
-    borderBottom: BORDERS[props["data-position"]].borderBottom,
-    ...BORDERS[props["data-position"]].key,
-  })
-);
-
-type RowPosition = "first" | "middle" | "last";
+const KeyCellContainer = styled(TableCell)({
+  width: "45%",
+  background: "rgba(13, 16, 48, 0.03)",
+  fontWeight: 500,
+});
 
 interface KeyCellProps {
   data: IdentifiableRowData;
   size: Size;
   isLast?: boolean;
-  position: RowPosition;
 }
 
-const KeyCell: React.FC<KeyCellProps> = ({ data, size, position }) => {
+const KeyCell: React.FC<KeyCellProps> = ({ data, size }) => {
   let { name } = data;
   if (data.value instanceof Array && data.value.length > 1) {
     name = `${data.name}s`;
   }
-  return (
-    <KeyCellContainer size={size} data-position={position}>
-      {name}
-    </KeyCellContainer>
-  );
+  return <KeyCellContainer size={size}>{name}</KeyCellContainer>;
 };
 
 interface ImmutableRowProps extends KeyCellProps {}
 
-const ImmutableRow: React.FC<ImmutableRowProps> = ({ data, size, position }) => {
+const ImmutableRow: React.FC<ImmutableRowProps> = ({ data, size }) => {
   let { value } = data;
   if (data.value instanceof Array && data.value.length > 1) {
     value = data.value.join(", ");
   }
   return (
     <TableRow key={data.id}>
-      <KeyCell data={data} size={size} position={position} />
-      <TableCell size={size} data-position={position}>
-        {value}
-      </TableCell>
+      <KeyCell data={data} size={size} />
+      <TableCell size={size}>{value}</TableCell>
     </TableRow>
   );
 };
@@ -138,20 +113,13 @@ interface MutableRowProps extends ImmutableRowProps {
   validation: any;
 }
 
-const MutableRow: React.FC<MutableRowProps> = ({
-  data,
-  onUpdate,
-  onReturn,
-  validation,
-  size,
-  position,
-}) => {
+const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, validation, size }) => {
   const error = validation.errors?.[data.name];
 
   return (
     <TableRow key={data.id}>
-      <KeyCell data={data} size={size} position={position} />
-      <TableCell size={size} data-position={position}>
+      <KeyCell data={data} size={size} />
+      <TableCell size={size}>
         <TextField
           id={data.id}
           name={data.name}
@@ -214,13 +182,7 @@ export const MetadataTable: React.FC<MetadataTableProps> = ({
       {process.env.REACT_APP_DEBUG_FORMS && onUpdate !== undefined && <DevTool control={control} />}
       <Table>
         <TableBody>
-          {rows.map((row: IdentifiableRowData, idx: number) => {
-            let position = "middle" as RowPosition;
-            if (idx === 0) {
-              position = "first";
-            } else if (idx === rows.length - 1) {
-              position = "last";
-            }
+          {rows.map((row: IdentifiableRowData) => {
             return row.input !== undefined && onUpdate ? (
               <MutableRow
                 data={row}
@@ -229,10 +191,9 @@ export const MetadataTable: React.FC<MetadataTableProps> = ({
                 key={row.id}
                 validation={validation}
                 size={displayVariant}
-                position={position}
               />
             ) : (
-              <ImmutableRow data={row} key={row.id} size={displayVariant} position={position} />
+              <ImmutableRow data={row} key={row.id} size={displayVariant} />
             );
           })}
           {children}
