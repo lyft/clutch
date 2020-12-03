@@ -10,14 +10,12 @@ import {
 } from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/Error";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { css } from "@emotion/react";
 
 const StyledFormControl = styled(MuiFormControl)({
   "label + .MuiInput-formControl": {
     marginTop: "20px",
   },
 });
-
 
 const StyledFormHelperText = styled(MuiFormHelperText)({
   verticalAlign: "middle",
@@ -91,7 +89,7 @@ const StyledSelect = styled(BaseSelect)({
     height: "20px",
   },
 
-  "ul": {
+  ul: {
     borderRadius: "4px",
     border: "1px solid rgba(13, 16, 48, 0.1)",
     // boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
@@ -103,11 +101,11 @@ const StyledSelect = styled(BaseSelect)({
   },
 
   ".MuiListItem-root:first-child": {
-    borderRadius: "4px 4px 0 0"
+    borderRadius: "4px 4px 0 0",
   },
 
   ".MuiListItem-root:last-child": {
-    borderRadius: "0 0 4px 4px"
+    borderRadius: "0 0 4px 4px",
   },
 
   ".MuiListItem-root.Mui-selected": {
@@ -121,7 +119,7 @@ const StyledSelect = styled(BaseSelect)({
   ".MuiListItem-root:hover": {
     backgroundColor: "#e7e7ea",
   },
-  
+
   ".MuiListItem-root:active": {
     backgroundColor: "#dbdbe0",
   },
@@ -130,7 +128,7 @@ const StyledSelect = styled(BaseSelect)({
     marginTop: "5px",
     border: "none",
     // boxShadow: "none",
-        boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+    boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
   },
 
   "&.Mui-focused > .MuiSelect-root": {
