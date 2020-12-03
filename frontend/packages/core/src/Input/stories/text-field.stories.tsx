@@ -2,7 +2,7 @@ import * as React from "react";
 import type { Meta } from "@storybook/react";
 
 import type { TextFieldProps } from "../text-field";
-import TextField from "../text-field";
+import { TextField } from "../text-field";
 
 export default {
   title: "Core/Input/TextField",

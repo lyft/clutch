@@ -1,37 +1,80 @@
 import React from "react";
+import styled from "@emotion/styled";
 import {
   Avatar as MuiAvatar,
+  Box,
   ClickAwayListener,
-  Grid,
-  Grow,
+  Grow as MuiGrow,
   IconButton,
+  ListItemIcon,
+  ListItemText,
+  MenuItem as MuiMenuItem,
   MenuList,
-  Paper,
-  Popper,
+  Paper as MuiPaper,
+  Popper as MuiPopper,
   Typography,
 } from "@material-ui/core";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
-import styled from "styled-components";
 
-const UserPhoto = styled(IconButton)`
-  ${({ theme }) => `
-  padding: 1px 0 ${theme.spacing(0.5)}px 12px;
-  margin-right: ${theme.spacing(0.5)}px;
-  `}
-`;
+const UserPhoto = styled(IconButton)({
+  padding: "12px",
+  "&:hover": {
+    background: "#2d3db4",
+  },
+  "&:active": {
+    background: "#2938a5",
+  },
+});
 
-const Avatar = styled(MuiAvatar)`
-  ${({ theme }) => `
-  background-color: ${theme.palette.text.secondary}
-  `}
-`;
+const Avatar = styled(MuiAvatar)({
+  backgroundColor: "#dce7f4",
+  height: "28px",
+  width: "28px",
+  border: "2px solid #f6faff",
+  borderRadius: "50%",
+});
 
-const Initials = styled(Typography)`
-  ${({ theme }) => `
-  color: ${theme.palette.accent.main}
-  `}
-`;
+const Initials = styled(Typography)({
+  color: "#0d1030",
+  opacity: 0.6,
+  fontSize: "14px",
+  fontWeight: 500,
+});
+
+const Paper = styled(MuiPaper)({
+  width: "266px",
+  border: "1px solid #e2e2e6",
+  boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+});
+
+const Popper = styled(MuiPopper)({
+  padding: "0 12px",
+  marginLeft: "12px",
+});
+
+const UserProfileMenuItem = styled(MuiMenuItem)({
+  "&:focus": {
+    background: "transparent",
+  },
+  "&:hover": {
+    background: "transparent",
+  },
+});
+
+const AvatarListItemIcon = styled(ListItemIcon)({
+  marginLeft: "8px",
+});
+
+const AvatarListItemText = styled(Typography)({
+  color: "#0d1030",
+  fontSize: "14px",
+  opacity: "0.6",
+});
+
+const Grow = styled(MuiGrow)((props: { placement: string }) => ({
+  transformOrigin: props.placement,
+}));
 
 interface JwtToken {
   sub: string;
@@ -53,6 +96,16 @@ const userId = (): string => {
   return subject;
 };
 
+const UserAvatar: React.FC = () => {
+  return (
+    <Avatar>
+      <Initials>{userId().slice(0, 2).toUpperCase()}</Initials>
+    </Avatar>
+  );
+};
+
+// TODO (sperry): add interface to render menu items
+// TODO (sperry): investigate using popover instead of popper
 const UserInformation: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
@@ -76,8 +129,7 @@ const UserInformation: React.FC = () => {
   }
 
   return (
-    <Grid container alignItems="center" justify="flex-end">
-      <div>{userId()}</div>
+    <Box>
       <UserPhoto
         ref={anchorRef}
         edge="end"
@@ -85,25 +137,38 @@ const UserInformation: React.FC = () => {
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        <Avatar>
-          <Initials variant="h6">{userId().slice(0, 2).toUpperCase()}</Initials>
-        </Avatar>
+        <UserAvatar />
       </UserPhoto>
-      <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition>
+      <Popper
+        open={open}
+        anchorEl={anchorRef.current}
+        role={undefined}
+        transition
+        placement="bottom-end"
+      >
         {({ TransitionProps, placement }) => (
           <Grow
             {...TransitionProps}
-            style={{ transformOrigin: placement === "bottom" ? "center top" : "center bottom" }}
+            placement={placement === "bottom" ? "center top" : "center bottom"}
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
-                <MenuList autoFocusItem={open} id="account-options" onKeyDown={handleListKeyDown} />
+                <MenuList autoFocusItem={open} id="account-options" onKeyDown={handleListKeyDown}>
+                  <UserProfileMenuItem>
+                    <AvatarListItemIcon>
+                      <UserAvatar />
+                    </AvatarListItemIcon>
+                    <ListItemText>
+                      <AvatarListItemText>{userId()}</AvatarListItemText>
+                    </ListItemText>
+                  </UserProfileMenuItem>
+                </MenuList>
               </ClickAwayListener>
             </Paper>
           </Grow>
         )}
       </Popper>
-    </Grid>
+    </Box>
   );
 };
 
