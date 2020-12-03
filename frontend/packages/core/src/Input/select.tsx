@@ -92,7 +92,6 @@ const StyledSelect = styled(BaseSelect)({
   ul: {
     borderRadius: "4px",
     border: "1px solid rgba(13, 16, 48, 0.1)",
-    // boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
   },
 
   ".MuiListItem-root": {
@@ -127,7 +126,6 @@ const StyledSelect = styled(BaseSelect)({
   "&.MuiMenu-paper": {
     marginTop: "5px",
     border: "none",
-    // boxShadow: "none",
     boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
   },
 
