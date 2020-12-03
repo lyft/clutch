@@ -26,8 +26,7 @@ const Title = styled(Typography)({
   margin: "12px 25px 12px 8px",
   fontWeight: "bold",
   fontSize: "20px",
-  color: "#ffffff",
-  opacity: "0.87",
+  color: "rgba(255, 255, 255, 0.87)",
 });
 
 const Header: React.FC = () => {
@@ -56,7 +55,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <AppBar position="static" color="secondary" elevation={0}>
+      <AppBar position="static" elevation={0}>
         <Toolbar>
           <MenuButton onClick={openDrawer} edge="start" color="primary" data-qa="menuBtn">
             <MenuIcon />
