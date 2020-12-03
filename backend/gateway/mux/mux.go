@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/http/pprof"
 	"net/url"
 	"path"
 	"regexp"
@@ -236,7 +237,7 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 	})
 
 	if gatewayCfg.EnablePprof {
-		pprofHandlers(httpMux)
+		httpMux.HandleFunc("/debug/pprof/", pprof.Index)
 	}
 
 	mux := &Mux{
