@@ -83,9 +83,6 @@ const Popper = styled(MuiPopper)({
   },
   ".MuiAutocomplete-option[data-focus='true']": {
     background: "#ebedfb",
-    "&:hover": {
-      background: "#e7e7ea",
-    },
   },
 });
 
