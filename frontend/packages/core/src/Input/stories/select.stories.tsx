@@ -15,8 +15,8 @@ export default {
 
 const Template = (props: SelectProps) => <Select name="storybookDemo" {...props} />;
 
-export const Basic = Template.bind({});
-Basic.args = {
+export const Primary = Template.bind({});
+Primary.args = {
   label: "My Label",
   options: [
     {
@@ -30,20 +30,20 @@ Basic.args = {
 
 export const Disabled = Template.bind({});
 Disabled.args = {
-  ...Basic.args,
+  ...Primary.args,
   disabled: true,
 };
 
 export const Error = Template.bind({});
 Error.args = {
-  ...Basic.args,
+  ...Primary.args,
   error: true,
   helperText: "There was a problem!",
 };
 
 export const CustomValues = Template.bind({});
 CustomValues.args = {
-  ...Basic.args,
+  ...Primary.args,
   options: [
     {
       label: "Option 1",
@@ -58,6 +58,6 @@ CustomValues.args = {
 
 export const WithoutLabel = Template.bind({});
 WithoutLabel.args = {
-  ...Basic.args,
+  ...Primary.args,
   label: null,
 };
