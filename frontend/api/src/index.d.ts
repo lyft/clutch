@@ -5077,6 +5077,9 @@ export namespace clutch {
 
                     /** GatewayOptions assets */
                     assets?: (clutch.config.gateway.v1.IAssets|null);
+
+                    /** GatewayOptions enablePprof */
+                    enablePprof?: (boolean|null);
                 }
 
                 /** Represents a GatewayOptions. */
@@ -5108,6 +5111,9 @@ export namespace clutch {
 
                     /** GatewayOptions assets. */
                     public assets?: (clutch.config.gateway.v1.IAssets|null);
+
+                    /** GatewayOptions enablePprof. */
+                    public enablePprof: boolean;
 
                     /**
                      * Verifies a GatewayOptions message.
