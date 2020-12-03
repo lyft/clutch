@@ -64,7 +64,7 @@ const SearchIconButton = styled(IconButton)({
 const InputAdornment = styled(MuiInputAdornment)({
   color: "#0c0b31",
   marginLeft: "12px",
-})
+});
 
 const StyledCloseIcon = styled(Icon)({
   color: "#0c0b31",
@@ -82,10 +82,10 @@ const Popper = styled(MuiPopper)({
     height: "48px",
   },
   ".MuiAutocomplete-option[data-focus='true']": {
-      background: "linear-gradient(0deg, rgba(53, 72, 212, 0.1), rgba(53, 72, 212, 0.1)), #ffffff",
-      "&:hover": {
-        background: "#e7e7ea",
-      },
+    background: "#ebedfb",
+    "&:hover": {
+      background: "#e7e7ea",
+    },
   },
 });
 
@@ -221,26 +221,26 @@ const SearchField: React.FC = () => {
   return (
     <Grid container alignItems="center">
       {open ? (
-          <ClickAwayListener onClickAway={handleClose}>
-            <Autocomplete
-              autoComplete
-              freeSolo
-              selectOnFocus
-              size="small"
-              inputValue={inputValue}
-              renderInput={Input}
-              renderOption={renderResult}
-              onInputChange={onInputChange}
-              open={showOptions}
-              onOpen={onOptionsOpen}
-              onClose={onOptionsClose}
-              options={options}
-              filterOptions={filterResults}
-              getOptionLabel={x => x.label}
-              PopperComponent={renderPopper}
-              closeIcon={<CustomCloseIcon />}
-            />
-          </ClickAwayListener>
+        <ClickAwayListener onClickAway={handleClose}>
+          <Autocomplete
+            autoComplete
+            freeSolo
+            selectOnFocus
+            size="small"
+            inputValue={inputValue}
+            renderInput={Input}
+            renderOption={renderResult}
+            onInputChange={onInputChange}
+            open={showOptions}
+            onOpen={onOptionsOpen}
+            onClose={onOptionsClose}
+            options={options}
+            filterOptions={filterResults}
+            getOptionLabel={x => x.label}
+            PopperComponent={renderPopper}
+            closeIcon={<CustomCloseIcon />}
+          />
+        </ClickAwayListener>
       ) : (
         <SearchIconButton onClick={handleOpen}>
           <FiSearch />
