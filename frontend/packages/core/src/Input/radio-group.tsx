@@ -1,12 +1,13 @@
-import React from "react";
+import * as React from "react";
 import {
   FormControl as MuiFormControl,
   FormControlLabel,
   FormLabel as MuiFormLabel,
-  Radio as MuiRadio,
   RadioGroup as MuiRadioGroup,
 } from "@material-ui/core";
 import styled from "styled-components";
+
+import Radio from "./radio";
 
 const FormLabel = styled(MuiFormLabel)`
   ${({ theme }) => `
@@ -31,14 +32,6 @@ const FormControl = styled(MuiFormControl)`
   margin: 16px 0;
   min-width: fit-content;
   width: ${props["data-max-width"] || "500px"};
-  `}
-`;
-
-const Radio = styled(MuiRadio)`
-  ${({ theme }) => `
-  &.Mui-checked {
-    color: ${theme.palette.accent.main};
-  }
   `}
 `;
 
@@ -95,12 +88,12 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
         defaultValue={options[defaultIdx]?.value || options[defaultIdx].label}
         onChange={updateSelectedOption}
       >
-        {options.map(option => {
+        {options.map((option, idx) => {
           return (
             <FormControlLabel
               key={option.label}
               value={option?.value || option.label}
-              control={<Radio />}
+              control={<Radio selected={idx === selectedIdx} />}
               label={option.label}
             />
           );
