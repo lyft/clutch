@@ -2,7 +2,7 @@ import * as React from "react";
 import type { Meta } from "@storybook/react";
 
 import type { SelectProps } from "../select";
-import Select from "../select";
+import { Select } from "../select";
 
 export default {
   title: "Core/Input/Select",

@@ -75,24 +75,22 @@ const BaseSelect = ({ ...props }: MuiSelectProps) => (
 
 const StyledSelect = styled(BaseSelect)({
   padding: "0",
-  boxSizing: "content-box",
-  borderColor: "rgba(13, 16, 48, 0.38)",
-
-  "&.Mui-focused": {
-    borderColor: "#3548d4",
-  },
-
-  "&.Mui-error": {
-    borderColor: "#db3615",
-  },
 
   ".MuiSelect-root": {
     padding: "15px 60px 13px 16px",
     borderRadius: "4px",
     borderStyle: "solid",
     borderWidth: "1px",
-    borderColor: "inherit",
+    borderColor: "rgba(13, 16, 48, 0.38)",
     height: "20px",
+  },
+
+  "&.Mui-focused > .MuiSelect-root": {
+    borderColor: "#3548d4",
+  },
+
+  "&.Mui-error > .MuiSelect-root": {
+    borderColor: "#db3615",
   },
 
   ".MuiSelect-root.Mui-disabled": {
@@ -100,9 +98,6 @@ const StyledSelect = styled(BaseSelect)({
   },
 
   ".MuiSelect-icon": {
-    borderLeftColor: "inherit",
-    borderLeftWidth: "1px",
-    borderLeftStyle: "solid",
     height: "100%",
     width: "48px",
     top: "unset",
