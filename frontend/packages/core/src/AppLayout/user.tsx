@@ -19,8 +19,6 @@ import jwtDecode from "jwt-decode";
 
 const UserPhoto = styled(IconButton)({
   padding: "12px",
-  marginLeft: "8px",
-  marginRight: "8px",
   "&:hover": {
     background: "#2d3db4",
   },
@@ -148,7 +146,7 @@ const UserInformation: React.FC = () => {
         popperOptions={{
           modifiers: {
             offset: {
-              offset: "-118, -108",
+              offset: "-116, -112",
             },
           },
         }}
