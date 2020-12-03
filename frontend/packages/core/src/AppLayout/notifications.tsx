@@ -27,6 +27,7 @@ const Grow = styled(MuiGrow)((props: { placement: string }) => ({
   transformOrigin: props.placement,
 }));
 
+// TODO (sperry): add interface to render menu items
 const Notifications: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);

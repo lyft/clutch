@@ -12,10 +12,9 @@ const rotate = keyframes`
 `;
 
 const StyledSvg = styled.svg({
-  height: "32px",
-  width: "32px",
-  marginLeft: "8px",
-  marginRight: "8px",
+  height: "48px",
+  width: "48px",
+  padding: "8px",
   "&:hover": {
     animation: `${rotate} 5s linear`,
   },

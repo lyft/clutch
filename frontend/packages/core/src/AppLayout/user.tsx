@@ -11,7 +11,7 @@ import {
   MenuItem as MuiMenuItem,
   MenuList,
   Paper as MuiPaper,
-  Popper,
+  Popper as MuiPopper,
   Typography,
 } from "@material-ui/core";
 import Cookies from "js-cookie";
@@ -31,12 +31,8 @@ const Avatar = styled(MuiAvatar)({
   backgroundColor: "#dce7f4",
   height: "28px",
   width: "28px",
-});
-
-const AvatarBackdrop = styled(MuiAvatar)({
-  backgroundColor: "#f6faff",
-  height: "32px",
-  width: "32px",
+  border: "2px solid #f6faff",
+  borderRadius: "50%",
 });
 
 const Initials = styled(Typography)({
@@ -50,6 +46,11 @@ const Paper = styled(MuiPaper)({
   width: "266px",
   border: "1px solid #e2e2e6",
   boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+});
+
+const Popper = styled(MuiPopper)({
+  padding: "0 12px",
+  marginLeft: "12px",
 });
 
 const UserProfileMenuItem = styled(MuiMenuItem)({
@@ -97,14 +98,14 @@ const userId = (): string => {
 
 const UserAvatar: React.FC = () => {
   return (
-    <AvatarBackdrop>
-      <Avatar>
-        <Initials>{userId().slice(0, 2).toUpperCase()}</Initials>
-      </Avatar>
-    </AvatarBackdrop>
+    <Avatar>
+      <Initials>{userId().slice(0, 2).toUpperCase()}</Initials>
+    </Avatar>
   );
 };
 
+// TODO (sperry): add interface to render menu items
+// TODO (sperry): investigate using popover instead of popper
 const UserInformation: React.FC = () => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
@@ -143,13 +144,7 @@ const UserInformation: React.FC = () => {
         anchorEl={anchorRef.current}
         role={undefined}
         transition
-        popperOptions={{
-          modifiers: {
-            offset: {
-              offset: "-116, -112",
-            },
-          },
-        }}
+        placement="bottom-end"
       >
         {({ TransitionProps, placement }) => (
           <Grow

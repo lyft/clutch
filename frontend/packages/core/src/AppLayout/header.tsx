@@ -10,6 +10,7 @@ import Notifications from "./notifications";
 import SearchField from "./search";
 import { UserInformation } from "./user";
 
+// TODO (sperry): make header responsive for small devices
 const AppBar = styled(MuiAppBar)({
   minWidth: "fit-content",
   background: "linear-gradient(90deg, #38106b 4.58%, #131c5f 89.31%)",
@@ -22,8 +23,7 @@ const MenuButton = styled(IconButton)({
 
 // TODO (sperry): remove marginRight in new search bar design
 const Title = styled(Typography)({
-  marginRight: "25px",
-  marginLeft: "8px",
+  margin: "12px 25px 12px 8px",
   fontWeight: "bold",
   fontSize: "20px",
   color: "#ffffff",

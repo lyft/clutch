@@ -8,8 +8,8 @@ export default {
   component: Notifications,
   parameters: {
     backgrounds: {
-      default: "clutch",
-      values: [{ name: "clutch", value: "#131C5F" }],
+      default: "header blue",
+      values: [{ name: "header blue", value: "#131C5F" }],
     },
   },
 } as Meta;
