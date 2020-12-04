@@ -1,5 +1,6 @@
 import React from "react";
 import { FiSearch } from "react-icons/fi";
+import { GrFormClose } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import {
@@ -12,7 +13,6 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
 import type { AutocompleteRenderInputParams } from "@material-ui/lab/Autocomplete";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import type { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
@@ -26,32 +26,51 @@ import { searchIndexes } from "./utils";
 const hotKey = "/";
 
 const InputField = styled(TextField)({
+  // input field
   maxWidth: "551px",
   minWidth: "551px",
   "@media screen and (max-width: 880px)": {
     minWidth: "125px",
   },
-
   ".MuiInputBase-root": {
     height: "46px",
     border: "2px solid rgba(13, 16, 48, 0.1)",
     borderRadius: "4px",
     background: "white",
   },
+  // input text color
   ".MuiAutocomplete-input": {
     color: "#0d1030",
   },
+
+  // close icon's container
+  "div.MuiAutocomplete-endAdornment":{
+    ".MuiAutocomplete-popupIndicatorOpen": {
+      width: "32px",
+      height: "32px",
+      borderRadius: "30px",
+      marginRight: "8px",
+      "&:hover": {
+        background: "#e7e7ea",
+      },
+      "&:active": {
+        background: "linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), #0D1030;",
+      },
+    },
+  },
 });
 
+// search's result options
 const ResultLabel = styled(Typography)({
   color: "rgba(13, 16, 48, 0.6)",
   fontWeight: 500,
   fontSize: "14px",
 });
 
+// main search icon on header
 const SearchIconButton = styled(IconButton)({
   color: "#ffffff",
-  fontSize: "20px",
+  fontSize: "24px",
   padding: "12px",
   "&:hover": {
     background: "#2d3db4",
@@ -61,18 +80,20 @@ const SearchIconButton = styled(IconButton)({
   },
 });
 
-const InputAdornment = styled(MuiInputAdornment)({
+// search icon in input field
+const StartInputAdornment = styled(MuiInputAdornment)({
   color: "#0c0b31",
-  marginLeft: "12px",
+  marginLeft: "8px",
+  fontSize: "24px",
 });
 
+// closed icon svg
 const StyledCloseIcon = styled(Icon)({
-  color: "#0c0b31",
-  ".MuiSvgIcon-root": {
-    fontSize: "18px",
-  },
+    color: "#0c0b31",
+    fontSize: "24px",
 });
 
+// popper with the search result options
 const Popper = styled(MuiPopper)({
   ".MuiAutocomplete-paper": {
     border: "1px solid rgba(13, 16, 48, 0.12)",
@@ -92,9 +113,9 @@ const renderPopper = props => {
 
 const CustomCloseIcon: React.FC = () => {
   return (
-    <StyledCloseIcon>
-      <CloseIcon />
-    </StyledCloseIcon>
+      <StyledCloseIcon>
+        <GrFormClose />
+      </StyledCloseIcon>
   );
 };
 
@@ -127,9 +148,9 @@ const Input = (params: AutocompleteRenderInputParams): React.ReactNode => {
         disableUnderline: true,
         startAdornment: (
           <>
-            <InputAdornment position="start">
+            <StartInputAdornment position="start">
               <FiSearch />
-            </InputAdornment>
+            </StartInputAdornment>
             {params.InputProps.startAdornment}
           </>
         ),
@@ -221,7 +242,6 @@ const SearchField: React.FC = () => {
         <ClickAwayListener onClickAway={handleClose}>
           <Autocomplete
             autoComplete
-            freeSolo
             selectOnFocus
             size="small"
             inputValue={inputValue}
@@ -235,7 +255,9 @@ const SearchField: React.FC = () => {
             filterOptions={filterResults}
             getOptionLabel={x => x.label}
             PopperComponent={renderPopper}
-            closeIcon={<CustomCloseIcon />}
+            popupIcon={<CustomCloseIcon/>}
+            forcePopupIcon={showOptions ? true: false}
+            noOptionsText='No results found'
           />
         </ClickAwayListener>
       ) : (
