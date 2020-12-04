@@ -93,7 +93,7 @@ const StyledCloseIcon = styled(Icon)({
     fontSize: "24px",
 });
 
-// popper with the search result options
+// popper containing the search result options
 const Popper = styled(MuiPopper)({
   ".MuiAutocomplete-paper": {
     border: "1px solid rgba(13, 16, 48, 0.12)",
@@ -105,6 +105,9 @@ const Popper = styled(MuiPopper)({
   ".MuiAutocomplete-option[data-focus='true']": {
     background: "#ebedfb",
   },
+  ".MuiAutocomplete-noOptions": {
+    fontSize: "14px",
+  }
 });
 
 const renderPopper = props => {
