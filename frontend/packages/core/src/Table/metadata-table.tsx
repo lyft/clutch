@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import styled from "@emotion/styled";
 import { DevTool } from "@hookform/devtools";
 import { yupResolver } from "@hookform/resolvers/yup";
-import type { Size } from "@material-ui/core";
 import {
   Table as MuiTable,
   TableBody as MuiTableBody,
@@ -78,28 +77,27 @@ const KeyCellContainer = styled(TableCell)({
 
 interface KeyCellProps {
   data: IdentifiableRowData;
-  size: Size;
 }
 
-const KeyCell: React.FC<KeyCellProps> = ({ data, size }) => {
+const KeyCell: React.FC<KeyCellProps> = ({ data }) => {
   let { name } = data;
   if (data.value instanceof Array && data.value.length > 1) {
     name = `${data.name}s`;
   }
-  return <KeyCellContainer size={size}>{name}</KeyCellContainer>;
+  return <KeyCellContainer>{name}</KeyCellContainer>;
 };
 
 interface ImmutableRowProps extends KeyCellProps {}
 
-const ImmutableRow: React.FC<ImmutableRowProps> = ({ data, size }) => {
+const ImmutableRow: React.FC<ImmutableRowProps> = ({ data }) => {
   let { value } = data;
   if (data.value instanceof Array && data.value.length > 1) {
     value = data.value.join(", ");
   }
   return (
     <TableRow key={data.id}>
-      <KeyCell data={data} size={size} />
-      <TableCell size={size}>{value}</TableCell>
+      <KeyCell data={data} />
+      <TableCell>{value}</TableCell>
     </TableRow>
   );
 };
@@ -110,13 +108,13 @@ interface MutableRowProps extends ImmutableRowProps {
   validation: any;
 }
 
-const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, validation, size }) => {
+const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, validation }) => {
   const error = validation.errors?.[data.name];
 
   return (
     <TableRow key={data.id}>
-      <KeyCell data={data} size={size} />
-      <TableCell size={size}>
+      <KeyCell data={data} />
+      <TableCell>
         <TextField
           id={data.id}
           name={data.name}
@@ -137,16 +135,9 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
 export interface MetadataTableProps {
   data: RowData[];
   onUpdate?: (id: string, value: unknown) => void;
-  variant?: Size;
 }
 
-export const MetadataTable: React.FC<MetadataTableProps> = ({
-  data,
-  onUpdate,
-  children,
-  variant,
-}) => {
-  const displayVariant = variant || "medium";
+export const MetadataTable: React.FC<MetadataTableProps> = ({ data, onUpdate, children }) => {
   const { onSubmit, setOnSubmit } = useWizardContext();
   let rows = data;
   if (_.isEmpty(data)) {
@@ -187,10 +178,9 @@ export const MetadataTable: React.FC<MetadataTableProps> = ({
                 onReturn={onSubmit}
                 key={row.id}
                 validation={validation}
-                size={displayVariant}
               />
             ) : (
-              <ImmutableRow data={row} key={row.id} size={displayVariant} />
+              <ImmutableRow data={row} key={row.id} />
             );
           })}
           {children}

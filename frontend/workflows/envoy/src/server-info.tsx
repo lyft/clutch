@@ -36,7 +36,6 @@ const ServerInfo: React.FC<{ info: IClutch.envoytriage.v1.IServerInfo }> = ({ in
     return { name: key, value: cliOptions[key] };
   });
   const midPoint = Math.floor(cliOptionMetadata.length / 2);
-  const variant = "small";
   return (
     <ExpansionPanel heading="Server Info" summary={status}>
       <MetadataTable data={serverData}>
