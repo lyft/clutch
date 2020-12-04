@@ -11,6 +11,7 @@ import {
 
 const StyledCard = styled(MuiCard)({
   boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
+  border: "1px solid rgba(13, 16, 48, 0.1)",
 
   ".MuiCardContent-root": {
     padding: "32px",
@@ -36,6 +37,8 @@ export const Card = ({ children, ...props }: CardProps) => (
 );
 
 const StyledLandingCard = styled(Card)({
+  border: "none",
+  
   "& .header": {
     display: "inline-flex",
     marginBottom: "16px",
