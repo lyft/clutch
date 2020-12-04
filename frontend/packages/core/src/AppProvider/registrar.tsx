@@ -37,7 +37,10 @@ const registeredWorkflows = (
   workflows: { [key: string]: () => WorkflowConfiguration },
   configuration: UserConfiguration
 ): Workflow[] => {
-  return Object.keys(workflows || [])
+  const validWorkflows = Object.keys(workflows || []).filter(
+    workflow => workflow !== "@clutch-sh/app"
+  );
+  return validWorkflows
     .map((workflowId: string) => {
       const workflow = workflows[workflowId]();
       try {

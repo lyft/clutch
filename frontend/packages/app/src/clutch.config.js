@@ -52,4 +52,9 @@ module.exports = {
       },
     },
   },
+  "@clutch-sh/app": {
+    appConfig: {
+      api: ["@clutch-sh/api"],
+    },
+  },
 };
