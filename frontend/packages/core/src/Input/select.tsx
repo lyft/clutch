@@ -58,13 +58,17 @@ const SelectIcon = (props: any) => (
   </div>
 );
 
-const BaseSelect = ({ ...props }: MuiSelectProps) => (
+const BaseSelect = ({ className, ...props }: MuiSelectProps) => (
   <MuiSelect
     disableUnderline
     fullWidth
     IconComponent={SelectIcon}
+    className={className}
     MenuProps={{
-      style: { marginTop: "2px" },
+      classes: {
+        list: className,
+        paper: className,
+      },
       anchorOrigin: { vertical: "bottom", horizontal: "left" },
       transformOrigin: { vertical: "top", horizontal: "left" },
       getContentAnchorEl: null,
@@ -83,6 +87,46 @@ const StyledSelect = styled(BaseSelect)({
     borderWidth: "1px",
     borderColor: "rgba(13, 16, 48, 0.38)",
     height: "20px",
+  },
+
+  ul: {
+    borderRadius: "4px",
+    border: "1px solid rgba(13, 16, 48, 0.1)",
+  },
+
+  ".MuiListItem-root": {
+    color: "#0d1030",
+    height: "48px",
+  },
+
+  ".MuiListItem-root:first-child": {
+    borderRadius: "4px 4px 0 0",
+  },
+
+  ".MuiListItem-root:last-child": {
+    borderRadius: "0 0 4px 4px",
+  },
+
+  ".MuiListItem-root.Mui-selected": {
+    backgroundColor: "rgba(53, 72, 212, 0.1)",
+  },
+
+  ".MuiListItem-root.Mui-selected:hover": {
+    backgroundColor: "rgba(53, 72, 212, 0.1)",
+  },
+
+  ".MuiListItem-root:hover": {
+    backgroundColor: "#e7e7ea",
+  },
+
+  ".MuiListItem-root:active": {
+    backgroundColor: "#dbdbe0",
+  },
+
+  "&.MuiMenu-paper": {
+    marginTop: "5px",
+    border: "none",
+    boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
   },
 
   "&.Mui-focused > .MuiSelect-root": {
