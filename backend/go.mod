@@ -24,7 +24,7 @@ require (
 	github.com/iancoleman/strcase v0.1.2
 	github.com/jhump/protoreflect v1.7.1
 	github.com/lib/pq v1.9.0
-	github.com/mitchellh/hashstructure/v2 v2.0.1 // indirect
+	github.com/mitchellh/hashstructure/v2 v2.0.1
 	github.com/pquerna/cachecontrol v0.0.0-20180517163645-1555304b9b35 // indirect
 	github.com/shurcooL/githubv4 v0.0.0-20200928013246-d292edc3691b
 	github.com/shurcooL/graphql v0.0.0-20181231061246-d48a9a75455f // indirect
