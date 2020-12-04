@@ -9,7 +9,7 @@ const COLORS = {
   neutral: {
     background: {
       primary: "#FFFFFF",
-      hover: "#EFF0F2",
+      hover: "#E7E7EA",
       active: "#CFD3D7",
       disabled: "#FFFFFF",
     },
