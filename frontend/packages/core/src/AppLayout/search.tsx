@@ -1,6 +1,4 @@
 import React from "react";
-import { FiSearch } from "react-icons/fi";
-import { GrFormClose } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import {
@@ -13,6 +11,8 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
+import SearchIcon from '@material-ui/icons/Search';
+import CloseIcon from '@material-ui/icons/Close';
 import type { AutocompleteRenderInputParams } from "@material-ui/lab/Autocomplete";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import type { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
@@ -34,9 +34,9 @@ const InputField = styled(TextField)({
   },
   ".MuiInputBase-root": {
     height: "46px",
-    border: "2px solid rgba(13, 16, 48, 0.1)",
+    border: "1px solid #3548d4",
     borderRadius: "4px",
-    background: "white",
+    background: "#ffffff",
   },
   // input text color
   ".MuiAutocomplete-input": {
@@ -62,8 +62,7 @@ const InputField = styled(TextField)({
 
 // search's result options
 const ResultLabel = styled(Typography)({
-  color: "rgba(13, 16, 48, 0.6)",
-  fontWeight: 500,
+  color: "#0d1030",
   fontSize: "14px",
 });
 
@@ -84,7 +83,6 @@ const SearchIconButton = styled(IconButton)({
 const StartInputAdornment = styled(MuiInputAdornment)({
   color: "#0c0b31",
   marginLeft: "8px",
-  fontSize: "24px",
 });
 
 // closed icon svg
@@ -96,8 +94,8 @@ const StyledCloseIcon = styled(Icon)({
 // popper containing the search result options
 const Popper = styled(MuiPopper)({
   ".MuiAutocomplete-paper": {
-    border: "1px solid rgba(13, 16, 48, 0.12)",
-    boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
+    border: "1px solid #e7e7ea",
+    boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
   },
   ".MuiAutocomplete-option": {
     height: "48px",
@@ -107,6 +105,7 @@ const Popper = styled(MuiPopper)({
   },
   ".MuiAutocomplete-noOptions": {
     fontSize: "14px",
+    color: "#0d1030",
   }
 });
 
@@ -117,7 +116,7 @@ const renderPopper = props => {
 const CustomCloseIcon: React.FC = () => {
   return (
       <StyledCloseIcon>
-        <GrFormClose />
+        <CloseIcon fontSize="small"/>
       </StyledCloseIcon>
   );
 };
@@ -152,7 +151,7 @@ const Input = (params: AutocompleteRenderInputParams): React.ReactNode => {
         startAdornment: (
           <>
             <StartInputAdornment position="start">
-              <FiSearch />
+              <SearchIcon />
             </StartInputAdornment>
             {params.InputProps.startAdornment}
           </>
@@ -265,7 +264,7 @@ const SearchField: React.FC = () => {
         </ClickAwayListener>
       ) : (
         <SearchIconButton onClick={handleOpen}>
-          <FiSearch />
+          <SearchIcon />
         </SearchIconButton>
       )}
     </Grid>
