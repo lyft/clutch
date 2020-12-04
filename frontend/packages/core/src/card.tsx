@@ -38,7 +38,7 @@ export const Card = ({ children, ...props }: CardProps) => (
 
 const StyledLandingCard = styled(Card)({
   border: "none",
-  
+
   "& .header": {
     display: "inline-flex",
     marginBottom: "16px",
