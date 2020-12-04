@@ -20,7 +20,7 @@ const COLORS = {
       primary: "#3548D4",
       hover: "#2D3DB4",
       active: "#2938A5",
-      disabled: "#7680E8",
+      disabled: "#E7E7EA",
     },
     font: "#FFFFFF",
   },
