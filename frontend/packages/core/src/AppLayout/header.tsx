@@ -21,9 +21,8 @@ const MenuButton = styled(IconButton)({
   marginLeft: "-12px",
 });
 
-// TODO (sperry): remove marginRight in new search bar design
 const Title = styled(Typography)({
-  margin: "12px 25px 12px 8px",
+  margin: "12px 0px 12px 8px",
   fontWeight: "bold",
   fontSize: "20px",
   color: "rgba(255, 255, 255, 0.87)",
@@ -64,10 +63,10 @@ const Header: React.FC = () => {
             <Logo />
           </Link>
           <Title>clutch</Title>
-          <Box />
-          <SearchField />
-          <Box />
           <Grid container alignItems="center" justify="flex-end">
+            <Box>
+              <SearchField />
+            </Box>
             <Notifications />
             <UserInformation />
           </Grid>
