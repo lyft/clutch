@@ -1,61 +1,93 @@
-import React from "react";
-import { Card as MuiCard, CardActionArea, CardContent } from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
-import styled from "styled-components";
+import * as React from "react";
+import { Card as MuiCard, CardActionArea, CardActionAreaProps, CardContent as MuiCardContent, CardHeader, Typography } from "@material-ui/core";
+import styled from "@emotion/styled";
+import { Avatar } from "@material-ui/core";
 
-const MIN_HEIGHT = "150px";
+const StyledCard = styled(MuiCard)({
+  boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
 
-const SizedCard = styled(MuiCard)`
-  ${({ theme, ...props }) => `
-  min-height: ${MIN_HEIGHT};
-  width: 300px;
-  background: ${
-    props["data-background"] !== undefined
-      ? props["data-background"]
-      : `linear-gradient(340deg, ${theme.palette.accent.main} 0%, ${theme.palette.secondary.main} 90%)`
-  };
-  `};
-`;
+  ".MuiCardContent-root": {
+    padding: "32px",
+    color: "#0D1030",
+    fontSize: "16px",
+  },
 
-const SizedContent = styled(CardContent)`
-  min-height: ${MIN_HEIGHT};
-`;
+  ".MuiCardActionArea-root:hover": {
+    backgroundColor: "#F5F6FD",
+  },
 
-const CardTitle = styled(Typography)`
-  ${({ ...props }) => `
-    color: ${props["data-color"] !== undefined ? props["data-color"] : "#ffffff"};
-  `};
-`;
+  ".MuiCardActionArea-root:active": {
+    backgroundColor: "#D7DAF6",
+  },
+});
 
-export interface CardProps {
+export type CardProps = ({
+  children?: React.ReactNode | React.ReactNode[];
+});
+
+export const Card = ({
+  children, ...props
+}: CardProps) => (
+  <StyledCard {...props}>
+    {children}
+  </StyledCard>
+);
+
+const StyledLandingCard = styled(Card)({
+  "& .header": {
+    display: "inline-flex",
+    marginBottom: "16px",
+    textTransform: "uppercase",
+    fontWeight: "bold",
+    fontSize: "12px",
+    lineHeight: "36px",
+    color: "rgba(13, 16, 48, 0.6)",
+  },
+
+  "& .header .icon .MuiAvatar-root": {
+    height: "36px",
+    width: "36px",
+    marginRight: "8px",
+    color: "rgba(13, 16, 48, 0.38)",
+    backgroundColor: "rgba(13, 16, 48, 0.12)",
+  },
+
+  "& .title": {
+    fontSize: "20px",
+    fontWeight: 700,
+  },
+
+  "& .description": {
+    marginTop: "5px",
+    color: "rgba(13, 16, 48, 0.6)",
+  }
+});
+
+export interface LandingCardProps extends Pick<CardActionAreaProps, "onClick"> {
+  group: string;
   title: string;
   description: string;
-  onClick?: () => void;
-  titleColor?: string;
-  descriptionColor?: "textPrimary" | "textSecondary";
-  backgroundColor?: string;
-}
+};
 
-const Card: React.FC<CardProps> = ({
-  title,
-  description,
-  onClick,
-  titleColor,
-  descriptionColor = "textSecondary",
-  backgroundColor,
-}) => (
-  <SizedCard raised data-background={backgroundColor}>
+export const LandingCard = ({ group, title, description, onClick, ...props }: LandingCardProps) => (
+  <StyledLandingCard {...props}>
     <CardActionArea onClick={onClick}>
-      <SizedContent>
-        <CardTitle gutterBottom variant="h6" data-color={titleColor}>
-          {title}
-        </CardTitle>
-        <Typography variant="body2" color={descriptionColor}>
-          {description}
-        </Typography>
-      </SizedContent>
+      <MuiCardContent>
+        <div className="header">
+          <div className="icon">
+            <Avatar>{group.charAt(0)}</Avatar>
+          </div>
+          <span>{group}</span>
+        </div>
+        <div>
+          <Typography className="title">{title}</Typography>
+          <Typography className="description">{description}</Typography>
+        </div>
+      </MuiCardContent>
     </CardActionArea>
-  </SizedCard>
+  </StyledLandingCard>
 );
+
+export const CardContent = MuiCardContent;
 
 export default Card;

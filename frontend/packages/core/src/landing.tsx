@@ -6,7 +6,7 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import styled from "styled-components";
 
 import { userId } from "./AppLayout/user";
-import Card from "./card";
+import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
 import { TrendingUpIcon } from "./icon";
 
@@ -95,7 +95,8 @@ const Landing: React.FC<{}> = () => {
               <GridContainer justify="center" container direction="row" spacing={3}>
                 {trendingWorkflows.map(workflow => (
                   <Grid item>
-                    <Card
+                    <LandingCard
+                      group={"Clutch"}
                       title={workflow.title}
                       description={workflow.description}
                       onClick={() => navigateTo(workflow.path)}
