@@ -26,8 +26,20 @@ const Template = (props: AccordionProps) => (
   </Accordion>
 );
 
-export const Basic = Template.bind({});
-Basic.args = {
+export const Primary = Template.bind({});
+Primary.args = {
   title: "Hello world!",
   defaultExpanded: true,
+};
+
+export const CollapsedByDefault = Template.bind({});
+CollapsedByDefault.args = {
+  ...Primary.args,
+  defaultExpanded: false,
+};
+
+export const NotCollapsible = Template.bind({});
+NotCollapsible.args = {
+  ...Primary.args,
+  collapsible: false,
 };
