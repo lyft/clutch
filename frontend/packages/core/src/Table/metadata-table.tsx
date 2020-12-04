@@ -45,24 +45,20 @@ const Table = styled(MuiTable)({
 });
 
 const TableBody = styled(MuiTableBody)({
-  "tr:first-child": {
-    "*:first-child": {
-      borderTopLeftRadius: "3px",
-    },
-    "*:last-child": {
-      borderTopRightRadius: "3px",
-    },
+  "tr:first-of-type > td:first-of-type": {
+    borderTopLeftRadius: "3px",
   },
-  "tr:last-child": {
-    "*": {
-      borderBottom: "0",
-    },
-    "*:first-child": {
-      borderBottomLeftRadius: "3px",
-    },
-    "*:last-child": {
-      borderBottomRightRadius: "3px",
-    },
+  "tr:first-of-type > td:last-of-type": {
+    borderTopRightRadius: "3px",
+  },
+  "tr:last-of-type > td": {
+    borderBottom: "0",
+  },
+  "tr:last-of-type > td:first-of-type": {
+    borderBottomLeftRadius: "3px",
+  },
+  "tr:last-of-type > td:last-of-type": {
+    borderBottomRightRadius: "3px",
   },
 });
 
