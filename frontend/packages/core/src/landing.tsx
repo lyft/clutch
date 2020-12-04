@@ -52,10 +52,11 @@ const Landing: React.FC<{}> = () => {
   workflows.forEach(workflow => {
     workflow.routes.forEach(route => {
       const title = route.displayName
-        ? `${workflow.displayName} - ${route.displayName}`
+        ? `${workflow.displayName}: ${route.displayName}`
         : workflow.displayName;
       if (route.trending) {
         trendingWorkflows.push({
+          group: workflow.group,
           title,
           description: route.description,
           path: `${workflow.path}/${route.path}`,
@@ -96,7 +97,7 @@ const Landing: React.FC<{}> = () => {
                 {trendingWorkflows.map(workflow => (
                   <Grid item>
                     <LandingCard
-                      group="Clutch"
+                      group={workflow.group}
                       title={workflow.title}
                       description={workflow.description}
                       onClick={() => navigateTo(workflow.path)}
