@@ -15,5 +15,5 @@ export const Primary = Template.bind({});
 Primary.args = {
   group: "AWS",
   title: "EC2: Terminate Instance",
-  description: "Search for and terminate an EC2 instance."
+  description: "Search for and terminate an EC2 instance.",
 };

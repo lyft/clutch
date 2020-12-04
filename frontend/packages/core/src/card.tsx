@@ -1,7 +1,13 @@
 import * as React from "react";
-import { Card as MuiCard, CardActionArea, CardActionAreaProps, CardContent as MuiCardContent, CardHeader, Typography } from "@material-ui/core";
 import styled from "@emotion/styled";
-import { Avatar } from "@material-ui/core";
+import {
+  Avatar,
+  Card as MuiCard,
+  CardActionArea,
+  CardActionAreaProps,
+  CardContent as MuiCardContent,
+  Typography,
+} from "@material-ui/core";
 
 const StyledCard = styled(MuiCard)({
   boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
@@ -21,16 +27,12 @@ const StyledCard = styled(MuiCard)({
   },
 });
 
-export type CardProps = ({
+export type CardProps = {
   children?: React.ReactNode | React.ReactNode[];
-});
+};
 
-export const Card = ({
-  children, ...props
-}: CardProps) => (
-  <StyledCard {...props}>
-    {children}
-  </StyledCard>
+export const Card = ({ children, ...props }: CardProps) => (
+  <StyledCard {...props}>{children}</StyledCard>
 );
 
 const StyledLandingCard = styled(Card)({
@@ -60,14 +62,14 @@ const StyledLandingCard = styled(Card)({
   "& .description": {
     marginTop: "5px",
     color: "rgba(13, 16, 48, 0.6)",
-  }
+  },
 });
 
 export interface LandingCardProps extends Pick<CardActionAreaProps, "onClick"> {
   group: string;
   title: string;
   description: string;
-};
+}
 
 export const LandingCard = ({ group, title, description, onClick, ...props }: LandingCardProps) => (
   <StyledLandingCard {...props}>

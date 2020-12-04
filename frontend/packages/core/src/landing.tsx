@@ -96,7 +96,7 @@ const Landing: React.FC<{}> = () => {
                 {trendingWorkflows.map(workflow => (
                   <Grid item>
                     <LandingCard
-                      group={"Clutch"}
+                      group="Clutch"
                       title={workflow.title}
                       description={workflow.description}
                       onClick={() => navigateTo(workflow.path)}
