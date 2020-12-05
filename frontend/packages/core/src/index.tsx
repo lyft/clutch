@@ -1,6 +1,6 @@
 // @ts-ignore
 import { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
-import CheckboxPanel from "./Input/checkbox";
+import { CheckboxPanel } from "./Input/checkbox";
 import { RadioGroup } from "./Input/radio-group";
 import { Select } from "./Input/select";
 import { TextField } from "./Input/text-field";
