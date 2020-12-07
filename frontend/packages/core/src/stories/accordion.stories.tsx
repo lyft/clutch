@@ -6,7 +6,7 @@ import { Accordion, AccordionActions, AccordionDetails, AccordionDivider } from 
 import { Button } from "../button";
 
 export default {
-  title: "Core/Accordion",
+  title: "Core/Accordion/Accordion",
   component: Accordion,
 } as Meta;
 

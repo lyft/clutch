@@ -1,12 +1,13 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import { AccordionProps as MuiAccordionProps, useControlled } from "@material-ui/core";
 import {
   Accordion as MuiAccordion,
   AccordionActions as MuiAccordionActions,
   AccordionDetails as MuiAccordionDetails,
+  AccordionProps as MuiAccordionProps,
   AccordionSummary as MuiAccordionSummary,
   Divider as MuiDivider,
+  useControlled,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
@@ -77,10 +78,25 @@ export const StyledAccordionSummary = styled(AccordionSummaryBase)({
   },
 });
 
+const StyledAccordionGroup = styled.div({
+  ".MuiAccordion-root": {
+    marginBottom: "16px",
+  },
+
+  ".MuiAccordion-root.Mui-expanded": {
+    marginBottom: "16px",
+  },
+
+  ".MuiAccordion-root:before": {
+    display: "none",
+  },
+});
+
 export interface AccordionProps extends Pick<MuiAccordionProps, "defaultExpanded" | "expanded"> {
   title?: string;
   collapsible?: boolean;
-  children: React.ReactNode[];
+  children: React.ReactNode | React.ReactNode[];
+  onClick?: React.MouseEventHandler;
 }
 
 export const Accordion = ({
@@ -88,23 +104,33 @@ export const Accordion = ({
   collapsible = true,
   defaultExpanded,
   expanded: expandedProp,
+  onClick: onClickProp,
   children,
   ...props
 }: AccordionProps) => {
   const [expanded, setExpanded] = useControlled({
     controlled: expandedProp,
     default: defaultExpanded,
-    name: 'Accordion',
-    state: 'expanded',
+    name: "Clutch Accordion",
+    state: "expanded",
   });
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (collapsible) {
+      setExpanded(!expanded);
+    }
+    if (onClickProp) {
+      onClickProp(e);
+    }
+  };
+
   return (
-    <StyledAccordion defaultExpanded={defaultExpanded} expanded={expanded} {...props}>
-      <StyledAccordionSummary
-        expanded={expanded}
-        collapsible={collapsible}
-        onClick={() => collapsible && setExpanded(!expanded)}
-      >
+    <StyledAccordion
+      defaultExpanded={defaultExpanded}
+      expanded={expanded || defaultExpanded || false}
+      {...props}
+    >
+      <StyledAccordionSummary expanded={expanded} collapsible={collapsible} onClick={handleClick}>
         {title}
       </StyledAccordionSummary>
       {children}
@@ -112,7 +138,31 @@ export const Accordion = ({
   );
 };
 
-export const AccordionGroup = () => {};
+export interface AccordionGroupProps {
+  children: React.ReactElement | React.ReactElement[];
+  defaultExpandedIdx?: number;
+}
+
+export const AccordionGroup = ({ children, defaultExpandedIdx }: AccordionGroupProps) => {
+  const [expandedIdx, setExpandedIdx] = React.useState(defaultExpandedIdx ?? -1);
+
+  return (
+    <StyledAccordionGroup>
+      {
+        // Clone each accordion as a controlled component.
+        React.Children.map(children, (child, idx) =>
+          React.cloneElement(child, {
+            ...child.props,
+            expanded: idx === expandedIdx,
+            onClick: () => {
+              setExpandedIdx(idx === expandedIdx ? -1 : idx);
+            },
+          })
+        )
+      }
+    </StyledAccordionGroup>
+  );
+};
 
 export const AccordionActions = MuiAccordionActions;
 export const AccordionDetails = MuiAccordionDetails;
