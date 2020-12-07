@@ -6,7 +6,6 @@ import type {
 } from "@material-ui/core";
 import { TextField as MuiTextField } from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/Error";
-import _ from "lodash";
 
 const KEY_ENTER = 13;
 
@@ -20,13 +19,11 @@ const BaseTextField = ({ InputProps, InputLabelProps, ...props }: MuiStandardTex
 );
 
 const StyledTextField = styled(BaseTextField)({
-  padding: "8px 0",
   ".MuiInputLabel-root": {
     fontSize: "14px",
     fontWeight: 500,
     transform: "scale(1)",
     marginLeft: "2px",
-    padding: "8px 0",
   },
 
   ".MuiInputLabel-root, .MuiInputLabel-root.Mui-focused": {
@@ -137,9 +134,11 @@ export const TextField = ({
     }
   };
 
+  let helpText = helperText;
+
   // Prepend a '!' icon to helperText displayed below the form if the form is in an error state.
   if (error) {
-    helperText = (
+    helpText = (
       <>
         <ErrorIcon />
         {helperText}
@@ -153,7 +152,7 @@ export const TextField = ({
       onFocus={onChange}
       onBlur={onChange}
       error={error}
-      helperText={helperText}
+      helperText={helpText}
       InputProps={{ readOnly }}
       {...props}
     />

@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { Button } from "../button";
 import { useWizardContext } from "../Contexts";
 import { CompressedError, Error } from "../error";
+import { HorizontalRule } from "../horizontal-rule";
 import Loadable from "../loading";
 
 import { fetchResourceSchemas, resolveResource } from "./fetch";
@@ -14,10 +15,6 @@ import type { ResolverChangeEvent } from "./hydrator";
 import { QueryResolver, SchemaResolver } from "./input";
 import type { DispatchAction } from "./state";
 import { ResolverAction, useResolverState } from "./state";
-
-const Spacer = styled.div`
-  margin: 10px;
-`;
 
 const Form = styled.form`
   align-items: center;
@@ -130,11 +127,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
               />
             </Form>
           )}
-          {variant === "dual" && (
-            <>
-              <Spacer />- OR -
-            </>
-          )}
+          {variant === "dual" && <HorizontalRule>OR</HorizontalRule>}
           {(variant === "dual" || variant === "schema") && (
             <Form onSubmit={validation.handleSubmit(submitHandler)} noValidate>
               <SchemaResolver

@@ -1,5 +1,6 @@
 import React from "react";
-import styled, { keyframes } from "styled-components";
+import { keyframes } from "@emotion/react";
+import styled from "@emotion/styled";
 
 const rotate = keyframes`
   from {
@@ -10,13 +11,15 @@ const rotate = keyframes`
   }
 `;
 
-const StyledSvg = styled.svg`
-  height: 40px;
-  width: 40px;
-  &:hover {
-    animation: ${rotate} 5s linear;
-  }
-`;
+const StyledSvg = styled.svg({
+  height: "48px",
+  width: "48px",
+  padding: "8px",
+  "&:hover": {
+    animation: `${rotate} 5s linear`,
+  },
+  verticalAlign: "middle",
+});
 
 const Logo: React.FC = () => (
   <StyledSvg id="logo" viewBox="0 0 250 250">
