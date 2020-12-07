@@ -6,7 +6,7 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import styled from "styled-components";
 
 import { userId } from "./AppLayout/user";
-import Card from "./card";
+import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
 import { TrendingUpIcon } from "./icon";
 
@@ -52,10 +52,11 @@ const Landing: React.FC<{}> = () => {
   workflows.forEach(workflow => {
     workflow.routes.forEach(route => {
       const title = route.displayName
-        ? `${workflow.displayName} - ${route.displayName}`
+        ? `${workflow.displayName}: ${route.displayName}`
         : workflow.displayName;
       if (route.trending) {
         trendingWorkflows.push({
+          group: workflow.group,
           title,
           description: route.description,
           path: `${workflow.path}/${route.path}`,
@@ -95,7 +96,8 @@ const Landing: React.FC<{}> = () => {
               <GridContainer justify="center" container direction="row" spacing={3}>
                 {trendingWorkflows.map(workflow => (
                   <Grid item>
-                    <Card
+                    <LandingCard
+                      group={workflow.group}
                       title={workflow.title}
                       description={workflow.description}
                       onClick={() => navigateTo(workflow.path)}
