@@ -11,8 +11,8 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import SearchIcon from '@material-ui/icons/Search';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from "@material-ui/icons/Close";
+import SearchIcon from "@material-ui/icons/Search";
 import type { AutocompleteRenderInputParams } from "@material-ui/lab/Autocomplete";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import type { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
@@ -44,7 +44,7 @@ const InputField = styled(TextField)({
   },
 
   // close icon's container
-  "div.MuiAutocomplete-endAdornment":{
+  "div.MuiAutocomplete-endAdornment": {
     ".MuiAutocomplete-popupIndicatorOpen": {
       width: "32px",
       height: "32px",
@@ -54,7 +54,8 @@ const InputField = styled(TextField)({
         background: "#e7e7ea",
       },
       "&:active": {
-        background: "linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), #0D1030;",
+        background:
+          "linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), #0D1030;",
       },
     },
   },
@@ -87,8 +88,8 @@ const StartInputAdornment = styled(MuiInputAdornment)({
 
 // closed icon svg
 const StyledCloseIcon = styled(Icon)({
-    color: "#0c0b31",
-    fontSize: "24px",
+  color: "#0c0b31",
+  fontSize: "24px",
 });
 
 // popper containing the search result options
@@ -106,7 +107,7 @@ const Popper = styled(MuiPopper)({
   ".MuiAutocomplete-noOptions": {
     fontSize: "14px",
     color: "#0d1030",
-  }
+  },
 });
 
 const renderPopper = props => {
@@ -115,9 +116,9 @@ const renderPopper = props => {
 
 const CustomCloseIcon: React.FC = () => {
   return (
-      <StyledCloseIcon>
-        <CloseIcon fontSize="small"/>
-      </StyledCloseIcon>
+    <StyledCloseIcon>
+      <CloseIcon fontSize="small" />
+    </StyledCloseIcon>
   );
 };
 
@@ -257,9 +258,9 @@ const SearchField: React.FC = () => {
             filterOptions={filterResults}
             getOptionLabel={x => x.label}
             PopperComponent={renderPopper}
-            popupIcon={<CustomCloseIcon/>}
-            forcePopupIcon={showOptions ? true: false}
-            noOptionsText='No results found'
+            popupIcon={<CustomCloseIcon />}
+            forcePopupIcon={!!showOptions}
+            noOptionsText="No results found"
           />
         </ClickAwayListener>
       ) : (
