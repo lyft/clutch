@@ -10,6 +10,15 @@ import {
 import MuiCheckIcon from "@material-ui/icons/Check";
 import PriorityHighIcon from "@material-ui/icons/PriorityHigh";
 
+const StepContainer = styled.div({
+  ".MuiStepper-root": {
+    padding: "0",
+  },
+  ".MuiGrid-container": {
+    padding: "16px 0",
+  },
+});
+
 const Circle = styled.div((props: { background: string; border: string }) => ({
   backgroundColor: props.background,
   border: props.border,
@@ -120,8 +129,8 @@ export interface StepperProps {
 }
 
 const Stepper = ({ activeStep, children }: StepperProps) => (
-  <div>
-    <MuiStepper style={{ padding: "0" }} activeStep={activeStep + 1} connector={<StepConnector />}>
+  <StepContainer>
+    <MuiStepper activeStep={activeStep + 1} connector={<StepConnector />}>
       {React.Children.map(children, (step: any, idx: number) => {
         const stepProps = {
           index: idx + 1,
@@ -140,14 +149,14 @@ const Stepper = ({ activeStep, children }: StepperProps) => (
         );
       })}
     </MuiStepper>
-    <Grid style={{ padding: "16px 0" }} container justify="space-between">
+    <Grid container justify="space-between">
       {React.Children.map(children, (step: any, idx: number) => (
         <StepLabel item data-active={idx === activeStep}>
           {step.props.label}
         </StepLabel>
       ))}
     </Grid>
-  </div>
+  </StepContainer>
 );
 
 export { Stepper, Step };
