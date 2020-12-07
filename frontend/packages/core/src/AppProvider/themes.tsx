@@ -20,7 +20,8 @@ interface ClutchTheme extends ThemeOptions {
 }
 
 declare module "styled-components" {
-  export interface ClutchTheme extends ThemeOptions {
+  export interface ClutchTheme // eslint-disable-line @typescript-eslint/no-shadow
+    extends ThemeOptions {
     palette: ClutchPalette;
   }
 }
@@ -59,6 +60,10 @@ const lightPalette = (): ClutchPalette => {
 const lightTheme = () => {
   return createMuiTheme({
     palette: lightPalette(),
+    transitions: {
+      // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
+      create: () => "none",
+    },
     props: {
       MuiButtonBase: {
         // https://material-ui.com/getting-started/faq/#how-can-i-disable-the-ripple-effect-globally

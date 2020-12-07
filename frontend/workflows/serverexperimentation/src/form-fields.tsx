@@ -22,6 +22,7 @@ interface TextFieldProps {
 
 interface SelectProps {
   options: SelectOption[];
+  defaultValue: string;
 }
 
 interface SelectOption {
@@ -31,6 +32,7 @@ interface SelectOption {
 
 interface RadioGroupProps {
   options: RadioGroupOption[];
+  defaultValue: string;
 }
 
 interface RadioGroupOption {
@@ -45,7 +47,7 @@ interface FormItem {
   inputProps: SelectProps | TextFieldProps;
 }
 
-const FormContent: React.FC<FormProps> = ({ state, items, register, errors }) => {
+const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => {
   const [data, setData] = state;
 
   return (
@@ -68,9 +70,6 @@ const FormContent: React.FC<FormProps> = ({ state, items, register, errors }) =>
               inputRef={register}
               error={!!errors[field.name]}
               helperText={errors[field.name] ? errors[field.name].message : ""}
-              InputLabelProps={{
-                shrink: true,
-              }}
             />
           );
         }
@@ -82,6 +81,9 @@ const FormContent: React.FC<FormProps> = ({ state, items, register, errors }) =>
               name={field.name}
               label={field.label}
               options={customProps.options}
+              defaultOption={customProps.options
+                .map(o => o.value)
+                .indexOf(customProps.defaultValue)}
               onChange={value => {
                 const copiedData = { ...data };
                 copiedData[field.name] = value;
@@ -99,6 +101,9 @@ const FormContent: React.FC<FormProps> = ({ state, items, register, errors }) =>
                 key={field.name}
                 label={field.label}
                 options={customProps.options}
+                defaultOption={customProps.options
+                  .map(o => o.value)
+                  .indexOf(customProps.defaultValue)}
                 onChange={value => {
                   const copiedData = { ...data };
                   copiedData[field.name] = value;
@@ -115,4 +120,4 @@ const FormContent: React.FC<FormProps> = ({ state, items, register, errors }) =>
   );
 };
 
-export { FormContent, FormItem, SelectOption, SelectProps, TextFieldProps };
+export default FormFields;

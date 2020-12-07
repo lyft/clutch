@@ -2,12 +2,13 @@
 import { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 import CheckboxPanel from "./Input/checkbox";
 import { RadioGroup } from "./Input/radio-group";
-import Select from "./Input/select";
-import TextField from "./Input/text-field";
+import { Select } from "./Input/select";
+import { TextField } from "./Input/text-field";
 import ClutchApp from "./AppProvider";
 import { Button, ButtonGroup, ButtonProps, ClipboardButton } from "./button";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
+import Dialog from "./dialog";
 import { Error } from "./error";
 import { Hint, Note, NoteConfig, NotePanel, Warning } from "./Feedback";
 import { Status } from "./icon";
@@ -36,6 +37,7 @@ export {
   ClientError,
   ClipboardButton,
   Confirmation,
+  Dialog,
   Error,
   ExpandableRow,
   ExpandableTable,

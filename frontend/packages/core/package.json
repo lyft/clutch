@@ -25,7 +25,7 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/api": "^0.0.0-beta",
+    "@clutch-sh/api": "^1.0.0-beta",
     "@date-io/core": "^1.3.6",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
@@ -49,9 +49,9 @@
     "react-router-dom": "^6.0.0-beta",
     "styled-components": "^5.1.1",
     "superstruct": "~0.8.4",
-    "yup": "^0.29.0"
+    "yup": "^0.31.0"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^0.0.0-beta"
+    "@clutch-sh/tools": "^1.0.0-beta"
   }
 }

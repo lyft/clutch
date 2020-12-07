@@ -20,4 +20,5 @@ extend google.protobuf.MethodOptions {
   // Use a random high number that won't conflict with annotations from other
   // libraries.
   Action action = 58901;
+  bool disable_audit = 58902;
 }

@@ -31,6 +31,6 @@
     "react-hook-thunk-reducer": "^0.2.1"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^0.0.0-beta"
+    "@clutch-sh/tools": "^1.0.0-beta"
   }
 }

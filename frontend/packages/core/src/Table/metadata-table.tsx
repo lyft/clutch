@@ -1,16 +1,21 @@
-import React from "react";
+import * as React from "react";
 import { useForm } from "react-hook-form";
+import styled from "@emotion/styled";
 import { DevTool } from "@hookform/devtools";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Table, TableBody, TableCell, TableContainer, TableRow } from "@material-ui/core";
-import type { Size } from "@material-ui/core/TableCell";
+import {
+  Table as MuiTable,
+  TableBody as MuiTableBody,
+  TableCell as MuiTableCell,
+  TableContainer as MuiTableContainer,
+  TableRow,
+} from "@material-ui/core";
 import _ from "lodash";
-import styled from "styled-components";
 import type { Schema } from "yup";
 import { object } from "yup";
 
 import { useWizardContext } from "../Contexts";
-import TextField from "../Input/text-field";
+import { TextField } from "../Input/text-field";
 
 interface RowData {
   input?: {
@@ -26,102 +31,113 @@ interface IdentifiableRowData extends RowData {
   id: string;
 }
 
+const TableContainer = styled(MuiTableContainer)({
+  borderWidth: "0",
+  border: "0",
+  padding: "16px 32px",
+});
+
+const Table = styled(MuiTable)({
+  border: "1px solid rgba(13, 16, 48, 0.12)",
+  borderRadius: "4px",
+  borderCollapse: "unset",
+});
+
+const TableBody = styled(MuiTableBody)({
+  "tr:first-of-type > td:first-of-type": {
+    borderTopLeftRadius: "3px",
+  },
+  "tr:first-of-type > td:last-of-type": {
+    borderTopRightRadius: "3px",
+  },
+  "tr:last-of-type > td": {
+    borderBottom: "0",
+  },
+  "tr:last-of-type > td:first-of-type": {
+    borderBottomLeftRadius: "3px",
+  },
+  "tr:last-of-type > td:last-of-type": {
+    borderBottomRightRadius: "3px",
+  },
+});
+
+const TableCell = styled(MuiTableCell)({
+  color: "#0D1030",
+  fontSize: "14px",
+  fontWeight: "normal",
+  height: "48px",
+  padding: "0 16px",
+});
+
+const KeyCellContainer = styled(TableCell)({
+  width: "45%",
+  background: "rgba(13, 16, 48, 0.03)",
+  fontWeight: 500,
+});
+
 interface KeyCellProps {
   data: IdentifiableRowData;
-  size: Size;
 }
 
-const StyledKeyCell = styled(TableCell)`
-  width: 50%;
-`;
-
-const KeyCell: React.FC<KeyCellProps> = ({ data, size }) => {
+const KeyCell: React.FC<KeyCellProps> = ({ data }) => {
   let { name } = data;
   if (data.value instanceof Array && data.value.length > 1) {
     name = `${data.name}s`;
   }
-  return (
-    <StyledKeyCell size={size}>
-      <strong>{name}</strong>
-    </StyledKeyCell>
-  );
+  return <KeyCellContainer>{name}</KeyCellContainer>;
 };
 
-interface ViewOnlyRowProps {
-  data: IdentifiableRowData;
-  size: Size;
-}
+interface ImmutableRowProps extends KeyCellProps {}
 
-const ViewOnlyRow: React.FC<ViewOnlyRowProps> = ({ data, size }) => {
+const ImmutableRow: React.FC<ImmutableRowProps> = ({ data }) => {
   let { value } = data;
   if (data.value instanceof Array && data.value.length > 1) {
     value = data.value.join(", ");
   }
   return (
     <TableRow key={data.id}>
-      <KeyCell data={data} size={size} />
-      <TableCell size={size}>{value}</TableCell>
+      <KeyCell data={data} />
+      <TableCell>{value}</TableCell>
     </TableRow>
   );
 };
 
-interface EditableRowProps {
-  data: IdentifiableRowData;
+interface MutableRowProps extends ImmutableRowProps {
   onUpdate: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
   onReturn: () => void;
   validation: any;
-  size: Size;
 }
 
-const EditableRow: React.FC<EditableRowProps> = ({
-  data,
-  onUpdate,
-  onReturn,
-  validation,
-  size,
-}) => {
+const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, validation }) => {
   const error = validation.errors?.[data.name];
 
   return (
     <TableRow key={data.id}>
-      <KeyCell data={data} size={size} />
-      <TableCell size={size}>
+      <KeyCell data={data} />
+      <TableCell>
         <TextField
           id={data.id}
           name={data.name}
           defaultValue={data.value}
-          size="small"
           type={data?.input?.type}
-          InputProps={{ margin: "dense", color: "secondary", name: data.name }}
-          inputProps={data?.input}
           onChange={onUpdate}
           onReturn={onReturn}
           onFocus={onUpdate}
           inputRef={validation.register}
           helperText={error?.message || ""}
           error={!!error || false}
-          maxWidth="50%"
-          style={{ marginLeft: 0 }}
         />
       </TableCell>
     </TableRow>
   );
 };
 
-interface MetadataTableProps {
+export interface MetadataTableProps {
   data: RowData[];
   onUpdate?: (id: string, value: unknown) => void;
-  variant?: Size;
 }
 
-const MetadataTable: React.FC<MetadataTableProps> = ({
-  data,
-  onUpdate,
-  children,
-  variant,
-  ...props
-}) => {
-  const displayVariant = variant || "medium";
+export const MetadataTable: React.FC<MetadataTableProps> = ({ data, onUpdate, children }) => {
   const { onSubmit, setOnSubmit } = useWizardContext();
   let rows = data;
   if (_.isEmpty(data)) {
@@ -150,22 +166,21 @@ const MetadataTable: React.FC<MetadataTableProps> = ({
   }, []);
 
   return (
-    <TableContainer {...props}>
+    <TableContainer>
       {process.env.REACT_APP_DEBUG_FORMS && onUpdate !== undefined && <DevTool control={control} />}
-      <Table {...props}>
+      <Table>
         <TableBody>
           {rows.map((row: IdentifiableRowData) => {
             return row.input !== undefined && onUpdate ? (
-              <EditableRow
+              <MutableRow
                 data={row}
                 onUpdate={e => onUpdate(e.target.id, e.target.value)}
                 onReturn={onSubmit}
                 key={row.id}
                 validation={validation}
-                size={displayVariant}
               />
             ) : (
-              <ViewOnlyRow data={row} key={row.id} size={displayVariant} />
+              <ImmutableRow data={row} key={row.id} />
             );
           })}
           {children}

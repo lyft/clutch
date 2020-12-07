@@ -3,33 +3,21 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { clutch as IClutch } from "@clutch-sh/api";
 import type { BaseWorkflowProps } from "@clutch-sh/core";
-import { ButtonGroup, client } from "@clutch-sh/core";
+import { Button, ButtonGroup, client, Dialog } from "@clutch-sh/core";
 import { PageLayout } from "@clutch-sh/experimentation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import Dialog from "./dialog";
-import { FormContent } from "./form-content";
+import FormFields from "./form-fields";
 
 enum FaultType {
   ABORT = "Abort",
   LATENCY = "Latency",
 }
 
-const faultInjectionTypeItems = [
-  {
-    label: "Internal",
-    value: IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster.FAULTINJECTIONCLUSTER_UPSTREAM.toString(),
-  },
-  {
-    label: "External (3rd party)",
-    value: IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster.FAULTINJECTIONCLUSTER_DOWNSTREAM.toString(),
-  },
-];
-
 type ExperimentData = IClutch.chaos.serverexperimentation.v1.AbortFaultConfig &
   IClutch.chaos.serverexperimentation.v1.LatencyFaultConfig &
-  IClutch.chaos.serverexperimentation.v1.ClusterPairTarget & { type: FaultType };
+  IClutch.chaos.serverexperimentation.v1.ClusterPairTarget & { faultType: FaultType };
 
 interface ExperimentDetailsProps {
   upstreamClusterTypeSelectionEnabled: boolean;
@@ -40,7 +28,14 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   upstreamClusterTypeSelectionEnabled,
   onStart,
 }) => {
-  const experimentDataState = useState<ExperimentData>({} as ExperimentData);
+  const initialExperimentData = {
+    faultInjectionCluster:
+      IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster.FAULTINJECTIONCLUSTER_UPSTREAM,
+    faultType: FaultType.ABORT,
+  } as ExperimentData;
+
+  const experimentDataState = useState<ExperimentData>(initialExperimentData);
+
   const experimentData = experimentDataState[0];
   const navigate = useNavigate();
 
@@ -52,7 +47,7 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
     onStart(experimentData);
   };
 
-  const isAbort = (experimentData?.type ?? FaultType.ABORT) === FaultType.ABORT;
+  const isAbort = experimentData.faultType === FaultType.ABORT;
   const fields = [
     {
       name: "downstreamCluster",
@@ -69,13 +64,25 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
       inputProps: { defaultValue: undefined },
     },
     upstreamClusterTypeSelectionEnabled && {
-      name: "upstreamClusterType",
+      name: "faultInjectionCluster",
       label: "Upstream Cluster Type",
       type: "radio-group",
-      inputProps: { options: faultInjectionTypeItems },
+      inputProps: {
+        options: [
+          {
+            label: "Internal",
+            value: IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster.FAULTINJECTIONCLUSTER_UPSTREAM.toString(),
+          },
+          {
+            label: "External (3rd party)",
+            value: IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster.FAULTINJECTIONCLUSTER_DOWNSTREAM.toString(),
+          },
+        ],
+        defaultValue: initialExperimentData.faultInjectionCluster.toString(),
+      },
     },
     {
-      name: "type",
+      name: "faultType",
       label: "Fault Type",
       type: "select",
       inputProps: {
@@ -83,6 +90,7 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
           { label: "Abort", value: FaultType.ABORT },
           { label: "Latency", value: FaultType.LATENCY },
         ],
+        defaultValue: initialExperimentData.faultType,
       },
     },
     {
@@ -125,7 +133,7 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
 
   return (
     <form onSubmit={handleSubmit(handleOnSubmit)}>
-      <FormContent state={experimentDataState} items={fields} register={register} errors={errors} />
+      <FormFields state={experimentDataState} items={fields} register={register} errors={errors} />
       <ButtonGroup
         buttons={[
           {
@@ -160,19 +168,16 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
     navigate(`/experimentation/run/${id}`);
   };
 
-  const createExperiment = (
-    data: IClutch.chaos.serverexperimentation.v1.AbortFaultConfig &
-      IClutch.chaos.serverexperimentation.v1.LatencyFaultConfig &
-      IClutch.chaos.serverexperimentation.v1.ClusterPairTarget & { type: FaultType }
-  ) => {
-    const isAbort = data.type === FaultType.ABORT;
+  const handleOnCreatedExperimentFailure = (err: string) => {
+    setExperimentData(undefined);
+    setError(err);
+  };
+
+  const createExperiment = (data: ExperimentData) => {
+    const isAbort = data.faultType === FaultType.ABORT;
     const fault = isAbort
       ? { abort: { httpStatus: data.httpStatus, percent: data.percent } }
       : { latency: { durationMs: data.durationMs, percent: data.percent } };
-
-    const faultInjectionCluster =
-      data.faultInjectionCluster ||
-      IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster.FAULTINJECTIONCLUSTER_UPSTREAM;
 
     return client
       .post("/v1/chaos/experimentation/createExperiment", {
@@ -181,7 +186,10 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
           clusterPair: {
             downstreamCluster: data.downstreamCluster,
             upstreamCluster: data.upstreamCluster,
-            faultInjectionCluster,
+            faultInjectionCluster:
+              IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster[
+                data.faultInjectionCluster
+              ],
           },
           ...fault,
         },
@@ -190,7 +198,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
         handleOnCreatedExperiment(response?.data.experiment.id);
       })
       .catch(err => {
-        setError(err.response.statusText);
+        handleOnCreatedExperimentFailure(err.response.statusText);
       });
   };
 
@@ -205,16 +213,15 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
         content="Are you sure you want to start an experiment? The experiment will start immediately and you will be moved to experiment details view page."
         open={experimentData !== undefined}
         onClose={() => setExperimentData(undefined)}
-        buttons={[
-          {
-            label: "Yes",
-            onAction: () => {
-              createExperiment(experimentData);
-            },
-          },
-          { label: "No", onAction: () => setExperimentData(undefined) },
-        ]}
-      />
+      >
+        <Button
+          text="Yes"
+          onClick={() => {
+            createExperiment(experimentData);
+          }}
+        />
+        <Button text="No" onClick={() => setExperimentData(undefined)} />
+      </Dialog>
     </PageLayout>
   );
 };

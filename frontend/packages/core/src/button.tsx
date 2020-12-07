@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import styled from "@emotion/styled";
 import type { ButtonProps as MuiButtonProps, GridJustification } from "@material-ui/core";
 import { Button as MuiButton, Grid, IconButton } from "@material-ui/core";
@@ -9,7 +9,7 @@ const COLORS = {
   neutral: {
     background: {
       primary: "#FFFFFF",
-      hover: "#EFF0F2",
+      hover: "#E7E7EA",
       active: "#CFD3D7",
       disabled: "#FFFFFF",
     },
@@ -18,18 +18,18 @@ const COLORS = {
   primary: {
     background: {
       primary: "#3548D4",
-      hover: "#7680E8",
-      active: "#1B31C6",
-      disabled: "#7680E8",
+      hover: "#2D3DB4",
+      active: "#2938A5",
+      disabled: "#E7E7EA",
     },
     font: "#FFFFFF",
   },
   danger: {
     background: {
       primary: "#DB3615",
-      hover: "#FF6441",
-      active: "#E32E11",
-      disabled: "#FF3E1C",
+      hover: "#BA2E12",
+      active: "#AB2A10",
+      disabled: "#F1B3A6",
     },
     font: "#FFFFFF",
   },
@@ -38,9 +38,12 @@ const COLORS = {
 const StyledButton = styled(MuiButton)(
   {
     borderRadius: "4px",
-    fontWeight: 700,
+    fontWeight: 500,
+    lineHeight: "20px",
+    fontSize: "16px",
     textTransform: "none",
-    padding: "0.875rem 2rem",
+    height: "48px",
+    padding: "14px 32px",
     margin: "2rem .875rem",
   },
   props => ({
@@ -62,6 +65,9 @@ const StyledButton = styled(MuiButton)(
 
 const OutlinedButton = styled(StyledButton)({
   border: "1px solid #0D1030",
+  "&.Mui-disabled": {
+    borderColor: "rgba(13, 16, 48, 0.1)",
+  },
 });
 
 export interface ButtonProps
