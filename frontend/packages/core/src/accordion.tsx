@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { AccordionProps as MuiAccordionProps } from "@material-ui/core";
+import { AccordionProps as MuiAccordionProps, useControlled } from "@material-ui/core";
 import {
   Accordion as MuiAccordion,
   AccordionActions as MuiAccordionActions,
@@ -77,7 +77,7 @@ export const StyledAccordionSummary = styled(AccordionSummaryBase)({
   },
 });
 
-export interface AccordionProps extends Pick<MuiAccordionProps, "defaultExpanded"> {
+export interface AccordionProps extends Pick<MuiAccordionProps, "defaultExpanded" | "expanded"> {
   title?: string;
   collapsible?: boolean;
   children: React.ReactNode[];
@@ -87,18 +87,23 @@ export const Accordion = ({
   title,
   collapsible = true,
   defaultExpanded,
+  expanded: expandedProp,
   children,
   ...props
 }: AccordionProps) => {
-  const [expanded, setExpanded] = React.useState(defaultExpanded);
+  const [expanded, setExpanded] = useControlled({
+    controlled: expandedProp,
+    default: defaultExpanded,
+    name: 'Accordion',
+    state: 'expanded',
+  });
 
   return (
     <StyledAccordion defaultExpanded={defaultExpanded} expanded={expanded} {...props}>
       <StyledAccordionSummary
         expanded={expanded}
-        defaultExpanded={defaultExpanded}
         collapsible={collapsible}
-        onClick={() => collapsible && setExpanded(v => !v)}
+        onClick={() => collapsible && setExpanded(!expanded)}
       >
         {title}
       </StyledAccordionSummary>
@@ -106,6 +111,8 @@ export const Accordion = ({
     </StyledAccordion>
   );
 };
+
+export const AccordionGroup = () => {};
 
 export const AccordionActions = MuiAccordionActions;
 export const AccordionDetails = MuiAccordionDetails;
