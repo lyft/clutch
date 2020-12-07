@@ -1,8 +1,9 @@
-import React from "react";
+import * as React from "react";
 import styled from "@emotion/styled";
 import type { Meta } from "@storybook/react";
 
 import { Button } from "../button";
+import type { StepperProps } from "../stepper";
 import { Step, Stepper } from "../stepper";
 
 const Text = styled.div({
@@ -14,43 +15,38 @@ export default {
   component: Stepper,
 } as Meta;
 
-const PrimaryTemplate = ({ stepCount }: { stepCount: number }) => {
-  const [activeStep, setActiveStep] = React.useState(0);
+const PrimaryTemplate = ({ stepCount, activeStep }: StepperProps & { stepCount: number }) => {
+  const [curStep, setCurStep] = React.useState(activeStep);
 
   const handleNext = () => {
-    setActiveStep(prevActiveStep => prevActiveStep + 1);
+    setCurStep(prevActiveStep => prevActiveStep + 1);
   };
 
   const handleBack = () => {
-    setActiveStep(prevActiveStep => prevActiveStep - 1);
+    setCurStep(prevActiveStep => prevActiveStep - 1);
   };
 
   const handleReset = () => {
-    setActiveStep(0);
+    setCurStep(0);
   };
 
   return (
     <>
-      <Stepper activeStep={activeStep}>
+      <Stepper activeStep={curStep}>
         {[...Array(stepCount)].map((_, index: number) => (
           // eslint-disable-next-line react/no-array-index-key
           <Step key={index} label={`Step ${index + 1}`} />
         ))}
       </Stepper>
       <div>
-        <Text>Step {activeStep + 1} content</Text>
+        <Text>Step {curStep + 1} content</Text>
 
-        {activeStep === stepCount - 1 ? (
+        {curStep === stepCount - 1 ? (
           <Button onClick={handleReset} text="Reset" variant="neutral" />
         ) : (
           <div>
-            <Button
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              text="Back"
-              variant="neutral"
-            />
-            <Button onClick={handleNext} text={activeStep === stepCount ? "Finish" : "Next"} />
+            <Button disabled={curStep === 0} onClick={handleBack} text="Back" variant="neutral" />
+            <Button onClick={handleNext} text={curStep === stepCount ? "Finish" : "Next"} />
           </div>
         )}
       </div>
@@ -79,7 +75,7 @@ const FailureTemplate = () => {
         <Step label="Step 1">
           <Text>First step content</Text>
         </Step>
-        <Step label="Step 2">
+        <Step label="Step 2" error>
           <Text>Second step content</Text>
         </Step>
         <Step label="Step 3">
@@ -92,7 +88,7 @@ const FailureTemplate = () => {
       <div>
         <Text>Step {activeStep + 1} content</Text>
 
-        {activeStep === 3 || activeStep === 2 ? (
+        {activeStep === 2 ? (
           <Button onClick={handleReset} text="Reset" variant="neutral" />
         ) : (
           <div>
