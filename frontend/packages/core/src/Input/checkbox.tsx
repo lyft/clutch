@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import styled from "@emotion/styled";
 import type { CheckboxProps as MuiCheckboxProps } from "@material-ui/core";
 import {
@@ -73,6 +73,7 @@ const SelectedIcon = styled.div(
 export interface CheckboxProps
   extends Pick<MuiCheckboxProps, "checked" | "disabled" | "name" | "onChange"> {}
 
+// TODO (sperry): add 16px size variant
 const Checkbox: React.FC<CheckboxProps> = ({ checked, disabled, ...props }) => {
   return (
     <StyledCheckbox
