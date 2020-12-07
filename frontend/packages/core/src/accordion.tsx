@@ -1,10 +1,10 @@
 import * as React from "react";
 import styled from "@emotion/styled";
+import type { AccordionProps as MuiAccordionProps } from "@material-ui/core";
 import {
   Accordion as MuiAccordion,
   AccordionActions as MuiAccordionActions,
   AccordionDetails as MuiAccordionDetails,
-  AccordionProps as MuiAccordionProps,
   AccordionSummary as MuiAccordionSummary,
   Divider as MuiDivider,
   useControlled,
@@ -95,7 +95,7 @@ const StyledAccordionGroup = styled.div({
 export interface AccordionProps extends Pick<MuiAccordionProps, "defaultExpanded" | "expanded"> {
   title?: string;
   collapsible?: boolean;
-  children: React.ReactNode | React.ReactNode[];
+  children: React.ReactNode;
   onClick?: React.MouseEventHandler;
 }
 
@@ -139,7 +139,7 @@ export const Accordion = ({
 };
 
 export interface AccordionGroupProps {
-  children: React.ReactElement | React.ReactElement[];
+  children: React.ReactElement<AccordionProps> | React.ReactElement<AccordionProps>[];
   defaultExpandedIdx?: number;
 }
 
