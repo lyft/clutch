@@ -6,6 +6,7 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import styled from "styled-components";
 
 import { userId } from "./AppLayout/user";
+import { MonsterIcon } from "./Assets/Icons";
 import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
 import { TrendingUpIcon } from "./icon";
@@ -72,6 +73,7 @@ const Landing: React.FC<{}> = () => {
   return (
     <Content id="landing" elevation={0}>
       <Typography variant="h5">
+        <MonsterIcon />
         <strong>Welcome {userId()} </strong>
         <span role="img" aria-label="Hand Waving">
           👋
