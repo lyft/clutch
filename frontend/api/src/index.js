@@ -7872,6 +7872,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {google.protobuf.ITimestamp|null} [dateValue] Property dateValue
                      * @property {string|null} [stringValue] Property stringValue
                      * @property {number|Long|null} [intValue] Property intValue
+                     * @property {string|null} [urlValue] Property urlValue
                      */
 
                     /**
@@ -7937,17 +7938,25 @@ export const clutch = $root.clutch = (() => {
                      */
                     Property.prototype.intValue = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
+                    /**
+                     * Property urlValue.
+                     * @member {string} urlValue
+                     * @memberof clutch.chaos.experimentation.v1.Property
+                     * @instance
+                     */
+                    Property.prototype.urlValue = "";
+
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
 
                     /**
                      * Property value.
-                     * @member {"dateValue"|"stringValue"|"intValue"|undefined} value
+                     * @member {"dateValue"|"stringValue"|"intValue"|"urlValue"|undefined} value
                      * @memberof clutch.chaos.experimentation.v1.Property
                      * @instance
                      */
                     Object.defineProperty(Property.prototype, "value", {
-                        get: $util.oneOfGetter($oneOfFields = ["dateValue", "stringValue", "intValue"]),
+                        get: $util.oneOfGetter($oneOfFields = ["dateValue", "stringValue", "intValue", "urlValue"]),
                         set: $util.oneOfSetter($oneOfFields)
                     });
 
@@ -7996,6 +8005,13 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isInteger(message.intValue) && !(message.intValue && $util.isInteger(message.intValue.low) && $util.isInteger(message.intValue.high)))
                                 return "intValue: integer|Long expected";
                         }
+                        if (message.urlValue != null && message.hasOwnProperty("urlValue")) {
+                            if (properties.value === 1)
+                                return "value: multiple values";
+                            properties.value = 1;
+                            if (!$util.isString(message.urlValue))
+                                return "urlValue: string expected";
+                        }
                         return null;
                     };
 
@@ -8036,6 +8052,8 @@ export const clutch = $root.clutch = (() => {
                                 message.intValue = object.intValue;
                             else if (typeof object.intValue === "object")
                                 message.intValue = new $util.LongBits(object.intValue.low >>> 0, object.intValue.high >>> 0).toNumber();
+                        if (object.urlValue != null)
+                            message.urlValue = String(object.urlValue);
                         return message;
                     };
 
@@ -8080,6 +8098,11 @@ export const clutch = $root.clutch = (() => {
                                 object.intValue = options.longs === String ? $util.Long.prototype.toString.call(message.intValue) : options.longs === Number ? new $util.LongBits(message.intValue.low >>> 0, message.intValue.high >>> 0).toNumber() : message.intValue;
                             if (options.oneofs)
                                 object.value = "intValue";
+                        }
+                        if (message.urlValue != null && message.hasOwnProperty("urlValue")) {
+                            object.urlValue = message.urlValue;
+                            if (options.oneofs)
+                                object.value = "urlValue";
                         }
                         return object;
                     };
@@ -11898,6 +11921,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.config.gateway.v1.ITimeouts|null} [timeouts] GatewayOptions timeouts
                      * @property {Array.<clutch.config.gateway.v1.IMiddleware>|null} [middleware] GatewayOptions middleware
                      * @property {clutch.config.gateway.v1.IAssets|null} [assets] GatewayOptions assets
+                     * @property {boolean|null} [enablePprof] GatewayOptions enablePprof
                      */
 
                     /**
@@ -11973,6 +11997,14 @@ export const clutch = $root.clutch = (() => {
                     GatewayOptions.prototype.assets = null;
 
                     /**
+                     * GatewayOptions enablePprof.
+                     * @member {boolean} enablePprof
+                     * @memberof clutch.config.gateway.v1.GatewayOptions
+                     * @instance
+                     */
+                    GatewayOptions.prototype.enablePprof = false;
+
+                    /**
                      * Verifies a GatewayOptions message.
                      * @function verify
                      * @memberof clutch.config.gateway.v1.GatewayOptions
@@ -12022,6 +12054,9 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "assets." + error;
                         }
+                        if (message.enablePprof != null && message.hasOwnProperty("enablePprof"))
+                            if (typeof message.enablePprof !== "boolean")
+                                return "enablePprof: boolean expected";
                         return null;
                     };
 
@@ -12077,6 +12112,8 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.config.gateway.v1.GatewayOptions.assets: object expected");
                             message.assets = $root.clutch.config.gateway.v1.Assets.fromObject(object.assets);
                         }
+                        if (object.enablePprof != null)
+                            message.enablePprof = Boolean(object.enablePprof);
                         return message;
                     };
 
@@ -12102,6 +12139,7 @@ export const clutch = $root.clutch = (() => {
                             object.stats = null;
                             object.timeouts = null;
                             object.assets = null;
+                            object.enablePprof = false;
                         }
                         if (message.listener != null && message.hasOwnProperty("listener"))
                             object.listener = $root.clutch.config.gateway.v1.Listener.toObject(message.listener, options);
@@ -12120,6 +12158,8 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (message.assets != null && message.hasOwnProperty("assets"))
                             object.assets = $root.clutch.config.gateway.v1.Assets.toObject(message.assets, options);
+                        if (message.enablePprof != null && message.hasOwnProperty("enablePprof"))
+                            object.enablePprof = message.enablePprof;
                         return object;
                     };
 

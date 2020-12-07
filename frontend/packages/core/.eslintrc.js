@@ -1,6 +1,5 @@
 const baseConfig = require("@clutch-sh/tools/.eslintrc.js");
 
-
 module.exports = {
   ...baseConfig,
   overrides: [
@@ -21,7 +20,7 @@ module.exports = {
       files: ["**/*.stories.*"],
       rules: {
         "import/no-extraneous-dependencies": ["off"],
-      }
+      },
     },
-  ]
+  ],
 };

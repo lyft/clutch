@@ -662,6 +662,8 @@ func (m *GatewayOptions) Validate() error {
 		}
 	}
 
+	// no validation rules for EnablePprof
+
 	return nil
 }
 
