@@ -121,7 +121,7 @@ export interface StepperProps {
 
 const Stepper = ({ activeStep, children }: StepperProps) => (
   <div>
-    <MuiStepper activeStep={activeStep + 1} connector={<StepConnector />}>
+    <MuiStepper style={{ padding: "0" }} activeStep={activeStep + 1} connector={<StepConnector />}>
       {React.Children.map(children, (step: any, idx: number) => {
         const stepProps = {
           index: idx + 1,
@@ -140,7 +140,7 @@ const Stepper = ({ activeStep, children }: StepperProps) => (
         );
       })}
     </MuiStepper>
-    <Grid style={{ padding: "0 24px 24px 24px" }} container justify="space-between">
+    <Grid style={{ padding: "16px 0" }} container justify="space-between">
       {React.Children.map(children, (step: any, idx: number) => (
         <StepLabel item data-active={idx === activeStep}>
           {step.props.label}

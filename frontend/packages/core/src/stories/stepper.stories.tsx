@@ -16,7 +16,7 @@ export default {
 } as Meta;
 
 const PrimaryTemplate = ({ stepCount, activeStep }: StepperProps & { stepCount: number }) => {
-  const [curStep, setCurStep] = React.useState(activeStep);
+  const [curStep, setCurStep] = React.useState(activeStep || 0);
 
   const handleNext = () => {
     setCurStep(prevActiveStep => prevActiveStep + 1);
