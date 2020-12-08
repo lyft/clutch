@@ -47,6 +47,10 @@ func (s svc) GetCommit(ctx context.Context, ref *github.RemoteRef) (*github.Comm
 	panic("implement me")
 }
 
+func (s svc) GetDefaultBranch(ctx context.Context, ref *github.RemoteRef) (string, error) {
+	panic("implement me")
+}
+
 func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	return New(), nil
 }
