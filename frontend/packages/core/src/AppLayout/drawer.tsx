@@ -29,6 +29,7 @@ const DrawerPanel = styled(MuiDrawer)({
   "div[class*='MuiDrawer-paper']": {
     minWidth: `${drawerWidth}`,
     paddingTop: "32px",
+    top: "64px",
     backgroundColor: "linear-gradient(0deg, #FFFFFF, #FFFFFF), #FFFFFF",
     boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
     "@media screen and (max-width: 800px)": {

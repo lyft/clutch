@@ -7,8 +7,11 @@ import Header from "./header";
 const AppLayout: React.FC = ({ children }) => {
   return (
     <>
+      <div style={{display: "flex"}}>
       <Header />
-      {children}
+        <div style={{minHeight: "64px"}}/>
+        {children}
+      </div>
       <FeedbackButton />
       <Outlet />
     </>
