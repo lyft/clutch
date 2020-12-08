@@ -74,6 +74,7 @@ type Client interface {
 	CreateIssueComment(ctx context.Context, ref *RemoteRef, number int, body string) error
 	CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error)
 	GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error)
+	GetDefaultBranch(ctx context.Context, ref *RemoteRef) (string, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -305,4 +306,19 @@ func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
 	return &Commit{
 		Files: commit.Files,
 	}, nil
+}
+
+func (s *svc) GetDefaultBranch(ctx context.Context, repo *RemoteRef) (string, error) {
+	q := &getDefaultBranchQuery{}
+	params := map[string]interface{}{
+		"owner": githubv4.String(repo.RepoOwner),
+		"name":  githubv4.String(repo.RepoName),
+	}
+
+	err := s.graphQL.Query(ctx, q, params)
+	if err != nil {
+		return "", err
+	}
+
+	return string(q.Repository.DefaultBranchRef.Name), nil
 }
