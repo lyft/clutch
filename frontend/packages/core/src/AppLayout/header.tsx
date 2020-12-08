@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import { AppBar as MuiAppBar, Box, Grid, IconButton, Toolbar, Typography } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
 
 import Drawer from "./drawer";
 import Logo from "./logo";
@@ -16,11 +15,6 @@ const AppBar = styled(MuiAppBar)({
   background: "linear-gradient(90deg, #38106b 4.58%, #131c5f 89.31%)",
 });
 
-const MenuButton = styled(IconButton)({
-  padding: "12px",
-  marginLeft: "-12px",
-});
-
 const Title = styled(Typography)({
   margin: "12px 0px 12px 8px",
   fontWeight: "bold",
@@ -31,35 +25,13 @@ const Title = styled(Typography)({
 const Header: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const showNotifications = false;
-
-  const handleKeyPress = (event: KeyboardEvent) => {
-    // @ts-ignore
-    if (event.key === "." && event.target?.nodeName !== "INPUT") {
-      setDrawerOpen(true);
-    } else if (event.key === "Escape") {
-      setDrawerOpen(false);
-    }
-  };
-
-  React.useLayoutEffect(() => {
-    window.addEventListener("keydown", handleKeyPress);
-  }, []);
-
-  const openDrawer = () => {
-    setDrawerOpen(true);
-  };
-
   const onDrawerClose = () => {
     setDrawerOpen(false);
   };
-
   return (
     <>
       <AppBar position="static" elevation={0}>
         <Toolbar>
-          <MenuButton onClick={openDrawer} edge="start" color="primary" data-qa="menuBtn">
-            <MenuIcon />
-          </MenuButton>
           <Link to="/">
             <Logo />
           </Link>
@@ -73,7 +45,7 @@ const Header: React.FC = () => {
           </Grid>
         </Toolbar>
       </AppBar>
-      <Drawer open={drawerOpen} onClose={onDrawerClose} />
+      <Drawer onClose={onDrawerClose} />
     </>
   );
 };

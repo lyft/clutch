@@ -1,123 +1,73 @@
-import React from "react";
+import * as React from "react";
+import styled from "@emotion/styled";
 import { Link as RouterLink } from "react-router-dom";
 import {
   Collapse,
-  Divider as MuiDivider,
   Drawer as MuiDrawer,
-  Grid,
+  Grow as MuiGrow,
   List,
   ListItem,
   ListItemText,
+  Popper,
+  Paper as MuiPaper,
   Typography,
 } from "@material-ui/core";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import styled from "styled-components";
 
 import { useTheme } from "../AppProvider/themes";
 import { useAppContext } from "../Contexts";
-import { TrendingUpIcon } from "../icon";
 
-import Logo from "./logo";
-import { userId } from "./user";
 import { routesByGrouping, sortedGroupings } from "./utils";
 
 const mobileDrawerWidth = "90%";
-const drawerWidth = "300px";
+const drawerWidth = "100px";
 
-const DrawerPanel = styled(MuiDrawer)`
-  ${({ theme }) => `
-  flex-shrink: 0;
-  min-width: ${drawerWidth};
-  @media screen and (max-width: 800px) {
-    min-width: ${mobileDrawerWidth};
-  }
-  div[class*="MuiDrawer-paper"] {
-    min-width: ${drawerWidth};
-    background-color: ${theme.palette.secondary.main};
-    padding: ${theme.spacing(2)}px;
-    @media screen and (max-width: 800px) {
-      min-width: ${mobileDrawerWidth};
+const DrawerPanel = styled(MuiDrawer)({
+  flexShrink: 0,
+  minWidth: `${drawerWidth}`,
+  "@media screen and (max-width: 800px)": {
+    minWidth: `${mobileDrawerWidth}`,
+  },
+  "div[class*='MuiDrawer-paper']": {
+    minWidth: `${drawerWidth}`,
+    backgroundColor: "linear-gradient(0deg, #FFFFFF, #FFFFFF), #FFFFFF",
+    boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+    "@media screen and (max-width: 800px)": {
+      minWidth: `${mobileDrawerWidth}`,
     }
   }
-  `}
-`;
+});
 
-const DrawerHeader = styled(Grid)`
-  ${({ theme }) => `
-    justify: flex-start;
-    direction: row;
-    ${theme.mixins.toolbar};
-  `}
-`;
+const GroupHeading = styled(Typography)({
+  color: "rgba(13, 16, 48, 0.6)",
+  paddingTop: "0.25rem",
+  fontWeight: 500,
+  fontSize: "14px",
+  lineHeight: "18px",
+  textAlign: "center",
+});
 
-const ExpandLessIcon = styled(ExpandLess)`
-  ${({ theme }) => `
-  color: ${theme.palette.primary.main};
-  `}
-`;
+const GroupListItem = styled(ListItem)({
+  height: "82px",
+  "&:hover": {
+    backgroundColor: "#EBEDFB",
+  },
+});
 
-const ExpandMoreIcon = styled(ExpandMore)`
-  ${({ theme }) => `
-  color: ${theme.palette.primary.main};
-  `}
-`;
+// const NavigationLink = styled(RouterLink)`
+//   ${({ theme }) => `
+//   color: ${theme.palette.text.secondary};
+//   `}
+// `;
 
-const GroupHeading = styled(Typography)`
-  ${({ theme }) => `
-  color: ${theme.palette.primary.main};
-  padding-top: 0.25rem;
-  font-weight: bolder;
-  `}
-`;
+const Paper = styled(MuiPaper)({
+  minWidth: "230px",
+  border: "1px solid #E7E7EA",
+  boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
+})
 
-const TrendingIcon = styled(TrendingUpIcon)`
-  fontsize: 20px;
-  marginleft: 10px;
-`;
-
-const NavigationLink = styled(RouterLink)`
-  ${({ theme }) => `
-  color: ${theme.palette.text.secondary};
-  `}
-`;
-
-interface HeaderProps {
-  onNavigate: () => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
-  return (
-    <DrawerHeader container flex-wrap="wrap">
-      <Grid item>
-        <NavigationLink to="/" onClick={onNavigate} data-qa="logo">
-          <Logo />
-        </NavigationLink>
-      </Grid>
-      <Grid item>
-        <Grid container justify="center" direction="column">
-          <Typography
-            style={{ lineHeight: "1.3", margin: "-5px 0px 10px 10px" }}
-            component="span"
-            color="primary"
-            data-qa="title"
-          >
-            <NavigationLink to="/" onClick={onNavigate}>
-              <GroupHeading>clutch</GroupHeading>
-            </NavigationLink>
-            <Typography variant="caption">Welcome {userId()}!</Typography>
-          </Typography>
-        </Grid>
-      </Grid>
-    </DrawerHeader>
-  );
-};
-
-const Divider = styled(MuiDivider)`
-  ${({ theme }) => `
-  background-color: ${theme.palette.accent.main};
-  `}
-`;
+const Grow = styled(MuiGrow)((props: { placement: string }) => ({
+  transformOrigin: props.placement,
+}));
 
 interface GroupProps {
   heading: string;
@@ -135,6 +85,13 @@ const Group: React.FC<GroupProps> = ({
 }) => {
   const childrenList = React.Children.toArray(children);
 
+  const [openList, setOpen] = React.useState(false);
+  const anchorRef = React.useRef(null);
+
+  const handleToggle = () => {
+    setOpen(!openList);
+  };
+
   // n.b. if a Workflow Grouping has no workflows in it don't display it even if
   // it's not explicitly marked as hidden.
   if (childrenList.length === 0) {
@@ -142,22 +99,48 @@ const Group: React.FC<GroupProps> = ({
   }
   return (
     <List data-qa="workflowGroup">
-      <ListItem button onClick={() => updateOpenGroup(heading)}>
-        <GroupHeading color="primary" variant="h6">
+      <GroupListItem
+        button
+        onClick={() => {
+          updateOpenGroup(heading);
+          handleToggle();
+        }}
+        ref={anchorRef}
+        aria-controls={open ? "workflow-options" : undefined}
+        aria-haspopup="true"
+      >
+        <GroupHeading>
           {heading}
         </GroupHeading>
-        <Grid container justify="flex-end" data-qa="toggle">
-          {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        </Grid>
-      </ListItem>
-      {!open ? <Divider variant="middle" /> : null}
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {childrenList.map((c: React.ReactElement) => {
-            return React.cloneElement(c, { onClick: onNavigate });
-          })}
-        </List>
-      </Collapse>
+      </GroupListItem>
+      <Popper
+        open={openList}
+        anchorEl={anchorRef.current}
+        role={undefined}
+        transition
+        placement="right-start"
+      >
+        {({ TransitionProps, placement }) => (
+        <Grow
+          {...TransitionProps}
+          placement={placement === "bottom" ? "center top" : "center bottom"}
+        >
+          <Paper>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <List
+                component="div"
+                disablePadding
+                id="workflow-options"
+              >
+                {childrenList.map((c: React.ReactElement) => {
+                  return React.cloneElement(c, { onClick: onNavigate });
+                })}
+              </List>
+            </Collapse>
+          </Paper>
+        </Grow>
+        )}
+      </Popper>
     </List>
   );
 };
@@ -166,33 +149,30 @@ interface LinkProps {
   to: string;
   text: string;
   onClick: () => void;
-  trending?: boolean;
 }
 
-const Link: React.FC<LinkProps> = ({ to, text, onClick, trending = false }) => {
+const Link: React.FC<LinkProps> = ({ to, text, onClick }) => {
   const theme = useTheme();
   const isSelected = window.location.pathname.replace("/", "") === to;
   const selectedStyle = isSelected ? { color: theme.palette.accent.main } : {};
   return (
     <ListItem
-      component={NavigationLink}
+      component={RouterLink}
       onClick={onClick}
       to={to}
       dense
       data-qa="workflowGroupItem"
     >
       <ListItemText primary={text} style={selectedStyle} />
-      {trending && <TrendingIcon />}
     </ListItem>
   );
 };
 
 interface DrawerProps {
-  open: boolean;
   onClose: () => void;
 }
 
-const Drawer: React.FC<DrawerProps> = ({ open, onClose }) => {
+const Drawer: React.FC<DrawerProps> = ({ onClose }) => {
   const { workflows } = useAppContext();
   const [openGroup, setOpenGroup] = React.useState("");
 
@@ -205,8 +185,7 @@ const Drawer: React.FC<DrawerProps> = ({ open, onClose }) => {
   };
 
   return (
-    <DrawerPanel open={open} onClose={onClose} data-qa="drawer">
-      <Header onNavigate={onClose} />
+    <DrawerPanel onClose={onClose} data-qa="drawer" variant="permanent">
       {sortedGroupings(workflows).map(grouping => {
         const value = routesByGrouping(workflows)[grouping];
         return (
@@ -219,7 +198,6 @@ const Drawer: React.FC<DrawerProps> = ({ open, onClose }) => {
           >
             {value.workflows.map(workflow => (
               <Link
-                trending={workflow.trending}
                 key={workflow.path.replace("/", "")}
                 to={workflow.path}
                 text={workflow.displayName}
