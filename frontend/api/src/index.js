@@ -13132,6 +13132,301 @@ export const clutch = $root.clutch = (() => {
             return gateway;
         })();
 
+        config.middleware = (function() {
+
+            /**
+             * Namespace middleware.
+             * @memberof clutch.config
+             * @namespace
+             */
+            const middleware = {};
+
+            middleware.v1 = (function() {
+
+                /**
+                 * Namespace v1.
+                 * @memberof clutch.config.middleware
+                 * @namespace
+                 */
+                const v1 = {};
+
+                v1.AccessLog = (function() {
+
+                    /**
+                     * Properties of an AccessLog.
+                     * @memberof clutch.config.middleware.v1
+                     * @interface IAccessLog
+                     * @property {clutch.config.middleware.v1.AccessLog.IStatusCodeFilter|null} [statusCodeFilter] AccessLog statusCodeFilter
+                     */
+
+                    /**
+                     * Constructs a new AccessLog.
+                     * @memberof clutch.config.middleware.v1
+                     * @classdesc Represents an AccessLog.
+                     * @implements IAccessLog
+                     * @constructor
+                     * @param {clutch.config.middleware.v1.IAccessLog=} [properties] Properties to set
+                     */
+                    function AccessLog(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * AccessLog statusCodeFilter.
+                     * @member {clutch.config.middleware.v1.AccessLog.IStatusCodeFilter|null|undefined} statusCodeFilter
+                     * @memberof clutch.config.middleware.v1.AccessLog
+                     * @instance
+                     */
+                    AccessLog.prototype.statusCodeFilter = null;
+
+                    /**
+                     * Verifies an AccessLog message.
+                     * @function verify
+                     * @memberof clutch.config.middleware.v1.AccessLog
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    AccessLog.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.statusCodeFilter != null && message.hasOwnProperty("statusCodeFilter")) {
+                            let error = $root.clutch.config.middleware.v1.AccessLog.StatusCodeFilter.verify(message.statusCodeFilter);
+                            if (error)
+                                return "statusCodeFilter." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates an AccessLog message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.config.middleware.v1.AccessLog
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.config.middleware.v1.AccessLog} AccessLog
+                     */
+                    AccessLog.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.config.middleware.v1.AccessLog)
+                            return object;
+                        let message = new $root.clutch.config.middleware.v1.AccessLog();
+                        if (object.statusCodeFilter != null) {
+                            if (typeof object.statusCodeFilter !== "object")
+                                throw TypeError(".clutch.config.middleware.v1.AccessLog.statusCodeFilter: object expected");
+                            message.statusCodeFilter = $root.clutch.config.middleware.v1.AccessLog.StatusCodeFilter.fromObject(object.statusCodeFilter);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an AccessLog message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.config.middleware.v1.AccessLog
+                     * @static
+                     * @param {clutch.config.middleware.v1.AccessLog} message AccessLog
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    AccessLog.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            object.statusCodeFilter = null;
+                        if (message.statusCodeFilter != null && message.hasOwnProperty("statusCodeFilter"))
+                            object.statusCodeFilter = $root.clutch.config.middleware.v1.AccessLog.StatusCodeFilter.toObject(message.statusCodeFilter, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this AccessLog to JSON.
+                     * @function toJSON
+                     * @memberof clutch.config.middleware.v1.AccessLog
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    AccessLog.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    AccessLog.StatusCodeFilter = (function() {
+
+                        /**
+                         * Properties of a StatusCodeFilter.
+                         * @memberof clutch.config.middleware.v1.AccessLog
+                         * @interface IStatusCodeFilter
+                         * @property {clutch.config.middleware.v1.AccessLog.StatusCodeFilter.Op|null} [operator] StatusCodeFilter operator
+                         * @property {number|null} [value] StatusCodeFilter value
+                         */
+
+                        /**
+                         * Constructs a new StatusCodeFilter.
+                         * @memberof clutch.config.middleware.v1.AccessLog
+                         * @classdesc Represents a StatusCodeFilter.
+                         * @implements IStatusCodeFilter
+                         * @constructor
+                         * @param {clutch.config.middleware.v1.AccessLog.IStatusCodeFilter=} [properties] Properties to set
+                         */
+                        function StatusCodeFilter(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * StatusCodeFilter operator.
+                         * @member {clutch.config.middleware.v1.AccessLog.StatusCodeFilter.Op} operator
+                         * @memberof clutch.config.middleware.v1.AccessLog.StatusCodeFilter
+                         * @instance
+                         */
+                        StatusCodeFilter.prototype.operator = 0;
+
+                        /**
+                         * StatusCodeFilter value.
+                         * @member {number} value
+                         * @memberof clutch.config.middleware.v1.AccessLog.StatusCodeFilter
+                         * @instance
+                         */
+                        StatusCodeFilter.prototype.value = 0;
+
+                        /**
+                         * Verifies a StatusCodeFilter message.
+                         * @function verify
+                         * @memberof clutch.config.middleware.v1.AccessLog.StatusCodeFilter
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        StatusCodeFilter.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.operator != null && message.hasOwnProperty("operator"))
+                                switch (message.operator) {
+                                default:
+                                    return "operator: enum value expected";
+                                case 0:
+                                case 1:
+                                case 2:
+                                case 3:
+                                case 4:
+                                    break;
+                                }
+                            if (message.value != null && message.hasOwnProperty("value"))
+                                if (!$util.isInteger(message.value))
+                                    return "value: integer expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a StatusCodeFilter message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.middleware.v1.AccessLog.StatusCodeFilter
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.middleware.v1.AccessLog.StatusCodeFilter} StatusCodeFilter
+                         */
+                        StatusCodeFilter.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.middleware.v1.AccessLog.StatusCodeFilter)
+                                return object;
+                            let message = new $root.clutch.config.middleware.v1.AccessLog.StatusCodeFilter();
+                            switch (object.operator) {
+                            case "UNSPECIFIED":
+                            case 0:
+                                message.operator = 0;
+                                break;
+                            case "EQ":
+                            case 1:
+                                message.operator = 1;
+                                break;
+                            case "GE":
+                            case 2:
+                                message.operator = 2;
+                                break;
+                            case "LE":
+                            case 3:
+                                message.operator = 3;
+                                break;
+                            case "NE":
+                            case 4:
+                                message.operator = 4;
+                                break;
+                            }
+                            if (object.value != null)
+                                message.value = object.value >>> 0;
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a StatusCodeFilter message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.middleware.v1.AccessLog.StatusCodeFilter
+                         * @static
+                         * @param {clutch.config.middleware.v1.AccessLog.StatusCodeFilter} message StatusCodeFilter
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        StatusCodeFilter.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.operator = options.enums === String ? "UNSPECIFIED" : 0;
+                                object.value = 0;
+                            }
+                            if (message.operator != null && message.hasOwnProperty("operator"))
+                                object.operator = options.enums === String ? $root.clutch.config.middleware.v1.AccessLog.StatusCodeFilter.Op[message.operator] : message.operator;
+                            if (message.value != null && message.hasOwnProperty("value"))
+                                object.value = message.value;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this StatusCodeFilter to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.middleware.v1.AccessLog.StatusCodeFilter
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        StatusCodeFilter.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        /**
+                         * Op enum.
+                         * @name clutch.config.middleware.v1.AccessLog.StatusCodeFilter.Op
+                         * @enum {number}
+                         * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                         * @property {number} EQ=1 EQ value
+                         * @property {number} GE=2 GE value
+                         * @property {number} LE=3 LE value
+                         * @property {number} NE=4 NE value
+                         */
+                        StatusCodeFilter.Op = (function() {
+                            const valuesById = {}, values = Object.create(valuesById);
+                            values[valuesById[0] = "UNSPECIFIED"] = 0;
+                            values[valuesById[1] = "EQ"] = 1;
+                            values[valuesById[2] = "GE"] = 2;
+                            values[valuesById[3] = "LE"] = 3;
+                            values[valuesById[4] = "NE"] = 4;
+                            return values;
+                        })();
+
+                        return StatusCodeFilter;
+                    })();
+
+                    return AccessLog;
+                })();
+
+                return v1;
+            })();
+
+            return middleware;
+        })();
+
         config.module = (function() {
 
             /**
