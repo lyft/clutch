@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
-import { AppBar as MuiAppBar, Box, Grid, IconButton, Toolbar, Typography } from "@material-ui/core";
+import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@material-ui/core";
 
 import Drawer from "./drawer";
 import Logo from "./logo";
@@ -13,6 +13,7 @@ import { UserInformation } from "./user";
 const AppBar = styled(MuiAppBar)({
   minWidth: "fit-content",
   background: "linear-gradient(90deg, #38106b 4.58%, #131c5f 89.31%)",
+  zIndex: 1201,
 });
 
 const Title = styled(Typography)({
