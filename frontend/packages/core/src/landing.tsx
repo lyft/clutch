@@ -1,49 +1,48 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Grid, Link, Paper } from "@material-ui/core";
+import styled from "@emotion/styled";
+import { Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import GitHubIcon from "@material-ui/icons/GitHub";
-import styled from "styled-components";
 
 import { userId } from "./AppLayout/user";
+import { MonsterGraphic } from "./Assets/Graphics";
 import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
-import { TrendingUpIcon } from "./icon";
 
-const GridContainer = styled(Grid)`
-  margin-top: 20px;
-`;
+const StyledLanding = styled.div({
+  backgroundColor: "#f9f9fe",
+  height: "100%",
+  "& .welcome": {
+    display: "flex",
+    backgroundColor: "white",
+    padding: "32px 80px",
+  },
 
-const Content = styled(Paper)`
-  padding: 1.5%;
-`;
+  "& .welcome svg": {
+    flex: "0 0 auto",
+    marginRight: "24px",
+  },
 
-const Footer = styled.div`
-  @media screen and (min-width: 900px) and (min-height: 500px) {
-    position: absolute;
-    bottom: 0;
-    width: 150px;
-    left: 50%;
-    margin-left: -75px;
-    padding-bottom: 10px;
-  }
-  @media screen and (max-height: 500px) {
-    position: inherit;
-  }
-`;
+  "& .welcome .welcomeText": {
+    flex: "1 1 auto",
+  },
 
-const GitHubLogo = styled(GitHubIcon)`
-  ${({ theme }) => `
-  color: ${theme.palette.accent.main};
-  margin-right: 5px;
-  `}
-`;
+  "& .welcome .title": {
+    fontWeight: "bold",
+    fontSize: "22px",
+    color: "#0d1030",
+  },
 
-const GitHubLink = styled(Link)`
-  ${({ theme }) => `
-  color: ${theme.palette.secondary.main};
-  `}
-`;
+  "& .welcome .subtitle": {
+    fontSize: "16px",
+    fontWeight: "normal",
+    color: "rgba(13, 16, 48, 0.6)",
+  },
+
+  "& .content": {
+    padding: "32px 80px",
+  },
+});
 
 const Landing: React.FC<{}> = () => {
   const navigate = useNavigate();
@@ -70,64 +69,38 @@ const Landing: React.FC<{}> = () => {
   };
 
   return (
-    <Content id="landing" elevation={0}>
-      <Typography variant="h5">
-        <strong>Welcome {userId()} </strong>
-        <span role="img" aria-label="Hand Waving">
-          👋
-        </span>
-      </Typography>
-      <>
-        <div>
-          <Typography gutterBottom variant="body1" paragraph>
+    <StyledLanding id="landing">
+      <div className="welcome">
+        <MonsterGraphic />
+        <div className="welcomeText">
+          <div className="title">Welcome {userId()}</div>
+          <div className="subtitle">
             Clutch will assist you in safely modifying resources outside of the normal orchestration
             process.
-          </Typography>
-
-          {trendingWorkflows.length === 0 ? null : (
-            <>
-              <Grid container justify="center" alignItems="center">
-                <TrendingUpIcon />
-                <Typography align="center" variant="h5">
-                  Trending Workflows
-                </Typography>
-              </Grid>
-
-              <GridContainer justify="center" container direction="row" spacing={3}>
-                {trendingWorkflows.map(workflow => (
-                  <Grid item>
-                    <LandingCard
-                      group={workflow.group}
-                      title={workflow.title}
-                      description={workflow.description}
-                      onClick={() => navigateTo(workflow.path)}
-                      key={workflow.path}
-                    />
-                  </Grid>
-                ))}
-              </GridContainer>
-            </>
-          )}
+          </div>
         </div>
-        <Footer>
-          <GridContainer container justify="center">
-            <Grid item>
-              <GitHubLogo fontSize="small" />
+      </div>
+      <div className="content">
+        {trendingWorkflows.length === 0 ? null : (
+          <Grid container spacing={3} alignItems="center">
+            <Grid item xs={12}>
+              <Typography variant="h5">Trending Workflows</Typography>
             </Grid>
-            <Grid item>
-              <GitHubLink
-                target="_blank"
-                rel="noreferrer"
-                href="https://github.com/lyft/clutch"
-                underline="none"
-              >
-                lyft/clutch
-              </GitHubLink>
-            </Grid>
-          </GridContainer>
-        </Footer>
-      </>
-    </Content>
+            {trendingWorkflows.map(workflow => (
+              <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+                <LandingCard
+                  group={workflow.group}
+                  title={workflow.title}
+                  description={workflow.description}
+                  onClick={() => navigateTo(workflow.path)}
+                  key={workflow.path}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        )}
+      </div>
+    </StyledLanding>
   );
 };
 
