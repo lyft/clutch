@@ -101,7 +101,7 @@ const Landing: React.FC<{}> = () => {
               </Typography>
             </Grid>
             {trendingWorkflows.map(workflow => (
-              <Grid item xs={2}>
+              <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
                 <LandingCard
                   group={workflow.group}
                   title={workflow.title}
