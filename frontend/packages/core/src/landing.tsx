@@ -1,15 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "@emotion/styled";
 import { Grid, Paper } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import styled from "@emotion/styled";
-
 
 import { userId } from "./AppLayout/user";
 import { MonsterGraphic } from "./Assets/Graphics";
 import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
-
 
 const StyledLanding = styled.div({
   height: "100%",
@@ -44,8 +42,8 @@ const StyledLanding = styled.div({
   "& .content": {
     backgroundColor: "#f9f9fe",
     padding: "32px 80px",
+    height: "100%",
   },
-
 });
 
 const Landing: React.FC<{}> = () => {
@@ -75,17 +73,9 @@ const Landing: React.FC<{}> = () => {
   return (
     <StyledLanding id="landing">
       <div className="welcome">
-        {/* <Grid container>
-          <Grid item xs={3}><MonsterIcon /></Grid>
-          <Grid item xs={9}>Welcome {userId()}</Grid>
-          <Grid item xs={12} className="subtext">Clutch will assist you in safely modifying resources outside of the normal orchestration
-            process.</Grid>
-        </Grid> */}
         <MonsterGraphic />
         <div className="welcomeText">
-          <div className="title">
-            Welcome {userId()}
-          </div>
+          <div className="title">Welcome {userId()}</div>
           <div className="subtitle">
             Clutch will assist you in safely modifying resources outside of the normal orchestration
             process.
@@ -94,11 +84,9 @@ const Landing: React.FC<{}> = () => {
       </div>
       <div className="content">
         {trendingWorkflows.length === 0 ? null : (
-          <Grid container spacing={3} alignItems={"center"}>
+          <Grid container spacing={3} alignItems="center">
             <Grid item xs={12}>
-              <Typography variant="h5">
-                Trending Workflows
-              </Typography>
+              <Typography variant="h5">Trending Workflows</Typography>
             </Grid>
             {trendingWorkflows.map(workflow => (
               <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
