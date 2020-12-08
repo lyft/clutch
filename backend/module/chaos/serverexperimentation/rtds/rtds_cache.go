@@ -14,7 +14,7 @@ import (
 	gcpResourceV3 "github.com/envoyproxy/go-control-plane/pkg/resource/v3"
 	"github.com/golang/protobuf/ptypes"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
-	"github.com/mitchellh/hashstructure"
+	"github.com/mitchellh/hashstructure/v2"
 	"go.uber.org/zap"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
@@ -329,7 +329,7 @@ func isFaultTest(experiment *experimentation.Experiment, testConfig *serverexper
 }
 
 func computeChecksum(item interface{}) (string, error) {
-	hash, err := hashstructure.Hash(item, &hashstructure.HashOptions{TagName: "json"})
+	hash, err := hashstructure.Hash(item, hashstructure.FormatV1, &hashstructure.HashOptions{TagName: "json"})
 	if err != nil {
 		return "", err
 	}

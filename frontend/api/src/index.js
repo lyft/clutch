@@ -11921,6 +11921,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {clutch.config.gateway.v1.ITimeouts|null} [timeouts] GatewayOptions timeouts
                      * @property {Array.<clutch.config.gateway.v1.IMiddleware>|null} [middleware] GatewayOptions middleware
                      * @property {clutch.config.gateway.v1.IAssets|null} [assets] GatewayOptions assets
+                     * @property {boolean|null} [enablePprof] GatewayOptions enablePprof
                      */
 
                     /**
@@ -11996,6 +11997,14 @@ export const clutch = $root.clutch = (() => {
                     GatewayOptions.prototype.assets = null;
 
                     /**
+                     * GatewayOptions enablePprof.
+                     * @member {boolean} enablePprof
+                     * @memberof clutch.config.gateway.v1.GatewayOptions
+                     * @instance
+                     */
+                    GatewayOptions.prototype.enablePprof = false;
+
+                    /**
                      * Verifies a GatewayOptions message.
                      * @function verify
                      * @memberof clutch.config.gateway.v1.GatewayOptions
@@ -12045,6 +12054,9 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "assets." + error;
                         }
+                        if (message.enablePprof != null && message.hasOwnProperty("enablePprof"))
+                            if (typeof message.enablePprof !== "boolean")
+                                return "enablePprof: boolean expected";
                         return null;
                     };
 
@@ -12100,6 +12112,8 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.config.gateway.v1.GatewayOptions.assets: object expected");
                             message.assets = $root.clutch.config.gateway.v1.Assets.fromObject(object.assets);
                         }
+                        if (object.enablePprof != null)
+                            message.enablePprof = Boolean(object.enablePprof);
                         return message;
                     };
 
@@ -12125,6 +12139,7 @@ export const clutch = $root.clutch = (() => {
                             object.stats = null;
                             object.timeouts = null;
                             object.assets = null;
+                            object.enablePprof = false;
                         }
                         if (message.listener != null && message.hasOwnProperty("listener"))
                             object.listener = $root.clutch.config.gateway.v1.Listener.toObject(message.listener, options);
@@ -12143,6 +12158,8 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (message.assets != null && message.hasOwnProperty("assets"))
                             object.assets = $root.clutch.config.gateway.v1.Assets.toObject(message.assets, options);
+                        if (message.enablePprof != null && message.hasOwnProperty("enablePprof"))
+                            object.enablePprof = message.enablePprof;
                         return object;
                     };
 

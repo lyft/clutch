@@ -25,6 +25,7 @@ import (
 
 type MigrateFlags struct {
 	Force     bool
+	Down      bool
 	BaseFlags *gateway.Flags
 }
 
@@ -33,6 +34,7 @@ func (m *MigrateFlags) Link() {
 	m.BaseFlags.Link()
 
 	flag.BoolVar(&m.Force, "f", false, "do not ask user for confirmation")
+	flag.BoolVar(&m.Down, "down", false, "migrates down by one version")
 }
 
 type migrateLogger struct {
@@ -85,7 +87,8 @@ func (m *Migrator) setupSqlClient() (*sql.DB, string) {
 
 // Asks the user to confrim an action, this can be skipped by using the force flag.
 // If the input is not 'y' we log fatal and exit.
-func (m *Migrator) confirmWithUser(msg string, hostInfo string) {
+func (m *Migrator) confirmWithUser(msg string) {
+	_, hostInfo := m.setupSqlClient()
 	// Verify that user wants to continue (unless -f for force is passed as a flag).
 	m.log.Info("using database", zap.String("hostInfo", hostInfo))
 	if !m.flags.Force {
@@ -103,11 +106,9 @@ func (m *Migrator) confirmWithUser(msg string, hostInfo string) {
 	}
 }
 
-func (m *Migrator) Up() {
-	sqlDB, hostInfo := m.setupSqlClient()
-
-	msg := "migration has the potential to cause irrevocable data loss, verify host information above"
-	m.confirmWithUser(msg, hostInfo)
+// Sets up the sql migrator while also perfomring some pre flight checks such as a db ping.
+func (m *Migrator) setupSqlMigrator() *migrate.Migrate {
+	sqlDB, _ := m.setupSqlClient()
 
 	// Ping database and bring up driver.
 	if err := sqlDB.Ping(); err != nil {
@@ -125,6 +126,7 @@ func (m *Migrator) Up() {
 		m.log.Fatal("could not get working dir", zap.Error(err))
 	}
 	migrationDir = filepath.Join(migrationDir, "migrations")
+	m.log.Info("Utilizing migration directory:", zap.String("migrationDir", migrationDir))
 
 	sqlMigrate, err := migrate.NewWithDatabaseInstance(
 		fmt.Sprintf("file://%s", migrationDir),
@@ -137,9 +139,39 @@ func (m *Migrator) Up() {
 		logger: m.log.Sugar(),
 	}
 
+	return sqlMigrate
+}
+
+func (m *Migrator) Up() {
+	msg := "migration has the potential to cause irrevocable data loss, verify host information above"
+	m.confirmWithUser(msg)
+
+	sqlMigrate := m.setupSqlMigrator()
+
 	// Apply migrations!
-	m.log.Info("applying migrations", zap.String("migrationDir", migrationDir))
-	err = sqlMigrate.Up()
+	m.log.Info("applying up migrations")
+	err := sqlMigrate.Up()
+	if err != nil && err != migrate.ErrNoChange {
+		m.log.Fatal("failed running migrations", zap.Error(err))
+	}
+}
+
+func (m *Migrator) Down() {
+	sqlMigrate := m.setupSqlMigrator()
+	version, _, err := sqlMigrate.Version()
+	if err != nil {
+		m.log.Fatal("failed to aquire migration version", zap.Error(err))
+	}
+
+	msg := fmt.Sprintf(
+		"Migrating DOWN by ONE version from (%d -> %d) this migration has the potential to cause irrevocable data loss, verify host information above",
+		version, (version - 1))
+
+	m.confirmWithUser(msg)
+
+	// Migrate back by 1
+	m.log.Info("applying migrations down")
+	err = sqlMigrate.Steps(-1)
 	if err != nil && err != migrate.ErrNoChange {
 		m.log.Fatal("failed running migrations", zap.Error(err))
 	}
@@ -161,5 +193,9 @@ func main() {
 		cfg:   cfg,
 	}
 
-	migrator.Up()
+	if f.Down {
+		migrator.Down()
+	} else {
+		migrator.Up()
+	}
 }

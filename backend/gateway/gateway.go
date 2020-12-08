@@ -164,7 +164,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	}
 
 	// Instantiate and register modules listed in the configuration.
-	rpcMux, err := mux.New(interceptors, assets, cfg.Gateway.Assets)
+	rpcMux, err := mux.New(interceptors, assets, cfg.Gateway)
 	if err != nil {
 		panic(err)
 	}
