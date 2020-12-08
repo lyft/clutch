@@ -1,15 +1,8 @@
-html {
-  height: 100%;
-}
-
-body {
-  height: 100%;
-}
-
-#root {
+html, body, #root, #App {
   height: 100%;
 }
 
 #App {
-  height: 100%;
+  display: flex;
+  flex-direction: column;
 }

@@ -10,8 +10,8 @@ import { LandingCard } from "./card";
 import { useAppContext } from "./Contexts";
 
 const StyledLanding = styled.div({
+  backgroundColor: "#f9f9fe",
   height: "100%",
-
   "& .welcome": {
     display: "flex",
     backgroundColor: "white",
@@ -40,9 +40,7 @@ const StyledLanding = styled.div({
   },
 
   "& .content": {
-    backgroundColor: "#f9f9fe",
     padding: "32px 80px",
-    height: "100%",
   },
 });
 
