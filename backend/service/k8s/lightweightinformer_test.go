@@ -38,6 +38,7 @@ func TestLightweightInformer(t *testing.T) {
 		&v1.Pod{},
 		time.Minute,
 		informerHandlers,
+		true,
 	)
 
 	go podInformer.Run(stop)

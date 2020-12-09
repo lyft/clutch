@@ -42,6 +42,7 @@ func NewLightweightInformer(
 	objType runtime.Object,
 	resync time.Duration,
 	h cache.ResourceEventHandler,
+	recieveUpdates bool,
 ) cache.Controller {
 	cacheStore := cache.NewIndexer(cache.DeletionHandlingMetaNamespaceKeyFunc, cache.Indexers{})
 	fifo := cache.NewDeltaFIFOWithOptions(cache.DeltaFIFOOptions{
@@ -70,10 +71,12 @@ func NewLightweightInformer(
 				switch d.Type {
 				case cache.Sync, cache.Replaced, cache.Added, cache.Updated:
 					if _, exists, err := cacheStore.Get(lightweightObj); err == nil && exists {
-						if err := cacheStore.Update(lightweightObj); err != nil {
-							return err
+						if recieveUpdates {
+							if err := cacheStore.Update(lightweightObj); err != nil {
+								return err
+							}
+							h.OnUpdate(nil, d.Object)
 						}
-						h.OnUpdate(nil, d.Object)
 					} else {
 						if err := cacheStore.Add(lightweightObj); err != nil {
 							return err
