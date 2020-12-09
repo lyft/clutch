@@ -1,8 +1,8 @@
 import React from "react";
 import type { clutch } from "@clutch-sh/api";
 
-import { TextField } from "../Input/text-field";
 import { Select } from "../Input/select";
+import { TextField } from "../Input/text-field";
 
 export interface ResolverChangeEvent {
   target: {
@@ -79,7 +79,7 @@ const OptionField = (
     onChange({
       target: {
         name: field.name,
-        value: value,
+        value,
       },
     });
   };

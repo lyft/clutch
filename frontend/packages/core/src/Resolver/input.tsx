@@ -1,16 +1,15 @@
 import React from "react";
 import type { UseFormMethods } from "react-hook-form";
-import type { clutch } from "@clutch-sh/api";
 import { useForm } from "react-hook-form";
+import type { clutch } from "@clutch-sh/api";
 
-
+import { Accordion, AccordionActions, AccordionDetails, AccordionDivider, AccordionProps } from "../accordion";
+import { Button } from "../button";
 import { Error } from "../error";
 import { TextField } from "../Input/text-field";
 
 import type { ChangeEventTarget, ResolverChangeEvent } from "./hydrator";
 import { convertChangeEvent, hydrateField } from "./hydrator";
-import { Accordion, AccordionDetails, AccordionDivider, AccordionActions } from "../accordion";
-import { Button } from "../button";
 
 interface QueryResolverProps {
   schemas: clutch.resolver.v1.Schema[];
@@ -43,24 +42,23 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, onChange, valida
 };
 
 // TODO: update and use
-interface SchemaResolverProps {
-  schemas: clutch.resolver.v1.Schema[];
-  selectedSchema: number;
-  onChange: (e: ResolverChangeEvent) => void;
-  validation: UseFormMethods;
+interface SchemaResolverProps extends Pick<AccordionProps, "expanded" | "onClick"> {
+  schema: clutch.resolver.v1.Schema;
 }
 
-const SchemaResolver = ({ schema, expanded, onClick }) => {
+const SchemaResolver = ({ schema, expanded, onClick } : SchemaResolverProps) => {
   const schemaValidation = useForm({
     mode: "onSubmit",
     reValidateMode: "onSubmit",
     shouldFocusError: false,
   });
 
-  const onChange = (e) => { console.log("schema event", JSON.stringify(e)) }; // TODO
+  const onChange = e => {
+    console.log("schema event", JSON.stringify(e));
+  }; // TODO
 
   return (
-    <form>
+    <form onSubmit={schemaValidation.handleSubmit((e) => {console.log("schema submitted", e)})}>
       <Accordion
         title={`Search by ${schema.metadata.displayName}`}
         expanded={expanded}
@@ -69,18 +67,17 @@ const SchemaResolver = ({ schema, expanded, onClick }) => {
         <AccordionDetails>
           {schema.error ? (
             <Error message={`Schema Error: ${schema.error.message}`} />
-          ) :
+          ) : (
             schema.fields.map(field => hydrateField(field, onChange, schemaValidation))
-          }
+          )}
         </AccordionDetails>
         <AccordionDivider />
         <AccordionActions>
-          <Button text="Submit" />
+          <Button text="Submit" type="submit" />
         </AccordionActions>
       </Accordion>
     </form>
   );
 };
-
 
 export { SchemaResolver, QueryResolver };

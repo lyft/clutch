@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { AccordionGroup } from "../accordion";
 import { Button } from "../button";
 import { useWizardContext } from "../Contexts";
-import { CompressedError, Error } from "../error";
+import { Error } from "../error";
 import { HorizontalRule } from "../horizontal-rule";
 import Loadable from "../loading";
 
@@ -85,34 +85,36 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
     shouldFocusError: false,
   });
 
-  const queryOnChange = (e) => { console.log("query event", JSON.stringify(e)) }; // TODO
+  const queryOnChange = e => {
+    console.log("query event", JSON.stringify(e));
+  }; // TODO
 
   return (
     <Loadable isLoading={state.schemasLoading}>
       {state.schemaFetchError !== "" ? (
         <Error message={state.schemaFetchError} onRetry={() => loadSchemas(type, dispatch)} />
       ) : (
-          <Loadable variant="overlay" isLoading={state.resolverLoading}>
-            {/* {process.env.REACT_APP_DEBUG_FORMS === "true" && <DevTool control={validation.control} />} */}
-            {(variant === "dual" || variant === "query") && (
-              <Form onSubmit={queryValidation.handleSubmit(submitHandler)} noValidate>
-                <QueryResolver
-                  schemas={state.searchableSchemas}
-                  onChange={queryOnChange}
-                  validation={queryValidation}
-                />
-                <Button text="Search" />
-              </Form>
-            )}
-            {variant === "dual" && <HorizontalRule>OR</HorizontalRule>}
+        <Loadable variant="overlay" isLoading={state.resolverLoading}>
+          {/* {process.env.REACT_APP_DEBUG_FORMS === "true" && <DevTool control={validation.control} />} */}
+          {(variant === "dual" || variant === "query") && (
+            <Form onSubmit={queryValidation.handleSubmit(submitHandler)} noValidate>
+              <QueryResolver
+                schemas={state.searchableSchemas}
+                onChange={queryOnChange}
+                validation={queryValidation}
+              />
+              <Button text="Search" type="submit" />
+            </Form>
+          )}
+          {variant === "dual" && <HorizontalRule>OR</HorizontalRule>}
           Advanced Search
-            <AccordionGroup defaultExpandedIdx={0}>
-              {state.allSchemas.map((schema, idx) => (
-                <SchemaResolver key={schema.typeUrl} schema={schema} />
-              ))}
-            </AccordionGroup>
-          </Loadable>
-        )}
+          <AccordionGroup defaultExpandedIdx={0}>
+            {state.allSchemas.map(schema => (
+              <SchemaResolver key={schema.typeUrl} schema={schema} />
+            ))}
+          </AccordionGroup>
+        </Loadable>
+      )}
     </Loadable>
   );
 };
