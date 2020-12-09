@@ -1,7 +1,8 @@
 import React from "react";
 import type { UseFormMethods } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
-import { MenuItem, Select } from "@material-ui/core";
+import { useForm } from "react-hook-form";
+
 
 import { Error } from "../error";
 import { TextField } from "../Input/text-field";
