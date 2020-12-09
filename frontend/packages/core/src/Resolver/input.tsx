@@ -42,7 +42,6 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, onChange, valida
 interface SchemaResolverProps {
   schemas: clutch.resolver.v1.Schema[];
   selectedSchema: number;
-  onSelect: (e: React.ChangeEvent<{ name?: string; value: unknown }>) => void;
   onChange: (e: ResolverChangeEvent) => void;
   validation: UseFormMethods;
 }
@@ -50,21 +49,10 @@ interface SchemaResolverProps {
 const SchemaResolver: React.FC<SchemaResolverProps> = ({
   schemas,
   selectedSchema,
-  onSelect,
   onChange,
   validation,
 }) => (
   <>
-    <FormControl>
-      <InputLabel>Resolver</InputLabel>
-      <Select value={schemas?.[selectedSchema]?.typeUrl || ""} onChange={onSelect}>
-        {schemas.map(schema => (
-          <MenuItem key={schema.metadata.displayName} value={schema.typeUrl}>
-            {schema.metadata.displayName}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
     {schemas[selectedSchema]?.error ? (
       <Error message={`Schema Error: ${schemas[selectedSchema].error.message}`} />
     ) : (

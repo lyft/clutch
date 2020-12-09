@@ -139,7 +139,7 @@ export const Accordion = ({
 };
 
 export interface AccordionGroupProps {
-  children: React.ReactElement<AccordionProps> | React.ReactElement<AccordionProps>[];
+  children?: React.ReactElement<AccordionProps> | React.ReactElement<AccordionProps>[];
   defaultExpandedIdx?: number;
 }
 

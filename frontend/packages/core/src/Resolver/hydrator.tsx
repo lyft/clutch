@@ -88,15 +88,7 @@ const OptionField = (
   field: clutch.resolver.v1.IField,
   onChange: (e: ResolverChangeEvent) => void
 ): React.ReactElement => {
-  const options = field.metadata.optionField.options.map(option => {
-    return option.displayName;
-  });
   const [selectedIdx, setSelectedIdx] = React.useState(0);
-  const updateSelectedOption = (event: React.ChangeEvent<ChangeEventTarget>) => {
-    setSelectedIdx(options.indexOf(event.target.value));
-    onChange(convertChangeEvent(event));
-  };
-
   React.useEffect(() => {
     const fieldName = field.metadata.displayName || field.name;
     onChange({
@@ -107,6 +99,16 @@ const OptionField = (
       initialLoad: true,
     });
   }, []);
+
+  const options = field.metadata.optionField.options.map(option => {
+    return option.displayName;
+  });
+  const updateSelectedOption = (event: React.ChangeEvent<ChangeEventTarget>) => {
+    setSelectedIdx(options.indexOf(event.target.value));
+    onChange(convertChangeEvent(event));
+  };
+
+
 
   return (
     <FormControl
