@@ -348,5 +348,4 @@ func (s *svc) GetRepository(ctx context.Context, repo *RemoteRef) (*Repository, 
 	}
 
 	return r, nil
-
 }
