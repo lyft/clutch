@@ -27,7 +27,7 @@ interface ClutchAppProps {
 
 const ClutchApp: React.FC<ClutchAppProps> = ({ availableWorkflows, configuration }) => {
   const workflows = registeredWorkflows(availableWorkflows, configuration);
-  const appConfiguration = configuration?.["@clutch-sh/app"];
+  const appConfiguration = configuration?.["@clutch-sh/app"] || {};
 
   /** Filter out all of the workflows that are configured to be `hideNav: true`.
    * This prevents the workflows from being discoverable by the user from the UI,

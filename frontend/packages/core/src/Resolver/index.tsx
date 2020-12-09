@@ -8,6 +8,7 @@ import { AdvanceButton } from "../button";
 import { useWizardContext } from "../Contexts";
 import { CompressedError, Error } from "../error";
 import Loadable from "../loading";
+import { useAppContext } from "../Contexts";
 
 import { fetchResourceSchemas, resolveResource } from "./fetch";
 import type { ResolverChangeEvent } from "./hydrator";
@@ -26,8 +27,8 @@ const Form = styled.form`
   width: 100%;
 `;
 
-const loadSchemas = (type: string, dispatch: React.Dispatch<DispatchAction>) => {
-  fetchResourceSchemas(type)
+const loadSchemas = (type: string, api: string[], dispatch: React.Dispatch<DispatchAction>) => {
+  fetchResourceSchemas(type, api as string[])
     .then(schemas => {
       if (schemas.length === 0) {
         dispatch({
@@ -53,6 +54,7 @@ interface ResolverProps {
 const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, variant = "dual" }) => {
   const [state, dispatch] = useResolverState();
   const { displayWarnings } = useWizardContext();
+  const { appConfig } = useAppContext();
 
   const queryValidation = useForm({
     mode: "onSubmit",
@@ -66,7 +68,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
   });
   const [validation, setValidation] = React.useState(() => queryValidation);
 
-  React.useEffect(() => loadSchemas(type, dispatch), []);
+  React.useEffect(() => loadSchemas(type, appConfig.api, dispatch), []);
 
   const submitHandler = () => {
     // Move to loading state.
@@ -83,6 +85,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
       type,
       searchLimit,
       data,
+      appConfig.api as string[],
       (results, failures) => {
         onResolve({ results, input: data });
         if (!_.isEmpty(failures)) {

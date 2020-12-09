@@ -3,10 +3,9 @@ import _ from "lodash";
 
 import { client, parseErrorMessage } from "../network";
 
-const { appConfig } = useAppContext();
-
-const fetchResourceSchemas = async (type: string): Promise<IClutch.resolver.v1.Schema[]> => {
-  const pbclutch = await require(appConfig.api || "@clutch-sh/api"); // eslint-disable-line import/no-dynamic-require
+const fetchResourceSchemas = async (type: string, api: string[]): Promise<IClutch.resolver.v1.Schema[]> => {
+  console.log(api?.[0]);
+  const pbclutch = await require(api?.[0] || "@clutch-sh/api"); // eslint-disable-line import/no-dynamic-require
   const response = await client.post("/v1/resolver/getObjectSchemas", {
     type_url: `type.googleapis.com/${type}`,
   });
@@ -56,10 +55,11 @@ const resolveResource = async (
   fields: {
     [key: string]: any;
   },
+  api: string[],
   onResolve: (resultObjects: any[], failureMessages: string[]) => void,
   onError: (message: string) => void
 ) => {
-  const pbclutch = await require(appConfig.api || "@clutch-sh/api"); // eslint-disable-line import/no-dynamic-require
+  const pbclutch = await require(api?.[0] || "@clutch-sh/api"); // eslint-disable-line import/no-dynamic-require
   const resolver = fields?.query !== undefined ? resolveQuery : resolveFields;
   return resolver(type, limit, fields)
     .then(({ results, failures }) => {

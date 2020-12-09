@@ -4,6 +4,7 @@ import type { Workflow } from "../AppProvider/workflow";
 
 interface ContextProps {
   workflows: Workflow[];
+  appConfig: {[key: string]: any};
 }
 const ApplicationContext = React.createContext<ContextProps>(undefined);
 
