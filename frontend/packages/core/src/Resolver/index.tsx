@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { AccordionGroup } from "../accordion";
 import { Button } from "../button";
 import { useWizardContext } from "../Contexts";
-import { Error } from "../error";
+import { CompressedError, Error } from "../error";
 import { HorizontalRule } from "../horizontal-rule";
 import Loadable from "../loading";
 
@@ -93,6 +93,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
         <Error message={state.schemaFetchError} onRetry={() => loadSchemas(type, dispatch)} />
       ) : (
         <Loadable variant="overlay" isLoading={state.resolverLoading}>
+          <CompressedError title="Error" message={state.resolverFetchError} />
           {(variant === "dual" || variant === "query") && (
             <Form
               onSubmit={queryValidation.handleSubmit(() => submitHandler(queryData))}
