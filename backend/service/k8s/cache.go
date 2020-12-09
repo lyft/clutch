@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/golang/protobuf/ptypes"
 	"go.uber.org/zap"
@@ -21,7 +22,7 @@ import (
 // and the additional requests that we place on all configured kubernetes cluster.
 // We have to be mindful of our clients Burst & QPS configuration,
 // which is overrideable by the user.
-const informerResyncTime = 0
+const informerResyncTime = time.Hour * 1
 
 // Setting a large channel buffer mostly for first boot and the  resync timer,
 // this really should be sized according to the size of your k8s deployment.
