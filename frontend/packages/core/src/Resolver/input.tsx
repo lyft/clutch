@@ -54,7 +54,7 @@ interface SchemaResolverProps extends Pick<AccordionProps, "expanded" | "onClick
 }
 
 const SchemaResolver = ({ schema, expanded, onClick, submitHandler }: SchemaResolverProps) => {
-  const [data, setData] = React.useState({"@type" : schema.typeUrl});
+  const [data, setData] = React.useState({ "@type": schema.typeUrl });
 
   const schemaValidation = useForm({
     mode: "onSubmit",
