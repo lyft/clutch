@@ -2,7 +2,6 @@ package k8s
 
 import (
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 	v1 "k8s.io/api/core/v1"
@@ -36,7 +35,6 @@ func TestLightweightInformer(t *testing.T) {
 	podInformer := NewLightweightInformer(
 		fc,
 		&v1.Pod{},
-		time.Minute,
 		informerHandlers,
 		true,
 	)
