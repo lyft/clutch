@@ -2,6 +2,7 @@ import * as React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import styled from "@emotion/styled";
 import {
+  Avatar as MuiAvatar,
   ClickAwayListener,
   Collapse,
   Drawer as MuiDrawer,
@@ -17,24 +18,16 @@ import { useAppContext } from "../Contexts";
 
 import { routesByGrouping, sortedGroupings } from "./utils";
 
-const mobileDrawerWidth = "90%";
 const drawerWidth = "100px";
 
 const DrawerPanel = styled(MuiDrawer)({
   flexShrink: 0,
   minWidth: `${drawerWidth}`,
-  "@media screen and (max-width: 800px)": {
-    minWidth: `${mobileDrawerWidth}`,
-  },
   "div[class*='MuiDrawer-paper']": {
     minWidth: `${drawerWidth}`,
-    paddingTop: "32px",
     top: "64px",
     backgroundColor: "linear-gradient(0deg, #FFFFFF, #FFFFFF), #FFFFFF",
     boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
-    "@media screen and (max-width: 800px)": {
-      minWidth: `${mobileDrawerWidth}`,
-    },
   },
 });
 
@@ -45,6 +38,8 @@ const GroupList = styled(List)({
 
 const GroupListItem = styled(ListItem)({
   height: "82px",
+  display: "flex",
+  flexDirection: "column",
   "&:hover": {
     backgroundColor: "#E7E7EA",
   },
@@ -65,10 +60,13 @@ const GroupHeading = styled(Typography)({
   flexGrow: 1,
 });
 
-const LinkListItem = styled(ListItem)((props: { isSelectedWorkflow: boolean }) => ({
-  backgroundColor: props.isSelectedWorkflow ? "#EBEDFB" : "#FFFFFF",
+const LinkListItem = styled(ListItem)({
+  backgroundColor: "#FFFFFF",
+  "&.Mui-selected": {
+    backgroundColor: "#EBEDFB",
+  },
   height: "48px",
-}));
+});
 
 const LinkHeading = styled(Typography)((props: { isSelectedWorkflow: boolean }) => ({
   color: props.isSelectedWorkflow ? "#3548D4" : "rgba(13, 16, 48, 0.6)",
@@ -83,18 +81,23 @@ const Paper = styled(MuiPaper)({
   boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
 });
 
+const Avatar = styled(MuiAvatar)((props: { isSelectedWorkflow: boolean }) => ({
+  color: props.isSelectedWorkflow ? "#FFFFFF": "rgba(13, 16, 48, 0.38)",
+  background: props.isSelectedWorkflow ? "#3548D4" : "rgba(13, 16, 48, 0.12)",
+  height: "36px",
+  width: "36px",
+}));
+
 interface GroupProps {
   heading: string;
   open: boolean;
   updateOpenGroup: (heading: string) => void;
-  onNavigate: () => void;
 }
 
 const Group: React.FC<GroupProps> = ({
   heading,
   open = false,
   updateOpenGroup,
-  onNavigate,
   children,
 }) => {
   const childrenList = React.Children.toArray(children);
@@ -137,6 +140,7 @@ const Group: React.FC<GroupProps> = ({
       onClick={handleToggle}
     >
       <GroupListItem button onClick={() => updateOpenGroup(heading)} selected={isSelected}>
+        <Avatar isSelectedWorkflow={isSelected}>{heading.charAt(0)}</Avatar>
         <GroupHeading align="center">{heading}</GroupHeading>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Popper
@@ -151,7 +155,7 @@ const Group: React.FC<GroupProps> = ({
               <ClickAwayListener onClickAway={handleClose}>
                 <List component="div" disablePadding id="workflow-options">
                   {childrenList.map((c: React.ReactElement) => {
-                    return React.cloneElement(c, { onClick: onNavigate });
+                    return React.cloneElement(c);
                   })}
                 </List>
               </ClickAwayListener>
@@ -166,16 +170,14 @@ const Group: React.FC<GroupProps> = ({
 interface LinkProps {
   to: string;
   text: string;
-  onClick: () => void;
 }
 
-const Link: React.FC<LinkProps> = ({ to, text, onClick }) => {
+const Link: React.FC<LinkProps> = ({ to, text }) => {
   const isSelected = window.location.pathname.replace("/", "") === to;
   return (
     <LinkListItem
-      isSelectedWorkflow={isSelected}
+      selected={isSelected}
       component={RouterLink}
-      onClick={onClick}
       to={to}
       dense
       data-qa="workflowGroupItem"
@@ -187,11 +189,7 @@ const Link: React.FC<LinkProps> = ({ to, text, onClick }) => {
   );
 };
 
-interface DrawerProps {
-  onClose: () => void;
-}
-
-const Drawer: React.FC<DrawerProps> = ({ onClose }) => {
+const Drawer: React.FC = () => {
   const { workflows } = useAppContext();
   const [openGroup, setOpenGroup] = React.useState("");
 
@@ -204,7 +202,7 @@ const Drawer: React.FC<DrawerProps> = ({ onClose }) => {
   };
 
   return (
-    <DrawerPanel onClose={onClose} data-qa="drawer" variant="permanent">
+    <DrawerPanel data-qa="drawer" variant="permanent">
       {sortedGroupings(workflows).map(grouping => {
         const value = routesByGrouping(workflows)[grouping];
         return (
@@ -213,14 +211,12 @@ const Drawer: React.FC<DrawerProps> = ({ onClose }) => {
             heading={grouping}
             open={openGroup === grouping}
             updateOpenGroup={updateOpenGroup}
-            onNavigate={onClose}
           >
             {value.workflows.map(workflow => (
               <Link
                 key={workflow.path.replace("/", "")}
                 to={workflow.path}
                 text={workflow.displayName}
-                onClick={onClose}
               />
             ))}
           </Group>

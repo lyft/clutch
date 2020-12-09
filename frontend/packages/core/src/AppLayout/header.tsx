@@ -9,7 +9,6 @@ import Notifications from "./notifications";
 import SearchField from "./search";
 import { UserInformation } from "./user";
 
-// TODO (sperry): make header responsive for small devices
 const AppBar = styled(MuiAppBar)({
   minWidth: "fit-content",
   background: "linear-gradient(90deg, #38106b 4.58%, #131c5f 89.31%)",
@@ -24,11 +23,8 @@ const Title = styled(Typography)({
 });
 
 const Header: React.FC = () => {
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
   const showNotifications = false;
-  const onDrawerClose = () => {
-    setDrawerOpen(false);
-  };
+
   return (
     <>
       <AppBar position="fixed" elevation={0}>
@@ -46,7 +42,7 @@ const Header: React.FC = () => {
           </Grid>
         </Toolbar>
       </AppBar>
-      <Drawer onClose={onDrawerClose} />
+      <Drawer/>
     </>
   );
 };
