@@ -71,6 +71,18 @@ const reducer = (state: ResolverState, action: DispatchAction) => {
         schemasLoading: false,
         schemaFetchError: action.error,
       };
+    case ResolverAction.UPDATE_QUERY_DATA: {
+      const queryData = { ...state.queryData };
+      if (action.data?.query === undefined) {
+        delete queryData.query;
+      }
+      return {
+        ...state,
+        queryData: { ...queryData, ...action.data },
+        resolverFetchError: "",
+      };
+    }
+  
     case ResolverAction.RESOLVING:
       return {
         ...state,

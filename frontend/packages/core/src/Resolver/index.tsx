@@ -95,7 +95,6 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
         <Error message={state.schemaFetchError} onRetry={() => loadSchemas(type, dispatch)} />
       ) : (
         <Loadable variant="overlay" isLoading={state.resolverLoading}>
-          {/* {process.env.REACT_APP_DEBUG_FORMS === "true" && <DevTool control={validation.control} />} */}
           {(variant === "dual" || variant === "query") && (
             <Form onSubmit={queryValidation.handleSubmit(submitHandler)} noValidate>
               <QueryResolver

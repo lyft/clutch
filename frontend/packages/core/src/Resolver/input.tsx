@@ -58,7 +58,7 @@ const SchemaResolver = ({ schema, expanded, onClick } : SchemaResolverProps) => 
   }; // TODO
 
   return (
-    <form onSubmit={schemaValidation.handleSubmit((e) => {console.log("schema submitted", e)})}>
+    <form noValidate onSubmit={schemaValidation.handleSubmit((e) => {console.log("schema submitted", e)})}>
       <Accordion
         title={`Search by ${schema.metadata.displayName}`}
         expanded={expanded}
