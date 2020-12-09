@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@material-ui/core";
 
-import Drawer from "./drawer";
 import Logo from "./logo";
 import Notifications from "./notifications";
 import SearchField from "./search";
@@ -42,7 +41,6 @@ const Header: React.FC = () => {
           </Grid>
         </Toolbar>
       </AppBar>
-      <Drawer/>
     </>
   );
 };
