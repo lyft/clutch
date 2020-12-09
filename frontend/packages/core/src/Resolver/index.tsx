@@ -53,12 +53,15 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
 
   React.useEffect(() => loadSchemas(type, dispatch), []);
 
-  const submitHandler = () => {
+  const [queryData, setQueryData] = React.useState({query: ""});
+
+  const submitHandler = (data) => {
+    console.log("data", data);
     // Move to loading state.
     dispatch({ type: ResolverAction.RESOLVING });
 
     // Copy incoming data, trimming whitespace from any string values (usually artifact of cut and paste into tool).
-    const data = _.mapValues(state.queryData, v => (_.isString(v) && _.trim(v)) || v);
+    data = _.mapValues(data, v => (_.isString(v) && _.trim(v)) || v);
 
     // Set desired type.
     data["@type"] = state.allSchemas[state.selectedSchema]?.typeUrl;
@@ -86,8 +89,8 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
   });
 
   const queryOnChange = e => {
-    console.log("query event", JSON.stringify(e));
-  }; // TODO
+    setQueryData({query: e.target.value})
+  };
 
   return (
     <Loadable isLoading={state.schemasLoading}>
@@ -96,7 +99,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
       ) : (
         <Loadable variant="overlay" isLoading={state.resolverLoading}>
           {(variant === "dual" || variant === "query") && (
-            <Form onSubmit={queryValidation.handleSubmit(submitHandler)} noValidate>
+            <Form onSubmit={queryValidation.handleSubmit(() => submitHandler(queryData))} noValidate>
               <QueryResolver
                 schemas={state.searchableSchemas}
                 onChange={queryOnChange}
@@ -109,7 +112,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
           Advanced Search
           <AccordionGroup defaultExpandedIdx={0}>
             {state.allSchemas.map(schema => (
-              <SchemaResolver key={schema.typeUrl} schema={schema} />
+              <SchemaResolver key={schema.typeUrl} schema={schema} submitHandler={submitHandler} />
             ))}
           </AccordionGroup>
         </Loadable>

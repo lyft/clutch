@@ -44,9 +44,13 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, onChange, valida
 // TODO: update and use
 interface SchemaResolverProps extends Pick<AccordionProps, "expanded" | "onClick"> {
   schema: clutch.resolver.v1.Schema;
+  submitHandler: any;
 }
 
-const SchemaResolver = ({ schema, expanded, onClick } : SchemaResolverProps) => {
+const SchemaResolver = ({ schema, expanded, onClick, submitHandler } : SchemaResolverProps) => {
+
+  const [data, setData] = React.useState({});
+
   const schemaValidation = useForm({
     mode: "onSubmit",
     reValidateMode: "onSubmit",
@@ -54,11 +58,11 @@ const SchemaResolver = ({ schema, expanded, onClick } : SchemaResolverProps) => 
   });
 
   const onChange = e => {
-    console.log("schema event", JSON.stringify(e));
-  }; // TODO
+    setData({...data, [e.target.name]: e.target.value});
+  };
 
   return (
-    <form noValidate onSubmit={schemaValidation.handleSubmit((e) => {console.log("schema submitted", e)})}>
+    <form noValidate onSubmit={schemaValidation.handleSubmit(() => submitHandler(data))}>
       <Accordion
         title={`Search by ${schema.metadata.displayName}`}
         expanded={expanded}
