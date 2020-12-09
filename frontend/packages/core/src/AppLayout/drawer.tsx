@@ -10,7 +10,7 @@ import {
   ListItem,
   ListItemText,
   Paper as MuiPaper,
-  Popper,
+  Popper as MuiPopper,
   Typography,
 } from "@material-ui/core";
 
@@ -18,6 +18,7 @@ import { useAppContext } from "../Contexts";
 
 import { routesByGrouping, sortedGroupings } from "./utils";
 
+// sidebar
 const drawerWidth = "100px";
 
 const DrawerPanel = styled(MuiDrawer)({
@@ -31,15 +32,15 @@ const DrawerPanel = styled(MuiDrawer)({
   },
 });
 
+// sidebar groupings
 const GroupList = styled(List)({
-  paddingTop: "0px",
-  paddingBottom: "0px",
+  padding: "0px",
 });
 
 const GroupListItem = styled(ListItem)({
-  height: "82px",
-  display: "flex",
   flexDirection: "column",
+  height: "82px",
+  padding: "16px 8px 0px 8px",
   "&:hover": {
     backgroundColor: "#E7E7EA",
   },
@@ -49,7 +50,18 @@ const GroupListItem = styled(ListItem)({
   },
   "&.Mui-selected": {
     backgroundColor: "#EBEDFB",
+    ".MuiAvatar-root": {
+      color: "#FFFFFF",
+      background: "#3548D4",
+    },
   },
+});
+
+const Avatar = styled(MuiAvatar)({
+  color: "rgba(13, 16, 48, 0.38)",
+  background: "rgba(13, 16, 48, 0.12)",
+  height: "36px",
+  width: "36px",
 });
 
 const GroupHeading = styled(Typography)({
@@ -58,22 +70,15 @@ const GroupHeading = styled(Typography)({
   fontSize: "14px",
   lineHeight: "18px",
   flexGrow: 1,
+  paddingTop: "8px",
+  paddingBottom: "8px",
 });
 
-const LinkListItem = styled(ListItem)({
-  backgroundColor: "#FFFFFF",
-  "&.Mui-selected": {
-    backgroundColor: "#EBEDFB",
-  },
-  height: "48px",
+// sidebar submenu
+const Popper = styled(MuiPopper)({
+  zIndex: 1200,
+  paddingTop: "16px",
 });
-
-const LinkHeading = styled(Typography)((props: { isSelectedWorkflow: boolean }) => ({
-  color: props.isSelectedWorkflow ? "#3548D4" : "rgba(13, 16, 48, 0.6)",
-  fontWeight: 500,
-  fontSize: "14px",
-  lineHeight: "18px",
-}));
 
 const Paper = styled(MuiPaper)({
   minWidth: "230px",
@@ -81,12 +86,27 @@ const Paper = styled(MuiPaper)({
   boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
 });
 
-const Avatar = styled(MuiAvatar)((props: { isSelectedWorkflow: boolean }) => ({
-  color: props.isSelectedWorkflow ? "#FFFFFF": "rgba(13, 16, 48, 0.38)",
-  background: props.isSelectedWorkflow ? "#3548D4" : "rgba(13, 16, 48, 0.12)",
-  height: "36px",
-  width: "36px",
-}));
+// sudebar submenu groupings
+const LinkListItem = styled(ListItem)({
+  backgroundColor: "#FFFFFF",
+  "&.Mui-selected": {
+    backgroundColor: "#EBEDFB",
+    ".MuiTypography-root": {
+      color: "#3548D4",
+    },
+  },
+  "&:hover": {
+    backgroundColor: "#E7E7EA",
+  },
+  height: "48px",
+});
+
+const LinkHeading = styled(Typography)({
+  color: "rgba(13, 16, 48, 0.6)",
+  fontWeight: 500,
+  fontSize: "14px",
+  lineHeight: "18px",
+});
 
 interface GroupProps {
   heading: string;
@@ -94,12 +114,7 @@ interface GroupProps {
   updateOpenGroup: (heading: string) => void;
 }
 
-const Group: React.FC<GroupProps> = ({
-  heading,
-  open = false,
-  updateOpenGroup,
-  children,
-}) => {
+const Group: React.FC<GroupProps> = ({ heading, open = false, updateOpenGroup, children }) => {
   const childrenList = React.Children.toArray(children);
 
   const [openList, setListOpen] = React.useState(false);
@@ -132,15 +147,19 @@ const Group: React.FC<GroupProps> = ({
   }
 
   return (
-    <GroupList
-      data-qa="workflowGroup"
-      ref={anchorRef}
-      aria-controls={openList ? "workflow-options" : undefined}
-      aria-haspopup="true"
-      onClick={handleToggle}
-    >
-      <GroupListItem button onClick={() => updateOpenGroup(heading)} selected={isSelected}>
-        <Avatar isSelectedWorkflow={isSelected}>{heading.charAt(0)}</Avatar>
+    <GroupList data-qa="workflowGroup">
+      <GroupListItem
+        button
+        selected={isSelected}
+        ref={anchorRef}
+        aria-controls={openList ? "workflow-options" : undefined}
+        aria-haspopup="true"
+        onClick={() => {
+          handleToggle();
+          updateOpenGroup(heading);
+        }}
+      >
+        <Avatar>{heading.charAt(0)}</Avatar>
         <GroupHeading align="center">{heading}</GroupHeading>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Popper
@@ -149,7 +168,6 @@ const Group: React.FC<GroupProps> = ({
             role={undefined}
             transition
             placement="right-start"
-            style={{ zIndex: 1200 }}
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
@@ -183,7 +201,7 @@ const Link: React.FC<LinkProps> = ({ to, text }) => {
       data-qa="workflowGroupItem"
     >
       <ListItemText>
-        <LinkHeading isSelectedWorkflow={isSelected}>{text}</LinkHeading>
+        <LinkHeading>{text}</LinkHeading>
       </ListItemText>
     </LinkListItem>
   );
