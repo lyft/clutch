@@ -7,7 +7,9 @@ import { Error } from "../error";
 import { TextField } from "../Input/text-field";
 
 import type { ChangeEventTarget, ResolverChangeEvent } from "./hydrator";
-import { convertChangeEvent, FormControl, hydrateField, InputLabel } from "./hydrator";
+import { convertChangeEvent, hydrateField } from "./hydrator";
+import { Accordion, AccordionDetails, AccordionDivider, AccordionActions } from "../accordion";
+import { Button } from "../button";
 
 interface QueryResolverProps {
   schemas: clutch.resolver.v1.Schema[];
@@ -39,6 +41,7 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, onChange, valida
   );
 };
 
+// TODO: update and use
 interface SchemaResolverProps {
   schemas: clutch.resolver.v1.Schema[];
   selectedSchema: number;
@@ -46,19 +49,37 @@ interface SchemaResolverProps {
   validation: UseFormMethods;
 }
 
-const SchemaResolver: React.FC<SchemaResolverProps> = ({
-  schemas,
-  selectedSchema,
-  onChange,
-  validation,
-}) => (
-  <>
-    {schemas[selectedSchema]?.error ? (
-      <Error message={`Schema Error: ${schemas[selectedSchema].error.message}`} />
-    ) : (
-      schemas[selectedSchema]?.fields.map(field => hydrateField(field, onChange, validation))
-    )}
-  </>
-);
+const SchemaResolver = ({ schema, expanded, onClick }) => {
+  const schemaValidation = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+    shouldFocusError: false,
+  });
+
+  const onChange = (e) => { console.log("schema event", JSON.stringify(e)) }; // TODO
+
+  return (
+    <form>
+      <Accordion
+        title={`Search by ${schema.metadata.displayName}`}
+        expanded={expanded}
+        onClick={onClick}
+      >
+        <AccordionDetails>
+          {schema.error ? (
+            <Error message={`Schema Error: ${schema.error.message}`} />
+          ) :
+            schema.fields.map(field => hydrateField(field, onChange, schemaValidation))
+          }
+        </AccordionDetails>
+        <AccordionDivider />
+        <AccordionActions>
+          <Button text="Submit" />
+        </AccordionActions>
+      </Accordion>
+    </form>
+  );
+};
+
 
 export { SchemaResolver, QueryResolver };

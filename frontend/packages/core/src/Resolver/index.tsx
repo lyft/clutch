@@ -4,7 +4,7 @@ import { DevTool } from "@hookform/devtools";
 import _ from "lodash";
 import styled from "styled-components";
 
-import { Accordion, AccordionActions, AccordionDetails, AccordionDivider, AccordionGroup } from "../accordion";
+import { AccordionGroup } from "../accordion";
 import { Button } from "../button";
 import { useWizardContext } from "../Contexts";
 import { CompressedError, Error } from "../error";
@@ -12,7 +12,6 @@ import { HorizontalRule } from "../horizontal-rule";
 import Loadable from "../loading";
 
 import { fetchResourceSchemas, resolveResource } from "./fetch";
-import { hydrateField, ResolverChangeEvent } from "./hydrator";
 import { QueryResolver, SchemaResolver } from "./input";
 import type { DispatchAction } from "./state";
 import { ResolverAction, useResolverState } from "./state";
@@ -86,65 +85,35 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
     shouldFocusError: false,
   });
 
+  const queryOnChange = (e) => { console.log("query event", JSON.stringify(e)) }; // TODO
+
   return (
     <Loadable isLoading={state.schemasLoading}>
       {state.schemaFetchError !== "" ? (
         <Error message={state.schemaFetchError} onRetry={() => loadSchemas(type, dispatch)} />
       ) : (
-        <Loadable variant="overlay" isLoading={state.resolverLoading}>
-          {/* {process.env.REACT_APP_DEBUG_FORMS === "true" && <DevTool control={validation.control} />} */}
-          {(variant === "dual" || variant === "query") && (
-            <Form onSubmit={queryValidation.handleSubmit(submitHandler)} noValidate>
-              <QueryResolver
-                schemas={state.searchableSchemas}
-                onChange={() => {}}
-                validation={queryValidation}
-              />
-              <Button text="Search" />
-            </Form>
-          )}
-          {variant === "dual" && <HorizontalRule>OR</HorizontalRule>}
+          <Loadable variant="overlay" isLoading={state.resolverLoading}>
+            {/* {process.env.REACT_APP_DEBUG_FORMS === "true" && <DevTool control={validation.control} />} */}
+            {(variant === "dual" || variant === "query") && (
+              <Form onSubmit={queryValidation.handleSubmit(submitHandler)} noValidate>
+                <QueryResolver
+                  schemas={state.searchableSchemas}
+                  onChange={queryOnChange}
+                  validation={queryValidation}
+                />
+                <Button text="Search" />
+              </Form>
+            )}
+            {variant === "dual" && <HorizontalRule>OR</HorizontalRule>}
           Advanced Search
-          <AccordionGroup defaultExpandedIdx={0}>
-            {state.allSchemas.map((schema, idx) => (
-              <SchemaResolver2 key={schema.typeUrl} schema={schema} />
-            ))}
-          </AccordionGroup>
-        </Loadable>
-      )}
+            <AccordionGroup defaultExpandedIdx={0}>
+              {state.allSchemas.map((schema, idx) => (
+                <SchemaResolver key={schema.typeUrl} schema={schema} />
+              ))}
+            </AccordionGroup>
+          </Loadable>
+        )}
     </Loadable>
-  );
-};
-
-const SchemaResolver2 = ({ schema, expanded, onClick }) => {
-  const schemaValidation = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onSubmit",
-    shouldFocusError: false,
-  });
-
-  return (
-    <Form>
-    <Accordion
-      title={`Search by ${schema.metadata.displayName}`}
-      expanded={expanded}
-      onClick={onClick}
-    >
-      <AccordionDetails>
-
-          {schema.error ? (
-            <Error message={`Schema Error: ${schema.error.message}`} />
-          ) : (
-            schema.fields.map(field => hydrateField(field, () => {}, schemaValidation))
-          )}
-
-      </AccordionDetails>
-      <AccordionDivider />
-      <AccordionActions>
-        <Button text="Submit" />
-      </AccordionActions>
-    </Accordion>
-    </Form>
   );
 };
 
