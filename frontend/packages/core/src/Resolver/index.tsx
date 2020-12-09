@@ -1,6 +1,5 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
 import _ from "lodash";
 import styled from "styled-components";
 
@@ -53,26 +52,22 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
 
   React.useEffect(() => loadSchemas(type, dispatch), []);
 
-  const [queryData, setQueryData] = React.useState({query: ""});
+  const [queryData, setQueryData] = React.useState({ query: "" });
 
-  const submitHandler = (data) => {
-    console.log("data", data);
+  const submitHandler = data => {
     // Move to loading state.
     dispatch({ type: ResolverAction.RESOLVING });
 
     // Copy incoming data, trimming whitespace from any string values (usually artifact of cut and paste into tool).
-    data = _.mapValues(data, v => (_.isString(v) && _.trim(v)) || v);
-
-    // Set desired type.
-    data["@type"] = state.allSchemas[state.selectedSchema]?.typeUrl;
+    const inputData = _.mapValues(data, v => (_.isString(v) && _.trim(v)) || v);
 
     // Resolve!
     resolveResource(
       type,
       searchLimit,
-      data,
+      inputData,
       (results, failures) => {
-        onResolve({ results, input: data });
+        onResolve({ results, input: inputData });
         if (!_.isEmpty(failures)) {
           displayWarnings(failures);
         }
@@ -89,7 +84,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
   });
 
   const queryOnChange = e => {
-    setQueryData({query: e.target.value})
+    setQueryData({ query: e.target.value });
   };
 
   return (
@@ -99,7 +94,10 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
       ) : (
         <Loadable variant="overlay" isLoading={state.resolverLoading}>
           {(variant === "dual" || variant === "query") && (
-            <Form onSubmit={queryValidation.handleSubmit(() => submitHandler(queryData))} noValidate>
+            <Form
+              onSubmit={queryValidation.handleSubmit(() => submitHandler(queryData))}
+              noValidate
+            >
               <QueryResolver
                 schemas={state.searchableSchemas}
                 onChange={queryOnChange}

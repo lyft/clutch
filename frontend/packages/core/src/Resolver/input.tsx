@@ -3,7 +3,13 @@ import type { UseFormMethods } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
 
-import { Accordion, AccordionActions, AccordionDetails, AccordionDivider, AccordionProps } from "../accordion";
+import {
+  Accordion,
+  AccordionActions,
+  AccordionDetails,
+  AccordionDivider,
+  AccordionProps,
+} from "../accordion";
 import { Button } from "../button";
 import { Error } from "../error";
 import { TextField } from "../Input/text-field";
@@ -47,9 +53,8 @@ interface SchemaResolverProps extends Pick<AccordionProps, "expanded" | "onClick
   submitHandler: any;
 }
 
-const SchemaResolver = ({ schema, expanded, onClick, submitHandler } : SchemaResolverProps) => {
-
-  const [data, setData] = React.useState({});
+const SchemaResolver = ({ schema, expanded, onClick, submitHandler }: SchemaResolverProps) => {
+  const [data, setData] = React.useState({"@type" : schema.typeUrl});
 
   const schemaValidation = useForm({
     mode: "onSubmit",
@@ -58,7 +63,7 @@ const SchemaResolver = ({ schema, expanded, onClick, submitHandler } : SchemaRes
   });
 
   const onChange = e => {
-    setData({...data, [e.target.name]: e.target.value});
+    setData({ ...data, [e.target.name]: e.target.value });
   };
 
   return (
