@@ -351,13 +351,13 @@ func TestGetCommit(t *testing.T) {
 	}
 }
 
-type getDefaultBranchMock struct {
+type getRepositoryMock struct {
 	v4client
 	branchName string
 }
 
-func (g *getDefaultBranchMock) Query(ctx context.Context, query interface{}, variables map[string]interface{}) error {
-	q, ok := query.(*getDefaultBranchQuery)
+func (g *getRepositoryMock) Query(ctx context.Context, query interface{}, variables map[string]interface{}) error {
+	q, ok := query.(*getRepositoryQuery)
 	if !ok {
 		panic("not a query")
 	}
@@ -367,22 +367,23 @@ func (g *getDefaultBranchMock) Query(ctx context.Context, query interface{}, var
 
 var getDefaultBranchTests = []struct {
 	name string
-	v4   getDefaultBranchMock
-	want string
+	v4   getRepositoryMock
+
+	wantDefaultBranch string
 }{
 	{
-		name: "1. with main branch",
-		v4:   getDefaultBranchMock{branchName: "main"},
-		want: "main",
+		name:              "1. default repo with main branch",
+		v4:                getRepositoryMock{branchName: "main"},
+		wantDefaultBranch: "main",
 	},
 	{
-		name: "2. with master branch",
-		v4:   getDefaultBranchMock{branchName: "master"},
-		want: "master",
+		name:              "2. default repo with master branch",
+		v4:                getRepositoryMock{branchName: "master"},
+		wantDefaultBranch: "master",
 	},
 }
 
-func TestGetDefaultBranch(t *testing.T) {
+func TestGetRepository(t *testing.T) {
 	t.Parallel()
 	for _, tt := range getDefaultBranchTests {
 		tt := tt
@@ -391,7 +392,7 @@ func TestGetDefaultBranch(t *testing.T) {
 			a := assert.New(t)
 			s := &svc{graphQL: &tt.v4}
 
-			got, err := s.GetDefaultBranch(context.Background(),
+			repo, err := s.GetRepository(context.Background(),
 				&RemoteRef{
 					RepoOwner: "owner",
 					RepoName:  "myRepo",
@@ -403,7 +404,9 @@ func TestGetDefaultBranch(t *testing.T) {
 				return
 			}
 
-			a.Equal(got, tt.want)
+			gotDefaultBranch := repo.DefaultBranch.Name
+
+			a.Equal(gotDefaultBranch, tt.wantDefaultBranch)
 			a.Nil(err)
 		})
 	}

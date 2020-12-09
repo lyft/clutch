@@ -56,6 +56,23 @@ type RemoteRef struct {
 	Ref string
 }
 
+// BranchRef git reference object representing a "branch"
+type BranchRef struct {
+	Name string
+}
+
+// RepositoryOwner represents the entity that owns a repo
+type RepositoryOwner struct {
+	Login string
+}
+
+// Repository contains information about a requested repository.
+type Repository struct {
+	Name          string
+	Owner         RepositoryOwner
+	DefaultBranch BranchRef
+}
+
 // File contains information about a requested file, including its content.
 type File struct {
 	Path             string
@@ -74,7 +91,7 @@ type Client interface {
 	CreateIssueComment(ctx context.Context, ref *RemoteRef, number int, body string) error
 	CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error)
 	GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error)
-	GetDefaultBranch(ctx context.Context, ref *RemoteRef) (string, error)
+	GetRepository(ctx context.Context, ref *RemoteRef) (*Repository, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -308,8 +325,8 @@ func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
 	}, nil
 }
 
-func (s *svc) GetDefaultBranch(ctx context.Context, repo *RemoteRef) (string, error) {
-	q := &getDefaultBranchQuery{}
+func (s *svc) GetRepository(ctx context.Context, repo *RemoteRef) (*Repository, error) {
+	q := &getRepositoryQuery{}
 	params := map[string]interface{}{
 		"owner": githubv4.String(repo.RepoOwner),
 		"name":  githubv4.String(repo.RepoName),
@@ -317,8 +334,19 @@ func (s *svc) GetDefaultBranch(ctx context.Context, repo *RemoteRef) (string, er
 
 	err := s.graphQL.Query(ctx, q, params)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return string(q.Repository.DefaultBranchRef.Name), nil
+	r := &Repository{
+		Name: repo.RepoName,
+		Owner: RepositoryOwner{
+			Login: repo.RepoOwner,
+		},
+		DefaultBranch: BranchRef{
+			Name: string(q.Repository.DefaultBranchRef.Name),
+		},
+	}
+
+	return r, nil
+
 }

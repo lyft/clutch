@@ -37,7 +37,7 @@ type getFileQuery struct {
 	} `graphql:"repository(owner:$owner,name:$name)"`
 }
 
-type getDefaultBranchQuery struct {
+type getRepositoryQuery struct {
 	Repository struct {
 		DefaultBranchRef struct {
 			Name string

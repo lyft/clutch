@@ -47,7 +47,7 @@ func (s svc) GetCommit(ctx context.Context, ref *github.RemoteRef) (*github.Comm
 	panic("implement me")
 }
 
-func (s svc) GetDefaultBranch(ctx context.Context, ref *github.RemoteRef) (string, error) {
+func (s svc) GetRepository(ctx context.Context, ref *github.RemoteRef) (*github.Repository, error) {
 	panic("implement me")
 }
 
