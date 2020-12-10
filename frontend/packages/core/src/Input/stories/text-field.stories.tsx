@@ -1,5 +1,6 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
+import SearchIcon from "@material-ui/icons/Search"
 
 import type { TextFieldProps } from "../text-field";
 import { TextField } from "../text-field";
@@ -41,4 +42,11 @@ MultipleLines.args = {
   ...Primary.args,
   multiline: true,
   defaultValue: "This is\nan example\nof multiline content",
+};
+
+export const WithEndAdornment = Template.bind({});
+WithEndAdornment.args = {
+  ...Primary.args,
+  defaultValue: "Search",
+  endAdornment: <SearchIcon />,
 };
