@@ -6444,6 +6444,9 @@ export namespace clutch {
 
                         /** Config regions */
                         regions?: (string[]|null);
+
+                        /** Config awsClient */
+                        awsClient?: (clutch.config.service.aws.v1.IAWSClient|null);
                     }
 
                     /** Represents a Config. */
@@ -6457,6 +6460,9 @@ export namespace clutch {
 
                         /** Config regions. */
                         public regions: string[];
+
+                        /** Config awsClient. */
+                        public awsClient?: (clutch.config.service.aws.v1.IAWSClient|null);
 
                         /**
                          * Verifies a Config message.
@@ -6482,6 +6488,54 @@ export namespace clutch {
 
                         /**
                          * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a AWSClient. */
+                    interface IAWSClient {
+
+                        /** AWSClient retries */
+                        retries?: (number|null);
+                    }
+
+                    /** Represents a AWSClient. */
+                    class AWSClient implements IAWSClient {
+
+                        /**
+                         * Constructs a new AWSClient.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.aws.v1.IAWSClient);
+
+                        /** AWSClient retries. */
+                        public retries: number;
+
+                        /**
+                         * Verifies a AWSClient message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a AWSClient message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns AWSClient
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.aws.v1.AWSClient;
+
+                        /**
+                         * Creates a plain object from a AWSClient message. Also converts values to other types if specified.
+                         * @param message AWSClient
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.aws.v1.AWSClient, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this AWSClient to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };

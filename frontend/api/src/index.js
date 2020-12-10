@@ -15451,6 +15451,7 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.service.aws.v1
                          * @interface IConfig
                          * @property {Array.<string>|null} [regions] Config regions
+                         * @property {clutch.config.service.aws.v1.IAWSClient|null} [awsClient] Config awsClient
                          */
 
                         /**
@@ -15478,6 +15479,14 @@ export const clutch = $root.clutch = (() => {
                         Config.prototype.regions = $util.emptyArray;
 
                         /**
+                         * Config awsClient.
+                         * @member {clutch.config.service.aws.v1.IAWSClient|null|undefined} awsClient
+                         * @memberof clutch.config.service.aws.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.awsClient = null;
+
+                        /**
                          * Verifies a Config message.
                          * @function verify
                          * @memberof clutch.config.service.aws.v1.Config
@@ -15494,6 +15503,11 @@ export const clutch = $root.clutch = (() => {
                                 for (let i = 0; i < message.regions.length; ++i)
                                     if (!$util.isString(message.regions[i]))
                                         return "regions: string[] expected";
+                            }
+                            if (message.awsClient != null && message.hasOwnProperty("awsClient")) {
+                                let error = $root.clutch.config.service.aws.v1.AWSClient.verify(message.awsClient);
+                                if (error)
+                                    return "awsClient." + error;
                             }
                             return null;
                         };
@@ -15517,6 +15531,11 @@ export const clutch = $root.clutch = (() => {
                                 for (let i = 0; i < object.regions.length; ++i)
                                     message.regions[i] = String(object.regions[i]);
                             }
+                            if (object.awsClient != null) {
+                                if (typeof object.awsClient !== "object")
+                                    throw TypeError(".clutch.config.service.aws.v1.Config.awsClient: object expected");
+                                message.awsClient = $root.clutch.config.service.aws.v1.AWSClient.fromObject(object.awsClient);
+                            }
                             return message;
                         };
 
@@ -15535,11 +15554,15 @@ export const clutch = $root.clutch = (() => {
                             let object = {};
                             if (options.arrays || options.defaults)
                                 object.regions = [];
+                            if (options.defaults)
+                                object.awsClient = null;
                             if (message.regions && message.regions.length) {
                                 object.regions = [];
                                 for (let j = 0; j < message.regions.length; ++j)
                                     object.regions[j] = message.regions[j];
                             }
+                            if (message.awsClient != null && message.hasOwnProperty("awsClient"))
+                                object.awsClient = $root.clutch.config.service.aws.v1.AWSClient.toObject(message.awsClient, options);
                             return object;
                         };
 
@@ -15555,6 +15578,106 @@ export const clutch = $root.clutch = (() => {
                         };
 
                         return Config;
+                    })();
+
+                    v1.AWSClient = (function() {
+
+                        /**
+                         * Properties of a AWSClient.
+                         * @memberof clutch.config.service.aws.v1
+                         * @interface IAWSClient
+                         * @property {number|null} [retries] AWSClient retries
+                         */
+
+                        /**
+                         * Constructs a new AWSClient.
+                         * @memberof clutch.config.service.aws.v1
+                         * @classdesc Represents a AWSClient.
+                         * @implements IAWSClient
+                         * @constructor
+                         * @param {clutch.config.service.aws.v1.IAWSClient=} [properties] Properties to set
+                         */
+                        function AWSClient(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * AWSClient retries.
+                         * @member {number} retries
+                         * @memberof clutch.config.service.aws.v1.AWSClient
+                         * @instance
+                         */
+                        AWSClient.prototype.retries = 0;
+
+                        /**
+                         * Verifies a AWSClient message.
+                         * @function verify
+                         * @memberof clutch.config.service.aws.v1.AWSClient
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        AWSClient.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.retries != null && message.hasOwnProperty("retries"))
+                                if (!$util.isInteger(message.retries))
+                                    return "retries: integer expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a AWSClient message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.aws.v1.AWSClient
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.aws.v1.AWSClient} AWSClient
+                         */
+                        AWSClient.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.aws.v1.AWSClient)
+                                return object;
+                            let message = new $root.clutch.config.service.aws.v1.AWSClient();
+                            if (object.retries != null)
+                                message.retries = object.retries >>> 0;
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a AWSClient message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.aws.v1.AWSClient
+                         * @static
+                         * @param {clutch.config.service.aws.v1.AWSClient} message AWSClient
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        AWSClient.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults)
+                                object.retries = 0;
+                            if (message.retries != null && message.hasOwnProperty("retries"))
+                                object.retries = message.retries;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this AWSClient to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.aws.v1.AWSClient
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        AWSClient.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return AWSClient;
                     })();
 
                     return v1;

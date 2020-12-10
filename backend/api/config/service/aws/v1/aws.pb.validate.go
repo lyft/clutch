@@ -50,6 +50,16 @@ func (m *Config) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetAwsClient()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ConfigValidationError{
+				field:  "AwsClient",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -106,3 +116,74 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ConfigValidationError{}
+
+// Validate checks the field values on AWSClient with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *AWSClient) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetRetries() < 0 {
+		return AWSClientValidationError{
+			field:  "Retries",
+			reason: "value must be greater than or equal to 0",
+		}
+	}
+
+	return nil
+}
+
+// AWSClientValidationError is the validation error returned by
+// AWSClient.Validate if the designated constraints aren't met.
+type AWSClientValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AWSClientValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AWSClientValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AWSClientValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AWSClientValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AWSClientValidationError) ErrorName() string { return "AWSClientValidationError" }
+
+// Error satisfies the builtin error interface
+func (e AWSClientValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAWSClient.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AWSClientValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AWSClientValidationError{}

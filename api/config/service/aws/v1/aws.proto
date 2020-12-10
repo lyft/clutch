@@ -8,4 +8,10 @@ import "validate/validate.proto";
 
 message Config {
   repeated string regions = 1 [ (validate.rules).repeated = {min_items : 1} ];
+  AWSClient aws_client = 2;
+}
+
+message AWSClient {
+  // If not set explicity, retries default to 0
+  uint32 retries = 1 [(validate.rules).uint32.gte = 0];
 }
