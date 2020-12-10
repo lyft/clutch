@@ -50,6 +50,12 @@ const StyledTextField = styled(BaseTextField)({
 
   ".MuiInputBase-root.Mui-focused": {
     borderColor: "#3548d4",
+    ".MuiButtonBase-root": {
+      backgroundColor: "#3548D4",
+      "*": {
+        color: "#FFFFFF"
+      },
+    },
   },
 
   ".MuiInputBase-root.Mui-disabled": {
@@ -95,6 +101,18 @@ const IconButton = styled(MuiIconButton)({
   backgroundColor: "#E7E7EA",
   borderBottomRightRadius: "3px",
   borderTopRightRadius: "3px",
+  "&:hover": {
+    backgroundColor: "#2D3DB4",
+    "*": {
+      color: "#FFFFFF"
+    },
+  },
+  "&:active": {
+    backgroundColor: "#2938A5",
+    "*": {
+      color: "#FFFFFF",
+    },
+  },
 });
 
 export interface TextFieldProps
@@ -117,9 +135,8 @@ export interface TextFieldProps
       | "type"
       | "value"
     >,
-    Pick<MuiInputProps, "readOnly"> {
+    Pick<MuiInputProps, "readOnly" | "endAdornment"> {
   onReturn?: () => void;
-  endAdornment?: React.ReactElement | React.ReactElement[];
 }
 
 export const TextField = ({
