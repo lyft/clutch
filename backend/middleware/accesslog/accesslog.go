@@ -6,6 +6,7 @@ package log
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -13,35 +14,37 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	middlewarev1 "github.com/lyft/clutch/backend/api/config/middleware/v1"
+	accesslogv1 "github.com/lyft/clutch/backend/api/config/middleware/accesslog/v1"
 	"github.com/lyft/clutch/backend/gateway/log"
 	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/middleware"
 )
 
-const Name = "clutch.middleware.access_log"
+const Name = "clutch.middleware.accesslog"
 
-func New(config *middlewarev1.AccessLog, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
-	if config == nil || config.StatusCodeFilter == nil {
-		// default to logging all status codes
-		config = &middlewarev1.AccessLog{
-			StatusCodeFilter: &middlewarev1.AccessLog_StatusCodeFilter{
-				Operator: middlewarev1.AccessLog_StatusCodeFilter_GE,
-				Value:    uint32(codes.OK),
-			},
+func New(config *accesslogv1.Config, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
+	var statusCodes []codes.Code
+	// if no filter is provided default to logging all status codes
+	if config != nil && len(config.StatusCodeFilters) > 0 {
+		for _, filter := range config.StatusCodeFilters {
+			switch t := filter.GetFilterType().(type) {
+			case *accesslogv1.Config_StatusCodeFilter_Equals:
+				statusCode := filter.GetEquals()
+				statusCodes = append(statusCodes, codes.Code(statusCode))
+			default:
+				logger.Error("status code filter not supported", zap.String("type", fmt.Sprintf("%T", t)))
+			}
 		}
 	}
 	return &mid{
-		logger:     logger,
-		operator:   config.StatusCodeFilter.Operator,
-		statusCode: codes.Code(config.StatusCodeFilter.Value),
+		logger:      logger,
+		statusCodes: statusCodes,
 	}, nil
 }
 
 type mid struct {
-	logger     *zap.Logger
-	operator   middlewarev1.AccessLog_StatusCodeFilter_Op
-	statusCode codes.Code
+	logger      *zap.Logger
+	statusCodes []codes.Code
 }
 
 func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
@@ -51,32 +54,38 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 		if s == nil {
 			s = status.New(codes.OK, "")
 		}
-		code := codes.Code(s.Proto().Code)
+		code := s.Code()
 
 		if m.validStatusCode(code) {
-			respBody, err := meta.APIBody(resp)
+			// if err is returned from handler, log error details only
+			// as response body will be nil
 			if err != nil {
-				return nil, err
+				m.logger.Error("GRPC error:",
+					zap.Int("status code", int(code)),
+					zap.String("message", s.Message()))
+			} else {
+				respBody, err := meta.APIBody(resp)
+				if err != nil {
+					return nil, err
+				}
+				m.logger.Info("GRPC:",
+					zap.Int("status code", int(code)),
+					log.ProtoField("response body", respBody))
 			}
-			m.logger.Error("GRPC error:",
-				zap.Int("status code", int(code)),
-				log.ProtoField("response body", respBody))
 		}
 		return resp, err
 	}
 }
 
 func (m *mid) validStatusCode(c codes.Code) bool {
-	switch m.operator {
-	case middlewarev1.AccessLog_StatusCodeFilter_EQ:
-		return c == m.statusCode
-	case middlewarev1.AccessLog_StatusCodeFilter_GE:
-		return c >= m.statusCode
-	case middlewarev1.AccessLog_StatusCodeFilter_LE:
-		return c <= m.statusCode
-	case middlewarev1.AccessLog_StatusCodeFilter_NE:
-		return c != m.statusCode
-	default:
+	// If no filter is provided all status codes are valid
+	if len(m.statusCodes) == 0 {
 		return true
 	}
+	for _, code := range m.statusCodes {
+		if c == code {
+			return true
+		}
+	}
+	return false
 }

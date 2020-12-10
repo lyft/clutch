@@ -5550,122 +5550,111 @@ export namespace clutch {
         /** Namespace middleware. */
         namespace middleware {
 
-            /** Namespace v1. */
-            namespace v1 {
+            /** Namespace accesslog. */
+            namespace accesslog {
 
-                /** Properties of an AccessLog. */
-                interface IAccessLog {
+                /** Namespace v1. */
+                namespace v1 {
 
-                    /** AccessLog statusCodeFilter */
-                    statusCodeFilter?: (clutch.config.middleware.v1.AccessLog.IStatusCodeFilter|null);
-                }
+                    /** Properties of a Config. */
+                    interface IConfig {
 
-                /** Represents an AccessLog. */
-                class AccessLog implements IAccessLog {
-
-                    /**
-                     * Constructs a new AccessLog.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.config.middleware.v1.IAccessLog);
-
-                    /** AccessLog statusCodeFilter. */
-                    public statusCodeFilter?: (clutch.config.middleware.v1.AccessLog.IStatusCodeFilter|null);
-
-                    /**
-                     * Verifies an AccessLog message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates an AccessLog message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns AccessLog
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.config.middleware.v1.AccessLog;
-
-                    /**
-                     * Creates a plain object from an AccessLog message. Also converts values to other types if specified.
-                     * @param message AccessLog
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.config.middleware.v1.AccessLog, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this AccessLog to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                namespace AccessLog {
-
-                    /** Properties of a StatusCodeFilter. */
-                    interface IStatusCodeFilter {
-
-                        /** StatusCodeFilter operator */
-                        operator?: (clutch.config.middleware.v1.AccessLog.StatusCodeFilter.Op|null);
-
-                        /** StatusCodeFilter value */
-                        value?: (number|null);
+                        /** Config statusCodeFilters */
+                        statusCodeFilters?: (clutch.config.middleware.accesslog.v1.Config.IStatusCodeFilter[]|null);
                     }
 
-                    /** Represents a StatusCodeFilter. */
-                    class StatusCodeFilter implements IStatusCodeFilter {
+                    /** Represents a Config. */
+                    class Config implements IConfig {
 
                         /**
-                         * Constructs a new StatusCodeFilter.
+                         * Constructs a new Config.
                          * @param [properties] Properties to set
                          */
-                        constructor(properties?: clutch.config.middleware.v1.AccessLog.IStatusCodeFilter);
+                        constructor(properties?: clutch.config.middleware.accesslog.v1.IConfig);
 
-                        /** StatusCodeFilter operator. */
-                        public operator: clutch.config.middleware.v1.AccessLog.StatusCodeFilter.Op;
-
-                        /** StatusCodeFilter value. */
-                        public value: number;
+                        /** Config statusCodeFilters. */
+                        public statusCodeFilters: clutch.config.middleware.accesslog.v1.Config.IStatusCodeFilter[];
 
                         /**
-                         * Verifies a StatusCodeFilter message.
+                         * Verifies a Config message.
                          * @param message Plain object to verify
                          * @returns `null` if valid, otherwise the reason why it is not
                          */
                         public static verify(message: { [k: string]: any }): (string|null);
 
                         /**
-                         * Creates a StatusCodeFilter message from a plain object. Also converts values to their respective internal types.
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
                          * @param object Plain object
-                         * @returns StatusCodeFilter
+                         * @returns Config
                          */
-                        public static fromObject(object: { [k: string]: any }): clutch.config.middleware.v1.AccessLog.StatusCodeFilter;
+                        public static fromObject(object: { [k: string]: any }): clutch.config.middleware.accesslog.v1.Config;
 
                         /**
-                         * Creates a plain object from a StatusCodeFilter message. Also converts values to other types if specified.
-                         * @param message StatusCodeFilter
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
                          * @param [options] Conversion options
                          * @returns Plain object
                          */
-                        public static toObject(message: clutch.config.middleware.v1.AccessLog.StatusCodeFilter, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                        public static toObject(message: clutch.config.middleware.accesslog.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                         /**
-                         * Converts this StatusCodeFilter to JSON.
+                         * Converts this Config to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };
                     }
 
-                    namespace StatusCodeFilter {
+                    namespace Config {
 
-                        /** Op enum. */
-                        enum Op {
-                            UNSPECIFIED = 0,
-                            EQ = 1,
-                            GE = 2,
-                            LE = 3,
-                            NE = 4
+                        /** Properties of a StatusCodeFilter. */
+                        interface IStatusCodeFilter {
+
+                            /** StatusCodeFilter equals */
+                            equals?: (number|null);
+                        }
+
+                        /** Represents a StatusCodeFilter. */
+                        class StatusCodeFilter implements IStatusCodeFilter {
+
+                            /**
+                             * Constructs a new StatusCodeFilter.
+                             * @param [properties] Properties to set
+                             */
+                            constructor(properties?: clutch.config.middleware.accesslog.v1.Config.IStatusCodeFilter);
+
+                            /** StatusCodeFilter equals. */
+                            public equals: number;
+
+                            /** StatusCodeFilter filterType. */
+                            public filterType?: "equals";
+
+                            /**
+                             * Verifies a StatusCodeFilter message.
+                             * @param message Plain object to verify
+                             * @returns `null` if valid, otherwise the reason why it is not
+                             */
+                            public static verify(message: { [k: string]: any }): (string|null);
+
+                            /**
+                             * Creates a StatusCodeFilter message from a plain object. Also converts values to their respective internal types.
+                             * @param object Plain object
+                             * @returns StatusCodeFilter
+                             */
+                            public static fromObject(object: { [k: string]: any }): clutch.config.middleware.accesslog.v1.Config.StatusCodeFilter;
+
+                            /**
+                             * Creates a plain object from a StatusCodeFilter message. Also converts values to other types if specified.
+                             * @param message StatusCodeFilter
+                             * @param [options] Conversion options
+                             * @returns Plain object
+                             */
+                            public static toObject(message: clutch.config.middleware.accesslog.v1.Config.StatusCodeFilter, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                            /**
+                             * Converts this StatusCodeFilter to JSON.
+                             * @returns JSON object
+                             */
+                            public toJSON(): { [k: string]: any };
                         }
                     }
                 }

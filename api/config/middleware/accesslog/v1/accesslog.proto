@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package clutch.config.middleware.accesslog.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/config/middleware/accesslog/v1;accesslogv1";
+
+import "validate/validate.proto";
+
+message Config {
+  // filter on an interger comparison of the status code
+  message StatusCodeFilter {
+    // only equals filter type is supported for now
+    // since there are only 16 codes for gRPC. We can
+    // expand this to include a range filter type if need be.
+    oneof filter_type {
+      // gRPC status code value
+      uint32 equals = 1 [ (validate.rules).uint32 = {gte : 0, lte : 16} ];
+    }
+  }
+  // if no filter is specified all status codes are logged
+  repeated StatusCodeFilter status_code_filters = 1;
+}
