@@ -2,7 +2,6 @@ package k8s
 
 import (
 	"fmt"
-	"time"
 
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -37,10 +36,12 @@ func (lw *lightweightCacheObject) GetNamespace() string { return lw.Namespace }
 // Drawbacks
 // - Update resource event handler does not function as expected, old objects will always return nil.
 //   This is because we dont cache the full k8s object to compute deltas as we are using lightweightCacheObjects instead.
+// - Resync does not work as expected becuase the cache is filled with lightweightCacheObjects,
+//   for this reason Resync is disabled.
+
 func NewLightweightInformer(
 	lw cache.ListerWatcher,
 	objType runtime.Object,
-	resync time.Duration,
 	h cache.ResourceEventHandler,
 	recieveUpdates bool,
 ) cache.Controller {
@@ -54,7 +55,7 @@ func NewLightweightInformer(
 		Queue:            fifo,
 		ListerWatcher:    lw,
 		ObjectType:       objType,
-		FullResyncPeriod: resync,
+		FullResyncPeriod: 0,
 		RetryOnError:     false,
 		Process: func(obj interface{}) error {
 			for _, d := range obj.(cache.Deltas) {
