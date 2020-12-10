@@ -71,6 +71,9 @@ func NewLightweightInformer(
 				switch d.Type {
 				case cache.Sync, cache.Replaced, cache.Added, cache.Updated:
 					if _, exists, err := cacheStore.Get(lightweightObj); err == nil && exists {
+						// Not all use-cases of this informer require updates to Kubernetes objects
+						// For this reason you can disable updates completely by setting `recieveUpdates` to false
+						// This both disables the cache update and the OnUpdate handler
 						if recieveUpdates {
 							if err := cacheStore.Update(lightweightObj); err != nil {
 								return err
