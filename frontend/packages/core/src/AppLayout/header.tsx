@@ -12,6 +12,7 @@ const AppBar = styled(MuiAppBar)({
   minWidth: "fit-content",
   background: "linear-gradient(90deg, #38106b 4.58%, #131c5f 89.31%)",
   zIndex: 1201,
+  height: "64px",
 });
 
 const Title = styled(Typography)({

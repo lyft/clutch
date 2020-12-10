@@ -23,9 +23,9 @@ const drawerWidth = "100px";
 
 const DrawerPanel = styled(MuiDrawer)({
   flexShrink: 0,
-  minWidth: `${drawerWidth}`,
+  width: `${drawerWidth}`,
   "div[class*='MuiDrawer-paper']": {
-    minWidth: `${drawerWidth}`,
+    width: `${drawerWidth}`,
     top: "64px",
     backgroundColor: "linear-gradient(0deg, #FFFFFF, #FFFFFF), #FFFFFF",
     boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
