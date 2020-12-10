@@ -61,6 +61,7 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 		&corev1.Pod{},
 		informerResyncTime,
 		informerHandlers,
+		false,
 	)
 
 	deploymentInformer := NewLightweightInformer(
@@ -68,6 +69,7 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 		&appsv1.Deployment{},
 		informerResyncTime,
 		informerHandlers,
+		true,
 	)
 
 	hpaInformer := NewLightweightInformer(
@@ -75,6 +77,7 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 		&autoscalingv1.HorizontalPodAutoscaler{},
 		informerResyncTime,
 		informerHandlers,
+		true,
 	)
 
 	stop := make(chan struct{})
