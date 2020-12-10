@@ -53,7 +53,7 @@ const StyledTextField = styled(BaseTextField)({
     ".MuiButtonBase-root": {
       backgroundColor: "#3548D4",
       "*": {
-        color: "#FFFFFF"
+        color: "#FFFFFF",
       },
     },
   },
@@ -104,7 +104,7 @@ const IconButton = styled(MuiIconButton)({
   "&:hover": {
     backgroundColor: "#2D3DB4",
     "*": {
-      color: "#FFFFFF"
+      color: "#FFFFFF",
     },
   },
   "&:active": {
