@@ -54,7 +54,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	}
 
 	for _, region := range ac.Regions {
-		regionCfg := aws.NewConfig().WithRegion(region).WithMaxRetries(0)
+		regionCfg := aws.NewConfig().WithRegion(region).WithMaxRetries(50)
 		awsSession, err := session.NewSession(regionCfg)
 		if err != nil {
 			return nil, err
@@ -222,6 +222,7 @@ func (c *client) DescribeInstances(ctx context.Context, region string, ids []str
 	}
 
 	input := &ec2.DescribeInstancesInput{InstanceIds: aws.StringSlice(ids)}
+	// 20 transactions per second account wide
 	result, err := cl.ec2.DescribeInstancesWithContext(ctx, input)
 
 	if err != nil {
