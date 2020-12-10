@@ -16,7 +16,7 @@ export default {
 } as Meta;
 
 const Template = () => (
-  <Grid container alignItems="center" justify="flex-end">
+  <Grid container alignItems="center" justify="center">
     <UserInformation />
   </Grid>
 );

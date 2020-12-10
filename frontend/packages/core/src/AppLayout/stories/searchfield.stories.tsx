@@ -1,5 +1,7 @@
 import * as React from "react";
 import { MemoryRouter } from "react-router";
+import styled from "@emotion/styled";
+import { Box, Grid as MuiGrid } from "@material-ui/core";
 import type { Meta } from "@storybook/react";
 
 import ResizeAutoscalingGroup from "../../../../../workflows/ec2/src/resize-asg";
@@ -11,11 +13,13 @@ export default {
   title: "Core/AppLayout/Search Field",
   component: SearchField,
   decorators: [
-    () => (
-      <MemoryRouter>
-        <SearchField />
-      </MemoryRouter>
-    ),
+    Search => {
+      return (
+        <MemoryRouter>
+          <Search />
+        </MemoryRouter>
+      );
+    },
     StoryFn => {
       return (
         <ApplicationContext.Provider
@@ -54,12 +58,19 @@ export default {
       );
     },
   ],
-  parameters: {
-    backgrounds: {
-      default: "header blue",
-      values: [{ name: "header blue", value: "#131C5F" }],
-    },
-  },
 } as Meta;
 
-export const Primary: React.FC<{}> = () => <SearchField />;
+const Grid = styled(MuiGrid)({
+  height: "64px",
+  backgroundColor: "#131C5F",
+});
+
+const Template = () => (
+  <Grid container alignItems="center" justify="center">
+    <Box>
+      <SearchField />
+    </Box>
+  </Grid>
+);
+
+export const Primary = Template.bind({});
