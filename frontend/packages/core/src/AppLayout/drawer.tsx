@@ -75,8 +75,7 @@ const GroupHeading = styled(Typography)({
   fontSize: "14px",
   lineHeight: "18px",
   flexGrow: 1,
-  paddingTop: "8px",
-  paddingBottom: "8px",
+  paddingTop: "11px",
 });
 
 const Avatar = styled(MuiAvatar)({
@@ -187,11 +186,11 @@ const Group: React.FC<GroupProps> = ({ heading, open = false, updateOpenGroup, c
         }}
       >
         <Avatar>
-          <Initials className="initials">
-            {heading.charAt(0)}
-          </Initials>
+          <Initials className="initials">{heading.charAt(0)}</Initials>
         </Avatar>
-        <GroupHeading className="heading" align="center">{heading}</GroupHeading>
+        <GroupHeading className="heading" align="center">
+          {heading}
+        </GroupHeading>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Popper
             open={openList}
