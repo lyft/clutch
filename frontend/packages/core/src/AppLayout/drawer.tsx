@@ -167,7 +167,7 @@ const Group: React.FC<GroupProps> = ({ heading, open = false, updateOpenGroup, c
 
   // n.b. if a Workflow Grouping has no workflows in it don't display it even if
   // it's not explicitly marked as hidden.
-  if (children === 0) {
+  if (React.Children.count(children) === 0) {
     return null;
   }
 
