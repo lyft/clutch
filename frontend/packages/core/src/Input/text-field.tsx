@@ -4,7 +4,7 @@ import type {
   InputProps as MuiInputProps,
   StandardTextFieldProps as MuiStandardTextFieldProps,
 } from "@material-ui/core";
-import { TextField as MuiTextField } from "@material-ui/core";
+import { IconButton as MuiIconButton, TextField as MuiTextField } from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/Error";
 
 const KEY_ENTER = 13;
@@ -42,7 +42,6 @@ const StyledTextField = styled(BaseTextField)({
     border: "1px solid rgba(13, 16, 48, 0.38)",
     borderRadius: "4px",
     fontSize: "16px",
-    padding: "14px 16px",
   },
 
   "label + .MuiInput-formControl": {
@@ -51,6 +50,12 @@ const StyledTextField = styled(BaseTextField)({
 
   ".MuiInputBase-root.Mui-focused": {
     borderColor: "#3548d4",
+    ".MuiButtonBase-root": {
+      backgroundColor: "#3548D4",
+      "*": {
+        color: "#FFFFFF",
+      },
+    },
   },
 
   ".MuiInputBase-root.Mui-disabled": {
@@ -58,7 +63,7 @@ const StyledTextField = styled(BaseTextField)({
   },
 
   ".MuiInput-input": {
-    padding: "0",
+    padding: "14px 16px",
     height: "20px",
   },
 
@@ -91,6 +96,25 @@ const StyledTextField = styled(BaseTextField)({
   },
 });
 
+const IconButton = styled(MuiIconButton)({
+  borderRadius: "0",
+  backgroundColor: "#E7E7EA",
+  borderBottomRightRadius: "3px",
+  borderTopRightRadius: "3px",
+  "&:hover": {
+    backgroundColor: "#2D3DB4",
+    "*": {
+      color: "#FFFFFF",
+    },
+  },
+  "&:active": {
+    backgroundColor: "#2938A5",
+    "*": {
+      color: "#FFFFFF",
+    },
+  },
+});
+
 export interface TextFieldProps
   extends Pick<
       MuiStandardTextFieldProps,
@@ -111,7 +135,7 @@ export interface TextFieldProps
       | "type"
       | "value"
     >,
-    Pick<MuiInputProps, "readOnly"> {
+    Pick<MuiInputProps, "readOnly" | "endAdornment"> {
   onReturn?: () => void;
 }
 
@@ -121,6 +145,7 @@ export const TextField = ({
   error,
   helperText,
   readOnly,
+  endAdornment,
   ...props
 }: TextFieldProps) => {
   const onKeyDown = (
@@ -153,7 +178,10 @@ export const TextField = ({
       onBlur={onChange}
       error={error}
       helperText={helpText}
-      InputProps={{ readOnly }}
+      InputProps={{
+        readOnly,
+        endAdornment: endAdornment && <IconButton type="submit">{endAdornment}</IconButton>,
+      }}
       {...props}
     />
   );
