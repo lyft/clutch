@@ -34,10 +34,6 @@ interface ResolverState {
 
 export interface DispatchAction {
   allSchemas?: any[];
-  data?: {
-    query?: string;
-    [key: string]: string;
-  };
   error?: string;
   schema?: any;
   type: ResolverAction;
