@@ -141,8 +141,6 @@ interface GroupProps {
 }
 
 const Group: React.FC<GroupProps> = ({ heading, open = false, updateOpenGroup, children }) => {
-  const childrenList = React.Children.toArray(children);
-
   const [openList, setListOpen] = React.useState(false);
 
   const anchorRef = React.useRef(null);
@@ -160,6 +158,7 @@ const Group: React.FC<GroupProps> = ({ heading, open = false, updateOpenGroup, c
 
   let headingPath = window.location.pathname.replace("/", "").split("/")[0];
 
+  // TODO: discover this from config
   if (headingPath === "ec2") {
     headingPath = "aws";
   }
@@ -168,7 +167,7 @@ const Group: React.FC<GroupProps> = ({ heading, open = false, updateOpenGroup, c
 
   // n.b. if a Workflow Grouping has no workflows in it don't display it even if
   // it's not explicitly marked as hidden.
-  if (childrenList.length === 0) {
+  if (children === 0) {
     return null;
   }
 
@@ -195,16 +194,13 @@ const Group: React.FC<GroupProps> = ({ heading, open = false, updateOpenGroup, c
           <Popper
             open={openList}
             anchorEl={anchorRef.current}
-            role={undefined}
             transition
             placement="right-start"
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <List component="div" disablePadding id="workflow-options">
-                  {childrenList.map((c: React.ReactElement) => {
-                    return React.cloneElement(c);
-                  })}
+                  {children}
                 </List>
               </ClickAwayListener>
             </Paper>
