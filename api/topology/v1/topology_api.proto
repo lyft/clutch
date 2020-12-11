@@ -21,6 +21,14 @@ service TopologyAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
+
+  rpc SearchTopology(SearchTopologyRequest) returns (SearchTopologyResponse) {
+    option (google.api.http) = {
+      post : "/v1/topology/search"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
 }
 
 message GetTopologyRequest {
@@ -29,6 +37,55 @@ message GetTopologyRequest {
 
 message GetTopologyResponse {
   repeated QueryResult results = 1;
+}
+
+message SearchTopologyRequest {
+
+  message FieldSelector {
+    oneof field {
+      // idk ID does not make sense here
+      // wanted to convey that is not metadata like the ID column in our topology_cache table
+      // maybe this can just be a bool?
+      string id = 2;
+      // if metadata is nested specific the full path like so
+      // meatadata = 'level1.level2.level3.fieldname'
+      string metadata = 3;
+    }
+  }
+
+  // default ID:ascending
+  message Sort {
+    enum Direction {
+      UNSPECIFIED = 0;
+      ASCENDING = 1;
+      DESCENDING = 2;
+    }
+    Direction direction = 1;
+    FieldSelector field = 2;
+  }
+
+  message Filter {
+    message Search {
+      FieldSelector field = 1;
+      string text = 2;
+    }
+
+    // Filter what type of resource your looking for my proto type_url
+    string type_url = 2;
+
+    // Any valid metadata
+    map<string, string> metadata = 3;
+  }
+
+  Sort sort = 1;
+  // or call it offset i dont mind either way
+  int64 skip = 2;
+  int64 limit = 3;
+  Filter filter = 4;
+}
+
+message SearchTopologyResponse {
+  repeated Resource resources = 1;
 }
 
 // A query allows the user to specify multiple dimensions and the

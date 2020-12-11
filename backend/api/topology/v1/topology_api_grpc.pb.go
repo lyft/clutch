@@ -18,6 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TopologyAPIClient interface {
 	GetTopology(ctx context.Context, in *GetTopologyRequest, opts ...grpc.CallOption) (*GetTopologyResponse, error)
+	SearchTopology(ctx context.Context, in *SearchTopologyRequest, opts ...grpc.CallOption) (*SearchTopologyResponse, error)
 }
 
 type topologyAPIClient struct {
@@ -37,11 +38,21 @@ func (c *topologyAPIClient) GetTopology(ctx context.Context, in *GetTopologyRequ
 	return out, nil
 }
 
+func (c *topologyAPIClient) SearchTopology(ctx context.Context, in *SearchTopologyRequest, opts ...grpc.CallOption) (*SearchTopologyResponse, error) {
+	out := new(SearchTopologyResponse)
+	err := c.cc.Invoke(ctx, "/clutch.topology.v1.TopologyAPI/SearchTopology", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TopologyAPIServer is the server API for TopologyAPI service.
 // All implementations should embed UnimplementedTopologyAPIServer
 // for forward compatibility
 type TopologyAPIServer interface {
 	GetTopology(context.Context, *GetTopologyRequest) (*GetTopologyResponse, error)
+	SearchTopology(context.Context, *SearchTopologyRequest) (*SearchTopologyResponse, error)
 }
 
 // UnimplementedTopologyAPIServer should be embedded to have forward compatible implementations.
@@ -50,6 +61,9 @@ type UnimplementedTopologyAPIServer struct {
 
 func (UnimplementedTopologyAPIServer) GetTopology(context.Context, *GetTopologyRequest) (*GetTopologyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTopology not implemented")
+}
+func (UnimplementedTopologyAPIServer) SearchTopology(context.Context, *SearchTopologyRequest) (*SearchTopologyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchTopology not implemented")
 }
 
 // UnsafeTopologyAPIServer may be embedded to opt out of forward compatibility for this service.
@@ -81,6 +95,24 @@ func _TopologyAPI_GetTopology_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TopologyAPI_SearchTopology_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchTopologyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TopologyAPIServer).SearchTopology(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.topology.v1.TopologyAPI/SearchTopology",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TopologyAPIServer).SearchTopology(ctx, req.(*SearchTopologyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _TopologyAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "clutch.topology.v1.TopologyAPI",
 	HandlerType: (*TopologyAPIServer)(nil),
@@ -88,6 +120,10 @@ var _TopologyAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTopology",
 			Handler:    _TopologyAPI_GetTopology_Handler,
+		},
+		{
+			MethodName: "SearchTopology",
+			Handler:    _TopologyAPI_SearchTopology_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
