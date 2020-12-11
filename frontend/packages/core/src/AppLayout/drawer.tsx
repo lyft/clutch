@@ -233,7 +233,7 @@ const Link: React.FC<LinkProps> = ({ to, text }) => {
   );
 };
 
-const Drawer: React.FC = () => {
+export const Drawer: React.FC = () => {
   const { workflows } = useAppContext();
   const [openGroup, setOpenGroup] = React.useState("");
 
