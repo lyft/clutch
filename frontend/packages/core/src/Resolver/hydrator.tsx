@@ -1,34 +1,8 @@
 import React from "react";
 import type { clutch } from "@clutch-sh/api";
-import {
-  FormControl as MuiFormControl,
-  InputLabel as MuiInputLabel,
-  MenuItem,
-  Select as MuiSelect,
-} from "@material-ui/core";
-import styled from "styled-components";
 
+import { Select } from "../Input/select";
 import { TextField } from "../Input/text-field";
-
-const maxWidth = "500px";
-const InputLabel = styled(MuiInputLabel)`
-  ${({ theme }) => `
-    color: ${theme.palette.text.primary};
-  `}
-`;
-
-const FormControl = styled(MuiFormControl)`
-  display: flex;
-  width: 100%;
-  margin-top: 5px;
-  max-width: ${maxWidth};
-`;
-
-const Select = styled(MuiSelect)`
-  display: flex;
-  width: 100%;
-  max-width: ${maxWidth};
-`;
 
 export interface ResolverChangeEvent {
   target: {
@@ -88,45 +62,35 @@ const OptionField = (
   field: clutch.resolver.v1.IField,
   onChange: (e: ResolverChangeEvent) => void
 ): React.ReactElement => {
-  const options = field.metadata.optionField.options.map(option => {
-    return option.displayName;
-  });
-  const [selectedIdx, setSelectedIdx] = React.useState(0);
-  const updateSelectedOption = (event: React.ChangeEvent<ChangeEventTarget>) => {
-    setSelectedIdx(options.indexOf(event.target.value));
-    onChange(convertChangeEvent(event));
-  };
-
   React.useEffect(() => {
-    const fieldName = field.metadata.displayName || field.name;
     onChange({
       target: {
-        name: fieldName,
-        value: field.metadata.optionField.options?.[selectedIdx]?.stringValue,
+        name: field.name,
+        value: field.metadata.optionField.options?.[0]?.stringValue,
       },
       initialLoad: true,
     });
   }, []);
 
+  const options = field.metadata.optionField.options.map(option => {
+    return { label: option.displayName, value: option.stringValue };
+  });
+  const updateSelectedOption = (value: string) => {
+    onChange({
+      target: {
+        name: field.name,
+        value,
+      },
+    });
+  };
+
   return (
-    <FormControl
-      key={field.metadata.displayName || field.name}
-      required={field.metadata.required || false}
-    >
-      <InputLabel color="secondary">{field.metadata.displayName || field.name}</InputLabel>
-      <Select
-        value={options[selectedIdx] || ""}
-        onChange={updateSelectedOption}
-        name={field.metadata.displayName || field.name}
-        inputProps={{ style: { minWidth: "100px" } }}
-      >
-        {options.map(option => (
-          <MenuItem key={option} value={option}>
-            {option}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+    <Select
+      label={field.metadata.displayName}
+      onChange={updateSelectedOption}
+      name={field.name}
+      options={options}
+    />
   );
 };
 
@@ -151,4 +115,4 @@ const hydrateField = (
   return component(field, onChange, validation);
 };
 
-export { convertChangeEvent, FormControl, hydrateField, InputLabel };
+export { convertChangeEvent, hydrateField };

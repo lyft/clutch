@@ -33,7 +33,7 @@ const StyledAccordion = styled(MuiAccordion)({
   },
 
   ".MuiAccordionDetails-root": {
-    padding: "16px",
+    padding: "8px",
     fontSize: "16px",
   },
 
@@ -79,6 +79,8 @@ export const StyledAccordionSummary = styled(AccordionSummaryBase)({
 });
 
 const StyledAccordionGroup = styled.div({
+  width: "100%",
+
   ".MuiAccordion-root": {
     marginBottom: "16px",
   },
@@ -135,7 +137,7 @@ export const Accordion = ({
 };
 
 export interface AccordionGroupProps {
-  children: React.ReactElement<AccordionProps> | React.ReactElement<AccordionProps>[];
+  children?: React.ReactElement<AccordionProps> | React.ReactElement<AccordionProps>[];
   defaultExpandedIdx?: number;
 }
 
@@ -160,6 +162,15 @@ export const AccordionGroup = ({ children, defaultExpandedIdx }: AccordionGroupP
   );
 };
 
+const StyledAccordionDetails = styled(MuiAccordionDetails)({
+  "> *": {
+    padding: "8px 8px",
+  },
+  ".MuiFormLabel-root": {
+    padding: "inherit",
+  },
+});
+
 export const AccordionActions = MuiAccordionActions;
-export const AccordionDetails = MuiAccordionDetails;
+export const AccordionDetails = StyledAccordionDetails;
 export const AccordionDivider = MuiDivider;

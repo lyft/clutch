@@ -1,9 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
+import styled from "@emotion/styled";
 import _ from "lodash";
-import styled from "styled-components";
 
+import { AccordionGroup } from "../accordion";
 import { Button } from "../button";
 import { useWizardContext } from "../Contexts";
 import { CompressedError, Error } from "../error";
@@ -11,17 +11,22 @@ import { HorizontalRule } from "../horizontal-rule";
 import Loadable from "../loading";
 
 import { fetchResourceSchemas, resolveResource } from "./fetch";
-import type { ResolverChangeEvent } from "./hydrator";
 import { QueryResolver, SchemaResolver } from "./input";
 import type { DispatchAction } from "./state";
 import { ResolverAction, useResolverState } from "./state";
 
-const Form = styled.form`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
+const Form = styled.form({
+  alignItems: "center",
+  display: "flex",
+  flexDirection: "column",
+});
+
+const SchemaLabel = styled.div({
+  alignSelf: "flex-start",
+  fontSize: "20px",
+  fontWeight: 700,
+  paddingBottom: "8px",
+});
 
 const loadSchemas = (type: string, dispatch: React.Dispatch<DispatchAction>) => {
   fetchResourceSchemas(type)
@@ -51,37 +56,24 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
   const [state, dispatch] = useResolverState();
   const { displayWarnings } = useWizardContext();
 
-  const queryValidation = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onSubmit",
-    shouldFocusError: false,
-  });
-  const schemaValidation = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onSubmit",
-    shouldFocusError: false,
-  });
-  const [validation, setValidation] = React.useState(() => queryValidation);
-
   React.useEffect(() => loadSchemas(type, dispatch), []);
 
-  const submitHandler = () => {
+  const [queryData, setQueryData] = React.useState({ query: "" });
+
+  const submitHandler = data => {
     // Move to loading state.
     dispatch({ type: ResolverAction.RESOLVING });
 
     // Copy incoming data, trimming whitespace from any string values (usually artifact of cut and paste into tool).
-    const data = _.mapValues(state.queryData, v => (_.isString(v) && _.trim(v)) || v);
-
-    // Set desired type.
-    data["@type"] = state.allSchemas[state.selectedSchema]?.typeUrl;
+    const inputData = _.mapValues(data, v => (_.isString(v) && _.trim(v)) || v);
 
     // Resolve!
     resolveResource(
       type,
       searchLimit,
-      data,
+      inputData,
       (results, failures) => {
-        onResolve({ results, input: data });
+        onResolve({ results, input: inputData });
         if (!_.isEmpty(failures)) {
           displayWarnings(failures);
         }
@@ -91,24 +83,14 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
     );
   };
 
-  const updateResolverData = (e: ResolverChangeEvent) => {
-    validation.clearErrors();
-    if (e.target.name !== "query") {
-      setValidation(() => schemaValidation);
-    } else {
-      setValidation(() => queryValidation);
-    }
-    dispatch({
-      type: ResolverAction.UPDATE_QUERY_DATA,
-      data: { [e.target.name.toLowerCase()]: e.target.value },
-    });
-    if (e.initialLoad) {
-      setValidation(() => queryValidation);
-    }
-  };
+  const queryValidation = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+    shouldFocusError: false,
+  });
 
-  const setSelectedSchema = (e: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-    dispatch({ type: ResolverAction.SET_SELECTED_SCHEMA, schema: e.target.value });
+  const queryOnChange = e => {
+    setQueryData({ query: e.target.value });
   };
 
   return (
@@ -117,30 +99,27 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
         <Error message={state.schemaFetchError} onRetry={() => loadSchemas(type, dispatch)} />
       ) : (
         <Loadable variant="overlay" isLoading={state.resolverLoading}>
-          {process.env.REACT_APP_DEBUG_FORMS === "true" && <DevTool control={validation.control} />}
+          <CompressedError title="Error" message={state.resolverFetchError} />
           {(variant === "dual" || variant === "query") && (
-            <Form onSubmit={validation.handleSubmit(submitHandler)} noValidate>
+            <Form
+              onSubmit={queryValidation.handleSubmit(() => submitHandler(queryData))}
+              noValidate
+            >
               <QueryResolver
                 schemas={state.searchableSchemas}
-                onChange={updateResolverData}
+                onChange={queryOnChange}
                 validation={queryValidation}
               />
+              <Button text="Search" type="submit" />
             </Form>
           )}
           {variant === "dual" && <HorizontalRule>OR</HorizontalRule>}
-          {(variant === "dual" || variant === "schema") && (
-            <Form onSubmit={validation.handleSubmit(submitHandler)} noValidate>
-              <SchemaResolver
-                schemas={state.allSchemas}
-                selectedSchema={state.selectedSchema}
-                onSelect={setSelectedSchema}
-                onChange={updateResolverData}
-                validation={schemaValidation}
-              />
-            </Form>
-          )}
-          <Button text="Continue" onClick={validation.handleSubmit(submitHandler)} />
-          <CompressedError title="Error" message={state.resolverFetchError} />
+          <SchemaLabel>Advanced Search</SchemaLabel>
+          <AccordionGroup defaultExpandedIdx={0}>
+            {state.allSchemas.map(schema => (
+              <SchemaResolver key={schema.typeUrl} schema={schema} submitHandler={submitHandler} />
+            ))}
+          </AccordionGroup>
         </Loadable>
       )}
     </Loadable>
