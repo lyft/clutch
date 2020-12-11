@@ -8,6 +8,7 @@ import "google/protobuf/any.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
 import "google/rpc/status.proto";
+import "validate/validate.proto";
 
 import "api/v1/annotations.proto";
 
@@ -21,6 +22,14 @@ service TopologyAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
+
+  rpc SearchTopology(SearchTopologyRequest) returns (SearchTopologyResponse) {
+    option (google.api.http) = {
+      post : "/v1/topology/search"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
 }
 
 message GetTopologyRequest {
@@ -29,6 +38,54 @@ message GetTopologyRequest {
 
 message GetTopologyResponse {
   repeated QueryResult results = 1;
+}
+
+message SearchTopologyRequest {
+  message FieldSelector {
+    enum Column {
+      UNSPECIFIED = 0;
+      ID = 1;
+    }
+    oneof field {
+      Column column = 1;
+      // if metadata is nested specific the full path like so
+      // meatadata = 'level1.level2.level3.fieldname'
+      string metadata = 2;
+    }
+  }
+
+  // The default sort is by column `id` and descending
+  message Sort {
+    enum Direction {
+      UNSPECIFIED = 0;
+      ASCENDING = 1;
+      DESCENDING = 2;
+    }
+    Direction direction = 1;
+    FieldSelector field = 2 [ (validate.rules).message.required = true ];
+  }
+
+  message Filter {
+    message Search {
+      FieldSelector field = 1 [ (validate.rules).message.required = true ];
+      string text = 2 [ (validate.rules).string.min_len = 1 ];
+    }
+
+    Search search = 1;
+    string type_url = 2;
+    // Any valid metadata on the cache Resource object
+    map<string, string> metadata = 3;
+  }
+
+  Sort sort = 1;
+  string page_token = 2;
+  int64 limit = 3;
+  Filter filter = 4;
+}
+
+message SearchTopologyResponse {
+  repeated Resource resources = 1;
+  string next_page_token = 2;
 }
 
 // A query allows the user to specify multiple dimensions and the
