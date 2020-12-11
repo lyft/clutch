@@ -227,7 +227,6 @@ func (c *client) DescribeInstances(ctx context.Context, region string, ids []str
 	}
 
 	input := &ec2.DescribeInstancesInput{InstanceIds: aws.StringSlice(ids)}
-	// 20 transactions per second account wide
 	result, err := cl.ec2.DescribeInstancesWithContext(ctx, input)
 
 	if err != nil {
