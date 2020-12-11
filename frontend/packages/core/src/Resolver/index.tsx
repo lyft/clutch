@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import styled from "@emotion/styled";
 import _ from "lodash";
-import styled from "styled-components";
 
 import { AccordionGroup } from "../accordion";
 import { Button } from "../button";
@@ -15,12 +15,18 @@ import { QueryResolver, SchemaResolver } from "./input";
 import type { DispatchAction } from "./state";
 import { ResolverAction, useResolverState } from "./state";
 
-const Form = styled.form`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
+const Form = styled.form({
+  alignItems: "center",
+  display: "flex",
+  flexDirection: "column",
+});
+
+const SchemaLabel = styled.div({
+  alignSelf: "flex-start",
+  fontSize: "20px",
+  fontWeight: 700,
+  paddingBottom: "8px",
+});
 
 const loadSchemas = (type: string, dispatch: React.Dispatch<DispatchAction>) => {
   fetchResourceSchemas(type)
@@ -108,7 +114,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
             </Form>
           )}
           {variant === "dual" && <HorizontalRule>OR</HorizontalRule>}
-          Advanced Search
+          <SchemaLabel>Advanced Search</SchemaLabel>
           <AccordionGroup defaultExpandedIdx={0}>
             {state.allSchemas.map(schema => (
               <SchemaResolver key={schema.typeUrl} schema={schema} submitHandler={submitHandler} />

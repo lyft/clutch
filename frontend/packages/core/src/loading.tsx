@@ -1,17 +1,23 @@
 import React from "react";
+import styled from "@emotion/styled";
 import { CircularProgress, Grid, Paper } from "@material-ui/core";
-import styled from "styled-components";
 
 const LoadingSpinner = styled(CircularProgress)`
-  ${({ theme }) => `
-  color: ${theme.palette.accent.main};
+  color: #02acbe;
   position: absolute;
-  `}
 `;
 
 const ContentContainer = styled(Grid)`
   position: relative;
 `;
+
+const ChildrenContainer = styled.div({
+  width: "100%",
+  "> *": {
+    paddingTop: "8px",
+    paddingBottom: "8px",
+  },
+});
 
 const Overlay = styled(Paper)`
   position: absolute;
@@ -35,7 +41,7 @@ const Loadable: React.FC<LoadableProps> = ({ isLoading, variant, children }) => 
   if (variant === "overlay") {
     return (
       <ContentContainer container direction="column" justify="center" alignItems="center">
-        {children}
+        <ChildrenContainer>{children}</ChildrenContainer>
         {isLoading && <LoadingOveray />}
       </ContentContainer>
     );
