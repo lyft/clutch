@@ -27,7 +27,7 @@ const DrawerPanel = styled(MuiDrawer)({
   "div[class*='MuiDrawer-paper']": {
     width: `${drawerWidth}`,
     top: "64px",
-    backgroundColor: "linear-gradient(0deg, #FFFFFF, #FFFFFF), #FFFFFF",
+    backgroundColor: "#FFFFFF",
     boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
   },
 });
@@ -40,28 +40,33 @@ const GroupList = styled(List)({
 const GroupListItem = styled(ListItem)({
   flexDirection: "column",
   height: "82px",
-  padding: "16px 8px 0px 8px",
+  padding: "16px 8px 16px 8px",
   "&:hover": {
-    backgroundColor: "#E7E7EA",
-  },
-  "&:active": {
-    backgroundColor:
-      "linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), #0D1030",
-  },
-  "&.Mui-selected": {
-    backgroundColor: "#EBEDFB",
-    ".MuiAvatar-root": {
-      color: "#FFFFFF",
-      background: "#3548D4",
+    backgroundColor: "#F5F6FD",
+    "&.Mui-selected": {
+      backgroundColor: "#F5F6FD",
     },
   },
-});
-
-const Avatar = styled(MuiAvatar)({
-  color: "rgba(13, 16, 48, 0.38)",
-  background: "rgba(13, 16, 48, 0.12)",
-  height: "36px",
-  width: "36px",
+  "&:active": {
+    backgroundColor: "#D7DAF6",
+    "&.Mui-selected": {
+      backgroundColor: "#D7DAF6",
+    },
+  },
+  "&:hover, &:active, &.Mui-selected": {
+    ".MuiAvatar-root": {
+      backgroundColor: "#3548D4",
+    },
+    ".heading": {
+      color: "#3548D4",
+    },
+    ".initials": {
+      color: "#FFFFFF",
+    },
+  },
+  "&.Mui-selected": {
+    backgroundColor: "#FFFFFF",
+  },
 });
 
 const GroupHeading = styled(Typography)({
@@ -74,6 +79,17 @@ const GroupHeading = styled(Typography)({
   paddingBottom: "8px",
 });
 
+const Avatar = styled(MuiAvatar)({
+  background: "rgba(13, 16, 48, 0.6)",
+  height: "24px",
+  width: "24px",
+});
+
+const Initials = styled(Typography)({
+  color: "#FFFFFF",
+  fontSize: "14px",
+});
+
 // sidebar submenu
 const Popper = styled(MuiPopper)({
   zIndex: 1200,
@@ -81,7 +97,7 @@ const Popper = styled(MuiPopper)({
 });
 
 const Paper = styled(MuiPaper)({
-  minWidth: "230px",
+  width: "230px",
   border: "1px solid #E7E7EA",
   boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
 });
@@ -89,16 +105,27 @@ const Paper = styled(MuiPaper)({
 // sudebar submenu groupings
 const LinkListItem = styled(ListItem)({
   backgroundColor: "#FFFFFF",
-  "&.Mui-selected": {
-    backgroundColor: "#EBEDFB",
+  height: "48px",
+  "&:hover": {
+    backgroundColor: "#F5F6FD",
+    "&.Mui-selected": {
+      backgroundColor: "#F5F6FD",
+    },
+  },
+  "&:active": {
+    backgroundColor: "#D7DAF6",
+    "&.Mui-selected": {
+      backgroundColor: "#D7DAF6",
+    },
+  },
+  "&:hover, &:active, &.Mui-selected": {
     ".MuiTypography-root": {
       color: "#3548D4",
     },
   },
-  "&:hover": {
-    backgroundColor: "#E7E7EA",
+  "&.Mui-selected": {
+    backgroundColor: "#FFFFFF",
   },
-  height: "48px",
 });
 
 const LinkHeading = styled(Typography)({
@@ -159,8 +186,12 @@ const Group: React.FC<GroupProps> = ({ heading, open = false, updateOpenGroup, c
           updateOpenGroup(heading);
         }}
       >
-        <Avatar>{heading.charAt(0)}</Avatar>
-        <GroupHeading align="center">{heading}</GroupHeading>
+        <Avatar>
+          <Initials className="initials">
+            {heading.charAt(0)}
+          </Initials>
+        </Avatar>
+        <GroupHeading className="heading" align="center">{heading}</GroupHeading>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Popper
             open={openList}
