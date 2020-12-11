@@ -15642,7 +15642,7 @@ export const clutch = $root.clutch = (() => {
                                 return object;
                             let message = new $root.clutch.config.service.aws.v1.AWSClient();
                             if (object.retries != null)
-                                message.retries = object.retries >>> 0;
+                                message.retries = object.retries | 0;
                             return message;
                         };
 

@@ -132,7 +132,7 @@ func (c *client) processAllEC2Instances(ctx context.Context, client *regionalCli
 }
 
 func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalClient) {
-	c.log.Info("starting to process auto scaling groups for region", zap.String("region", client.region))
+	c.log.Info("starting to process kinesis streams for region", zap.String("region", client.region))
 	// 100 is arbatrary, currently this API does not have a per page limit,
 	// looking at other aws API limits this value felt safe.
 	input := kinesis.ListStreamsInput{

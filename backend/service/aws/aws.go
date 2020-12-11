@@ -53,8 +53,13 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		scope:              scope,
 	}
 
+	clientRetries := 0
+	if ac.AwsClient != nil && ac.AwsClient.Retries >= 0 {
+		clientRetries = int(ac.AwsClient.Retries)
+	}
+
 	for _, region := range ac.Regions {
-		regionCfg := aws.NewConfig().WithRegion(region).WithMaxRetries(50)
+		regionCfg := aws.NewConfig().WithRegion(region).WithMaxRetries(clientRetries)
 		awsSession, err := session.NewSession(regionCfg)
 		if err != nil {
 			return nil, err
