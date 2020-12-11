@@ -1,13 +1,9 @@
 import React from "react";
-import { Warning, Step, Stepper, WizardContext, ButtonGroup } from "@clutch-sh/core";
+import { ButtonGroup, Step, Stepper, Warning, WizardContext } from "@clutch-sh/core";
 import type { ManagerLayout } from "@clutch-sh/data-layout";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
-import {
-  Container as MuiContainer,
-  Grid,
-  Typography,
-} from "@material-ui/core";
 import styled from "@emotion/styled";
+import { Container as MuiContainer, Grid, Typography } from "@material-ui/core";
 
 import { useWizardState, WizardAction } from "./state";
 import type { WizardStepProps } from "./step";
@@ -84,7 +80,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
   const lastStepIndex = React.Children.count(children) - 1;
   // If our wizard only has 1 step, it doesn't make sense to put a restart button
   const isMultistep = lastStepIndex > 0;
-  const steps = React.Children.map(children, (child: WizardChildren, idx: number) => {
+  const steps = React.Children.map(children, (child: WizardChildren) => {
     const isLoading = wizardStepData[child.type.name]?.isLoading || false;
     return (
       <>
@@ -97,15 +93,15 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
         </DataLayoutContext.Provider>
         <Grid container justify="center">
           {state.activeStep === lastStepIndex && !isLoading && isMultistep && (
-          <ButtonGroup
-            justify="flex-end"
-            buttons={[
-              {
-                text: "Start Over",
-                onClick: () => dispatch(WizardAction.RESET),
-              },
-            ]}
-          />
+            <ButtonGroup
+              justify="flex-end"
+              buttons={[
+                {
+                  text: "Start Over",
+                  onClick: () => dispatch(WizardAction.RESET),
+                },
+              ]}
+            />
           )}
         </Grid>
       </>
@@ -125,7 +121,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
         alignItems="stretch"
         style={{ display: "inline" }}
       >
-      {heading && <Heading>{heading}</Heading>}
+        {heading && <Heading>{heading}</Heading>}
         <Grid item>
           <Stepper activeStep={state.activeStep}>
             {React.Children.map(children, (child: WizardChildren) => {

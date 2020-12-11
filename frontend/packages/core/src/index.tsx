@@ -1,10 +1,10 @@
-import { Accordion, AccordionDetails } from "./accordion";
 // @ts-ignore
 import { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 import { CheckboxPanel } from "./Input/checkbox";
 import { RadioGroup } from "./Input/radio-group";
 import { Select } from "./Input/select";
 import { TextField } from "./Input/text-field";
+import { Accordion, AccordionDetails } from "./accordion";
 import ClutchApp from "./AppProvider";
 import { Button, ButtonGroup, ButtonProps, ClipboardButton } from "./button";
 import Confirmation from "./confirmation";

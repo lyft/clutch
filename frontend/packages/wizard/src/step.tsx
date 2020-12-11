@@ -1,12 +1,12 @@
 import React from "react";
 import { Error, Loadable, useWizardContext } from "@clutch-sh/core";
-import { Grid as MuiGrid} from "@material-ui/core";
 import styled from "@emotion/styled";
+import { Grid as MuiGrid } from "@material-ui/core";
 
 const Grid = styled(MuiGrid)({
   width: "100%",
   "> *": {
-    padding: "8px"
+    padding: "8px",
   },
 });
 

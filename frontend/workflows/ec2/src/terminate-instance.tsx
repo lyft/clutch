@@ -6,7 +6,6 @@ import {
   client,
   Confirmation,
   MetadataTable,
-  NotePanel,
   Resolver,
   useWizardContext,
 } from "@clutch-sh/core";
@@ -82,13 +81,11 @@ const Confirm: React.FC<ConfirmChild> = ({ note }) => {
   const terminationData = useDataLayout("terminationData");
   const configData = JSON.parse(terminationData.displayValue()?.config?.data || "{}");
   const confirmationData = Object.keys(configData).map(key => {
-    return {name: key, value: configData[key]};
+    return { name: key, value: configData[key] };
   });
   return (
     <WizardStep error={terminationData.error} isLoading={terminationData.isLoading}>
-      <Confirmation action="Termination">
-        {note && note}
-      </Confirmation>
+      <Confirmation action="Termination">{note && note}</Confirmation>
       <MetadataTable data={confirmationData} />
     </WizardStep>
   );
