@@ -4,6 +4,7 @@ module.exports = {
       trending: true,
       componentProps: {
         resolverType: "clutch.aws.ec2.v1.Instance",
+        note: "The instance may take several minutes to shut down.",
       },
     },
     rebootInstance: {

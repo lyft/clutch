@@ -10,7 +10,7 @@ interface ResolverConfigProps {
 }
 
 interface ConfirmConfigProps {
-  notes?: NoteConfig[];
+  note?: string;
 }
 
 export interface WorkflowProps extends BaseWorkflowProps, ResolverConfigProps, ConfirmConfigProps {}

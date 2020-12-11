@@ -110,7 +110,6 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
                 onChange={queryOnChange}
                 validation={queryValidation}
               />
-              <Button text="Search" type="submit" />
             </Form>
           )}
           {variant === "dual" && <HorizontalRule>OR</HorizontalRule>}

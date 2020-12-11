@@ -1,5 +1,7 @@
 import React from "react";
 import {
+  Accordion,
+  AccordionDetails,
   ButtonGroup,
   client,
   Confirmation,
@@ -42,20 +44,28 @@ const InstanceDetails: React.FC<WizardChild> = () => {
     { name: "Availability Zone", value: instance.availabilityZone },
   ];
 
+  const metadata = [];
   if (instance.tags) {
     Object.keys(instance.tags).forEach(key => {
-      data.push({ name: key, value: instance.tags[key] });
+      metadata.push({ name: key, value: instance.tags[key] });
     });
   }
 
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
       <MetadataTable data={data} />
+      <Accordion title="Metadata">
+        <AccordionDetails>
+          <MetadataTable data={metadata} />
+        </AccordionDetails>
+      </Accordion>
       <ButtonGroup
+        justify="flex-end"
         buttons={[
           {
             text: "Back",
             onClick: onBack,
+            variant: "neutral",
           },
           {
             text: "Terminate",
@@ -68,18 +78,23 @@ const InstanceDetails: React.FC<WizardChild> = () => {
   );
 };
 
-const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
+const Confirm: React.FC<ConfirmChild> = ({ note }) => {
   const terminationData = useDataLayout("terminationData");
-
+  const configData = JSON.parse(terminationData.displayValue()?.config?.data || "{}");
+  const confirmationData = Object.keys(configData).map(key => {
+    return {name: key, value: configData[key]};
+  });
   return (
     <WizardStep error={terminationData.error} isLoading={terminationData.isLoading}>
-      <Confirmation action="Termination" />
-      <NotePanel notes={notes} />
+      <Confirmation action="Termination">
+        {note && note}
+      </Confirmation>
+      <MetadataTable data={confirmationData} />
     </WizardStep>
   );
 };
 
-const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
+const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, note }) => {
   const dataLayout = {
     resourceData: {},
     terminationData: {
@@ -97,7 +112,7 @@ const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, not
     <Wizard dataLayout={dataLayout} heading={heading}>
       <InstanceIdentifier name="Lookup" resolverType={resolverType} />
       <InstanceDetails name="Modify" />
-      <Confirm name="Confirmation" notes={notes} />
+      <Confirm name="Confirmation" note={note} />
     </Wizard>
   );
 };

@@ -36,10 +36,6 @@ const StyledAccordion = styled(MuiAccordion)({
     padding: "8px",
     fontSize: "16px",
   },
-
-  ".MuiAccordionActions-root": {
-    padding: "0",
-  },
 });
 
 const AccordionSummaryBase = ({ children, collapsible, expanded, ...props }) => {
@@ -89,7 +85,7 @@ const StyledAccordionGroup = styled.div({
     marginBottom: "16px",
   },
 
-  ".MuiAccordion-root:before": {
+  "&.MuiAccordion-root:before": {
     display: "none",
   },
 });
@@ -171,6 +167,13 @@ const StyledAccordionDetails = styled(MuiAccordionDetails)({
   },
 });
 
-export const AccordionActions = MuiAccordionActions;
+const StyledAccordionActions = styled(MuiAccordionActions)({
+  padding: "8px",
+  "> *": {
+    margin: "8px 8px",
+  },
+});
+
+export const AccordionActions = StyledAccordionActions;
 export const AccordionDetails = StyledAccordionDetails;
 export const AccordionDivider = MuiDivider;

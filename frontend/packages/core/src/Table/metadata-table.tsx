@@ -34,7 +34,6 @@ interface IdentifiableRowData extends RowData {
 const TableContainer = styled(MuiTableContainer)({
   borderWidth: "0",
   border: "0",
-  padding: "16px 32px",
 });
 
 const Table = styled(MuiTable)({

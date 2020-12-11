@@ -1,3 +1,4 @@
+import { Accordion, AccordionDetails } from "./accordion";
 // @ts-ignore
 import { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 import { CheckboxPanel } from "./Input/checkbox";
@@ -16,6 +17,7 @@ import Loadable from "./loading";
 import { client, ClientError } from "./network";
 import ExpansionPanel from "./panel";
 import Resolver from "./Resolver";
+import { Step, Stepper } from "./stepper";
 import {
   ExpandableRow,
   ExpandableTable,
@@ -27,6 +29,8 @@ import {
 } from "./Table";
 
 export {
+  Accordion,
+  AccordionDetails,
   ClutchApp,
   BaseWorkflowProps,
   Button,
@@ -56,6 +60,8 @@ export {
   Select,
   Status,
   StatusRow,
+  Step,
+  Stepper,
   Table,
   TextField,
   TreeTable,

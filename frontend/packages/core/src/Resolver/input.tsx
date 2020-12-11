@@ -2,6 +2,7 @@ import React from "react";
 import type { UseFormMethods } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
+import SearchIcon from "@material-ui/icons/Search";
 
 import {
   Accordion,
@@ -43,6 +44,7 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, onChange, valida
       inputRef={validation.register({ required: true })}
       error={!!error}
       helperText={error?.message || error?.type || ""}
+      endAdornment={<SearchIcon />}
     />
   );
 };
