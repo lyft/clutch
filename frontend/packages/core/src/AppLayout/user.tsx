@@ -13,7 +13,6 @@ import {
   MenuList as MuiMenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
-  Typography,
 } from "@material-ui/core";
 import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
@@ -34,9 +33,6 @@ const UserPhoto = styled(IconButton)({
 
 const Avatar = styled(MuiAvatar)({
   backgroundColor: "#727FE1",
-});
-
-const Initials = styled(Typography)({
   color: "#FFFFFF",
   fontSize: "14px",
   fontWeight: 500,
@@ -91,8 +87,6 @@ const AvatarListItemIcon = styled(ListItemIcon)({
   ".MuiAvatar-root": {
     height: "48px",
     width: "48px",
-  },
-  ".MuiTypography-root": {
     fontSize: "20px",
     lineHeight: "24px",
   },
@@ -141,16 +135,12 @@ const userId = (): string => {
   return subject;
 };
 
-export interface UserAvatarProps {
+interface UserAvatarProps {
   initials: string;
 }
 
 const UserAvatar: React.FC<UserAvatarProps> = ({ initials }) => {
-  return (
-    <Avatar>
-      <Initials>{initials}</Initials>
-    </Avatar>
-  );
+  return <Avatar>{initials}</Avatar>;
 };
 
 interface UserData {
@@ -214,16 +204,12 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
                       <AvatarListItemText>{user}</AvatarListItemText>
                     </MenuItem>
                   </div>
-                  {
-                    data?.length > 0 ? <Divider /> : null
-                  }
-                  {data?.map(d => {
-                    return (
-                      <MenuItem>
-                        <ListItemText>{d.value}</ListItemText>
-                      </MenuItem>
-                    );
-                  })}
+                  {data?.length === 0 ? null : <Divider />}
+                  {data?.map(d => (
+                    <MenuItem>
+                      <ListItemText>{d.value}</ListItemText>
+                    </MenuItem>
+                  ))}
                 </MenuList>
               </ClickAwayListener>
             </Paper>
