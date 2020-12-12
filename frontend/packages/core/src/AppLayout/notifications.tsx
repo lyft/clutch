@@ -14,7 +14,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 
 const StyledNotificationsIcon = styled(IconButton)({
   color: "#ffffff",
-  margin: "8px",
+  marginRight: "8px",
   padding: "12px",
   "&:hover": {
     background: "#2d3db4",
@@ -106,13 +106,7 @@ export const UserNotifications: React.FC<UserNotficationsProp> = ({ data }) => {
       >
         <NotificationsIcon />
       </StyledNotificationsIcon>
-      <Popper
-        open={open}
-        anchorEl={anchorRef.current}
-        role={undefined}
-        transition
-        placement="bottom-end"
-      >
+      <Popper open={open} anchorEl={anchorRef.current} transition placement="bottom-end">
         {({ TransitionProps, placement }) => (
           <Grow
             {...TransitionProps}

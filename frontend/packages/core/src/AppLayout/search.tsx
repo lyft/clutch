@@ -77,6 +77,7 @@ const SearchIconButton = styled(IconButton)({
   color: "#ffffff",
   fontSize: "24px",
   padding: "12px",
+  marginRight: "8px",
   "&:hover": {
     background: "#2d3db4",
   },
@@ -280,7 +281,7 @@ const SearchField: React.FC = () => {
           />
         </ClickAwayListener>
       ) : (
-        <SearchIconButton onClick={handleOpen}>
+        <SearchIconButton onClick={handleOpen} edge="end">
           <SearchIcon />
         </SearchIconButton>
       )}
