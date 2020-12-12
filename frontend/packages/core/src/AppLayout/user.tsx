@@ -4,10 +4,11 @@ import {
   Avatar as MuiAvatar,
   Box,
   ClickAwayListener,
+  Divider as MuiDivider,
   Grow as MuiGrow,
   IconButton,
   ListItemIcon,
-  ListItemText,
+  ListItemText as MuiListItemText,
   MenuItem as MuiMenuItem,
   MenuList,
   Paper as MuiPaper,
@@ -25,51 +26,79 @@ const UserPhoto = styled(IconButton)({
   "&:active": {
     background: "#2938a5",
   },
+  ".avatar-header .MuiAvatar-root": {
+    height: "32px",
+    width: "32px",
+  },
 });
 
 const Avatar = styled(MuiAvatar)({
-  backgroundColor: "#dce7f4",
-  height: "28px",
-  width: "28px",
-  border: "2px solid #f6faff",
-  borderRadius: "50%",
+  backgroundColor: "#727FE1",
 });
 
 const Initials = styled(Typography)({
-  color: "#0d1030",
-  opacity: 0.6,
+  color: "#FFFFFF",
   fontSize: "14px",
   fontWeight: 500,
+  lineHeight: "18px",
 });
 
 const Paper = styled(MuiPaper)({
-  width: "266px",
-  border: "1px solid #e2e2e6",
+  width: "242px",
+  border: "1px solid #E7E7EA",
   boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
 });
 
 const Popper = styled(MuiPopper)({
   padding: "0 12px",
   marginLeft: "12px",
+  zIndex: 1101,
 });
 
-const UserProfileMenuItem = styled(MuiMenuItem)({
-  "&:focus": {
-    background: "transparent",
-  },
+const MenuItem = styled(MuiMenuItem)({
   "&:hover": {
-    background: "transparent",
+    backgroundColor: "#E7E7EA",
   },
+  "&.MuiListItem-root.Mui-focusVisible": {
+    backgroundColor: "#DBDBE0",
+  },
+  "&:active": {
+    backgroundColor: "#EBEDFB",
+  },
+});
+
+const Divider = styled(MuiDivider)({
+  backgroundColor: "#E7E7EA",
 });
 
 const AvatarListItemIcon = styled(ListItemIcon)({
-  marginLeft: "8px",
+  minWidth: "inherit",
+  width: "48px",
+  ".avatar-menu .MuiAvatar-root": {
+    height: "48px",
+    width: "48px",
+  },
+  ".avatar-menu .MuiTypography-root": {
+    fontSize: "20px",
+    lineHeight: "24px",
+  },
 });
 
-const AvatarListItemText = styled(Typography)({
-  color: "#0d1030",
-  fontSize: "14px",
-  opacity: "0.6",
+const AvatarListItemText = styled(MuiListItemText)({
+  paddingLeft: "16px",
+  ".MuiTypography-root": {
+    color: "rgba(13, 16, 48, 0.6)",
+    fontSize: "14px",
+    lineHeight: "24px",
+  },
+});
+
+const ListItemText = styled(MuiListItemText)({
+  ".MuiTypography-root": {
+    color: "#0D1030",
+    fontSize: "14px",
+    lineHeight: "24px",
+  },
 });
 
 const Grow = styled(MuiGrow)((props: { placement: string }) => ({
@@ -96,17 +125,31 @@ const userId = (): string => {
   return subject;
 };
 
-const UserAvatar: React.FC = () => {
+export interface UserAvatarProps {
+  initials: string;
+}
+
+const UserAvatar: React.FC<UserAvatarProps> = ({ initials }) => {
   return (
     <Avatar>
-      <Initials>{userId().slice(0, 2).toUpperCase()}</Initials>
+      <Initials>{initials}</Initials>
     </Avatar>
   );
 };
 
-// TODO (sperry): add interface to render menu items
+interface UserData {
+  value: string;
+  user: string;
+}
+
+export interface UserInformationProps {
+  data?: UserData[];
+  user?: string;
+}
+
 // TODO (sperry): investigate using popover instead of popper
-const UserInformation: React.FC = () => {
+const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId() }) => {
+  const userInitials = user.slice(0, 2).toUpperCase();
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
 
@@ -137,15 +180,11 @@ const UserInformation: React.FC = () => {
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        <UserAvatar />
+        <div className="avatar-header">
+          <UserAvatar initials={userInitials} />
+        </div>
       </UserPhoto>
-      <Popper
-        open={open}
-        anchorEl={anchorRef.current}
-        role={undefined}
-        transition
-        placement="bottom-end"
-      >
+      <Popper open={open} anchorEl={anchorRef.current} transition placement="bottom-end">
         {({ TransitionProps, placement }) => (
           <Grow
             {...TransitionProps}
@@ -154,14 +193,22 @@ const UserInformation: React.FC = () => {
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList autoFocusItem={open} id="account-options" onKeyDown={handleListKeyDown}>
-                  <UserProfileMenuItem>
+                  <MenuItem>
                     <AvatarListItemIcon>
-                      <UserAvatar />
+                      <div className="avatar-menu">
+                        <UserAvatar initials={userInitials} />
+                      </div>
                     </AvatarListItemIcon>
-                    <ListItemText>
-                      <AvatarListItemText>{userId()}</AvatarListItemText>
-                    </ListItemText>
-                  </UserProfileMenuItem>
+                    <AvatarListItemText>{user}</AvatarListItemText>
+                  </MenuItem>
+                  <Divider />
+                  {data?.map(d => {
+                    return (
+                      <MenuItem>
+                        <ListItemText>{d.value}</ListItemText>
+                      </MenuItem>
+                    );
+                  })}
                 </MenuList>
               </ClickAwayListener>
             </Paper>
