@@ -10,7 +10,7 @@ import {
   ListItemIcon,
   ListItemText as MuiListItemText,
   MenuItem as MuiMenuItem,
-  MenuList,
+  MenuList as MuiMenuList,
   Paper as MuiPaper,
   Popper as MuiPopper,
   Typography,
@@ -26,7 +26,7 @@ const UserPhoto = styled(IconButton)({
   "&:active": {
     background: "#2938a5",
   },
-  ".avatar-header .MuiAvatar-root": {
+  ".MuiAvatar-root": {
     height: "32px",
     width: "32px",
   },
@@ -55,7 +55,21 @@ const Popper = styled(MuiPopper)({
   zIndex: 1101,
 });
 
+const MenuList = styled(MuiMenuList)({
+  padding: "0px",
+  borderRadius: "4px",
+  ".avatar-menu-item": {
+    padding: "16px 0 16px 0",
+  },
+  ".avatar-menu-item .MuiMenuItem-root": {
+    height: "52px",
+    padding: "0 16px 0 16px",
+  },
+});
+
 const MenuItem = styled(MuiMenuItem)({
+  height: "48px",
+  padding: "12px",
   "&:hover": {
     backgroundColor: "#E7E7EA",
   },
@@ -74,11 +88,11 @@ const Divider = styled(MuiDivider)({
 const AvatarListItemIcon = styled(ListItemIcon)({
   minWidth: "inherit",
   width: "48px",
-  ".avatar-menu .MuiAvatar-root": {
+  ".MuiAvatar-root": {
     height: "48px",
     width: "48px",
   },
-  ".avatar-menu .MuiTypography-root": {
+  ".MuiTypography-root": {
     fontSize: "20px",
     lineHeight: "24px",
   },
@@ -86,6 +100,7 @@ const AvatarListItemIcon = styled(ListItemIcon)({
 
 const AvatarListItemText = styled(MuiListItemText)({
   paddingLeft: "16px",
+  margin: "0px",
   ".MuiTypography-root": {
     color: "rgba(13, 16, 48, 0.6)",
     fontSize: "14px",
@@ -94,6 +109,7 @@ const AvatarListItemText = styled(MuiListItemText)({
 });
 
 const ListItemText = styled(MuiListItemText)({
+  margin: "0px",
   ".MuiTypography-root": {
     color: "#0D1030",
     fontSize: "14px",
@@ -139,7 +155,6 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ initials }) => {
 
 interface UserData {
   value: string;
-  user: string;
 }
 
 export interface UserInformationProps {
@@ -180,9 +195,7 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        <div className="avatar-header">
-          <UserAvatar initials={userInitials} />
-        </div>
+        <UserAvatar initials={userInitials} />
       </UserPhoto>
       <Popper open={open} anchorEl={anchorRef.current} transition placement="bottom-end">
         {({ TransitionProps, placement }) => (
@@ -193,15 +206,17 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList autoFocusItem={open} id="account-options" onKeyDown={handleListKeyDown}>
-                  <MenuItem>
-                    <AvatarListItemIcon>
-                      <div className="avatar-menu">
+                  <div className="avatar-menu-item">
+                    <MenuItem>
+                      <AvatarListItemIcon>
                         <UserAvatar initials={userInitials} />
-                      </div>
-                    </AvatarListItemIcon>
-                    <AvatarListItemText>{user}</AvatarListItemText>
-                  </MenuItem>
-                  <Divider />
+                      </AvatarListItemIcon>
+                      <AvatarListItemText>{user}</AvatarListItemText>
+                    </MenuItem>
+                  </div>
+                  {
+                    data?.length > 0 ? <Divider /> : null
+                  }
                   {data?.map(d => {
                     return (
                       <MenuItem>
