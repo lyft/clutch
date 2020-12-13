@@ -54,8 +54,7 @@ const InputField = styled(TextField)({
         background: "#e7e7ea",
       },
       "&:active": {
-        background:
-          "linear-gradient(0deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), #0D1030;",
+        background: "#DBDBE0",
       },
     },
   },
@@ -239,6 +238,13 @@ const SearchField: React.FC = () => {
     setOpen(false);
   };
 
+  function handleListKeyDown(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      setOpen(false);
+    }
+  }
+
   return (
     <Grid container alignItems="center">
       {open ? (
@@ -260,7 +266,9 @@ const SearchField: React.FC = () => {
             PopperComponent={renderPopper}
             popupIcon={<CustomCloseIcon />}
             forcePopupIcon={!!showOptions}
+            closeIcon={<CustomCloseIcon />}
             noOptionsText="No results found"
+            onKeyDown={handleListKeyDown}
           />
         </ClickAwayListener>
       ) : (
