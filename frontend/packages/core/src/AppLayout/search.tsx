@@ -266,7 +266,6 @@ const SearchField: React.FC = () => {
             PopperComponent={renderPopper}
             popupIcon={<CustomCloseIcon />}
             forcePopupIcon={!!showOptions}
-            closeIcon={<CustomCloseIcon />}
             noOptionsText="No results found"
             onKeyDown={handleListKeyDown}
           />
