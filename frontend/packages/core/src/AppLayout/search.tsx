@@ -60,6 +60,7 @@ const InputField = styled(TextField)({
   },
 });
 
+// search's result options container
 const ResultGrid = styled(Grid)({
   height: "inherit",
 })
@@ -171,7 +172,7 @@ interface ResultProps {
 }
 
 const Result: React.FC<ResultProps> = ({ option, handleSelection }) => (
-  <ResultGrid container alignItems="center" onClick={handleSelection} style={{height: "inherit"}}>
+  <ResultGrid container alignItems="center" onClick={handleSelection}>
     <Grid item xs>
       <ResultLabel>{option.label}</ResultLabel>
     </Grid>
