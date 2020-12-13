@@ -63,6 +63,7 @@ const InputField = styled(TextField)({
 // search's result options container
 const ResultGrid = styled(Grid)({
   height: "inherit",
+  padding: "12px 16px 12px 16px",
 })
 
 // search's result options
@@ -104,6 +105,7 @@ const Popper = styled(MuiPopper)({
   },
   ".MuiAutocomplete-option": {
     height: "48px",
+    padding: "0px",
   },
   ".MuiAutocomplete-option[data-focus='true']": {
     background: "#ebedfb",
