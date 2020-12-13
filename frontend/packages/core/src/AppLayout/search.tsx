@@ -60,6 +60,10 @@ const InputField = styled(TextField)({
   },
 });
 
+const ResultGrid = styled(Grid)({
+  height: "inherit",
+})
+
 // search's result options
 const ResultLabel = styled(Typography)({
   color: "#0d1030",
@@ -167,11 +171,11 @@ interface ResultProps {
 }
 
 const Result: React.FC<ResultProps> = ({ option, handleSelection }) => (
-  <Grid container alignItems="center" onClick={handleSelection}>
+  <ResultGrid container alignItems="center" onClick={handleSelection} style={{height: "inherit"}}>
     <Grid item xs>
       <ResultLabel>{option.label}</ResultLabel>
     </Grid>
-  </Grid>
+  </ResultGrid>
 );
 
 const filterResults = (searchOptions: SearchIndex[], state: FilterOptionsState<SearchIndex>) => {
