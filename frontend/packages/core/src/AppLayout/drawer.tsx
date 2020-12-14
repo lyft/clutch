@@ -138,23 +138,17 @@ interface GroupProps {
   heading: string;
   open: boolean;
   updateOpenGroup: (heading: string) => void;
+  closeGroup: () => void;
 }
 
-const Group: React.FC<GroupProps> = ({ heading, open = false, updateOpenGroup, children }) => {
-  const [openList, setListOpen] = React.useState(false);
-
+const Group: React.FC<GroupProps> = ({
+  heading,
+  open = false,
+  updateOpenGroup,
+  closeGroup,
+  children,
+}) => {
   const anchorRef = React.useRef(null);
-
-  const handleToggle = () => {
-    setListOpen(!openList);
-  };
-
-  const handleClose = event => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
-    setListOpen(false);
-  };
 
   let headingPath = window.location.pathname.replace("/", "").split("/")[0];
 
@@ -177,10 +171,9 @@ const Group: React.FC<GroupProps> = ({ heading, open = false, updateOpenGroup, c
         button
         selected={isSelected}
         ref={anchorRef}
-        aria-controls={openList ? "workflow-options" : undefined}
+        aria-controls={open ? "workflow-options" : undefined}
         aria-haspopup="true"
         onClick={() => {
-          handleToggle();
           updateOpenGroup(heading);
         }}
       >
@@ -191,14 +184,9 @@ const Group: React.FC<GroupProps> = ({ heading, open = false, updateOpenGroup, c
           {heading}
         </GroupHeading>
         <Collapse in={open} timeout="auto" unmountOnExit>
-          <Popper
-            open={openList}
-            anchorEl={anchorRef.current}
-            transition
-            placement="right-start"
-          >
+          <Popper open={open} anchorEl={anchorRef.current} transition placement="right-start">
             <Paper>
-              <ClickAwayListener onClickAway={handleClose}>
+              <ClickAwayListener onClickAway={closeGroup}>
                 <List component="div" disablePadding id="workflow-options">
                   {children}
                 </List>
@@ -233,7 +221,7 @@ const Link: React.FC<LinkProps> = ({ to, text }) => {
   );
 };
 
-export const Drawer: React.FC = () => {
+const Drawer: React.FC = () => {
   const { workflows } = useAppContext();
   const [openGroup, setOpenGroup] = React.useState("");
 
@@ -243,6 +231,10 @@ export const Drawer: React.FC = () => {
     } else {
       setOpenGroup(group);
     }
+  };
+
+  const closeGroup = () => {
+    setOpenGroup("");
   };
 
   return (
@@ -255,6 +247,7 @@ export const Drawer: React.FC = () => {
             heading={grouping}
             open={openGroup === grouping}
             updateOpenGroup={updateOpenGroup}
+            closeGroup={closeGroup}
           >
             {value.workflows.map(workflow => (
               <Link
