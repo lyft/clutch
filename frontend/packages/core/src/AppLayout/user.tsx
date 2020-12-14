@@ -2,7 +2,6 @@ import React from "react";
 import styled from "@emotion/styled";
 import {
   Avatar as MuiAvatar,
-  Box,
   ClickAwayListener,
   Divider as MuiDivider,
   Grow as MuiGrow,
@@ -25,18 +24,20 @@ const UserPhoto = styled(IconButton)({
   "&:active": {
     background: "#2938a5",
   },
+  // avatar on header
   ".MuiAvatar-root": {
     height: "32px",
     width: "32px",
+    fontSize: "14px",
+    lineHeight: "18px",
   },
 });
 
+// css for both header and menu avatar
 const Avatar = styled(MuiAvatar)({
   backgroundColor: "#727FE1",
   color: "#FFFFFF",
-  fontSize: "14px",
   fontWeight: 500,
-  lineHeight: "18px",
 });
 
 const Paper = styled(MuiPaper)({
@@ -46,44 +47,37 @@ const Paper = styled(MuiPaper)({
 });
 
 const Popper = styled(MuiPopper)({
-  padding: "0 12px",
-  marginLeft: "12px",
+  padding: "0 6px",
+  marginLeft: "6px",
   zIndex: 1101,
 });
 
 const MenuList = styled(MuiMenuList)({
   padding: "0px",
   borderRadius: "4px",
-  ".avatar-menu-item": {
-    padding: "16px 0 16px 0",
-  },
-  ".avatar-menu-item .MuiMenuItem-root": {
-    height: "52px",
-    padding: "0 16px 0 16px",
-  },
-});
-
-const MenuItem = styled(MuiMenuItem)({
-  height: "48px",
-  padding: "12px",
-  "&:hover": {
-    backgroundColor: "#E7E7EA",
-  },
-  "&.MuiListItem-root.Mui-focusVisible": {
-    backgroundColor: "#DBDBE0",
-  },
-  "&:active": {
-    backgroundColor: "#EBEDFB",
+  ".MuiMenuItem-root": {
+    "&:hover": {
+      backgroundColor: "#E7E7EA",
+    },
+    "&.MuiListItem-root.Mui-focusVisible": {
+      backgroundColor: "#DBDBE0",
+    },
+    "&:active": {
+      backgroundColor: "#EBEDFB",
+    },
   },
 });
 
-const Divider = styled(MuiDivider)({
-  backgroundColor: "#E7E7EA",
+const AvatarMenuItem = styled(MuiMenuItem)({
+  height: "52px",
+  margin: "16px 0 16px 0",
+  padding: "0 16px 0 16px",
 });
 
 const AvatarListItemIcon = styled(ListItemIcon)({
   minWidth: "inherit",
   width: "48px",
+  // avatar on menu
   ".MuiAvatar-root": {
     height: "48px",
     width: "48px",
@@ -102,6 +96,11 @@ const AvatarListItemText = styled(MuiListItemText)({
   },
 });
 
+const MenuItem = styled(MuiMenuItem)({
+  height: "48px",
+  padding: "12px",
+});
+
 const ListItemText = styled(MuiListItemText)({
   margin: "0px",
   ".MuiTypography-root": {
@@ -109,6 +108,10 @@ const ListItemText = styled(MuiListItemText)({
     fontSize: "14px",
     lineHeight: "24px",
   },
+});
+
+const Divider = styled(MuiDivider)({
+  backgroundColor: "#E7E7EA",
 });
 
 const Grow = styled(MuiGrow)((props: { placement: string }) => ({
@@ -177,7 +180,7 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
   }
 
   return (
-    <Box>
+    <>
       <UserPhoto
         ref={anchorRef}
         edge="end"
@@ -196,14 +199,12 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList autoFocusItem={open} id="account-options" onKeyDown={handleListKeyDown}>
-                  <div className="avatar-menu-item">
-                    <MenuItem>
-                      <AvatarListItemIcon>
-                        <UserAvatar initials={userInitials} />
-                      </AvatarListItemIcon>
-                      <AvatarListItemText>{user}</AvatarListItemText>
-                    </MenuItem>
-                  </div>
+                  <AvatarMenuItem>
+                    <AvatarListItemIcon>
+                      <UserAvatar initials={userInitials} />
+                    </AvatarListItemIcon>
+                    <AvatarListItemText>{user}</AvatarListItemText>
+                  </AvatarMenuItem>
                   {data?.length === 0 ? null : <Divider />}
                   {data?.map(d => (
                     <MenuItem>
@@ -216,7 +217,7 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
           </Grow>
         )}
       </Popper>
-    </Box>
+    </>
   );
 };
 
