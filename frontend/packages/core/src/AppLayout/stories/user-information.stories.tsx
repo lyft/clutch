@@ -24,5 +24,5 @@ const Template = (props: UserInformationProps) => (
 export const Primary = Template.bind({});
 Primary.args = {
   data: [{ value: "Dashboard" }, { value: "Settings" }],
-  user: "fooBar@gmail.com",
+  user: "fooBar@example.com",
 };

@@ -47,8 +47,8 @@ const Paper = styled(MuiPaper)({
 });
 
 const Popper = styled(MuiPopper)({
-  padding: "0 6px",
-  marginLeft: "6px",
+  padding: "0 12px",
+  marginLeft: "12px",
   zIndex: 1101,
 });
 
