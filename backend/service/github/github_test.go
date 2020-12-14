@@ -404,7 +404,7 @@ func TestGetRepository(t *testing.T) {
 				return
 			}
 
-			gotDefaultBranch := repo.DefaultBranch.Name
+			gotDefaultBranch := repo.DefaultBranch
 
 			a.Equal(gotDefaultBranch, tt.wantDefaultBranch)
 			a.Nil(err)
