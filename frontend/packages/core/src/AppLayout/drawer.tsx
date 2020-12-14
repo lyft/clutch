@@ -43,29 +43,27 @@ const GroupListItem = styled(ListItem)({
   padding: "16px 8px 16px 8px",
   "&:hover": {
     backgroundColor: "#F5F6FD",
-    "&.Mui-selected": {
-      backgroundColor: "#F5F6FD",
-    },
   },
   "&:active": {
     backgroundColor: "#D7DAF6",
-    "&.Mui-selected": {
-      backgroundColor: "#D7DAF6",
-    },
   },
+  // avatar and label
   "&:hover, &:active, &.Mui-selected": {
     ".MuiAvatar-root": {
       backgroundColor: "#3548D4",
     },
-    ".heading": {
+    ".MuiTypography-root": {
       color: "#3548D4",
-    },
-    ".initials": {
-      color: "#FFFFFF",
     },
   },
   "&.Mui-selected": {
     backgroundColor: "#FFFFFF",
+    "&:hover": {
+      backgroundColor: "#F5F6FD",
+    },
+    "&:active": {
+      backgroundColor: "#D7DAF6",
+    },
   },
 });
 
@@ -82,9 +80,6 @@ const Avatar = styled(MuiAvatar)({
   background: "rgba(13, 16, 48, 0.6)",
   height: "24px",
   width: "24px",
-});
-
-const Initials = styled(Typography)({
   color: "#FFFFFF",
   fontSize: "14px",
 });
@@ -99,39 +94,41 @@ const Paper = styled(MuiPaper)({
   width: "230px",
   border: "1px solid #E7E7EA",
   boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
-});
 
-// sudebar submenu groupings
-const LinkListItem = styled(ListItem)({
-  backgroundColor: "#FFFFFF",
-  height: "48px",
-  "&:hover": {
-    backgroundColor: "#F5F6FD",
-    "&.Mui-selected": {
+  // sidebar submenu groupings
+  ".MuiListItem-root[data-qa='workflowGroupItem']": {
+    backgroundColor: "#FFFFFF",
+    height: "48px",
+    "&:hover": {
       backgroundColor: "#F5F6FD",
     },
-  },
-  "&:active": {
-    backgroundColor: "#D7DAF6",
-    "&.Mui-selected": {
+    "&:active": {
       backgroundColor: "#D7DAF6",
     },
-  },
-  "&:hover, &:active, &.Mui-selected": {
-    ".MuiTypography-root": {
-      color: "#3548D4",
+    "&.Mui-selected": {
+      backgroundColor: "#FFFFFF",
+      "&:hover": {
+        backgroundColor: "#F5F6FD",
+      },
+      "&:active": {
+        backgroundColor: "#D7DAF6",
+      },
     },
-  },
-  "&.Mui-selected": {
-    backgroundColor: "#FFFFFF",
+    "&:hover, &:active, &.Mui-selected": {
+      ".MuiTypography-root": {
+        color: "#3548D4",
+      },
+    },
   },
 });
 
-const LinkHeading = styled(Typography)({
-  color: "rgba(13, 16, 48, 0.6)",
-  fontWeight: 500,
-  fontSize: "14px",
-  lineHeight: "18px",
+const LinkListItemText = styled(ListItemText)({
+  ".MuiTypography-root": {
+    color: "rgba(13, 16, 48, 0.6)",
+    fontWeight: 500,
+    fontSize: "14px",
+    lineHeight: "18px",
+  },
 });
 
 interface GroupProps {
@@ -150,15 +147,6 @@ const Group: React.FC<GroupProps> = ({
 }) => {
   const anchorRef = React.useRef(null);
 
-  let headingPath = window.location.pathname.replace("/", "").split("/")[0];
-
-  // TODO: discover this from config
-  if (headingPath === "ec2") {
-    headingPath = "aws";
-  }
-
-  const isSelected = headingPath == heading.toLowerCase();
-
   // n.b. if a Workflow Grouping has no workflows in it don't display it even if
   // it's not explicitly marked as hidden.
   if (React.Children.count(children) === 0) {
@@ -169,7 +157,7 @@ const Group: React.FC<GroupProps> = ({
     <GroupList data-qa="workflowGroup">
       <GroupListItem
         button
-        selected={isSelected}
+        selected={open}
         ref={anchorRef}
         aria-controls={open ? "workflow-options" : undefined}
         aria-haspopup="true"
@@ -177,10 +165,8 @@ const Group: React.FC<GroupProps> = ({
           updateOpenGroup(heading);
         }}
       >
-        <Avatar>
-          <Initials className="initials">{heading.charAt(0)}</Initials>
-        </Avatar>
-        <GroupHeading className="heading" align="center">
+        <Avatar>{heading.charAt(0)}</Avatar>
+        <GroupHeading align="center">
           {heading}
         </GroupHeading>
         <Collapse in={open} timeout="auto" unmountOnExit>
@@ -207,17 +193,15 @@ interface LinkProps {
 const Link: React.FC<LinkProps> = ({ to, text }) => {
   const isSelected = window.location.pathname.replace("/", "") === to;
   return (
-    <LinkListItem
+    <ListItem
       selected={isSelected}
       component={RouterLink}
       to={to}
       dense
       data-qa="workflowGroupItem"
     >
-      <ListItemText>
-        <LinkHeading>{text}</LinkHeading>
-      </ListItemText>
-    </LinkListItem>
+      <LinkListItemText>{text}</LinkListItemText>
+    </ListItem>
   );
 };
 
