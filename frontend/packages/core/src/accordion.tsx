@@ -85,7 +85,7 @@ const StyledAccordionGroup = styled.div({
     marginBottom: "16px",
   },
 
-  "&.MuiAccordion-root:before": {
+  ".MuiAccordion-root:before": {
     display: "none",
   },
 });
