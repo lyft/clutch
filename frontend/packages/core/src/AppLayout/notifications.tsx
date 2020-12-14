@@ -63,14 +63,11 @@ interface NotificationsData {
   value: string;
 }
 
-interface NotficationsProp {
-  disabled?: boolean;
+export interface NotificationsProp {
   data?: NotificationsData[];
 }
 
-export interface UserNotficationsProp extends Pick<NotficationsProp, "data"> {}
-
-export const UserNotifications: React.FC<UserNotficationsProp> = ({ data }) => {
+const Notifications: React.FC<NotificationsProp> = ({ data }) => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
 
@@ -131,10 +128,6 @@ export const UserNotifications: React.FC<UserNotficationsProp> = ({ data }) => {
       </Popper>
     </>
   );
-};
-
-const Notifications: React.FC<NotficationsProp> = ({ disabled = true, data }) => {
-  return <>{disabled ? null : <UserNotifications data={data} />}</>;
 };
 
 export default Notifications;

@@ -3,12 +3,12 @@ import styled from "@emotion/styled";
 import { Grid as MuiGrid } from "@material-ui/core";
 import type { Meta } from "@storybook/react";
 
-import type { UserNotficationsProp } from "../notifications";
-import { UserNotifications } from "../notifications";
+import type { NotificationsProp } from "../notifications";
+import Notifications from "../notifications";
 
 export default {
-  title: "Core/AppLayout/User Notifications",
-  component: UserNotifications,
+  title: "Core/AppLayout/Notifications",
+  component: Notifications,
 } as Meta;
 
 const Grid = styled(MuiGrid)({
@@ -16,9 +16,9 @@ const Grid = styled(MuiGrid)({
   backgroundColor: "#131C5F",
 });
 
-const Template = (props: UserNotficationsProp) => (
+const Template = (props: NotificationsProp) => (
   <Grid container alignItems="center" justify="center">
-    <UserNotifications {...props} />
+    <Notifications {...props} />
   </Grid>
 );
 

@@ -30,6 +30,7 @@ const Title = styled(Typography)({
 
 const Header: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const showNotifications = false;
 
   const handleKeyPress = (event: KeyboardEvent) => {
     // @ts-ignore
@@ -67,7 +68,7 @@ const Header: React.FC = () => {
             <Box>
               <SearchField />
             </Box>
-            <Notifications />
+            {showNotifications ? <Notifications /> : null}
             <UserInformation />
           </Grid>
         </Toolbar>
