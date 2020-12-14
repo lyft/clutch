@@ -1,4 +1,4 @@
-package log
+package accesslog
 
 import (
 	"context"
