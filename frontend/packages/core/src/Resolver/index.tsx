@@ -125,7 +125,7 @@ const Resolver: React.FC<ResolverProps> = ({
   return (
     <Loadable isLoading={state.schemasLoading}>
       {state.schemaFetchError !== "" ? (
-        <Error message={state.schemaFetchError} onRetry={() => loadSchemas(type, dispatch)} />
+        <Error message={state.schemaFetchError} onRetry={() => loadSchemas(type, dispatch,  apiProto)} />
       ) : (
         <Loadable variant="overlay" isLoading={state.resolverLoading}>
           {process.env.REACT_APP_DEBUG_FORMS === "true" && <DevTool control={validation.control} />}
