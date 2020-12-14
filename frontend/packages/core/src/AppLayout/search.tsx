@@ -64,7 +64,7 @@ const InputField = styled(TextField)({
 const ResultGrid = styled(Grid)({
   height: "inherit",
   padding: "12px 16px 12px 16px",
-})
+});
 
 // search's result options
 const ResultLabel = styled(Typography)({
@@ -245,6 +245,8 @@ const SearchField: React.FC = () => {
     setOpen(false);
   };
 
+  // If workflow selected by pressing enter/return,
+  // update the open state to collapse search bar to search icon
   function handleListKeyDown(event) {
     if (event.key === "Enter") {
       event.preventDefault();
