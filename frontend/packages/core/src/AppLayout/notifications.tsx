@@ -41,9 +41,6 @@ const MenuItem = styled(MuiMenuItem)({
   "&:hover": {
     backgroundColor: "#E7E7EA",
   },
-  "&.MuiListItem-root.Mui-focusVisible": {
-    backgroundColor: "#DBDBE0",
-  },
   "&:active": {
     backgroundColor: "#EBEDFB",
   },

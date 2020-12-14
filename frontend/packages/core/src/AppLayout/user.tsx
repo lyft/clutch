@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import {
   Avatar as MuiAvatar,
+  Box,
   ClickAwayListener,
   Divider as MuiDivider,
   Grow as MuiGrow,
@@ -179,7 +180,7 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
   }
 
   return (
-    <>
+    <Box>
       <UserPhoto
         ref={anchorRef}
         edge="end"
@@ -216,7 +217,7 @@ const UserInformation: React.FC<UserInformationProps> = ({ data, user = userId()
           </Grow>
         )}
       </Popper>
-    </>
+    </Box>
   );
 };
 
