@@ -328,13 +328,9 @@ func (s *svc) GetRepository(ctx context.Context, repo *RemoteRef) (*Repository, 
 	}
 
 	r := &Repository{
-		Name: repo.RepoName,
-		Owner: RepositoryOwner{
-			Login: repo.RepoOwner,
-		},
-		DefaultBranch: BranchRef{
-			Name: string(q.Repository.DefaultBranchRef.Name),
-		},
+		Name:          repo.RepoName,
+		Owner:         repo.RepoOwner,
+		DefaultBranch: string(q.Repository.DefaultBranchRef.Name),
 	}
 
 	return r, nil
