@@ -56,21 +56,11 @@ type RemoteRef struct {
 	Ref string
 }
 
-// BranchRef git reference object representing a "branch"
-type BranchRef struct {
-	Name string
-}
-
-// RepositoryOwner represents the entity that owns a repo
-type RepositoryOwner struct {
-	Login string
-}
-
 // Repository contains information about a requested repository.
 type Repository struct {
 	Name          string
-	Owner         RepositoryOwner
-	DefaultBranch BranchRef
+	Owner         string
+	DefaultBranch string
 }
 
 // File contains information about a requested file, including its content.
