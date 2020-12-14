@@ -4,21 +4,13 @@ import _ from "lodash";
 
 import { client, parseErrorMessage } from "../network";
 
-const fetchResourceSchemas = async (
-  type: string,
-  apiProto?: any
-): Promise<IClutch.resolver.v1.Schema[]> => {
+const fetchResourceSchemas = async (type: string): Promise<IClutch.resolver.v1.Schema[]> => {
   const response = await client.post("/v1/resolver/getObjectSchemas", {
     type_url: `type.googleapis.com/${type}`,
   });
-  return response.data.schemas.map((schema: object) => {
-    if (apiProto) {
-      try {
-        return apiProto.clutch.resolver.v1.Schema.fromObject(schema);
-      } catch {}
-    }
-    return $pbclutch.clutch.resolver.v1.Schema.fromObject(schema);
-  });
+  return response.data.schemas.map((schema: object) =>
+    $pbclutch.clutch.resolver.v1.Schema.fromObject(schema)
+  );
 };
 
 export interface ResolutionResults {

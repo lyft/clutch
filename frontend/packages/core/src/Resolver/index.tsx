@@ -26,8 +26,8 @@ const Form = styled.form`
   width: 100%;
 `;
 
-const loadSchemas = (type: string, dispatch: React.Dispatch<DispatchAction>, apiProto: any) => {
-  fetchResourceSchemas(type, apiProto)
+const loadSchemas = (type: string, dispatch: React.Dispatch<DispatchAction>) => {
+  fetchResourceSchemas(type)
     .then(schemas => {
       if (schemas.length === 0) {
         dispatch({
@@ -73,7 +73,7 @@ const Resolver: React.FC<ResolverProps> = ({
   });
   const [validation, setValidation] = React.useState(() => queryValidation);
 
-  React.useEffect(() => loadSchemas(type, dispatch, apiProto), []);
+  React.useEffect(() => loadSchemas(type, dispatch), []);
 
   const submitHandler = () => {
     // Move to loading state.
@@ -125,7 +125,7 @@ const Resolver: React.FC<ResolverProps> = ({
   return (
     <Loadable isLoading={state.schemasLoading}>
       {state.schemaFetchError !== "" ? (
-        <Error message={state.schemaFetchError} onRetry={() => loadSchemas(type, dispatch,  apiProto)} />
+        <Error message={state.schemaFetchError} onRetry={() => loadSchemas(type, dispatch)} />
       ) : (
         <Loadable variant="overlay" isLoading={state.resolverLoading}>
           {process.env.REACT_APP_DEBUG_FORMS === "true" && <DevTool control={validation.control} />}
