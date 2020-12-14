@@ -91,17 +91,25 @@ const Button: React.FC<ButtonProps> = ({ text, variant = "primary", ...props }) 
   );
 };
 
+const ButtonGroupContainer = styled(Grid)({
+  borderTop: "1px solid #E7E7EA",
+  marginTop: "24px",
+  "> *": {
+    margin: "8px",
+  },
+});
+
 export interface ButtonGroupProps {
   buttons: ButtonProps[];
   justify?: GridJustification;
 }
 
 const ButtonGroup: React.FC<ButtonGroupProps> = ({ buttons, justify = "center" }) => (
-  <Grid container justify={justify}>
+  <ButtonGroupContainer container justify={justify}>
     {buttons.map(button => (
       <Button key={button.text} {...button} />
     ))}
-  </Grid>
+  </ButtonGroupContainer>
 );
 
 export interface ClipboardButtonProps {

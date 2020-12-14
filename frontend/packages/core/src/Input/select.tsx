@@ -99,7 +99,7 @@ const StyledSelect = styled(BaseSelect)({
     height: "48px",
   },
 
-  ".MuiListItem-root:first-child": {
+  ".MuiListItem-root:first-of-type": {
     borderRadius: "4px 4px 0 0",
   },
 

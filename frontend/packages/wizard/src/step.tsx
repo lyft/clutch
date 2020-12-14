@@ -1,12 +1,14 @@
 import React from "react";
 import { Error, Loadable, useWizardContext } from "@clutch-sh/core";
-import { Grid } from "@material-ui/core";
-import styled from "styled-components";
+import styled from "@emotion/styled";
+import { Grid as MuiGrid } from "@material-ui/core";
 
-const SizedGrid = styled(Grid)`
-  width: 100%;
-  padding: 0 5%;
-`;
+const Grid = styled(MuiGrid)({
+  width: "100%",
+  "> *": {
+    padding: "8px",
+  },
+});
 
 export interface WizardStepProps {
   isLoading: boolean;
@@ -26,9 +28,9 @@ const WizardStep: React.FC<WizardStepProps> = ({ isLoading, error, children }) =
   return hasError ? (
     <Error message={error} />
   ) : (
-    <SizedGrid container justify="center" direction="column" alignItems="center">
+    <Grid container justify="center" direction="column" alignItems="stretch">
       {children}
-    </SizedGrid>
+    </Grid>
   );
 };
 

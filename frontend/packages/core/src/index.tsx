@@ -4,6 +4,7 @@ import { CheckboxPanel } from "./Input/checkbox";
 import { RadioGroup } from "./Input/radio-group";
 import { Select } from "./Input/select";
 import { TextField } from "./Input/text-field";
+import { Accordion, AccordionDetails } from "./accordion";
 import ClutchApp from "./AppProvider";
 import { Button, ButtonGroup, ButtonProps, ClipboardButton } from "./button";
 import Confirmation from "./confirmation";
@@ -16,6 +17,7 @@ import Loadable from "./loading";
 import { client, ClientError } from "./network";
 import ExpansionPanel from "./panel";
 import Resolver from "./Resolver";
+import { Step, Stepper } from "./stepper";
 import {
   ExpandableRow,
   ExpandableTable,
@@ -27,6 +29,8 @@ import {
 } from "./Table";
 
 export {
+  Accordion,
+  AccordionDetails,
   ClutchApp,
   BaseWorkflowProps,
   Button,
@@ -56,6 +60,8 @@ export {
   Select,
   Status,
   StatusRow,
+  Step,
+  Stepper,
   Table,
   TextField,
   TreeTable,

@@ -4,7 +4,6 @@ import styled from "@emotion/styled";
 import _ from "lodash";
 
 import { AccordionGroup } from "../accordion";
-import { Button } from "../button";
 import { useWizardContext } from "../Contexts";
 import { CompressedError, Error } from "../error";
 import { HorizontalRule } from "../horizontal-rule";
@@ -110,7 +109,6 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
                 onChange={queryOnChange}
                 validation={queryValidation}
               />
-              <Button text="Search" type="submit" />
             </Form>
           )}
           {variant === "dual" && <HorizontalRule>OR</HorizontalRule>}
