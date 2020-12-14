@@ -6444,6 +6444,9 @@ export namespace clutch {
 
                         /** Config regions */
                         regions?: (string[]|null);
+
+                        /** Config clientConfig */
+                        clientConfig?: (clutch.config.service.aws.v1.IClientConfig|null);
                     }
 
                     /** Represents a Config. */
@@ -6457,6 +6460,9 @@ export namespace clutch {
 
                         /** Config regions. */
                         public regions: string[];
+
+                        /** Config clientConfig. */
+                        public clientConfig?: (clutch.config.service.aws.v1.IClientConfig|null);
 
                         /**
                          * Verifies a Config message.
@@ -6482,6 +6488,54 @@ export namespace clutch {
 
                         /**
                          * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a ClientConfig. */
+                    interface IClientConfig {
+
+                        /** ClientConfig retries */
+                        retries?: (number|null);
+                    }
+
+                    /** Represents a ClientConfig. */
+                    class ClientConfig implements IClientConfig {
+
+                        /**
+                         * Constructs a new ClientConfig.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.aws.v1.IClientConfig);
+
+                        /** ClientConfig retries. */
+                        public retries: number;
+
+                        /**
+                         * Verifies a ClientConfig message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a ClientConfig message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns ClientConfig
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.aws.v1.ClientConfig;
+
+                        /**
+                         * Creates a plain object from a ClientConfig message. Also converts values to other types if specified.
+                         * @param message ClientConfig
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.aws.v1.ClientConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this ClientConfig to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };
