@@ -77,21 +77,22 @@ const InstanceDetails: React.FC<WizardChild> = () => {
   );
 };
 
-const Confirm: React.FC<ConfirmChild> = ({ note }) => {
+const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const terminationData = useDataLayout("terminationData");
   const configData = JSON.parse(terminationData.displayValue()?.config?.data || "{}");
   const confirmationData = Object.keys(configData).map(key => {
     return { name: key, value: configData[key] };
   });
+  const formattedNotes = notes.map(note => <div>{note.text}</div>)
   return (
     <WizardStep error={terminationData.error} isLoading={terminationData.isLoading}>
-      <Confirmation action="Termination">{note && note}</Confirmation>
+      <Confirmation action="Termination">{notes && formattedNotes}</Confirmation>
       <MetadataTable data={confirmationData} />
     </WizardStep>
   );
 };
 
-const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, note }) => {
+const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes }) => {
   const dataLayout = {
     resourceData: {},
     terminationData: {
@@ -109,7 +110,7 @@ const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, not
     <Wizard dataLayout={dataLayout} heading={heading}>
       <InstanceIdentifier name="Lookup" resolverType={resolverType} />
       <InstanceDetails name="Modify" />
-      <Confirm name="Confirmation" note={note} />
+      <Confirm name="Confirmation" notes={notes} />
     </Wizard>
   );
 };

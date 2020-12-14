@@ -1,4 +1,4 @@
-import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+import type { BaseWorkflowProps, NoteConfig, WorkflowConfiguration } from "@clutch-sh/core";
 import type { WizardChild } from "@clutch-sh/wizard";
 
 import RebootInstance from "./reboot-instance";
@@ -10,7 +10,7 @@ interface ResolverConfigProps {
 }
 
 interface ConfirmConfigProps {
-  note?: string;
+  notes?: NoteConfig[];
 }
 
 export interface WorkflowProps extends BaseWorkflowProps, ResolverConfigProps, ConfirmConfigProps {}
