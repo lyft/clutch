@@ -55,8 +55,8 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	}
 
 	clientRetries := 0
-	if ac.AwsClient != nil && ac.AwsClient.Retries >= 0 {
-		clientRetries = int(ac.AwsClient.Retries)
+	if ac.ClientConfig != nil && ac.ClientConfig.Retries >= 0 {
+		clientRetries = int(ac.ClientConfig.Retries)
 	}
 
 	for _, region := range ac.Regions {

@@ -50,10 +50,10 @@ func (m *Config) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetAwsClient()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetClientConfig()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return ConfigValidationError{
-				field:  "AwsClient",
+				field:  "ClientConfig",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -117,15 +117,16 @@ var _ interface {
 	ErrorName() string
 } = ConfigValidationError{}
 
-// Validate checks the field values on AWSClient with the rules defined in the
-// proto definition for this message. If any rules are violated, an error is returned.
-func (m *AWSClient) Validate() error {
+// Validate checks the field values on ClientConfig with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *ClientConfig) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if m.GetRetries() < 0 {
-		return AWSClientValidationError{
+		return ClientConfigValidationError{
 			field:  "Retries",
 			reason: "value must be greater than or equal to 0",
 		}
@@ -134,9 +135,9 @@ func (m *AWSClient) Validate() error {
 	return nil
 }
 
-// AWSClientValidationError is the validation error returned by
-// AWSClient.Validate if the designated constraints aren't met.
-type AWSClientValidationError struct {
+// ClientConfigValidationError is the validation error returned by
+// ClientConfig.Validate if the designated constraints aren't met.
+type ClientConfigValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -144,22 +145,22 @@ type AWSClientValidationError struct {
 }
 
 // Field function returns field value.
-func (e AWSClientValidationError) Field() string { return e.field }
+func (e ClientConfigValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e AWSClientValidationError) Reason() string { return e.reason }
+func (e ClientConfigValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e AWSClientValidationError) Cause() error { return e.cause }
+func (e ClientConfigValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e AWSClientValidationError) Key() bool { return e.key }
+func (e ClientConfigValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e AWSClientValidationError) ErrorName() string { return "AWSClientValidationError" }
+func (e ClientConfigValidationError) ErrorName() string { return "ClientConfigValidationError" }
 
 // Error satisfies the builtin error interface
-func (e AWSClientValidationError) Error() string {
+func (e ClientConfigValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -171,14 +172,14 @@ func (e AWSClientValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sAWSClient.%s: %s%s",
+		"invalid %sClientConfig.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = AWSClientValidationError{}
+var _ error = ClientConfigValidationError{}
 
 var _ interface {
 	Field() string
@@ -186,4 +187,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = AWSClientValidationError{}
+} = ClientConfigValidationError{}
