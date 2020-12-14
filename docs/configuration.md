@@ -51,7 +51,7 @@ See comments in [any.proto](https://github.com/protocolbuffers/protobuf/blob/d4c
 {{ simpleProtoYAML "clutch.config.gateway.v1.Service" }}
 ```
 
-Example with `clutch.service.authn` and environment variables.
+Example with `clutch.service.authn` and environment variables. As an example, see [`api/config/service/authn/v1/authn.proto`](https://github.com/lyft/clutch/blob/main/api/config/service/authn/v1/authn.proto) for the configuration definition for this particular service.
 ```yaml title="clutch-config.yaml"
 ...
 services:
