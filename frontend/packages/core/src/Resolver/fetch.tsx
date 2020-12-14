@@ -4,13 +4,18 @@ import _ from "lodash";
 
 import { client, parseErrorMessage } from "../network";
 
-const fetchResourceSchemas = async (type: string): Promise<IClutch.resolver.v1.Schema[]> => {
+const fetchResourceSchemas = async (type: string, apiProto?: any): Promise<IClutch.resolver.v1.Schema[]> => {
   const response = await client.post("/v1/resolver/getObjectSchemas", {
     type_url: `type.googleapis.com/${type}`,
   });
-  return response.data.schemas.map((schema: object) =>
-    $pbclutch.clutch.resolver.v1.Schema.fromObject(schema)
-  );
+  return response.data.schemas.map((schema: object) => {
+    if (apiProto) {
+      try {
+        return apiProto.clutch.resolver.v1.Schema.fromObject(schema);
+      } catch {}
+    }
+    return $pbclutch.clutch.resolver.v1.Schema.fromObject(schema);
+  });
 };
 
 export interface ResolutionResults {
@@ -55,12 +60,17 @@ const resolveResource = async (
     [key: string]: any;
   },
   onResolve: (resultObjects: any[], failureMessages: string[]) => void,
-  onError: (message: string) => void
+  onError: (message: string) => void,
+  apiProto?: any,
 ) => {
   const resolver = fields?.query !== undefined ? resolveQuery : resolveFields;
   return resolver(type, limit, fields)
     .then(({ results, failures }) => {
-      const resultObjects = results.map(result => _.get($pbclutch, type).fromObject(result));
+      let pbClutch = _.get($pbclutch, type);
+      if (apiProto) {
+        pbClutch = _.get(apiProto, type);
+      }
+      const resultObjects = results.map(result => pbClutch.fromObject(result));
       const failureMessages = failures.map(failure => parseErrorMessage(failure.message).summary);
       if (_.some(resultObjects) !== undefined) {
         onResolve(resultObjects, failureMessages);

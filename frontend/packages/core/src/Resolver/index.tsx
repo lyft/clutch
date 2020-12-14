@@ -26,8 +26,8 @@ const Form = styled.form`
   width: 100%;
 `;
 
-const loadSchemas = (type: string, dispatch: React.Dispatch<DispatchAction>) => {
-  fetchResourceSchemas(type)
+const loadSchemas = (type: string, dispatch: React.Dispatch<DispatchAction>, apiProto: any) => {
+  fetchResourceSchemas(type, apiProto)
     .then(schemas => {
       if (schemas.length === 0) {
         dispatch({
@@ -48,9 +48,10 @@ interface ResolverProps {
   searchLimit: number;
   onResolve: (data: { results: object[]; input: object }) => void;
   variant?: "dual" | "query" | "schema";
+  apiProto?: any;
 }
 
-const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, variant = "dual" }) => {
+const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, variant = "dual", apiProto }) => {
   const [state, dispatch] = useResolverState();
   const { displayWarnings } = useWizardContext();
 
@@ -66,7 +67,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
   });
   const [validation, setValidation] = React.useState(() => queryValidation);
 
-  React.useEffect(() => loadSchemas(type, dispatch), []);
+  React.useEffect(() => loadSchemas(type, dispatch, apiProto), []);
 
   const submitHandler = () => {
     // Move to loading state.
@@ -90,7 +91,8 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
         }
         dispatch({ type: ResolverAction.RESOLVE_SUCCESS });
       },
-      err => dispatch({ type: ResolverAction.RESOLVE_ERROR, error: err })
+      err => dispatch({ type: ResolverAction.RESOLVE_ERROR, error: err }),
+      apiProto,
     );
   };
 
