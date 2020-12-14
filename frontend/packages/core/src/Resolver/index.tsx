@@ -51,7 +51,13 @@ interface ResolverProps {
   apiProto?: any;
 }
 
-const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, variant = "dual", apiProto }) => {
+const Resolver: React.FC<ResolverProps> = ({
+  type,
+  searchLimit,
+  onResolve,
+  variant = "dual",
+  apiProto,
+}) => {
   const [state, dispatch] = useResolverState();
   const { displayWarnings } = useWizardContext();
 
@@ -92,7 +98,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
         dispatch({ type: ResolverAction.RESOLVE_SUCCESS });
       },
       err => dispatch({ type: ResolverAction.RESOLVE_ERROR, error: err }),
-      apiProto,
+      apiProto
     );
   };
 

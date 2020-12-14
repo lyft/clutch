@@ -4,7 +4,10 @@ import _ from "lodash";
 
 import { client, parseErrorMessage } from "../network";
 
-const fetchResourceSchemas = async (type: string, apiProto?: any): Promise<IClutch.resolver.v1.Schema[]> => {
+const fetchResourceSchemas = async (
+  type: string,
+  apiProto?: any
+): Promise<IClutch.resolver.v1.Schema[]> => {
   const response = await client.post("/v1/resolver/getObjectSchemas", {
     type_url: `type.googleapis.com/${type}`,
   });
@@ -61,7 +64,7 @@ const resolveResource = async (
   },
   onResolve: (resultObjects: any[], failureMessages: string[]) => void,
   onError: (message: string) => void,
-  apiProto?: any,
+  apiProto?: any
 ) => {
   const resolver = fields?.query !== undefined ? resolveQuery : resolveFields;
   return resolver(type, limit, fields)
