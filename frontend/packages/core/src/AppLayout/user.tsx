@@ -33,7 +33,7 @@ const UserPhoto = styled(IconButton)({
   },
 });
 
-// css for both header and menu avatar
+// header and menu avatar
 const Avatar = styled(MuiAvatar)({
   backgroundColor: "#727FE1",
   color: "#FFFFFF",
@@ -59,15 +59,13 @@ const MenuList = styled(MuiMenuList)({
     "&:hover": {
       backgroundColor: "#E7E7EA",
     },
-    "&.MuiListItem-root.Mui-focusVisible": {
-      backgroundColor: "#DBDBE0",
-    },
     "&:active": {
       backgroundColor: "#EBEDFB",
     },
   },
 });
 
+// user details menu item
 const AvatarMenuItem = styled(MuiMenuItem)({
   height: "52px",
   margin: "16px 0 16px 0",
@@ -96,6 +94,7 @@ const AvatarListItemText = styled(MuiListItemText)({
   },
 });
 
+// default menu items
 const MenuItem = styled(MuiMenuItem)({
   height: "48px",
   padding: "12px",
