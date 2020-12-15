@@ -121,3 +121,63 @@ func TestStatusCodeFilter(t *testing.T) {
 		assert.Equal(t, test.expectedLogLength, recorded.Len())
 	}
 }
+
+func TestLogContent(t *testing.T) {
+	logTests := []struct {
+		// status code filter value
+		equals []int
+		// length of recorded log
+		expectedLogLength int
+		// expected status code of recorded log
+		expectedStatusCode int64
+	}{
+		{
+			equals:             []int{0},
+			expectedLogLength:  1,
+			expectedStatusCode: 0,
+		},
+		{
+			equals:             []int{0, 12, 13, 14},
+			expectedLogLength:  1,
+			expectedStatusCode: 0,
+		},
+	}
+	for _, test := range logTests {
+		core, recorded := observer.New(zapcore.DebugLevel)
+		log := zap.New(core)
+
+		var statusCodeFilters []*accesslogv1.Config_StatusCodeFilter
+		for _, value := range test.equals {
+			statusCodeFilters = append(statusCodeFilters,
+				&accesslogv1.Config_StatusCodeFilter{
+					FilterType: &accesslogv1.Config_StatusCodeFilter_Equals{
+						Equals: uint32(value),
+					},
+				})
+		}
+		m, err := New(&accesslogv1.Config{
+			StatusCodeFilters: statusCodeFilters,
+		}, log, nil)
+		assert.NoError(t, err)
+
+		fakeHandler := func(ctx context.Context, req interface{}) (interface{}, error) {
+			return &healthcheckv1.HealthcheckResponse{}, nil
+		}
+
+		midFn := m.UnaryInterceptor()
+		resp, err := midFn(context.Background(), nil, &grpc.UnaryServerInfo{FullMethod: "/foo/bar"}, fakeHandler)
+		assert.NotNil(t, resp)
+
+		s := status.Convert(err)
+		assert.Equal(t, codes.OK, s.Code())
+
+		// ensure the recorded log message matches status code filter
+		assert.Equal(t, test.expectedLogLength, recorded.Len())
+		logEntry := recorded.All()[0]
+		code := logEntry.ContextMap()["status code"]
+		assert.Equal(t, test.expectedStatusCode, code)
+		body := logEntry.ContextMap()["response body"]
+		assert.NotNil(t, body)
+
+	}
+}
