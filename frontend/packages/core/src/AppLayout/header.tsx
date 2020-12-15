@@ -68,7 +68,7 @@ const Header: React.FC = () => {
             <Box>
               <SearchField />
             </Box>
-            {showNotifications ? <Notifications /> : null}
+            {showNotifications && <Notifications />}
             <UserInformation />
           </Grid>
         </Toolbar>
