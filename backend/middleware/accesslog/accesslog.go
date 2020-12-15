@@ -66,7 +66,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 			// if err is returned from handler, log error details only
 			// as response body will be nil
 			if err != nil {
-				fields = append(fields, zap.String("message", s.Message()))
+				fields = append(fields, zap.String("error", s.Message()))
 				m.logger.Error("gRPC", fields...)
 			} else {
 				respBody, err := meta.APIBody(resp)
