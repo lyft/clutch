@@ -41,8 +41,7 @@ const Error: React.FC<ErrorProps> = ({ message, onRetry }) => {
 };
 
 const Collapse = styled(MuiCollapse)`
-  margin-top: 10px;
-  width: 45%;
+  display: none;
 `;
 
 const ErrorText = styled(Typography)`

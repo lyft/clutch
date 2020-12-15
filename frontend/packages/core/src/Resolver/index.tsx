@@ -104,6 +104,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
               onSubmit={queryValidation.handleSubmit(() => submitHandler(queryData))}
               noValidate
             >
+              <SchemaLabel>Search</SchemaLabel>
               <QueryResolver
                 schemas={state.searchableSchemas}
                 onChange={queryOnChange}

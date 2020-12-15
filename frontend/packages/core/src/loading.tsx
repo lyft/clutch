@@ -13,10 +13,6 @@ const ContentContainer = styled(Grid)`
 
 const ChildrenContainer = styled.div({
   width: "100%",
-  "> *": {
-    paddingTop: "8px",
-    paddingBottom: "8px",
-  },
 });
 
 const Overlay = styled(Paper)`
