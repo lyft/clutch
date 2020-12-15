@@ -1,19 +1,20 @@
 import React from "react";
 import styled from "@emotion/styled";
 import {
-  Box,
   ClickAwayListener,
   Grow as MuiGrow,
   IconButton,
+  ListItemText as MuiListItemText,
+  MenuItem as MuiMenuItem,
   MenuList,
-  Paper,
-  Popper,
+  Paper as MuiPaper,
+  Popper as MuiPopper,
 } from "@material-ui/core";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
 const StyledNotificationsIcon = styled(IconButton)({
   color: "#ffffff",
-  margin: "8px",
+  marginRight: "8px",
   padding: "12px",
   "&:hover": {
     background: "#2d3db4",
@@ -23,12 +24,50 @@ const StyledNotificationsIcon = styled(IconButton)({
   },
 });
 
+const Popper = styled(MuiPopper)({
+  padding: "0 12px",
+  marginLeft: "12px",
+});
+
+const Paper = styled(MuiPaper)({
+  width: "242px",
+  border: "1px solid #E7E7EA",
+  boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+});
+
+const MenuItem = styled(MuiMenuItem)({
+  height: "48px",
+  padding: "12px",
+  "&:hover": {
+    backgroundColor: "#E7E7EA",
+  },
+  "&:active": {
+    backgroundColor: "#EBEDFB",
+  },
+});
+
+const ListItemText = styled(MuiListItemText)({
+  margin: "0px",
+  ".MuiTypography-root": {
+    color: "#0D1030",
+    fontSize: "14px",
+    lineHeight: "24px",
+  },
+});
+
 const Grow = styled(MuiGrow)((props: { placement: string }) => ({
   transformOrigin: props.placement,
 }));
 
-// TODO (sperry): add interface to render menu items
-const Notifications: React.FC = () => {
+interface NotificationsData {
+  value: string;
+}
+
+export interface NotificationsProp {
+  data?: NotificationsData[];
+}
+
+const Notifications: React.FC<NotificationsProp> = ({ data }) => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
 
@@ -51,7 +90,7 @@ const Notifications: React.FC = () => {
   }
 
   return (
-    <Box>
+    <>
       <StyledNotificationsIcon
         ref={anchorRef}
         edge="end"
@@ -61,7 +100,7 @@ const Notifications: React.FC = () => {
       >
         <NotificationsIcon />
       </StyledNotificationsIcon>
-      <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition>
+      <Popper open={open} anchorEl={anchorRef.current} transition placement="bottom-end">
         {({ TransitionProps, placement }) => (
           <Grow
             {...TransitionProps}
@@ -73,13 +112,21 @@ const Notifications: React.FC = () => {
                   autoFocusItem={open}
                   id="notification-options"
                   onKeyDown={handleListKeyDown}
-                />
+                >
+                  {data?.map(d => {
+                    return (
+                      <MenuItem>
+                        <ListItemText>{d.value}</ListItemText>
+                      </MenuItem>
+                    );
+                  })}
+                </MenuList>
               </ClickAwayListener>
             </Paper>
           </Grow>
         )}
       </Popper>
-    </Box>
+    </>
   );
 };
 
