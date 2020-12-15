@@ -176,7 +176,9 @@ func TestLogContent(t *testing.T) {
 		logEntry := recorded.All()[0]
 		code := logEntry.ContextMap()["statusCode"]
 		assert.Equal(t, test.expectedStatusCode, code)
-		body := logEntry.ContextMap()["responseBody"]
-		assert.NotNil(t, body)
+		svc := logEntry.ContextMap()["service"]
+		assert.NotNil(t, svc)
+		method := logEntry.ContextMap()["service"]
+		assert.NotNil(t, method)
 	}
 }

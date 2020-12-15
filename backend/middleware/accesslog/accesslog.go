@@ -50,6 +50,10 @@ type mid struct {
 
 func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+		service, method, ok := middleware.SplitFullMethod(info.FullMethod)
+		if !ok {
+			m.logger.Warn("could not parse gRPC method", zap.String("fullMethod", info.FullMethod))
+		}
 		resp, err := handler(ctx, req)
 		s := status.Convert(err)
 		if s == nil {
@@ -58,6 +62,8 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 		code := s.Code()
 		// common logger context fields
 		fields := []zap.Field{
+			zap.String("service", service),
+			zap.String("method", method),
 			zap.Int("statusCode", int(code)),
 			zap.String("status", code.String()),
 		}
@@ -66,13 +72,14 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 			// if err is returned from handler, log error details only
 			// as response body will be nil
 			if err != nil {
-				fields = append(fields, zap.String("error", s.Message()))
-				m.logger.Error("gRPC", fields...)
-			} else {
-				respBody, err := meta.APIBody(resp)
+				reqBody, err := meta.APIBody(req)
 				if err != nil {
 					return nil, err
 				}
+				fields = append(fields, log.ProtoField("requestBody", reqBody))
+				fields = append(fields, zap.String("error", s.Message()))
+				m.logger.Error("gRPC", fields...)
+			} else {
 				m.logger.Info("gRPC", fields...)
 			}
 		}
