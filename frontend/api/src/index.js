@@ -20137,6 +20137,72 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeCronJob}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DescribeCronJobCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DescribeCronJobResponse} [response] DescribeCronJobResponse
+                 */
+
+                /**
+                 * Calls DescribeCronJob.
+                 * @function describeCronJob
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeCronJobRequest} request DescribeCronJobRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DescribeCronJobCallback} callback Node-style callback called with the error, if any, and DescribeCronJobResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.describeCronJob = function describeCronJob(request, callback) {
+                    return this.rpcCall(describeCronJob, $root.clutch.k8s.v1.DescribeCronJobRequest, $root.clutch.k8s.v1.DescribeCronJobResponse, request, callback);
+                }, "name", { value: "DescribeCronJob" });
+
+                /**
+                 * Calls DescribeCronJob.
+                 * @function describeCronJob
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeCronJobRequest} request DescribeCronJobRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DescribeCronJobResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteCronJob}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DeleteCronJobCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DeleteCronJobResponse} [response] DeleteCronJobResponse
+                 */
+
+                /**
+                 * Calls DeleteCronJob.
+                 * @function deleteCronJob
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteCronJobRequest} request DeleteCronJobRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DeleteCronJobCallback} callback Node-style callback called with the error, if any, and DeleteCronJobResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.deleteCronJob = function deleteCronJob(request, callback) {
+                    return this.rpcCall(deleteCronJob, $root.clutch.k8s.v1.DeleteCronJobRequest, $root.clutch.k8s.v1.DeleteCronJobResponse, request, callback);
+                }, "name", { value: "DeleteCronJob" });
+
+                /**
+                 * Calls DeleteCronJob.
+                 * @function deleteCronJob
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteCronJobRequest} request DeleteCronJobRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DeleteCronJobResponse>} Promise
+                 * @variation 2
+                 */
+
                 return K8sAPI;
             })();
 
@@ -25104,6 +25170,743 @@ export const clutch = $root.clutch = (() => {
                 return DeleteServiceResponse;
             })();
 
+            v1.CronJob = (function() {
+
+                /**
+                 * Properties of a CronJob.
+                 * @memberof clutch.k8s.v1
+                 * @interface ICronJob
+                 * @property {string|null} [cluster] CronJob cluster
+                 * @property {string|null} [namespace] CronJob namespace
+                 * @property {string|null} [name] CronJob name
+                 * @property {string|null} [schedule] CronJob schedule
+                 * @property {Object.<string,string>|null} [labels] CronJob labels
+                 * @property {Object.<string,string>|null} [annotations] CronJob annotations
+                 */
+
+                /**
+                 * Constructs a new CronJob.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a CronJob.
+                 * @implements ICronJob
+                 * @constructor
+                 * @param {clutch.k8s.v1.ICronJob=} [properties] Properties to set
+                 */
+                function CronJob(properties) {
+                    this.labels = {};
+                    this.annotations = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * CronJob cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @instance
+                 */
+                CronJob.prototype.cluster = "";
+
+                /**
+                 * CronJob namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @instance
+                 */
+                CronJob.prototype.namespace = "";
+
+                /**
+                 * CronJob name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @instance
+                 */
+                CronJob.prototype.name = "";
+
+                /**
+                 * CronJob schedule.
+                 * @member {string} schedule
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @instance
+                 */
+                CronJob.prototype.schedule = "";
+
+                /**
+                 * CronJob labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @instance
+                 */
+                CronJob.prototype.labels = $util.emptyObject;
+
+                /**
+                 * CronJob annotations.
+                 * @member {Object.<string,string>} annotations
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @instance
+                 */
+                CronJob.prototype.annotations = $util.emptyObject;
+
+                /**
+                 * Verifies a CronJob message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                CronJob.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.schedule != null && message.hasOwnProperty("schedule"))
+                        if (!$util.isString(message.schedule))
+                            return "schedule: string expected";
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                        if (!$util.isObject(message.annotations))
+                            return "annotations: object expected";
+                        let key = Object.keys(message.annotations);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.annotations[key[i]]))
+                                return "annotations: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a CronJob message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.CronJob} CronJob
+                 */
+                CronJob.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.CronJob)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.CronJob();
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.schedule != null)
+                        message.schedule = String(object.schedule);
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.CronJob.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    if (object.annotations) {
+                        if (typeof object.annotations !== "object")
+                            throw TypeError(".clutch.k8s.v1.CronJob.annotations: object expected");
+                        message.annotations = {};
+                        for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
+                            message.annotations[keys[i]] = String(object.annotations[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a CronJob message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @static
+                 * @param {clutch.k8s.v1.CronJob} message CronJob
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CronJob.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults) {
+                        object.labels = {};
+                        object.annotations = {};
+                    }
+                    if (options.defaults) {
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                        object.schedule = "";
+                    }
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.schedule != null && message.hasOwnProperty("schedule"))
+                        object.schedule = message.schedule;
+                    let keys2;
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
+                        object.annotations = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this CronJob to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CronJob.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return CronJob;
+            })();
+
+            v1.DescribeCronJobRequest = (function() {
+
+                /**
+                 * Properties of a DescribeCronJobRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeCronJobRequest
+                 * @property {string|null} [clientset] DescribeCronJobRequest clientset
+                 * @property {string|null} [cluster] DescribeCronJobRequest cluster
+                 * @property {string|null} [namespace] DescribeCronJobRequest namespace
+                 * @property {string|null} [name] DescribeCronJobRequest name
+                 * @property {Object.<string,string>|null} [labels] DescribeCronJobRequest labels
+                 */
+
+                /**
+                 * Constructs a new DescribeCronJobRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeCronJobRequest.
+                 * @implements IDescribeCronJobRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeCronJobRequest=} [properties] Properties to set
+                 */
+                function DescribeCronJobRequest(properties) {
+                    this.labels = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeCronJobRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DescribeCronJobRequest
+                 * @instance
+                 */
+                DescribeCronJobRequest.prototype.clientset = "";
+
+                /**
+                 * DescribeCronJobRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DescribeCronJobRequest
+                 * @instance
+                 */
+                DescribeCronJobRequest.prototype.cluster = "";
+
+                /**
+                 * DescribeCronJobRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.DescribeCronJobRequest
+                 * @instance
+                 */
+                DescribeCronJobRequest.prototype.namespace = "";
+
+                /**
+                 * DescribeCronJobRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DescribeCronJobRequest
+                 * @instance
+                 */
+                DescribeCronJobRequest.prototype.name = "";
+
+                /**
+                 * DescribeCronJobRequest labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.DescribeCronJobRequest
+                 * @instance
+                 */
+                DescribeCronJobRequest.prototype.labels = $util.emptyObject;
+
+                /**
+                 * Verifies a DescribeCronJobRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeCronJobRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeCronJobRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeCronJobRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeCronJobRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeCronJobRequest} DescribeCronJobRequest
+                 */
+                DescribeCronJobRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeCronJobRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeCronJobRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeCronJobRequest.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeCronJobRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeCronJobRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeCronJobRequest} message DescribeCronJobRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeCronJobRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults)
+                        object.labels = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    let keys2;
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeCronJobRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeCronJobRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeCronJobRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeCronJobRequest;
+            })();
+
+            v1.DescribeCronJobResponse = (function() {
+
+                /**
+                 * Properties of a DescribeCronJobResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeCronJobResponse
+                 * @property {clutch.k8s.v1.ICronJob|null} [cronjob] DescribeCronJobResponse cronjob
+                 */
+
+                /**
+                 * Constructs a new DescribeCronJobResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeCronJobResponse.
+                 * @implements IDescribeCronJobResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeCronJobResponse=} [properties] Properties to set
+                 */
+                function DescribeCronJobResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeCronJobResponse cronjob.
+                 * @member {clutch.k8s.v1.ICronJob|null|undefined} cronjob
+                 * @memberof clutch.k8s.v1.DescribeCronJobResponse
+                 * @instance
+                 */
+                DescribeCronJobResponse.prototype.cronjob = null;
+
+                /**
+                 * Verifies a DescribeCronJobResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeCronJobResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeCronJobResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.cronjob != null && message.hasOwnProperty("cronjob")) {
+                        let error = $root.clutch.k8s.v1.CronJob.verify(message.cronjob);
+                        if (error)
+                            return "cronjob." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeCronJobResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeCronJobResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeCronJobResponse} DescribeCronJobResponse
+                 */
+                DescribeCronJobResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeCronJobResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeCronJobResponse();
+                    if (object.cronjob != null) {
+                        if (typeof object.cronjob !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeCronJobResponse.cronjob: object expected");
+                        message.cronjob = $root.clutch.k8s.v1.CronJob.fromObject(object.cronjob);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeCronJobResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeCronJobResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeCronJobResponse} message DescribeCronJobResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeCronJobResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.cronjob = null;
+                    if (message.cronjob != null && message.hasOwnProperty("cronjob"))
+                        object.cronjob = $root.clutch.k8s.v1.CronJob.toObject(message.cronjob, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeCronJobResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeCronJobResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeCronJobResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeCronJobResponse;
+            })();
+
+            v1.DeleteCronJobRequest = (function() {
+
+                /**
+                 * Properties of a DeleteCronJobRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteCronJobRequest
+                 * @property {string|null} [clientset] DeleteCronJobRequest clientset
+                 * @property {string|null} [cluster] DeleteCronJobRequest cluster
+                 * @property {string|null} [namespace] DeleteCronJobRequest namespace
+                 * @property {string|null} [name] DeleteCronJobRequest name
+                 */
+
+                /**
+                 * Constructs a new DeleteCronJobRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteCronJobRequest.
+                 * @implements IDeleteCronJobRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteCronJobRequest=} [properties] Properties to set
+                 */
+                function DeleteCronJobRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DeleteCronJobRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DeleteCronJobRequest
+                 * @instance
+                 */
+                DeleteCronJobRequest.prototype.clientset = "";
+
+                /**
+                 * DeleteCronJobRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DeleteCronJobRequest
+                 * @instance
+                 */
+                DeleteCronJobRequest.prototype.cluster = "";
+
+                /**
+                 * DeleteCronJobRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.DeleteCronJobRequest
+                 * @instance
+                 */
+                DeleteCronJobRequest.prototype.namespace = "";
+
+                /**
+                 * DeleteCronJobRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DeleteCronJobRequest
+                 * @instance
+                 */
+                DeleteCronJobRequest.prototype.name = "";
+
+                /**
+                 * Verifies a DeleteCronJobRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteCronJobRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteCronJobRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteCronJobRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteCronJobRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteCronJobRequest} DeleteCronJobRequest
+                 */
+                DeleteCronJobRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteCronJobRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DeleteCronJobRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DeleteCronJobRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteCronJobRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteCronJobRequest} message DeleteCronJobRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteCronJobRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    return object;
+                };
+
+                /**
+                 * Converts this DeleteCronJobRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteCronJobRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteCronJobRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteCronJobRequest;
+            })();
+
+            v1.DeleteCronJobResponse = (function() {
+
+                /**
+                 * Properties of a DeleteCronJobResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteCronJobResponse
+                 */
+
+                /**
+                 * Constructs a new DeleteCronJobResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteCronJobResponse.
+                 * @implements IDeleteCronJobResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteCronJobResponse=} [properties] Properties to set
+                 */
+                function DeleteCronJobResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies a DeleteCronJobResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteCronJobResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteCronJobResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteCronJobResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteCronJobResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteCronJobResponse} DeleteCronJobResponse
+                 */
+                DeleteCronJobResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteCronJobResponse)
+                        return object;
+                    return new $root.clutch.k8s.v1.DeleteCronJobResponse();
+                };
+
+                /**
+                 * Creates a plain object from a DeleteCronJobResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteCronJobResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteCronJobResponse} message DeleteCronJobResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteCronJobResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this DeleteCronJobResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteCronJobResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteCronJobResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteCronJobResponse;
+            })();
+
             v1.NullableString = (function() {
 
                 /**
@@ -28868,6 +29671,141 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return Service;
+                })();
+
+                v1.CronJob = (function() {
+
+                    /**
+                     * Properties of a CronJob.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @interface ICronJob
+                     * @property {string|null} [name] CronJob name
+                     * @property {string|null} [clientset] CronJob clientset
+                     * @property {string|null} [namespace] CronJob namespace
+                     */
+
+                    /**
+                     * Constructs a new CronJob.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @classdesc Represents a CronJob.
+                     * @implements ICronJob
+                     * @constructor
+                     * @param {clutch.resolver.k8s.v1.ICronJob=} [properties] Properties to set
+                     */
+                    function CronJob(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * CronJob name.
+                     * @member {string} name
+                     * @memberof clutch.resolver.k8s.v1.CronJob
+                     * @instance
+                     */
+                    CronJob.prototype.name = "";
+
+                    /**
+                     * CronJob clientset.
+                     * @member {string} clientset
+                     * @memberof clutch.resolver.k8s.v1.CronJob
+                     * @instance
+                     */
+                    CronJob.prototype.clientset = "";
+
+                    /**
+                     * CronJob namespace.
+                     * @member {string} namespace
+                     * @memberof clutch.resolver.k8s.v1.CronJob
+                     * @instance
+                     */
+                    CronJob.prototype.namespace = "";
+
+                    /**
+                     * Verifies a CronJob message.
+                     * @function verify
+                     * @memberof clutch.resolver.k8s.v1.CronJob
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    CronJob.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            if (!$util.isString(message.clientset))
+                                return "clientset: string expected";
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            if (!$util.isString(message.namespace))
+                                return "namespace: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a CronJob message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.resolver.k8s.v1.CronJob
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.resolver.k8s.v1.CronJob} CronJob
+                     */
+                    CronJob.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.resolver.k8s.v1.CronJob)
+                            return object;
+                        let message = new $root.clutch.resolver.k8s.v1.CronJob();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.clientset != null)
+                            message.clientset = String(object.clientset);
+                        if (object.namespace != null)
+                            message.namespace = String(object.namespace);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a CronJob message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.resolver.k8s.v1.CronJob
+                     * @static
+                     * @param {clutch.resolver.k8s.v1.CronJob} message CronJob
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    CronJob.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.clientset = "";
+                            object.namespace = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            object.clientset = message.clientset;
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            object.namespace = message.namespace;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this CronJob to JSON.
+                     * @function toJSON
+                     * @memberof clutch.resolver.k8s.v1.CronJob
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    CronJob.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return CronJob;
                 })();
 
                 return v1;
