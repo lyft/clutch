@@ -1,7 +1,7 @@
 package accesslog
 
 // <!-- START clutchdoc -->
-// description: Enables access log filtering on responses to filter logs by status code
+// description: Logs gRPC requests and responses, optionally filtered by status code.
 // <!-- END clutchdoc -->
 
 import (
