@@ -14,11 +14,6 @@ import { QueryResolver, SchemaResolver } from "./input";
 import type { DispatchAction } from "./state";
 import { ResolverAction, useResolverState } from "./state";
 
-const Form = styled.form({
-  alignItems: "center",
-  display: "flex",
-  flexDirection: "column",
-});
 
 const SchemaLabel = styled.div({
   alignSelf: "flex-start",
@@ -56,7 +51,6 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
 
   React.useEffect(() => loadSchemas(type, dispatch), []);
 
-  const [queryData, setQueryData] = React.useState({ query: "" });
 
   const submitHandler = data => {
     // Move to loading state.
@@ -81,15 +75,6 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
     );
   };
 
-  const queryValidation = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onSubmit",
-    shouldFocusError: false,
-  });
-
-  const queryOnChange = e => {
-    setQueryData({ query: e.target.value });
-  };
 
   return (
     <Loadable isLoading={state.schemasLoading}>
@@ -99,17 +84,13 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
         <Loadable variant="overlay" isLoading={state.resolverLoading}>
           <CompressedError title="Error" message={state.resolverFetchError} />
           {(variant === "dual" || variant === "query") && (
-            <Form
-              onSubmit={queryValidation.handleSubmit(() => submitHandler(queryData))}
-              noValidate
-            >
+            <>
               <SchemaLabel>Search</SchemaLabel>
               <QueryResolver
                 schemas={state.searchableSchemas}
-                onChange={queryOnChange}
-                validation={queryValidation}
+                submitHandler={submitHandler}
               />
-            </Form>
+            </>
           )}
           {variant === "dual" && <HorizontalRule>OR</HorizontalRule>}
           <SchemaLabel>Advanced Search</SchemaLabel>

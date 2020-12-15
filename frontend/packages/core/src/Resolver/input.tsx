@@ -1,6 +1,7 @@
 import React from "react";
-import type { UseFormMethods } from "react-hook-form";
 import { useForm } from "react-hook-form";
+import styled from "@emotion/styled";
+
 import type { clutch } from "@clutch-sh/api";
 import SearchIcon from "@material-ui/icons/Search";
 
@@ -18,24 +19,40 @@ import { TextField } from "../Input/text-field";
 import type { ChangeEventTarget, ResolverChangeEvent } from "./hydrator";
 import { convertChangeEvent, hydrateField } from "./hydrator";
 
+const Form = styled.form({
+
+});
+
+
 interface QueryResolverProps {
   schemas: clutch.resolver.v1.Schema[];
-  onChange: (e: ResolverChangeEvent) => void;
-  validation: UseFormMethods;
+  submitHandler: any;
 }
 
-const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, onChange, validation }) => {
+const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, submitHandler }) => {
+  const validation = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+    shouldFocusError: false,
+  });
+
+  const [queryData, setQueryData] = React.useState("");
+
   let typeLabel = schemas.map(schema => schema?.metadata.displayName).join();
   typeLabel = `Search by ${typeLabel}`;
 
   const handleChanges = (event: React.ChangeEvent<ChangeEventTarget> | React.KeyboardEvent) => {
-    onChange(convertChangeEvent(event));
+    setQueryData(convertChangeEvent(event).target.value);
   };
 
   const error = validation.errors?.query;
   return (
+    <Form
+    onSubmit={validation.handleSubmit(() => submitHandler({query: queryData}))}
+    noValidate
+  >
     <TextField
-      label={typeLabel || "Please select a resolver"}
+      label={typeLabel}
       name="query"
       required
       onChange={handleChanges}
@@ -46,6 +63,7 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, onChange, valida
       helperText={error?.message || error?.type || ""}
       endAdornment={<SearchIcon />}
     />
+    </Form>
   );
 };
 
@@ -69,7 +87,7 @@ const SchemaResolver = ({ schema, expanded, onClick, submitHandler }: SchemaReso
   };
 
   return (
-    <form noValidate onSubmit={schemaValidation.handleSubmit(() => submitHandler(data))}>
+    <Form noValidate onSubmit={schemaValidation.handleSubmit(() => submitHandler(data))}>
       <Accordion
         title={`Search by ${schema.metadata.displayName}`}
         expanded={expanded}
@@ -87,7 +105,7 @@ const SchemaResolver = ({ schema, expanded, onClick, submitHandler }: SchemaReso
           <Button text="Submit" type="submit" />
         </AccordionActions>
       </Accordion>
-    </form>
+    </Form>
   );
 };
 
