@@ -2,7 +2,10 @@ package topology
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
+	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -12,6 +15,7 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"golang.org/x/net/context"
+	"google.golang.org/protobuf/encoding/protojson"
 
 	topologyv1cfg "github.com/lyft/clutch/backend/api/config/service/topology/v1"
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
@@ -21,7 +25,10 @@ import (
 
 const Name = "clutch.service.topology"
 
-type Service interface{}
+type Service interface {
+	GetTopology(ctx context.Context) error
+	SearchTopology(ctx context.Context, search *topologyv1.SearchTopologyRequest) ([]*topologyv1.Resource, error)
+}
 
 type client struct {
 	config *topologyv1cfg.Config
@@ -85,3 +92,97 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 
 	return c, nil
 }
+
+func (c *client) GetTopology(ctx context.Context) error {
+	return nil
+}
+
+func (c *client) SearchTopology(ctx context.Context, req *topologyv1.SearchTopologyRequest) ([]*topologyv1.Resource, error) {
+	query := "SELECT id, data, metadata FROM topology_cache WHERE "
+
+	// WHERE
+	// Filter - Search
+	if req.Filter != nil && req.Filter.Search.Field != nil {
+		// Is there an ID
+		if len(req.Filter.Search.Field.GetId()) > 0 {
+			query += fmt.Sprintf("id like '%%%s%%' ", req.Filter.Search.Text)
+		}
+	}
+
+	if req.Filter != nil && len(req.Filter.TypeUrl) > 0 {
+		query += fmt.Sprintf("AND resolver_type_url = '%s' ", req.Filter.TypeUrl)
+	}
+
+	// Filter - Metadata
+
+	// Sort
+	// Offset
+	if req.Skip >= 0 {
+		query += fmt.Sprintf("OFFSET %d ", req.Skip)
+	}
+
+	// Limit
+	limit := 25
+	if req.Limit >= 0 {
+		limit = int(req.Limit)
+	}
+	query += fmt.Sprintf("LIMIT %d ", limit)
+
+	// End Query
+	query += ";"
+
+	log.Print(query)
+
+	rows, err := c.db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	results := []*topologyv1.Resource{}
+
+	for rows.Next() {
+		var id string
+		var data []byte
+		var metadata []byte
+
+		if err := rows.Scan(&id, &data, &metadata); err != nil {
+			log.Printf("%v", err)
+		}
+
+		var dataAny any.Any
+		if err := protojson.Unmarshal(data, &dataAny); err != nil {
+			log.Printf("%v", err)
+		}
+
+		var metadataMap map[string]string
+		if err := json.Unmarshal(metadata, &metadataMap); err != nil {
+			log.Printf("%v", err)
+		}
+
+		results = append(results, &topologyv1.Resource{
+			Id:       id,
+			Pb:       &dataAny,
+			Metadata: metadataMap,
+		})
+	}
+
+	// Rows.Err will report the last error encountered by Rows.Scan.
+	if err := rows.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("%v", results)
+	return results, nil
+}
+
+// func queryBuilder(skip, limit, filter, sort) {
+
+// 	f := filter
+// 	s := sort
+// 	"".join(" ")
+// 	query += ";"
+// }
+
+// func filter
+// func sort

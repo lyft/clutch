@@ -1336,6 +1336,16 @@ func (m *SearchTopologyRequest_Filter) Validate() error {
 		return nil
 	}
 
+	if v, ok := interface{}(m.GetSearch()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SearchTopologyRequest_FilterValidationError{
+				field:  "Search",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	// no validation rules for TypeUrl
 
 	// no validation rules for Metadata

@@ -30591,6 +30591,7 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a Filter.
                      * @memberof clutch.topology.v1.SearchTopologyRequest
                      * @interface IFilter
+                     * @property {clutch.topology.v1.SearchTopologyRequest.Filter.ISearch|null} [search] Filter search
                      * @property {string|null} [typeUrl] Filter typeUrl
                      * @property {Object.<string,string>|null} [metadata] Filter metadata
                      */
@@ -30610,6 +30611,14 @@ export const clutch = $root.clutch = (() => {
                                 if (properties[keys[i]] != null)
                                     this[keys[i]] = properties[keys[i]];
                     }
+
+                    /**
+                     * Filter search.
+                     * @member {clutch.topology.v1.SearchTopologyRequest.Filter.ISearch|null|undefined} search
+                     * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                     * @instance
+                     */
+                    Filter.prototype.search = null;
 
                     /**
                      * Filter typeUrl.
@@ -30638,6 +30647,11 @@ export const clutch = $root.clutch = (() => {
                     Filter.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
+                        if (message.search != null && message.hasOwnProperty("search")) {
+                            let error = $root.clutch.topology.v1.SearchTopologyRequest.Filter.Search.verify(message.search);
+                            if (error)
+                                return "search." + error;
+                        }
                         if (message.typeUrl != null && message.hasOwnProperty("typeUrl"))
                             if (!$util.isString(message.typeUrl))
                                 return "typeUrl: string expected";
@@ -30664,6 +30678,11 @@ export const clutch = $root.clutch = (() => {
                         if (object instanceof $root.clutch.topology.v1.SearchTopologyRequest.Filter)
                             return object;
                         let message = new $root.clutch.topology.v1.SearchTopologyRequest.Filter();
+                        if (object.search != null) {
+                            if (typeof object.search !== "object")
+                                throw TypeError(".clutch.topology.v1.SearchTopologyRequest.Filter.search: object expected");
+                            message.search = $root.clutch.topology.v1.SearchTopologyRequest.Filter.Search.fromObject(object.search);
+                        }
                         if (object.typeUrl != null)
                             message.typeUrl = String(object.typeUrl);
                         if (object.metadata) {
@@ -30691,8 +30710,12 @@ export const clutch = $root.clutch = (() => {
                         let object = {};
                         if (options.objects || options.defaults)
                             object.metadata = {};
-                        if (options.defaults)
+                        if (options.defaults) {
+                            object.search = null;
                             object.typeUrl = "";
+                        }
+                        if (message.search != null && message.hasOwnProperty("search"))
+                            object.search = $root.clutch.topology.v1.SearchTopologyRequest.Filter.Search.toObject(message.search, options);
                         if (message.typeUrl != null && message.hasOwnProperty("typeUrl"))
                             object.typeUrl = message.typeUrl;
                         let keys2;

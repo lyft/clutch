@@ -40,10 +40,9 @@ message GetTopologyResponse {
 }
 
 message SearchTopologyRequest {
-
   message FieldSelector {
     oneof field {
-      // idk ID does not make sense here
+      // idk ID does not make s  ense here
       // wanted to convey that is not metadata like the ID column in our topology_cache table
       // maybe this can just be a bool?
       string id = 2;
@@ -70,6 +69,8 @@ message SearchTopologyRequest {
       string text = 2;
     }
 
+    Search search = 1;
+
     // Filter what type of resource your looking for my proto type_url
     string type_url = 2;
 
@@ -78,7 +79,6 @@ message SearchTopologyRequest {
   }
 
   Sort sort = 1;
-  // or call it offset i dont mind either way
   int64 skip = 2;
   int64 limit = 3;
   Filter filter = 4;

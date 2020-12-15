@@ -12868,6 +12868,9 @@ export namespace clutch {
                 /** Properties of a Filter. */
                 interface IFilter {
 
+                    /** Filter search */
+                    search?: (clutch.topology.v1.SearchTopologyRequest.Filter.ISearch|null);
+
                     /** Filter typeUrl */
                     typeUrl?: (string|null);
 
@@ -12883,6 +12886,9 @@ export namespace clutch {
                      * @param [properties] Properties to set
                      */
                     constructor(properties?: clutch.topology.v1.SearchTopologyRequest.IFilter);
+
+                    /** Filter search. */
+                    public search?: (clutch.topology.v1.SearchTopologyRequest.Filter.ISearch|null);
 
                     /** Filter typeUrl. */
                     public typeUrl: string;
