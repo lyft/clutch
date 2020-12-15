@@ -6,13 +6,13 @@ import { Switch as MuiSwitch } from "@material-ui/core";
 const SwitchContainer = styled(MuiSwitch)({
   ".MuiSwitch-switchBase": {
     ":hover": {
-      backgroundColor: "rgba(231, 231, 234, .65)",
+      backgroundColor: "rgba(13, 16, 48, 0.1)",
     },
     ":focus": {
-      backgroundColor: "rgba(226, 226, 230, .65)",
+      backgroundColor: "rgba(13, 16, 48, 0.12)",
     },
     ":active": {
-      backgroundColor: "rgba(219, 219, 224, .65)",
+      backgroundColor: "rgba(13, 16, 48, 0.15)",
     },
     ".MuiSwitch-thumb": {
       boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.25)",
@@ -34,13 +34,13 @@ const SwitchContainer = styled(MuiSwitch)({
   },
   ".Mui-checked": {
     ":hover": {
-      backgroundColor: "rgba(245, 246, 253, .65)",
+      backgroundColor: "rgba(53, 72, 212, 0.05)",
     },
     ":focus": {
-      backgroundColor: "rgba(235, 237, 251, .65)",
+      backgroundColor: "rgba(53, 72, 212, 0.1)",
     },
     ":active": {
-      backgroundColor: "rgba(215, 218, 246, .65)",
+      backgroundColor: "rgba(53, 72, 212, 0.2)",
     },
     ".MuiSwitch-thumb": {
       color: "#3548D4",
