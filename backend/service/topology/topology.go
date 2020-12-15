@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -100,12 +99,14 @@ func (c *client) SearchTopology(ctx context.Context, req *topologyv1.SearchTopol
 	query, err := paginatedQueryBuilder(
 		req.Filter,
 		req.Sort,
-		int(req.Skip),
+		req.PageToken,
 		int(req.Limit),
 	)
 	if err != nil {
 		return nil, err
 	}
+
+	c.log.Debug("SearchTopology", zap.String("query", query))
 
 	rows, err := c.db.QueryContext(ctx, query)
 	if err != nil {
@@ -114,24 +115,26 @@ func (c *client) SearchTopology(ctx context.Context, req *topologyv1.SearchTopol
 	defer rows.Close()
 
 	results := []*topologyv1.Resource{}
-
 	for rows.Next() {
 		var id string
 		var data []byte
 		var metadata []byte
 
 		if err := rows.Scan(&id, &data, &metadata); err != nil {
-			log.Printf("%v", err)
+			c.log.Error("Error scaning row", zap.Error(err))
+			return nil, err
 		}
 
 		var dataAny any.Any
 		if err := protojson.Unmarshal(data, &dataAny); err != nil {
-			log.Printf("%v", err)
+			c.log.Error("Error unmarshaling data field", zap.Error(err))
+			return nil, err
 		}
 
 		var metadataMap map[string]string
 		if err := json.Unmarshal(metadata, &metadataMap); err != nil {
-			log.Printf("%v", err)
+			c.log.Error("Error unmarshaling metadata", zap.Error(err))
+			return nil, err
 		}
 
 		results = append(results, &topologyv1.Resource{
@@ -143,6 +146,7 @@ func (c *client) SearchTopology(ctx context.Context, req *topologyv1.SearchTopol
 
 	// Rows.Err will report the last error encountered by Rows.Scan.
 	if err := rows.Err(); err != nil {
+		c.log.Error("Error processing rows for topology search query", zap.Error(err))
 		return nil, err
 	}
 

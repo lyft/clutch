@@ -30107,7 +30107,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.topology.v1
                  * @interface ISearchTopologyRequest
                  * @property {clutch.topology.v1.SearchTopologyRequest.ISort|null} [sort] SearchTopologyRequest sort
-                 * @property {number|Long|null} [skip] SearchTopologyRequest skip
+                 * @property {string|null} [pageToken] SearchTopologyRequest pageToken
                  * @property {number|Long|null} [limit] SearchTopologyRequest limit
                  * @property {clutch.topology.v1.SearchTopologyRequest.IFilter|null} [filter] SearchTopologyRequest filter
                  */
@@ -30136,12 +30136,12 @@ export const clutch = $root.clutch = (() => {
                 SearchTopologyRequest.prototype.sort = null;
 
                 /**
-                 * SearchTopologyRequest skip.
-                 * @member {number|Long} skip
+                 * SearchTopologyRequest pageToken.
+                 * @member {string} pageToken
                  * @memberof clutch.topology.v1.SearchTopologyRequest
                  * @instance
                  */
-                SearchTopologyRequest.prototype.skip = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                SearchTopologyRequest.prototype.pageToken = "";
 
                 /**
                  * SearchTopologyRequest limit.
@@ -30175,9 +30175,9 @@ export const clutch = $root.clutch = (() => {
                         if (error)
                             return "sort." + error;
                     }
-                    if (message.skip != null && message.hasOwnProperty("skip"))
-                        if (!$util.isInteger(message.skip) && !(message.skip && $util.isInteger(message.skip.low) && $util.isInteger(message.skip.high)))
-                            return "skip: integer|Long expected";
+                    if (message.pageToken != null && message.hasOwnProperty("pageToken"))
+                        if (!$util.isString(message.pageToken))
+                            return "pageToken: string expected";
                     if (message.limit != null && message.hasOwnProperty("limit"))
                         if (!$util.isInteger(message.limit) && !(message.limit && $util.isInteger(message.limit.low) && $util.isInteger(message.limit.high)))
                             return "limit: integer|Long expected";
@@ -30206,15 +30206,8 @@ export const clutch = $root.clutch = (() => {
                             throw TypeError(".clutch.topology.v1.SearchTopologyRequest.sort: object expected");
                         message.sort = $root.clutch.topology.v1.SearchTopologyRequest.Sort.fromObject(object.sort);
                     }
-                    if (object.skip != null)
-                        if ($util.Long)
-                            (message.skip = $util.Long.fromValue(object.skip)).unsigned = false;
-                        else if (typeof object.skip === "string")
-                            message.skip = parseInt(object.skip, 10);
-                        else if (typeof object.skip === "number")
-                            message.skip = object.skip;
-                        else if (typeof object.skip === "object")
-                            message.skip = new $util.LongBits(object.skip.low >>> 0, object.skip.high >>> 0).toNumber();
+                    if (object.pageToken != null)
+                        message.pageToken = String(object.pageToken);
                     if (object.limit != null)
                         if ($util.Long)
                             (message.limit = $util.Long.fromValue(object.limit)).unsigned = false;
@@ -30247,11 +30240,7 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.defaults) {
                         object.sort = null;
-                        if ($util.Long) {
-                            let long = new $util.Long(0, 0, false);
-                            object.skip = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                        } else
-                            object.skip = options.longs === String ? "0" : 0;
+                        object.pageToken = "";
                         if ($util.Long) {
                             let long = new $util.Long(0, 0, false);
                             object.limit = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
@@ -30261,11 +30250,8 @@ export const clutch = $root.clutch = (() => {
                     }
                     if (message.sort != null && message.hasOwnProperty("sort"))
                         object.sort = $root.clutch.topology.v1.SearchTopologyRequest.Sort.toObject(message.sort, options);
-                    if (message.skip != null && message.hasOwnProperty("skip"))
-                        if (typeof message.skip === "number")
-                            object.skip = options.longs === String ? String(message.skip) : message.skip;
-                        else
-                            object.skip = options.longs === String ? $util.Long.prototype.toString.call(message.skip) : options.longs === Number ? new $util.LongBits(message.skip.low >>> 0, message.skip.high >>> 0).toNumber() : message.skip;
+                    if (message.pageToken != null && message.hasOwnProperty("pageToken"))
+                        object.pageToken = message.pageToken;
                     if (message.limit != null && message.hasOwnProperty("limit"))
                         if (typeof message.limit === "number")
                             object.limit = options.longs === String ? String(message.limit) : message.limit;
@@ -30874,6 +30860,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.topology.v1
                  * @interface ISearchTopologyResponse
                  * @property {Array.<clutch.topology.v1.IResource>|null} [resources] SearchTopologyResponse resources
+                 * @property {string|null} [nextPageToken] SearchTopologyResponse nextPageToken
                  */
 
                 /**
@@ -30901,6 +30888,14 @@ export const clutch = $root.clutch = (() => {
                 SearchTopologyResponse.prototype.resources = $util.emptyArray;
 
                 /**
+                 * SearchTopologyResponse nextPageToken.
+                 * @member {string} nextPageToken
+                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @instance
+                 */
+                SearchTopologyResponse.prototype.nextPageToken = "";
+
+                /**
                  * Verifies a SearchTopologyResponse message.
                  * @function verify
                  * @memberof clutch.topology.v1.SearchTopologyResponse
@@ -30920,6 +30915,9 @@ export const clutch = $root.clutch = (() => {
                                 return "resources." + error;
                         }
                     }
+                    if (message.nextPageToken != null && message.hasOwnProperty("nextPageToken"))
+                        if (!$util.isString(message.nextPageToken))
+                            return "nextPageToken: string expected";
                     return null;
                 };
 
@@ -30945,6 +30943,8 @@ export const clutch = $root.clutch = (() => {
                             message.resources[i] = $root.clutch.topology.v1.Resource.fromObject(object.resources[i]);
                         }
                     }
+                    if (object.nextPageToken != null)
+                        message.nextPageToken = String(object.nextPageToken);
                     return message;
                 };
 
@@ -30963,11 +30963,15 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.arrays || options.defaults)
                         object.resources = [];
+                    if (options.defaults)
+                        object.nextPageToken = "";
                     if (message.resources && message.resources.length) {
                         object.resources = [];
                         for (let j = 0; j < message.resources.length; ++j)
                             object.resources[j] = $root.clutch.topology.v1.Resource.toObject(message.resources[j], options);
                     }
+                    if (message.nextPageToken != null && message.hasOwnProperty("nextPageToken"))
+                        object.nextPageToken = message.nextPageToken;
                     return object;
                 };
 

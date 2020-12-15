@@ -2,7 +2,7 @@ package topology
 
 import (
 	"fmt"
-	"log"
+	"strconv"
 	"strings"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
@@ -11,7 +11,8 @@ import (
 func paginatedQueryBuilder(
 	filter *topologyv1.SearchTopologyRequest_Filter,
 	sort *topologyv1.SearchTopologyRequest_Sort,
-	skip, limit int,
+	pageToken string,
+	limit int,
 ) (string, error) {
 	query := "SELECT id, data, metadata FROM topology_cache WHERE"
 
@@ -20,9 +21,14 @@ func paginatedQueryBuilder(
 		queryLimit = limit
 	}
 
+	pageNum, err := strconv.Atoi(pageToken)
+	if err != nil {
+		return "", err
+	}
+
 	queryOffset := 0
-	if skip >= 0 {
-		queryOffset = skip
+	if pageNum > 0 {
+		queryOffset = pageNum * limit
 	}
 
 	f := filterQueryBuilder(filter)
@@ -31,10 +37,6 @@ func paginatedQueryBuilder(
 	o := fmt.Sprintf("OFFSET %d", queryOffset)
 
 	fullQuery := strings.Join([]string{query, f, s, l, o, ";"}, " ")
-
-	log.Printf("%s", fullQuery)
-	log.Printf("%s", fullQuery)
-	log.Printf("%s", fullQuery)
 
 	return fullQuery, nil
 }

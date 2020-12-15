@@ -59,8 +59,8 @@ message SearchTopologyRequest {
       ASCENDING = 1;
       DESCENDING = 2;
     }
-    Direction direction = 1;
-    FieldSelector field = 2;
+    Direction direction = 1; // both required
+    FieldSelector field = 2; // both required
   }
 
   message Filter {
@@ -78,10 +78,10 @@ message SearchTopologyRequest {
     map<string, string> metadata = 3;
   }
 
+  // check delta for large calls, limit to 1000
   Sort sort = 1;
-  // check delta for large calls, limit to 1000 or some
-  string page_token = 2; // probz rename offset
-  int64 limit = 3; // default to something
+  string page_token = 2;
+  int64 limit = 3;
   Filter filter = 4;
 }
 

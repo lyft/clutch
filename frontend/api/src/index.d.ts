@@ -12682,8 +12682,8 @@ export namespace clutch {
                 /** SearchTopologyRequest sort */
                 sort?: (clutch.topology.v1.SearchTopologyRequest.ISort|null);
 
-                /** SearchTopologyRequest skip */
-                skip?: (number|Long|null);
+                /** SearchTopologyRequest pageToken */
+                pageToken?: (string|null);
 
                 /** SearchTopologyRequest limit */
                 limit?: (number|Long|null);
@@ -12704,8 +12704,8 @@ export namespace clutch {
                 /** SearchTopologyRequest sort. */
                 public sort?: (clutch.topology.v1.SearchTopologyRequest.ISort|null);
 
-                /** SearchTopologyRequest skip. */
-                public skip: (number|Long);
+                /** SearchTopologyRequest pageToken. */
+                public pageToken: string;
 
                 /** SearchTopologyRequest limit. */
                 public limit: (number|Long);
@@ -12988,6 +12988,9 @@ export namespace clutch {
 
                 /** SearchTopologyResponse resources */
                 resources?: (clutch.topology.v1.IResource[]|null);
+
+                /** SearchTopologyResponse nextPageToken */
+                nextPageToken?: (string|null);
             }
 
             /** Represents a SearchTopologyResponse. */
@@ -13001,6 +13004,9 @@ export namespace clutch {
 
                 /** SearchTopologyResponse resources. */
                 public resources: clutch.topology.v1.IResource[];
+
+                /** SearchTopologyResponse nextPageToken. */
+                public nextPageToken: string;
 
                 /**
                  * Verifies a SearchTopologyResponse message.

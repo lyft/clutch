@@ -218,7 +218,7 @@ func (m *SearchTopologyRequest) Validate() error {
 		}
 	}
 
-	// no validation rules for Skip
+	// no validation rules for PageToken
 
 	// no validation rules for Limit
 
@@ -313,6 +313,8 @@ func (m *SearchTopologyResponse) Validate() error {
 		}
 
 	}
+
+	// no validation rules for NextPageToken
 
 	return nil
 }
