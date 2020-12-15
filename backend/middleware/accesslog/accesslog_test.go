@@ -174,10 +174,9 @@ func TestLogContent(t *testing.T) {
 		// ensure the recorded log message matches status code filter
 		assert.Equal(t, test.expectedLogLength, recorded.Len())
 		logEntry := recorded.All()[0]
-		code := logEntry.ContextMap()["status code"]
+		code := logEntry.ContextMap()["statusCode"]
 		assert.Equal(t, test.expectedStatusCode, code)
-		body := logEntry.ContextMap()["response body"]
+		body := logEntry.ContextMap()["responseBody"]
 		assert.NotNil(t, body)
-
 	}
 }

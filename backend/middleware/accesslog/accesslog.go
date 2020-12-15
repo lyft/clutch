@@ -56,22 +56,25 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 			s = status.New(codes.OK, "")
 		}
 		code := s.Code()
+		// common logger context fields
+		fields := []zap.Field{
+			zap.Int("statusCode", int(code)),
+			zap.String("status", code.String()),
+		}
 
 		if m.validStatusCode(code) {
 			// if err is returned from handler, log error details only
 			// as response body will be nil
 			if err != nil {
-				m.logger.Error("GRPC error:",
-					zap.Int("status code", int(code)),
-					zap.String("message", s.Message()))
+				fields = append(fields, zap.String("message", s.Message()))
+				m.logger.Error("GRPC error:", fields...)
 			} else {
 				respBody, err := meta.APIBody(resp)
 				if err != nil {
 					return nil, err
 				}
-				m.logger.Info("GRPC:",
-					zap.Int("status code", int(code)),
-					log.ProtoField("response body", respBody))
+				fields = append(fields, log.ProtoField("responseBody", respBody))
+				m.logger.Info("GRPC:", fields...)
 			}
 		}
 		return resp, err
