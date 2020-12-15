@@ -24,7 +24,6 @@ const SchemaLabel = styled.div({
   alignSelf: "flex-start",
   fontSize: "20px",
   fontWeight: 700,
-  paddingBottom: "8px",
 });
 
 const loadSchemas = (type: string, dispatch: React.Dispatch<DispatchAction>) => {
