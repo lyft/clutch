@@ -54,6 +54,9 @@ export default {
       );
     },
   ],
+  parameters: {
+    layout: "fullscreen",
+  },
 } as Meta;
 
 export const Primary: React.FC<{}> = () => <Header />;

@@ -1,14 +1,13 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import styled from "@emotion/styled";
-import { Box as MuiBox } from "@material-ui/core";
+import { Grid as MuiGrid } from "@material-ui/core";
 
 import Drawer from "./drawer";
 import FeedbackButton from "./feedback";
 import Header from "./header";
 
-const Box = styled(MuiBox)({
-  display: "flex",
+const Grid = styled(MuiGrid)({
   ".app-content": {
     width: "calc(100% - 100px)",
   },
@@ -20,7 +19,7 @@ const Box = styled(MuiBox)({
 const AppLayout: React.FC = () => {
   return (
     <>
-      <Box className="app-main">
+      <Grid direction="column" className="app-main">
         <Header />
         <Drawer />
         <FeedbackButton />
@@ -28,7 +27,7 @@ const AppLayout: React.FC = () => {
           <div className="divider" />
           <Outlet />
         </div>
-      </Box>
+      </Grid>
     </>
   );
 };

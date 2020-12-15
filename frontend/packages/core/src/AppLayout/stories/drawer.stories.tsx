@@ -3,17 +3,20 @@ import { MemoryRouter } from "react-router";
 import styled from "@emotion/styled";
 import { Box as MuiBox } from "@material-ui/core";
 import type { Meta } from "@storybook/react";
+import { Grid } from "@material-ui/core";
 
 import { ApplicationContext } from "../../Contexts/app-context";
 import Drawer from "../drawer";
+import { Primary as HeaderStory } from "./header.stories";
+import Header from "../header";
 
 export default {
   title: "Core/AppLayout/Drawer",
   component: Drawer,
   decorators: [
-    Sidebar => (
+    StoryFn => (
       <MemoryRouter>
-        <Sidebar />
+        <StoryFn />
       </MemoryRouter>
     ),
     StoryFn => {
@@ -54,18 +57,11 @@ export default {
       );
     },
   ],
+  parameters: {
+    layout: "fullscreen",
+  },
 } as Meta;
 
-const Box = styled(MuiBox)({
-  ".MuiDrawer-root div[class*='MuiDrawer-paper']": {
-    top: 0,
-  },
-});
+export const Primary = () => <Drawer />;
 
-const Template = () => (
-  <Box>
-    <Drawer />
-  </Box>
-);
-
-export const Primary = Template.bind({});
+export const WithHeader = () => <Grid direction="column"><Header/><Drawer/></Grid>;

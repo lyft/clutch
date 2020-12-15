@@ -27,7 +27,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <AppBar position="fixed" elevation={0}>
+      <AppBar position="relative" elevation={0}>
         <Toolbar>
           <Link to="/">
             <Logo />
