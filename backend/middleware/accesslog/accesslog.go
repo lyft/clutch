@@ -73,7 +73,6 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 				if err != nil {
 					return nil, err
 				}
-				fields = append(fields, log.ProtoField("responseBody", respBody))
 				m.logger.Info("gRPC", fields...)
 			}
 		}

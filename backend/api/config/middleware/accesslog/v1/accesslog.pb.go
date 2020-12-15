@@ -74,7 +74,7 @@ func (x *Config) GetStatusCodeFilters() []*Config_StatusCodeFilter {
 	return nil
 }
 
-// filter on an interger comparison of the status code
+// filter on an integer comparison of the status code
 type Config_StatusCodeFilter struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
