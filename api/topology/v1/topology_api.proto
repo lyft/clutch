@@ -79,13 +79,15 @@ message SearchTopologyRequest {
   }
 
   Sort sort = 1;
-  int64 skip = 2;
-  int64 limit = 3;
+  // check delta for large calls, limit to 1000 or some
+  string page_token = 2; // probz rename offset
+  int64 limit = 3; // default to something
   Filter filter = 4;
 }
 
 message SearchTopologyResponse {
   repeated Resource resources = 1;
+  string next_page_token = 2;
 }
 
 // A query allows the user to specify multiple dimensions and the

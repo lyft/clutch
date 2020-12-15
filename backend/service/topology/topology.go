@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -98,40 +97,15 @@ func (c *client) GetTopology(ctx context.Context) error {
 }
 
 func (c *client) SearchTopology(ctx context.Context, req *topologyv1.SearchTopologyRequest) ([]*topologyv1.Resource, error) {
-	query := "SELECT id, data, metadata FROM topology_cache WHERE "
-
-	// WHERE
-	// Filter - Search
-	if req.Filter != nil && req.Filter.Search.Field != nil {
-		// Is there an ID
-		if len(req.Filter.Search.Field.GetId()) > 0 {
-			query += fmt.Sprintf("id like '%%%s%%' ", req.Filter.Search.Text)
-		}
+	query, err := paginatedQueryBuilder(
+		req.Filter,
+		req.Sort,
+		int(req.Skip),
+		int(req.Limit),
+	)
+	if err != nil {
+		return nil, err
 	}
-
-	if req.Filter != nil && len(req.Filter.TypeUrl) > 0 {
-		query += fmt.Sprintf("AND resolver_type_url = '%s' ", req.Filter.TypeUrl)
-	}
-
-	// Filter - Metadata
-
-	// Sort
-	// Offset
-	if req.Skip >= 0 {
-		query += fmt.Sprintf("OFFSET %d ", req.Skip)
-	}
-
-	// Limit
-	limit := 25
-	if req.Limit >= 0 {
-		limit = int(req.Limit)
-	}
-	query += fmt.Sprintf("LIMIT %d ", limit)
-
-	// End Query
-	query += ";"
-
-	log.Print(query)
 
 	rows, err := c.db.QueryContext(ctx, query)
 	if err != nil {
@@ -169,20 +143,8 @@ func (c *client) SearchTopology(ctx context.Context, req *topologyv1.SearchTopol
 
 	// Rows.Err will report the last error encountered by Rows.Scan.
 	if err := rows.Err(); err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	log.Printf("%v", results)
 	return results, nil
 }
-
-// func queryBuilder(skip, limit, filter, sort) {
-
-// 	f := filter
-// 	s := sort
-// 	"".join(" ")
-// 	query += ";"
-// }
-
-// func filter
-// func sort
