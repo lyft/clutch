@@ -74,7 +74,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 					return nil, err
 				}
 				fields = append(fields, log.ProtoField("responseBody", respBody))
-				m.logger.Info("GRPC:", fields...)
+				m.logger.Info("gRPC", fields...)
 			}
 		}
 		return resp, err
