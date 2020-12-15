@@ -7,7 +7,7 @@ option go_package = "github.com/lyft/clutch/backend/api/config/middleware/access
 import "validate/validate.proto";
 
 message Config {
-  // filter on an interger comparison of the status code
+  // filter on an integer comparison of the status code
   message StatusCodeFilter {
     // only equals filter type is supported for now
     // since there are only 16 codes for gRPC. We can
