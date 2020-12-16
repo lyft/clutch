@@ -2,11 +2,12 @@ import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import {
   Button,
+  Accordion,
+  AccordionDetails,
   ButtonGroup,
   client,
   Confirmation,
   MetadataTable,
-  NotePanel,
   Resolver,
   useWizardContext,
 } from "@clutch-sh/core";
@@ -40,6 +41,20 @@ const HPADetails: React.FC<WizardChild> = () => {
     hpaData.updateData(key, value);
   };
 
+  const metadata = [];
+
+  if (hpa.annotations) {
+    Object.keys(hpa.annotations).forEach(key => {
+      metadata.push({ name: key, value: hpa.annotations[key] });
+    });
+  }
+
+  if (hpa.labels) {
+    Object.keys(hpa.labels).forEach(key => {
+      metadata.push({ name: key, value: hpa.labels[key] });
+    });
+  }
+
   return (
     <WizardStep error={hpaData.error} isLoading={hpaData.isLoading}>
       <MetadataTable
@@ -70,6 +85,11 @@ const HPADetails: React.FC<WizardChild> = () => {
         <Button text="Back" variant="neutral" onClick={onBack} />
         <Button text="Resize" variant="destructive" onClick={onSubmit} />
       </ButtonGroup>
+      <Accordion title="Metadata">
+        <AccordionDetails>
+          <MetadataTable data={metadata} />
+        </AccordionDetails>
+      </Accordion>
     </WizardStep>
   );
 };
@@ -77,10 +97,11 @@ const HPADetails: React.FC<WizardChild> = () => {
 const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const hpa = useDataLayout("hpaData").displayValue() as IClutch.k8s.v1.HPA;
   const resizeData = useDataLayout("resizeData");
+  const formattedNotes = notes?.map(note => <div>{note.text}</div>);
 
   return (
     <WizardStep error={resizeData.error} isLoading={resizeData.isLoading}>
-      <Confirmation action="Resize" />
+      <Confirmation action="Resize">{notes && formattedNotes}</Confirmation>
       <MetadataTable
         data={[
           { name: "Name", value: hpa.name },
@@ -90,12 +111,11 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
           { name: "New Max Size", value: hpa.sizing.maxReplicas },
         ]}
       />
-      <NotePanel notes={notes} />
     </WizardStep>
   );
 };
 
-const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
+const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes }) => {
   const dataLayout = {
     hpaData: {},
     inputData: {},
