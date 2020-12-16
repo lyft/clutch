@@ -56,14 +56,14 @@ const resolveResource = async (
   },
   onResolve: (resultObjects: any[], failureMessages: string[]) => void,
   onError: (message: string) => void,
-  apiProto?: any
+  apiPackage?: any
 ) => {
   const resolver = fields?.query !== undefined ? resolveQuery : resolveFields;
   return resolver(type, limit, fields)
     .then(({ results, failures }) => {
       let pbClutch = _.get($pbclutch, type);
-      if (apiProto) {
-        pbClutch = _.get(apiProto, type);
+      if (apiPackage) {
+        pbClutch = _.get(apiPackage, type);
       }
       const resultObjects = results.map(result => pbClutch.fromObject(result));
       const failureMessages = failures.map(failure => parseErrorMessage(failure.message).summary);
