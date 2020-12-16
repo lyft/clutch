@@ -1,6 +1,7 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import {
+  Button,
   ButtonGroup,
   client,
   Confirmation,
@@ -47,19 +48,10 @@ const PodDetails: React.FC<WizardChild> = () => {
           { name: "Pod IP Address", value: instance.podIp },
         ]}
       />
-      <ButtonGroup
-        buttons={[
-          {
-            text: "Back",
-            onClick: onBack,
-          },
-          {
-            text: "Delete",
-            onClick: onSubmit,
-            variant: "destructive",
-          },
-        ]}
-      />
+      <ButtonGroup>
+        <Button text="Back" variant="neutral" onClick={onBack} />
+        <Button text="Delete" variant="destructive" onClick={onSubmit} />
+      </ButtonGroup>
     </WizardStep>
   );
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Button,
   ButtonGroup,
   client,
   Confirmation,
@@ -51,19 +52,10 @@ const InstanceDetails: React.FC<WizardChild> = () => {
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
       <MetadataTable data={data} />
-      <ButtonGroup
-        buttons={[
-          {
-            text: "Back",
-            onClick: onBack,
-          },
-          {
-            text: "Reboot",
-            onClick: onSubmit,
-            variant: "destructive",
-          },
-        ]}
-      />
+      <ButtonGroup>
+        <Button text="Back" variant="neutral" onClick={onBack} />
+        <Button text="Reboot" variant="destructive" onClick={onSubmit} />
+      </ButtonGroup>
     </WizardStep>
   );
 };

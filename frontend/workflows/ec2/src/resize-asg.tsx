@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Button,
   ButtonGroup,
   client,
   Confirmation,
@@ -67,19 +68,10 @@ const GroupDetails: React.FC<WizardChild> = () => {
           { name: "Availability Zone", value: group.zones },
         ]}
       />
-      <ButtonGroup
-        buttons={[
-          {
-            text: "Back",
-            onClick: onBack,
-          },
-          {
-            text: "Resize",
-            onClick: onSubmit,
-            variant: "destructive",
-          },
-        ]}
-      />
+      <ButtonGroup>
+        <Button text="Back" variant="neutral" onClick={onBack} />
+        <Button text="Resize" variant="destructive" onClick={onSubmit} />
+      </ButtonGroup>
     </WizardStep>
   );
 };
