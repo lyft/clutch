@@ -1,5 +1,5 @@
 import React from "react";
-import { ButtonGroup, Step, Stepper, Warning, WizardContext } from "@clutch-sh/core";
+import { Button, ButtonGroup, Step, Stepper, Warning, WizardContext } from "@clutch-sh/core";
 import type { ManagerLayout } from "@clutch-sh/data-layout";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
 import styled from "@emotion/styled";
@@ -93,15 +93,9 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
         </DataLayoutContext.Provider>
         <Grid container justify="center">
           {state.activeStep === lastStepIndex && !isLoading && isMultistep && (
-            <ButtonGroup
-              justify="flex-end"
-              buttons={[
-                {
-                  text: "Start Over",
-                  onClick: () => dispatch(WizardAction.RESET),
-                },
-              ]}
-            />
+            <ButtonGroup justify="flex-end">
+              <Button text="Start Over" onClick={() => dispatch(WizardAction.RESET)} />
+            </ButtonGroup>
           )}
         </Grid>
       </>

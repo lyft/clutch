@@ -1,6 +1,7 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import {
+  Button,
   ButtonGroup,
   client,
   Confirmation,
@@ -65,19 +66,10 @@ const HPADetails: React.FC<WizardChild> = () => {
           { name: "Cluster", value: hpa.cluster },
         ]}
       />
-      <ButtonGroup
-        buttons={[
-          {
-            text: "Back",
-            onClick: onBack,
-          },
-          {
-            text: "Resize",
-            onClick: onSubmit,
-            variant: "destructive",
-          },
-        ]}
-      />
+      <ButtonGroup>
+        <Button text="Back" variant="neutral" onClick={onBack} />
+        <Button text="Resize" variant="destructive" onClick={onSubmit} />
+      </ButtonGroup>
     </WizardStep>
   );
 };

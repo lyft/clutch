@@ -26,7 +26,7 @@ const SwitchContainer = styled(MuiSwitch)({
   ".Mui-disabled": {
     ".MuiSwitch-thumb": {
       color: "rgba(248, 248, 249, 1)",
-    }
+    },
   },
   ".Mui-disabled + .MuiSwitch-track": {
     backgroundColor: "#E7E7EA",
@@ -61,10 +61,8 @@ const SwitchContainer = styled(MuiSwitch)({
   },
 });
 
-export interface SwitchProps extends Pick<MuiSwitchProps, "checked" | "disabled" | "onChange"> {};
+export interface SwitchProps extends Pick<MuiSwitchProps, "checked" | "disabled" | "onChange"> {}
 
-export const Switch = ({...props}: SwitchProps) => (
-  <SwitchContainer color="default" {...props} />
-);
+export const Switch = ({ ...props }: SwitchProps) => <SwitchContainer color="default" {...props} />;
 
 export default Switch;

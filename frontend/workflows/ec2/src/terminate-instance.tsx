@@ -2,6 +2,7 @@ import React from "react";
 import {
   Accordion,
   AccordionDetails,
+  Button,
   ButtonGroup,
   client,
   Confirmation,
@@ -58,21 +59,10 @@ const InstanceDetails: React.FC<WizardChild> = () => {
           <MetadataTable data={metadata} />
         </AccordionDetails>
       </Accordion>
-      <ButtonGroup
-        justify="flex-end"
-        buttons={[
-          {
-            text: "Back",
-            onClick: onBack,
-            variant: "neutral",
-          },
-          {
-            text: "Terminate",
-            onClick: onSubmit,
-            variant: "destructive",
-          },
-        ]}
-      />
+      <ButtonGroup justify="flex-end">
+        <Button text="Back" variant="neutral" onClick={onBack} />
+        <Button text="Terminate" variant="destructive" onClick={onSubmit} />
+      </ButtonGroup>
     </WizardStep>
   );
 };
@@ -83,7 +73,7 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const confirmationData = Object.keys(configData).map(key => {
     return { name: key, value: configData[key] };
   });
-  const formattedNotes = notes.map(note => <div>{note.text}</div>)
+  const formattedNotes = notes.map(note => <div>{note.text}</div>);
   return (
     <WizardStep error={terminationData.error} isLoading={terminationData.isLoading}>
       <Confirmation action="Termination">{notes && formattedNotes}</Confirmation>
