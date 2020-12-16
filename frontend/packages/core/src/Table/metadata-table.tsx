@@ -4,12 +4,14 @@ import styled from "@emotion/styled";
 import { DevTool } from "@hookform/devtools";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
+  Grid,
   Table as MuiTable,
   TableBody as MuiTableBody,
   TableCell as MuiTableCell,
   TableContainer as MuiTableContainer,
   TableRow,
 } from "@material-ui/core";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import _ from "lodash";
 import type { Schema } from "yup";
 import { object } from "yup";
@@ -114,18 +116,22 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
     <TableRow key={data.id}>
       <KeyCell data={data} />
       <TableCell>
-        <TextField
-          id={data.id}
-          name={data.name}
-          defaultValue={data.value}
-          type={data?.input?.type}
-          onChange={onUpdate}
-          onReturn={onReturn}
-          onFocus={onUpdate}
-          inputRef={validation.register}
-          helperText={error?.message || ""}
-          error={!!error || false}
-        />
+        <Grid container alignItems="center" wrap="nowrap" spacing={2}>
+          <TextField disabled id={data.id} name={data.name} defaultValue={data.value} />
+          <ChevronRightIcon />
+          <TextField
+            id={data.id}
+            name={data.name}
+            defaultValue={data.value}
+            type={data?.input?.type}
+            onChange={onUpdate}
+            onReturn={onReturn}
+            onFocus={onUpdate}
+            inputRef={validation.register}
+            helperText={error?.message || ""}
+            error={!!error || false}
+          />
+        </Grid>
       </TableCell>
     </TableRow>
   );
