@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import { DevTool } from "@hookform/devtools";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
-  Grid,
+  Grid as MuiGrid,
   Table as MuiTable,
   TableBody as MuiTableBody,
   TableCell as MuiTableCell,
@@ -67,7 +67,22 @@ const TableCell = styled(MuiTableCell)({
   fontSize: "14px",
   fontWeight: "normal",
   height: "48px",
-  padding: "15px 16px 15px 16px",
+  padding: "0 16px",
+});
+
+const Grid = styled(MuiGrid)({
+  ".MuiFormControl-root": {
+    height: "40px",
+    width: "100px",
+    flexDirection: "row",
+  },
+  ".textfield-disabled .MuiFormControl-root": {
+    width: "41px",
+  },
+  ".textfield-disabled .MuiInput-input": {
+    padding: "0px",
+    textAlign: "center",
+  },
 });
 
 const KeyCellContainer = styled(TableCell)({
@@ -117,7 +132,9 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
       <KeyCell data={data} />
       <TableCell>
         <Grid container alignItems="center" wrap="nowrap" spacing={2}>
-          <TextField disabled id={data.id} name={data.name} defaultValue={data.value} />
+          <div className="textfield-disabled">
+            <TextField disabled id={data.id} name={data.name} defaultValue={data.value} />
+          </div>
           <ChevronRightIcon />
           <TextField
             id={data.id}

@@ -1,9 +1,9 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import {
-  Button,
   Accordion,
   AccordionDetails,
+  Button,
   ButtonGroup,
   client,
   Confirmation,
@@ -81,15 +81,17 @@ const HPADetails: React.FC<WizardChild> = () => {
           { name: "Cluster", value: hpa.cluster },
         ]}
       />
+      {metadata.length > 0 && (
+        <Accordion title="Metadata">
+          <AccordionDetails>
+            <MetadataTable data={metadata} />
+          </AccordionDetails>
+        </Accordion>
+      )}
       <ButtonGroup>
         <Button text="Back" variant="neutral" onClick={onBack} />
         <Button text="Resize" variant="destructive" onClick={onSubmit} />
       </ButtonGroup>
-      <Accordion title="Metadata">
-        <AccordionDetails>
-          <MetadataTable data={metadata} />
-        </AccordionDetails>
-      </Accordion>
     </WizardStep>
   );
 };

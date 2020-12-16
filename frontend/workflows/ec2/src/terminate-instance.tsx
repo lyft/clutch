@@ -54,11 +54,13 @@ const InstanceDetails: React.FC<WizardChild> = () => {
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
       <MetadataTable data={data} />
-      <Accordion title="Metadata">
-        <AccordionDetails>
-          <MetadataTable data={metadata} />
-        </AccordionDetails>
-      </Accordion>
+      {metadata.length > 0 && (
+        <Accordion title="Metadata">
+          <AccordionDetails>
+            <MetadataTable data={metadata} />
+          </AccordionDetails>
+        </Accordion>
+      )}
       <ButtonGroup justify="flex-end">
         <Button text="Back" variant="neutral" onClick={onBack} />
         <Button text="Terminate" variant="destructive" onClick={onSubmit} />
