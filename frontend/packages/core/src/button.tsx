@@ -106,7 +106,7 @@ export interface ButtonGroupProps {
 
 const ButtonGroup = ({ children, justify = "center" }: ButtonGroupProps) => (
   <ButtonGroupContainer container justify={justify}>
-    {React.Children.map(children, child => child)}
+    {children}
   </ButtonGroupContainer>
 );
 
