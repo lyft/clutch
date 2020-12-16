@@ -2515,6 +2515,429 @@ var _ interface {
 	ErrorName() string
 } = DeleteServiceResponseValidationError{}
 
+// Validate checks the field values on CronJob with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *CronJob) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Cluster
+
+	// no validation rules for Namespace
+
+	// no validation rules for Name
+
+	// no validation rules for Schedule
+
+	// no validation rules for Labels
+
+	// no validation rules for Annotations
+
+	return nil
+}
+
+// CronJobValidationError is the validation error returned by CronJob.Validate
+// if the designated constraints aren't met.
+type CronJobValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CronJobValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CronJobValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CronJobValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CronJobValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CronJobValidationError) ErrorName() string { return "CronJobValidationError" }
+
+// Error satisfies the builtin error interface
+func (e CronJobValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCronJob.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CronJobValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CronJobValidationError{}
+
+// Validate checks the field values on DescribeCronJobRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DescribeCronJobRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return DescribeCronJobRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return DescribeCronJobRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return DescribeCronJobRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetName()) < 1 {
+		return DescribeCronJobRequestValidationError{
+			field:  "Name",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	for key, val := range m.GetLabels() {
+		_ = val
+
+		if len(key) < 1 {
+			return DescribeCronJobRequestValidationError{
+				field:  fmt.Sprintf("Labels[%v]", key),
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+		// no validation rules for Labels[key]
+	}
+
+	return nil
+}
+
+// DescribeCronJobRequestValidationError is the validation error returned by
+// DescribeCronJobRequest.Validate if the designated constraints aren't met.
+type DescribeCronJobRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DescribeCronJobRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DescribeCronJobRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DescribeCronJobRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DescribeCronJobRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DescribeCronJobRequestValidationError) ErrorName() string {
+	return "DescribeCronJobRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DescribeCronJobRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDescribeCronJobRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DescribeCronJobRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DescribeCronJobRequestValidationError{}
+
+// Validate checks the field values on DescribeCronJobResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DescribeCronJobResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetCronjob()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DescribeCronJobResponseValidationError{
+				field:  "Cronjob",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// DescribeCronJobResponseValidationError is the validation error returned by
+// DescribeCronJobResponse.Validate if the designated constraints aren't met.
+type DescribeCronJobResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DescribeCronJobResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DescribeCronJobResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DescribeCronJobResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DescribeCronJobResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DescribeCronJobResponseValidationError) ErrorName() string {
+	return "DescribeCronJobResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DescribeCronJobResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDescribeCronJobResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DescribeCronJobResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DescribeCronJobResponseValidationError{}
+
+// Validate checks the field values on DeleteCronJobRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DeleteCronJobRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return DeleteCronJobRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return DeleteCronJobRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return DeleteCronJobRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetName()) < 1 {
+		return DeleteCronJobRequestValidationError{
+			field:  "Name",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	return nil
+}
+
+// DeleteCronJobRequestValidationError is the validation error returned by
+// DeleteCronJobRequest.Validate if the designated constraints aren't met.
+type DeleteCronJobRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeleteCronJobRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeleteCronJobRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeleteCronJobRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeleteCronJobRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeleteCronJobRequestValidationError) ErrorName() string {
+	return "DeleteCronJobRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeleteCronJobRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeleteCronJobRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeleteCronJobRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeleteCronJobRequestValidationError{}
+
+// Validate checks the field values on DeleteCronJobResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DeleteCronJobResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// DeleteCronJobResponseValidationError is the validation error returned by
+// DeleteCronJobResponse.Validate if the designated constraints aren't met.
+type DeleteCronJobResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeleteCronJobResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeleteCronJobResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeleteCronJobResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeleteCronJobResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeleteCronJobResponseValidationError) ErrorName() string {
+	return "DeleteCronJobResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeleteCronJobResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeleteCronJobResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeleteCronJobResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeleteCronJobResponseValidationError{}
+
 // Validate checks the field values on NullableString with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.

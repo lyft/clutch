@@ -8562,6 +8562,34 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public updateStatefulSet(request: clutch.k8s.v1.IUpdateStatefulSetRequest): Promise<clutch.k8s.v1.UpdateStatefulSetResponse>;
+
+                /**
+                 * Calls DescribeCronJob.
+                 * @param request DescribeCronJobRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DescribeCronJobResponse
+                 */
+                public describeCronJob(request: clutch.k8s.v1.IDescribeCronJobRequest, callback: clutch.k8s.v1.K8sAPI.DescribeCronJobCallback): void;
+
+                /**
+                 * Calls DescribeCronJob.
+                 * @param request DescribeCronJobRequest message or plain object
+                 * @returns Promise
+                 */
+                public describeCronJob(request: clutch.k8s.v1.IDescribeCronJobRequest): Promise<clutch.k8s.v1.DescribeCronJobResponse>;
+
+                /**
+                 * Calls DeleteCronJob.
+                 * @param request DeleteCronJobRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DeleteCronJobResponse
+                 */
+                public deleteCronJob(request: clutch.k8s.v1.IDeleteCronJobRequest, callback: clutch.k8s.v1.K8sAPI.DeleteCronJobCallback): void;
+
+                /**
+                 * Calls DeleteCronJob.
+                 * @param request DeleteCronJobRequest message or plain object
+                 * @returns Promise
+                 */
+                public deleteCronJob(request: clutch.k8s.v1.IDeleteCronJobRequest): Promise<clutch.k8s.v1.DeleteCronJobResponse>;
             }
 
             namespace K8sAPI {
@@ -8642,6 +8670,20 @@ export namespace clutch {
                  * @param [response] UpdateStatefulSetResponse
                  */
                 type UpdateStatefulSetCallback = (error: (Error|null), response?: clutch.k8s.v1.UpdateStatefulSetResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeCronJob}.
+                 * @param error Error, if any
+                 * @param [response] DescribeCronJobResponse
+                 */
+                type DescribeCronJobCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribeCronJobResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteCronJob}.
+                 * @param error Error, if any
+                 * @param [response] DeleteCronJobResponse
+                 */
+                type DeleteCronJobCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteCronJobResponse) => void;
             }
 
             /** Properties of a DescribePodRequest. */
@@ -10692,6 +10734,312 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a CronJob. */
+            interface ICronJob {
+
+                /** CronJob cluster */
+                cluster?: (string|null);
+
+                /** CronJob namespace */
+                namespace?: (string|null);
+
+                /** CronJob name */
+                name?: (string|null);
+
+                /** CronJob schedule */
+                schedule?: (string|null);
+
+                /** CronJob labels */
+                labels?: ({ [k: string]: string }|null);
+
+                /** CronJob annotations */
+                annotations?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a CronJob. */
+            class CronJob implements ICronJob {
+
+                /**
+                 * Constructs a new CronJob.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.ICronJob);
+
+                /** CronJob cluster. */
+                public cluster: string;
+
+                /** CronJob namespace. */
+                public namespace: string;
+
+                /** CronJob name. */
+                public name: string;
+
+                /** CronJob schedule. */
+                public schedule: string;
+
+                /** CronJob labels. */
+                public labels: { [k: string]: string };
+
+                /** CronJob annotations. */
+                public annotations: { [k: string]: string };
+
+                /**
+                 * Verifies a CronJob message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CronJob message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CronJob
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.CronJob;
+
+                /**
+                 * Creates a plain object from a CronJob message. Also converts values to other types if specified.
+                 * @param message CronJob
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.CronJob, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CronJob to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DescribeCronJobRequest. */
+            interface IDescribeCronJobRequest {
+
+                /** DescribeCronJobRequest clientset */
+                clientset?: (string|null);
+
+                /** DescribeCronJobRequest cluster */
+                cluster?: (string|null);
+
+                /** DescribeCronJobRequest namespace */
+                namespace?: (string|null);
+
+                /** DescribeCronJobRequest name */
+                name?: (string|null);
+
+                /** DescribeCronJobRequest labels */
+                labels?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a DescribeCronJobRequest. */
+            class DescribeCronJobRequest implements IDescribeCronJobRequest {
+
+                /**
+                 * Constructs a new DescribeCronJobRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeCronJobRequest);
+
+                /** DescribeCronJobRequest clientset. */
+                public clientset: string;
+
+                /** DescribeCronJobRequest cluster. */
+                public cluster: string;
+
+                /** DescribeCronJobRequest namespace. */
+                public namespace: string;
+
+                /** DescribeCronJobRequest name. */
+                public name: string;
+
+                /** DescribeCronJobRequest labels. */
+                public labels: { [k: string]: string };
+
+                /**
+                 * Verifies a DescribeCronJobRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeCronJobRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeCronJobRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeCronJobRequest;
+
+                /**
+                 * Creates a plain object from a DescribeCronJobRequest message. Also converts values to other types if specified.
+                 * @param message DescribeCronJobRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeCronJobRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeCronJobRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DescribeCronJobResponse. */
+            interface IDescribeCronJobResponse {
+
+                /** DescribeCronJobResponse cronjob */
+                cronjob?: (clutch.k8s.v1.ICronJob|null);
+            }
+
+            /** Represents a DescribeCronJobResponse. */
+            class DescribeCronJobResponse implements IDescribeCronJobResponse {
+
+                /**
+                 * Constructs a new DescribeCronJobResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeCronJobResponse);
+
+                /** DescribeCronJobResponse cronjob. */
+                public cronjob?: (clutch.k8s.v1.ICronJob|null);
+
+                /**
+                 * Verifies a DescribeCronJobResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeCronJobResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeCronJobResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeCronJobResponse;
+
+                /**
+                 * Creates a plain object from a DescribeCronJobResponse message. Also converts values to other types if specified.
+                 * @param message DescribeCronJobResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeCronJobResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeCronJobResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteCronJobRequest. */
+            interface IDeleteCronJobRequest {
+
+                /** DeleteCronJobRequest clientset */
+                clientset?: (string|null);
+
+                /** DeleteCronJobRequest cluster */
+                cluster?: (string|null);
+
+                /** DeleteCronJobRequest namespace */
+                namespace?: (string|null);
+
+                /** DeleteCronJobRequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a DeleteCronJobRequest. */
+            class DeleteCronJobRequest implements IDeleteCronJobRequest {
+
+                /**
+                 * Constructs a new DeleteCronJobRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteCronJobRequest);
+
+                /** DeleteCronJobRequest clientset. */
+                public clientset: string;
+
+                /** DeleteCronJobRequest cluster. */
+                public cluster: string;
+
+                /** DeleteCronJobRequest namespace. */
+                public namespace: string;
+
+                /** DeleteCronJobRequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a DeleteCronJobRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteCronJobRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteCronJobRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteCronJobRequest;
+
+                /**
+                 * Creates a plain object from a DeleteCronJobRequest message. Also converts values to other types if specified.
+                 * @param message DeleteCronJobRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteCronJobRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteCronJobRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteCronJobResponse. */
+            interface IDeleteCronJobResponse {
+            }
+
+            /** Represents a DeleteCronJobResponse. */
+            class DeleteCronJobResponse implements IDeleteCronJobResponse {
+
+                /**
+                 * Constructs a new DeleteCronJobResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteCronJobResponse);
+
+                /**
+                 * Verifies a DeleteCronJobResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteCronJobResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteCronJobResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteCronJobResponse;
+
+                /**
+                 * Creates a plain object from a DeleteCronJobResponse message. Also converts values to other types if specified.
+                 * @param message DeleteCronJobResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteCronJobResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteCronJobResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a NullableString. */
             interface INullableString {
 
@@ -12261,6 +12609,66 @@ export namespace clutch {
 
                     /**
                      * Converts this Service to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a CronJob. */
+                interface ICronJob {
+
+                    /** CronJob name */
+                    name?: (string|null);
+
+                    /** CronJob clientset */
+                    clientset?: (string|null);
+
+                    /** CronJob namespace */
+                    namespace?: (string|null);
+                }
+
+                /** Represents a CronJob. */
+                class CronJob implements ICronJob {
+
+                    /**
+                     * Constructs a new CronJob.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.k8s.v1.ICronJob);
+
+                    /** CronJob name. */
+                    public name: string;
+
+                    /** CronJob clientset. */
+                    public clientset: string;
+
+                    /** CronJob namespace. */
+                    public namespace: string;
+
+                    /**
+                     * Verifies a CronJob message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a CronJob message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns CronJob
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.k8s.v1.CronJob;
+
+                    /**
+                     * Creates a plain object from a CronJob message. Also converts values to other types if specified.
+                     * @param message CronJob
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.k8s.v1.CronJob, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this CronJob to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
