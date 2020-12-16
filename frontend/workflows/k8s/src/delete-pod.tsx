@@ -65,15 +65,17 @@ and
 const Confirm: React.FC<ConfirmChild> = () => {
   const deletionData = useDataLayout("deletionData");
   const podData = useDataLayout("resourceData");
-  const {name, cluster, namespace} = podData.displayValue();
+  const { name, cluster, namespace } = podData.displayValue();
   return (
     <WizardStep error={deletionData.error} isLoading={deletionData.isLoading}>
       <Confirmation action="Deletion" />
-      <MetadataTable data={[
-        {name: "Name", value: name},
-        {name: "Cluster", value: cluster},
-        {name: "Namespace", value: namespace},
-      ]} />
+      <MetadataTable
+        data={[
+          { name: "Name", value: name },
+          { name: "Cluster", value: cluster },
+          { name: "Namespace", value: namespace },
+        ]}
+      />
     </WizardStep>
   );
 };
