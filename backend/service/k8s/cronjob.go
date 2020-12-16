@@ -50,6 +50,7 @@ func ProtoForCronJob(cluster string, k8scronJob *v1beta1.CronJob) *k8sapiv1.Cron
 		Cluster:     clusterName,
 		Namespace:   k8scronJob.Namespace,
 		Name:        k8scronJob.Name,
+		Schedule:    k8scronJob.Spec.Schedule,
 		Labels:      k8scronJob.Labels,
 		Annotations: k8scronJob.Annotations,
 	}

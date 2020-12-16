@@ -7,11 +7,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	v1beta1 "k8s.io/api/batch/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
 )
 
-func testCronClientset() k8s.Interface {
+func testCronService() *svc {
 	cron := &v1beta1.CronJob{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        "testing-cron-name",
@@ -21,12 +20,8 @@ func testCronClientset() k8s.Interface {
 		},
 	}
 
-	return fake.NewSimpleClientset(cron)
-}
-
-func TestDescribeCron(t *testing.T) {
-	cs := testCronClientset()
-	s := &svc{
+	cs := fake.NewSimpleClientset(cron)
+	return &svc{
 		manager: &managerImpl{
 			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
 				Interface: cs,
@@ -35,24 +30,17 @@ func TestDescribeCron(t *testing.T) {
 			}},
 		},
 	}
+}
 
+func TestDescribeCron(t *testing.T) {
+	s := testCronService()
 	cron, err := s.DescribeCronJob(context.Background(), "foo", "core-testing", "testing-namespace", "testing-cron-name")
 	assert.NoError(t, err)
 	assert.NotNil(t, cron)
 }
 
 func TestDeleteCron(t *testing.T) {
-	cs := testCronClientset()
-	s := &svc{
-		manager: &managerImpl{
-			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
-				Interface: cs,
-				namespace: "default",
-				cluster:   "core-testing",
-			}},
-		},
-	}
-
+	s := testCronService()
 	// Not found.
 	err := s.DeleteCronJob(context.Background(), "foo", "core-testing", "testing-namespace", "abc")
 	assert.Error(t, err)
