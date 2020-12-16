@@ -1,4 +1,5 @@
 import * as React from "react";
+import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
 import { WizardContext } from "../../Contexts";
@@ -43,5 +44,33 @@ Primary.args = {
     { name: "Public IP Address", value: "54.234.102.49" },
     { name: "Private IP Address", value: "10.46.191.123" },
     { name: "Availability Zone", value: "us-east-1d" },
+  ],
+};
+
+export const WithMutableRows = Template.bind({});
+WithMutableRows.args = {
+  onUpdate: action("onClick event"),
+  data: [
+    { name: "Name", value: "my-asg-name" },
+    { name: "Region", value: "us-mock-1" },
+    {
+      name: "Min Size",
+      value: 15,
+      input: {
+        type: "number",
+        key: "size.min",
+      },
+    },
+    {
+      name: "Max Size",
+      value: 25,
+      input: { type: "number", key: "size.max" },
+    },
+    {
+      name: "Desired Size",
+      value: 20,
+      input: { type: "number", key: "size.desired" },
+    },
+    { name: "Availability Zones", value: "us-mock-1b" },
   ],
 };
