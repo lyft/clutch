@@ -159,8 +159,12 @@ export const AccordionGroup = ({ children, defaultExpandedIdx }: AccordionGroupP
 };
 
 const StyledAccordionDetails = styled(MuiAccordionDetails)({
+  display: "flex",
+  flexWrap: "wrap",
+  boxSizing: "border-box",
   "> *": {
     padding: "8px 8px",
+
   },
   ".MuiFormLabel-root": {
     padding: "inherit",

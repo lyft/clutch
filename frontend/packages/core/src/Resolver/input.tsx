@@ -3,6 +3,7 @@ import type { UseFormMethods } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
 import SearchIcon from "@material-ui/icons/Search";
+import styled from "@emotion/styled";
 
 import {
   Accordion,
@@ -55,6 +56,12 @@ interface SchemaResolverProps extends Pick<AccordionProps, "expanded" | "onClick
   submitHandler: any;
 }
 
+const SchemaDetails = styled(AccordionDetails)({
+  "> *": {
+    flex: "1 50%",
+  },
+});
+
 const SchemaResolver = ({ schema, expanded, onClick, submitHandler }: SchemaResolverProps) => {
   const [data, setData] = React.useState({ "@type": schema.typeUrl });
 
@@ -75,13 +82,13 @@ const SchemaResolver = ({ schema, expanded, onClick, submitHandler }: SchemaReso
         expanded={expanded}
         onClick={onClick}
       >
-        <AccordionDetails>
+        <SchemaDetails>
           {schema.error ? (
             <Error message={`Schema Error: ${schema.error.message}`} />
           ) : (
             schema.fields.map(field => hydrateField(field, onChange, schemaValidation))
           )}
-        </AccordionDetails>
+        </SchemaDetails>
         <AccordionDivider />
         <AccordionActions>
           <Button text="Submit" type="submit" />
