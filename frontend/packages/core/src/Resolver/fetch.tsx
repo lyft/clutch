@@ -61,6 +61,8 @@ const resolveResource = async (
   const resolver = fields?.query !== undefined ? resolveQuery : resolveFields;
   return resolver(type, limit, fields)
     .then(({ results, failures }) => {
+      // n.b. default to using the open source @clutch-sh/api package to resolve the
+      // resource against unless a custom package has been specified by the workflow.
       let pbClutch = _.get($pbclutch, type);
       if (apiPackage) {
         pbClutch = _.get(apiPackage, type);

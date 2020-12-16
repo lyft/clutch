@@ -48,7 +48,10 @@ interface ResolverProps {
   searchLimit: number;
   onResolve: (data: { results: object[]; input: object }) => void;
   variant?: "dual" | "query" | "schema";
-  apiPackage?: any;
+  /**
+   *  API module to resolve lookups against.
+   * */
+  apiPackage?: object;
 }
 
 const Resolver: React.FC<ResolverProps> = ({
