@@ -164,7 +164,6 @@ const StyledAccordionDetails = styled(MuiAccordionDetails)({
   boxSizing: "border-box",
   "> *": {
     padding: "8px 8px",
-    flex: "1 50%",
 
   },
   ".MuiFormLabel-root": {
