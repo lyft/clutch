@@ -67,7 +67,7 @@ const TableCell = styled(MuiTableCell)({
   fontSize: "14px",
   fontWeight: "normal",
   height: "48px",
-  padding: "0 16px",
+  padding: "15px 16px 15px 16px",
 });
 
 const KeyCellContainer = styled(TableCell)({

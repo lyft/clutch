@@ -49,7 +49,7 @@ Primary.args = {
 
 export const WithMutableRows = Template.bind({});
 WithMutableRows.args = {
-  onUpdate: action("onClick event"),
+  onUpdate: action("update event"),
   data: [
     { name: "Name", value: "my-asg-name" },
     { name: "Region", value: "us-mock-1" },
