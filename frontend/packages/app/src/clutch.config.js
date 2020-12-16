@@ -58,4 +58,11 @@ module.exports = {
       },
     },
   },
+  "@clutch-sh/kinesis": {
+    updateShardCount: {
+      componentProps: {
+        resolverType: "clutch.aws.kinesis.v1.Stream",
+      },
+    },
+  },
 };

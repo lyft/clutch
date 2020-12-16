@@ -2,8 +2,8 @@ import React from "react";
 import type { UseFormMethods } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
-import SearchIcon from "@material-ui/icons/Search";
 import styled from "@emotion/styled";
+import SearchIcon from "@material-ui/icons/Search";
 
 import {
   Accordion,
