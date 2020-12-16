@@ -157,7 +157,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 	// Settings snapshot with empty faults to remove the faults
 	for _, cluster := range snapshotCache.GetStatusKeys() {
 		if _, exist := clusterFaultMap[cluster]; !exist {
-			logger.Infow("Removing faults for cluster", "cluster", cluster)
+			logger.Debugw("Removing faults for cluster", "cluster", cluster)
 			err = setSnapshot(snapshotCache, rtdsLayerName, cluster, ingressPrefix, egressPrefix, []*experimentation.Experiment{}, logger)
 			if err != nil {
 				logger.Errorw("Unable to unset the fault for cluster", "cluster", cluster,
