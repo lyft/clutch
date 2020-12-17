@@ -11,12 +11,48 @@ import MuiCheckIcon from "@material-ui/icons/Check";
 import PriorityHighIcon from "@material-ui/icons/PriorityHigh";
 
 const StepContainer = styled.div({
+  margin: "0px 10px 30px 10px",
+
   ".MuiStepper-root": {
     padding: "0",
   },
   ".MuiGrid-container": {
     padding: "16px 0",
   },
+  ".MuiStepLabel-labelContainer": {
+    width: "unset",
+  },
+  ".MuiStepConnector-alternativeLabel": {
+    top: "10px",
+    right: "calc(50%)",
+    left: "calc(-50%)",
+    zIndex: 10,
+  },
+  ".MuiStepLabel-iconContainer": {
+    zIndex: 20,
+  },
+  ".MuiStep-root": {
+    padding: "0",
+  },
+  ".MuiStep-root:first-of-type": {
+    ".MuiStepLabel-root": {
+      alignItems: "flex-start",
+    },
+  },
+  ".MuiStep-root:nth-of-type(2)": {
+    ".MuiStepConnector-alternativeLabel": {
+      left: "calc(-100%)",
+    },
+  },
+  ".MuiStep-root:last-of-type": {
+    ".MuiStepLabel-root": {
+      alignItems: "flex-end",
+    },
+
+    ".MuiStepConnector-alternativeLabel": {
+      right: "0px",
+    }
+  }
 });
 
 const Circle = styled.div((props: { background: string; border: string }) => ({
@@ -55,12 +91,6 @@ const StepConnector = styled(MuiStepConnector)((props: { completed?: boolean }) 
     border: "0",
   },
 }));
-
-const StepLabelIcon = styled(MuiStepLabel)({
-  ".MuiStepLabel-iconContainer": {
-    padding: "0",
-  },
-});
 
 type StepIconVariant = "active" | "pending" | "success" | "failed";
 export interface StepIconProps {
@@ -130,7 +160,7 @@ export interface StepperProps {
 
 const Stepper = ({ activeStep, children }: StepperProps) => (
   <StepContainer>
-    <MuiStepper activeStep={activeStep + 1} connector={<StepConnector />}>
+    <MuiStepper activeStep={activeStep + 1} connector={<StepConnector />} alternativeLabel>
       {React.Children.map(children, (step: any, idx: number) => {
         const stepProps = {
           index: idx + 1,
@@ -143,19 +173,14 @@ const Stepper = ({ activeStep, children }: StepperProps) => (
         }
 
         return (
-          <MuiStep key={step.label} style={{ padding: "0" }}>
-            <StepLabelIcon icon={<StepIcon {...stepProps} />} />
+          <MuiStep key={step.props.label}>
+            <MuiStepLabel StepIconComponent={() => <StepIcon {...stepProps} />}>
+              {step.props.label ?? `Step ${idx + 1}`}
+            </MuiStepLabel>
           </MuiStep>
         );
       })}
     </MuiStepper>
-    <Grid container justify="space-between">
-      {React.Children.map(children, (step: any, idx: number) => (
-        <StepLabel item data-active={idx === activeStep}>
-          {step.props.label}
-        </StepLabel>
-      ))}
-    </Grid>
   </StepContainer>
 );
 
