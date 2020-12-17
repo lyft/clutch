@@ -48,9 +48,19 @@ interface ResolverProps {
   searchLimit: number;
   onResolve: (data: { results: object[]; input: object }) => void;
   variant?: "dual" | "query" | "schema";
+  /**
+   *  API module to resolve lookups against.
+   * */
+  apiPackage?: object;
 }
 
-const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, variant = "dual" }) => {
+const Resolver: React.FC<ResolverProps> = ({
+  type,
+  searchLimit,
+  onResolve,
+  variant = "dual",
+  apiPackage,
+}) => {
   const [state, dispatch] = useResolverState();
   const { displayWarnings } = useWizardContext();
 
@@ -90,7 +100,8 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
         }
         dispatch({ type: ResolverAction.RESOLVE_SUCCESS });
       },
-      err => dispatch({ type: ResolverAction.RESOLVE_ERROR, error: err })
+      err => dispatch({ type: ResolverAction.RESOLVE_ERROR, error: err }),
+      apiPackage
     );
   };
 
