@@ -14,6 +14,7 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
+import _ from "lodash";
 import * as yup from "yup";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
@@ -44,14 +45,14 @@ const HPADetails: React.FC<WizardChild> = () => {
   const metadata = [];
 
   if (hpa.annotations) {
-    Object.keys(hpa.annotations).forEach(key => {
-      metadata.push({ name: key, value: hpa.annotations[key] });
+    _.forEach(hpa.annotations, (annotation, key) => {
+      metadata.push({ name: key, value: annotation });
     });
   }
 
   if (hpa.labels) {
-    Object.keys(hpa.labels).forEach(key => {
-      metadata.push({ name: key, value: hpa.labels[key] });
+    _.forEach(hpa.labels, (label, key) => {
+      metadata.push({ name: key, value: label });
     });
   }
 
