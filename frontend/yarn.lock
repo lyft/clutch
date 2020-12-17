@@ -17525,13 +17525,10 @@ stylis@^4.0.3:
   resolved "https://registry.yarnpkg.com/stylis/-/stylis-4.0.3.tgz#0d714765f3f694a685550f0c45411ebf90a9bded"
   integrity sha512-iAxdFyR9cHKp4H5M2dJlDnvcb/3TvPprzlKjvYVbH7Sh+y8hjY/mUu/ssdcvVz6Z4lKI3vsoS0jAkMYmX7ozfA==
 
-superstruct@~0.8.4:
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-0.8.4.tgz#478a19649f6b02c6319c02044db6a1f5863c391f"
-  integrity sha512-48Ors8IVWZm/tMr8r0Si6+mJiB7mkD7jqvIzktjJ4+EnP5tBp0qOpiM1J8sCUorKx+TXWrfb3i1UcjdD1YK/wA==
-  dependencies:
-    kind-of "^6.0.2"
-    tiny-invariant "^1.0.6"
+superstruct@~0.13.0:
+  version "0.13.1"
+  resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-0.13.1.tgz#1b182738fb08cc712465d810e1fce17c659ee50a"
+  integrity sha512-HwUNsCVbHyf2CiLQr+fNpYkqfHVGvNU1AeZCRUlmXvS7tGujrkhQgld930bdsskHPmCgy5d/3wAiosRY+DuTOg==
 
 supports-color@^2.0.0:
   version "2.0.0"
@@ -19286,17 +19283,6 @@ yauzl@^2.10.0:
   dependencies:
     buffer-crc32 "~0.2.3"
     fd-slicer "~1.1.0"
-
-yup@^0.30.0:
-  version "0.30.0"
-  resolved "https://registry.yarnpkg.com/yup/-/yup-0.30.0.tgz#427ee076abb1d7e01e747fb782801f7df252fb76"
-  integrity sha512-GX3vqpC9E+Ow0fmQPgqbEg7UV40XRrN1IOEgKF5v04v6T4ha2vBas/hu0thWgewk8L4wUEBLRO/EnXwYyP+p+A==
-  dependencies:
-    "@babel/runtime" "^7.10.5"
-    lodash "^4.17.20"
-    lodash-es "^4.17.11"
-    property-expr "^2.0.4"
-    toposort "^2.0.2"
 
 yup@^0.31.0:
   version "0.31.0"

@@ -27,7 +27,7 @@ func (s svc) CreateBranch(ctx context.Context, req *github.CreateBranchRequest) 
 	panic("implement me")
 }
 
-func (s svc) CreatePullRequest(ctx context.Context, ref *github.RemoteRef, title, body string) (*github.PullRequestInfo, error) {
+func (s svc) CreatePullRequest(ctx context.Context, ref *github.RemoteRef, base, title, body string) (*github.PullRequestInfo, error) {
 	panic("implement me")
 }
 
@@ -44,6 +44,10 @@ func (s svc) CompareCommits(ctx context.Context, ref *github.RemoteRef, compareS
 }
 
 func (s svc) GetCommit(ctx context.Context, ref *github.RemoteRef) (*github.Commit, error) {
+	panic("implement me")
+}
+
+func (s svc) GetRepository(ctx context.Context, ref *github.RemoteRef) (*github.Repository, error) {
 	panic("implement me")
 }
 

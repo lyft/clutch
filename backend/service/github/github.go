@@ -56,6 +56,13 @@ type RemoteRef struct {
 	Ref string
 }
 
+// Repository contains information about a requested repository.
+type Repository struct {
+	Name          string
+	Owner         string
+	DefaultBranch string
+}
+
 // File contains information about a requested file, including its content.
 type File struct {
 	Path             string
@@ -69,11 +76,12 @@ type File struct {
 type Client interface {
 	GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, error)
 	CreateBranch(ctx context.Context, req *CreateBranchRequest) error
-	CreatePullRequest(ctx context.Context, ref *RemoteRef, title, body string) (*PullRequestInfo, error)
+	CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title, body string) (*PullRequestInfo, error)
 	CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error)
 	CreateIssueComment(ctx context.Context, ref *RemoteRef, number int, body string) error
 	CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error)
 	GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error)
+	GetRepository(ctx context.Context, ref *RemoteRef) (*Repository, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -129,11 +137,11 @@ func boolPtr(b bool) *bool {
 	return &b
 }
 
-func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, title, body string) (*PullRequestInfo, error) {
+func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title, body string) (*PullRequestInfo, error) {
 	req := &githubv3.NewPullRequest{
 		Title:               strPtr(title),
 		Head:                strPtr(ref.Ref),
-		Base:                strPtr("master"),
+		Base:                strPtr(base),
 		Body:                strPtr(body),
 		MaintainerCanModify: boolPtr(true),
 	}
@@ -305,4 +313,25 @@ func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
 	return &Commit{
 		Files: commit.Files,
 	}, nil
+}
+
+func (s *svc) GetRepository(ctx context.Context, repo *RemoteRef) (*Repository, error) {
+	q := &getRepositoryQuery{}
+	params := map[string]interface{}{
+		"owner": githubv4.String(repo.RepoOwner),
+		"name":  githubv4.String(repo.RepoName),
+	}
+
+	err := s.graphQL.Query(ctx, q, params)
+	if err != nil {
+		return nil, err
+	}
+
+	r := &Repository{
+		Name:          repo.RepoName,
+		Owner:         repo.RepoOwner,
+		DefaultBranch: string(q.Repository.DefaultBranchRef.Name),
+	}
+
+	return r, nil
 }

@@ -22,6 +22,7 @@ import (
 	kinesismod "github.com/lyft/clutch/backend/module/kinesis"
 	resolvermod "github.com/lyft/clutch/backend/module/resolver"
 	"github.com/lyft/clutch/backend/module/sourcecontrol"
+	topologymod "github.com/lyft/clutch/backend/module/topology"
 	"github.com/lyft/clutch/backend/resolver"
 	awsresolver "github.com/lyft/clutch/backend/resolver/aws"
 	k8sresolver "github.com/lyft/clutch/backend/resolver/k8s"
@@ -63,6 +64,7 @@ var Modules = module.Factory{
 	rtdsmod.Name:               rtdsmod.New,
 	serverexperimentation.Name: serverexperimentation.New,
 	sourcecontrol.Name:         sourcecontrol.New,
+	topologymod.Name:           topologymod.New,
 }
 
 var Services = service.Factory{

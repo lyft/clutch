@@ -2,7 +2,6 @@ package k8s
 
 import (
 	"fmt"
-	"time"
 
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -37,11 +36,14 @@ func (lw *lightweightCacheObject) GetNamespace() string { return lw.Namespace }
 // Drawbacks
 // - Update resource event handler does not function as expected, old objects will always return nil.
 //   This is because we dont cache the full k8s object to compute deltas as we are using lightweightCacheObjects instead.
+// - Resync does not work as expected becuase the cache is filled with lightweightCacheObjects,
+//   for this reason Resync is disabled.
+
 func NewLightweightInformer(
 	lw cache.ListerWatcher,
 	objType runtime.Object,
-	resync time.Duration,
 	h cache.ResourceEventHandler,
+	recieveUpdates bool,
 ) cache.Controller {
 	cacheStore := cache.NewIndexer(cache.DeletionHandlingMetaNamespaceKeyFunc, cache.Indexers{})
 	fifo := cache.NewDeltaFIFOWithOptions(cache.DeltaFIFOOptions{
@@ -53,7 +55,7 @@ func NewLightweightInformer(
 		Queue:            fifo,
 		ListerWatcher:    lw,
 		ObjectType:       objType,
-		FullResyncPeriod: resync,
+		FullResyncPeriod: 0,
 		RetryOnError:     false,
 		Process: func(obj interface{}) error {
 			for _, d := range obj.(cache.Deltas) {
@@ -70,10 +72,15 @@ func NewLightweightInformer(
 				switch d.Type {
 				case cache.Sync, cache.Replaced, cache.Added, cache.Updated:
 					if _, exists, err := cacheStore.Get(lightweightObj); err == nil && exists {
-						if err := cacheStore.Update(lightweightObj); err != nil {
-							return err
+						// Not all use-cases of this informer require updates to Kubernetes objects
+						// For this reason you can disable updates completely by setting `recieveUpdates` to false
+						// This both disables the cache update and the OnUpdate handler
+						if recieveUpdates {
+							if err := cacheStore.Update(lightweightObj); err != nil {
+								return err
+							}
+							h.OnUpdate(nil, d.Object)
 						}
-						h.OnUpdate(nil, d.Object)
 					} else {
 						if err := cacheStore.Add(lightweightObj); err != nil {
 							return err

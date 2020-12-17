@@ -101,3 +101,27 @@ func TestMatchResource(t *testing.T) {
 		})
 	}
 }
+
+func TestDeeplyNestedMatching(t *testing.T) {
+	input := "us-east-1/i-1234567890/network/controller"
+
+	tests := []struct {
+		pattern string
+		match   bool
+	}{
+		{pattern: "us-east-1/**", match: true},
+		{pattern: "us-east-1/i-*/**/controller", match: true},
+		{pattern: "us-east-1/**/controller", match: true},
+		{pattern: "us-east-1/*", match: false},
+		{pattern: "us-east-1/i-*/controller", match: false},
+	}
+
+	for idx, tt := range tests {
+		tt := tt
+		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
+			t.Parallel()
+			result := MatchMethodOrResource(tt.pattern, input)
+			assert.Equal(t, tt.match, result)
+		})
+	}
+}

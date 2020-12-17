@@ -63,7 +63,7 @@ services:
         client_id: ${OIDC_CLIENT_ID}
         client_secret: ${OIDC_CLIENT_SECRET}
         redirect_url: "http://localhost:8080/v1/authn/callback"
-        session_secret: ${AUTHN_SESSION_SECRET}
+      session_secret: ${AUTHN_SESSION_SECRET}
 ...
 ```
 

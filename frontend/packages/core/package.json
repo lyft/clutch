@@ -48,7 +48,7 @@
     "react-router": "^6.0.0-beta",
     "react-router-dom": "^6.0.0-beta",
     "styled-components": "^5.1.1",
-    "superstruct": "~0.8.4",
+    "superstruct": "~0.13.0",
     "yup": "^0.31.0"
   },
   "devDependencies": {
