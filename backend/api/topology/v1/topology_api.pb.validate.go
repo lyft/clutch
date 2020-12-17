@@ -1183,8 +1183,8 @@ func (m *SearchTopologyRequest_FieldSelector) Validate() error {
 
 	switch m.Field.(type) {
 
-	case *SearchTopologyRequest_FieldSelector_Id:
-		// no validation rules for Id
+	case *SearchTopologyRequest_FieldSelector_Column_:
+		// no validation rules for Column
 
 	case *SearchTopologyRequest_FieldSelector_Metadata:
 		// no validation rules for Metadata
@@ -1260,6 +1260,13 @@ func (m *SearchTopologyRequest_Sort) Validate() error {
 	}
 
 	// no validation rules for Direction
+
+	if m.GetField() == nil {
+		return SearchTopologyRequest_SortValidationError{
+			field:  "Field",
+			reason: "value is required",
+		}
+	}
 
 	if v, ok := interface{}(m.GetField()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
@@ -1420,6 +1427,13 @@ func (m *SearchTopologyRequest_Filter_Search) Validate() error {
 		return nil
 	}
 
+	if m.GetField() == nil {
+		return SearchTopologyRequest_Filter_SearchValidationError{
+			field:  "Field",
+			reason: "value is required",
+		}
+	}
+
 	if v, ok := interface{}(m.GetField()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return SearchTopologyRequest_Filter_SearchValidationError{
@@ -1430,7 +1444,12 @@ func (m *SearchTopologyRequest_Filter_Search) Validate() error {
 		}
 	}
 
-	// no validation rules for Text
+	if utf8.RuneCountInString(m.GetText()) < 1 {
+		return SearchTopologyRequest_Filter_SearchValidationError{
+			field:  "Text",
+			reason: "value length must be at least 1 runes",
+		}
+	}
 
 	return nil
 }

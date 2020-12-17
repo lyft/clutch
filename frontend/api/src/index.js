@@ -30279,7 +30279,7 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a FieldSelector.
                      * @memberof clutch.topology.v1.SearchTopologyRequest
                      * @interface IFieldSelector
-                     * @property {string|null} [id] FieldSelector id
+                     * @property {clutch.topology.v1.SearchTopologyRequest.FieldSelector.Column|null} [column] FieldSelector column
                      * @property {string|null} [metadata] FieldSelector metadata
                      */
 
@@ -30299,12 +30299,12 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * FieldSelector id.
-                     * @member {string} id
+                     * FieldSelector column.
+                     * @member {clutch.topology.v1.SearchTopologyRequest.FieldSelector.Column} column
                      * @memberof clutch.topology.v1.SearchTopologyRequest.FieldSelector
                      * @instance
                      */
-                    FieldSelector.prototype.id = "";
+                    FieldSelector.prototype.column = 0;
 
                     /**
                      * FieldSelector metadata.
@@ -30319,12 +30319,12 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * FieldSelector field.
-                     * @member {"id"|"metadata"|undefined} field
+                     * @member {"column"|"metadata"|undefined} field
                      * @memberof clutch.topology.v1.SearchTopologyRequest.FieldSelector
                      * @instance
                      */
                     Object.defineProperty(FieldSelector.prototype, "field", {
-                        get: $util.oneOfGetter($oneOfFields = ["id", "metadata"]),
+                        get: $util.oneOfGetter($oneOfFields = ["column", "metadata"]),
                         set: $util.oneOfSetter($oneOfFields)
                     });
 
@@ -30340,10 +30340,15 @@ export const clutch = $root.clutch = (() => {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         let properties = {};
-                        if (message.id != null && message.hasOwnProperty("id")) {
+                        if (message.column != null && message.hasOwnProperty("column")) {
                             properties.field = 1;
-                            if (!$util.isString(message.id))
-                                return "id: string expected";
+                            switch (message.column) {
+                            default:
+                                return "column: enum value expected";
+                            case 0:
+                            case 1:
+                                break;
+                            }
                         }
                         if (message.metadata != null && message.hasOwnProperty("metadata")) {
                             if (properties.field === 1)
@@ -30367,8 +30372,16 @@ export const clutch = $root.clutch = (() => {
                         if (object instanceof $root.clutch.topology.v1.SearchTopologyRequest.FieldSelector)
                             return object;
                         let message = new $root.clutch.topology.v1.SearchTopologyRequest.FieldSelector();
-                        if (object.id != null)
-                            message.id = String(object.id);
+                        switch (object.column) {
+                        case "UNSPECIFIED":
+                        case 0:
+                            message.column = 0;
+                            break;
+                        case "ID":
+                        case 1:
+                            message.column = 1;
+                            break;
+                        }
                         if (object.metadata != null)
                             message.metadata = String(object.metadata);
                         return message;
@@ -30387,10 +30400,10 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (message.id != null && message.hasOwnProperty("id")) {
-                            object.id = message.id;
+                        if (message.column != null && message.hasOwnProperty("column")) {
+                            object.column = options.enums === String ? $root.clutch.topology.v1.SearchTopologyRequest.FieldSelector.Column[message.column] : message.column;
                             if (options.oneofs)
-                                object.field = "id";
+                                object.field = "column";
                         }
                         if (message.metadata != null && message.hasOwnProperty("metadata")) {
                             object.metadata = message.metadata;
@@ -30410,6 +30423,20 @@ export const clutch = $root.clutch = (() => {
                     FieldSelector.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
+
+                    /**
+                     * Column enum.
+                     * @name clutch.topology.v1.SearchTopologyRequest.FieldSelector.Column
+                     * @enum {number}
+                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                     * @property {number} ID=1 ID value
+                     */
+                    FieldSelector.Column = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "ID"] = 1;
+                        return values;
+                    })();
 
                     return FieldSelector;
                 })();

@@ -49,8 +49,8 @@ func filterQueryBuilder(f *topologyv1.SearchTopologyRequest_Filter) string {
 	}
 
 	if f.Search != nil && f.Search.Field != nil {
-		if len(f.Search.Field.GetId()) > 0 {
-			filterQuery += fmt.Sprintf("id like '%%%s%%'", f.Search.Text)
+		if f.Search.Field.GetColumn() > 0 {
+			filterQuery += fmt.Sprintf("%s like '%%%s%%'", f.Search.Field.GetColumn(), f.Search.Text)
 		} else if f.Metadata != nil {
 			mdQuery := convertMetadataToQuery(f.Search.Field.GetMetadata())
 			filterQuery += fmt.Sprintf("%s like '%%%s%%'", mdQuery, f.Search.Text)
@@ -74,8 +74,8 @@ func sortQueryBuilder(s *topologyv1.SearchTopologyRequest_Sort) string {
 	if len(s.Direction.String()) > 0 && s.Field.Field != nil {
 		direction := getDirection(s.Direction.String())
 
-		if len(s.Field.GetId()) > 0 {
-			sortQuery = fmt.Sprintf("ORDER BY %s %s", s.Field.GetId(), direction)
+		if s.Field.GetColumn() > 0 {
+			sortQuery = fmt.Sprintf("ORDER BY %s %s", s.Field.GetColumn(), direction)
 		} else if len(s.Field.GetMetadata()) > 0 {
 			mdQuery := convertMetadataToQuery(s.Field.GetMetadata())
 			sortQuery = fmt.Sprintf("ORDER BY %s %s", mdQuery, direction)

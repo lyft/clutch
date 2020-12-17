@@ -12747,8 +12747,8 @@ export namespace clutch {
                 /** Properties of a FieldSelector. */
                 interface IFieldSelector {
 
-                    /** FieldSelector id */
-                    id?: (string|null);
+                    /** FieldSelector column */
+                    column?: (clutch.topology.v1.SearchTopologyRequest.FieldSelector.Column|null);
 
                     /** FieldSelector metadata */
                     metadata?: (string|null);
@@ -12763,14 +12763,14 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.topology.v1.SearchTopologyRequest.IFieldSelector);
 
-                    /** FieldSelector id. */
-                    public id: string;
+                    /** FieldSelector column. */
+                    public column: clutch.topology.v1.SearchTopologyRequest.FieldSelector.Column;
 
                     /** FieldSelector metadata. */
                     public metadata: string;
 
                     /** FieldSelector field. */
-                    public field?: ("id"|"metadata");
+                    public field?: ("column"|"metadata");
 
                     /**
                      * Verifies a FieldSelector message.
@@ -12799,6 +12799,15 @@ export namespace clutch {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                namespace FieldSelector {
+
+                    /** Column enum. */
+                    enum Column {
+                        UNSPECIFIED = 0,
+                        ID = 1
+                    }
                 }
 
                 /** Properties of a Sort. */
