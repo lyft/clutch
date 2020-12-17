@@ -1,13 +1,10 @@
 import * as React from "react";
 import { MemoryRouter } from "react-router";
-import styled from "@emotion/styled";
-import { Box as MuiBox } from "@material-ui/core";
-import type { Meta } from "@storybook/react";
 import { Grid } from "@material-ui/core";
+import type { Meta } from "@storybook/react";
 
 import { ApplicationContext } from "../../Contexts/app-context";
 import Drawer from "../drawer";
-import { Primary as HeaderStory } from "./header.stories";
 import Header from "../header";
 
 export default {
@@ -64,4 +61,9 @@ export default {
 
 export const Primary = () => <Drawer />;
 
-export const WithHeader = () => <Grid direction="column"><Header/><Drawer/></Grid>;
+export const WithHeader = () => (
+  <Grid direction="column">
+    <Header />
+    <Drawer />
+  </Grid>
+);

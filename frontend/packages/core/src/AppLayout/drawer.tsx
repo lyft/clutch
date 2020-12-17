@@ -86,7 +86,7 @@ const Avatar = styled(MuiAvatar)({
 
 // sidebar submenu
 const Popper = styled(MuiPopper)({
-  zIndex: 1200,
+  zIndex: 1201,
   paddingTop: "16px",
 });
 
@@ -166,9 +166,7 @@ const Group: React.FC<GroupProps> = ({
         }}
       >
         <Avatar>{heading.charAt(0)}</Avatar>
-        <GroupHeading align="center">
-          {heading}
-        </GroupHeading>
+        <GroupHeading align="center">{heading}</GroupHeading>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Popper open={open} anchorEl={anchorRef.current} transition placement="right-start">
             <Paper>
