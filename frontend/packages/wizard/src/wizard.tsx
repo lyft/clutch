@@ -128,9 +128,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
               return <Step key={child.props.name} label={child.props.name} error={hasError} />;
             })}
           </Stepper>
-          <Paper elevation={0}>
-          {steps[state.activeStep]}
-          </Paper>
+          <Paper elevation={0}>{steps[state.activeStep]}</Paper>
         </Grid>
       </Grid>
       {globalWarnings.map(error => (

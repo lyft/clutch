@@ -1,8 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import styled from "@emotion/styled";
-
 import type { clutch } from "@clutch-sh/api";
+import styled from "@emotion/styled";
 import SearchIcon from "@material-ui/icons/Search";
 
 import {
@@ -19,10 +18,7 @@ import { TextField } from "../Input/text-field";
 import type { ChangeEventTarget } from "./hydrator";
 import { convertChangeEvent, hydrateField } from "./hydrator";
 
-const Form = styled.form({
-
-});
-
+const Form = styled.form({});
 
 interface QueryResolverProps {
   schemas: clutch.resolver.v1.Schema[];
@@ -47,22 +43,19 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, submitHandler })
 
   const error = validation.errors?.query;
   return (
-    <Form
-    onSubmit={validation.handleSubmit(() => submitHandler({query: queryData}))}
-    noValidate
-  >
-    <TextField
-      label={typeLabel}
-      name="query"
-      required
-      onChange={handleChanges}
-      onKeyDown={handleChanges}
-      onFocus={handleChanges}
-      inputRef={validation.register({ required: true })}
-      error={!!error}
-      helperText={error?.message || error?.type || ""}
-      endAdornment={<SearchIcon />}
-    />
+    <Form onSubmit={validation.handleSubmit(() => submitHandler({ query: queryData }))} noValidate>
+      <TextField
+        label={typeLabel}
+        name="query"
+        required
+        onChange={handleChanges}
+        onKeyDown={handleChanges}
+        onFocus={handleChanges}
+        inputRef={validation.register({ required: true })}
+        error={!!error}
+        helperText={error?.message || error?.type || ""}
+        endAdornment={<SearchIcon />}
+      />
     </Form>
   );
 };

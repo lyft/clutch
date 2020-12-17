@@ -40,8 +40,7 @@ const Error: React.FC<ErrorProps> = ({ message, onRetry }) => {
   );
 };
 
-const Collapse = styled(MuiCollapse)`
-`;
+const Collapse = styled(MuiCollapse)``;
 
 const ErrorText = styled(Typography)`
   color: rgb(97, 26, 21);

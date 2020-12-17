@@ -1,5 +1,4 @@
 import React from "react";
-import { useForm } from "react-hook-form";
 import styled from "@emotion/styled";
 import _ from "lodash";
 
@@ -13,7 +12,6 @@ import { fetchResourceSchemas, resolveResource } from "./fetch";
 import { QueryResolver, SchemaResolver } from "./input";
 import type { DispatchAction } from "./state";
 import { ResolverAction, useResolverState } from "./state";
-
 
 const SchemaLabel = styled.div({
   alignSelf: "flex-start",
@@ -52,7 +50,6 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
 
   React.useEffect(() => loadSchemas(type, dispatch), []);
 
-
   const submitHandler = data => {
     // Move to loading state.
     dispatch({ type: ResolverAction.RESOLVING });
@@ -76,7 +73,6 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
     );
   };
 
-
   return (
     <Loadable isLoading={state.schemasLoading}>
       {state.schemaFetchError !== "" ? (
@@ -87,10 +83,7 @@ const Resolver: React.FC<ResolverProps> = ({ type, searchLimit, onResolve, varia
           {(variant === "dual" || variant === "query") && (
             <>
               <SchemaLabel>Search</SchemaLabel>
-              <QueryResolver
-                schemas={state.searchableSchemas}
-                submitHandler={submitHandler}
-              />
+              <QueryResolver schemas={state.searchableSchemas} submitHandler={submitHandler} />
             </>
           )}
           {variant === "dual" && <HorizontalRule>OR</HorizontalRule>}
