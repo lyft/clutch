@@ -1,8 +1,8 @@
 import React from "react";
+import styled from "@emotion/styled";
 import { Grid, Paper } from "@material-ui/core";
 import type { Color } from "@material-ui/lab/Alert";
 import MuiAlert from "@material-ui/lab/Alert";
-import styled from "@emotion/styled";
 
 const Alert = styled(MuiAlert)({
   alignItems: "center",
