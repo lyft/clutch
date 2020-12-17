@@ -2,15 +2,11 @@ import React from "react";
 import { Grid, Paper } from "@material-ui/core";
 import type { Color } from "@material-ui/lab/Alert";
 import MuiAlert from "@material-ui/lab/Alert";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
-const Container = styled(Paper)`
-  margin: 1%;
-`;
-
-const Alert = styled(MuiAlert)`
-  align-items: center;
-`;
+const Alert = styled(MuiAlert)({
+  alignItems: "center",
+});
 
 export interface NoteProps {
   severity?: Color;
@@ -27,13 +23,13 @@ export interface NotePanelProps {
 
 const Note: React.FC<NoteProps> = ({ severity = "info", children }) => {
   return (
-    <Container elevation={0}>
+    <Paper elevation={0}>
       <Alert severity={severity}>
         <Grid container justify="center" alignItems="center">
           {children}
         </Grid>
       </Alert>
-    </Container>
+    </Paper>
   );
 };
 

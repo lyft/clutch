@@ -81,7 +81,7 @@ const StreamDetails: React.FC<WizardChild> = () => {
               disabled
             />
           </Grid>
-          <Grid item style={{ flexBasis: "50%", paddingRight: "8px" }}>
+          <Grid item style={{ flexBasis: "50%", paddingLeft: "8px" }}>
             <Select
               label="TargetShardCount"
               name="targetShardCount"
@@ -93,10 +93,6 @@ const StreamDetails: React.FC<WizardChild> = () => {
         </Grid>
       </Form>
 
-      <ButtonGroup>
-        <Button text="Back" onClick={onBack} />
-        <Button text="Update" variant="destructive" onClick={onSubmit} />
-      </ButtonGroup>
       <NotePanel
         notes={[
           {
@@ -106,6 +102,10 @@ const StreamDetails: React.FC<WizardChild> = () => {
           },
         ]}
       />
+      <ButtonGroup>
+        <Button text="Back" onClick={onBack} />
+        <Button text="Update" variant="destructive" onClick={onSubmit} />
+      </ButtonGroup>
     </WizardStep>
   );
 };
