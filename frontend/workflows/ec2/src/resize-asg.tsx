@@ -74,6 +74,7 @@ const GroupDetails: React.FC<WizardChild> = () => {
   );
 };
 
+// TODO (sperry): possibly show the previous size values
 const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const group = useDataLayout("groupData").displayValue();
   const resizeData = useDataLayout("resizeData");

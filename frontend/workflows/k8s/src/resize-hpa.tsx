@@ -96,6 +96,7 @@ const HPADetails: React.FC<WizardChild> = () => {
   );
 };
 
+// TODO (sperry): possibly show the previous size values
 const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const hpa = useDataLayout("hpaData").displayValue() as IClutch.k8s.v1.HPA;
   const resizeData = useDataLayout("resizeData");
