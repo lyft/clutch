@@ -4,12 +4,14 @@ import styled from "@emotion/styled";
 import { DevTool } from "@hookform/devtools";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
+  Grid as MuiGrid,
   Table as MuiTable,
   TableBody as MuiTableBody,
   TableCell as MuiTableCell,
   TableContainer as MuiTableContainer,
   TableRow,
 } from "@material-ui/core";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import _ from "lodash";
 import type { Schema } from "yup";
 import { object } from "yup";
@@ -68,6 +70,21 @@ const TableCell = styled(MuiTableCell)({
   padding: "0 16px",
 });
 
+const Grid = styled(MuiGrid)({
+  ".MuiFormControl-root": {
+    height: "40px",
+    width: "100px",
+    flexDirection: "row",
+  },
+  ".textfield-disabled .MuiFormControl-root": {
+    width: "41px",
+  },
+  ".textfield-disabled .MuiInput-input": {
+    padding: "0px",
+    textAlign: "center",
+  },
+});
+
 const KeyCellContainer = styled(TableCell)({
   width: "45%",
   background: "rgba(13, 16, 48, 0.03)",
@@ -114,18 +131,24 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
     <TableRow key={data.id}>
       <KeyCell data={data} />
       <TableCell>
-        <TextField
-          id={data.id}
-          name={data.name}
-          defaultValue={data.value}
-          type={data?.input?.type}
-          onChange={onUpdate}
-          onReturn={onReturn}
-          onFocus={onUpdate}
-          inputRef={validation.register}
-          helperText={error?.message || ""}
-          error={!!error || false}
-        />
+        <Grid container alignItems="center" wrap="nowrap" spacing={2}>
+          <div className="textfield-disabled">
+            <TextField disabled id={data.id} name={data.name} defaultValue={data.value} />
+          </div>
+          <ChevronRightIcon />
+          <TextField
+            id={data.id}
+            name={data.name}
+            defaultValue={data.value}
+            type={data?.input?.type}
+            onChange={onUpdate}
+            onReturn={onReturn}
+            onFocus={onUpdate}
+            inputRef={validation.register}
+            helperText={error?.message || ""}
+            error={!!error || false}
+          />
+        </Grid>
       </TableCell>
     </TableRow>
   );

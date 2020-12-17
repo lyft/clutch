@@ -54,11 +54,13 @@ const InstanceDetails: React.FC<WizardChild> = () => {
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
       <MetadataTable data={data} />
-      <Accordion title="Metadata">
-        <AccordionDetails>
-          <MetadataTable data={metadata} />
-        </AccordionDetails>
-      </Accordion>
+      {metadata.length > 0 && (
+        <Accordion title="Metadata">
+          <AccordionDetails>
+            <MetadataTable data={metadata} />
+          </AccordionDetails>
+        </Accordion>
+      )}
       <ButtonGroup justify="flex-end">
         <Button text="Back" variant="neutral" onClick={onBack} />
         <Button text="Terminate" variant="destructive" onClick={onSubmit} />
@@ -69,15 +71,18 @@ const InstanceDetails: React.FC<WizardChild> = () => {
 
 const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const terminationData = useDataLayout("terminationData");
-  const configData = JSON.parse(terminationData.displayValue()?.config?.data || "{}");
-  const confirmationData = Object.keys(configData).map(key => {
-    return { name: key, value: configData[key] };
-  });
-  const formattedNotes = notes.map(note => <div>{note.text}</div>);
+  const instance = useDataLayout("resourceData").displayValue();
+  const formattedNotes = notes?.map(note => <div>{note.text}</div>);
+
+  const data = [
+    { name: "Instance ID", value: instance.instanceId },
+    { name: "Region", value: instance.region },
+  ];
+
   return (
     <WizardStep error={terminationData.error} isLoading={terminationData.isLoading}>
       <Confirmation action="Termination">{notes && formattedNotes}</Confirmation>
-      <MetadataTable data={confirmationData} />
+      <MetadataTable data={data} />
     </WizardStep>
   );
 };
