@@ -6,7 +6,7 @@ import { Grid as MuiGrid } from "@material-ui/core";
 const Grid = styled(MuiGrid)({
   width: "100%",
   "> *": {
-    padding: "8px",
+    padding: "8px 0",
   },
 });
 
