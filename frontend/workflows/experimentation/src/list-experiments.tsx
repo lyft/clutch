@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { BaseWorkflowProps, ButtonGroup, client } from "@clutch-sh/core";
+import { BaseWorkflowProps, Button, ButtonGroup, client } from "@clutch-sh/core";
 
 import PageLayout from "./core/page-layout";
 import { Column, ListView } from "./list-view";
@@ -39,16 +39,13 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, lin
       });
   }, []);
 
-  const buttons = links.map(link => {
-    return {
-      text: link.displayName,
-      onClick: () => navigate(link.path),
-    };
-  });
+  const buttons = links.map(link => (
+    <Button text={link.displayName} onClick={() => navigate(link.path)} />
+  ));
 
   return (
     <PageLayout heading={heading} error={error}>
-      <ButtonGroup buttons={buttons} />
+      <ButtonGroup>{buttons}</ButtonGroup>
       <ListView
         columns={columns}
         items={experiments}

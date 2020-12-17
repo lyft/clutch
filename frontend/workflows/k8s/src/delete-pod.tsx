@@ -1,6 +1,7 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import {
+  Button,
   ButtonGroup,
   client,
   Confirmation,
@@ -47,19 +48,10 @@ const PodDetails: React.FC<WizardChild> = () => {
           { name: "Pod IP Address", value: instance.podIp },
         ]}
       />
-      <ButtonGroup
-        buttons={[
-          {
-            text: "Back",
-            onClick: onBack,
-          },
-          {
-            text: "Delete",
-            onClick: onSubmit,
-            variant: "destructive",
-          },
-        ]}
-      />
+      <ButtonGroup>
+        <Button text="Back" variant="neutral" onClick={onBack} />
+        <Button text="Delete" variant="destructive" onClick={onSubmit} />
+      </ButtonGroup>
     </WizardStep>
   );
 };
@@ -72,10 +64,18 @@ and
 */
 const Confirm: React.FC<ConfirmChild> = () => {
   const deletionData = useDataLayout("deletionData");
-
+  const podData = useDataLayout("resourceData");
+  const { name, cluster, namespace } = podData.displayValue();
   return (
     <WizardStep error={deletionData.error} isLoading={deletionData.isLoading}>
       <Confirmation action="Deletion" />
+      <MetadataTable
+        data={[
+          { name: "Name", value: name },
+          { name: "Cluster", value: cluster },
+          { name: "Namespace", value: namespace },
+        ]}
+      />
     </WizardStep>
   );
 };

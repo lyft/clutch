@@ -100,15 +100,13 @@ const ButtonGroupContainer = styled(Grid)({
 });
 
 export interface ButtonGroupProps {
-  buttons: ButtonProps[];
+  children: React.ReactElement<ButtonProps> | React.ReactElement<ButtonProps>[];
   justify?: GridJustification;
 }
 
-const ButtonGroup: React.FC<ButtonGroupProps> = ({ buttons, justify = "center" }) => (
+const ButtonGroup = ({ children, justify = "center" }: ButtonGroupProps) => (
   <ButtonGroupContainer container justify={justify}>
-    {buttons.map(button => (
-      <Button key={button.text} {...button} />
-    ))}
+    {children}
   </ButtonGroupContainer>
 );
 

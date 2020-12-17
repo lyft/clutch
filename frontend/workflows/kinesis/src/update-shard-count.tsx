@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import {
   Button,
+  ButtonGroup,
   client,
   Confirmation,
   NotePanel,
@@ -12,7 +13,7 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
-import { Grid, Select } from "@material-ui/core";
+import { Select } from "@material-ui/core";
 
 import type { ResolverChild, WorkflowProps } from "./index";
 
@@ -80,10 +81,11 @@ const StreamDetails: React.FC<WizardChild> = () => {
           <option value={values[6]}>{values[6]}</option>
         </Select>
       </form>
-      <Grid container justify="center">
+
+      <ButtonGroup>
         <Button text="Back" onClick={onBack} />
         <Button text="Update" variant="destructive" onClick={onSubmit} />
-      </Grid>
+      </ButtonGroup>
       <NotePanel
         notes={[
           {

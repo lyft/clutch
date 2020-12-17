@@ -2,40 +2,27 @@ import React from "react";
 import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
-import type { ButtonGroupProps } from "../button";
-import { ButtonGroup } from "../button";
+import type { ButtonGroupProps, ButtonProps } from "../button";
+import { Button, ButtonGroup } from "../button";
 
 export default {
   title: "Core/Buttons/Button Group",
   component: ButtonGroup,
 } as Meta;
 
-const Template = (props: ButtonGroupProps) => <ButtonGroup {...props} />;
-
-const sharedArgs = [
-  { text: "Back", variant: "neutral", onClick: action("onClick event") },
-  action("onClick event"),
-];
+const Template = ({ children, ...props }: ButtonGroupProps) => (
+  <ButtonGroup {...props}>
+    <Button text="Back" variant="neutral" onClick={action("onClick event")} />
+    {children as React.ReactElement<ButtonProps>}
+  </ButtonGroup>
+);
 
 export const Primary = Template.bind({});
 Primary.args = {
-  buttons: [
-    sharedArgs[0],
-    {
-      text: "Next",
-      onClick: sharedArgs[1],
-    },
-  ],
+  children: <Button text="Next" onClick={action("onClick event")} />,
 };
 
 export const Destructive = Template.bind({});
 Destructive.args = {
-  buttons: [
-    sharedArgs[0],
-    {
-      text: "Terminate",
-      variant: "destructive",
-      onClick: sharedArgs[1],
-    },
-  ],
+  children: <Button text="Terminate" variant="destructive" onClick={action("onClick event")} />,
 };

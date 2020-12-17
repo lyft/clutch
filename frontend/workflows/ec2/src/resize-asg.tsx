@@ -1,17 +1,16 @@
 import React from "react";
 import {
+  Button,
   ButtonGroup,
   client,
   Confirmation,
   MetadataTable,
-  NotePanel,
   Resolver,
   useWizardContext,
 } from "@clutch-sh/core";
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
-import { Paper } from "@material-ui/core";
 import { number } from "yup";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
@@ -67,46 +66,36 @@ const GroupDetails: React.FC<WizardChild> = () => {
           { name: "Availability Zone", value: group.zones },
         ]}
       />
-      <ButtonGroup
-        buttons={[
-          {
-            text: "Back",
-            onClick: onBack,
-          },
-          {
-            text: "Resize",
-            onClick: onSubmit,
-            variant: "destructive",
-          },
+      <ButtonGroup>
+        <Button text="Back" variant="neutral" onClick={onBack} />
+        <Button text="Resize" variant="destructive" onClick={onSubmit} />
+      </ButtonGroup>
+    </WizardStep>
+  );
+};
+
+// TODO (sperry): possibly show the previous size values
+const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
+  const group = useDataLayout("groupData").displayValue();
+  const resizeData = useDataLayout("resizeData");
+  const formattedNotes = notes?.map(note => <div>{note.text}</div>);
+
+  return (
+    <WizardStep error={resizeData.error} isLoading={resizeData.isLoading}>
+      <Confirmation action="Resize">{notes && formattedNotes}</Confirmation>
+      <MetadataTable
+        data={[
+          { name: "Name", value: group.name },
+          { name: "New Min Size", value: group.size.min },
+          { name: "New Max Size", value: group.size.max },
+          { name: "New Desired Size", value: group.size.desired },
         ]}
       />
     </WizardStep>
   );
 };
 
-const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
-  const group = useDataLayout("groupData").displayValue();
-  const resizeData = useDataLayout("resizeData");
-
-  return (
-    <WizardStep error={resizeData.error} isLoading={resizeData.isLoading}>
-      <Confirmation action="Resize" />
-      <Paper style={{ width: "100%", margin: "2.5% 0" }} elevation={3}>
-        <MetadataTable
-          data={[
-            { name: "Name", value: group.name },
-            { name: "New Min Size", value: group.size.min },
-            { name: "New Max Size", value: group.size.max },
-            { name: "New Desired Size", value: group.size.desired },
-          ]}
-        />
-      </Paper>
-      <NotePanel notes={notes} />
-    </WizardStep>
-  );
-};
-
-const ResizeAutoscalingGroup: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
+const ResizeAutoscalingGroup: React.FC<WorkflowProps> = ({ heading, resolverType, notes }) => {
   const dataLayout = {
     groupData: {},
     resizeData: {
