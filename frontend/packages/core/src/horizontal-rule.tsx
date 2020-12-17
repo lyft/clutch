@@ -22,6 +22,7 @@ const StyledHorizontalRule = styled(HorizontalRuleBase)({
   display: "flex",
   flexDirection: "row",
   width: "100%",
+  margin: "16px 0px",
 
   ".line": {
     flex: "1 1 auto",
@@ -33,8 +34,9 @@ const StyledHorizontalRule = styled(HorizontalRuleBase)({
   },
 
   ".content": {
-    padding: "0 30px",
+    padding: "0 16px",
     fontWeight: "bold",
+    fontSize: "14px",
     color: "rgba(13, 16, 48, 0.38)",
     textTransform: "uppercase",
     display: "inline-flex",
