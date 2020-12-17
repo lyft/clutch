@@ -7,6 +7,7 @@ option go_package = "github.com/lyft/clutch/backend/api/config/gateway/v1;gatewa
 import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "validate/validate.proto";
+import "config/middleware/accesslog/v1/accesslog.proto";
 
 message Config {
   GatewayOptions gateway = 1 [ (validate.rules).message = {required : true} ];
@@ -97,6 +98,8 @@ message GatewayOptions {
   Assets assets = 7;
 
   bool enable_pprof = 8;
+
+  clutch.config.middleware.accesslog.v1.Config accesslog = 9;
 }
 
 // Assets configuration provide a passthrough host for frontend static assets.
