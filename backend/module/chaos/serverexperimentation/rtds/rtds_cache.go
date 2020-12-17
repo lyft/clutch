@@ -123,7 +123,7 @@ func PeriodicallyRefreshCache(s *Server) {
 
 func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCache cacheWrapper, rtdsLayerName string,
 	ingressPrefix string, egressPrefix string, logger *zap.SugaredLogger) {
-	allRunningExperiments, err := storer.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig", experimentation.GetExperimentsRequest_STATUS_RUNNING)
+	allRunningExperiments, err := storer.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig", experimentation.GetExperimentsRequest_STATUS_RUNNING)
 	if err != nil {
 		logger.Errorw("Failed to get data from experiments store", "error", err)
 
@@ -133,24 +133,23 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 
 	clusterFaultMap := make(map[string][]*experimentation.Experiment)
 	for _, experiment := range allRunningExperiments {
-		testConfig := &serverexperimentation.TestConfig{}
-		if !isFaultTest(experiment, testConfig) {
+		httpFaultConfig := &serverexperimentation.HTTPFaultConfig{}
+		if !isFaultTest(experiment, httpFaultConfig) {
 			continue
 		}
 
-		upstreamCluster := testConfig.GetClusterPair().GetUpstreamCluster()
-		downstreamCluster := testConfig.GetClusterPair().GetDownstreamCluster()
-		faultInjectionCluster := testConfig.GetClusterPair().GetFaultInjectionCluster()
+		upstreamCluster, downstreamCluster, err := unParse(httpFaultConfig)
+		if err != nil {
+			logger.Errorw("Invalid http fault config", "config", httpFaultConfig)
+		}
 
-		switch faultInjectionCluster {
-		case serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_UPSTREAM:
+		switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
+		case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
 			clusterFaultMap[upstreamCluster] = append(clusterFaultMap[upstreamCluster], experiment)
-
-		case serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_DOWNSTREAM:
+		case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
 			clusterFaultMap[downstreamCluster] = append(clusterFaultMap[downstreamCluster], experiment)
-
 		default:
-			logger.Errorw("Invalid fault injection cluster found", "upstream", upstreamCluster, "downstream", downstreamCluster, "faultInjectionCluster", faultInjectionCluster)
+			logger.Errorw("unknown enforcer %v", httpFaultConfig)
 		}
 	}
 
@@ -186,11 +185,27 @@ func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, cluster strin
 	// No experiments meaning clear all experiments for the given upstream cluster
 	if len(experiments) != 0 {
 		for _, experiment := range experiments {
-			testConfig := &serverexperimentation.TestConfig{}
-			if !isFaultTest(experiment, testConfig) {
+			httpFaultConfig := &serverexperimentation.HTTPFaultConfig{}
+			if !isFaultTest(experiment, httpFaultConfig) {
 				continue
 			}
-			percentageKey, percentageValue, faultKey, faultValue := createRuntimeKeys(testConfig, ingressPrefix, egressPrefix, logger)
+
+			upstreamCluster, downstreamCluster, err := unParse(httpFaultConfig)
+			if err != nil {
+				logger.Errorw("Invalid http fault config", "config", httpFaultConfig)
+			}
+
+			var enforcer string
+			switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
+			case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
+				enforcer = "downstreamEnforcing"
+			case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
+				enforcer = "upstreamEnforcing"
+			default:
+				logger.Errorw("unknown enforcer %v", httpFaultConfig)
+			}
+
+			percentageKey, percentageValue, faultKey, faultValue := createRuntimeKeys(upstreamCluster, downstreamCluster, httpFaultConfig, ingressPrefix, egressPrefix, logger)
 
 			fieldMap[percentageKey] = &pstruct.Value{
 				Kind: &pstruct.Value_NumberValue{
@@ -203,14 +218,14 @@ func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, cluster strin
 					NumberValue: float64(faultValue),
 				},
 			}
-			clusterPair := testConfig.GetClusterPair()
+
 			logger.Debugw("Fault details",
-				"upstream_cluster", clusterPair.GetUpstreamCluster(),
-				"downstream_cluster", clusterPair.GetDownstreamCluster(),
+				"upstream_cluster", upstreamCluster,
+				"downstream_cluster", downstreamCluster,
 				"fault_type", faultKey,
 				"percentage", percentageValue,
 				"value", faultValue,
-				"fault_injection_type", testConfig.GetClusterPair().GetFaultInjectionCluster())
+				"fault_enforcer", enforcer)
 		}
 	}
 
@@ -242,86 +257,83 @@ func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, cluster strin
 	return nil
 }
 
-func createRuntimeKeys(testConfig *serverexperimentation.TestConfig, ingressPrefix string, egressPrefix string, logger *zap.SugaredLogger) (string, float32, string, int32) {
+func createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFaultConfig *serverexperimentation.HTTPFaultConfig, ingressPrefix string, egressPrefix string, logger *zap.SugaredLogger) (string, uint32, string, uint32) {
 	var percentageKey string
-	var percentageValue float32
+	var percentageValue uint32
 	var faultKey string
-	var faultValue int32
+	var faultValue uint32
 
-	target := testConfig.GetClusterPair()
-	faultInjectionCluster := testConfig.GetClusterPair().GetFaultInjectionCluster()
+	switch httpFaultConfig.GetFault().(type) {
+	case *serverexperimentation.HTTPFaultConfig_AbortFault:
+		abort := httpFaultConfig.GetAbortFault()
+		percentageValue = abort.GetPercentage().GetPercentage()
+		faultValue = abort.GetAbortStatus().GetHttpStatusCode()
 
-	switch testConfig.GetFault().(type) {
-	case *serverexperimentation.TestConfig_Abort:
-		abort := testConfig.GetAbort()
-		percentageValue = abort.Percent
-		faultValue = abort.HttpStatus
-
-		switch faultInjectionCluster {
-		case serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_DOWNSTREAM:
+		switch interface{}(httpFaultConfig.GetFaultTargeting().GetEnforcer()).(type) {
+		case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
 			// Abort External Fault
-			percentageKey = fmt.Sprintf(HTTPPercentageForExternal, egressPrefix, target.GetUpstreamCluster())
-			faultKey = fmt.Sprintf(HTTPStatusForExternal, egressPrefix, target.GetUpstreamCluster())
+			percentageKey = fmt.Sprintf(HTTPPercentageForExternal, egressPrefix, upstreamCluster)
+			faultKey = fmt.Sprintf(HTTPStatusForExternal, egressPrefix, upstreamCluster)
 
-		case serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_UPSTREAM:
+		case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
 			// Abort Internal Fault for all downstream services
-			if target.GetDownstreamCluster() == "" {
+			if downstreamCluster == "" {
 				percentageKey = fmt.Sprintf(HTTPPercentageWithoutDownstream, ingressPrefix)
 				faultKey = fmt.Sprintf(HTTPStatusWithoutDownstream, ingressPrefix)
 			} else {
 				// Abort Internal Fault for a given downstream services
-				percentageKey = fmt.Sprintf(HTTPPercentageWithDownstream, ingressPrefix, target.GetDownstreamCluster())
-				faultKey = fmt.Sprintf(HTTPStatusWithDownstream, ingressPrefix, target.GetDownstreamCluster())
+				percentageKey = fmt.Sprintf(HTTPPercentageWithDownstream, ingressPrefix, downstreamCluster)
+				faultKey = fmt.Sprintf(HTTPStatusWithDownstream, ingressPrefix, downstreamCluster)
 			}
 
 		default:
-			logger.Errorw("Invalid fault injection cluster found", "upstream", target.GetUpstreamCluster(), "downstream", target.GetDownstreamCluster(), "faultInjectionCluster", faultInjectionCluster)
+			logger.Errorw("unknown enforcer %v", httpFaultConfig)
 		}
 
-	case *serverexperimentation.TestConfig_Latency:
-		latency := testConfig.GetLatency()
-		percentageValue = latency.Percent
-		faultValue = latency.DurationMs
+	case *serverexperimentation.HTTPFaultConfig_LatencyFault:
+		latency := httpFaultConfig.GetLatencyFault()
+		percentageValue = latency.GetPercentage().GetPercentage()
+		faultValue = latency.GetLatencyDuration().GetFixedDurationMs()
 
-		switch faultInjectionCluster {
-		case serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_DOWNSTREAM:
+		switch interface{}(httpFaultConfig.GetFaultTargeting().GetEnforcer()).(type) {
+		case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
 			// Latency External Fault
-			percentageKey = fmt.Sprintf(LatencyPercentageForExternal, egressPrefix, target.GetUpstreamCluster())
-			faultKey = fmt.Sprintf(LatencyDurationForExternal, egressPrefix, target.GetUpstreamCluster())
+			percentageKey = fmt.Sprintf(LatencyPercentageForExternal, egressPrefix, upstreamCluster)
+			faultKey = fmt.Sprintf(LatencyDurationForExternal, egressPrefix, upstreamCluster)
 
-		case serverexperimentation.FaultInjectionCluster_FAULTINJECTIONCLUSTER_UPSTREAM:
+		case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
 			// Latency Internal Fault for all downstream services
-			if target.GetDownstreamCluster() == "" {
+			if downstreamCluster == "" {
 				percentageKey = fmt.Sprintf(LatencyPercentageWithoutDownstream, ingressPrefix)
 				faultKey = fmt.Sprintf(LatencyDurationWithoutDownstream, ingressPrefix)
 			} else {
 				// Latency Internal Fault for a given downstream services
-				percentageKey = fmt.Sprintf(LatencyPercentageWithDownstream, ingressPrefix, target.GetDownstreamCluster())
-				faultKey = fmt.Sprintf(LatencyDurationWithDownstream, ingressPrefix, target.GetDownstreamCluster())
+				percentageKey = fmt.Sprintf(LatencyPercentageWithDownstream, ingressPrefix, downstreamCluster)
+				faultKey = fmt.Sprintf(LatencyDurationWithDownstream, ingressPrefix, downstreamCluster)
 			}
 
 		default:
-			logger.Errorw("Invalid fault injection cluster found", "upstream", target.GetUpstreamCluster(), "downstream", target.GetDownstreamCluster(), "faultInjectionCluster", faultInjectionCluster)
+			logger.Errorw("unknown enforcer %v", httpFaultConfig)
 		}
 
 	default:
-		logger.Errorw("Unknown fault type: %t", testConfig)
+		logger.Errorw("Unknown fault type: %t", httpFaultConfig)
 		panic("Unknown fault type")
 	}
 
 	return percentageKey, percentageValue, faultKey, faultValue
 }
 
-func isFaultTest(experiment *experimentation.Experiment, testConfig *serverexperimentation.TestConfig) bool {
-	err := ptypes.UnmarshalAny(experiment.GetConfig(), testConfig)
+func isFaultTest(experiment *experimentation.Experiment, httpFaultConfig *serverexperimentation.HTTPFaultConfig) bool {
+	err := ptypes.UnmarshalAny(experiment.GetConfig(), httpFaultConfig)
 	if err != nil {
 		return false
 	}
 
-	switch testConfig.GetFault().(type) {
-	case *serverexperimentation.TestConfig_Abort:
+	switch httpFaultConfig.GetFault().(type) {
+	case *serverexperimentation.HTTPFaultConfig_AbortFault:
 		return true
-	case *serverexperimentation.TestConfig_Latency:
+	case *serverexperimentation.HTTPFaultConfig_LatencyFault:
 		return true
 	default:
 		return false
@@ -335,4 +347,51 @@ func computeChecksum(item interface{}) (string, error) {
 	}
 
 	return fmt.Sprintf("%d", hash), nil
+}
+
+func unParse(httpFaultConfig *serverexperimentation.HTTPFaultConfig) (string, string, error) {
+	var downstream, upstream string
+
+	switch interface{}(httpFaultConfig.GetFaultTargeting().GetEnforcer()).(type) {
+	case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
+		downstreamEnforcing := httpFaultConfig.GetFaultTargeting().GetDownstreamEnforcing()
+
+		switch interface{}(downstreamEnforcing.GetDownstreamType()).(type) {
+		case *serverexperimentation.DownstreamEnforcing_DownstreamCluster:
+			downstream = downstreamEnforcing.GetDownstreamCluster().GetName()
+		default:
+			return "", "", fmt.Errorf("unknown downstream type of downstream enforcing %v", downstreamEnforcing.GetDownstreamType())
+		}
+
+		switch interface{}(downstreamEnforcing.GetUpstreamType()).(type) {
+		case *serverexperimentation.DownstreamEnforcing_UpstreamCluster:
+			upstream = downstreamEnforcing.GetUpstreamCluster().GetName()
+		default:
+			return "", "", fmt.Errorf("unknown upstream type of downstream enforcing %v", downstreamEnforcing.GetUpstreamType())
+		}
+
+	case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
+		upstreamEnforcing := httpFaultConfig.GetFaultTargeting().GetUpstreamEnforcing()
+
+		switch interface{}(upstreamEnforcing.GetDownstreamType()).(type) {
+		case *serverexperimentation.UpstreamEnforcing_DownstreamCluster:
+			downstream = upstreamEnforcing.GetDownstreamCluster().GetName()
+		default:
+			return "", "", fmt.Errorf("unknown downstream type of upstream enforcing %v", upstreamEnforcing.GetDownstreamType())
+		}
+
+		switch interface{}(upstreamEnforcing.GetUpstreamType()).(type) {
+		case *serverexperimentation.UpstreamEnforcing_UpstreamCluster:
+			upstream = upstreamEnforcing.GetUpstreamCluster().GetName()
+		case *serverexperimentation.UpstreamEnforcing_UpstreamPartialSingleCluster:
+			upstream = upstreamEnforcing.GetUpstreamPartialSingleCluster().GetName()
+		default:
+			return "", "", fmt.Errorf("unknown upstream type of upstream enforcing %v", upstreamEnforcing.GetUpstreamType())
+		}
+
+	default:
+		return "", "", fmt.Errorf("unknown enforcer %v", httpFaultConfig.GetFaultTargeting())
+	}
+
+	return upstream, downstream, nil
 }
