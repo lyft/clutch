@@ -45,7 +45,6 @@ const StepContainer = styled.div({
     ".MuiStepLabel-root": {
       alignItems: "flex-start",
     },
-    width: "50%",
   },
   ".MuiStep-root:nth-of-type(2)": {
     ".MuiStepConnector-alternativeLabel": {
