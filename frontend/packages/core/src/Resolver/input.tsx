@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import styled from "@emotion/styled";
 
 import type { clutch } from "@clutch-sh/api";
-import styled from "@emotion/styled";
 import SearchIcon from "@material-ui/icons/Search";
 
 import {
@@ -17,7 +16,7 @@ import { Button } from "../button";
 import { Error } from "../error";
 import { TextField } from "../Input/text-field";
 
-import type { ChangeEventTarget, ResolverChangeEvent } from "./hydrator";
+import type { ChangeEventTarget } from "./hydrator";
 import { convertChangeEvent, hydrateField } from "./hydrator";
 
 const Form = styled.form({

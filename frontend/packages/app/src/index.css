@@ -5,4 +5,5 @@ html, body, #root, #App {
 #App {
   display: flex;
   flex-direction: column;
+  background-color: #f9fafe;
 }
