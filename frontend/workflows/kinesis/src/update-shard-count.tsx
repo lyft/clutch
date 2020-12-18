@@ -102,7 +102,7 @@ const StreamDetails: React.FC<WizardChild> = () => {
           },
         ]}
       />
-      <ButtonGroup>
+      <ButtonGroup justify="flex-end">
         <Button text="Back" onClick={onBack} />
         <Button text="Update" variant="destructive" onClick={onSubmit} />
       </ButtonGroup>

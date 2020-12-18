@@ -89,7 +89,7 @@ const HPADetails: React.FC<WizardChild> = () => {
           </AccordionDetails>
         </Accordion>
       )}
-      <ButtonGroup>
+      <ButtonGroup justify="flex-end">
         <Button text="Back" variant="neutral" onClick={onBack} />
         <Button text="Resize" variant="destructive" onClick={onSubmit} />
       </ButtonGroup>

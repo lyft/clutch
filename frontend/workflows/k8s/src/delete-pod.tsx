@@ -48,7 +48,7 @@ const PodDetails: React.FC<WizardChild> = () => {
           { name: "Pod IP Address", value: instance.podIp },
         ]}
       />
-      <ButtonGroup>
+      <ButtonGroup justify="flex-end">
         <Button text="Back" variant="neutral" onClick={onBack} />
         <Button text="Delete" variant="destructive" onClick={onSubmit} />
       </ButtonGroup>
