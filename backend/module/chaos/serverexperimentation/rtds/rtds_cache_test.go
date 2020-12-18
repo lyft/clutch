@@ -192,7 +192,60 @@ func TestSetSnapshotV3(t *testing.T) {
 		}
 	}
 
-	err := setSnapshot(&cacheWrapperV3{testCache}, testRtdsLayerName, testCluster, ingressPrefix, egressPrefix, testClusterFaults, zap.NewNop().Sugar())
+	err := setSnapshot(&cacheWrapperV3{testCache, nil}, testRtdsLayerName, testCluster, ingressPrefix, egressPrefix, testClusterFaults, zap.NewNop().Sugar())
+	if err != nil {
+		t.Errorf("setSnapshot failed %v", err)
+	}
+
+	snapshot, err := testCache.GetSnapshot(testCluster)
+	if err != nil {
+		t.Errorf("Snapshot not found for cluster %s", testCluster)
+	}
+
+	resources := snapshot.GetResources(gcpResourceV3.RuntimeType)
+	if resources == nil {
+		t.Errorf("no resources")
+	}
+
+	resource := resources[testRtdsLayerName]
+	if resources == nil {
+		t.Errorf("no RTDS resources")
+	}
+
+	runtime := resource.(*gcpRuntimeServiceV3.Runtime)
+	fields := runtime.GetLayer().GetFields()
+	assert.Equal(t, 6, len(fields))
+	assert.EqualValues(t, 10, fields["ingress.serviceB.abort.abort_percent"].GetNumberValue())
+	assert.EqualValues(t, 404, fields["ingress.serviceB.abort.http_status"].GetNumberValue())
+	assert.EqualValues(t, 30, fields["ingress.serviceD.delay.fixed_delay_percent"].GetNumberValue())
+	assert.EqualValues(t, 100, fields["ingress.serviceD.delay.fixed_duration_ms"].GetNumberValue())
+	assert.EqualValues(t, 65, fields["egress.serviceX.abort.abort_percent"].GetNumberValue())
+	assert.EqualValues(t, 400, fields["egress.serviceX.abort.http_status"].GetNumberValue())
+}
+
+func TestSetSnapshotV3WithTTL(t *testing.T) {
+	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
+	testRtdsLayerName := "testRtdsLayerName"
+	ingressPrefix := "ingress"
+	egressPrefix := "egress"
+	testCluster := "serviceA"
+	mockExperimentList := mockGenerateFaultData(t)
+
+	var testClusterFaults []*experimentation.Experiment
+	for _, experiment := range mockExperimentList {
+		config := &serverexperimentation.TestConfig{}
+		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+		if err != nil {
+			t.Errorf("unmarshalAny failed %v", err)
+		}
+
+		target := config.GetClusterPair()
+		if target.GetUpstreamCluster() == testCluster || target.GetDownstreamCluster() == testCluster {
+			testClusterFaults = append(testClusterFaults, experiment)
+		}
+	}
+
+	err := setSnapshot(&cacheWrapperV3{testCache, nil}, testRtdsLayerName, testCluster, ingressPrefix, egressPrefix, testClusterFaults, zap.NewNop().Sugar())
 	if err != nil {
 		t.Errorf("setSnapshot failed %v", err)
 	}

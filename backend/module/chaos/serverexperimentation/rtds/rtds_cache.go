@@ -83,6 +83,7 @@ func (c *cacheWrapperV2) SetRuntimeLayer(nodeName string, layerName string, laye
 
 type cacheWrapperV3 struct {
 	gcpCacheV3.SnapshotCache
+	ttl *time.Duration
 }
 
 func (c *cacheWrapperV3) GetSnapshotVersion(key string) (string, error) {
@@ -95,13 +96,14 @@ func (c *cacheWrapperV3) GetSnapshotVersion(key string) (string, error) {
 }
 
 func (c *cacheWrapperV3) SetRuntimeLayer(nodeName string, layerName string, layer *pstruct.Struct, version string) error {
-	runtimes := []gcpTypes.Resource{
-		&gcpRuntimeServiceV3.Runtime{
+	runtimes := []gcpTypes.ResourceWithTtl{{
+		Resource: &gcpRuntimeServiceV3.Runtime{
 			Name:  layerName,
 			Layer: layer,
 		},
-	}
-	snapshot := gcpCacheV3.NewSnapshot(version, nil, nil, nil, nil, runtimes, nil)
+		Ttl: c.ttl,
+	}}
+	snapshot := gcpCacheV3.NewSnapshotWithTtls(version, nil, nil, nil, nil, runtimes, nil)
 	err := c.SetSnapshot(nodeName, snapshot)
 	if err != nil {
 		return err
@@ -116,7 +118,7 @@ func PeriodicallyRefreshCache(s *Server) {
 		for range ticker.C {
 			s.logger.Info("Refreshing RTDS cache")
 			refreshCache(s.ctx, s.storer, &cacheWrapperV2{s.snapshotCacheV2}, s.rtdsLayerName, s.ingressPrefix, s.egressPrefix, s.logger)
-			refreshCache(s.ctx, s.storer, &cacheWrapperV3{s.snapshotCacheV3}, s.rtdsLayerName, s.ingressPrefix, s.egressPrefix, s.logger)
+			refreshCache(s.ctx, s.storer, &cacheWrapperV3{s.snapshotCacheV3, s.resourceTTL}, s.rtdsLayerName, s.ingressPrefix, s.egressPrefix, s.logger)
 		}
 	}()
 }

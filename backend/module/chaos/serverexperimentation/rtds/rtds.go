@@ -59,6 +59,12 @@ type Server struct {
 	// Runtime prefix for egress faults
 	egressPrefix string
 
+	// The TTL to set for RTDS resources.
+	resourceTTL *time.Duration
+
+	// The heartbeat interval to use for TTL'd resources.
+	heartbeatInterval *time.Duration
+
 	rtdsScope tally.Scope
 
 	logger *zap.SugaredLogger
@@ -96,9 +102,6 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 	if err != nil {
 		return nil, errors.New("error parsing duration")
 	}
-	rtdsLayerName := config.GetRtdsLayerName()
-	ingressPrefix := config.GetIngressFaultRuntimePrefix()
-	egressPrefix := config.GetEgressFaultRuntimePrefix()
 
 	store, ok := service.Registry[experimentstore.Name]
 	if !ok {
@@ -110,18 +113,44 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		return nil, errors.New("service was not the correct type")
 	}
 
-	gcpCacheV3 := gcpCacheV3.NewSnapshotCache(false, ClusterHashV3{}, logger.Sugar())
+	var heartbeatInterval *time.Duration
+	var resourceTTL *time.Duration
+	if config.ResourceTtl != nil {
+		d, err := ptypes.Duration(config.ResourceTtl)
+		if err != nil {
+			return nil, err
+		}
+		resourceTTL = &d
+
+		if config.HeartbeatInterval != nil {
+			d, err := ptypes.Duration(config.HeartbeatInterval)
+			if err != nil {
+				return nil, err
+			}
+			heartbeatInterval = &d
+		}
+	}
+
+	ctx := context.Background()
+	var cacheV3 gcpCacheV3.SnapshotCache
+	if heartbeatInterval != nil {
+		cacheV3 = gcpCacheV3.NewSnapshotCacheWithHeartbeating(ctx, false, ClusterHashV3{}, logger.Sugar(), *heartbeatInterval)
+	} else {
+		cacheV3 = gcpCacheV3.NewSnapshotCache(false, ClusterHashV3{}, logger.Sugar())
+	}
 	gcpCacheV2 := gcpCacheV2.NewSnapshotCache(false, ClusterHashV2{}, logger.Sugar())
 
 	return &Server{
-		ctx:                  context.Background(),
+		ctx:                  ctx,
 		storer:               storer,
 		snapshotCacheV2:      gcpCacheV2,
-		snapshotCacheV3:      gcpCacheV3,
+		snapshotCacheV3:      cacheV3,
 		cacheRefreshInterval: cacheRefreshInterval,
-		rtdsLayerName:        rtdsLayerName,
-		ingressPrefix:        ingressPrefix,
-		egressPrefix:         egressPrefix,
+		rtdsLayerName:        config.GetRtdsLayerName(),
+		ingressPrefix:        config.GetIngressFaultRuntimePrefix(),
+		egressPrefix:         config.GetEgressFaultRuntimePrefix(),
+		resourceTTL:          resourceTTL,
+		heartbeatInterval:    heartbeatInterval,
 		rtdsScope:            scope,
 		logger:               logger.Sugar(),
 	}, nil

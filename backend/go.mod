@@ -9,7 +9,7 @@ require (
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/coreos/go-oidc/v3 v3.0.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/envoyproxy/go-control-plane v0.9.8
+	github.com/envoyproxy/go-control-plane v0.9.9-0.20201217023817-7fe139bd184a
 	github.com/envoyproxy/protoc-gen-validate v0.4.1
 	github.com/fullstorydev/grpcurl v1.8.0
 	github.com/go-git/go-billy/v5 v5.0.0
