@@ -10,7 +10,7 @@ const AppLayout: React.FC = () => {
   return (
     <Grid container direction="column" style={{flex: 1}}>
       <Header />
-      <Grid container style={{flex: 1}}>
+      <Grid container style={{flex: 1, flexWrap: "nowrap", overflow: "hidden"}}>
         <Drawer />
         <Outlet />
       </Grid>

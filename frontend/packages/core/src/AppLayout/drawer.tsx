@@ -20,13 +20,14 @@ import { routesByGrouping, sortedGroupings } from "./utils";
 
 // sidebar
 const DrawerPanel = styled(MuiDrawer)({
-  flexShrink: 0,
   width: "100px",
   ".MuiDrawer-paper": {
     top: "unset",
     width: "inherit",
     backgroundColor: "#FFFFFF",
     boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+    position: "relative",
+    display: "flex",
   },
 });
 
@@ -93,7 +94,6 @@ const Paper = styled(MuiPaper)({
   minWidth: "230px",
   border: "1px solid #E7E7EA",
   boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
-
   // sidebar submenu groupings
   ".MuiListItem-root[data-qa='workflowGroupItem']": {
     backgroundColor: "#FFFFFF",
