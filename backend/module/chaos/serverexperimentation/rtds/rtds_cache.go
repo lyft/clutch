@@ -14,7 +14,7 @@ import (
 	gcpResourceV3 "github.com/envoyproxy/go-control-plane/pkg/resource/v3"
 	"github.com/golang/protobuf/ptypes"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
-	"github.com/mitchellh/hashstructure"
+	"github.com/mitchellh/hashstructure/v2"
 	"go.uber.org/zap"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
@@ -157,7 +157,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 	// Settings snapshot with empty faults to remove the faults
 	for _, cluster := range snapshotCache.GetStatusKeys() {
 		if _, exist := clusterFaultMap[cluster]; !exist {
-			logger.Infow("Removing faults for cluster", "cluster", cluster)
+			logger.Debugw("Removing faults for cluster", "cluster", cluster)
 			err = setSnapshot(snapshotCache, rtdsLayerName, cluster, ingressPrefix, egressPrefix, []*experimentation.Experiment{}, logger)
 			if err != nil {
 				logger.Errorw("Unable to unset the fault for cluster", "cluster", cluster,
@@ -329,7 +329,7 @@ func isFaultTest(experiment *experimentation.Experiment, testConfig *serverexper
 }
 
 func computeChecksum(item interface{}) (string, error) {
-	hash, err := hashstructure.Hash(item, &hashstructure.HashOptions{TagName: "json"})
+	hash, err := hashstructure.Hash(item, hashstructure.FormatV1, &hashstructure.HashOptions{TagName: "json"})
 	if err != nil {
 		return "", err
 	}

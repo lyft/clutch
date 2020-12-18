@@ -50,6 +50,16 @@ func (m *Config) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetClientConfig()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ConfigValidationError{
+				field:  "ClientConfig",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -106,3 +116,75 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ConfigValidationError{}
+
+// Validate checks the field values on ClientConfig with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *ClientConfig) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetRetries() < 0 {
+		return ClientConfigValidationError{
+			field:  "Retries",
+			reason: "value must be greater than or equal to 0",
+		}
+	}
+
+	return nil
+}
+
+// ClientConfigValidationError is the validation error returned by
+// ClientConfig.Validate if the designated constraints aren't met.
+type ClientConfigValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ClientConfigValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ClientConfigValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ClientConfigValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ClientConfigValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ClientConfigValidationError) ErrorName() string { return "ClientConfigValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ClientConfigValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sClientConfig.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ClientConfigValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ClientConfigValidationError{}
