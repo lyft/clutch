@@ -19,14 +19,12 @@ import { useAppContext } from "../Contexts";
 import { routesByGrouping, sortedGroupings } from "./utils";
 
 // sidebar
-const drawerWidth = "100px";
-
 const DrawerPanel = styled(MuiDrawer)({
   flexShrink: 0,
-  width: `${drawerWidth}`,
+  width: "100px",
   ".MuiDrawer-paper": {
     top: "unset",
-    width: `${drawerWidth}`,
+    width: "inherit",
     backgroundColor: "#FFFFFF",
     boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
   },
@@ -57,7 +55,7 @@ const GroupListItem = styled(ListItem)({
     },
   },
   "&.Mui-selected": {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#EBEDFB",
     "&:hover": {
       backgroundColor: "#F5F6FD",
     },
@@ -82,6 +80,7 @@ const Avatar = styled(MuiAvatar)({
   width: "24px",
   color: "#FFFFFF",
   fontSize: "14px",
+  borderRadius: "4px",
 });
 
 // sidebar submenu
@@ -91,7 +90,7 @@ const Popper = styled(MuiPopper)({
 });
 
 const Paper = styled(MuiPaper)({
-  width: "230px",
+  minWidth: "230px",
   border: "1px solid #E7E7EA",
   boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
 
@@ -215,10 +214,6 @@ const Drawer: React.FC = () => {
     }
   };
 
-  const closeGroup = () => {
-    setOpenGroup("");
-  };
-
   return (
     <DrawerPanel data-qa="drawer" variant="permanent">
       {sortedGroupings(workflows).map(grouping => {
@@ -229,7 +224,7 @@ const Drawer: React.FC = () => {
             heading={grouping}
             open={openGroup === grouping}
             updateOpenGroup={updateOpenGroup}
-            closeGroup={closeGroup}
+            closeGroup={() => setOpenGroup("")}
           >
             {value.workflows.map(workflow => (
               <Link

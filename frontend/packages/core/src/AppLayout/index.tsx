@@ -8,16 +8,14 @@ import Header from "./header";
 
 const AppLayout: React.FC = () => {
   return (
-    <>
-      <Grid direction="column">
-        <Header />
-        <Box display="flex">
-          <Drawer />
-          <Outlet />
-        </Box>
-        <FeedbackButton />
+    <Grid container direction="column" style={{flex: 1}}>
+      <Header />
+      <Grid container style={{flex: 1}}>
+        <Drawer />
+        <Outlet />
       </Grid>
-    </>
+      <FeedbackButton />
+    </Grid>
   );
 };
 

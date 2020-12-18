@@ -11,7 +11,9 @@ import { useAppContext } from "./Contexts";
 
 const StyledLanding = styled.div({
   backgroundColor: "#f9f9fe",
-  height: "100%",
+  display: "flex",
+  flexDirection: "column",
+  flexGrow: 1,
   "& .welcome": {
     display: "flex",
     backgroundColor: "white",
@@ -87,7 +89,7 @@ const Landing: React.FC<{}> = () => {
               <Typography variant="h5">Trending Workflows</Typography>
             </Grid>
             {trendingWorkflows.map(workflow => (
-              <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+              <Grid key={workflow.path} item xs={12} sm={12} md={6} lg={4} xl={4}>
                 <LandingCard
                   group={workflow.group}
                   title={workflow.title}
