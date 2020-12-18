@@ -1,7 +1,6 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import {
-  Grid,
   Step as MuiStep,
   StepConnector as MuiStepConnector,
   StepLabel as MuiStepLabel,
@@ -11,11 +10,70 @@ import MuiCheckIcon from "@material-ui/icons/Check";
 import PriorityHighIcon from "@material-ui/icons/PriorityHigh";
 
 const StepContainer = styled.div({
+  margin: "0px 2px 30px 2px",
+
+  ".MuiStepLabel-label": {
+    fontWeight: 500,
+    fontSize: "14px",
+    color: "rgba(13, 16, 48, 0.38)",
+  },
+  ".MuiStepLabel-label.MuiStepLabel-active": {
+    color: "#0d1030",
+  },
   ".MuiStepper-root": {
     padding: "0",
   },
   ".MuiGrid-container": {
     padding: "16px 0",
+  },
+  ".MuiStepLabel-labelContainer": {
+    width: "unset",
+  },
+  ".MuiStepConnector-alternativeLabel": {
+    top: "10px",
+    right: "calc(50% + 8px)",
+    left: "calc(-50% + 8px)",
+    zIndex: 10,
+  },
+  ".MuiStepLabel-iconContainer": {
+    zIndex: 20,
+  },
+  ".MuiStep-root": {
+    padding: "0",
+  },
+  ".MuiStep-root:first-of-type": {
+    ".MuiStepLabel-root": {
+      alignItems: "flex-start",
+    },
+  },
+  ".MuiStep-root:nth-of-type(2)": {
+    ".MuiStepConnector-alternativeLabel": {
+      left: "calc(-100%)",
+    },
+  },
+  ".MuiStep-root:last-of-type": {
+    ".MuiStepLabel-root": {
+      alignItems: "flex-end",
+    },
+
+    ".MuiStepConnector-alternativeLabel": {
+      right: "0px",
+    },
+  },
+
+  ".MuiStepConnector-line": {
+    height: "5px",
+    border: 0,
+    backgroundColor: "#E7E7EA",
+    borderRadius: "4px",
+  },
+
+  ".MuiStepConnector-active .MuiStepConnector-line": {
+    backgroundColor: "#3548D4",
+  },
+
+  ".MuiStepConnector-completed .MuiStepConnector-line": {
+    backgroundColor: "#3548D4",
   },
 });
 
@@ -47,20 +105,6 @@ const CheckIcon = styled(MuiCheckIcon)((props: { font: string }) => ({
 }));
 
 const ClearIcon = CheckIcon.withComponent(PriorityHighIcon);
-
-const StepConnector = styled(MuiStepConnector)((props: { completed?: boolean }) => ({
-  ".MuiStepConnector-line": {
-    height: "5px",
-    background: props.completed ? "#3548D4" : "#E7E7EA",
-    border: "0",
-  },
-}));
-
-const StepLabelIcon = styled(MuiStepLabel)({
-  ".MuiStepLabel-iconContainer": {
-    padding: "0",
-  },
-});
 
 type StepIconVariant = "active" | "pending" | "success" | "failed";
 export interface StepIconProps {
@@ -106,16 +150,6 @@ const StepIcon: React.FC<StepIconProps> = ({ index, variant }) => {
   );
 };
 
-const StepLabel = styled(Grid)(
-  {
-    fontWeight: 500,
-    fontSize: "14px",
-  },
-  props => ({
-    color: props["data-active"] ? "#0D1030" : "rgba(13, 16, 48, 0.38)",
-  })
-);
-
 export interface StepProps {
   label: string;
   error?: boolean;
@@ -130,7 +164,7 @@ export interface StepperProps {
 
 const Stepper = ({ activeStep, children }: StepperProps) => (
   <StepContainer>
-    <MuiStepper activeStep={activeStep + 1} connector={<StepConnector />}>
+    <MuiStepper activeStep={activeStep} connector={<MuiStepConnector />} alternativeLabel>
       {React.Children.map(children, (step: any, idx: number) => {
         const stepProps = {
           index: idx + 1,
@@ -143,19 +177,14 @@ const Stepper = ({ activeStep, children }: StepperProps) => (
         }
 
         return (
-          <MuiStep key={step.label} style={{ padding: "0" }}>
-            <StepLabelIcon icon={<StepIcon {...stepProps} />} />
+          <MuiStep key={step.props.label}>
+            <MuiStepLabel StepIconComponent={() => <StepIcon {...stepProps} />}>
+              {step.props.label ?? `Step ${idx + 1}`}
+            </MuiStepLabel>
           </MuiStep>
         );
       })}
     </MuiStepper>
-    <Grid container justify="space-between">
-      {React.Children.map(children, (step: any, idx: number) => (
-        <StepLabel item data-active={idx === activeStep}>
-          {step.props.label}
-        </StepLabel>
-      ))}
-    </Grid>
   </StepContainer>
 );
 

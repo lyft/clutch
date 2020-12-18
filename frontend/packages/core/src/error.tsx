@@ -40,11 +40,6 @@ const Error: React.FC<ErrorProps> = ({ message, onRetry }) => {
   );
 };
 
-const Collapse = styled(MuiCollapse)`
-  margin-top: 10px;
-  width: 45%;
-`;
-
 const ErrorText = styled(Typography)`
   color: rgb(97, 26, 21);
   font-size: 0.875rem;
@@ -92,7 +87,7 @@ const CompressedError: React.FC<CompressedErrorProps> = ({ title, message }) => 
 
   const breakpoint = findBreakpoint(errorMsg);
   return (
-    <Collapse in={open}>
+    <MuiCollapse in={open}>
       <Alert severity="error">
         <AlertTitle>{title || "Error"}</AlertTitle>
         {(errorMsg?.length || 0) > BREAKPOINT_LENGTH ? (
@@ -112,7 +107,7 @@ const CompressedError: React.FC<CompressedErrorProps> = ({ title, message }) => 
           errorMsg
         )}
       </Alert>
-    </Collapse>
+    </MuiCollapse>
   );
 };
 

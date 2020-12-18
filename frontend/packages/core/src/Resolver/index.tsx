@@ -1,5 +1,4 @@
 import React from "react";
-import { useForm } from "react-hook-form";
 import styled from "@emotion/styled";
 import _ from "lodash";
 
@@ -14,17 +13,11 @@ import { QueryResolver, SchemaResolver } from "./input";
 import type { DispatchAction } from "./state";
 import { ResolverAction, useResolverState } from "./state";
 
-const Form = styled.form({
-  alignItems: "center",
-  display: "flex",
-  flexDirection: "column",
-});
-
 const SchemaLabel = styled.div({
   alignSelf: "flex-start",
   fontSize: "20px",
   fontWeight: 700,
-  paddingBottom: "8px",
+  marginBottom: "8px",
 });
 
 const loadSchemas = (type: string, dispatch: React.Dispatch<DispatchAction>) => {
@@ -67,8 +60,6 @@ const Resolver: React.FC<ResolverProps> = ({
 
   React.useEffect(() => loadSchemas(type, dispatch), []);
 
-  const [queryData, setQueryData] = React.useState({ query: "" });
-
   const submitHandler = data => {
     // Move to loading state.
     dispatch({ type: ResolverAction.RESOLVING });
@@ -93,16 +84,6 @@ const Resolver: React.FC<ResolverProps> = ({
     );
   };
 
-  const queryValidation = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onSubmit",
-    shouldFocusError: false,
-  });
-
-  const queryOnChange = e => {
-    setQueryData({ query: e.target.value });
-  };
-
   return (
     <Loadable isLoading={state.schemasLoading}>
       {state.schemaFetchError !== "" ? (
@@ -111,16 +92,10 @@ const Resolver: React.FC<ResolverProps> = ({
         <Loadable variant="overlay" isLoading={state.resolverLoading}>
           <CompressedError title="Error" message={state.resolverFetchError} />
           {(variant === "dual" || variant === "query") && (
-            <Form
-              onSubmit={queryValidation.handleSubmit(() => submitHandler(queryData))}
-              noValidate
-            >
-              <QueryResolver
-                schemas={state.searchableSchemas}
-                onChange={queryOnChange}
-                validation={queryValidation}
-              />
-            </Form>
+            <>
+              <SchemaLabel>Search</SchemaLabel>
+              <QueryResolver schemas={state.searchableSchemas} submitHandler={submitHandler} />
+            </>
           )}
           {variant === "dual" && <HorizontalRule>OR</HorizontalRule>}
           <SchemaLabel>Advanced Search</SchemaLabel>

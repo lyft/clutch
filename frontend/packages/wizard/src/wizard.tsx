@@ -3,7 +3,7 @@ import { Button, ButtonGroup, Step, Stepper, Warning, WizardContext } from "@clu
 import type { ManagerLayout } from "@clutch-sh/data-layout";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
 import styled from "@emotion/styled";
-import { Container as MuiContainer, Grid, Typography } from "@material-ui/core";
+import { Container as MuiContainer, Grid, Paper as MuiPaper, Typography } from "@material-ui/core";
 
 import { useWizardState, WizardAction } from "./state";
 import type { WizardStepProps } from "./step";
@@ -35,6 +35,11 @@ interface WizardStepData {
 const Container = styled(MuiContainer)({
   padding: "32px",
   maxWidth: "800px",
+});
+
+const Paper = styled(MuiPaper)({
+  boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+  padding: "32px",
 });
 
 const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
@@ -123,7 +128,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
               return <Step key={child.props.name} label={child.props.name} error={hasError} />;
             })}
           </Stepper>
-          {steps[state.activeStep]}
+          <Paper elevation={0}>{steps[state.activeStep]}</Paper>
         </Grid>
       </Grid>
       {globalWarnings.map(error => (
