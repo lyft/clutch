@@ -76,7 +76,7 @@ func createExperimentsTests() ([]experimentTest, error) {
 					sql: `INSERT INTO experiment_config (id, details) VALUES ($1, $2)`,
 					args: []driver.Value{
 						sqlmock.AnyArg(),
-						`{"@type":"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig","fault":{"abortFault":{"percentage":{"percentage"":100}}, "abortStatus":{"httpStatusCode":401}},"faultTargeting": {"enforcer":{"upstreamEnforcing":{"upstreamType":{"upstreamCluster":{"name":"uCluster"}}, "downstreamType":{"downstreamCluster":{"name":"dCluster"}}}}}}`,
+						`{"@type":"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig","faultTargeting":{"upstreamEnforcing":{"upstreamCluster":{"name":"upstreamCluster"},"downstreamCluster":{"name":"downstreamCluster"}}},"abortFault":{"percentage":{"percentage":100},"abortStatus":{"httpStatusCode":401}}}`,
 					},
 				},
 				{
@@ -163,7 +163,7 @@ func TestGetExperimentsUnmarshalsExperimentConfiguration(t *testing.T) {
 	rows := sqlmock.NewRows(experimentColumns)
 	rows.AddRow([]driver.Value{
 		1234,
-		`{"@type":"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig","fault":{"abortFault":{"percentage":{"percentage":100}}, "abortStatus":{"httpStatusCode":401}},"faultTargeting": {"enforcer":{"upstreamEnforcing":{"upstreamType":{"upstreamCluster":{"name":"uCluster"}}, "downstreamType":{"downstreamCluster":{"name":"dCluster"}}}}}}`,
+		`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig","faultTargeting":{"upstreamEnforcing":{"upstreamCluster":{"name":"upstreamCluster"},"downstreamCluster":{"name":"downstreamCluster"}}},"abortFault":{"percentage":{"percentage":100},"abortStatus":{"httpStatusCode":401}}}`,
 	}...)
 	expected.WillReturnRows(rows)
 
@@ -197,11 +197,11 @@ func TestGetExperimentsFailsIfItReadsExperimentWithMalformedConfiguration(t *tes
 	rowsData := [][]driver.Value{
 		{
 			1,
-			`{"@type":"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig","fault":{"abortFault":{"percentage":{"percentage":100}}, "abortStatus":{"httpStatusCode":401}},"faultTargeting": {"enforcer":{"upstreamEnforcing":{"upstreamType":{"upstreamCluster":{"name":"uCluster"}}, "downstreamType":{"downstreamCluster":{"name":"dCluster"}}}}}}`,
+			`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig","faultTargeting":{"upstreamEnforcing":{"upstreamCluster":{"name":"upstreamCluster"},"downstreamCluster":{"name":"downstreamCluster"}}},"abortFault":{"percentage":{"percentage":100},"abortStatus":{"httpStatusCode":401}}}`,
 		},
 		{
 			2,
-			`{"@type": "malformed_foo","fault":{"abortFault":{"percentage":{"percentage":100}}, "abortStatus":{"httpStatusCode":401}},"faultTargeting": {"enforcer":{"upstreamEnforcing":{"upstreamType":{"upstreamCluster":{"name":"uCluster"}}, "downstreamType":{"downstreamCluster":{"name":"dCluster"}}}}}}`,
+			`{"@type": "malformed_foo","faultTargeting":{"upstreamEnforcing":{"upstreamCluster":{"name":"upstreamCluster"},"downstreamCluster":{"name":"downstreamCluster"}}},"abortFault":{"percentage":{"percentage":100},"abortStatus":{"httpStatusCode":401}}}`,
 		},
 	}
 
