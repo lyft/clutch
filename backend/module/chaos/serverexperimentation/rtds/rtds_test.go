@@ -127,7 +127,8 @@ func TestResourceTTL(t *testing.T) {
 	a, err := ptypes.MarshalAny(&config)
 	assert.NoError(t, err)
 
-	testServer.storer.CreateExperiment(context.Background(), a, &now, &now)
+	_, err = testServer.storer.CreateExperiment(context.Background(), a, &now, &now)
+	assert.NoError(t, err)
 
 	// First we look at a stream for a cluster that has an active fault. This should result in a TTL'd
 	// resource that sends heartbeats.
@@ -268,6 +269,7 @@ func (t *testServer) stop() {
 func (t *testServer) clientConn() (*grpc.ClientConn, error) {
 	return grpc.Dial("localhost:9000", grpc.WithInsecure())
 }
+
 // Helper class for testing calls over a single RTDS stream.
 type v3StreamWrapper struct {
 	stream  gcpRuntimeServiceV3.RuntimeDiscoveryService_StreamRuntimeClient
