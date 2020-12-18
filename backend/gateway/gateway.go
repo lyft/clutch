@@ -135,17 +135,21 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		resolver.Registry[resolverCfg.Name] = res
 	}
 
-	accesslog, err := accesslog.New(cfg.Gateway.Accesslog, logger, scope)
-	if err != nil {
-		logger.Fatal("could not create timeout interceptor", zap.Error(err))
+	var interceptors []grpc.UnaryServerInterceptor
+	if cfg.Gateway.Accesslog != nil {
+		accesslog, err := accesslog.New(cfg.Gateway.Accesslog, logger, scope)
+		if err != nil {
+			logger.Fatal("could not create accesslog config", zap.Error(err))
+		}
+		interceptors = append(interceptors, accesslog.UnaryInterceptor())
 	}
 
 	timeoutInterceptor, err := timeouts.New(cfg.Gateway.Timeouts, logger, scope)
 	if err != nil {
 		logger.Fatal("could not create timeout interceptor", zap.Error(err))
 	}
+	interceptors = append(interceptors, timeoutInterceptor.UnaryInterceptor())
 
-	interceptors := []grpc.UnaryServerInterceptor{accesslog.UnaryInterceptor(), timeoutInterceptor.UnaryInterceptor()}
 	for _, mCfg := range cfg.Gateway.Middleware {
 		logger := logger.With(zap.String("moduleName", mCfg.Name))
 
