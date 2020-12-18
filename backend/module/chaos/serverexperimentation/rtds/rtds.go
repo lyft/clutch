@@ -62,9 +62,6 @@ type Server struct {
 	// The TTL to set for RTDS resources.
 	resourceTTL *time.Duration
 
-	// The heartbeat interval to use for TTL'd resources.
-	heartbeatInterval *time.Duration
-
 	rtdsScope tally.Scope
 
 	logger *zap.SugaredLogger
@@ -150,7 +147,6 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		ingressPrefix:        config.GetIngressFaultRuntimePrefix(),
 		egressPrefix:         config.GetEgressFaultRuntimePrefix(),
 		resourceTTL:          resourceTTL,
-		heartbeatInterval:    heartbeatInterval,
 		rtdsScope:            scope,
 		logger:               logger.Sugar(),
 	}, nil
