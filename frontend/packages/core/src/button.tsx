@@ -104,7 +104,7 @@ export interface ButtonGroupProps {
   justify?: GridJustification;
 }
 
-const ButtonGroup = ({ children, justify = "center" }: ButtonGroupProps) => (
+const ButtonGroup = ({ children, justify = "flex-end" }: ButtonGroupProps) => (
   <ButtonGroupContainer container justify={justify}>
     {children}
   </ButtonGroupContainer>

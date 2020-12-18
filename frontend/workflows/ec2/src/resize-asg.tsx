@@ -66,7 +66,7 @@ const GroupDetails: React.FC<WizardChild> = () => {
           { name: "Availability Zone", value: group.zones },
         ]}
       />
-      <ButtonGroup justify="flex-end">
+      <ButtonGroup>
         <Button text="Back" variant="neutral" onClick={onBack} />
         <Button text="Resize" variant="destructive" onClick={onSubmit} />
       </ButtonGroup>
