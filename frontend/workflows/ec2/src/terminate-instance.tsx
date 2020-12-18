@@ -61,7 +61,7 @@ const InstanceDetails: React.FC<WizardChild> = () => {
           </AccordionDetails>
         </Accordion>
       )}
-      <ButtonGroup justify="flex-end">
+      <ButtonGroup>
         <Button text="Back" variant="neutral" onClick={onBack} />
         <Button text="Terminate" variant="destructive" onClick={onSubmit} />
       </ButtonGroup>

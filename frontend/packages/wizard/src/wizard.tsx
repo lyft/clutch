@@ -98,7 +98,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
         </DataLayoutContext.Provider>
         <Grid container justify="center">
           {state.activeStep === lastStepIndex && !isLoading && isMultistep && (
-            <ButtonGroup justify="flex-end">
+            <ButtonGroup>
               <Button text="Start Over" onClick={() => dispatch(WizardAction.RESET)} />
             </ButtonGroup>
           )}
