@@ -27,141 +27,6 @@ import (
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
-type testServer struct {
-	registrar *moduletest.TestRegistrar
-	scope     tally.TestScope
-	storer    *simpleStorer
-}
-
-func newTestServer(t *testing.T, ttl bool) testServer {
-	t.Helper()
-	server := testServer{}
-
-	server.storer = &simpleStorer{}
-	service.Registry[experimentstore.Name] = server.storer
-
-	// Set up a test server listening to :9000.
-	config := &rtdsconfigv1.Config{
-		RtdsLayerName:             "tests",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
-		IngressFaultRuntimePrefix: "ingress",
-		EgressFaultRuntimePrefix:  "egress",
-	}
-
-	if ttl {
-		config.ResourceTtl = &durationpb.Duration{
-			Seconds: 1,
-		}
-		config.HeartbeatInterval = &durationpb.Duration{
-			Seconds: 1,
-		}
-	}
-
-	any, err := ptypes.MarshalAny(config)
-	assert.NoError(t, err)
-	server.scope = tally.NewTestScope("test", nil)
-
-	logger, err := zap.NewDevelopment()
-	assert.NoError(t, err)
-
-	m, err := New(any, logger, server.scope)
-	assert.NoError(t, err)
-
-	server.registrar = moduletest.NewRegisterChecker()
-
-	err = m.Register(server.registrar)
-	assert.NoError(t, err)
-
-	l, err := net.Listen("tcp", "localhost:9000")
-	assert.NoError(t, err)
-
-	go func() {
-		err := server.registrar.GRPCServer().Serve(l)
-		assert.NoError(t, err)
-	}()
-
-	return server
-}
-
-func (t *testServer) stop() {
-	t.registrar.GRPCServer().Stop()
-}
-
-func (t *testServer) clientConn() (*grpc.ClientConn, error) {
-	return grpc.Dial("localhost:9000", grpc.WithInsecure())
-}
-
-type v3StreamWrapper struct {
-	stream  gcpRuntimeServiceV3.RuntimeDiscoveryService_StreamRuntimeClient
-	layer   string
-	cluster string
-}
-
-func newV3Stream(ctx context.Context, layer string, cluster string, t testServer) (*v3StreamWrapper, error) {
-	conn, err := t.clientConn()
-	if err != nil {
-		return nil, err
-	}
-
-	client := gcpRuntimeServiceV3.NewRuntimeDiscoveryServiceClient(conn)
-	s, err := client.StreamRuntime(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	return &v3StreamWrapper{stream: s, layer: layer, cluster: cluster}, err
-}
-
-func (v *v3StreamWrapper) close(t *testing.T) {
-	assert.NoError(t, v.stream.CloseSend())
-}
-
-func (v *v3StreamWrapper) sendV3RequestWithoutResponse(version string, nonce string) error {
-	err := v.stream.Send(&gcpDiscoveryV3.DiscoveryRequest{
-		Node:          &envoy_config_core_v3.Node{Cluster: v.cluster},
-		ResourceNames: []string{v.layer},
-	})
-	if err != nil {
-		return err
-	}
-
-	responseCh := make(chan error)
-	go func() {
-		_, err := v.stream.Recv()
-		responseCh <- err
-	}()
-
-	select {
-	case err := <-responseCh:
-		if err == nil {
-			return errors.New("unexpected response")
-		}
-		return err
-	case <-time.After(2 * time.Second):
-	}
-
-	return nil
-}
-
-func (v *v3StreamWrapper) sendV3RequestAndAwaitResponse(version string, nonce string) (*gcpDiscoveryV3.DiscoveryResponse, error) {
-	err := v.stream.Send(&gcpDiscoveryV3.DiscoveryRequest{
-		VersionInfo:   version,
-		ResponseNonce: nonce,
-		Node:          &envoy_config_core_v3.Node{Cluster: v.cluster},
-		ResourceNames: []string{v.layer},
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	response, err := v.stream.Recv()
-	if err != nil {
-		return nil, err
-	}
-
-	return response, nil
-}
-
 func TestServerStats(t *testing.T) {
 	testServer := newTestServer(t, false)
 	defer testServer.stop()
@@ -220,31 +85,6 @@ func TestServerStats(t *testing.T) {
 	// Async verification here since it appears that we don't get a response back in this case, so we
 	// aren't able to synchronize on the response.
 	awaitCounterEquals(t, testServer.scope, "test.v2.totalErrorsReceived+", 1)
-}
-
-func awaitCounterEquals(t *testing.T, scope tally.TestScope, counter string, value int64) {
-	t.Helper()
-
-	timeout := time.NewTimer(time.Second)
-	for {
-		v := int64(0)
-		c, ok := scope.Snapshot().Counters()[counter]
-		if ok {
-			v = c.Value()
-		}
-
-		if value == v {
-			return
-		}
-
-		select {
-		case <-timeout.C:
-			t.Errorf("timed out waiting for %s to become %d, last value %d", counter, value, v)
-			return
-		case <-time.After(100 * time.Millisecond):
-			break
-		}
-	}
 }
 
 // Verifies that TTL and heartbeating is done when configured to do so.
@@ -337,4 +177,168 @@ func TestResourceTTL(t *testing.T) {
 	assert.Empty(t, runtime.Layer.Fields)
 
 	assert.NoError(t, noFaultStream.sendV3RequestWithoutResponse(r.VersionInfo, r.Nonce))
+}
+
+func awaitCounterEquals(t *testing.T, scope tally.TestScope, counter string, value int64) {
+	t.Helper()
+
+	timeout := time.NewTimer(time.Second)
+	for {
+		v := int64(0)
+		c, ok := scope.Snapshot().Counters()[counter]
+		if ok {
+			v = c.Value()
+		}
+
+		if value == v {
+			return
+		}
+
+		select {
+		case <-timeout.C:
+			t.Errorf("timed out waiting for %s to become %d, last value %d", counter, value, v)
+			return
+		case <-time.After(100 * time.Millisecond):
+			break
+		}
+	}
+}
+
+// Helper class for initializing a test RTDS server.
+type testServer struct {
+	registrar *moduletest.TestRegistrar
+	scope     tally.TestScope
+	storer    *simpleStorer
+}
+
+func newTestServer(t *testing.T, ttl bool) testServer {
+	t.Helper()
+	server := testServer{}
+
+	server.storer = &simpleStorer{}
+	service.Registry[experimentstore.Name] = server.storer
+
+	// Set up a test server listening to :9000.
+	config := &rtdsconfigv1.Config{
+		RtdsLayerName:             "tests",
+		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		IngressFaultRuntimePrefix: "ingress",
+		EgressFaultRuntimePrefix:  "egress",
+	}
+
+	if ttl {
+		config.ResourceTtl = &durationpb.Duration{
+			Seconds: 1,
+		}
+		config.HeartbeatInterval = &durationpb.Duration{
+			Seconds: 1,
+		}
+	}
+
+	any, err := ptypes.MarshalAny(config)
+	assert.NoError(t, err)
+	server.scope = tally.NewTestScope("test", nil)
+
+	logger, err := zap.NewDevelopment()
+	assert.NoError(t, err)
+
+	m, err := New(any, logger, server.scope)
+	assert.NoError(t, err)
+
+	server.registrar = moduletest.NewRegisterChecker()
+
+	err = m.Register(server.registrar)
+	assert.NoError(t, err)
+
+	l, err := net.Listen("tcp", "localhost:9000")
+	assert.NoError(t, err)
+
+	go func() {
+		err := server.registrar.GRPCServer().Serve(l)
+		assert.NoError(t, err)
+	}()
+
+	return server
+}
+
+func (t *testServer) stop() {
+	t.registrar.GRPCServer().Stop()
+}
+
+func (t *testServer) clientConn() (*grpc.ClientConn, error) {
+	return grpc.Dial("localhost:9000", grpc.WithInsecure())
+}
+// Helper class for testing calls over a single RTDS stream.
+type v3StreamWrapper struct {
+	stream  gcpRuntimeServiceV3.RuntimeDiscoveryService_StreamRuntimeClient
+	layer   string
+	cluster string
+}
+
+func newV3Stream(ctx context.Context, layer string, cluster string, t testServer) (*v3StreamWrapper, error) {
+	conn, err := t.clientConn()
+	if err != nil {
+		return nil, err
+	}
+
+	client := gcpRuntimeServiceV3.NewRuntimeDiscoveryServiceClient(conn)
+	s, err := client.StreamRuntime(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return &v3StreamWrapper{stream: s, layer: layer, cluster: cluster}, err
+}
+
+func (v *v3StreamWrapper) close(t *testing.T) {
+	assert.NoError(t, v.stream.CloseSend())
+}
+
+func (v *v3StreamWrapper) sendV3RequestWithoutResponse(version string, nonce string) error {
+	err := v.stream.Send(&gcpDiscoveryV3.DiscoveryRequest{
+		Node:          &envoy_config_core_v3.Node{Cluster: v.cluster},
+		ResourceNames: []string{v.layer},
+	})
+	if err != nil {
+		return err
+	}
+
+	// Capture the error if we get one, otherwise we pass nil over the channel which signals a response.
+	// TODO(snowp): Output the response during test failures if necessary.
+	responseCh := make(chan error)
+	go func() {
+		_, err := v.stream.Recv()
+		responseCh <- err
+	}()
+
+	// Wait up to two seconds for a response.
+	select {
+	case err := <-responseCh:
+		if err == nil {
+			return errors.New("unexpected response")
+		}
+		return err
+	case <-time.After(2 * time.Second):
+	}
+
+	return nil
+}
+
+func (v *v3StreamWrapper) sendV3RequestAndAwaitResponse(version string, nonce string) (*gcpDiscoveryV3.DiscoveryResponse, error) {
+	err := v.stream.Send(&gcpDiscoveryV3.DiscoveryRequest{
+		VersionInfo:   version,
+		ResponseNonce: nonce,
+		Node:          &envoy_config_core_v3.Node{Cluster: v.cluster},
+		ResourceNames: []string{v.layer},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	response, err := v.stream.Recv()
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
