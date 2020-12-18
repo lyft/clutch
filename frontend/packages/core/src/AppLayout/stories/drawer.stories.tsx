@@ -1,19 +1,19 @@
 import * as React from "react";
 import { MemoryRouter } from "react-router";
+import { Grid } from "@material-ui/core";
 import type { Meta } from "@storybook/react";
 
-import ResizeAutoscalingGroup from "../../../../../workflows/ec2/src/resize-asg";
-import TerminateInstance from "../../../../../workflows/ec2/src/terminate-instance";
 import { ApplicationContext } from "../../Contexts/app-context";
+import Drawer from "../drawer";
 import Header from "../header";
 
 export default {
-  title: "Core/AppLayout/Header",
-  component: Header,
+  title: "Core/AppLayout/Drawer",
+  component: Drawer,
   decorators: [
-    () => (
+    StoryFn => (
       <MemoryRouter>
-        <Header />
+        <StoryFn />
       </MemoryRouter>
     ),
     StoryFn => {
@@ -28,7 +28,7 @@ export default {
                 path: "ec2",
                 routes: [
                   {
-                    component: TerminateInstance,
+                    component: () => <></>,
                     componentProps: { resolverType: "clutch.aws.ec2.v1.Instance" },
                     description: "Terminate an EC2 instance.",
                     displayName: "Terminate Instance",
@@ -37,7 +37,7 @@ export default {
                     trending: true,
                   },
                   {
-                    component: ResizeAutoscalingGroup,
+                    component: () => <></>,
                     componentProps: { resolverType: "clutch.aws.ec2.v1.AutoscalingGroup" },
                     description: "Resize an autoscaling group.",
                     displayName: "Resize Autoscaling Group",
@@ -59,4 +59,11 @@ export default {
   },
 } as Meta;
 
-export const Primary: React.FC<{}> = () => <Header />;
+export const Primary = () => <Drawer />;
+
+export const WithHeader = () => (
+  <Grid direction="column">
+    <Header />
+    <Drawer />
+  </Grid>
+);

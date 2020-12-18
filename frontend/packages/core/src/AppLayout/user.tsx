@@ -49,7 +49,7 @@ const Paper = styled(MuiPaper)({
 const Popper = styled(MuiPopper)({
   padding: "0 12px",
   marginLeft: "12px",
-  zIndex: 1101,
+  zIndex: 1201,
 });
 
 const MenuList = styled(MuiMenuList)({
