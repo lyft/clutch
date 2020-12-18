@@ -132,7 +132,7 @@ const CustomCloseIcon: React.FC = () => {
 const Input = (params: AutocompleteRenderInputParams): React.ReactNode => {
   const searchRef = React.useRef();
   const handleKeyPress = (event: KeyboardEvent) => {
-    if (searchRef.current !== undefined) {
+      if (searchRef.current && searchRef.current !== undefined) {
       if (event.key === hotKey && (event.target as Node).nodeName !== "INPUT") {
         // @ts-ignore
         searchRef.current.focus();
