@@ -1,21 +1,31 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { Box, Grid } from "@material-ui/core";
+import styled from "@emotion/styled";
+import { Grid as MuiGrid } from "@material-ui/core";
 
 import Drawer from "./drawer";
 import FeedbackButton from "./feedback";
 import Header from "./header";
 
+const AppGrid = styled(MuiGrid)({
+  flex: 1,
+});
+
+const ContentGrid = styled(MuiGrid)({
+  flex: 1,
+  overflow: "hidden",
+});
+
 const AppLayout: React.FC = () => {
   return (
-    <Grid container direction="column" style={{flex: 1}}>
+    <AppGrid container direction="column">
       <Header />
-      <Grid container style={{flex: 1, flexWrap: "nowrap", overflow: "hidden"}}>
+      <ContentGrid container wrap="nowrap">
         <Drawer />
         <Outlet />
-      </Grid>
+      </ContentGrid>
       <FeedbackButton />
-    </Grid>
+    </AppGrid>
   );
 };
 
