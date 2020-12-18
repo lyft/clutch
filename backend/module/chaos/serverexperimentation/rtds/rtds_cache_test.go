@@ -233,14 +233,15 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
-		config := &serverexperimentation.TestConfig{}
+		config := &serverexperimentation.HTTPFaultConfig{}
 		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
 		if err != nil {
 			t.Errorf("unmarshalAny failed %v", err)
 		}
 
-		target := config.GetClusterPair()
-		if target.GetUpstreamCluster() == testCluster || target.GetDownstreamCluster() == testCluster {
+		upstream, downstream, err := getClusterPair(config)
+		assert.NoError(t, err)
+		if upstream == testCluster || downstream == testCluster {
 			testClusterFaults = append(testClusterFaults, experiment)
 		}
 	}
