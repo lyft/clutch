@@ -31,7 +31,7 @@ const StyledTab = styled(MuiTab)({
   },
   "&:active": {
     color: "rgba(13, 16, 48, 0.6)",
-    backgroundColor: "rgba(219, 219, 224, 1)",
+    backgroundColor: "#DBDBE0",
   },
 });
 
