@@ -12,17 +12,16 @@ export default {
   },
 } as Meta;
 
-const Template = ({ tabCount, value, ...props }: TabsProps & { tabCount: number }) => {
-  const [selectedValue, setSelectedValue] = React.useState(value - 1);
-  return (
-    <Tabs value={selectedValue} onChange={(_, v) => setSelectedValue(v)} {...props}>
-      {[...Array(tabCount)].map((_, index: number) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <Tab key={index} label={`Tab ${index + 1}`} value={index} />
-      ))}
-    </Tabs>
-  );
-};
+const Template = ({ tabCount, value }: TabsProps & { tabCount: number }) => (
+  <Tabs value={value - 1}>
+    {[...Array(tabCount)].map((_, index: number) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <Tab key={index} label={`Tab ${index + 1}`} value={index}>
+        <div>Tab {index + 1} Content</div>
+      </Tab>
+    ))}
+  </Tabs>
+);
 
 export const Primary = Template.bind({});
 Primary.args = {
