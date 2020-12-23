@@ -151,6 +151,12 @@ const Group: React.FC<GroupProps> = ({
   if (React.Children.count(children) === 0) {
     return null;
   }
+  // TODO (dschaller): revisit how we handle long groups once we have designs.
+  // n.b. this is a stop-gap solution to prevent long groups from looking unreadable.
+  let formattedHeading = heading;
+  if (heading.length > 11) {
+    formattedHeading = `${heading.substring(0, 10)}...`;
+  }
 
   return (
     <GroupList data-qa="workflowGroup">
@@ -161,11 +167,11 @@ const Group: React.FC<GroupProps> = ({
         aria-controls={open ? "workflow-options" : undefined}
         aria-haspopup="true"
         onClick={() => {
-          updateOpenGroup(heading);
+          updateOpenGroup(formattedHeading);
         }}
       >
-        <Avatar>{heading.charAt(0)}</Avatar>
-        <GroupHeading align="center">{heading}</GroupHeading>
+        <Avatar>{formattedHeading.charAt(0)}</Avatar>
+        <GroupHeading align="center">{formattedHeading}</GroupHeading>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Popper open={open} anchorEl={anchorRef.current} transition placement="right-start">
             <Paper>
