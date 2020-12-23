@@ -1,7 +1,8 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import type { TabProps as MuiTabProps, TabsProps as MuiTabsProps } from "@material-ui/core";
-import { Tab as MuiTab, Tabs as MuiTabs } from "@material-ui/core";
+import { Tab as MuiTab } from "@material-ui/core";
+import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 
 const StyledTab = styled(MuiTab)({
   minWidth: "111px",
@@ -10,7 +11,9 @@ const StyledTab = styled(MuiTab)({
   color: "rgba(13, 16, 48, 0.6)",
   borderBottom: "3px solid #E7E7EA",
   fontSize: "14px",
+  fontWeight: "bold",
   opacity: "1",
+  textTransform: "none",
   "&.Mui-selected": {
     backgroundColor: "unset",
     color: "#3548D4",
@@ -35,35 +38,49 @@ const StyledTab = styled(MuiTab)({
   },
 });
 
-const StyledTabs = styled(MuiTabs)({
+const StyledTabs = styled(TabList)({
   ".MuiTabs-indicator": {
     height: "4px",
     backgroundColor: "#3548D4",
   },
 });
 
-export interface TabProps extends Pick<MuiTabProps, "label" | "selected" | "value" | "onClick"> {}
+export interface TabProps extends Pick<MuiTabProps, "label" | "selected" | "value" | "onClick"> {
+  children?: React.ReactNode;
+}
 
 export const Tab = ({ onClick, ...props }: TabProps) => {
+  const tabProps = { ...props };
+  delete tabProps.children;
   const onClickMiddleware = (e: any) => {
     e.currentTarget.blur();
     if (onClick) {
       onClick(e);
     }
   };
-  return <StyledTab color="primary" onClick={onClickMiddleware} {...props} />;
+  return <StyledTab color="primary" onClick={onClickMiddleware} {...tabProps} />;
 };
 
 export interface TabsProps extends Pick<MuiTabsProps, "value"> {
   children: React.ReactElement<TabProps> | React.ReactElement<TabProps>[];
-  // n.b. we explicitly override this prop due to https://github.com/mui-org/material-ui/issues/17454
-  onChange:
-    | ((event: React.ChangeEvent<{}>, value: any) => void)
-    | ((event: React.FormEvent<HTMLButtonElement>) => void);
 }
 
-export const Tabs = ({ children, ...props }: TabsProps) => (
-  <StyledTabs {...props}>{children}</StyledTabs>
-);
+export const Tabs = ({ children, value }: TabsProps) => {
+  const [selectedIndex, setSelectedIndex] = React.useState((value || 0).toString());
+  const onChangeMiddleware = (_, v: string) => {
+    setSelectedIndex(v);
+  };
 
-export default Tab;
+  return (
+    <TabContext value={selectedIndex}>
+      <StyledTabs onChange={onChangeMiddleware}>
+        {React.Children.map(children, (child, index) =>
+          React.cloneElement(child, { value: index.toString() })
+        )}
+      </StyledTabs>
+      {React.Children.map(children, (tab, index) => (
+        <TabPanel value={index.toString()}>{tab.props?.children}</TabPanel>
+      ))}
+    </TabContext>
+  );
+};
