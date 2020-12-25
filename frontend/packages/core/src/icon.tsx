@@ -1,9 +1,9 @@
 import React from "react";
+import styled from "@emotion/styled";
 import { Grid, GridJustification } from "@material-ui/core";
 import FiberManualRecordTwoToneIcon from "@material-ui/icons/FiberManualRecordTwoTone";
-import styled from "styled-components";
 
-const StatusIcon = styled(FiberManualRecordTwoToneIcon)`
+const StyledStatusIcon = styled(FiberManualRecordTwoToneIcon)`
   ${({ ...props }) => `
     color: ${props["data-color"]}
   `}
@@ -14,7 +14,7 @@ export interface StatusProps {
   align?: "left" | "center" | "right";
 }
 
-const Status: React.FC<StatusProps> = ({
+export const StatusIcon: React.FC<StatusProps> = ({
   children,
   variant = "neutral",
   align = "left",
@@ -30,21 +30,19 @@ const Status: React.FC<StatusProps> = ({
     <Grid container alignItems="center" justify={justifyContent} {...props}>
       {variant === "neutral" && (
         <>
-          <StatusIcon data-color="darkgray" /> {children}
+          <StyledStatusIcon data-color="darkgray" /> {children}
         </>
       )}
       {variant === "success" && (
         <>
-          <StatusIcon data-color="limegreen" /> {children}
+          <StyledStatusIcon data-color="limegreen" /> {children}
         </>
       )}
       {variant === "failure" && (
         <>
-          <StatusIcon data-color="red" /> {children}
+          <StyledStatusIcon data-color="red" /> {children}
         </>
       )}
     </Grid>
   );
 };
-
-export { Status };
