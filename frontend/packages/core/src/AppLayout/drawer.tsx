@@ -167,7 +167,7 @@ const Group: React.FC<GroupProps> = ({
         aria-controls={open ? "workflow-options" : undefined}
         aria-haspopup="true"
         onClick={() => {
-          updateOpenGroup(formattedHeading);
+          updateOpenGroup(heading);
         }}
       >
         <Avatar>{formattedHeading.charAt(0)}</Avatar>
