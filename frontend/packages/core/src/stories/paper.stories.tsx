@@ -9,5 +9,7 @@ export default {
 } as Meta;
 
 export const Primary = () => (
-  <Paper><div>Some text in paper</div></Paper>
+  <Paper>
+    <div>Some text in paper</div>
+  </Paper>
 );

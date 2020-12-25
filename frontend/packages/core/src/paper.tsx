@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import type { PaperProps as MuiPaperProps } from "@material-ui/core";
 import { Paper as MuiPaper } from "@material-ui/core";
 
-export interface PaperProps extends Pick<MuiPaperProps, "children"> {};
+export interface PaperProps extends Pick<MuiPaperProps, "children"> {}
 
 const StyledPaper = styled(MuiPaper)({
   boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
@@ -12,4 +12,4 @@ const StyledPaper = styled(MuiPaper)({
   padding: "16px",
 });
 
-export const Paper = ({children}: PaperProps) => <StyledPaper>{children}</StyledPaper>;
+export const Paper = ({ children }: PaperProps) => <StyledPaper>{children}</StyledPaper>;
