@@ -11,7 +11,6 @@ import PriorityHighIcon from "@material-ui/icons/PriorityHigh";
 
 const StepContainer = styled.div({
   margin: "0px 2px 30px 2px",
-
   ".MuiStepLabel-label": {
     fontWeight: 500,
     fontSize: "14px",
@@ -21,6 +20,7 @@ const StepContainer = styled.div({
     color: "#0d1030",
   },
   ".MuiStepper-root": {
+    background: "transparent",
     padding: "0",
   },
   ".MuiGrid-container": {
