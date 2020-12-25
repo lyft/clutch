@@ -1,7 +1,6 @@
 import React from "react";
 import { Grid, GridJustification } from "@material-ui/core";
 import FiberManualRecordTwoToneIcon from "@material-ui/icons/FiberManualRecordTwoTone";
-import MuiTrendingUpIcon from "@material-ui/icons/TrendingUp";
 import styled from "styled-components";
 
 const StatusIcon = styled(FiberManualRecordTwoToneIcon)`
@@ -48,13 +47,4 @@ const Status: React.FC<StatusProps> = ({
   );
 };
 
-const StyledTrendingUpIcon = styled(MuiTrendingUpIcon)`
-  ${({ theme }) => `
-  color: ${theme.palette.accent.main};
-  margin: 1%;
-  `}
-`;
-
-const TrendingUpIcon: React.FC = () => <StyledTrendingUpIcon />;
-
-export { Status, TrendingUpIcon };
+export { Status };
