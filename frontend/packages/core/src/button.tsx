@@ -91,21 +91,30 @@ const Button: React.FC<ButtonProps> = ({ text, variant = "primary", ...props }) 
   );
 };
 
-const ButtonGroupContainer = styled(Grid)({
-  borderTop: "1px solid #E7E7EA",
-  marginTop: "24px",
-  "> *": {
-    margin: "8px",
+const ButtonGroupContainer = styled(Grid)(
+  {
+    "> *": {
+      margin: "8px",
+    },
   },
-});
+  props => (
+    props["data-border"] === "top" ? {
+    marginTop: "24px",
+    borderTop: "1px solid #E7E7EA",
+  } : {
+    marginBottom: "24px",
+    borderBottom: "1px solid #E7E7EA",
+  })
+);
 
 export interface ButtonGroupProps {
   children: React.ReactElement<ButtonProps> | React.ReactElement<ButtonProps>[];
   justify?: GridJustification;
+  border?: "top" | "bottom"
 }
 
-const ButtonGroup = ({ children, justify = "flex-end" }: ButtonGroupProps) => (
-  <ButtonGroupContainer container justify={justify}>
+const ButtonGroup = ({ children, justify = "flex-end", border = "top" }: ButtonGroupProps) => (
+  <ButtonGroupContainer container justify={justify} data-border={border}>
     {children}
   </ButtonGroupContainer>
 );
