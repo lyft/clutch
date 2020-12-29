@@ -45,7 +45,9 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, lin
 
   return (
     <PageLayout heading={heading} error={error}>
-      <ButtonGroup>{buttons}</ButtonGroup>
+      <ButtonGroup justify="center" border="bottom">
+        {buttons}
+      </ButtonGroup>
       <ListView
         columns={columns}
         items={experiments}

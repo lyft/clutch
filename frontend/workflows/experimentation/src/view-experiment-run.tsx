@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { clutch as IClutch } from "@clutch-sh/api";
-import { BaseWorkflowProps, Button, ButtonGroup, client, Link, TextField } from "@clutch-sh/core";
-import styled from "styled-components";
+import {
+  BaseWorkflowProps,
+  Button,
+  ButtonGroup,
+  client,
+  Form,
+  Link,
+  TextField,
+} from "@clutch-sh/core";
 
 import PageLayout from "./core/page-layout";
 import { propertyToString } from "./property-helpers";
-
-export const Form = styled.form`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
 
 const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
   const [experiment, setExperiment] = useState<
@@ -27,7 +27,7 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
     const goBack = () => {
       navigate("/experimentation/list");
     };
-    const goBackButton = <Button text="Return" variant="neutral" onClick={goBack} />;
+    const goBackButton = <Button text="Back" variant="neutral" onClick={goBack} />;
 
     const statusValue = IClutch.chaos.experimentation.v1.Experiment.Status[
       experiment.status
@@ -83,7 +83,9 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
           <>
             {experiment.properties.items.map(property =>
               property.urlValue !== undefined ? (
-                <Link href={property.urlValue}>{property.label}</Link>
+                <Link href={property.urlValue} textTransform="capitalize">
+                  {property.label}
+                </Link>
               ) : (
                 <TextField
                   readOnly

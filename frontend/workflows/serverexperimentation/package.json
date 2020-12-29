@@ -21,15 +21,15 @@
     "@clutch-sh/api": "^1.0.0-beta",
     "@clutch-sh/core": "^1.0.0-beta",
     "@clutch-sh/data-layout": "^1.0.0-beta",
-    "@clutch-sh/experimentation": "^0.0.0-beta",
+    "@clutch-sh/experimentation": "^1.0.0-beta",
     "@clutch-sh/wizard": "^1.0.0-beta",
+    "@emotion/styled": "^11.0.0",
     "@hookform/resolvers": "^1.0.0",
     "@material-ui/core": "^4.11.0",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-hook-form": "^6.9.2",
     "react-router-dom": "^6.0.0-beta",
-    "styled-components": "^5.1.1",
     "yup": "^0.31.0"
   },
   "devDependencies": {

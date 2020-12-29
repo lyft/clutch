@@ -3,7 +3,15 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { clutch as IClutch } from "@clutch-sh/api";
 import type { BaseWorkflowProps } from "@clutch-sh/core";
-import { Button, ButtonGroup, client, Dialog, DialogActions, DialogContent } from "@clutch-sh/core";
+import {
+  Button,
+  ButtonGroup,
+  client,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Form,
+} from "@clutch-sh/core";
 import { PageLayout } from "@clutch-sh/experimentation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -132,13 +140,13 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   });
 
   return (
-    <form onSubmit={handleSubmit(handleOnSubmit)}>
+    <Form onSubmit={handleSubmit(handleOnSubmit)}>
       <FormFields state={experimentDataState} items={fields} register={register} errors={errors} />
       <ButtonGroup>
         <Button text="Cancel" variant="neutral" onClick={handleOnCancel} />
         <Button text="Start" type="submit" />
       </ButtonGroup>
-    </form>
+    </Form>
   );
 };
 
