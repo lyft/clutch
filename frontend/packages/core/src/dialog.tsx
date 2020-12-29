@@ -20,7 +20,7 @@ const DialogPaper = styled(Paper)({
 
 const DialogTitle = styled(MuiDialogTitle)({
   display: "flex",
-  justifyContent: "space-evenly",
+  justifyContent: "space-between",
   fontSize: "20px",
   padding: "12px 12px 0 32px",
   fontWeight: 400,
