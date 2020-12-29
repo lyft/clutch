@@ -1,6 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { ExpansionPanel, Row, Table } from "@clutch-sh/core";
+import { ExpansionPanel, Table, TableRow } from "@clutch-sh/core";
 
 interface ListenersProps {
   listeners: IClutch.envoytriage.v1.IListeners;
@@ -22,7 +22,10 @@ const Listeners: React.FC<ListenersProps> = ({ listeners }) => {
     <ExpansionPanel heading="Listeners" summary={summary}>
       <Table headings={["Name", "Local Address"]}>
         {statuses.map(listener => (
-          <Row key={listener.name} data={[listener.name, listener.localAddress]} />
+          <TableRow key={listener.name}>
+            {listener.name}
+            {listener.localAddress}
+          </TableRow>
         ))}
       </Table>
     </ExpansionPanel>
