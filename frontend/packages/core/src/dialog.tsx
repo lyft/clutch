@@ -71,7 +71,7 @@ const Dialog = ({ title, children, open }: DialogProps) => {
   const onClose = () => {
     setIsOpen(prevOpenState => !prevOpenState);
   };
-  React.useEffect(() => setIsOpen(open), [open])
+  React.useEffect(() => setIsOpen(open), [open]);
   return (
     <MuiDialog PaperComponent={DialogPaper} open={isOpen} onClose={onClose}>
       <DialogTitle disableTypography>
