@@ -79,11 +79,6 @@ const lightTheme = () => {
           color: GRAY,
         },
       },
-      MuiLink: {
-        root: {
-          color: TEAL,
-        },
-      },
     },
   });
 };
