@@ -98,12 +98,12 @@ const ButtonGroupContainer = styled(Grid)(
     },
   },
   props => (
-    props["data-border"] === "top" ? {
-    marginTop: "24px",
-    borderTop: "1px solid #E7E7EA",
-  } : {
-    marginBottom: "24px",
-    borderBottom: "1px solid #E7E7EA",
+    props["data-border"] === "bottom" ? {
+      marginBottom: "24px",
+      borderBottom: "1px solid #E7E7EA",
+    } : {
+      marginTop: "24px",
+      borderTop: "1px solid #E7E7EA",
   })
 );
 
