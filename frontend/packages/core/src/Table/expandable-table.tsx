@@ -65,7 +65,7 @@ const ExpandableRow: React.FC<ExpandableRowProps> = ({ heading, summary, childre
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Table elevation={0}>{children}</Table>
+            <Table>{children}</Table>
           </Collapse>
         </TableCell>
       </TableRow>

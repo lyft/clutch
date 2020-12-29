@@ -23,9 +23,9 @@ import {
   ExpandableRow,
   ExpandableTable,
   MetadataTable,
-  Row,
   StatusRow,
   Table,
+  TableRow,
   TreeTable,
 } from "./Table";
 
@@ -58,7 +58,7 @@ export {
   NotePanel,
   RadioGroup,
   Resolver,
-  Row,
+  TableRow,
   Select,
   Status,
   StatusRow,
