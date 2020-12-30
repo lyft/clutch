@@ -22,6 +22,12 @@ Primary.args = {
   children: <Button text="Next" onClick={action("onClick event")} />,
 };
 
+export const BottomBorder = Template.bind({});
+BottomBorder.args = {
+  border: "bottom",
+  children: <Button text="Next" onClick={action("onClick event")} />,
+};
+
 export const Destructive = Template.bind({});
 Destructive.args = {
   children: <Button text="Terminate" variant="destructive" onClick={action("onClick event")} />,
