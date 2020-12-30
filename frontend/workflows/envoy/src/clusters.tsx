@@ -1,7 +1,22 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { ExpandableRow, ExpandableTable, ExpansionPanel, Status, StatusRow } from "@clutch-sh/core";
+import { AccordionRow, ExpansionPanel, StatusIcon, Table, TableRow } from "@clutch-sh/core";
 import { Grid } from "@material-ui/core";
+
+interface StatusRowProps {
+  success: boolean;
+  data: any[];
+}
+
+const StatusRow: React.FC<StatusRowProps> = ({ success, data }) => {
+  const variant = success ? "success" : "failure";
+  return (
+    <TableRow>
+      {[...data]}
+      <StatusIcon variant={variant} />
+    </TableRow>
+  );
+};
 
 interface RatioStatusProps {
   succeeded: boolean;
@@ -10,20 +25,20 @@ interface RatioStatusProps {
 }
 
 const RatioStatus: React.FC<RatioStatusProps> = ({ succeeded, failed, ...props }) => (
-  <Grid container alignItems="center" justify="flex-end" {...props}>
+  <Grid container alignItems="center" {...props}>
     {succeeded ? (
       <Grid item>
-        <Status variant="success" {...props}>
+        <StatusIcon variant="success" {...props}>
           {succeeded}
-        </Status>
+        </StatusIcon>
       </Grid>
     ) : null}
     {succeeded && failed ? <Grid item> / </Grid> : null}
     {failed ? (
       <Grid item>
-        <Status variant="failure" {...props}>
+        <StatusIcon variant="failure" {...props}>
           {failed}
-        </Status>
+        </StatusIcon>
       </Grid>
     ) : null}
   </Grid>
@@ -64,22 +79,18 @@ const Clusters: React.FC<ClustersProps> = ({ clusters }) => {
 
   return (
     <ExpansionPanel heading="Clusters" summary={summary}>
-      <ExpandableTable headings={["Name", "Hosts"]}>
+      <Table headings={["Name", "Hosts"]}>
         {statuses.map(cluster => (
-          <ExpandableRow
+          <AccordionRow
             key={cluster.name}
-            heading={cluster.name}
-            summary={
+            headings={[
+              cluster.name,
               cluster.hosts.length === 0 ? (
-                <Status align="right">0</Status>
+                <StatusIcon>0</StatusIcon>
               ) : (
-                <RatioStatus
-                  align="right"
-                  succeeded={cluster.healthyCount}
-                  failed={cluster.unhealthyCount}
-                />
-              )
-            }
+                <RatioStatus succeeded={cluster.healthyCount} failed={cluster.unhealthyCount} />
+              ),
+            ]}
           >
             {cluster.hosts.map(host => {
               const hostData = { ...host };
@@ -89,9 +100,9 @@ const Clusters: React.FC<ClustersProps> = ({ clusters }) => {
                 <StatusRow key={host.address} success={healthy} data={Object.values(hostData)} />
               );
             })}
-          </ExpandableRow>
+          </AccordionRow>
         ))}
-      </ExpandableTable>
+      </Table>
     </ExpansionPanel>
   );
 };

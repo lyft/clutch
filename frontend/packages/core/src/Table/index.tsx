@@ -1,6 +1,6 @@
-import { ExpandableRow, ExpandableTable, StatusRow } from "./expandable-table";
+import { AccordionRow } from "./accordion-table";
 import { MetadataTable } from "./metadata-table";
-import { Table, TableRow } from "./table";
+import { Table, TableCell, TableRow } from "./table";
 import TreeTable from "./tree-table";
 
-export { ExpandableRow, ExpandableTable, MetadataTable, TableRow, StatusRow, Table, TreeTable };
+export { AccordionRow, MetadataTable, Table, TableCell, TableRow, TreeTable };
