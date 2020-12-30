@@ -22,6 +22,9 @@ const WizardStep: React.FC<WizardStepProps> = ({ isLoading, error, children }) =
   React.useEffect(() => {
     wizardContext.setIsLoading(showLoading);
   }, [showLoading]);
+  React.useEffect(() => {
+    wizardContext.setHasError(hasError);
+  }, [error]);
   if (showLoading) {
     return <Loadable isLoading={isLoading}>{children}</Loadable>;
   }
