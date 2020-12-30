@@ -40,12 +40,14 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, lin
   }, []);
 
   const buttons = links.map(link => (
-    <Button text={link.displayName} onClick={() => navigate(link.path)} />
+    <Button text={link.displayName} key={link.path} onClick={() => navigate(link.path)} />
   ));
 
   return (
     <PageLayout heading={heading} error={error}>
-      <ButtonGroup>{buttons}</ButtonGroup>
+      <ButtonGroup justify="center" border="bottom">
+        {buttons}
+      </ButtonGroup>
       <ListView
         columns={columns}
         items={experiments}
