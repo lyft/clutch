@@ -83,14 +83,7 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
           <>
             {experiment.properties.items.map(property =>
               property.urlValue !== undefined ? (
-                <Link
-                  maxWidth="500px"
-                  fontSize="16px"
-                  padding="10px 0 0 0"
-                  href={property.urlValue}
-                >
-                  {property.label}
-                </Link>
+                <Link href={property.urlValue}>{property.label}</Link>
               ) : (
                 <TextField
                   readOnly

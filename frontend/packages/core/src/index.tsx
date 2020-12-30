@@ -13,7 +13,7 @@ import { Dialog, DialogActions, DialogContent } from "./dialog";
 import { Error } from "./error";
 import { Hint, Note, NoteConfig, NotePanel, Warning } from "./Feedback";
 import { Status } from "./icon";
-import Link from "./link";
+import { Link } from "./link";
 import Loadable from "./loading";
 import { client, ClientError } from "./network";
 import ExpansionPanel from "./panel";
