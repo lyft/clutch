@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import type { ButtonProps as MuiButtonProps, GridJustification } from "@material-ui/core";
-import { Button as MuiButton, Grid, IconButton } from "@material-ui/core";
+import { Button as MuiButton, Grid, IconButton as MuiIconButton } from "@material-ui/core";
 import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 
@@ -121,21 +121,21 @@ const ButtonGroup = ({ children, justify = "flex-end", border = "top" }: ButtonG
   </ButtonGroupContainer>
 );
 
+const IconButton = styled(MuiIconButton)({
+  color: "#000000",
+  ":hover": {
+    backgroundColor: "transparent",
+  },
+});
+
 export interface ClipboardButtonProps {
-  primary?: boolean;
-  size?: "small" | "medium";
   text: string;
 }
 
 // ClipboardButton is a button that copies text to the clipboard and briefly displays a checkmark
 // after being clicked to let the user know that clicking actually did something and sent the
 // provided value to the clipboard.
-const ClipboardButton: React.FC<ClipboardButtonProps> = ({
-  text,
-  primary = false,
-  size = "small",
-  ...props
-}) => {
+const ClipboardButton: React.FC<ClipboardButtonProps> = ({ text }) => {
   const [clicked, setClicked] = React.useState(false);
   React.useEffect(() => {
     if (clicked) {
@@ -150,13 +150,10 @@ const ClipboardButton: React.FC<ClipboardButtonProps> = ({
 
   return (
     <IconButton
-      color={primary ? "primary" : "secondary"}
       onClick={() => {
         setClicked(true);
         navigator.clipboard.writeText(text);
       }}
-      size={size}
-      {...props}
     >
       {clicked ? <CheckCircleOutlinedIcon /> : <FileCopyOutlinedIcon />}
     </IconButton>
