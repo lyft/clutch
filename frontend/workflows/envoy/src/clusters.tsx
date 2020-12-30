@@ -5,7 +5,6 @@ import {
   ExpansionPanel,
   StatusIcon,
   Table,
-  TableCell,
   TableRow,
 } from "@clutch-sh/core";
 import { Grid } from "@material-ui/core";
@@ -16,19 +15,11 @@ interface StatusRowProps {
 }
 
 const StatusRow: React.FC<StatusRowProps> = ({ success, data }) => {
-  const displayData = [...data];
-  const headerValue = displayData.shift();
   const variant = success ? "success" : "failure";
   return (
     <TableRow>
-      <TableCell align="left">
-        <StatusIcon variant={variant}>{headerValue}</StatusIcon>
-      </TableCell>
-      {displayData.map(value => (
-        <TableCell key={value} align="left">
-          {value}
-        </TableCell>
-      ))}
+      {[...data]}
+      <StatusIcon variant={variant} />
     </TableRow>
   );
 };
@@ -40,7 +31,7 @@ interface RatioStatusProps {
 }
 
 const RatioStatus: React.FC<RatioStatusProps> = ({ succeeded, failed, ...props }) => (
-  <Grid container alignItems="center" justify="flex-end" {...props}>
+  <Grid container alignItems="center" {...props}>
     {succeeded ? (
       <Grid item>
         <StatusIcon variant="success" {...props}>
@@ -101,10 +92,9 @@ const Clusters: React.FC<ClustersProps> = ({ clusters }) => {
             headings={[
               cluster.name,
               cluster.hosts.length === 0 ? (
-                <StatusIcon align="right">0</StatusIcon>
+                <StatusIcon>0</StatusIcon>
               ) : (
                 <RatioStatus
-                  align="right"
                   succeeded={cluster.healthyCount}
                   failed={cluster.unhealthyCount}
                 />
