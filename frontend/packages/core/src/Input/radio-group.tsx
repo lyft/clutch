@@ -22,20 +22,9 @@ const FormLabel = styled(MuiFormLabel)`
   `}
 `;
 
-const StyledRadioGroup = styled(MuiRadioGroup)`
-  ${({ ...props }) => `
-  display: flex;
-  max-width: ${props["data-max-width"] || "500px"};
-  `}
-`;
-
 const FormControl = styled(MuiFormControl)`
-  ${({ ...props }) => `
-  display: flex;
   margin: 16px 0;
   min-width: fit-content;
-  width: ${props["data-max-width"] || "500px"};
-  `}
 `;
 
 interface RadioGroupOption {
@@ -47,7 +36,6 @@ interface RadioGroupProps {
   defaultOption?: number;
   label?: string;
   disabled?: boolean;
-  maxWidth?: string;
   name: string;
   options: RadioGroupOption[];
   onChange: (value: string) => void;
@@ -57,7 +45,6 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   defaultOption = 0,
   label,
   disabled,
-  maxWidth,
   name,
   options,
   onChange,
@@ -85,9 +72,9 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   }, []);
 
   return (
-    <FormControl key={name} disabled={disabled} data-max-width={maxWidth}>
+    <FormControl key={name} disabled={disabled}>
       {label && <FormLabel>{label}</FormLabel>}
-      <StyledRadioGroup
+      <MuiRadioGroup
         aria-label={label}
         name={name}
         defaultValue={options[defaultIdx]?.value || options[defaultIdx].label}
@@ -103,7 +90,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
             />
           );
         })}
-      </StyledRadioGroup>
+      </MuiRadioGroup>
     </FormControl>
   );
 };
