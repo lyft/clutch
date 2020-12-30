@@ -72,6 +72,9 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
       setIsLoading: (isLoading: boolean) => {
         updateStepData(child.type.name, { isLoading });
       },
+      setHasError: (hasError: boolean) => {
+        updateStepData(child.type.name, { hasError });
+      },
       displayWarnings: (warnings: string[]) => {
         setGlobalWarnings(warnings);
       },
@@ -87,6 +90,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
   const isMultistep = lastStepIndex > 0;
   const steps = React.Children.map(children, (child: WizardChildren) => {
     const isLoading = wizardStepData[child.type.name]?.isLoading || false;
+    const hasError = wizardStepData[child.type.name]?.hasError;
     return (
       <>
         <DataLayoutContext.Provider value={dataLayoutManager}>
@@ -97,7 +101,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
           </WizardContext.Provider>
         </DataLayoutContext.Provider>
         <Grid container justify="center">
-          {state.activeStep === lastStepIndex && !isLoading && isMultistep && (
+          {((state.activeStep === lastStepIndex && !isLoading && isMultistep) || hasError) && (
             <ButtonGroup>
               <Button text="Start Over" onClick={() => dispatch(WizardAction.RESET)} />
             </ButtonGroup>
@@ -124,8 +128,9 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
         <Grid item>
           <Stepper activeStep={state.activeStep}>
             {React.Children.map(children, (child: WizardChildren) => {
-              const hasError = (wizardStepData[child.type.name]?.errors?.length || 0) !== 0;
-              return <Step key={child.props.name} label={child.props.name} error={hasError} />;
+              const { name } = child.props;
+              const hasError = wizardStepData[child.type.name]?.hasError;
+              return <Step key={name} label={name} error={hasError} />;
             })}
           </Stepper>
           <Paper elevation={0}>{steps[state.activeStep]}</Paper>
