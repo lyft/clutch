@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import type { Meta } from "@storybook/react";
 
-import { Button } from "../button";
+import { Button, ButtonGroup } from "../button";
 import type { StepperProps } from "../stepper";
 import { Step, Stepper } from "../stepper";
 
@@ -75,7 +75,7 @@ const FailureTemplate = ({ failedStep = 2, activeStep }: StepperProps & { failed
       <Stepper activeStep={curStep}>
         {[...Array(stepCount)].map((_, index: number) => (
           <Step
-            error={curStep === failedStep && index === failedStep - 1}
+            error={curStep === failedStep && index === failedStep}
             key={index} // eslint-disable-line react/no-array-index-key
             label={`Step ${index + 1}`}
           />
@@ -85,12 +85,14 @@ const FailureTemplate = ({ failedStep = 2, activeStep }: StepperProps & { failed
         <Text>Step {curStep + 1} content</Text>
 
         {curStep === stepCount - 1 || curStep === failedStep ? (
-          <Button onClick={handleReset} text="Reset" variant="neutral" />
+          <ButtonGroup justify="flex-start">
+            <Button onClick={handleReset} text="Reset" variant="neutral" />
+          </ButtonGroup>
         ) : (
-          <div>
+          <ButtonGroup justify="flex-start">
             <Button disabled={curStep === 0} onClick={handleBack} text="Back" variant="neutral" />
             <Button onClick={handleNext} text={curStep === stepCount ? "Finish" : "Next"} />
-          </div>
+          </ButtonGroup>
         )}
       </div>
     </>

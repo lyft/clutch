@@ -171,9 +171,9 @@ const Stepper = ({ activeStep, children }: StepperProps) => (
           variant: "pending" as StepIconVariant,
         };
         if (idx === activeStep) {
-          stepProps.variant = "active";
+          stepProps.variant = step.props.error ? "failed" : "active";
         } else if (idx < activeStep) {
-          stepProps.variant = step.props.error ? "failed" : "success";
+          stepProps.variant = "success";
         }
 
         return (
