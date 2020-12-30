@@ -1,12 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import {
-  AccordionRow,
-  ExpansionPanel,
-  StatusIcon,
-  Table,
-  TableRow,
-} from "@clutch-sh/core";
+import { AccordionRow, ExpansionPanel, StatusIcon, Table, TableRow } from "@clutch-sh/core";
 import { Grid } from "@material-ui/core";
 
 interface StatusRowProps {
@@ -94,10 +88,7 @@ const Clusters: React.FC<ClustersProps> = ({ clusters }) => {
               cluster.hosts.length === 0 ? (
                 <StatusIcon>0</StatusIcon>
               ) : (
-                <RatioStatus
-                  succeeded={cluster.healthyCount}
-                  failed={cluster.unhealthyCount}
-                />
+                <RatioStatus succeeded={cluster.healthyCount} failed={cluster.unhealthyCount} />
               ),
             ]}
           >
