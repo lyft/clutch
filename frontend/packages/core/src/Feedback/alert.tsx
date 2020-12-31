@@ -55,25 +55,12 @@ export interface AlertProps extends Pick<MuiAlertProps, "severity"> {
   title?: React.ReactNode;
 }
 
-export const Alert: React.FC<AlertProps> = ({ severity = "info", title, children }) => {
-  return (
-    <>
-      <div
-        style={{
-          width: "8px",
-          background: "#DB3615",
-          height: "100%",
-        }}
-      />
-      <StyledAlert severity={severity} iconMapping={iconMappings}>
-        {title && <AlertTitle>{title}</AlertTitle>}
-        {/* <Grid container justify="center" alignItems="center"> */}
-        {children}
-        {/* </Grid> */}
-      </StyledAlert>
-    </>
-  );
-};
+export const Alert: React.FC<AlertProps> = ({ severity = "info", title, children }) => (
+  <StyledAlert severity={severity} iconMapping={iconMappings}>
+    {title && <AlertTitle>{title}</AlertTitle>}
+    {children}
+  </StyledAlert>
+);
 
 export interface AlertPanelProps {
   direction?: "row" | "column";
