@@ -55,7 +55,6 @@ const WarningIcon = styled(MuiWarningIcon)({
   color: "#ffcc80",
 });
 
-
 const AlertTitle = styled(MuiAlertTitle)({
   color: "#0D1030",
   fontWeight: 600,
@@ -68,12 +67,12 @@ const iconMappings = {
   success: <SuccessIcon />,
   warning: <WarningIcon />,
 };
-export interface AlertProps extends Pick<MuiAlertProps, "severity"> {
+export interface AlertProps extends Pick<MuiAlertProps, "severity" | "action"> {
   title?: React.ReactNode;
 }
 
-export const Alert: React.FC<AlertProps> = ({ severity = "info", title, children }) => (
-  <StyledAlert severity={severity} iconMapping={iconMappings}>
+export const Alert: React.FC<AlertProps> = ({ severity = "info", title, children, ...props }) => (
+  <StyledAlert severity={severity} iconMapping={iconMappings} {...props}>
     {title && <AlertTitle>{title}</AlertTitle>}
     {children}
   </StyledAlert>
