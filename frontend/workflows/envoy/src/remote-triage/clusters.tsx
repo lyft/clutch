@@ -62,7 +62,7 @@ export const StatusRow = ({ success, data }: StatusRowProps) => {
   return (
     <TableRow>
       <div style={{ textAlign: "center" }}>{headerValue}</div>
-      <StatusIcon align="center" variant={variant} />
+      <StatusIcon align="left" variant={variant} />
     </TableRow>
   );
 };
