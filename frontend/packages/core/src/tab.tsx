@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import type { TabProps as MuiTabProps, TabsProps as MuiTabsProps } from "@material-ui/core";
 import { Tab as MuiTab } from "@material-ui/core";
-import { TabContext, TabList, TabPanel } from "@material-ui/lab";
+import { TabContext, TabList, TabPanel as MuiTabPanel } from "@material-ui/lab";
 
 const StyledTab = styled(MuiTab)({
   minWidth: "111px",
@@ -60,6 +60,10 @@ export const Tab = ({ onClick, ...props }: TabProps) => {
   };
   return <StyledTab color="primary" onClick={onClickMiddleware} {...tabProps} />;
 };
+
+const TabPanel = styled(MuiTabPanel)({
+  maxWidth: "100%",
+});
 
 export interface TabsProps extends Pick<MuiTabsProps, "value"> {
   children: React.ReactElement<TabProps> | React.ReactElement<TabProps>[];
