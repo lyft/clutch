@@ -135,7 +135,7 @@ const TriageDetails: React.FC<WizardChild> = () => {
         data={[
           {
             name: "Address",
-            value: `${remoteData.value.address?.host} : ${remoteData.value.address?.port}`,
+            value: `${remoteData.value.address?.host}:${remoteData.value.address?.port}`,
           },
           { name: "Service Node", value: metadata?.serviceNode },
           { name: "Service Zone", value: metadata?.serviceZone },
