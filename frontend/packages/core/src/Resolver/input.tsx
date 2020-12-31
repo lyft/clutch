@@ -12,7 +12,7 @@ import {
   AccordionProps,
 } from "../accordion";
 import { Button } from "../button";
-import { Error } from "../error";
+import { Error } from "../Feedback";
 import { TextField } from "../Input/text-field";
 
 import type { ChangeEventTarget } from "./hydrator";

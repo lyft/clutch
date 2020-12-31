@@ -4,7 +4,7 @@ import _ from "lodash";
 
 import { AccordionGroup } from "../accordion";
 import { useWizardContext } from "../Contexts";
-import { CompressedError, Error } from "../error";
+import { CompressedError, Error } from "../Feedback";
 import { HorizontalRule } from "../horizontal-rule";
 import Loadable from "../loading";
 
