@@ -1,10 +1,10 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import { Grid } from "@material-ui/core";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import ErrorIcon from "@material-ui/icons/Error";
-import InfoIcon from "@material-ui/icons/Info";
-import WarningIcon from "@material-ui/icons/Warning";
+import MuiSuccessIcon from "@material-ui/icons/CheckCircle";
+import MuiErrorIcon from "@material-ui/icons/Error";
+import MuiInfoIcon from "@material-ui/icons/Info";
+import MuiWarningIcon from "@material-ui/icons/Warning";
 import type { AlertProps as MuiAlertProps } from "@material-ui/lab";
 import { Alert as MuiAlert, AlertTitle as MuiAlertTitle } from "@material-ui/lab";
 
@@ -39,6 +39,23 @@ const StyledAlert = styled(MuiAlert)(
   })
 );
 
+const ErrorIcon = styled(MuiErrorIcon)({
+  color: "#db3716",
+});
+
+const InfoIcon = styled(MuiInfoIcon)({
+  color: "#3548d4",
+});
+
+const SuccessIcon = styled(MuiSuccessIcon)({
+  color: "#1e942d",
+});
+
+const WarningIcon = styled(MuiWarningIcon)({
+  color: "#ffcc80",
+});
+
+
 const AlertTitle = styled(MuiAlertTitle)({
   color: "#0D1030",
   fontWeight: 600,
@@ -46,10 +63,10 @@ const AlertTitle = styled(MuiAlertTitle)({
 });
 
 const iconMappings = {
-  error: <ErrorIcon style={{ color: "#db3716" }} />,
-  info: <InfoIcon style={{ color: "#3548d4" }} />,
-  success: <CheckCircleIcon style={{ color: "#1e942d" }} />,
-  warning: <WarningIcon style={{ color: "#ffcc80" }} />,
+  error: <ErrorIcon />,
+  info: <InfoIcon />,
+  success: <SuccessIcon />,
+  warning: <WarningIcon />,
 };
 export interface AlertProps extends Pick<MuiAlertProps, "severity"> {
   title?: React.ReactNode;

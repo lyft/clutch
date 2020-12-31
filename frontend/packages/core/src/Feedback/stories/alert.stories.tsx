@@ -19,7 +19,6 @@ WithTitle.args = {
 export const Success = Template.bind({});
 Success.args = {
   severity: "success",
-  title: "A title",
 };
 
 export const Error = Template.bind({});
