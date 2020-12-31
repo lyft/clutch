@@ -67,6 +67,7 @@ const iconMappings = {
   success: <SuccessIcon />,
   warning: <WarningIcon />,
 };
+
 export interface AlertProps extends Pick<MuiAlertProps, "severity" | "action"> {
   title?: React.ReactNode;
 }
