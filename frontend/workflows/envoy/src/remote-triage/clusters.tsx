@@ -1,48 +1,41 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { AccordionRow, ExpansionPanel, StatusIcon, Table, TableRow } from "@clutch-sh/core";
-import { Grid } from "@material-ui/core";
+import { AccordionRow, StatusIcon, Table, TableRow } from "@clutch-sh/core";
+import styled from "@emotion/styled";
+import _ from "lodash";
 
-interface StatusRowProps {
-  success: boolean;
-  data: any[];
-}
+const BarContainer = styled.rect(
+  {
+    height: "12px",
+  },
+  props => ({
+    width: props.width,
+    fill: props.fill,
+    strokeWidth: props.fill === "transparent" ? "1px" : "0",
+    stroke: "#C2C8F2",
+  })
+);
 
-const StatusRow: React.FC<StatusRowProps> = ({ success, data }) => {
-  const variant = success ? "success" : "failure";
-  return (
-    <TableRow>
-      {[...data]}
-      <StatusIcon variant={variant} />
-    </TableRow>
-  );
-};
+const Bar = ({ fill, width }) => (
+  <svg width={width} height="12px">
+    <BarContainer fill={fill} width={width} />
+  </svg>
+);
 
 interface RatioStatusProps {
-  succeeded: boolean;
-  failed: boolean;
-  align?: "right" | "center";
+  succeeded: number;
+  failed: number;
 }
 
-const RatioStatus: React.FC<RatioStatusProps> = ({ succeeded, failed, ...props }) => (
-  <Grid container alignItems="center" {...props}>
-    {succeeded ? (
-      <Grid item>
-        <StatusIcon variant="success" {...props}>
-          {succeeded}
-        </StatusIcon>
-      </Grid>
-    ) : null}
-    {succeeded && failed ? <Grid item> / </Grid> : null}
-    {failed ? (
-      <Grid item>
-        <StatusIcon variant="failure" {...props}>
-          {failed}
-        </StatusIcon>
-      </Grid>
-    ) : null}
-  </Grid>
-);
+const RatioStatus: React.FC<RatioStatusProps> = ({ succeeded, failed }) => {
+  const total = succeeded + failed;
+  return (
+    <>
+      {succeeded !== 0 && <Bar fill="#69F0AE" width={`${(succeeded / total) * 100}px`} />}
+      {failed !== 0 && <Bar fill="#FF8A80" width={`${(failed / total) * 100}px`} />}
+    </>
+  );
+};
 
 const clusterStatuses = (data: IClutch.envoytriage.v1.IClusters) => {
   return data.clusterStatuses.map(clusterStatus => {
@@ -57,36 +50,44 @@ const clusterStatuses = (data: IClutch.envoytriage.v1.IClusters) => {
   });
 };
 
+interface StatusRowProps {
+  success: boolean;
+  data: any[];
+}
+
+export const StatusRow = ({ success, data }: StatusRowProps) => {
+  const displayData = [...data];
+  const headerValue = displayData.shift();
+  const variant = success ? "success" : "failure";
+  return (
+    <TableRow>
+      <div style={{ textAlign: "center" }}>{headerValue}</div>
+      <StatusIcon align="center" variant={variant} />
+    </TableRow>
+  );
+};
+
 interface ClustersProps {
   clusters: IClutch.envoytriage.v1.IClusters;
 }
 
 const Clusters: React.FC<ClustersProps> = ({ clusters }) => {
   const [statuses, setStatuses] = React.useState([]);
-  const [summary, setSummary] = React.useState("");
 
   React.useEffect(() => {
     setStatuses(clusterStatuses(clusters));
   }, [clusters]);
 
-  React.useEffect(() => {
-    const healthyHostCount = statuses
-      .map(cluster => cluster.healthyCount)
-      .reduce((a, b) => a + b, 0);
-    const totalHostCount = statuses.map(cluster => cluster.hosts.length).reduce((a, b) => a + b, 0);
-    setSummary(`(${healthyHostCount}/${totalHostCount} healthy)`);
-  }, [statuses]);
-
   return (
-    <ExpansionPanel heading="Clusters" summary={summary}>
-      <Table headings={["Name", "Hosts"]}>
-        {statuses.map(cluster => (
+    <div style={{ height: "400px", display: "flex" }}>
+      <Table stickyHeader headings={["Hosts", "Status"]}>
+        {_.sortBy(statuses, ["name"]).map(cluster => (
           <AccordionRow
             key={cluster.name}
             headings={[
               cluster.name,
               cluster.hosts.length === 0 ? (
-                <StatusIcon>0</StatusIcon>
+                <Bar fill="transparent" width="100px" />
               ) : (
                 <RatioStatus succeeded={cluster.healthyCount} failed={cluster.unhealthyCount} />
               ),
@@ -103,7 +104,7 @@ const Clusters: React.FC<ClustersProps> = ({ clusters }) => {
           </AccordionRow>
         ))}
       </Table>
-    </ExpansionPanel>
+    </div>
   );
 };
 

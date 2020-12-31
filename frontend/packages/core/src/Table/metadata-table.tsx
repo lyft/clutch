@@ -33,10 +33,15 @@ interface IdentifiableRowData extends RowData {
   id: string;
 }
 
-const TableContainer = styled(MuiTableContainer)({
-  borderWidth: "0",
-  border: "0",
-});
+const TableContainer = styled(MuiTableContainer)(
+  {
+    borderWidth: "0",
+    border: "0",
+  },
+  props => ({
+    maxHeight: props["data-max-height"] || "fit-content",
+  })
+);
 
 const Table = styled(MuiTable)({
   border: "1px solid rgba(13, 16, 48, 0.12)",
@@ -157,9 +162,15 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
 export interface MetadataTableProps {
   data: RowData[];
   onUpdate?: (id: string, value: unknown) => void;
+  maxHeight?: string;
 }
 
-export const MetadataTable: React.FC<MetadataTableProps> = ({ data, onUpdate, children }) => {
+export const MetadataTable: React.FC<MetadataTableProps> = ({
+  data,
+  onUpdate,
+  maxHeight,
+  children,
+}) => {
   const { onSubmit, setOnSubmit } = useWizardContext();
   let rows = data;
   if (_.isEmpty(data)) {
@@ -188,7 +199,7 @@ export const MetadataTable: React.FC<MetadataTableProps> = ({ data, onUpdate, ch
   }, []);
 
   return (
-    <TableContainer>
+    <TableContainer data-max-height={maxHeight}>
       {process.env.REACT_APP_DEBUG_FORMS && onUpdate !== undefined && <DevTool control={control} />}
       <Table>
         <TableBody>

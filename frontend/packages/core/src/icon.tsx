@@ -30,17 +30,17 @@ export const StatusIcon: React.FC<StatusProps> = ({
     <Grid container alignItems="center" justify={justifyContent} {...props}>
       {variant === "neutral" && (
         <>
-          <StyledStatusIcon data-color="darkgray" /> {children}
+          <StyledStatusIcon data-color="#C2C8F2" /> {children}
         </>
       )}
       {variant === "success" && (
         <>
-          <StyledStatusIcon data-color="limegreen" /> {children}
+          <StyledStatusIcon data-color="#69F0AE" /> {children}
         </>
       )}
       {variant === "failure" && (
         <>
-          <StyledStatusIcon data-color="red" /> {children}
+          <StyledStatusIcon data-color="#FF8A80" /> {children}
         </>
       )}
     </Grid>

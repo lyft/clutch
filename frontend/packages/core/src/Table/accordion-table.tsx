@@ -4,10 +4,12 @@ import { IconButton as MuiIconButton, TableRow } from "@material-ui/core";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
+import type { TableRowProps } from "./table";
 import { TableCell } from "./table";
 
 const IconButton = styled(MuiIconButton)({
   padding: "0",
+  color: "#0D1030",
 });
 
 const ChevronRight = styled(ChevronRightIcon)(props => ({
@@ -16,9 +18,10 @@ const ChevronRight = styled(ChevronRightIcon)(props => ({
 
 export interface AccordionRowProps {
   headings: React.ReactElement[];
+  children: React.ReactElement<TableRowProps> | React.ReactElement<TableRowProps>[];
 }
 
-export const AccordionRow: React.FC<AccordionRowProps> = ({ headings, children }) => {
+export const AccordionRow = ({ headings, children }: AccordionRowProps) => {
   const [open, setOpen] = React.useState(false);
   const hasChildren = React.Children.count(children) !== 0;
 
@@ -37,7 +40,7 @@ export const AccordionRow: React.FC<AccordionRowProps> = ({ headings, children }
             </IconButton>
           );
           return (
-            <TableCell key={heading} style={index === 0 ? { display: "flex" } : {}}>
+            <TableCell key={heading} data-border style={index === 0 ? { display: "flex" } : {}}>
               {index === 0 && icon}
               <div style={{ alignSelf: "center" }}>{heading}</div>
             </TableCell>

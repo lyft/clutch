@@ -62,6 +62,7 @@ export const Tab = ({ onClick, ...props }: TabProps) => {
 };
 
 const TabPanel = styled(MuiTabPanel)({
+  padding: "0",
   maxWidth: "100%",
 });
 
