@@ -134,7 +134,7 @@ const TriageDetails: React.FC<WizardChild> = () => {
       <MetadataTable
         data={[
           {
-            name: "IP & Port",
+            name: "Address",
             value: `${remoteData.value.address?.host} : ${remoteData.value.address?.port}`,
           },
           { name: "Service Node", value: metadata?.serviceNode },
