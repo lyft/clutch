@@ -27,6 +27,7 @@ const StyledAlert = styled(MuiAlert)(
       padding: "0",
     },
     ".MuiAlert-message": {
+      width: "100%",
       padding: "0",
       ".MuiAlertTitle-root": {
         marginBottom: "0",
