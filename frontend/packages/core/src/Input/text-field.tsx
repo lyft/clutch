@@ -42,6 +42,7 @@ const StyledTextField = styled(BaseTextField)({
     border: "1px solid rgba(13, 16, 48, 0.38)",
     borderRadius: "4px",
     fontSize: "16px",
+    color: "#0D1030"
   },
 
   "label + .MuiInput-formControl": {
