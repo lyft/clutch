@@ -25,7 +25,7 @@ const Template = (props: TableProps) => (
 
 export const Primary = Template.bind({});
 
-export const StickHeader = Template.bind({});
-StickHeader.args = {
+export const StickyHeader = Template.bind({});
+StickyHeader.args = {
   stickyHeader: true,
 };
