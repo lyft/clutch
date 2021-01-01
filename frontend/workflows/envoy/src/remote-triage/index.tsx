@@ -5,9 +5,7 @@ import {
   Button,
   ButtonGroup,
   client,
-  Grid,
   MetadataTable,
-  Paper,
   Tab,
   Tabs,
   TextField,
@@ -16,9 +14,9 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
-import styled from "@emotion/styled";
 
 import Clusters from "./clusters";
+import Dashboard from "./dashboard";
 import Listeners from "./listeners";
 import Runtime from "./runtime";
 import ServerInfo from "./server-info";
@@ -52,79 +50,31 @@ const TriageIdentifier: React.FC<WizardChild> = () => {
   );
 };
 
-interface DashboardTabProps {
-  serverInfo: IClutch.envoytriage.v1.IServerInfo;
-  summaries?: {
-    name: string;
-    value: number;
-  }[];
-}
-
-const SummaryCardTitle = styled.div({
-  fontWeight: 600,
-  fontSize: "14px",
-  color: "#0D1030",
-});
-
-const SummaryCardBody = styled.div({
-  fontWeight: "bold",
-  fontSize: "20px",
-  color: "#3548D4",
-});
-
-const DashboardTab = ({ serverInfo, summaries }: DashboardTabProps) => {
-  const INFORMATION_KEYS = [
-    "hot_restart_version",
-    "uptime_all_epochs",
-    "uptime_current_epoch",
-    "version",
-  ];
-
-  const serverData = INFORMATION_KEYS.map(key => {
-    return { name: key, value: serverInfo.value?.[key] };
-  });
-
-  return (
-    <div>
-      <Grid container direction="row" justify="space-evenly" wrap="nowrap" spacing={1}>
-        <Grid item style={{ flexBasis: "60%" }}>
-          <Paper>
-            <SummaryCardTitle>Clusters</SummaryCardTitle>
-          </Paper>
-        </Grid>
-        <Grid
-          item
-          container
-          direction="column"
-          justify="space-evenly"
-          spacing={1}
-          style={{ textAlign: "center", flexBasis: "40%" }}
-        >
-          {summaries.map(summary => (
-            <Grid item key={summary.name}>
-              <Paper>
-                <SummaryCardTitle>{summary.name}</SummaryCardTitle>
-                <SummaryCardBody>{summary.value}</SummaryCardBody>
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
-      </Grid>
-      <div style={{ padding: "16px 0" }}>
-        <MetadataTable data={serverData} />
-      </div>
-    </div>
-  );
-};
-
 const TriageDetails: React.FC<WizardChild> = () => {
   const remoteData = useDataLayout("remoteData");
   const metadata = remoteData.value.nodeMetadata as IClutch.envoytriage.v1.NodeMetadata;
   const { clusters, listeners, runtime, stats, serverInfo } =
     (remoteData.value?.output as IClutch.envoytriage.v1.Result.Output) || {};
 
-  const summaryData = [
-    { name: "Clusters", value: clusters?.clusterStatuses?.length || 0 },
+  const failingClusterCount = clusters?.clusterStatuses.filter(
+    cluster => cluster.hostStatuses.filter(host => !host.healthy).length > 0
+  ).length;
+  const healthyClusterCount = clusters?.clusterStatuses.length - failingClusterCount;
+
+  const data = [
+    {
+      id: "Running",
+      value: healthyClusterCount,
+      color: "#69F0AE",
+    },
+    {
+      id: "Failing",
+      value: failingClusterCount,
+      color: "#FF8A80",
+    },
+  ];
+  const dashboardFeaturedSummary = { name: "Clusters", data };
+  const dashboardSummary = [
     { name: "Listeners", value: listeners?.listenerStatuses?.length || 0 },
     { name: "Runtime Keys", value: runtime?.entries?.length || 0 },
     { name: "Stats", value: stats?.stats?.length || 0 },
@@ -140,12 +90,15 @@ const TriageDetails: React.FC<WizardChild> = () => {
           { name: "Service Node", value: metadata?.serviceNode },
           { name: "Service Zone", value: metadata?.serviceZone },
           { name: "Service Cluster", value: metadata?.serviceCluster },
-          // { name: "Version", value: metadata?.version },
         ]}
       />
       <Tabs>
         <Tab label="Dashboard">
-          <DashboardTab serverInfo={serverInfo} summaries={summaryData} />
+          <Dashboard
+            serverInfo={serverInfo}
+            featuredSummary={dashboardFeaturedSummary}
+            summaries={dashboardSummary}
+          />
         </Tab>
         <Tab label="Clusters">
           <Clusters clusters={clusters} />
