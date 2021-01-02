@@ -86,6 +86,7 @@ const OptionField = (
 
   return (
     <Select
+      key={field.metadata.displayName}
       label={field.metadata.displayName}
       onChange={updateSelectedOption}
       name={field.name}
