@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { CircularProgress, Grid, Paper } from "@material-ui/core";
 
 const LoadingSpinner = styled(CircularProgress)`
-  color: #3548D4;
+  color: #3548d4;
   position: absolute;
 `;
 
