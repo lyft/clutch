@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { CircularProgress, Grid, Paper } from "@material-ui/core";
 
 const LoadingSpinner = styled(CircularProgress)`
-  color: #02acbe;
+  color: #3548D4;
   position: absolute;
 `;
 
@@ -18,7 +18,7 @@ const ChildrenContainer = styled.div({
 const Overlay = styled(Paper)`
   position: absolute;
   height: 105%;
-  width: 100%;
+  width: 105%;
   display: flex;
   justify-content: center;
   align-items: center;
