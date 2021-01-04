@@ -36,6 +36,10 @@ const StyledAccordion = styled(MuiAccordion)({
     padding: "8px",
     fontSize: "16px",
   },
+
+  "&:before": {
+    display: "none",
+  }
 });
 
 const AccordionSummaryBase = ({ children, collapsible, expanded, ...props }) => {
@@ -83,10 +87,6 @@ const StyledAccordionGroup = styled.div({
 
   ".MuiAccordion-root.Mui-expanded": {
     marginBottom: "16px",
-  },
-
-  ".MuiAccordion-root:before": {
-    display: "none",
   },
 });
 
