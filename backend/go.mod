@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
-	github.com/aws/aws-sdk-go v1.36.7
+	github.com/aws/aws-sdk-go v1.36.19
 	github.com/bufbuild/buf v0.30.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/coreos/go-oidc v2.2.1+incompatible
@@ -18,7 +18,7 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.14.1
 	github.com/golang/protobuf v1.4.3
 	github.com/google/go-github/v32 v32.1.0
-	github.com/google/uuid v1.1.2
+	github.com/google/uuid v1.1.3
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.0.1
 	github.com/iancoleman/strcase v0.1.2
@@ -34,10 +34,10 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/uber-go/tally v3.3.17+incompatible
 	go.uber.org/zap v1.16.0
-	golang.org/x/net v0.0.0-20201209123823-ac852fbbde11
+	golang.org/x/net v0.0.0-20201224014010-6772e930b67b
 	golang.org/x/oauth2 v0.0.0-20201208152858-08078c50e5b5
 	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
-	google.golang.org/genproto v0.0.0-20201211151036-40ec1c210f7a
+	google.golang.org/genproto v0.0.0-20201214200347-8c77b98c765d
 	google.golang.org/grpc v1.34.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.0.1
 	google.golang.org/protobuf v1.25.0
