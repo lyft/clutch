@@ -19,7 +19,6 @@ const StyledAccordion = styled(MuiAccordion)({
   boxSizing: "content-box",
 
   "&.Mui-expanded": {
-    margin: "0",
     boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
     borderColor: "rgba(13, 16, 48, 0.12)",
   },

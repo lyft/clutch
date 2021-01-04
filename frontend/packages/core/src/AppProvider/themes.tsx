@@ -71,6 +71,13 @@ const lightTheme = () => {
       },
     },
     overrides: {
+      MuiAccordion: {
+        root: {
+          '&$expanded': {
+            margin: null,
+          },
+        }
+      },
       MuiTypography: {
         colorPrimary: {
           color: NAVY,
@@ -80,6 +87,7 @@ const lightTheme = () => {
         },
       },
     },
+
   });
 };
 
