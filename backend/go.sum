@@ -214,8 +214,8 @@ github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMo
 github.com/fsnotify/fsnotify v1.4.9 h1:hsms1Qyu0jgnwNXIxa+/V/PDsU6CfLf6CNO8H7IWoS4=
 github.com/fsnotify/fsnotify v1.4.9/go.mod h1:znqG4EE+3YCdAaPaxE2ZRY/06pZUdp0tY4IgpuI1SZQ=
 github.com/fsouza/fake-gcs-server v1.17.0/go.mod h1:D1rTE4YCyHFNa99oyJJ5HyclvN/0uQR+pM/VdlL83bw=
-github.com/fullstorydev/grpcurl v1.7.0 h1:GPb2O+86V4sMFBHqwZ6OJE5gtQtcqhfHYgh0LhS7UmY=
-github.com/fullstorydev/grpcurl v1.7.0/go.mod h1:Mn2jWbdMrQGJQ8UD62uNyMumT2acsZUCkZIqFxsQf1o=
+github.com/fullstorydev/grpcurl v1.8.0 h1:ahuh/VkAhEWskGBawQT6N8efu463D7dOV3uEDav2Hqk=
+github.com/fullstorydev/grpcurl v1.8.0/go.mod h1:Mn2jWbdMrQGJQ8UD62uNyMumT2acsZUCkZIqFxsQf1o=
 github.com/ghodss/yaml v0.0.0-20150909031657-73d445a93680/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/ghodss/yaml v1.0.0 h1:wQHKEahhL6wmXdzwWG11gIVCkOv05bNOh+Rxn0yngAk=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
