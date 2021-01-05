@@ -219,6 +219,8 @@ module.exports = {
         },
         blog: {
           path: "generated/blog",
+          blogTitle: 'Clutch Open-source Developer Blog',
+          blogDescription: 'Where Clutch open-source maintainers and contributors share their work and thoughts on development.',
           feedOptions: {
             type: 'all',
             copyright: `Copyright © ${new Date().getFullYear()} <a href="https://lyft.com" target="blank">Lyft, Inc.</a>`,
