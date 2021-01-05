@@ -11922,6 +11922,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {Array.<clutch.config.gateway.v1.IMiddleware>|null} [middleware] GatewayOptions middleware
                      * @property {clutch.config.gateway.v1.IAssets|null} [assets] GatewayOptions assets
                      * @property {boolean|null} [enablePprof] GatewayOptions enablePprof
+                     * @property {clutch.config.middleware.accesslog.v1.IConfig|null} [accesslog] GatewayOptions accesslog
                      */
 
                     /**
@@ -12005,6 +12006,14 @@ export const clutch = $root.clutch = (() => {
                     GatewayOptions.prototype.enablePprof = false;
 
                     /**
+                     * GatewayOptions accesslog.
+                     * @member {clutch.config.middleware.accesslog.v1.IConfig|null|undefined} accesslog
+                     * @memberof clutch.config.gateway.v1.GatewayOptions
+                     * @instance
+                     */
+                    GatewayOptions.prototype.accesslog = null;
+
+                    /**
                      * Verifies a GatewayOptions message.
                      * @function verify
                      * @memberof clutch.config.gateway.v1.GatewayOptions
@@ -12057,6 +12066,11 @@ export const clutch = $root.clutch = (() => {
                         if (message.enablePprof != null && message.hasOwnProperty("enablePprof"))
                             if (typeof message.enablePprof !== "boolean")
                                 return "enablePprof: boolean expected";
+                        if (message.accesslog != null && message.hasOwnProperty("accesslog")) {
+                            let error = $root.clutch.config.middleware.accesslog.v1.Config.verify(message.accesslog);
+                            if (error)
+                                return "accesslog." + error;
+                        }
                         return null;
                     };
 
@@ -12114,6 +12128,11 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (object.enablePprof != null)
                             message.enablePprof = Boolean(object.enablePprof);
+                        if (object.accesslog != null) {
+                            if (typeof object.accesslog !== "object")
+                                throw TypeError(".clutch.config.gateway.v1.GatewayOptions.accesslog: object expected");
+                            message.accesslog = $root.clutch.config.middleware.accesslog.v1.Config.fromObject(object.accesslog);
+                        }
                         return message;
                     };
 
@@ -12140,6 +12159,7 @@ export const clutch = $root.clutch = (() => {
                             object.timeouts = null;
                             object.assets = null;
                             object.enablePprof = false;
+                            object.accesslog = null;
                         }
                         if (message.listener != null && message.hasOwnProperty("listener"))
                             object.listener = $root.clutch.config.gateway.v1.Listener.toObject(message.listener, options);
@@ -12160,6 +12180,8 @@ export const clutch = $root.clutch = (() => {
                             object.assets = $root.clutch.config.gateway.v1.Assets.toObject(message.assets, options);
                         if (message.enablePprof != null && message.hasOwnProperty("enablePprof"))
                             object.enablePprof = message.enablePprof;
+                        if (message.accesslog != null && message.hasOwnProperty("accesslog"))
+                            object.accesslog = $root.clutch.config.middleware.accesslog.v1.Config.toObject(message.accesslog, options);
                         return object;
                     };
 

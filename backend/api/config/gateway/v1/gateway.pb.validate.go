@@ -664,6 +664,16 @@ func (m *GatewayOptions) Validate() error {
 
 	// no validation rules for EnablePprof
 
+	if v, ok := interface{}(m.GetAccesslog()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GatewayOptionsValidationError{
+				field:  "Accesslog",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 

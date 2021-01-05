@@ -16,6 +16,7 @@ import (
 	"github.com/lyft/clutch/backend/gateway/mux"
 	"github.com/lyft/clutch/backend/gateway/stats"
 	"github.com/lyft/clutch/backend/middleware"
+	"github.com/lyft/clutch/backend/middleware/accesslog"
 	"github.com/lyft/clutch/backend/middleware/timeouts"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/resolver"
@@ -134,11 +135,21 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		resolver.Registry[resolverCfg.Name] = res
 	}
 
+	var interceptors []grpc.UnaryServerInterceptor
+	if cfg.Gateway.Accesslog != nil {
+		accesslog, err := accesslog.New(cfg.Gateway.Accesslog, logger, scope)
+		if err != nil {
+			logger.Fatal("could not create accesslog interceptor", zap.Error(err))
+		}
+		interceptors = append(interceptors, accesslog.UnaryInterceptor())
+	}
+
 	timeoutInterceptor, err := timeouts.New(cfg.Gateway.Timeouts, logger, scope)
 	if err != nil {
 		logger.Fatal("could not create timeout interceptor", zap.Error(err))
 	}
-	interceptors := []grpc.UnaryServerInterceptor{timeoutInterceptor.UnaryInterceptor()}
+	interceptors = append(interceptors, timeoutInterceptor.UnaryInterceptor())
+
 	for _, mCfg := range cfg.Gateway.Middleware {
 		logger := logger.With(zap.String("moduleName", mCfg.Name))
 
