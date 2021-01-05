@@ -139,7 +139,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	if cfg.Gateway.Accesslog != nil {
 		accesslog, err := accesslog.New(cfg.Gateway.Accesslog, logger, scope)
 		if err != nil {
-			logger.Fatal("could not create accesslog config", zap.Error(err))
+			logger.Fatal("could not create accesslog interceptor", zap.Error(err))
 		}
 		interceptors = append(interceptors, accesslog.UnaryInterceptor())
 	}
