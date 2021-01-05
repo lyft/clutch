@@ -171,6 +171,12 @@ module.exports = {
           ],
         },
         {
+          title: 'Blog',
+          items: [
+            {label: 'Blog', to: 'blog'},
+          ],
+        },
+        {
           title: 'Components',
           items: [
             {
