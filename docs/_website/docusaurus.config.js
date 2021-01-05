@@ -171,12 +171,6 @@ module.exports = {
           ],
         },
         {
-          title: 'Blog',
-          items: [
-            {label: 'Blog', to: 'blog'},
-          ],
-        },
-        {
           title: 'Components',
           items: [
             {
@@ -192,6 +186,7 @@ module.exports = {
         {
           title: 'Community',
           items: [
+            {label: 'Blog', to: 'blog'},
             {
               label: 'GitHub',
               to: 'https://github.com/lyft/clutch',
@@ -221,6 +216,13 @@ module.exports = {
         docs: {
           path: "generated/docs",
           sidebarPath: require.resolve('../sidebars.json'),
+        },
+        blog: {
+          path: "generated/blog",
+          feedOptions: {
+            type: 'all',
+            copyright: `Copyright © ${new Date().getFullYear()} <a href="https://lyft.com" target="blank">Lyft, Inc.</a>`,
+          },
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
