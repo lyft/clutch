@@ -38,6 +38,7 @@ const PodDetails: React.FC<WizardChild> = () => {
 
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
+      <strong>Pod Details</strong>
       <MetadataTable
         data={[
           { name: "Name", value: instance.name },
