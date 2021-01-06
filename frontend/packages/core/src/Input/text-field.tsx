@@ -51,12 +51,6 @@ const StyledTextField = styled(BaseTextField)({
 
   ".MuiInputBase-root.Mui-focused": {
     borderColor: "#3548d4",
-    ".MuiButtonBase-root": {
-      backgroundColor: "#3548D4",
-      "*": {
-        color: "#FFFFFF",
-      },
-    },
   },
 
   ".MuiInputBase-root.Mui-disabled": {
@@ -99,20 +93,15 @@ const StyledTextField = styled(BaseTextField)({
 
 const IconButton = styled(MuiIconButton)({
   borderRadius: "0",
-  backgroundColor: "#E7E7EA",
+  backgroundColor: "#3548D4",
+  color: "#FFFFFF",
   borderBottomRightRadius: "3px",
   borderTopRightRadius: "3px",
   "&:hover": {
     backgroundColor: "#2D3DB4",
-    "*": {
-      color: "#FFFFFF",
-    },
   },
   "&:active": {
     backgroundColor: "#2938A5",
-    "*": {
-      color: "#FFFFFF",
-    },
   },
 });
 
