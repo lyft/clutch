@@ -50,6 +50,7 @@ type resolverAPI struct{}
 func newResponse() *response {
 	return &response{
 		Results: []*any.Any{},
+		PartialFailures: []*statuspb.Status{},
 	}
 }
 
