@@ -14,6 +14,7 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	statuspb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -46,10 +47,69 @@ func newAPI() resolverv1.ResolverAPIServer {
 
 type resolverAPI struct{}
 
-func (r *resolverAPI) Resolve(ctx context.Context, req *resolverv1.ResolveRequest) (*resolverv1.ResolveResponse, error) {
-	response := &resolverv1.ResolveResponse{
+func newResponse() *response {
+	return &response{
 		Results: []*any.Any{},
 	}
+}
+
+// Generic object to handle common operations for SearchResponse and ResolveResponse.
+type response struct {
+	Results         []*any.Any
+	PartialFailures []*statuspb.Status
+}
+
+// Get rid of any extraneous results or partial failures based on the limit provided in the request.
+func (r *response) truncate(limit uint32) {
+	if limit == 0 {
+		return
+	}
+
+	if len(r.Results) > int(limit) {
+		// Truncate in case it wasn't done earlier.
+		r.Results = r.Results[:limit]
+	}
+
+	if len(r.Results) == int(limit) {
+		// If we fulfilled our limit then errors are not relevant.
+		r.PartialFailures = nil
+	}
+}
+
+func (r *response) marshalResults(results *resolver.Results) error {
+	for _, result := range results.Messages {
+		asAny, err := ptypes.MarshalAny(result)
+		if err != nil {
+			return err
+		}
+		r.Results = append(r.Results, asAny)
+	}
+
+	for _, failure := range results.PartialFailures {
+		r.PartialFailures = append(r.PartialFailures, failure.Proto())
+	}
+
+	return nil
+}
+
+func (r *response) isError(wanted string, searchedSchemas []string) error {
+	if len(r.Results) > 0 {
+		return nil
+	}
+
+	msg := fmt.Sprintf("Did not find a '%s', looked by: %s", wanted, strings.Join(searchedSchemas, ", "))
+
+	if len(r.PartialFailures) > 0 {
+		s := status.New(codes.FailedPrecondition, msg)
+		s, _ = s.WithDetails(resolver.MessageSlice(r.PartialFailures)...)
+		return s.Err()
+	}
+
+	return status.Error(codes.NotFound, msg)
+}
+
+func (r *resolverAPI) Resolve(ctx context.Context, req *resolverv1.ResolveRequest) (*resolverv1.ResolveResponse, error) {
+	resp := newResponse()
 
 	var searchedSchemas []string
 	for _, res := range resolver.Registry {
@@ -74,49 +134,27 @@ func (r *resolverAPI) Resolve(ctx context.Context, req *resolverv1.ResolveReques
 					return nil, err
 				}
 
-				for _, result := range results.Messages {
-					asAny, err := ptypes.MarshalAny(result)
-					if err != nil {
-						return nil, err
-					}
-					response.Results = append(response.Results, asAny)
-				}
-
-				for _, failure := range results.PartialFailures {
-					response.PartialFailures = append(response.PartialFailures, failure.Proto())
+				err = resp.marshalResults(results)
+				if err != nil {
+					return nil, err
 				}
 			}
 		}
 	}
 
-	if req.Limit > 0 && len(response.Results) > int(req.Limit) {
-		// Truncate in case it wasn't done earlier.
-		response.Results = response.Results[:req.Limit]
+	resp.truncate(req.Limit)
+	if err := resp.isError(req.Want, searchedSchemas); err != nil {
+		return nil, err
 	}
 
-	if len(response.Results) == 0 {
-		msg := fmt.Sprintf("Did not find a '%s', looked by: %s", req.Want, strings.Join(searchedSchemas, ", "))
-
-		if len(response.PartialFailures) > 0 {
-			s := status.New(codes.FailedPrecondition, msg)
-			s, _ = s.WithDetails(resolver.MessageSlice(response.PartialFailures)...)
-			return nil, s.Err()
-		}
-
-		return nil, status.Error(codes.NotFound, msg)
-	}
-
-	if len(response.Results) == 0 {
-		return nil, status.Error(codes.NotFound, fmt.Sprintf("Did not find a '%s', looked by: %s", req.Have.TypeUrl, strings.Join(searchedSchemas, ", ")))
-	}
-
-	return response, nil
+	return &resolverv1.ResolveResponse{
+		Results:         resp.Results,
+		PartialFailures: resp.PartialFailures,
+	}, nil
 }
 
 func (r *resolverAPI) Search(ctx context.Context, req *resolverv1.SearchRequest) (*resolverv1.SearchResponse, error) {
-	response := &resolverv1.SearchResponse{
-		Results: []*any.Any{},
-	}
+	resp := newResponse()
 
 	var searchedSchemas []string
 	for _, res := range resolver.Registry {
@@ -133,43 +171,22 @@ func (r *resolverAPI) Search(ctx context.Context, req *resolverv1.SearchRequest)
 				return nil, err
 			}
 
-			for _, result := range results.Messages {
-				asAny, err := ptypes.MarshalAny(result)
-				if err != nil {
-					return nil, err
-				}
-				response.Results = append(response.Results, asAny)
-			}
-
-			for _, failure := range results.PartialFailures {
-				response.PartialFailures = append(response.PartialFailures, failure.Proto())
+			err = resp.marshalResults(results)
+			if err != nil {
+				return nil, err
 			}
 		}
 	}
 
-	if req.Limit > 0 && len(response.Results) > int(req.Limit) {
-		// Truncate in case it wasn't done earlier.
-		response.Results = response.Results[:req.Limit]
+	resp.truncate(req.Limit)
+	if err := resp.isError(req.Want, searchedSchemas); err != nil {
+		return nil, err
 	}
 
-	if len(response.Results) == int(req.Limit) {
-		// If we fulfilled our limit then errors are not relevant.
-		response.PartialFailures = nil
-	}
-
-	if len(response.Results) == 0 {
-		msg := fmt.Sprintf("Did not find a '%s', looked by: %s", req.Want, strings.Join(searchedSchemas, ", "))
-
-		if len(response.PartialFailures) > 0 {
-			s := status.New(codes.FailedPrecondition, msg)
-			s, _ = s.WithDetails(resolver.MessageSlice(response.PartialFailures)...)
-			return nil, s.Err()
-		}
-
-		return nil, status.Error(codes.NotFound, msg)
-	}
-
-	return response, nil
+	return &resolverv1.SearchResponse{
+		Results:         resp.Results,
+		PartialFailures: resp.PartialFailures,
+	}, nil
 }
 
 func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetObjectSchemasRequest) (*resolverv1.GetObjectSchemasResponse, error) {
