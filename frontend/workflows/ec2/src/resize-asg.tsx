@@ -5,6 +5,7 @@ import {
   client,
   Confirmation,
   MetadataTable,
+  NotePanel,
   Resolver,
   useWizardContext,
 } from "@clutch-sh/core";
@@ -78,11 +79,10 @@ const GroupDetails: React.FC<WizardChild> = () => {
 const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const group = useDataLayout("groupData").displayValue();
   const resizeData = useDataLayout("resizeData");
-  const formattedNotes = notes?.map(note => <div>{note.text}</div>);
 
   return (
     <WizardStep error={resizeData.error} isLoading={resizeData.isLoading}>
-      <Confirmation action="Resize">{notes && formattedNotes}</Confirmation>
+      <Confirmation action="Resize" />
       <MetadataTable
         data={[
           { name: "Name", value: group.name },
@@ -91,11 +91,12 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
           { name: "New Desired Size", value: group.size.desired },
         ]}
       />
+      <NotePanel notes={notes} />
     </WizardStep>
   );
 };
 
-const ResizeAutoscalingGroup: React.FC<WorkflowProps> = ({ heading, resolverType, notes }) => {
+const ResizeAutoscalingGroup: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
   const dataLayout = {
     groupData: {},
     resizeData: {

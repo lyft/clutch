@@ -7,6 +7,7 @@ import {
   client,
   Confirmation,
   MetadataTable,
+  NotePanel,
   Resolver,
   useWizardContext,
 } from "@clutch-sh/core";
@@ -72,7 +73,6 @@ const InstanceDetails: React.FC<WizardChild> = () => {
 const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const terminationData = useDataLayout("terminationData");
   const instance = useDataLayout("resourceData").displayValue();
-  const formattedNotes = notes?.map(note => <div>{note.text}</div>);
 
   const data = [
     { name: "Instance ID", value: instance.instanceId },
@@ -81,13 +81,14 @@ const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
 
   return (
     <WizardStep error={terminationData.error} isLoading={terminationData.isLoading}>
-      <Confirmation action="Termination">{notes && formattedNotes}</Confirmation>
+      <Confirmation action="Termination" />
       <MetadataTable data={data} />
+      <NotePanel notes={notes} />
     </WizardStep>
   );
 };
 
-const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes }) => {
+const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
   const dataLayout = {
     resourceData: {},
     terminationData: {
@@ -104,7 +105,7 @@ const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, not
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <InstanceIdentifier name="Lookup" resolverType={resolverType} />
-      <InstanceDetails name="Modify" />
+      <InstanceDetails name="Verify" />
       <Confirm name="Confirmation" notes={notes} />
     </Wizard>
   );
