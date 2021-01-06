@@ -39,6 +39,7 @@ const GroupDetails: React.FC<WizardChild> = () => {
 
   return (
     <WizardStep error={groupData.error} isLoading={groupData.isLoading}>
+      <strong>ASG Details</strong>
       <MetadataTable
         onUpdate={update}
         data={[
