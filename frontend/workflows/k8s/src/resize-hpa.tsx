@@ -60,6 +60,7 @@ const HPADetails: React.FC<WizardChild> = () => {
 
   return (
     <WizardStep error={hpaData.error} isLoading={hpaData.isLoading}>
+      <strong>HPA Details</strong>
       <MetadataTable
         onUpdate={update}
         data={[

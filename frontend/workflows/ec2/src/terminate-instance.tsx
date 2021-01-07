@@ -54,6 +54,7 @@ const InstanceDetails: React.FC<WizardChild> = () => {
 
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
+      <strong>Instance Details</strong>
       <MetadataTable data={data} />
       {metadata.length > 0 && (
         <Accordion title="Metadata">
