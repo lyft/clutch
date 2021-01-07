@@ -76,12 +76,19 @@ const TableCell = styled(MuiTableCell)({
 });
 
 const Grid = styled(MuiGrid)({
+  display: "flex",
   ".MuiFormControl-root": {
-    height: "40px",
-    width: "100px",
     flexDirection: "row",
   },
-  ".textfield-disabled .MuiFormControl-root": {
+  ".MuiFormControl-root .MuiInputBase-root": {
+    height: "40px",
+    width: "100px",
+    alignSelf: "center",
+  },
+  ".MuiFormControl-root .MuiFormHelperText-root.Mui-error": {
+    flex: 1,
+  },
+  ".textfield-disabled .MuiFormControl-root .MuiInputBase-root": {
     width: "41px",
   },
   ".textfield-disabled .MuiInput-input": {
@@ -136,7 +143,7 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
     <TableRow key={data.id}>
       <KeyCell data={data} />
       <TableCell>
-        <Grid container alignItems="center" wrap="nowrap" spacing={2}>
+        <Grid spacing={2} alignItems="center">
           <div className="textfield-disabled">
             <TextField disabled id={data.id} name={data.name} defaultValue={data.value} />
           </div>
