@@ -22,11 +22,13 @@ const StyledAlert = styled(MuiAlert)(
     paddingBottom: "20px",
     color: "rgba(13, 16, 48, 0.6)",
     fontSize: "14px",
+    overflow: "auto",
     ".MuiAlert-icon": {
       marginRight: "16px",
       padding: "0",
     },
     ".MuiAlert-message": {
+      maxWidth: "calc(100% - 40px)",
       width: "100%",
       padding: "0",
       ".MuiAlertTitle-root": {
