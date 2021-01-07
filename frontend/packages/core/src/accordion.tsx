@@ -17,6 +17,7 @@ const StyledAccordion = styled(MuiAccordion)({
   boxShadow: "none",
   border: "1px solid transparent",
   boxSizing: "content-box",
+  maxWidth: "100%",
 
   "&.Mui-expanded": {
     boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
@@ -38,7 +39,7 @@ const StyledAccordion = styled(MuiAccordion)({
 
   "&:before": {
     display: "none",
-  }
+  },
 });
 
 const AccordionSummaryBase = ({ children, collapsible, expanded, ...props }) => {
