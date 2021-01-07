@@ -42,7 +42,6 @@ const StyledLandingCard = styled(Card)({
   "& .header": {
     display: "inline-flex",
     marginBottom: "16px",
-    textTransform: "uppercase",
     fontWeight: "bold",
     fontSize: "12px",
     lineHeight: "36px",
