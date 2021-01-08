@@ -100,11 +100,11 @@ const ButtonGroupContainer = styled(Grid)(
   props =>
     props["data-border"] === "bottom"
       ? {
-          marginBottom: "24px",
+          marginBottom: "12px",
           borderBottom: "1px solid #E7E7EA",
         }
       : {
-          marginTop: "24px",
+          marginTop: "12px",
           borderTop: "1px solid #E7E7EA",
         }
 );
