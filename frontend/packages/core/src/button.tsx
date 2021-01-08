@@ -94,7 +94,7 @@ const Button: React.FC<ButtonProps> = ({ text, variant = "primary", ...props }) 
 const ButtonGroupContainer = styled(Grid)(
   {
     "> *": {
-      margin: "8px",
+      margin: "12px 8px",
     },
   },
   props =>
@@ -102,10 +102,12 @@ const ButtonGroupContainer = styled(Grid)(
       ? {
           marginBottom: "12px",
           borderBottom: "1px solid #E7E7EA",
+          marginTop: "0",
         }
       : {
           marginTop: "12px",
           borderTop: "1px solid #E7E7EA",
+          marginBottom: "0",
         }
 );
 
