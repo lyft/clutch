@@ -79,6 +79,7 @@ const BaseSelect = ({ className, ...props }: MuiSelectProps) => (
 
 const StyledSelect = styled(BaseSelect)({
   padding: "0",
+  backgroundColor: "#FFFFFF",
 
   ".MuiSelect-root": {
     padding: "15px 60px 13px 16px",
