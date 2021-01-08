@@ -12,7 +12,7 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
-import { number } from "yup";
+import { number, ref } from "yup";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
@@ -58,12 +58,20 @@ const GroupDetails: React.FC<WizardChild> = () => {
           {
             name: "Max Size",
             value: group.size.max,
-            input: { type: "number", key: "size.max" },
+            input: {
+              type: "number",
+              key: "size.max",
+              validation: number().integer().moreThan(ref("Min Size"))
+            },
           },
           {
             name: "Desired Size",
             value: group.size.desired,
-            input: { type: "number", key: "size.desired" },
+            input: {
+              type: "number",
+              key: "size.desired",
+              validation: number().integer().moreThan(ref("Min Size")),
+            },
           },
           { name: "Availability Zone", value: group.zones },
         ]}

@@ -16,7 +16,7 @@ import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import _ from "lodash";
-import * as yup from "yup";
+import { number, ref } from "yup";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
@@ -74,13 +74,17 @@ const HPADetails: React.FC<WizardChild> = () => {
             input: {
               type: "number",
               key: "sizing.minReplicas",
-              validation: yup.number().integer().moreThan(0),
+              validation: number().integer().moreThan(0),
             },
           },
           {
             name: "Max Size",
             value: hpa.sizing.maxReplicas,
-            input: { type: "number", key: "sizing.maxReplicas" },
+            input: {
+              type: "number",
+              key: "sizing.maxReplicas",
+              validation: number().integer().moreThan(ref("Min Size")),
+            },
           },
           { name: "Cluster", value: hpa.cluster },
         ]}
