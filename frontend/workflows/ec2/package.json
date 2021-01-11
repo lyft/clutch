@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/ec2",
-  "version": "0.0.0-beta",
+  "version": "1.0.0-beta",
   "description": "Clutch EC2 Workflows",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",

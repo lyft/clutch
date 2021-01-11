@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/server-experimentation",
-  "version": "0.0.0-beta",
+  "version": "1.0.0-beta",
   "private": true,
   "description": "Clutch Server Experimentation Workflows",
   "license": "Apache-2.0",

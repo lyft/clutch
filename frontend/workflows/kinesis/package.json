@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/kinesis",
-  "version": "0.0.0-beta",
+  "version": "1.0.0-beta",
   "description": "Clutch Kinesis Workflows",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
