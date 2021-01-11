@@ -5080,6 +5080,9 @@ export namespace clutch {
 
                     /** GatewayOptions enablePprof */
                     enablePprof?: (boolean|null);
+
+                    /** GatewayOptions accesslog */
+                    accesslog?: (clutch.config.middleware.accesslog.v1.IConfig|null);
                 }
 
                 /** Represents a GatewayOptions. */
@@ -5114,6 +5117,9 @@ export namespace clutch {
 
                     /** GatewayOptions enablePprof. */
                     public enablePprof: boolean;
+
+                    /** GatewayOptions accesslog. */
+                    public accesslog?: (clutch.config.middleware.accesslog.v1.IConfig|null);
 
                     /**
                      * Verifies a GatewayOptions message.
