@@ -13,8 +13,8 @@
     "@docusaurus/preset-classic": "^2.0.0-alpha",
     "classnames": "^2.2.6",
     "prismjs": "^1.21.0",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
     "remark-toc": "^7.0.0"
   },
   "browserslist": {

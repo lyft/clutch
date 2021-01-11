@@ -28,10 +28,10 @@
     "@clutch-sh/wizard": "^1.0.0-beta",
     "@emotion/styled": "^11.0.0",
     "@material-ui/core": "^4.11.0",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
     "react-hook-form": "^6.0.8",
-    "react-is": "^16.8.0"
+    "react-is": "^17.0.0"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^1.0.0-beta"

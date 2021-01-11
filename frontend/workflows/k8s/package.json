@@ -27,8 +27,8 @@
     "@clutch-sh/data-layout": "^1.0.0-beta",
     "@clutch-sh/wizard": "^1.0.0-beta",
     "lodash": "4.17.20",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
     "yup": "^0.31.0"
   },
   "devDependencies": {

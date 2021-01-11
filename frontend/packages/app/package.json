@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@clutch-sh/core": "^1.0.0-beta",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^1.0.0-beta"
