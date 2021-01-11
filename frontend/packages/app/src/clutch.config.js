@@ -4,6 +4,12 @@ module.exports = {
       trending: true,
       componentProps: {
         resolverType: "clutch.aws.ec2.v1.Instance",
+        notes: [
+          {
+            severity: "info",
+            text: "The instance may take several minutes to shut down.",
+          },
+        ],
       },
     },
     rebootInstance: {
@@ -49,6 +55,13 @@ module.exports = {
       trending: true,
       componentProps: {
         resolverType: "clutch.k8s.v1.HPA",
+      },
+    },
+  },
+  "@clutch-sh/kinesis": {
+    updateShardCount: {
+      componentProps: {
+        resolverType: "clutch.aws.kinesis.v1.Stream",
       },
     },
   },
