@@ -26,6 +26,7 @@ const Warning: React.FC<WarningProps> = ({ message, onClose }) => {
     <Snackbar
       open={open}
       autoHideDuration={6000}
+      onExiting={onDismiss}
       onClose={() => setOpen(false)}
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
     >
