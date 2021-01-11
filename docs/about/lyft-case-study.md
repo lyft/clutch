@@ -36,7 +36,7 @@ In the event that the cluster required a resize, developers had three main optio
 
 Lyft is all-in on infrastructure-as-code. However, resizing a cluster during an incident via GitOps is a painful experience.
 
-In our implementation of GitOps, applying orchestration changes requires a full deploy of a service to minimize the possibility of configuration drift. It can take 10 minutes or more for CI to run tests, launch a deploy pipline, and enact the latest declaration. In the event that the first value was not enough, the engineer would have to repeat the process. This would drastically increase the time it takes to mitigate the issue. 
+In our implementation of GitOps, applying orchestration changes requires a full deploy of a service to minimize the possibility of configuration drift. It can take 10 minutes or more for CI to run tests, launch a deploy pipline, and enact the latest declaration. In the event that the first value was not enough, the engineer would have to repeat the process. This would drastically increase the time it takes to mitigate the issue.
 
 In addition, the `desired` size of a cluster is not generally controlled by orchestration code. It's a dynamic value that changes in response to average CPU usage. Committing this value would reset it on every deploy regardless of current conditions. For this reason developers would simply use minimum to enforce the desired size during an incident. Sometimes they would forget to revert their change after the incident was over costing thousands of dollars in unnecessary cloud resource usage.
 
@@ -49,18 +49,18 @@ Developers often avoided the CLI due to the friction of performing 2FA flows on 
 $ aws-okta exec elevated-role -- aws autoscaling update-auto-scaling-group \
  --auto-scaling-group-name my-auto-scaling-group \
  --min-size 1 --max-size 3
-$ 
+$
 ```
 
 #### UI
-The console presents a large amount of functionality and information needed to perform a task which slows down operations and increases cognitive load. 
+The console presents a large amount of functionality and information needed to perform a task which slows down operations and increases cognitive load.
 
 {{/* TODO: this is too fuzzy, may be possible to redact information rather than pixelizing the entire gif */}}
 <img style={ {border: "2px solid gray"} } alt="Resizing an ASG in the AWS console" src={require('@docusaurus/useBaseUrl').default('img/docs/aws-resize.gif')} width="50%" />
 
 ### Mitigation (after)
 
-<img style={ {border: "2px solid gray"} } alt="Resizing an ASG in Clutch" src={require('@docusaurus/useBaseUrl').default('img/docs/aws-resize-clutch.gif')} width="65%" />
+<img style={ {border: "2px solid gray"} } alt="Resizing an ASG in Clutch" src={require('@docusaurus/useBaseUrl').default('https://user-images.githubusercontent.com/39421794/104223887-39c09900-5412-11eb-9791-af10afdc6bbb.gif')} width="65%" />
 
 #### Preventing Accidents
 Next, we added rules to validate actions and prevent accidents that had occurred before with legacy tools.
