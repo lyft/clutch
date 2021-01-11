@@ -1,8 +1,8 @@
-import React from "react";
+import * as React from "react";
 import type { Meta } from "@storybook/react";
 
 import type { LinkProps } from "../link";
-import Link from "../link";
+import { Link } from "../link";
 
 export default {
   title: "Core/Link",

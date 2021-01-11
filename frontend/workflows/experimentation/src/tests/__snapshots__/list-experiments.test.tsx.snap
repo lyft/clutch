@@ -2,7 +2,9 @@
 
 exports[`List Experiments workflow renders correctly 1`] = `
 "<PageLayout heading={[undefined]} error=\\"\\">
-  <ButtonGroup buttons={{...}} />
+  <ButtonGroup justify=\\"center\\" border=\\"bottom\\">
+    <Button text=\\"button_1\\" onClick={[Function: onClick]} />
+  </ButtonGroup>
   <ListView columns={{...}} items={[undefined]} onRowSelection={[Function: onRowSelection]} />
 </PageLayout>"
 `;

@@ -1,8 +1,8 @@
-import React from "react";
+import * as React from "react";
 import type { Meta } from "@storybook/react";
 
 import type { SelectProps } from "../select";
-import Select from "../select";
+import { Select } from "../select";
 
 export default {
   title: "Core/Input/Select",
@@ -13,46 +13,51 @@ export default {
   },
 } as Meta;
 
-const Template = (props: SelectProps) => <Select name="demo" {...props} />;
+const Template = (props: SelectProps) => <Select name="storybookDemo" {...props} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
+  label: "My Label",
   options: [
     {
-      label: "option 1",
+      label: "Option 1",
     },
     {
-      label: "option 2",
+      label: "Option 2",
     },
   ],
+};
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+  ...Primary.args,
+  disabled: true,
+};
+
+export const Error = Template.bind({});
+Error.args = {
+  ...Primary.args,
+  error: true,
+  helperText: "There was a problem!",
 };
 
 export const CustomValues = Template.bind({});
 CustomValues.args = {
+  ...Primary.args,
   options: [
     {
-      label: "option 1",
-      value: "value 1",
+      label: "Option 1",
+      value: "VALUE_ONE",
     },
     {
-      label: "option 2",
-      value: "value 2",
+      label: "Option 2",
+      value: "VALUE_TWO",
     },
   ],
 };
 
-export const WithLabel = Template.bind({});
-WithLabel.argTypes = {
-  defaultOption: {
-    control: {
-      type: "select",
-      options: Primary.args.options.map((_: any, i: number) => i),
-    },
-  },
-};
-WithLabel.args = {
+export const WithoutLabel = Template.bind({});
+WithoutLabel.args = {
   ...Primary.args,
-  defaultOption: 0,
-  label: "Please select one",
-  maxWidth: "100px",
+  label: null,
 };

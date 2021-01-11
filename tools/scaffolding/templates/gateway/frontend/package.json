@@ -22,9 +22,9 @@
   },
   "devDependencies": {
     "lerna": "^3.20.0",
-    "@clutch-sh/ec2": "^0.0.0-beta",
+    "@clutch-sh/ec2": "^1.0.0-beta",
     "@{{ .RepoName }}/echo": "^0.0.0",
-    "@clutch-sh/core": "^0.0.0-beta",
+    "@clutch-sh/core": "^1.0.0-beta",
     "history": "^5.0.0",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",

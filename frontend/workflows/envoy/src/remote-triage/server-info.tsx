@@ -1,7 +1,19 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { ExpansionPanel, MetadataTable } from "@clutch-sh/core";
-import { TableCell, TableRow } from "@material-ui/core";
+import { MetadataTable } from "@clutch-sh/core";
+import styled from "@emotion/styled";
+
+const Container = styled.div({
+  "> *": {
+    padding: "8px 0",
+  },
+});
+const Title = styled.div({
+  fontWeight: "bold",
+  fontSize: "20px",
+  color: "#0D1030",
+  textTransform: "capitalize",
+});
 
 interface ServerInformation {
   // eslint-disable-next-line camelcase
@@ -26,30 +38,22 @@ const ServerInfo: React.FC<{ info: IClutch.envoytriage.v1.IServerInfo }> = ({ in
     return localInfo;
   }, {});
   const cliOptions = rawServerInfo.command_line_options;
-  const status = `(${rawServerInfo.state.toLowerCase()})`;
+  const status = `${rawServerInfo.state.toLowerCase()}`;
 
   const serverData = Object.keys(information).map(key => {
     return { name: key, value: information[key] };
   });
-  serverData.push({ name: "Command Line Options", value: "" });
   const cliOptionMetadata = Object.keys(cliOptions).map(key => {
     return { name: key, value: cliOptions[key] };
   });
-  const midPoint = Math.floor(cliOptionMetadata.length / 2);
-  const variant = "small";
   return (
-    <ExpansionPanel heading="Server Info" summary={status}>
-      <MetadataTable data={serverData} variant="small">
-        <TableRow>
-          <TableCell size={variant}>
-            <MetadataTable data={cliOptionMetadata.slice(0, midPoint)} variant={variant} />
-          </TableCell>
-          <TableCell size={variant}>
-            <MetadataTable data={cliOptionMetadata.slice(midPoint)} variant={variant} />
-          </TableCell>
-        </TableRow>
-      </MetadataTable>
-    </ExpansionPanel>
+    <Container>
+      <Title>{status}</Title>
+      <Title>Stats</Title>
+      <MetadataTable data={serverData} />
+      <Title>Command Line Options</Title>
+      <MetadataTable maxHeight="400px" data={cliOptionMetadata} />
+    </Container>
   );
 };
 

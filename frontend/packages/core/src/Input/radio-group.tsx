@@ -3,10 +3,11 @@ import {
   FormControl as MuiFormControl,
   FormControlLabel,
   FormLabel as MuiFormLabel,
-  Radio as MuiRadio,
   RadioGroup as MuiRadioGroup,
 } from "@material-ui/core";
 import styled from "styled-components";
+
+import Radio from "./radio";
 
 const FormLabel = styled(MuiFormLabel)`
   ${({ theme }) => `
@@ -21,31 +22,9 @@ const FormLabel = styled(MuiFormLabel)`
   `}
 `;
 
-const StyledRadioGroup = styled(MuiRadioGroup)`
-  ${({ ...props }) => `
-  display: flex;
-  max-width: ${props["data-max-width"] || "500px"};
-  `}
-`;
-
 const FormControl = styled(MuiFormControl)`
-  ${({ ...props }) => `
-  display: flex;
   margin: 16px 0;
   min-width: fit-content;
-  width: ${props["data-max-width"] || "500px"};
-  `}
-`;
-
-const Radio = styled(MuiRadio)`
-  ${({ theme }) => `
-  &.Mui-checked {
-    color: ${theme.palette.accent.main};
-  }
-  &.Mui-disabled {
-    opacity: 0.75;
-  }
-  `}
 `;
 
 interface RadioGroupOption {
@@ -57,7 +36,6 @@ interface RadioGroupProps {
   defaultOption?: number;
   label?: string;
   disabled?: boolean;
-  maxWidth?: string;
   name: string;
   options: RadioGroupOption[];
   onChange: (value: string) => void;
@@ -67,7 +45,6 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   defaultOption = 0,
   label,
   disabled,
-  maxWidth,
   name,
   options,
   onChange,
@@ -95,25 +72,25 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   }, []);
 
   return (
-    <FormControl key={name} disabled={disabled} data-max-width={maxWidth}>
+    <FormControl key={name} disabled={disabled}>
       {label && <FormLabel>{label}</FormLabel>}
-      <StyledRadioGroup
+      <MuiRadioGroup
         aria-label={label}
         name={name}
         defaultValue={options[defaultIdx]?.value || options[defaultIdx].label}
         onChange={updateSelectedOption}
       >
-        {options.map(option => {
+        {options.map((option, idx) => {
           return (
             <FormControlLabel
               key={option.label}
               value={option?.value || option.label}
-              control={<Radio />}
+              control={<Radio selected={idx === selectedIdx} />}
               label={option.label}
             />
           );
         })}
-      </StyledRadioGroup>
+      </MuiRadioGroup>
     </FormControl>
   );
 };
