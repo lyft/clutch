@@ -141,6 +141,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 		upstreamCluster, downstreamCluster, err := getClusterPair(httpFaultConfig)
 		if err != nil {
 			logger.Errorw("Invalid http fault config", "config", httpFaultConfig)
+			continue
 		}
 
 		switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
@@ -150,6 +151,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 			clusterFaultMap[downstreamCluster] = append(clusterFaultMap[downstreamCluster], experiment)
 		default:
 			logger.Errorw("unknown enforcer %v", httpFaultConfig)
+			continue
 		}
 	}
 
@@ -161,7 +163,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 			if err != nil {
 				logger.Errorw("Unable to unset the fault for cluster", "cluster", cluster,
 					"error", err)
-				panic(err)
+				break
 			}
 		}
 	}
@@ -173,7 +175,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 		if err != nil {
 			logger.Errorw("Unable to set the fault for cluster", "cluster", cluster,
 				"error", err)
-			panic(err)
+			break
 		}
 	}
 }
