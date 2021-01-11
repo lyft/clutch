@@ -9,6 +9,8 @@ LINKED_PACKAGES=(
   "react-router"
   "react-router-dom"
   "styled-components"
+  "@emotion/react"
+  "@emotion/styled"
   "@material-ui/styles"
   "@material-ui/core"
   "@types/enzyme"
