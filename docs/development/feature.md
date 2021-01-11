@@ -77,7 +77,6 @@ package clutch.amiibo.v1;
 
 option go_package = "amiibov1";
 
-// highlight-next-line
 import "google/api/annotations.proto";
 
 service AmiiboAPI {
