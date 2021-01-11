@@ -73,11 +73,11 @@ const lightTheme = () => {
     overrides: {
       MuiAccordion: {
         root: {
-          '&$expanded': {
+          "&$expanded": {
             // remove the additional margin rule when expanded so the original margin is used.
             margin: null,
           },
-        }
+        },
       },
       MuiTypography: {
         colorPrimary: {

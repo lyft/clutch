@@ -61,7 +61,7 @@ const GroupDetails: React.FC<WizardChild> = () => {
             input: {
               type: "number",
               key: "size.max",
-              validation: number().integer().moreThan(ref("Min Size"))
+              validation: number().integer().moreThan(ref("Min Size")),
             },
           },
           {
