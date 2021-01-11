@@ -16,7 +16,7 @@
     "upgrade": "yarn upgrade"
   },
   "dependencies": {
-    "@clutch-sh/core": "^1.0.0-beta",
+    "@clutch-sh/core": "^0.0.0-beta",
     "@clutch-sh/data-layout": "^1.0.0-beta",
     "@clutch-sh/wizard": "^1.0.0-beta",
     "@material-ui/core": "^4.11.0",
