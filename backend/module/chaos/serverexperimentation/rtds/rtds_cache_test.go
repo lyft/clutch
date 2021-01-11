@@ -131,7 +131,7 @@ func TestSetSnapshotV2(t *testing.T) {
 			t.Errorf("unmarshalAny failed %v", err)
 		}
 
-		upstream, downstream, err := unParse(config)
+		upstream, downstream, err := getClusterPair(config)
 		assert.NoError(t, err)
 		if upstream == testCluster || downstream == testCluster {
 			testClusterFaults = append(testClusterFaults, experiment)
@@ -185,7 +185,7 @@ func TestSetSnapshotV3(t *testing.T) {
 			t.Errorf("unmarshalAny failed %v", err)
 		}
 
-		upstream, downstream, err := unParse(config)
+		upstream, downstream, err := getClusterPair(config)
 		assert.NoError(t, err)
 		if upstream == testCluster || downstream == testCluster {
 			testClusterFaults = append(testClusterFaults, experiment)
@@ -247,7 +247,7 @@ func TestCreateRuntimeKeys(t *testing.T) {
 			t.Errorf("unmarshalAny failed %v", err)
 		}
 
-		upstream, downstream, err := unParse(config)
+		upstream, downstream, err := getClusterPair(config)
 		assert.NoError(t, err)
 
 		switch config.GetFault().(type) {
@@ -289,7 +289,8 @@ func TestCreateRuntimeKeys(t *testing.T) {
 			}
 		}
 
-		percentageKey, percentageValue, faultKey, faultValue := createRuntimeKeys(upstream, downstream, config, ingressPrefix, egressPrefix, zap.NewNop().Sugar())
+		percentageKey, percentageValue, faultKey, faultValue, err := createRuntimeKeys(upstream, downstream, config, ingressPrefix, egressPrefix, zap.NewNop().Sugar())
+		assert.NoError(t, err)
 
 		assert.Equal(t, expectedPercentageKey, percentageKey)
 		assert.Equal(t, expectedPercentageValue, percentageValue)

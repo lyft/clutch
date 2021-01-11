@@ -134,11 +134,11 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 	clusterFaultMap := make(map[string][]*experimentation.Experiment)
 	for _, experiment := range allRunningExperiments {
 		httpFaultConfig := &serverexperimentation.HTTPFaultConfig{}
-		if !isFaultTest(experiment, httpFaultConfig) {
+		if !maybeUnmarshalFaultTest(experiment, httpFaultConfig) {
 			continue
 		}
 
-		upstreamCluster, downstreamCluster, err := unParse(httpFaultConfig)
+		upstreamCluster, downstreamCluster, err := getClusterPair(httpFaultConfig)
 		if err != nil {
 			logger.Errorw("Invalid http fault config", "config", httpFaultConfig)
 		}
@@ -186,26 +186,17 @@ func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, cluster strin
 	if len(experiments) != 0 {
 		for _, experiment := range experiments {
 			httpFaultConfig := &serverexperimentation.HTTPFaultConfig{}
-			if !isFaultTest(experiment, httpFaultConfig) {
+			if !maybeUnmarshalFaultTest(experiment, httpFaultConfig) {
 				continue
 			}
 
-			upstreamCluster, downstreamCluster, err := unParse(httpFaultConfig)
+			upstreamCluster, downstreamCluster, err := getClusterPair(httpFaultConfig)
 			if err != nil {
 				logger.Errorw("Invalid http fault config", "config", httpFaultConfig)
+				continue
 			}
 
-			var enforcer string
-			switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
-			case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
-				enforcer = "downstreamEnforcing"
-			case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
-				enforcer = "upstreamEnforcing"
-			default:
-				logger.Errorw("unknown enforcer %v", httpFaultConfig)
-			}
-
-			percentageKey, percentageValue, faultKey, faultValue := createRuntimeKeys(upstreamCluster, downstreamCluster, httpFaultConfig, ingressPrefix, egressPrefix, logger)
+			percentageKey, percentageValue, faultKey, faultValue, err := createRuntimeKeys(upstreamCluster, downstreamCluster, httpFaultConfig, ingressPrefix, egressPrefix, logger)
 
 			fieldMap[percentageKey] = &pstruct.Value{
 				Kind: &pstruct.Value_NumberValue{
@@ -225,7 +216,7 @@ func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, cluster strin
 				"fault_type", faultKey,
 				"percentage", percentageValue,
 				"value", faultValue,
-				"fault_enforcer", enforcer)
+				"fault_enforcer", getEnforcer(httpFaultConfig))
 		}
 	}
 
@@ -257,7 +248,7 @@ func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, cluster strin
 	return nil
 }
 
-func createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFaultConfig *serverexperimentation.HTTPFaultConfig, ingressPrefix string, egressPrefix string, logger *zap.SugaredLogger) (string, uint32, string, uint32) {
+func createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFaultConfig *serverexperimentation.HTTPFaultConfig, ingressPrefix string, egressPrefix string, logger *zap.SugaredLogger) (string, uint32, string, uint32, error) {
 	var percentageKey string
 	var percentageValue uint32
 	var faultKey string
@@ -269,7 +260,7 @@ func createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFau
 		percentageValue = abort.GetPercentage().GetPercentage()
 		faultValue = abort.GetAbortStatus().GetHttpStatusCode()
 
-		switch interface{}(httpFaultConfig.GetFaultTargeting().GetEnforcer()).(type) {
+		switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
 		case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
 			// Abort External Fault
 			percentageKey = fmt.Sprintf(HTTPPercentageForExternal, egressPrefix, upstreamCluster)
@@ -288,6 +279,7 @@ func createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFau
 
 		default:
 			logger.Errorw("unknown enforcer %v", httpFaultConfig)
+			return "", 0, "", 0, fmt.Errorf("unknown enforcer %v", httpFaultConfig)
 		}
 
 	case *serverexperimentation.HTTPFaultConfig_LatencyFault:
@@ -295,7 +287,7 @@ func createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFau
 		percentageValue = latency.GetPercentage().GetPercentage()
 		faultValue = latency.GetLatencyDuration().GetFixedDurationMs()
 
-		switch interface{}(httpFaultConfig.GetFaultTargeting().GetEnforcer()).(type) {
+		switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
 		case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
 			// Latency External Fault
 			percentageKey = fmt.Sprintf(LatencyPercentageForExternal, egressPrefix, upstreamCluster)
@@ -314,17 +306,18 @@ func createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFau
 
 		default:
 			logger.Errorw("unknown enforcer %v", httpFaultConfig)
+			return "", 0, "", 0, fmt.Errorf("unknown enforcer %v", httpFaultConfig)
 		}
 
 	default:
-		logger.Errorw("Unknown fault type: %t", httpFaultConfig)
-		panic("Unknown fault type")
+		logger.Errorw("Unknown fault type %v", httpFaultConfig)
+		return "", 0, "", 0, fmt.Errorf("unknown fault type %v", httpFaultConfig)
 	}
 
-	return percentageKey, percentageValue, faultKey, faultValue
+	return percentageKey, percentageValue, faultKey, faultValue, nil
 }
 
-func isFaultTest(experiment *experimentation.Experiment, httpFaultConfig *serverexperimentation.HTTPFaultConfig) bool {
+func maybeUnmarshalFaultTest(experiment *experimentation.Experiment, httpFaultConfig *serverexperimentation.HTTPFaultConfig) bool {
 	err := ptypes.UnmarshalAny(experiment.GetConfig(), httpFaultConfig)
 	if err != nil {
 		return false
@@ -349,21 +342,21 @@ func computeChecksum(item interface{}) (string, error) {
 	return fmt.Sprintf("%d", hash), nil
 }
 
-func unParse(httpFaultConfig *serverexperimentation.HTTPFaultConfig) (string, string, error) {
+func getClusterPair(httpFaultConfig *serverexperimentation.HTTPFaultConfig) (string, string, error) {
 	var downstream, upstream string
 
-	switch interface{}(httpFaultConfig.GetFaultTargeting().GetEnforcer()).(type) {
+	switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
 	case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
 		downstreamEnforcing := httpFaultConfig.GetFaultTargeting().GetDownstreamEnforcing()
 
-		switch interface{}(downstreamEnforcing.GetDownstreamType()).(type) {
+		switch downstreamEnforcing.GetDownstreamType().(type) {
 		case *serverexperimentation.DownstreamEnforcing_DownstreamCluster:
 			downstream = downstreamEnforcing.GetDownstreamCluster().GetName()
 		default:
 			return "", "", fmt.Errorf("unknown downstream type of downstream enforcing %v", downstreamEnforcing.GetDownstreamType())
 		}
 
-		switch interface{}(downstreamEnforcing.GetUpstreamType()).(type) {
+		switch downstreamEnforcing.GetUpstreamType().(type) {
 		case *serverexperimentation.DownstreamEnforcing_UpstreamCluster:
 			upstream = downstreamEnforcing.GetUpstreamCluster().GetName()
 		default:
@@ -373,14 +366,14 @@ func unParse(httpFaultConfig *serverexperimentation.HTTPFaultConfig) (string, st
 	case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
 		upstreamEnforcing := httpFaultConfig.GetFaultTargeting().GetUpstreamEnforcing()
 
-		switch interface{}(upstreamEnforcing.GetDownstreamType()).(type) {
+		switch upstreamEnforcing.GetDownstreamType().(type) {
 		case *serverexperimentation.UpstreamEnforcing_DownstreamCluster:
 			downstream = upstreamEnforcing.GetDownstreamCluster().GetName()
 		default:
 			return "", "", fmt.Errorf("unknown downstream type of upstream enforcing %v", upstreamEnforcing.GetDownstreamType())
 		}
 
-		switch interface{}(upstreamEnforcing.GetUpstreamType()).(type) {
+		switch upstreamEnforcing.GetUpstreamType().(type) {
 		case *serverexperimentation.UpstreamEnforcing_UpstreamCluster:
 			upstream = upstreamEnforcing.GetUpstreamCluster().GetName()
 		case *serverexperimentation.UpstreamEnforcing_UpstreamPartialSingleCluster:
@@ -394,4 +387,16 @@ func unParse(httpFaultConfig *serverexperimentation.HTTPFaultConfig) (string, st
 	}
 
 	return upstream, downstream, nil
+}
+
+func getEnforcer(httpFaultConfig *serverexperimentation.HTTPFaultConfig) string {
+	switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
+	case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
+		return "downstreamEnforcing"
+	case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
+		return "upstreamEnforcing"
+	default:
+		return "unknown"
+	}
+
 }
