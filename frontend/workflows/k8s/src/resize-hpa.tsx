@@ -46,17 +46,19 @@ const HPADetails: React.FC<WizardChild> = () => {
   const metadataAnnotations = [];
   const metadataLabels = [];
 
-  if (hpa.annotations) {
-    _.forEach(hpa.annotations, (annotation, key) => {
-      metadataAnnotations.push({ name: key, value: annotation });
-    });
-  }
-
-  if (hpa.labels) {
-    _.forEach(hpa.labels, (label, key) => {
-      metadataLabels.push({ name: key, value: label });
-    });
-  }
+  React.useEffect(() => {
+    if (hpa.annotations) {
+      _.forEach(hpa.annotations, (annotation, key) => {
+        metadataAnnotations.push({ name: key, value: annotation });
+      });
+    }
+  
+    if (hpa.labels) {
+      _.forEach(hpa.labels, (label, key) => {
+        metadataLabels.push({ name: key, value: label });
+      });
+    }
+  }, []);
 
   return (
     <WizardStep error={hpaData.error} isLoading={hpaData.isLoading}>
@@ -83,7 +85,7 @@ const HPADetails: React.FC<WizardChild> = () => {
             input: {
               type: "number",
               key: "sizing.maxReplicas",
-              validation: number().integer().moreThan(ref("Min Size")),
+              validation: number().integer().min(ref("Min Size")),
             },
           },
           { name: "Cluster", value: hpa.cluster },

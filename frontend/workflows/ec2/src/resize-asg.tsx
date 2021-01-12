@@ -61,7 +61,7 @@ const GroupDetails: React.FC<WizardChild> = () => {
             input: {
               type: "number",
               key: "size.max",
-              validation: number().integer().moreThan(ref("Min Size")),
+              validation: number().integer().min(ref("Min Size")),
             },
           },
           {
@@ -70,7 +70,7 @@ const GroupDetails: React.FC<WizardChild> = () => {
             input: {
               type: "number",
               key: "size.desired",
-              validation: number().integer().moreThan(ref("Min Size")),
+              validation: number().integer().min(ref("Min Size")),
             },
           },
           { name: "Availability Zone", value: group.zones },
