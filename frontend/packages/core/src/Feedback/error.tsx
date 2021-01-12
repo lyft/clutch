@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "@emotion/styled";
 import {
   Accordion as MuiAccordion,
   AccordionDetails,
@@ -9,8 +10,8 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import RefreshIcon from "@material-ui/icons/Refresh";
-import { Alert as MuiAlert, AlertTitle } from "@material-ui/lab";
-import styled from "styled-components";
+
+import { Alert } from "./alert";
 
 const BREAKPOINT_LENGTH = 100;
 const BREAKPOINT_REGEX = /[.\n]/g;
@@ -19,12 +20,6 @@ export interface ErrorProps {
   message: string;
   onRetry?: () => void;
 }
-
-const Alert = styled(MuiAlert)`
-  margin: 5px;
-  min-width: fit-content;
-  max-width: 45vw;
-`;
 
 const Error: React.FC<ErrorProps> = ({ message, onRetry }) => {
   const action =
@@ -40,25 +35,29 @@ const Error: React.FC<ErrorProps> = ({ message, onRetry }) => {
   );
 };
 
-const Collapse = styled(MuiCollapse)`
-  margin-top: 10px;
-  width: 45%;
-`;
+const Collapse = styled(MuiCollapse)({ marginBottom: "16px" });
 
-const ErrorText = styled(Typography)`
-  color: rgb(97, 26, 21);
-  font-size: 0.875rem;
-`;
+const ErrorText = styled(Typography)({
+  color: "rgba(13, 16, 48, 0.6)",
+  fontSize: "14px",
+});
 
-const Accordion = styled(MuiAccordion)`
-  background-color: inherit;
-  padding: 0px;
-`;
-
-export interface CompressedErrorProps {
-  title?: string;
-  message: string;
-}
+const Accordion = styled(MuiAccordion)({
+  backgroundColor: "inherit",
+  margin: "0",
+  padding: "0px",
+  ":before": {
+    height: "0",
+  },
+  "&.Mui-expanded": {
+    margin: "0",
+    minHeight: "fit-content",
+  },
+  "& .MuiAccordionSummary-root": {
+    padding: "0",
+    minHeight: "fit-content",
+  },
+});
 
 const findBreakpoint = (message: string): number => {
   // n.b. if no breakpoint this will return -1 and become 0.
@@ -79,6 +78,11 @@ const findBreakpoint = (message: string): number => {
   return breakpoint;
 };
 
+export interface CompressedErrorProps {
+  title?: string;
+  message: string;
+}
+
 const CompressedError: React.FC<CompressedErrorProps> = ({ title, message }) => {
   const [open, setOpen] = React.useState(message !== "");
   const [errorMsg, setErrorMsg] = React.useState("");
@@ -93,15 +97,10 @@ const CompressedError: React.FC<CompressedErrorProps> = ({ title, message }) => 
   const breakpoint = findBreakpoint(errorMsg);
   return (
     <Collapse in={open}>
-      <Alert severity="error">
-        <AlertTitle>{title || "Error"}</AlertTitle>
+      <Alert severity="error" title={title || "Error"}>
         {(errorMsg?.length || 0) > BREAKPOINT_LENGTH ? (
           <Accordion elevation={0}>
-            <AccordionSummary
-              style={{ padding: "0px" }}
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-            >
+            <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content">
               <ErrorText>{errorMsg.slice(0, breakpoint)}</ErrorText>
             </AccordionSummary>
             <AccordionDetails style={{ padding: "0px", overflowWrap: "anywhere" }}>
