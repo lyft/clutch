@@ -28,6 +28,8 @@ type K8SAPIClient interface {
 	DescribeService(ctx context.Context, in *DescribeServiceRequest, opts ...grpc.CallOption) (*DescribeServiceResponse, error)
 	DeleteService(ctx context.Context, in *DeleteServiceRequest, opts ...grpc.CallOption) (*DeleteServiceResponse, error)
 	UpdateStatefulSet(ctx context.Context, in *UpdateStatefulSetRequest, opts ...grpc.CallOption) (*UpdateStatefulSetResponse, error)
+	DescribeCronJob(ctx context.Context, in *DescribeCronJobRequest, opts ...grpc.CallOption) (*DescribeCronJobResponse, error)
+	DeleteCronJob(ctx context.Context, in *DeleteCronJobRequest, opts ...grpc.CallOption) (*DeleteCronJobResponse, error)
 }
 
 type k8SAPIClient struct {
@@ -137,6 +139,24 @@ func (c *k8SAPIClient) UpdateStatefulSet(ctx context.Context, in *UpdateStateful
 	return out, nil
 }
 
+func (c *k8SAPIClient) DescribeCronJob(ctx context.Context, in *DescribeCronJobRequest, opts ...grpc.CallOption) (*DescribeCronJobResponse, error) {
+	out := new(DescribeCronJobResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/DescribeCronJob", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *k8SAPIClient) DeleteCronJob(ctx context.Context, in *DeleteCronJobRequest, opts ...grpc.CallOption) (*DeleteCronJobResponse, error) {
+	out := new(DeleteCronJobResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/DeleteCronJob", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // K8SAPIServer is the server API for K8SAPI service.
 // All implementations should embed UnimplementedK8SAPIServer
 // for forward compatibility
@@ -152,6 +172,8 @@ type K8SAPIServer interface {
 	DescribeService(context.Context, *DescribeServiceRequest) (*DescribeServiceResponse, error)
 	DeleteService(context.Context, *DeleteServiceRequest) (*DeleteServiceResponse, error)
 	UpdateStatefulSet(context.Context, *UpdateStatefulSetRequest) (*UpdateStatefulSetResponse, error)
+	DescribeCronJob(context.Context, *DescribeCronJobRequest) (*DescribeCronJobResponse, error)
+	DeleteCronJob(context.Context, *DeleteCronJobRequest) (*DeleteCronJobResponse, error)
 }
 
 // UnimplementedK8SAPIServer should be embedded to have forward compatible implementations.
@@ -190,6 +212,12 @@ func (UnimplementedK8SAPIServer) DeleteService(context.Context, *DeleteServiceRe
 }
 func (UnimplementedK8SAPIServer) UpdateStatefulSet(context.Context, *UpdateStatefulSetRequest) (*UpdateStatefulSetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateStatefulSet not implemented")
+}
+func (UnimplementedK8SAPIServer) DescribeCronJob(context.Context, *DescribeCronJobRequest) (*DescribeCronJobResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DescribeCronJob not implemented")
+}
+func (UnimplementedK8SAPIServer) DeleteCronJob(context.Context, *DeleteCronJobRequest) (*DeleteCronJobResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteCronJob not implemented")
 }
 
 // UnsafeK8SAPIServer may be embedded to opt out of forward compatibility for this service.
@@ -401,6 +429,42 @@ func _K8SAPI_UpdateStatefulSet_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _K8SAPI_DescribeCronJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DescribeCronJobRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).DescribeCronJob(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/DescribeCronJob",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).DescribeCronJob(ctx, req.(*DescribeCronJobRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _K8SAPI_DeleteCronJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteCronJobRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).DeleteCronJob(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/DeleteCronJob",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).DeleteCronJob(ctx, req.(*DeleteCronJobRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _K8SAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "clutch.k8s.v1.K8sAPI",
 	HandlerType: (*K8SAPIServer)(nil),
@@ -448,6 +512,14 @@ var _K8SAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateStatefulSet",
 			Handler:    _K8SAPI_UpdateStatefulSet_Handler,
+		},
+		{
+			MethodName: "DescribeCronJob",
+			Handler:    _K8SAPI_DescribeCronJob_Handler,
+		},
+		{
+			MethodName: "DeleteCronJob",
+			Handler:    _K8SAPI_DeleteCronJob_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

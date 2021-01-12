@@ -1,16 +1,15 @@
 import React from "react";
+import styled from "@emotion/styled";
 import { Grid, Paper } from "@material-ui/core";
 import type { Color } from "@material-ui/lab/Alert";
-import MuiAlert from "@material-ui/lab/Alert";
-import styled from "styled-components";
 
-const Container = styled(Paper)`
-  margin: 1%;
-`;
+import { Alert } from "./alert";
 
-const Alert = styled(MuiAlert)`
-  align-items: center;
-`;
+const NotePanelContainer = styled(Grid)({
+  "> *": {
+    padding: "4px 0",
+  },
+});
 
 export interface NoteProps {
   severity?: Color;
@@ -27,25 +26,31 @@ export interface NotePanelProps {
 
 const Note: React.FC<NoteProps> = ({ severity = "info", children }) => {
   return (
-    <Container elevation={0}>
+    <Paper elevation={0}>
       <Alert severity={severity}>
         <Grid container justify="center" alignItems="center">
           {children}
         </Grid>
       </Alert>
-    </Container>
+    </Paper>
   );
 };
 
 const NotePanel: React.FC<NotePanelProps> = ({ direction = "column", notes, children }) => (
-  <Grid container direction={direction} justify="center" alignContent="space-between" wrap="nowrap">
+  <NotePanelContainer
+    container
+    direction={direction}
+    justify="center"
+    alignContent="space-between"
+    wrap="nowrap"
+  >
     {notes?.map((note: NoteConfig) => (
       <Note key={note.text} severity={note.severity}>
         {note.text}
       </Note>
     ))}
     {children}
-  </Grid>
+  </NotePanelContainer>
 );
 
 export { Note, NotePanel };

@@ -45,7 +45,7 @@ func (c *client) processRegionTopologyObjects(ctx context.Context) {
 		c.log.Info("processing topology objects for region", zap.String("region", name))
 		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*5), client, c.processAllEC2Instances)
 		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*10), client, c.processAllAutoScalingGroups)
-		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*10), client, c.processAllKinesisStreams)
+		go c.startTickerForCacheResource(ctx, time.Duration(time.Minute*30), client, c.processAllKinesisStreams)
 	}
 }
 
@@ -132,7 +132,7 @@ func (c *client) processAllEC2Instances(ctx context.Context, client *regionalCli
 }
 
 func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalClient) {
-	c.log.Info("starting to process auto scaling groups for region", zap.String("region", client.region))
+	c.log.Info("starting to process kinesis streams for region", zap.String("region", client.region))
 	// 100 is arbatrary, currently this API does not have a per page limit,
 	// looking at other aws API limits this value felt safe.
 	input := kinesis.ListStreamsInput{

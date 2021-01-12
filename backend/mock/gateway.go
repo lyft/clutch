@@ -9,6 +9,7 @@ import (
 	"github.com/lyft/clutch/backend/mock/service/envoyadminmock"
 	"github.com/lyft/clutch/backend/mock/service/githubmock"
 	"github.com/lyft/clutch/backend/mock/service/k8smock"
+	"github.com/lyft/clutch/backend/mock/service/topologymock"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/audit"
 	"github.com/lyft/clutch/backend/service/aws"
@@ -16,6 +17,7 @@ import (
 	"github.com/lyft/clutch/backend/service/envoyadmin"
 	"github.com/lyft/clutch/backend/service/github"
 	"github.com/lyft/clutch/backend/service/k8s"
+	"github.com/lyft/clutch/backend/service/topology"
 )
 
 var MockServiceFactory = service.Factory{
@@ -25,6 +27,7 @@ var MockServiceFactory = service.Factory{
 	experimentstore.Name: experimentstoremock.NewMock,
 	github.Name:          githubmock.NewAsService,
 	k8s.Name:             k8smock.NewAsService,
+	topology.Name:        topologymock.NewAsService,
 }
 
 func main() {

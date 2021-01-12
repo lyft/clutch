@@ -1,13 +1,16 @@
 import React from "react";
 import { RadioGroup, Select, TextField } from "@clutch-sh/core";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
-const StyledDiv = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
+const FieldContainer = styled.div({
+  alignItems: "center",
+  display: "flex",
+  flexDirection: "column",
+  width: "100%",
+  "> *": {
+    margin: "inherit",
+  },
+});
 
 interface FormProps {
   state: any;
@@ -51,7 +54,7 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
   const [data, setData] = state;
 
   return (
-    <StyledDiv>
+    <FieldContainer>
       {items.map(field => {
         if (["text", "number"].indexOf(field.type) >= 0) {
           const customProps: TextFieldProps = field.inputProps as TextFieldProps;
@@ -70,9 +73,6 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
               inputRef={register}
               error={!!errors[field.name]}
               helperText={errors[field.name] ? errors[field.name].message : ""}
-              InputLabelProps={{
-                shrink: true,
-              }}
             />
           );
         }
@@ -98,28 +98,26 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
         if (field.type === "select") {
           const customProps: SelectProps = field.inputProps as SelectProps;
           return (
-            <div key={field.name} style={{ margin: "15px 0" }}>
-              <Select
-                name={field.name}
-                key={field.name}
-                label={field.label}
-                options={customProps.options}
-                defaultOption={customProps.options
-                  .map(o => o.value)
-                  .indexOf(customProps.defaultValue)}
-                onChange={value => {
-                  const copiedData = { ...data };
-                  copiedData[field.name] = value;
-                  setData(copiedData);
-                }}
-              />
-            </div>
+            <Select
+              name={field.name}
+              key={field.name}
+              label={field.label}
+              options={customProps.options}
+              defaultOption={customProps.options
+                .map(o => o.value)
+                .indexOf(customProps.defaultValue)}
+              onChange={value => {
+                const copiedData = { ...data };
+                copiedData[field.name] = value;
+                setData(copiedData);
+              }}
+            />
           );
         }
 
         return <div key="blank" />;
       })}
-    </StyledDiv>
+    </FieldContainer>
   );
 };
 

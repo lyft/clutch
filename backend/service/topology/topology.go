@@ -21,7 +21,9 @@ import (
 
 const Name = "clutch.service.topology"
 
-type Service interface{}
+type Service interface {
+	GetTopology(ctx context.Context) error
+}
 
 type client struct {
 	config *topologyv1cfg.Config
@@ -84,4 +86,8 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	go c.acquireTopologyCacheLock(ctx)
 
 	return c, nil
+}
+
+func (c *client) GetTopology(ctx context.Context) error {
+	return nil
 }

@@ -1,90 +1,47 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  AppBar as MuiAppBar,
-  Box,
-  Divider as MuiDivider,
-  IconButton,
-  Toolbar,
-  Typography,
-} from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
-import styled from "styled-components";
+import styled from "@emotion/styled";
+import { AppBar as MuiAppBar, Box, Grid, Toolbar, Typography } from "@material-ui/core";
 
-import Drawer from "./drawer";
 import Logo from "./logo";
+import Notifications from "./notifications";
 import SearchField from "./search";
 import { UserInformation } from "./user";
 
-const AppBar = styled(MuiAppBar)`
-  ${({ theme }) => `
-  min-width: fit-content;
-  background-color: ${theme.palette.secondary.main};
-  color: ${theme.palette.primary.main};
-  min-width: fit-content;
-  `}
-`;
+const AppBar = styled(MuiAppBar)({
+  minWidth: "fit-content",
+  background: "linear-gradient(90deg, #38106b 4.58%, #131c5f 89.31%)",
+  zIndex: 1201,
+  height: "64px",
+});
 
-const MenuButton = styled(IconButton)`
-  padding: 12px;
-  margin-left: -12px;
-`;
-
-const Title = styled(Typography)`
-  margin-right: 25px;
-  font-weight: bolder;
-`;
-
-const Divider = styled(MuiDivider)`
-  ${({ theme }) => `
-  background-color: ${theme.palette.primary.main};
-  margin: 16px 8px;
-  `}
-`;
+const Title = styled(Typography)({
+  margin: "12px 0px 12px 8px",
+  fontWeight: "bold",
+  fontSize: "20px",
+  color: "rgba(255, 255, 255, 0.87)",
+});
 
 const Header: React.FC = () => {
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
-
-  const handleKeyPress = (event: KeyboardEvent) => {
-    // @ts-ignore
-    if (event.key === "." && event.target?.nodeName !== "INPUT") {
-      setDrawerOpen(true);
-    } else if (event.key === "Escape") {
-      setDrawerOpen(false);
-    }
-  };
-
-  React.useLayoutEffect(() => {
-    window.addEventListener("keydown", handleKeyPress);
-  }, []);
-
-  const openDrawer = () => {
-    setDrawerOpen(true);
-  };
-
-  const onDrawerClose = () => {
-    setDrawerOpen(false);
-  };
+  const showNotifications = false;
 
   return (
     <>
-      <AppBar position="static" color="secondary">
+      <AppBar position="relative" elevation={0}>
         <Toolbar>
-          <MenuButton onClick={openDrawer} edge="start" color="primary" data-qa="menuBtn">
-            <MenuIcon />
-          </MenuButton>
           <Link to="/">
             <Logo />
           </Link>
-          <Divider orientation="vertical" flexItem />
-          <Title variant="h5">clutch</Title>
-          <Box />
-          <SearchField />
-          <Box />
-          <UserInformation />
+          <Title>clutch</Title>
+          <Grid container alignItems="center" justify="flex-end">
+            <Box>
+              <SearchField />
+            </Box>
+            {showNotifications && <Notifications />}
+            <UserInformation />
+          </Grid>
         </Toolbar>
       </AppBar>
-      <Drawer open={drawerOpen} onClose={onDrawerClose} />
     </>
   );
 };
