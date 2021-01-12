@@ -6,8 +6,6 @@ import (
 	"crypto/rsa"
 	"encoding/json"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
-	"gopkg.in/square/go-jose.v2"
 	"math"
 	"net"
 	"net/http"
@@ -15,8 +13,10 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/oauth2"
+	"gopkg.in/square/go-jose.v2"
 
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 	apimock "github.com/lyft/clutch/backend/mock/api"
@@ -55,7 +55,6 @@ func TestStateNoncePrependsLeadingSlash(t *testing.T) {
 	assert.NoError(t, err)
 	u, _ := p.ValidateStateNonce(s)
 	assert.Equal(t, "/dest/foo", u)
-
 }
 
 func TestStateNonceRejections(t *testing.T) {
@@ -106,8 +105,8 @@ oidc:
 		case "/oauth2/v1/token":
 			claims := &testIdTokenClaims{
 				StandardClaims: &jwt.StandardClaims{
-					Issuer: "http://foo.example.com",
-					Audience: "my_client_id",
+					Issuer:    "http://foo.example.com",
+					Audience:  "my_client_id",
 					ExpiresAt: math.MaxInt32,
 				},
 				Email: "user@example.com",
@@ -118,12 +117,12 @@ oidc:
 				panic(err)
 			}
 
-			fmt.Fprintln(w, fmt.Sprintf(`{"token_type":"bearer","access_token":"AAAAAAAAAAAA", "id_token": "%s"}`, tok))
+			fmt.Fprintf(w, `{"token_type":"bearer","access_token":"AAAAAAAAAAAA", "id_token": "%s"}`, tok)
 		case "/oauth2/v1/keys":
 			jwk := jose.JSONWebKey{KeyID: "foo", Key: key.Public()}
 			jwks := jose.JSONWebKeySet{Keys: []jose.JSONWebKey{jwk}}
 			jks, _ := json.Marshal(jwks)
-			w.Write(jks)
+			_, _ = w.Write(jks)
 		}
 	}))
 	defer ts.Close()
@@ -139,6 +138,7 @@ oidc:
 	assert.NotNil(t, p)
 
 	authURL, err := p.GetAuthCodeURL(context.Background(), "myState")
+	assert.NoError(t, err)
 	assert.True(t, strings.HasPrefix(authURL, "http://foo.example.com/oauth2/v1/authorize"))
 	assert.True(t, strings.Contains(authURL, "access_type=offline"))
 	assert.True(t, strings.Contains(authURL, "state=myState"))
@@ -150,5 +150,4 @@ oidc:
 	c, err := p.Verify(ctx, token.AccessToken)
 	assert.NoError(t, err)
 	assert.NotNil(t, c)
-
 }
