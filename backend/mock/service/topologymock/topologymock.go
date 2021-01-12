@@ -25,3 +25,7 @@ func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 func (s *svc) GetTopology(ctx context.Context) error {
 	return errors.New("Not implemented")
 }
+
+func (s *svc) SearchTopology(ctx context.Context) error {
+	return errors.New("Not implemented")
+}

@@ -58,3 +58,7 @@ func newTopologyAPI(svc topologyservice.Service) topologyv1.TopologyAPIServer {
 func (t *topologyAPI) GetTopology(ctx context.Context, req *topologyv1.GetTopologyRequest) (*topologyv1.GetTopologyResponse, error) {
 	return nil, errors.New("not implemented")
 }
+
+func (t *topologyAPI) SearchTopology(ctx context.Context, req *topologyv1.SearchTopologyRequest) (*topologyv1.SearchTopologyResponse, error) {
+	return nil, errors.New("not implemented")
+}
