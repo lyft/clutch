@@ -2,10 +2,17 @@ package authn
 
 import (
 	"context"
+	"crypto/rand"
+	"crypto/rsa"
+	"encoding/json"
 	"fmt"
+	"github.com/dgrijalva/jwt-go"
+	"gopkg.in/square/go-jose.v2"
+	"math"
 	"net"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -40,6 +47,43 @@ func TestStateNonceRoundTrip(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestStateNoncePrependsLeadingSlash(t *testing.T) {
+	p := &OIDCProvider{
+		sessionSecret: "this-is-my-secret",
+	}
+	s, err := p.GetStateNonce("dest/foo")
+	assert.NoError(t, err)
+	u, _ := p.ValidateStateNonce(s)
+	assert.Equal(t, "/dest/foo", u)
+
+}
+
+func TestStateNonceRejections(t *testing.T) {
+	p := &OIDCProvider{
+		sessionSecret: "this-is-my-secret",
+	}
+
+	tests := []string{
+		"unix:///tmp/redis.sock",
+		"https://google.com",
+		"http://google.com",
+		"123%45%6",
+	}
+
+	for _, tt := range tests {
+		tt := tt // pin!
+		t.Run(tt, func(t *testing.T) {
+			_, err := p.GetStateNonce(tt)
+			assert.Error(t, err)
+		})
+	}
+}
+
+type testIdTokenClaims struct {
+	*jwt.StandardClaims
+	Email string `json:"email"`
+}
+
 func TestNewProvider(t *testing.T) {
 	cfg := &authnv1.Config{}
 	apimock.FromYAML(`
@@ -51,10 +95,35 @@ oidc:
   redirect_url: "http://localhost:12000/v1/authn/callback"
 `, cfg)
 
+	key, _ := rsa.GenerateKey(rand.Reader, 2048)
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("RECEIVED REQUEST", r.URL)
-		if r.URL.Path == "/.well-known/openid-configuration" {
+		fmt.Println("RECEIVED REQUEST", r.URL.Path)
+
+		w.Header().Set("content-type", "application/json")
+		switch r.URL.Path {
+		case "/.well-known/openid-configuration":
 			fmt.Fprintln(w, openIDConfiguration)
+		case "/oauth2/v1/token":
+			claims := &testIdTokenClaims{
+				StandardClaims: &jwt.StandardClaims{
+					Issuer: "http://foo.example.com",
+					Audience: "my_client_id",
+					ExpiresAt: math.MaxInt32,
+				},
+				Email: "user@example.com",
+			}
+
+			tok, err := jwt.NewWithClaims(jwt.SigningMethodRS256, claims).SignedString(key)
+			if err != nil {
+				panic(err)
+			}
+
+			fmt.Fprintln(w, fmt.Sprintf(`{"token_type":"bearer","access_token":"AAAAAAAAAAAA", "id_token": "%s"}`, tok))
+		case "/oauth2/v1/keys":
+			jwk := jose.JSONWebKey{KeyID: "foo", Key: key.Public()}
+			jwks := jose.JSONWebKeySet{Keys: []jose.JSONWebKey{jwk}}
+			jks, _ := json.Marshal(jwks)
+			w.Write(jks)
 		}
 	}))
 	defer ts.Close()
@@ -65,7 +134,18 @@ oidc:
 	}}
 
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, ts.Client())
-	p, err := NewProvider(ctx, cfg)
+	p, err := NewOIDCProvider(ctx, cfg)
 	assert.NoError(t, err)
 	assert.NotNil(t, p)
+
+	authURL, err := p.GetAuthCodeURL(context.Background(), "myState")
+	assert.True(t, strings.HasPrefix(authURL, "http://foo.example.com/oauth2/v1/authorize"))
+	assert.True(t, strings.Contains(authURL, "access_type=offline"))
+	assert.True(t, strings.Contains(authURL, "state=myState"))
+
+	token, err := p.Exchange(ctx, "aaa")
+	assert.NoError(t, err)
+	assert.NotNil(t, token)
+
+
 }

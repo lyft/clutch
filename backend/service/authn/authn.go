@@ -41,7 +41,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	if err := ptypes.UnmarshalAny(cfg, config); err != nil {
 		return nil, err
 	}
-	return NewProvider(context.Background(), config)
+	return NewOIDCProvider(context.Background(), config)
 }
 
 // Standardized representation of a user's claims.
@@ -105,7 +105,7 @@ func (p *OIDCProvider) GetStateNonce(redirectURL string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if u.Host != "" {
+	if u.Scheme != "" || u.Host != "" {
 		return "", errors.New("only relative redirects are supported")
 	}
 	dest := u.Path
@@ -240,7 +240,7 @@ func (pc *oidcProviderClaims) Check(grantType string) error {
 	return fmt.Errorf("grant type '%s' not supported by provider. supported: %v", grantType, pc.GrantTypesSupported)
 }
 
-func NewProvider(ctx context.Context, config *authnv1.Config) (Provider, error) {
+func NewOIDCProvider(ctx context.Context, config *authnv1.Config) (Provider, error) {
 	c := config.GetOidc()
 
 	// Allows injection of test client. If client not present then add the default.
