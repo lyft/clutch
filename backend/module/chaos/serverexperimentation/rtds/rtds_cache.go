@@ -199,6 +199,10 @@ func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, cluster strin
 			}
 
 			percentageKey, percentageValue, faultKey, faultValue, err := createRuntimeKeys(upstreamCluster, downstreamCluster, httpFaultConfig, ingressPrefix, egressPrefix, logger)
+			if err != nil {
+				logger.Errorw("Unable to create runtime keys", "config", httpFaultConfig)
+				continue
+			}
 
 			fieldMap[percentageKey] = &pstruct.Value{
 				Kind: &pstruct.Value_NumberValue{
@@ -400,5 +404,4 @@ func getEnforcer(httpFaultConfig *serverexperimentation.HTTPFaultConfig) string 
 	default:
 		return "unknown"
 	}
-
 }
