@@ -147,5 +147,8 @@ oidc:
 	assert.NoError(t, err)
 	assert.NotNil(t, token)
 
+	c, err := p.Verify(ctx, token.AccessToken)
+	assert.NoError(t, err)
+	assert.NotNil(t, c)
 
 }
