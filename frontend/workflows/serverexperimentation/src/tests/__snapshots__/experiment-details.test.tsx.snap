@@ -1,90 +1,80 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Start Experiment workflow renders correctly 1`] = `
-"<styled.div>
+"<Styled(div)>
   <h3 style={{...}}>
     Cluster Pair
   </h3>
-  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
-  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
+  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Targeting
   </h3>
-  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
+  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Faults
   </h3>
-  <div style={{...}}>
-    <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  </div>
-  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
-</styled.div>"
+  <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
+  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+</Styled(div)>"
 `;
 
 exports[`Start Experiment workflow renders correctly with host percentage based faults and upstream cluster type selecion enabled 1`] = `
-"<styled.div>
+"<Styled(div)>
   <h3 style={{...}}>
     Cluster Pair
   </h3>
-  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
-  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
+  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <RadioGroup name=\\"faultInjectionCluster\\" label=\\"Upstream Cluster Type\\" disabled={false} options={{...}} defaultOption={0} onChange={[Function: onChange]} />
   <h3 style={{...}}>
     Targeting
   </h3>
-  <div style={{...}}>
-    <Select name=\\"targetType\\" label=\\"Target Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  </div>
-  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
+  <Select name=\\"targetType\\" label=\\"Target Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
+  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Faults
   </h3>
-  <div style={{...}}>
-    <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  </div>
-  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
-</styled.div>"
+  <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
+  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+</Styled(div)>"
 `;
 
 exports[`Start Experiment workflow renders correctly with host percentage based faults enabled 1`] = `
-"<styled.div>
+"<Styled(div)>
   <h3 style={{...}}>
     Cluster Pair
   </h3>
-  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
-  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
+  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Targeting
   </h3>
-  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
+  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Faults
   </h3>
-  <div style={{...}}>
-    <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  </div>
-  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
-</styled.div>"
+  <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
+  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+</Styled(div)>"
 `;
 
 exports[`Start Experiment workflow renders correctly with upstream cluster type selection enabled 1`] = `
-"<styled.div>
+"<Styled(div)>
   <h3 style={{...}}>
     Cluster Pair
   </h3>
-  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
-  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
+  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <RadioGroup name=\\"faultInjectionCluster\\" label=\\"Upstream Cluster Type\\" disabled={false} options={{...}} defaultOption={0} onChange={[Function: onChange]} />
   <h3 style={{...}}>
     Targeting
   </h3>
-  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
+  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Faults
   </h3>
-  <div style={{...}}>
-    <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  </div>
-  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" InputLabelProps={{...}} />
-</styled.div>"
+  <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
+  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+</Styled(div)>"
 `;
