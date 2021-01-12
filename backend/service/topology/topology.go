@@ -106,9 +106,7 @@ func (c *client) SearchTopology(ctx context.Context, req *topologyv1.SearchTopol
 		return nil, err
 	}
 
-	c.log.Debug("SearchTopology", zap.String("query", query))
-
-	rows, err := c.db.QueryContext(ctx, query)
+	rows, err := query.RunWith(c.db).Query()
 	if err != nil {
 		return nil, err
 	}

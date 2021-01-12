@@ -45,7 +45,7 @@ message SearchTopologyRequest {
   message FieldSelector {
     enum Column {
       UNSPECIFIED = 0;
-      ID = 1; 
+      ID = 1;
     }
     oneof field {
       Column column = 1;

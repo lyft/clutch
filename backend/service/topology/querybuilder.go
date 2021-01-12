@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	sq "github.com/Masterminds/squirrel"
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
@@ -13,9 +14,7 @@ func paginatedQueryBuilder(
 	sort *topologyv1.SearchTopologyRequest_Sort,
 	pageToken string,
 	limit int,
-) (string, error) {
-	query := "SELECT id, data, metadata FROM topology_cache WHERE"
-
+) (sq.SelectBuilder, error) {
 	queryLimit := 100
 	if limit >= 0 {
 		queryLimit = limit
@@ -23,7 +22,7 @@ func paginatedQueryBuilder(
 
 	pageNum, err := strconv.Atoi(pageToken)
 	if err != nil {
-		return "", err
+		return sq.SelectBuilder{}, err
 	}
 
 	queryOffset := 0
@@ -31,58 +30,50 @@ func paginatedQueryBuilder(
 		queryOffset = pageNum * limit
 	}
 
-	f := filterQueryBuilder(filter)
-	s := sortQueryBuilder(sort)
-	l := fmt.Sprintf("LIMIT %d", queryLimit)
-	o := fmt.Sprintf("OFFSET %d", queryOffset)
+	query := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
+		Select("id, data, metadata").
+		From("topology_cache").
+		Limit(uint64(queryLimit)).
+		Offset(uint64(queryOffset))
 
-	fullQuery := strings.Join([]string{query, f, s, l, o, ";"}, " ")
+	query = filterQueryBuilder(query, filter)
+	query = sortQueryBuilder(query, sort)
 
-	return fullQuery, nil
+	return query, nil
 }
 
-func filterQueryBuilder(f *topologyv1.SearchTopologyRequest_Filter) string {
-	filterQuery := ""
-
-	if f == nil {
-		return ""
-	}
-
+func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchTopologyRequest_Filter) sq.SelectBuilder {
 	if f.Search != nil && f.Search.Field != nil {
 		if f.Search.Field.GetColumn() > 0 {
-			filterQuery += fmt.Sprintf("%s like '%%%s%%'", f.Search.Field.GetColumn(), f.Search.Text)
+			query = query.Where(sq.Like{f.Search.Field.GetColumn().String(): fmt.Sprintf("%%%s%%", f.Search.Text)})
 		} else if f.Metadata != nil {
 			mdQuery := convertMetadataToQuery(f.Search.Field.GetMetadata())
-			filterQuery += fmt.Sprintf("%s like '%%%s%%'", mdQuery, f.Search.Text)
+			query = query.Where(sq.Like{mdQuery: f.Search.Text})
 		}
 	}
 
 	if len(f.TypeUrl) > 0 {
-		if len(filterQuery) > 0 {
-			filterQuery += " AND "
-		}
-		filterQuery += fmt.Sprintf("resolver_type_url = '%s'", f.TypeUrl)
+		query = query.Where(sq.Eq{"resolver_type_url": f.TypeUrl})
 	}
 
-	return filterQuery
+	return query
 }
 
-func sortQueryBuilder(s *topologyv1.SearchTopologyRequest_Sort) string {
-	// Default is to sort by id
-	sortQuery := "ORDER BY id ASC"
-
+func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchTopologyRequest_Sort) sq.SelectBuilder {
 	if len(s.Direction.String()) > 0 && s.Field.Field != nil {
 		direction := getDirection(s.Direction.String())
 
 		if s.Field.GetColumn() > 0 {
-			sortQuery = fmt.Sprintf("ORDER BY %s %s", s.Field.GetColumn(), direction)
+			query = query.OrderBy(fmt.Sprintf("%s %s", s.Field.GetColumn(), direction))
 		} else if len(s.Field.GetMetadata()) > 0 {
 			mdQuery := convertMetadataToQuery(s.Field.GetMetadata())
-			sortQuery = fmt.Sprintf("ORDER BY %s %s", mdQuery, direction)
+			query = query.OrderBy(fmt.Sprintf("%s %s", mdQuery, direction))
 		}
+	} else {
+		query = query.OrderBy("ID ASC")
 	}
 
-	return sortQuery
+	return query
 }
 
 func convertMetadataToQuery(metadata string) string {
