@@ -52,7 +52,7 @@ const HPADetails: React.FC<WizardChild> = () => {
         metadataAnnotations.push({ name: key, value: annotation });
       });
     }
-  
+
     if (hpa.labels) {
       _.forEach(hpa.labels, (label, key) => {
         metadataLabels.push({ name: key, value: label });
