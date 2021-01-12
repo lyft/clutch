@@ -420,7 +420,10 @@ type SearchTopologyRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Sort      *SearchTopologyRequest_Sort   `protobuf:"bytes,1,opt,name=sort,proto3" json:"sort,omitempty"`
+	Sort *SearchTopologyRequest_Sort `protobuf:"bytes,1,opt,name=sort,proto3" json:"sort,omitempty"`
+	// Currently page_token specifies the page number you wish to request.
+	// The rational behind the naming is we might changes this to a cursor implentation
+	// in the future and did not want to break existing implementations of the API.
 	PageToken string                        `protobuf:"bytes,2,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
 	Limit     int64                         `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`
 	Filter    *SearchTopologyRequest_Filter `protobuf:"bytes,4,opt,name=filter,proto3" json:"filter,omitempty"`

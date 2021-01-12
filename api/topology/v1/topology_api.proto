@@ -78,6 +78,9 @@ message SearchTopologyRequest {
   }
 
   Sort sort = 1;
+  // Currently page_token specifies the page number you wish to request.
+  // The rational behind the naming is we might changes this to a cursor implentation
+  // in the future and did not want to break existing implementations of the API.
   string page_token = 2;
   int64 limit = 3;
   Filter filter = 4;
