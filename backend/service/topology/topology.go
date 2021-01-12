@@ -2,6 +2,7 @@ package topology
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"os"
 	"os/signal"
@@ -12,6 +13,7 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"golang.org/x/net/context"
+	"google.golang.org/protobuf/encoding/protojson"
 
 	topologyv1cfg "github.com/lyft/clutch/backend/api/config/service/topology/v1"
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
@@ -23,7 +25,7 @@ const Name = "clutch.service.topology"
 
 type Service interface {
 	GetTopology(ctx context.Context) error
-	SearchTopology(ctx context.Context) error
+	SearchTopology(ctx context.Context, search *topologyv1.SearchTopologyRequest) ([]*topologyv1.Resource, error)
 }
 
 type client struct {
@@ -93,6 +95,58 @@ func (c *client) GetTopology(ctx context.Context) error {
 	return nil
 }
 
-func (c *client) SearchTopology() error {
-	return nil
+func (c *client) SearchTopology(ctx context.Context, req *topologyv1.SearchTopologyRequest) ([]*topologyv1.Resource, error) {
+	query, err := paginatedQueryBuilder(
+		req.Filter,
+		req.Sort,
+		int(req.PageToken),
+		int(req.Limit),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := query.RunWith(c.db).Query()
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	results := []*topologyv1.Resource{}
+	for rows.Next() {
+		var id string
+		var data []byte
+		var metadata []byte
+
+		if err := rows.Scan(&id, &data, &metadata); err != nil {
+			c.log.Error("Error scaning row", zap.Error(err))
+			return nil, err
+		}
+
+		var dataAny any.Any
+		if err := protojson.Unmarshal(data, &dataAny); err != nil {
+			c.log.Error("Error unmarshaling data field", zap.Error(err))
+			return nil, err
+		}
+
+		var metadataMap map[string]string
+		if err := json.Unmarshal(metadata, &metadataMap); err != nil {
+			c.log.Error("Error unmarshaling metadata", zap.Error(err))
+			return nil, err
+		}
+
+		results = append(results, &topologyv1.Resource{
+			Id:       id,
+			Pb:       &dataAny,
+			Metadata: metadataMap,
+		})
+	}
+
+	// Rows.Err will report the last error encountered by Rows.Scan.
+	if err := rows.Err(); err != nil {
+		c.log.Error("Error processing rows for topology search query", zap.Error(err))
+		return nil, err
+	}
+
+	return results, nil
 }
