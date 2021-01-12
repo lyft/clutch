@@ -37,7 +37,7 @@
     "lint:packages:fix": "sort-package-json package.json packages/**/package.json",
     "package": "func() { yarn workspace @clutch-sh/\"$@\"; }; func",
     "publishBeta": "lerna run compile && lerna run publishBeta --no-bail",
-    "start": "yarn compile:watch & FORCE_COLOR=true yarn workspace @clutch-sh/app start | cat",
+    "start": "yarn clean && yarn compile:watch & FORCE_COLOR=true yarn workspace @clutch-sh/app start | cat",
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook --no-dll -o netlify/storybook-static",
     "test": "lerna run test --stream --no-bail --",
