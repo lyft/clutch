@@ -2,6 +2,6 @@
 
 exports[`View Experiment Run workflow renders correctly 1`] = `
 "<PageLayout heading={[undefined]} error=\\"\\">
-  <styled.form />
+  <Styled(form) />
 </PageLayout>"
 `;

@@ -5,8 +5,6 @@ enum ResolverAction {
   SCHEMAS_LOADING,
   SCHEMAS_SUCCCESS,
   SCHEMAS_ERROR,
-  SET_SELECTED_SCHEMA,
-  UPDATE_QUERY_DATA,
   RESOLVING,
   RESOLVE_ERROR,
   RESOLVE_SUCCESS,
@@ -17,8 +15,6 @@ const initialState = {
   allSchemas: [],
   searchableSchemas: [],
   schemaFetchError: "",
-  selectedSchema: 0,
-  queryData: {},
   resolverLoading: false,
   resolverData: {},
   resolverFetchError: "",
@@ -26,24 +22,16 @@ const initialState = {
 
 interface ResolverState {
   allSchemas: clutch.resolver.v1.Schema[];
-  queryData: {
-    query: string;
-  };
   resolverData: object;
   resolverFetchError: string;
   resolverLoading: boolean;
   schemaFetchError: string;
   schemasLoading: boolean;
   searchableSchemas: clutch.resolver.v1.Schema[];
-  selectedSchema: number;
 }
 
 export interface DispatchAction {
   allSchemas?: any[];
-  data?: {
-    query?: string;
-    [key: string]: string;
-  };
   error?: string;
   schema?: any;
   type: ResolverAction;
@@ -71,24 +59,6 @@ const reducer = (state: ResolverState, action: DispatchAction) => {
         schemasLoading: false,
         schemaFetchError: action.error,
       };
-    case ResolverAction.SET_SELECTED_SCHEMA:
-      return {
-        ...state,
-        selectedSchema: state.allSchemas.map(schema => schema.typeUrl).indexOf(action.schema),
-        queryData: {},
-        resolverFetchError: "",
-      };
-    case ResolverAction.UPDATE_QUERY_DATA: {
-      const queryData = { ...state.queryData };
-      if (action.data?.query === undefined) {
-        delete queryData.query;
-      }
-      return {
-        ...state,
-        queryData: { ...queryData, ...action.data },
-        resolverFetchError: "",
-      };
-    }
     case ResolverAction.RESOLVING:
       return {
         ...state,

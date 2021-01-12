@@ -350,3 +350,64 @@ func TestGetCommit(t *testing.T) {
 		})
 	}
 }
+
+type getRepositoryMock struct {
+	v4client
+	branchName string
+}
+
+func (g *getRepositoryMock) Query(ctx context.Context, query interface{}, variables map[string]interface{}) error {
+	q, ok := query.(*getRepositoryQuery)
+	if !ok {
+		panic("not a query")
+	}
+	q.Repository.DefaultBranchRef.Name = g.branchName
+	return nil
+}
+
+var getDefaultBranchTests = []struct {
+	name string
+	v4   getRepositoryMock
+
+	wantDefaultBranch string
+}{
+	{
+		name:              "1. default repo with main branch",
+		v4:                getRepositoryMock{branchName: "main"},
+		wantDefaultBranch: "main",
+	},
+	{
+		name:              "2. default repo with master branch",
+		v4:                getRepositoryMock{branchName: "master"},
+		wantDefaultBranch: "master",
+	},
+}
+
+func TestGetRepository(t *testing.T) {
+	t.Parallel()
+	for _, tt := range getDefaultBranchTests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			a := assert.New(t)
+			s := &svc{graphQL: &tt.v4}
+
+			repo, err := s.GetRepository(context.Background(),
+				&RemoteRef{
+					RepoOwner: "owner",
+					RepoName:  "myRepo",
+				},
+			)
+
+			if err != nil {
+				a.FailNowf("unexpected error: %s", err.Error())
+				return
+			}
+
+			gotDefaultBranch := repo.DefaultBranch
+
+			a.Equal(gotDefaultBranch, tt.wantDefaultBranch)
+			a.Nil(err)
+		})
+	}
+}

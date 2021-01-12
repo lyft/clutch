@@ -1,4 +1,6 @@
-import React from "react";
+import * as React from "react";
+import styled from "@emotion/styled";
+import type { CheckboxProps as MuiCheckboxProps } from "@material-ui/core";
 import {
   Checkbox as MuiCheckbox,
   FormControl as MuiFormControl,
@@ -7,17 +9,86 @@ import {
   FormLabel,
   Grid,
 } from "@material-ui/core";
-import styled from "styled-components";
+import CheckIcon from "@material-ui/icons/Check";
 
-const FormControl = styled(MuiFormControl)`
-  width: 75%;
-`;
+const FormControl = styled(MuiFormControl)({
+  width: "75%",
+});
 
-const Checkbox = styled(MuiCheckbox)`
-  ${({ theme }) => `
-  color: ${theme.palette.text.primary};
-  `}
-`;
+const StyledCheckbox = styled(MuiCheckbox)({
+  color: "#6e7083",
+  height: "48px",
+  width: "48px",
+  borderRadius: "30px",
+  "&:hover": {
+    background: "#f5f6fd",
+  },
+  "&:active": {
+    background: "#d7daf6",
+  },
+  "&.Mui-checked": {
+    color: "#ffffff",
+    "&:hover": {
+      background: "#f5f6fd",
+    },
+    "&:active": {
+      background: "#d7daf6",
+    },
+    "&.Mui-disabled": {
+      color: "#e7e7ea",
+      ".MuiIconButton-label": {
+        color: "rgba(13, 16, 48, 0.38)",
+      },
+    },
+  },
+});
+
+const Icon = styled.div(
+  {
+    borderRadius: "2px",
+    boxSizing: "border-box",
+    height: "24px",
+    width: "24px",
+  },
+  props => ({
+    border: props["data-disabled"] ? "1px solid #e7e7ea" : "1px solid #6e7083",
+  })
+);
+
+const SelectedIcon = styled.div(
+  {
+    borderRadius: "2px",
+    boxSizing: "border-box",
+    height: "24px",
+    width: "24px",
+    ".MuiSvgIcon-root": {
+      display: "block",
+    },
+  },
+  props => ({
+    background: props["data-disabled"] ? "#e7e7eA" : "#3548d4",
+  })
+);
+
+export interface CheckboxProps
+  extends Pick<MuiCheckboxProps, "checked" | "disabled" | "name" | "onChange"> {}
+
+// TODO (sperry): add 16px size variant
+const Checkbox: React.FC<CheckboxProps> = ({ checked, disabled, ...props }) => {
+  return (
+    <StyledCheckbox
+      checked={checked}
+      icon={<Icon data-disabled={disabled} />}
+      checkedIcon={
+        <SelectedIcon data-disabled={disabled}>
+          <CheckIcon />
+        </SelectedIcon>
+      }
+      {...props}
+      disabled={disabled}
+    />
+  );
+};
 
 export interface CheckboxPanelProps {
   header?: string;
@@ -103,4 +174,4 @@ const CheckboxPanel: React.FC<CheckboxPanelProps> = ({ header, options, onChange
   );
 };
 
-export default CheckboxPanel;
+export { CheckboxPanel, Checkbox };
