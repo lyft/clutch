@@ -213,7 +213,12 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
 
   return (
     <Form onSubmit={handleSubmit(handleOnSubmit)}>
-      <FormFields state={experimentDataState} items={visibleFields} register={register} errors={errors} />
+      <FormFields
+        state={experimentDataState}
+        items={visibleFields}
+        register={register}
+        errors={errors}
+      />
       <ButtonGroup>
         <Button text="Cancel" variant="neutral" onClick={handleOnCancel} />
         <Button text="Start" type="submit" />

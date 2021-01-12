@@ -1,5 +1,5 @@
-import type { UserConfiguration } from ".";
 import type { ConfiguredRoute, Workflow, WorkflowConfiguration } from "./workflow";
+import type { UserConfiguration } from ".";
 
 const workflowRoutes = (
   workflowId: string,
