@@ -41,7 +41,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	if err := ptypes.UnmarshalAny(cfg, config); err != nil {
 		return nil, err
 	}
-	return NewProvider(config)
+	return NewProvider(context.Background(), config)
 }
 
 // Standardized representation of a user's claims.
@@ -240,11 +240,14 @@ func (pc *oidcProviderClaims) Check(grantType string) error {
 	return fmt.Errorf("grant type '%s' not supported by provider. supported: %v", grantType, pc.GrantTypesSupported)
 }
 
-func NewProvider(config *authnv1.Config) (Provider, error) {
+func NewProvider(ctx context.Context, config *authnv1.Config) (Provider, error) {
 	c := config.GetOidc()
 
-	httpClient := &http.Client{}
-	ctx := oidc.ClientContext(context.Background(), httpClient)
+	// Allows injection of test client. If client not present then add the default.
+	if v := ctx.Value(oauth2.HTTPClient); v == nil {
+		ctx = oidc.ClientContext(ctx, &http.Client{})
+	}
+
 	provider, err := oidc.NewProvider(ctx, c.Issuer)
 	if err != nil {
 		return nil, err
@@ -275,7 +278,7 @@ func NewProvider(config *authnv1.Config) (Provider, error) {
 		provider:            provider,
 		verifier:            verifier,
 		oauth2:              oc,
-		httpClient:          httpClient,
+		httpClient:          ctx.Value(oauth2.HTTPClient).(*http.Client),
 		sessionSecret:       config.SessionSecret,
 		claimsFromOIDCToken: DefaultClaimsFromOIDCToken,
 	}
