@@ -40,7 +40,7 @@ If desired, use a custom configuration with the Docker image by mapping it into 
 ```bash
 docker run --rm -p 8080:8080 -it lyft/clutch:latest
 ```
- 
+
 </TabItem>
 <TabItem value="custom">
 
@@ -49,7 +49,7 @@ docker run --rm -p 8080:8080 \
 -v /host/absolute/path/to/config.yaml:/clutch-config.yaml:ro \
 -it lyft/clutch:latest
 ```
- 
+
 </TabItem>
 <TabItem value="env">
 
@@ -59,7 +59,7 @@ docker run --rm -p 8080:8080 \
 -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
 -it lyft/clutch:latest
 ```
- 
+
 </TabItem>
 </Tabs>
 
@@ -75,7 +75,7 @@ For more information on configuring Clutch, see the [Configuration Reference](/d
 ### Accessing Clutch
 :tada: Clutch should now be accessible from `localhost:8080` in the browser.
 
-<img style={ {border: "1px solid black"} } alt="Clutch Landing Page Screenshot" src={useBaseUrl('img/docs/screenshot-landing.png')} width="50%" />
+<img alt="Clutch Landing Page Screenshot" src={useBaseUrl('img/docs/landing-page.png')} width="50%" />
 
 ## Building the Container From Scratch
 

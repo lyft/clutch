@@ -2,14 +2,14 @@ import React from "react";
 import type { Meta } from "@storybook/react";
 
 import type { StatusProps } from "../icon";
-import { Status } from "../icon";
+import { StatusIcon } from "../icon";
 
 export default {
   title: "Core/Icon/Status",
-  component: Status,
+  component: StatusIcon,
 } as Meta;
 
-const Template = (props: StatusProps) => <Status {...props} />;
+const Template = (props: StatusProps) => <StatusIcon {...props} />;
 
 export const Primary = Template.bind({});
 

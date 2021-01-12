@@ -1,6 +1,6 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { ExpansionPanel, TreeTable } from "@clutch-sh/core";
+import { TreeTable } from "@clutch-sh/core";
 import _ from "lodash";
 
 interface StatsProps {
@@ -15,12 +15,7 @@ const Stats: React.FC<StatsProps> = ({ stats }) => {
     }
   });
 
-  const status = `(${stats.stats.length} total)`;
-  return (
-    <ExpansionPanel heading="Stats" summary={status}>
-      <TreeTable data={structuredStats} />
-    </ExpansionPanel>
-  );
+  return <TreeTable data={structuredStats} />;
 };
 
 export default Stats;

@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
+	awsclient "github.com/aws/aws-sdk-go/aws/client"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/autoscaling"
 	"github.com/aws/aws-sdk-go/service/autoscaling/autoscalingiface"
@@ -53,8 +54,17 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		scope:              scope,
 	}
 
+	clientRetries := 0
+	if ac.ClientConfig != nil && ac.ClientConfig.Retries >= 0 {
+		clientRetries = int(ac.ClientConfig.Retries)
+	}
+
 	for _, region := range ac.Regions {
-		regionCfg := aws.NewConfig().WithRegion(region).WithMaxRetries(0)
+		regionCfg := aws.NewConfig().WithRegion(region)
+		regionCfg.Retryer = awsclient.DefaultRetryer{
+			NumMaxRetries: clientRetries,
+		}
+
 		awsSession, err := session.NewSession(regionCfg)
 		if err != nil {
 			return nil, err

@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/data-layout",
-  "version": "0.0.0-beta",
+  "version": "1.0.0-beta",
   "description": "Data Layout manager for clutch",
   "homepage": "https://clutch.sh/docs/development/frontend#clutch-shdata-layout",
   "license": "Apache-2.0",
@@ -31,6 +31,6 @@
     "react-hook-thunk-reducer": "^0.2.1"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^0.0.0-beta"
+    "@clutch-sh/tools": "^1.0.0-beta"
   }
 }

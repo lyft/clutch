@@ -88,7 +88,7 @@ const useDataLayoutManager = (layouts: ManagerLayout): DataManager => {
   Object.keys(layouts).forEach(key => {
     const layout = layouts[key];
     initialState[key] = { data: {}, isLoading: true, error: null };
-    if (layout?.["hydrator"] !== undefined) {
+    if (layout?.hydrator !== undefined) {
       initialState[key] = {
         ...initialState[key],
         hydrator: layout?.hydrator || (() => {}),

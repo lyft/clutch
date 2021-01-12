@@ -22,7 +22,7 @@ jobs:
           TAGS="$TAGS,${DOCKER_IMAGE}:sha-${GITHUB_SHA::7}"
           echo ::set-output name=tags::${TAGS}
       - name: build
-        uses: docker/build-push-action@v2.2.0
+        uses: docker/build-push-action@v2.2.2
         with:
           tags: ${{ steps.tags.outputs.tags }}
           push: true

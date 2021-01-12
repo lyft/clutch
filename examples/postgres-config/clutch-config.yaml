@@ -13,23 +13,13 @@ gateway:
       address: 0.0.0.0
       port: 8080
       secure: false
-#  json_gateway_loopback_listener:
-#    tcp:
-#      address 127.0.0.1
-#      port: 8081
-#      secure: false
 modules:
   - name: clutch.module.healthcheck
   - name: clutch.module.resolver
   - name: clutch.module.aws
-    # typed_config:
-    #   "@type": types.google.com/clutch.aws.v1.Config
-    #   aws_provider:
-    #     service: aws-us-east-2
   - name: clutch.module.audit
 services:
   - name: clutch.service.aws
-    # alias: aws-us-east
     typed_config:
       "@type": types.google.com/clutch.config.service.aws.v1.Config
       regions:
@@ -61,11 +51,3 @@ services:
               text: Healthcheck
 resolvers:
   - name: clutch.resolver.aws
-#    config:
-#      autoscaling_group:
-#        placeholder: adhocinfra-staging-iad
-#      hpa:
-#        placeholder: adhocinfra
-#        facet: main
-#    placeholders:
-#      autoscaling_group: lyft-staging-iad

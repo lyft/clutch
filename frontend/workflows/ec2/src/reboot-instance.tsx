@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Button,
   ButtonGroup,
   client,
   Confirmation,
@@ -51,19 +52,10 @@ const InstanceDetails: React.FC<WizardChild> = () => {
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
       <MetadataTable data={data} />
-      <ButtonGroup
-        buttons={[
-          {
-            text: "Back",
-            onClick: onBack,
-          },
-          {
-            text: "Reboot",
-            onClick: onSubmit,
-            destructive: true,
-          },
-        ]}
-      />
+      <ButtonGroup>
+        <Button text="Back" variant="neutral" onClick={onBack} />
+        <Button text="Reboot" variant="destructive" onClick={onSubmit} />
+      </ButtonGroup>
     </WizardStep>
   );
 };
@@ -96,7 +88,7 @@ const RebootInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes 
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <InstanceIdentifier name="Lookup" resolverType={resolverType} />
-      <InstanceDetails name="Modify" />
+      <InstanceDetails name="Verify" />
       <Confirm name="Confirmation" notes={notes} />
     </Wizard>
   );

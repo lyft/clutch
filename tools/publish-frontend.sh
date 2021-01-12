@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="0.0.0-beta.$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')"
+VERSION="1.0.0-beta.$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')"
 PACKAGE=$1
 
 if yarn info "@clutch-sh/${PACKAGE}" | grep -q "$VERSION"; then

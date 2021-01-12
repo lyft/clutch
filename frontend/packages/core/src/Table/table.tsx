@@ -1,48 +1,71 @@
-import React from "react";
-import type { TableProps as MuiTableProps, TableRowProps } from "@material-ui/core";
+import * as React from "react";
+import styled from "@emotion/styled";
+import type { TableProps as MuiTableProps } from "@material-ui/core";
 import {
   Paper,
   Table as MuiTable,
   TableBody,
-  TableCell,
-  TableContainer,
+  TableCell as MuiTableCell,
+  TableContainer as MuiTableContainer,
   TableHead,
-  TableRow,
+  TableRow as MuiTableRow,
 } from "@material-ui/core";
-import styled from "styled-components";
 
-const TablePaper = styled(Paper)`
-  max-height: 400px;
-`;
+const TablePaper = styled(Paper)({
+  border: "1px solid #E7E7EA",
+});
 
-interface TableProps extends MuiTableProps {
-  headings?: string[];
-  elevation?: number;
+export const StyledTableRow = styled(MuiTableRow)({
+  ":hover": {
+    background: "#EBEDFB",
+  },
+});
+
+export const TableCell = styled(MuiTableCell)(
+  {
+    fontSize: "14px",
+    padding: "12px 16px",
+    color: "#0D1030",
+  },
+  props => ({
+    borderBottom: props["data-border"] ? "1px solid #E7E7EA" : "0",
+  })
+);
+
+const HeaderTableCell = styled(TableCell)({
+  backgroundColor: "rgba(248, 248, 249, 1)",
+  fontWeight: 600,
+});
+
+export interface TableContainerProps {
+  children: React.ReactElement<MuiTableProps>;
 }
 
-const Table: React.FC<TableProps> = ({ headings, children, elevation = 1, ...props }) => {
-  let localHeadings = [];
-  if (headings) {
-    localHeadings = [...headings];
-  }
+export const TableContainer = ({ children }: TableContainerProps) => (
+  <MuiTableContainer component={TablePaper} elevation={0}>
+    {children}
+  </MuiTableContainer>
+);
+
+export interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
+  headings?: string[];
+}
+
+export const Table: React.FC<TableProps> = ({ headings, children, ...props }) => {
+  const localHeadings = headings ? [...headings] : [];
 
   return (
-    // n.b. material ui doesn't use the component prop to determine the prop types.
-    // @ts-ignore
-    <TableContainer component={TablePaper} elevation={elevation}>
+    <TableContainer>
       <MuiTable {...props}>
         {localHeadings.length !== 0 && (
           <TableHead>
-            <TableRow>
-              <TableCell align="left">
-                <strong>{localHeadings.shift()}</strong>
-              </TableCell>
+            <MuiTableRow>
               {localHeadings.map(heading => (
-                <TableCell key={heading} align="right">
-                  <strong>{heading}</strong>
-                </TableCell>
+                <HeaderTableCell key={heading} align="left">
+                  {heading}
+                </HeaderTableCell>
               ))}
-            </TableRow>
+            </MuiTableRow>
           </TableHead>
         )}
         <TableBody>{children}</TableBody>
@@ -51,25 +74,15 @@ const Table: React.FC<TableProps> = ({ headings, children, elevation = 1, ...pro
   );
 };
 
-interface RowProps extends TableRowProps {
-  data: any[];
+export interface TableRowProps {
+  children?: React.ReactNode;
 }
 
-const Row: React.FC<RowProps> = ({ data, ...props }) => {
-  const rowData = data ? [...data] : [];
-  const headerValue = rowData.shift();
-  return (
-    <TableRow {...props}>
-      <TableCell component="th" scope="row">
-        {headerValue}
-      </TableCell>
-      {rowData.map(value => (
-        <TableCell key={value} align="right">
-          {value}
-        </TableCell>
-      ))}
-    </TableRow>
-  );
-};
-
-export { Row, Table, TablePaper };
+export const TableRow = ({ children = [] }: TableRowProps) => (
+  <StyledTableRow>
+    {React.Children.map(children, (value, index) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <TableCell key={index}>{value}</TableCell>
+    ))}
+  </StyledTableRow>
+);

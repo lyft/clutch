@@ -3,7 +3,7 @@
 exports[`Terminate Instance workflow renders correctly 1`] = `
 "<Wizard dataLayout={{...}} heading={[undefined]}>
   <InstanceIdentifier name=\\"Lookup\\" resolverType=\\"clutch.aws.ec2.v1.Instance\\" />
-  <InstanceDetails name=\\"Modify\\" />
+  <InstanceDetails name=\\"Verify\\" />
   <Confirm name=\\"Confirmation\\" notes={{...}} />
 </Wizard>"
 `;
