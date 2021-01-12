@@ -13129,6 +13129,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public getTopology(request: clutch.topology.v1.IGetTopologyRequest): Promise<clutch.topology.v1.GetTopologyResponse>;
+
+                /**
+                 * Calls SearchTopology.
+                 * @param request SearchTopologyRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and SearchTopologyResponse
+                 */
+                public searchTopology(request: clutch.topology.v1.ISearchTopologyRequest, callback: clutch.topology.v1.TopologyAPI.SearchTopologyCallback): void;
+
+                /**
+                 * Calls SearchTopology.
+                 * @param request SearchTopologyRequest message or plain object
+                 * @returns Promise
+                 */
+                public searchTopology(request: clutch.topology.v1.ISearchTopologyRequest): Promise<clutch.topology.v1.SearchTopologyResponse>;
             }
 
             namespace TopologyAPI {
@@ -13139,6 +13153,13 @@ export namespace clutch {
                  * @param [response] GetTopologyResponse
                  */
                 type GetTopologyCallback = (error: (Error|null), response?: clutch.topology.v1.GetTopologyResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.topology.v1.TopologyAPI#searchTopology}.
+                 * @param error Error, if any
+                 * @param [response] SearchTopologyResponse
+                 */
+                type SearchTopologyCallback = (error: (Error|null), response?: clutch.topology.v1.SearchTopologyResponse) => void;
             }
 
             /** Properties of a GetTopologyRequest. */
@@ -13232,6 +13253,310 @@ export namespace clutch {
 
                 /**
                  * Converts this GetTopologyResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a SearchTopologyRequest. */
+            interface ISearchTopologyRequest {
+
+                /** SearchTopologyRequest sort */
+                sort?: (clutch.topology.v1.SearchTopologyRequest.ISort|null);
+
+                /** SearchTopologyRequest pageToken */
+                pageToken?: (number|Long|null);
+
+                /** SearchTopologyRequest limit */
+                limit?: (number|Long|null);
+
+                /** SearchTopologyRequest filter */
+                filter?: (clutch.topology.v1.SearchTopologyRequest.IFilter|null);
+            }
+
+            /** Represents a SearchTopologyRequest. */
+            class SearchTopologyRequest implements ISearchTopologyRequest {
+
+                /**
+                 * Constructs a new SearchTopologyRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.topology.v1.ISearchTopologyRequest);
+
+                /** SearchTopologyRequest sort. */
+                public sort?: (clutch.topology.v1.SearchTopologyRequest.ISort|null);
+
+                /** SearchTopologyRequest pageToken. */
+                public pageToken: (number|Long);
+
+                /** SearchTopologyRequest limit. */
+                public limit: (number|Long);
+
+                /** SearchTopologyRequest filter. */
+                public filter?: (clutch.topology.v1.SearchTopologyRequest.IFilter|null);
+
+                /**
+                 * Verifies a SearchTopologyRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a SearchTopologyRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns SearchTopologyRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyRequest;
+
+                /**
+                 * Creates a plain object from a SearchTopologyRequest message. Also converts values to other types if specified.
+                 * @param message SearchTopologyRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.topology.v1.SearchTopologyRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this SearchTopologyRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace SearchTopologyRequest {
+
+                /** Properties of a Sort. */
+                interface ISort {
+
+                    /** Sort direction */
+                    direction?: (clutch.topology.v1.SearchTopologyRequest.Sort.Direction|null);
+
+                    /** Sort field */
+                    field?: (string|null);
+                }
+
+                /** Represents a Sort. */
+                class Sort implements ISort {
+
+                    /**
+                     * Constructs a new Sort.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.topology.v1.SearchTopologyRequest.ISort);
+
+                    /** Sort direction. */
+                    public direction: clutch.topology.v1.SearchTopologyRequest.Sort.Direction;
+
+                    /** Sort field. */
+                    public field: string;
+
+                    /**
+                     * Verifies a Sort message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Sort message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Sort
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyRequest.Sort;
+
+                    /**
+                     * Creates a plain object from a Sort message. Also converts values to other types if specified.
+                     * @param message Sort
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.topology.v1.SearchTopologyRequest.Sort, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Sort to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                namespace Sort {
+
+                    /** Direction enum. */
+                    enum Direction {
+                        UNSPECIFIED = 0,
+                        ASCENDING = 1,
+                        DESCENDING = 2
+                    }
+                }
+
+                /** Properties of a Filter. */
+                interface IFilter {
+
+                    /** Filter search */
+                    search?: (clutch.topology.v1.SearchTopologyRequest.Filter.ISearch|null);
+
+                    /** Filter typeUrl */
+                    typeUrl?: (string|null);
+
+                    /** Filter metadata */
+                    metadata?: ({ [k: string]: string }|null);
+                }
+
+                /** Represents a Filter. */
+                class Filter implements IFilter {
+
+                    /**
+                     * Constructs a new Filter.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.topology.v1.SearchTopologyRequest.IFilter);
+
+                    /** Filter search. */
+                    public search?: (clutch.topology.v1.SearchTopologyRequest.Filter.ISearch|null);
+
+                    /** Filter typeUrl. */
+                    public typeUrl: string;
+
+                    /** Filter metadata. */
+                    public metadata: { [k: string]: string };
+
+                    /**
+                     * Verifies a Filter message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Filter message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Filter
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyRequest.Filter;
+
+                    /**
+                     * Creates a plain object from a Filter message. Also converts values to other types if specified.
+                     * @param message Filter
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.topology.v1.SearchTopologyRequest.Filter, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Filter to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                namespace Filter {
+
+                    /** Properties of a Search. */
+                    interface ISearch {
+
+                        /** Search field */
+                        field?: (string|null);
+
+                        /** Search text */
+                        text?: (string|null);
+                    }
+
+                    /** Represents a Search. */
+                    class Search implements ISearch {
+
+                        /**
+                         * Constructs a new Search.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.topology.v1.SearchTopologyRequest.Filter.ISearch);
+
+                        /** Search field. */
+                        public field: string;
+
+                        /** Search text. */
+                        public text: string;
+
+                        /**
+                         * Verifies a Search message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Search message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Search
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyRequest.Filter.Search;
+
+                        /**
+                         * Creates a plain object from a Search message. Also converts values to other types if specified.
+                         * @param message Search
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.topology.v1.SearchTopologyRequest.Filter.Search, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Search to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
+
+            /** Properties of a SearchTopologyResponse. */
+            interface ISearchTopologyResponse {
+
+                /** SearchTopologyResponse resources */
+                resources?: (clutch.topology.v1.IResource[]|null);
+
+                /** SearchTopologyResponse nextPageToken */
+                nextPageToken?: (string|null);
+            }
+
+            /** Represents a SearchTopologyResponse. */
+            class SearchTopologyResponse implements ISearchTopologyResponse {
+
+                /**
+                 * Constructs a new SearchTopologyResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.topology.v1.ISearchTopologyResponse);
+
+                /** SearchTopologyResponse resources. */
+                public resources: clutch.topology.v1.IResource[];
+
+                /** SearchTopologyResponse nextPageToken. */
+                public nextPageToken: string;
+
+                /**
+                 * Verifies a SearchTopologyResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a SearchTopologyResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns SearchTopologyResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyResponse;
+
+                /**
+                 * Creates a plain object from a SearchTopologyResponse message. Also converts values to other types if specified.
+                 * @param message SearchTopologyResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.topology.v1.SearchTopologyResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this SearchTopologyResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
