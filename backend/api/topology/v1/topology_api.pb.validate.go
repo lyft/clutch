@@ -1173,84 +1173,6 @@ var _ interface {
 	ErrorName() string
 } = UpdateCacheRequestValidationError{}
 
-// Validate checks the field values on SearchTopologyRequest_FieldSelector with
-// the rules defined in the proto definition for this message. If any rules
-// are violated, an error is returned.
-func (m *SearchTopologyRequest_FieldSelector) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	switch m.Field.(type) {
-
-	case *SearchTopologyRequest_FieldSelector_Column_:
-		// no validation rules for Column
-
-	case *SearchTopologyRequest_FieldSelector_Metadata:
-		// no validation rules for Metadata
-
-	}
-
-	return nil
-}
-
-// SearchTopologyRequest_FieldSelectorValidationError is the validation error
-// returned by SearchTopologyRequest_FieldSelector.Validate if the designated
-// constraints aren't met.
-type SearchTopologyRequest_FieldSelectorValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e SearchTopologyRequest_FieldSelectorValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e SearchTopologyRequest_FieldSelectorValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e SearchTopologyRequest_FieldSelectorValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e SearchTopologyRequest_FieldSelectorValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e SearchTopologyRequest_FieldSelectorValidationError) ErrorName() string {
-	return "SearchTopologyRequest_FieldSelectorValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e SearchTopologyRequest_FieldSelectorValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sSearchTopologyRequest_FieldSelector.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = SearchTopologyRequest_FieldSelectorValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = SearchTopologyRequest_FieldSelectorValidationError{}
-
 // Validate checks the field values on SearchTopologyRequest_Sort with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -1261,20 +1183,10 @@ func (m *SearchTopologyRequest_Sort) Validate() error {
 
 	// no validation rules for Direction
 
-	if m.GetField() == nil {
+	if utf8.RuneCountInString(m.GetField()) < 1 {
 		return SearchTopologyRequest_SortValidationError{
 			field:  "Field",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetField()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SearchTopologyRequest_SortValidationError{
-				field:  "Field",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
+			reason: "value length must be at least 1 runes",
 		}
 	}
 
@@ -1427,20 +1339,10 @@ func (m *SearchTopologyRequest_Filter_Search) Validate() error {
 		return nil
 	}
 
-	if m.GetField() == nil {
+	if utf8.RuneCountInString(m.GetField()) < 1 {
 		return SearchTopologyRequest_Filter_SearchValidationError{
 			field:  "Field",
-			reason: "value is required",
-		}
-	}
-
-	if v, ok := interface{}(m.GetField()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return SearchTopologyRequest_Filter_SearchValidationError{
-				field:  "Field",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
+			reason: "value length must be at least 1 runes",
 		}
 	}
 

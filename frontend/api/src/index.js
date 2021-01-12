@@ -31462,7 +31462,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.topology.v1
                  * @interface ISearchTopologyRequest
                  * @property {clutch.topology.v1.SearchTopologyRequest.ISort|null} [sort] SearchTopologyRequest sort
-                 * @property {string|null} [pageToken] SearchTopologyRequest pageToken
+                 * @property {number|Long|null} [pageToken] SearchTopologyRequest pageToken
                  * @property {number|Long|null} [limit] SearchTopologyRequest limit
                  * @property {clutch.topology.v1.SearchTopologyRequest.IFilter|null} [filter] SearchTopologyRequest filter
                  */
@@ -31492,11 +31492,11 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * SearchTopologyRequest pageToken.
-                 * @member {string} pageToken
+                 * @member {number|Long} pageToken
                  * @memberof clutch.topology.v1.SearchTopologyRequest
                  * @instance
                  */
-                SearchTopologyRequest.prototype.pageToken = "";
+                SearchTopologyRequest.prototype.pageToken = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
 
                 /**
                  * SearchTopologyRequest limit.
@@ -31504,7 +31504,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.topology.v1.SearchTopologyRequest
                  * @instance
                  */
-                SearchTopologyRequest.prototype.limit = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                SearchTopologyRequest.prototype.limit = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
 
                 /**
                  * SearchTopologyRequest filter.
@@ -31531,8 +31531,8 @@ export const clutch = $root.clutch = (() => {
                             return "sort." + error;
                     }
                     if (message.pageToken != null && message.hasOwnProperty("pageToken"))
-                        if (!$util.isString(message.pageToken))
-                            return "pageToken: string expected";
+                        if (!$util.isInteger(message.pageToken) && !(message.pageToken && $util.isInteger(message.pageToken.low) && $util.isInteger(message.pageToken.high)))
+                            return "pageToken: integer|Long expected";
                     if (message.limit != null && message.hasOwnProperty("limit"))
                         if (!$util.isInteger(message.limit) && !(message.limit && $util.isInteger(message.limit.low) && $util.isInteger(message.limit.high)))
                             return "limit: integer|Long expected";
@@ -31562,16 +31562,23 @@ export const clutch = $root.clutch = (() => {
                         message.sort = $root.clutch.topology.v1.SearchTopologyRequest.Sort.fromObject(object.sort);
                     }
                     if (object.pageToken != null)
-                        message.pageToken = String(object.pageToken);
+                        if ($util.Long)
+                            (message.pageToken = $util.Long.fromValue(object.pageToken)).unsigned = true;
+                        else if (typeof object.pageToken === "string")
+                            message.pageToken = parseInt(object.pageToken, 10);
+                        else if (typeof object.pageToken === "number")
+                            message.pageToken = object.pageToken;
+                        else if (typeof object.pageToken === "object")
+                            message.pageToken = new $util.LongBits(object.pageToken.low >>> 0, object.pageToken.high >>> 0).toNumber(true);
                     if (object.limit != null)
                         if ($util.Long)
-                            (message.limit = $util.Long.fromValue(object.limit)).unsigned = false;
+                            (message.limit = $util.Long.fromValue(object.limit)).unsigned = true;
                         else if (typeof object.limit === "string")
                             message.limit = parseInt(object.limit, 10);
                         else if (typeof object.limit === "number")
                             message.limit = object.limit;
                         else if (typeof object.limit === "object")
-                            message.limit = new $util.LongBits(object.limit.low >>> 0, object.limit.high >>> 0).toNumber();
+                            message.limit = new $util.LongBits(object.limit.low >>> 0, object.limit.high >>> 0).toNumber(true);
                     if (object.filter != null) {
                         if (typeof object.filter !== "object")
                             throw TypeError(".clutch.topology.v1.SearchTopologyRequest.filter: object expected");
@@ -31595,9 +31602,13 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.defaults) {
                         object.sort = null;
-                        object.pageToken = "";
                         if ($util.Long) {
-                            let long = new $util.Long(0, 0, false);
+                            let long = new $util.Long(0, 0, true);
+                            object.pageToken = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.pageToken = options.longs === String ? "0" : 0;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, true);
                             object.limit = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                         } else
                             object.limit = options.longs === String ? "0" : 0;
@@ -31606,12 +31617,15 @@ export const clutch = $root.clutch = (() => {
                     if (message.sort != null && message.hasOwnProperty("sort"))
                         object.sort = $root.clutch.topology.v1.SearchTopologyRequest.Sort.toObject(message.sort, options);
                     if (message.pageToken != null && message.hasOwnProperty("pageToken"))
-                        object.pageToken = message.pageToken;
+                        if (typeof message.pageToken === "number")
+                            object.pageToken = options.longs === String ? String(message.pageToken) : message.pageToken;
+                        else
+                            object.pageToken = options.longs === String ? $util.Long.prototype.toString.call(message.pageToken) : options.longs === Number ? new $util.LongBits(message.pageToken.low >>> 0, message.pageToken.high >>> 0).toNumber(true) : message.pageToken;
                     if (message.limit != null && message.hasOwnProperty("limit"))
                         if (typeof message.limit === "number")
                             object.limit = options.longs === String ? String(message.limit) : message.limit;
                         else
-                            object.limit = options.longs === String ? $util.Long.prototype.toString.call(message.limit) : options.longs === Number ? new $util.LongBits(message.limit.low >>> 0, message.limit.high >>> 0).toNumber() : message.limit;
+                            object.limit = options.longs === String ? $util.Long.prototype.toString.call(message.limit) : options.longs === Number ? new $util.LongBits(message.limit.low >>> 0, message.limit.high >>> 0).toNumber(true) : message.limit;
                     if (message.filter != null && message.hasOwnProperty("filter"))
                         object.filter = $root.clutch.topology.v1.SearchTopologyRequest.Filter.toObject(message.filter, options);
                     return object;
@@ -31628,174 +31642,6 @@ export const clutch = $root.clutch = (() => {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                SearchTopologyRequest.FieldSelector = (function() {
-
-                    /**
-                     * Properties of a FieldSelector.
-                     * @memberof clutch.topology.v1.SearchTopologyRequest
-                     * @interface IFieldSelector
-                     * @property {clutch.topology.v1.SearchTopologyRequest.FieldSelector.Column|null} [column] FieldSelector column
-                     * @property {string|null} [metadata] FieldSelector metadata
-                     */
-
-                    /**
-                     * Constructs a new FieldSelector.
-                     * @memberof clutch.topology.v1.SearchTopologyRequest
-                     * @classdesc Represents a FieldSelector.
-                     * @implements IFieldSelector
-                     * @constructor
-                     * @param {clutch.topology.v1.SearchTopologyRequest.IFieldSelector=} [properties] Properties to set
-                     */
-                    function FieldSelector(properties) {
-                        if (properties)
-                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * FieldSelector column.
-                     * @member {clutch.topology.v1.SearchTopologyRequest.FieldSelector.Column} column
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.FieldSelector
-                     * @instance
-                     */
-                    FieldSelector.prototype.column = 0;
-
-                    /**
-                     * FieldSelector metadata.
-                     * @member {string} metadata
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.FieldSelector
-                     * @instance
-                     */
-                    FieldSelector.prototype.metadata = "";
-
-                    // OneOf field names bound to virtual getters and setters
-                    let $oneOfFields;
-
-                    /**
-                     * FieldSelector field.
-                     * @member {"column"|"metadata"|undefined} field
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.FieldSelector
-                     * @instance
-                     */
-                    Object.defineProperty(FieldSelector.prototype, "field", {
-                        get: $util.oneOfGetter($oneOfFields = ["column", "metadata"]),
-                        set: $util.oneOfSetter($oneOfFields)
-                    });
-
-                    /**
-                     * Verifies a FieldSelector message.
-                     * @function verify
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.FieldSelector
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    FieldSelector.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        let properties = {};
-                        if (message.column != null && message.hasOwnProperty("column")) {
-                            properties.field = 1;
-                            switch (message.column) {
-                            default:
-                                return "column: enum value expected";
-                            case 0:
-                            case 1:
-                                break;
-                            }
-                        }
-                        if (message.metadata != null && message.hasOwnProperty("metadata")) {
-                            if (properties.field === 1)
-                                return "field: multiple values";
-                            properties.field = 1;
-                            if (!$util.isString(message.metadata))
-                                return "metadata: string expected";
-                        }
-                        return null;
-                    };
-
-                    /**
-                     * Creates a FieldSelector message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.FieldSelector
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.topology.v1.SearchTopologyRequest.FieldSelector} FieldSelector
-                     */
-                    FieldSelector.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.topology.v1.SearchTopologyRequest.FieldSelector)
-                            return object;
-                        let message = new $root.clutch.topology.v1.SearchTopologyRequest.FieldSelector();
-                        switch (object.column) {
-                        case "UNSPECIFIED":
-                        case 0:
-                            message.column = 0;
-                            break;
-                        case "ID":
-                        case 1:
-                            message.column = 1;
-                            break;
-                        }
-                        if (object.metadata != null)
-                            message.metadata = String(object.metadata);
-                        return message;
-                    };
-
-                    /**
-                     * Creates a plain object from a FieldSelector message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.FieldSelector
-                     * @static
-                     * @param {clutch.topology.v1.SearchTopologyRequest.FieldSelector} message FieldSelector
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    FieldSelector.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        let object = {};
-                        if (message.column != null && message.hasOwnProperty("column")) {
-                            object.column = options.enums === String ? $root.clutch.topology.v1.SearchTopologyRequest.FieldSelector.Column[message.column] : message.column;
-                            if (options.oneofs)
-                                object.field = "column";
-                        }
-                        if (message.metadata != null && message.hasOwnProperty("metadata")) {
-                            object.metadata = message.metadata;
-                            if (options.oneofs)
-                                object.field = "metadata";
-                        }
-                        return object;
-                    };
-
-                    /**
-                     * Converts this FieldSelector to JSON.
-                     * @function toJSON
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.FieldSelector
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    FieldSelector.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    /**
-                     * Column enum.
-                     * @name clutch.topology.v1.SearchTopologyRequest.FieldSelector.Column
-                     * @enum {number}
-                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
-                     * @property {number} ID=1 ID value
-                     */
-                    FieldSelector.Column = (function() {
-                        const valuesById = {}, values = Object.create(valuesById);
-                        values[valuesById[0] = "UNSPECIFIED"] = 0;
-                        values[valuesById[1] = "ID"] = 1;
-                        return values;
-                    })();
-
-                    return FieldSelector;
-                })();
-
                 SearchTopologyRequest.Sort = (function() {
 
                     /**
@@ -31803,7 +31649,7 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.topology.v1.SearchTopologyRequest
                      * @interface ISort
                      * @property {clutch.topology.v1.SearchTopologyRequest.Sort.Direction|null} [direction] Sort direction
-                     * @property {clutch.topology.v1.SearchTopologyRequest.IFieldSelector|null} [field] Sort field
+                     * @property {string|null} [field] Sort field
                      */
 
                     /**
@@ -31831,11 +31677,11 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Sort field.
-                     * @member {clutch.topology.v1.SearchTopologyRequest.IFieldSelector|null|undefined} field
+                     * @member {string} field
                      * @memberof clutch.topology.v1.SearchTopologyRequest.Sort
                      * @instance
                      */
-                    Sort.prototype.field = null;
+                    Sort.prototype.field = "";
 
                     /**
                      * Verifies a Sort message.
@@ -31857,11 +31703,9 @@ export const clutch = $root.clutch = (() => {
                             case 2:
                                 break;
                             }
-                        if (message.field != null && message.hasOwnProperty("field")) {
-                            let error = $root.clutch.topology.v1.SearchTopologyRequest.FieldSelector.verify(message.field);
-                            if (error)
-                                return "field." + error;
-                        }
+                        if (message.field != null && message.hasOwnProperty("field"))
+                            if (!$util.isString(message.field))
+                                return "field: string expected";
                         return null;
                     };
 
@@ -31891,11 +31735,8 @@ export const clutch = $root.clutch = (() => {
                             message.direction = 2;
                             break;
                         }
-                        if (object.field != null) {
-                            if (typeof object.field !== "object")
-                                throw TypeError(".clutch.topology.v1.SearchTopologyRequest.Sort.field: object expected");
-                            message.field = $root.clutch.topology.v1.SearchTopologyRequest.FieldSelector.fromObject(object.field);
-                        }
+                        if (object.field != null)
+                            message.field = String(object.field);
                         return message;
                     };
 
@@ -31914,12 +31755,12 @@ export const clutch = $root.clutch = (() => {
                         let object = {};
                         if (options.defaults) {
                             object.direction = options.enums === String ? "UNSPECIFIED" : 0;
-                            object.field = null;
+                            object.field = "";
                         }
                         if (message.direction != null && message.hasOwnProperty("direction"))
                             object.direction = options.enums === String ? $root.clutch.topology.v1.SearchTopologyRequest.Sort.Direction[message.direction] : message.direction;
                         if (message.field != null && message.hasOwnProperty("field"))
-                            object.field = $root.clutch.topology.v1.SearchTopologyRequest.FieldSelector.toObject(message.field, options);
+                            object.field = message.field;
                         return object;
                     };
 
@@ -32112,7 +31953,7 @@ export const clutch = $root.clutch = (() => {
                          * Properties of a Search.
                          * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
                          * @interface ISearch
-                         * @property {clutch.topology.v1.SearchTopologyRequest.IFieldSelector|null} [field] Search field
+                         * @property {string|null} [field] Search field
                          * @property {string|null} [text] Search text
                          */
 
@@ -32133,11 +31974,11 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Search field.
-                         * @member {clutch.topology.v1.SearchTopologyRequest.IFieldSelector|null|undefined} field
+                         * @member {string} field
                          * @memberof clutch.topology.v1.SearchTopologyRequest.Filter.Search
                          * @instance
                          */
-                        Search.prototype.field = null;
+                        Search.prototype.field = "";
 
                         /**
                          * Search text.
@@ -32158,11 +31999,9 @@ export const clutch = $root.clutch = (() => {
                         Search.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
-                            if (message.field != null && message.hasOwnProperty("field")) {
-                                let error = $root.clutch.topology.v1.SearchTopologyRequest.FieldSelector.verify(message.field);
-                                if (error)
-                                    return "field." + error;
-                            }
+                            if (message.field != null && message.hasOwnProperty("field"))
+                                if (!$util.isString(message.field))
+                                    return "field: string expected";
                             if (message.text != null && message.hasOwnProperty("text"))
                                 if (!$util.isString(message.text))
                                     return "text: string expected";
@@ -32181,11 +32020,8 @@ export const clutch = $root.clutch = (() => {
                             if (object instanceof $root.clutch.topology.v1.SearchTopologyRequest.Filter.Search)
                                 return object;
                             let message = new $root.clutch.topology.v1.SearchTopologyRequest.Filter.Search();
-                            if (object.field != null) {
-                                if (typeof object.field !== "object")
-                                    throw TypeError(".clutch.topology.v1.SearchTopologyRequest.Filter.Search.field: object expected");
-                                message.field = $root.clutch.topology.v1.SearchTopologyRequest.FieldSelector.fromObject(object.field);
-                            }
+                            if (object.field != null)
+                                message.field = String(object.field);
                             if (object.text != null)
                                 message.text = String(object.text);
                             return message;
@@ -32205,11 +32041,11 @@ export const clutch = $root.clutch = (() => {
                                 options = {};
                             let object = {};
                             if (options.defaults) {
-                                object.field = null;
+                                object.field = "";
                                 object.text = "";
                             }
                             if (message.field != null && message.hasOwnProperty("field"))
-                                object.field = $root.clutch.topology.v1.SearchTopologyRequest.FieldSelector.toObject(message.field, options);
+                                object.field = message.field;
                             if (message.text != null && message.hasOwnProperty("text"))
                                 object.text = message.text;
                             return object;

@@ -13265,7 +13265,7 @@ export namespace clutch {
                 sort?: (clutch.topology.v1.SearchTopologyRequest.ISort|null);
 
                 /** SearchTopologyRequest pageToken */
-                pageToken?: (string|null);
+                pageToken?: (number|Long|null);
 
                 /** SearchTopologyRequest limit */
                 limit?: (number|Long|null);
@@ -13287,7 +13287,7 @@ export namespace clutch {
                 public sort?: (clutch.topology.v1.SearchTopologyRequest.ISort|null);
 
                 /** SearchTopologyRequest pageToken. */
-                public pageToken: string;
+                public pageToken: (number|Long);
 
                 /** SearchTopologyRequest limit. */
                 public limit: (number|Long);
@@ -13326,72 +13326,6 @@ export namespace clutch {
 
             namespace SearchTopologyRequest {
 
-                /** Properties of a FieldSelector. */
-                interface IFieldSelector {
-
-                    /** FieldSelector column */
-                    column?: (clutch.topology.v1.SearchTopologyRequest.FieldSelector.Column|null);
-
-                    /** FieldSelector metadata */
-                    metadata?: (string|null);
-                }
-
-                /** Represents a FieldSelector. */
-                class FieldSelector implements IFieldSelector {
-
-                    /**
-                     * Constructs a new FieldSelector.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.topology.v1.SearchTopologyRequest.IFieldSelector);
-
-                    /** FieldSelector column. */
-                    public column: clutch.topology.v1.SearchTopologyRequest.FieldSelector.Column;
-
-                    /** FieldSelector metadata. */
-                    public metadata: string;
-
-                    /** FieldSelector field. */
-                    public field?: ("column"|"metadata");
-
-                    /**
-                     * Verifies a FieldSelector message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a FieldSelector message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns FieldSelector
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyRequest.FieldSelector;
-
-                    /**
-                     * Creates a plain object from a FieldSelector message. Also converts values to other types if specified.
-                     * @param message FieldSelector
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.topology.v1.SearchTopologyRequest.FieldSelector, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this FieldSelector to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                namespace FieldSelector {
-
-                    /** Column enum. */
-                    enum Column {
-                        UNSPECIFIED = 0,
-                        ID = 1
-                    }
-                }
-
                 /** Properties of a Sort. */
                 interface ISort {
 
@@ -13399,7 +13333,7 @@ export namespace clutch {
                     direction?: (clutch.topology.v1.SearchTopologyRequest.Sort.Direction|null);
 
                     /** Sort field */
-                    field?: (clutch.topology.v1.SearchTopologyRequest.IFieldSelector|null);
+                    field?: (string|null);
                 }
 
                 /** Represents a Sort. */
@@ -13415,7 +13349,7 @@ export namespace clutch {
                     public direction: clutch.topology.v1.SearchTopologyRequest.Sort.Direction;
 
                     /** Sort field. */
-                    public field?: (clutch.topology.v1.SearchTopologyRequest.IFieldSelector|null);
+                    public field: string;
 
                     /**
                      * Verifies a Sort message.
@@ -13522,7 +13456,7 @@ export namespace clutch {
                     interface ISearch {
 
                         /** Search field */
-                        field?: (clutch.topology.v1.SearchTopologyRequest.IFieldSelector|null);
+                        field?: (string|null);
 
                         /** Search text */
                         text?: (string|null);
@@ -13538,7 +13472,7 @@ export namespace clutch {
                         constructor(properties?: clutch.topology.v1.SearchTopologyRequest.Filter.ISearch);
 
                         /** Search field. */
-                        public field?: (clutch.topology.v1.SearchTopologyRequest.IFieldSelector|null);
+                        public field: string;
 
                         /** Search text. */
                         public text: string;
