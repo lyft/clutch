@@ -9,6 +9,7 @@ on:
     paths:
       - 'backend/**'
       - .github/workflows/backend.yml
+      - tools/golangci-lint.sh
       - Makefile
 jobs:
   build:
