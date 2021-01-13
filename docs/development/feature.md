@@ -434,7 +434,10 @@ import {
 
 import { useDataLayout } from "@clutch-sh/data-layout";
 // highlight-end
+import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
+
+import type { WorkflowProps } from ".";
 ...
 // highlight-start
 const AmiiboLookup: React.FC<WizardChild> = () => {

@@ -11,8 +11,8 @@ import {
 } from "@clutch-sh/core";
 
 import { useDataLayout } from "@clutch-sh/data-layout";
-import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import type { WizardChild } from "@clutch-sh/wizard";
+import { Wizard, WizardStep } from "@clutch-sh/wizard";
 
 import type { WorkflowProps } from ".";
 
