@@ -78,7 +78,9 @@ oidc:
   redirect_url: "http://localhost:12000/v1/authn/callback"
 `, cfg)
 
-	mockprovider := authnmock.NewMockOIDCProviderServer()
+	email := "user@example.com"
+
+	mockprovider := authnmock.NewMockOIDCProviderServer(email)
 	defer mockprovider.Close()
 
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
@@ -92,11 +94,12 @@ oidc:
 	assert.True(t, strings.Contains(authURL, "access_type=offline"))
 	assert.True(t, strings.Contains(authURL, "state=myState"))
 
-	token, err := p.Exchange(ctx, "aaa")
+	token, err := p.Exchange(context.Background(), "aaa")
 	assert.NoError(t, err)
 	assert.NotNil(t, token)
 
-	c, err := p.Verify(ctx, token.AccessToken)
+	c, err := p.Verify(context.Background(), token.AccessToken)
 	assert.NoError(t, err)
 	assert.NotNil(t, c)
+	assert.Equal(t, email, c.Subject)
 }

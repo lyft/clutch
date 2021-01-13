@@ -9,11 +9,13 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func FromYAML(s string, message proto.Message) {
+func FromYAML(s string, message proto.Message) proto.Message {
 	err := protojson.Unmarshal(yamlToJSON(s), message)
 	if err != nil {
 		panic(err)
 	}
+
+	return message
 }
 
 func AnyFromYAML(s string) *anypb.Any {

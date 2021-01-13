@@ -40,7 +40,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	case *authnv1.Config_Oidc:
 		return NewOIDCProvider(context.Background(), config)
 	default:
-		return nil, fmt.Errorf("authn type '%T' not implemented", t)
+		return nil, fmt.Errorf("authn provider type '%T' not implemented", t)
 	}
 }
 
