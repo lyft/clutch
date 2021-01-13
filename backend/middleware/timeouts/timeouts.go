@@ -88,7 +88,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 		if timeout != 0 {
 			// If timeout is not infinite, return after timeout plus boost. Boost give the goroutine a chance to return if it's respecting the deadline.
 			timer := time.AfterFunc(timeout+boost, func() { close(done) })
-			defer func() { timer.Stop(); close(done) }()
+			defer timer.Stop() // Channel will still be garbage collected if close never occurs.
 		} else {
 			defer close(done)
 		}
