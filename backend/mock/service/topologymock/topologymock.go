@@ -8,6 +8,7 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/service"
 	topologyservice "github.com/lyft/clutch/backend/service/topology"
 )
@@ -26,6 +27,13 @@ func (s *svc) GetTopology(ctx context.Context) error {
 	return errors.New("Not implemented")
 }
 
-func (s *svc) SearchTopology(ctx context.Context) error {
-	return errors.New("Not implemented")
+func (s *svc) SearchTopology(context.Context, *topologyv1.SearchTopologyRequest) ([]*topologyv1.Resource, error) {
+	return []*topologyv1.Resource{
+		{
+			Id: "pod-123",
+			Metadata: map[string]string{
+				"label": "value",
+			},
+		},
+	}, nil
 }
