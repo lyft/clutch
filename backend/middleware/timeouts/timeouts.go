@@ -89,6 +89,8 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 			// If timeout is not infinite, return after timeout plus boost
 			timer := time.AfterFunc(timeout+boost, func() { close(done) })
 			defer timer.Stop()
+		} else {
+			defer close(done)
 		}
 
 		// Spawn the handler in a goroutine so we can return early on timeout if it doesn't complete.
