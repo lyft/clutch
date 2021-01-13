@@ -105,10 +105,11 @@ func TestFilterQueryBuilder(t *testing.T) {
 				},
 				TypeUrl: "type.googleapis.com/clutch.aws.ec2.v1.AutoscalingGroup",
 				Metadata: map[string]string{
-					"label": "value",
+					"label":  "value",
+					"label2": "value2",
 				},
 			},
-			expect: "SELECT * FROM topology_cache WHERE metadata->>'label' LIKE $1 AND resolver_type_url = $2 AND metadata->>'label' = $3",
+			expect: "SELECT * FROM topology_cache WHERE metadata->>'label' LIKE $1 AND resolver_type_url = $2 AND metadata->>'label' = $3 AND metadata->>'label2' = $4",
 		},
 	}
 
