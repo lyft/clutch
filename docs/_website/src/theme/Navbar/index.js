@@ -10,7 +10,7 @@ import useThemeContext from '@theme/hooks/useThemeContext';
 import useHideableNavbar from '@theme/hooks/useHideableNavbar';
 import useLockBodyScroll from '@theme/hooks/useLockBodyScroll';
 import useWindowSize, { windowSizes } from '@theme/hooks/useWindowSize';
-import useLogo from '@theme/hooks/useLogo';
+import { useThemeConfig } from '@docusaurus/theme-common';
 
 import styles from './styles.module.css';
 
@@ -192,7 +192,9 @@ function Navbar() {
 
   const { isDarkTheme, setLightTheme, setDarkTheme } = useThemeContext();
   const { navbarRef, isNavbarVisible } = useHideableNavbar(hideOnScroll);
-  const { logoLink, logoLinkProps, logoImageUrl, logoAlt } = useLogo();
+  const {
+    navbar: {logo = {}},
+  } = useThemeConfig();
 
   useLockBodyScroll(sidebarShown);
 
@@ -254,13 +256,13 @@ function Navbar() {
               </svg>
             </div>
           )}
-          <Link className={clsx("navbar__brand", styles.navbarLogoCustom)} to={logoLink} {...logoLinkProps}>
-            {logoImageUrl != null && (
+          <Link className={clsx("navbar__brand", styles.navbarLogoCustom)} to={'/'} rel='noopener noreferrer' target={logo.target}>
+            {logo.src != null && (
               <img
                 key={isClient}
                 className={clsx("navbar__logo")}
-                src={logoImageUrl}
-                alt={logoAlt}
+                src={logo.src}
+                alt={logo.alt}
               />
             )}
             <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
@@ -297,14 +299,16 @@ function Navbar() {
           <Link
             className="navbar__brand"
             onClick={hideSidebar}
-            to={logoLink}
-            {...logoLinkProps}>
-            {logoImageUrl != null && (
+            to={'/'}
+            rel='noopener noreferrer'
+            target={logo.target}
+          >
+            {logo.src != null && (
               <img
                 key={isClient}
                 className="navbar__logo"
-                src={logoImageUrl}
-                alt={logoAlt}
+                src={logo.src}
+                alt={logo.alt}
               />
             )}
             <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />

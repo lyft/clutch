@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import useLogo from '@theme/hooks/useLogo';
+import { useThemeConfig } from '@docusaurus/theme-common';
 
 import styles from './styles.module.css';
 
@@ -45,7 +45,9 @@ function FooterLink({to, href, label, prependBaseUrlToHref, ...props}) {
 }
 
 function Logo({...props}) {
-  const {logoAlt} = useLogo();
+  const {
+    navbar: {logo = {}},
+  } = useThemeConfig();
   const lyftLogoUrl = useBaseUrl('img/navigation/lyft-logo.svg');
   const logoImageUrl = useBaseUrl('img/navigation/logo.svg');
 
@@ -56,7 +58,7 @@ function Logo({...props}) {
           <img
             className="navbar__logo"
             src={logoImageUrl}
-            alt={logoAlt}
+            alt={logo.alt}
           />
           <div className={clsx(styles.logoSubtext)}>
             by
@@ -64,7 +66,7 @@ function Logo({...props}) {
           <img
             className={clsx(styles.lyftLogo)}
             src={lyftLogoUrl}
-            alt={logoAlt}
+            alt={logo.alt}
           />
         </>
       )}
