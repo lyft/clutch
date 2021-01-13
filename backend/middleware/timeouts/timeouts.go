@@ -87,7 +87,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 		done := make(chan struct{})
 		if timeout != 0 {
 			// If timeout is not infinite, return after timeout plus boost
-			timer := time.AfterFunc(timeout + boost, func() {close(done)})
+			timer := time.AfterFunc(timeout+boost, func() { close(done) })
 			defer timer.Stop()
 		}
 
