@@ -86,9 +86,9 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 		// Create a channel to track when the timeout error has already been returned and the return channel is closed.
 		done := make(chan struct{})
 		if timeout != 0 {
-			// If timeout is not infinite, return after timeout plus boost
+			// If timeout is not infinite, return after timeout plus boost. Boost give the goroutine a chance to return if it's respecting the deadline.
 			timer := time.AfterFunc(timeout+boost, func() { close(done) })
-			defer timer.Stop()
+			defer func() { timer.Stop(); close(done) }()
 		} else {
 			defer close(done)
 		}
@@ -108,6 +108,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 			}
 		}()
 
+		// Wait for timeout or handler to send result.
 		select {
 		case ret := <-resultChan:
 			return ret.resp, ret.err
