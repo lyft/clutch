@@ -56,7 +56,7 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchTopologyRequ
 		query = query.Where(sq.Eq{"resolver_type_url": f.TypeUrl})
 	}
 
-	// TODO: support nested matadata fields
+	// TODO: Support nested objects
 	if f.Metadata != nil {
 		for k, v := range f.Metadata {
 			query = query.Where(sq.Eq{fmt.Sprintf("metadata->>'%s'", k): v})
@@ -99,14 +99,17 @@ func convertMetadataToQuery(metadata string) string {
 	return metadataQuery
 }
 
-// TODO: do something else here for default, maybe default to ASC?
 func getDirection(direction string) string {
 	switch direction {
 	case topologyv1.SearchTopologyRequest_Sort_ASCENDING.String():
 		return "ASC"
 	case topologyv1.SearchTopologyRequest_Sort_DESCENDING.String():
 		return "DESC"
+	case topologyv1.SearchTopologyRequest_Sort_UNSPECIFIED.String():
+		// Default to ASC
+		return "ASC"
 	default:
-		return ""
+		// Default to ASC
+		return "ASC"
 	}
 }

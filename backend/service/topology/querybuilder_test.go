@@ -221,7 +221,7 @@ func TestGetDirection(t *testing.T) {
 		{
 			id:     "Bad input",
 			input:  "MeowCat",
-			expect: "",
+			expect: "ASC",
 		},
 	}
 
