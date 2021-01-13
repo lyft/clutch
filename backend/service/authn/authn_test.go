@@ -5,10 +5,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"testing"
-
-	"github.com/stretchr/testify/assert"
-
 	apimock "github.com/lyft/clutch/backend/mock/api"
 )
 
