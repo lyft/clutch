@@ -1,6 +1,6 @@
 import type { WorkflowConfiguration } from "@clutch-sh/core";
 
-import { StartExperiment } from "./start-experiment";
+import StartExperiment from "./start-experiment";
 
 const register = (): WorkflowConfiguration => {
   return {

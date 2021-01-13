@@ -163,7 +163,6 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 			if err != nil {
 				logger.Errorw("Unable to unset the fault for cluster", "cluster", cluster,
 					"error", err)
-				break
 			}
 		}
 	}
@@ -175,7 +174,6 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 		if err != nil {
 			logger.Errorw("Unable to set the fault for cluster", "cluster", cluster,
 				"error", err)
-			break
 		}
 	}
 }

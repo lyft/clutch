@@ -58,18 +58,18 @@ func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experiment
 	}
 
 	var downstream, upstream string
-	switch interface{}(experimentConfig.GetFaultTargeting().GetEnforcer()).(type) {
+	switch experimentConfig.GetFaultTargeting().GetEnforcer().(type) {
 	case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
 		downstreamEnforcing := experimentConfig.GetFaultTargeting().GetDownstreamEnforcing()
 
-		switch interface{}(downstreamEnforcing.GetDownstreamType()).(type) {
+		switch downstreamEnforcing.GetDownstreamType().(type) {
 		case *serverexperimentation.DownstreamEnforcing_DownstreamCluster:
 			downstream = downstreamEnforcing.GetDownstreamCluster().GetName()
 		default:
 			return nil, fmt.Errorf("unknown downstream type of downstream enforcing %v", downstreamEnforcing.GetDownstreamType())
 		}
 
-		switch interface{}(downstreamEnforcing.GetUpstreamType()).(type) {
+		switch downstreamEnforcing.GetUpstreamType().(type) {
 		case *serverexperimentation.DownstreamEnforcing_UpstreamCluster:
 			upstream = downstreamEnforcing.GetUpstreamCluster().GetName()
 		default:
@@ -79,14 +79,14 @@ func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experiment
 	case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
 		upstreamEnforcing := experimentConfig.GetFaultTargeting().GetUpstreamEnforcing()
 
-		switch interface{}(upstreamEnforcing.GetDownstreamType()).(type) {
+		switch upstreamEnforcing.GetDownstreamType().(type) {
 		case *serverexperimentation.UpstreamEnforcing_DownstreamCluster:
 			downstream = upstreamEnforcing.GetDownstreamCluster().GetName()
 		default:
 			return nil, fmt.Errorf("unknown downstream type of upstream enforcing %v", upstreamEnforcing.GetDownstreamType())
 		}
 
-		switch interface{}(upstreamEnforcing.GetUpstreamType()).(type) {
+		switch upstreamEnforcing.GetUpstreamType().(type) {
 		case *serverexperimentation.UpstreamEnforcing_UpstreamCluster:
 			upstream = upstreamEnforcing.GetUpstreamCluster().GetName()
 		case *serverexperimentation.UpstreamEnforcing_UpstreamPartialSingleCluster:

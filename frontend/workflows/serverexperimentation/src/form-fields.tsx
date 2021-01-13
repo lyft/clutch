@@ -36,7 +36,6 @@ interface SelectOption {
 interface RadioGroupProps {
   options: RadioGroupOption[];
   defaultValue: string;
-  disabled?: boolean;
 }
 
 interface RadioGroupOption {
@@ -45,12 +44,10 @@ interface RadioGroupOption {
 }
 
 interface FormItem {
-  name?: string;
+  name: string;
   label: string;
   type: string;
-  validation?: any;
-  visible?: boolean;
-  inputProps?: SelectProps | TextFieldProps;
+  inputProps: SelectProps | TextFieldProps;
 }
 
 const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => {
@@ -59,13 +56,6 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
   return (
     <FieldContainer>
       {items.map(field => {
-        if (field.type === "title") {
-          return (
-            <h3 key={field.label} style={{ textAlign: "center" }}>
-              {field.label}
-            </h3>
-          );
-        }
         if (["text", "number"].indexOf(field.type) >= 0) {
           const customProps: TextFieldProps = field.inputProps as TextFieldProps;
           return (
@@ -93,7 +83,6 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
               key={field.name}
               name={field.name}
               label={field.label}
-              disabled={customProps.disabled}
               options={customProps.options}
               defaultOption={customProps.options
                 .map(o => o.value)
@@ -132,4 +121,4 @@ const FormFields: React.FC<FormProps> = ({ state, items, register, errors }) => 
   );
 };
 
-export { FormFields, FormItem };
+export default FormFields;
