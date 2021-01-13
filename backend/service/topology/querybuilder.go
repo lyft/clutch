@@ -9,6 +9,11 @@ import (
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
+const (
+	column   = "column."
+	metadata = "metadata."
+)
+
 func paginatedQueryBuilder(
 	filter *topologyv1.SearchTopologyRequest_Filter,
 	sort *topologyv1.SearchTopologyRequest_Sort,
@@ -16,7 +21,7 @@ func paginatedQueryBuilder(
 	limit int,
 ) (sq.SelectBuilder, error) {
 	queryLimit := 100
-	if limit >= 0 {
+	if limit > 0 {
 		queryLimit = limit
 	}
 
@@ -39,10 +44,10 @@ func paginatedQueryBuilder(
 
 func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchTopologyRequest_Filter) sq.SelectBuilder {
 	if f.Search != nil && len(f.Search.Field) > 0 {
-		if strings.HasPrefix(f.Search.Field, "column.") {
-			query = query.Where(sq.Like{strings.TrimPrefix(f.Search.Field, "column."): fmt.Sprintf("%%%s%%", f.Search.Text)})
-		} else if strings.HasPrefix(f.Search.Field, "metadata.") {
-			mdQuery := convertMetadataToQuery(strings.TrimPrefix(f.Search.Field, "metadata."))
+		if strings.HasPrefix(f.Search.Field, column) {
+			query = query.Where(sq.Like{strings.TrimPrefix(f.Search.Field, column): fmt.Sprintf("%%%s%%", f.Search.Text)})
+		} else if strings.HasPrefix(f.Search.Field, metadata) {
+			mdQuery := convertMetadataToQuery(strings.TrimPrefix(f.Search.Field, metadata))
 			query = query.Where(sq.Like{mdQuery: fmt.Sprintf("%%%s%%", f.Search.Text)})
 		}
 	}
@@ -65,10 +70,10 @@ func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchTopologyReques
 	if len(s.Direction.String()) > 0 && len(s.Field) > 0 {
 		direction := getDirection(s.Direction.String())
 
-		if strings.HasPrefix(s.Field, "column.") {
-			query = query.OrderBy(fmt.Sprintf("%s %s", strings.TrimPrefix(s.Field, "column."), direction))
-		} else if strings.HasPrefix(s.Field, "metadata.") {
-			mdQuery := convertMetadataToQuery(strings.TrimPrefix(s.Field, "metadata."))
+		if strings.HasPrefix(s.Field, column) {
+			query = query.OrderBy(fmt.Sprintf("%s %s", strings.TrimPrefix(s.Field, column), direction))
+		} else if strings.HasPrefix(s.Field, metadata) {
+			mdQuery := convertMetadataToQuery(strings.TrimPrefix(s.Field, metadata))
 			query = query.OrderBy(fmt.Sprintf("%s %s", mdQuery, direction))
 		}
 	} else {
@@ -94,6 +99,7 @@ func convertMetadataToQuery(metadata string) string {
 	return metadataQuery
 }
 
+// TODO: do something else here for default, maybe default to ASC?
 func getDirection(direction string) string {
 	switch direction {
 	case topologyv1.SearchTopologyRequest_Sort_ASCENDING.String():
