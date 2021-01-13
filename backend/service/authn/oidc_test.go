@@ -5,9 +5,6 @@ import (
 	"strings"
 	"testing"
 
-	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
-	apimock "github.com/lyft/clutch/backend/mock/api"
-
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/oauth2"
 
