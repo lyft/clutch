@@ -150,6 +150,7 @@ const Input = (params: AutocompleteRenderInputParams): React.ReactNode => {
   return (
     <InputField
       {...params}
+      autoFocus
       placeholder="Search..."
       fullWidth
       inputRef={searchRef}
