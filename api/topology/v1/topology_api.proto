@@ -23,7 +23,7 @@ service TopologyAPI {
     option (clutch.api.v1.action).type = READ;
   }
 
-  rpc SearchTopology(SearchTopologyRequest) returns (SearchTopologyResponse) {
+  rpc Search(SearchTopologyRequest) returns (SearchTopologyResponse) {
     option (google.api.http) = {
       post : "/v1/topology/search"
       body : "*"
@@ -77,7 +77,7 @@ message SearchTopologyRequest {
   // The rationale behind the naming is we might changes this to a cursor implentation
   // in the future and did not want to break existing implementations of the API.
   // https://cloud.google.com/apis/design/design_patterns#list_pagination
-  uint64 page_token = 2;
+  string page_token = 2;
   uint64 limit = 3;
   Filter filter = 4;
 }

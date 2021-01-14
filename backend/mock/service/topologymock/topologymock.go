@@ -27,7 +27,7 @@ func (s *svc) GetTopology(ctx context.Context) error {
 	return errors.New("Not implemented")
 }
 
-func (s *svc) SearchTopology(context.Context, *topologyv1.SearchTopologyRequest) ([]*topologyv1.Resource, error) {
+func (s *svc) Search(context.Context, *topologyv1.SearchTopologyRequest) ([]*topologyv1.Resource, error) {
 	return []*topologyv1.Resource{
 		{
 			Id: "pod-123",

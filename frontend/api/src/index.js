@@ -32445,31 +32445,31 @@ export const clutch = $root.clutch = (() => {
                  */
 
                 /**
-                 * Callback as used by {@link clutch.topology.v1.TopologyAPI#searchTopology}.
+                 * Callback as used by {@link clutch.topology.v1.TopologyAPI#search}.
                  * @memberof clutch.topology.v1.TopologyAPI
-                 * @typedef SearchTopologyCallback
+                 * @typedef SearchCallback
                  * @type {function}
                  * @param {Error|null} error Error, if any
                  * @param {clutch.topology.v1.SearchTopologyResponse} [response] SearchTopologyResponse
                  */
 
                 /**
-                 * Calls SearchTopology.
-                 * @function searchTopology
+                 * Calls Search.
+                 * @function search
                  * @memberof clutch.topology.v1.TopologyAPI
                  * @instance
                  * @param {clutch.topology.v1.ISearchTopologyRequest} request SearchTopologyRequest message or plain object
-                 * @param {clutch.topology.v1.TopologyAPI.SearchTopologyCallback} callback Node-style callback called with the error, if any, and SearchTopologyResponse
+                 * @param {clutch.topology.v1.TopologyAPI.SearchCallback} callback Node-style callback called with the error, if any, and SearchTopologyResponse
                  * @returns {undefined}
                  * @variation 1
                  */
-                Object.defineProperty(TopologyAPI.prototype.searchTopology = function searchTopology(request, callback) {
-                    return this.rpcCall(searchTopology, $root.clutch.topology.v1.SearchTopologyRequest, $root.clutch.topology.v1.SearchTopologyResponse, request, callback);
-                }, "name", { value: "SearchTopology" });
+                Object.defineProperty(TopologyAPI.prototype.search = function search(request, callback) {
+                    return this.rpcCall(search, $root.clutch.topology.v1.SearchTopologyRequest, $root.clutch.topology.v1.SearchTopologyResponse, request, callback);
+                }, "name", { value: "Search" });
 
                 /**
-                 * Calls SearchTopology.
-                 * @function searchTopology
+                 * Calls Search.
+                 * @function search
                  * @memberof clutch.topology.v1.TopologyAPI
                  * @instance
                  * @param {clutch.topology.v1.ISearchTopologyRequest} request SearchTopologyRequest message or plain object
@@ -32723,7 +32723,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.topology.v1
                  * @interface ISearchTopologyRequest
                  * @property {clutch.topology.v1.SearchTopologyRequest.ISort|null} [sort] SearchTopologyRequest sort
-                 * @property {number|Long|null} [pageToken] SearchTopologyRequest pageToken
+                 * @property {string|null} [pageToken] SearchTopologyRequest pageToken
                  * @property {number|Long|null} [limit] SearchTopologyRequest limit
                  * @property {clutch.topology.v1.SearchTopologyRequest.IFilter|null} [filter] SearchTopologyRequest filter
                  */
@@ -32753,11 +32753,11 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * SearchTopologyRequest pageToken.
-                 * @member {number|Long} pageToken
+                 * @member {string} pageToken
                  * @memberof clutch.topology.v1.SearchTopologyRequest
                  * @instance
                  */
-                SearchTopologyRequest.prototype.pageToken = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+                SearchTopologyRequest.prototype.pageToken = "";
 
                 /**
                  * SearchTopologyRequest limit.
@@ -32792,8 +32792,8 @@ export const clutch = $root.clutch = (() => {
                             return "sort." + error;
                     }
                     if (message.pageToken != null && message.hasOwnProperty("pageToken"))
-                        if (!$util.isInteger(message.pageToken) && !(message.pageToken && $util.isInteger(message.pageToken.low) && $util.isInteger(message.pageToken.high)))
-                            return "pageToken: integer|Long expected";
+                        if (!$util.isString(message.pageToken))
+                            return "pageToken: string expected";
                     if (message.limit != null && message.hasOwnProperty("limit"))
                         if (!$util.isInteger(message.limit) && !(message.limit && $util.isInteger(message.limit.low) && $util.isInteger(message.limit.high)))
                             return "limit: integer|Long expected";
@@ -32823,14 +32823,7 @@ export const clutch = $root.clutch = (() => {
                         message.sort = $root.clutch.topology.v1.SearchTopologyRequest.Sort.fromObject(object.sort);
                     }
                     if (object.pageToken != null)
-                        if ($util.Long)
-                            (message.pageToken = $util.Long.fromValue(object.pageToken)).unsigned = true;
-                        else if (typeof object.pageToken === "string")
-                            message.pageToken = parseInt(object.pageToken, 10);
-                        else if (typeof object.pageToken === "number")
-                            message.pageToken = object.pageToken;
-                        else if (typeof object.pageToken === "object")
-                            message.pageToken = new $util.LongBits(object.pageToken.low >>> 0, object.pageToken.high >>> 0).toNumber(true);
+                        message.pageToken = String(object.pageToken);
                     if (object.limit != null)
                         if ($util.Long)
                             (message.limit = $util.Long.fromValue(object.limit)).unsigned = true;
@@ -32863,11 +32856,7 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.defaults) {
                         object.sort = null;
-                        if ($util.Long) {
-                            let long = new $util.Long(0, 0, true);
-                            object.pageToken = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                        } else
-                            object.pageToken = options.longs === String ? "0" : 0;
+                        object.pageToken = "";
                         if ($util.Long) {
                             let long = new $util.Long(0, 0, true);
                             object.limit = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
@@ -32878,10 +32867,7 @@ export const clutch = $root.clutch = (() => {
                     if (message.sort != null && message.hasOwnProperty("sort"))
                         object.sort = $root.clutch.topology.v1.SearchTopologyRequest.Sort.toObject(message.sort, options);
                     if (message.pageToken != null && message.hasOwnProperty("pageToken"))
-                        if (typeof message.pageToken === "number")
-                            object.pageToken = options.longs === String ? String(message.pageToken) : message.pageToken;
-                        else
-                            object.pageToken = options.longs === String ? $util.Long.prototype.toString.call(message.pageToken) : options.longs === Number ? new $util.LongBits(message.pageToken.low >>> 0, message.pageToken.high >>> 0).toNumber(true) : message.pageToken;
+                        object.pageToken = message.pageToken;
                     if (message.limit != null && message.hasOwnProperty("limit"))
                         if (typeof message.limit === "number")
                             object.limit = options.longs === String ? String(message.limit) : message.limit;

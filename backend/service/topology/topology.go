@@ -25,7 +25,7 @@ const Name = "clutch.service.topology"
 
 type Service interface {
 	GetTopology(ctx context.Context) error
-	SearchTopology(ctx context.Context, search *topologyv1.SearchTopologyRequest) ([]*topologyv1.Resource, error)
+	Search(ctx context.Context, search *topologyv1.SearchTopologyRequest) ([]*topologyv1.Resource, error)
 }
 
 type client struct {
@@ -95,11 +95,11 @@ func (c *client) GetTopology(ctx context.Context) error {
 	return nil
 }
 
-func (c *client) SearchTopology(ctx context.Context, req *topologyv1.SearchTopologyRequest) ([]*topologyv1.Resource, error) {
+func (c *client) Search(ctx context.Context, req *topologyv1.SearchTopologyRequest) ([]*topologyv1.Resource, error) {
 	query, err := paginatedQueryBuilder(
 		req.Filter,
 		req.Sort,
-		int(req.PageToken),
+		req.PageToken,
 		int(req.Limit),
 	)
 	if err != nil {

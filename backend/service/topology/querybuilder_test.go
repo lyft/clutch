@@ -14,7 +14,7 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 		id        string
 		filter    *topologyv1.SearchTopologyRequest_Filter
 		sort      *topologyv1.SearchTopologyRequest_Sort
-		pageToken int
+		pageToken string
 		limit     int
 		expect    string
 	}{
@@ -22,7 +22,7 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 			id:        "Default",
 			filter:    &topologyv1.SearchTopologyRequest_Filter{},
 			sort:      &topologyv1.SearchTopologyRequest_Sort{},
-			pageToken: 0,
+			pageToken: "0",
 			limit:     0,
 			expect:    "SELECT id, data, metadata FROM topology_cache ORDER BY ID ASC LIMIT 100 OFFSET 0",
 		},
@@ -30,7 +30,7 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 			id:        "Page 0 with limit set",
 			filter:    &topologyv1.SearchTopologyRequest_Filter{},
 			sort:      &topologyv1.SearchTopologyRequest_Sort{},
-			pageToken: 0,
+			pageToken: "0",
 			limit:     5,
 			expect:    "SELECT id, data, metadata FROM topology_cache ORDER BY ID ASC LIMIT 5 OFFSET 0",
 		},
@@ -38,7 +38,7 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 			id:        "Change PageToken and Limits",
 			filter:    &topologyv1.SearchTopologyRequest_Filter{},
 			sort:      &topologyv1.SearchTopologyRequest_Sort{},
-			pageToken: 10,
+			pageToken: "10",
 			limit:     5,
 			expect:    "SELECT id, data, metadata FROM topology_cache ORDER BY ID ASC LIMIT 5 OFFSET 50",
 		},
@@ -58,7 +58,7 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 				Field:     "metadata.meow.iam.a.cat",
 				Direction: topologyv1.SearchTopologyRequest_Sort_ASCENDING,
 			},
-			pageToken: 10,
+			pageToken: "10",
 			limit:     5,
 			expect:    "SELECT id, data, metadata FROM topology_cache WHERE metadata->'search'->'field' LIKE $1 AND resolver_type_url = $2 AND metadata->>'label' = $3 ORDER BY metadata->'meow'->'iam'->'a'->'cat' ASC LIMIT 5 OFFSET 50",
 		},

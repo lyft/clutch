@@ -59,8 +59,8 @@ func (t *topologyAPI) GetTopology(ctx context.Context, req *topologyv1.GetTopolo
 	return nil, errors.New("not implemented")
 }
 
-func (t *topologyAPI) SearchTopology(ctx context.Context, req *topologyv1.SearchTopologyRequest) (*topologyv1.SearchTopologyResponse, error) {
-	resources, err := t.topology.SearchTopology(ctx, req)
+func (t *topologyAPI) Search(ctx context.Context, req *topologyv1.SearchTopologyRequest) (*topologyv1.SearchTopologyResponse, error) {
+	resources, err := t.topology.Search(ctx, req)
 	if err != nil {
 		return nil, err
 	}

@@ -2,6 +2,7 @@ package topology
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	sq "github.com/Masterminds/squirrel"
@@ -18,7 +19,7 @@ const (
 func paginatedQueryBuilder(
 	filter *topologyv1.SearchTopologyRequest_Filter,
 	sort *topologyv1.SearchTopologyRequest_Sort,
-	pageToken,
+	pageToken string,
 	limit int,
 ) (sq.SelectBuilder, error) {
 	queryLimit := queryDefaultLimit
@@ -26,13 +27,18 @@ func paginatedQueryBuilder(
 		queryLimit = limit
 	}
 
+	pageNum, err := strconv.Atoi(pageToken)
+	if err != nil {
+		return sq.SelectBuilder{}, err
+	}
+
 	queryOffset := 0
-	if pageToken > 0 {
-		queryOffset = pageToken * limit
+	if pageNum > 0 {
+		queryOffset = pageNum * limit
 	}
 
 	query := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
-		Select("id, data, metadata").
+		Select("id", "data", "metadata").
 		From("topology_cache").
 		Limit(uint64(queryLimit)).
 		Offset(uint64(queryOffset))
