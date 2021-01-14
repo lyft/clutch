@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TopologyAPIClient interface {
 	GetTopology(ctx context.Context, in *GetTopologyRequest, opts ...grpc.CallOption) (*GetTopologyResponse, error)
-	Search(ctx context.Context, in *SearchTopologyRequest, opts ...grpc.CallOption) (*SearchTopologyResponse, error)
+	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error)
 }
 
 type topologyAPIClient struct {
@@ -38,8 +38,8 @@ func (c *topologyAPIClient) GetTopology(ctx context.Context, in *GetTopologyRequ
 	return out, nil
 }
 
-func (c *topologyAPIClient) Search(ctx context.Context, in *SearchTopologyRequest, opts ...grpc.CallOption) (*SearchTopologyResponse, error) {
-	out := new(SearchTopologyResponse)
+func (c *topologyAPIClient) Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error) {
+	out := new(SearchResponse)
 	err := c.cc.Invoke(ctx, "/clutch.topology.v1.TopologyAPI/Search", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func (c *topologyAPIClient) Search(ctx context.Context, in *SearchTopologyReques
 // for forward compatibility
 type TopologyAPIServer interface {
 	GetTopology(context.Context, *GetTopologyRequest) (*GetTopologyResponse, error)
-	Search(context.Context, *SearchTopologyRequest) (*SearchTopologyResponse, error)
+	Search(context.Context, *SearchRequest) (*SearchResponse, error)
 }
 
 // UnimplementedTopologyAPIServer should be embedded to have forward compatible implementations.
@@ -62,7 +62,7 @@ type UnimplementedTopologyAPIServer struct {
 func (UnimplementedTopologyAPIServer) GetTopology(context.Context, *GetTopologyRequest) (*GetTopologyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTopology not implemented")
 }
-func (UnimplementedTopologyAPIServer) Search(context.Context, *SearchTopologyRequest) (*SearchTopologyResponse, error) {
+func (UnimplementedTopologyAPIServer) Search(context.Context, *SearchRequest) (*SearchResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 
@@ -96,7 +96,7 @@ func _TopologyAPI_GetTopology_Handler(srv interface{}, ctx context.Context, dec 
 }
 
 func _TopologyAPI_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SearchTopologyRequest)
+	in := new(SearchRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func _TopologyAPI_Search_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: "/clutch.topology.v1.TopologyAPI/Search",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TopologyAPIServer).Search(ctx, req.(*SearchTopologyRequest))
+		return srv.(TopologyAPIServer).Search(ctx, req.(*SearchRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

@@ -13675,17 +13675,17 @@ export namespace clutch {
 
                 /**
                  * Calls Search.
-                 * @param request SearchTopologyRequest message or plain object
-                 * @param callback Node-style callback called with the error, if any, and SearchTopologyResponse
+                 * @param request SearchRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and SearchResponse
                  */
-                public search(request: clutch.topology.v1.ISearchTopologyRequest, callback: clutch.topology.v1.TopologyAPI.SearchCallback): void;
+                public search(request: clutch.topology.v1.ISearchRequest, callback: clutch.topology.v1.TopologyAPI.SearchCallback): void;
 
                 /**
                  * Calls Search.
-                 * @param request SearchTopologyRequest message or plain object
+                 * @param request SearchRequest message or plain object
                  * @returns Promise
                  */
-                public search(request: clutch.topology.v1.ISearchTopologyRequest): Promise<clutch.topology.v1.SearchTopologyResponse>;
+                public search(request: clutch.topology.v1.ISearchRequest): Promise<clutch.topology.v1.SearchResponse>;
             }
 
             namespace TopologyAPI {
@@ -13700,9 +13700,9 @@ export namespace clutch {
                 /**
                  * Callback as used by {@link clutch.topology.v1.TopologyAPI#search}.
                  * @param error Error, if any
-                 * @param [response] SearchTopologyResponse
+                 * @param [response] SearchResponse
                  */
-                type SearchCallback = (error: (Error|null), response?: clutch.topology.v1.SearchTopologyResponse) => void;
+                type SearchCallback = (error: (Error|null), response?: clutch.topology.v1.SearchResponse) => void;
             }
 
             /** Properties of a GetTopologyRequest. */
@@ -13801,79 +13801,79 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a SearchTopologyRequest. */
-            interface ISearchTopologyRequest {
+            /** Properties of a SearchRequest. */
+            interface ISearchRequest {
 
-                /** SearchTopologyRequest sort */
-                sort?: (clutch.topology.v1.SearchTopologyRequest.ISort|null);
+                /** SearchRequest sort */
+                sort?: (clutch.topology.v1.SearchRequest.ISort|null);
 
-                /** SearchTopologyRequest pageToken */
+                /** SearchRequest pageToken */
                 pageToken?: (string|null);
 
-                /** SearchTopologyRequest limit */
+                /** SearchRequest limit */
                 limit?: (number|Long|null);
 
-                /** SearchTopologyRequest filter */
-                filter?: (clutch.topology.v1.SearchTopologyRequest.IFilter|null);
+                /** SearchRequest filter */
+                filter?: (clutch.topology.v1.SearchRequest.IFilter|null);
             }
 
-            /** Represents a SearchTopologyRequest. */
-            class SearchTopologyRequest implements ISearchTopologyRequest {
+            /** Represents a SearchRequest. */
+            class SearchRequest implements ISearchRequest {
 
                 /**
-                 * Constructs a new SearchTopologyRequest.
+                 * Constructs a new SearchRequest.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.topology.v1.ISearchTopologyRequest);
+                constructor(properties?: clutch.topology.v1.ISearchRequest);
 
-                /** SearchTopologyRequest sort. */
-                public sort?: (clutch.topology.v1.SearchTopologyRequest.ISort|null);
+                /** SearchRequest sort. */
+                public sort?: (clutch.topology.v1.SearchRequest.ISort|null);
 
-                /** SearchTopologyRequest pageToken. */
+                /** SearchRequest pageToken. */
                 public pageToken: string;
 
-                /** SearchTopologyRequest limit. */
+                /** SearchRequest limit. */
                 public limit: (number|Long);
 
-                /** SearchTopologyRequest filter. */
-                public filter?: (clutch.topology.v1.SearchTopologyRequest.IFilter|null);
+                /** SearchRequest filter. */
+                public filter?: (clutch.topology.v1.SearchRequest.IFilter|null);
 
                 /**
-                 * Verifies a SearchTopologyRequest message.
+                 * Verifies a SearchRequest message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a SearchTopologyRequest message from a plain object. Also converts values to their respective internal types.
+                 * Creates a SearchRequest message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns SearchTopologyRequest
+                 * @returns SearchRequest
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyRequest;
+                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchRequest;
 
                 /**
-                 * Creates a plain object from a SearchTopologyRequest message. Also converts values to other types if specified.
-                 * @param message SearchTopologyRequest
+                 * Creates a plain object from a SearchRequest message. Also converts values to other types if specified.
+                 * @param message SearchRequest
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.topology.v1.SearchTopologyRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.topology.v1.SearchRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this SearchTopologyRequest to JSON.
+                 * Converts this SearchRequest to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
             }
 
-            namespace SearchTopologyRequest {
+            namespace SearchRequest {
 
                 /** Properties of a Sort. */
                 interface ISort {
 
                     /** Sort direction */
-                    direction?: (clutch.topology.v1.SearchTopologyRequest.Sort.Direction|null);
+                    direction?: (clutch.topology.v1.SearchRequest.Sort.Direction|null);
 
                     /** Sort field */
                     field?: (string|null);
@@ -13886,10 +13886,10 @@ export namespace clutch {
                      * Constructs a new Sort.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.topology.v1.SearchTopologyRequest.ISort);
+                    constructor(properties?: clutch.topology.v1.SearchRequest.ISort);
 
                     /** Sort direction. */
-                    public direction: clutch.topology.v1.SearchTopologyRequest.Sort.Direction;
+                    public direction: clutch.topology.v1.SearchRequest.Sort.Direction;
 
                     /** Sort field. */
                     public field: string;
@@ -13906,7 +13906,7 @@ export namespace clutch {
                      * @param object Plain object
                      * @returns Sort
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyRequest.Sort;
+                    public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchRequest.Sort;
 
                     /**
                      * Creates a plain object from a Sort message. Also converts values to other types if specified.
@@ -13914,7 +13914,7 @@ export namespace clutch {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.topology.v1.SearchTopologyRequest.Sort, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.topology.v1.SearchRequest.Sort, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this Sort to JSON.
@@ -13937,7 +13937,7 @@ export namespace clutch {
                 interface IFilter {
 
                     /** Filter search */
-                    search?: (clutch.topology.v1.SearchTopologyRequest.Filter.ISearch|null);
+                    search?: (clutch.topology.v1.SearchRequest.Filter.ISearch|null);
 
                     /** Filter typeUrl */
                     typeUrl?: (string|null);
@@ -13953,10 +13953,10 @@ export namespace clutch {
                      * Constructs a new Filter.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.topology.v1.SearchTopologyRequest.IFilter);
+                    constructor(properties?: clutch.topology.v1.SearchRequest.IFilter);
 
                     /** Filter search. */
-                    public search?: (clutch.topology.v1.SearchTopologyRequest.Filter.ISearch|null);
+                    public search?: (clutch.topology.v1.SearchRequest.Filter.ISearch|null);
 
                     /** Filter typeUrl. */
                     public typeUrl: string;
@@ -13976,7 +13976,7 @@ export namespace clutch {
                      * @param object Plain object
                      * @returns Filter
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyRequest.Filter;
+                    public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchRequest.Filter;
 
                     /**
                      * Creates a plain object from a Filter message. Also converts values to other types if specified.
@@ -13984,7 +13984,7 @@ export namespace clutch {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.topology.v1.SearchTopologyRequest.Filter, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.topology.v1.SearchRequest.Filter, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this Filter to JSON.
@@ -14012,7 +14012,7 @@ export namespace clutch {
                          * Constructs a new Search.
                          * @param [properties] Properties to set
                          */
-                        constructor(properties?: clutch.topology.v1.SearchTopologyRequest.Filter.ISearch);
+                        constructor(properties?: clutch.topology.v1.SearchRequest.Filter.ISearch);
 
                         /** Search field. */
                         public field: string;
@@ -14032,7 +14032,7 @@ export namespace clutch {
                          * @param object Plain object
                          * @returns Search
                          */
-                        public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyRequest.Filter.Search;
+                        public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchRequest.Filter.Search;
 
                         /**
                          * Creates a plain object from a Search message. Also converts values to other types if specified.
@@ -14040,7 +14040,7 @@ export namespace clutch {
                          * @param [options] Conversion options
                          * @returns Plain object
                          */
-                        public static toObject(message: clutch.topology.v1.SearchTopologyRequest.Filter.Search, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                        public static toObject(message: clutch.topology.v1.SearchRequest.Filter.Search, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                         /**
                          * Converts this Search to JSON.
@@ -14051,55 +14051,55 @@ export namespace clutch {
                 }
             }
 
-            /** Properties of a SearchTopologyResponse. */
-            interface ISearchTopologyResponse {
+            /** Properties of a SearchResponse. */
+            interface ISearchResponse {
 
-                /** SearchTopologyResponse resources */
+                /** SearchResponse resources */
                 resources?: (clutch.topology.v1.IResource[]|null);
 
-                /** SearchTopologyResponse nextPageToken */
+                /** SearchResponse nextPageToken */
                 nextPageToken?: (string|null);
             }
 
-            /** Represents a SearchTopologyResponse. */
-            class SearchTopologyResponse implements ISearchTopologyResponse {
+            /** Represents a SearchResponse. */
+            class SearchResponse implements ISearchResponse {
 
                 /**
-                 * Constructs a new SearchTopologyResponse.
+                 * Constructs a new SearchResponse.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.topology.v1.ISearchTopologyResponse);
+                constructor(properties?: clutch.topology.v1.ISearchResponse);
 
-                /** SearchTopologyResponse resources. */
+                /** SearchResponse resources. */
                 public resources: clutch.topology.v1.IResource[];
 
-                /** SearchTopologyResponse nextPageToken. */
+                /** SearchResponse nextPageToken. */
                 public nextPageToken: string;
 
                 /**
-                 * Verifies a SearchTopologyResponse message.
+                 * Verifies a SearchResponse message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a SearchTopologyResponse message from a plain object. Also converts values to their respective internal types.
+                 * Creates a SearchResponse message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns SearchTopologyResponse
+                 * @returns SearchResponse
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyResponse;
+                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchResponse;
 
                 /**
-                 * Creates a plain object from a SearchTopologyResponse message. Also converts values to other types if specified.
-                 * @param message SearchTopologyResponse
+                 * Creates a plain object from a SearchResponse message. Also converts values to other types if specified.
+                 * @param message SearchResponse
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.topology.v1.SearchTopologyResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.topology.v1.SearchResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this SearchTopologyResponse to JSON.
+                 * Converts this SearchResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

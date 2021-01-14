@@ -66,7 +66,7 @@ func local_request_TopologyAPI_GetTopology_0(ctx context.Context, marshaler runt
 }
 
 func request_TopologyAPI_Search_0(ctx context.Context, marshaler runtime.Marshaler, client TopologyAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq SearchTopologyRequest
+	var protoReq SearchRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -83,7 +83,7 @@ func request_TopologyAPI_Search_0(ctx context.Context, marshaler runtime.Marshal
 }
 
 func local_request_TopologyAPI_Search_0(ctx context.Context, marshaler runtime.Marshaler, server TopologyAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq SearchTopologyRequest
+	var protoReq SearchRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)

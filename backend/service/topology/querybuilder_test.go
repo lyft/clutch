@@ -12,40 +12,40 @@ import (
 func TestPaginatedQueryBuilder(t *testing.T) {
 	testCases := []struct {
 		id        string
-		filter    *topologyv1.SearchTopologyRequest_Filter
-		sort      *topologyv1.SearchTopologyRequest_Sort
+		filter    *topologyv1.SearchRequest_Filter
+		sort      *topologyv1.SearchRequest_Sort
 		pageToken string
 		limit     int
 		expect    string
 	}{
 		{
 			id:        "Default",
-			filter:    &topologyv1.SearchTopologyRequest_Filter{},
-			sort:      &topologyv1.SearchTopologyRequest_Sort{},
+			filter:    &topologyv1.SearchRequest_Filter{},
+			sort:      &topologyv1.SearchRequest_Sort{},
 			pageToken: "0",
 			limit:     0,
 			expect:    "SELECT id, data, metadata FROM topology_cache ORDER BY ID ASC LIMIT 100 OFFSET 0",
 		},
 		{
 			id:        "Page 0 with limit set",
-			filter:    &topologyv1.SearchTopologyRequest_Filter{},
-			sort:      &topologyv1.SearchTopologyRequest_Sort{},
+			filter:    &topologyv1.SearchRequest_Filter{},
+			sort:      &topologyv1.SearchRequest_Sort{},
 			pageToken: "0",
 			limit:     5,
 			expect:    "SELECT id, data, metadata FROM topology_cache ORDER BY ID ASC LIMIT 5 OFFSET 0",
 		},
 		{
 			id:        "Change PageToken and Limits",
-			filter:    &topologyv1.SearchTopologyRequest_Filter{},
-			sort:      &topologyv1.SearchTopologyRequest_Sort{},
+			filter:    &topologyv1.SearchRequest_Filter{},
+			sort:      &topologyv1.SearchRequest_Sort{},
 			pageToken: "10",
 			limit:     5,
 			expect:    "SELECT id, data, metadata FROM topology_cache ORDER BY ID ASC LIMIT 5 OFFSET 50",
 		},
 		{
 			id: "All Options",
-			filter: &topologyv1.SearchTopologyRequest_Filter{
-				Search: &topologyv1.SearchTopologyRequest_Filter_Search{
+			filter: &topologyv1.SearchRequest_Filter{
+				Search: &topologyv1.SearchRequest_Filter_Search{
 					Field: "metadata.search.field",
 					Text:  "cat",
 				},
@@ -54,9 +54,9 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 					"label": "value",
 				},
 			},
-			sort: &topologyv1.SearchTopologyRequest_Sort{
+			sort: &topologyv1.SearchRequest_Sort{
 				Field:     "metadata.meow.iam.a.cat",
-				Direction: topologyv1.SearchTopologyRequest_Sort_ASCENDING,
+				Direction: topologyv1.SearchRequest_Sort_ASCENDING,
 			},
 			pageToken: "10",
 			limit:     5,
@@ -76,18 +76,18 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 func TestFilterQueryBuilder(t *testing.T) {
 	testCases := []struct {
 		id     string
-		input  *topologyv1.SearchTopologyRequest_Filter
+		input  *topologyv1.SearchRequest_Filter
 		expect string
 	}{
 		{
 			id:     "No Input",
-			input:  &topologyv1.SearchTopologyRequest_Filter{},
+			input:  &topologyv1.SearchRequest_Filter{},
 			expect: "SELECT * FROM topology_cache",
 		},
 		{
 			id: "Search by column",
-			input: &topologyv1.SearchTopologyRequest_Filter{
-				Search: &topologyv1.SearchTopologyRequest_Filter_Search{
+			input: &topologyv1.SearchRequest_Filter{
+				Search: &topologyv1.SearchRequest_Filter_Search{
 					Field: "column.id",
 					Text:  "cat",
 				},
@@ -96,8 +96,8 @@ func TestFilterQueryBuilder(t *testing.T) {
 		},
 		{
 			id: "Search by Metadata",
-			input: &topologyv1.SearchTopologyRequest_Filter{
-				Search: &topologyv1.SearchTopologyRequest_Filter_Search{
+			input: &topologyv1.SearchRequest_Filter{
+				Search: &topologyv1.SearchRequest_Filter_Search{
 					Field: "metadata.label",
 					Text:  "cat",
 				},
@@ -106,8 +106,8 @@ func TestFilterQueryBuilder(t *testing.T) {
 		},
 		{
 			id: "Search all options",
-			input: &topologyv1.SearchTopologyRequest_Filter{
-				Search: &topologyv1.SearchTopologyRequest_Filter_Search{
+			input: &topologyv1.SearchRequest_Filter{
+				Search: &topologyv1.SearchRequest_Filter_Search{
 					Field: "metadata.label",
 					Text:  "cat",
 				},
@@ -136,35 +136,35 @@ func TestFilterQueryBuilder(t *testing.T) {
 func TestSortQueryBuilder(t *testing.T) {
 	testCases := []struct {
 		id     string
-		input  *topologyv1.SearchTopologyRequest_Sort
+		input  *topologyv1.SearchRequest_Sort
 		expect string
 	}{
 		{
 			id:     "Default to ID ASC",
-			input:  &topologyv1.SearchTopologyRequest_Sort{},
+			input:  &topologyv1.SearchRequest_Sort{},
 			expect: "SELECT * FROM topology_cache ORDER BY ID ASC",
 		},
 		{
 			id: "Sort by custom column and direction",
-			input: &topologyv1.SearchTopologyRequest_Sort{
+			input: &topologyv1.SearchRequest_Sort{
 				Field:     "column.cat",
-				Direction: topologyv1.SearchTopologyRequest_Sort_DESCENDING,
+				Direction: topologyv1.SearchRequest_Sort_DESCENDING,
 			},
 			expect: "SELECT * FROM topology_cache ORDER BY cat DESC",
 		},
 		{
 			id: "Sort by custom metadata and direction",
-			input: &topologyv1.SearchTopologyRequest_Sort{
+			input: &topologyv1.SearchRequest_Sort{
 				Field:     "metadata.meow",
-				Direction: topologyv1.SearchTopologyRequest_Sort_ASCENDING,
+				Direction: topologyv1.SearchRequest_Sort_ASCENDING,
 			},
 			expect: "SELECT * FROM topology_cache ORDER BY metadata->>'meow' ASC",
 		},
 		{
 			id: "Sort by custom metadata deeply nested",
-			input: &topologyv1.SearchTopologyRequest_Sort{
+			input: &topologyv1.SearchRequest_Sort{
 				Field:     "metadata.meow.iam.a.cat",
-				Direction: topologyv1.SearchTopologyRequest_Sort_ASCENDING,
+				Direction: topologyv1.SearchRequest_Sort_ASCENDING,
 			},
 			expect: "SELECT * FROM topology_cache ORDER BY metadata->'meow'->'iam'->'a'->'cat' ASC",
 		},
@@ -214,22 +214,22 @@ func TestConvertMetadataToQuery(t *testing.T) {
 func TestGetDirection(t *testing.T) {
 	testCases := []struct {
 		id     string
-		input  topologyv1.SearchTopologyRequest_Sort_Direction
+		input  topologyv1.SearchRequest_Sort_Direction
 		expect string
 	}{
 		{
 			id:     "ASCENDING",
-			input:  topologyv1.SearchTopologyRequest_Sort_ASCENDING,
+			input:  topologyv1.SearchRequest_Sort_ASCENDING,
 			expect: "ASC",
 		},
 		{
 			id:     "DESCENDING",
-			input:  topologyv1.SearchTopologyRequest_Sort_DESCENDING,
+			input:  topologyv1.SearchRequest_Sort_DESCENDING,
 			expect: "DESC",
 		},
 		{
 			id:     "Bad input",
-			input:  topologyv1.SearchTopologyRequest_Sort_UNSPECIFIED,
+			input:  topologyv1.SearchRequest_Sort_UNSPECIFIED,
 			expect: "ASC",
 		},
 	}

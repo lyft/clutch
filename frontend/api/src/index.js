@@ -32450,7 +32450,7 @@ export const clutch = $root.clutch = (() => {
                  * @typedef SearchCallback
                  * @type {function}
                  * @param {Error|null} error Error, if any
-                 * @param {clutch.topology.v1.SearchTopologyResponse} [response] SearchTopologyResponse
+                 * @param {clutch.topology.v1.SearchResponse} [response] SearchResponse
                  */
 
                 /**
@@ -32458,13 +32458,13 @@ export const clutch = $root.clutch = (() => {
                  * @function search
                  * @memberof clutch.topology.v1.TopologyAPI
                  * @instance
-                 * @param {clutch.topology.v1.ISearchTopologyRequest} request SearchTopologyRequest message or plain object
-                 * @param {clutch.topology.v1.TopologyAPI.SearchCallback} callback Node-style callback called with the error, if any, and SearchTopologyResponse
+                 * @param {clutch.topology.v1.ISearchRequest} request SearchRequest message or plain object
+                 * @param {clutch.topology.v1.TopologyAPI.SearchCallback} callback Node-style callback called with the error, if any, and SearchResponse
                  * @returns {undefined}
                  * @variation 1
                  */
                 Object.defineProperty(TopologyAPI.prototype.search = function search(request, callback) {
-                    return this.rpcCall(search, $root.clutch.topology.v1.SearchTopologyRequest, $root.clutch.topology.v1.SearchTopologyResponse, request, callback);
+                    return this.rpcCall(search, $root.clutch.topology.v1.SearchRequest, $root.clutch.topology.v1.SearchResponse, request, callback);
                 }, "name", { value: "Search" });
 
                 /**
@@ -32472,8 +32472,8 @@ export const clutch = $root.clutch = (() => {
                  * @function search
                  * @memberof clutch.topology.v1.TopologyAPI
                  * @instance
-                 * @param {clutch.topology.v1.ISearchTopologyRequest} request SearchTopologyRequest message or plain object
-                 * @returns {Promise<clutch.topology.v1.SearchTopologyResponse>} Promise
+                 * @param {clutch.topology.v1.ISearchRequest} request SearchRequest message or plain object
+                 * @returns {Promise<clutch.topology.v1.SearchResponse>} Promise
                  * @variation 2
                  */
 
@@ -32716,27 +32716,27 @@ export const clutch = $root.clutch = (() => {
                 return GetTopologyResponse;
             })();
 
-            v1.SearchTopologyRequest = (function() {
+            v1.SearchRequest = (function() {
 
                 /**
-                 * Properties of a SearchTopologyRequest.
+                 * Properties of a SearchRequest.
                  * @memberof clutch.topology.v1
-                 * @interface ISearchTopologyRequest
-                 * @property {clutch.topology.v1.SearchTopologyRequest.ISort|null} [sort] SearchTopologyRequest sort
-                 * @property {string|null} [pageToken] SearchTopologyRequest pageToken
-                 * @property {number|Long|null} [limit] SearchTopologyRequest limit
-                 * @property {clutch.topology.v1.SearchTopologyRequest.IFilter|null} [filter] SearchTopologyRequest filter
+                 * @interface ISearchRequest
+                 * @property {clutch.topology.v1.SearchRequest.ISort|null} [sort] SearchRequest sort
+                 * @property {string|null} [pageToken] SearchRequest pageToken
+                 * @property {number|Long|null} [limit] SearchRequest limit
+                 * @property {clutch.topology.v1.SearchRequest.IFilter|null} [filter] SearchRequest filter
                  */
 
                 /**
-                 * Constructs a new SearchTopologyRequest.
+                 * Constructs a new SearchRequest.
                  * @memberof clutch.topology.v1
-                 * @classdesc Represents a SearchTopologyRequest.
-                 * @implements ISearchTopologyRequest
+                 * @classdesc Represents a SearchRequest.
+                 * @implements ISearchRequest
                  * @constructor
-                 * @param {clutch.topology.v1.ISearchTopologyRequest=} [properties] Properties to set
+                 * @param {clutch.topology.v1.ISearchRequest=} [properties] Properties to set
                  */
-                function SearchTopologyRequest(properties) {
+                function SearchRequest(properties) {
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -32744,50 +32744,50 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * SearchTopologyRequest sort.
-                 * @member {clutch.topology.v1.SearchTopologyRequest.ISort|null|undefined} sort
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * SearchRequest sort.
+                 * @member {clutch.topology.v1.SearchRequest.ISort|null|undefined} sort
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @instance
                  */
-                SearchTopologyRequest.prototype.sort = null;
+                SearchRequest.prototype.sort = null;
 
                 /**
-                 * SearchTopologyRequest pageToken.
+                 * SearchRequest pageToken.
                  * @member {string} pageToken
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @instance
                  */
-                SearchTopologyRequest.prototype.pageToken = "";
+                SearchRequest.prototype.pageToken = "";
 
                 /**
-                 * SearchTopologyRequest limit.
+                 * SearchRequest limit.
                  * @member {number|Long} limit
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @instance
                  */
-                SearchTopologyRequest.prototype.limit = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+                SearchRequest.prototype.limit = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
 
                 /**
-                 * SearchTopologyRequest filter.
-                 * @member {clutch.topology.v1.SearchTopologyRequest.IFilter|null|undefined} filter
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * SearchRequest filter.
+                 * @member {clutch.topology.v1.SearchRequest.IFilter|null|undefined} filter
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @instance
                  */
-                SearchTopologyRequest.prototype.filter = null;
+                SearchRequest.prototype.filter = null;
 
                 /**
-                 * Verifies a SearchTopologyRequest message.
+                 * Verifies a SearchRequest message.
                  * @function verify
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                SearchTopologyRequest.verify = function verify(message) {
+                SearchRequest.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.sort != null && message.hasOwnProperty("sort")) {
-                        let error = $root.clutch.topology.v1.SearchTopologyRequest.Sort.verify(message.sort);
+                        let error = $root.clutch.topology.v1.SearchRequest.Sort.verify(message.sort);
                         if (error)
                             return "sort." + error;
                     }
@@ -32798,7 +32798,7 @@ export const clutch = $root.clutch = (() => {
                         if (!$util.isInteger(message.limit) && !(message.limit && $util.isInteger(message.limit.low) && $util.isInteger(message.limit.high)))
                             return "limit: integer|Long expected";
                     if (message.filter != null && message.hasOwnProperty("filter")) {
-                        let error = $root.clutch.topology.v1.SearchTopologyRequest.Filter.verify(message.filter);
+                        let error = $root.clutch.topology.v1.SearchRequest.Filter.verify(message.filter);
                         if (error)
                             return "filter." + error;
                     }
@@ -32806,21 +32806,21 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a SearchTopologyRequest message from a plain object. Also converts values to their respective internal types.
+                 * Creates a SearchRequest message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.topology.v1.SearchTopologyRequest} SearchTopologyRequest
+                 * @returns {clutch.topology.v1.SearchRequest} SearchRequest
                  */
-                SearchTopologyRequest.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.topology.v1.SearchTopologyRequest)
+                SearchRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.SearchRequest)
                         return object;
-                    let message = new $root.clutch.topology.v1.SearchTopologyRequest();
+                    let message = new $root.clutch.topology.v1.SearchRequest();
                     if (object.sort != null) {
                         if (typeof object.sort !== "object")
-                            throw TypeError(".clutch.topology.v1.SearchTopologyRequest.sort: object expected");
-                        message.sort = $root.clutch.topology.v1.SearchTopologyRequest.Sort.fromObject(object.sort);
+                            throw TypeError(".clutch.topology.v1.SearchRequest.sort: object expected");
+                        message.sort = $root.clutch.topology.v1.SearchRequest.Sort.fromObject(object.sort);
                     }
                     if (object.pageToken != null)
                         message.pageToken = String(object.pageToken);
@@ -32835,22 +32835,22 @@ export const clutch = $root.clutch = (() => {
                             message.limit = new $util.LongBits(object.limit.low >>> 0, object.limit.high >>> 0).toNumber(true);
                     if (object.filter != null) {
                         if (typeof object.filter !== "object")
-                            throw TypeError(".clutch.topology.v1.SearchTopologyRequest.filter: object expected");
-                        message.filter = $root.clutch.topology.v1.SearchTopologyRequest.Filter.fromObject(object.filter);
+                            throw TypeError(".clutch.topology.v1.SearchRequest.filter: object expected");
+                        message.filter = $root.clutch.topology.v1.SearchRequest.Filter.fromObject(object.filter);
                     }
                     return message;
                 };
 
                 /**
-                 * Creates a plain object from a SearchTopologyRequest message. Also converts values to other types if specified.
+                 * Creates a plain object from a SearchRequest message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @static
-                 * @param {clutch.topology.v1.SearchTopologyRequest} message SearchTopologyRequest
+                 * @param {clutch.topology.v1.SearchRequest} message SearchRequest
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                SearchTopologyRequest.toObject = function toObject(message, options) {
+                SearchRequest.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -32865,7 +32865,7 @@ export const clutch = $root.clutch = (() => {
                         object.filter = null;
                     }
                     if (message.sort != null && message.hasOwnProperty("sort"))
-                        object.sort = $root.clutch.topology.v1.SearchTopologyRequest.Sort.toObject(message.sort, options);
+                        object.sort = $root.clutch.topology.v1.SearchRequest.Sort.toObject(message.sort, options);
                     if (message.pageToken != null && message.hasOwnProperty("pageToken"))
                         object.pageToken = message.pageToken;
                     if (message.limit != null && message.hasOwnProperty("limit"))
@@ -32874,38 +32874,38 @@ export const clutch = $root.clutch = (() => {
                         else
                             object.limit = options.longs === String ? $util.Long.prototype.toString.call(message.limit) : options.longs === Number ? new $util.LongBits(message.limit.low >>> 0, message.limit.high >>> 0).toNumber(true) : message.limit;
                     if (message.filter != null && message.hasOwnProperty("filter"))
-                        object.filter = $root.clutch.topology.v1.SearchTopologyRequest.Filter.toObject(message.filter, options);
+                        object.filter = $root.clutch.topology.v1.SearchRequest.Filter.toObject(message.filter, options);
                     return object;
                 };
 
                 /**
-                 * Converts this SearchTopologyRequest to JSON.
+                 * Converts this SearchRequest to JSON.
                  * @function toJSON
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                SearchTopologyRequest.prototype.toJSON = function toJSON() {
+                SearchRequest.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                SearchTopologyRequest.Sort = (function() {
+                SearchRequest.Sort = (function() {
 
                     /**
                      * Properties of a Sort.
-                     * @memberof clutch.topology.v1.SearchTopologyRequest
+                     * @memberof clutch.topology.v1.SearchRequest
                      * @interface ISort
-                     * @property {clutch.topology.v1.SearchTopologyRequest.Sort.Direction|null} [direction] Sort direction
+                     * @property {clutch.topology.v1.SearchRequest.Sort.Direction|null} [direction] Sort direction
                      * @property {string|null} [field] Sort field
                      */
 
                     /**
                      * Constructs a new Sort.
-                     * @memberof clutch.topology.v1.SearchTopologyRequest
+                     * @memberof clutch.topology.v1.SearchRequest
                      * @classdesc Represents a Sort.
                      * @implements ISort
                      * @constructor
-                     * @param {clutch.topology.v1.SearchTopologyRequest.ISort=} [properties] Properties to set
+                     * @param {clutch.topology.v1.SearchRequest.ISort=} [properties] Properties to set
                      */
                     function Sort(properties) {
                         if (properties)
@@ -32916,8 +32916,8 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Sort direction.
-                     * @member {clutch.topology.v1.SearchTopologyRequest.Sort.Direction} direction
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Sort
+                     * @member {clutch.topology.v1.SearchRequest.Sort.Direction} direction
+                     * @memberof clutch.topology.v1.SearchRequest.Sort
                      * @instance
                      */
                     Sort.prototype.direction = 0;
@@ -32925,7 +32925,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Sort field.
                      * @member {string} field
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Sort
+                     * @memberof clutch.topology.v1.SearchRequest.Sort
                      * @instance
                      */
                     Sort.prototype.field = "";
@@ -32933,7 +32933,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Verifies a Sort message.
                      * @function verify
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Sort
+                     * @memberof clutch.topology.v1.SearchRequest.Sort
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -32959,15 +32959,15 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Creates a Sort message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Sort
+                     * @memberof clutch.topology.v1.SearchRequest.Sort
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.topology.v1.SearchTopologyRequest.Sort} Sort
+                     * @returns {clutch.topology.v1.SearchRequest.Sort} Sort
                      */
                     Sort.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.topology.v1.SearchTopologyRequest.Sort)
+                        if (object instanceof $root.clutch.topology.v1.SearchRequest.Sort)
                             return object;
-                        let message = new $root.clutch.topology.v1.SearchTopologyRequest.Sort();
+                        let message = new $root.clutch.topology.v1.SearchRequest.Sort();
                         switch (object.direction) {
                         case "UNSPECIFIED":
                         case 0:
@@ -32990,9 +32990,9 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Creates a plain object from a Sort message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Sort
+                     * @memberof clutch.topology.v1.SearchRequest.Sort
                      * @static
-                     * @param {clutch.topology.v1.SearchTopologyRequest.Sort} message Sort
+                     * @param {clutch.topology.v1.SearchRequest.Sort} message Sort
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -33005,7 +33005,7 @@ export const clutch = $root.clutch = (() => {
                             object.field = "";
                         }
                         if (message.direction != null && message.hasOwnProperty("direction"))
-                            object.direction = options.enums === String ? $root.clutch.topology.v1.SearchTopologyRequest.Sort.Direction[message.direction] : message.direction;
+                            object.direction = options.enums === String ? $root.clutch.topology.v1.SearchRequest.Sort.Direction[message.direction] : message.direction;
                         if (message.field != null && message.hasOwnProperty("field"))
                             object.field = message.field;
                         return object;
@@ -33014,7 +33014,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Converts this Sort to JSON.
                      * @function toJSON
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Sort
+                     * @memberof clutch.topology.v1.SearchRequest.Sort
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -33024,7 +33024,7 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Direction enum.
-                     * @name clutch.topology.v1.SearchTopologyRequest.Sort.Direction
+                     * @name clutch.topology.v1.SearchRequest.Sort.Direction
                      * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} ASCENDING=1 ASCENDING value
@@ -33041,24 +33041,24 @@ export const clutch = $root.clutch = (() => {
                     return Sort;
                 })();
 
-                SearchTopologyRequest.Filter = (function() {
+                SearchRequest.Filter = (function() {
 
                     /**
                      * Properties of a Filter.
-                     * @memberof clutch.topology.v1.SearchTopologyRequest
+                     * @memberof clutch.topology.v1.SearchRequest
                      * @interface IFilter
-                     * @property {clutch.topology.v1.SearchTopologyRequest.Filter.ISearch|null} [search] Filter search
+                     * @property {clutch.topology.v1.SearchRequest.Filter.ISearch|null} [search] Filter search
                      * @property {string|null} [typeUrl] Filter typeUrl
                      * @property {Object.<string,string>|null} [metadata] Filter metadata
                      */
 
                     /**
                      * Constructs a new Filter.
-                     * @memberof clutch.topology.v1.SearchTopologyRequest
+                     * @memberof clutch.topology.v1.SearchRequest
                      * @classdesc Represents a Filter.
                      * @implements IFilter
                      * @constructor
-                     * @param {clutch.topology.v1.SearchTopologyRequest.IFilter=} [properties] Properties to set
+                     * @param {clutch.topology.v1.SearchRequest.IFilter=} [properties] Properties to set
                      */
                     function Filter(properties) {
                         this.metadata = {};
@@ -33070,8 +33070,8 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Filter search.
-                     * @member {clutch.topology.v1.SearchTopologyRequest.Filter.ISearch|null|undefined} search
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                     * @member {clutch.topology.v1.SearchRequest.Filter.ISearch|null|undefined} search
+                     * @memberof clutch.topology.v1.SearchRequest.Filter
                      * @instance
                      */
                     Filter.prototype.search = null;
@@ -33079,7 +33079,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Filter typeUrl.
                      * @member {string} typeUrl
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                     * @memberof clutch.topology.v1.SearchRequest.Filter
                      * @instance
                      */
                     Filter.prototype.typeUrl = "";
@@ -33087,7 +33087,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Filter metadata.
                      * @member {Object.<string,string>} metadata
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                     * @memberof clutch.topology.v1.SearchRequest.Filter
                      * @instance
                      */
                     Filter.prototype.metadata = $util.emptyObject;
@@ -33095,7 +33095,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Verifies a Filter message.
                      * @function verify
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                     * @memberof clutch.topology.v1.SearchRequest.Filter
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -33104,7 +33104,7 @@ export const clutch = $root.clutch = (() => {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.search != null && message.hasOwnProperty("search")) {
-                            let error = $root.clutch.topology.v1.SearchTopologyRequest.Filter.Search.verify(message.search);
+                            let error = $root.clutch.topology.v1.SearchRequest.Filter.Search.verify(message.search);
                             if (error)
                                 return "search." + error;
                         }
@@ -33125,25 +33125,25 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Creates a Filter message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                     * @memberof clutch.topology.v1.SearchRequest.Filter
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.topology.v1.SearchTopologyRequest.Filter} Filter
+                     * @returns {clutch.topology.v1.SearchRequest.Filter} Filter
                      */
                     Filter.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.topology.v1.SearchTopologyRequest.Filter)
+                        if (object instanceof $root.clutch.topology.v1.SearchRequest.Filter)
                             return object;
-                        let message = new $root.clutch.topology.v1.SearchTopologyRequest.Filter();
+                        let message = new $root.clutch.topology.v1.SearchRequest.Filter();
                         if (object.search != null) {
                             if (typeof object.search !== "object")
-                                throw TypeError(".clutch.topology.v1.SearchTopologyRequest.Filter.search: object expected");
-                            message.search = $root.clutch.topology.v1.SearchTopologyRequest.Filter.Search.fromObject(object.search);
+                                throw TypeError(".clutch.topology.v1.SearchRequest.Filter.search: object expected");
+                            message.search = $root.clutch.topology.v1.SearchRequest.Filter.Search.fromObject(object.search);
                         }
                         if (object.typeUrl != null)
                             message.typeUrl = String(object.typeUrl);
                         if (object.metadata) {
                             if (typeof object.metadata !== "object")
-                                throw TypeError(".clutch.topology.v1.SearchTopologyRequest.Filter.metadata: object expected");
+                                throw TypeError(".clutch.topology.v1.SearchRequest.Filter.metadata: object expected");
                             message.metadata = {};
                             for (let keys = Object.keys(object.metadata), i = 0; i < keys.length; ++i)
                                 message.metadata[keys[i]] = String(object.metadata[keys[i]]);
@@ -33154,9 +33154,9 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Creates a plain object from a Filter message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                     * @memberof clutch.topology.v1.SearchRequest.Filter
                      * @static
-                     * @param {clutch.topology.v1.SearchTopologyRequest.Filter} message Filter
+                     * @param {clutch.topology.v1.SearchRequest.Filter} message Filter
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -33171,7 +33171,7 @@ export const clutch = $root.clutch = (() => {
                             object.typeUrl = "";
                         }
                         if (message.search != null && message.hasOwnProperty("search"))
-                            object.search = $root.clutch.topology.v1.SearchTopologyRequest.Filter.Search.toObject(message.search, options);
+                            object.search = $root.clutch.topology.v1.SearchRequest.Filter.Search.toObject(message.search, options);
                         if (message.typeUrl != null && message.hasOwnProperty("typeUrl"))
                             object.typeUrl = message.typeUrl;
                         let keys2;
@@ -33186,7 +33186,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Converts this Filter to JSON.
                      * @function toJSON
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                     * @memberof clutch.topology.v1.SearchRequest.Filter
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -33198,7 +33198,7 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Properties of a Search.
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                         * @memberof clutch.topology.v1.SearchRequest.Filter
                          * @interface ISearch
                          * @property {string|null} [field] Search field
                          * @property {string|null} [text] Search text
@@ -33206,11 +33206,11 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Constructs a new Search.
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                         * @memberof clutch.topology.v1.SearchRequest.Filter
                          * @classdesc Represents a Search.
                          * @implements ISearch
                          * @constructor
-                         * @param {clutch.topology.v1.SearchTopologyRequest.Filter.ISearch=} [properties] Properties to set
+                         * @param {clutch.topology.v1.SearchRequest.Filter.ISearch=} [properties] Properties to set
                          */
                         function Search(properties) {
                             if (properties)
@@ -33222,7 +33222,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Search field.
                          * @member {string} field
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter.Search
+                         * @memberof clutch.topology.v1.SearchRequest.Filter.Search
                          * @instance
                          */
                         Search.prototype.field = "";
@@ -33230,7 +33230,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Search text.
                          * @member {string} text
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter.Search
+                         * @memberof clutch.topology.v1.SearchRequest.Filter.Search
                          * @instance
                          */
                         Search.prototype.text = "";
@@ -33238,7 +33238,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Verifies a Search message.
                          * @function verify
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter.Search
+                         * @memberof clutch.topology.v1.SearchRequest.Filter.Search
                          * @static
                          * @param {Object.<string,*>} message Plain object to verify
                          * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -33258,15 +33258,15 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Creates a Search message from a plain object. Also converts values to their respective internal types.
                          * @function fromObject
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter.Search
+                         * @memberof clutch.topology.v1.SearchRequest.Filter.Search
                          * @static
                          * @param {Object.<string,*>} object Plain object
-                         * @returns {clutch.topology.v1.SearchTopologyRequest.Filter.Search} Search
+                         * @returns {clutch.topology.v1.SearchRequest.Filter.Search} Search
                          */
                         Search.fromObject = function fromObject(object) {
-                            if (object instanceof $root.clutch.topology.v1.SearchTopologyRequest.Filter.Search)
+                            if (object instanceof $root.clutch.topology.v1.SearchRequest.Filter.Search)
                                 return object;
-                            let message = new $root.clutch.topology.v1.SearchTopologyRequest.Filter.Search();
+                            let message = new $root.clutch.topology.v1.SearchRequest.Filter.Search();
                             if (object.field != null)
                                 message.field = String(object.field);
                             if (object.text != null)
@@ -33277,9 +33277,9 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Creates a plain object from a Search message. Also converts values to other types if specified.
                          * @function toObject
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter.Search
+                         * @memberof clutch.topology.v1.SearchRequest.Filter.Search
                          * @static
-                         * @param {clutch.topology.v1.SearchTopologyRequest.Filter.Search} message Search
+                         * @param {clutch.topology.v1.SearchRequest.Filter.Search} message Search
                          * @param {$protobuf.IConversionOptions} [options] Conversion options
                          * @returns {Object.<string,*>} Plain object
                          */
@@ -33301,7 +33301,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Converts this Search to JSON.
                          * @function toJSON
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter.Search
+                         * @memberof clutch.topology.v1.SearchRequest.Filter.Search
                          * @instance
                          * @returns {Object.<string,*>} JSON object
                          */
@@ -33315,28 +33315,28 @@ export const clutch = $root.clutch = (() => {
                     return Filter;
                 })();
 
-                return SearchTopologyRequest;
+                return SearchRequest;
             })();
 
-            v1.SearchTopologyResponse = (function() {
+            v1.SearchResponse = (function() {
 
                 /**
-                 * Properties of a SearchTopologyResponse.
+                 * Properties of a SearchResponse.
                  * @memberof clutch.topology.v1
-                 * @interface ISearchTopologyResponse
-                 * @property {Array.<clutch.topology.v1.IResource>|null} [resources] SearchTopologyResponse resources
-                 * @property {string|null} [nextPageToken] SearchTopologyResponse nextPageToken
+                 * @interface ISearchResponse
+                 * @property {Array.<clutch.topology.v1.IResource>|null} [resources] SearchResponse resources
+                 * @property {string|null} [nextPageToken] SearchResponse nextPageToken
                  */
 
                 /**
-                 * Constructs a new SearchTopologyResponse.
+                 * Constructs a new SearchResponse.
                  * @memberof clutch.topology.v1
-                 * @classdesc Represents a SearchTopologyResponse.
-                 * @implements ISearchTopologyResponse
+                 * @classdesc Represents a SearchResponse.
+                 * @implements ISearchResponse
                  * @constructor
-                 * @param {clutch.topology.v1.ISearchTopologyResponse=} [properties] Properties to set
+                 * @param {clutch.topology.v1.ISearchResponse=} [properties] Properties to set
                  */
-                function SearchTopologyResponse(properties) {
+                function SearchResponse(properties) {
                     this.resources = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -33345,30 +33345,30 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * SearchTopologyResponse resources.
+                 * SearchResponse resources.
                  * @member {Array.<clutch.topology.v1.IResource>} resources
-                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @memberof clutch.topology.v1.SearchResponse
                  * @instance
                  */
-                SearchTopologyResponse.prototype.resources = $util.emptyArray;
+                SearchResponse.prototype.resources = $util.emptyArray;
 
                 /**
-                 * SearchTopologyResponse nextPageToken.
+                 * SearchResponse nextPageToken.
                  * @member {string} nextPageToken
-                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @memberof clutch.topology.v1.SearchResponse
                  * @instance
                  */
-                SearchTopologyResponse.prototype.nextPageToken = "";
+                SearchResponse.prototype.nextPageToken = "";
 
                 /**
-                 * Verifies a SearchTopologyResponse message.
+                 * Verifies a SearchResponse message.
                  * @function verify
-                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @memberof clutch.topology.v1.SearchResponse
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                SearchTopologyResponse.verify = function verify(message) {
+                SearchResponse.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.resources != null && message.hasOwnProperty("resources")) {
@@ -33387,24 +33387,24 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a SearchTopologyResponse message from a plain object. Also converts values to their respective internal types.
+                 * Creates a SearchResponse message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @memberof clutch.topology.v1.SearchResponse
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.topology.v1.SearchTopologyResponse} SearchTopologyResponse
+                 * @returns {clutch.topology.v1.SearchResponse} SearchResponse
                  */
-                SearchTopologyResponse.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.topology.v1.SearchTopologyResponse)
+                SearchResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.SearchResponse)
                         return object;
-                    let message = new $root.clutch.topology.v1.SearchTopologyResponse();
+                    let message = new $root.clutch.topology.v1.SearchResponse();
                     if (object.resources) {
                         if (!Array.isArray(object.resources))
-                            throw TypeError(".clutch.topology.v1.SearchTopologyResponse.resources: array expected");
+                            throw TypeError(".clutch.topology.v1.SearchResponse.resources: array expected");
                         message.resources = [];
                         for (let i = 0; i < object.resources.length; ++i) {
                             if (typeof object.resources[i] !== "object")
-                                throw TypeError(".clutch.topology.v1.SearchTopologyResponse.resources: object expected");
+                                throw TypeError(".clutch.topology.v1.SearchResponse.resources: object expected");
                             message.resources[i] = $root.clutch.topology.v1.Resource.fromObject(object.resources[i]);
                         }
                     }
@@ -33414,15 +33414,15 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a plain object from a SearchTopologyResponse message. Also converts values to other types if specified.
+                 * Creates a plain object from a SearchResponse message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @memberof clutch.topology.v1.SearchResponse
                  * @static
-                 * @param {clutch.topology.v1.SearchTopologyResponse} message SearchTopologyResponse
+                 * @param {clutch.topology.v1.SearchResponse} message SearchResponse
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                SearchTopologyResponse.toObject = function toObject(message, options) {
+                SearchResponse.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -33441,17 +33441,17 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this SearchTopologyResponse to JSON.
+                 * Converts this SearchResponse to JSON.
                  * @function toJSON
-                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @memberof clutch.topology.v1.SearchResponse
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                SearchTopologyResponse.prototype.toJSON = function toJSON() {
+                SearchResponse.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return SearchTopologyResponse;
+                return SearchResponse;
             })();
 
             v1.FeatureQuery = (function() {

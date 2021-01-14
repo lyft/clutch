@@ -23,7 +23,7 @@ service TopologyAPI {
     option (clutch.api.v1.action).type = READ;
   }
 
-  rpc Search(SearchTopologyRequest) returns (SearchTopologyResponse) {
+  rpc Search(SearchRequest) returns (SearchResponse) {
     option (google.api.http) = {
       post : "/v1/topology/search"
       body : "*"
@@ -40,7 +40,7 @@ message GetTopologyResponse {
   repeated QueryResult results = 1;
 }
 
-message SearchTopologyRequest {
+message SearchRequest {
   // The default sort is by column `id` and descending
   message Sort {
     enum Direction {
@@ -82,7 +82,7 @@ message SearchTopologyRequest {
   Filter filter = 4;
 }
 
-message SearchTopologyResponse {
+message SearchResponse {
   repeated Resource resources = 1;
   string next_page_token = 2;
 }

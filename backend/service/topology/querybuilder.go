@@ -17,8 +17,8 @@ const (
 )
 
 func paginatedQueryBuilder(
-	filter *topologyv1.SearchTopologyRequest_Filter,
-	sort *topologyv1.SearchTopologyRequest_Sort,
+	filter *topologyv1.SearchRequest_Filter,
+	sort *topologyv1.SearchRequest_Sort,
 	pageToken string,
 	limit int,
 ) (sq.SelectBuilder, error) {
@@ -49,7 +49,7 @@ func paginatedQueryBuilder(
 	return query, nil
 }
 
-func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchTopologyRequest_Filter) sq.SelectBuilder {
+func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filter) sq.SelectBuilder {
 	if f.Search != nil && len(f.Search.Field) > 0 {
 		if strings.HasPrefix(f.Search.Field, column) {
 			query = query.Where(sq.Like{strings.TrimPrefix(f.Search.Field, column): fmt.Sprintf("%%%s%%", f.Search.Text)})
@@ -73,8 +73,8 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchTopologyRequ
 	return query
 }
 
-func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchTopologyRequest_Sort) sq.SelectBuilder {
-	if s.Direction > topologyv1.SearchTopologyRequest_Sort_UNSPECIFIED && len(s.Field) > 0 {
+func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) sq.SelectBuilder {
+	if s.Direction > topologyv1.SearchRequest_Sort_UNSPECIFIED && len(s.Field) > 0 {
 		direction := getDirection(s.Direction)
 
 		if strings.HasPrefix(s.Field, column) {
@@ -106,11 +106,11 @@ func convertMetadataToQuery(metadata string) string {
 	return metadataQuery
 }
 
-func getDirection(direction topologyv1.SearchTopologyRequest_Sort_Direction) string {
+func getDirection(direction topologyv1.SearchRequest_Sort_Direction) string {
 	switch direction {
-	case topologyv1.SearchTopologyRequest_Sort_ASCENDING:
+	case topologyv1.SearchRequest_Sort_ASCENDING:
 		return "ASC"
-	case topologyv1.SearchTopologyRequest_Sort_DESCENDING:
+	case topologyv1.SearchRequest_Sort_DESCENDING:
 		return "DESC"
 	default:
 		// Default to ASC
