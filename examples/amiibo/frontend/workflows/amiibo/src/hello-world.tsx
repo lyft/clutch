@@ -2,15 +2,19 @@ import React, { ChangeEvent } from "react";
 import _ from "lodash";
 import {
   Button,
+  ButtonGroup,
   client,
   useWizardContext,
   Table,
-  Row,
+  TableRow,
   TextField,
 } from "@clutch-sh/core";
 
 import { useDataLayout } from "@clutch-sh/data-layout";
+import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
+
+import type { WorkflowProps } from ".";
 
 const AmiiboLookup: React.FC<WizardChild> = () => {
   const { onSubmit } = useWizardContext();
@@ -23,7 +27,9 @@ const AmiiboLookup: React.FC<WizardChild> = () => {
   return (
     <>
       <TextField onChange={onChange} onReturn={onSubmit}/>
-      <Button text="Search" onClick={onSubmit}/>
+      <ButtonGroup>
+        <Button text="Search" onClick={onSubmit}/>
+      </ButtonGroup>
     </>
   );
 };
@@ -38,10 +44,14 @@ const AmiiboDetails: React.FC<WizardChild> = () => {
   return (
     <WizardStep error={amiiboData.error} isLoading={amiiboData.isLoading}>
       <Table headings={["Name", "Image", "Series", "Type"]}>
-        {amiiboResults.map(amiibo => {
-          const image = <img src={amiibo.imageUrl} height="75px"/>;
-          return <Row data={[amiibo.name, image, amiibo.amiiboSeries, amiibo.type]} />;
-        })}
+        {amiiboResults.map((amiibo, index: number) => (
+          <TableRow key={index}>
+            {amiibo.name}
+            <img src={amiibo.imageUrl} height="75px"/>
+            {amiibo.amiiboSeries}
+            {amiibo.type}
+          </TableRow>
+        ))}
       </Table>
     </WizardStep>
   );
