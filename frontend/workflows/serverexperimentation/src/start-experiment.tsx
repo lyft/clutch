@@ -257,25 +257,20 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
 
     const faultTargeting = {} as IClutch.chaos.serverexperimentation.v1.FaultTargeting;
     if (isUpstreamEnforcing) {
+      faultTargeting.upstreamEnforcing = {
+        downstreamCluster: {
+          name: data.downstreamCluster,
+        },
+      }
       if (isTargetingRequests) {
-        faultTargeting.upstreamEnforcing = {
-          downstreamCluster: {
-            name: data.downstreamCluster,
-          },
-          upstreamCluster: {
-            name: data.upstreamCluster,
-          },
+        faultTargeting.upstreamEnforcing.upstreamCluster = {
+          name: data.upstreamCluster,
         };
       } else {
-        faultTargeting.upstreamEnforcing = {
-          downstreamCluster: {
-            name: data.downstreamCluster,
-          },
-          upstreamPartialSingleCluster: {
-            name: data.upstreamCluster,
-            clusterPercentage: {
-              percentage: isTargetingHosts ? data.hostsPercentage : 100,
-            },
+        faultTargeting.upstreamEnforcing.upstreamPartialSingleCluster = {
+          name: data.upstreamCluster,
+          clusterPercentage: {
+            percentage: isTargetingHosts ? data.hostsPercentage : 100,
           },
         };
       }
