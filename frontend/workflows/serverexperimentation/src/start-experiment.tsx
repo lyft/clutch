@@ -261,7 +261,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
         downstreamCluster: {
           name: data.downstreamCluster,
         },
-      }
+      };
       if (isTargetingRequests) {
         faultTargeting.upstreamEnforcing.upstreamCluster = {
           name: data.upstreamCluster,
