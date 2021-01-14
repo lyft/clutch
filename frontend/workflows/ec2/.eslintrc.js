@@ -8,7 +8,7 @@ module.exports = {
       files: ["**/*.test.*"],
       rules: {
         "import/no-extraneous-dependencies": ["off"],
-      }
-    }
-  ]
+      },
+    },
+  ],
 };

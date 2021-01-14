@@ -10,11 +10,11 @@ module.exports = {
         "import/no-extraneous-dependencies": [
           "error",
           {
-            "devDependencies": ["*.config.js"],
-            "packageDir": [".", "../tools/"],
-          }
+            devDependencies: ["*.config.js"],
+            packageDir: [".", "../tools/"],
+          },
         ],
-      }
+      },
     },
     {
       files: ["**/*.stories.*"],
