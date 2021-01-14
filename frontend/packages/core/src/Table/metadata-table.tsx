@@ -77,6 +77,7 @@ const TableCell = styled(MuiTableCell)({
 
 const Grid = styled(MuiGrid)({
   display: "flex",
+  alignItems: "center",
   ".MuiFormControl-root": {
     flexDirection: "row",
   },
@@ -143,7 +144,7 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
     <TableRow key={data.id}>
       <KeyCell data={data} />
       <TableCell>
-        <Grid spacing={2} alignItems="center">
+        <Grid>
           <div className="textfield-disabled">
             <TextField disabled id={data.id} name={data.name} defaultValue={data.value} />
           </div>
