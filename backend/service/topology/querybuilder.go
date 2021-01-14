@@ -10,8 +10,9 @@ import (
 )
 
 const (
-	column   = "column."
-	metadata = "metadata."
+	column            = "column."
+	metadata          = "metadata."
+	queryDefaultLimit = 100
 )
 
 func paginatedQueryBuilder(
@@ -20,7 +21,7 @@ func paginatedQueryBuilder(
 	pageToken,
 	limit int,
 ) (sq.SelectBuilder, error) {
-	queryLimit := 100
+	queryLimit := queryDefaultLimit
 	if limit > 0 {
 		queryLimit = limit
 	}
@@ -105,9 +106,6 @@ func getDirection(direction string) string {
 		return "ASC"
 	case topologyv1.SearchTopologyRequest_Sort_DESCENDING.String():
 		return "DESC"
-	case topologyv1.SearchTopologyRequest_Sort_UNSPECIFIED.String():
-		// Default to ASC
-		return "ASC"
 	default:
 		// Default to ASC
 		return "ASC"

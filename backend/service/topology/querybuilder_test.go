@@ -27,6 +27,14 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 			expect:    "SELECT id, data, metadata FROM topology_cache ORDER BY ID ASC LIMIT 100 OFFSET 0",
 		},
 		{
+			id:        "Page 0 with limit set",
+			filter:    &topologyv1.SearchTopologyRequest_Filter{},
+			sort:      &topologyv1.SearchTopologyRequest_Sort{},
+			pageToken: 0,
+			limit:     5,
+			expect:    "SELECT id, data, metadata FROM topology_cache ORDER BY ID ASC LIMIT 5 OFFSET 0",
+		},
+		{
 			id:        "Change PageToken and Limits",
 			filter:    &topologyv1.SearchTopologyRequest_Filter{},
 			sort:      &topologyv1.SearchTopologyRequest_Sort{},
