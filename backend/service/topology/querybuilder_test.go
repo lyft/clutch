@@ -214,22 +214,22 @@ func TestConvertMetadataToQuery(t *testing.T) {
 func TestGetDirection(t *testing.T) {
 	testCases := []struct {
 		id     string
-		input  string
+		input  topologyv1.SearchTopologyRequest_Sort_Direction
 		expect string
 	}{
 		{
 			id:     "ASCENDING",
-			input:  "ASCENDING",
+			input:  topologyv1.SearchTopologyRequest_Sort_ASCENDING,
 			expect: "ASC",
 		},
 		{
 			id:     "DESCENDING",
-			input:  "DESCENDING",
+			input:  topologyv1.SearchTopologyRequest_Sort_DESCENDING,
 			expect: "DESC",
 		},
 		{
 			id:     "Bad input",
-			input:  "MeowCat",
+			input:  topologyv1.SearchTopologyRequest_Sort_UNSPECIFIED,
 			expect: "ASC",
 		},
 	}

@@ -74,8 +74,8 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchTopologyRequ
 }
 
 func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchTopologyRequest_Sort) sq.SelectBuilder {
-	if len(s.Direction.String()) > 0 && len(s.Field) > 0 {
-		direction := getDirection(s.Direction.String())
+	if s.Direction > topologyv1.SearchTopologyRequest_Sort_UNSPECIFIED && len(s.Field) > 0 {
+		direction := getDirection(s.Direction)
 
 		if strings.HasPrefix(s.Field, column) {
 			query = query.OrderBy(fmt.Sprintf("%s %s", strings.TrimPrefix(s.Field, column), direction))
@@ -106,11 +106,11 @@ func convertMetadataToQuery(metadata string) string {
 	return metadataQuery
 }
 
-func getDirection(direction string) string {
+func getDirection(direction topologyv1.SearchTopologyRequest_Sort_Direction) string {
 	switch direction {
-	case topologyv1.SearchTopologyRequest_Sort_ASCENDING.String():
+	case topologyv1.SearchTopologyRequest_Sort_ASCENDING:
 		return "ASC"
-	case topologyv1.SearchTopologyRequest_Sort_DESCENDING.String():
+	case topologyv1.SearchTopologyRequest_Sort_DESCENDING:
 		return "DESC"
 	default:
 		// Default to ASC
