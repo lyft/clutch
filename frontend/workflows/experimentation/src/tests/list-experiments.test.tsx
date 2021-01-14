@@ -11,16 +11,17 @@ jest.mock("react-router-dom", () => {
 });
 
 describe("List Experiments workflow", () => {
-  let component;
+  let links;
+  let columns;
 
   beforeAll(() => {
-    const links = [
+    links = [
       {
         displayName: "button_1",
         path: "/path1",
       },
     ];
-    const columns = [
+    columns = [
       {
         id: "column_1",
         header: "column 1",
@@ -30,11 +31,12 @@ describe("List Experiments workflow", () => {
         header: "column 2",
       },
     ];
-
-    component = shallow(<ListExperiments columns={columns} links={links} />);
   });
 
   it("renders correctly", () => {
+    const component = shallow(
+      <ListExperiments heading="List Experiments" columns={columns} links={links} />
+    );
     expect(component.debug()).toMatchSnapshot();
   });
 });
