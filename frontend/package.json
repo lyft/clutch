@@ -75,7 +75,7 @@
     "eslint": "^7.11.0",
     "lerna": "^3.22.1",
     "license-checker": "^25.0.1",
-    "prettier": "^2.0.0",
+    "prettier": "^2.2.1",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-is": "^16.8.0",
