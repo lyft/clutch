@@ -60,7 +60,7 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 			},
 			pageToken: "10",
 			limit:     5,
-			expect:    "SELECT id, data, metadata FROM topology_cache WHERE metadata->'search'->'field' LIKE $1 AND resolver_type_url = $2 AND metadata->>'label' = $3 ORDER BY metadata->'meow'->'iam'->'a'->'cat' ASC LIMIT 5 OFFSET 50",
+			expect:    "SELECT id, data, metadata FROM topology_cache WHERE metadata->'search'->'field' LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb ORDER BY metadata->'meow'->'iam'->'a'->'cat' ASC LIMIT 5 OFFSET 50",
 		},
 	}
 	for _, test := range testCases {
@@ -117,7 +117,7 @@ func TestFilterQueryBuilder(t *testing.T) {
 					"label2": "value2",
 				},
 			},
-			expect: "SELECT * FROM topology_cache WHERE metadata->>'label' LIKE $1 AND resolver_type_url = $2 AND metadata->>'label' = $3 AND metadata->>'label2' = $4",
+			expect: "SELECT * FROM topology_cache WHERE metadata->>'label' LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb",
 		},
 	}
 
@@ -126,7 +126,9 @@ func TestFilterQueryBuilder(t *testing.T) {
 			Select("*").
 			From("topology_cache")
 
-		output := filterQueryBuilder(selectBuilder, test.input)
+		output, err := filterQueryBuilder(selectBuilder, test.input)
+		assert.NoError(t, err)
+
 		sql, _, err := output.ToSql()
 		assert.NoError(t, err)
 		assert.Equal(t, test.expect, sql)

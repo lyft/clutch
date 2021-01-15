@@ -1,6 +1,7 @@
 package topology
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
@@ -43,13 +44,16 @@ func paginatedQueryBuilder(
 		Limit(uint64(queryLimit)).
 		Offset(uint64(queryOffset))
 
-	query = filterQueryBuilder(query, filter)
+	query, err = filterQueryBuilder(query, filter)
+	if err != nil {
+		return sq.SelectBuilder{}, err
+	}
 	query = sortQueryBuilder(query, sort)
 
 	return query, nil
 }
 
-func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filter) sq.SelectBuilder {
+func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filter) (sq.SelectBuilder, error) {
 	if f.Search != nil && len(f.Search.Field) > 0 {
 		if strings.HasPrefix(f.Search.Field, column) {
 			query = query.Where(sq.Like{strings.TrimPrefix(f.Search.Field, column): fmt.Sprintf("%%%s%%", f.Search.Text)})
@@ -63,14 +67,16 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 		query = query.Where(sq.Eq{"resolver_type_url": f.TypeUrl})
 	}
 
-	// TODO: Support nested objects
 	if f.Metadata != nil {
-		for k, v := range f.Metadata {
-			query = query.Where(sq.Eq{fmt.Sprintf("metadata->>'%s'", k): v})
+		metadataJson, err := json.Marshal(f.Metadata)
+		if err != nil {
+			return sq.SelectBuilder{}, err
 		}
+
+		query = query.Where(sq.Expr("metadata @> ?::jsonb", metadataJson))
 	}
 
-	return query
+	return query, nil
 }
 
 func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) sq.SelectBuilder {
