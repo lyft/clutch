@@ -99,7 +99,7 @@ function BlogPostItem(props) {
           <MDXProvider components={MDXComponents}>{children}</MDXProvider>
         </section>
         {(tags.length > 0 || truncated) && (
-          <footer className="row margin-vert--lg">
+          <footer className="row margin-vert--md">
             {tags.length > 0 && (
               <div className="col">
                 {tags.map(({ label, permalink: tagPermalink }) => (

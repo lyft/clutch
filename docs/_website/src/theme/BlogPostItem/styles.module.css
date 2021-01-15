@@ -34,6 +34,6 @@
 
 .blogPostPreview {
   border: 2px solid grey;
-  padding: 25px 25px 0 25px;
+  padding: 25px 25px 10px 25px;
   border-radius: 10px;
 }
