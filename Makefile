@@ -75,17 +75,21 @@ backend-verify:
 backend-config-validation:
 	cd backend && go run main.go -validate -c clutch-config.yaml
 
+.PHONY: yarn-install # Install frontend dependencies.
+yarn-install: yarn-ensure
+	$(YARN) --cwd frontend install --frozen-lockfile 
+
 .PHONY: frontend # Build production frontend assets.
-frontend: yarn-ensure
-	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend build
+frontend: yarn-install
+	$(YARN) --cwd frontend build
 
 .PHONY: frontend-dev-build # Build development frontend assets.
-frontend-dev-build: yarn-ensure
-	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend build:dev
+frontend-dev-build: yarn-install
+	$(YARN) --cwd frontend build:dev
 
 .PHONY: frontend-dev # Start the frontend in development mode.
-frontend-dev: yarn-ensure
-	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend start
+frontend-dev: yarn-install
+	$(YARN) --cwd frontend start
 
 .PHONY: frontend-lint # Lint the frontend code.
 frontend-lint: yarn-ensure
@@ -142,12 +146,12 @@ scaffold-workflow:
 	cd tools/scaffolding && go run scaffolder.go -m frontend-plugin
 
 .PHONY: storybook # Start storybook locally.
-storybook: yarn-ensure
-	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend storybook
+storybook: yarn-install
+	$(YARN) --cwd frontend storybook
 
 .PHONY: storybook-build # Build storybook assets for deploy.
-storybook-build: yarn-ensure
-	$(YARN) --cwd frontend install --frozen-lockfile && $(YARN) --cwd frontend storybook:build
+storybook-build: yarn-install
+	$(YARN) --cwd frontend storybook:build
 
 .PHONY: test # Unit test all of the code.
 test: backend-test frontend-test
