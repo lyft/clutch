@@ -60,7 +60,7 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 			},
 			pageToken: "10",
 			limit:     5,
-			expect:    "SELECT id, data, metadata FROM topology_cache WHERE metadata->'search'->'field' LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb ORDER BY metadata->'meow'->'iam'->'a'->'cat' ASC LIMIT 5 OFFSET 50",
+			expect:    "SELECT id, data, metadata FROM topology_cache WHERE quote_literal(metadata->'search'->'field') LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb ORDER BY metadata->'meow'->'iam'->'a'->'cat' ASC LIMIT 5 OFFSET 50",
 		},
 	}
 	for _, test := range testCases {
@@ -92,7 +92,7 @@ func TestFilterQueryBuilder(t *testing.T) {
 					Text:  "cat",
 				},
 			},
-			expect: "SELECT * FROM topology_cache WHERE id LIKE $1",
+			expect: "SELECT * FROM topology_cache WHERE quote_literal(id) LIKE $1",
 		},
 		{
 			id: "Search by Metadata",
@@ -102,7 +102,7 @@ func TestFilterQueryBuilder(t *testing.T) {
 					Text:  "cat",
 				},
 			},
-			expect: "SELECT * FROM topology_cache WHERE metadata->>'label' LIKE $1",
+			expect: "SELECT * FROM topology_cache WHERE quote_literal(metadata->>'label') LIKE $1",
 		},
 		{
 			id: "Search all options",
@@ -117,7 +117,7 @@ func TestFilterQueryBuilder(t *testing.T) {
 					"label2": "value2",
 				},
 			},
-			expect: "SELECT * FROM topology_cache WHERE metadata->>'label' LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb",
+			expect: "SELECT * FROM topology_cache WHERE quote_literal(metadata->>'label') LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb",
 		},
 	}
 
@@ -152,7 +152,7 @@ func TestSortQueryBuilder(t *testing.T) {
 				Field:     "column.cat",
 				Direction: topologyv1.SearchRequest_Sort_DESCENDING,
 			},
-			expect: "SELECT * FROM topology_cache ORDER BY cat DESC",
+			expect: "SELECT * FROM topology_cache ORDER BY $1 DESC",
 		},
 		{
 			id: "Sort by custom metadata and direction",

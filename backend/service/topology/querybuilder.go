@@ -2,6 +2,7 @@ package topology
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -15,6 +16,7 @@ const (
 	column            = "column."
 	metadata          = "metadata."
 	queryDefaultLimit = 100
+	maxResultLimit    = 1000
 )
 
 func paginatedQueryBuilder(
@@ -24,7 +26,9 @@ func paginatedQueryBuilder(
 	limit int,
 ) (sq.SelectBuilder, error) {
 	queryLimit := queryDefaultLimit
-	if limit > 0 {
+	if limit > maxResultLimit {
+		return sq.SelectBuilder{}, errors.New("Maximum query limit is 1000")
+	} else if limit > 0 {
 		queryLimit = limit
 	}
 
@@ -44,22 +48,31 @@ func paginatedQueryBuilder(
 		Limit(uint64(queryLimit)).
 		Offset(uint64(queryOffset))
 
-	query, err = filterQueryBuilder(query, filter)
-	if err != nil {
-		return sq.SelectBuilder{}, err
+	if filter != nil {
+		query, err = filterQueryBuilder(query, filter)
+		if err != nil {
+			return sq.SelectBuilder{}, err
+		}
 	}
-	query = sortQueryBuilder(query, sort)
+
+	if sort != nil {
+		query = sortQueryBuilder(query, sort)
+	}
 
 	return query, nil
 }
 
 func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filter) (sq.SelectBuilder, error) {
+	if f == nil {
+		return query, nil
+	}
+
 	if f.Search != nil && len(f.Search.Field) > 0 {
 		if strings.HasPrefix(f.Search.Field, column) {
-			query = query.Where(sq.Like{strings.TrimPrefix(f.Search.Field, column): fmt.Sprintf("%%%s%%", f.Search.Text)})
+			query = query.Where(sq.Expr("quote_literal(?) LIKE ?", sq.Expr(strings.TrimPrefix(f.Search.Field, column)), fmt.Sprintf("%%%s%%", f.Search.Text)))
 		} else if strings.HasPrefix(f.Search.Field, metadata) {
 			mdQuery := convertMetadataToQuery(strings.TrimPrefix(f.Search.Field, metadata))
-			query = query.Where(sq.Like{mdQuery: fmt.Sprintf("%%%s%%", f.Search.Text)})
+			query = query.Where(sq.Expr("quote_literal(?) LIKE ?", sq.Expr(mdQuery), fmt.Sprintf("%%%s%%", f.Search.Text)))
 		}
 	}
 
@@ -72,7 +85,6 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 		if err != nil {
 			return sq.SelectBuilder{}, err
 		}
-
 		query = query.Where(sq.Expr("metadata @> ?::jsonb", metadataJson))
 	}
 
@@ -80,11 +92,15 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 }
 
 func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) sq.SelectBuilder {
+	if s == nil {
+		return query
+	}
+
 	if s.Direction > topologyv1.SearchRequest_Sort_UNSPECIFIED && len(s.Field) > 0 {
 		direction := getDirection(s.Direction)
 
 		if strings.HasPrefix(s.Field, column) {
-			query = query.OrderBy(fmt.Sprintf("%s %s", strings.TrimPrefix(s.Field, column), direction))
+			query = query.OrderByClause(fmt.Sprintf("? %s", direction), strings.TrimPrefix(s.Field, column))
 		} else if strings.HasPrefix(s.Field, metadata) {
 			mdQuery := convertMetadataToQuery(strings.TrimPrefix(s.Field, metadata))
 			query = query.OrderBy(fmt.Sprintf("%s %s", mdQuery, direction))
