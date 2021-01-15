@@ -1,29 +1,28 @@
 ---
-title: Announcing Clutch, the Open-source Platform for Infrastructure Tooling
-author: Daniel Hochman
-author_title: Lyft Engineer
-author_url: https://github.com/danielhochman
-author_image_url: https://user-images.githubusercontent.com/4712430/87979981-839a7900-ca98-11ea-9d35-07c01b4cec14.png
-tags: [hello, world]
-description: This is my first post.
+title: Announcing Clutch
+authors:
+  - name: Daniel Hochman
+    url: https://github.com/danielhochman
+    avatar: https://user-images.githubusercontent.com/4712430/87979981-839a7900-ca98-11ea-9d35-07c01b4cec14.png
+  - name: Derek Schaller
+    url: https://github.com/dschaller
+    avatar: https://avatars2.githubusercontent.com/u/1004789?s=460&u=e4028c0a2f8c51aa78d9ce90288ee99451e80b71&v=4
+description: Announcing Clutch, the Open-source Platform for Infrastructure Tooling.
 image: https://user-images.githubusercontent.com/4712430/104760766-7a2c5980-5727-11eb-93f5-3296b23ba3a0.png
 hide_table_of_contents: false
 ---
 
-Today we are excited to announce the open-source availability of [Clutch](https://clutch.sh/), Lyft’s extensible UI and API platform for infrastructure tooling. Clutch empowers engineering teams to build, run, and maintain user-friendly workflows that also incorporate domain-specific safety mechanisms and access controls.
+Today we are excited to announce the open-source availability of Clutch, Lyft’s extensible UI and API platform for infrastructure tooling. Clutch empowers engineering teams to build, run, and maintain user-friendly workflows that also incorporate domain-specific safety mechanisms and access controls.
 
 <!--truncate-->
 
 ---
 
-**Note**: [This article](https://eng.lyft.com/announcing-clutch-the-open-source-platform-for-infrastructure-tooling-143d00de9713) was originally published at [eng.lyft.com](https://eng.lyft.com/).
+**Note**: *[This article](https://eng.lyft.com/announcing-clutch-the-open-source-platform-for-infrastructure-tooling-143d00de9713) was originally published at [eng.lyft.com](https://eng.lyft.com/).*
 
 **Nota**: *[Este artículo](https://medium.com/lyft-engineering-en-espa%C3%B1ol/anunciando-clutch-la-plataforma-de-c%C3%B3digo-abierto-para-administraci%C3%B3n-de-infraestructura-855dafe4380a) también está en español a [eng-espanol.lyft.com](http://eng-espanol.lyft.com/).*
 
 ---
-
-By [Daniel Hochman](https://github.com/danielhochman) and [Derek Schaller](https://github.com/dschaller)
-
 
 Clutch ships with several features for managing platforms such as AWS, Envoy, and Kubernetes with an emphasis on extensibility so it can host features for any component in the stack.
 

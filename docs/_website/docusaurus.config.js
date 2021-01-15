@@ -186,7 +186,6 @@ module.exports = {
         {
           title: 'Community',
           items: [
-            {label: 'Blog', to: 'blog'},
             {
               label: 'GitHub',
               to: 'https://github.com/lyft/clutch',
@@ -199,6 +198,7 @@ module.exports = {
               label: 'Twitter',
               to: 'https://twitter.com/clutchdotsh',
             },
+            {label: 'Blog', to: 'blog'},
             {
               label: 'More',
               to: 'docs/community',

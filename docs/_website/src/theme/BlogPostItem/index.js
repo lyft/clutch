@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import {MDXProvider} from '@mdx-js/react';
+import { MDXProvider } from '@mdx-js/react';
 import Head from '@docusaurus/Head';
 import Link from '@docusaurus/Link';
 import MDXComponents from '@theme/MDXComponents';
@@ -29,12 +29,8 @@ function BlogPostItem(props) {
     truncated,
     isBlogPostPage = false,
   } = props;
-  const {date, permalink, tags, readingTime} = metadata;
-  const {author, title, image, keywords} = frontMatter;
-  const authorURL = frontMatter.author_url || frontMatter.authorURL;
-  const authorTitle = frontMatter.author_title || frontMatter.authorTitle;
-  const authorImageURL =
-    frontMatter.author_image_url || frontMatter.authorImageURL;
+  const { date, permalink, tags, readingTime } = metadata;
+  const { authors, title, image, keywords } = frontMatter;
   const imageUrl = useBaseUrl(image, {
     absolute: true,
   });
@@ -57,27 +53,27 @@ function BlogPostItem(props) {
             {readingTime && <> · {Math.ceil(readingTime)} min read</>}
           </time>
         </div>
-        <div className="avatar margin-vert--md">
-          {authorImageURL && (
-            <a
-              className="avatar__photo-link avatar__photo"
-              href={authorURL}
-              target="_blank"
-              rel="noreferrer noopener">
-              <img src={authorImageURL} alt={author} />
-            </a>
+
+
+        <div className={"avatar margin-vert--md"}>
+          {/* Crazy avatar stack code */}
+          <div style={{position: 'relative', height: "45px", width: 8 + 45 + ((authors.length - 1) * 20) + "px"}}>
+          {authors.map(({ name, avatar }, idx) =>
+            <img className={styles.blogPostAvatar} style={{ zIndex: 1000 - idx, marginLeft: idx * 20 + "px" }} src={avatar} alt={name} />
           )}
+          </div>
+
           <div className="avatar__intro">
-            {author && (
-              <>
-                <h4 className="avatar__name">
-                  <a href={authorURL} target="_blank" rel="noreferrer noopener">
-                    {author}
+            <h4 className={clsx(styles.blogPostAuthor, "avatar__name")}>
+              {authors.map(({ name, url }, idx) =>
+                <>
+                  <a href={url} target="_blank" rel="noreferrer noopener">
+                    {name}
                   </a>
-                </h4>
-                <small className="avatar__subtitle">{authorTitle}</small>
-              </>
-            )}
+                  {idx != (authors.length - 1) && <span className={clsx(styles.blogPostAuthorSeparator)}>,&nbsp;</span>}
+                </>
+              )}
+            </h4>
           </div>
         </div>
       </header>
@@ -97,7 +93,7 @@ function BlogPostItem(props) {
         )}
       </Head>
 
-      <article className={!isBlogPostPage ? 'margin-bottom--xl' : undefined}>
+      <article className={clsx(!isBlogPostPage && 'margin-bottom--lg', !isBlogPostPage && styles.blogPostPreview)}>
         {renderPostHeader()}
         <section className="markdown">
           <MDXProvider components={MDXComponents}>{children}</MDXProvider>
@@ -106,11 +102,10 @@ function BlogPostItem(props) {
           <footer className="row margin-vert--lg">
             {tags.length > 0 && (
               <div className="col">
-                <strong>Tags:</strong>
-                {tags.map(({label, permalink: tagPermalink}) => (
+                {tags.map(({ label, permalink: tagPermalink }) => (
                   <Link
                     key={tagPermalink}
-                    className="margin-horiz--sm"
+                    className={clsx(styles.blogPostTag)}
                     to={tagPermalink}>
                     {label}
                   </Link>
