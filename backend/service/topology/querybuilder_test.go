@@ -9,13 +9,46 @@ import (
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
+func TestMaxQueryLimit(t *testing.T) {
+	testCases := []struct {
+		id          string
+		input       uint64
+		shouldError bool
+	}{
+		{
+			id:          "Under limit",
+			input:       999,
+			shouldError: false,
+		},
+		{
+			id:          "Equal to limit",
+			input:       1000,
+			shouldError: false,
+		},
+		{
+			id:          "Above limit",
+			input:       1001,
+			shouldError: true,
+		},
+	}
+
+	for _, test := range testCases {
+		_, err := paginatedQueryBuilder(&topologyv1.SearchRequest_Filter{}, &topologyv1.SearchRequest_Sort{}, "0", test.input)
+		if test.shouldError {
+			assert.Error(t, err)
+		} else {
+			assert.NoError(t, err)
+		}
+	}
+}
+
 func TestPaginatedQueryBuilder(t *testing.T) {
 	testCases := []struct {
 		id        string
 		filter    *topologyv1.SearchRequest_Filter
 		sort      *topologyv1.SearchRequest_Sort
 		pageToken string
-		limit     int
+		limit     uint64
 		expect    string
 	}{
 		{

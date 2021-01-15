@@ -2,42 +2,43 @@ package topology
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"strconv"
 	"strings"
 
 	sq "github.com/Masterminds/squirrel"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
 const (
-	column            = "column."
-	metadata          = "metadata."
-	queryDefaultLimit = 100
-	maxResultLimit    = 1000
+	column                   = "column."
+	metadata                 = "metadata."
+	queryDefaultLimit uint64 = 100
+	maxResultLimit           = 1000
 )
 
 func paginatedQueryBuilder(
 	filter *topologyv1.SearchRequest_Filter,
 	sort *topologyv1.SearchRequest_Sort,
 	pageToken string,
-	limit int,
+	limit uint64,
 ) (sq.SelectBuilder, error) {
 	queryLimit := queryDefaultLimit
 	if limit > maxResultLimit {
-		return sq.SelectBuilder{}, errors.New("Maximum query limit is 1000")
+		return sq.SelectBuilder{}, status.Error(codes.InvalidArgument, "maximum query limit is 1000")
 	} else if limit > 0 {
 		queryLimit = limit
 	}
 
-	pageNum, err := strconv.Atoi(pageToken)
+	pageNum, err := strconv.ParseUint(pageToken, 10, 64)
 	if err != nil {
-		return sq.SelectBuilder{}, err
+		return sq.SelectBuilder{}, status.Error(codes.InvalidArgument, "unable to parse page_token")
 	}
 
-	queryOffset := 0
+	var queryOffset uint64 = 0
 	if pageNum > 0 {
 		queryOffset = pageNum * limit
 	}
@@ -96,7 +97,7 @@ func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) 
 		return query
 	}
 
-	if s.Direction > topologyv1.SearchRequest_Sort_UNSPECIFIED && len(s.Field) > 0 {
+	if len(s.Field) > 0 {
 		direction := getDirection(s.Direction)
 
 		if strings.HasPrefix(s.Field, column) {
@@ -135,7 +136,6 @@ func getDirection(direction topologyv1.SearchRequest_Sort_Direction) string {
 	case topologyv1.SearchRequest_Sort_DESCENDING:
 		return "DESC"
 	default:
-		// Default to ASC
 		return "ASC"
 	}
 }

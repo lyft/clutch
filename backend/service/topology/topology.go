@@ -100,7 +100,7 @@ func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*
 		req.Filter,
 		req.Sort,
 		req.PageToken,
-		int(req.Limit),
+		req.Limit,
 	)
 	if err != nil {
 		return nil, err
@@ -119,7 +119,7 @@ func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*
 		var metadata []byte
 
 		if err := rows.Scan(&id, &data, &metadata); err != nil {
-			c.log.Error("Error scaning row", zap.Error(err))
+			c.log.Error("Error scanning row", zap.Error(err))
 			return nil, err
 		}
 
