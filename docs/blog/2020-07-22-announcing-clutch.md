@@ -51,17 +51,17 @@ Next, we turned to the open-source community. We found that the scope of open-so
 
 Finally, we wanted a platform that we could invest in as an organization, thus requiring it to be easy for other internal teams to understand and build on. Clutch offers an integrated and guided development model that makes feature development a straightforward process. In addition to the first-class backend features, Clutch’s frontend offers unique abstractions for state management and multi-step forms that make frontend development easier for infrastructure teams without a lot of JavaScript experience.
 
-For a detailed analysis on how other tools measure up to Clutch, see [Comparisons to Other Tools](https://clutch.sh/docs/about/comparison).
+For a detailed analysis on how other tools measure up to Clutch, see [Comparisons to Other Tools](/docs/about/comparison).
 
 ## Features
 
 ### The 'Control Plane' Model
 [Envoy Proxy](https://www.envoyproxy.io/) was created at Lyft. Today, it’s one of the most popular proxies, deployed at many large internet companies and continuously advancing the standard for cloud networking. Our team has learned a lot from maintaining Envoy alongside the larger community. One of the most popular topics discussed among Envoy users is the [state of control plane development](https://mattklein123.dev/2020/03/15/on-the-state-of-envoy-proxy-control-planes/), specifically how to systematically integrate a wide range of disparate components such that Envoy can effectively route and report on network traffic. This is directly analogous to Clutch, which integrates disparate infrastructure systems behind a uniform API.
 
-Clutch adopts many of Envoy Proxy’s core patterns that emerged from years of work on network control planes. Like Envoy, Clutch is [configuration-driven](https://clutch.sh/docs/configuration), [schema-driven](https://clutch.sh/docs/development/api), and leverages a modular [extension-based architecture](https://clutch.sh/docs/about/architecture) to make it work for a wide variety of use cases without compromising maintainability. Extending Clutch does not require forks or rewrites, and custom code can easily be compiled into the application from a custom public or private external repository. These same patterns that enable organizations large and small with unique tech stacks to converge on a single proxy solution will hopefully enable similarly unique organizations to converge on Clutch as an infrastructure control plane.
+Clutch adopts many of Envoy Proxy’s core patterns that emerged from years of work on network control planes. Like Envoy, Clutch is [configuration-driven](/docs/configuration), [schema-driven](/docs/development/api), and leverages a modular [extension-based architecture](/docs/about/architecture) to make it work for a wide variety of use cases without compromising maintainability. Extending Clutch does not require forks or rewrites, and custom code can easily be compiled into the application from a custom public or private external repository. These same patterns that enable organizations large and small with unique tech stacks to converge on a single proxy solution will hopefully enable similarly unique organizations to converge on Clutch as an infrastructure control plane.
 
 ### Safety and Security
-Additionally, Clutch ships with [authentication and authorization components](https://clutch.sh/docs/advanced/auth). OpenID Connect (OIDC) authentication flows for single-sign on, resource-level role-based access control (RBAC) via static mapping, and automatic auditing of all actions with the ability to run additional sinks for output, e.g., a Slackbot.
+Additionally, Clutch ships with [authentication and authorization components](/docs/advanced/auth). OpenID Connect (OIDC) authentication flows for single-sign on, resource-level role-based access control (RBAC) via static mapping, and automatic auditing of all actions with the ability to run additional sinks for output, e.g., a Slackbot.
 
 ![Slack message showing the action performed by a user via Clutch](https://user-images.githubusercontent.com/4712430/104761542-ae544a00-5728-11eb-9206-fad9fa91aec5.png)
 
@@ -75,20 +75,20 @@ Other systems that offer infrastructure lifecycle tooling require a complicated 
 ### Frameworks and Components
 Clutch is powered by a Go backend and React frontend. It provides full-featured frameworks for backend and frontend development. All components in Clutch are composable, allowing for partial use of the framework offerings or completely custom features.
 
-This component-and-workflow architecture allows a developer with limited frontend experience to replace clunky tooling or command-line scripts with a clear and easy-to-use step-by-step UI in [under an hour of development time](https://clutch.sh/docs/development/feature).
+This component-and-workflow architecture allows a developer with limited frontend experience to replace clunky tooling or command-line scripts with a clear and easy-to-use step-by-step UI in [under an hour of development time](/docs/development/feature).
 
 Clutch’s frontend packages offer components to easily build step-by-step workflows with a consistent and seamless user experience, including:
 
-- [DataLayout](https://clutch.sh/docs/about/architecture/#data-layout), a workflow-local state management component that handles user input and data from API calls.
-- [Wizard](https://clutch.sh/docs/about/architecture#wizard), for presenting step-by-step forms to users.
+- [DataLayout](/docs/about/architecture/#data-layout), a workflow-local state management component that handles user input and data from API calls.
+- [Wizard](/docs/about/architecture#wizard), for presenting step-by-step forms to users.
 - Custom Material UI components, for displaying rich information with minimal code in a consistent manner across workflows.
 
 Clutch’s backend relies heavily on generated code from protobuf API definitions. Protobuf tooling also generates frontend clients which keeps the backend and frontend in sync as APIs evolve. Components on the backend include:
 
-- [Modules](https://clutch.sh/docs/about/architecture/#modules), implementations of the code generated API stubs
-- [Services](https://clutch.sh/docs/about/architecture/#services), for interacting with external sources of data
-- [Middleware](https://clutch.sh/docs/about/architecture/#middleware), for inspecting request and response data and applying auditing, authorization, etc.
-- [Resolvers](https://clutch.sh/docs/about/architecture/#resolvers), a common interface to locate resources based on free-form text search or structured queries
+- [Modules](/docs/about/architecture/#modules), implementations of the code generated API stubs
+- [Services](/docs/about/architecture/#services), for interacting with external sources of data
+- [Middleware](/docs/about/architecture/#middleware), for inspecting request and response data and applying auditing, authorization, etc.
+- [Resolvers](/docs/about/architecture/#resolvers), a common interface to locate resources based on free-form text search or structured queries
 
 Resolvers are one Clutch abstraction we hope will make a big impact on the way features can be abstracted to multiple organizations. Resolvers are easily extended with custom resource location code, allowing operators to locate resources (such as K8s pods or EC2 instances) by the common name(s) that the organization is accustomed to rather than the terse canonical identifier. For example, if developers call their application `myService-staging`, it’s easy to add code that will interpret such a query as the structured elements `${application_name}-${environment}`. Furthermore, the frontend automatically generates user input forms from the backend definitions.
 
@@ -116,7 +116,7 @@ We have received a lot of positive feedback internally, for example:
 
 > “I’m so happy that this exists because otherwise I would still be waiting on the tab to load in the cloud provider’s console.”
 
-More specifics on Clutch at Lyft can be found in the [Lyft Case Study](https://clutch.sh/docs/about/lyft-case-study) article.
+More specifics on Clutch at Lyft can be found in the [Lyft Case Study](/docs/about/lyft-case-study) article.
 
 ## Roadmap
 
@@ -132,7 +132,7 @@ Upcoming features include:
 - **Generalized configuration management**, allowing users to manage complex configuration via a guided UI or otherwise reflect changes in infrastructure as code declarations.
 - **Topology mapping**, associating users with the services they own and showing them relevant data and tools on the landing page.
 
-For more details on upcoming projects visit our [roadmap](https://clutch.sh/docs/about/roadmap).
+For more details on upcoming projects visit our [roadmap](/docs/about/roadmap).
 
 ## Community
 Clutch has had a significant impact on Lyft’s developer experience, allowing the infrastructure and other engineering teams to deliver tooling as a polished product rather than an afterthought. Teams are super excited about contributing new features internally, and engineers at Lyft love using the platform:
