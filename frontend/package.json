@@ -72,18 +72,18 @@
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
     "babel-loader": "^8.1.0",
-    "eslint": "^6.6.0",
+    "eslint": "^7.11.0",
     "lerna": "^3.22.1",
     "license-checker": "^25.0.1",
     "prettier": "^2.0.0",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-is": "^16.8.0",
-    "react-scripts": "^3.4.1",
+    "react-scripts": "^4.0.1",
     "sort-package-json": "^1.44.0",
     "styled-components": "^5.1.1",
     "typescript": "^3.8.0",
-    "webpack": "4.42.0"
+    "webpack": "4.44.2"
   },
   "engines": {
     "node": ">=12.0.0"
