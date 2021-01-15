@@ -25,17 +25,22 @@ func paginatedQueryBuilder(
 	sort *topologyv1.SearchRequest_Sort,
 	pageToken string,
 	limit uint64,
-) (sq.SelectBuilder, error) {
+) (sq.SelectBuilder, uint64, error) {
 	queryLimit := queryDefaultLimit
 	if limit > maxResultLimit {
-		return sq.SelectBuilder{}, status.Error(codes.InvalidArgument, "maximum query limit is 1000")
+		return sq.SelectBuilder{}, 0, status.Error(codes.InvalidArgument, "maximum query limit is 1000")
 	} else if limit > 0 {
 		queryLimit = limit
 	}
 
-	pageNum, err := strconv.ParseUint(pageToken, 10, 64)
-	if err != nil {
-		return sq.SelectBuilder{}, status.Error(codes.InvalidArgument, "unable to parse page_token")
+	// If no page is supplied default to 0
+	var pageNum uint64 = 0
+	var err error
+	if len(pageToken) > 0 {
+		pageNum, err = strconv.ParseUint(pageToken, 10, 64)
+		if err != nil {
+			return sq.SelectBuilder{}, 0, status.Error(codes.InvalidArgument, "unable to parse page_token")
+		}
 	}
 
 	var queryOffset uint64 = 0
@@ -52,7 +57,7 @@ func paginatedQueryBuilder(
 	if filter != nil {
 		query, err = filterQueryBuilder(query, filter)
 		if err != nil {
-			return sq.SelectBuilder{}, err
+			return sq.SelectBuilder{}, 0, err
 		}
 	}
 
@@ -60,7 +65,8 @@ func paginatedQueryBuilder(
 		query = sortQueryBuilder(query, sort)
 	}
 
-	return query, nil
+	// Blindly increment pageNum by 1 for next_page_token
+	return query, pageNum + 1, nil
 }
 
 func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filter) (sq.SelectBuilder, error) {
@@ -104,7 +110,7 @@ func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) 
 			query = query.OrderByClause(fmt.Sprintf("? %s", direction), strings.TrimPrefix(s.Field, column))
 		} else if strings.HasPrefix(s.Field, metadata) {
 			mdQuery := convertMetadataToQuery(strings.TrimPrefix(s.Field, metadata))
-			query = query.OrderBy(fmt.Sprintf("%s %s", mdQuery, direction))
+			query = query.OrderByClause(fmt.Sprintf("? %s", direction), mdQuery)
 		}
 	} else {
 		query = query.OrderBy("ID ASC")

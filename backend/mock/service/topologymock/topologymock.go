@@ -27,13 +27,14 @@ func (s *svc) GetTopology(ctx context.Context) error {
 	return errors.New("Not implemented")
 }
 
-func (s *svc) Search(context.Context, *topologyv1.SearchRequest) ([]*topologyv1.Resource, error) {
+func (s *svc) Search(context.Context, *topologyv1.SearchRequest) ([]*topologyv1.Resource, uint64, error) {
 	return []*topologyv1.Resource{
 		{
 			Id: "pod-123",
+			Pb: &any.Any{},
 			Metadata: map[string]string{
 				"label": "value",
 			},
 		},
-	}, nil
+	}, 1, nil
 }

@@ -33,7 +33,7 @@ func TestMaxQueryLimit(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		_, err := paginatedQueryBuilder(&topologyv1.SearchRequest_Filter{}, &topologyv1.SearchRequest_Sort{}, "0", test.input)
+		_, _, err := paginatedQueryBuilder(&topologyv1.SearchRequest_Filter{}, &topologyv1.SearchRequest_Sort{}, "0", test.input)
 		if test.shouldError {
 			assert.Error(t, err)
 		} else {
@@ -58,6 +58,14 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 			pageToken: "0",
 			limit:     0,
 			expect:    "SELECT id, data, metadata FROM topology_cache ORDER BY ID ASC LIMIT 100 OFFSET 0",
+		},
+		{
+			id:        "No page set",
+			filter:    &topologyv1.SearchRequest_Filter{},
+			sort:      &topologyv1.SearchRequest_Sort{},
+			pageToken: "",
+			limit:     5,
+			expect:    "SELECT id, data, metadata FROM topology_cache ORDER BY ID ASC LIMIT 5 OFFSET 0",
 		},
 		{
 			id:        "Page 0 with limit set",
@@ -93,11 +101,11 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 			},
 			pageToken: "10",
 			limit:     5,
-			expect:    "SELECT id, data, metadata FROM topology_cache WHERE quote_literal(metadata->'search'->'field') LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb ORDER BY metadata->'meow'->'iam'->'a'->'cat' ASC LIMIT 5 OFFSET 50",
+			expect:    "SELECT id, data, metadata FROM topology_cache WHERE quote_literal(metadata->'search'->'field') LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb ORDER BY $4 ASC LIMIT 5 OFFSET 50",
 		},
 	}
 	for _, test := range testCases {
-		output, err := paginatedQueryBuilder(test.filter, test.sort, test.pageToken, test.limit)
+		output, _, err := paginatedQueryBuilder(test.filter, test.sort, test.pageToken, test.limit)
 		assert.NoError(t, err)
 
 		sql, _, err := output.ToSql()
@@ -193,7 +201,7 @@ func TestSortQueryBuilder(t *testing.T) {
 				Field:     "metadata.meow",
 				Direction: topologyv1.SearchRequest_Sort_ASCENDING,
 			},
-			expect: "SELECT * FROM topology_cache ORDER BY metadata->>'meow' ASC",
+			expect: "SELECT * FROM topology_cache ORDER BY $1 ASC",
 		},
 		{
 			id: "Sort by custom metadata deeply nested",
@@ -201,7 +209,7 @@ func TestSortQueryBuilder(t *testing.T) {
 				Field:     "metadata.meow.iam.a.cat",
 				Direction: topologyv1.SearchRequest_Sort_ASCENDING,
 			},
-			expect: "SELECT * FROM topology_cache ORDER BY metadata->'meow'->'iam'->'a'->'cat' ASC",
+			expect: "SELECT * FROM topology_cache ORDER BY $1 ASC",
 		},
 	}
 
