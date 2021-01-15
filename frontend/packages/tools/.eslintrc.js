@@ -96,7 +96,7 @@ module.exports = {
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": ["**/*.config.js", ".eslintrc.js"],
+        "devDependencies": ["**/*.config.js", "**/.eslintrc.js"],
       }
     ],
     "no-console": ["error"],
