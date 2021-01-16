@@ -218,10 +218,48 @@ func TestSortQueryBuilder(t *testing.T) {
 			Select("*").
 			From("topology_cache")
 
-		output := sortQueryBuilder(selectBuilder, test.input)
+		output, _ := sortQueryBuilder(selectBuilder, test.input)
 		sql, _, err := output.ToSql()
 		assert.NoError(t, err)
 		assert.Equal(t, test.expect, sql)
+	}
+}
+
+func TestGetFilterSortPrefixIdentifer(t *testing.T) {
+	testCases := []struct {
+		id          string
+		input       string
+		output      string
+		shouldError bool
+	}{
+		{
+			id:          "Column",
+			input:       "column.my.id",
+			output:      "column.",
+			shouldError: false,
+		},
+		{
+			id:          "Metadata",
+			input:       "metadata.my.id",
+			output:      "metadata.",
+			shouldError: false,
+		},
+		{
+			id:          "Unsupported identifer",
+			input:       "meow.my.id",
+			output:      "",
+			shouldError: true,
+		},
+	}
+
+	for _, test := range testCases {
+		output, err := getFilterSortPrefixIdentifer(test.input)
+		if test.shouldError {
+			assert.Error(t, err)
+		} else {
+			assert.NoError(t, err)
+		}
+		assert.Equal(t, test.output, output)
 	}
 }
 

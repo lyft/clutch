@@ -62,7 +62,10 @@ func paginatedQueryBuilder(
 	}
 
 	if sort != nil {
-		query = sortQueryBuilder(query, sort)
+		query, err = sortQueryBuilder(query, sort)
+		if err != nil {
+			return sq.SelectBuilder{}, 0, err
+		}
 	}
 
 	// Blindly increment pageNum by 1 for next_page_token
@@ -75,12 +78,20 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 	}
 
 	if f.Search != nil && len(f.Search.Field) > 0 {
-		if strings.HasPrefix(f.Search.Field, column) {
-			query = query.Where(sq.Expr("quote_literal(?) LIKE ?", sq.Expr(strings.TrimPrefix(f.Search.Field, column)), fmt.Sprintf("%%%s%%", f.Search.Text)))
-		} else if strings.HasPrefix(f.Search.Field, metadata) {
-			mdQuery := convertMetadataToQuery(strings.TrimPrefix(f.Search.Field, metadata))
-			query = query.Where(sq.Expr("quote_literal(?) LIKE ?", sq.Expr(mdQuery), fmt.Sprintf("%%%s%%", f.Search.Text)))
+		searchIdentiferExpr := sq.Expr("id LIKE ?", f.Search.Text)
+		identifer, err := getFilterSortPrefixIdentifer(f.Search.Field)
+		if err != nil {
+			return sq.SelectBuilder{}, err
 		}
+
+		if identifer == column {
+			searchIdentiferExpr = sq.Expr(strings.TrimPrefix(f.Search.Field, column))
+		} else if identifer == metadata {
+			mdQuery := convertMetadataToQuery(strings.TrimPrefix(f.Search.Field, metadata))
+			searchIdentiferExpr = sq.Expr(mdQuery)
+		}
+
+		query = query.Where(sq.Expr("quote_literal(?) LIKE ?", searchIdentiferExpr, fmt.Sprintf("%%%s%%", f.Search.Text)))
 	}
 
 	if len(f.TypeUrl) > 0 {
@@ -98,17 +109,17 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 	return query, nil
 }
 
-func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) sq.SelectBuilder {
-	if s == nil {
-		return query
-	}
-
+func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) (sq.SelectBuilder, error) {
 	if len(s.Field) > 0 {
 		direction := getDirection(s.Direction)
+		identifer, err := getFilterSortPrefixIdentifer(s.Field)
+		if err != nil {
+			return sq.SelectBuilder{}, err
+		}
 
-		if strings.HasPrefix(s.Field, column) {
+		if identifer == column {
 			query = query.OrderByClause(fmt.Sprintf("? %s", direction), strings.TrimPrefix(s.Field, column))
-		} else if strings.HasPrefix(s.Field, metadata) {
+		} else if identifer == metadata {
 			mdQuery := convertMetadataToQuery(strings.TrimPrefix(s.Field, metadata))
 			query = query.OrderByClause(fmt.Sprintf("? %s", direction), mdQuery)
 		}
@@ -116,7 +127,21 @@ func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) 
 		query = query.OrderBy("ID ASC")
 	}
 
-	return query
+	return query, nil
+}
+
+func getFilterSortPrefixIdentifer(identifer string) (string, error) {
+	// appending the extra `.` so we can utilize the const defined for column and metadata
+	identifer += "."
+
+	switch identifer {
+	case column:
+		return column, nil
+	case metadata:
+		return metadata, nil
+	default:
+		return "", fmt.Errorf("Unsupported identifer: [%s]", identifer)
+	}
 }
 
 func convertMetadataToQuery(metadata string) string {
