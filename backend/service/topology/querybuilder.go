@@ -73,10 +73,6 @@ func paginatedQueryBuilder(
 }
 
 func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filter) (sq.SelectBuilder, error) {
-	if f == nil {
-		return query, nil
-	}
-
 	if f.Search != nil && len(f.Search.Field) > 0 {
 		searchIdentiferExpr := sq.Expr("id LIKE ?", f.Search.Text)
 		identifer, err := getFilterSortPrefixIdentifer(f.Search.Field)
@@ -87,7 +83,10 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 		if identifer == column {
 			searchIdentiferExpr = sq.Expr(strings.TrimPrefix(f.Search.Field, column))
 		} else if identifer == metadata {
-			mdQuery := convertMetadataToQuery(strings.TrimPrefix(f.Search.Field, metadata))
+			mdQuery, err := convertMetadataToQuery(f.Search.Field)
+			if err != nil {
+				return sq.SelectBuilder{}, err
+			}
 			searchIdentiferExpr = sq.Expr(mdQuery)
 		}
 
@@ -120,7 +119,10 @@ func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) 
 		if identifer == column {
 			query = query.OrderByClause(fmt.Sprintf("? %s", direction), strings.TrimPrefix(s.Field, column))
 		} else if identifer == metadata {
-			mdQuery := convertMetadataToQuery(strings.TrimPrefix(s.Field, metadata))
+			mdQuery, err := convertMetadataToQuery(s.Field)
+			if err != nil {
+				return sq.SelectBuilder{}, err
+			}
 			query = query.OrderByClause(fmt.Sprintf("? %s", direction), mdQuery)
 		}
 	} else {
@@ -132,6 +134,7 @@ func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) 
 
 func getFilterSortPrefixIdentifer(identifer string) (string, error) {
 	// appending the extra `.` so we can utilize the const defined for column and metadata
+	identifer = strings.Split(identifer, ".")[0]
 	identifer += "."
 
 	switch identifer {
@@ -144,20 +147,21 @@ func getFilterSortPrefixIdentifer(identifer string) (string, error) {
 	}
 }
 
-func convertMetadataToQuery(metadata string) string {
-	metadataQuery := ""
-	splitMetadata := strings.Split(metadata, ".")
+func convertMetadataToQuery(input string) (string, error) {
+	splitMetadata := strings.Split(strings.TrimPrefix(input, metadata), ".")
+
+	if splitMetadata[0] == "" {
+		return "", fmt.Errorf("Incomplete metadata identifer: [%s]", metadata)
+	}
 
 	if len(splitMetadata) == 1 {
-		metadataQuery = fmt.Sprintf("metadata->>'%s'", splitMetadata[0])
+		return fmt.Sprintf("metadata->>'%s'", splitMetadata[0]), nil
 	} else {
 		for i := range splitMetadata {
 			splitMetadata[i] = fmt.Sprintf("'%s'", splitMetadata[i])
 		}
-		metadataQuery = fmt.Sprintf("metadata->%s", strings.Join(splitMetadata, "->"))
+		return fmt.Sprintf("metadata->%s", strings.Join(splitMetadata, "->")), nil
 	}
-
-	return metadataQuery
 }
 
 func getDirection(direction topologyv1.SearchRequest_Sort_Direction) string {

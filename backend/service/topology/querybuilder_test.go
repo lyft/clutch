@@ -265,29 +265,44 @@ func TestGetFilterSortPrefixIdentifer(t *testing.T) {
 
 func TestConvertMetadataToQuery(t *testing.T) {
 	testCases := []struct {
-		id     string
-		input  string
-		expect string
+		id          string
+		input       string
+		expect      string
+		shouldError bool
 	}{
 		{
-			id:     "top level field",
-			input:  "toplevel",
-			expect: "metadata->>'toplevel'",
+			id:          "Invalid input",
+			input:       "metadata.",
+			expect:      "",
+			shouldError: true,
 		},
 		{
-			id:     "one level deep",
-			input:  "toplevel.level1",
-			expect: "metadata->'toplevel'->'level1'",
+			id:          "top level field",
+			input:       "toplevel",
+			expect:      "metadata->>'toplevel'",
+			shouldError: false,
 		},
 		{
-			id:     "two levels deep",
-			input:  "toplevel.level1.level2",
-			expect: "metadata->'toplevel'->'level1'->'level2'",
+			id:          "one level deep",
+			input:       "toplevel.level1",
+			expect:      "metadata->'toplevel'->'level1'",
+			shouldError: false,
+		},
+		{
+			id:          "two levels deep",
+			input:       "toplevel.level1.level2",
+			expect:      "metadata->'toplevel'->'level1'->'level2'",
+			shouldError: false,
 		},
 	}
 
 	for _, test := range testCases {
-		output := convertMetadataToQuery(test.input)
+		output, err := convertMetadataToQuery(test.input)
+		if test.shouldError {
+			assert.Error(t, err)
+		} else {
+			assert.NoError(t, err)
+		}
 		assert.Equal(t, test.expect, output)
 	}
 }
