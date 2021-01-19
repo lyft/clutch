@@ -1809,10 +1809,10 @@
     lodash "^4.17.15"
     react-simple-animate "^3.3.8"
 
-"@hookform/resolvers@^2.0.0-beta.3":
-  version "2.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-2.0.0-rc.1.tgz#3234315d27bbd058083b17bd615d57d4d59d81f3"
-  integrity sha512-p6YLQbnPwG6VrMZGusdyAuvIPB3VCJLc/XG/cuaDQNm1xyijDAyU1Og86phOGOmMD4QbItJKcmoaxbO9JKYQCQ==
+"@hookform/resolvers@2.0.0-beta.3":
+  version "2.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-2.0.0-beta.3.tgz#6a13cecb8d261fee9fc53564e3e4ef6212148f16"
+  integrity sha512-sOP+IX7TglN34WbMVt8eRqWgnXAQcvFc4XUU6x3bIiIjTkjV5L3N7sBjff2Ln4QPTMYnmdXaZV2Yf5WxOiC5YQ==
 
 "@icons/material@^0.2.4":
   version "0.2.4"
