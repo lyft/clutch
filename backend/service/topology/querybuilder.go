@@ -45,16 +45,13 @@ func paginatedQueryBuilder(
 		}
 	}
 
-	var queryOffset uint64 = 0
-	if pageNum > 0 {
-		queryOffset = pageNum * limit
-	}
+	queryOffset := pageNum * limit
 
 	query := sq.StatementBuilder.PlaceholderFormat(sq.Dollar).
 		Select("id", "data", "metadata").
 		From("topology_cache").
-		Limit(uint64(queryLimit)).
-		Offset(uint64(queryOffset))
+		Limit(queryLimit).
+		Offset(queryOffset)
 
 	if filter != nil {
 		query, err = filterQueryBuilder(query, filter)

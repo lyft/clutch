@@ -6,6 +6,7 @@ import (
 	"errors"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 
 	"github.com/golang/protobuf/ptypes"
@@ -25,7 +26,7 @@ const Name = "clutch.service.topology"
 
 type Service interface {
 	GetTopology(ctx context.Context) error
-	Search(ctx context.Context, search *topologyv1.SearchRequest) ([]*topologyv1.Resource, uint64, error)
+	Search(ctx context.Context, search *topologyv1.SearchRequest) ([]*topologyv1.Resource, string, error)
 }
 
 type client struct {
@@ -95,7 +96,7 @@ func (c *client) GetTopology(ctx context.Context) error {
 	return nil
 }
 
-func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*topologyv1.Resource, uint64, error) {
+func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*topologyv1.Resource, string, error) {
 	query, nextPageToken, err := paginatedQueryBuilder(
 		req.Filter,
 		req.Sort,
@@ -103,12 +104,12 @@ func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*
 		req.Limit,
 	)
 	if err != nil {
-		return nil, 0, err
+		return nil, "0", err
 	}
 
 	rows, err := query.RunWith(c.db).Query()
 	if err != nil {
-		return nil, 0, err
+		return nil, "0", err
 	}
 	defer rows.Close()
 
@@ -120,19 +121,19 @@ func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*
 
 		if err := rows.Scan(&id, &data, &metadata); err != nil {
 			c.log.Error("Error scanning row", zap.Error(err))
-			return nil, 0, err
+			return nil, "0", err
 		}
 
 		var dataAny any.Any
 		if err := protojson.Unmarshal(data, &dataAny); err != nil {
 			c.log.Error("Error unmarshaling data field", zap.Error(err))
-			return nil, 0, err
+			return nil, "0", err
 		}
 
 		var metadataMap map[string]string
 		if err := json.Unmarshal(metadata, &metadataMap); err != nil {
 			c.log.Error("Error unmarshaling metadata", zap.Error(err))
-			return nil, 0, err
+			return nil, "0", err
 		}
 
 		results = append(results, &topologyv1.Resource{
@@ -145,8 +146,8 @@ func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*
 	// Rows.Err will report the last error encountered by Rows.Scan.
 	if err := rows.Err(); err != nil {
 		c.log.Error("Error processing rows for topology search query", zap.Error(err))
-		return nil, 0, err
+		return nil, "0", err
 	}
 
-	return results, nextPageToken, nil
+	return results, strconv.FormatUint(nextPageToken, 10), nil
 }

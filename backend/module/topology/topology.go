@@ -3,7 +3,6 @@ package topology
 import (
 	"context"
 	"errors"
-	"strconv"
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -68,6 +67,6 @@ func (t *topologyAPI) Search(ctx context.Context, req *topologyv1.SearchRequest)
 
 	return &topologyv1.SearchResponse{
 		Resources:     resources,
-		NextPageToken: strconv.FormatUint(nextPageToken, 10),
+		NextPageToken: nextPageToken,
 	}, nil
 }
