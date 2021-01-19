@@ -148,7 +148,7 @@ module.exports = {
       rules: {
         "no-undef": ["off"],
         "no-unused-vars": ["off"],
-        "@typescript-eslint/no-unused-vars": ["error"],
+        "@typescript-eslint/no-unused-vars": ["error", {"args": "none"}],
         "no-use-before-define": ["off"],
         "@typescript-eslint/no-use-before-define": ["error"],
         "no-shadow": ["off"],
