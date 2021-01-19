@@ -28,7 +28,7 @@
     "build": "yarn compile && yarn workspace @clutch-sh/app build",
     "build:dev": "yarn compile:dev && yarn workspace @clutch-sh/app register-workflows",
     "clean": "lerna run clean --parallel",
-    "compile": "lerna run compile --parallel",
+    "compile": "lerna run compile",
     "compile:dev": "lerna run compile:dev",
     "compile:watch": "lerna run compile:watch --parallel",
     "lint": "lerna run lint --no-bail",
