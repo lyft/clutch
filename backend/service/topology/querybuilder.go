@@ -14,8 +14,10 @@ import (
 )
 
 const (
-	column                   = "column."
-	metadata                 = "metadata."
+	column                   = "column"
+	columnIdentifer          = "column."
+	metadata                 = "metadata"
+	metadataIdentifer        = "metadata."
 	queryDefaultLimit uint64 = 100
 	maxResultLimit           = 1000
 )
@@ -81,7 +83,7 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 		}
 
 		if identifer == column {
-			searchIdentiferExpr = sq.Expr(strings.TrimPrefix(f.Search.Field, column))
+			searchIdentiferExpr = sq.Expr(strings.TrimPrefix(f.Search.Field, columnIdentifer))
 		} else if identifer == metadata {
 			mdQuery, err := convertMetadataToQuery(f.Search.Field)
 			if err != nil {
@@ -117,7 +119,7 @@ func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) 
 		}
 
 		if identifer == column {
-			query = query.OrderByClause(fmt.Sprintf("? %s", direction), strings.TrimPrefix(s.Field, column))
+			query = query.OrderByClause(fmt.Sprintf("? %s", direction), strings.TrimPrefix(s.Field, columnIdentifer))
 		} else if identifer == metadata {
 			mdQuery, err := convertMetadataToQuery(s.Field)
 			if err != nil {
@@ -133,11 +135,7 @@ func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) 
 }
 
 func getFilterSortPrefixIdentifer(identifer string) (string, error) {
-	// appending the extra `.` so we can utilize the const defined for column and metadata
-	identifer = strings.Split(identifer, ".")[0]
-	identifer += "."
-
-	switch identifer {
+	switch strings.Split(identifer, ".")[0] {
 	case column:
 		return column, nil
 	case metadata:
@@ -148,7 +146,7 @@ func getFilterSortPrefixIdentifer(identifer string) (string, error) {
 }
 
 func convertMetadataToQuery(input string) (string, error) {
-	splitMetadata := strings.Split(strings.TrimPrefix(input, metadata), ".")
+	splitMetadata := strings.Split(strings.TrimPrefix(input, metadataIdentifer), ".")
 
 	if splitMetadata[0] == "" {
 		return "", fmt.Errorf("Incomplete metadata identifer: [%s]", metadata)

@@ -235,13 +235,13 @@ func TestGetFilterSortPrefixIdentifer(t *testing.T) {
 		{
 			id:          "Column",
 			input:       "column.my.id",
-			output:      "column.",
+			output:      "column",
 			shouldError: false,
 		},
 		{
 			id:          "Metadata",
 			input:       "metadata.my.id",
-			output:      "metadata.",
+			output:      "metadata",
 			shouldError: false,
 		},
 		{
