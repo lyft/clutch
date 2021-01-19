@@ -55,7 +55,7 @@ Modules are implementations of API stubs generated from proto. The `Register` me
 
 Resolvers abstract resource location into an extensible framework. Finding resources is different at almost every organization. Changing the first step of locating a resource should not require wholesale replacement of a feature. That's where resolvers come in.
 
-Resolvers start in protbuf with an object definition representing the user input needed to locate a resource. The fields are additionally annotated with schema information (such as `placeholder`, `required`, `display_name`) at the object and field level so that the frontend knows how to render the appropriate form.
+Resolvers start in protobuf with an object definition representing the user input needed to locate a resource. The fields are additionally annotated with schema information (such as `placeholder`, `required`, `display_name`) at the object and field level so that the frontend knows how to render the appropriate form.
 
 The resolver has two ways of locating resources, `Search` takes a free-form text query and locates resources by interpreting the query and making the appropriate call. `Resolve` takes the filled-out schemas and makes a query based on that structured information.
 
