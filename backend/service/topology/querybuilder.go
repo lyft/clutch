@@ -3,6 +3,7 @@ package topology
 import (
 	"encoding/json"
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -21,6 +22,8 @@ const (
 	queryDefaultLimit uint64 = 100
 	maxResultLimit           = 1000
 )
+
+var metadataQueryValidator = regexp.MustCompile(`^[a-zA-Z0-9->'"]*$`)
 
 func paginatedQueryBuilder(
 	filter *topologyv1.SearchRequest_Filter,
@@ -73,7 +76,7 @@ func paginatedQueryBuilder(
 
 func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filter) (sq.SelectBuilder, error) {
 	if f.Search != nil && len(f.Search.Field) > 0 {
-		searchIdentiferExpr := sq.Expr("id LIKE ?", f.Search.Text)
+		searchIdentiferExpr := sq.Expr("id")
 		identifer, err := getFilterSortPrefixIdentifer(f.Search.Field)
 		if err != nil {
 			return sq.SelectBuilder{}, err
@@ -89,7 +92,7 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 			searchIdentiferExpr = sq.Expr(mdQuery)
 		}
 
-		query = query.Where(sq.Expr("quote_literal(?) LIKE ?", searchIdentiferExpr, fmt.Sprintf("%%%s%%", f.Search.Text)))
+		query = query.Where(sq.Expr("? LIKE ?", searchIdentiferExpr, fmt.Sprintf("%%%s%%", f.Search.Text)))
 	}
 
 	if len(f.TypeUrl) > 0 {
@@ -149,14 +152,21 @@ func convertMetadataToQuery(input string) (string, error) {
 		return "", fmt.Errorf("Incomplete metadata identifer: [%s]", metadata)
 	}
 
+	var query string
 	if len(splitMetadata) == 1 {
-		return fmt.Sprintf("metadata->>'%s'", splitMetadata[0]), nil
+		query = fmt.Sprintf("metadata->>'%s'", splitMetadata[0])
 	} else {
 		for i := range splitMetadata {
 			splitMetadata[i] = fmt.Sprintf("'%s'", splitMetadata[i])
 		}
-		return fmt.Sprintf("metadata->%s", strings.Join(splitMetadata, "->")), nil
+		query = fmt.Sprintf("metadata->%s", strings.Join(splitMetadata, "->"))
 	}
+
+	if !metadataQueryValidator.MatchString(query) {
+		return "", fmt.Errorf("Illegal Query Operation: [%s]", query)
+	}
+
+	return query, nil
 }
 
 func getDirection(direction topologyv1.SearchRequest_Sort_Direction) string {
