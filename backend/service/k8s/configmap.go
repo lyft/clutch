@@ -3,8 +3,8 @@ package k8s
 import (
 	"context"
 
-	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	v1 "k8s.io/api/core/v1"
+
 )
 
 func (s *svc) ListConfigMaps(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.ConfigMap, error) {
