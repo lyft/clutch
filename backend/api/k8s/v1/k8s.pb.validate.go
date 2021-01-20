@@ -2951,8 +2951,6 @@ func (m *ConfigMap) Validate() error {
 
 	// no validation rules for Name
 
-	// no validation rules for Data
-
 	// no validation rules for Annotations
 
 	// no validation rules for Labels

@@ -11079,9 +11079,6 @@ export namespace clutch {
                 /** ConfigMap name */
                 name?: (string|null);
 
-                /** ConfigMap data */
-                data?: ({ [k: string]: string }|null);
-
                 /** ConfigMap annotations */
                 annotations?: ({ [k: string]: string }|null);
 
@@ -11106,9 +11103,6 @@ export namespace clutch {
 
                 /** ConfigMap name. */
                 public name: string;
-
-                /** ConfigMap data. */
-                public data: { [k: string]: string };
 
                 /** ConfigMap annotations. */
                 public annotations: { [k: string]: string };

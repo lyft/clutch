@@ -26243,7 +26243,6 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [cluster] ConfigMap cluster
                  * @property {string|null} [namespace] ConfigMap namespace
                  * @property {string|null} [name] ConfigMap name
-                 * @property {Object.<string,string>|null} [data] ConfigMap data
                  * @property {Object.<string,string>|null} [annotations] ConfigMap annotations
                  * @property {Object.<string,string>|null} [labels] ConfigMap labels
                  */
@@ -26257,7 +26256,6 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.k8s.v1.IConfigMap=} [properties] Properties to set
                  */
                 function ConfigMap(properties) {
-                    this.data = {};
                     this.annotations = {};
                     this.labels = {};
                     if (properties)
@@ -26289,14 +26287,6 @@ export const clutch = $root.clutch = (() => {
                  * @instance
                  */
                 ConfigMap.prototype.name = "";
-
-                /**
-                 * ConfigMap data.
-                 * @member {Object.<string,string>} data
-                 * @memberof clutch.k8s.v1.ConfigMap
-                 * @instance
-                 */
-                ConfigMap.prototype.data = $util.emptyObject;
 
                 /**
                  * ConfigMap annotations.
@@ -26334,14 +26324,6 @@ export const clutch = $root.clutch = (() => {
                     if (message.name != null && message.hasOwnProperty("name"))
                         if (!$util.isString(message.name))
                             return "name: string expected";
-                    if (message.data != null && message.hasOwnProperty("data")) {
-                        if (!$util.isObject(message.data))
-                            return "data: object expected";
-                        let key = Object.keys(message.data);
-                        for (let i = 0; i < key.length; ++i)
-                            if (!$util.isString(message.data[key[i]]))
-                                return "data: string{k:string} expected";
-                    }
                     if (message.annotations != null && message.hasOwnProperty("annotations")) {
                         if (!$util.isObject(message.annotations))
                             return "annotations: object expected";
@@ -26379,13 +26361,6 @@ export const clutch = $root.clutch = (() => {
                         message.namespace = String(object.namespace);
                     if (object.name != null)
                         message.name = String(object.name);
-                    if (object.data) {
-                        if (typeof object.data !== "object")
-                            throw TypeError(".clutch.k8s.v1.ConfigMap.data: object expected");
-                        message.data = {};
-                        for (let keys = Object.keys(object.data), i = 0; i < keys.length; ++i)
-                            message.data[keys[i]] = String(object.data[keys[i]]);
-                    }
                     if (object.annotations) {
                         if (typeof object.annotations !== "object")
                             throw TypeError(".clutch.k8s.v1.ConfigMap.annotations: object expected");
@@ -26417,7 +26392,6 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.objects || options.defaults) {
-                        object.data = {};
                         object.annotations = {};
                         object.labels = {};
                     }
@@ -26433,11 +26407,6 @@ export const clutch = $root.clutch = (() => {
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
                     let keys2;
-                    if (message.data && (keys2 = Object.keys(message.data)).length) {
-                        object.data = {};
-                        for (let j = 0; j < keys2.length; ++j)
-                            object.data[keys2[j]] = message.data[keys2[j]];
-                    }
                     if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
                         object.annotations = {};
                         for (let j = 0; j < keys2.length; ++j)

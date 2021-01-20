@@ -40,7 +40,6 @@ func protoForConfigMap(cluster string, k8sconfigMap *v1.ConfigMap) *k8sapiv1.Con
 		Cluster:     clusterName,
 		Namespace:   k8sconfigMap.Namespace,
 		Name:        k8sconfigMap.Name,
-		Data:        k8sconfigMap.Data,
 		Labels:      k8sconfigMap.Labels,
 		Annotations: k8sconfigMap.Annotations,
 	}

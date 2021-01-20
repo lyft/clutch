@@ -527,9 +527,8 @@ message ConfigMap {
   string namespace = 2;
   string name = 3;
 
-  map<string, string> data = 4;
-  map<string, string> annotations = 5;
-  map<string, string> labels = 6;
+  map<string, string> annotations = 4;
+  map<string, string> labels = 5;
 }
 
 message ListConfigMapsRequest {
