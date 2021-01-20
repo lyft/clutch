@@ -8596,6 +8596,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public deleteCronJob(request: clutch.k8s.v1.IDeleteCronJobRequest): Promise<clutch.k8s.v1.DeleteCronJobResponse>;
+
+                /**
+                 * Calls ListConfigMaps.
+                 * @param request ListConfigMapsRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and ListConfigMapsResponse
+                 */
+                public listConfigMaps(request: clutch.k8s.v1.IListConfigMapsRequest, callback: clutch.k8s.v1.K8sAPI.ListConfigMapsCallback): void;
+
+                /**
+                 * Calls ListConfigMaps.
+                 * @param request ListConfigMapsRequest message or plain object
+                 * @returns Promise
+                 */
+                public listConfigMaps(request: clutch.k8s.v1.IListConfigMapsRequest): Promise<clutch.k8s.v1.ListConfigMapsResponse>;
             }
 
             namespace K8sAPI {
@@ -8690,6 +8704,13 @@ export namespace clutch {
                  * @param [response] DeleteCronJobResponse
                  */
                 type DeleteCronJobCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteCronJobResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listConfigMaps}.
+                 * @param error Error, if any
+                 * @param [response] ListConfigMapsResponse
+                 */
+                type ListConfigMapsCallback = (error: (Error|null), response?: clutch.k8s.v1.ListConfigMapsResponse) => void;
             }
 
             /** Properties of a DescribePodRequest. */
@@ -11046,6 +11067,198 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a ConfigMap. */
+            interface IConfigMap {
+
+                /** ConfigMap cluster */
+                cluster?: (string|null);
+
+                /** ConfigMap namespace */
+                namespace?: (string|null);
+
+                /** ConfigMap name */
+                name?: (string|null);
+
+                /** ConfigMap data */
+                data?: ({ [k: string]: string }|null);
+
+                /** ConfigMap annotations */
+                annotations?: ({ [k: string]: string }|null);
+
+                /** ConfigMap labels */
+                labels?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a ConfigMap. */
+            class ConfigMap implements IConfigMap {
+
+                /**
+                 * Constructs a new ConfigMap.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IConfigMap);
+
+                /** ConfigMap cluster. */
+                public cluster: string;
+
+                /** ConfigMap namespace. */
+                public namespace: string;
+
+                /** ConfigMap name. */
+                public name: string;
+
+                /** ConfigMap data. */
+                public data: { [k: string]: string };
+
+                /** ConfigMap annotations. */
+                public annotations: { [k: string]: string };
+
+                /** ConfigMap labels. */
+                public labels: { [k: string]: string };
+
+                /**
+                 * Verifies a ConfigMap message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ConfigMap message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ConfigMap
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ConfigMap;
+
+                /**
+                 * Creates a plain object from a ConfigMap message. Also converts values to other types if specified.
+                 * @param message ConfigMap
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ConfigMap, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ConfigMap to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListConfigMapsRequest. */
+            interface IListConfigMapsRequest {
+
+                /** ListConfigMapsRequest clientset */
+                clientset?: (string|null);
+
+                /** ListConfigMapsRequest cluster */
+                cluster?: (string|null);
+
+                /** ListConfigMapsRequest namespace */
+                namespace?: (string|null);
+
+                /** ListConfigMapsRequest options */
+                options?: (clutch.k8s.v1.IListOptions|null);
+            }
+
+            /** Represents a ListConfigMapsRequest. */
+            class ListConfigMapsRequest implements IListConfigMapsRequest {
+
+                /**
+                 * Constructs a new ListConfigMapsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListConfigMapsRequest);
+
+                /** ListConfigMapsRequest clientset. */
+                public clientset: string;
+
+                /** ListConfigMapsRequest cluster. */
+                public cluster: string;
+
+                /** ListConfigMapsRequest namespace. */
+                public namespace: string;
+
+                /** ListConfigMapsRequest options. */
+                public options?: (clutch.k8s.v1.IListOptions|null);
+
+                /**
+                 * Verifies a ListConfigMapsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListConfigMapsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListConfigMapsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListConfigMapsRequest;
+
+                /**
+                 * Creates a plain object from a ListConfigMapsRequest message. Also converts values to other types if specified.
+                 * @param message ListConfigMapsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListConfigMapsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListConfigMapsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListConfigMapsResponse. */
+            interface IListConfigMapsResponse {
+
+                /** ListConfigMapsResponse configMaps */
+                configMaps?: (clutch.k8s.v1.IConfigMap[]|null);
+            }
+
+            /** Represents a ListConfigMapsResponse. */
+            class ListConfigMapsResponse implements IListConfigMapsResponse {
+
+                /**
+                 * Constructs a new ListConfigMapsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListConfigMapsResponse);
+
+                /** ListConfigMapsResponse configMaps. */
+                public configMaps: clutch.k8s.v1.IConfigMap[];
+
+                /**
+                 * Verifies a ListConfigMapsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListConfigMapsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListConfigMapsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListConfigMapsResponse;
+
+                /**
+                 * Creates a plain object from a ListConfigMapsResponse message. Also converts values to other types if specified.
+                 * @param message ListConfigMapsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListConfigMapsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListConfigMapsResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a NullableString. */
             interface INullableString {
 
@@ -12675,6 +12888,66 @@ export namespace clutch {
 
                     /**
                      * Converts this CronJob to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a ConfigMap. */
+                interface IConfigMap {
+
+                    /** ConfigMap name */
+                    name?: (string|null);
+
+                    /** ConfigMap clientset */
+                    clientset?: (string|null);
+
+                    /** ConfigMap namespace */
+                    namespace?: (string|null);
+                }
+
+                /** Represents a ConfigMap. */
+                class ConfigMap implements IConfigMap {
+
+                    /**
+                     * Constructs a new ConfigMap.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.k8s.v1.IConfigMap);
+
+                    /** ConfigMap name. */
+                    public name: string;
+
+                    /** ConfigMap clientset. */
+                    public clientset: string;
+
+                    /** ConfigMap namespace. */
+                    public namespace: string;
+
+                    /**
+                     * Verifies a ConfigMap message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ConfigMap message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ConfigMap
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.k8s.v1.ConfigMap;
+
+                    /**
+                     * Creates a plain object from a ConfigMap message. Also converts values to other types if specified.
+                     * @param message ConfigMap
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.k8s.v1.ConfigMap, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ConfigMap to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

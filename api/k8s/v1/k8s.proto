@@ -115,6 +115,14 @@ service K8sAPI {
     };
     option (clutch.api.v1.action).type = DELETE;
   }
+
+  rpc ListConfigMaps(ListConfigMapsRequest) returns (ListConfigMapsResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/listConfigMaps"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
 }
 
 message DescribePodRequest {
@@ -507,6 +515,35 @@ message DeleteCronJobRequest {
 }
 
 message DeleteCronJobResponse {
+}
+
+message ConfigMap {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.ConfigMap",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string cluster = 1;
+  string namespace = 2;
+  string name = 3;
+
+  map<string,string> data = 4;
+  map<string, string> annotations = 5;
+  map<string, string> labels = 6;
+}
+
+message ListConfigMapsRequest {
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+
+  ListOptions options = 4 [ (validate.rules).message = {required : true} ];
+}
+
+message ListConfigMapsResponse {
+  option (clutch.api.v1.reference).fields = "config_maps";
+
+  repeated ConfigMap config_maps = 1;
 }
 
 // This message type is used to add support for nullable strings and is an

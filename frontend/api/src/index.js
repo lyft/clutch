@@ -20497,6 +20497,39 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listConfigMaps}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef ListConfigMapsCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.ListConfigMapsResponse} [response] ListConfigMapsResponse
+                 */
+
+                /**
+                 * Calls ListConfigMaps.
+                 * @function listConfigMaps
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListConfigMapsRequest} request ListConfigMapsRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.ListConfigMapsCallback} callback Node-style callback called with the error, if any, and ListConfigMapsResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.listConfigMaps = function listConfigMaps(request, callback) {
+                    return this.rpcCall(listConfigMaps, $root.clutch.k8s.v1.ListConfigMapsRequest, $root.clutch.k8s.v1.ListConfigMapsResponse, request, callback);
+                }, "name", { value: "ListConfigMaps" });
+
+                /**
+                 * Calls ListConfigMaps.
+                 * @function listConfigMaps
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListConfigMapsRequest} request ListConfigMapsRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.ListConfigMapsResponse>} Promise
+                 * @variation 2
+                 */
+
                 return K8sAPI;
             })();
 
@@ -26201,6 +26234,512 @@ export const clutch = $root.clutch = (() => {
                 return DeleteCronJobResponse;
             })();
 
+            v1.ConfigMap = (function() {
+
+                /**
+                 * Properties of a ConfigMap.
+                 * @memberof clutch.k8s.v1
+                 * @interface IConfigMap
+                 * @property {string|null} [cluster] ConfigMap cluster
+                 * @property {string|null} [namespace] ConfigMap namespace
+                 * @property {string|null} [name] ConfigMap name
+                 * @property {Object.<string,string>|null} [data] ConfigMap data
+                 * @property {Object.<string,string>|null} [annotations] ConfigMap annotations
+                 * @property {Object.<string,string>|null} [labels] ConfigMap labels
+                 */
+
+                /**
+                 * Constructs a new ConfigMap.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ConfigMap.
+                 * @implements IConfigMap
+                 * @constructor
+                 * @param {clutch.k8s.v1.IConfigMap=} [properties] Properties to set
+                 */
+                function ConfigMap(properties) {
+                    this.data = {};
+                    this.annotations = {};
+                    this.labels = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ConfigMap cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 */
+                ConfigMap.prototype.cluster = "";
+
+                /**
+                 * ConfigMap namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 */
+                ConfigMap.prototype.namespace = "";
+
+                /**
+                 * ConfigMap name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 */
+                ConfigMap.prototype.name = "";
+
+                /**
+                 * ConfigMap data.
+                 * @member {Object.<string,string>} data
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 */
+                ConfigMap.prototype.data = $util.emptyObject;
+
+                /**
+                 * ConfigMap annotations.
+                 * @member {Object.<string,string>} annotations
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 */
+                ConfigMap.prototype.annotations = $util.emptyObject;
+
+                /**
+                 * ConfigMap labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 */
+                ConfigMap.prototype.labels = $util.emptyObject;
+
+                /**
+                 * Verifies a ConfigMap message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ConfigMap.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.data != null && message.hasOwnProperty("data")) {
+                        if (!$util.isObject(message.data))
+                            return "data: object expected";
+                        let key = Object.keys(message.data);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.data[key[i]]))
+                                return "data: string{k:string} expected";
+                    }
+                    if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                        if (!$util.isObject(message.annotations))
+                            return "annotations: object expected";
+                        let key = Object.keys(message.annotations);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.annotations[key[i]]))
+                                return "annotations: string{k:string} expected";
+                    }
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ConfigMap message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ConfigMap} ConfigMap
+                 */
+                ConfigMap.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ConfigMap)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ConfigMap();
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.data) {
+                        if (typeof object.data !== "object")
+                            throw TypeError(".clutch.k8s.v1.ConfigMap.data: object expected");
+                        message.data = {};
+                        for (let keys = Object.keys(object.data), i = 0; i < keys.length; ++i)
+                            message.data[keys[i]] = String(object.data[keys[i]]);
+                    }
+                    if (object.annotations) {
+                        if (typeof object.annotations !== "object")
+                            throw TypeError(".clutch.k8s.v1.ConfigMap.annotations: object expected");
+                        message.annotations = {};
+                        for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
+                            message.annotations[keys[i]] = String(object.annotations[keys[i]]);
+                    }
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.ConfigMap.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ConfigMap message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @static
+                 * @param {clutch.k8s.v1.ConfigMap} message ConfigMap
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ConfigMap.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults) {
+                        object.data = {};
+                        object.annotations = {};
+                        object.labels = {};
+                    }
+                    if (options.defaults) {
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    let keys2;
+                    if (message.data && (keys2 = Object.keys(message.data)).length) {
+                        object.data = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.data[keys2[j]] = message.data[keys2[j]];
+                    }
+                    if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
+                        object.annotations = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                    }
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this ConfigMap to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ConfigMap.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ConfigMap;
+            })();
+
+            v1.ListConfigMapsRequest = (function() {
+
+                /**
+                 * Properties of a ListConfigMapsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListConfigMapsRequest
+                 * @property {string|null} [clientset] ListConfigMapsRequest clientset
+                 * @property {string|null} [cluster] ListConfigMapsRequest cluster
+                 * @property {string|null} [namespace] ListConfigMapsRequest namespace
+                 * @property {clutch.k8s.v1.IListOptions|null} [options] ListConfigMapsRequest options
+                 */
+
+                /**
+                 * Constructs a new ListConfigMapsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListConfigMapsRequest.
+                 * @implements IListConfigMapsRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListConfigMapsRequest=} [properties] Properties to set
+                 */
+                function ListConfigMapsRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListConfigMapsRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @instance
+                 */
+                ListConfigMapsRequest.prototype.clientset = "";
+
+                /**
+                 * ListConfigMapsRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @instance
+                 */
+                ListConfigMapsRequest.prototype.cluster = "";
+
+                /**
+                 * ListConfigMapsRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @instance
+                 */
+                ListConfigMapsRequest.prototype.namespace = "";
+
+                /**
+                 * ListConfigMapsRequest options.
+                 * @member {clutch.k8s.v1.IListOptions|null|undefined} options
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @instance
+                 */
+                ListConfigMapsRequest.prototype.options = null;
+
+                /**
+                 * Verifies a ListConfigMapsRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListConfigMapsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.options != null && message.hasOwnProperty("options")) {
+                        let error = $root.clutch.k8s.v1.ListOptions.verify(message.options);
+                        if (error)
+                            return "options." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListConfigMapsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListConfigMapsRequest} ListConfigMapsRequest
+                 */
+                ListConfigMapsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListConfigMapsRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListConfigMapsRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.options != null) {
+                        if (typeof object.options !== "object")
+                            throw TypeError(".clutch.k8s.v1.ListConfigMapsRequest.options: object expected");
+                        message.options = $root.clutch.k8s.v1.ListOptions.fromObject(object.options);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListConfigMapsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @static
+                 * @param {clutch.k8s.v1.ListConfigMapsRequest} message ListConfigMapsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListConfigMapsRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.options = null;
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.options != null && message.hasOwnProperty("options"))
+                        object.options = $root.clutch.k8s.v1.ListOptions.toObject(message.options, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this ListConfigMapsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListConfigMapsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListConfigMapsRequest;
+            })();
+
+            v1.ListConfigMapsResponse = (function() {
+
+                /**
+                 * Properties of a ListConfigMapsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListConfigMapsResponse
+                 * @property {Array.<clutch.k8s.v1.IConfigMap>|null} [configMaps] ListConfigMapsResponse configMaps
+                 */
+
+                /**
+                 * Constructs a new ListConfigMapsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListConfigMapsResponse.
+                 * @implements IListConfigMapsResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListConfigMapsResponse=} [properties] Properties to set
+                 */
+                function ListConfigMapsResponse(properties) {
+                    this.configMaps = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListConfigMapsResponse configMaps.
+                 * @member {Array.<clutch.k8s.v1.IConfigMap>} configMaps
+                 * @memberof clutch.k8s.v1.ListConfigMapsResponse
+                 * @instance
+                 */
+                ListConfigMapsResponse.prototype.configMaps = $util.emptyArray;
+
+                /**
+                 * Verifies a ListConfigMapsResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListConfigMapsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListConfigMapsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.configMaps != null && message.hasOwnProperty("configMaps")) {
+                        if (!Array.isArray(message.configMaps))
+                            return "configMaps: array expected";
+                        for (let i = 0; i < message.configMaps.length; ++i) {
+                            let error = $root.clutch.k8s.v1.ConfigMap.verify(message.configMaps[i]);
+                            if (error)
+                                return "configMaps." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListConfigMapsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListConfigMapsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListConfigMapsResponse} ListConfigMapsResponse
+                 */
+                ListConfigMapsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListConfigMapsResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListConfigMapsResponse();
+                    if (object.configMaps) {
+                        if (!Array.isArray(object.configMaps))
+                            throw TypeError(".clutch.k8s.v1.ListConfigMapsResponse.configMaps: array expected");
+                        message.configMaps = [];
+                        for (let i = 0; i < object.configMaps.length; ++i) {
+                            if (typeof object.configMaps[i] !== "object")
+                                throw TypeError(".clutch.k8s.v1.ListConfigMapsResponse.configMaps: object expected");
+                            message.configMaps[i] = $root.clutch.k8s.v1.ConfigMap.fromObject(object.configMaps[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListConfigMapsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListConfigMapsResponse
+                 * @static
+                 * @param {clutch.k8s.v1.ListConfigMapsResponse} message ListConfigMapsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListConfigMapsResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.configMaps = [];
+                    if (message.configMaps && message.configMaps.length) {
+                        object.configMaps = [];
+                        for (let j = 0; j < message.configMaps.length; ++j)
+                            object.configMaps[j] = $root.clutch.k8s.v1.ConfigMap.toObject(message.configMaps[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this ListConfigMapsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListConfigMapsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListConfigMapsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListConfigMapsResponse;
+            })();
+
             v1.NullableString = (function() {
 
                 /**
@@ -30100,6 +30639,141 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return CronJob;
+                })();
+
+                v1.ConfigMap = (function() {
+
+                    /**
+                     * Properties of a ConfigMap.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @interface IConfigMap
+                     * @property {string|null} [name] ConfigMap name
+                     * @property {string|null} [clientset] ConfigMap clientset
+                     * @property {string|null} [namespace] ConfigMap namespace
+                     */
+
+                    /**
+                     * Constructs a new ConfigMap.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @classdesc Represents a ConfigMap.
+                     * @implements IConfigMap
+                     * @constructor
+                     * @param {clutch.resolver.k8s.v1.IConfigMap=} [properties] Properties to set
+                     */
+                    function ConfigMap(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ConfigMap name.
+                     * @member {string} name
+                     * @memberof clutch.resolver.k8s.v1.ConfigMap
+                     * @instance
+                     */
+                    ConfigMap.prototype.name = "";
+
+                    /**
+                     * ConfigMap clientset.
+                     * @member {string} clientset
+                     * @memberof clutch.resolver.k8s.v1.ConfigMap
+                     * @instance
+                     */
+                    ConfigMap.prototype.clientset = "";
+
+                    /**
+                     * ConfigMap namespace.
+                     * @member {string} namespace
+                     * @memberof clutch.resolver.k8s.v1.ConfigMap
+                     * @instance
+                     */
+                    ConfigMap.prototype.namespace = "";
+
+                    /**
+                     * Verifies a ConfigMap message.
+                     * @function verify
+                     * @memberof clutch.resolver.k8s.v1.ConfigMap
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ConfigMap.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            if (!$util.isString(message.clientset))
+                                return "clientset: string expected";
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            if (!$util.isString(message.namespace))
+                                return "namespace: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ConfigMap message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.resolver.k8s.v1.ConfigMap
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.resolver.k8s.v1.ConfigMap} ConfigMap
+                     */
+                    ConfigMap.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.resolver.k8s.v1.ConfigMap)
+                            return object;
+                        let message = new $root.clutch.resolver.k8s.v1.ConfigMap();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.clientset != null)
+                            message.clientset = String(object.clientset);
+                        if (object.namespace != null)
+                            message.namespace = String(object.namespace);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ConfigMap message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.resolver.k8s.v1.ConfigMap
+                     * @static
+                     * @param {clutch.resolver.k8s.v1.ConfigMap} message ConfigMap
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ConfigMap.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.clientset = "";
+                            object.namespace = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            object.clientset = message.clientset;
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            object.namespace = message.namespace;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ConfigMap to JSON.
+                     * @function toJSON
+                     * @memberof clutch.resolver.k8s.v1.ConfigMap
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ConfigMap.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ConfigMap;
                 })();
 
                 return v1;
