@@ -102,8 +102,9 @@ func NewWithClientsetManager(manager ClientsetManager, logger *zap.Logger, scope
 }
 
 func (s *svc) Clientsets() []string {
-	ret := make([]string, 0, len(s.manager.Clientsets()))
-	for name := range s.manager.Clientsets() {
+	cs := s.manager.Clientsets(context.Background())
+	ret := make([]string, 0, len(cs))
+	for name := range cs {
 		ret = append(ret, name)
 	}
 	return ret

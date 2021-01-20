@@ -14,7 +14,7 @@ import (
 )
 
 func (s *svc) DescribeStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.StatefulSet, error) {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func ProtoForStatefulSet(cluster string, statefulSet *appsv1.StatefulSet) *k8sap
 }
 
 func (s *svc) UpdateStatefulSet(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateStatefulSetRequest_Fields) error {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return err
 	}
