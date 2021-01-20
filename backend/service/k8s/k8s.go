@@ -80,6 +80,9 @@ type Service interface {
 	// CronJob management functions.
 	DescribeCronJob(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.CronJob, error)
 	DeleteCronJob(ctx context.Context, clientset, cluster, namespace, name string) error
+
+	// ConfigMap management functions.
+	ListConfigMaps(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.ConfigMap, error)
 }
 
 type svc struct {
