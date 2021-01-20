@@ -2938,6 +2938,267 @@ var _ interface {
 	ErrorName() string
 } = DeleteCronJobResponseValidationError{}
 
+// Validate checks the field values on ConfigMap with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *ConfigMap) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Cluster
+
+	// no validation rules for Namespace
+
+	// no validation rules for Name
+
+	// no validation rules for Annotations
+
+	// no validation rules for Labels
+
+	return nil
+}
+
+// ConfigMapValidationError is the validation error returned by
+// ConfigMap.Validate if the designated constraints aren't met.
+type ConfigMapValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ConfigMapValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ConfigMapValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ConfigMapValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ConfigMapValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ConfigMapValidationError) ErrorName() string { return "ConfigMapValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ConfigMapValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sConfigMap.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ConfigMapValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ConfigMapValidationError{}
+
+// Validate checks the field values on ListConfigMapsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ListConfigMapsRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return ListConfigMapsRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return ListConfigMapsRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return ListConfigMapsRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if m.GetOptions() == nil {
+		return ListConfigMapsRequestValidationError{
+			field:  "Options",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOptions()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListConfigMapsRequestValidationError{
+				field:  "Options",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// ListConfigMapsRequestValidationError is the validation error returned by
+// ListConfigMapsRequest.Validate if the designated constraints aren't met.
+type ListConfigMapsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListConfigMapsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListConfigMapsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListConfigMapsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListConfigMapsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListConfigMapsRequestValidationError) ErrorName() string {
+	return "ListConfigMapsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListConfigMapsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListConfigMapsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListConfigMapsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListConfigMapsRequestValidationError{}
+
+// Validate checks the field values on ListConfigMapsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ListConfigMapsResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for idx, item := range m.GetConfigMaps() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListConfigMapsResponseValidationError{
+					field:  fmt.Sprintf("ConfigMaps[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ListConfigMapsResponseValidationError is the validation error returned by
+// ListConfigMapsResponse.Validate if the designated constraints aren't met.
+type ListConfigMapsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListConfigMapsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListConfigMapsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListConfigMapsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListConfigMapsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListConfigMapsResponseValidationError) ErrorName() string {
+	return "ListConfigMapsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListConfigMapsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListConfigMapsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListConfigMapsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListConfigMapsResponseValidationError{}
+
 // Validate checks the field values on NullableString with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.

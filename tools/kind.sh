@@ -64,6 +64,11 @@ seed() {
     KUBECONFIG=$KUBECONFIG kubectl autoscale deployment envoy --cpu-percent=50 --min=1 --max=2 -n "envoy-${env}" || true
     KUBECONFIG=$KUBECONFIG kubectl expose deployment envoy --port=8080 -n "envoy-${env}" || true
     KUBECONFIG=$KUBECONFIG kubectl create cronjob cron-test --schedule "*/1 * * * *" --image busybox -n "cron-${env}" || true
+    KUBECONFIG=$KUBECONFIG kubectl create configmap "configmap-${env}-test-1" --from-literal=environment="${env}" -n "envoy-${env}" || true
+    KUBECONFIG=$KUBECONFIG kubectl create configmap "configmap-${env}-test-2" --from-literal=environment="${env}" -n "envoy-${env}" || true
+
+    # Adding labels to a ConfigMap
+    KUBECONFIG=$KUBECONFIG kubectl label configmap "configmap-${env}-test-1" -n "envoy-${env}" app=envoy || true
   done
 }
 
