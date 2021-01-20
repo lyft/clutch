@@ -155,7 +155,7 @@ func (*svc) DeleteCronJob(ctx context.Context, clientset, cluster, namespace, na
 	return nil
 }
 
-func (*svc) Clientsets() []string {
+func (*svc) Clientsets(ctx context.Context) []string {
 	return []string{"fake-user@fake-cluster"}
 }
 

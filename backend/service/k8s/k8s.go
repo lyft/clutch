@@ -51,7 +51,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 
 type Service interface {
 	// All names of clientsets.
-	Clientsets() []string
+	Clientsets(ctx context.Context) []string
 
 	// Pod management functions.
 	DescribePod(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Pod, error)
@@ -101,8 +101,8 @@ func NewWithClientsetManager(manager ClientsetManager, logger *zap.Logger, scope
 	}, nil
 }
 
-func (s *svc) Clientsets() []string {
-	cs := s.manager.Clientsets(context.Background())
+func (s *svc) Clientsets(ctx context.Context) []string {
+	cs := s.manager.Clientsets(ctx)
 	ret := make([]string, 0, len(cs))
 	for name := range cs {
 		ret = append(ret, name)
