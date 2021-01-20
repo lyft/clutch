@@ -31,6 +31,17 @@ type OIDCProvider struct {
 	claimsFromOIDCToken ClaimsFromOIDCTokenFunc
 }
 
+// Clutch's state token claims used during the exchange.
+type stateClaims struct {
+	*jwt.StandardClaims
+	RedirectURL string `json:"redirect"`
+}
+
+// Intermediate claims object for the ID token. Based on what scopes were requested.
+type idClaims struct {
+	Email string `json:"email"`
+}
+
 func WithClaimsFromOIDCTokenFunc(p *OIDCProvider, fn ClaimsFromOIDCTokenFunc) *OIDCProvider {
 	ret := *p
 	ret.claimsFromOIDCToken = fn
@@ -204,14 +215,6 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config) (Provider, err
 		httpClient:          ctx.Value(oauth2.HTTPClient).(*http.Client),
 		sessionSecret:       config.SessionSecret,
 		claimsFromOIDCToken: DefaultClaimsFromOIDCToken,
-	}
-
-	if config.Storage != nil {
-		c, err := newCryptographer(config.Storage.EncryptionPassphrase)
-		if err != nil {
-			return nil, err
-		}
-		p.cryptographer = c
 	}
 
 	return p, nil
