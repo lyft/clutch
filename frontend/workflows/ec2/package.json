@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/ec2",
-  "version": "0.0.0-beta",
+  "version": "1.0.0-beta",
   "description": "Clutch EC2 Workflows",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
@@ -23,16 +23,16 @@
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/core": "^0.0.0-beta",
-    "@clutch-sh/data-layout": "^0.0.0-beta",
-    "@clutch-sh/wizard": "^0.0.0-beta",
+    "@clutch-sh/core": "^1.0.0-beta",
+    "@clutch-sh/data-layout": "^1.0.0-beta",
+    "@clutch-sh/wizard": "^1.0.0-beta",
     "@material-ui/core": "^4.11.0",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-is": "^16.8.0",
-    "yup": "^0.29.0"
+    "yup": "^0.31.0"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "0.0.0-beta"
+    "@clutch-sh/tools": "^1.0.0-beta"
   }
 }

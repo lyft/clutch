@@ -16,6 +16,7 @@ import (
 	"github.com/lyft/clutch/backend/gateway/mux"
 	"github.com/lyft/clutch/backend/gateway/stats"
 	"github.com/lyft/clutch/backend/middleware"
+	"github.com/lyft/clutch/backend/middleware/accesslog"
 	"github.com/lyft/clutch/backend/middleware/timeouts"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/resolver"
@@ -134,11 +135,21 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		resolver.Registry[resolverCfg.Name] = res
 	}
 
+	var interceptors []grpc.UnaryServerInterceptor
+	if cfg.Gateway.Accesslog != nil {
+		accesslog, err := accesslog.New(cfg.Gateway.Accesslog, logger, scope)
+		if err != nil {
+			logger.Fatal("could not create accesslog interceptor", zap.Error(err))
+		}
+		interceptors = append(interceptors, accesslog.UnaryInterceptor())
+	}
+
 	timeoutInterceptor, err := timeouts.New(cfg.Gateway.Timeouts, logger, scope)
 	if err != nil {
 		logger.Fatal("could not create timeout interceptor", zap.Error(err))
 	}
-	interceptors := []grpc.UnaryServerInterceptor{timeoutInterceptor.UnaryInterceptor()}
+	interceptors = append(interceptors, timeoutInterceptor.UnaryInterceptor())
+
 	for _, mCfg := range cfg.Gateway.Middleware {
 		logger := logger.With(zap.String("moduleName", mCfg.Name))
 
@@ -164,7 +175,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	}
 
 	// Instantiate and register modules listed in the configuration.
-	rpcMux, err := mux.New(interceptors, assets, cfg.Gateway.Assets)
+	rpcMux, err := mux.New(interceptors, assets, cfg.Gateway)
 	if err != nil {
 		panic(err)
 	}
@@ -246,6 +257,12 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	timeout := computeMaximumTimeout(cfg.Gateway.Timeouts)
 	if timeout > 0 {
 		timeout += time.Second
+	}
+
+	// Start collecting go runtime stats if enabled
+	if cfg.Gateway.Stats != nil && cfg.Gateway.Stats.GoRuntimeStats != nil {
+		runtimeStats := stats.NewRuntimeStats(scope, cfg.Gateway.Stats.GoRuntimeStats)
+		go runtimeStats.Collect(ctx)
 	}
 
 	srv := &http.Server{

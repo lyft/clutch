@@ -13,10 +13,12 @@ extend google.protobuf.MessageOptions {
   // libraries.
   Reference reference = 58901;
   Identifier id = 58902;
+  bool redacted = 58903;
 }
 
 extend google.protobuf.MethodOptions {
   // Use a random high number that won't conflict with annotations from other
   // libraries.
   Action action = 58901;
+  bool disable_audit = 58902;
 }

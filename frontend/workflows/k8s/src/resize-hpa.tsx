@@ -1,6 +1,9 @@
 import React from "react";
 import type { clutch as IClutch } from "@clutch-sh/api";
 import {
+  Accordion,
+  AccordionDetails,
+  Button,
   ButtonGroup,
   client,
   Confirmation,
@@ -12,7 +15,8 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
-import * as yup from "yup";
+import _ from "lodash";
+import { number, ref } from "yup";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
@@ -39,8 +43,26 @@ const HPADetails: React.FC<WizardChild> = () => {
     hpaData.updateData(key, value);
   };
 
+  const metadataAnnotations = [];
+  const metadataLabels = [];
+
+  React.useEffect(() => {
+    if (hpa.annotations) {
+      _.forEach(hpa.annotations, (annotation, key) => {
+        metadataAnnotations.push({ name: key, value: annotation });
+      });
+    }
+
+    if (hpa.labels) {
+      _.forEach(hpa.labels, (label, key) => {
+        metadataLabels.push({ name: key, value: label });
+      });
+    }
+  }, []);
+
   return (
     <WizardStep error={hpaData.error} isLoading={hpaData.isLoading}>
+      <strong>HPA Details</strong>
       <MetadataTable
         onUpdate={update}
         data={[
@@ -54,34 +76,44 @@ const HPADetails: React.FC<WizardChild> = () => {
             input: {
               type: "number",
               key: "sizing.minReplicas",
-              validation: yup.number().integer().moreThan(0),
+              validation: number().integer().moreThan(0),
             },
           },
           {
             name: "Max Size",
             value: hpa.sizing.maxReplicas,
-            input: { type: "number", key: "sizing.maxReplicas" },
+            input: {
+              type: "number",
+              key: "sizing.maxReplicas",
+              validation: number().integer().min(ref("Min Size")),
+            },
           },
           { name: "Cluster", value: hpa.cluster },
         ]}
       />
-      <ButtonGroup
-        buttons={[
-          {
-            text: "Back",
-            onClick: onBack,
-          },
-          {
-            text: "Resize",
-            onClick: onSubmit,
-            destructive: true,
-          },
-        ]}
-      />
+      {metadataAnnotations.length > 0 && (
+        <Accordion title="Annotations">
+          <AccordionDetails>
+            <MetadataTable data={metadataAnnotations} />
+          </AccordionDetails>
+        </Accordion>
+      )}
+      {metadataLabels.length > 0 && (
+        <Accordion title="Labels">
+          <AccordionDetails>
+            <MetadataTable data={metadataLabels} />
+          </AccordionDetails>
+        </Accordion>
+      )}
+      <ButtonGroup>
+        <Button text="Back" variant="neutral" onClick={onBack} />
+        <Button text="Resize" variant="destructive" onClick={onSubmit} />
+      </ButtonGroup>
     </WizardStep>
   );
 };
 
+// TODO (sperry): possibly show the previous size values
 const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const hpa = useDataLayout("hpaData").displayValue() as IClutch.k8s.v1.HPA;
   const resizeData = useDataLayout("resizeData");

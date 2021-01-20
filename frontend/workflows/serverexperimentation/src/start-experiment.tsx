@@ -1,228 +1,354 @@
-import React from "react";
-import { clutch as IClutch } from "@clutch-sh/api";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import type { BaseWorkflowProps } from "@clutch-sh/core";
 import {
+  Button,
   ButtonGroup,
   client,
-  Confirmation,
-  MetadataTable,
-  RadioGroup,
-  Select,
-  useWizardContext,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Form,
 } from "@clutch-sh/core";
-import { useDataLayout } from "@clutch-sh/data-layout";
-import type { WizardChild } from "@clutch-sh/wizard";
-import { Wizard, WizardStep } from "@clutch-sh/wizard";
+import { PageLayout } from "@clutch-sh/experimentation";
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-const faultInjectionTypeItems = [
-  {
-    label: "Internal (Lyft owned)",
-    value: IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster.FAULTINJECTIONCLUSTER_UPSTREAM.toString(),
-  },
-  {
-    label: "External (3rd party)",
-    value: IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster.FAULTINJECTIONCLUSTER_DOWNSTREAM.toString(),
-  },
-];
-
-interface ClusterPairTargetDetailsProps extends WizardChild {
-  upstreamClusterTypeSelectionEnabled: boolean;
-}
-
-const ClusterPairTargetDetails: React.FC<ClusterPairTargetDetailsProps> = ({
-  upstreamClusterTypeSelectionEnabled,
-}) => {
-  const { onSubmit } = useWizardContext();
-  const clusterPairData = useDataLayout("clusterPairTargetData");
-  const clusterPair = clusterPairData.displayValue();
-
-  return (
-    <WizardStep error={clusterPairData.error} isLoading={false}>
-      <MetadataTable
-        onUpdate={(key, value: string) => clusterPairData.updateData(key, value)}
-        data={[
-          {
-            name: "Downstream Cluster",
-            value: clusterPair.downstreamCluster,
-            input: {
-              key: "downstreamCluster",
-              validation: yup.string().required(),
-            },
-          },
-          {
-            name: "Upstream Cluster",
-            value: clusterPair.upstreamCluster,
-            input: {
-              key: "upstreamCluster",
-              validation: yup.string().required(),
-            },
-          },
-        ]}
-      />
-      {upstreamClusterTypeSelectionEnabled && (
-        <RadioGroup
-          name="upstream_cluster_type"
-          label="Upstream Cluster Type"
-          options={faultInjectionTypeItems}
-          onChange={(value: string) =>
-            clusterPairData.updateData("faultInjectionCluster", parseInt(value, 10))
-          }
-        />
-      )}
-      <ButtonGroup
-        buttons={[
-          {
-            text: "Next",
-            onClick: onSubmit,
-          },
-        ]}
-      />
-    </WizardStep>
-  );
-};
+import { FormFields, FormItem } from "./form-fields";
 
 enum FaultType {
   ABORT = "Abort",
   LATENCY = "Latency",
 }
 
-const ExperimentDetails: React.FC<WizardChild> = () => {
-  const { onSubmit, onBack } = useWizardContext();
-  const experimentData = useDataLayout("experimentData");
-  const experiment = experimentData.value;
+enum TargetType {
+  REQUESTS = "requests",
+  HOSTS = "hosts",
+}
 
-  const isAbort = (experiment?.type ?? FaultType.ABORT) === FaultType.ABORT;
-  return (
-    <WizardStep error={experimentData.error} isLoading={false}>
-      <Select
-        name="Type"
-        label="Fault Type"
-        options={[
-          { label: "Abort", value: FaultType.ABORT },
-          { label: "Latency", value: FaultType.LATENCY },
-        ]}
-        onChange={value => experimentData.updateData("type", value)}
-      />
-      <MetadataTable
-        onUpdate={(key, value) => experimentData.updateData(key, value)}
-        data={[
-          {
-            name: "Percent",
-            value: experiment.percent,
-            input: {
-              type: "number",
-              key: "percent",
-              validation: yup.number().integer().min(1).max(100),
-            },
-          },
-          isAbort
-            ? {
-                name: "HTTP Status",
-                value: experiment.httpStatus,
-                input: {
-                  type: "number",
-                  key: "httpStatus",
-                  validation: yup.number().integer().min(100).max(599),
-                },
-              }
-            : {
-                name: "Duration (ms)",
-                value: experiment.durationMs,
-                input: {
-                  type: "number",
-                  key: "durationMs",
-                  validation: yup.number().integer().min(1),
-                },
-              },
-        ]}
-      />
-      <ButtonGroup
-        buttons={[
-          {
-            text: "Back",
-            onClick: onBack,
-          },
-          {
-            text: "Next",
-            onClick: onSubmit,
-            destructive: true,
-          },
-        ]}
-      />
-    </WizardStep>
-  );
+enum UpstreamClusterType {
+  INTERNAL = "internal",
+  EXTERNAL = "external",
+}
+
+type ExperimentData = {
+  downstreamCluster: string;
+  upstreamCluster: string;
+  upstreamClusterType: UpstreamClusterType;
+  targetType: TargetType;
+  requestsPercentage: number;
+  hostsPercentage: number;
+  faultType: FaultType;
+  httpStatus: number;
+  durationMs: number;
 };
 
-const Confirm: React.FC<WizardChild> = () => {
-  const startData = useDataLayout("startData");
+interface ExperimentDetailsProps {
+  upstreamClusterTypeSelectionEnabled: boolean;
+  hostsPercentageBasedTargetingEnabled: boolean;
+  onStart: (ExperimentData) => void;
+}
+
+const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
+  upstreamClusterTypeSelectionEnabled,
+  hostsPercentageBasedTargetingEnabled,
+  onStart,
+}) => {
+  const initialExperimentData = {
+    upstreamClusterType: UpstreamClusterType.INTERNAL,
+    faultType: FaultType.ABORT,
+    targetType: TargetType.REQUESTS,
+  } as ExperimentData;
+
+  const experimentDataState = useState<ExperimentData>(initialExperimentData);
+
+  const experimentData = experimentDataState[0];
+  const navigate = useNavigate();
+
+  const handleOnCancel = () => {
+    navigate("/experimentation/list");
+  };
+
+  const handleOnSubmit = () => {
+    onStart(experimentData);
+  };
+
+  const faultInjectionClusterRadioGroup = {
+    name: "faultInjectionCluster",
+    label: "Upstream Cluster Type",
+    type: "radio-group",
+    visible:
+      upstreamClusterTypeSelectionEnabled && experimentData.targetType === TargetType.REQUESTS,
+    inputProps: {
+      options: [
+        {
+          label: "Internal",
+          value: UpstreamClusterType.INTERNAL,
+        },
+        {
+          label: "External (3rd party)",
+          value: UpstreamClusterType.EXTERNAL,
+        },
+      ],
+      defaultValue: initialExperimentData.upstreamClusterType,
+      disabled: experimentData.targetType !== TargetType.REQUESTS,
+    },
+  };
+  const fakeFaultInjectionClusterRadioGroup = { ...faultInjectionClusterRadioGroup };
+  fakeFaultInjectionClusterRadioGroup.name = "fakeFaultInjectionCluster";
+  fakeFaultInjectionClusterRadioGroup.visible =
+    upstreamClusterTypeSelectionEnabled && experimentData.targetType === TargetType.HOSTS;
+
+  const isAbort = experimentData.faultType === FaultType.ABORT;
+  const fields = [
+    {
+      label: "Cluster Pair",
+      type: "title",
+    },
+    {
+      name: "downstreamCluster",
+      label: "Downstream Cluster",
+      type: "text",
+      validation: yup.string().label("Downstream Cluster").required(),
+      inputProps: { defaultValue: undefined },
+    },
+    {
+      name: "upstreamCluster",
+      label: "Upstream Cluster",
+      type: "text",
+      validation: yup.string().label("Upstream Cluster").required(),
+      inputProps: { defaultValue: undefined },
+    },
+    faultInjectionClusterRadioGroup,
+    fakeFaultInjectionClusterRadioGroup,
+    {
+      label: "Targeting",
+      type: "title",
+    },
+    {
+      name: "targetType",
+      label: "Target Type",
+      type: "select",
+      visible: hostsPercentageBasedTargetingEnabled,
+      inputProps: {
+        options: [
+          {
+            label: "Requests",
+            value: TargetType.REQUESTS,
+          },
+          {
+            label: "Hosts",
+            value: TargetType.HOSTS,
+          },
+        ],
+        defaultValue: initialExperimentData.targetType,
+      },
+    },
+    {
+      name: "requestsPercentage",
+      label: "Percentage of Requests Served by All Hosts",
+      type: "number",
+      validation: yup.number().label("Percentage").integer().min(1).max(100).required(),
+      visible: experimentData.targetType === TargetType.REQUESTS,
+      inputProps: { defaultValue: "0" },
+    },
+    {
+      name: "hostsPercentage",
+      label: "Percentage of Hosts",
+      type: "number",
+      validation: yup.number().label("Percentage").integer().min(1).max(100).required(),
+      visible: experimentData.targetType === TargetType.HOSTS,
+      inputProps: { defaultValue: "0" },
+    },
+    {
+      label: "Faults",
+      type: "title",
+    },
+    {
+      name: "faultType",
+      label: "Fault Type",
+      type: "select",
+      inputProps: {
+        options: [
+          { label: "Abort", value: FaultType.ABORT },
+          { label: "Latency", value: FaultType.LATENCY },
+        ],
+        defaultValue: initialExperimentData.faultType,
+      },
+    },
+    {
+      name: "httpStatus",
+      label: "HTTP Status",
+      type: "number",
+      validation: yup.number().label("HTTP Status").integer().min(100).max(599).required(),
+      visible: isAbort,
+      inputProps: { defaultValue: experimentData.httpStatus?.toString() },
+    },
+    {
+      name: "durationMs",
+      label: "Duration (ms)",
+      type: "number",
+      validation: yup.number().label("Duration (ms)").integer().min(1).required(),
+      visible: !isAbort,
+      inputProps: { defaultValue: experimentData.durationMs?.toString() },
+    },
+  ] as FormItem[];
+
+  const schema: { [name: string]: yup.StringSchema | yup.NumberSchema } = {};
+  const visibleFields = fields.filter(field => field.visible !== false);
+  visibleFields
+    .filter(field => field.validation !== undefined)
+    .reduce((accumulator, field) => {
+      accumulator[field.name] = field.validation;
+      return accumulator;
+    }, schema);
+
+  const { register, errors, handleSubmit } = useForm({
+    mode: "onChange",
+    reValidateMode: "onChange",
+    resolver: yupResolver(yup.object().shape(schema)),
+  });
 
   return (
-    <WizardStep error={startData.error} isLoading={startData.isLoading}>
-      <Confirmation action="Start" />
-    </WizardStep>
+    <Form onSubmit={handleSubmit(handleOnSubmit)}>
+      <FormFields
+        state={experimentDataState}
+        items={visibleFields}
+        register={register}
+        errors={errors}
+      />
+      <ButtonGroup>
+        <Button text="Cancel" variant="neutral" onClick={handleOnCancel} />
+        <Button text="Start" type="submit" />
+      </ButtonGroup>
+    </Form>
   );
 };
 
 interface StartExperimentProps extends BaseWorkflowProps {
   upstreamClusterTypeSelectionEnabled?: boolean;
+  hostsPercentageBasedTargetingEnabled?: boolean;
 }
 
 const StartExperiment: React.FC<StartExperimentProps> = ({
   heading,
   upstreamClusterTypeSelectionEnabled = false,
+  hostsPercentageBasedTargetingEnabled = false,
 }) => {
-  const createExperiment = (data: IClutch.chaos.serverexperimentation.v1.ITestConfig) => {
-    const testConfig = data;
-    testConfig["@type"] = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig";
+  const navigate = useNavigate();
+  const [error, setError] = useState(undefined);
+  const [experimentData, setExperimentData] = useState<ExperimentData | undefined>(undefined);
 
-    return client.post("/v1/chaos/experimentation/createExperiment", {
-      config: testConfig,
-    });
+  const handleOnCreatedExperiment = (id: number) => {
+    navigate(`/experimentation/run/${id}`);
   };
 
-  const dataLayout = {
-    clusterPairTargetData: {},
-    experimentData: {},
-    startData: {
-      deps: ["clusterPairTargetData", "experimentData"],
-      hydrator: (
-        clusterPairTargetData: IClutch.chaos.serverexperimentation.v1.IClusterPairTarget,
-        experimentData: IClutch.chaos.serverexperimentation.v1.AbortFaultConfig &
-          IClutch.chaos.serverexperimentation.v1.LatencyFaultConfig & { type: FaultType }
-      ) => {
-        const isAbort = experimentData.type === FaultType.ABORT;
-        const fault = isAbort
-          ? { abort: { httpStatus: experimentData.httpStatus, percent: experimentData.percent } }
-          : { latency: { durationMs: experimentData.durationMs, percent: experimentData.percent } };
+  const handleOnCreatedExperimentFailure = (err: string) => {
+    setExperimentData(undefined);
+    setError(err);
+  };
 
-        const faultInjectionCluster =
-          clusterPairTargetData.faultInjectionCluster ||
-          IClutch.chaos.serverexperimentation.v1.FaultInjectionCluster
-            .FAULTINJECTIONCLUSTER_UPSTREAM;
+  const createExperiment = (data: ExperimentData) => {
+    const isUpstreamEnforcing = data.upstreamClusterType === UpstreamClusterType.INTERNAL;
+    const isTargetingRequests = data.targetType === TargetType.REQUESTS;
+    const isTargetingHosts = data.targetType === TargetType.HOSTS;
 
-        return createExperiment({
-          clusterPair: {
-            downstreamCluster: clusterPairTargetData.downstreamCluster,
-            upstreamCluster: clusterPairTargetData.upstreamCluster,
-            faultInjectionCluster,
+    const faultTargeting = {} as IClutch.chaos.serverexperimentation.v1.FaultTargeting;
+    if (isUpstreamEnforcing) {
+      faultTargeting.upstreamEnforcing = {
+        downstreamCluster: {
+          name: data.downstreamCluster,
+        },
+      };
+      if (isTargetingRequests) {
+        faultTargeting.upstreamEnforcing.upstreamCluster = {
+          name: data.upstreamCluster,
+        };
+      } else {
+        faultTargeting.upstreamEnforcing.upstreamPartialSingleCluster = {
+          name: data.upstreamCluster,
+          clusterPercentage: {
+            percentage: isTargetingHosts ? data.hostsPercentage : 100,
           },
-          ...fault,
-        });
-      },
-    },
+        };
+      }
+    } else {
+      faultTargeting.downstreamEnforcing = {
+        downstreamCluster: {
+          name: data.downstreamCluster,
+        },
+        upstreamCluster: {
+          name: data.upstreamCluster,
+        },
+      };
+    }
+
+    const isAbort = data.faultType === FaultType.ABORT;
+    let abortFault: IClutch.chaos.serverexperimentation.v1.AbortFault;
+    let latencyFault: IClutch.chaos.serverexperimentation.v1.AbortFault;
+    if (isAbort) {
+      abortFault = {
+        abortStatus: {
+          httpStatusCode: data.httpStatus,
+        },
+        percentage: {
+          percentage: isTargetingRequests ? data.requestsPercentage : 100,
+        },
+      } as IClutch.chaos.serverexperimentation.v1.AbortFault;
+    } else {
+      latencyFault = {
+        latencyDuration: {
+          fixedDurationMs: data.durationMs,
+        },
+        percentage: {
+          percentage: isTargetingRequests ? data.requestsPercentage : 100,
+        },
+      } as IClutch.chaos.serverexperimentation.v1.LatencyFault;
+    }
+
+    return client
+      .post("/v1/chaos/experimentation/createExperiment", {
+        config: {
+          "@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig",
+          faultTargeting,
+          abortFault,
+          latencyFault,
+        },
+      })
+      .then(response => {
+        handleOnCreatedExperiment(response?.data.experiment.id);
+      })
+      .catch(err => {
+        handleOnCreatedExperimentFailure(err.response.statusText);
+      });
   };
 
   return (
-    <Wizard dataLayout={dataLayout} heading={heading}>
-      <ClusterPairTargetDetails
-        name="Target"
+    <PageLayout heading={heading} error={error}>
+      <ExperimentDetails
         upstreamClusterTypeSelectionEnabled={upstreamClusterTypeSelectionEnabled}
+        hostsPercentageBasedTargetingEnabled={hostsPercentageBasedTargetingEnabled}
+        onStart={experimentDetails => setExperimentData(experimentDetails)}
       />
-      <ExperimentDetails name="Experiment Data" />
-      <Confirm name="Confirmation" />
-    </Wizard>
+      <Dialog title="Experiment Start Confirmation" open={experimentData !== undefined}>
+        <DialogContent>
+          Are you sure you want to start an experiment? The experiment will start immediately and
+          you will be moved to experiment details view page.
+        </DialogContent>
+        <DialogActions>
+          <Button variant="neutral" text="No" onClick={() => setExperimentData(undefined)} />
+          <Button
+            text="Yes"
+            onClick={() => {
+              createExperiment(experimentData);
+            }}
+          />
+        </DialogActions>
+      </Dialog>
+    </PageLayout>
   );
 };
 
-export default StartExperiment;
+export { StartExperiment, ExperimentDetails };

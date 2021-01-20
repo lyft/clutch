@@ -8,7 +8,16 @@ import "validate/validate.proto";
 import "google/protobuf/duration.proto";
 
 message Config {
+  // A list of paths for `kubeconfig` files. Each config will be read and each context will become a clientset
+  // in the clientset manager. If no files are provided, the service will use the K8s SDK default loading rules
+  // which are detailed here: https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/,
+  // i.e. look for configs:
+  // - in a comma-separated `KUBECONFIG` environment variable
+  // - else `$HOME/.kube/config`
+  // - else in-cluster config
+  // https://github.com/kubernetes/client-go/tree/master/examples/in-cluster-client-configuration
   repeated string kubeconfigs = 1 [ (validate.rules).repeated = {unique : true} ];
+
   RestClientConfig rest_client_config = 2;
 }
 

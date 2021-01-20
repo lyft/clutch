@@ -77,7 +77,6 @@ package clutch.amiibo.v1;
 
 option go_package = "amiibov1";
 
-// highlight-next-line
 import "google/api/annotations.proto";
 
 service AmiiboAPI {
@@ -428,13 +427,17 @@ Define a functional component for the amiibo lookup by adding the highlighted li
 import React, { ChangeEvent } from "react";
 import {
   Button,
+  ButtonGroup,
   useWizardContext,
   TextField,
 } from "@clutch-sh/core";
 
 import { useDataLayout } from "@clutch-sh/data-layout";
 // highlight-end
+import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
+
+import type { WorkflowProps } from ".";
 ...
 // highlight-start
 const AmiiboLookup: React.FC<WizardChild> = () => {
@@ -448,7 +451,9 @@ const AmiiboLookup: React.FC<WizardChild> = () => {
   return (
     <>
       <TextField onChange={onChange} onReturn={onSubmit}/>
-      <Button text="Search" onClick={onSubmit}/>
+      <ButtonGroup>
+        <Button text="Search" onClick={onSubmit}/>
+      </ButtonGroup>
     </>
   );
 };
@@ -472,7 +477,7 @@ import {
 	// highlight-next-line
 	Table,
 	// highlight-next-line
-	Row,
+	TableRow,
 	TextField,
 } from "@clutch-sh/core";
 ...
@@ -487,10 +492,14 @@ const AmiiboDetails: React.FC<WizardChild> = () => {
   return (
     <WizardStep error={amiiboData.error} isLoading={amiiboData.isLoading}>
       <Table headings={["Name", "Image", "Series", "Type"]}>
-        {amiiboResults.map(amiibo => {
-          const image = <img src={amiibo.imageUrl} height="75px"/>;
-          return <Row data={[amiibo.name, image, amiibo.amiiboSeries, amiibo.type]} />;
-        })}
+        {amiiboResults.map((amiibo, index: number) => (
+          <TableRow key={index}>
+            {amiibo.name}
+            <img src={amiibo.imageUrl} height="75px"/>
+            {amiibo.amiiboSeries}
+            {amiibo.type}
+          </TableRow>
+        ))}
       </Table>
     </WizardStep>
   );
@@ -569,7 +578,8 @@ const register = (): WorkflowConfiguration => {
     displayName: "Amiibo",
     routes: {
       landing: {
-        path: "/",
+  // highlight-next-line
+        path: "/lookup",
         description: "Lookup all Amiibo by name.",
 	// highlight-next-line
         component: Amiibo,

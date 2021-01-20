@@ -101,7 +101,7 @@ type UnsafeEC2APIServer interface {
 	mustEmbedUnimplementedEC2APIServer()
 }
 
-func RegisterEC2APIServer(s *grpc.Server, srv EC2APIServer) {
+func RegisterEC2APIServer(s grpc.ServiceRegistrar, srv EC2APIServer) {
 	s.RegisterService(&_EC2API_serviceDesc, srv)
 }
 

@@ -7,6 +7,7 @@ option go_package = "github.com/lyft/clutch/backend/api/config/gateway/v1;gatewa
 import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "validate/validate.proto";
+import "config/middleware/accesslog/v1/accesslog.proto";
 
 message Config {
   GatewayOptions gateway = 1 [ (validate.rules).message = {required : true} ];
@@ -55,6 +56,14 @@ message Stats {
     StatsdReporter statsd_reporter = 3;
     //  TODO: Prometheus support.
   }
+
+  message GoRuntimeStats {
+    // Collection interval defaults to 10 seconds
+    google.protobuf.Duration collection_interval = 1 [ (validate.rules).duration.gte.nanos = 100000000 ];
+  }
+
+  // Collect go runtime stats, this is disabled by default.
+  GoRuntimeStats go_runtime_stats = 4;
 }
 
 message Timeouts {
@@ -87,6 +96,10 @@ message GatewayOptions {
   repeated Middleware middleware = 6;
 
   Assets assets = 7;
+
+  bool enable_pprof = 8;
+
+  clutch.config.middleware.accesslog.v1.Config accesslog = 9;
 }
 
 // Assets configuration provide a passthrough host for frontend static assets.

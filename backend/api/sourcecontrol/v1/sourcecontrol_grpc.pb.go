@@ -59,7 +59,7 @@ type UnsafeSourceControlAPIServer interface {
 	mustEmbedUnimplementedSourceControlAPIServer()
 }
 
-func RegisterSourceControlAPIServer(s *grpc.Server, srv SourceControlAPIServer) {
+func RegisterSourceControlAPIServer(s grpc.ServiceRegistrar, srv SourceControlAPIServer) {
 	s.RegisterService(&_SourceControlAPI_serviceDesc, srv)
 }
 

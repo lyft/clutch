@@ -24,15 +24,21 @@ service AuthnAPI {
 }
 
 message LoginRequest {
+  option (clutch.api.v1.redacted) = true;
+
   string redirect_url = 1;
 }
 
 message LoginResponse {
+  option (clutch.api.v1.redacted) = true;
+
   string auth_url = 1;
 }
 
 // See https://www.oauth.com/oauth2-servers/authorization/the-authorization-response/ for description of the parameters.
 message CallbackRequest {
+  option (clutch.api.v1.redacted) = true;
+
   string code = 1;
   string state = 2;
   string error = 3;
@@ -40,6 +46,8 @@ message CallbackRequest {
 }
 
 message CallbackResponse {
+  option (clutch.api.v1.redacted) = true;
+
   // This is the token that the user should present. Note: this response is only valid in a gRPC context. In an HTTP
   // context the user will be redirected.
   string access_token = 1;

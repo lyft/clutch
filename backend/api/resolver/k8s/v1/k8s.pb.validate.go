@@ -312,6 +312,77 @@ var _ interface {
 	ErrorName() string
 } = DeploymentValidationError{}
 
+// Validate checks the field values on StatefulSet with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *StatefulSet) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Name
+
+	// no validation rules for Clientset
+
+	// no validation rules for Namespace
+
+	return nil
+}
+
+// StatefulSetValidationError is the validation error returned by
+// StatefulSet.Validate if the designated constraints aren't met.
+type StatefulSetValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StatefulSetValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StatefulSetValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StatefulSetValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StatefulSetValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StatefulSetValidationError) ErrorName() string { return "StatefulSetValidationError" }
+
+// Error satisfies the builtin error interface
+func (e StatefulSetValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStatefulSet.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StatefulSetValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StatefulSetValidationError{}
+
 // Validate checks the field values on Service with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *Service) Validate() error {
@@ -381,3 +452,73 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ServiceValidationError{}
+
+// Validate checks the field values on CronJob with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *CronJob) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Name
+
+	// no validation rules for Clientset
+
+	// no validation rules for Namespace
+
+	return nil
+}
+
+// CronJobValidationError is the validation error returned by CronJob.Validate
+// if the designated constraints aren't met.
+type CronJobValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CronJobValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CronJobValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CronJobValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CronJobValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CronJobValidationError) ErrorName() string { return "CronJobValidationError" }
+
+// Error satisfies the builtin error interface
+func (e CronJobValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCronJob.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CronJobValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CronJobValidationError{}

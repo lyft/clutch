@@ -8,6 +8,7 @@ yarn-debug.log*
 yarn-error.log*
 *.tsbuildinfo
 package-lock.json
+**/.eslintcache
 
 # dependencies
 *node_modules

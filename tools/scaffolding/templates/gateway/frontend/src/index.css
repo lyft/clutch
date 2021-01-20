@@ -1,3 +1,20 @@
-#root {
-    height: 100%;
-}
+html, body, #root, #App {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  #App {
+    background-color: #f9fafe;
+  }
+  
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    font-size: 16px;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #0D1030 !important;
+  }

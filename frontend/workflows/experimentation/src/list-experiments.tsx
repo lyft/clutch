@@ -1,27 +1,22 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import { ButtonGroup, client, Error } from "@clutch-sh/core";
-import { Container } from "@material-ui/core";
-import styled from "styled-components";
+import { BaseWorkflowProps, Button, ButtonGroup, client } from "@clutch-sh/core";
 
+import PageLayout from "./core/page-layout";
 import { Column, ListView } from "./list-view";
-
-const Layout = styled(Container)`
-  padding: 5% 0;
-`;
 
 interface ExperimentTypeLinkProps {
   displayName: string;
   path: string;
 }
 
-interface ListExperimentsProps {
+interface ListExperimentsProps extends BaseWorkflowProps {
   columns: Column[];
   links: ExperimentTypeLinkProps[];
 }
 
-const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, links }) => {
+const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, links }) => {
   const [experiments, setExperiments] = useState<
     IClutch.chaos.experimentation.v1.ListViewItem[] | undefined
   >(undefined);
@@ -44,17 +39,15 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, links }) => 
       });
   }, []);
 
-  const buttons = links.map(link => {
-    return {
-      text: link.displayName,
-      onClick: () => navigate(link.path),
-    };
-  });
+  const buttons = links.map(link => (
+    <Button text={link.displayName} key={link.path} onClick={() => navigate(link.path)} />
+  ));
 
   return (
-    <Layout>
-      {error && <Error message={error} />}
-      <ButtonGroup buttons={buttons} />
+    <PageLayout heading={heading} error={error}>
+      <ButtonGroup justify="center" border="bottom">
+        {buttons}
+      </ButtonGroup>
       <ListView
         columns={columns}
         items={experiments}
@@ -62,7 +55,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ columns, links }) => 
           handleRowSelection(event, item);
         }}
       />
-    </Layout>
+    </PageLayout>
   );
 };
 

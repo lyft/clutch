@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { clutch as IClutch } from "@clutch-sh/api";
-import { ButtonGroup, client, Error, TextField } from "@clutch-sh/core";
-import styled from "styled-components";
+import {
+  BaseWorkflowProps,
+  Button,
+  ButtonGroup,
+  client,
+  Form,
+  Link,
+  TextField,
+} from "@clutch-sh/core";
 
+import PageLayout from "./core/page-layout";
 import { propertyToString } from "./property-helpers";
 
-export const Form = styled.form`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const ViewExperimentRun: React.FC = () => {
+const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
   const [experiment, setExperiment] = useState<
     IClutch.chaos.experimentation.v1.ExperimentRunDetails | undefined
   >(undefined);
@@ -26,10 +27,7 @@ const ViewExperimentRun: React.FC = () => {
     const goBack = () => {
       navigate("/experimentation/list");
     };
-    const goBackButton = {
-      text: "Return",
-      onClick: goBack,
-    };
+    const goBackButton = <Button text="Back" variant="neutral" onClick={goBack} />;
 
     const statusValue = IClutch.chaos.experimentation.v1.Experiment.Status[
       experiment.status
@@ -47,20 +45,22 @@ const ViewExperimentRun: React.FC = () => {
       statusValue === IClutch.chaos.experimentation.v1.Experiment.Status.STATUS_RUNNING.toString()
         ? "Stop Experiment Run"
         : "Cancel Experiment Run";
-    const destructiveButton = {
-      text: title,
-      destructive: true,
-      onClick: () => {
-        client
-          .post("/v1/chaos/experimentation/cancelExperimentRun", { id: runID })
-          .then(() => {
-            setExperiment(undefined);
-          })
-          .catch(err => {
-            setError(err.response.statusText);
-          });
-      },
-    };
+    const destructiveButton = (
+      <Button
+        text={title}
+        variant="destructive"
+        onClick={() => {
+          client
+            .post("/v1/chaos/experimentation/cancelExperimentRun", { id: runID })
+            .then(() => {
+              setExperiment(undefined);
+            })
+            .catch(err => {
+              setError(err.response.statusText);
+            });
+        }}
+      />
+    );
 
     return [goBackButton, destructiveButton];
   }
@@ -77,28 +77,35 @@ const ViewExperimentRun: React.FC = () => {
   }
 
   return (
-    <Form>
-      {error && <Error message={error} />}
-      {experiment && (
-        <>
-          {experiment.properties.items.map(property => (
+    <PageLayout heading={heading} error={error}>
+      <Form>
+        {experiment && (
+          <>
+            {experiment.properties.items.map(property =>
+              property.urlValue !== undefined ? (
+                <Link href={property.urlValue} key={property.urlValue} textTransform="capitalize">
+                  {property.label}
+                </Link>
+              ) : (
+                <TextField
+                  readOnly
+                  key={property.label}
+                  label={property.label}
+                  defaultValue={propertyToString(property)}
+                />
+              )
+            )}
             <TextField
-              key={property.label}
-              label={property.label}
-              defaultValue={propertyToString(property)}
-              InputProps={{ readOnly: true }}
+              multiline
+              readOnly
+              label="Config"
+              defaultValue={JSON.stringify(experiment.config, null, 4)}
             />
-          ))}
-          <TextField
-            multiline
-            label="Config"
-            defaultValue={JSON.stringify(experiment.config, null, 4)}
-            InputProps={{ readOnly: true }}
-          />
-          <ButtonGroup buttons={makeButtons()} />
-        </>
-      )}
-    </Form>
+            <ButtonGroup>{makeButtons()}</ButtonGroup>
+          </>
+        )}
+      </Form>
+    </PageLayout>
   );
 };
 

@@ -350,6 +350,834 @@ func (x *LatencyFaultConfig) GetDurationMs() int32 {
 	return 0
 }
 
+// The configuration of an HTTP fault.
+type HTTPFaultConfig struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The targeting of the fault describing what requests are being considered for faults.
+	FaultTargeting *FaultTargeting `protobuf:"bytes,1,opt,name=fault_targeting,json=faultTargeting,proto3" json:"fault_targeting,omitempty"`
+	// Types that are assignable to Fault:
+	//	*HTTPFaultConfig_AbortFault
+	//	*HTTPFaultConfig_LatencyFault
+	Fault isHTTPFaultConfig_Fault `protobuf_oneof:"fault"`
+}
+
+func (x *HTTPFaultConfig) Reset() {
+	*x = HTTPFaultConfig{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *HTTPFaultConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HTTPFaultConfig) ProtoMessage() {}
+
+func (x *HTTPFaultConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HTTPFaultConfig.ProtoReflect.Descriptor instead.
+func (*HTTPFaultConfig) Descriptor() ([]byte, []int) {
+	return file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *HTTPFaultConfig) GetFaultTargeting() *FaultTargeting {
+	if x != nil {
+		return x.FaultTargeting
+	}
+	return nil
+}
+
+func (m *HTTPFaultConfig) GetFault() isHTTPFaultConfig_Fault {
+	if m != nil {
+		return m.Fault
+	}
+	return nil
+}
+
+func (x *HTTPFaultConfig) GetAbortFault() *AbortFault {
+	if x, ok := x.GetFault().(*HTTPFaultConfig_AbortFault); ok {
+		return x.AbortFault
+	}
+	return nil
+}
+
+func (x *HTTPFaultConfig) GetLatencyFault() *LatencyFault {
+	if x, ok := x.GetFault().(*HTTPFaultConfig_LatencyFault); ok {
+		return x.LatencyFault
+	}
+	return nil
+}
+
+type isHTTPFaultConfig_Fault interface {
+	isHTTPFaultConfig_Fault()
+}
+
+type HTTPFaultConfig_AbortFault struct {
+	// The abort fault.
+	AbortFault *AbortFault `protobuf:"bytes,2,opt,name=abort_fault,json=abortFault,proto3,oneof"`
+}
+
+type HTTPFaultConfig_LatencyFault struct {
+	// The latency fault.
+	LatencyFault *LatencyFault `protobuf:"bytes,3,opt,name=latency_fault,json=latencyFault,proto3,oneof"`
+}
+
+func (*HTTPFaultConfig_AbortFault) isHTTPFaultConfig_Fault() {}
+
+func (*HTTPFaultConfig_LatencyFault) isHTTPFaultConfig_Fault() {}
+
+// The definition of an abort fault.
+type AbortFault struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The percentage of requests the fault should be applied to.
+	Percentage *FaultPercentage `protobuf:"bytes,1,opt,name=percentage,proto3" json:"percentage,omitempty"`
+	// The HTTP status code to insert when applying an abort fault.
+	AbortStatus *FaultAbortStatus `protobuf:"bytes,2,opt,name=abort_status,json=abortStatus,proto3" json:"abort_status,omitempty"`
+}
+
+func (x *AbortFault) Reset() {
+	*x = AbortFault{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AbortFault) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AbortFault) ProtoMessage() {}
+
+func (x *AbortFault) ProtoReflect() protoreflect.Message {
+	mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AbortFault.ProtoReflect.Descriptor instead.
+func (*AbortFault) Descriptor() ([]byte, []int) {
+	return file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *AbortFault) GetPercentage() *FaultPercentage {
+	if x != nil {
+		return x.Percentage
+	}
+	return nil
+}
+
+func (x *AbortFault) GetAbortStatus() *FaultAbortStatus {
+	if x != nil {
+		return x.AbortStatus
+	}
+	return nil
+}
+
+// The definition of a latency fault.
+type LatencyFault struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The percentage of requests the fault should be applied to.
+	Percentage *FaultPercentage `protobuf:"bytes,1,opt,name=percentage,proto3" json:"percentage,omitempty"`
+	// The latency duration to apply when applying a latency fault.
+	LatencyDuration *FaultLatencyDuration `protobuf:"bytes,2,opt,name=latency_duration,json=latencyDuration,proto3" json:"latency_duration,omitempty"`
+}
+
+func (x *LatencyFault) Reset() {
+	*x = LatencyFault{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *LatencyFault) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LatencyFault) ProtoMessage() {}
+
+func (x *LatencyFault) ProtoReflect() protoreflect.Message {
+	mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LatencyFault.ProtoReflect.Descriptor instead.
+func (*LatencyFault) Descriptor() ([]byte, []int) {
+	return file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *LatencyFault) GetPercentage() *FaultPercentage {
+	if x != nil {
+		return x.Percentage
+	}
+	return nil
+}
+
+func (x *LatencyFault) GetLatencyDuration() *FaultLatencyDuration {
+	if x != nil {
+		return x.LatencyDuration
+	}
+	return nil
+}
+
+// The fault targeting that allows us to control which requests are considered for
+// fault injection and what part of the system is responsible for applying faults.
+// The `enforcer` abstraction allows us to define a different list of matching criteria
+// depending on whether faults are applied on the upstream or downstream.
+type FaultTargeting struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// A fault enforcer.
+	//
+	// Types that are assignable to Enforcer:
+	//	*FaultTargeting_UpstreamEnforcing
+	//	*FaultTargeting_DownstreamEnforcing
+	Enforcer isFaultTargeting_Enforcer `protobuf_oneof:"enforcer"`
+}
+
+func (x *FaultTargeting) Reset() {
+	*x = FaultTargeting{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *FaultTargeting) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FaultTargeting) ProtoMessage() {}
+
+func (x *FaultTargeting) ProtoReflect() protoreflect.Message {
+	mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FaultTargeting.ProtoReflect.Descriptor instead.
+func (*FaultTargeting) Descriptor() ([]byte, []int) {
+	return file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDescGZIP(), []int{7}
+}
+
+func (m *FaultTargeting) GetEnforcer() isFaultTargeting_Enforcer {
+	if m != nil {
+		return m.Enforcer
+	}
+	return nil
+}
+
+func (x *FaultTargeting) GetUpstreamEnforcing() *UpstreamEnforcing {
+	if x, ok := x.GetEnforcer().(*FaultTargeting_UpstreamEnforcing); ok {
+		return x.UpstreamEnforcing
+	}
+	return nil
+}
+
+func (x *FaultTargeting) GetDownstreamEnforcing() *DownstreamEnforcing {
+	if x, ok := x.GetEnforcer().(*FaultTargeting_DownstreamEnforcing); ok {
+		return x.DownstreamEnforcing
+	}
+	return nil
+}
+
+type isFaultTargeting_Enforcer interface {
+	isFaultTargeting_Enforcer()
+}
+
+type FaultTargeting_UpstreamEnforcing struct {
+	// Enforce a fault on an upstream.
+	UpstreamEnforcing *UpstreamEnforcing `protobuf:"bytes,1,opt,name=upstream_enforcing,json=upstreamEnforcing,proto3,oneof"`
+}
+
+type FaultTargeting_DownstreamEnforcing struct {
+	// Enfore a fault on a downstream.
+	DownstreamEnforcing *DownstreamEnforcing `protobuf:"bytes,2,opt,name=downstream_enforcing,json=downstreamEnforcing,proto3,oneof"`
+}
+
+func (*FaultTargeting_UpstreamEnforcing) isFaultTargeting_Enforcer() {}
+
+func (*FaultTargeting_DownstreamEnforcing) isFaultTargeting_Enforcer() {}
+
+// Enforce faults on an upstream.
+type UpstreamEnforcing struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// An upstream responsible for enforcing a fault. Only requests that are handled
+	// by the specified upstream are considered for the fault injection.
+	//
+	// Types that are assignable to UpstreamType:
+	//	*UpstreamEnforcing_UpstreamCluster
+	//	*UpstreamEnforcing_UpstreamPartialSingleCluster
+	UpstreamType isUpstreamEnforcing_UpstreamType `protobuf_oneof:"upstream_type"`
+	// A downstream responsible for enforcing a fault. Only requests that are started
+	// by the specified downstream are considered for the fault injection.
+	//
+	// Types that are assignable to DownstreamType:
+	//	*UpstreamEnforcing_DownstreamCluster
+	DownstreamType isUpstreamEnforcing_DownstreamType `protobuf_oneof:"downstream_type"`
+}
+
+func (x *UpstreamEnforcing) Reset() {
+	*x = UpstreamEnforcing{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpstreamEnforcing) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpstreamEnforcing) ProtoMessage() {}
+
+func (x *UpstreamEnforcing) ProtoReflect() protoreflect.Message {
+	mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpstreamEnforcing.ProtoReflect.Descriptor instead.
+func (*UpstreamEnforcing) Descriptor() ([]byte, []int) {
+	return file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDescGZIP(), []int{8}
+}
+
+func (m *UpstreamEnforcing) GetUpstreamType() isUpstreamEnforcing_UpstreamType {
+	if m != nil {
+		return m.UpstreamType
+	}
+	return nil
+}
+
+func (x *UpstreamEnforcing) GetUpstreamCluster() *SingleCluster {
+	if x, ok := x.GetUpstreamType().(*UpstreamEnforcing_UpstreamCluster); ok {
+		return x.UpstreamCluster
+	}
+	return nil
+}
+
+func (x *UpstreamEnforcing) GetUpstreamPartialSingleCluster() *PartialSingleCluster {
+	if x, ok := x.GetUpstreamType().(*UpstreamEnforcing_UpstreamPartialSingleCluster); ok {
+		return x.UpstreamPartialSingleCluster
+	}
+	return nil
+}
+
+func (m *UpstreamEnforcing) GetDownstreamType() isUpstreamEnforcing_DownstreamType {
+	if m != nil {
+		return m.DownstreamType
+	}
+	return nil
+}
+
+func (x *UpstreamEnforcing) GetDownstreamCluster() *SingleCluster {
+	if x, ok := x.GetDownstreamType().(*UpstreamEnforcing_DownstreamCluster); ok {
+		return x.DownstreamCluster
+	}
+	return nil
+}
+
+type isUpstreamEnforcing_UpstreamType interface {
+	isUpstreamEnforcing_UpstreamType()
+}
+
+type UpstreamEnforcing_UpstreamCluster struct {
+	// A single upstream cluster.
+	UpstreamCluster *SingleCluster `protobuf:"bytes,1,opt,name=upstream_cluster,json=upstreamCluster,proto3,oneof"`
+}
+
+type UpstreamEnforcing_UpstreamPartialSingleCluster struct {
+	// A partial single upstream cluster.
+	UpstreamPartialSingleCluster *PartialSingleCluster `protobuf:"bytes,2,opt,name=upstream_partial_single_cluster,json=upstreamPartialSingleCluster,proto3,oneof"`
+}
+
+func (*UpstreamEnforcing_UpstreamCluster) isUpstreamEnforcing_UpstreamType() {}
+
+func (*UpstreamEnforcing_UpstreamPartialSingleCluster) isUpstreamEnforcing_UpstreamType() {}
+
+type isUpstreamEnforcing_DownstreamType interface {
+	isUpstreamEnforcing_DownstreamType()
+}
+
+type UpstreamEnforcing_DownstreamCluster struct {
+	// A single downstream cluster.
+	DownstreamCluster *SingleCluster `protobuf:"bytes,3,opt,name=downstream_cluster,json=downstreamCluster,proto3,oneof"`
+}
+
+func (*UpstreamEnforcing_DownstreamCluster) isUpstreamEnforcing_DownstreamType() {}
+
+// Enforce faults on a downstream.
+type DownstreamEnforcing struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// An upstream responsible for enforcing a fault. Only requests that are handled
+	// by the specified upstream are considered for the fault injection.
+	//
+	// Types that are assignable to UpstreamType:
+	//	*DownstreamEnforcing_UpstreamCluster
+	UpstreamType isDownstreamEnforcing_UpstreamType `protobuf_oneof:"upstream_type"`
+	// A downstream responsible for enforcing a fault. Only requests that are started
+	// by the specified downstream are considered for a fault injection.
+	//
+	// Types that are assignable to DownstreamType:
+	//	*DownstreamEnforcing_DownstreamCluster
+	DownstreamType isDownstreamEnforcing_DownstreamType `protobuf_oneof:"downstream_type"`
+}
+
+func (x *DownstreamEnforcing) Reset() {
+	*x = DownstreamEnforcing{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DownstreamEnforcing) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DownstreamEnforcing) ProtoMessage() {}
+
+func (x *DownstreamEnforcing) ProtoReflect() protoreflect.Message {
+	mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DownstreamEnforcing.ProtoReflect.Descriptor instead.
+func (*DownstreamEnforcing) Descriptor() ([]byte, []int) {
+	return file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDescGZIP(), []int{9}
+}
+
+func (m *DownstreamEnforcing) GetUpstreamType() isDownstreamEnforcing_UpstreamType {
+	if m != nil {
+		return m.UpstreamType
+	}
+	return nil
+}
+
+func (x *DownstreamEnforcing) GetUpstreamCluster() *SingleCluster {
+	if x, ok := x.GetUpstreamType().(*DownstreamEnforcing_UpstreamCluster); ok {
+		return x.UpstreamCluster
+	}
+	return nil
+}
+
+func (m *DownstreamEnforcing) GetDownstreamType() isDownstreamEnforcing_DownstreamType {
+	if m != nil {
+		return m.DownstreamType
+	}
+	return nil
+}
+
+func (x *DownstreamEnforcing) GetDownstreamCluster() *SingleCluster {
+	if x, ok := x.GetDownstreamType().(*DownstreamEnforcing_DownstreamCluster); ok {
+		return x.DownstreamCluster
+	}
+	return nil
+}
+
+type isDownstreamEnforcing_UpstreamType interface {
+	isDownstreamEnforcing_UpstreamType()
+}
+
+type DownstreamEnforcing_UpstreamCluster struct {
+	// A single upstream cluster.
+	UpstreamCluster *SingleCluster `protobuf:"bytes,1,opt,name=upstream_cluster,json=upstreamCluster,proto3,oneof"`
+}
+
+func (*DownstreamEnforcing_UpstreamCluster) isDownstreamEnforcing_UpstreamType() {}
+
+type isDownstreamEnforcing_DownstreamType interface {
+	isDownstreamEnforcing_DownstreamType()
+}
+
+type DownstreamEnforcing_DownstreamCluster struct {
+	// A single downstream cluster.
+	DownstreamCluster *SingleCluster `protobuf:"bytes,2,opt,name=downstream_cluster,json=downstreamCluster,proto3,oneof"`
+}
+
+func (*DownstreamEnforcing_DownstreamCluster) isDownstreamEnforcing_DownstreamType() {}
+
+// A single cluster that is partaking in the fault injection.
+type SingleCluster struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The name of a cluster.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (x *SingleCluster) Reset() {
+	*x = SingleCluster{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SingleCluster) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SingleCluster) ProtoMessage() {}
+
+func (x *SingleCluster) ProtoReflect() protoreflect.Message {
+	mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SingleCluster.ProtoReflect.Descriptor instead.
+func (*SingleCluster) Descriptor() ([]byte, []int) {
+	return file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *SingleCluster) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+// A partial single cluster - the part of a single cluster that's partaking
+// in the fault injection. It allows the user of the API to specify the subset
+// of the cluster whose requests should be considered for a fault injection.
+type PartialSingleCluster struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The name of a cluster.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// The percentage controlling what part of a cluster should be considered for fault
+	// injection. The portion of the cluster is supposed to be consistent, meaning that
+	// any given part of a cluster should be either included or excluded for the whole duration of
+	// a given fault injection test. In other words, for every part of the cluster, we toss a
+	// coin once to decide whether it should participate in a given fault injection test or not
+	// and we stick to our decision.
+	ClusterPercentage *ClusterPercentage `protobuf:"bytes,2,opt,name=cluster_percentage,json=clusterPercentage,proto3" json:"cluster_percentage,omitempty"`
+}
+
+func (x *PartialSingleCluster) Reset() {
+	*x = PartialSingleCluster{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PartialSingleCluster) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PartialSingleCluster) ProtoMessage() {}
+
+func (x *PartialSingleCluster) ProtoReflect() protoreflect.Message {
+	mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PartialSingleCluster.ProtoReflect.Descriptor instead.
+func (*PartialSingleCluster) Descriptor() ([]byte, []int) {
+	return file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *PartialSingleCluster) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *PartialSingleCluster) GetClusterPercentage() *ClusterPercentage {
+	if x != nil {
+		return x.ClusterPercentage
+	}
+	return nil
+}
+
+// The percentage controlling what portion of a given cluster should be applying faults.
+type ClusterPercentage struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The numerator of a percentage with a fixed denumerator equal to 100
+	// (i.e. percentage equal to 50 results in 50/100 = 50%)
+	Percentage uint32 `protobuf:"varint,1,opt,name=percentage,proto3" json:"percentage,omitempty"`
+}
+
+func (x *ClusterPercentage) Reset() {
+	*x = ClusterPercentage{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[12]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ClusterPercentage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ClusterPercentage) ProtoMessage() {}
+
+func (x *ClusterPercentage) ProtoReflect() protoreflect.Message {
+	mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[12]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ClusterPercentage.ProtoReflect.Descriptor instead.
+func (*ClusterPercentage) Descriptor() ([]byte, []int) {
+	return file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *ClusterPercentage) GetPercentage() uint32 {
+	if x != nil {
+		return x.Percentage
+	}
+	return 0
+}
+
+// The fault percentage controlling what percentage of requests considered for a fault injection
+// should have the fault applied.
+type FaultPercentage struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The numerator of a percentage with a fixed denumerator equal to 100
+	// (i.e. percentage equal to 50 results in 50/100 = 50%)
+	Percentage uint32 `protobuf:"varint,1,opt,name=percentage,proto3" json:"percentage,omitempty"`
+}
+
+func (x *FaultPercentage) Reset() {
+	*x = FaultPercentage{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[13]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *FaultPercentage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FaultPercentage) ProtoMessage() {}
+
+func (x *FaultPercentage) ProtoReflect() protoreflect.Message {
+	mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[13]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FaultPercentage.ProtoReflect.Descriptor instead.
+func (*FaultPercentage) Descriptor() ([]byte, []int) {
+	return file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *FaultPercentage) GetPercentage() uint32 {
+	if x != nil {
+		return x.Percentage
+	}
+	return 0
+}
+
+// The abort status to apply as part of an abort fault.
+type FaultAbortStatus struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The abort HTTP status.
+	HttpStatusCode uint32 `protobuf:"varint,1,opt,name=http_status_code,json=httpStatusCode,proto3" json:"http_status_code,omitempty"`
+}
+
+func (x *FaultAbortStatus) Reset() {
+	*x = FaultAbortStatus{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *FaultAbortStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FaultAbortStatus) ProtoMessage() {}
+
+func (x *FaultAbortStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FaultAbortStatus.ProtoReflect.Descriptor instead.
+func (*FaultAbortStatus) Descriptor() ([]byte, []int) {
+	return file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *FaultAbortStatus) GetHttpStatusCode() uint32 {
+	if x != nil {
+		return x.HttpStatusCode
+	}
+	return 0
+}
+
+// The latency duration to apply as part of a latency fault.
+type FaultLatencyDuration struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// The fixed latency duration in milliseconds.
+	FixedDurationMs uint32 `protobuf:"varint,1,opt,name=fixed_duration_ms,json=fixedDurationMs,proto3" json:"fixed_duration_ms,omitempty"`
+}
+
+func (x *FaultLatencyDuration) Reset() {
+	*x = FaultLatencyDuration{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[15]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *FaultLatencyDuration) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FaultLatencyDuration) ProtoMessage() {}
+
+func (x *FaultLatencyDuration) ProtoReflect() protoreflect.Message {
+	mi := &file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[15]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FaultLatencyDuration.ProtoReflect.Descriptor instead.
+func (*FaultLatencyDuration) Descriptor() ([]byte, []int) {
+	return file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *FaultLatencyDuration) GetFixedDurationMs() uint32 {
+	if x != nil {
+		return x.FixedDurationMs
+	}
+	return 0
+}
+
 var File_chaos_serverexperimentation_v1_serverexperimentation_proto protoreflect.FileDescriptor
 
 var file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDesc = []byte{
@@ -409,22 +1237,158 @@ var file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDesc = []
 	0x70, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74, 0x12, 0x28, 0x0a, 0x0b, 0x64, 0x75, 0x72, 0x61, 0x74,
 	0x69, 0x6f, 0x6e, 0x5f, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x42, 0x07, 0xfa, 0x42,
 	0x04, 0x1a, 0x02, 0x20, 0x00, 0x52, 0x0a, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4d,
-	0x73, 0x2a, 0x88, 0x01, 0x0a, 0x15, 0x46, 0x61, 0x75, 0x6c, 0x74, 0x49, 0x6e, 0x6a, 0x65, 0x63,
-	0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x12, 0x25, 0x0a, 0x21, 0x46,
-	0x41, 0x55, 0x4c, 0x54, 0x49, 0x4e, 0x4a, 0x45, 0x43, 0x54, 0x49, 0x4f, 0x4e, 0x43, 0x4c, 0x55,
-	0x53, 0x54, 0x45, 0x52, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44,
-	0x10, 0x00, 0x12, 0x24, 0x0a, 0x20, 0x46, 0x41, 0x55, 0x4c, 0x54, 0x49, 0x4e, 0x4a, 0x45, 0x43,
-	0x54, 0x49, 0x4f, 0x4e, 0x43, 0x4c, 0x55, 0x53, 0x54, 0x45, 0x52, 0x5f, 0x44, 0x4f, 0x57, 0x4e,
-	0x53, 0x54, 0x52, 0x45, 0x41, 0x4d, 0x10, 0x01, 0x12, 0x22, 0x0a, 0x1e, 0x46, 0x41, 0x55, 0x4c,
-	0x54, 0x49, 0x4e, 0x4a, 0x45, 0x43, 0x54, 0x49, 0x4f, 0x4e, 0x43, 0x4c, 0x55, 0x53, 0x54, 0x45,
-	0x52, 0x5f, 0x55, 0x50, 0x53, 0x54, 0x52, 0x45, 0x41, 0x4d, 0x10, 0x02, 0x42, 0x5b, 0x5a, 0x59,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6c, 0x79, 0x66, 0x74, 0x2f,
-	0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2f, 0x62, 0x61, 0x63, 0x6b, 0x65, 0x6e, 0x64, 0x2f, 0x61,
-	0x70, 0x69, 0x2f, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x65,
-	0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2f, 0x76,
-	0x31, 0x3b, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65,
-	0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x73, 0x22, 0xbb, 0x02, 0x0a, 0x0f, 0x48, 0x54, 0x54, 0x50, 0x46, 0x61, 0x75, 0x6c, 0x74, 0x43,
+	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x68, 0x0a, 0x0f, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x5f, 0x74,
+	0x61, 0x72, 0x67, 0x65, 0x74, 0x69, 0x6e, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x35,
+	0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2e, 0x73, 0x65,
+	0x72, 0x76, 0x65, 0x72, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x46, 0x61, 0x75, 0x6c, 0x74, 0x54, 0x61, 0x72, 0x67,
+	0x65, 0x74, 0x69, 0x6e, 0x67, 0x42, 0x08, 0xfa, 0x42, 0x05, 0x8a, 0x01, 0x02, 0x10, 0x01, 0x52,
+	0x0e, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x69, 0x6e, 0x67, 0x12,
+	0x54, 0x0a, 0x0b, 0x61, 0x62, 0x6f, 0x72, 0x74, 0x5f, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x31, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x68,
+	0x61, 0x6f, 0x73, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69,
+	0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x62, 0x6f,
+	0x72, 0x74, 0x46, 0x61, 0x75, 0x6c, 0x74, 0x48, 0x00, 0x52, 0x0a, 0x61, 0x62, 0x6f, 0x72, 0x74,
+	0x46, 0x61, 0x75, 0x6c, 0x74, 0x12, 0x5a, 0x0a, 0x0d, 0x6c, 0x61, 0x74, 0x65, 0x6e, 0x63, 0x79,
+	0x5f, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x33, 0x2e, 0x63,
+	0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2e, 0x73, 0x65, 0x72, 0x76,
+	0x65, 0x72, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x61, 0x74, 0x65, 0x6e, 0x63, 0x79, 0x46, 0x61, 0x75, 0x6c,
+	0x74, 0x48, 0x00, 0x52, 0x0c, 0x6c, 0x61, 0x74, 0x65, 0x6e, 0x63, 0x79, 0x46, 0x61, 0x75, 0x6c,
+	0x74, 0x42, 0x0c, 0x0a, 0x05, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x12, 0x03, 0xf8, 0x42, 0x01, 0x22,
+	0xd4, 0x01, 0x0a, 0x0a, 0x41, 0x62, 0x6f, 0x72, 0x74, 0x46, 0x61, 0x75, 0x6c, 0x74, 0x12, 0x60,
+	0x0a, 0x0a, 0x70, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x36, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x68, 0x61, 0x6f,
+	0x73, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65,
+	0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x46, 0x61, 0x75, 0x6c, 0x74,
+	0x50, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x42, 0x08, 0xfa, 0x42, 0x05, 0x8a,
+	0x01, 0x02, 0x10, 0x01, 0x52, 0x0a, 0x70, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65,
+	0x12, 0x64, 0x0a, 0x0c, 0x61, 0x62, 0x6f, 0x72, 0x74, 0x5f, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x37, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e,
+	0x63, 0x68, 0x61, 0x6f, 0x73, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x65, 0x78, 0x70, 0x65,
+	0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x46,
+	0x61, 0x75, 0x6c, 0x74, 0x41, 0x62, 0x6f, 0x72, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x42,
+	0x08, 0xfa, 0x42, 0x05, 0x8a, 0x01, 0x02, 0x10, 0x01, 0x52, 0x0b, 0x61, 0x62, 0x6f, 0x72, 0x74,
+	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0xe2, 0x01, 0x0a, 0x0c, 0x4c, 0x61, 0x74, 0x65, 0x6e,
+	0x63, 0x79, 0x46, 0x61, 0x75, 0x6c, 0x74, 0x12, 0x60, 0x0a, 0x0a, 0x70, 0x65, 0x72, 0x63, 0x65,
+	0x6e, 0x74, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x36, 0x2e, 0x63, 0x6c,
+	0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65,
+	0x72, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x2e, 0x76, 0x31, 0x2e, 0x46, 0x61, 0x75, 0x6c, 0x74, 0x50, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74,
+	0x61, 0x67, 0x65, 0x42, 0x08, 0xfa, 0x42, 0x05, 0x8a, 0x01, 0x02, 0x10, 0x01, 0x52, 0x0a, 0x70,
+	0x65, 0x72, 0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x12, 0x70, 0x0a, 0x10, 0x6c, 0x61, 0x74,
+	0x65, 0x6e, 0x63, 0x79, 0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x3b, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x68, 0x61,
+	0x6f, 0x73, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69, 0x6d,
+	0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x46, 0x61, 0x75, 0x6c,
+	0x74, 0x4c, 0x61, 0x74, 0x65, 0x6e, 0x63, 0x79, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x42, 0x08, 0xfa, 0x42, 0x05, 0x8a, 0x01, 0x02, 0x10, 0x01, 0x52, 0x0f, 0x6c, 0x61, 0x74, 0x65,
+	0x6e, 0x63, 0x79, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xfd, 0x01, 0x0a, 0x0e,
+	0x46, 0x61, 0x75, 0x6c, 0x74, 0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x69, 0x6e, 0x67, 0x12, 0x69,
+	0x0a, 0x12, 0x75, 0x70, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x5f, 0x65, 0x6e, 0x66, 0x6f, 0x72,
+	0x63, 0x69, 0x6e, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x38, 0x2e, 0x63, 0x6c, 0x75,
+	0x74, 0x63, 0x68, 0x2e, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72,
+	0x65, 0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e,
+	0x76, 0x31, 0x2e, 0x55, 0x70, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x45, 0x6e, 0x66, 0x6f, 0x72,
+	0x63, 0x69, 0x6e, 0x67, 0x48, 0x00, 0x52, 0x11, 0x75, 0x70, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d,
+	0x45, 0x6e, 0x66, 0x6f, 0x72, 0x63, 0x69, 0x6e, 0x67, 0x12, 0x6f, 0x0a, 0x14, 0x64, 0x6f, 0x77,
+	0x6e, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x5f, 0x65, 0x6e, 0x66, 0x6f, 0x72, 0x63, 0x69, 0x6e,
+	0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x3a, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68,
+	0x2e, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x65, 0x78, 0x70,
+	0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x31, 0x2e,
+	0x44, 0x6f, 0x77, 0x6e, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x45, 0x6e, 0x66, 0x6f, 0x72, 0x63,
+	0x69, 0x6e, 0x67, 0x48, 0x00, 0x52, 0x13, 0x64, 0x6f, 0x77, 0x6e, 0x73, 0x74, 0x72, 0x65, 0x61,
+	0x6d, 0x45, 0x6e, 0x66, 0x6f, 0x72, 0x63, 0x69, 0x6e, 0x67, 0x42, 0x0f, 0x0a, 0x08, 0x65, 0x6e,
+	0x66, 0x6f, 0x72, 0x63, 0x65, 0x72, 0x12, 0x03, 0xf8, 0x42, 0x01, 0x22, 0x92, 0x03, 0x0a, 0x11,
+	0x55, 0x70, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x45, 0x6e, 0x66, 0x6f, 0x72, 0x63, 0x69, 0x6e,
+	0x67, 0x12, 0x61, 0x0a, 0x10, 0x75, 0x70, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x5f, 0x63, 0x6c,
+	0x75, 0x73, 0x74, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x34, 0x2e, 0x63, 0x6c,
+	0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65,
+	0x72, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x2e, 0x76, 0x31, 0x2e, 0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x43, 0x6c, 0x75, 0x73, 0x74, 0x65,
+	0x72, 0x48, 0x00, 0x52, 0x0f, 0x75, 0x70, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x43, 0x6c, 0x75,
+	0x73, 0x74, 0x65, 0x72, 0x12, 0x84, 0x01, 0x0a, 0x1f, 0x75, 0x70, 0x73, 0x74, 0x72, 0x65, 0x61,
+	0x6d, 0x5f, 0x70, 0x61, 0x72, 0x74, 0x69, 0x61, 0x6c, 0x5f, 0x73, 0x69, 0x6e, 0x67, 0x6c, 0x65,
+	0x5f, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x3b,
+	0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2e, 0x73, 0x65,
+	0x72, 0x76, 0x65, 0x72, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x72, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x69,
+	0x6e, 0x67, 0x6c, 0x65, 0x43, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x48, 0x00, 0x52, 0x1c, 0x75,
+	0x70, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x50, 0x61, 0x72, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x69,
+	0x6e, 0x67, 0x6c, 0x65, 0x43, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x12, 0x65, 0x0a, 0x12, 0x64,
+	0x6f, 0x77, 0x6e, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x5f, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65,
+	0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x34, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68,
+	0x2e, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x65, 0x78, 0x70,
+	0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x31, 0x2e,
+	0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x43, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x48, 0x01, 0x52,
+	0x11, 0x64, 0x6f, 0x77, 0x6e, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x43, 0x6c, 0x75, 0x73, 0x74,
+	0x65, 0x72, 0x42, 0x14, 0x0a, 0x0d, 0x75, 0x70, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x5f, 0x74,
+	0x79, 0x70, 0x65, 0x12, 0x03, 0xf8, 0x42, 0x01, 0x42, 0x16, 0x0a, 0x0f, 0x64, 0x6f, 0x77, 0x6e,
+	0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x12, 0x03, 0xf8, 0x42, 0x01,
+	0x22, 0x8d, 0x02, 0x0a, 0x13, 0x44, 0x6f, 0x77, 0x6e, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x45,
+	0x6e, 0x66, 0x6f, 0x72, 0x63, 0x69, 0x6e, 0x67, 0x12, 0x61, 0x0a, 0x10, 0x75, 0x70, 0x73, 0x74,
+	0x72, 0x65, 0x61, 0x6d, 0x5f, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x34, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x68, 0x61, 0x6f,
+	0x73, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65,
+	0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x69, 0x6e, 0x67, 0x6c,
+	0x65, 0x43, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x48, 0x00, 0x52, 0x0f, 0x75, 0x70, 0x73, 0x74,
+	0x72, 0x65, 0x61, 0x6d, 0x43, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x12, 0x65, 0x0a, 0x12, 0x64,
+	0x6f, 0x77, 0x6e, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x5f, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65,
+	0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x34, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68,
+	0x2e, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x65, 0x78, 0x70,
+	0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x31, 0x2e,
+	0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x43, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x48, 0x01, 0x52,
+	0x11, 0x64, 0x6f, 0x77, 0x6e, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x43, 0x6c, 0x75, 0x73, 0x74,
+	0x65, 0x72, 0x42, 0x14, 0x0a, 0x0d, 0x75, 0x70, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x5f, 0x74,
+	0x79, 0x70, 0x65, 0x12, 0x03, 0xf8, 0x42, 0x01, 0x42, 0x16, 0x0a, 0x0f, 0x64, 0x6f, 0x77, 0x6e,
+	0x73, 0x74, 0x72, 0x65, 0x61, 0x6d, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x12, 0x03, 0xf8, 0x42, 0x01,
+	0x22, 0x2c, 0x0a, 0x0d, 0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x43, 0x6c, 0x75, 0x73, 0x74, 0x65,
+	0x72, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42,
+	0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x22, 0xa6,
+	0x01, 0x0a, 0x14, 0x50, 0x61, 0x72, 0x74, 0x69, 0x61, 0x6c, 0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65,
+	0x43, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x12, 0x1b, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01, 0x52, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x71, 0x0a, 0x12, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x5f,
+	0x70, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x38, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2e,
+	0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72,
+	0x50, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x42, 0x08, 0xfa, 0x42, 0x05, 0x8a,
+	0x01, 0x02, 0x10, 0x01, 0x52, 0x11, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x50, 0x65, 0x72,
+	0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x22, 0x3e, 0x0a, 0x11, 0x43, 0x6c, 0x75, 0x73, 0x74,
+	0x65, 0x72, 0x50, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x12, 0x29, 0x0a, 0x0a,
+	0x70, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d,
+	0x42, 0x09, 0xfa, 0x42, 0x06, 0x2a, 0x04, 0x18, 0x64, 0x20, 0x00, 0x52, 0x0a, 0x70, 0x65, 0x72,
+	0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x22, 0x3c, 0x0a, 0x0f, 0x46, 0x61, 0x75, 0x6c, 0x74,
+	0x50, 0x65, 0x72, 0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x12, 0x29, 0x0a, 0x0a, 0x70, 0x65,
+	0x72, 0x63, 0x65, 0x6e, 0x74, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x09,
+	0xfa, 0x42, 0x06, 0x2a, 0x04, 0x18, 0x64, 0x20, 0x00, 0x52, 0x0a, 0x70, 0x65, 0x72, 0x63, 0x65,
+	0x6e, 0x74, 0x61, 0x67, 0x65, 0x22, 0x48, 0x0a, 0x10, 0x46, 0x61, 0x75, 0x6c, 0x74, 0x41, 0x62,
+	0x6f, 0x72, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x34, 0x0a, 0x10, 0x68, 0x74, 0x74,
+	0x70, 0x5f, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0d, 0x42, 0x0a, 0xfa, 0x42, 0x07, 0x2a, 0x05, 0x10, 0xd8, 0x04, 0x20, 0x63, 0x52,
+	0x0e, 0x68, 0x74, 0x74, 0x70, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x43, 0x6f, 0x64, 0x65, 0x22,
+	0x4b, 0x0a, 0x14, 0x46, 0x61, 0x75, 0x6c, 0x74, 0x4c, 0x61, 0x74, 0x65, 0x6e, 0x63, 0x79, 0x44,
+	0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x33, 0x0a, 0x11, 0x66, 0x69, 0x78, 0x65, 0x64,
+	0x5f, 0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0d, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x2a, 0x02, 0x20, 0x00, 0x52, 0x0f, 0x66, 0x69, 0x78,
+	0x65, 0x64, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4d, 0x73, 0x2a, 0x88, 0x01, 0x0a,
+	0x15, 0x46, 0x61, 0x75, 0x6c, 0x74, 0x49, 0x6e, 0x6a, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x43,
+	0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x12, 0x25, 0x0a, 0x21, 0x46, 0x41, 0x55, 0x4c, 0x54, 0x49,
+	0x4e, 0x4a, 0x45, 0x43, 0x54, 0x49, 0x4f, 0x4e, 0x43, 0x4c, 0x55, 0x53, 0x54, 0x45, 0x52, 0x5f,
+	0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x24, 0x0a,
+	0x20, 0x46, 0x41, 0x55, 0x4c, 0x54, 0x49, 0x4e, 0x4a, 0x45, 0x43, 0x54, 0x49, 0x4f, 0x4e, 0x43,
+	0x4c, 0x55, 0x53, 0x54, 0x45, 0x52, 0x5f, 0x44, 0x4f, 0x57, 0x4e, 0x53, 0x54, 0x52, 0x45, 0x41,
+	0x4d, 0x10, 0x01, 0x12, 0x22, 0x0a, 0x1e, 0x46, 0x41, 0x55, 0x4c, 0x54, 0x49, 0x4e, 0x4a, 0x45,
+	0x43, 0x54, 0x49, 0x4f, 0x4e, 0x43, 0x4c, 0x55, 0x53, 0x54, 0x45, 0x52, 0x5f, 0x55, 0x50, 0x53,
+	0x54, 0x52, 0x45, 0x41, 0x4d, 0x10, 0x02, 0x42, 0x5b, 0x5a, 0x59, 0x67, 0x69, 0x74, 0x68, 0x75,
+	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6c, 0x79, 0x66, 0x74, 0x2f, 0x63, 0x6c, 0x75, 0x74, 0x63,
+	0x68, 0x2f, 0x62, 0x61, 0x63, 0x6b, 0x65, 0x6e, 0x64, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x63, 0x68,
+	0x61, 0x6f, 0x73, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69,
+	0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2f, 0x76, 0x31, 0x3b, 0x73, 0x65, 0x72,
+	0x76, 0x65, 0x72, 0x65, 0x78, 0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -440,24 +1404,51 @@ func file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDescGZIP
 }
 
 var file_chaos_serverexperimentation_v1_serverexperimentation_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_chaos_serverexperimentation_v1_serverexperimentation_proto_goTypes = []interface{}{
-	(FaultInjectionCluster)(0), // 0: clutch.chaos.serverexperimentation.v1.FaultInjectionCluster
-	(*TestConfig)(nil),         // 1: clutch.chaos.serverexperimentation.v1.TestConfig
-	(*ClusterPairTarget)(nil),  // 2: clutch.chaos.serverexperimentation.v1.ClusterPairTarget
-	(*AbortFaultConfig)(nil),   // 3: clutch.chaos.serverexperimentation.v1.AbortFaultConfig
-	(*LatencyFaultConfig)(nil), // 4: clutch.chaos.serverexperimentation.v1.LatencyFaultConfig
+	(FaultInjectionCluster)(0),   // 0: clutch.chaos.serverexperimentation.v1.FaultInjectionCluster
+	(*TestConfig)(nil),           // 1: clutch.chaos.serverexperimentation.v1.TestConfig
+	(*ClusterPairTarget)(nil),    // 2: clutch.chaos.serverexperimentation.v1.ClusterPairTarget
+	(*AbortFaultConfig)(nil),     // 3: clutch.chaos.serverexperimentation.v1.AbortFaultConfig
+	(*LatencyFaultConfig)(nil),   // 4: clutch.chaos.serverexperimentation.v1.LatencyFaultConfig
+	(*HTTPFaultConfig)(nil),      // 5: clutch.chaos.serverexperimentation.v1.HTTPFaultConfig
+	(*AbortFault)(nil),           // 6: clutch.chaos.serverexperimentation.v1.AbortFault
+	(*LatencyFault)(nil),         // 7: clutch.chaos.serverexperimentation.v1.LatencyFault
+	(*FaultTargeting)(nil),       // 8: clutch.chaos.serverexperimentation.v1.FaultTargeting
+	(*UpstreamEnforcing)(nil),    // 9: clutch.chaos.serverexperimentation.v1.UpstreamEnforcing
+	(*DownstreamEnforcing)(nil),  // 10: clutch.chaos.serverexperimentation.v1.DownstreamEnforcing
+	(*SingleCluster)(nil),        // 11: clutch.chaos.serverexperimentation.v1.SingleCluster
+	(*PartialSingleCluster)(nil), // 12: clutch.chaos.serverexperimentation.v1.PartialSingleCluster
+	(*ClusterPercentage)(nil),    // 13: clutch.chaos.serverexperimentation.v1.ClusterPercentage
+	(*FaultPercentage)(nil),      // 14: clutch.chaos.serverexperimentation.v1.FaultPercentage
+	(*FaultAbortStatus)(nil),     // 15: clutch.chaos.serverexperimentation.v1.FaultAbortStatus
+	(*FaultLatencyDuration)(nil), // 16: clutch.chaos.serverexperimentation.v1.FaultLatencyDuration
 }
 var file_chaos_serverexperimentation_v1_serverexperimentation_proto_depIdxs = []int32{
-	2, // 0: clutch.chaos.serverexperimentation.v1.TestConfig.cluster_pair:type_name -> clutch.chaos.serverexperimentation.v1.ClusterPairTarget
-	3, // 1: clutch.chaos.serverexperimentation.v1.TestConfig.abort:type_name -> clutch.chaos.serverexperimentation.v1.AbortFaultConfig
-	4, // 2: clutch.chaos.serverexperimentation.v1.TestConfig.latency:type_name -> clutch.chaos.serverexperimentation.v1.LatencyFaultConfig
-	0, // 3: clutch.chaos.serverexperimentation.v1.ClusterPairTarget.fault_injection_cluster:type_name -> clutch.chaos.serverexperimentation.v1.FaultInjectionCluster
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	2,  // 0: clutch.chaos.serverexperimentation.v1.TestConfig.cluster_pair:type_name -> clutch.chaos.serverexperimentation.v1.ClusterPairTarget
+	3,  // 1: clutch.chaos.serverexperimentation.v1.TestConfig.abort:type_name -> clutch.chaos.serverexperimentation.v1.AbortFaultConfig
+	4,  // 2: clutch.chaos.serverexperimentation.v1.TestConfig.latency:type_name -> clutch.chaos.serverexperimentation.v1.LatencyFaultConfig
+	0,  // 3: clutch.chaos.serverexperimentation.v1.ClusterPairTarget.fault_injection_cluster:type_name -> clutch.chaos.serverexperimentation.v1.FaultInjectionCluster
+	8,  // 4: clutch.chaos.serverexperimentation.v1.HTTPFaultConfig.fault_targeting:type_name -> clutch.chaos.serverexperimentation.v1.FaultTargeting
+	6,  // 5: clutch.chaos.serverexperimentation.v1.HTTPFaultConfig.abort_fault:type_name -> clutch.chaos.serverexperimentation.v1.AbortFault
+	7,  // 6: clutch.chaos.serverexperimentation.v1.HTTPFaultConfig.latency_fault:type_name -> clutch.chaos.serverexperimentation.v1.LatencyFault
+	14, // 7: clutch.chaos.serverexperimentation.v1.AbortFault.percentage:type_name -> clutch.chaos.serverexperimentation.v1.FaultPercentage
+	15, // 8: clutch.chaos.serverexperimentation.v1.AbortFault.abort_status:type_name -> clutch.chaos.serverexperimentation.v1.FaultAbortStatus
+	14, // 9: clutch.chaos.serverexperimentation.v1.LatencyFault.percentage:type_name -> clutch.chaos.serverexperimentation.v1.FaultPercentage
+	16, // 10: clutch.chaos.serverexperimentation.v1.LatencyFault.latency_duration:type_name -> clutch.chaos.serverexperimentation.v1.FaultLatencyDuration
+	9,  // 11: clutch.chaos.serverexperimentation.v1.FaultTargeting.upstream_enforcing:type_name -> clutch.chaos.serverexperimentation.v1.UpstreamEnforcing
+	10, // 12: clutch.chaos.serverexperimentation.v1.FaultTargeting.downstream_enforcing:type_name -> clutch.chaos.serverexperimentation.v1.DownstreamEnforcing
+	11, // 13: clutch.chaos.serverexperimentation.v1.UpstreamEnforcing.upstream_cluster:type_name -> clutch.chaos.serverexperimentation.v1.SingleCluster
+	12, // 14: clutch.chaos.serverexperimentation.v1.UpstreamEnforcing.upstream_partial_single_cluster:type_name -> clutch.chaos.serverexperimentation.v1.PartialSingleCluster
+	11, // 15: clutch.chaos.serverexperimentation.v1.UpstreamEnforcing.downstream_cluster:type_name -> clutch.chaos.serverexperimentation.v1.SingleCluster
+	11, // 16: clutch.chaos.serverexperimentation.v1.DownstreamEnforcing.upstream_cluster:type_name -> clutch.chaos.serverexperimentation.v1.SingleCluster
+	11, // 17: clutch.chaos.serverexperimentation.v1.DownstreamEnforcing.downstream_cluster:type_name -> clutch.chaos.serverexperimentation.v1.SingleCluster
+	13, // 18: clutch.chaos.serverexperimentation.v1.PartialSingleCluster.cluster_percentage:type_name -> clutch.chaos.serverexperimentation.v1.ClusterPercentage
+	19, // [19:19] is the sub-list for method output_type
+	19, // [19:19] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_chaos_serverexperimentation_v1_serverexperimentation_proto_init() }
@@ -514,10 +1505,171 @@ func file_chaos_serverexperimentation_v1_serverexperimentation_proto_init() {
 				return nil
 			}
 		}
+		file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*HTTPFaultConfig); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AbortFault); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*LatencyFault); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*FaultTargeting); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpstreamEnforcing); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DownstreamEnforcing); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SingleCluster); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*PartialSingleCluster); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ClusterPercentage); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*FaultPercentage); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*FaultAbortStatus); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*FaultLatencyDuration); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[0].OneofWrappers = []interface{}{
 		(*TestConfig_Abort)(nil),
 		(*TestConfig_Latency)(nil),
+	}
+	file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[4].OneofWrappers = []interface{}{
+		(*HTTPFaultConfig_AbortFault)(nil),
+		(*HTTPFaultConfig_LatencyFault)(nil),
+	}
+	file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[7].OneofWrappers = []interface{}{
+		(*FaultTargeting_UpstreamEnforcing)(nil),
+		(*FaultTargeting_DownstreamEnforcing)(nil),
+	}
+	file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[8].OneofWrappers = []interface{}{
+		(*UpstreamEnforcing_UpstreamCluster)(nil),
+		(*UpstreamEnforcing_UpstreamPartialSingleCluster)(nil),
+		(*UpstreamEnforcing_DownstreamCluster)(nil),
+	}
+	file_chaos_serverexperimentation_v1_serverexperimentation_proto_msgTypes[9].OneofWrappers = []interface{}{
+		(*DownstreamEnforcing_UpstreamCluster)(nil),
+		(*DownstreamEnforcing_DownstreamCluster)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -525,7 +1677,7 @@ func file_chaos_serverexperimentation_v1_serverexperimentation_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_chaos_serverexperimentation_v1_serverexperimentation_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   4,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

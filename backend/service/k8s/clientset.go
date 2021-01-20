@@ -86,21 +86,24 @@ func newClientsetManager(rules *clientcmd.ClientConfigLoadingRules, restClientCo
 		logger.Info("no kubeconfig was found, falling back to InClusterConfig")
 
 		restConfig, err := rest.InClusterConfig()
-		if err := ApplyRestClientConfig(restConfig, restClientConfig); err != nil {
-			return nil, err
-		}
 
 		switch err {
-		case rest.ErrNotInCluster:
-			logger.Warn("not in a kubernetes cluster, unable to configure kube clientset")
 		case nil:
+			if err := ApplyRestClientConfig(restConfig, restClientConfig); err != nil {
+				return nil, err
+			}
+
 			clientset, err := k8s.NewForConfig(restConfig)
 			if err != nil {
 				return nil, fmt.Errorf("could not create k8s InClusterConfig: %w", err)
 			}
+
 			lookup[inCluster] = &ctxClientsetImpl{Interface: clientset, namespace: "default", cluster: inCluster}
+		case rest.ErrNotInCluster:
+			// Warn but allow to continue.
+			logger.Warn("unable to load configuration for kube clientset")
 		default:
-			return nil, err
+			return nil, fmt.Errorf("encountered unexpected issue with InClusterConfig, config detected but incomplete: %w", err)
 		}
 	}
 

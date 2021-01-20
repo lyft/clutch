@@ -8,6 +8,7 @@ import "google/protobuf/any.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
 import "google/rpc/status.proto";
+import "validate/validate.proto";
 
 import "api/v1/annotations.proto";
 
@@ -21,6 +22,14 @@ service TopologyAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
+
+  rpc SearchTopology(SearchTopologyRequest) returns (SearchTopologyResponse) {
+    option (google.api.http) = {
+      post : "/v1/topology/search"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
 }
 
 message GetTopologyRequest {
@@ -29,6 +38,53 @@ message GetTopologyRequest {
 
 message GetTopologyResponse {
   repeated QueryResult results = 1;
+}
+
+message SearchTopologyRequest {
+  // The default sort is by column `id` and descending
+  message Sort {
+    enum Direction {
+      UNSPECIFIED = 0;
+      ASCENDING = 1;
+      DESCENDING = 2;
+    }
+    Direction direction = 1;
+    // Using field mask selector to delinate a column or metadata.
+    // if the metadata is nested specify the full path like the example shows below.
+    // example for metadata 'metadata.level1.level2.level3.fieldname'
+    // example for column 'column.id'
+    string field = 2 [ (validate.rules).string.min_len = 1 ];
+  }
+
+  message Filter {
+    message Search {
+      // Using field mask selector to delinate a column or metadata.
+      // if the metadata is nested specify the full path like the example shows below.
+      // example for metadata 'metadata.level1.level2.level3.fieldname'
+      // example for column 'column.id'
+      string field = 1 [ (validate.rules).string.min_len = 1 ];
+      string text = 2 [ (validate.rules).string.min_len = 1 ];
+    }
+
+    Search search = 1;
+    string type_url = 2;
+    // Any valid metadata on the cache Resource object
+    map<string, string> metadata = 3;
+  }
+
+  Sort sort = 1;
+  // Currently page_token specifies the page number you wish to request.
+  // The rationale behind the naming is we might changes this to a cursor implentation
+  // in the future and did not want to break existing implementations of the API.
+  // https://cloud.google.com/apis/design/design_patterns#list_pagination
+  uint64 page_token = 2;
+  uint64 limit = 3;
+  Filter filter = 4;
+}
+
+message SearchTopologyResponse {
+  repeated Resource resources = 1;
+  string next_page_token = 2;
 }
 
 // A query allows the user to specify multiple dimensions and the
