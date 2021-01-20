@@ -60,3 +60,11 @@ func TestK8SAPIResizeHPA(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 }
+
+func TestK8SAPIListConfigMaps(t *testing.T) {
+	c := k8smock.New()
+	api := newK8sAPI(c)
+	resp, err := api.ListConfigMaps(context.Background(), &k8sapiv1.ListConfigMapsRequest{Options: &k8sapiv1.ListOptions{}})
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
