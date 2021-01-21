@@ -64,19 +64,25 @@ export interface DialogProps extends Pick<MuiDialogProps, "open"> {
     | React.ReactElement<DialogContentProps>[]
     | React.ReactElement<DialogActionsProps>
     | React.ReactElement<DialogActionsProps>[];
+  onClose?: () => void;
 }
 
-const Dialog = ({ title, children, open }: DialogProps) => {
-  const [isOpen, setIsOpen] = React.useState(open);
-  const onClose = () => {
-    setIsOpen(prevOpenState => !prevOpenState);
+const Dialog = ({ title, children, open: isOpenFromProps, onClose }: DialogProps) => {
+  const [isOpenFromState, setIsOpen] = React.useState(isOpenFromProps);
+  const onCloseHandlerExists = typeof onClose === 'function';
+  const closeCallback = () => {
+    if (onCloseHandlerExists) {
+      onClose();
+    } else {
+      setIsOpen(prevOpenState => !prevOpenState);
+    }
   };
-  React.useEffect(() => setIsOpen(open), [open]);
+  React.useEffect(() => setIsOpen(isOpenFromProps), [isOpenFromProps]);
   return (
-    <MuiDialog PaperComponent={DialogPaper} open={isOpen} onClose={onClose}>
+    <MuiDialog PaperComponent={DialogPaper} open={onCloseHandlerExists ? isOpenFromProps : isOpenFromState} onClose={closeCallback}>
       <DialogTitle disableTypography>
         <DialogTitleText>{title}</DialogTitleText>
-        <IconButton onClick={onClose}>
+        <IconButton onClick={closeCallback}>
           <CloseIcon />
         </IconButton>
       </DialogTitle>
