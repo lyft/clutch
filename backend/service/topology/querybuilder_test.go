@@ -101,7 +101,7 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 			},
 			pageToken: "10",
 			limit:     5,
-			expect:    "SELECT id, data, metadata FROM topology_cache WHERE metadata->'search'->'field' LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb ORDER BY $4 ASC LIMIT 5 OFFSET 50",
+			expect:    "SELECT id, data, metadata FROM topology_cache WHERE metadata->'search'->>'field' LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb ORDER BY $4 ASC LIMIT 5 OFFSET 50",
 		},
 	}
 	for _, test := range testCases {
@@ -116,14 +116,27 @@ func TestPaginatedQueryBuilder(t *testing.T) {
 
 func TestFilterQueryBuilder(t *testing.T) {
 	testCases := []struct {
-		id     string
-		input  *topologyv1.SearchRequest_Filter
-		expect string
+		id          string
+		input       *topologyv1.SearchRequest_Filter
+		expect      string
+		shouldError bool
 	}{
 		{
-			id:     "No Input",
-			input:  &topologyv1.SearchRequest_Filter{},
-			expect: "SELECT * FROM topology_cache",
+			id:          "No Input",
+			input:       &topologyv1.SearchRequest_Filter{},
+			expect:      "SELECT * FROM topology_cache",
+			shouldError: false,
+		},
+		{
+			id: "Try to sql inject",
+			input: &topologyv1.SearchRequest_Filter{
+				Search: &topologyv1.SearchRequest_Filter_Search{
+					Field: "column.id NOT NULL;--",
+					Text:  "cat",
+				},
+			},
+			expect:      "",
+			shouldError: true,
 		},
 		{
 			id: "Search by column",
@@ -133,7 +146,8 @@ func TestFilterQueryBuilder(t *testing.T) {
 					Text:  "cat",
 				},
 			},
-			expect: "SELECT * FROM topology_cache WHERE id LIKE $1",
+			expect:      "SELECT * FROM topology_cache WHERE id LIKE $1",
+			shouldError: false,
 		},
 		{
 			id: "Search by Metadata",
@@ -143,7 +157,8 @@ func TestFilterQueryBuilder(t *testing.T) {
 					Text:  "cat",
 				},
 			},
-			expect: "SELECT * FROM topology_cache WHERE metadata->>'label' LIKE $1",
+			expect:      "SELECT * FROM topology_cache WHERE metadata->>'label' LIKE $1",
+			shouldError: false,
 		},
 		{
 			id: "Search all options",
@@ -158,7 +173,8 @@ func TestFilterQueryBuilder(t *testing.T) {
 					"label2": "value2",
 				},
 			},
-			expect: "SELECT * FROM topology_cache WHERE metadata->>'label' LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb",
+			expect:      "SELECT * FROM topology_cache WHERE metadata->>'label' LIKE $1 AND resolver_type_url = $2 AND metadata @> $3::jsonb",
+			shouldError: false,
 		},
 	}
 
@@ -168,24 +184,38 @@ func TestFilterQueryBuilder(t *testing.T) {
 			From("topology_cache")
 
 		output, err := filterQueryBuilder(selectBuilder, test.input)
-		assert.NoError(t, err)
-
-		sql, _, err := output.ToSql()
-		assert.NoError(t, err)
-		assert.Equal(t, test.expect, sql)
+		if test.shouldError {
+			assert.Error(t, err)
+		} else {
+			assert.NoError(t, err)
+			sql, _, err := output.ToSql()
+			assert.NoError(t, err)
+			assert.Equal(t, test.expect, sql)
+		}
 	}
 }
 
 func TestSortQueryBuilder(t *testing.T) {
 	testCases := []struct {
-		id     string
-		input  *topologyv1.SearchRequest_Sort
-		expect string
+		id          string
+		input       *topologyv1.SearchRequest_Sort
+		expect      string
+		shouldError bool
 	}{
 		{
-			id:     "Default to ID ASC",
-			input:  &topologyv1.SearchRequest_Sort{},
-			expect: "SELECT * FROM topology_cache ORDER BY ID ASC",
+			id:          "Default to ID ASC",
+			input:       &topologyv1.SearchRequest_Sort{},
+			expect:      "SELECT * FROM topology_cache ORDER BY ID ASC",
+			shouldError: false,
+		},
+		{
+			id: "Try to sql inject",
+			input: &topologyv1.SearchRequest_Sort{
+				Field:     "column.id NOT NULL;--",
+				Direction: topologyv1.SearchRequest_Sort_DESCENDING,
+			},
+			expect:      "",
+			shouldError: true,
 		},
 		{
 			id: "Sort by custom column and direction",
@@ -193,7 +223,8 @@ func TestSortQueryBuilder(t *testing.T) {
 				Field:     "column.cat",
 				Direction: topologyv1.SearchRequest_Sort_DESCENDING,
 			},
-			expect: "SELECT * FROM topology_cache ORDER BY $1 DESC",
+			expect:      "SELECT * FROM topology_cache ORDER BY $1 DESC",
+			shouldError: false,
 		},
 		{
 			id: "Sort by custom metadata and direction",
@@ -201,7 +232,8 @@ func TestSortQueryBuilder(t *testing.T) {
 				Field:     "metadata.meow",
 				Direction: topologyv1.SearchRequest_Sort_ASCENDING,
 			},
-			expect: "SELECT * FROM topology_cache ORDER BY $1 ASC",
+			expect:      "SELECT * FROM topology_cache ORDER BY $1 ASC",
+			shouldError: false,
 		},
 		{
 			id: "Sort by custom metadata deeply nested",
@@ -209,7 +241,8 @@ func TestSortQueryBuilder(t *testing.T) {
 				Field:     "metadata.meow.iam.a.cat",
 				Direction: topologyv1.SearchRequest_Sort_ASCENDING,
 			},
-			expect: "SELECT * FROM topology_cache ORDER BY $1 ASC",
+			expect:      "SELECT * FROM topology_cache ORDER BY $1 ASC",
+			shouldError: false,
 		},
 	}
 
@@ -218,10 +251,44 @@ func TestSortQueryBuilder(t *testing.T) {
 			Select("*").
 			From("topology_cache")
 
-		output, _ := sortQueryBuilder(selectBuilder, test.input)
-		sql, _, err := output.ToSql()
-		assert.NoError(t, err)
-		assert.Equal(t, test.expect, sql)
+		output, err := sortQueryBuilder(selectBuilder, test.input)
+		if test.shouldError {
+			assert.Error(t, err)
+		} else {
+			assert.NoError(t, err)
+			sql, _, err := output.ToSql()
+			assert.NoError(t, err)
+			assert.Equal(t, test.expect, sql)
+		}
+	}
+}
+
+func TestValidateFilterSortField(t *testing.T) {
+	testCases := []struct {
+		input       string
+		shouldError bool
+	}{
+		{
+			input:       "column.';DROP TABLE;'",
+			shouldError: true,
+		},
+		{
+			input:       "column.id NOT NULL;--",
+			shouldError: true,
+		},
+		{
+			input:       "metadata.id.hello.meow",
+			shouldError: false,
+		},
+	}
+
+	for _, test := range testCases {
+		err := validateFilterSortField(test.input)
+		if test.shouldError {
+			assert.Error(t, err)
+		} else {
+			assert.NoError(t, err)
+		}
 	}
 }
 
@@ -277,12 +344,6 @@ func TestConvertMetadataToQuery(t *testing.T) {
 			shouldError: true,
 		},
 		{
-			id:          "Sql Inject",
-			input:       "metadata.label') --",
-			expect:      "",
-			shouldError: true,
-		},
-		{
 			id:          "top level field",
 			input:       "toplevel",
 			expect:      "metadata->>'toplevel'",
@@ -291,13 +352,13 @@ func TestConvertMetadataToQuery(t *testing.T) {
 		{
 			id:          "one level deep",
 			input:       "toplevel.level1",
-			expect:      "metadata->'toplevel'->'level1'",
+			expect:      "metadata->'toplevel'->>'level1'",
 			shouldError: false,
 		},
 		{
 			id:          "two levels deep",
 			input:       "toplevel.level1.level2",
-			expect:      "metadata->'toplevel'->'level1'->'level2'",
+			expect:      "metadata->'toplevel'->'level1'->>'level2'",
 			shouldError: false,
 		},
 	}

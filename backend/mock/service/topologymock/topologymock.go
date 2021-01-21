@@ -7,6 +7,7 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/structpb"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -32,8 +33,8 @@ func (s *svc) Search(context.Context, *topologyv1.SearchRequest) ([]*topologyv1.
 		{
 			Id: "pod-123",
 			Pb: &any.Any{},
-			Metadata: map[string]string{
-				"label": "value",
+			Metadata: map[string]*structpb.Value{
+				"label": &structpb.Value{},
 			},
 		},
 	}, "1", nil

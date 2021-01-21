@@ -15,6 +15,7 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/net/context"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/structpb"
 
 	topologyv1cfg "github.com/lyft/clutch/backend/api/config/service/topology/v1"
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
@@ -130,7 +131,7 @@ func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*
 			return nil, "0", err
 		}
 
-		var metadataMap map[string]string
+		var metadataMap map[string]*structpb.Value
 		if err := json.Unmarshal(metadata, &metadataMap); err != nil {
 			c.log.Error("Error unmarshaling metadata", zap.Error(err))
 			return nil, "0", err

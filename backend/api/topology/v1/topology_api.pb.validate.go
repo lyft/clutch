@@ -1031,7 +1031,22 @@ func (m *Resource) Validate() error {
 		}
 	}
 
-	// no validation rules for Metadata
+	for key, val := range m.GetMetadata() {
+		_ = val
+
+		// no validation rules for Metadata[key]
+
+		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ResourceValidationError{
+					field:  fmt.Sprintf("Metadata[%v]", key),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
 
 	return nil
 }

@@ -34846,7 +34846,7 @@ export const clutch = $root.clutch = (() => {
                  * @interface IResource
                  * @property {string|null} [id] Resource id
                  * @property {google.protobuf.IAny|null} [pb] Resource pb
-                 * @property {Object.<string,string>|null} [metadata] Resource metadata
+                 * @property {Object.<string,google.protobuf.IValue>|null} [metadata] Resource metadata
                  */
 
                 /**
@@ -34883,7 +34883,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * Resource metadata.
-                 * @member {Object.<string,string>} metadata
+                 * @member {Object.<string,google.protobuf.IValue>} metadata
                  * @memberof clutch.topology.v1.Resource
                  * @instance
                  */
@@ -34912,9 +34912,11 @@ export const clutch = $root.clutch = (() => {
                         if (!$util.isObject(message.metadata))
                             return "metadata: object expected";
                         let key = Object.keys(message.metadata);
-                        for (let i = 0; i < key.length; ++i)
-                            if (!$util.isString(message.metadata[key[i]]))
-                                return "metadata: string{k:string} expected";
+                        for (let i = 0; i < key.length; ++i) {
+                            let error = $root.google.protobuf.Value.verify(message.metadata[key[i]]);
+                            if (error)
+                                return "metadata." + error;
+                        }
                     }
                     return null;
                 };
@@ -34942,8 +34944,11 @@ export const clutch = $root.clutch = (() => {
                         if (typeof object.metadata !== "object")
                             throw TypeError(".clutch.topology.v1.Resource.metadata: object expected");
                         message.metadata = {};
-                        for (let keys = Object.keys(object.metadata), i = 0; i < keys.length; ++i)
-                            message.metadata[keys[i]] = String(object.metadata[keys[i]]);
+                        for (let keys = Object.keys(object.metadata), i = 0; i < keys.length; ++i) {
+                            if (typeof object.metadata[keys[i]] !== "object")
+                                throw TypeError(".clutch.topology.v1.Resource.metadata: object expected");
+                            message.metadata[keys[i]] = $root.google.protobuf.Value.fromObject(object.metadata[keys[i]]);
+                        }
                     }
                     return message;
                 };
@@ -34975,7 +34980,7 @@ export const clutch = $root.clutch = (() => {
                     if (message.metadata && (keys2 = Object.keys(message.metadata)).length) {
                         object.metadata = {};
                         for (let j = 0; j < keys2.length; ++j)
-                            object.metadata[keys2[j]] = message.metadata[keys2[j]];
+                            object.metadata[keys2[j]] = $root.google.protobuf.Value.toObject(message.metadata[keys2[j]], options);
                     }
                     return object;
                 };

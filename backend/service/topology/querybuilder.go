@@ -23,7 +23,7 @@ const (
 	maxResultLimit           = 1000
 )
 
-var metadataQueryValidator = regexp.MustCompile(`^[a-zA-Z0-9->'"]*$`)
+var filterSortFieldValidator = regexp.MustCompile(`^[a-zA-Z0-9.]*$`)
 
 func paginatedQueryBuilder(
 	filter *topologyv1.SearchRequest_Filter,
@@ -76,6 +76,10 @@ func paginatedQueryBuilder(
 
 func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filter) (sq.SelectBuilder, error) {
 	if f.Search != nil && len(f.Search.Field) > 0 {
+		if err := validateFilterSortField(f.Search.Field); err != nil {
+			return sq.SelectBuilder{}, err
+		}
+
 		searchIdentiferExpr := sq.Expr("id")
 		identifer, err := getFilterSortPrefixIdentifer(f.Search.Field)
 		if err != nil {
@@ -112,6 +116,10 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 
 func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) (sq.SelectBuilder, error) {
 	if len(s.Field) > 0 {
+		if err := validateFilterSortField(s.Field); err != nil {
+			return sq.SelectBuilder{}, err
+		}
+
 		direction := getDirection(s.Direction)
 		identifer, err := getFilterSortPrefixIdentifer(s.Field)
 		if err != nil {
@@ -132,6 +140,14 @@ func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) 
 	}
 
 	return query, nil
+}
+
+func validateFilterSortField(input string) error {
+	if !filterSortFieldValidator.MatchString(input) {
+		return fmt.Errorf("Illegal Query Operation: [%s]", input)
+	}
+
+	return nil
 }
 
 func getFilterSortPrefixIdentifer(identifer string) (string, error) {
@@ -160,10 +176,10 @@ func convertMetadataToQuery(input string) (string, error) {
 			splitMetadata[i] = fmt.Sprintf("'%s'", splitMetadata[i])
 		}
 		query = fmt.Sprintf("metadata->%s", strings.Join(splitMetadata, "->"))
-	}
 
-	if !metadataQueryValidator.MatchString(query) {
-		return "", fmt.Errorf("Illegal Query Operation: [%s]", query)
+		// Must replace the last -> with ->> to perform a text search rather than a jsonb one.
+		lastIndex := strings.LastIndex(query, "->")
+		query = query[:lastIndex] + strings.Replace(query[lastIndex:], "->", "->>", 1)
 	}
 
 	return query, nil
