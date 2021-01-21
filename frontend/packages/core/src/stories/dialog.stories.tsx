@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
@@ -14,7 +14,7 @@ export default {
 
 const Template = ({ content, open, ...props }: DialogProps & { content: React.ReactNode }) => {
   const [isOpen, setIsOpen] = useState(open);
-  
+
   return (
     <>
       <Button disabled={!open} text="Show Dialog" onClick={() => setIsOpen(true)} />

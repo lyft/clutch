@@ -69,7 +69,7 @@ export interface DialogProps extends Pick<MuiDialogProps, "open"> {
 
 const Dialog = ({ title, children, open: isOpenFromProps, onClose }: DialogProps) => {
   const [isOpenFromState, setIsOpen] = React.useState(isOpenFromProps);
-  const onCloseHandlerExists = typeof onClose === 'function';
+  const onCloseHandlerExists = typeof onClose === "function";
   const closeCallback = () => {
     if (onCloseHandlerExists) {
       onClose();
@@ -79,7 +79,11 @@ const Dialog = ({ title, children, open: isOpenFromProps, onClose }: DialogProps
   };
   React.useEffect(() => setIsOpen(isOpenFromProps), [isOpenFromProps]);
   return (
-    <MuiDialog PaperComponent={DialogPaper} open={onCloseHandlerExists ? isOpenFromProps : isOpenFromState} onClose={closeCallback}>
+    <MuiDialog
+      PaperComponent={DialogPaper}
+      open={onCloseHandlerExists ? isOpenFromProps : isOpenFromState}
+      onClose={closeCallback}
+    >
       <DialogTitle disableTypography>
         <DialogTitleText>{title}</DialogTitleText>
         <IconButton onClick={closeCallback}>
