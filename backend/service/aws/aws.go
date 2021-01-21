@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/aws/retry"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	astypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
@@ -62,17 +63,13 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	for _, region := range ac.Regions {
 		regionCfg, _ := config.LoadDefaultConfig(context.TODO(),
 			config.WithRegion(region),
+			config.WithRetryer(func() aws.Retryer {
+				customRetryer := retry.NewStandard(func(so *retry.StandardOptions) {
+					so.MaxAttempts = clientRetries
+				})
+				return customRetryer
+			}),
 		)
-
-		// TODO: figure out how v2 retryer works
-		// regionCfg.Retryer = awsclient.DefaultRetryer{
-		// 	NumMaxRetries: clientRetries,
-		// }
-
-		// awsSession, err := session.NewSession(regionCfg)
-		// if err != nil {
-		// 	return nil, err
-		// }
 
 		c.clients[region] = &regionalClient{
 			region:      region,
@@ -204,7 +201,6 @@ func newProtoForAutoscalingGroup(group astypes.AutoScalingGroup) *ec2v1.Autoscal
 		pb.TerminationPolicies[idx] = protoForTerminationPolicy(p)
 	}
 
-	// TODO what is going on here
 	// pb.Instances = make([]*ec2v1.AutoscalingGroup_Instance, len(group.Instances))
 	// for idx, i := range group.Instances {
 	// 	pb.Instances[idx] = newProtoForAutoscalingGroupInstance(i)
