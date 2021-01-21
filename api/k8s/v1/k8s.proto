@@ -578,7 +578,7 @@ message DescribeConfigMapRequest {
 message DescribeConfigMapResponse {
   option (clutch.api.v1.reference).fields = "config_map";
 
-  ConfigMap configMap = 1;
+  ConfigMap config_map = 1;
 }
 
 message DeleteConfigMapRequest {
