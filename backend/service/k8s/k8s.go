@@ -82,6 +82,8 @@ type Service interface {
 	DeleteCronJob(ctx context.Context, clientset, cluster, namespace, name string) error
 
 	// ConfigMap management functions.
+	DescribeConfigMap(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.ConfigMap, error)
+	DeleteConfigMap(ctx context.Context, clientset, cluster, namespace, name string) error
 	ListConfigMaps(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.ConfigMap, error)
 }
 

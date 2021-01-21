@@ -8,12 +8,13 @@ import (
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
 
 	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
-func testConfigMapClientset() *fake.Clientset {
+func testListConfigMapClientset() *fake.Clientset {
 	testConfigMaps := []runtime.Object{
 		&v1.ConfigMap{
 			ObjectMeta: metav1.ObjectMeta{
@@ -41,10 +42,22 @@ func testConfigMapClientset() *fake.Clientset {
 	return fake.NewSimpleClientset(testConfigMaps...)
 }
 
+func testConfigMapClientset() k8s.Interface {
+	configMap := &v1.ConfigMap{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      "testing-configmap-name",
+			Namespace: "testing-namespace",
+			Labels:    map[string]string{"foo": "bar"},
+		},
+	}
+
+	return fake.NewSimpleClientset(configMap)
+}
+
 func TestListConfigMaps(t *testing.T) {
 	t.Parallel()
 
-	cs := testConfigMapClientset()
+	cs := testListConfigMapClientset()
 
 	s := &svc{
 		manager: &managerImpl{
@@ -88,6 +101,58 @@ func TestListConfigMaps(t *testing.T) {
 	)
 	assert.NoError(t, err)
 	assert.Len(t, result, 3)
+}
+
+func TestDescribeConfigMap(t *testing.T) {
+	t.Parallel()
+
+	cs := testConfigMapClientset()
+
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "testing-namespace",
+				cluster:   "testing-cluster",
+			}},
+		},
+	}
+
+	// Not found
+	result, err := s.DescribeConfigMap(context.Background(), "", "", "", "")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+
+	configMap, err := s.DescribeConfigMap(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "testing-configmap-name")
+	assert.NoError(t, err)
+	assert.NotNil(t, configMap)
+}
+
+func TestDeleteConfigMap(t *testing.T) {
+	t.Parallel()
+
+	cs := testConfigMapClientset()
+
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "testing-namespace",
+				cluster:   "testing-cluster",
+			}},
+		},
+	}
+
+	// Not found
+	err := s.DeleteConfigMap(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "abc")
+	assert.Error(t, err)
+
+	err = s.DeleteConfigMap(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "testing-configmap-name")
+	assert.NoError(t, err)
+
+	// Not found
+	_, err = s.DescribeConfigMap(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "testing-configmap-name")
+	assert.Error(t, err)
 }
 
 func TestProtoForConfigMap(t *testing.T) {
