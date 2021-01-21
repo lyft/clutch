@@ -7,10 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/service/ec2"
-	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
@@ -78,21 +77,21 @@ func TestMissingRegionOnEachServiceCall(t *testing.T) {
 	assert.EqualError(t, err, "no client found for region 'us-north-5'")
 }
 
-var testInstance = &ec2.Instance{
+var testInstance = ec2types.Instance{
 	InstanceId: aws.String("i-123456789abcdef0"),
-	Tags: []*ec2.Tag{
+	Tags: []ec2types.Tag{
 		{Key: aws.String("Name"), Value: aws.String("locations-staging-iad")},
 		{Key: aws.String("Canary"), Value: aws.String("false")},
 	},
 	LaunchTime:       aws.Time(time.Unix(1449952498, 0)),
-	State:            &ec2.InstanceState{Name: aws.String("running")},
+	State:            &ec2types.InstanceState{Name: "running"},
 	PrivateIpAddress: aws.String("192.168.0.1"),
 	PublicIpAddress:  aws.String("35.40.0.1"),
-	InstanceType:     aws.String("c5.xlarge"),
-	Placement:        &ec2.Placement{AvailabilityZone: aws.String("us-east-1f")},
+	InstanceType:     "c5.xlarge",
+	Placement:        &ec2types.Placement{AvailabilityZone: aws.String("us-east-1f")},
 }
 
-var testInstanceProto = &ec2v1.Instance{
+var testInstanceProto = ec2v1.Instance{
 	InstanceId:       "i-123456789abcdef0",
 	Region:           "us-east-1",
 	State:            ec2v1.Instance_RUNNING,
@@ -125,7 +124,7 @@ func TestDescribeInstances(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Len(t, results, 0)
 
-	m.instances = []*ec2.Instance{testInstance}
+	m.instances = []ec2types.Instance{testInstance}
 
 	results, err = c.DescribeInstances(context.Background(), "us-east-1", []string{"i-12345"})
 	assert.NoError(t, err)
@@ -166,34 +165,34 @@ func TestRebootInstances(t *testing.T) {
 }
 
 type mockEC2 struct {
-	ec2iface.EC2API // satisfies interface
+	*ec2.Client // satisfies interface
 
 	instancesErr error
-	instances    []*ec2.Instance
+	instances    []ec2types.Instance
 
-	terminateResult []*ec2.InstanceStateChange
+	terminateResult []ec2types.InstanceStateChange
 	terminateErr    error
 	rebootErr       error
 }
 
-func (m *mockEC2) DescribeInstancesWithContext(ctx context.Context, input *ec2.DescribeInstancesInput, opts ...request.Option) (*ec2.DescribeInstancesOutput, error) {
+func (m *mockEC2) DescribeInstances(ctx context.Context, params *ec2.DescribeInstancesInput, optFns ...func(*ec2.Options)) (*ec2.DescribeInstancesOutput, error) {
 	if m.instancesErr != nil {
 		return nil, m.instancesErr
 	}
 
-	if len(input.InstanceIds) != len(m.instances) {
-		panic(fmt.Sprintf("DescribeInstances mock count mismatch input %d, expected %d", len(input.InstanceIds), len(m.instances)))
+	if len(params.InstanceIds) != len(m.instances) {
+		panic(fmt.Sprintf("DescribeInstances mock count mismatch input %d, expected %d", len(params.InstanceIds), len(m.instances)))
 	}
 
 	ret := &ec2.DescribeInstancesOutput{
-		Reservations: []*ec2.Reservation{
+		Reservations: []ec2types.Reservation{
 			{Instances: m.instances},
 		},
 	}
 	return ret, nil
 }
 
-func (m *mockEC2) TerminateInstancesWithContext(ctx context.Context, input *ec2.TerminateInstancesInput, opts ...request.Option) (*ec2.TerminateInstancesOutput, error) {
+func (m *mockEC2) TerminateInstances(ctx context.Context, params *ec2.TerminateInstancesInput, optFns ...func(*ec2.Options)) (*ec2.TerminateInstancesOutput, error) {
 	if m.terminateErr != nil {
 		return nil, m.terminateErr
 	}
@@ -203,7 +202,7 @@ func (m *mockEC2) TerminateInstancesWithContext(ctx context.Context, input *ec2.
 	return ret, nil
 }
 
-func (m *mockEC2) RebootInstancesWithContext(aws.Context, *ec2.RebootInstancesInput, ...request.Option) (*ec2.RebootInstancesOutput, error) {
+func (m *mockEC2) RebootInstances(ctx context.Context, params *ec2.RebootInstancesInput, optFns ...func(*ec2.Options)) (*ec2.RebootInstancesOutput, error) {
 	if m.rebootErr != nil {
 		return nil, m.rebootErr
 	}

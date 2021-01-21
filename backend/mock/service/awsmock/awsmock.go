@@ -22,12 +22,12 @@ func (s *svc) DescribeKinesisStream(ctx context.Context, region string, streamNa
 	ret := &kinesisv1.Stream{
 		StreamName:        streamName,
 		Region:            region,
-		CurrentShardCount: uint32(32),
+		CurrentShardCount: int32(32),
 	}
 	return ret, nil
 }
 
-func (s *svc) UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount uint32) error {
+func (s *svc) UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount int32) error {
 	return nil
 }
 

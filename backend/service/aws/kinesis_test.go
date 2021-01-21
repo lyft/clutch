@@ -6,33 +6,32 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/service/kinesis"
-	"github.com/aws/aws-sdk-go/service/kinesis/kinesisiface"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/kinesis"
+	"github.com/aws/aws-sdk-go-v2/service/kinesis/types"
 	"github.com/stretchr/testify/assert"
 
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 )
 
-var testAwsStream = &kinesis.StreamDescriptionSummary{
-	EnhancedMonitoring:      []*kinesis.EnhancedMetrics{},
-	OpenShardCount:          aws.Int64(100),
-	RetentionPeriodHours:    aws.Int64(24),
+var testAwsStream = &types.StreamDescriptionSummary{
+	EnhancedMonitoring:      []types.EnhancedMetrics{},
+	OpenShardCount:          aws.Int32(100),
+	RetentionPeriodHours:    aws.Int32(24),
 	StreamARN:               aws.String("test-arn"),
 	StreamCreationTimestamp: aws.Time(time.Unix(1449952498, 0)),
 	StreamName:              aws.String("test-stream"),
-	StreamStatus:            aws.String("ACTIVE"),
+	StreamStatus:            "ACTIVE",
 }
 
-var testAwsStreamWithBadData = &kinesis.StreamDescriptionSummary{
-	EnhancedMonitoring:      []*kinesis.EnhancedMetrics{},
-	OpenShardCount:          aws.Int64(-100),
-	RetentionPeriodHours:    aws.Int64(24),
+var testAwsStreamWithBadData = &types.StreamDescriptionSummary{
+	EnhancedMonitoring:      []types.EnhancedMetrics{},
+	OpenShardCount:          aws.Int32(-100),
+	RetentionPeriodHours:    aws.Int32(24),
 	StreamARN:               aws.String("test-arn"),
 	StreamCreationTimestamp: aws.Time(time.Unix(1449952498, 0)),
 	StreamName:              aws.String("test-stream"),
-	StreamStatus:            aws.String("ACTIVE"),
+	StreamStatus:            "ACTIVE",
 }
 
 var testStreamOutPut = &kinesisv1.Stream{
@@ -130,11 +129,11 @@ func TestIsRecommendedChangeWithGoodData(t *testing.T) {
 	c := &client{
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", kinesis: m}},
 	}
-	bool1, err1 := isRecommendedChange(context.Background(), c.clients["us-east-1"], "test-stream", uint32(100))
+	bool1, err1 := isRecommendedChange(context.Background(), c.clients["us-east-1"], "test-stream", int32(100))
 	assert.True(t, bool1)
 	assert.NoError(t, err1)
 
-	bool2, err2 := isRecommendedChange(context.Background(), c.clients["us-east-1"], "test-stream", uint32(10))
+	bool2, err2 := isRecommendedChange(context.Background(), c.clients["us-east-1"], "test-stream", int32(10))
 	assert.False(t, bool2)
 	assert.NoError(t, err2)
 }
@@ -146,21 +145,21 @@ func TestIsRecommendedChangeWithBadData(t *testing.T) {
 	c := &client{
 		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", kinesis: m}},
 	}
-	_, err1 := isRecommendedChange(context.Background(), c.clients["us-east-1"], "test-stream", uint32(100))
+	_, err1 := isRecommendedChange(context.Background(), c.clients["us-east-1"], "test-stream", int32(100))
 	assert.EqualError(t, err1, "AWS returned a negative value for the current shard count")
 }
 
 type mockKinesis struct {
-	kinesisiface.KinesisAPI
+	kinesis.Client
 
 	streamErr error
-	stream    *kinesis.StreamDescriptionSummary
+	stream    *types.StreamDescriptionSummary
 
 	updateErr error
 	update    *kinesis.UpdateShardCountOutput
 }
 
-func (m *mockKinesis) DescribeStreamSummaryWithContext(ctx context.Context, input *kinesis.DescribeStreamSummaryInput, opts ...request.Option) (*kinesis.DescribeStreamSummaryOutput, error) {
+func (m *mockKinesis) DescribeStreamSummary(ctx context.Context, params *kinesis.DescribeStreamSummaryInput, optFns ...func(*kinesis.Options)) (*kinesis.DescribeStreamSummaryOutput, error) {
 	if m.streamErr != nil {
 		return nil, m.streamErr
 	}
@@ -172,7 +171,7 @@ func (m *mockKinesis) DescribeStreamSummaryWithContext(ctx context.Context, inpu
 	return ret, nil
 }
 
-func (m *mockKinesis) UpdateShardCountWithContext(ctx context.Context, input *kinesis.UpdateShardCountInput, opts ...request.Option) (*kinesis.UpdateShardCountOutput, error) {
+func (m *mockKinesis) UpdateShardCount(ctx context.Context, params *kinesis.UpdateShardCountInput, optFns ...func(*kinesis.Options)) (*kinesis.UpdateShardCountOutput, error) {
 	if m.updateErr != nil {
 		return nil, m.updateErr
 	}

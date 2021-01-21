@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/kinesis"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/kinesis"
+	"github.com/aws/aws-sdk-go-v2/service/kinesis/types"
 
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 )
@@ -18,21 +19,21 @@ func (c *client) DescribeKinesisStream(ctx context.Context, region string, strea
 	}
 
 	input := &kinesis.DescribeStreamSummaryInput{StreamName: aws.String(streamName)}
-	result, err := cl.kinesis.DescribeStreamSummaryWithContext(ctx, input)
+	result, err := cl.kinesis.DescribeStreamSummary(ctx, input)
 
 	if err != nil {
 		return nil, err
 	}
 
-	currentShardCount := aws.Int64Value(result.StreamDescriptionSummary.OpenShardCount)
+	currentShardCount := aws.ToInt32(result.StreamDescriptionSummary.OpenShardCount)
 	if currentShardCount < 0 {
 		return nil, fmt.Errorf("AWS returned a negative value for the current shard count")
 	}
 
 	var ret = &kinesisv1.Stream{
-		StreamName:        aws.StringValue(result.StreamDescriptionSummary.StreamName),
+		StreamName:        aws.ToString(result.StreamDescriptionSummary.StreamName),
 		Region:            region,
-		CurrentShardCount: uint32(currentShardCount),
+		CurrentShardCount: currentShardCount,
 	}
 
 	return ret, nil
@@ -40,34 +41,34 @@ func (c *client) DescribeKinesisStream(ctx context.Context, region string, strea
 
 // we limit the resizing of shard sizes to increments of 25% ranging from [50%, 200%] of the current shard count
 // https://docs.aws.amazon.com/kinesis/latest/APIReference/API_UpdateShardCount.html
-func getRecommendedShardSizes(currentShardCount uint32) map[uint32]bool {
-	sizes := make(map[uint32]bool)
+func getRecommendedShardSizes(currentShardCount int32) map[int32]bool {
+	sizes := make(map[int32]bool)
 	base := 0.5
 	for i := 0; i < 7; i++ {
-		recommendedValue := uint32(math.Ceil(float64(currentShardCount) * base))
+		recommendedValue := int32(math.Ceil(float64(currentShardCount) * base))
 		sizes[recommendedValue] = true
 		base += 0.25
 	}
 	return sizes
 }
 
-func isRecommendedChange(ctx context.Context, cl *regionalClient, streamName string, targetShardCount uint32) (bool, error) {
+func isRecommendedChange(ctx context.Context, cl *regionalClient, streamName string, targetShardCount int32) (bool, error) {
 	input := &kinesis.DescribeStreamSummaryInput{StreamName: aws.String(streamName)}
-	result, err := cl.kinesis.DescribeStreamSummaryWithContext(ctx, input)
+	result, err := cl.kinesis.DescribeStreamSummary(ctx, input)
 
 	if err != nil {
 		return false, err
 	}
-	currentShardCount := aws.Int64Value(result.StreamDescriptionSummary.OpenShardCount)
+	currentShardCount := aws.ToInt32(result.StreamDescriptionSummary.OpenShardCount)
 	if currentShardCount < 0 {
 		return false, fmt.Errorf("AWS returned a negative value for the current shard count")
 	}
 
-	recommendedValues := getRecommendedShardSizes(uint32(currentShardCount))
+	recommendedValues := getRecommendedShardSizes(currentShardCount)
 	return recommendedValues[targetShardCount], nil
 }
 
-func (c *client) UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount uint32) error {
+func (c *client) UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount int32) error {
 	cl, ok := c.clients[region]
 	if !ok {
 		return fmt.Errorf("no client found for region '%s'", region)
@@ -83,10 +84,11 @@ func (c *client) UpdateKinesisShardCount(ctx context.Context, region string, str
 
 	input := &kinesis.UpdateShardCountInput{
 		StreamName:       aws.String(streamName),
-		TargetShardCount: aws.Int64(int64(targetShardCount)),
-		ScalingType:      aws.String(kinesis.ScalingTypeUniformScaling),
+		TargetShardCount: aws.Int32(targetShardCount),
+		ScalingType:      types.ScalingTypeUniformScaling,
 	}
-	_, err = cl.kinesis.UpdateShardCountWithContext(ctx, input)
+
+	_, err = cl.kinesis.UpdateShardCount(ctx, input)
 
 	return err
 }
