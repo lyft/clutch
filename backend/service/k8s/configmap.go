@@ -27,7 +27,7 @@ func (s *svc) DescribeConfigMap(ctx context.Context, clientset, cluster, namespa
 	if len(configMapList.Items) == 1 {
 		return protoForConfigMap(cs.Cluster(), &configMapList.Items[0]), nil
 	} else if len(configMapList.Items) > 1 {
-		return nil, fmt.Errorf("Located multiple configMaps")
+		return nil, fmt.Errorf("Located multiple configMaps with name %s", name)
 	}
 	return nil, fmt.Errorf("Unable to locate configMap")
 }

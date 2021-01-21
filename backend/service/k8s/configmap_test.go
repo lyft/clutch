@@ -118,6 +118,11 @@ func TestDescribeConfigMap(t *testing.T) {
 		},
 	}
 
+	// Not found
+	result, err := s.DescribeConfigMap(context.Background(), "", "", "", "")
+	assert.Error(t, err)
+	assert.Nil(t, result)
+
 	configMap, err := s.DescribeConfigMap(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", "testing-configmap-name")
 	assert.NoError(t, err)
 	assert.NotNil(t, configMap)

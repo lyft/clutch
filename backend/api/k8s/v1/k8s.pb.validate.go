@@ -3248,6 +3248,19 @@ func (m *DescribeConfigMapRequest) Validate() error {
 		// no validation rules for Labels[key]
 	}
 
+	for key, val := range m.GetAnnotations() {
+		_ = val
+
+		if len(key) < 1 {
+			return DescribeConfigMapRequestValidationError{
+				field:  fmt.Sprintf("Annotations[%v]", key),
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+		// no validation rules for Annotations[key]
+	}
+
 	return nil
 }
 

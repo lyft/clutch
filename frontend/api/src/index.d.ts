@@ -11312,6 +11312,9 @@ export namespace clutch {
 
                 /** DescribeConfigMapRequest labels */
                 labels?: ({ [k: string]: string }|null);
+
+                /** DescribeConfigMapRequest annotations */
+                annotations?: ({ [k: string]: string }|null);
             }
 
             /** Represents a DescribeConfigMapRequest. */
@@ -11337,6 +11340,9 @@ export namespace clutch {
 
                 /** DescribeConfigMapRequest labels. */
                 public labels: { [k: string]: string };
+
+                /** DescribeConfigMapRequest annotations. */
+                public annotations: { [k: string]: string };
 
                 /**
                  * Verifies a DescribeConfigMapRequest message.
