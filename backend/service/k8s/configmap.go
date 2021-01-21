@@ -2,11 +2,46 @@ package k8s
 
 import (
 	"context"
+	"fmt"
 
 	v1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
+
+func (s *svc) DescribeConfigMap(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.ConfigMap, error) {
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
+	if err != nil {
+		return nil, err
+	}
+
+	configMapList, err := cs.CoreV1().ConfigMaps(cs.Namespace()).List(ctx, metav1.ListOptions{
+		FieldSelector: "metadata.name=" + name,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if len(configMapList.Items) == 1 {
+		return protoForConfigMap(cs.Cluster(), &configMapList.Items[0]), nil
+	} else if len(configMapList.Items) > 1 {
+		return nil, fmt.Errorf("Located multiple configMaps")
+	}
+	return nil, fmt.Errorf("Unable to locate configMap")
+}
+
+func (s *svc) DeleteConfigMap(ctx context.Context, clientset, cluster, namespace, name string) error {
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
+	if err != nil {
+		return err
+	}
+
+	opts := metav1.DeleteOptions{}
+
+	return cs.CoreV1().ConfigMaps(cs.Namespace()).Delete(ctx, name, opts)
+}
 
 func (s *svc) ListConfigMaps(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.ConfigMap, error) {
 	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
