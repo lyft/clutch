@@ -61,6 +61,22 @@ func TestK8SAPIResizeHPA(t *testing.T) {
 	assert.NotNil(t, resp)
 }
 
+func TestK8SAPIDescribeConfigMap(t *testing.T) {
+	c := k8smock.New()
+	api := newK8sAPI(c)
+	resp, err := api.DescribeConfigMap(context.Background(), &k8sapiv1.DescribeConfigMapRequest{})
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
+
+func TestK8SAPIDeleteConfigMap(t *testing.T) {
+	c := k8smock.New()
+	api := newK8sAPI(c)
+	resp, err := api.DeleteConfigMap(context.Background(), &k8sapiv1.DeleteConfigMapRequest{})
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
+
 func TestK8SAPIListConfigMaps(t *testing.T) {
 	c := k8smock.New()
 	api := newK8sAPI(c)
