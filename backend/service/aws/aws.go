@@ -171,13 +171,13 @@ func protoForAutoscalingGroupInstanceLifecycleState(state string) ec2v1.Autoscal
 	return ec2v1.AutoscalingGroup_Instance_LifecycleState(val)
 }
 
-func newProtoForAutoscalingGroupInstance(instance astypes.AutoScalingInstanceDetails) *ec2v1.AutoscalingGroup_Instance {
+func newProtoForAutoscalingGroupInstance(instance astypes.Instance) *ec2v1.AutoscalingGroup_Instance {
 	return &ec2v1.AutoscalingGroup_Instance{
 		Id:                      aws.ToString(instance.InstanceId),
 		Zone:                    aws.ToString(instance.AvailabilityZone),
 		LaunchConfigurationName: aws.ToString(instance.LaunchConfigurationName),
 		Healthy:                 *instance.HealthStatus == "HEALTHY",
-		LifecycleState:          protoForAutoscalingGroupInstanceLifecycleState(*instance.LifecycleState),
+		LifecycleState:          protoForAutoscalingGroupInstanceLifecycleState(string(instance.LifecycleState)),
 	}
 }
 
@@ -201,10 +201,10 @@ func newProtoForAutoscalingGroup(group astypes.AutoScalingGroup) *ec2v1.Autoscal
 		pb.TerminationPolicies[idx] = protoForTerminationPolicy(p)
 	}
 
-	// pb.Instances = make([]*ec2v1.AutoscalingGroup_Instance, len(group.Instances))
-	// for idx, i := range group.Instances {
-	// 	pb.Instances[idx] = newProtoForAutoscalingGroupInstance(i)
-	// }
+	pb.Instances = make([]*ec2v1.AutoscalingGroup_Instance, len(group.Instances))
+	for idx, i := range group.Instances {
+		pb.Instances[idx] = newProtoForAutoscalingGroupInstance(i)
+	}
 
 	return pb
 }
