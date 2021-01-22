@@ -3,6 +3,7 @@ package authn
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
@@ -16,14 +17,14 @@ func TestCreateOrUpdateUser(t *testing.T) {
 	tok := &authnToken{
 		userID:       "foo@example.com",
 		provider:     "okta",
-		tokenType:    "oidc",
 		idToken:      []byte("id"),
 		accessToken:  []byte("access"),
 		refreshToken: []byte("refresh"),
+		expiry:       time.Now(),
 	}
 
 	mock.ExpectExec(createOrUpdateProviderToken).
-		WithArgs(tok.userID, tok.provider, tok.tokenType, tok.idToken, tok.accessToken, tok.refreshToken).
+		WithArgs(tok.userID, tok.provider, tok.accessToken, tok.refreshToken, tok.idToken, tok.expiry).
 		WillReturnResult(sqlmock.NewResult(0, 1))
 
 	r := &repository{db: db}

@@ -84,7 +84,7 @@ oidc:
 	defer mockprovider.Close()
 
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
-	p, err := NewOIDCProvider(ctx, cfg)
+	p, err := NewOIDCProvider(ctx, cfg, nil)
 	assert.NoError(t, err)
 	assert.NotNil(t, p)
 
