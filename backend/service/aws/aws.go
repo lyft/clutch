@@ -8,7 +8,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -57,8 +56,6 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	if ac.ClientConfig != nil && ac.ClientConfig.Retries >= 0 {
 		clientRetries = int(ac.ClientConfig.Retries)
 	}
-
-	log.Printf("%s", clientRetries)
 
 	for _, region := range ac.Regions {
 		regionCfg, _ := config.LoadDefaultConfig(context.TODO(),
