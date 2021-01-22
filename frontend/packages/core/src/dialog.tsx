@@ -69,7 +69,7 @@ export interface DialogProps extends Pick<MuiDialogProps, "open"> {
 
 const Dialog = ({ title, children, open: isOpenFromProps, onClose }: DialogProps) => {
   const [isOpenFromState, setIsOpen] = React.useState(isOpenFromProps);
-  const onCloseHandlerExists = typeof onClose === "function";
+  const onCloseHandlerExists = !!onClose;
   const closeCallback = () => {
     if (onCloseHandlerExists) {
       onClose();
