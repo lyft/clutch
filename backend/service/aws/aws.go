@@ -96,10 +96,25 @@ type Client interface {
 	Regions() []string
 }
 
+type s3Client interface {
+	GetObject(ctx context.Context, params *s3.GetObjectInput, optFns ...func(*s3.Options)) (*s3.GetObjectOutput, error)
+}
+
 type kinesisClient interface {
 	DescribeStreamSummary(ctx context.Context, params *kinesis.DescribeStreamSummaryInput, optFns ...func(*kinesis.Options)) (*kinesis.DescribeStreamSummaryOutput, error)
 	UpdateShardCount(ctx context.Context, params *kinesis.UpdateShardCountInput, optFns ...func(*kinesis.Options)) (*kinesis.UpdateShardCountOutput, error)
 	ListStreams(ctx context.Context, params *kinesis.ListStreamsInput, optFns ...func(*kinesis.Options)) (*kinesis.ListStreamsOutput, error)
+}
+
+type ec2Client interface {
+	DescribeInstances(ctx context.Context, params *ec2.DescribeInstancesInput, optFns ...func(*ec2.Options)) (*ec2.DescribeInstancesOutput, error)
+	TerminateInstances(ctx context.Context, params *ec2.TerminateInstancesInput, optFns ...func(*ec2.Options)) (*ec2.TerminateInstancesOutput, error)
+	RebootInstances(ctx context.Context, params *ec2.RebootInstancesInput, optFns ...func(*ec2.Options)) (*ec2.RebootInstancesOutput, error)
+}
+
+type autoscalingClient interface {
+	DescribeAutoScalingGroups(ctx context.Context, params *autoscaling.DescribeAutoScalingGroupsInput, optFns ...func(*autoscaling.Options)) (*autoscaling.DescribeAutoScalingGroupsOutput, error)
+	UpdateAutoScalingGroup(ctx context.Context, params *autoscaling.UpdateAutoScalingGroupInput, optFns ...func(*autoscaling.Options)) (*autoscaling.UpdateAutoScalingGroupOutput, error)
 }
 
 type client struct {
@@ -113,10 +128,10 @@ type client struct {
 type regionalClient struct {
 	region string
 
-	s3          *s3.Client
+	s3          s3Client
 	kinesis     kinesisClient
-	ec2         *ec2.Client
-	autoscaling *autoscaling.Client
+	ec2         ec2Client
+	autoscaling autoscalingClient
 }
 
 func (c *client) ResizeAutoscalingGroup(ctx context.Context, region string, name string, size *ec2v1.AutoscalingGroupSize) error {
@@ -291,7 +306,7 @@ func protoForInstanceState(state string) ec2v1.Instance_State {
 func newProtoForInstance(i ec2types.Instance) *ec2v1.Instance {
 	ret := &ec2v1.Instance{
 		InstanceId:       aws.ToString(i.InstanceId),
-		State:            ec2v1.Instance_State(i.State.Code),
+		State:            protoForInstanceState(string(i.State.Name)),
 		InstanceType:     string(i.InstanceType),
 		PublicIpAddress:  aws.ToString(i.PublicIpAddress),
 		PrivateIpAddress: aws.ToString(i.PrivateIpAddress),

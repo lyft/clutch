@@ -24,6 +24,11 @@ func (c *client) DescribeKinesisStream(ctx context.Context, region string, strea
 		return nil, err
 	}
 
+	currentShardCount := aws.ToInt32(result.StreamDescriptionSummary.OpenShardCount)
+	if currentShardCount < 0 {
+		return nil, fmt.Errorf("AWS returned a negative value for the current shard count")
+	}
+
 	var ret = &kinesisv1.Stream{
 		StreamName:        aws.ToString(result.StreamDescriptionSummary.StreamName),
 		Region:            region,
@@ -52,7 +57,6 @@ func isRecommendedChange(stream *kinesis.DescribeStreamSummaryOutput, targetShar
 	}
 
 	recommendedValues := getRecommendedShardSizes(currentShardCount)
-
 	if !recommendedValues[targetShardCount] {
 		return fmt.Errorf("new shard count should be a 25%% increment of current shard count ranging from 50-200%%")
 	}

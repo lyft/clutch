@@ -104,7 +104,7 @@ var testInstanceProto = ec2v1.Instance{
 
 func TestNewProtoForInstance(t *testing.T) {
 	pb := newProtoForInstance(testInstance)
-	assert.Equal(t, testInstanceProto, pb)
+	assert.Equal(t, &testInstanceProto, pb)
 }
 
 func TestProtoForInstanceState(t *testing.T) {
@@ -129,7 +129,7 @@ func TestDescribeInstances(t *testing.T) {
 	results, err = c.DescribeInstances(context.Background(), "us-east-1", []string{"i-12345"})
 	assert.NoError(t, err)
 	assert.Len(t, results, 1)
-	assert.Equal(t, testInstanceProto, results[0])
+	assert.Equal(t, &testInstanceProto, results[0])
 
 	m.instancesErr = errors.New("whoops")
 	_, err = c.DescribeInstances(context.Background(), "us-east-1", nil)
