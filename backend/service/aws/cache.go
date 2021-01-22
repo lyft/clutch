@@ -138,7 +138,7 @@ func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalC
 		Limit: aws.Int32(100),
 	}
 
-	for true {
+	for {
 		output, err := client.kinesis.ListStreams(ctx, &input)
 		if err != nil {
 			c.log.Error("unable to list kinesis stream", zap.Error(err))

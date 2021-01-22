@@ -203,19 +203,19 @@ func newProtoForAutoscalingGroupInstance(instance astypes.Instance) *ec2v1.Autos
 		Id:                      aws.ToString(instance.InstanceId),
 		Zone:                    aws.ToString(instance.AvailabilityZone),
 		LaunchConfigurationName: aws.ToString(instance.LaunchConfigurationName),
-		Healthy:                 *instance.HealthStatus == "HEALTHY",
+		Healthy:                 aws.ToString(instance.HealthStatus) == "HEALTHY",
 		LifecycleState:          protoForAutoscalingGroupInstanceLifecycleState(string(instance.LifecycleState)),
 	}
 }
 
 func newProtoForAutoscalingGroup(group astypes.AutoScalingGroup) *ec2v1.AutoscalingGroup {
 	pb := &ec2v1.AutoscalingGroup{
-		Name:  *group.AutoScalingGroupName,
+		Name:  aws.ToString(group.AutoScalingGroupName),
 		Zones: group.AvailabilityZones,
 		Size: &ec2v1.AutoscalingGroupSize{
-			Min:     uint32(*group.MinSize),
-			Max:     uint32(*group.MaxSize),
-			Desired: uint32(*group.DesiredCapacity),
+			Min:     uint32(aws.ToInt32(group.MinSize)),
+			Max:     uint32(aws.ToInt32(group.MaxSize)),
+			Desired: uint32(aws.ToInt32(group.DesiredCapacity)),
 		},
 	}
 
