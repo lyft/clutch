@@ -158,7 +158,7 @@ func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalC
 				continue
 			}
 
-			protoStream, _ := ptypes.MarshalAny(v1Stream)
+			protoStream, err := ptypes.MarshalAny(v1Stream)
 			if err != nil {
 				c.log.Error("unable to marshal kinesis stream", zap.Error(err))
 				continue
