@@ -21,7 +21,6 @@ gateway:
   middleware:
     - name: clutch.middleware.stats
     - name: clutch.middleware.validate
-    - name: clutch.middleware.authn
   listener:
     tcp:
       address: 0.0.0.0
@@ -35,35 +34,13 @@ modules:
   - name: clutch.module.envoytriage
   - name: clutch.module.k8s
   - name: clutch.module.kinesis
-  - name: clutch.module.authn
 services:
-  - name: clutch.service.db.postgres
-    typed_config:
-      "@type": types.google.com/clutch.config.service.db.postgres.v1.Config
-      connection:
-        host: 0.0.0.0
-        port: 5432
-        user: clutch
-        ssl_mode: DISABLE
-        dbname: clutch
-        password: clutch
   - name: clutch.service.aws
     typed_config:
       "@type": types.google.com/clutch.config.service.aws.v1.Config
       regions:
         - us-east-1
         - us-west-2
-  - name: clutch.service.authn
-    typed_config:
-      "@type": types.google.com/clutch.config.service.authn.v1.Config
-      oidc:
-        issuer: https://lyft.okta.com
-        client_id: ${CREDENTIALS_OIDC_CLIENT_ID}
-        client_secret: ${CREDENTIALS_OIDC_CLIENT_SECRET}
-        redirect_url: "${BASE_URL}/v1/authn/callback"
-      session_secret: ${CREDENTIALS_SESSION_SECRET}
-      storage:
-        encryption_passphrase: ${CREDENTIALS_AUTHN_ENCRYPTION_PASSPHRASE}
   - name: clutch.service.envoyadmin
     typed_config:
       "@type": types.google.com/clutch.config.service.envoyadmin.v1.Config
