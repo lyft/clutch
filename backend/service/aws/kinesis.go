@@ -20,22 +20,15 @@ func (c *client) DescribeKinesisStream(ctx context.Context, region string, strea
 
 	input := &kinesis.DescribeStreamSummaryInput{StreamName: aws.String(streamName)}
 	result, err := cl.kinesis.DescribeStreamSummary(ctx, input)
-
 	if err != nil {
 		return nil, err
-	}
-
-	currentShardCount := aws.ToInt32(result.StreamDescriptionSummary.OpenShardCount)
-	if currentShardCount < 0 {
-		return nil, fmt.Errorf("AWS returned a negative value for the current shard count")
 	}
 
 	var ret = &kinesisv1.Stream{
 		StreamName:        aws.ToString(result.StreamDescriptionSummary.StreamName),
 		Region:            region,
-		CurrentShardCount: currentShardCount,
+		CurrentShardCount: aws.ToInt32(result.StreamDescriptionSummary.OpenShardCount),
 	}
-
 	return ret, nil
 }
 
@@ -91,6 +84,5 @@ func (c *client) UpdateKinesisShardCount(ctx context.Context, region string, str
 	}
 
 	_, err = cl.kinesis.UpdateShardCount(ctx, input)
-
 	return err
 }

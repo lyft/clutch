@@ -1,18 +1,91 @@
 package aws
 
 import (
+	"context"
+	"errors"
 	"testing"
+	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
+	"github.com/aws/aws-sdk-go-v2/service/kinesis/types"
 	"github.com/stretchr/testify/assert"
 
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 )
 
+var testAwsStream = &types.StreamDescriptionSummary{
+	EnhancedMonitoring:      []types.EnhancedMetrics{},
+	OpenShardCount:          aws.Int32(100),
+	RetentionPeriodHours:    aws.Int32(24),
+	StreamARN:               aws.String("test-arn"),
+	StreamCreationTimestamp: aws.Time(time.Unix(1449952498, 0)),
+	StreamName:              aws.String("test-stream"),
+	StreamStatus:            "ACTIVE",
+}
+
+var testAwsStreamWithBadData = &types.StreamDescriptionSummary{
+	EnhancedMonitoring:      []types.EnhancedMetrics{},
+	OpenShardCount:          aws.Int32(-100),
+	RetentionPeriodHours:    aws.Int32(24),
+	StreamARN:               aws.String("test-arn"),
+	StreamCreationTimestamp: aws.Time(time.Unix(1449952498, 0)),
+	StreamName:              aws.String("test-stream"),
+	StreamStatus:            "ACTIVE",
+}
+
 var testStreamOutPut = &kinesisv1.Stream{
 	StreamName:        "test-stream",
 	Region:            "us-east-1",
 	CurrentShardCount: 100,
+}
+
+func TestDescribeStreamWithGoodData(t *testing.T) {
+	m := &mockKinesis{
+		stream: testAwsStream,
+	}
+	c := &client{
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", kinesis: m}},
+	}
+
+	result, err := c.DescribeKinesisStream(context.Background(), "us-east-1", "test-stream")
+	assert.NoError(t, err)
+	assert.Equal(t, testStreamOutPut, result)
+
+	m.streamErr = errors.New("error")
+	_, err1 := c.DescribeKinesisStream(context.Background(), "us-east-1", "test-stream")
+	assert.EqualError(t, err1, "error")
+}
+
+func TestDescribeStreamWithBadData(t *testing.T) {
+	m := &mockKinesis{
+		stream: testAwsStreamWithBadData,
+	}
+	c := &client{
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", kinesis: m}},
+	}
+
+	_, err := c.DescribeKinesisStream(context.Background(), "us-east-1", "test-stream")
+	assert.EqualError(t, err, "AWS returned a negative value for the current shard count")
+}
+
+func TestUpdateShardCount(t *testing.T) {
+	m := &mockKinesis{
+		stream: testAwsStream,
+	}
+	c := &client{
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", kinesis: m}},
+	}
+
+	err := c.UpdateKinesisShardCount(context.Background(), "us-east-1", "test-stream", 50)
+	assert.NoError(t, err)
+
+	m.updateErr = errors.New("error")
+	err1 := c.UpdateKinesisShardCount(context.Background(), "us-east-1", "test-stream", 50)
+	assert.EqualError(t, err1, "error")
+
+	err2 := c.UpdateKinesisShardCount(context.Background(), "us-east-1", "test-stream", 10)
+	assert.EqualError(t, err2, "new shard count should be a 25% increment of current shard count ranging from 50-200%")
 }
 
 func TestGetRecommendedShardSizes(t *testing.T) {
@@ -60,4 +133,35 @@ func TestIsRecommendedChangeWithGoodData(t *testing.T) {
 func TestIsRecommendedChangeWithBadData(t *testing.T) {
 	err1 := isRecommendedChange(&kinesis.DescribeStreamSummaryOutput{}, int32(100))
 	assert.EqualError(t, err1, "AWS returned a negative value for the current shard count")
+}
+
+type mockKinesis struct {
+	kinesisClient
+
+	streamErr error
+	stream    *types.StreamDescriptionSummary
+
+	updateErr error
+	update    *kinesis.UpdateShardCountOutput
+}
+
+func (m *mockKinesis) DescribeStreamSummary(ctx context.Context, params *kinesis.DescribeStreamSummaryInput, optFns ...func(*kinesis.Options)) (*kinesis.DescribeStreamSummaryOutput, error) {
+	if m.streamErr != nil {
+		return nil, m.streamErr
+	}
+
+	ret := &kinesis.DescribeStreamSummaryOutput{
+		StreamDescriptionSummary: m.stream,
+	}
+
+	return ret, nil
+}
+
+func (m *mockKinesis) UpdateShardCount(ctx context.Context, params *kinesis.UpdateShardCountInput, optFns ...func(*kinesis.Options)) (*kinesis.UpdateShardCountOutput, error) {
+	if m.updateErr != nil {
+		return nil, m.updateErr
+	}
+	ret := m.update
+
+	return ret, nil
 }

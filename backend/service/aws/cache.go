@@ -138,17 +138,17 @@ func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalC
 		Limit: aws.Int32(100),
 	}
 
-	goagain := true
-	for goagain {
+	for true {
 		output, err := client.kinesis.ListStreams(ctx, &input)
 		if err != nil {
-			return
+			c.log.Error("unable to list kinesis stream", zap.Error(err))
+			break
 		}
 
 		if aws.ToBool(output.HasMoreStreams) {
 			input.ExclusiveStartStreamName = &output.StreamNames[len(output.StreamNames)-1]
 		} else {
-			goagain = false
+			break
 		}
 
 		for _, stream := range output.StreamNames {

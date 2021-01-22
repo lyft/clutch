@@ -96,12 +96,27 @@ type Client interface {
 	Regions() []string
 }
 
+type kinesisClient interface {
+	DescribeStreamSummary(ctx context.Context, params *kinesis.DescribeStreamSummaryInput, optFns ...func(*kinesis.Options)) (*kinesis.DescribeStreamSummaryOutput, error)
+	UpdateShardCount(ctx context.Context, params *kinesis.UpdateShardCountInput, optFns ...func(*kinesis.Options)) (*kinesis.UpdateShardCountOutput, error)
+	ListStreams(ctx context.Context, params *kinesis.ListStreamsInput, optFns ...func(*kinesis.Options)) (*kinesis.ListStreamsOutput, error)
+}
+
 type client struct {
 	clients            map[string]*regionalClient
 	topologyObjectChan chan *topologyv1.UpdateCacheRequest
 	topologyLock       *semaphore.Weighted
 	log                *zap.Logger
 	scope              tally.Scope
+}
+
+type regionalClient struct {
+	region string
+
+	s3          *s3.Client
+	kinesis     kinesisClient
+	ec2         *ec2.Client
+	autoscaling *autoscaling.Client
 }
 
 func (c *client) ResizeAutoscalingGroup(ctx context.Context, region string, name string, size *ec2v1.AutoscalingGroupSize) error {
@@ -212,15 +227,6 @@ func (c *client) Regions() []string {
 		regions = append(regions, region)
 	}
 	return regions
-}
-
-type regionalClient struct {
-	region string
-
-	s3          *s3.Client
-	kinesis     *kinesis.Client
-	ec2         *ec2.Client
-	autoscaling *autoscaling.Client
 }
 
 func (c *client) DescribeInstances(ctx context.Context, region string, ids []string) ([]*ec2v1.Instance, error) {
