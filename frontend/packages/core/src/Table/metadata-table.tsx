@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import _ from "lodash";
-import type { Schema } from "yup";
+import type { BaseSchema } from "yup";
 import { object } from "yup";
 
 import { useWizardContext } from "../Contexts";
@@ -23,7 +23,7 @@ interface RowData {
   input?: {
     key?: string;
     type?: string;
-    validation?: Schema<unknown>;
+    validation?: BaseSchema<unknown>;
   };
   name: string;
   value: unknown;

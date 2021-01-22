@@ -34,7 +34,7 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-is": "^16.8.0",
-    "yup": "^0.31.0"
+    "yup": "^0.32.8"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^1.0.0-beta"

@@ -17,6 +17,7 @@ import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import _ from "lodash";
 import { number, ref } from "yup";
+import type Reference from "yup/lib/Reference";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
@@ -85,7 +86,9 @@ const HPADetails: React.FC<WizardChild> = () => {
             input: {
               type: "number",
               key: "sizing.maxReplicas",
-              validation: number().integer().min(ref("Min Size")),
+              validation: number()
+                .integer()
+                .min(ref("Min Size") as Reference<number>),
             },
           },
           { name: "Cluster", value: hpa.cluster },
