@@ -52,20 +52,19 @@ func getRecommendedShardSizes(currentShardCount int32) map[int32]bool {
 	return sizes
 }
 
-func isRecommendedChange(ctx context.Context, cl *regionalClient, streamName string, targetShardCount int32) (bool, error) {
-	input := &kinesis.DescribeStreamSummaryInput{StreamName: aws.String(streamName)}
-	result, err := cl.kinesis.DescribeStreamSummary(ctx, input)
-
-	if err != nil {
-		return false, err
-	}
-	currentShardCount := aws.ToInt32(result.StreamDescriptionSummary.OpenShardCount)
+func isRecommendedChange(stream *kinesis.DescribeStreamSummaryOutput, targetShardCount int32) error {
+	currentShardCount := aws.ToInt32(stream.StreamDescriptionSummary.OpenShardCount)
 	if currentShardCount < 0 {
-		return false, fmt.Errorf("AWS returned a negative value for the current shard count")
+		return fmt.Errorf("AWS returned a negative value for the current shard count")
 	}
 
 	recommendedValues := getRecommendedShardSizes(currentShardCount)
-	return recommendedValues[targetShardCount], nil
+
+	if !recommendedValues[targetShardCount] {
+		return fmt.Errorf("new shard count should be a 25%% increment of current shard count ranging from 50-200%%")
+	}
+
+	return nil
 }
 
 func (c *client) UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount int32) error {
@@ -74,12 +73,15 @@ func (c *client) UpdateKinesisShardCount(ctx context.Context, region string, str
 		return fmt.Errorf("no client found for region '%s'", region)
 	}
 
-	recommended, err := isRecommendedChange(ctx, cl, streamName, targetShardCount)
+	describeInput := &kinesis.DescribeStreamSummaryInput{StreamName: aws.String(streamName)}
+	result, err := cl.kinesis.DescribeStreamSummary(ctx, describeInput)
 	if err != nil {
 		return err
 	}
-	if !recommended {
-		return fmt.Errorf("new shard count should be a 25%% increment of current shard count ranging from 50-200%%")
+
+	err = isRecommendedChange(result, targetShardCount)
+	if err != nil {
+		return err
 	}
 
 	input := &kinesis.UpdateShardCountInput{
