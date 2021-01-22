@@ -155,7 +155,41 @@ func (*svc) DeleteCronJob(ctx context.Context, clientset, cluster, namespace, na
 	return nil
 }
 
-func (*svc) Clientsets() []string {
+func (s *svc) DescribeConfigMap(_ context.Context, clientset, cluster, namespace, name string) (*k8sv1.ConfigMap, error) {
+	return &k8sv1.ConfigMap{
+		Cluster:     "fake-cluster-name",
+		Namespace:   namespace,
+		Name:        name,
+		Labels:      map[string]string{"Key": "value"},
+		Annotations: map[string]string{"Key": "value"},
+	}, nil
+}
+
+func (*svc) DeleteConfigMap(ctx context.Context, clientset, cluster, namespace, name string) error {
+	return nil
+}
+
+func (s *svc) ListConfigMaps(_ context.Context, clientset, cluster, namespace string, listOptions *k8sv1.ListOptions) ([]*k8sv1.ConfigMap, error) {
+	configMaps := []*k8sv1.ConfigMap{
+		&k8sv1.ConfigMap{
+			Cluster:     "fake-cluster-name",
+			Namespace:   namespace,
+			Name:        "name1",
+			Labels:      listOptions.Labels,
+			Annotations: map[string]string{"Key": "value"},
+		},
+		&k8sv1.ConfigMap{
+			Cluster:     "fake-cluster-name",
+			Namespace:   namespace,
+			Name:        "name2",
+			Labels:      listOptions.Labels,
+			Annotations: map[string]string{"Key": "value"},
+		},
+	}
+	return configMaps, nil
+}
+
+func (*svc) Clientsets(ctx context.Context) []string {
 	return []string{"fake-user@fake-cluster"}
 }
 
