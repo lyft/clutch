@@ -2,6 +2,7 @@ package authn
 
 import (
 	"context"
+	"fmt"
 
 	"golang.org/x/oauth2"
 
@@ -35,6 +36,12 @@ func newStorage(cfg *authnv1.Storage) (*storage, error) {
 }
 
 func (s *storage) Store(ctx context.Context, userID, provider string, t *oauth2.Token) error {
+	if t == nil {
+		return fmt.Errorf("token provided for storage was nil")
+	} else if userID == "" || provider == "" {
+		return fmt.Errorf("userID '%s' or provider '%s' were blank", userID, provider)
+	}
+
 	at, err := s.crypto.Encrypt([]byte(t.AccessToken))
 	if err != nil {
 		return err
@@ -94,7 +101,7 @@ func (s *storage) Read(ctx context.Context, userID string, provider string) (*oa
 		if err != nil {
 			return nil, err
 		}
-		ret = ret.WithExtra(map[string]string{"id_token": string(it)})
+		ret = ret.WithExtra(map[string]interface{}{"id_token": string(it)})
 	}
 
 	return ret, nil

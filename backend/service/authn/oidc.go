@@ -26,7 +26,7 @@ type OIDCProvider struct {
 
 	sessionSecret string
 
-	tokenStorage *storage
+	tokenStorage  *storage
 	providerAlias string
 
 	claimsFromOIDCToken ClaimsFromOIDCTokenFunc
