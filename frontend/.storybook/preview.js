@@ -8,3 +8,19 @@ export const decorators = [
     </Theme>
   ),
 ];
+
+export const parameters = {  
+  backgrounds: {
+    default: "clutch",
+    values: [
+      {
+        name: "clutch",
+        value: "#f9fafe",
+      },
+      {
+        name: "light",
+        value: "#ffffff",
+      },
+    ]
+  }
+};
