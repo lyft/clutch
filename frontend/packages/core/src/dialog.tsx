@@ -57,7 +57,7 @@ const DialogActions = styled(MuiDialogActions)({
 
 export interface DialogContentProps {}
 export interface DialogActionsProps {}
-export type DialogCloseReasons = "closeButtonClick" | "escapeKeyDown" | "backdropClick"
+export type DialogCloseReasons = "closeButtonClick" | "escapeKeyDown" | "backdropClick";
 export interface DialogProps extends Pick<MuiDialogProps, "open"> {
   title: string;
   children:
@@ -69,11 +69,7 @@ export interface DialogProps extends Pick<MuiDialogProps, "open"> {
 }
 
 const Dialog = ({ title, children, open, onClose }: DialogProps) => (
-  <MuiDialog
-    PaperComponent={DialogPaper}
-    open={open}
-    onClose={onClose}
-  >
+  <MuiDialog PaperComponent={DialogPaper} open={open} onClose={onClose}>
     <DialogTitle disableTypography>
       <DialogTitleText>{title}</DialogTitleText>
       <IconButton onClick={e => onClose(e, "closeButtonClick")}>
