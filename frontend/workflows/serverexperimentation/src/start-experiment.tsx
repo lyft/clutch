@@ -332,7 +332,11 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
         hostsPercentageBasedTargetingEnabled={hostsPercentageBasedTargetingEnabled}
         onStart={experimentDetails => setExperimentData(experimentDetails)}
       />
-      <Dialog title="Experiment Start Confirmation" open={experimentData !== undefined}>
+      <Dialog
+        title="Experiment Start Confirmation"
+        open={experimentData !== undefined}
+        onClose={() => setExperimentData(undefined)}
+      >
         <DialogContent>
           Are you sure you want to start an experiment? The experiment will start immediately and
           you will be moved to experiment details view page.
