@@ -1,9 +1,8 @@
 import React from "react";
-import { Dialog, DialogContent } from "@clutch-sh/core";
 import { Grid, IconButton } from "@material-ui/core";
 import LaunchIcon from "@material-ui/icons/Launch";
 import { Alert } from "@material-ui/lab";
-
+import { Dialog, DialogContent } from "../dialog";
 export interface BaseWorkflowProps {
   heading: string;
 }
