@@ -99,7 +99,7 @@ func TestResourceTTL(t *testing.T) {
 	config := serverexperimentation.HTTPFaultConfig{
 		Fault: &serverexperimentation.HTTPFaultConfig_AbortFault{
 			AbortFault: &serverexperimentation.AbortFault{
-				Percentage:    &serverexperimentation.FaultPercentage{
+				Percentage: &serverexperimentation.FaultPercentage{
 					Percentage: 10,
 				},
 				AbortStatus: &serverexperimentation.FaultAbortStatus{
