@@ -76,7 +76,7 @@ func (c *client) processAllAutoScalingGroups(ctx context.Context, client *region
 		output, err := paginator.NextPage(ctx)
 		if err != nil {
 			c.log.Error("unable to get next asg page", zap.Error(err))
-			continue
+			break
 		}
 
 		for _, asg := range output.AutoScalingGroups {
@@ -108,7 +108,7 @@ func (c *client) processAllEC2Instances(ctx context.Context, client *regionalCli
 		output, err := paginator.NextPage(ctx)
 		if err != nil {
 			c.log.Error("unable to get next ec2 instance page", zap.Error(err))
-			continue
+			break
 		}
 
 		for _, reservation := range output.Reservations {

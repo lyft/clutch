@@ -58,7 +58,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	}
 
 	for _, region := range ac.Regions {
-		regionCfg, _ := config.LoadDefaultConfig(context.TODO(),
+		regionCfg, err := config.LoadDefaultConfig(context.TODO(),
 			config.WithRegion(region),
 			config.WithRetryer(func() aws.Retryer {
 				customRetryer := retry.NewStandard(func(so *retry.StandardOptions) {
@@ -67,6 +67,9 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 				return customRetryer
 			}),
 		)
+		if err != nil {
+			return nil, err
+		}
 
 		c.clients[region] = &regionalClient{
 			region:      region,
@@ -94,27 +97,6 @@ type Client interface {
 	S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error)
 
 	Regions() []string
-}
-
-type s3Client interface {
-	GetObject(ctx context.Context, params *s3.GetObjectInput, optFns ...func(*s3.Options)) (*s3.GetObjectOutput, error)
-}
-
-type kinesisClient interface {
-	DescribeStreamSummary(ctx context.Context, params *kinesis.DescribeStreamSummaryInput, optFns ...func(*kinesis.Options)) (*kinesis.DescribeStreamSummaryOutput, error)
-	UpdateShardCount(ctx context.Context, params *kinesis.UpdateShardCountInput, optFns ...func(*kinesis.Options)) (*kinesis.UpdateShardCountOutput, error)
-	ListStreams(ctx context.Context, params *kinesis.ListStreamsInput, optFns ...func(*kinesis.Options)) (*kinesis.ListStreamsOutput, error)
-}
-
-type ec2Client interface {
-	DescribeInstances(ctx context.Context, params *ec2.DescribeInstancesInput, optFns ...func(*ec2.Options)) (*ec2.DescribeInstancesOutput, error)
-	TerminateInstances(ctx context.Context, params *ec2.TerminateInstancesInput, optFns ...func(*ec2.Options)) (*ec2.TerminateInstancesOutput, error)
-	RebootInstances(ctx context.Context, params *ec2.RebootInstancesInput, optFns ...func(*ec2.Options)) (*ec2.RebootInstancesOutput, error)
-}
-
-type autoscalingClient interface {
-	DescribeAutoScalingGroups(ctx context.Context, params *autoscaling.DescribeAutoScalingGroupsInput, optFns ...func(*autoscaling.Options)) (*autoscaling.DescribeAutoScalingGroupsOutput, error)
-	UpdateAutoScalingGroup(ctx context.Context, params *autoscaling.UpdateAutoScalingGroupInput, optFns ...func(*autoscaling.Options)) (*autoscaling.UpdateAutoScalingGroupOutput, error)
 }
 
 type client struct {
