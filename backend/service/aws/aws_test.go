@@ -9,7 +9,6 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
-	"github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
 	astypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
@@ -53,7 +52,6 @@ func TestNew(t *testing.T) {
 	for key, rc := range c.clients {
 		addedRegions = append(addedRegions, key)
 		assert.Equal(t, key, rc.region)
-
 	}
 	assert.ElementsMatch(t, addedRegions, regions)
 }
@@ -291,7 +289,7 @@ func TestResizeAutoscalingGroupErrorHandling(t *testing.T) {
 func TestDescribeAutoScalingGroups(t *testing.T) {
 	autoscalingClient := &mockAutoscaling{
 		describeASGOutput: &autoscaling.DescribeAutoScalingGroupsOutput{
-			AutoScalingGroups: []types.AutoScalingGroup{
+			AutoScalingGroups: []astypes.AutoScalingGroup{
 				{
 					AutoScalingGroupName: aws.String("asg-one"),
 					AvailabilityZones:    []string{"us-east-1a", "us-east-1b"},
