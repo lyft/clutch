@@ -115,28 +115,29 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 }
 
 func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) (sq.SelectBuilder, error) {
-	if len(s.Field) > 0 {
-		if err := validateFilterSortField(s.Field); err != nil {
-			return sq.SelectBuilder{}, err
-		}
+	if len(s.Field) == 0 {
+		query = query.OrderBy("ID ASC")
+		return query, nil
+	}
 
-		direction := getDirection(s.Direction)
-		identifer, err := getFilterSortPrefixIdentifer(s.Field)
+	if err := validateFilterSortField(s.Field); err != nil {
+		return sq.SelectBuilder{}, err
+	}
+
+	direction := getDirection(s.Direction)
+	identifer, err := getFilterSortPrefixIdentifer(s.Field)
+	if err != nil {
+		return sq.SelectBuilder{}, err
+	}
+
+	if identifer == column {
+		query = query.OrderByClause(fmt.Sprintf("? %s", direction), strings.TrimPrefix(s.Field, columnIdentifer))
+	} else if identifer == metadata {
+		mdQuery, err := convertMetadataToQuery(s.Field)
 		if err != nil {
 			return sq.SelectBuilder{}, err
 		}
-
-		if identifer == column {
-			query = query.OrderByClause(fmt.Sprintf("? %s", direction), strings.TrimPrefix(s.Field, columnIdentifer))
-		} else if identifer == metadata {
-			mdQuery, err := convertMetadataToQuery(s.Field)
-			if err != nil {
-				return sq.SelectBuilder{}, err
-			}
-			query = query.OrderByClause(fmt.Sprintf("? %s", direction), mdQuery)
-		}
-	} else {
-		query = query.OrderBy("ID ASC")
+		query = query.OrderByClause(fmt.Sprintf("? %s", direction), mdQuery)
 	}
 
 	return query, nil

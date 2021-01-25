@@ -105,12 +105,12 @@ func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*
 		req.Limit,
 	)
 	if err != nil {
-		return nil, "0", err
+		return nil, "", err
 	}
 
 	rows, err := query.RunWith(c.db).Query()
 	if err != nil {
-		return nil, "0", err
+		return nil, "", err
 	}
 	defer rows.Close()
 
@@ -122,19 +122,19 @@ func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*
 
 		if err := rows.Scan(&id, &data, &metadata); err != nil {
 			c.log.Error("Error scanning row", zap.Error(err))
-			return nil, "0", err
+			return nil, "", err
 		}
 
 		var dataAny any.Any
 		if err := protojson.Unmarshal(data, &dataAny); err != nil {
 			c.log.Error("Error unmarshaling data field", zap.Error(err))
-			return nil, "0", err
+			return nil, "", err
 		}
 
 		var metadataMap map[string]*structpb.Value
 		if err := json.Unmarshal(metadata, &metadataMap); err != nil {
 			c.log.Error("Error unmarshaling metadata", zap.Error(err))
-			return nil, "0", err
+			return nil, "", err
 		}
 
 		results = append(results, &topologyv1.Resource{
@@ -147,8 +147,14 @@ func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*
 	// Rows.Err will report the last error encountered by Rows.Scan.
 	if err := rows.Err(); err != nil {
 		c.log.Error("Error processing rows for topology search query", zap.Error(err))
-		return nil, "0", err
+		return nil, "", err
 	}
 
-	return results, strconv.FormatUint(nextPageToken, 10), nil
+	// if their are no results then set the next page to nil
+	nextPageTokenStr := ""
+	if len(results) > 0 {
+		nextPageTokenStr = strconv.FormatUint(nextPageToken, 10)
+	}
+
+	return results, nextPageTokenStr, nil
 }
