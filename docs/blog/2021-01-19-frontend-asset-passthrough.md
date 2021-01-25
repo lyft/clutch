@@ -9,6 +9,8 @@ image: https://user-images.githubusercontent.com/4712430/104760766-7a2c5980-5727
 hide_table_of_contents: false
 ---
 
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 Handling frontend asset management with a distribtued deployment.
 
 <!--truncate-->
@@ -57,11 +59,19 @@ For S3 the configuration is simple, specify a `region`, `bucket` and the `key` w
 However there is still an addtional problem to solve, which will be unique to each deployment.
 Will go over how at Lyft we manage uploading new frontend assets to S3 per release.
 
-
 ## Deploying
-![Deployment](../images/fe-asset-passthrough-s3-upload.png)
 
+Below is a simplifed version of our deployment process.
+Early on in the deployment pipeline assets are uploaded to S3,
+utilizing the aws cli to `aws s3 sync` the new assets to the target bucket.
 
+Internally our CI/CD infrastructure utilize container images at most stages in the pipeline,
+allowing us to easily access newly built assets to upload to S3.
 
+<img alt="Deploying" src={useBaseUrl('img/docs/blog/fe-asset-passthrough-s3-upload.png')} width="75%" />
+
+## Conclusion
+
+Frontend asset passthrough enables 
 
 ## Contributing
