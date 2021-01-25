@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"net/http"
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -57,8 +58,11 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		clientRetries = int(ac.ClientConfig.Retries)
 	}
 
+	awsHTTPClient := &http.Client{}
+
 	for _, region := range ac.Regions {
 		regionCfg, err := config.LoadDefaultConfig(context.TODO(),
+			config.WithHTTPClient(awsHTTPClient),
 			config.WithRegion(region),
 			config.WithRetryer(func() aws.Retryer {
 				customRetryer := retry.NewStandard(func(so *retry.StandardOptions) {
