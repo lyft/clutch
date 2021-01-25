@@ -23,7 +23,7 @@ service TopologyAPI {
     option (clutch.api.v1.action).type = READ;
   }
 
-  rpc SearchTopology(SearchTopologyRequest) returns (SearchTopologyResponse) {
+  rpc Search(SearchRequest) returns (SearchResponse) {
     option (google.api.http) = {
       post : "/v1/topology/search"
       body : "*"
@@ -40,7 +40,7 @@ message GetTopologyResponse {
   repeated QueryResult results = 1;
 }
 
-message SearchTopologyRequest {
+message SearchRequest {
   // The default sort is by column `id` and descending
   message Sort {
     enum Direction {
@@ -77,12 +77,12 @@ message SearchTopologyRequest {
   // The rationale behind the naming is we might changes this to a cursor implentation
   // in the future and did not want to break existing implementations of the API.
   // https://cloud.google.com/apis/design/design_patterns#list_pagination
-  uint64 page_token = 2;
+  string page_token = 2;
   uint64 limit = 3;
   Filter filter = 4;
 }
 
-message SearchTopologyResponse {
+message SearchResponse {
   repeated Resource resources = 1;
   string next_page_token = 2;
 }
@@ -225,7 +225,7 @@ message Resource {
 
   // Metadata is set by the service which produces the topology Resource, for example k8s would extract
   // relevant metadata that gives the Topology API the ability to query against it.
-  map<string, string> metadata = 3;
+  map<string, google.protobuf.Value> metadata = 3;
 }
 
 // A UpdateCacheRequest is used when a service such as kubernetes or aws produces objects for
