@@ -25,6 +25,13 @@ const (
 
 var filterSortFieldValidator = regexp.MustCompile(`^[a-zA-Z0-9.]*$`)
 
+// The paginated query builder takes in all parts of the topologyv1.SearchRequest_* to produce a useable query.
+// Most fields will have default values in the event of absent data.
+// This function handles a few of those values:
+//
+// Variable | Default | Limit
+// limit    | 100     | 1000
+// pageNum  | 0
 func paginatedQueryBuilder(
 	filter *topologyv1.SearchRequest_Filter,
 	sort *topologyv1.SearchRequest_Sort,
@@ -74,6 +81,8 @@ func paginatedQueryBuilder(
 	return query, pageNum + 1, nil
 }
 
+// Filter query builder handles only the filter portion of the query all filters are AND together.
+// There are no defaults for the filter builder, if no inputs are supplied this is essentially a no-op.
 func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filter) (sq.SelectBuilder, error) {
 	if f.Search != nil && len(f.Search.Field) > 0 {
 		if err := validateFilterSortField(f.Search.Field); err != nil {
@@ -114,6 +123,8 @@ func filterQueryBuilder(query sq.SelectBuilder, f *topologyv1.SearchRequest_Filt
 	return query, nil
 }
 
+// Sort query builder handles the sorting portion of the query.
+// By default if no inputs are supplied we will sort by `ID ASC`.
 func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) (sq.SelectBuilder, error) {
 	if len(s.Field) == 0 {
 		query = query.OrderBy("ID ASC")
@@ -143,6 +154,10 @@ func sortQueryBuilder(query sq.SelectBuilder, s *topologyv1.SearchRequest_Sort) 
 	return query, nil
 }
 
+// Sanitizes filter and sort user input which is free form.
+// For sort and filter fields we give the users the ability to specify a custom string.
+// EG: "column.id" OR "metadata.fieldone.fieldtwo"
+// This is susceptible to SQL injection, here we sanitize and check the string complies with our validation regex.
 func validateFilterSortField(input string) error {
 	if !filterSortFieldValidator.MatchString(input) {
 		return fmt.Errorf("Illegal Query Operation: [%s]", input)
@@ -151,6 +166,9 @@ func validateFilterSortField(input string) error {
 	return nil
 }
 
+// Validate user input for filter and sort is supported
+// For sort and filter fields we give the users the ability to specify a custom string.
+// EG: "column.id" OR "metadata.fieldone.fieldtwo"
 func getFilterSortPrefixIdentifer(identifer string) (string, error) {
 	switch strings.Split(identifer, ".")[0] {
 	case column:
@@ -162,6 +180,10 @@ func getFilterSortPrefixIdentifer(identifer string) (string, error) {
 	}
 }
 
+// Transformation from a field identifier to a valid json sql query.
+// Example:
+//  input: "metadata.fieldone.fieldtwo.id"
+//  output: "metadata->fieldone->fieldtwo->>id"
 func convertMetadataToQuery(input string) (string, error) {
 	splitMetadata := strings.Split(strings.TrimPrefix(input, metadataIdentifer), ".")
 
