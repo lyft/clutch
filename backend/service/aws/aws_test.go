@@ -7,10 +7,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/service/ec2"
-	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
+	astypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
@@ -26,6 +27,9 @@ func TestNew(t *testing.T) {
 
 	cfg, _ := ptypes.MarshalAny(&awsv1.Config{
 		Regions: regions,
+		ClientConfig: &awsv1.ClientConfig{
+			Retries: 10,
+		},
 	})
 	log := zaptest.NewLogger(t)
 	scope := tally.NewTestScope("", nil)
@@ -78,21 +82,21 @@ func TestMissingRegionOnEachServiceCall(t *testing.T) {
 	assert.EqualError(t, err, "no client found for region 'us-north-5'")
 }
 
-var testInstance = &ec2.Instance{
+var testInstance = ec2types.Instance{
 	InstanceId: aws.String("i-123456789abcdef0"),
-	Tags: []*ec2.Tag{
+	Tags: []ec2types.Tag{
 		{Key: aws.String("Name"), Value: aws.String("locations-staging-iad")},
 		{Key: aws.String("Canary"), Value: aws.String("false")},
 	},
 	LaunchTime:       aws.Time(time.Unix(1449952498, 0)),
-	State:            &ec2.InstanceState{Name: aws.String("running")},
+	State:            &ec2types.InstanceState{Name: "running"},
 	PrivateIpAddress: aws.String("192.168.0.1"),
 	PublicIpAddress:  aws.String("35.40.0.1"),
-	InstanceType:     aws.String("c5.xlarge"),
-	Placement:        &ec2.Placement{AvailabilityZone: aws.String("us-east-1f")},
+	InstanceType:     "c5.xlarge",
+	Placement:        &ec2types.Placement{AvailabilityZone: aws.String("us-east-1f")},
 }
 
-var testInstanceProto = &ec2v1.Instance{
+var testInstanceProto = ec2v1.Instance{
 	InstanceId:       "i-123456789abcdef0",
 	Region:           "us-east-1",
 	State:            ec2v1.Instance_RUNNING,
@@ -103,9 +107,70 @@ var testInstanceProto = &ec2v1.Instance{
 	Tags:             map[string]string{"Name": "locations-staging-iad", "Canary": "false"},
 }
 
+var testAutoscalingGroupInstance = astypes.Instance{
+	InstanceId:              aws.String("asginstance"),
+	AvailabilityZone:        aws.String("us-east-1"),
+	LaunchConfigurationName: aws.String("launch-config-name"),
+	HealthStatus:            aws.String("HEALTHY"),
+	LifecycleState:          astypes.LifecycleStatePending,
+}
+
+var testAutoscalingGroupInstnaceProto = ec2v1.AutoscalingGroup_Instance{
+	Id:                      "asginstance",
+	Zone:                    "us-east-1",
+	LaunchConfigurationName: "launch-config-name",
+	Healthy:                 true,
+	LifecycleState:          ec2v1.AutoscalingGroup_Instance_PENDING,
+}
+
+var testAutoscalingGroup = astypes.AutoScalingGroup{
+	AutoScalingGroupName: aws.String("asgname"),
+	AvailabilityZones:    []string{"us-east-1a", "us-east-1b"},
+	MinSize:              aws.Int32(1),
+	MaxSize:              aws.Int32(10),
+	DesiredCapacity:      aws.Int32(5),
+	TerminationPolicies:  []string{"oldest-instance"},
+	Tags: []astypes.TagDescription{
+		{
+			Key:   aws.String("key"),
+			Value: aws.String("value"),
+		},
+	},
+	Instances: []astypes.Instance{
+		testAutoscalingGroupInstance,
+	},
+}
+
+var testAutoscalingGroupProto = ec2v1.AutoscalingGroup{
+	Name:   "asgname",
+	Zones:  []string{"us-east-1a", "us-east-1b"},
+	Region: "us-east-1",
+	Size: &ec2v1.AutoscalingGroupSize{
+		Min:     uint32(1),
+		Max:     uint32(10),
+		Desired: uint32(5),
+	},
+	TerminationPolicies: []ec2v1.AutoscalingGroup_TerminationPolicy{
+		ec2v1.AutoscalingGroup_OLDEST_INSTANCE,
+	},
+	Instances: []*ec2v1.AutoscalingGroup_Instance{
+		&testAutoscalingGroupInstnaceProto,
+	},
+}
+
 func TestNewProtoForInstance(t *testing.T) {
 	pb := newProtoForInstance(testInstance)
-	assert.Equal(t, testInstanceProto, pb)
+	assert.Equal(t, &testInstanceProto, pb)
+}
+
+func TestNewProtoForAutoscalingGroupInstance(t *testing.T) {
+	pb := newProtoForAutoscalingGroupInstance(testAutoscalingGroupInstance)
+	assert.Equal(t, &testAutoscalingGroupInstnaceProto, pb)
+}
+
+func TestNewProtoForAutoscalingGroup(t *testing.T) {
+	pb := newProtoForAutoscalingGroup(testAutoscalingGroup)
+	assert.Equal(t, &testAutoscalingGroupProto, pb)
 }
 
 func TestProtoForInstanceState(t *testing.T) {
@@ -113,6 +178,21 @@ func TestProtoForInstanceState(t *testing.T) {
 	assert.Equal(t, ec2v1.Instance_UNKNOWN, protoForInstanceState(""))
 	assert.Equal(t, ec2v1.Instance_RUNNING, protoForInstanceState("running"))
 	assert.Equal(t, ec2v1.Instance_SHUTTING_DOWN, protoForInstanceState("shutting-down"))
+}
+
+func TestProtoForTerminationPolicy(t *testing.T) {
+	assert.Equal(t, ec2v1.AutoscalingGroup_UNKNOWN, protoForTerminationPolicy("foo"))
+	assert.Equal(t, ec2v1.AutoscalingGroup_UNKNOWN, protoForTerminationPolicy(""))
+	assert.Equal(t, ec2v1.AutoscalingGroup_DEFAULT, protoForTerminationPolicy("default"))
+	assert.Equal(t, ec2v1.AutoscalingGroup_OLDEST_INSTANCE, protoForTerminationPolicy("oldest-instance"))
+	assert.Equal(t, ec2v1.AutoscalingGroup_OLDEST_LAUNCH_CONFIGURATION, protoForTerminationPolicy("oldest-launch-configuration"))
+}
+
+func TestProtoForAutoscalingGroupInstanceLifecycleState(t *testing.T) {
+	assert.Equal(t, ec2v1.AutoscalingGroup_Instance_UNKNOWN, protoForAutoscalingGroupInstanceLifecycleState("foo"))
+	assert.Equal(t, ec2v1.AutoscalingGroup_Instance_UNKNOWN, protoForAutoscalingGroupInstanceLifecycleState(""))
+	assert.Equal(t, ec2v1.AutoscalingGroup_Instance_TERMINATING_WAIT, protoForAutoscalingGroupInstanceLifecycleState("terminating-wait"))
+	assert.Equal(t, ec2v1.AutoscalingGroup_Instance_ENTERING_STANDBY, protoForAutoscalingGroupInstanceLifecycleState("entering-standby"))
 }
 
 func TestDescribeInstances(t *testing.T) {
@@ -125,12 +205,12 @@ func TestDescribeInstances(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Len(t, results, 0)
 
-	m.instances = []*ec2.Instance{testInstance}
+	m.instances = []ec2types.Instance{testInstance}
 
 	results, err = c.DescribeInstances(context.Background(), "us-east-1", []string{"i-12345"})
 	assert.NoError(t, err)
 	assert.Len(t, results, 1)
-	assert.Equal(t, testInstanceProto, results[0])
+	assert.Equal(t, &testInstanceProto, results[0])
 
 	m.instancesErr = errors.New("whoops")
 	_, err = c.DescribeInstances(context.Background(), "us-east-1", nil)
@@ -165,35 +245,133 @@ func TestRebootInstances(t *testing.T) {
 	assert.EqualError(t, err, "ohno")
 }
 
+func TestZoneToRegion(t *testing.T) {
+	tests := []struct {
+		input  string
+		expect string
+	}{
+		{
+			input:  "us-east-1a",
+			expect: "us-east-1",
+		},
+		{
+			input:  "",
+			expect: "UNKNOWN",
+		},
+	}
+
+	for _, test := range tests {
+		output := zoneToRegion(test.input)
+		assert.Equal(t, test.expect, output)
+	}
+}
+
+func TestResizeAutoscalingGroupErrorHandling(t *testing.T) {
+	autoscalingClient := &mockAutoscaling{
+		updateASGErr: fmt.Errorf("error"),
+	}
+	c := &client{
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", autoscaling: autoscalingClient}},
+	}
+
+	err1 := c.ResizeAutoscalingGroup(context.Background(), "us-east-1", "asgname", &ec2v1.AutoscalingGroupSize{
+		Min:     1,
+		Max:     10,
+		Desired: 5,
+	})
+	assert.Error(t, err1)
+
+	// Test unknown region
+	err2 := c.ResizeAutoscalingGroup(context.Background(), "choice-region-1", "clutch", &ec2v1.AutoscalingGroupSize{})
+	assert.Error(t, err2)
+}
+
+func TestDescribeAutoScalingGroups(t *testing.T) {
+	autoscalingClient := &mockAutoscaling{
+		describeASGOutput: &autoscaling.DescribeAutoScalingGroupsOutput{
+			AutoScalingGroups: []astypes.AutoScalingGroup{
+				{
+					AutoScalingGroupName: aws.String("asg-one"),
+					AvailabilityZones:    []string{"us-east-1a", "us-east-1b"},
+					DesiredCapacity:      aws.Int32(5),
+					MaxSize:              aws.Int32(10),
+					MinSize:              aws.Int32(1),
+				},
+				{
+					AutoScalingGroupName: aws.String("asg-two"),
+					AvailabilityZones:    []string{"us-east-1c", "us-east-1d"},
+					DesiredCapacity:      aws.Int32(1),
+					MaxSize:              aws.Int32(2),
+					MinSize:              aws.Int32(1),
+				},
+			},
+		},
+	}
+	c := &client{
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", autoscaling: autoscalingClient}},
+	}
+
+	asgs, err := c.DescribeAutoscalingGroups(context.Background(), "us-east-1", []string{"asg-one", "asg-two"})
+	assert.NoError(t, err)
+	assert.Len(t, asgs, 2)
+
+	for i, asg := range asgs {
+		assert.Equal(t, aws.ToString(autoscalingClient.describeASGOutput.AutoScalingGroups[i].AutoScalingGroupName), asg.Name)
+		assert.Equal(t, autoscalingClient.describeASGOutput.AutoScalingGroups[i].AvailabilityZones, asg.Zones)
+		assert.Equal(t, uint32(aws.ToInt32(autoscalingClient.describeASGOutput.AutoScalingGroups[i].DesiredCapacity)), asg.Size.Desired)
+		assert.Equal(t, uint32(aws.ToInt32(autoscalingClient.describeASGOutput.AutoScalingGroups[i].MaxSize)), asg.Size.Max)
+		assert.Equal(t, uint32(aws.ToInt32(autoscalingClient.describeASGOutput.AutoScalingGroups[i].MinSize)), asg.Size.Min)
+	}
+}
+
+func TestDescribeAutoscalingGroupsErrorHandling(t *testing.T) {
+	autoscalingClient := &mockAutoscaling{
+		describeASGErr: fmt.Errorf("error"),
+	}
+
+	c := &client{
+		clients: map[string]*regionalClient{"us-east-1": {region: "us-east-1", autoscaling: autoscalingClient}},
+	}
+
+	asg1, err1 := c.DescribeAutoscalingGroups(context.Background(), "us-east-1", []string{"asgname"})
+	assert.Nil(t, asg1)
+	assert.Error(t, err1)
+
+	// Test unknown region
+	asg2, err2 := c.DescribeAutoscalingGroups(context.Background(), "unknown-region", []string{"asgname"})
+	assert.Nil(t, asg2)
+	assert.Error(t, err2)
+}
+
 type mockEC2 struct {
-	ec2iface.EC2API // satisfies interface
+	ec2Client
 
 	instancesErr error
-	instances    []*ec2.Instance
+	instances    []ec2types.Instance
 
-	terminateResult []*ec2.InstanceStateChange
+	terminateResult []ec2types.InstanceStateChange
 	terminateErr    error
 	rebootErr       error
 }
 
-func (m *mockEC2) DescribeInstancesWithContext(ctx context.Context, input *ec2.DescribeInstancesInput, opts ...request.Option) (*ec2.DescribeInstancesOutput, error) {
+func (m *mockEC2) DescribeInstances(ctx context.Context, params *ec2.DescribeInstancesInput, optFns ...func(*ec2.Options)) (*ec2.DescribeInstancesOutput, error) {
 	if m.instancesErr != nil {
 		return nil, m.instancesErr
 	}
 
-	if len(input.InstanceIds) != len(m.instances) {
-		panic(fmt.Sprintf("DescribeInstances mock count mismatch input %d, expected %d", len(input.InstanceIds), len(m.instances)))
+	if len(params.InstanceIds) != len(m.instances) {
+		panic(fmt.Sprintf("DescribeInstances mock count mismatch input %d, expected %d", len(params.InstanceIds), len(m.instances)))
 	}
 
 	ret := &ec2.DescribeInstancesOutput{
-		Reservations: []*ec2.Reservation{
+		Reservations: []ec2types.Reservation{
 			{Instances: m.instances},
 		},
 	}
 	return ret, nil
 }
 
-func (m *mockEC2) TerminateInstancesWithContext(ctx context.Context, input *ec2.TerminateInstancesInput, opts ...request.Option) (*ec2.TerminateInstancesOutput, error) {
+func (m *mockEC2) TerminateInstances(ctx context.Context, params *ec2.TerminateInstancesInput, optFns ...func(*ec2.Options)) (*ec2.TerminateInstancesOutput, error) {
 	if m.terminateErr != nil {
 		return nil, m.terminateErr
 	}
@@ -203,9 +381,39 @@ func (m *mockEC2) TerminateInstancesWithContext(ctx context.Context, input *ec2.
 	return ret, nil
 }
 
-func (m *mockEC2) RebootInstancesWithContext(aws.Context, *ec2.RebootInstancesInput, ...request.Option) (*ec2.RebootInstancesOutput, error) {
+func (m *mockEC2) RebootInstances(ctx context.Context, params *ec2.RebootInstancesInput, optFns ...func(*ec2.Options)) (*ec2.RebootInstancesOutput, error) {
 	if m.rebootErr != nil {
 		return nil, m.rebootErr
 	}
 	return &ec2.RebootInstancesOutput{}, nil
+}
+
+type mockAutoscaling struct {
+	autoscalingClient
+
+	describeASGErr    error
+	describeASGOutput *autoscaling.DescribeAutoScalingGroupsOutput
+
+	updateASGErr error
+}
+
+func (ma mockAutoscaling) DescribeAutoScalingGroups(ctx context.Context, params *autoscaling.DescribeAutoScalingGroupsInput, optFns ...func(*autoscaling.Options)) (*autoscaling.DescribeAutoScalingGroupsOutput, error) {
+	if ma.describeASGErr != nil {
+		return nil, ma.describeASGErr
+	}
+
+	output := &autoscaling.DescribeAutoScalingGroupsOutput{}
+	if ma.describeASGOutput != nil {
+		output = ma.describeASGOutput
+	}
+
+	return output, nil
+}
+
+func (ma mockAutoscaling) UpdateAutoScalingGroup(ctx context.Context, params *autoscaling.UpdateAutoScalingGroupInput, optFns ...func(*autoscaling.Options)) (*autoscaling.UpdateAutoScalingGroupOutput, error) {
+	if ma.updateASGErr != nil {
+		return nil, ma.updateASGErr
+	}
+
+	return &autoscaling.UpdateAutoScalingGroupOutput{}, nil
 }

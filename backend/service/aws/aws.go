@@ -8,19 +8,18 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"net/http"
 	"strings"
 
-	"github.com/aws/aws-sdk-go/aws"
-	awsclient "github.com/aws/aws-sdk-go/aws/client"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/autoscaling"
-	"github.com/aws/aws-sdk-go/service/autoscaling/autoscalingiface"
-	"github.com/aws/aws-sdk-go/service/ec2"
-	"github.com/aws/aws-sdk-go/service/ec2/ec2iface"
-	"github.com/aws/aws-sdk-go/service/kinesis"
-	"github.com/aws/aws-sdk-go/service/kinesis/kinesisiface"
-	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/aws/aws-sdk-go/service/s3/s3iface"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/aws/retry"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
+	astypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
+	"github.com/aws/aws-sdk-go-v2/service/kinesis"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/iancoleman/strcase"
@@ -59,23 +58,29 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		clientRetries = int(ac.ClientConfig.Retries)
 	}
 
-	for _, region := range ac.Regions {
-		regionCfg := aws.NewConfig().WithRegion(region)
-		regionCfg.Retryer = awsclient.DefaultRetryer{
-			NumMaxRetries: clientRetries,
-		}
+	awsHTTPClient := &http.Client{}
 
-		awsSession, err := session.NewSession(regionCfg)
+	for _, region := range ac.Regions {
+		regionCfg, err := config.LoadDefaultConfig(context.TODO(),
+			config.WithHTTPClient(awsHTTPClient),
+			config.WithRegion(region),
+			config.WithRetryer(func() aws.Retryer {
+				customRetryer := retry.NewStandard(func(so *retry.StandardOptions) {
+					so.MaxAttempts = clientRetries
+				})
+				return customRetryer
+			}),
+		)
 		if err != nil {
 			return nil, err
 		}
 
 		c.clients[region] = &regionalClient{
 			region:      region,
-			s3:          s3.New(awsSession),
-			kinesis:     kinesis.New(awsSession),
-			ec2:         ec2.New(awsSession),
-			autoscaling: autoscaling.New(awsSession),
+			s3:          s3.NewFromConfig(regionCfg),
+			kinesis:     kinesis.NewFromConfig(regionCfg),
+			ec2:         ec2.NewFromConfig(regionCfg),
+			autoscaling: autoscaling.NewFromConfig(regionCfg),
 		}
 	}
 
@@ -91,7 +96,7 @@ type Client interface {
 	ResizeAutoscalingGroup(ctx context.Context, region string, name string, size *ec2v1.AutoscalingGroupSize) error
 
 	DescribeKinesisStream(ctx context.Context, region string, streamName string) (*kinesisv1.Stream, error)
-	UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount uint32) error
+	UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount int32) error
 
 	S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error)
 
@@ -106,6 +111,15 @@ type client struct {
 	scope              tally.Scope
 }
 
+type regionalClient struct {
+	region string
+
+	s3          s3Client
+	kinesis     kinesisClient
+	ec2         ec2Client
+	autoscaling autoscalingClient
+}
+
 func (c *client) ResizeAutoscalingGroup(ctx context.Context, region string, name string, size *ec2v1.AutoscalingGroupSize) error {
 	rc, ok := c.clients[region]
 	if !ok {
@@ -114,12 +128,12 @@ func (c *client) ResizeAutoscalingGroup(ctx context.Context, region string, name
 
 	input := &autoscaling.UpdateAutoScalingGroupInput{
 		AutoScalingGroupName: aws.String(name),
-		DesiredCapacity:      aws.Int64(int64(size.Desired)),
-		MaxSize:              aws.Int64(int64(size.Max)),
-		MinSize:              aws.Int64(int64(size.Min)),
+		DesiredCapacity:      aws.Int32(int32(size.Desired)),
+		MaxSize:              aws.Int32(int32(size.Max)),
+		MinSize:              aws.Int32(int32(size.Min)),
 	}
 
-	_, err := rc.autoscaling.UpdateAutoScalingGroupWithContext(ctx, input)
+	_, err := rc.autoscaling.UpdateAutoScalingGroup(ctx, input)
 	return err
 }
 
@@ -130,9 +144,9 @@ func (c *client) DescribeAutoscalingGroups(ctx context.Context, region string, n
 	}
 
 	input := &autoscaling.DescribeAutoScalingGroupsInput{
-		AutoScalingGroupNames: aws.StringSlice(names),
+		AutoScalingGroupNames: names,
 	}
-	result, err := cl.autoscaling.DescribeAutoScalingGroupsWithContext(ctx, input)
+	result, err := cl.autoscaling.DescribeAutoScalingGroups(ctx, input)
 	if err != nil {
 		return nil, err
 	}
@@ -170,24 +184,24 @@ func protoForAutoscalingGroupInstanceLifecycleState(state string) ec2v1.Autoscal
 	return ec2v1.AutoscalingGroup_Instance_LifecycleState(val)
 }
 
-func newProtoForAutoscalingGroupInstance(instance *autoscaling.Instance) *ec2v1.AutoscalingGroup_Instance {
+func newProtoForAutoscalingGroupInstance(instance astypes.Instance) *ec2v1.AutoscalingGroup_Instance {
 	return &ec2v1.AutoscalingGroup_Instance{
-		Id:                      aws.StringValue(instance.InstanceId),
-		Zone:                    aws.StringValue(instance.AvailabilityZone),
-		LaunchConfigurationName: aws.StringValue(instance.LaunchConfigurationName),
-		Healthy:                 aws.StringValue(instance.HealthStatus) == "HEALTHY",
-		LifecycleState:          protoForAutoscalingGroupInstanceLifecycleState(aws.StringValue(instance.LifecycleState)),
+		Id:                      aws.ToString(instance.InstanceId),
+		Zone:                    aws.ToString(instance.AvailabilityZone),
+		LaunchConfigurationName: aws.ToString(instance.LaunchConfigurationName),
+		Healthy:                 aws.ToString(instance.HealthStatus) == "HEALTHY",
+		LifecycleState:          protoForAutoscalingGroupInstanceLifecycleState(string(instance.LifecycleState)),
 	}
 }
 
-func newProtoForAutoscalingGroup(group *autoscaling.Group) *ec2v1.AutoscalingGroup {
+func newProtoForAutoscalingGroup(group astypes.AutoScalingGroup) *ec2v1.AutoscalingGroup {
 	pb := &ec2v1.AutoscalingGroup{
-		Name:  aws.StringValue(group.AutoScalingGroupName),
-		Zones: aws.StringValueSlice(group.AvailabilityZones),
+		Name:  aws.ToString(group.AutoScalingGroupName),
+		Zones: group.AvailabilityZones,
 		Size: &ec2v1.AutoscalingGroupSize{
-			Min:     uint32(aws.Int64Value(group.MinSize)),
-			Max:     uint32(aws.Int64Value(group.MaxSize)),
-			Desired: uint32(aws.Int64Value(group.DesiredCapacity)),
+			Min:     uint32(aws.ToInt32(group.MinSize)),
+			Max:     uint32(aws.ToInt32(group.MaxSize)),
+			Desired: uint32(aws.ToInt32(group.DesiredCapacity)),
 		},
 	}
 
@@ -196,7 +210,7 @@ func newProtoForAutoscalingGroup(group *autoscaling.Group) *ec2v1.AutoscalingGro
 	}
 
 	pb.TerminationPolicies = make([]ec2v1.AutoscalingGroup_TerminationPolicy, len(group.TerminationPolicies))
-	for idx, p := range aws.StringValueSlice(group.TerminationPolicies) {
+	for idx, p := range group.TerminationPolicies {
 		pb.TerminationPolicies[idx] = protoForTerminationPolicy(p)
 	}
 
@@ -216,23 +230,14 @@ func (c *client) Regions() []string {
 	return regions
 }
 
-type regionalClient struct {
-	region string
-
-	s3          s3iface.S3API
-	kinesis     kinesisiface.KinesisAPI
-	ec2         ec2iface.EC2API
-	autoscaling autoscalingiface.AutoScalingAPI
-}
-
 func (c *client) DescribeInstances(ctx context.Context, region string, ids []string) ([]*ec2v1.Instance, error) {
 	cl, ok := c.clients[region]
 	if !ok {
 		return nil, fmt.Errorf("no client found for region '%s'", region)
 	}
 
-	input := &ec2.DescribeInstancesInput{InstanceIds: aws.StringSlice(ids)}
-	result, err := cl.ec2.DescribeInstancesWithContext(ctx, input)
+	input := &ec2.DescribeInstancesInput{InstanceIds: ids}
+	result, err := cl.ec2.DescribeInstances(ctx, input)
 
 	if err != nil {
 		return nil, err
@@ -254,8 +259,8 @@ func (c *client) TerminateInstances(ctx context.Context, region string, ids []st
 		return fmt.Errorf("no client found for region '%s'", region)
 	}
 
-	input := &ec2.TerminateInstancesInput{InstanceIds: aws.StringSlice(ids)}
-	_, err := cl.ec2.TerminateInstancesWithContext(ctx, input)
+	input := &ec2.TerminateInstancesInput{InstanceIds: ids}
+	_, err := cl.ec2.TerminateInstances(ctx, input)
 
 	return err
 }
@@ -266,8 +271,8 @@ func (c *client) RebootInstances(ctx context.Context, region string, ids []strin
 		return fmt.Errorf("no client found for region '%s'", region)
 	}
 
-	input := &ec2.RebootInstancesInput{InstanceIds: aws.StringSlice(ids)}
-	_, err := cl.ec2.RebootInstancesWithContext(ctx, input)
+	input := &ec2.RebootInstancesInput{InstanceIds: ids}
+	_, err := cl.ec2.RebootInstances(ctx, input)
 
 	return err
 }
@@ -284,14 +289,14 @@ func protoForInstanceState(state string) ec2v1.Instance_State {
 	return ec2v1.Instance_State(val)
 }
 
-func newProtoForInstance(i *ec2.Instance) *ec2v1.Instance {
+func newProtoForInstance(i ec2types.Instance) *ec2v1.Instance {
 	ret := &ec2v1.Instance{
-		InstanceId:       aws.StringValue(i.InstanceId),
-		State:            protoForInstanceState(aws.StringValue(i.State.Name)),
-		InstanceType:     aws.StringValue(i.InstanceType),
-		PublicIpAddress:  aws.StringValue(i.PublicIpAddress),
-		PrivateIpAddress: aws.StringValue(i.PrivateIpAddress),
-		AvailabilityZone: aws.StringValue(i.Placement.AvailabilityZone),
+		InstanceId:       aws.ToString(i.InstanceId),
+		State:            protoForInstanceState(string(i.State.Name)),
+		InstanceType:     string(i.InstanceType),
+		PublicIpAddress:  aws.ToString(i.PublicIpAddress),
+		PrivateIpAddress: aws.ToString(i.PrivateIpAddress),
+		AvailabilityZone: aws.ToString(i.Placement.AvailabilityZone),
 	}
 
 	ret.Region = zoneToRegion(ret.AvailabilityZone)
@@ -299,7 +304,7 @@ func newProtoForInstance(i *ec2.Instance) *ec2v1.Instance {
 	// Transform tag list to map.
 	ret.Tags = make(map[string]string, len(i.Tags))
 	for _, tag := range i.Tags {
-		ret.Tags[aws.StringValue(tag.Key)] = aws.StringValue(tag.Value)
+		ret.Tags[aws.ToString(tag.Key)] = aws.ToString(tag.Value)
 	}
 
 	return ret

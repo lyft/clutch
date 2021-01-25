@@ -5677,7 +5677,7 @@ export const clutch = $root.clutch = (() => {
                         if (object.region != null)
                             message.region = String(object.region);
                         if (object.targetShardCount != null)
-                            message.targetShardCount = object.targetShardCount >>> 0;
+                            message.targetShardCount = object.targetShardCount | 0;
                         return message;
                     };
 
@@ -5890,7 +5890,7 @@ export const clutch = $root.clutch = (() => {
                         if (object.region != null)
                             message.region = String(object.region);
                         if (object.currentShardCount != null)
-                            message.currentShardCount = object.currentShardCount >>> 0;
+                            message.currentShardCount = object.currentShardCount | 0;
                         return message;
                     };
 
