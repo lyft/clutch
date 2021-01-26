@@ -38,8 +38,9 @@ func newCryptographer(passphrase string) (*cryptographer, error) {
 
 // Return decrypted bytes using input with nonce as the prefix and ciphertext as remaining bytes.
 func (c *cryptographer) Decrypt(b []byte) ([]byte, error) {
-	if len(b) < c.gcm.NonceSize()+1 {
-		return nil, fmt.Errorf("bytes for decryption are smaller than algorithm's nonce size")
+	// Ensure we don't panic when splitting the nonce and ciphertext.
+	if len(b) < c.gcm.NonceSize() {
+		return nil, fmt.Errorf("invalid nonce+cipher, bytes for decryption are smaller than algorithm's nonce size")
 	}
 
 	nonce, ciphertext := b[:c.gcm.NonceSize()], b[c.gcm.NonceSize():]
