@@ -9,12 +9,17 @@ import (
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 )
 
+type Storage interface {
+	Store(ctx context.Context, userID, provider string, t *oauth2.Token) error
+	Read(ctx context.Context, userID, provider string) (*oauth2.Token, error)
+}
+
 type storage struct {
 	crypto *cryptographer
 	repo   *repository
 }
 
-func newStorage(cfg *authnv1.Storage) (*storage, error) {
+func newStorage(cfg *authnv1.Storage) (Storage, error) {
 	if cfg == nil {
 		return nil, nil
 	}

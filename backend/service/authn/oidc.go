@@ -26,7 +26,7 @@ type OIDCProvider struct {
 
 	sessionSecret string
 
-	tokenStorage  *storage
+	tokenStorage  Storage
 	providerAlias string
 
 	claimsFromOIDCToken ClaimsFromOIDCTokenFunc
@@ -175,7 +175,7 @@ func (p *OIDCProvider) Verify(ctx context.Context, rawToken string) (*Claims, er
 	return claims, nil
 }
 
-func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage *storage) (Provider, error) {
+func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage Storage) (Provider, error) {
 	c := config.GetOidc()
 
 	// Allows injection of test client. If client not present then add the default.

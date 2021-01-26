@@ -38,8 +38,9 @@ func TestNewStorage(t *testing.T) {
 		})
 		assert.NoError(t, err)
 		assert.NotNil(t, s)
-		assert.NotNil(t, s.crypto)
-		assert.NotNil(t, s.repo)
+
+		assert.NotNil(t, s.(*storage).crypto)
+		assert.NotNil(t, s.(*storage).repo)
 	}
 }
 
@@ -149,9 +150,9 @@ func TestReadWithResult(t *testing.T) {
 
 	now := time.Now().UTC()
 
-	at, _ := s.crypto.Encrypt([]byte("Access"))
-	rt, _ := s.crypto.Encrypt([]byte("REFRESH"))
-	it, _ := s.crypto.Encrypt([]byte("id"))
+	at, _ := s.(*storage).crypto.Encrypt([]byte("Access"))
+	rt, _ := s.(*storage).crypto.Encrypt([]byte("REFRESH"))
+	it, _ := s.(*storage).crypto.Encrypt([]byte("id"))
 
 	rows := sqlmock.NewRows([]string{"user_id", "provider", "access_token", "refresh_token", "id_token", "expiry"})
 	rows.AddRow("user@example.com", "clutch.example.com", at, rt, it, now)
