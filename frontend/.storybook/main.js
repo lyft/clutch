@@ -3,7 +3,7 @@ module.exports = {
     "../packages/**/*.stories.@(tsx|jsx)",
   ],
   typescript: {
-    reactDocgen: 'react-docgen-typescript',
+    reactDocgen: 'none',
     reactDocgenTypescriptOptions: {
       compilerOptions: {
         allowSyntheticDefaultImports: false,
