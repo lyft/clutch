@@ -5696,6 +5696,12 @@ export namespace clutch {
 
                                 /** Config egressFaultRuntimePrefix */
                                 egressFaultRuntimePrefix?: (string|null);
+
+                                /** Config resourceTtl */
+                                resourceTtl?: (google.protobuf.IDuration|null);
+
+                                /** Config heartbeatInterval */
+                                heartbeatInterval?: (google.protobuf.IDuration|null);
                             }
 
                             /** Represents a Config. */
@@ -5718,6 +5724,12 @@ export namespace clutch {
 
                                 /** Config egressFaultRuntimePrefix. */
                                 public egressFaultRuntimePrefix: string;
+
+                                /** Config resourceTtl. */
+                                public resourceTtl?: (google.protobuf.IDuration|null);
+
+                                /** Config heartbeatInterval. */
+                                public heartbeatInterval?: (google.protobuf.IDuration|null);
 
                                 /**
                                  * Verifies a Config message.

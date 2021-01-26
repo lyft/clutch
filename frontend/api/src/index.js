@@ -13481,6 +13481,8 @@ export const clutch = $root.clutch = (() => {
                                  * @property {google.protobuf.IDuration|null} [cacheRefreshInterval] Config cacheRefreshInterval
                                  * @property {string|null} [ingressFaultRuntimePrefix] Config ingressFaultRuntimePrefix
                                  * @property {string|null} [egressFaultRuntimePrefix] Config egressFaultRuntimePrefix
+                                 * @property {google.protobuf.IDuration|null} [resourceTtl] Config resourceTtl
+                                 * @property {google.protobuf.IDuration|null} [heartbeatInterval] Config heartbeatInterval
                                  */
 
                                 /**
@@ -13531,6 +13533,22 @@ export const clutch = $root.clutch = (() => {
                                 Config.prototype.egressFaultRuntimePrefix = "";
 
                                 /**
+                                 * Config resourceTtl.
+                                 * @member {google.protobuf.IDuration|null|undefined} resourceTtl
+                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.resourceTtl = null;
+
+                                /**
+                                 * Config heartbeatInterval.
+                                 * @member {google.protobuf.IDuration|null|undefined} heartbeatInterval
+                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.heartbeatInterval = null;
+
+                                /**
                                  * Verifies a Config message.
                                  * @function verify
                                  * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
@@ -13555,6 +13573,16 @@ export const clutch = $root.clutch = (() => {
                                     if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
                                         if (!$util.isString(message.egressFaultRuntimePrefix))
                                             return "egressFaultRuntimePrefix: string expected";
+                                    if (message.resourceTtl != null && message.hasOwnProperty("resourceTtl")) {
+                                        let error = $root.google.protobuf.Duration.verify(message.resourceTtl);
+                                        if (error)
+                                            return "resourceTtl." + error;
+                                    }
+                                    if (message.heartbeatInterval != null && message.hasOwnProperty("heartbeatInterval")) {
+                                        let error = $root.google.protobuf.Duration.verify(message.heartbeatInterval);
+                                        if (error)
+                                            return "heartbeatInterval." + error;
+                                    }
                                     return null;
                                 };
 
@@ -13581,6 +13609,16 @@ export const clutch = $root.clutch = (() => {
                                         message.ingressFaultRuntimePrefix = String(object.ingressFaultRuntimePrefix);
                                     if (object.egressFaultRuntimePrefix != null)
                                         message.egressFaultRuntimePrefix = String(object.egressFaultRuntimePrefix);
+                                    if (object.resourceTtl != null) {
+                                        if (typeof object.resourceTtl !== "object")
+                                            throw TypeError(".clutch.config.module.chaos.experimentation.rtds.v1.Config.resourceTtl: object expected");
+                                        message.resourceTtl = $root.google.protobuf.Duration.fromObject(object.resourceTtl);
+                                    }
+                                    if (object.heartbeatInterval != null) {
+                                        if (typeof object.heartbeatInterval !== "object")
+                                            throw TypeError(".clutch.config.module.chaos.experimentation.rtds.v1.Config.heartbeatInterval: object expected");
+                                        message.heartbeatInterval = $root.google.protobuf.Duration.fromObject(object.heartbeatInterval);
+                                    }
                                     return message;
                                 };
 
@@ -13602,6 +13640,8 @@ export const clutch = $root.clutch = (() => {
                                         object.cacheRefreshInterval = null;
                                         object.ingressFaultRuntimePrefix = "";
                                         object.egressFaultRuntimePrefix = "";
+                                        object.resourceTtl = null;
+                                        object.heartbeatInterval = null;
                                     }
                                     if (message.rtdsLayerName != null && message.hasOwnProperty("rtdsLayerName"))
                                         object.rtdsLayerName = message.rtdsLayerName;
@@ -13611,6 +13651,10 @@ export const clutch = $root.clutch = (() => {
                                         object.ingressFaultRuntimePrefix = message.ingressFaultRuntimePrefix;
                                     if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
                                         object.egressFaultRuntimePrefix = message.egressFaultRuntimePrefix;
+                                    if (message.resourceTtl != null && message.hasOwnProperty("resourceTtl"))
+                                        object.resourceTtl = $root.google.protobuf.Duration.toObject(message.resourceTtl, options);
+                                    if (message.heartbeatInterval != null && message.hasOwnProperty("heartbeatInterval"))
+                                        object.heartbeatInterval = $root.google.protobuf.Duration.toObject(message.heartbeatInterval, options);
                                     return object;
                                 };
 
