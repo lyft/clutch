@@ -17,6 +17,14 @@ import styles from './styles.module.css';
 // retrocompatible with v1
 const DefaultNavItemPosition = 'right';
 
+interface ItemProps {
+  to: string;
+  activeBasePath: string;
+  icon: string;
+  label: string;
+  className?: string;
+}
+
 // items defined here instead of config so they can have an associated icon
 var items = [
   {
@@ -44,14 +52,21 @@ var items = [
   },
 ];
 
+interface NavLinkProps {
+  to: string;
+  href?: string;
+  label: string;
+  activeClassName?: string;
+  prependBaseUrlToHref?: boolean;
+  icon: string;
+}
+
 function NavLink({
-  activeBasePath,
-  activeBaseRegex,
   to,
-  href,
+  href = "",
   label,
   activeClassName = 'navbar__link--active',
-  prependBaseUrlToHref,
+  prependBaseUrlToHref = false,
   icon,
   ...props
 }) {
@@ -77,12 +92,18 @@ function NavLink({
   );
 }
 
+interface NavItemProps extends NavLinkProps {
+  items?: ItemProps[];
+  position?: 'right' | 'left';
+  className?: string;
+}
+
 function NavItem({
   items,
   position = DefaultNavItemPosition,
   className,
   ...props
-}) {
+}: NavItemProps) {
   const navLinkClassNames = (extraClassName, isDropdownItem = false) =>
     clsx(
       {
@@ -128,7 +149,11 @@ function NavItem({
   );
 }
 
-function MobileNavItem({ items, position: _position, className, ...props }) {
+interface MobileNavItemProps extends NavItemProps {
+  onClick: any;
+}
+
+function MobileNavItem({ items, className, ...props }: MobileNavItemProps) {
   // Need to destructure position from props so that it doesn't get passed on.
   const navLinkClassNames = (extraClassName, isSubList = false) =>
     clsx(
@@ -307,7 +332,7 @@ function Navbar() {
         <div className="navbar-sidebar__items">
           <div className="menu">
             <ul className="menu__list">
-              {items.map((linkItem, i) => (
+              {items.map((linkItem: ItemProps, i) => (
                 <MobileNavItem {...linkItem} onClick={hideSidebar} key={i} />
               ))}
             </ul>
