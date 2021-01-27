@@ -5,7 +5,7 @@ authors:
     url: https://github.com/mcutalo88
     avatar: https://avatars1.githubusercontent.com/u/2250844?s=460&u=24deb32096e9f892cc91a6ff1ca1af50193b1fbd&v=4
 description: Frontend Asset Passthrough
-image: https://user-images.githubusercontent.com/4712430/104760766-7a2c5980-5727-11eb-93f5-3296b23ba3a0.png
+image: https://user-images.githubusercontent.com/2250844/106030368-f8bbbc00-6082-11eb-819f-fd3798a53489.png
 hide_table_of_contents: false
 ---
 
@@ -79,7 +79,7 @@ If the provider has the correct asset it will be served to the user.
 
 Let's look at the diagram below to demonstrate this.
 Our user makes a request, it goes through our load balancer, which in Lyft's case is Envoy.
-Envoy is load balancing all versions of Clutch that are currently deployed; in our example we have two Clutch versions deployed **v1** and **v2**.
+Envoy is load balancing all versions of Clutch that are currently deployed; in our example we have two Clutch versions deployed `v1` and `v2`.
 Regardless of which version of the frontend a user might have, all versions of the frontend assets live in S3, so
 if a Clutch host does not have what the user is requesting it can simply check S3.
 
@@ -94,7 +94,7 @@ As an example, I will go over how we solved this problem at Lyft.
 
 Below is a simplified version of our deployment process.
 Early on in the deployment pipeline assets are uploaded to S3,
-simply utilizing the aws cli to `aws s3 sync` the new assets to the target bucket.
+simply utilizing the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/s3/sync.html) to `aws s3 sync` the new assets to the target bucket.
 
 <img alt="Deploying" src={useBaseUrl('img/docs/blog/fe-asset-passthrough-s3-upload.png')} width="75%"/>
 
