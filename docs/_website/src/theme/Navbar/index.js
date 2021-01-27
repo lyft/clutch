@@ -10,7 +10,7 @@ import useThemeContext from '@theme/hooks/useThemeContext';
 import useHideableNavbar from '@theme/hooks/useHideableNavbar';
 import useLockBodyScroll from '@theme/hooks/useLockBodyScroll';
 import useWindowSize, { windowSizes } from '@theme/hooks/useWindowSize';
-import { useThemeConfig } from '@docusaurus/theme-common';
+import Logo from '@theme/Logo';
 
 import styles from './styles.module.css';
 
@@ -187,7 +187,7 @@ function Navbar() {
   const {
     siteConfig: {
       themeConfig: {
-        navbar: { title, hideOnScroll = false } = {},
+        navbar: { hideOnScroll = false } = {},
         colorMode: {disableSwitch: disableColorModeSwitch = false} = {},
       },
     },
@@ -198,9 +198,6 @@ function Navbar() {
 
   const { isDarkTheme, setLightTheme, setDarkTheme } = useThemeContext();
   const { navbarRef, isNavbarVisible } = useHideableNavbar(hideOnScroll);
-  const {
-    navbar: {logo = {}},
-  } = useThemeConfig();
 
   useLockBodyScroll(sidebarShown);
 
@@ -262,17 +259,10 @@ function Navbar() {
               </svg>
             </div>
           )}
-          <Link className={clsx("navbar__brand", styles.navbarLogoCustom)} to={'/'} rel='noopener noreferrer' target={logo.target}>
-            {logo.src != null && (
-              <img
-                key={isClient}
-                className={clsx("navbar__logo")}
-                src={logo.src}
-                alt={logo.alt}
-              />
-            )}
+          <div className={clsx("navbar__brand", styles.navbarLogoCustom)}>
+            <Logo imageClassName={clsx("navbar__logo", styles.navbarLogoCustom)} />
             <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
-          </Link>
+          </div>
           {leftLinks.map((linkItem, i) => (
             <NavItem {...linkItem} key={i} />
           ))}
@@ -302,7 +292,11 @@ function Navbar() {
       />
       <div className="navbar-sidebar">
         <div className="navbar-sidebar__brand">
-          <Link
+          <div className={clsx("navbar__brand", styles.navbarLogoCustom)} onClick={hideSidebar}>
+            <Logo imageClassName={clsx("navbar__logo", styles.navbarLogoCustom)} />
+            <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
+          </div>
+          {/* <Link
             className="navbar__brand"
             onClick={hideSidebar}
             to={'/'}
@@ -318,7 +312,7 @@ function Navbar() {
               />
             )}
             <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
-          </Link>
+          </Link> */}
           {!disableColorModeSwitch && sidebarShown && (
             <Toggle
               aria-label="Dark mode toggle in sidebar"
