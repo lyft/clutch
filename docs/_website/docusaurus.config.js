@@ -123,7 +123,6 @@ module.exports = {
       theme: require('prism-react-renderer/themes/vsDark'),
     },
     navbar: {
-      title: 'Clutch',
       logo: {
         alt: 'Clutch Logo',
         src: 'img/navigation/logoMark.svg',
