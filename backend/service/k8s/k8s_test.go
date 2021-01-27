@@ -1,6 +1,7 @@
 package k8s
 
 import (
+	"context"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -60,7 +61,7 @@ func TestNew(t *testing.T) {
 	assert.True(t, ok)
 	assert.NotNil(t, c.log)
 	assert.NotNil(t, c.scope)
-	assert.Len(t, c.manager.Clientsets(), 1)
+	assert.Len(t, c.manager.Clientsets(context.Background()), 1)
 }
 
 func TestNewWithWrongConfig(t *testing.T) {

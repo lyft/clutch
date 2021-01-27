@@ -7,7 +7,9 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/structpb"
 
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/service"
 	topologyservice "github.com/lyft/clutch/backend/service/topology"
 )
@@ -26,6 +28,14 @@ func (s *svc) GetTopology(ctx context.Context) error {
 	return errors.New("Not implemented")
 }
 
-func (s *svc) SearchTopology(ctx context.Context) error {
-	return errors.New("Not implemented")
+func (s *svc) Search(context.Context, *topologyv1.SearchRequest) ([]*topologyv1.Resource, string, error) {
+	return []*topologyv1.Resource{
+		{
+			Id: "pod-123",
+			Pb: &any.Any{},
+			Metadata: map[string]*structpb.Value{
+				"label": &structpb.Value{},
+			},
+		},
+	}, "1", nil
 }

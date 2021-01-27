@@ -23,6 +23,7 @@
     "**/*.stories.ts*",
     "**/*.stories.js*",
     "**/*.test.js*",
-    "**/*.test.ts*"
+    "**/*.test.ts*",
+    "**/dist/*"
   ],
 }

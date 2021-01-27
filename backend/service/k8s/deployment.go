@@ -14,7 +14,7 @@ import (
 )
 
 func (s *svc) DescribeDeployment(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Deployment, error) {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1
 }
 
 func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return err
 	}
@@ -77,7 +77,7 @@ func (s *svc) UpdateDeployment(ctx context.Context, clientset, cluster, namespac
 }
 
 func (s *svc) DeleteDeployment(ctx context.Context, clientset, cluster, namespace, name string) error {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return err
 	}

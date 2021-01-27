@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import _ from "lodash";
-import type { Schema } from "yup";
+import type { BaseSchema } from "yup";
 import { object } from "yup";
 
 import { useWizardContext } from "../Contexts";
@@ -23,7 +23,7 @@ interface RowData {
   input?: {
     key?: string;
     type?: string;
-    validation?: Schema<unknown>;
+    validation?: BaseSchema<unknown>;
   };
   name: string;
   value: unknown;
@@ -77,6 +77,7 @@ const TableCell = styled(MuiTableCell)({
 
 const Grid = styled(MuiGrid)({
   display: "flex",
+  alignItems: "center",
   ".MuiFormControl-root": {
     flexDirection: "row",
   },
@@ -143,7 +144,7 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
     <TableRow key={data.id}>
       <KeyCell data={data} />
       <TableCell>
-        <Grid spacing={2} alignItems="center">
+        <Grid>
           <div className="textfield-disabled">
             <TextField disabled id={data.id} name={data.name} defaultValue={data.value} />
           </div>

@@ -5677,7 +5677,7 @@ export const clutch = $root.clutch = (() => {
                         if (object.region != null)
                             message.region = String(object.region);
                         if (object.targetShardCount != null)
-                            message.targetShardCount = object.targetShardCount >>> 0;
+                            message.targetShardCount = object.targetShardCount | 0;
                         return message;
                     };
 
@@ -5890,7 +5890,7 @@ export const clutch = $root.clutch = (() => {
                         if (object.region != null)
                             message.region = String(object.region);
                         if (object.currentShardCount != null)
-                            message.currentShardCount = object.currentShardCount >>> 0;
+                            message.currentShardCount = object.currentShardCount | 0;
                         return message;
                     };
 
@@ -13481,6 +13481,8 @@ export const clutch = $root.clutch = (() => {
                                  * @property {google.protobuf.IDuration|null} [cacheRefreshInterval] Config cacheRefreshInterval
                                  * @property {string|null} [ingressFaultRuntimePrefix] Config ingressFaultRuntimePrefix
                                  * @property {string|null} [egressFaultRuntimePrefix] Config egressFaultRuntimePrefix
+                                 * @property {google.protobuf.IDuration|null} [resourceTtl] Config resourceTtl
+                                 * @property {google.protobuf.IDuration|null} [heartbeatInterval] Config heartbeatInterval
                                  */
 
                                 /**
@@ -13531,6 +13533,22 @@ export const clutch = $root.clutch = (() => {
                                 Config.prototype.egressFaultRuntimePrefix = "";
 
                                 /**
+                                 * Config resourceTtl.
+                                 * @member {google.protobuf.IDuration|null|undefined} resourceTtl
+                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.resourceTtl = null;
+
+                                /**
+                                 * Config heartbeatInterval.
+                                 * @member {google.protobuf.IDuration|null|undefined} heartbeatInterval
+                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.heartbeatInterval = null;
+
+                                /**
                                  * Verifies a Config message.
                                  * @function verify
                                  * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
@@ -13555,6 +13573,16 @@ export const clutch = $root.clutch = (() => {
                                     if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
                                         if (!$util.isString(message.egressFaultRuntimePrefix))
                                             return "egressFaultRuntimePrefix: string expected";
+                                    if (message.resourceTtl != null && message.hasOwnProperty("resourceTtl")) {
+                                        let error = $root.google.protobuf.Duration.verify(message.resourceTtl);
+                                        if (error)
+                                            return "resourceTtl." + error;
+                                    }
+                                    if (message.heartbeatInterval != null && message.hasOwnProperty("heartbeatInterval")) {
+                                        let error = $root.google.protobuf.Duration.verify(message.heartbeatInterval);
+                                        if (error)
+                                            return "heartbeatInterval." + error;
+                                    }
                                     return null;
                                 };
 
@@ -13581,6 +13609,16 @@ export const clutch = $root.clutch = (() => {
                                         message.ingressFaultRuntimePrefix = String(object.ingressFaultRuntimePrefix);
                                     if (object.egressFaultRuntimePrefix != null)
                                         message.egressFaultRuntimePrefix = String(object.egressFaultRuntimePrefix);
+                                    if (object.resourceTtl != null) {
+                                        if (typeof object.resourceTtl !== "object")
+                                            throw TypeError(".clutch.config.module.chaos.experimentation.rtds.v1.Config.resourceTtl: object expected");
+                                        message.resourceTtl = $root.google.protobuf.Duration.fromObject(object.resourceTtl);
+                                    }
+                                    if (object.heartbeatInterval != null) {
+                                        if (typeof object.heartbeatInterval !== "object")
+                                            throw TypeError(".clutch.config.module.chaos.experimentation.rtds.v1.Config.heartbeatInterval: object expected");
+                                        message.heartbeatInterval = $root.google.protobuf.Duration.fromObject(object.heartbeatInterval);
+                                    }
                                     return message;
                                 };
 
@@ -13602,6 +13640,8 @@ export const clutch = $root.clutch = (() => {
                                         object.cacheRefreshInterval = null;
                                         object.ingressFaultRuntimePrefix = "";
                                         object.egressFaultRuntimePrefix = "";
+                                        object.resourceTtl = null;
+                                        object.heartbeatInterval = null;
                                     }
                                     if (message.rtdsLayerName != null && message.hasOwnProperty("rtdsLayerName"))
                                         object.rtdsLayerName = message.rtdsLayerName;
@@ -13611,6 +13651,10 @@ export const clutch = $root.clutch = (() => {
                                         object.ingressFaultRuntimePrefix = message.ingressFaultRuntimePrefix;
                                     if (message.egressFaultRuntimePrefix != null && message.hasOwnProperty("egressFaultRuntimePrefix"))
                                         object.egressFaultRuntimePrefix = message.egressFaultRuntimePrefix;
+                                    if (message.resourceTtl != null && message.hasOwnProperty("resourceTtl"))
+                                        object.resourceTtl = $root.google.protobuf.Duration.toObject(message.resourceTtl, options);
+                                    if (message.heartbeatInterval != null && message.hasOwnProperty("heartbeatInterval"))
+                                        object.heartbeatInterval = $root.google.protobuf.Duration.toObject(message.heartbeatInterval, options);
                                     return object;
                                 };
 
@@ -20497,6 +20541,105 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listConfigMaps}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef ListConfigMapsCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.ListConfigMapsResponse} [response] ListConfigMapsResponse
+                 */
+
+                /**
+                 * Calls ListConfigMaps.
+                 * @function listConfigMaps
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListConfigMapsRequest} request ListConfigMapsRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.ListConfigMapsCallback} callback Node-style callback called with the error, if any, and ListConfigMapsResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.listConfigMaps = function listConfigMaps(request, callback) {
+                    return this.rpcCall(listConfigMaps, $root.clutch.k8s.v1.ListConfigMapsRequest, $root.clutch.k8s.v1.ListConfigMapsResponse, request, callback);
+                }, "name", { value: "ListConfigMaps" });
+
+                /**
+                 * Calls ListConfigMaps.
+                 * @function listConfigMaps
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListConfigMapsRequest} request ListConfigMapsRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.ListConfigMapsResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeConfigMap}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DescribeConfigMapCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DescribeConfigMapResponse} [response] DescribeConfigMapResponse
+                 */
+
+                /**
+                 * Calls DescribeConfigMap.
+                 * @function describeConfigMap
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeConfigMapRequest} request DescribeConfigMapRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DescribeConfigMapCallback} callback Node-style callback called with the error, if any, and DescribeConfigMapResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.describeConfigMap = function describeConfigMap(request, callback) {
+                    return this.rpcCall(describeConfigMap, $root.clutch.k8s.v1.DescribeConfigMapRequest, $root.clutch.k8s.v1.DescribeConfigMapResponse, request, callback);
+                }, "name", { value: "DescribeConfigMap" });
+
+                /**
+                 * Calls DescribeConfigMap.
+                 * @function describeConfigMap
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeConfigMapRequest} request DescribeConfigMapRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DescribeConfigMapResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteConfigMap}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DeleteConfigMapCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DeleteConfigMapResponse} [response] DeleteConfigMapResponse
+                 */
+
+                /**
+                 * Calls DeleteConfigMap.
+                 * @function deleteConfigMap
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteConfigMapRequest} request DeleteConfigMapRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DeleteConfigMapCallback} callback Node-style callback called with the error, if any, and DeleteConfigMapResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.deleteConfigMap = function deleteConfigMap(request, callback) {
+                    return this.rpcCall(deleteConfigMap, $root.clutch.k8s.v1.DeleteConfigMapRequest, $root.clutch.k8s.v1.DeleteConfigMapResponse, request, callback);
+                }, "name", { value: "DeleteConfigMap" });
+
+                /**
+                 * Calls DeleteConfigMap.
+                 * @function deleteConfigMap
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteConfigMapRequest} request DeleteConfigMapRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DeleteConfigMapResponse>} Promise
+                 * @variation 2
+                 */
+
                 return K8sAPI;
             })();
 
@@ -26201,6 +26344,1033 @@ export const clutch = $root.clutch = (() => {
                 return DeleteCronJobResponse;
             })();
 
+            v1.ConfigMap = (function() {
+
+                /**
+                 * Properties of a ConfigMap.
+                 * @memberof clutch.k8s.v1
+                 * @interface IConfigMap
+                 * @property {string|null} [cluster] ConfigMap cluster
+                 * @property {string|null} [namespace] ConfigMap namespace
+                 * @property {string|null} [name] ConfigMap name
+                 * @property {Object.<string,string>|null} [annotations] ConfigMap annotations
+                 * @property {Object.<string,string>|null} [labels] ConfigMap labels
+                 */
+
+                /**
+                 * Constructs a new ConfigMap.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ConfigMap.
+                 * @implements IConfigMap
+                 * @constructor
+                 * @param {clutch.k8s.v1.IConfigMap=} [properties] Properties to set
+                 */
+                function ConfigMap(properties) {
+                    this.annotations = {};
+                    this.labels = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ConfigMap cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 */
+                ConfigMap.prototype.cluster = "";
+
+                /**
+                 * ConfigMap namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 */
+                ConfigMap.prototype.namespace = "";
+
+                /**
+                 * ConfigMap name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 */
+                ConfigMap.prototype.name = "";
+
+                /**
+                 * ConfigMap annotations.
+                 * @member {Object.<string,string>} annotations
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 */
+                ConfigMap.prototype.annotations = $util.emptyObject;
+
+                /**
+                 * ConfigMap labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 */
+                ConfigMap.prototype.labels = $util.emptyObject;
+
+                /**
+                 * Verifies a ConfigMap message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ConfigMap.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                        if (!$util.isObject(message.annotations))
+                            return "annotations: object expected";
+                        let key = Object.keys(message.annotations);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.annotations[key[i]]))
+                                return "annotations: string{k:string} expected";
+                    }
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ConfigMap message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ConfigMap} ConfigMap
+                 */
+                ConfigMap.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ConfigMap)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ConfigMap();
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.annotations) {
+                        if (typeof object.annotations !== "object")
+                            throw TypeError(".clutch.k8s.v1.ConfigMap.annotations: object expected");
+                        message.annotations = {};
+                        for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
+                            message.annotations[keys[i]] = String(object.annotations[keys[i]]);
+                    }
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.ConfigMap.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ConfigMap message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @static
+                 * @param {clutch.k8s.v1.ConfigMap} message ConfigMap
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ConfigMap.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults) {
+                        object.annotations = {};
+                        object.labels = {};
+                    }
+                    if (options.defaults) {
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    let keys2;
+                    if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
+                        object.annotations = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                    }
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this ConfigMap to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ConfigMap.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ConfigMap;
+            })();
+
+            v1.ListConfigMapsRequest = (function() {
+
+                /**
+                 * Properties of a ListConfigMapsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListConfigMapsRequest
+                 * @property {string|null} [clientset] ListConfigMapsRequest clientset
+                 * @property {string|null} [cluster] ListConfigMapsRequest cluster
+                 * @property {string|null} [namespace] ListConfigMapsRequest namespace
+                 * @property {clutch.k8s.v1.IListOptions|null} [options] ListConfigMapsRequest options
+                 */
+
+                /**
+                 * Constructs a new ListConfigMapsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListConfigMapsRequest.
+                 * @implements IListConfigMapsRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListConfigMapsRequest=} [properties] Properties to set
+                 */
+                function ListConfigMapsRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListConfigMapsRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @instance
+                 */
+                ListConfigMapsRequest.prototype.clientset = "";
+
+                /**
+                 * ListConfigMapsRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @instance
+                 */
+                ListConfigMapsRequest.prototype.cluster = "";
+
+                /**
+                 * ListConfigMapsRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @instance
+                 */
+                ListConfigMapsRequest.prototype.namespace = "";
+
+                /**
+                 * ListConfigMapsRequest options.
+                 * @member {clutch.k8s.v1.IListOptions|null|undefined} options
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @instance
+                 */
+                ListConfigMapsRequest.prototype.options = null;
+
+                /**
+                 * Verifies a ListConfigMapsRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListConfigMapsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.options != null && message.hasOwnProperty("options")) {
+                        let error = $root.clutch.k8s.v1.ListOptions.verify(message.options);
+                        if (error)
+                            return "options." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListConfigMapsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListConfigMapsRequest} ListConfigMapsRequest
+                 */
+                ListConfigMapsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListConfigMapsRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListConfigMapsRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.options != null) {
+                        if (typeof object.options !== "object")
+                            throw TypeError(".clutch.k8s.v1.ListConfigMapsRequest.options: object expected");
+                        message.options = $root.clutch.k8s.v1.ListOptions.fromObject(object.options);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListConfigMapsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @static
+                 * @param {clutch.k8s.v1.ListConfigMapsRequest} message ListConfigMapsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListConfigMapsRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.options = null;
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.options != null && message.hasOwnProperty("options"))
+                        object.options = $root.clutch.k8s.v1.ListOptions.toObject(message.options, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this ListConfigMapsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListConfigMapsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListConfigMapsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListConfigMapsRequest;
+            })();
+
+            v1.ListConfigMapsResponse = (function() {
+
+                /**
+                 * Properties of a ListConfigMapsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListConfigMapsResponse
+                 * @property {Array.<clutch.k8s.v1.IConfigMap>|null} [configMaps] ListConfigMapsResponse configMaps
+                 */
+
+                /**
+                 * Constructs a new ListConfigMapsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListConfigMapsResponse.
+                 * @implements IListConfigMapsResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListConfigMapsResponse=} [properties] Properties to set
+                 */
+                function ListConfigMapsResponse(properties) {
+                    this.configMaps = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListConfigMapsResponse configMaps.
+                 * @member {Array.<clutch.k8s.v1.IConfigMap>} configMaps
+                 * @memberof clutch.k8s.v1.ListConfigMapsResponse
+                 * @instance
+                 */
+                ListConfigMapsResponse.prototype.configMaps = $util.emptyArray;
+
+                /**
+                 * Verifies a ListConfigMapsResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListConfigMapsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListConfigMapsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.configMaps != null && message.hasOwnProperty("configMaps")) {
+                        if (!Array.isArray(message.configMaps))
+                            return "configMaps: array expected";
+                        for (let i = 0; i < message.configMaps.length; ++i) {
+                            let error = $root.clutch.k8s.v1.ConfigMap.verify(message.configMaps[i]);
+                            if (error)
+                                return "configMaps." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListConfigMapsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListConfigMapsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListConfigMapsResponse} ListConfigMapsResponse
+                 */
+                ListConfigMapsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListConfigMapsResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListConfigMapsResponse();
+                    if (object.configMaps) {
+                        if (!Array.isArray(object.configMaps))
+                            throw TypeError(".clutch.k8s.v1.ListConfigMapsResponse.configMaps: array expected");
+                        message.configMaps = [];
+                        for (let i = 0; i < object.configMaps.length; ++i) {
+                            if (typeof object.configMaps[i] !== "object")
+                                throw TypeError(".clutch.k8s.v1.ListConfigMapsResponse.configMaps: object expected");
+                            message.configMaps[i] = $root.clutch.k8s.v1.ConfigMap.fromObject(object.configMaps[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListConfigMapsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListConfigMapsResponse
+                 * @static
+                 * @param {clutch.k8s.v1.ListConfigMapsResponse} message ListConfigMapsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListConfigMapsResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.configMaps = [];
+                    if (message.configMaps && message.configMaps.length) {
+                        object.configMaps = [];
+                        for (let j = 0; j < message.configMaps.length; ++j)
+                            object.configMaps[j] = $root.clutch.k8s.v1.ConfigMap.toObject(message.configMaps[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this ListConfigMapsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListConfigMapsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListConfigMapsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListConfigMapsResponse;
+            })();
+
+            v1.DescribeConfigMapRequest = (function() {
+
+                /**
+                 * Properties of a DescribeConfigMapRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeConfigMapRequest
+                 * @property {string|null} [clientset] DescribeConfigMapRequest clientset
+                 * @property {string|null} [cluster] DescribeConfigMapRequest cluster
+                 * @property {string|null} [namespace] DescribeConfigMapRequest namespace
+                 * @property {string|null} [name] DescribeConfigMapRequest name
+                 * @property {Object.<string,string>|null} [labels] DescribeConfigMapRequest labels
+                 * @property {Object.<string,string>|null} [annotations] DescribeConfigMapRequest annotations
+                 */
+
+                /**
+                 * Constructs a new DescribeConfigMapRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeConfigMapRequest.
+                 * @implements IDescribeConfigMapRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeConfigMapRequest=} [properties] Properties to set
+                 */
+                function DescribeConfigMapRequest(properties) {
+                    this.labels = {};
+                    this.annotations = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeConfigMapRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DescribeConfigMapRequest
+                 * @instance
+                 */
+                DescribeConfigMapRequest.prototype.clientset = "";
+
+                /**
+                 * DescribeConfigMapRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DescribeConfigMapRequest
+                 * @instance
+                 */
+                DescribeConfigMapRequest.prototype.cluster = "";
+
+                /**
+                 * DescribeConfigMapRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.DescribeConfigMapRequest
+                 * @instance
+                 */
+                DescribeConfigMapRequest.prototype.namespace = "";
+
+                /**
+                 * DescribeConfigMapRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DescribeConfigMapRequest
+                 * @instance
+                 */
+                DescribeConfigMapRequest.prototype.name = "";
+
+                /**
+                 * DescribeConfigMapRequest labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.DescribeConfigMapRequest
+                 * @instance
+                 */
+                DescribeConfigMapRequest.prototype.labels = $util.emptyObject;
+
+                /**
+                 * DescribeConfigMapRequest annotations.
+                 * @member {Object.<string,string>} annotations
+                 * @memberof clutch.k8s.v1.DescribeConfigMapRequest
+                 * @instance
+                 */
+                DescribeConfigMapRequest.prototype.annotations = $util.emptyObject;
+
+                /**
+                 * Verifies a DescribeConfigMapRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeConfigMapRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeConfigMapRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                        if (!$util.isObject(message.annotations))
+                            return "annotations: object expected";
+                        let key = Object.keys(message.annotations);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.annotations[key[i]]))
+                                return "annotations: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeConfigMapRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeConfigMapRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeConfigMapRequest} DescribeConfigMapRequest
+                 */
+                DescribeConfigMapRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeConfigMapRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeConfigMapRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeConfigMapRequest.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    if (object.annotations) {
+                        if (typeof object.annotations !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeConfigMapRequest.annotations: object expected");
+                        message.annotations = {};
+                        for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
+                            message.annotations[keys[i]] = String(object.annotations[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeConfigMapRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeConfigMapRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeConfigMapRequest} message DescribeConfigMapRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeConfigMapRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults) {
+                        object.labels = {};
+                        object.annotations = {};
+                    }
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    let keys2;
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
+                        object.annotations = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeConfigMapRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeConfigMapRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeConfigMapRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeConfigMapRequest;
+            })();
+
+            v1.DescribeConfigMapResponse = (function() {
+
+                /**
+                 * Properties of a DescribeConfigMapResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeConfigMapResponse
+                 * @property {clutch.k8s.v1.IConfigMap|null} [configMap] DescribeConfigMapResponse configMap
+                 */
+
+                /**
+                 * Constructs a new DescribeConfigMapResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeConfigMapResponse.
+                 * @implements IDescribeConfigMapResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeConfigMapResponse=} [properties] Properties to set
+                 */
+                function DescribeConfigMapResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeConfigMapResponse configMap.
+                 * @member {clutch.k8s.v1.IConfigMap|null|undefined} configMap
+                 * @memberof clutch.k8s.v1.DescribeConfigMapResponse
+                 * @instance
+                 */
+                DescribeConfigMapResponse.prototype.configMap = null;
+
+                /**
+                 * Verifies a DescribeConfigMapResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeConfigMapResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeConfigMapResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.configMap != null && message.hasOwnProperty("configMap")) {
+                        let error = $root.clutch.k8s.v1.ConfigMap.verify(message.configMap);
+                        if (error)
+                            return "configMap." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeConfigMapResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeConfigMapResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeConfigMapResponse} DescribeConfigMapResponse
+                 */
+                DescribeConfigMapResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeConfigMapResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeConfigMapResponse();
+                    if (object.configMap != null) {
+                        if (typeof object.configMap !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeConfigMapResponse.configMap: object expected");
+                        message.configMap = $root.clutch.k8s.v1.ConfigMap.fromObject(object.configMap);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeConfigMapResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeConfigMapResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeConfigMapResponse} message DescribeConfigMapResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeConfigMapResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.configMap = null;
+                    if (message.configMap != null && message.hasOwnProperty("configMap"))
+                        object.configMap = $root.clutch.k8s.v1.ConfigMap.toObject(message.configMap, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeConfigMapResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeConfigMapResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeConfigMapResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeConfigMapResponse;
+            })();
+
+            v1.DeleteConfigMapRequest = (function() {
+
+                /**
+                 * Properties of a DeleteConfigMapRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteConfigMapRequest
+                 * @property {string|null} [clientset] DeleteConfigMapRequest clientset
+                 * @property {string|null} [cluster] DeleteConfigMapRequest cluster
+                 * @property {string|null} [namespace] DeleteConfigMapRequest namespace
+                 * @property {string|null} [name] DeleteConfigMapRequest name
+                 */
+
+                /**
+                 * Constructs a new DeleteConfigMapRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteConfigMapRequest.
+                 * @implements IDeleteConfigMapRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteConfigMapRequest=} [properties] Properties to set
+                 */
+                function DeleteConfigMapRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DeleteConfigMapRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DeleteConfigMapRequest
+                 * @instance
+                 */
+                DeleteConfigMapRequest.prototype.clientset = "";
+
+                /**
+                 * DeleteConfigMapRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DeleteConfigMapRequest
+                 * @instance
+                 */
+                DeleteConfigMapRequest.prototype.cluster = "";
+
+                /**
+                 * DeleteConfigMapRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.DeleteConfigMapRequest
+                 * @instance
+                 */
+                DeleteConfigMapRequest.prototype.namespace = "";
+
+                /**
+                 * DeleteConfigMapRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DeleteConfigMapRequest
+                 * @instance
+                 */
+                DeleteConfigMapRequest.prototype.name = "";
+
+                /**
+                 * Verifies a DeleteConfigMapRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteConfigMapRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteConfigMapRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteConfigMapRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteConfigMapRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteConfigMapRequest} DeleteConfigMapRequest
+                 */
+                DeleteConfigMapRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteConfigMapRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DeleteConfigMapRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DeleteConfigMapRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteConfigMapRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteConfigMapRequest} message DeleteConfigMapRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteConfigMapRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    return object;
+                };
+
+                /**
+                 * Converts this DeleteConfigMapRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteConfigMapRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteConfigMapRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteConfigMapRequest;
+            })();
+
+            v1.DeleteConfigMapResponse = (function() {
+
+                /**
+                 * Properties of a DeleteConfigMapResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteConfigMapResponse
+                 */
+
+                /**
+                 * Constructs a new DeleteConfigMapResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteConfigMapResponse.
+                 * @implements IDeleteConfigMapResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteConfigMapResponse=} [properties] Properties to set
+                 */
+                function DeleteConfigMapResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies a DeleteConfigMapResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteConfigMapResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteConfigMapResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteConfigMapResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteConfigMapResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteConfigMapResponse} DeleteConfigMapResponse
+                 */
+                DeleteConfigMapResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteConfigMapResponse)
+                        return object;
+                    return new $root.clutch.k8s.v1.DeleteConfigMapResponse();
+                };
+
+                /**
+                 * Creates a plain object from a DeleteConfigMapResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteConfigMapResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteConfigMapResponse} message DeleteConfigMapResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteConfigMapResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this DeleteConfigMapResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteConfigMapResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteConfigMapResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteConfigMapResponse;
+            })();
+
             v1.NullableString = (function() {
 
                 /**
@@ -30102,6 +31272,141 @@ export const clutch = $root.clutch = (() => {
                     return CronJob;
                 })();
 
+                v1.ConfigMap = (function() {
+
+                    /**
+                     * Properties of a ConfigMap.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @interface IConfigMap
+                     * @property {string|null} [name] ConfigMap name
+                     * @property {string|null} [clientset] ConfigMap clientset
+                     * @property {string|null} [namespace] ConfigMap namespace
+                     */
+
+                    /**
+                     * Constructs a new ConfigMap.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @classdesc Represents a ConfigMap.
+                     * @implements IConfigMap
+                     * @constructor
+                     * @param {clutch.resolver.k8s.v1.IConfigMap=} [properties] Properties to set
+                     */
+                    function ConfigMap(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * ConfigMap name.
+                     * @member {string} name
+                     * @memberof clutch.resolver.k8s.v1.ConfigMap
+                     * @instance
+                     */
+                    ConfigMap.prototype.name = "";
+
+                    /**
+                     * ConfigMap clientset.
+                     * @member {string} clientset
+                     * @memberof clutch.resolver.k8s.v1.ConfigMap
+                     * @instance
+                     */
+                    ConfigMap.prototype.clientset = "";
+
+                    /**
+                     * ConfigMap namespace.
+                     * @member {string} namespace
+                     * @memberof clutch.resolver.k8s.v1.ConfigMap
+                     * @instance
+                     */
+                    ConfigMap.prototype.namespace = "";
+
+                    /**
+                     * Verifies a ConfigMap message.
+                     * @function verify
+                     * @memberof clutch.resolver.k8s.v1.ConfigMap
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    ConfigMap.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            if (!$util.isString(message.clientset))
+                                return "clientset: string expected";
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            if (!$util.isString(message.namespace))
+                                return "namespace: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a ConfigMap message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.resolver.k8s.v1.ConfigMap
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.resolver.k8s.v1.ConfigMap} ConfigMap
+                     */
+                    ConfigMap.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.resolver.k8s.v1.ConfigMap)
+                            return object;
+                        let message = new $root.clutch.resolver.k8s.v1.ConfigMap();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.clientset != null)
+                            message.clientset = String(object.clientset);
+                        if (object.namespace != null)
+                            message.namespace = String(object.namespace);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a ConfigMap message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.resolver.k8s.v1.ConfigMap
+                     * @static
+                     * @param {clutch.resolver.k8s.v1.ConfigMap} message ConfigMap
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    ConfigMap.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.clientset = "";
+                            object.namespace = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            object.clientset = message.clientset;
+                        if (message.namespace != null && message.hasOwnProperty("namespace"))
+                            object.namespace = message.namespace;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this ConfigMap to JSON.
+                     * @function toJSON
+                     * @memberof clutch.resolver.k8s.v1.ConfigMap
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    ConfigMap.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return ConfigMap;
+                })();
+
                 return v1;
             })();
 
@@ -31184,35 +32489,35 @@ export const clutch = $root.clutch = (() => {
                  */
 
                 /**
-                 * Callback as used by {@link clutch.topology.v1.TopologyAPI#searchTopology}.
+                 * Callback as used by {@link clutch.topology.v1.TopologyAPI#search}.
                  * @memberof clutch.topology.v1.TopologyAPI
-                 * @typedef SearchTopologyCallback
+                 * @typedef SearchCallback
                  * @type {function}
                  * @param {Error|null} error Error, if any
-                 * @param {clutch.topology.v1.SearchTopologyResponse} [response] SearchTopologyResponse
+                 * @param {clutch.topology.v1.SearchResponse} [response] SearchResponse
                  */
 
                 /**
-                 * Calls SearchTopology.
-                 * @function searchTopology
+                 * Calls Search.
+                 * @function search
                  * @memberof clutch.topology.v1.TopologyAPI
                  * @instance
-                 * @param {clutch.topology.v1.ISearchTopologyRequest} request SearchTopologyRequest message or plain object
-                 * @param {clutch.topology.v1.TopologyAPI.SearchTopologyCallback} callback Node-style callback called with the error, if any, and SearchTopologyResponse
+                 * @param {clutch.topology.v1.ISearchRequest} request SearchRequest message or plain object
+                 * @param {clutch.topology.v1.TopologyAPI.SearchCallback} callback Node-style callback called with the error, if any, and SearchResponse
                  * @returns {undefined}
                  * @variation 1
                  */
-                Object.defineProperty(TopologyAPI.prototype.searchTopology = function searchTopology(request, callback) {
-                    return this.rpcCall(searchTopology, $root.clutch.topology.v1.SearchTopologyRequest, $root.clutch.topology.v1.SearchTopologyResponse, request, callback);
-                }, "name", { value: "SearchTopology" });
+                Object.defineProperty(TopologyAPI.prototype.search = function search(request, callback) {
+                    return this.rpcCall(search, $root.clutch.topology.v1.SearchRequest, $root.clutch.topology.v1.SearchResponse, request, callback);
+                }, "name", { value: "Search" });
 
                 /**
-                 * Calls SearchTopology.
-                 * @function searchTopology
+                 * Calls Search.
+                 * @function search
                  * @memberof clutch.topology.v1.TopologyAPI
                  * @instance
-                 * @param {clutch.topology.v1.ISearchTopologyRequest} request SearchTopologyRequest message or plain object
-                 * @returns {Promise<clutch.topology.v1.SearchTopologyResponse>} Promise
+                 * @param {clutch.topology.v1.ISearchRequest} request SearchRequest message or plain object
+                 * @returns {Promise<clutch.topology.v1.SearchResponse>} Promise
                  * @variation 2
                  */
 
@@ -31455,27 +32760,27 @@ export const clutch = $root.clutch = (() => {
                 return GetTopologyResponse;
             })();
 
-            v1.SearchTopologyRequest = (function() {
+            v1.SearchRequest = (function() {
 
                 /**
-                 * Properties of a SearchTopologyRequest.
+                 * Properties of a SearchRequest.
                  * @memberof clutch.topology.v1
-                 * @interface ISearchTopologyRequest
-                 * @property {clutch.topology.v1.SearchTopologyRequest.ISort|null} [sort] SearchTopologyRequest sort
-                 * @property {number|Long|null} [pageToken] SearchTopologyRequest pageToken
-                 * @property {number|Long|null} [limit] SearchTopologyRequest limit
-                 * @property {clutch.topology.v1.SearchTopologyRequest.IFilter|null} [filter] SearchTopologyRequest filter
+                 * @interface ISearchRequest
+                 * @property {clutch.topology.v1.SearchRequest.ISort|null} [sort] SearchRequest sort
+                 * @property {string|null} [pageToken] SearchRequest pageToken
+                 * @property {number|Long|null} [limit] SearchRequest limit
+                 * @property {clutch.topology.v1.SearchRequest.IFilter|null} [filter] SearchRequest filter
                  */
 
                 /**
-                 * Constructs a new SearchTopologyRequest.
+                 * Constructs a new SearchRequest.
                  * @memberof clutch.topology.v1
-                 * @classdesc Represents a SearchTopologyRequest.
-                 * @implements ISearchTopologyRequest
+                 * @classdesc Represents a SearchRequest.
+                 * @implements ISearchRequest
                  * @constructor
-                 * @param {clutch.topology.v1.ISearchTopologyRequest=} [properties] Properties to set
+                 * @param {clutch.topology.v1.ISearchRequest=} [properties] Properties to set
                  */
-                function SearchTopologyRequest(properties) {
+                function SearchRequest(properties) {
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -31483,61 +32788,61 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * SearchTopologyRequest sort.
-                 * @member {clutch.topology.v1.SearchTopologyRequest.ISort|null|undefined} sort
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * SearchRequest sort.
+                 * @member {clutch.topology.v1.SearchRequest.ISort|null|undefined} sort
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @instance
                  */
-                SearchTopologyRequest.prototype.sort = null;
+                SearchRequest.prototype.sort = null;
 
                 /**
-                 * SearchTopologyRequest pageToken.
-                 * @member {number|Long} pageToken
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * SearchRequest pageToken.
+                 * @member {string} pageToken
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @instance
                  */
-                SearchTopologyRequest.prototype.pageToken = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+                SearchRequest.prototype.pageToken = "";
 
                 /**
-                 * SearchTopologyRequest limit.
+                 * SearchRequest limit.
                  * @member {number|Long} limit
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @instance
                  */
-                SearchTopologyRequest.prototype.limit = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+                SearchRequest.prototype.limit = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
 
                 /**
-                 * SearchTopologyRequest filter.
-                 * @member {clutch.topology.v1.SearchTopologyRequest.IFilter|null|undefined} filter
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * SearchRequest filter.
+                 * @member {clutch.topology.v1.SearchRequest.IFilter|null|undefined} filter
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @instance
                  */
-                SearchTopologyRequest.prototype.filter = null;
+                SearchRequest.prototype.filter = null;
 
                 /**
-                 * Verifies a SearchTopologyRequest message.
+                 * Verifies a SearchRequest message.
                  * @function verify
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                SearchTopologyRequest.verify = function verify(message) {
+                SearchRequest.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.sort != null && message.hasOwnProperty("sort")) {
-                        let error = $root.clutch.topology.v1.SearchTopologyRequest.Sort.verify(message.sort);
+                        let error = $root.clutch.topology.v1.SearchRequest.Sort.verify(message.sort);
                         if (error)
                             return "sort." + error;
                     }
                     if (message.pageToken != null && message.hasOwnProperty("pageToken"))
-                        if (!$util.isInteger(message.pageToken) && !(message.pageToken && $util.isInteger(message.pageToken.low) && $util.isInteger(message.pageToken.high)))
-                            return "pageToken: integer|Long expected";
+                        if (!$util.isString(message.pageToken))
+                            return "pageToken: string expected";
                     if (message.limit != null && message.hasOwnProperty("limit"))
                         if (!$util.isInteger(message.limit) && !(message.limit && $util.isInteger(message.limit.low) && $util.isInteger(message.limit.high)))
                             return "limit: integer|Long expected";
                     if (message.filter != null && message.hasOwnProperty("filter")) {
-                        let error = $root.clutch.topology.v1.SearchTopologyRequest.Filter.verify(message.filter);
+                        let error = $root.clutch.topology.v1.SearchRequest.Filter.verify(message.filter);
                         if (error)
                             return "filter." + error;
                     }
@@ -31545,31 +32850,24 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a SearchTopologyRequest message from a plain object. Also converts values to their respective internal types.
+                 * Creates a SearchRequest message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.topology.v1.SearchTopologyRequest} SearchTopologyRequest
+                 * @returns {clutch.topology.v1.SearchRequest} SearchRequest
                  */
-                SearchTopologyRequest.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.topology.v1.SearchTopologyRequest)
+                SearchRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.SearchRequest)
                         return object;
-                    let message = new $root.clutch.topology.v1.SearchTopologyRequest();
+                    let message = new $root.clutch.topology.v1.SearchRequest();
                     if (object.sort != null) {
                         if (typeof object.sort !== "object")
-                            throw TypeError(".clutch.topology.v1.SearchTopologyRequest.sort: object expected");
-                        message.sort = $root.clutch.topology.v1.SearchTopologyRequest.Sort.fromObject(object.sort);
+                            throw TypeError(".clutch.topology.v1.SearchRequest.sort: object expected");
+                        message.sort = $root.clutch.topology.v1.SearchRequest.Sort.fromObject(object.sort);
                     }
                     if (object.pageToken != null)
-                        if ($util.Long)
-                            (message.pageToken = $util.Long.fromValue(object.pageToken)).unsigned = true;
-                        else if (typeof object.pageToken === "string")
-                            message.pageToken = parseInt(object.pageToken, 10);
-                        else if (typeof object.pageToken === "number")
-                            message.pageToken = object.pageToken;
-                        else if (typeof object.pageToken === "object")
-                            message.pageToken = new $util.LongBits(object.pageToken.low >>> 0, object.pageToken.high >>> 0).toNumber(true);
+                        message.pageToken = String(object.pageToken);
                     if (object.limit != null)
                         if ($util.Long)
                             (message.limit = $util.Long.fromValue(object.limit)).unsigned = true;
@@ -31581,32 +32879,28 @@ export const clutch = $root.clutch = (() => {
                             message.limit = new $util.LongBits(object.limit.low >>> 0, object.limit.high >>> 0).toNumber(true);
                     if (object.filter != null) {
                         if (typeof object.filter !== "object")
-                            throw TypeError(".clutch.topology.v1.SearchTopologyRequest.filter: object expected");
-                        message.filter = $root.clutch.topology.v1.SearchTopologyRequest.Filter.fromObject(object.filter);
+                            throw TypeError(".clutch.topology.v1.SearchRequest.filter: object expected");
+                        message.filter = $root.clutch.topology.v1.SearchRequest.Filter.fromObject(object.filter);
                     }
                     return message;
                 };
 
                 /**
-                 * Creates a plain object from a SearchTopologyRequest message. Also converts values to other types if specified.
+                 * Creates a plain object from a SearchRequest message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @static
-                 * @param {clutch.topology.v1.SearchTopologyRequest} message SearchTopologyRequest
+                 * @param {clutch.topology.v1.SearchRequest} message SearchRequest
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                SearchTopologyRequest.toObject = function toObject(message, options) {
+                SearchRequest.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
                     if (options.defaults) {
                         object.sort = null;
-                        if ($util.Long) {
-                            let long = new $util.Long(0, 0, true);
-                            object.pageToken = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                        } else
-                            object.pageToken = options.longs === String ? "0" : 0;
+                        object.pageToken = "";
                         if ($util.Long) {
                             let long = new $util.Long(0, 0, true);
                             object.limit = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
@@ -31615,50 +32909,47 @@ export const clutch = $root.clutch = (() => {
                         object.filter = null;
                     }
                     if (message.sort != null && message.hasOwnProperty("sort"))
-                        object.sort = $root.clutch.topology.v1.SearchTopologyRequest.Sort.toObject(message.sort, options);
+                        object.sort = $root.clutch.topology.v1.SearchRequest.Sort.toObject(message.sort, options);
                     if (message.pageToken != null && message.hasOwnProperty("pageToken"))
-                        if (typeof message.pageToken === "number")
-                            object.pageToken = options.longs === String ? String(message.pageToken) : message.pageToken;
-                        else
-                            object.pageToken = options.longs === String ? $util.Long.prototype.toString.call(message.pageToken) : options.longs === Number ? new $util.LongBits(message.pageToken.low >>> 0, message.pageToken.high >>> 0).toNumber(true) : message.pageToken;
+                        object.pageToken = message.pageToken;
                     if (message.limit != null && message.hasOwnProperty("limit"))
                         if (typeof message.limit === "number")
                             object.limit = options.longs === String ? String(message.limit) : message.limit;
                         else
                             object.limit = options.longs === String ? $util.Long.prototype.toString.call(message.limit) : options.longs === Number ? new $util.LongBits(message.limit.low >>> 0, message.limit.high >>> 0).toNumber(true) : message.limit;
                     if (message.filter != null && message.hasOwnProperty("filter"))
-                        object.filter = $root.clutch.topology.v1.SearchTopologyRequest.Filter.toObject(message.filter, options);
+                        object.filter = $root.clutch.topology.v1.SearchRequest.Filter.toObject(message.filter, options);
                     return object;
                 };
 
                 /**
-                 * Converts this SearchTopologyRequest to JSON.
+                 * Converts this SearchRequest to JSON.
                  * @function toJSON
-                 * @memberof clutch.topology.v1.SearchTopologyRequest
+                 * @memberof clutch.topology.v1.SearchRequest
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                SearchTopologyRequest.prototype.toJSON = function toJSON() {
+                SearchRequest.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                SearchTopologyRequest.Sort = (function() {
+                SearchRequest.Sort = (function() {
 
                     /**
                      * Properties of a Sort.
-                     * @memberof clutch.topology.v1.SearchTopologyRequest
+                     * @memberof clutch.topology.v1.SearchRequest
                      * @interface ISort
-                     * @property {clutch.topology.v1.SearchTopologyRequest.Sort.Direction|null} [direction] Sort direction
+                     * @property {clutch.topology.v1.SearchRequest.Sort.Direction|null} [direction] Sort direction
                      * @property {string|null} [field] Sort field
                      */
 
                     /**
                      * Constructs a new Sort.
-                     * @memberof clutch.topology.v1.SearchTopologyRequest
+                     * @memberof clutch.topology.v1.SearchRequest
                      * @classdesc Represents a Sort.
                      * @implements ISort
                      * @constructor
-                     * @param {clutch.topology.v1.SearchTopologyRequest.ISort=} [properties] Properties to set
+                     * @param {clutch.topology.v1.SearchRequest.ISort=} [properties] Properties to set
                      */
                     function Sort(properties) {
                         if (properties)
@@ -31669,8 +32960,8 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Sort direction.
-                     * @member {clutch.topology.v1.SearchTopologyRequest.Sort.Direction} direction
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Sort
+                     * @member {clutch.topology.v1.SearchRequest.Sort.Direction} direction
+                     * @memberof clutch.topology.v1.SearchRequest.Sort
                      * @instance
                      */
                     Sort.prototype.direction = 0;
@@ -31678,7 +32969,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Sort field.
                      * @member {string} field
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Sort
+                     * @memberof clutch.topology.v1.SearchRequest.Sort
                      * @instance
                      */
                     Sort.prototype.field = "";
@@ -31686,7 +32977,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Verifies a Sort message.
                      * @function verify
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Sort
+                     * @memberof clutch.topology.v1.SearchRequest.Sort
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -31712,15 +33003,15 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Creates a Sort message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Sort
+                     * @memberof clutch.topology.v1.SearchRequest.Sort
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.topology.v1.SearchTopologyRequest.Sort} Sort
+                     * @returns {clutch.topology.v1.SearchRequest.Sort} Sort
                      */
                     Sort.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.topology.v1.SearchTopologyRequest.Sort)
+                        if (object instanceof $root.clutch.topology.v1.SearchRequest.Sort)
                             return object;
-                        let message = new $root.clutch.topology.v1.SearchTopologyRequest.Sort();
+                        let message = new $root.clutch.topology.v1.SearchRequest.Sort();
                         switch (object.direction) {
                         case "UNSPECIFIED":
                         case 0:
@@ -31743,9 +33034,9 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Creates a plain object from a Sort message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Sort
+                     * @memberof clutch.topology.v1.SearchRequest.Sort
                      * @static
-                     * @param {clutch.topology.v1.SearchTopologyRequest.Sort} message Sort
+                     * @param {clutch.topology.v1.SearchRequest.Sort} message Sort
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -31758,7 +33049,7 @@ export const clutch = $root.clutch = (() => {
                             object.field = "";
                         }
                         if (message.direction != null && message.hasOwnProperty("direction"))
-                            object.direction = options.enums === String ? $root.clutch.topology.v1.SearchTopologyRequest.Sort.Direction[message.direction] : message.direction;
+                            object.direction = options.enums === String ? $root.clutch.topology.v1.SearchRequest.Sort.Direction[message.direction] : message.direction;
                         if (message.field != null && message.hasOwnProperty("field"))
                             object.field = message.field;
                         return object;
@@ -31767,7 +33058,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Converts this Sort to JSON.
                      * @function toJSON
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Sort
+                     * @memberof clutch.topology.v1.SearchRequest.Sort
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -31777,7 +33068,7 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Direction enum.
-                     * @name clutch.topology.v1.SearchTopologyRequest.Sort.Direction
+                     * @name clutch.topology.v1.SearchRequest.Sort.Direction
                      * @enum {number}
                      * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                      * @property {number} ASCENDING=1 ASCENDING value
@@ -31794,24 +33085,24 @@ export const clutch = $root.clutch = (() => {
                     return Sort;
                 })();
 
-                SearchTopologyRequest.Filter = (function() {
+                SearchRequest.Filter = (function() {
 
                     /**
                      * Properties of a Filter.
-                     * @memberof clutch.topology.v1.SearchTopologyRequest
+                     * @memberof clutch.topology.v1.SearchRequest
                      * @interface IFilter
-                     * @property {clutch.topology.v1.SearchTopologyRequest.Filter.ISearch|null} [search] Filter search
+                     * @property {clutch.topology.v1.SearchRequest.Filter.ISearch|null} [search] Filter search
                      * @property {string|null} [typeUrl] Filter typeUrl
                      * @property {Object.<string,string>|null} [metadata] Filter metadata
                      */
 
                     /**
                      * Constructs a new Filter.
-                     * @memberof clutch.topology.v1.SearchTopologyRequest
+                     * @memberof clutch.topology.v1.SearchRequest
                      * @classdesc Represents a Filter.
                      * @implements IFilter
                      * @constructor
-                     * @param {clutch.topology.v1.SearchTopologyRequest.IFilter=} [properties] Properties to set
+                     * @param {clutch.topology.v1.SearchRequest.IFilter=} [properties] Properties to set
                      */
                     function Filter(properties) {
                         this.metadata = {};
@@ -31823,8 +33114,8 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * Filter search.
-                     * @member {clutch.topology.v1.SearchTopologyRequest.Filter.ISearch|null|undefined} search
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                     * @member {clutch.topology.v1.SearchRequest.Filter.ISearch|null|undefined} search
+                     * @memberof clutch.topology.v1.SearchRequest.Filter
                      * @instance
                      */
                     Filter.prototype.search = null;
@@ -31832,7 +33123,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Filter typeUrl.
                      * @member {string} typeUrl
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                     * @memberof clutch.topology.v1.SearchRequest.Filter
                      * @instance
                      */
                     Filter.prototype.typeUrl = "";
@@ -31840,7 +33131,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Filter metadata.
                      * @member {Object.<string,string>} metadata
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                     * @memberof clutch.topology.v1.SearchRequest.Filter
                      * @instance
                      */
                     Filter.prototype.metadata = $util.emptyObject;
@@ -31848,7 +33139,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Verifies a Filter message.
                      * @function verify
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                     * @memberof clutch.topology.v1.SearchRequest.Filter
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -31857,7 +33148,7 @@ export const clutch = $root.clutch = (() => {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.search != null && message.hasOwnProperty("search")) {
-                            let error = $root.clutch.topology.v1.SearchTopologyRequest.Filter.Search.verify(message.search);
+                            let error = $root.clutch.topology.v1.SearchRequest.Filter.Search.verify(message.search);
                             if (error)
                                 return "search." + error;
                         }
@@ -31878,25 +33169,25 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Creates a Filter message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                     * @memberof clutch.topology.v1.SearchRequest.Filter
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.topology.v1.SearchTopologyRequest.Filter} Filter
+                     * @returns {clutch.topology.v1.SearchRequest.Filter} Filter
                      */
                     Filter.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.topology.v1.SearchTopologyRequest.Filter)
+                        if (object instanceof $root.clutch.topology.v1.SearchRequest.Filter)
                             return object;
-                        let message = new $root.clutch.topology.v1.SearchTopologyRequest.Filter();
+                        let message = new $root.clutch.topology.v1.SearchRequest.Filter();
                         if (object.search != null) {
                             if (typeof object.search !== "object")
-                                throw TypeError(".clutch.topology.v1.SearchTopologyRequest.Filter.search: object expected");
-                            message.search = $root.clutch.topology.v1.SearchTopologyRequest.Filter.Search.fromObject(object.search);
+                                throw TypeError(".clutch.topology.v1.SearchRequest.Filter.search: object expected");
+                            message.search = $root.clutch.topology.v1.SearchRequest.Filter.Search.fromObject(object.search);
                         }
                         if (object.typeUrl != null)
                             message.typeUrl = String(object.typeUrl);
                         if (object.metadata) {
                             if (typeof object.metadata !== "object")
-                                throw TypeError(".clutch.topology.v1.SearchTopologyRequest.Filter.metadata: object expected");
+                                throw TypeError(".clutch.topology.v1.SearchRequest.Filter.metadata: object expected");
                             message.metadata = {};
                             for (let keys = Object.keys(object.metadata), i = 0; i < keys.length; ++i)
                                 message.metadata[keys[i]] = String(object.metadata[keys[i]]);
@@ -31907,9 +33198,9 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Creates a plain object from a Filter message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                     * @memberof clutch.topology.v1.SearchRequest.Filter
                      * @static
-                     * @param {clutch.topology.v1.SearchTopologyRequest.Filter} message Filter
+                     * @param {clutch.topology.v1.SearchRequest.Filter} message Filter
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
@@ -31924,7 +33215,7 @@ export const clutch = $root.clutch = (() => {
                             object.typeUrl = "";
                         }
                         if (message.search != null && message.hasOwnProperty("search"))
-                            object.search = $root.clutch.topology.v1.SearchTopologyRequest.Filter.Search.toObject(message.search, options);
+                            object.search = $root.clutch.topology.v1.SearchRequest.Filter.Search.toObject(message.search, options);
                         if (message.typeUrl != null && message.hasOwnProperty("typeUrl"))
                             object.typeUrl = message.typeUrl;
                         let keys2;
@@ -31939,7 +33230,7 @@ export const clutch = $root.clutch = (() => {
                     /**
                      * Converts this Filter to JSON.
                      * @function toJSON
-                     * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                     * @memberof clutch.topology.v1.SearchRequest.Filter
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
@@ -31951,7 +33242,7 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Properties of a Search.
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                         * @memberof clutch.topology.v1.SearchRequest.Filter
                          * @interface ISearch
                          * @property {string|null} [field] Search field
                          * @property {string|null} [text] Search text
@@ -31959,11 +33250,11 @@ export const clutch = $root.clutch = (() => {
 
                         /**
                          * Constructs a new Search.
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter
+                         * @memberof clutch.topology.v1.SearchRequest.Filter
                          * @classdesc Represents a Search.
                          * @implements ISearch
                          * @constructor
-                         * @param {clutch.topology.v1.SearchTopologyRequest.Filter.ISearch=} [properties] Properties to set
+                         * @param {clutch.topology.v1.SearchRequest.Filter.ISearch=} [properties] Properties to set
                          */
                         function Search(properties) {
                             if (properties)
@@ -31975,7 +33266,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Search field.
                          * @member {string} field
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter.Search
+                         * @memberof clutch.topology.v1.SearchRequest.Filter.Search
                          * @instance
                          */
                         Search.prototype.field = "";
@@ -31983,7 +33274,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Search text.
                          * @member {string} text
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter.Search
+                         * @memberof clutch.topology.v1.SearchRequest.Filter.Search
                          * @instance
                          */
                         Search.prototype.text = "";
@@ -31991,7 +33282,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Verifies a Search message.
                          * @function verify
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter.Search
+                         * @memberof clutch.topology.v1.SearchRequest.Filter.Search
                          * @static
                          * @param {Object.<string,*>} message Plain object to verify
                          * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -32011,15 +33302,15 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Creates a Search message from a plain object. Also converts values to their respective internal types.
                          * @function fromObject
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter.Search
+                         * @memberof clutch.topology.v1.SearchRequest.Filter.Search
                          * @static
                          * @param {Object.<string,*>} object Plain object
-                         * @returns {clutch.topology.v1.SearchTopologyRequest.Filter.Search} Search
+                         * @returns {clutch.topology.v1.SearchRequest.Filter.Search} Search
                          */
                         Search.fromObject = function fromObject(object) {
-                            if (object instanceof $root.clutch.topology.v1.SearchTopologyRequest.Filter.Search)
+                            if (object instanceof $root.clutch.topology.v1.SearchRequest.Filter.Search)
                                 return object;
-                            let message = new $root.clutch.topology.v1.SearchTopologyRequest.Filter.Search();
+                            let message = new $root.clutch.topology.v1.SearchRequest.Filter.Search();
                             if (object.field != null)
                                 message.field = String(object.field);
                             if (object.text != null)
@@ -32030,9 +33321,9 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Creates a plain object from a Search message. Also converts values to other types if specified.
                          * @function toObject
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter.Search
+                         * @memberof clutch.topology.v1.SearchRequest.Filter.Search
                          * @static
-                         * @param {clutch.topology.v1.SearchTopologyRequest.Filter.Search} message Search
+                         * @param {clutch.topology.v1.SearchRequest.Filter.Search} message Search
                          * @param {$protobuf.IConversionOptions} [options] Conversion options
                          * @returns {Object.<string,*>} Plain object
                          */
@@ -32054,7 +33345,7 @@ export const clutch = $root.clutch = (() => {
                         /**
                          * Converts this Search to JSON.
                          * @function toJSON
-                         * @memberof clutch.topology.v1.SearchTopologyRequest.Filter.Search
+                         * @memberof clutch.topology.v1.SearchRequest.Filter.Search
                          * @instance
                          * @returns {Object.<string,*>} JSON object
                          */
@@ -32068,28 +33359,28 @@ export const clutch = $root.clutch = (() => {
                     return Filter;
                 })();
 
-                return SearchTopologyRequest;
+                return SearchRequest;
             })();
 
-            v1.SearchTopologyResponse = (function() {
+            v1.SearchResponse = (function() {
 
                 /**
-                 * Properties of a SearchTopologyResponse.
+                 * Properties of a SearchResponse.
                  * @memberof clutch.topology.v1
-                 * @interface ISearchTopologyResponse
-                 * @property {Array.<clutch.topology.v1.IResource>|null} [resources] SearchTopologyResponse resources
-                 * @property {string|null} [nextPageToken] SearchTopologyResponse nextPageToken
+                 * @interface ISearchResponse
+                 * @property {Array.<clutch.topology.v1.IResource>|null} [resources] SearchResponse resources
+                 * @property {string|null} [nextPageToken] SearchResponse nextPageToken
                  */
 
                 /**
-                 * Constructs a new SearchTopologyResponse.
+                 * Constructs a new SearchResponse.
                  * @memberof clutch.topology.v1
-                 * @classdesc Represents a SearchTopologyResponse.
-                 * @implements ISearchTopologyResponse
+                 * @classdesc Represents a SearchResponse.
+                 * @implements ISearchResponse
                  * @constructor
-                 * @param {clutch.topology.v1.ISearchTopologyResponse=} [properties] Properties to set
+                 * @param {clutch.topology.v1.ISearchResponse=} [properties] Properties to set
                  */
-                function SearchTopologyResponse(properties) {
+                function SearchResponse(properties) {
                     this.resources = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -32098,30 +33389,30 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * SearchTopologyResponse resources.
+                 * SearchResponse resources.
                  * @member {Array.<clutch.topology.v1.IResource>} resources
-                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @memberof clutch.topology.v1.SearchResponse
                  * @instance
                  */
-                SearchTopologyResponse.prototype.resources = $util.emptyArray;
+                SearchResponse.prototype.resources = $util.emptyArray;
 
                 /**
-                 * SearchTopologyResponse nextPageToken.
+                 * SearchResponse nextPageToken.
                  * @member {string} nextPageToken
-                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @memberof clutch.topology.v1.SearchResponse
                  * @instance
                  */
-                SearchTopologyResponse.prototype.nextPageToken = "";
+                SearchResponse.prototype.nextPageToken = "";
 
                 /**
-                 * Verifies a SearchTopologyResponse message.
+                 * Verifies a SearchResponse message.
                  * @function verify
-                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @memberof clutch.topology.v1.SearchResponse
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                SearchTopologyResponse.verify = function verify(message) {
+                SearchResponse.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.resources != null && message.hasOwnProperty("resources")) {
@@ -32140,24 +33431,24 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a SearchTopologyResponse message from a plain object. Also converts values to their respective internal types.
+                 * Creates a SearchResponse message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @memberof clutch.topology.v1.SearchResponse
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.topology.v1.SearchTopologyResponse} SearchTopologyResponse
+                 * @returns {clutch.topology.v1.SearchResponse} SearchResponse
                  */
-                SearchTopologyResponse.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.topology.v1.SearchTopologyResponse)
+                SearchResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.topology.v1.SearchResponse)
                         return object;
-                    let message = new $root.clutch.topology.v1.SearchTopologyResponse();
+                    let message = new $root.clutch.topology.v1.SearchResponse();
                     if (object.resources) {
                         if (!Array.isArray(object.resources))
-                            throw TypeError(".clutch.topology.v1.SearchTopologyResponse.resources: array expected");
+                            throw TypeError(".clutch.topology.v1.SearchResponse.resources: array expected");
                         message.resources = [];
                         for (let i = 0; i < object.resources.length; ++i) {
                             if (typeof object.resources[i] !== "object")
-                                throw TypeError(".clutch.topology.v1.SearchTopologyResponse.resources: object expected");
+                                throw TypeError(".clutch.topology.v1.SearchResponse.resources: object expected");
                             message.resources[i] = $root.clutch.topology.v1.Resource.fromObject(object.resources[i]);
                         }
                     }
@@ -32167,15 +33458,15 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a plain object from a SearchTopologyResponse message. Also converts values to other types if specified.
+                 * Creates a plain object from a SearchResponse message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @memberof clutch.topology.v1.SearchResponse
                  * @static
-                 * @param {clutch.topology.v1.SearchTopologyResponse} message SearchTopologyResponse
+                 * @param {clutch.topology.v1.SearchResponse} message SearchResponse
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                SearchTopologyResponse.toObject = function toObject(message, options) {
+                SearchResponse.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -32194,17 +33485,17 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this SearchTopologyResponse to JSON.
+                 * Converts this SearchResponse to JSON.
                  * @function toJSON
-                 * @memberof clutch.topology.v1.SearchTopologyResponse
+                 * @memberof clutch.topology.v1.SearchResponse
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                SearchTopologyResponse.prototype.toJSON = function toJSON() {
+                SearchResponse.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return SearchTopologyResponse;
+                return SearchResponse;
             })();
 
             v1.FeatureQuery = (function() {
@@ -33599,7 +34890,7 @@ export const clutch = $root.clutch = (() => {
                  * @interface IResource
                  * @property {string|null} [id] Resource id
                  * @property {google.protobuf.IAny|null} [pb] Resource pb
-                 * @property {Object.<string,string>|null} [metadata] Resource metadata
+                 * @property {Object.<string,google.protobuf.IValue>|null} [metadata] Resource metadata
                  */
 
                 /**
@@ -33636,7 +34927,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * Resource metadata.
-                 * @member {Object.<string,string>} metadata
+                 * @member {Object.<string,google.protobuf.IValue>} metadata
                  * @memberof clutch.topology.v1.Resource
                  * @instance
                  */
@@ -33665,9 +34956,11 @@ export const clutch = $root.clutch = (() => {
                         if (!$util.isObject(message.metadata))
                             return "metadata: object expected";
                         let key = Object.keys(message.metadata);
-                        for (let i = 0; i < key.length; ++i)
-                            if (!$util.isString(message.metadata[key[i]]))
-                                return "metadata: string{k:string} expected";
+                        for (let i = 0; i < key.length; ++i) {
+                            let error = $root.google.protobuf.Value.verify(message.metadata[key[i]]);
+                            if (error)
+                                return "metadata." + error;
+                        }
                     }
                     return null;
                 };
@@ -33695,8 +34988,11 @@ export const clutch = $root.clutch = (() => {
                         if (typeof object.metadata !== "object")
                             throw TypeError(".clutch.topology.v1.Resource.metadata: object expected");
                         message.metadata = {};
-                        for (let keys = Object.keys(object.metadata), i = 0; i < keys.length; ++i)
-                            message.metadata[keys[i]] = String(object.metadata[keys[i]]);
+                        for (let keys = Object.keys(object.metadata), i = 0; i < keys.length; ++i) {
+                            if (typeof object.metadata[keys[i]] !== "object")
+                                throw TypeError(".clutch.topology.v1.Resource.metadata: object expected");
+                            message.metadata[keys[i]] = $root.google.protobuf.Value.fromObject(object.metadata[keys[i]]);
+                        }
                     }
                     return message;
                 };
@@ -33728,7 +35024,7 @@ export const clutch = $root.clutch = (() => {
                     if (message.metadata && (keys2 = Object.keys(message.metadata)).length) {
                         object.metadata = {};
                         for (let j = 0; j < keys2.length; ++j)
-                            object.metadata[keys2[j]] = message.metadata[keys2[j]];
+                            object.metadata[keys2[j]] = $root.google.protobuf.Value.toObject(message.metadata[keys2[j]], options);
                     }
                     return object;
                 };

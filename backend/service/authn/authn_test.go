@@ -4,27 +4,21 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	apimock "github.com/lyft/clutch/backend/mock/api"
 )
 
-func TestStateNonceRoundTrip(t *testing.T) {
-	p := &OIDCProvider{
-		sessionSecret: "this-is-my-secret",
-	}
-
-	url := "/foo"
-
-	state, err := p.GetStateNonce(url)
-	assert.NoError(t, err)
-	assert.NotEmpty(t, state)
-
-	outUrl, err := p.ValidateStateNonce(state)
-	assert.NoError(t, err)
-	assert.Equal(t, url, outUrl)
-
-	// Check that the same fails if not signed correctly.
-	p2 := &OIDCProvider{
-		sessionSecret: "this-is-a-different-secret",
-	}
-	_, err = p2.ValidateStateNonce(state)
+func TestNotImpl(t *testing.T) {
+	a := apimock.AnyFromYAML(`
+"@type": types.google.com/clutch.config.service.authn.v1.Config
+session_secret: my_session_secret
+storage:
+  encryption_passphrase: abcdefg
+`)
+	svc, err := New(a, nil, nil)
 	assert.Error(t, err)
+	assert.Nil(t, svc)
 }
+
+// TODO: until services have plumbed context in the factory, this would require the test to call out to the internet to succeeed, at least for the OIDC provider
+// func TestReturnsCorrectProvider(t *testing.T)

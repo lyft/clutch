@@ -152,6 +152,10 @@ func main() {
 		relpath, _ := filepath.Rel(docsRoot, f)
 		dest := filepath.Join(destRoot, relpath)
 
+		if strings.Contains(dest, "docs/blog") {
+			dest = strings.Replace(dest, "/docs/blog", "/blog", 1)
+		}
+
 		// Make directory if it doesn't exist.
 		if err := os.MkdirAll(filepath.Dir(dest), 0755); err != nil {
 			log.Fatal(err)

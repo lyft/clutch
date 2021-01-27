@@ -26,6 +26,12 @@ var items = [
     label: 'Docs',
   },
   {
+    to: 'blog',
+    activeBasePath: 'blog',
+    icon: "fe fe-rss",
+    label: 'Blog',
+  },
+  {
     to: 'docs/community',
     activeBasePath: 'docs',
     icon: "fe fe-message-square",
