@@ -22,10 +22,10 @@ When deploying Clutch at Lyft we noticed very early on when deploying a new vers
 a subset of users would fail to load the webpage as some of the frontend assets could not be resolved.
 
 Clutch bundles all frontend assets into a single binary, which allows us to serve all frontend assets from disk, simplifying our architecture by omitting the need for a CDN.
-However, this means that during deploys, particularly when deploying to canary (which at Lyft is a particular subset of the production environment),
-there will be an intermediary state in which the frontend assets requested by the user may not exist on the hosts serving that request while the rollout is still progressing, since during deploys, there will briefly exist two different versions of the application taking traffic.
+However, this means that during deploys, particularly when deploying to canary (which at Lyft is a particular subset of the production environment), there will briefly be two different versions of the application taking traffic.
+In this intermediary state, the frontend assets requested by the user may not yet exist on the hosts serving that request while the rollout is progressing.
 
-Typically, organizations solve this problem by simply adding a CDN to their service architecture and serve static assets from there.
+Typically, organizations solve this problem by simply adding a CDN to their service architecture and serving static assets from there.
 However, we decided to go a different route, as the Clutch architecture and design philosophy values simplicity and avoiding adding new dependencies unless absolutely necessary. This simplicity is core to Clutch's values as we want to keep Clutch easy to deploy and configure and cloud provider agnostic, with as few external dependencies as possible.
 
 ## Solution
@@ -33,7 +33,7 @@ However, we decided to go a different route, as the Clutch architecture and desi
 This leads us to our solution, which we call Frontend Asset Passthrough.
 How this works is simple: when a request for a static asset does not reside on disk, Clutch will fallback to a configured provider to look for the asset.
 
-Lets first take a look at the [proto configration](https://github.com/lyft/clutch/blob/890245e7d2a1bf91623a9e74b39f1083dbd5ea2c/api/config/gateway/v1/gateway.proto#L105-L119) and then will go into more detail.
+Let's first take a look at the [proto configuration](https://github.com/lyft/clutch/blob/890245e7d2a1bf91623a9e74b39f1083dbd5ea2c/api/config/gateway/v1/gateway.proto#L105-L119) and then will go into more detail.
 
 ```protobuf
 message Assets {
@@ -51,12 +51,12 @@ message Assets {
 
 The `assets` configuration resides in the `gateway` configuration.
 
-At Lyft we utilized AWS S3 as the provider of choice and have implemented this setup as an example,
+At Lyft we utilize AWS S3 as the provider of choice and have implemented this setup as an example;
 however, the Clutch protobuf model is extensible and can easily be extended to add additional providers for any given deployment.
 
-For S3 the configuration is simple, specify a `region`, `bucket`, and the `key` where the assets live.
+For S3 the configuration is simple: specify a `region`, `bucket`, and the `key` where the assets live.
 This does require you to also configure the `clutch.service.aws` service,
-which enables Clutch fetch these assets with S3 API's.
+which enables Clutch to fetch these assets with S3 API's.
 
 ```yaml
 gateway:
@@ -106,4 +106,4 @@ ensuring the correct assets are served regardless of the divergence in deployed 
 
 ## Contributing
 
-If their is a provider that you need for your deployment, please consider contributing!
+If there is a provider that you need for your deployment, please consider contributing!
