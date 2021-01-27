@@ -181,6 +181,10 @@ module.exports = {
               label: 'Backend',
               to: 'docs/components#backend',
             },
+            {
+              label: 'Storybook',
+              to: 'https://storybook.clutch.sh',
+            },
           ],
         },
         {
