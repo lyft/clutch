@@ -18,15 +18,17 @@ This article will touch on how Lyft deploys Clutch and some of the early problem
 
 ## Problem
 
-When deploying Clutch at Lyft we noticed very early on when deploying a new version,
-a subset of users would fail to load the webpage as some of the frontend assets could not be resolved.
+During our deploys of Clutch at Lyft we noticed very early on that when a new version is deployed,
+a subset of users would fail to load the webpage (only seeing a blank page) as some of the frontend assets could not be resolved.
 
-Clutch bundles all frontend assets into a single binary, which allows us to serve all frontend assets from disk, simplifying our architecture by omitting the need for a CDN.
-However, this means that during deploys, particularly when deploying to canary (which at Lyft is a particular subset of the production environment), there will briefly be two different versions of the application taking traffic.
+<img alt="Unable to Load" src={useBaseUrl('img/docs/blog/fe-asset-passthrough-unable-to-load.png')} width="80%" />
+
+Clutch bundles all frontend assets into a single binary, which allows us to serve them from disk, simplifying our architecture by omitting the need for a CDN.
+However, this means that during deploys, particularly when deploying to a canary environment (which at Lyft is a particular subset of the production environment) or multiple availability zones, there will briefly be two different versions of the application taking traffic.
 In this intermediary state, the frontend assets requested by the user may not yet exist on the hosts serving that request while the rollout is progressing.
 
 Typically, organizations solve this problem by simply adding a CDN to their service architecture and serving static assets from there.
-However, we decided to go a different route, as the Clutch architecture and design philosophy values simplicity and avoiding adding new dependencies unless absolutely necessary. This simplicity is core to Clutch's values as we want to keep Clutch easy to deploy and configure and cloud provider agnostic, with as few external dependencies as possible.
+However, we decided to go a different route, as the Clutch architecture and design philosophy values simplicity and avoiding adding new dependencies unless absolutely necessary. We want to keep Clutch easy to deploy and configure, and cloud provider agnostic, with as few external dependencies as possible.
 
 ## Solution
 
@@ -56,7 +58,7 @@ however, the Clutch protobuf model is extensible and can easily be extended to a
 
 For S3 the configuration is simple: specify a `region`, `bucket`, and the `key` where the assets live.
 This does require you to also configure the `clutch.service.aws` service,
-which enables Clutch to fetch these assets with S3 API's.
+which allows Clutch to fetch these assets via S3 APIs.
 
 ```yaml
 gateway:
@@ -79,7 +81,7 @@ If the provider has the correct asset it will be served to the user.
 
 Let's look at the diagram below to demonstrate this.
 Our user makes a request, it goes through our load balancer, which in Lyft's case is Envoy.
-Envoy is load balancing all versions of Clutch that are currently deployed; in our example we have two Clutch versions deployed `v1` and `v2`.
+Envoy is load balancing all versions of Clutch that are currently deployed. In this example we have two Clutch versions deployed: `v1` and `v2`.
 Regardless of which version of the frontend a user might have, all versions of the frontend assets live in S3, so
 if a Clutch host does not have what the user is requesting it can simply check S3.
 
