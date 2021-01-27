@@ -38,7 +38,7 @@ var items = [
     label: 'Community',
   },
   {
-    to: 'storybook.clutch.sh',
+    to: 'https://storybook.clutch.sh',
     icon: "fe fe-layers",
     label: 'Storybook',
   },
