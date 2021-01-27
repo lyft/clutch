@@ -39,7 +39,7 @@
     "publishBeta": "lerna run compile && lerna run publishBeta --no-bail",
     "start": "yarn clean && yarn compile:watch & FORCE_COLOR=true yarn workspace @clutch-sh/app start | cat",
     "storybook": "rm -rf node_modules/.cache/storybook/ && start-storybook -p 6006 -h localhost",
-    "storybook:build": "NODE_OPTIONS=--max_old_space_size=4096 build-storybook --no-dll --docs -o netlify/storybook-static",
+    "storybook:build": "NODE_OPTIONS=--max_old_space_size=4096 build-storybook --no-dll -o netlify/storybook-static",
     "test": "lerna run test --stream --no-bail --",
     "test:coverage": "lerna run test:coverage --stream --no-bail --",
     "test:e2e": "lerna run test:e2e",
