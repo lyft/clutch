@@ -1,6 +1,5 @@
 const checker = require("license-checker"); // eslint-disable-line import/no-extraneous-dependencies
 
-
 const allowLicenses = [
   "Apache-1.0",
   "Apache-1.1",
