@@ -1,6 +1,6 @@
 [build]
   # Only build clutch-components site if frontend files change.
-  ignore = "cd .. && git diff-tree --no-commit-id --name-only --quiet -r $COMMIT_REF -- '*.ts*' '*.js' 'yarn.lock' 'package.json' '**/netlify.toml'"
+  ignore = "cd .. && git diff-tree --no-commit-id --name-only --quiet -r $COMMIT_REF -- '*.ts*' '*.js' 'yarn.lock' 'package.json' '**/netlify.toml' '*.html'"
 
 [[headers]]
   # Define which paths this specific [[headers]] block will cover.
