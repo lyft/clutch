@@ -296,23 +296,6 @@ function Navbar() {
             <Logo imageClassName={clsx("navbar__logo", styles.navbarLogoCustom)} />
             <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
           </div>
-          {/* <Link
-            className="navbar__brand"
-            onClick={hideSidebar}
-            to={'/'}
-            rel='noopener noreferrer'
-            target={logo.target}
-          >
-            {logo.src != null && (
-              <img
-                key={isClient}
-                className="navbar__logo"
-                src={logo.src}
-                alt={logo.alt}
-              />
-            )}
-            <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
-          </Link> */}
           {!disableColorModeSwitch && sidebarShown && (
             <Toggle
               aria-label="Dark mode toggle in sidebar"
