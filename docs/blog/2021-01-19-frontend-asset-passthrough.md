@@ -11,28 +11,27 @@ hide_table_of_contents: false
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-How Clutch handles serving frontend assets without a CDN in a distributed multi version deployment.
-Will touch on how Lyft deploys Clutch and some of the early problems we faced when rolling it out.
+Ever wonder how Clutch handles serving frontend assets without a CDN in a distributed multi-version deployment?
+This article will touch on how Lyft deploys Clutch and some of the early problems we faced when rolling it out.
 
 <!--truncate-->
 
 ## Problem
 
-When deploying Clutch at Lyft we noticed very early on when deploying a new version a subset of users would fail to load some frontend assets.
-Clutch bundles all frontend assets into a single binary, which allows us to serve all frontend assets from disk easily.
-However the frontend assets they were requesting did not exist on the hosts that were serving their request.
+When deploying Clutch at Lyft we noticed very early on when deploying a new version,
+a subset of users would fail to load the webpage as some of the frontend assets could not be resolved.
 
-This problem was exacerbated when deploying to canary or waiting for the full production rollout to complete.
-As there were at least 2 different versions of the application take production traffic.
+Clutch bundles all frontend assets into a single binary, which allows us to serve all frontend assets from disk, simplifying our architecture by omitting the need for a CDN.
+However, this means that during deploys, particularly when deploying to canary (which at Lyft is a particular subset of the production environment),
+there will be an intermediary state in which the frontend assets requested by the user may not exist on the hosts serving that request while the rollout is still progressing, since during deploys, there will briefly exist two different versions of the application taking traffic.
 
-On the surface it seems like the obvious solution would be to add a CDN and have that serve our static assets.
-However our decision making processing of adding new dependencies to the Clutch architecture is simple, unless absolutely necessary find a different way to solve the problem.
-We want Clutch to be extremely easy to deploy and configure with as few external dependencies as possible which are not tied to a specific cloud provider.
+Typically, organizations solve this problem by simply adding a CDN to their service architecture and serve static assets from there.
+However, we decided to go a different route, as the Clutch architecture and design philosophy values simplicity and avoiding adding new dependencies unless absolutely necessary. This simplicity is core to Clutch's values as we want to keep Clutch easy to deploy and configure and cloud provider agnostic, with as few external dependencies as possible.
 
 ## Solution
 
-Which leads us to our solution, simply called Frontend Asset Passthrough.
-When a request for a static asset does not reside on disk Clutch will fallback to a configured provider to look for the asset.
+This leads us to our solution, which we call Frontend Asset Passthrough.
+How this works is simple: when a request for a static asset does not reside on disk, Clutch will fallback to a configured provider to look for the asset.
 
 Lets first take a look at the [proto configration](https://github.com/lyft/clutch/blob/890245e7d2a1bf91623a9e74b39f1083dbd5ea2c/api/config/gateway/v1/gateway.proto#L105-L119) and then will go into more detail.
 
@@ -52,10 +51,10 @@ message Assets {
 
 The `assets` configuration resides in the `gateway` configuration.
 
-At Lyft we utilized AWS S3 as the provider of choice which we implemented first,
-given this model its easy to add additional providers for any given deployment.
+At Lyft we utilized AWS S3 as the provider of choice and have implemented this setup as an example,
+however, the Clutch protobuf model is extensible and can easily be extended to add additional providers for any given deployment.
 
-For S3 the configuration is simple, specify a `region`, `bucket` and the `key` where the assets live.
+For S3 the configuration is simple, specify a `region`, `bucket`, and the `key` where the assets live.
 This does require you to also configure the `clutch.service.aws` service,
 which enables Clutch fetch these assets with S3 API's.
 
@@ -75,38 +74,36 @@ services:
         - us-east-1
 ```
 
-With this configured if a user requests an asset that does not reside on disk the configured passthrough provider will be utilized.
+With this configured, if a user requests an asset that does not reside on disk the configured passthrough provider will be utilized.
 If the provider has the correct asset it will be served to the user.
 
-Lets look at the diagram below to demonstrate this.
-Our users makes a request, it goes through our load balancer in our case Envoy.
-Envoy is load balancing all versions of Clutch that are currently deployed, in our example we have two Clutch versions deployed **v1** and **v2**.
-Regardless of which version of the frontend a user might have all versions of the frontend assets live in S3,
-if a clutch host does not have what the user is requesting it will check S3.
+Let's look at the diagram below to demonstrate this.
+Our user makes a request, it goes through our load balancer, which in Lyft's case is Envoy.
+Envoy is load balancing all versions of Clutch that are currently deployed; in our example we have two Clutch versions deployed **v1** and **v2**.
+Regardless of which version of the frontend a user might have, all versions of the frontend assets live in S3, so
+if a Clutch host does not have what the user is requesting it can simply check S3.
 
 <img alt="Deploying" src={useBaseUrl('img/docs/blog/fe-asset-passthrough-s3-logical.png')} width="75%"/>
 
 
 ## Deploying
 
-However there is still an additional problem to solve, which will be unique to each deployment.
-Will go over how at Lyft we manage uploading new frontend assets to S3 per deploy.
+Now that we have configured a passthrough asset provider, there is still an additional problem to solve, which will be unique to each Clutch deployment.
+This problem, namely, is how exactly the assets end up in the fallback provider in the first place.
+As an example, I will go over how we solved this problem at Lyft.
 
 Below is a simplified version of our deployment process.
 Early on in the deployment pipeline assets are uploaded to S3,
 simply utilizing the aws cli to `aws s3 sync` the new assets to the target bucket.
 
-Internally our CI/CD infrastructure utilize container images at most stages in the pipeline,
-allowing us to easily access newly built assets to upload to S3.
-
 <img alt="Deploying" src={useBaseUrl('img/docs/blog/fe-asset-passthrough-s3-upload.png')} width="75%"/>
 
 ## Conclusion
 
-Frontend asset passthrough enables distributed Clutch deployments to easily provide a fallback mechanism
-when serving frontend assets.
-With minimal configuration
+Through Frontend Asset Passthrough, a distributed Clutch deployment is able to provide a fallback mechanism
+when serving frontend assets with minimal configuration and without the additional complexity of a CDN,
+ensuring the correct assets are served regardless of the divergence in deployed versions across a Clutch fleet.
 
 ## Contributing
 
-If their is a provider that you need for your deployment, please contribute!
+If their is a provider that you need for your deployment, please consider contributing!
