@@ -36,7 +36,7 @@ func TestEnvoyFaults(t *testing.T) {
 }
 
 func TestTTls(t *testing.T) {
-	ts := newTestServer(t, false)
+	ts := newTestServer(t, true)
 
 	e := startEnvoy(t)
 	defer e.stop()
