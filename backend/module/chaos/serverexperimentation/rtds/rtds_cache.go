@@ -110,6 +110,8 @@ func (c *cacheWrapperV3) SetRuntimeLayer(nodeName string, layerName string, laye
 		},
 		Ttl: resourceTTL,
 	}}
+
+	fmt.Printf("runtimes: %v", runtimes)
 	snapshot := gcpCacheV3.NewSnapshotWithTtls(version, nil, nil, nil, nil, runtimes, nil)
 	err := c.SetSnapshot(nodeName, snapshot)
 	if err != nil {

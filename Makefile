@@ -79,6 +79,10 @@ backend-config-validation:
 yarn-install: yarn-ensure
 	$(YARN) --cwd frontend install --frozen-lockfile 
 
+.PHONY: backend-ensure-envoy
+backend-ensure-envoy:
+	which getenvoy || curl -L https://getenvoy.io/cli | bash -s -- -b /usr/local/bin
+
 .PHONY: frontend # Build production frontend assets.
 frontend: yarn-install
 	$(YARN) --cwd frontend build

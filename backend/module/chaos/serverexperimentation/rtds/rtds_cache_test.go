@@ -19,6 +19,7 @@ import (
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	rtds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds/testing"
 )
 
 const (
@@ -278,10 +279,10 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 }
 
 func TestRefreshCache(t *testing.T) {
-	s := &mockStorer{}
+	s := &rtds_testing.MockStorer{}
 	testCache := gcpCache.NewSnapshotCache(false, gcpCache.IDHash{}, nil)
 	refreshCache(context.Background(), s, &cacheWrapperV2{testCache}, "test_layer", "ingress", "egress", nil)
-	assert.Equal(t, s.getExperimentArguments.configType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig")
+	assert.Equal(t, s.GetExperimentArguments.ConfigType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig")
 }
 
 func TestCreateRuntimeKeys(t *testing.T) {

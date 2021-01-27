@@ -3,7 +3,6 @@ package rtds
 import (
 	"context"
 	"errors"
-	"net"
 	"testing"
 	"time"
 
@@ -15,16 +14,9 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
-	"go.uber.org/zap"
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
-	"google.golang.org/grpc"
-	"google.golang.org/protobuf/types/known/durationpb"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
-	rtdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/rtds/v1"
-	"github.com/lyft/clutch/backend/module/moduletest"
-	"github.com/lyft/clutch/backend/service"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 func TestServerStats(t *testing.T) {
@@ -39,7 +31,7 @@ func TestServerStats(t *testing.T) {
 	defer cancel()
 
 	// Verify V3 stats.
-	v3Stream, err := newV3Stream(ctx, "tests", "cluster", testServer)
+	v3Stream, err := newV3Stream(ctx, "rtds", "cluster", testServer)
 	assert.NoError(t, err)
 	defer v3Stream.close(t)
 
@@ -132,7 +124,7 @@ func TestResourceTTL(t *testing.T) {
 
 	// First we look at a stream for a cluster that has an active fault. This should result in a TTL'd
 	// resource that sends heartbeats.
-	s, err := newV3Stream(ctx, "tests", "cluster", testServer)
+	s, err := newV3Stream(ctx, "rtds", "cluster", testServer)
 	assert.NoError(t, err)
 	defer s.close(t)
 
@@ -160,7 +152,7 @@ func TestResourceTTL(t *testing.T) {
 
 	// Second we look at a stream for a cluster that should not receive any faults.
 	// Here we do not expect to see TTLs or heartbeats.
-	noFaultStream, err := newV3Stream(ctx, "tests", "other-cluster", testServer)
+	noFaultStream, err := newV3Stream(ctx, "rtds", "other-cluster", testServer)
 	assert.NoError(t, err)
 	defer s.close(t)
 
@@ -204,72 +196,6 @@ func awaitCounterEquals(t *testing.T, scope tally.TestScope, counter string, val
 		}
 	}
 }
-
-// Helper class for initializing a test RTDS server.
-type testServer struct {
-	registrar *moduletest.TestRegistrar
-	scope     tally.TestScope
-	storer    *simpleStorer
-}
-
-func newTestServer(t *testing.T, ttl bool) testServer {
-	t.Helper()
-	server := testServer{}
-
-	server.storer = &simpleStorer{}
-	service.Registry[experimentstore.Name] = server.storer
-
-	// Set up a test server listening to :9000.
-	config := &rtdsconfigv1.Config{
-		RtdsLayerName:             "tests",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
-		IngressFaultRuntimePrefix: "ingress",
-		EgressFaultRuntimePrefix:  "egress",
-	}
-
-	if ttl {
-		config.ResourceTtl = &durationpb.Duration{
-			Seconds: 1,
-		}
-		config.HeartbeatInterval = &durationpb.Duration{
-			Seconds: 1,
-		}
-	}
-
-	any, err := ptypes.MarshalAny(config)
-	assert.NoError(t, err)
-	server.scope = tally.NewTestScope("test", nil)
-
-	logger, err := zap.NewDevelopment()
-	assert.NoError(t, err)
-
-	m, err := New(any, logger, server.scope)
-	assert.NoError(t, err)
-
-	server.registrar = moduletest.NewRegisterChecker()
-
-	err = m.Register(server.registrar)
-	assert.NoError(t, err)
-
-	l, err := net.Listen("tcp", "localhost:9000")
-	assert.NoError(t, err)
-
-	go func() {
-		err := server.registrar.GRPCServer().Serve(l)
-		assert.NoError(t, err)
-	}()
-
-	return server
-}
-
-func (t *testServer) stop() {
-	t.registrar.GRPCServer().Stop()
-}
-
-func (t *testServer) clientConn() (*grpc.ClientConn, error) {
-	return grpc.Dial("localhost:9000", grpc.WithInsecure())
-}
-
 // Helper class for testing calls over a single RTDS stream.
 type v3StreamWrapper struct {
 	stream  gcpRuntimeServiceV3.RuntimeDiscoveryService_StreamRuntimeClient
