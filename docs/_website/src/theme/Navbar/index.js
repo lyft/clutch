@@ -38,6 +38,11 @@ var items = [
     label: 'Community',
   },
   {
+    to: 'storybook.clutch.sh',
+    icon: "fe fe-layers",
+    label: 'Storybook',
+  },
+  {
     href: 'https://github.com/lyft/clutch',
     icon: "fe fe-github",
     label: 'GitHub',
