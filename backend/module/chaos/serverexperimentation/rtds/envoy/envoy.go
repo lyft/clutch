@@ -13,9 +13,9 @@ import (
 	"time"
 
 	bootstrap "github.com/envoyproxy/go-control-plane/envoy/config/bootstrap/v3"
+	cluster "github.com/envoyproxy/go-control-plane/envoy/config/cluster/v3"
 	listener "github.com/envoyproxy/go-control-plane/envoy/config/listener/v3"
 	hcm "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/network/http_connection_manager/v3"
-	cluster "github.com/envoyproxy/go-control-plane/envoy/config/cluster/v3"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
@@ -75,7 +75,7 @@ static_resources:
 // TODO(snowp): If we ever need to support multiple Envoy instances under test, use some port selection
 // logic to avoid port collisions.
 type Envoy struct {
-	doneCh chan error
+	doneCh          chan error
 	configModifiers []func(*bootstrap.Bootstrap) *bootstrap.Bootstrap
 
 	finalConfig *bootstrap.Bootstrap
@@ -91,7 +91,6 @@ func (e *Envoy) Start() error {
 			return err
 		}
 
-		fmt.Println(len(e.configModifiers))
 		for _, m := range e.configModifiers {
 			b = m(b)
 		}
@@ -113,10 +112,10 @@ func (e *Envoy) Start() error {
 
 		for range time.NewTicker(100 * time.Millisecond).C {
 			select {
-			case <- timeout.C:
-					startupCh <- errors.New("timed out waiting for Envoy to start up")
-					close(startupCh)
-					return
+			case <-timeout.C:
+				startupCh <- errors.New("timed out waiting for Envoy to start up")
+				close(startupCh)
+				return
 			default:
 			}
 
@@ -130,14 +129,16 @@ func (e *Envoy) Start() error {
 
 	go func(doneCh chan error) {
 		defer close(doneCh)
-		c := exec.Command("/usr/local/bin/getenvoy", "run", "standard:1.17.0", "--", "--config-yaml", string(out.Bytes()))
+
+		config := out.String()
+		c := exec.Command("/usr/local/bin/getenvoy", "run", "standard:1.17.0", "--", "--config-yaml", config)
 		c.Stderr = os.Stderr
 		c.Stdout = os.Stdout
 		err := c.Run()
 		doneCh <- err
 	}(e.doneCh)
 
-	err = <- startupCh
+	err = <-startupCh
 
 	return err
 }
@@ -151,8 +152,7 @@ func (e *Envoy) Stop(t *testing.T) {
 // MakeSimpleCall issues a basic GET request to the Envoy under test, with the downstream cluster
 // set to test-cluster.
 func (e *Envoy) MakeSimpleCall() (int, error) {
-	client := &http.Client{
-	}
+	client := &http.Client{}
 
 	r, err := http.NewRequest("GET", "http://localhost:10000", nil)
 	if err != nil {
@@ -182,7 +182,7 @@ func (e *Envoy) AddRuntimeLayer(input string) error {
 			b.LayeredRuntime = &bootstrap.LayeredRuntime{}
 		}
 		b.LayeredRuntime.Layers = append(b.LayeredRuntime.Layers, runtimeLayer)
-		
+
 		return b
 	})
 
@@ -200,7 +200,7 @@ func (e *Envoy) AddCluster(input string) error {
 
 	e.configModifiers = append(e.configModifiers, func(b *bootstrap.Bootstrap) *bootstrap.Bootstrap {
 		b.StaticResources.Clusters = append(b.StaticResources.Clusters, cluster)
-		
+
 		return b
 	})
 
@@ -217,7 +217,8 @@ func (e *Envoy) AddHTTPFilter(input string) error {
 
 	e.configModifiers = append(e.configModifiers, func(b *bootstrap.Bootstrap) *bootstrap.Bootstrap {
 		h := &hcm.HttpConnectionManager{}
-		b.StaticResources.Listeners[0].FilterChains[0].Filters[0].GetTypedConfig().UnmarshalTo(h)
+		// TODO(snowp): Have config modifiers return (Bootstrap, error) so we can propagate errors.
+		_ = b.StaticResources.Listeners[0].FilterChains[0].Filters[0].GetTypedConfig().UnmarshalTo(h)
 
 		h.HttpFilters = append([]*hcm.HttpFilter{filter}, h.HttpFilters...)
 
@@ -235,7 +236,7 @@ func (e *Envoy) AddHTTPFilter(input string) error {
 
 // AwaitShutdown blocks until the Envoy instance has terminated.
 func (e *Envoy) AwaitShutdown() {
-	<- e.doneCh
+	<-e.doneCh
 }
 
 // NewEnvoy creates a new Envoy instance to run under test.
@@ -256,23 +257,23 @@ func NewEnvoy(t *testing.T) *Envoy {
 
 // Helper to convert an input yaml into a typed Protobuf message.
 func unmarshalYaml(m proto.Message, input string) error {
-		intermediate := map[string]interface{}{}
+	intermediate := map[string]interface{}{}
 
-		err := yaml.Unmarshal([]byte(input), intermediate)
-		if err != nil {
-			return fmt.Errorf("error unmarshaling yaml: %s", err)
-		}
+	err := yaml.Unmarshal([]byte(input), intermediate)
+	if err != nil {
+		return fmt.Errorf("error unmarshaling yaml: %s", err)
+	}
 
-		asJSON, err := json.Marshal(intermediate)
-		if err != nil {
-			return fmt.Errorf("error marshaling json: %s", err)
-		}
+	asJSON, err := json.Marshal(intermediate)
+	if err != nil {
+		return fmt.Errorf("error marshaling json: %s", err)
+	}
 
-		u := jsonpb.Unmarshaler{}
-		err = u.Unmarshal(bytes.NewReader(asJSON), m)
-		if err != nil {
-			return fmt.Errorf("error unmarshaling json (%s) to proto: %s", string(asJSON), err)
-		}
+	u := jsonpb.Unmarshaler{}
+	err = u.Unmarshal(bytes.NewReader(asJSON), m)
+	if err != nil {
+		return fmt.Errorf("error unmarshaling json (%s) to proto: %s", string(asJSON), err)
+	}
 
-		return nil
+	return nil
 }

@@ -6,16 +6,17 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
-	rtdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/rtds/v1"
-	rtds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds/testing"
-	"github.com/lyft/clutch/backend/module/moduletest"
-	"github.com/lyft/clutch/backend/service"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/durationpb"
+
+	rtdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/rtds/v1"
+	rtds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds/testing"
+	"github.com/lyft/clutch/backend/module/moduletest"
+	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 // Helper class for initializing a test RTDS server.

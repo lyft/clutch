@@ -7,9 +7,10 @@ import (
 
 	_ "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
 	"github.com/golang/protobuf/ptypes"
+	"github.com/stretchr/testify/assert"
+
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds/envoy"
-	"github.com/stretchr/testify/assert"
 )
 
 const FaultFilterConfig = `
@@ -56,28 +57,27 @@ type: STRICT_DNS
 `
 
 func TestEnvoyFaults(t *testing.T) {
-  ts := newTestServer(t, false)
-  defer ts.stop()
+	ts := newTestServer(t, false)
+	defer ts.stop()
 
-  e := envoy.NewEnvoy(t)
-  err := e.AddHttpFilter(FaultFilterConfig)
-  assert.NoError(t, err)
+	e := envoy.NewEnvoy(t)
+	err := e.AddHTTPFilter(FaultFilterConfig)
+	assert.NoError(t, err)
 
-  err = e.AddCluster(RtdsCluster)
-  assert.NoError(t, err)
+	err = e.AddCluster(RtdsCluster)
+	assert.NoError(t, err)
 
-  err = e.AddRuntimeLayer(RtdsLayerConfig)
-  assert.NoError(t, err)
+	err = e.AddRuntimeLayer(RtdsLayerConfig)
+	assert.NoError(t, err)
 
-  err = e.Start()
-  assert.NoError(t, err)
-  defer e.AwaitShutdown()
-  defer e.Stop(t)
+	err = e.Start()
+	assert.NoError(t, err)
+	defer e.AwaitShutdown()
+	defer e.Stop(t)
 
-  code, err := e.MakeSimpleCall()
-  assert.NoError(t, err)
-  assert.Equal(t, 503, code)
-
+	code, err := e.MakeSimpleCall()
+	assert.NoError(t, err)
+	assert.Equal(t, 503, code)
 
 	now := time.Now()
 	config := serverexperimentation.HTTPFaultConfig{
@@ -107,27 +107,27 @@ func TestEnvoyFaults(t *testing.T) {
 				},
 			},
 		},
-  }
+	}
 
 	a, err := ptypes.MarshalAny(&config)
 	assert.NoError(t, err)
 
 	_, err = ts.storer.CreateExperiment(context.Background(), a, &now, &now)
-  assert.NoError(t, err)
-  
-  timeout := time.NewTimer(2 * time.Second)
+	assert.NoError(t, err)
 
-  for range time.NewTicker(100 * time.Millisecond).C {
-    select {
-    case <- timeout.C:
-      t.Errorf("timed out waiting for faults to take effect")
-      break
-    default:
-    }
+	timeout := time.NewTimer(2 * time.Second)
 
-    code, err = e.MakeSimpleCall()
-    if err == nil && code == 400 {
-      break
-    }
-  }
+	for range time.NewTicker(100 * time.Millisecond).C {
+		select {
+		case <-timeout.C:
+			t.Errorf("timed out waiting for faults to take effect")
+			break
+		default:
+		}
+
+		code, err = e.MakeSimpleCall()
+		if err == nil && code == 400 {
+			break
+		}
+	}
 }

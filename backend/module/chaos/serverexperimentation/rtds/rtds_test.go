@@ -196,6 +196,7 @@ func awaitCounterEquals(t *testing.T, scope tally.TestScope, counter string, val
 		}
 	}
 }
+
 // Helper class for testing calls over a single RTDS stream.
 type v3StreamWrapper struct {
 	stream  gcpRuntimeServiceV3.RuntimeDiscoveryService_StreamRuntimeClient
