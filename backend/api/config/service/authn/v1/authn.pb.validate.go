@@ -71,6 +71,13 @@ func (m *OIDC) Validate() error {
 		}
 	}
 
+	if len(m.GetScopes()) < 1 {
+		return OIDCValidationError{
+			field:  "Scopes",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
 	return nil
 }
 

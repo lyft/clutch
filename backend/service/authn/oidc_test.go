@@ -76,6 +76,9 @@ oidc:
   client_id: my_client_id
   client_secret: my_client_secret
   redirect_url: "http://localhost:12000/v1/authn/callback"
+  scopes:
+  - openid
+  - email
 `, cfg)
 
 	email := "user@example.com"
