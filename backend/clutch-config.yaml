@@ -19,7 +19,6 @@ gateway:
   timeouts:
     default: 15s
   middleware:
-    - name: clutch.middleware.authn
     - name: clutch.middleware.stats
     - name: clutch.middleware.validate
   listener:
@@ -29,7 +28,6 @@ gateway:
       secure: false
 modules:
   - name: clutch.module.assets
-  - name: clutch.module.authn
   - name: clutch.module.healthcheck
   - name: clutch.module.resolver
   - name: clutch.module.aws
@@ -51,18 +49,6 @@ services:
   - name: clutch.service.k8s
     typed_config:
       "@type": types.google.com/clutch.config.service.k8s.v1.Config
-  - name: clutch.service.authn
-    typed_config:
-      "@type": types.google.com/clutch.config.service.authn.v1.Config
-      oidc:
-        issuer: https://lyft.okta.com
-        client_id: ${CREDENTIALS_OIDC_CLIENT_ID}
-        client_secret: ${CREDENTIALS_OIDC_CLIENT_SECRET}
-        redirect_url: "${BASE_URL}/v1/authn/callback"
-      session_secret: ${CREDENTIALS_SESSION_SECRET}
-      storage:
-        encryption_passphrase: ${CREDENTIALS_AUTHN_ENCRYPTION_PASSPHRASE}
-
 resolvers:
   - name: clutch.resolver.aws
   - name: clutch.resolver.k8s
