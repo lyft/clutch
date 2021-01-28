@@ -30,9 +30,21 @@ type OIDCProvider struct {
 
 	sessionSecret string
 
-	cryptographer *cryptographer
+	tokenStorage  Storage
+	providerAlias string
 
 	claimsFromOIDCToken ClaimsFromOIDCTokenFunc
+}
+
+// Clutch's state token claims used during the exchange.
+type stateClaims struct {
+	*jwt.StandardClaims
+	RedirectURL string `json:"redirect"`
+}
+
+// Intermediate claims object for the ID token. Based on what scopes were requested.
+type idClaims struct {
+	Email string `json:"email"`
 }
 
 func WithClaimsFromOIDCTokenFunc(p *OIDCProvider, fn ClaimsFromOIDCTokenFunc) *OIDCProvider {
@@ -112,9 +124,9 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 		return nil, err
 	}
 
-	// TODO: Store the encrypted refresh token in the database.
-	if p.cryptographer != nil {
-		if _, err := p.cryptographer.Encrypt([]byte(token.RefreshToken)); err != nil {
+	if p.tokenStorage != nil {
+		err := p.tokenStorage.Store(ctx, claims.Subject, p.providerAlias, token)
+		if err != nil {
 			return nil, err
 		}
 	}
@@ -170,13 +182,19 @@ func (p *OIDCProvider) Verify(ctx context.Context, rawToken string) (*Claims, er
 	return claims, nil
 }
 
-func NewOIDCProvider(ctx context.Context, config *authnv1.Config) (Provider, error) {
+func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage Storage) (Provider, error) {
 	c := config.GetOidc()
 
 	// Allows injection of test client. If client not present then add the default.
 	if v := ctx.Value(oauth2.HTTPClient); v == nil {
 		ctx = oidc.ClientContext(ctx, &http.Client{})
 	}
+
+	u, err := url.Parse(c.Issuer)
+	if err != nil {
+		return nil, err
+	}
+	alias := u.Hostname()
 
 	provider, err := oidc.NewProvider(ctx, c.Issuer)
 	if err != nil {
@@ -202,7 +220,7 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config) (Provider, err
 
 	// Verify the provider implements the same flow we do.
 	pClaims := &oidcProviderClaims{}
-	if err := provider.Claims(&pClaims); err != nil {
+	if err := provider.Claims(pClaims); err != nil {
 		return nil, err
 	}
 	if err := pClaims.Check("authorization_code"); err != nil {
@@ -210,20 +228,14 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config) (Provider, err
 	}
 
 	p := &OIDCProvider{
+		providerAlias:       alias,
 		provider:            provider,
 		verifier:            verifier,
 		oauth2:              oc,
 		httpClient:          ctx.Value(oauth2.HTTPClient).(*http.Client),
 		sessionSecret:       config.SessionSecret,
 		claimsFromOIDCToken: DefaultClaimsFromOIDCToken,
-	}
-
-	if config.Storage != nil {
-		c, err := newCryptographer(config.Storage.EncryptionPassphrase)
-		if err != nil {
-			return nil, err
-		}
-		p.cryptographer = c
+		tokenStorage:        tokenStorage,
 	}
 
 	return p, nil
