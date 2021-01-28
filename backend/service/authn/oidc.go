@@ -21,7 +21,6 @@ type OIDCProvider struct {
 	provider *oidc.Provider
 	verifier *oidc.IDTokenVerifier
 	oauth2   *oauth2.Config
-	exchangeOptions
 
 	httpClient *http.Client
 
@@ -85,7 +84,7 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 	// Exchange.
 	ctx = oidc.ClientContext(ctx, p.httpClient)
 
-	token, err := p.oauth2.Exchange(ctx, code)
+	token, err := p.oauth2.Exchange(ctx, code, oauth2.AccessTypeOffline)
 	if err != nil {
 		return nil, err
 	}
