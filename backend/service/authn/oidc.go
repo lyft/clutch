@@ -84,6 +84,8 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 	// Exchange.
 	ctx = oidc.ClientContext(ctx, p.httpClient)
 
+	// offline_access is used to request issuance of a refresh_token. Some providers may request it as a scope though.
+	// Also it may need to be configurable in the future depending on the requirements of other providers or users.
 	token, err := p.oauth2.Exchange(ctx, code, oauth2.AccessTypeOffline)
 	if err != nil {
 		return nil, err
