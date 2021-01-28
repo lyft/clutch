@@ -21,6 +21,7 @@ type OIDCProvider struct {
 	provider *oidc.Provider
 	verifier *oidc.IDTokenVerifier
 	oauth2   *oauth2.Config
+	exchangeOptions
 
 	httpClient *http.Client
 
@@ -83,7 +84,7 @@ func (p *OIDCProvider) GetStateNonce(redirectURL string) (string, error) {
 func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token, error) {
 	// Exchange.
 	ctx = oidc.ClientContext(ctx, p.httpClient)
-	// offline_access is used to request issuance of a refresh_token
+
 	token, err := p.oauth2.Exchange(ctx, code)
 	if err != nil {
 		return nil, err
@@ -183,8 +184,8 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config) (Provider, err
 
 	scopes := c.Scopes
 	if len(scopes) == 0 {
-		// Default scopes.
-		scopes = []string{oidc.ScopeOpenID, "email", oidc.ScopeOfflineAccess}
+		// Default scopes, compatible with Okta offline access, a holdover from previous defaults.
+		scopes = []string{oidc.ScopeOpenID, oidc.ScopeOfflineAccess, "email"}
 	}
 
 	oc := &oauth2.Config{
@@ -192,7 +193,7 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config) (Provider, err
 		ClientSecret: c.ClientSecret,
 		Endpoint:     provider.Endpoint(),
 		RedirectURL:  c.RedirectUrl,
-		Scopes:       c.Scopes,
+		Scopes:       scopes,
 	}
 
 	// Verify the provider implements the same flow we do.
