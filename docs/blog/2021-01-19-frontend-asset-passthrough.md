@@ -1,10 +1,10 @@
 ---
-title: Frontend Asset Passthrough
+title: Deploying Hashed Frontend Builds Without Interruption
 authors:
   - name: Mike Cutalo
     url: https://github.com/mcutalo88
     avatar: https://avatars1.githubusercontent.com/u/2250844?s=460&u=24deb32096e9f892cc91a6ff1ca1af50193b1fbd&v=4
-description: Frontend Asset Passthrough
+description: How Caching and Hashed Frontend Builds Can Lead to a Blank Screen; And How to Fix It.
 image: https://user-images.githubusercontent.com/2250844/106030368-f8bbbc00-6082-11eb-819f-fd3798a53489.png
 hide_table_of_contents: false
 ---
