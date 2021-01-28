@@ -57,6 +57,7 @@ const DialogActions = styled(MuiDialogActions)({
 
 export interface DialogContentProps {}
 export interface DialogActionsProps {}
+export type DialogCloseReasons = "closeButtonClick" | "escapeKeyDown" | "backdropClick";
 export interface DialogProps extends Pick<MuiDialogProps, "open"> {
   title: string;
   children:
@@ -64,25 +65,19 @@ export interface DialogProps extends Pick<MuiDialogProps, "open"> {
     | React.ReactElement<DialogContentProps>[]
     | React.ReactElement<DialogActionsProps>
     | React.ReactElement<DialogActionsProps>[];
+  onClose: (event?: object, reason?: DialogCloseReasons) => void;
 }
 
-const Dialog = ({ title, children, open }: DialogProps) => {
-  const [isOpen, setIsOpen] = React.useState(open);
-  const onClose = () => {
-    setIsOpen(prevOpenState => !prevOpenState);
-  };
-  React.useEffect(() => setIsOpen(open), [open]);
-  return (
-    <MuiDialog PaperComponent={DialogPaper} open={isOpen} onClose={onClose}>
-      <DialogTitle disableTypography>
-        <DialogTitleText>{title}</DialogTitleText>
-        <IconButton onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
-      </DialogTitle>
-      {children}
-    </MuiDialog>
-  );
-};
+const Dialog = ({ title, children, open, onClose }: DialogProps) => (
+  <MuiDialog PaperComponent={DialogPaper} open={open} onClose={onClose}>
+    <DialogTitle disableTypography>
+      <DialogTitleText>{title}</DialogTitleText>
+      <IconButton onClick={e => onClose(e, "closeButtonClick")}>
+        <CloseIcon />
+      </IconButton>
+    </DialogTitle>
+    {children}
+  </MuiDialog>
+);
 
 export { Dialog, DialogActions, DialogContent };

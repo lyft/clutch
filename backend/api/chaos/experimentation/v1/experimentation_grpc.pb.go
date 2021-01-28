@@ -11,6 +11,7 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // ExperimentsAPIClient is the client API for ExperimentsAPI service.
@@ -116,7 +117,7 @@ type UnsafeExperimentsAPIServer interface {
 }
 
 func RegisterExperimentsAPIServer(s grpc.ServiceRegistrar, srv ExperimentsAPIServer) {
-	s.RegisterService(&_ExperimentsAPI_serviceDesc, srv)
+	s.RegisterService(&ExperimentsAPI_ServiceDesc, srv)
 }
 
 func _ExperimentsAPI_CreateExperiment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -209,7 +210,10 @@ func _ExperimentsAPI_GetExperimentRunDetails_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
-var _ExperimentsAPI_serviceDesc = grpc.ServiceDesc{
+// ExperimentsAPI_ServiceDesc is the grpc.ServiceDesc for ExperimentsAPI service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var ExperimentsAPI_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "clutch.chaos.experimentation.v1.ExperimentsAPI",
 	HandlerType: (*ExperimentsAPIServer)(nil),
 	Methods: []grpc.MethodDesc{

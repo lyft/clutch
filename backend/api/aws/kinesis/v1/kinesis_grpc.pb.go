@@ -11,6 +11,7 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // KinesisAPIClient is the client API for KinesisAPI service.
@@ -74,7 +75,7 @@ type UnsafeKinesisAPIServer interface {
 }
 
 func RegisterKinesisAPIServer(s grpc.ServiceRegistrar, srv KinesisAPIServer) {
-	s.RegisterService(&_KinesisAPI_serviceDesc, srv)
+	s.RegisterService(&KinesisAPI_ServiceDesc, srv)
 }
 
 func _KinesisAPI_GetStream_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -113,7 +114,10 @@ func _KinesisAPI_UpdateShardCount_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-var _KinesisAPI_serviceDesc = grpc.ServiceDesc{
+// KinesisAPI_ServiceDesc is the grpc.ServiceDesc for KinesisAPI service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var KinesisAPI_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "clutch.aws.kinesis.v1.KinesisAPI",
 	HandlerType: (*KinesisAPIServer)(nil),
 	Methods: []grpc.MethodDesc{

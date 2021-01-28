@@ -11,6 +11,7 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // EC2APIClient is the client API for EC2API service.
@@ -102,7 +103,7 @@ type UnsafeEC2APIServer interface {
 }
 
 func RegisterEC2APIServer(s grpc.ServiceRegistrar, srv EC2APIServer) {
-	s.RegisterService(&_EC2API_serviceDesc, srv)
+	s.RegisterService(&EC2API_ServiceDesc, srv)
 }
 
 func _EC2API_GetInstance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -177,7 +178,10 @@ func _EC2API_RebootInstance_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-var _EC2API_serviceDesc = grpc.ServiceDesc{
+// EC2API_ServiceDesc is the grpc.ServiceDesc for EC2API service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var EC2API_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "clutch.aws.ec2.v1.EC2API",
 	HandlerType: (*EC2APIServer)(nil),
 	Methods: []grpc.MethodDesc{

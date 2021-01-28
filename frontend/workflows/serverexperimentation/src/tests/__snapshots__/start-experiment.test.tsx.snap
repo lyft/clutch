@@ -3,7 +3,7 @@
 exports[`Start Experiment workflow renders correctly 1`] = `
 "<PageLayout heading=\\"Start Experiment\\" error={[undefined]}>
   <ExperimentDetails upstreamClusterTypeSelectionEnabled={false} hostsPercentageBasedTargetingEnabled={false} onStart={[Function: onStart]} />
-  <Dialog title=\\"Experiment Start Confirmation\\" open={false}>
+  <Dialog title=\\"Experiment Start Confirmation\\" open={false} onClose={[Function: onClose]}>
     <Styled(WithStyles(ForwardRef(DialogContent)))>
       Are you sure you want to start an experiment? The experiment will start immediately and you will be moved to experiment details view page.
     </Styled(WithStyles(ForwardRef(DialogContent)))>
@@ -18,7 +18,7 @@ exports[`Start Experiment workflow renders correctly 1`] = `
 exports[`Start Experiment workflow renders correctly with host percentage based faults and upstream cluster type selecion enabled 1`] = `
 "<PageLayout heading=\\"Start Experiment\\" error={[undefined]}>
   <ExperimentDetails upstreamClusterTypeSelectionEnabled={true} hostsPercentageBasedTargetingEnabled={true} onStart={[Function: onStart]} />
-  <Dialog title=\\"Experiment Start Confirmation\\" open={false}>
+  <Dialog title=\\"Experiment Start Confirmation\\" open={false} onClose={[Function: onClose]}>
     <Styled(WithStyles(ForwardRef(DialogContent)))>
       Are you sure you want to start an experiment? The experiment will start immediately and you will be moved to experiment details view page.
     </Styled(WithStyles(ForwardRef(DialogContent)))>
@@ -33,7 +33,7 @@ exports[`Start Experiment workflow renders correctly with host percentage based 
 exports[`Start Experiment workflow renders correctly with host percentage based faults enabled 1`] = `
 "<PageLayout heading=\\"Start Experiment\\" error={[undefined]}>
   <ExperimentDetails upstreamClusterTypeSelectionEnabled={false} hostsPercentageBasedTargetingEnabled={true} onStart={[Function: onStart]} />
-  <Dialog title=\\"Experiment Start Confirmation\\" open={false}>
+  <Dialog title=\\"Experiment Start Confirmation\\" open={false} onClose={[Function: onClose]}>
     <Styled(WithStyles(ForwardRef(DialogContent)))>
       Are you sure you want to start an experiment? The experiment will start immediately and you will be moved to experiment details view page.
     </Styled(WithStyles(ForwardRef(DialogContent)))>
@@ -48,7 +48,7 @@ exports[`Start Experiment workflow renders correctly with host percentage based 
 exports[`Start Experiment workflow renders correctly with upstream cluster type selection enabled 1`] = `
 "<PageLayout heading=\\"Start Experiment\\" error={[undefined]}>
   <ExperimentDetails upstreamClusterTypeSelectionEnabled={true} hostsPercentageBasedTargetingEnabled={false} onStart={[Function: onStart]} />
-  <Dialog title=\\"Experiment Start Confirmation\\" open={false}>
+  <Dialog title=\\"Experiment Start Confirmation\\" open={false} onClose={[Function: onClose]}>
     <Styled(WithStyles(ForwardRef(DialogContent)))>
       Are you sure you want to start an experiment? The experiment will start immediately and you will be moved to experiment details view page.
     </Styled(WithStyles(ForwardRef(DialogContent)))>

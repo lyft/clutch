@@ -11,6 +11,7 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // TopologyAPIClient is the client API for TopologyAPI service.
@@ -74,7 +75,7 @@ type UnsafeTopologyAPIServer interface {
 }
 
 func RegisterTopologyAPIServer(s grpc.ServiceRegistrar, srv TopologyAPIServer) {
-	s.RegisterService(&_TopologyAPI_serviceDesc, srv)
+	s.RegisterService(&TopologyAPI_ServiceDesc, srv)
 }
 
 func _TopologyAPI_GetTopology_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -113,7 +114,10 @@ func _TopologyAPI_Search_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-var _TopologyAPI_serviceDesc = grpc.ServiceDesc{
+// TopologyAPI_ServiceDesc is the grpc.ServiceDesc for TopologyAPI service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var TopologyAPI_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "clutch.topology.v1.TopologyAPI",
 	HandlerType: (*TopologyAPIServer)(nil),
 	Methods: []grpc.MethodDesc{

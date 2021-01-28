@@ -11,6 +11,7 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // K8SAPIClient is the client API for K8SAPI service.
@@ -270,7 +271,7 @@ type UnsafeK8SAPIServer interface {
 }
 
 func RegisterK8SAPIServer(s grpc.ServiceRegistrar, srv K8SAPIServer) {
-	s.RegisterService(&_K8SAPI_serviceDesc, srv)
+	s.RegisterService(&K8SAPI_ServiceDesc, srv)
 }
 
 func _K8SAPI_DescribePod_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -561,7 +562,10 @@ func _K8SAPI_DeleteConfigMap_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-var _K8SAPI_serviceDesc = grpc.ServiceDesc{
+// K8SAPI_ServiceDesc is the grpc.ServiceDesc for K8SAPI service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var K8SAPI_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "clutch.k8s.v1.K8sAPI",
 	HandlerType: (*K8SAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
