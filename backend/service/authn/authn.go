@@ -8,7 +8,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
@@ -19,14 +18,6 @@ import (
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 	"github.com/lyft/clutch/backend/service"
 )
-
-// TODO(maybe): make scopes part of config?
-// For more documentation on scopes see: https://developer.okta.com/docs/reference/api/oidc/#scopes
-var scopes = []string{
-	oidc.ScopeOpenID,
-	oidc.ScopeOfflineAccess, // offline_access is used to request issuance of a refresh_token
-	"email",
-}
 
 const Name = "clutch.service.authn"
 

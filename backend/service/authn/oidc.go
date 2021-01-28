@@ -83,7 +83,8 @@ func (p *OIDCProvider) GetStateNonce(redirectURL string) (string, error) {
 func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token, error) {
 	// Exchange.
 	ctx = oidc.ClientContext(ctx, p.httpClient)
-	token, err := p.oauth2.Exchange(ctx, code)
+	// offline_access is used to request issuance of a refresh_token
+	token, err := p.oauth2.Exchange(ctx, code, oauth2.AccessTypeOffline)
 	if err != nil {
 		return nil, err
 	}
@@ -185,7 +186,7 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config) (Provider, err
 		ClientSecret: c.ClientSecret,
 		Endpoint:     provider.Endpoint(),
 		RedirectURL:  c.RedirectUrl,
-		Scopes:       scopes,
+		Scopes:       c.Scopes,
 	}
 
 	// Verify the provider implements the same flow we do.

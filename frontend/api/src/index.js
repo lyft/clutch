@@ -14537,6 +14537,7 @@ export const clutch = $root.clutch = (() => {
                          * @property {string|null} [clientId] OIDC clientId
                          * @property {string|null} [clientSecret] OIDC clientSecret
                          * @property {string|null} [redirectUrl] OIDC redirectUrl
+                         * @property {Array.<string>|null} [scopes] OIDC scopes
                          */
 
                         /**
@@ -14548,6 +14549,7 @@ export const clutch = $root.clutch = (() => {
                          * @param {clutch.config.service.authn.v1.IOIDC=} [properties] Properties to set
                          */
                         function OIDC(properties) {
+                            this.scopes = [];
                             if (properties)
                                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                     if (properties[keys[i]] != null)
@@ -14587,6 +14589,14 @@ export const clutch = $root.clutch = (() => {
                         OIDC.prototype.redirectUrl = "";
 
                         /**
+                         * OIDC scopes.
+                         * @member {Array.<string>} scopes
+                         * @memberof clutch.config.service.authn.v1.OIDC
+                         * @instance
+                         */
+                        OIDC.prototype.scopes = $util.emptyArray;
+
+                        /**
                          * Verifies a OIDC message.
                          * @function verify
                          * @memberof clutch.config.service.authn.v1.OIDC
@@ -14609,6 +14619,13 @@ export const clutch = $root.clutch = (() => {
                             if (message.redirectUrl != null && message.hasOwnProperty("redirectUrl"))
                                 if (!$util.isString(message.redirectUrl))
                                     return "redirectUrl: string expected";
+                            if (message.scopes != null && message.hasOwnProperty("scopes")) {
+                                if (!Array.isArray(message.scopes))
+                                    return "scopes: array expected";
+                                for (let i = 0; i < message.scopes.length; ++i)
+                                    if (!$util.isString(message.scopes[i]))
+                                        return "scopes: string[] expected";
+                            }
                             return null;
                         };
 
@@ -14632,6 +14649,13 @@ export const clutch = $root.clutch = (() => {
                                 message.clientSecret = String(object.clientSecret);
                             if (object.redirectUrl != null)
                                 message.redirectUrl = String(object.redirectUrl);
+                            if (object.scopes) {
+                                if (!Array.isArray(object.scopes))
+                                    throw TypeError(".clutch.config.service.authn.v1.OIDC.scopes: array expected");
+                                message.scopes = [];
+                                for (let i = 0; i < object.scopes.length; ++i)
+                                    message.scopes[i] = String(object.scopes[i]);
+                            }
                             return message;
                         };
 
@@ -14648,6 +14672,8 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
+                            if (options.arrays || options.defaults)
+                                object.scopes = [];
                             if (options.defaults) {
                                 object.issuer = "";
                                 object.clientId = "";
@@ -14662,6 +14688,11 @@ export const clutch = $root.clutch = (() => {
                                 object.clientSecret = message.clientSecret;
                             if (message.redirectUrl != null && message.hasOwnProperty("redirectUrl"))
                                 object.redirectUrl = message.redirectUrl;
+                            if (message.scopes && message.scopes.length) {
+                                object.scopes = [];
+                                for (let j = 0; j < message.scopes.length; ++j)
+                                    object.scopes[j] = message.scopes[j];
+                            }
                             return object;
                         };
 
