@@ -1,381 +1,388 @@
 ---
 - - :permit
   - MIT
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 02:54:10.073647000 Z
 - - :permit
   - New BSD
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 03:04:19.061374000 Z
 - - :permit
   - Apache 2.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 03:04:44.892543000 Z
 - - :permit
   - Simplified BSD
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 03:05:11.595624000 Z
 - - :permit
   - ISC
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 03:05:44.599322000 Z
 - - :permit
   - Mozilla Public License 2.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 03:06:32.269273000 Z
 - - :permit
   - BSD
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:39:09.747355000 Z
 - - :permit
   - Public Domain
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:41:12.431241000 Z
 - - :permit
   - curl
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:48:08.146595000 Z
 - - :permit
   - ICU
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:48:55.274807000 Z
 - - :permit
   - IJG
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:49:21.921637000 Z
 - - :permit
   - JSON
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:49:39.229938000 Z
 - - :permit
   - libtiff
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:50:03.218609000 Z
 - - :permit
   - OpenSSL
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:50:30.367475000 Z
 - - :permit
   - PostgreSQL
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:50:46.890222000 Z
 - - :permit
   - Ruby
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:51:02.163653000 Z
 - - :permit
   - TCL
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:51:28.725603000 Z
 - - :permit
   - Unlicense
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:51:43.089460000 Z
 - - :permit
   - W3C
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:52:07.238085000 Z
 - - :permit
   - WTFPL
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:52:18.325741000 Z
 - - :permit
   - Xnet
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:52:28.967685000 Z
 - - :permit
   - X11
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:52:46.142897000 Z
 - - :permit
   - libpng
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:52:57.794186000 Z
 - - :permit
   - Zlib
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:53:13.037026000 Z
 - - :permit
   - ZPL
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:53:45.395111000 Z
 - - :permit
   - Apache-1.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:57:42.884368000 Z
 - - :permit
   - Apache-1.1
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:57:59.254350000 Z
 - - :permit
   - Artistic-2.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:58:27.004941000 Z
 - - :permit
   - BSL-1.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:58:39.849728000 Z
 - - :permit
   - bzip2-1.0.5
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:59:33.376901000 Z
 - - :permit
   - bzip2-1.0.6
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:59:46.160591000 Z
 - - :permit
   - CC-BY-1.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 17:59:57.610339000 Z
 - - :permit
   - CC-BY-2.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:00:09.397298000 Z
 - - :permit
   - CC-BY-2.5
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:00:22.632834000 Z
 - - :permit
   - CC-BY-3.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:00:33.915592000 Z
 - - :permit
   - CC-BY-4.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:00:48.548548000 Z
 - - :permit
   - CC0-1.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:01:03.337548000 Z
 - - :permit
   - Zlib-acknowledgment
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:01:30.923786000 Z
 - - :permit
   - Ms-PL
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:01:47.936941000 Z
 - - :permit
   - MPL-1.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:01:59.924460000 Z
 - - :permit
   - MPL-1.1
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:02:11.068112000 Z
 - - :permit
   - MPL-2.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:02:22.383314000 Z
 - - :permit
   - OLDAP-1.1
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:02:32.788040000 Z
 - - :permit
   - OLDAP-1.2
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:02:43.651715000 Z
 - - :permit
   - OLDAP-1.3
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:02:53.315175000 Z
 - - :permit
   - OLDAP-1.4
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:03:02.771034000 Z
 - - :permit
   - OLDAP-2.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:03:13.582015000 Z
 - - :permit
   - OLDAP-2.0.1
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:03:24.683471000 Z
 - - :permit
   - OLDAP-2.1
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:03:37.257257000 Z
 - - :permit
   - OLDAP-2.2
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:03:49.516172000 Z
 - - :permit
   - OLDAP-2.2.1
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:04:08.168034000 Z
 - - :permit
   - OLDAP-2.2.2
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:04:17.136844000 Z
 - - :permit
   - OLDAP-2.3
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:04:35.060981000 Z
 - - :permit
   - OLDAP-2.4
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:04:42.886949000 Z
 - - :permit
   - OLDAP-2.5
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:04:57.099811000 Z
 - - :permit
   - OLDAP-2.6
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:05:05.169751000 Z
 - - :permit
   - OLDAP-2.7
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:05:14.856812000 Z
 - - :permit
   - OLDAP-2.8
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:05:31.656810000 Z
 - - :permit
   - PHP-3.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:05:42.983336000 Z
 - - :permit
   - PHP-3.1
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:05:55.851389000 Z
 - - :permit
   - Python-2.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-14 18:06:07.785903000 Z
 - - :license
   - github.com/cactus/go-statsd-client/statsd
   - MIT
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-16 02:47:46.769331100 Z
 - - :license
   - github.com/jmespath/go-jmespath
   - Apache 2.0
-  - :who:
-    :why:
+  - :who: 
+    :why: 
     :versions: []
     :when: 2020-10-16 02:49:16.158259100 Z
+- - :license
+  - github.com/aws/smithy-go
+  - Apache 2.0
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2021-01-22 00:04:57.253574509 Z

@@ -83,6 +83,7 @@ func (c *cacheWrapperV2) SetRuntimeLayer(nodeName string, layerName string, laye
 
 type cacheWrapperV3 struct {
 	gcpCacheV3.SnapshotCache
+	ttl *time.Duration
 }
 
 func (c *cacheWrapperV3) GetSnapshotVersion(key string) (string, error) {
@@ -95,13 +96,21 @@ func (c *cacheWrapperV3) GetSnapshotVersion(key string) (string, error) {
 }
 
 func (c *cacheWrapperV3) SetRuntimeLayer(nodeName string, layerName string, layer *pstruct.Struct, version string) error {
-	runtimes := []gcpTypes.Resource{
-		&gcpRuntimeServiceV3.Runtime{
+	// We only want to set a TTL for non-empty layers. This ensures that we don't spam clients with heartbeat responses
+	// unless they have an active runtime override.
+	var resourceTTL *time.Duration
+	if len(layer.Fields) > 0 {
+		resourceTTL = c.ttl
+	}
+
+	runtimes := []gcpTypes.ResourceWithTtl{{
+		Resource: &gcpRuntimeServiceV3.Runtime{
 			Name:  layerName,
 			Layer: layer,
 		},
-	}
-	snapshot := gcpCacheV3.NewSnapshot(version, nil, nil, nil, nil, runtimes, nil)
+		Ttl: resourceTTL,
+	}}
+	snapshot := gcpCacheV3.NewSnapshotWithTtls(version, nil, nil, nil, nil, runtimes, nil)
 	err := c.SetSnapshot(nodeName, snapshot)
 	if err != nil {
 		return err
@@ -116,7 +125,7 @@ func PeriodicallyRefreshCache(s *Server) {
 		for range ticker.C {
 			s.logger.Info("Refreshing RTDS cache")
 			refreshCache(s.ctx, s.storer, &cacheWrapperV2{s.snapshotCacheV2}, s.rtdsLayerName, s.ingressPrefix, s.egressPrefix, s.logger)
-			refreshCache(s.ctx, s.storer, &cacheWrapperV3{s.snapshotCacheV3}, s.rtdsLayerName, s.ingressPrefix, s.egressPrefix, s.logger)
+			refreshCache(s.ctx, s.storer, &cacheWrapperV3{s.snapshotCacheV3, s.resourceTTL}, s.rtdsLayerName, s.ingressPrefix, s.egressPrefix, s.logger)
 		}
 	}()
 }
@@ -180,48 +189,48 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 
 func setSnapshot(snapshotCache cacheWrapper, rtdsLayerName string, cluster string,
 	ingressPrefix string, egressPrefix string, experiments []*experimentation.Experiment, logger *zap.SugaredLogger) error {
+	// TODO(snowp): This code runs perioidcally and will compute a layer for consideration on every loop, which is somewhat wasteful
+	// for empty layers. We should short circuit this logic to avoid wasting cycles/generating garbage for clusters with no active faults.
 	var fieldMap = map[string]*pstruct.Value{}
 
 	// No experiments meaning clear all experiments for the given upstream cluster
-	if len(experiments) != 0 {
-		for _, experiment := range experiments {
-			httpFaultConfig := &serverexperimentation.HTTPFaultConfig{}
-			if !maybeUnmarshalFaultTest(experiment, httpFaultConfig) {
-				continue
-			}
-
-			upstreamCluster, downstreamCluster, err := getClusterPair(httpFaultConfig)
-			if err != nil {
-				logger.Errorw("Invalid http fault config", "config", httpFaultConfig)
-				continue
-			}
-
-			percentageKey, percentageValue, faultKey, faultValue, err := createRuntimeKeys(upstreamCluster, downstreamCluster, httpFaultConfig, ingressPrefix, egressPrefix, logger)
-			if err != nil {
-				logger.Errorw("Unable to create runtime keys", "config", httpFaultConfig)
-				continue
-			}
-
-			fieldMap[percentageKey] = &pstruct.Value{
-				Kind: &pstruct.Value_NumberValue{
-					NumberValue: float64(percentageValue),
-				},
-			}
-
-			fieldMap[faultKey] = &pstruct.Value{
-				Kind: &pstruct.Value_NumberValue{
-					NumberValue: float64(faultValue),
-				},
-			}
-
-			logger.Debugw("Fault details",
-				"upstream_cluster", upstreamCluster,
-				"downstream_cluster", downstreamCluster,
-				"fault_type", faultKey,
-				"percentage", percentageValue,
-				"value", faultValue,
-				"fault_enforcer", getEnforcer(httpFaultConfig))
+	for _, experiment := range experiments {
+		httpFaultConfig := &serverexperimentation.HTTPFaultConfig{}
+		if !maybeUnmarshalFaultTest(experiment, httpFaultConfig) {
+			continue
 		}
+
+		upstreamCluster, downstreamCluster, err := getClusterPair(httpFaultConfig)
+		if err != nil {
+			logger.Errorw("Invalid http fault config", "config", httpFaultConfig)
+			continue
+		}
+
+		percentageKey, percentageValue, faultKey, faultValue, err := createRuntimeKeys(upstreamCluster, downstreamCluster, httpFaultConfig, ingressPrefix, egressPrefix, logger)
+		if err != nil {
+			logger.Errorw("Unable to create runtime keys", "config", httpFaultConfig)
+			continue
+		}
+
+		fieldMap[percentageKey] = &pstruct.Value{
+			Kind: &pstruct.Value_NumberValue{
+				NumberValue: float64(percentageValue),
+			},
+		}
+
+		fieldMap[faultKey] = &pstruct.Value{
+			Kind: &pstruct.Value_NumberValue{
+				NumberValue: float64(faultValue),
+			},
+		}
+
+		logger.Debugw("Fault details",
+			"upstream_cluster", upstreamCluster,
+			"downstream_cluster", downstreamCluster,
+			"fault_type", faultKey,
+			"percentage", percentageValue,
+			"value", faultValue,
+			"fault_enforcer", getEnforcer(httpFaultConfig))
 	}
 
 	runtimeLayer := &pstruct.Struct{

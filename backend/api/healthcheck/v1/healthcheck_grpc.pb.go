@@ -11,6 +11,7 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // HealthcheckAPIClient is the client API for HealthcheckAPI service.
@@ -60,7 +61,7 @@ type UnsafeHealthcheckAPIServer interface {
 }
 
 func RegisterHealthcheckAPIServer(s grpc.ServiceRegistrar, srv HealthcheckAPIServer) {
-	s.RegisterService(&_HealthcheckAPI_serviceDesc, srv)
+	s.RegisterService(&HealthcheckAPI_ServiceDesc, srv)
 }
 
 func _HealthcheckAPI_Healthcheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -81,7 +82,10 @@ func _HealthcheckAPI_Healthcheck_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-var _HealthcheckAPI_serviceDesc = grpc.ServiceDesc{
+// HealthcheckAPI_ServiceDesc is the grpc.ServiceDesc for HealthcheckAPI service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var HealthcheckAPI_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "clutch.healthcheck.v1.HealthcheckAPI",
 	HandlerType: (*HealthcheckAPIServer)(nil),
 	Methods: []grpc.MethodDesc{

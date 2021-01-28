@@ -1,17 +1,9 @@
 import React from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Grid,
-  IconButton,
-  Paper as MuiPaper,
-} from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
+import { Grid, IconButton } from "@material-ui/core";
 import LaunchIcon from "@material-ui/icons/Launch";
 import { Alert } from "@material-ui/lab";
-import styled from "styled-components";
+
+import { Dialog, DialogContent } from "../dialog";
 
 export interface BaseWorkflowProps {
   heading: string;
@@ -55,16 +47,6 @@ export interface ConfiguredRoute extends Route {
   componentProps?: object;
   trending?: boolean;
 }
-
-const RightAlignedButton = styled(IconButton)`
-  float: right;
-`;
-
-const Paper = styled(MuiPaper)`
-  ${({ theme }) => `
-  background-color: ${theme.palette.background.default};
-  `}
-`;
 
 interface ErrorBoundaryProps {
   workflow: Workflow;
@@ -125,25 +107,12 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 
       return (
         <Grid container direction="column" justify="center" alignItems="center">
-          <Dialog
-            open={showDetails}
-            scroll="paper"
-            onClose={this.onDetailsClose}
-            PaperComponent={Paper}
-          >
-            <DialogTitle>
-              <strong>Stack Trace</strong>
-              <RightAlignedButton onClick={this.onDetailsClose}>
-                <CloseIcon />
-              </RightAlignedButton>
-            </DialogTitle>
-            <DialogContent dividers>
-              <DialogContentText color="textPrimary" tabIndex={-1} component="div">
-                {errorInfo.componentStack.split("\n").map((i, key) => {
-                  /* eslint-disable-next-line react/no-array-index-key */
-                  return <div key={key}>{i}</div>;
-                })}
-              </DialogContentText>
+          <Dialog onClose={this.onDetailsClose} open={showDetails} title="Stack Trace">
+            <DialogContent>
+              {errorInfo?.componentStack?.split("\n").map((i, key) => {
+                /* eslint-disable-next-line react/no-array-index-key */
+                return <div key={key}>{i}</div>;
+              })}
             </DialogContent>
           </Dialog>
           <Alert

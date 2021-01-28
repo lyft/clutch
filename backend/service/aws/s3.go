@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 func (c *client) S3StreamingGet(ctx context.Context, region string, bucket string, key string) (io.ReadCloser, error) {
@@ -20,7 +20,7 @@ func (c *client) S3StreamingGet(ctx context.Context, region string, bucket strin
 		Key:    aws.String(key),
 	}
 
-	out, err := rc.s3.GetObjectWithContext(ctx, in)
+	out, err := rc.s3.GetObject(ctx, in)
 	if err != nil {
 		return nil, err
 	}
