@@ -181,6 +181,12 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config) (Provider, err
 		ClientID: c.ClientId,
 	})
 
+	scopes := c.Scopes
+	if len(scopes) == 0 {
+		// Default scopes.
+		scopes = []string{oidc.ScopeOpenID, "email", oidc.ScopeOfflineAccess}
+	}
+
 	oc := &oauth2.Config{
 		ClientID:     c.ClientId,
 		ClientSecret: c.ClientSecret,
