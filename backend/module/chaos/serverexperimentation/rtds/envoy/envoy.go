@@ -7,9 +7,6 @@ import (
 	"fmt"
 	"net"
 	"net/http"
-	"os"
-	"os/exec"
-	"testing"
 	"time"
 
 	bootstrap "github.com/envoyproxy/go-control-plane/envoy/config/bootstrap/v3"
@@ -19,7 +16,6 @@ import (
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v3"
 )
 
@@ -30,12 +26,12 @@ node:
 admin:
   access_log_path: /dev/null
   address:
-    socket_address: { address: 127.0.0.1, port_value: 9901 }
+    socket_address: { address: 0.0.0.0, port_value: 9901 }
 static_resources:
   listeners:
   - name: ingress
     address:
-      socket_address: { address: 127.0.0.1, port_value: 10000 }
+      socket_address: { address: 0.0.0.0, port_value: 10000 }
     filter_chains:
     - filters:
       - name: envoy.filters.network.http_connection_manager
@@ -69,92 +65,36 @@ static_resources:
                 port_value: 1234
 `
 
-// Envoy provides lifetime management of and utility functions for an Envoy instance under test.
-// This makes use of a similar configuration system as Envoy integration tests, where a base
-// config is modified by a series of modifiers before arriving at the final bootstrap config.
-// TODO(snowp): If we ever need to support multiple Envoy instances under test, use some port selection
-// logic to avoid port collisions.
-type Envoy struct {
-	doneCh          chan error
-	configModifiers []func(*bootstrap.Bootstrap) *bootstrap.Bootstrap
+// EnvoyHandle is a handle to the Envoy instance under test, providing a startup check and provides
+// utilities for interacting with the instance.
+type EnvoyHandle struct{}
 
-	finalConfig *bootstrap.Bootstrap
-}
+// NewEnvoyHandle creates a new handle for the Envoy under test after waiting for it to initialize.
+func NewEnvoyHandle() (*EnvoyHandle, error) {
+	timeout := time.NewTimer(5 * time.Second)
 
-// Start generates the final configuration and starts the Envoy proccess.
-func (e *Envoy) Start() error {
-	if e.finalConfig == nil {
-		b := &bootstrap.Bootstrap{}
-
-		err := unmarshalYaml(b, baseConfig)
-		if err != nil {
-			return err
+	for range time.NewTicker(100 * time.Millisecond).C {
+		select {
+		case <-timeout.C:
+			return nil, errors.New("timed out waiting for Envoy to start up")
+		default:
 		}
 
-		for _, m := range e.configModifiers {
-			b = m(b)
+		_, err := net.Dial("tcp", "envoy:10000")
+		if err == nil {
+			break
 		}
-
-		e.finalConfig = b
 	}
 
-	m := jsonpb.Marshaler{}
-	out := bytes.NewBuffer([]byte{})
-	err := m.Marshal(out, e.finalConfig)
-	if err != nil {
-		return err
-	}
-
-	startupCh := make(chan error)
-
-	go func(startupCh chan error) {
-		timeout := time.NewTimer(5 * time.Second)
-
-		for range time.NewTicker(100 * time.Millisecond).C {
-			select {
-			case <-timeout.C:
-				startupCh <- errors.New("timed out waiting for Envoy to start up")
-				close(startupCh)
-				return
-			default:
-			}
-
-			_, err := net.Dial("tcp", "localhost:10000")
-			if err == nil {
-				close(startupCh)
-				return
-			}
-		}
-	}(startupCh)
-
-	go func(doneCh chan error) {
-		defer close(doneCh)
-
-		config := out.String()
-		c := exec.Command("/usr/local/bin/getenvoy", "run", "standard:1.17.0", "--", "--config-yaml", config)
-		c.Stderr = os.Stderr
-		c.Stdout = os.Stdout
-		err := c.Run()
-		doneCh <- err
-	}(e.doneCh)
-
-	err = <-startupCh
-
-	return err
-}
-
-// Stop issues a stop signal to the underlying Envoy.
-func (e *Envoy) Stop(t *testing.T) {
-	_, err := http.Post("http://localhost:9901/quitquitquit", "text/plain", nil)
-	assert.NoError(t, err)
+	return &EnvoyHandle{}, nil
 }
 
 // MakeSimpleCall issues a basic GET request to the Envoy under test, with the downstream cluster
 // set to test-cluster.
-func (e *Envoy) MakeSimpleCall() (int, error) {
+func (e *EnvoyHandle) MakeSimpleCall() (int, error) {
 	client := &http.Client{}
 
-	r, err := http.NewRequest("GET", "http://localhost:10000", nil)
+	r, err := http.NewRequest("GET", "http://envoy:10000", nil)
 	if err != nil {
 		return 0, err
 	}
@@ -168,8 +108,47 @@ func (e *Envoy) MakeSimpleCall() (int, error) {
 	return resp.StatusCode, nil
 }
 
+// EnvoyConfig provides a configuration builder that mirrors the upstream Envoy ConfigHelper:
+// a base configuration is used which can be modified by a series of modifiers to create the
+// final configuration.
+type EnvoyConfig struct {
+	configModifiers []func(*bootstrap.Bootstrap) *bootstrap.Bootstrap
+
+	finalConfig *bootstrap.Bootstrap
+}
+
+// Generate generates the final configuration by applying all the config modifiers.
+func (e *EnvoyConfig) Generate() (string, error) {
+	if e.finalConfig == nil {
+		b := &bootstrap.Bootstrap{}
+
+		err := unmarshalYaml(b, baseConfig)
+		if err != nil {
+			return "", err
+		}
+
+		for _, m := range e.configModifiers {
+			b = m(b)
+		}
+
+		e.finalConfig = b
+	}
+
+	m := jsonpb.Marshaler{}
+	out := bytes.NewBuffer([]byte{})
+	err := m.Marshal(out, e.finalConfig)
+
+	return out.String(), err
+}
+
+// NewEnvoyConfig creates a new Envoy config builder, using a sensible default configuration that allows
+// the provided EnvoyHandle to interact with the underlying Envoy instance.
+func NewEnvoyConfig() *EnvoyConfig {
+	return &EnvoyConfig{}
+}
+
 // AddRuntimeLayer adds a single runtime layer to the bootstrap.
-func (e *Envoy) AddRuntimeLayer(input string) error {
+func (e *EnvoyConfig) AddRuntimeLayer(input string) error {
 	runtimeLayer := &bootstrap.RuntimeLayer{}
 
 	err := unmarshalYaml(runtimeLayer, input)
@@ -190,7 +169,7 @@ func (e *Envoy) AddRuntimeLayer(input string) error {
 }
 
 // AddCluster adds a cluster to the list of static clusters.
-func (e *Envoy) AddCluster(input string) error {
+func (e *EnvoyConfig) AddCluster(input string) error {
 	cluster := &cluster.Cluster{}
 
 	err := unmarshalYaml(cluster, input)
@@ -208,7 +187,7 @@ func (e *Envoy) AddCluster(input string) error {
 }
 
 // AddHTTPFilter adds a HTTP filter in front of the list of HTTP filters for the default listener.
-func (e *Envoy) AddHTTPFilter(input string) error {
+func (e *EnvoyConfig) AddHTTPFilter(input string) error {
 	filter := &hcm.HttpFilter{}
 	err := unmarshalYaml(filter, input)
 	if err != nil {
@@ -232,27 +211,6 @@ func (e *Envoy) AddHTTPFilter(input string) error {
 	})
 
 	return nil
-}
-
-// AwaitShutdown blocks until the Envoy instance has terminated.
-func (e *Envoy) AwaitShutdown() {
-	<-e.doneCh
-}
-
-// NewEnvoy creates a new Envoy instance to run under test.
-func NewEnvoy(t *testing.T) *Envoy {
-	// We use of getenvoy here to make things really simple, but it might be nicer
-	// to use something that supports more specific Envoy versions.
-	if _, err := os.Stat("/usr/local/bin/getenvoy"); os.IsNotExist(err) {
-		t.Fatal("getenvoy not installed at /usr/local/bin/getenvoy")
-		return nil
-	}
-
-	envoy := &Envoy{
-		doneCh: make(chan error),
-	}
-
-	return envoy
 }
 
 // Helper to convert an input yaml into a typed Protobuf message.

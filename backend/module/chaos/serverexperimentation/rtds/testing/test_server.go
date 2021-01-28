@@ -1,4 +1,4 @@
-package rtds
+package testing
 
 import (
 	"net"
@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -13,25 +14,25 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 
 	rtdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/rtds/v1"
-	rtds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds/testing"
+	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/module/moduletest"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 // Helper class for initializing a test RTDS server.
-type testServer struct {
+type TestServer struct {
 	registrar *moduletest.TestRegistrar
-	scope     tally.TestScope
-	storer    *rtds_testing.SimpleStorer
+	Scope     tally.TestScope
+	Storer    *SimpleStorer
 }
 
-func newTestServer(t *testing.T, ttl bool) testServer {
+func NewTestServer(t *testing.T, c func(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error), ttl bool) TestServer {
 	t.Helper()
-	server := testServer{}
+	server := TestServer{}
 
-	server.storer = &rtds_testing.SimpleStorer{}
-	service.Registry[experimentstore.Name] = server.storer
+	server.Storer = &SimpleStorer{}
+	service.Registry[experimentstore.Name] = server.Storer
 
 	// Set up a test server listening to :9000.
 	config := &rtdsconfigv1.Config{
@@ -50,23 +51,23 @@ func newTestServer(t *testing.T, ttl bool) testServer {
 		}
 	}
 
+	server.registrar = moduletest.NewRegisterChecker()
+
 	any, err := ptypes.MarshalAny(config)
 	assert.NoError(t, err)
-	server.scope = tally.NewTestScope("test", nil)
+	server.Scope = tally.NewTestScope("test", nil)
 
 	logger, err := zap.NewDevelopment()
 	assert.NoError(t, err)
-
-	m, err := New(any, logger, server.scope)
+	m, err := c(any, logger, server.Scope)
 	assert.NoError(t, err)
-
-	server.registrar = moduletest.NewRegisterChecker()
 
 	err = m.Register(server.registrar)
 	assert.NoError(t, err)
 
 	go func() {
-		l, err := net.Listen("tcp", "localhost:9000")
+		//nolint:gosec
+		l, err := net.Listen("tcp", "0.0.0.0:9000")
 		assert.NoError(t, err)
 
 		err = server.registrar.GRPCServer().Serve(l)
@@ -76,10 +77,10 @@ func newTestServer(t *testing.T, ttl bool) testServer {
 	return server
 }
 
-func (t *testServer) stop() {
+func (t *TestServer) Stop() {
 	t.registrar.GRPCServer().Stop()
 }
 
-func (t *testServer) clientConn() (*grpc.ClientConn, error) {
+func (t *TestServer) ClientConn() (*grpc.ClientConn, error) {
 	return grpc.Dial("localhost:9000", grpc.WithInsecure())
 }

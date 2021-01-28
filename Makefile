@@ -79,9 +79,9 @@ backend-config-validation:
 yarn-install: yarn-ensure
 	$(YARN) --cwd frontend install --frozen-lockfile 
 
-.PHONY: backend-ensure-envoy
-backend-ensure-envoy:
-	which getenvoy || curl -L https://getenvoy.io/cli | bash -s -- -b /usr/local/bin
+.PHONY: backend-integration-test
+backend-integration-test:
+	cd backend/module/chaos/serverexperimentation/rtds/integration && docker-compose up --build --abort-on-container-exit
 
 .PHONY: frontend # Build production frontend assets.
 frontend: yarn-install

@@ -17,14 +17,15 @@ import (
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	rtds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds/testing"
 )
 
 func TestServerStats(t *testing.T) {
-	testServer := newTestServer(t, false)
-	defer testServer.stop()
+	testServer := rtds_testing.NewTestServer(t, New, false)
+	defer testServer.Stop()
 
 	// Connect to the test server.
-	conn, err := testServer.clientConn()
+	conn, err := testServer.ClientConn()
 	assert.NoError(t, err)
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -39,17 +40,17 @@ func TestServerStats(t *testing.T) {
 	_, err = v3Stream.sendV3RequestAndAwaitResponse("", "")
 	assert.NoError(t, err)
 
-	assert.Equal(t, int64(1), testServer.scope.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
-	assert.Equal(t, int64(0), testServer.scope.Snapshot().Counters()["test.v3.totalErrorsReceived+"].Value())
+	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
+	assert.Equal(t, int64(0), testServer.Scope.Snapshot().Counters()["test.v3.totalErrorsReceived+"].Value())
 
 	// Error response from xDS client.
 	err = v3Stream.stream.Send(&gcpDiscoveryV3.DiscoveryRequest{ErrorDetail: &rpc_status.Status{}})
 	assert.NoError(t, err)
 
-	assert.Equal(t, int64(1), testServer.scope.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
+	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
 	// Async verification here since it appears that we don't get a response back in this case, so we
 	// aren't able to synchronize on the response.
-	awaitCounterEquals(t, testServer.scope, "test.v3.totalErrorsReceived+", 1)
+	awaitCounterEquals(t, testServer.Scope, "test.v3.totalErrorsReceived+", 1)
 
 	// Verify V2 stats.
 	v2Client := gcpDiscoveryV2.NewRuntimeDiscoveryServiceClient(conn)
@@ -67,22 +68,22 @@ func TestServerStats(t *testing.T) {
 	_, err = v2Stream.Recv()
 	assert.NoError(t, err)
 
-	assert.Equal(t, int64(1), testServer.scope.Snapshot().Counters()["test.v2.totalResourcesServed+"].Value())
+	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.v2.totalResourcesServed+"].Value())
 
 	// Error response from xDS client.
 	err = v2Stream.Send(&envoy_api_v2.DiscoveryRequest{ErrorDetail: &rpc_status.Status{}})
 	assert.NoError(t, err)
 
-	assert.Equal(t, int64(1), testServer.scope.Snapshot().Counters()["test.v2.totalResourcesServed+"].Value())
+	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.v2.totalResourcesServed+"].Value())
 	// Async verification here since it appears that we don't get a response back in this case, so we
 	// aren't able to synchronize on the response.
-	awaitCounterEquals(t, testServer.scope, "test.v2.totalErrorsReceived+", 1)
+	awaitCounterEquals(t, testServer.Scope, "test.v2.totalErrorsReceived+", 1)
 }
 
 // Verifies that TTL and heartbeating is done when configured to do so.
 func TestResourceTTL(t *testing.T) {
-	testServer := newTestServer(t, true)
-	defer testServer.stop()
+	testServer := rtds_testing.NewTestServer(t, New, true)
+	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -119,7 +120,7 @@ func TestResourceTTL(t *testing.T) {
 	a, err := ptypes.MarshalAny(&config)
 	assert.NoError(t, err)
 
-	_, err = testServer.storer.CreateExperiment(context.Background(), a, &now, &now)
+	_, err = testServer.Storer.CreateExperiment(context.Background(), a, &now, &now)
 	assert.NoError(t, err)
 
 	// First we look at a stream for a cluster that has an active fault. This should result in a TTL'd
@@ -204,8 +205,8 @@ type v3StreamWrapper struct {
 	cluster string
 }
 
-func newV3Stream(ctx context.Context, layer string, cluster string, t testServer) (*v3StreamWrapper, error) {
-	conn, err := t.clientConn()
+func newV3Stream(ctx context.Context, layer string, cluster string, t rtds_testing.TestServer) (*v3StreamWrapper, error) {
+	conn, err := t.ClientConn()
 	if err != nil {
 		return nil, err
 	}
