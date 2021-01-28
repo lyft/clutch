@@ -13,7 +13,7 @@ message OIDC {
 
   string redirect_url = 4 [ (validate.rules).string = {min_bytes : 1} ];
 
-  repeated string scopes = 5 [ (validate.rules).repeated = {min_items : 1} ];
+  repeated string scopes = 5;
 }
 
 message Storage {

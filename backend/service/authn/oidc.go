@@ -17,6 +17,10 @@ import (
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 )
 
+// Default scopes, used if no scopes are provided in the configuration.
+// Compatible with Okta offline access, a holdover from previous defaults.
+var defaultScopes = []string{oidc.ScopeOpenID, oidc.ScopeOfflineAccess, "email"}
+
 type OIDCProvider struct {
 	provider *oidc.Provider
 	verifier *oidc.IDTokenVerifier
@@ -83,8 +87,10 @@ func (p *OIDCProvider) GetStateNonce(redirectURL string) (string, error) {
 func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token, error) {
 	// Exchange.
 	ctx = oidc.ClientContext(ctx, p.httpClient)
-	// offline_access is used to request issuance of a refresh_token
-	token, err := p.oauth2.Exchange(ctx, code)
+
+	// offline_access is used to request issuance of a refresh_token. Some providers may request it as a scope though.
+	// Also it may need to be configurable in the future depending on the requirements of other providers or users.
+	token, err := p.oauth2.Exchange(ctx, code, oauth2.AccessTypeOffline)
 	if err != nil {
 		return nil, err
 	}
@@ -181,12 +187,17 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config) (Provider, err
 		ClientID: c.ClientId,
 	})
 
+	scopes := c.Scopes
+	if len(scopes) == 0 {
+		scopes = defaultScopes
+	}
+
 	oc := &oauth2.Config{
 		ClientID:     c.ClientId,
 		ClientSecret: c.ClientSecret,
 		Endpoint:     provider.Endpoint(),
 		RedirectURL:  c.RedirectUrl,
-		Scopes:       c.Scopes,
+		Scopes:       scopes,
 	}
 
 	// Verify the provider implements the same flow we do.
