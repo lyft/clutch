@@ -17,6 +17,10 @@ import (
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 )
 
+// Default scopes, used if no scopes are provided in the configuration.
+// Compatible with Okta offline access, a holdover from previous defaults.
+var defaultScopes = []string{oidc.ScopeOpenID, oidc.ScopeOfflineAccess, "email"}
+
 type OIDCProvider struct {
 	provider *oidc.Provider
 	verifier *oidc.IDTokenVerifier
@@ -185,8 +189,7 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config) (Provider, err
 
 	scopes := c.Scopes
 	if len(scopes) == 0 {
-		// Default scopes, compatible with Okta offline access, a holdover from previous defaults.
-		scopes = []string{oidc.ScopeOpenID, oidc.ScopeOfflineAccess, "email"}
+		scopes = defaultScopes
 	}
 
 	oc := &oauth2.Config{
