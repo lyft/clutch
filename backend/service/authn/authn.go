@@ -7,7 +7,6 @@ package authn
 import (
 	"context"
 	"fmt"
-
 	"github.com/dgrijalva/jwt-go"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -26,10 +25,7 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 		return nil, err
 	}
 
-	tokenStorage, err := newStorage(config.Storage)
-	if err != nil {
-		return nil, err
-	}
+	tokenStorage := service.Registry[StorageName].(Storage)
 
 	switch t := config.Type.(type) {
 	case *authnv1.Config_Oidc:

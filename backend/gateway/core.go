@@ -70,6 +70,7 @@ var Modules = module.Factory{
 var Services = service.Factory{
 	auditservice.Name:    auditservice.New,
 	authnservice.Name:    authnservice.New,
+	authnservice.StorageName: authnservice.NewStorage,
 	authzservice.Name:    authzservice.New,
 	awsservice.Name:      awsservice.New,
 	envoyadmin.Name:      envoyadmin.New,

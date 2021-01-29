@@ -1,16 +1,34 @@
 package authn
 
+// <!-- START clutchdoc -->
+// description: Stores tokens from the auth provider(s) in the database.
+// <!-- END clutchdoc -->
+
 import (
 	"context"
 	"fmt"
+	"github.com/lyft/clutch/backend/service"
+	"github.com/uber-go/tally"
+	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	"golang.org/x/oauth2"
 
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 )
 
+const StorageName = "clutch.service.authnstorage"
+
+func NewStorage(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+	c := &authnv1.StorageConfig{}
+	if err := cfg.UnmarshalTo(c); err != nil {
+		return nil, err
+	}
+	return newStorage(c), nil
+}
+
 type Storage interface {
-	Store(ctx context.Context, userID, provider string, t *oauth2.Token) error
+	Store(ctx context.Context, userID, provider string, token *oauth2.Token) error
 	Read(ctx context.Context, userID, provider string) (*oauth2.Token, error)
 }
 
@@ -19,7 +37,7 @@ type storage struct {
 	repo   *repository
 }
 
-func newStorage(cfg *authnv1.Storage) (Storage, error) {
+func newStorage(cfg *authnv1.StorageConfig) (Storage, error) {
 	if cfg == nil {
 		return nil, nil
 	}
