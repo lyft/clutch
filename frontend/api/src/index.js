@@ -14710,24 +14710,24 @@ export const clutch = $root.clutch = (() => {
                         return OIDC;
                     })();
 
-                    v1.Storage = (function() {
+                    v1.StorageConfig = (function() {
 
                         /**
-                         * Properties of a Storage.
+                         * Properties of a StorageConfig.
                          * @memberof clutch.config.service.authn.v1
-                         * @interface IStorage
-                         * @property {string|null} [encryptionPassphrase] Storage encryptionPassphrase
+                         * @interface IStorageConfig
+                         * @property {string|null} [encryptionPassphrase] StorageConfig encryptionPassphrase
                          */
 
                         /**
-                         * Constructs a new Storage.
+                         * Constructs a new StorageConfig.
                          * @memberof clutch.config.service.authn.v1
-                         * @classdesc Represents a Storage.
-                         * @implements IStorage
+                         * @classdesc Represents a StorageConfig.
+                         * @implements IStorageConfig
                          * @constructor
-                         * @param {clutch.config.service.authn.v1.IStorage=} [properties] Properties to set
+                         * @param {clutch.config.service.authn.v1.IStorageConfig=} [properties] Properties to set
                          */
-                        function Storage(properties) {
+                        function StorageConfig(properties) {
                             if (properties)
                                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                     if (properties[keys[i]] != null)
@@ -14735,22 +14735,22 @@ export const clutch = $root.clutch = (() => {
                         }
 
                         /**
-                         * Storage encryptionPassphrase.
+                         * StorageConfig encryptionPassphrase.
                          * @member {string} encryptionPassphrase
-                         * @memberof clutch.config.service.authn.v1.Storage
+                         * @memberof clutch.config.service.authn.v1.StorageConfig
                          * @instance
                          */
-                        Storage.prototype.encryptionPassphrase = "";
+                        StorageConfig.prototype.encryptionPassphrase = "";
 
                         /**
-                         * Verifies a Storage message.
+                         * Verifies a StorageConfig message.
                          * @function verify
-                         * @memberof clutch.config.service.authn.v1.Storage
+                         * @memberof clutch.config.service.authn.v1.StorageConfig
                          * @static
                          * @param {Object.<string,*>} message Plain object to verify
                          * @returns {string|null} `null` if valid, otherwise the reason why it is not
                          */
-                        Storage.verify = function verify(message) {
+                        StorageConfig.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
                             if (message.encryptionPassphrase != null && message.hasOwnProperty("encryptionPassphrase"))
@@ -14760,32 +14760,32 @@ export const clutch = $root.clutch = (() => {
                         };
 
                         /**
-                         * Creates a Storage message from a plain object. Also converts values to their respective internal types.
+                         * Creates a StorageConfig message from a plain object. Also converts values to their respective internal types.
                          * @function fromObject
-                         * @memberof clutch.config.service.authn.v1.Storage
+                         * @memberof clutch.config.service.authn.v1.StorageConfig
                          * @static
                          * @param {Object.<string,*>} object Plain object
-                         * @returns {clutch.config.service.authn.v1.Storage} Storage
+                         * @returns {clutch.config.service.authn.v1.StorageConfig} StorageConfig
                          */
-                        Storage.fromObject = function fromObject(object) {
-                            if (object instanceof $root.clutch.config.service.authn.v1.Storage)
+                        StorageConfig.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.authn.v1.StorageConfig)
                                 return object;
-                            let message = new $root.clutch.config.service.authn.v1.Storage();
+                            let message = new $root.clutch.config.service.authn.v1.StorageConfig();
                             if (object.encryptionPassphrase != null)
                                 message.encryptionPassphrase = String(object.encryptionPassphrase);
                             return message;
                         };
 
                         /**
-                         * Creates a plain object from a Storage message. Also converts values to other types if specified.
+                         * Creates a plain object from a StorageConfig message. Also converts values to other types if specified.
                          * @function toObject
-                         * @memberof clutch.config.service.authn.v1.Storage
+                         * @memberof clutch.config.service.authn.v1.StorageConfig
                          * @static
-                         * @param {clutch.config.service.authn.v1.Storage} message Storage
+                         * @param {clutch.config.service.authn.v1.StorageConfig} message StorageConfig
                          * @param {$protobuf.IConversionOptions} [options] Conversion options
                          * @returns {Object.<string,*>} Plain object
                          */
-                        Storage.toObject = function toObject(message, options) {
+                        StorageConfig.toObject = function toObject(message, options) {
                             if (!options)
                                 options = {};
                             let object = {};
@@ -14797,17 +14797,17 @@ export const clutch = $root.clutch = (() => {
                         };
 
                         /**
-                         * Converts this Storage to JSON.
+                         * Converts this StorageConfig to JSON.
                          * @function toJSON
-                         * @memberof clutch.config.service.authn.v1.Storage
+                         * @memberof clutch.config.service.authn.v1.StorageConfig
                          * @instance
                          * @returns {Object.<string,*>} JSON object
                          */
-                        Storage.prototype.toJSON = function toJSON() {
+                        StorageConfig.prototype.toJSON = function toJSON() {
                             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                         };
 
-                        return Storage;
+                        return StorageConfig;
                     })();
 
                     v1.Config = (function() {
@@ -14818,7 +14818,6 @@ export const clutch = $root.clutch = (() => {
                          * @interface IConfig
                          * @property {string|null} [sessionSecret] Config sessionSecret
                          * @property {clutch.config.service.authn.v1.IOIDC|null} [oidc] Config oidc
-                         * @property {clutch.config.service.authn.v1.IStorage|null} [storage] Config storage
                          */
 
                         /**
@@ -14851,14 +14850,6 @@ export const clutch = $root.clutch = (() => {
                          * @instance
                          */
                         Config.prototype.oidc = null;
-
-                        /**
-                         * Config storage.
-                         * @member {clutch.config.service.authn.v1.IStorage|null|undefined} storage
-                         * @memberof clutch.config.service.authn.v1.Config
-                         * @instance
-                         */
-                        Config.prototype.storage = null;
 
                         // OneOf field names bound to virtual getters and setters
                         let $oneOfFields;
@@ -14897,11 +14888,6 @@ export const clutch = $root.clutch = (() => {
                                         return "oidc." + error;
                                 }
                             }
-                            if (message.storage != null && message.hasOwnProperty("storage")) {
-                                let error = $root.clutch.config.service.authn.v1.Storage.verify(message.storage);
-                                if (error)
-                                    return "storage." + error;
-                            }
                             return null;
                         };
 
@@ -14924,11 +14910,6 @@ export const clutch = $root.clutch = (() => {
                                     throw TypeError(".clutch.config.service.authn.v1.Config.oidc: object expected");
                                 message.oidc = $root.clutch.config.service.authn.v1.OIDC.fromObject(object.oidc);
                             }
-                            if (object.storage != null) {
-                                if (typeof object.storage !== "object")
-                                    throw TypeError(".clutch.config.service.authn.v1.Config.storage: object expected");
-                                message.storage = $root.clutch.config.service.authn.v1.Storage.fromObject(object.storage);
-                            }
                             return message;
                         };
 
@@ -14945,10 +14926,8 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.defaults) {
+                            if (options.defaults)
                                 object.sessionSecret = "";
-                                object.storage = null;
-                            }
                             if (message.sessionSecret != null && message.hasOwnProperty("sessionSecret"))
                                 object.sessionSecret = message.sessionSecret;
                             if (message.oidc != null && message.hasOwnProperty("oidc")) {
@@ -14956,8 +14935,6 @@ export const clutch = $root.clutch = (() => {
                                 if (options.oneofs)
                                     object.type = "oidc";
                             }
-                            if (message.storage != null && message.hasOwnProperty("storage"))
-                                object.storage = $root.clutch.config.service.authn.v1.Storage.toObject(message.storage, options);
                             return object;
                         };
 

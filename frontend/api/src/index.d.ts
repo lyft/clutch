@@ -6165,49 +6165,49 @@ export namespace clutch {
                         public toJSON(): { [k: string]: any };
                     }
 
-                    /** Properties of a Storage. */
-                    interface IStorage {
+                    /** Properties of a StorageConfig. */
+                    interface IStorageConfig {
 
-                        /** Storage encryptionPassphrase */
+                        /** StorageConfig encryptionPassphrase */
                         encryptionPassphrase?: (string|null);
                     }
 
-                    /** Represents a Storage. */
-                    class Storage implements IStorage {
+                    /** Represents a StorageConfig. */
+                    class StorageConfig implements IStorageConfig {
 
                         /**
-                         * Constructs a new Storage.
+                         * Constructs a new StorageConfig.
                          * @param [properties] Properties to set
                          */
-                        constructor(properties?: clutch.config.service.authn.v1.IStorage);
+                        constructor(properties?: clutch.config.service.authn.v1.IStorageConfig);
 
-                        /** Storage encryptionPassphrase. */
+                        /** StorageConfig encryptionPassphrase. */
                         public encryptionPassphrase: string;
 
                         /**
-                         * Verifies a Storage message.
+                         * Verifies a StorageConfig message.
                          * @param message Plain object to verify
                          * @returns `null` if valid, otherwise the reason why it is not
                          */
                         public static verify(message: { [k: string]: any }): (string|null);
 
                         /**
-                         * Creates a Storage message from a plain object. Also converts values to their respective internal types.
+                         * Creates a StorageConfig message from a plain object. Also converts values to their respective internal types.
                          * @param object Plain object
-                         * @returns Storage
+                         * @returns StorageConfig
                          */
-                        public static fromObject(object: { [k: string]: any }): clutch.config.service.authn.v1.Storage;
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.authn.v1.StorageConfig;
 
                         /**
-                         * Creates a plain object from a Storage message. Also converts values to other types if specified.
-                         * @param message Storage
+                         * Creates a plain object from a StorageConfig message. Also converts values to other types if specified.
+                         * @param message StorageConfig
                          * @param [options] Conversion options
                          * @returns Plain object
                          */
-                        public static toObject(message: clutch.config.service.authn.v1.Storage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                        public static toObject(message: clutch.config.service.authn.v1.StorageConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                         /**
-                         * Converts this Storage to JSON.
+                         * Converts this StorageConfig to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };
@@ -6221,9 +6221,6 @@ export namespace clutch {
 
                         /** Config oidc */
                         oidc?: (clutch.config.service.authn.v1.IOIDC|null);
-
-                        /** Config storage */
-                        storage?: (clutch.config.service.authn.v1.IStorage|null);
                     }
 
                     /** Represents a Config. */
@@ -6240,9 +6237,6 @@ export namespace clutch {
 
                         /** Config oidc. */
                         public oidc?: (clutch.config.service.authn.v1.IOIDC|null);
-
-                        /** Config storage. */
-                        public storage?: (clutch.config.service.authn.v1.IStorage|null);
 
                         /** Config type. */
                         public type?: "oidc";
