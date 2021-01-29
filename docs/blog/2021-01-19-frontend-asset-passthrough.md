@@ -23,8 +23,8 @@ a subset of users would fail to load the webpage (only seeing a blank page) as s
 
 <img alt="Unable to Load" src="https://user-images.githubusercontent.com/2250844/106201561-79ef7d80-616d-11eb-8453-55769750f7c6.png" />
 
-Clutch bundles all frontend assets into a single binary, which allows us to serve them from disk, simplifying our architecture by omitting the need for a CDN.
-However, during deploys, particularly when deploying to a canary environment or multiple availability zones, there will briefly be two different versions of the application taking traffic.
+Clutch embeds frontend assets into its binary, simplifying our architecture by omitting the need for a CDN or a separate frontend server.
+However, during deploys, if deploying to a canary environment or one of multiple availability zones, there will briefly be two different versions of the application taking traffic.
 In this intermediary state, the frontend assets requested by the user may not yet exist on the hosts serving that request while the rollout is progressing.
 
 Typically, organizations solve this problem by adding a CDN to their service architecture and serving static assets from there.
@@ -33,9 +33,9 @@ We want to keep Clutch easy to deploy and configure, and cloud provider agnostic
 In addition to the design considerations, not using a CDN does provide other advantages.
 While CDNs are inherently public facing, asset passthrough is private, making it easier to secure your deployment.
 
-Before we go through the illustration of the problem below we first need to understand how we build frontend bundles.
+Before we go through the illustration of the problem below we first need to understand how Webpack builds frontend bundles by default when using `create-react-app`.
 Clutch uses webpack as the build system for the frontend,
-when building a new release webpack [templates the output](https://webpack.js.org/guides/caching/#output-filenames) filename to include a content hash eg: `main.[contenthash].chunk.js`.
+when building a new release [webpack templates the output filename](https://webpack.js.org/guides/caching/#output-filenames) to include a content hash eg: `main.[contenthash].chunk.js`.
 This uniqueness of this content hash allows us to cache bust what the browser has locally allowing the new version to be requested.
 
 <img alt="Problem Diagram" src="https://user-images.githubusercontent.com/2250844/106201546-765bf680-616d-11eb-83d3-c70cf93ba252.png" />
@@ -69,7 +69,7 @@ message Assets {
 The configuration can be found in the [gatewayOptions](/docs/configuration#gatewayoptions).
 
 At Lyft we utilize AWS S3 as the provider of choice and have implemented this setup as an example;
-however, the Clutch protobuf model is extensible and can easily be extended to add additional providers for any given deployment.
+however, Clutch is extensible and can easily be extended with support for additional blob storage providers.
 
 For S3 the configuration is simple: specify a `region`, `bucket`, and the `key` where the assets live.
 This does require you to also configure the `clutch.service.aws` service,
@@ -91,12 +91,12 @@ services:
         - us-east-1
 ```
 
-With this configured, if a user requests an asset that does not reside on disk the configured passthrough provider will be utilized.
+With this configured, if a user requests an asset that does not reside on disk, Clutch will attempt to serve the file from the configured passthrough provider.
 If the provider has the correct asset it will be served to the user.
 
 Let's look at the diagram below to demonstrate this.
 When a user makes a request, it goes through a load balancer, in this example, Envoy.
-Envoy is load balancing all versions of Clutch that are currently deployed.
+Envoy is load balancing to all instances of Clutch using the round-robin algorithm.
 In this example we have two Clutch versions deployed: `v1` and `v2`.
 Regardless of which version of the frontend a user might request, all versions of the frontend assets live in S3,
 so if a Clutch host does not have what the user is requesting, it can simply check S3.
