@@ -87,8 +87,8 @@ const DeletePod: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
     resourceData: {},
     deletionData: {
       deps: ["resourceData", "resolverInput"],
-      hydrator: (resourceData: IClutch.k8s.v1.Pod, resolverInput: { clientset: string }) => {
-        const clientset = resolverInput.clientset ?? "undefined";
+      hydrator: (resourceData: IClutch.k8s.v1.Pod) => {
+        const clientset = resourceData.cluster ?? "undefined";
         return client.post("/v1/k8s/deletePod", {
           clientset,
           cluster: resourceData.cluster,

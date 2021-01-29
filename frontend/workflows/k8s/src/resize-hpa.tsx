@@ -144,9 +144,8 @@ const ResizeHPA: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] 
     inputData: {},
     resizeData: {
       deps: ["hpaData", "inputData"],
-      hydrator: (hpaData: IClutch.k8s.v1.HPA, inputData: { clientset: string }) => {
-        const clientset = inputData.clientset ?? "unspecified";
-
+      hydrator: (hpaData: IClutch.k8s.v1.HPA) => {
+        const clientset = hpaData.cluster ?? "unspecified";
         return client.post("/v1/k8s/resizeHPA", {
           clientset,
           cluster: hpaData.cluster,
