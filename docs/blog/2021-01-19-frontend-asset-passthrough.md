@@ -4,7 +4,7 @@ authors:
   - name: Mike Cutalo
     url: https://github.com/mcutalo88
     avatar: https://avatars1.githubusercontent.com/u/2250844?s=460&u=24deb32096e9f892cc91a6ff1ca1af50193b1fbd&v=4
-description: How Caching and Hashed Frontend Builds Can Lead to a Blank Screen; And How to Fix It.
+description: How caching and hashed frontend builds can lead to a blank screen; and how to fix it.
 image: https://user-images.githubusercontent.com/2250844/106201558-7956e700-616d-11eb-887d-28410b67d558.png
 hide_table_of_contents: false
 ---
@@ -23,6 +23,10 @@ a subset of users would fail to load the webpage (only seeing a blank page) as s
 
 <img alt="Unable to Load" src="https://user-images.githubusercontent.com/2250844/106201561-79ef7d80-616d-11eb-8453-55769750f7c6.png" />
 
+```text
+Uncaught SyntaxError: Unexpected token '<'
+```
+
 Clutch embeds frontend assets into its binary, simplifying our architecture by omitting the need for a CDN or a separate frontend server.
 However, during deploys, if deploying to a canary environment or one of multiple availability zones, there will briefly be two different versions of the application taking traffic.
 In this intermediary state, the frontend assets requested by the user may not yet exist on the hosts serving that request while the rollout is progressing.
@@ -36,13 +40,18 @@ While CDNs are inherently public facing, asset passthrough is private, making it
 Before we go through the illustration of the problem below we first need to understand how Webpack builds frontend bundles by default when using `create-react-app`.
 Clutch uses webpack as the build system for the frontend,
 when building a new release [webpack templates the output filename](https://webpack.js.org/guides/caching/#output-filenames) to include a content hash eg: `main.[contenthash].chunk.js`.
-This uniqueness of this content hash allows us to cache bust what the browser has locally allowing the new version to be requested.
+This uniqueness of this content hash allows Clutch to cache bust what the browser has locally allowing the new version to be requested.
 
 <img alt="Problem Diagram" src="https://user-images.githubusercontent.com/2250844/106201546-765bf680-616d-11eb-83d3-c70cf93ba252.png" />
 
 The client makes a request to Clutch and a canary host responds with an `index.html` page with a script tag asking for `main.a3762de8.chunk.js`.
 Illustrated by the green and red arrows, there is only one host which has the correct asset the client is asking for, the canary.
 If the client's request for `main.a3762de8.chunk.js` goes anywhere else the page will fail to load.
+
+This is not a problem if you are using a CDN, as traditionally there is a backing object storage such as S3 where all of the applications assets are stored.
+If a CDN does not have an asset it checks its backing object storage, warms the CDN cache, and serves it to the client.
+Alternatively, sticky sessions or session affinity could be used to remediate this problem,
+as the requesting client would always be routed to a specific version of the application.
 
 ## Solution
 
@@ -99,7 +108,7 @@ When a user makes a request, it goes through a load balancer, in this example, E
 Envoy is load balancing to all instances of Clutch using the round-robin algorithm.
 In this example we have two Clutch versions deployed: `v1` and `v2`.
 Regardless of which version of the frontend a user might request, all versions of the frontend assets live in S3,
-so if a Clutch host does not have what the user is requesting, it can simply check S3.
+so if a Clutch host does not have what the user is requesting, it can check S3.
 
 <img alt="Logical Architecture" src="https://user-images.githubusercontent.com/2250844/106201558-7956e700-616d-11eb-887d-28410b67d558.png" />
 
@@ -112,7 +121,7 @@ As an example, I will go over how we solved this problem at Lyft.
 
 Below is a simplified version of our deployment process.
 Early on in the deployment pipeline assets are uploaded to S3,
-simply utilizing the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/s3/sync.html) to `aws s3 sync` the new assets to the target bucket.
+utilizing the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/s3/sync.html) to `aws s3 sync` the new assets to the target bucket.
 
 <img alt="Deploying" src="https://user-images.githubusercontent.com/2250844/106201560-7956e700-616d-11eb-9f9d-a4b1345bcf41.png" />
 
@@ -125,4 +134,4 @@ ensuring the correct assets are served regardless of the divergence in deployed 
 ## Contributing
 
 If there is a provider that you need for your deployment, please open an [issue](https://github.com/lyft/clutch/issues) or consider [contributing](https://github.com/lyft/clutch#contributing)!
-If you have any questions or would like to chat with the team, join us in our [Slack](https://join.slack.com/t/lyftoss/shared_invite/zt-casz6lz4-G7gOx1OhHfeMsZKFe1emSA)!
+If you have any questions or would like to chat with the team, join us in our [Slack](/docs/community)!
