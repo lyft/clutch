@@ -112,6 +112,8 @@ github.com/aws/aws-sdk-go v1.25.11 h1:wUivbsVOH3LpHdC3Rl5i+FLHfg4sOmYgv4bvHe7+/P
 github.com/aws/aws-sdk-go v1.25.11/go.mod h1:KmX6BPdI08NWTb3/sm4ZGu5ShLoqVDhKgpiN924inxo=
 github.com/aws/aws-sdk-go-v2 v1.0.0 h1:ncEVPoHArsG+HjoDe/3ex/TG1CbLwMQ4eaWj0UGdyTo=
 github.com/aws/aws-sdk-go-v2 v1.0.0/go.mod h1:smfAbmpW+tcRVuNUjo3MOArSZmW72t62rkCzc2i0TWM=
+github.com/aws/aws-sdk-go-v2 v1.1.0 h1:sKP6QWxdN1oRYjl+k6S3bpgBI+XUx/0mqVOLIw4lR/Q=
+github.com/aws/aws-sdk-go-v2 v1.1.0/go.mod h1:smfAbmpW+tcRVuNUjo3MOArSZmW72t62rkCzc2i0TWM=
 github.com/aws/aws-sdk-go-v2/config v1.0.0 h1:x6vSFAwqAvhYPeSu60f0ZUlGHo3PKKmwDOTL8aMXtv4=
 github.com/aws/aws-sdk-go-v2/config v1.0.0/go.mod h1:WysE/OpUgE37tjtmtJd8GXgT8s1euilE5XtUkRNUQ1w=
 github.com/aws/aws-sdk-go-v2/credentials v1.0.0 h1:0M7netgZ8gCV4v7z1km+Fbl7j6KQYyZL7SS0/l5Jn/4=
@@ -128,8 +130,8 @@ github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.0.0 h1:IAutMPSryn
 github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.0.0/go.mod h1:3jExOmpbjgPnz2FJaMOfbSk1heTkZ66aD3yNtVhnjvI=
 github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.0.0 h1:Cg1XFRo41piOIT8Qp9RPQxfwLac5ddwGQxTPM8lowGk=
 github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.0.0/go.mod h1:ElU0+utGClu2dFpCf1NIFxFAG+xO4n5b5RBuIiVaCY0=
-github.com/aws/aws-sdk-go-v2/service/kinesis v1.0.0 h1:0qEL+rZCEyqjdUpjk4oWNwEnoViwyOuKHIzBID8ZsMc=
-github.com/aws/aws-sdk-go-v2/service/kinesis v1.0.0/go.mod h1:rSQggMm8F3eOSMzPELXYTCtpHT6ETpITL5v6AwbgqJU=
+github.com/aws/aws-sdk-go-v2/service/kinesis v1.1.0 h1:NUrzCvCOgcrNLSgSTj+dcP9Knuq4y+WheONrGniD7vc=
+github.com/aws/aws-sdk-go-v2/service/kinesis v1.1.0/go.mod h1:tGJVLSSJPcLVun6GBZtRXqsTJveHmJiLW/98dripIrU=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.0.0 h1:7petFdJE3VuXZnXNVDdynznREElHSzjYI4xjkGNWPX8=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.0.0/go.mod h1:IdVR1fGqVS8Zv/oraQXdBzbGmdpc3FBOHhCTI7tpsYE=
 github.com/aws/aws-sdk-go-v2/service/sts v1.0.0 h1:6XCgxNfE4L/Fnq+InhVNd16DKc6Ue1f3dJl3IwwJRUQ=
