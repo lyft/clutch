@@ -16,11 +16,6 @@ message OIDC {
   repeated string scopes = 5;
 }
 
-message StorageConfig {
-  // Encryption passphrase for credentials stored in the database.
-  string encryption_passphrase = 1 [ (validate.rules).string = {min_bytes : 1} ];
-}
-
 message Config {
   // Used to sign the nonce or any other JWT secrets.
   string session_secret = 1 [ (validate.rules).string = {min_bytes : 1} ];

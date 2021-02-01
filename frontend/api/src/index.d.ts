@@ -6165,54 +6165,6 @@ export namespace clutch {
                         public toJSON(): { [k: string]: any };
                     }
 
-                    /** Properties of a StorageConfig. */
-                    interface IStorageConfig {
-
-                        /** StorageConfig encryptionPassphrase */
-                        encryptionPassphrase?: (string|null);
-                    }
-
-                    /** Represents a StorageConfig. */
-                    class StorageConfig implements IStorageConfig {
-
-                        /**
-                         * Constructs a new StorageConfig.
-                         * @param [properties] Properties to set
-                         */
-                        constructor(properties?: clutch.config.service.authn.v1.IStorageConfig);
-
-                        /** StorageConfig encryptionPassphrase. */
-                        public encryptionPassphrase: string;
-
-                        /**
-                         * Verifies a StorageConfig message.
-                         * @param message Plain object to verify
-                         * @returns `null` if valid, otherwise the reason why it is not
-                         */
-                        public static verify(message: { [k: string]: any }): (string|null);
-
-                        /**
-                         * Creates a StorageConfig message from a plain object. Also converts values to their respective internal types.
-                         * @param object Plain object
-                         * @returns StorageConfig
-                         */
-                        public static fromObject(object: { [k: string]: any }): clutch.config.service.authn.v1.StorageConfig;
-
-                        /**
-                         * Creates a plain object from a StorageConfig message. Also converts values to other types if specified.
-                         * @param message StorageConfig
-                         * @param [options] Conversion options
-                         * @returns Plain object
-                         */
-                        public static toObject(message: clutch.config.service.authn.v1.StorageConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                        /**
-                         * Converts this StorageConfig to JSON.
-                         * @returns JSON object
-                         */
-                        public toJSON(): { [k: string]: any };
-                    }
-
                     /** Properties of a Config. */
                     interface IConfig {
 
@@ -6265,6 +6217,54 @@ export namespace clutch {
 
                         /**
                          * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a StorageConfig. */
+                    interface IStorageConfig {
+
+                        /** StorageConfig encryptionPassphrase */
+                        encryptionPassphrase?: (string|null);
+                    }
+
+                    /** Represents a StorageConfig. */
+                    class StorageConfig implements IStorageConfig {
+
+                        /**
+                         * Constructs a new StorageConfig.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.authn.v1.IStorageConfig);
+
+                        /** StorageConfig encryptionPassphrase. */
+                        public encryptionPassphrase: string;
+
+                        /**
+                         * Verifies a StorageConfig message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a StorageConfig message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns StorageConfig
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.authn.v1.StorageConfig;
+
+                        /**
+                         * Creates a plain object from a StorageConfig message. Also converts values to other types if specified.
+                         * @param message StorageConfig
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.authn.v1.StorageConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this StorageConfig to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };
