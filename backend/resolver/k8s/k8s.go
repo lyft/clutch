@@ -36,7 +36,6 @@ var typeURLHPA = meta.TypeURL((*k8sv1api.HPA)(nil))
 var typeSchemas = map[string][]descriptor.Message{
 	typeURLPod: {
 		(*k8sv1resolver.PodID)(nil),
-		(*k8sv1resolver.IPAddress)(nil),
 	},
 	typeURLHPA: {
 		(*k8sv1resolver.HPAName)(nil),

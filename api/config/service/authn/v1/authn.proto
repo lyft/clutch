@@ -12,6 +12,8 @@ message OIDC {
   string client_secret = 3 [ (validate.rules).string = {min_bytes : 1} ];
 
   string redirect_url = 4 [ (validate.rules).string = {min_bytes : 1} ];
+
+  repeated string scopes = 5;
 }
 
 message Storage {

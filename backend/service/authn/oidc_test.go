@@ -76,6 +76,9 @@ oidc:
   client_id: my_client_id
   client_secret: my_client_secret
   redirect_url: "http://localhost:12000/v1/authn/callback"
+  scopes:
+  - openid
+  - email
 `, cfg)
 
 	email := "user@example.com"
@@ -84,7 +87,7 @@ oidc:
 	defer mockprovider.Close()
 
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
-	p, err := NewOIDCProvider(ctx, cfg)
+	p, err := NewOIDCProvider(ctx, cfg, nil)
 	assert.NoError(t, err)
 	assert.NotNil(t, p)
 

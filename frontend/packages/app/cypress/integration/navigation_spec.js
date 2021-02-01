@@ -21,7 +21,7 @@ describe("Navigation drawer", () => {
         cy.wrap(link).should("have.attr", "href");
       });
       cy.element(WORKFLOW_GROUP).eq(idx).click();
-      cy.element(WORKFLOW_GROUP).eq(idx).descendent(WORKFLOW_GROUP_ITEM).should("not.be.visible");
+      cy.element(WORKFLOW_GROUP).eq(idx).descendent(WORKFLOW_GROUP_ITEM).should("not.exist");
     });
   });
 
