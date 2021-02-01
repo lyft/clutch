@@ -24,7 +24,7 @@ func NewStorage(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.
 	if err := cfg.UnmarshalTo(c); err != nil {
 		return nil, err
 	}
-	return newStorage(c), nil
+	return newStorage(c)
 }
 
 type Storage interface {
