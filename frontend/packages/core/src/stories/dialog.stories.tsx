@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
@@ -12,15 +12,22 @@ export default {
   component: Dialog,
 } as Meta;
 
-const Template = ({ content, open, ...props }: DialogProps & { content: React.ReactNode }) => (
-  <Dialog open={open} {...props}>
-    <DialogContent>{content}</DialogContent>
-    <DialogActions>
-      <Button text="Back" variant="neutral" onClick={action("back button click")} />
-      <Button text="Continue" onClick={action("continue button click")} />
-    </DialogActions>
-  </Dialog>
-);
+const Template = ({ content, open, ...props }: DialogProps & { content: React.ReactNode }) => {
+  const [isOpen, setIsOpen] = useState(open);
+
+  return (
+    <>
+      <Button disabled={!open} text="Show Dialog" onClick={() => setIsOpen(true)} />
+      <Dialog open={isOpen} onClose={() => setIsOpen(false)} {...props}>
+        <DialogContent>{content}</DialogContent>
+        <DialogActions>
+          <Button text="Close" variant="neutral" onClick={() => setIsOpen(false)} />
+          <Button text="Continue" onClick={action("continue button click")} />
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+};
 
 export const Primary = Template.bind({});
 Primary.args = {

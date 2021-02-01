@@ -13,7 +13,7 @@ import (
 )
 
 func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Pod, error) {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +34,7 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 }
 
 func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name
 }
 
 func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string, listOpts *k8sapiv1.ListOptions) ([]*k8sapiv1.Pod, error) {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name
 		}
 	}
 
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return err
 	}

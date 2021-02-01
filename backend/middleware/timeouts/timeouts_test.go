@@ -124,28 +124,26 @@ func TestTimeoutBlockForMoreThanBoost(t *testing.T) {
 	assert.NoError(t, err)
 
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		time.Sleep(boost + time.Millisecond)
+		time.Sleep(boost * 4)
 		return &healthcheckv1.HealthcheckResponse{}, nil
 	}
 
 	midFn := m.UnaryInterceptor()
 	resp, err := midFn(context.Background(), nil, &grpc.UnaryServerInfo{FullMethod: "/zip/zoom"}, handler)
 	assert.Nil(t, resp)
-
 	s := status.Convert(err)
 	assert.Equal(t, codes.DeadlineExceeded, s.Code())
 
 	// Wait for the log or timeout and fail.
-	timeout := time.After(time.Second)
+	timeout := time.After(boost * 5)
 	for recorded.Len() == 0 {
 		select {
 		case <-timeout:
-			panic("timed out waiting for log")
+			t.Fatal("timed out waiting for log")
 		default:
+			time.Sleep(time.Millisecond)
 		}
-		time.Sleep(time.Millisecond)
 	}
-
 	assert.Equal(t, "handler completed after timeout", recorded.All()[0].Message)
 }
 

@@ -12,7 +12,6 @@ import (
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
-	"github.com/golang/protobuf/ptypes"
 	_ "github.com/lib/pq"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -24,9 +23,11 @@ import (
 )
 
 type MigrateFlags struct {
-	Force     bool
-	Down      bool
-	BaseFlags *gateway.Flags
+	Force        bool
+	Down         bool
+	Namespace    string
+	MigrationDir string
+	BaseFlags    *gateway.Flags
 }
 
 func (m *MigrateFlags) Link() {
@@ -35,6 +36,9 @@ func (m *MigrateFlags) Link() {
 
 	flag.BoolVar(&m.Force, "f", false, "do not ask user for confirmation")
 	flag.BoolVar(&m.Down, "down", false, "migrates down by one version")
+
+	flag.StringVar(&m.Namespace, "namespace", "", "when overriding the migrations directory, a namespace must be supplied for independent versioning")
+	flag.StringVar(&m.MigrationDir, "migrationDir", "", "override the migrations directory (used when managing private or federated modules)")
 }
 
 type migrateLogger struct {
@@ -68,7 +72,7 @@ func (m *Migrator) setupSqlClient() (*sql.DB, string) {
 			}
 
 			cfg := &postgresv1.Config{}
-			if err := ptypes.UnmarshalAny(s.TypedConfig, cfg); err != nil {
+			if err := s.TypedConfig.UnmarshalTo(cfg); err != nil {
 				log.Fatal("could not convert config", zap.Error(err))
 			}
 
@@ -115,18 +119,34 @@ func (m *Migrator) setupSqlMigrator() *migrate.Migrate {
 		m.log.Fatal("error pinging db", zap.Error(err))
 	}
 
-	driver, err := postgres.WithInstance(sqlDB, &postgres.Config{})
+	// Determine version storage table.
+	cfg := &postgres.Config{
+		MigrationsTable: postgres.DefaultMigrationsTable,
+	}
+	if m.flags.Namespace != "" {
+		cfg.MigrationsTable = fmt.Sprintf("%s_%s", postgres.DefaultMigrationsTable, m.flags.Namespace)
+	}
+	m.log.Info("using migration table", zap.String("migrationTable", cfg.MigrationsTable))
+
+	// Create driver.
+	driver, err := postgres.WithInstance(sqlDB, cfg)
 	if err != nil {
 		m.log.Fatal("error creating pg driver", zap.Error(err))
 	}
 
 	// Create migrator.
-	migrationDir, err := os.Getwd()
-	if err != nil {
-		m.log.Fatal("could not get working dir", zap.Error(err))
+	migrationDir := m.flags.MigrationDir
+	if m.flags.MigrationDir == "" {
+		var err error
+		migrationDir, err = os.Getwd()
+		if err != nil {
+			m.log.Fatal("could not get working dir", zap.Error(err))
+		}
+		migrationDir = filepath.Join(migrationDir, "migrations")
 	}
-	migrationDir = filepath.Join(migrationDir, "migrations")
-	m.log.Info("Utilizing migration directory:", zap.String("migrationDir", migrationDir))
+
+	absPath, _ := filepath.Abs(migrationDir)
+	m.log.Info("using migration directory", zap.String("migrationDir", migrationDir), zap.String("absoluteMigrationDir", absPath))
 
 	sqlMigrate, err := migrate.NewWithDatabaseInstance(
 		fmt.Sprintf("file://%s", migrationDir),
@@ -143,10 +163,10 @@ func (m *Migrator) setupSqlMigrator() *migrate.Migrate {
 }
 
 func (m *Migrator) Up() {
-	msg := "migration has the potential to cause irrevocable data loss, verify host information above"
-	m.confirmWithUser(msg)
-
 	sqlMigrate := m.setupSqlMigrator()
+
+	msg := "migration has the potential to cause irrevocable data loss, verify information above"
+	m.confirmWithUser(msg)
 
 	// Apply migrations!
 	m.log.Info("applying up migrations")
@@ -186,6 +206,12 @@ func main() {
 
 	logger, _ := zap.NewDevelopment()
 	logger = logger.WithOptions(zap.AddStacktrace(zap.FatalLevel + 1))
+
+	// Check that both namespace and migration dir are either empty or filled.
+	if (f.Namespace == "") != (f.MigrationDir == "") {
+		logger.Fatal("namespace and migration dir must both be provided to use an alternate migration path")
+		os.Exit(1)
+	}
 
 	migrator := &Migrator{
 		log:   logger,

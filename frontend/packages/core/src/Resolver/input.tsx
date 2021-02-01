@@ -82,7 +82,9 @@ const SchemaResolver = ({ schema, expanded, onClick, submitHandler }: SchemaReso
   });
 
   const onChange = e => {
-    setData({ ...data, [e.target.name]: e.target.value });
+    setData(existing => {
+      return { ...existing, [e.target.name]: e.target.value };
+    });
   };
 
   return (

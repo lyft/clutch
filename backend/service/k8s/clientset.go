@@ -1,6 +1,7 @@
 package k8s
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
@@ -19,8 +20,8 @@ const (
 )
 
 type ClientsetManager interface {
-	Clientsets() map[string]ContextClientset
-	GetK8sClientset(clientset, cluster, namespace string) (ContextClientset, error)
+	Clientsets(ctx context.Context) map[string]ContextClientset
+	GetK8sClientset(ctx context.Context, clientset, cluster, namespace string) (ContextClientset, error)
 }
 
 type ContextClientset interface {
@@ -137,7 +138,7 @@ type managerImpl struct {
 	clientsets map[string]*ctxClientsetImpl
 }
 
-func (m *managerImpl) Clientsets() map[string]ContextClientset {
+func (m *managerImpl) Clientsets(ctx context.Context) map[string]ContextClientset {
 	ret := make(map[string]ContextClientset)
 	for k, v := range m.clientsets {
 		ret[k] = v
@@ -145,7 +146,7 @@ func (m *managerImpl) Clientsets() map[string]ContextClientset {
 	return ret
 }
 
-func (m *managerImpl) GetK8sClientset(clientset, cluster, namespace string) (ContextClientset, error) {
+func (m *managerImpl) GetK8sClientset(ctx context.Context, clientset, cluster, namespace string) (ContextClientset, error) {
 	cs, ok := m.clientsets[clientset]
 	if !ok {
 		return nil, errors.New("not found")

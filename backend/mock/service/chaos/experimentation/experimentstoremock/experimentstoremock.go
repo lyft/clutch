@@ -35,11 +35,9 @@ func (fs *mockExperimentStore) GetExperiments(context.Context) ([]*experimentati
 	var experiment experimentation.Experiment
 
 	details :=
-		`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.TestConfig",
-			"abort":{
-			"clusterPair":{"downstreamCluster":"dCluster","upstreamCluster":"uCluster"},
-			"percent":100,
-			"httpStatus":401}}`
+		`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig",
+			"fault":{"abortFault":{"percentage":{"percentage":100}}, "abortStatus":{"httpStatusCode":401}},
+			"faultTargeting": {"enforcer":{"upstreamEnforcing":{"upstreamType":{"upstreamCluster":{"name":"uCluster"}}, "downstreamType":{"downstreamCluster":{"name":"dCluster"}}}}}}`
 
 	anyConfig := &any.Any{}
 	err := jsonpb.UnmarshalString(details, anyConfig)

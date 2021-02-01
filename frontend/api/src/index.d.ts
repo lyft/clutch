@@ -5696,6 +5696,12 @@ export namespace clutch {
 
                                 /** Config egressFaultRuntimePrefix */
                                 egressFaultRuntimePrefix?: (string|null);
+
+                                /** Config resourceTtl */
+                                resourceTtl?: (google.protobuf.IDuration|null);
+
+                                /** Config heartbeatInterval */
+                                heartbeatInterval?: (google.protobuf.IDuration|null);
                             }
 
                             /** Represents a Config. */
@@ -5718,6 +5724,12 @@ export namespace clutch {
 
                                 /** Config egressFaultRuntimePrefix. */
                                 public egressFaultRuntimePrefix: string;
+
+                                /** Config resourceTtl. */
+                                public resourceTtl?: (google.protobuf.IDuration|null);
+
+                                /** Config heartbeatInterval. */
+                                public heartbeatInterval?: (google.protobuf.IDuration|null);
 
                                 /**
                                  * Verifies a Config message.
@@ -6095,6 +6107,9 @@ export namespace clutch {
 
                         /** OIDC redirectUrl */
                         redirectUrl?: (string|null);
+
+                        /** OIDC scopes */
+                        scopes?: (string[]|null);
                     }
 
                     /** Represents a OIDC. */
@@ -6117,6 +6132,9 @@ export namespace clutch {
 
                         /** OIDC redirectUrl. */
                         public redirectUrl: string;
+
+                        /** OIDC scopes. */
+                        public scopes: string[];
 
                         /**
                          * Verifies a OIDC message.
@@ -8596,6 +8614,48 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public deleteCronJob(request: clutch.k8s.v1.IDeleteCronJobRequest): Promise<clutch.k8s.v1.DeleteCronJobResponse>;
+
+                /**
+                 * Calls ListConfigMaps.
+                 * @param request ListConfigMapsRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and ListConfigMapsResponse
+                 */
+                public listConfigMaps(request: clutch.k8s.v1.IListConfigMapsRequest, callback: clutch.k8s.v1.K8sAPI.ListConfigMapsCallback): void;
+
+                /**
+                 * Calls ListConfigMaps.
+                 * @param request ListConfigMapsRequest message or plain object
+                 * @returns Promise
+                 */
+                public listConfigMaps(request: clutch.k8s.v1.IListConfigMapsRequest): Promise<clutch.k8s.v1.ListConfigMapsResponse>;
+
+                /**
+                 * Calls DescribeConfigMap.
+                 * @param request DescribeConfigMapRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DescribeConfigMapResponse
+                 */
+                public describeConfigMap(request: clutch.k8s.v1.IDescribeConfigMapRequest, callback: clutch.k8s.v1.K8sAPI.DescribeConfigMapCallback): void;
+
+                /**
+                 * Calls DescribeConfigMap.
+                 * @param request DescribeConfigMapRequest message or plain object
+                 * @returns Promise
+                 */
+                public describeConfigMap(request: clutch.k8s.v1.IDescribeConfigMapRequest): Promise<clutch.k8s.v1.DescribeConfigMapResponse>;
+
+                /**
+                 * Calls DeleteConfigMap.
+                 * @param request DeleteConfigMapRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DeleteConfigMapResponse
+                 */
+                public deleteConfigMap(request: clutch.k8s.v1.IDeleteConfigMapRequest, callback: clutch.k8s.v1.K8sAPI.DeleteConfigMapCallback): void;
+
+                /**
+                 * Calls DeleteConfigMap.
+                 * @param request DeleteConfigMapRequest message or plain object
+                 * @returns Promise
+                 */
+                public deleteConfigMap(request: clutch.k8s.v1.IDeleteConfigMapRequest): Promise<clutch.k8s.v1.DeleteConfigMapResponse>;
             }
 
             namespace K8sAPI {
@@ -8690,6 +8750,27 @@ export namespace clutch {
                  * @param [response] DeleteCronJobResponse
                  */
                 type DeleteCronJobCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteCronJobResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listConfigMaps}.
+                 * @param error Error, if any
+                 * @param [response] ListConfigMapsResponse
+                 */
+                type ListConfigMapsCallback = (error: (Error|null), response?: clutch.k8s.v1.ListConfigMapsResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeConfigMap}.
+                 * @param error Error, if any
+                 * @param [response] DescribeConfigMapResponse
+                 */
+                type DescribeConfigMapCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribeConfigMapResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteConfigMap}.
+                 * @param error Error, if any
+                 * @param [response] DeleteConfigMapResponse
+                 */
+                type DeleteConfigMapCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteConfigMapResponse) => void;
             }
 
             /** Properties of a DescribePodRequest. */
@@ -11046,6 +11127,426 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a ConfigMap. */
+            interface IConfigMap {
+
+                /** ConfigMap cluster */
+                cluster?: (string|null);
+
+                /** ConfigMap namespace */
+                namespace?: (string|null);
+
+                /** ConfigMap name */
+                name?: (string|null);
+
+                /** ConfigMap annotations */
+                annotations?: ({ [k: string]: string }|null);
+
+                /** ConfigMap labels */
+                labels?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a ConfigMap. */
+            class ConfigMap implements IConfigMap {
+
+                /**
+                 * Constructs a new ConfigMap.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IConfigMap);
+
+                /** ConfigMap cluster. */
+                public cluster: string;
+
+                /** ConfigMap namespace. */
+                public namespace: string;
+
+                /** ConfigMap name. */
+                public name: string;
+
+                /** ConfigMap annotations. */
+                public annotations: { [k: string]: string };
+
+                /** ConfigMap labels. */
+                public labels: { [k: string]: string };
+
+                /**
+                 * Verifies a ConfigMap message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ConfigMap message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ConfigMap
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ConfigMap;
+
+                /**
+                 * Creates a plain object from a ConfigMap message. Also converts values to other types if specified.
+                 * @param message ConfigMap
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ConfigMap, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ConfigMap to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListConfigMapsRequest. */
+            interface IListConfigMapsRequest {
+
+                /** ListConfigMapsRequest clientset */
+                clientset?: (string|null);
+
+                /** ListConfigMapsRequest cluster */
+                cluster?: (string|null);
+
+                /** ListConfigMapsRequest namespace */
+                namespace?: (string|null);
+
+                /** ListConfigMapsRequest options */
+                options?: (clutch.k8s.v1.IListOptions|null);
+            }
+
+            /** Represents a ListConfigMapsRequest. */
+            class ListConfigMapsRequest implements IListConfigMapsRequest {
+
+                /**
+                 * Constructs a new ListConfigMapsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListConfigMapsRequest);
+
+                /** ListConfigMapsRequest clientset. */
+                public clientset: string;
+
+                /** ListConfigMapsRequest cluster. */
+                public cluster: string;
+
+                /** ListConfigMapsRequest namespace. */
+                public namespace: string;
+
+                /** ListConfigMapsRequest options. */
+                public options?: (clutch.k8s.v1.IListOptions|null);
+
+                /**
+                 * Verifies a ListConfigMapsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListConfigMapsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListConfigMapsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListConfigMapsRequest;
+
+                /**
+                 * Creates a plain object from a ListConfigMapsRequest message. Also converts values to other types if specified.
+                 * @param message ListConfigMapsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListConfigMapsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListConfigMapsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListConfigMapsResponse. */
+            interface IListConfigMapsResponse {
+
+                /** ListConfigMapsResponse configMaps */
+                configMaps?: (clutch.k8s.v1.IConfigMap[]|null);
+            }
+
+            /** Represents a ListConfigMapsResponse. */
+            class ListConfigMapsResponse implements IListConfigMapsResponse {
+
+                /**
+                 * Constructs a new ListConfigMapsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListConfigMapsResponse);
+
+                /** ListConfigMapsResponse configMaps. */
+                public configMaps: clutch.k8s.v1.IConfigMap[];
+
+                /**
+                 * Verifies a ListConfigMapsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListConfigMapsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListConfigMapsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListConfigMapsResponse;
+
+                /**
+                 * Creates a plain object from a ListConfigMapsResponse message. Also converts values to other types if specified.
+                 * @param message ListConfigMapsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListConfigMapsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListConfigMapsResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DescribeConfigMapRequest. */
+            interface IDescribeConfigMapRequest {
+
+                /** DescribeConfigMapRequest clientset */
+                clientset?: (string|null);
+
+                /** DescribeConfigMapRequest cluster */
+                cluster?: (string|null);
+
+                /** DescribeConfigMapRequest namespace */
+                namespace?: (string|null);
+
+                /** DescribeConfigMapRequest name */
+                name?: (string|null);
+
+                /** DescribeConfigMapRequest labels */
+                labels?: ({ [k: string]: string }|null);
+
+                /** DescribeConfigMapRequest annotations */
+                annotations?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a DescribeConfigMapRequest. */
+            class DescribeConfigMapRequest implements IDescribeConfigMapRequest {
+
+                /**
+                 * Constructs a new DescribeConfigMapRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeConfigMapRequest);
+
+                /** DescribeConfigMapRequest clientset. */
+                public clientset: string;
+
+                /** DescribeConfigMapRequest cluster. */
+                public cluster: string;
+
+                /** DescribeConfigMapRequest namespace. */
+                public namespace: string;
+
+                /** DescribeConfigMapRequest name. */
+                public name: string;
+
+                /** DescribeConfigMapRequest labels. */
+                public labels: { [k: string]: string };
+
+                /** DescribeConfigMapRequest annotations. */
+                public annotations: { [k: string]: string };
+
+                /**
+                 * Verifies a DescribeConfigMapRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeConfigMapRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeConfigMapRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeConfigMapRequest;
+
+                /**
+                 * Creates a plain object from a DescribeConfigMapRequest message. Also converts values to other types if specified.
+                 * @param message DescribeConfigMapRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeConfigMapRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeConfigMapRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DescribeConfigMapResponse. */
+            interface IDescribeConfigMapResponse {
+
+                /** DescribeConfigMapResponse configMap */
+                configMap?: (clutch.k8s.v1.IConfigMap|null);
+            }
+
+            /** Represents a DescribeConfigMapResponse. */
+            class DescribeConfigMapResponse implements IDescribeConfigMapResponse {
+
+                /**
+                 * Constructs a new DescribeConfigMapResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeConfigMapResponse);
+
+                /** DescribeConfigMapResponse configMap. */
+                public configMap?: (clutch.k8s.v1.IConfigMap|null);
+
+                /**
+                 * Verifies a DescribeConfigMapResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeConfigMapResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeConfigMapResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeConfigMapResponse;
+
+                /**
+                 * Creates a plain object from a DescribeConfigMapResponse message. Also converts values to other types if specified.
+                 * @param message DescribeConfigMapResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeConfigMapResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeConfigMapResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteConfigMapRequest. */
+            interface IDeleteConfigMapRequest {
+
+                /** DeleteConfigMapRequest clientset */
+                clientset?: (string|null);
+
+                /** DeleteConfigMapRequest cluster */
+                cluster?: (string|null);
+
+                /** DeleteConfigMapRequest namespace */
+                namespace?: (string|null);
+
+                /** DeleteConfigMapRequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a DeleteConfigMapRequest. */
+            class DeleteConfigMapRequest implements IDeleteConfigMapRequest {
+
+                /**
+                 * Constructs a new DeleteConfigMapRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteConfigMapRequest);
+
+                /** DeleteConfigMapRequest clientset. */
+                public clientset: string;
+
+                /** DeleteConfigMapRequest cluster. */
+                public cluster: string;
+
+                /** DeleteConfigMapRequest namespace. */
+                public namespace: string;
+
+                /** DeleteConfigMapRequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a DeleteConfigMapRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteConfigMapRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteConfigMapRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteConfigMapRequest;
+
+                /**
+                 * Creates a plain object from a DeleteConfigMapRequest message. Also converts values to other types if specified.
+                 * @param message DeleteConfigMapRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteConfigMapRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteConfigMapRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteConfigMapResponse. */
+            interface IDeleteConfigMapResponse {
+            }
+
+            /** Represents a DeleteConfigMapResponse. */
+            class DeleteConfigMapResponse implements IDeleteConfigMapResponse {
+
+                /**
+                 * Constructs a new DeleteConfigMapResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteConfigMapResponse);
+
+                /**
+                 * Verifies a DeleteConfigMapResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteConfigMapResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteConfigMapResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteConfigMapResponse;
+
+                /**
+                 * Creates a plain object from a DeleteConfigMapResponse message. Also converts values to other types if specified.
+                 * @param message DeleteConfigMapResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteConfigMapResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteConfigMapResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a NullableString. */
             interface INullableString {
 
@@ -12679,6 +13180,66 @@ export namespace clutch {
                      */
                     public toJSON(): { [k: string]: any };
                 }
+
+                /** Properties of a ConfigMap. */
+                interface IConfigMap {
+
+                    /** ConfigMap name */
+                    name?: (string|null);
+
+                    /** ConfigMap clientset */
+                    clientset?: (string|null);
+
+                    /** ConfigMap namespace */
+                    namespace?: (string|null);
+                }
+
+                /** Represents a ConfigMap. */
+                class ConfigMap implements IConfigMap {
+
+                    /**
+                     * Constructs a new ConfigMap.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.k8s.v1.IConfigMap);
+
+                    /** ConfigMap name. */
+                    public name: string;
+
+                    /** ConfigMap clientset. */
+                    public clientset: string;
+
+                    /** ConfigMap namespace. */
+                    public namespace: string;
+
+                    /**
+                     * Verifies a ConfigMap message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a ConfigMap message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ConfigMap
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.k8s.v1.ConfigMap;
+
+                    /**
+                     * Creates a plain object from a ConfigMap message. Also converts values to other types if specified.
+                     * @param message ConfigMap
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.k8s.v1.ConfigMap, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ConfigMap to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
             }
         }
     }
@@ -13131,18 +13692,18 @@ export namespace clutch {
                 public getTopology(request: clutch.topology.v1.IGetTopologyRequest): Promise<clutch.topology.v1.GetTopologyResponse>;
 
                 /**
-                 * Calls SearchTopology.
-                 * @param request SearchTopologyRequest message or plain object
-                 * @param callback Node-style callback called with the error, if any, and SearchTopologyResponse
+                 * Calls Search.
+                 * @param request SearchRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and SearchResponse
                  */
-                public searchTopology(request: clutch.topology.v1.ISearchTopologyRequest, callback: clutch.topology.v1.TopologyAPI.SearchTopologyCallback): void;
+                public search(request: clutch.topology.v1.ISearchRequest, callback: clutch.topology.v1.TopologyAPI.SearchCallback): void;
 
                 /**
-                 * Calls SearchTopology.
-                 * @param request SearchTopologyRequest message or plain object
+                 * Calls Search.
+                 * @param request SearchRequest message or plain object
                  * @returns Promise
                  */
-                public searchTopology(request: clutch.topology.v1.ISearchTopologyRequest): Promise<clutch.topology.v1.SearchTopologyResponse>;
+                public search(request: clutch.topology.v1.ISearchRequest): Promise<clutch.topology.v1.SearchResponse>;
             }
 
             namespace TopologyAPI {
@@ -13155,11 +13716,11 @@ export namespace clutch {
                 type GetTopologyCallback = (error: (Error|null), response?: clutch.topology.v1.GetTopologyResponse) => void;
 
                 /**
-                 * Callback as used by {@link clutch.topology.v1.TopologyAPI#searchTopology}.
+                 * Callback as used by {@link clutch.topology.v1.TopologyAPI#search}.
                  * @param error Error, if any
-                 * @param [response] SearchTopologyResponse
+                 * @param [response] SearchResponse
                  */
-                type SearchTopologyCallback = (error: (Error|null), response?: clutch.topology.v1.SearchTopologyResponse) => void;
+                type SearchCallback = (error: (Error|null), response?: clutch.topology.v1.SearchResponse) => void;
             }
 
             /** Properties of a GetTopologyRequest. */
@@ -13258,79 +13819,79 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of a SearchTopologyRequest. */
-            interface ISearchTopologyRequest {
+            /** Properties of a SearchRequest. */
+            interface ISearchRequest {
 
-                /** SearchTopologyRequest sort */
-                sort?: (clutch.topology.v1.SearchTopologyRequest.ISort|null);
+                /** SearchRequest sort */
+                sort?: (clutch.topology.v1.SearchRequest.ISort|null);
 
-                /** SearchTopologyRequest pageToken */
-                pageToken?: (number|Long|null);
+                /** SearchRequest pageToken */
+                pageToken?: (string|null);
 
-                /** SearchTopologyRequest limit */
+                /** SearchRequest limit */
                 limit?: (number|Long|null);
 
-                /** SearchTopologyRequest filter */
-                filter?: (clutch.topology.v1.SearchTopologyRequest.IFilter|null);
+                /** SearchRequest filter */
+                filter?: (clutch.topology.v1.SearchRequest.IFilter|null);
             }
 
-            /** Represents a SearchTopologyRequest. */
-            class SearchTopologyRequest implements ISearchTopologyRequest {
+            /** Represents a SearchRequest. */
+            class SearchRequest implements ISearchRequest {
 
                 /**
-                 * Constructs a new SearchTopologyRequest.
+                 * Constructs a new SearchRequest.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.topology.v1.ISearchTopologyRequest);
+                constructor(properties?: clutch.topology.v1.ISearchRequest);
 
-                /** SearchTopologyRequest sort. */
-                public sort?: (clutch.topology.v1.SearchTopologyRequest.ISort|null);
+                /** SearchRequest sort. */
+                public sort?: (clutch.topology.v1.SearchRequest.ISort|null);
 
-                /** SearchTopologyRequest pageToken. */
-                public pageToken: (number|Long);
+                /** SearchRequest pageToken. */
+                public pageToken: string;
 
-                /** SearchTopologyRequest limit. */
+                /** SearchRequest limit. */
                 public limit: (number|Long);
 
-                /** SearchTopologyRequest filter. */
-                public filter?: (clutch.topology.v1.SearchTopologyRequest.IFilter|null);
+                /** SearchRequest filter. */
+                public filter?: (clutch.topology.v1.SearchRequest.IFilter|null);
 
                 /**
-                 * Verifies a SearchTopologyRequest message.
+                 * Verifies a SearchRequest message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a SearchTopologyRequest message from a plain object. Also converts values to their respective internal types.
+                 * Creates a SearchRequest message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns SearchTopologyRequest
+                 * @returns SearchRequest
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyRequest;
+                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchRequest;
 
                 /**
-                 * Creates a plain object from a SearchTopologyRequest message. Also converts values to other types if specified.
-                 * @param message SearchTopologyRequest
+                 * Creates a plain object from a SearchRequest message. Also converts values to other types if specified.
+                 * @param message SearchRequest
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.topology.v1.SearchTopologyRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.topology.v1.SearchRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this SearchTopologyRequest to JSON.
+                 * Converts this SearchRequest to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
             }
 
-            namespace SearchTopologyRequest {
+            namespace SearchRequest {
 
                 /** Properties of a Sort. */
                 interface ISort {
 
                     /** Sort direction */
-                    direction?: (clutch.topology.v1.SearchTopologyRequest.Sort.Direction|null);
+                    direction?: (clutch.topology.v1.SearchRequest.Sort.Direction|null);
 
                     /** Sort field */
                     field?: (string|null);
@@ -13343,10 +13904,10 @@ export namespace clutch {
                      * Constructs a new Sort.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.topology.v1.SearchTopologyRequest.ISort);
+                    constructor(properties?: clutch.topology.v1.SearchRequest.ISort);
 
                     /** Sort direction. */
-                    public direction: clutch.topology.v1.SearchTopologyRequest.Sort.Direction;
+                    public direction: clutch.topology.v1.SearchRequest.Sort.Direction;
 
                     /** Sort field. */
                     public field: string;
@@ -13363,7 +13924,7 @@ export namespace clutch {
                      * @param object Plain object
                      * @returns Sort
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyRequest.Sort;
+                    public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchRequest.Sort;
 
                     /**
                      * Creates a plain object from a Sort message. Also converts values to other types if specified.
@@ -13371,7 +13932,7 @@ export namespace clutch {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.topology.v1.SearchTopologyRequest.Sort, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.topology.v1.SearchRequest.Sort, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this Sort to JSON.
@@ -13394,7 +13955,7 @@ export namespace clutch {
                 interface IFilter {
 
                     /** Filter search */
-                    search?: (clutch.topology.v1.SearchTopologyRequest.Filter.ISearch|null);
+                    search?: (clutch.topology.v1.SearchRequest.Filter.ISearch|null);
 
                     /** Filter typeUrl */
                     typeUrl?: (string|null);
@@ -13410,10 +13971,10 @@ export namespace clutch {
                      * Constructs a new Filter.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.topology.v1.SearchTopologyRequest.IFilter);
+                    constructor(properties?: clutch.topology.v1.SearchRequest.IFilter);
 
                     /** Filter search. */
-                    public search?: (clutch.topology.v1.SearchTopologyRequest.Filter.ISearch|null);
+                    public search?: (clutch.topology.v1.SearchRequest.Filter.ISearch|null);
 
                     /** Filter typeUrl. */
                     public typeUrl: string;
@@ -13433,7 +13994,7 @@ export namespace clutch {
                      * @param object Plain object
                      * @returns Filter
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyRequest.Filter;
+                    public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchRequest.Filter;
 
                     /**
                      * Creates a plain object from a Filter message. Also converts values to other types if specified.
@@ -13441,7 +14002,7 @@ export namespace clutch {
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.topology.v1.SearchTopologyRequest.Filter, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.topology.v1.SearchRequest.Filter, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
                      * Converts this Filter to JSON.
@@ -13469,7 +14030,7 @@ export namespace clutch {
                          * Constructs a new Search.
                          * @param [properties] Properties to set
                          */
-                        constructor(properties?: clutch.topology.v1.SearchTopologyRequest.Filter.ISearch);
+                        constructor(properties?: clutch.topology.v1.SearchRequest.Filter.ISearch);
 
                         /** Search field. */
                         public field: string;
@@ -13489,7 +14050,7 @@ export namespace clutch {
                          * @param object Plain object
                          * @returns Search
                          */
-                        public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyRequest.Filter.Search;
+                        public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchRequest.Filter.Search;
 
                         /**
                          * Creates a plain object from a Search message. Also converts values to other types if specified.
@@ -13497,7 +14058,7 @@ export namespace clutch {
                          * @param [options] Conversion options
                          * @returns Plain object
                          */
-                        public static toObject(message: clutch.topology.v1.SearchTopologyRequest.Filter.Search, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                        public static toObject(message: clutch.topology.v1.SearchRequest.Filter.Search, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                         /**
                          * Converts this Search to JSON.
@@ -13508,55 +14069,55 @@ export namespace clutch {
                 }
             }
 
-            /** Properties of a SearchTopologyResponse. */
-            interface ISearchTopologyResponse {
+            /** Properties of a SearchResponse. */
+            interface ISearchResponse {
 
-                /** SearchTopologyResponse resources */
+                /** SearchResponse resources */
                 resources?: (clutch.topology.v1.IResource[]|null);
 
-                /** SearchTopologyResponse nextPageToken */
+                /** SearchResponse nextPageToken */
                 nextPageToken?: (string|null);
             }
 
-            /** Represents a SearchTopologyResponse. */
-            class SearchTopologyResponse implements ISearchTopologyResponse {
+            /** Represents a SearchResponse. */
+            class SearchResponse implements ISearchResponse {
 
                 /**
-                 * Constructs a new SearchTopologyResponse.
+                 * Constructs a new SearchResponse.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.topology.v1.ISearchTopologyResponse);
+                constructor(properties?: clutch.topology.v1.ISearchResponse);
 
-                /** SearchTopologyResponse resources. */
+                /** SearchResponse resources. */
                 public resources: clutch.topology.v1.IResource[];
 
-                /** SearchTopologyResponse nextPageToken. */
+                /** SearchResponse nextPageToken. */
                 public nextPageToken: string;
 
                 /**
-                 * Verifies a SearchTopologyResponse message.
+                 * Verifies a SearchResponse message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates a SearchTopologyResponse message from a plain object. Also converts values to their respective internal types.
+                 * Creates a SearchResponse message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns SearchTopologyResponse
+                 * @returns SearchResponse
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchTopologyResponse;
+                public static fromObject(object: { [k: string]: any }): clutch.topology.v1.SearchResponse;
 
                 /**
-                 * Creates a plain object from a SearchTopologyResponse message. Also converts values to other types if specified.
-                 * @param message SearchTopologyResponse
+                 * Creates a plain object from a SearchResponse message. Also converts values to other types if specified.
+                 * @param message SearchResponse
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.topology.v1.SearchTopologyResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.topology.v1.SearchResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this SearchTopologyResponse to JSON.
+                 * Converts this SearchResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -14048,7 +14609,7 @@ export namespace clutch {
                 pb?: (google.protobuf.IAny|null);
 
                 /** Resource metadata */
-                metadata?: ({ [k: string]: string }|null);
+                metadata?: ({ [k: string]: google.protobuf.IValue }|null);
             }
 
             /** Represents a Resource. */
@@ -14067,7 +14628,7 @@ export namespace clutch {
                 public pb?: (google.protobuf.IAny|null);
 
                 /** Resource metadata. */
-                public metadata: { [k: string]: string };
+                public metadata: { [k: string]: google.protobuf.IValue };
 
                 /**
                  * Verifies a Resource message.

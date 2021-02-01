@@ -20,7 +20,6 @@ LINKED_PACKAGES=(
   "@types/react"
   "@types/react-dom"
   "@types/styled-components"
-  "@types/yup"
   "typescript"
 )
 

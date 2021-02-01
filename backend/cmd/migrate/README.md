@@ -34,3 +34,15 @@ If you need to migrate down multiple versions, invoke the tool until you reach t
 cd backend/cmd/migrate
 go run migrate.go -template -down -c path/to/my/clutch-config.yaml
 ```
+
+## Federated Migrations
+
+:warning: **IT IS NOT SAFE TO MODIFY THE SAME TABLES FROM THE FEDERATED MIGRATIONS AND BUILT-IN MODULE MIGRATIONS. IT WILL CORRUPT THE DATABASE.**
+
+If you wish to run migrations for independent tables from federated code, provide the `-namespace` argument and `-migrationDir` argument.
+
+For example, if I had created a scaffolded application in `clutch-custom-gateway/`, I could create migrations for a new module's table in `clutch-custom-gateway/migrations`,
+e.g. `000001_create_my_new_table.up.sql` and `000001_create_my_new_table.down.sql`, and run the migrations using
+```bash
+$ go run migrate.go -c path/to/my/clutch-config.yaml -namespace custom_gateway -migrationDir path/to/clutch-custom-gateway/migrations
+```

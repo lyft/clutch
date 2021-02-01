@@ -36,7 +36,6 @@ var typeURLHPA = meta.TypeURL((*k8sv1api.HPA)(nil))
 var typeSchemas = map[string][]descriptor.Message{
 	typeURLPod: {
 		(*k8sv1resolver.PodID)(nil),
-		(*k8sv1resolver.IPAddress)(nil),
 	},
 	typeURLHPA: {
 		(*k8sv1resolver.HPAName)(nil),
@@ -75,7 +74,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 	}
 
 	resolver.HydrateDynamicOptions(schemas, map[string][]*resolverv1.Option{
-		"clientset": makeClientsetOptions(svc.Clientsets()),
+		"clientset": makeClientsetOptions(svc.Clientsets(context.Background())),
 	})
 
 	r := &res{
@@ -153,7 +152,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	switch typeURL {
 	case typeURLPod:
 		if idPattern.MatchString(query) {
-			for _, name := range r.svc.Clientsets() {
+			for _, name := range r.svc.Clientsets(ctx) {
 				handler.Add(1)
 				go func(name string) {
 					defer handler.Done()
@@ -171,7 +170,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 		}
 	case typeURLHPA:
 		if idPattern.MatchString(query) {
-			for _, name := range r.svc.Clientsets() {
+			for _, name := range r.svc.Clientsets(ctx) {
 				handler.Add(1)
 				go func(name string) {
 					defer handler.Done()

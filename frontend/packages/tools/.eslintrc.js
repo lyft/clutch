@@ -96,7 +96,7 @@ module.exports = {
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": ["**/*.config.js", ".eslintrc.js"],
+        "devDependencies": ["**/*.config.js", "**/.eslintrc.js"],
       }
     ],
     "no-console": ["error"],
@@ -117,6 +117,7 @@ module.exports = {
       }
     ],
     "react/prop-types": ["off"],
+    "react/require-default-props": ["off"],
     "react/jsx-props-no-spreading": [
       "off",
       {
@@ -147,7 +148,7 @@ module.exports = {
       rules: {
         "no-undef": ["off"],
         "no-unused-vars": ["off"],
-        "@typescript-eslint/no-unused-vars": ["error"],
+        "@typescript-eslint/no-unused-vars": ["error", {"args": "none"}],
         "no-use-before-define": ["off"],
         "@typescript-eslint/no-use-before-define": ["error"],
         "no-shadow": ["off"],

@@ -17,6 +17,7 @@ import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import _ from "lodash";
 import { number, ref } from "yup";
+import type Reference from "yup/lib/Reference";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
@@ -46,17 +47,19 @@ const HPADetails: React.FC<WizardChild> = () => {
   const metadataAnnotations = [];
   const metadataLabels = [];
 
-  if (hpa.annotations) {
-    _.forEach(hpa.annotations, (annotation, key) => {
-      metadataAnnotations.push({ name: key, value: annotation });
-    });
-  }
+  React.useEffect(() => {
+    if (hpa.annotations) {
+      _.forEach(hpa.annotations, (annotation, key) => {
+        metadataAnnotations.push({ name: key, value: annotation });
+      });
+    }
 
-  if (hpa.labels) {
-    _.forEach(hpa.labels, (label, key) => {
-      metadataLabels.push({ name: key, value: label });
-    });
-  }
+    if (hpa.labels) {
+      _.forEach(hpa.labels, (label, key) => {
+        metadataLabels.push({ name: key, value: label });
+      });
+    }
+  }, []);
 
   return (
     <WizardStep error={hpaData.error} isLoading={hpaData.isLoading}>
@@ -83,7 +86,9 @@ const HPADetails: React.FC<WizardChild> = () => {
             input: {
               type: "number",
               key: "sizing.maxReplicas",
-              validation: number().integer().moreThan(ref("Min Size")),
+              validation: number()
+                .integer()
+                .min(ref("Min Size") as Reference<number>),
             },
           },
           { name: "Cluster", value: hpa.cluster },

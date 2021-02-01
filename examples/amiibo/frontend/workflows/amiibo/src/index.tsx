@@ -1,6 +1,6 @@
-import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch/core";
+import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
 
-import HelloWorld from "./hello-world";
+import Amiibo from "./hello-world";
 
 export interface WorkflowProps extends BaseWorkflowProps {}
 
@@ -15,9 +15,9 @@ const register = (): WorkflowConfiguration => {
     displayName: "Amiibo",
     routes: {
       landing: {
-        path: "/",
+        path: "/lookup",
         description: "Lookup all Amiibo by name.",
-        component: HelloWorld,
+        component: Amiibo,
       },
     },
   };

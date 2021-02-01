@@ -11,6 +11,7 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // AuthnAPIClient is the client API for AuthnAPI service.
@@ -74,7 +75,7 @@ type UnsafeAuthnAPIServer interface {
 }
 
 func RegisterAuthnAPIServer(s grpc.ServiceRegistrar, srv AuthnAPIServer) {
-	s.RegisterService(&_AuthnAPI_serviceDesc, srv)
+	s.RegisterService(&AuthnAPI_ServiceDesc, srv)
 }
 
 func _AuthnAPI_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -113,7 +114,10 @@ func _AuthnAPI_Callback_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-var _AuthnAPI_serviceDesc = grpc.ServiceDesc{
+// AuthnAPI_ServiceDesc is the grpc.ServiceDesc for AuthnAPI service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var AuthnAPI_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "clutch.authn.v1.AuthnAPI",
 	HandlerType: (*AuthnAPIServer)(nil),
 	Methods: []grpc.MethodDesc{

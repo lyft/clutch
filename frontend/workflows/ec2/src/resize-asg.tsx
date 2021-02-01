@@ -13,6 +13,7 @@ import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import { number, ref } from "yup";
+import type Reference from "yup/lib/Reference";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
@@ -61,7 +62,9 @@ const GroupDetails: React.FC<WizardChild> = () => {
             input: {
               type: "number",
               key: "size.max",
-              validation: number().integer().moreThan(ref("Min Size")),
+              validation: number()
+                .integer()
+                .min(ref("Min Size") as Reference<number>),
             },
           },
           {
@@ -70,7 +73,9 @@ const GroupDetails: React.FC<WizardChild> = () => {
             input: {
               type: "number",
               key: "size.desired",
-              validation: number().integer().moreThan(ref("Min Size")),
+              validation: number()
+                .integer()
+                .min(ref("Min Size") as Reference<number>),
             },
           },
           { name: "Availability Zone", value: group.zones },

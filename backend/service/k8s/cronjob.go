@@ -11,7 +11,7 @@ import (
 )
 
 func (s *svc) DescribeCronJob(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.CronJob, error) {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +32,7 @@ func (s *svc) DescribeCronJob(ctx context.Context, clientset, cluster, namespace
 }
 
 func (s *svc) DeleteCronJob(ctx context.Context, clientset, cluster, namespace, name string) error {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return err
 	}

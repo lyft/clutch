@@ -10,12 +10,20 @@ import useThemeContext from '@theme/hooks/useThemeContext';
 import useHideableNavbar from '@theme/hooks/useHideableNavbar';
 import useLockBodyScroll from '@theme/hooks/useLockBodyScroll';
 import useWindowSize, { windowSizes } from '@theme/hooks/useWindowSize';
-import useLogo from '@theme/hooks/useLogo';
+import Logo from '@theme/Logo';
 
 import styles from './styles.module.css';
 
 // retrocompatible with v1
 const DefaultNavItemPosition = 'right';
+
+interface ItemProps {
+  to: string;
+  activeBasePath: string;
+  icon: string;
+  label: string;
+  className?: string;
+}
 
 // items defined here instead of config so they can have an associated icon
 var items = [
@@ -24,6 +32,12 @@ var items = [
     activeBasePath: 'docs',
     icon: "fe fe-book",
     label: 'Docs',
+  },
+  {
+    to: 'blog',
+    activeBasePath: 'blog',
+    icon: "fe fe-rss",
+    label: 'Blog',
   },
   {
     to: 'docs/community',
@@ -38,14 +52,21 @@ var items = [
   },
 ];
 
+interface NavLinkProps {
+  to: string;
+  href?: string;
+  label: string;
+  activeClassName?: string;
+  prependBaseUrlToHref?: boolean;
+  icon: string;
+}
+
 function NavLink({
-  activeBasePath,
-  activeBaseRegex,
   to,
-  href,
+  href = "",
   label,
   activeClassName = 'navbar__link--active',
-  prependBaseUrlToHref,
+  prependBaseUrlToHref = false,
   icon,
   ...props
 }) {
@@ -71,12 +92,18 @@ function NavLink({
   );
 }
 
+interface NavItemProps extends NavLinkProps {
+  items?: ItemProps[];
+  position?: 'right' | 'left';
+  className?: string;
+}
+
 function NavItem({
   items,
   position = DefaultNavItemPosition,
   className,
   ...props
-}) {
+}: NavItemProps) {
   const navLinkClassNames = (extraClassName, isDropdownItem = false) =>
     clsx(
       {
@@ -122,7 +149,11 @@ function NavItem({
   );
 }
 
-function MobileNavItem({ items, position: _position, className, ...props }) {
+interface MobileNavItemProps extends NavItemProps {
+  onClick: any;
+}
+
+function MobileNavItem({ items, className, ...props }: MobileNavItemProps) {
   // Need to destructure position from props so that it doesn't get passed on.
   const navLinkClassNames = (extraClassName, isSubList = false) =>
     clsx(
@@ -181,7 +212,7 @@ function Navbar() {
   const {
     siteConfig: {
       themeConfig: {
-        navbar: { title, hideOnScroll = false } = {},
+        navbar: { hideOnScroll = false } = {},
         colorMode: {disableSwitch: disableColorModeSwitch = false} = {},
       },
     },
@@ -192,7 +223,6 @@ function Navbar() {
 
   const { isDarkTheme, setLightTheme, setDarkTheme } = useThemeContext();
   const { navbarRef, isNavbarVisible } = useHideableNavbar(hideOnScroll);
-  const { logoLink, logoLinkProps, logoImageUrl, logoAlt } = useLogo();
 
   useLockBodyScroll(sidebarShown);
 
@@ -254,17 +284,10 @@ function Navbar() {
               </svg>
             </div>
           )}
-          <Link className={clsx("navbar__brand", styles.navbarLogoCustom)} to={logoLink} {...logoLinkProps}>
-            {logoImageUrl != null && (
-              <img
-                key={isClient}
-                className={clsx("navbar__logo")}
-                src={logoImageUrl}
-                alt={logoAlt}
-              />
-            )}
+          <div className={clsx("navbar__brand", styles.navbarLogoCustom)}>
+            <Logo imageClassName={clsx("navbar__logo", styles.navbarLogoCustom)} />
             <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
-          </Link>
+          </div>
           {leftLinks.map((linkItem, i) => (
             <NavItem {...linkItem} key={i} />
           ))}
@@ -294,21 +317,10 @@ function Navbar() {
       />
       <div className="navbar-sidebar">
         <div className="navbar-sidebar__brand">
-          <Link
-            className="navbar__brand"
-            onClick={hideSidebar}
-            to={logoLink}
-            {...logoLinkProps}>
-            {logoImageUrl != null && (
-              <img
-                key={isClient}
-                className="navbar__logo"
-                src={logoImageUrl}
-                alt={logoAlt}
-              />
-            )}
+          <div className={clsx("navbar__brand", styles.navbarLogoCustom)} onClick={hideSidebar}>
+            <Logo imageClassName={clsx("navbar__logo", styles.navbarLogoCustom)} />
             <img className={clsx('navbar__title', styles.navbarLogoTextCustom, {[styles.hideLogoText]: isSearchBarExpanded})} src={useBaseUrl("img/navigation/logoText.svg")} />
-          </Link>
+          </div>
           {!disableColorModeSwitch && sidebarShown && (
             <Toggle
               aria-label="Dark mode toggle in sidebar"
@@ -320,7 +332,7 @@ function Navbar() {
         <div className="navbar-sidebar__items">
           <div className="menu">
             <ul className="menu__list">
-              {items.map((linkItem, i) => (
+              {items.map((linkItem: ItemProps, i) => (
                 <MobileNavItem {...linkItem} onClick={hideSidebar} key={i} />
               ))}
             </ul>
