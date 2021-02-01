@@ -1,20 +1,17 @@
 import React from "react";
 import { Error } from "@clutch-sh/core";
+import styled from "@emotion/styled";
 import { Container, Grid, Typography } from "@material-ui/core";
-import styled from "styled-components";
 
-const Heading = styled(Typography)`
-  padding-left: 1.25rem;
-`;
+const PageContainer = styled.div({
+  display: "flex",
+  flex: "1 auto",
+  margin: "30px",
+});
 
-const Spacer = styled.div`
-  margin: 30px;
-`;
-
-const SizedGrid = styled(Grid)`
-  width: 100%;
-  padding: 24px;
-`;
+const Heading = styled(Typography)({
+  padding: "16px 0",
+});
 
 interface PageLayoutProps {
   heading: string;
@@ -24,15 +21,15 @@ interface PageLayoutProps {
 const PageLayout: React.FC<PageLayoutProps> = ({ heading, error, children }) => {
   const hasError = error !== undefined && error !== "" && error !== null;
   return (
-    <Spacer>
-      {hasError && <Error message={error} />}
-      <Container maxWidth="lg">
+    <PageContainer>
+      <Container>
         <Heading variant="h5">
           <strong>{heading}</strong>
         </Heading>
-        <SizedGrid>{children}</SizedGrid>
+        {hasError && <Error message={error} />}
+        <Grid>{children}</Grid>
       </Container>
-    </Spacer>
+    </PageContainer>
   );
 };
 

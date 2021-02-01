@@ -51,7 +51,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 
 type Service interface {
 	// All names of clientsets.
-	Clientsets() []string
+	Clientsets(ctx context.Context) []string
 
 	// Pod management functions.
 	DescribePod(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Pod, error)
@@ -76,6 +76,15 @@ type Service interface {
 	// StatefulSet management functions.
 	DescribeStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.StatefulSet, error)
 	UpdateStatefulSet(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateStatefulSetRequest_Fields) error
+
+	// CronJob management functions.
+	DescribeCronJob(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.CronJob, error)
+	DeleteCronJob(ctx context.Context, clientset, cluster, namespace, name string) error
+
+	// ConfigMap management functions.
+	DescribeConfigMap(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.ConfigMap, error)
+	DeleteConfigMap(ctx context.Context, clientset, cluster, namespace, name string) error
+	ListConfigMaps(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.ConfigMap, error)
 }
 
 type svc struct {
@@ -97,9 +106,10 @@ func NewWithClientsetManager(manager ClientsetManager, logger *zap.Logger, scope
 	}, nil
 }
 
-func (s *svc) Clientsets() []string {
-	ret := make([]string, 0, len(s.manager.Clientsets()))
-	for name := range s.manager.Clientsets() {
+func (s *svc) Clientsets(ctx context.Context) []string {
+	cs := s.manager.Clientsets(ctx)
+	ret := make([]string, 0, len(cs))
+	for name := range cs {
 		ret = append(ret, name)
 	}
 	return ret

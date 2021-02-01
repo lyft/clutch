@@ -55,12 +55,19 @@ const resolveResource = async (
     [key: string]: any;
   },
   onResolve: (resultObjects: any[], failureMessages: string[]) => void,
-  onError: (message: string) => void
+  onError: (message: string) => void,
+  apiPackage?: any
 ) => {
   const resolver = fields?.query !== undefined ? resolveQuery : resolveFields;
   return resolver(type, limit, fields)
     .then(({ results, failures }) => {
-      const resultObjects = results.map(result => _.get($pbclutch, type).fromObject(result));
+      // n.b. default to using the open source @clutch-sh/api package to resolve the
+      // resource against unless a custom package has been specified by the workflow.
+      let pbClutch = _.get($pbclutch, type);
+      if (apiPackage) {
+        pbClutch = _.get(apiPackage, type);
+      }
+      const resultObjects = results.map(result => pbClutch.fromObject(result));
       const failureMessages = failures.map(failure => parseErrorMessage(failure.message).summary);
       if (_.some(resultObjects) !== undefined) {
         onResolve(resultObjects, failureMessages);

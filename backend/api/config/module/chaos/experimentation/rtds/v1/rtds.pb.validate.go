@@ -64,6 +64,26 @@ func (m *Config) Validate() error {
 
 	// no validation rules for EgressFaultRuntimePrefix
 
+	if v, ok := interface{}(m.GetResourceTtl()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ConfigValidationError{
+				field:  "ResourceTtl",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetHeartbeatInterval()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ConfigValidationError{
+				field:  "HeartbeatInterval",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 

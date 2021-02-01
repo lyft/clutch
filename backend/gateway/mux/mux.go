@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/http/pprof"
 	"net/url"
 	"path"
 	"regexp"
@@ -199,7 +200,7 @@ func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Ma
 	runtime.DefaultHTTPErrorHandler(ctx, mux, m, w, req, err)
 }
 
-func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem, assetCfg *gatewayv1.Assets) (*Mux, error) {
+func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem, gatewayCfg *gatewayv1.GatewayOptions) (*Mux, error) {
 	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(unaryInterceptors...))
 	jsonGateway := runtime.NewServeMux(
 		runtime.WithForwardResponseOption(customResponseForwarder),
@@ -220,8 +221,8 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 
 	// If there is a configured asset provider, we check to see if the service is configured before proceeding.
 	// Bailing out early during the startup process instead of hitting this error at runtime when serving assets.
-	if assetCfg != nil && assetCfg.Provider != nil {
-		_, err := getAssetProviderService(assetCfg)
+	if gatewayCfg.Assets != nil && gatewayCfg.Assets.Provider != nil {
+		_, err := getAssetProviderService(gatewayCfg.Assets)
 		if err != nil {
 			return nil, err
 		}
@@ -229,11 +230,15 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 
 	httpMux := http.NewServeMux()
 	httpMux.Handle("/", &assetHandler{
-		assetCfg:   assetCfg,
+		assetCfg:   gatewayCfg.Assets,
 		next:       jsonGateway,
 		fileSystem: assets,
 		fileServer: http.FileServer(assets),
 	})
+
+	if gatewayCfg.EnablePprof {
+		httpMux.HandleFunc("/debug/pprof/", pprof.Index)
+	}
 
 	mux := &Mux{
 		GRPCServer:  grpcServer,

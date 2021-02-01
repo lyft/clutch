@@ -1,120 +1,23 @@
 import React from "react";
-import { Button, Warning, WizardContext } from "@clutch-sh/core";
+import { Button, ButtonGroup, Step, Stepper, Warning, WizardContext } from "@clutch-sh/core";
 import type { ManagerLayout } from "@clutch-sh/data-layout";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
-import type { ContainerProps } from "@material-ui/core";
-import {
-  Container,
-  Grid,
-  Step,
-  StepConnector as MUIStepConnector,
-  StepContent,
-  StepLabel,
-  Stepper,
-  Typography,
-} from "@material-ui/core";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Check from "@material-ui/icons/Check";
-import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
-import FirstPageIcon from "@material-ui/icons/FirstPage";
-import clsx from "clsx";
-import styled from "styled-components";
+import styled from "@emotion/styled";
+import { Container as MuiContainer, Grid, Paper as MuiPaper, Typography } from "@material-ui/core";
 
 import { useWizardState, WizardAction } from "./state";
 import type { WizardStepProps } from "./step";
 
-const Heading = styled(Typography)`
-  padding-left: 1.25rem;
-`;
-
-const StepConnector = withStyles({
-  alternativeLabel: {
-    top: 10,
-    left: "calc(-50% + 16px)",
-    right: "calc(50% + 16px)",
-  },
-  active: {
-    "& $line": {
-      borderColor: "#02acbe",
-    },
-  },
-  completed: {
-    "& $line": {
-      borderColor: "#02acbe",
-    },
-  },
-  line: {
-    borderColor: "#eaeaf0",
-    borderTopWidth: 3,
-    borderRadius: 1,
-  },
-})(MUIStepConnector);
-
-const useQontoStepIconStyles = makeStyles({
-  root: {
-    color: "#eaeaf0",
-    display: "flex",
-    height: 22,
-    alignItems: "center",
-  },
-  active: {
-    color: "#02acbe",
-  },
+const Heading = styled(Typography)({
+  paddingBottom: "16px",
+  fontWeight: 700,
+  fontSize: "26px",
 });
-
-const CircleIcon = styled.div`
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: currentColor;
-`;
-
-const CheckmarkIcon = styled(Check)`
-  ${({ theme }) => `
-  color: ${theme.palette.accent.main};
-  z-index: 1;
-  font-size: 18px;
-  `}
-`;
-
-interface StepIconProps {
-  active: boolean;
-  completed: boolean;
-  error: boolean;
-}
-
-const StepIcon: React.FC<StepIconProps> = ({ active, completed, error }) => {
-  const classes = useQontoStepIconStyles();
-
-  return (
-    <div
-      className={clsx(classes.root, {
-        [classes.active]: active,
-      })}
-    >
-      {completed ? <CheckmarkIcon /> : error ? <ErrorOutlineIcon /> : <CircleIcon />}
-    </div>
-  );
-};
-
-const StyledStepper = styled(Stepper)`
-  background-color: transparent;
-`;
-
-interface SpacerProps {
-  margin?: string;
-}
-
-const Spacer = styled.div<SpacerProps>`
-  ${({ margin }) => `
-  margin: ${Number(margin || 1) * 10}px;
-  `}
-`;
 
 interface WizardProps {
   heading?: string;
   dataLayout: ManagerLayout;
-  maxWidth?: ContainerProps["maxWidth"];
+  children: React.ReactElement<WizardStepProps> | React.ReactElement<WizardStepProps>[];
 }
 
 export interface WizardChild {
@@ -129,15 +32,17 @@ interface WizardStepData {
   [index: string]: any;
 }
 
-const SizedContainer = styled(Grid)`
-  display: inline;
-`;
+const Container = styled(MuiContainer)({
+  padding: "32px",
+  maxWidth: "800px",
+});
 
-const StartOverIcon = styled(FirstPageIcon)`
-  transform: rotate(90deg);
-`;
+const Paper = styled(MuiPaper)({
+  boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+  padding: "32px",
+});
 
-const Wizard: React.FC<WizardProps> = ({ heading, dataLayout, children, maxWidth }) => {
+const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
   const [state, dispatch] = useWizardState();
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
   const [globalWarnings, setGlobalWarnings] = React.useState<string[]>([]);
@@ -167,6 +72,9 @@ const Wizard: React.FC<WizardProps> = ({ heading, dataLayout, children, maxWidth
       setIsLoading: (isLoading: boolean) => {
         updateStepData(child.type.name, { isLoading });
       },
+      setHasError: (hasError: boolean) => {
+        updateStepData(child.type.name, { hasError });
+      },
       displayWarnings: (warnings: string[]) => {
         setGlobalWarnings(warnings);
       },
@@ -180,36 +88,26 @@ const Wizard: React.FC<WizardProps> = ({ heading, dataLayout, children, maxWidth
   const lastStepIndex = React.Children.count(children) - 1;
   // If our wizard only has 1 step, it doesn't make sense to put a restart button
   const isMultistep = lastStepIndex > 0;
-  const steps = React.Children.map(children, (child: WizardChildren, idx: number) => {
-    const hasError = (wizardStepData[child.type.name]?.errors?.length || 0) !== 0;
+  const steps = React.Children.map(children, (child: WizardChildren) => {
     const isLoading = wizardStepData[child.type.name]?.isLoading || false;
+    const hasError = wizardStepData[child.type.name]?.hasError;
     return (
-      <Step key={child.props.name} expanded={idx <= state.activeStep}>
-        <StepLabel StepIconComponent={StepIcon} error={hasError}>
-          {child.props.name}
-        </StepLabel>
-        <StepContent
-          TransitionProps={{ appear: true }}
-          style={{ display: idx === state.activeStep ? "block" : "none" }}
-        >
-          <DataLayoutContext.Provider value={dataLayoutManager}>
-            <WizardContext.Provider value={() => context(child)}>
-              <Grid container direction="column" justify="center" alignItems="center">
-                {child}
-              </Grid>
-            </WizardContext.Provider>
-          </DataLayoutContext.Provider>
-          <Grid container justify="center">
-            {state.activeStep === lastStepIndex && !isLoading && isMultistep && (
-              <Button
-                onClick={() => dispatch(WizardAction.RESET)}
-                text="Start Over"
-                endIcon={<StartOverIcon />}
-              />
-            )}
-          </Grid>
-        </StepContent>
-      </Step>
+      <>
+        <DataLayoutContext.Provider value={dataLayoutManager}>
+          <WizardContext.Provider value={() => context(child)}>
+            <Grid container direction="column" justify="center" alignItems="center">
+              {child}
+            </Grid>
+          </WizardContext.Provider>
+        </DataLayoutContext.Provider>
+        <Grid container justify="center">
+          {((state.activeStep === lastStepIndex && !isLoading && isMultistep) || hasError) && (
+            <ButtonGroup>
+              <Button text="Start Over" onClick={() => dispatch(WizardAction.RESET)} />
+            </ButtonGroup>
+          )}
+        </Grid>
+      </>
     );
   });
 
@@ -218,35 +116,30 @@ const Wizard: React.FC<WizardProps> = ({ heading, dataLayout, children, maxWidth
   };
 
   return (
-    <Spacer margin="3">
-      <Container maxWidth={maxWidth}>
-        {heading && (
-          <Heading variant="h5">
-            <strong>{heading}</strong>
-          </Heading>
-        )}
-        <SizedContainer
-          container
-          direction="column"
-          justify="center"
-          alignItems="stretch"
-          style={{ display: "inline" }}
-        >
-          <Grid item>
-            <StyledStepper
-              orientation="vertical"
-              activeStep={state.activeStep}
-              connector={<StepConnector />}
-            >
-              {steps}
-            </StyledStepper>
-          </Grid>
-        </SizedContainer>
-        {globalWarnings.map(error => (
-          <Warning key={error} message={error} onClose={() => removeWarning(error)} />
-        ))}
-      </Container>
-    </Spacer>
+    <Container>
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="stretch"
+        style={{ display: "inline" }}
+      >
+        {heading && <Heading>{heading}</Heading>}
+        <Grid item>
+          <Stepper activeStep={state.activeStep}>
+            {React.Children.map(children, (child: WizardChildren) => {
+              const { name } = child.props;
+              const hasError = wizardStepData[child.type.name]?.hasError;
+              return <Step key={name} label={name} error={hasError} />;
+            })}
+          </Stepper>
+          <Paper elevation={0}>{steps[state.activeStep]}</Paper>
+        </Grid>
+      </Grid>
+      {globalWarnings.map(error => (
+        <Warning key={error} message={error} onClose={() => removeWarning(error)} />
+      ))}
+    </Container>
   );
 };
 

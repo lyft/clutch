@@ -11,6 +11,7 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // ResolverAPIClient is the client API for ResolverAPI service.
@@ -88,7 +89,7 @@ type UnsafeResolverAPIServer interface {
 }
 
 func RegisterResolverAPIServer(s grpc.ServiceRegistrar, srv ResolverAPIServer) {
-	s.RegisterService(&_ResolverAPI_serviceDesc, srv)
+	s.RegisterService(&ResolverAPI_ServiceDesc, srv)
 }
 
 func _ResolverAPI_GetObjectSchemas_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -145,7 +146,10 @@ func _ResolverAPI_Resolve_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-var _ResolverAPI_serviceDesc = grpc.ServiceDesc{
+// ResolverAPI_ServiceDesc is the grpc.ServiceDesc for ResolverAPI service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var ResolverAPI_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "clutch.resolver.v1.ResolverAPI",
 	HandlerType: (*ResolverAPIServer)(nil),
 	Methods: []grpc.MethodDesc{

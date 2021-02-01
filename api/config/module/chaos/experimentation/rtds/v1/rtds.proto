@@ -20,4 +20,10 @@ message Config {
 
   // A prefix to use for runtime variables if a fault type is equal to egress (see FaultInjectionCluster)
   string egress_fault_runtime_prefix = 4;
+
+  // The resource TTL to set for RTDS resources.
+  google.protobuf.Duration resource_ttl = 5;
+
+  // The interval at which to send heartbeat responses for TTL'd resources.
+  google.protobuf.Duration heartbeat_interval = 6;
 }

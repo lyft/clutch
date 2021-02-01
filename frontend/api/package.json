@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/api",
-  "version": "0.0.0-beta",
+  "version": "1.0.0-beta",
   "description": "Clutch API",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
@@ -10,6 +10,6 @@
     "publishBeta": "../../tools/publish-frontend.sh api"
   },
   "dependencies": {
-    "protobufjs": "6.10.1"
+    "protobufjs": "6.10.2"
   }
 }

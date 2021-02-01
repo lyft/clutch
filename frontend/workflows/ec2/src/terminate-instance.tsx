@@ -1,5 +1,8 @@
 import React from "react";
 import {
+  Accordion,
+  AccordionDetails,
+  Button,
   ButtonGroup,
   client,
   Confirmation,
@@ -42,38 +45,45 @@ const InstanceDetails: React.FC<WizardChild> = () => {
     { name: "Availability Zone", value: instance.availabilityZone },
   ];
 
+  const metadata = [];
   if (instance.tags) {
     Object.keys(instance.tags).forEach(key => {
-      data.push({ name: key, value: instance.tags[key] });
+      metadata.push({ name: key, value: instance.tags[key] });
     });
   }
 
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
+      <strong>Instance Details</strong>
       <MetadataTable data={data} />
-      <ButtonGroup
-        buttons={[
-          {
-            text: "Back",
-            onClick: onBack,
-          },
-          {
-            text: "Terminate",
-            onClick: onSubmit,
-            destructive: true,
-          },
-        ]}
-      />
+      {metadata.length > 0 && (
+        <Accordion title="Metadata">
+          <AccordionDetails>
+            <MetadataTable data={metadata} />
+          </AccordionDetails>
+        </Accordion>
+      )}
+      <ButtonGroup>
+        <Button text="Back" variant="neutral" onClick={onBack} />
+        <Button text="Terminate" variant="destructive" onClick={onSubmit} />
+      </ButtonGroup>
     </WizardStep>
   );
 };
 
 const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const terminationData = useDataLayout("terminationData");
+  const instance = useDataLayout("resourceData").displayValue();
+
+  const data = [
+    { name: "Instance ID", value: instance.instanceId },
+    { name: "Region", value: instance.region },
+  ];
 
   return (
     <WizardStep error={terminationData.error} isLoading={terminationData.isLoading}>
       <Confirmation action="Termination" />
+      <MetadataTable data={data} />
       <NotePanel notes={notes} />
     </WizardStep>
   );
@@ -96,7 +106,7 @@ const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, not
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <InstanceIdentifier name="Lookup" resolverType={resolverType} />
-      <InstanceDetails name="Modify" />
+      <InstanceDetails name="Verify" />
       <Confirm name="Confirmation" notes={notes} />
     </Wizard>
   );

@@ -12,7 +12,7 @@ import (
 )
 
 func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.HPA, error) {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +54,7 @@ func ProtoForHPA(cluster string, autoscaler *autoscalingv1.HorizontalPodAutoscal
 }
 
 func (s *svc) ResizeHPA(ctx context.Context, clientset, cluster, namespace, name string, sizing *k8sapiv1.ResizeHPARequest_Sizing) error {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return err
 	}
@@ -89,7 +89,7 @@ func normalizeHPAChanges(hpa *autoscalingv1.HorizontalPodAutoscaler, sizing *k8s
 }
 
 func (s *svc) DeleteHPA(ctx context.Context, clientset, cluster, namespace, name string) error {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return err
 	}

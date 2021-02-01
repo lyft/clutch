@@ -36,3 +36,11 @@ type getFileQuery struct {
 		} `graphql:"object(expression:$refPath)"`
 	} `graphql:"repository(owner:$owner,name:$name)"`
 }
+
+type getRepositoryQuery struct {
+	Repository struct {
+		DefaultBranchRef struct {
+			Name string
+		}
+	} `graphql:"repository(owner:$owner,name:$name)"`
+}

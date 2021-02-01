@@ -123,7 +123,6 @@ module.exports = {
       theme: require('prism-react-renderer/themes/vsDark'),
     },
     navbar: {
-      title: 'Clutch',
       logo: {
         alt: 'Clutch Logo',
         src: 'img/navigation/logoMark.svg',
@@ -181,6 +180,10 @@ module.exports = {
               label: 'Backend',
               to: 'docs/components#backend',
             },
+            {
+              label: 'Storybook',
+              to: 'https://storybook.clutch.sh',
+            },
           ],
         },
         {
@@ -198,6 +201,7 @@ module.exports = {
               label: 'Twitter',
               to: 'https://twitter.com/clutchdotsh',
             },
+            {label: 'Blog', to: 'blog'},
             {
               label: 'More',
               to: 'docs/community',
@@ -215,6 +219,15 @@ module.exports = {
         docs: {
           path: "generated/docs",
           sidebarPath: require.resolve('../sidebars.json'),
+        },
+        blog: {
+          path: "generated/blog",
+          blogTitle: 'Clutch Open-source Developer Blog',
+          blogDescription: 'Where Clutch open-source maintainers and contributors share their work and thoughts on development.',
+          feedOptions: {
+            type: 'all',
+            copyright: `Copyright © ${new Date().getFullYear()} <a href="https://lyft.com" target="blank">Lyft, Inc.</a>`,
+          },
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

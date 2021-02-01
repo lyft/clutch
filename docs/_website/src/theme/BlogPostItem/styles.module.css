@@ -1,0 +1,39 @@
+.blogPostTitle {
+  font-size: 2.5rem;
+}
+
+.blogPostDate {
+  font-size: 0.9rem;
+}
+
+.blogPostAuthor a {
+  color: black;
+}
+
+.blogPostAuthorSeparator {
+  font-weight: normal;
+}
+
+.blogPostAvatar {
+  border: 2px solid white;
+  box-sizing: border-box;
+  height: 45px;
+  width: 45px;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.blogPostTag {
+  background-color: #ebedf0;
+  border-radius: 10px;
+  font-weight: bold;
+  padding: 3px 10px;
+  font-size: 1em;
+  margin-right: 10px;
+}
+
+.blogPostPreview {
+  border: 2px solid grey;
+  padding: 25px 25px 10px 25px;
+  border-radius: 10px;
+}

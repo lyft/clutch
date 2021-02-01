@@ -8,7 +8,7 @@ PROTO_ZIP_RELEASE_MD5_OSX=a545b7fb818dba564aa161e4232e69f5
 
 # https://github.com/protobufjs/protobuf.js/releases
 # NOTE: should match frontend/package.json
-PROTOBUFJS_RELEASE=6.10.1
+PROTOBUFJS_RELEASE=6.10.2
 
 # https://github.com/angular/clang-format/releases
 ANGULAR_CLANG_FORMAT_RELEASE=1.4.0
