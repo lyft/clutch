@@ -56,7 +56,7 @@ as the requesting client would always be routed to a specific version of the app
 ## Solution
 
 This leads us to our solution, which we call Frontend Asset Passthrough.
-How this works is simple: when a request for a static asset does not reside on disk,
+How this works is simple: when a request for a static asset is not found in the binary's embedded filesystem,
 Clutch will fallback to a configured provider to look for the asset.
 
 Let's first take a look at the [proto configuration](https://github.com/lyft/clutch/blob/890245e7d2a1bf91623a9e74b39f1083dbd5ea2c/api/config/gateway/v1/gateway.proto#L105-L119) and then will go into more detail.
@@ -100,7 +100,7 @@ services:
         - us-east-1
 ```
 
-With this configured, if a user requests an asset that does not reside on disk, Clutch will attempt to serve the file from the configured passthrough provider.
+With this configured, if a user requests an asset that is not embedded in the binary, Clutch will attempt to serve the file from the configured passthrough provider.
 If the provider has the correct asset it will be served to the user.
 
 Let's look at the diagram below to demonstrate this.
