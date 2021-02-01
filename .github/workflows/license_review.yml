@@ -8,6 +8,7 @@ on:
       - backend/go.mod
       - backend/go.sum
       - .github/workflows/license_review.yml
+      - tools/license-finder/config/*.yml
 jobs:
   license-check:
     runs-on: ubuntu-latest

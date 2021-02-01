@@ -59,19 +59,19 @@ function BlogPostItem(props) {
           {/* Crazy avatar stack code */}
           <div style={{position: 'relative', height: "45px", width: 8 + 45 + ((authors.length - 1) * 20) + "px"}}>
           {authors.map(({ name, avatar }, idx) =>
-            <img className={styles.blogPostAvatar} style={{ zIndex: 1000 - idx, marginLeft: idx * 20 + "px" }} src={avatar} alt={name} />
+            <img key={name} className={styles.blogPostAvatar} style={{ zIndex: 1000 - idx, marginLeft: idx * 20 + "px" }} src={avatar} alt={name} />
           )}
           </div>
 
           <div className="avatar__intro">
             <h4 className={clsx(styles.blogPostAuthor, "avatar__name")}>
               {authors.map(({ name, url }, idx) =>
-                <>
+                <React.Fragment key={name}>
                   <a href={url} target="_blank" rel="noreferrer noopener">
                     {name}
                   </a>
                   {idx != (authors.length - 1) && <span className={clsx(styles.blogPostAuthorSeparator)}>,&nbsp;</span>}
-                </>
+                </React.Fragment>
               )}
             </h4>
           </div>
@@ -93,7 +93,7 @@ function BlogPostItem(props) {
         )}
       </Head>
 
-      <article className={clsx(!isBlogPostPage && 'margin-bottom--lg', !isBlogPostPage && styles.blogPostPreview)}>
+      <article   className={clsx(!isBlogPostPage && 'margin-bottom--lg', !isBlogPostPage && styles.blogPostPreview)}>
         {renderPostHeader()}
         <section className="markdown">
           <MDXProvider components={MDXComponents}>{children}</MDXProvider>

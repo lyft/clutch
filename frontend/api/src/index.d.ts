@@ -6107,6 +6107,9 @@ export namespace clutch {
 
                         /** OIDC redirectUrl */
                         redirectUrl?: (string|null);
+
+                        /** OIDC scopes */
+                        scopes?: (string[]|null);
                     }
 
                     /** Represents a OIDC. */
@@ -6129,6 +6132,9 @@ export namespace clutch {
 
                         /** OIDC redirectUrl. */
                         public redirectUrl: string;
+
+                        /** OIDC scopes. */
+                        public scopes: string[];
 
                         /**
                          * Verifies a OIDC message.
