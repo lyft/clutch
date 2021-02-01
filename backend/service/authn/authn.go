@@ -25,7 +25,7 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service
 		return nil, err
 	}
 
-	tokenStorage := service.Registry[StorageName].(Storage)
+	tokenStorage, _ := service.Registry[StorageName].(Storage) // Ignoring 'ok', nil allowed.
 
 	switch t := config.Type.(type) {
 	case *authnv1.Config_Oidc:
