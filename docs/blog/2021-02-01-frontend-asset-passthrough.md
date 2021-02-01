@@ -21,7 +21,7 @@ This article will touch on how Lyft deploys Clutch and some of the early problem
 During our deploys of Clutch at Lyft we noticed very early on that when a new version is deployed,
 a subset of users would fail to load the webpage (only seeing a blank page) as some of the frontend assets could not be resolved.
 
-<img style={ {border: "1px solid black"} } alt="Unable to Load" src="https://user-images.githubusercontent.com/2250844/106497808-5ed58400-6473-11eb-9fbe-fa57a0e18969.png" />
+<img style={ {border: "1px solid black"} } alt="Unable to Load" src="https://user-images.githubusercontent.com/2250844/106508379-2dfc4b80-6481-11eb-9c75-6b9f66407047.png" />
 
 ```text
 Uncaught SyntaxError: Unexpected token '<'
