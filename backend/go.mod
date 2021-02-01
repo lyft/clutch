@@ -40,7 +40,7 @@ require (
 	github.com/uber-go/tally v3.3.17+incompatible
 	go.uber.org/zap v1.16.0
 	golang.org/x/net v0.0.0-20210119194325-5f4716e94777
-	golang.org/x/oauth2 v0.0.0-20210126194326-f9ce19ea3013
+	golang.org/x/oauth2 v0.0.0-20210201163806-010130855d6c
 	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
 	google.golang.org/genproto v0.0.0-20210126160654-44e461bb6506
 	google.golang.org/grpc v1.35.0
