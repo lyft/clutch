@@ -7750,10 +7750,10 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
 
-cypress@6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-6.0.0.tgz#57050773c61e8fe1e5c9871cc034c616fcacded9"
-  integrity sha512-A/w9S15xGxX5UVeAQZacKBqaA0Uqlae9e5WMrehehAdFiLOZj08IgSVZOV8YqA9OH9Z0iBOnmsEkK3NNj43VrA==
+cypress@6.4.0:
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-6.4.0.tgz#432c516bf4f1a0f042a6aa1f2c3a4278fa35a8b2"
+  integrity sha512-SrsPsZ4IBterudkoFYBvkQmXOVxclh1/+ytbzpV8AH/D2FA+s2Qy5ISsaRzOFsbQa4KZWoi3AKwREmF1HucYkg==
   dependencies:
     "@cypress/listr-verbose-renderer" "^0.4.1"
     "@cypress/request" "^2.88.5"
@@ -7769,6 +7769,7 @@ cypress@6.0.0:
     cli-table3 "~0.6.0"
     commander "^5.1.0"
     common-tags "^1.8.0"
+    dayjs "^1.9.3"
     debug "^4.1.1"
     eventemitter2 "^6.4.2"
     execa "^4.0.2"
@@ -7783,7 +7784,7 @@ cypress@6.0.0:
     lodash "^4.17.19"
     log-symbols "^4.0.0"
     minimist "^1.2.5"
-    moment "^2.27.0"
+    moment "^2.29.1"
     ospath "^1.2.2"
     pretty-bytes "^5.4.1"
     ramda "~0.26.1"
@@ -7952,6 +7953,11 @@ dateformat@^3.0.0:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/dateformat/-/dateformat-3.0.3.tgz#a6e37499a4d9a9cf85ef5872044d62901c9889ae"
   integrity sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==
+
+dayjs@^1.9.3:
+  version "1.10.4"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.10.4.tgz#8e544a9b8683f61783f570980a8a80eaf54ab1e2"
+  integrity sha512-RI/Hh4kqRc1UKLOAf/T5zdMMX5DQIlDxwUe3wSyMMnEbGunnpENCdbUgM+dW7kXidZqCttBrmw7BhN4TMddkCw==
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -13979,7 +13985,7 @@ modify-values@^1.0.0:
   resolved "https://registry.yarnpkg.com/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
 
-moment@^2.27.0:
+moment@^2.29.1:
   version "2.29.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
