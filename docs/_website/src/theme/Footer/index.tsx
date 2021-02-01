@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import type { NavbarLogo } from '@docusaurus/theme-common'
 import { useThemeConfig } from '@docusaurus/theme-common';
 
 import styles from './styles.module.css';
@@ -24,7 +25,7 @@ var socialLinks = [
 
 function FooterLink({to, href, label, prependBaseUrlToHref, ...props}) {
   const toUrl = useBaseUrl(to);
-  const normalizedHref = useBaseUrl(href, true);
+  const normalizedHref = useBaseUrl(href);
 
   return (
     <Link
@@ -46,7 +47,7 @@ function FooterLink({to, href, label, prependBaseUrlToHref, ...props}) {
 
 function Logo({...props}) {
   const {
-    navbar: {logo = {}},
+    navbar: {logo = {} as NavbarLogo},
   } = useThemeConfig();
   const lyftLogoUrl = useBaseUrl('img/navigation/lyft-logo.svg');
   const logoImageUrl = useBaseUrl('img/navigation/logo.svg');
@@ -182,7 +183,7 @@ function Footer() {
                 __html: copyright,
               }}
             />
-            <div style={{fontSize: ".875rem"}}>This site is powered by <a href="https://www.netlify.com/" _target="blank">Netlify</a>.</div>
+            <div style={{fontSize: ".875rem"}}>This site is powered by <a href="https://www.netlify.com/" target="blank">Netlify</a>.</div>
           </div>
         )}
       </div>
