@@ -7,14 +7,14 @@ package authn
 import (
 	"context"
 	"fmt"
-	"github.com/lyft/clutch/backend/service"
+
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"golang.org/x/oauth2"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"golang.org/x/oauth2"
-
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
+	"github.com/lyft/clutch/backend/service"
 )
 
 const StorageName = "clutch.service.authnstorage"

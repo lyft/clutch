@@ -7,6 +7,7 @@ package authn
 import (
 	"context"
 	"fmt"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
