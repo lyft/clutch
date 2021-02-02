@@ -29,11 +29,12 @@ interface QueryResolverProps {
 
 const autoComplete = async (type: string, search: string): Promise<string[]> => {
   const response = await client.post("/v1/resolver/autocomplete", {
-    want: `type.googleapis.com/clutch.aws.ec2.v1.Instance`,
-    search: search,
+    want: `type.googleapis.com/clutch.aws.ec2.v1.AutoscalingGroup`,
+    search,
   });
 
-  return { results: response.data?.results || [], failures: response.data?.partialFailures || [] };
+  // return { results: response.data?.results || [], failures: response.data?.partialFailures || [] };
+  return { results: response.data?.results || [] };
 };
 
 const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, submitHandler }) => {

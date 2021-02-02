@@ -6,7 +6,6 @@ package resolver
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/golang/protobuf/proto"
@@ -18,11 +17,8 @@ import (
 	"google.golang.org/grpc/status"
 
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/resolver"
-	"github.com/lyft/clutch/backend/service"
-	"github.com/lyft/clutch/backend/service/topology"
 )
 
 const Name = "clutch.module.resolver"
@@ -176,47 +172,29 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 	}
 
 	return &resolverv1.GetObjectSchemasResponse{
-		TypeUrl:            req.TypeUrl,
-		Schemas:            schemas,
-		IsAutocompleteable: true,
+		TypeUrl: req.TypeUrl,
+		Schemas: schemas,
 	}, nil
 }
 
 func (r *resolverAPI) AutoComplete(ctx context.Context, req *resolverv1.AutoCompleteRequest) (*resolverv1.AutoCompleteResponse, error) {
-	p, ok := service.Registry[topology.Name]
-	if !ok {
-		return nil, errors.New("Please config the datastore [clutch.service.db.postgres] to use the topology service")
-	}
+	var err error
+	results := []string{}
 
-	topologyService, ok := p.(topology.Service)
-	if !ok {
-		return nil, errors.New("Unable to get the datastore client")
-	}
-
-	results, _, err := topologyService.Search(ctx, &topologyv1.SearchRequest{
-		PageToken: "0",
-		Limit:     20,
-		Sort: &topologyv1.SearchRequest_Sort{
-			Direction: topologyv1.SearchRequest_Sort_ASCENDING,
-			Field:     "column.id",
-		},
-		Filter: &topologyv1.SearchRequest_Filter{
-			TypeUrl: req.Want,
-			Search: &topologyv1.SearchRequest_Filter_Search{
-				Field: "column.id",
-				Text:  req.Search,
-			},
-		},
-	})
-
-	autoCompleteValue := []string{}
-	for _, r := range results {
-		autoCompleteValue = append(autoCompleteValue, r.Id)
+	for _, res := range resolver.Registry {
+		resSchema := res.Schemas()
+		// check metadata if its autocompleteable
+		if _, ok := resSchema[req.Want]; ok {
+			results, err = res.AutoComplete(ctx, req.Want, req.Search)
+			if err != nil {
+				return nil, err
+			}
+		}
 	}
 
 	return &resolverv1.AutoCompleteResponse{
-		Results: autoCompleteValue,
-	}, err
+		Results: results,
+	}, nil
 }
 
 // Add error information to the schema if it's broken in some way.

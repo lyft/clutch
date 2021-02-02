@@ -12,6 +12,10 @@ message InstanceID {
   option (clutch.resolver.v1.schema) = {
     display_name : "instance ID"
     searchable : true
+    search: {
+      enabled : true
+      is_autocompleteable : true
+    }
   };
 
   string id = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -31,6 +35,10 @@ message AutoscalingGroupName {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
     searchable : true
+    search: {
+      enabled : true
+      is_autocompleteable : true
+    }
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -51,6 +59,10 @@ message KinesisStreamName {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
     searchable : true
+    search: {
+      enabled : true
+      is_autocompleteable : true
+    }
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {
