@@ -56,43 +56,45 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, submitHandler })
   const [options, setOptions] = React.useState([]);
   const error = validation.errors?.query;
 
-  // sudo code
-  // if (isAutoCompleteable) {
-  // else { render the TextField
-  return (
-    <Autocomplete
-      id="test-autocomplete"
-      options={options}
-      getOptionLabel={option => option}
-      style={{ width: 670 }}
-      renderInput={params => <TextField {...params} variant="outlined" />}
-      onChange={handleChanges}
-      onKeyDown={handleChanges}
-      onFocus={handleChanges}
-      onInputChange={(event, value, reason) => {
-        autoComplete("type", value).then(data => {
-          setOptions(data.results);
-        });
-      }}
-    />
-  );
+  const isAutocompleteable =
+    schemas.map(schema => schema?.metadata?.search?.isAutocompleteable).join() || false;
 
-  // return (
-  //   <Form onSubmit={validation.handleSubmit(() => submitHandler({ query: queryData }))} noValidate>
-  //     <TextField
-  //       label={typeLabel}
-  //       name="query"
-  //       required
-  //       onChange={handleChanges}
-  //       onKeyDown={handleChanges}
-  //       onFocus={handleChanges}
-  //       inputRef={validation.register({ required: true })}
-  //       error={!!error}
-  //       helperText={error?.message || error?.type || ""}
-  //       endAdornment={<SearchIcon />}
-  //     />
-  //     <span>meow</span>
-  //   </Form>
+  if (isAutocompleteable) {
+    return (
+      <Autocomplete
+        id="test-autocomplete"
+        options={options}
+        getOptionLabel={option => option}
+        style={{ width: 670 }}
+        renderInput={params => <TextField {...params} variant="outlined" />}
+        onChange={handleChanges}
+        onKeyDown={handleChanges}
+        onFocus={handleChanges}
+        onInputChange={(event, value, reason) => {
+          autoComplete("type", value).then(data => {
+            setOptions(data.results);
+          });
+        }}
+      />
+    );
+  }
+
+  return (
+    <Form onSubmit={validation.handleSubmit(() => submitHandler({ query: queryData }))} noValidate>
+      <TextField
+        label={typeLabel}
+        name="query"
+        required
+        onChange={handleChanges}
+        onKeyDown={handleChanges}
+        onFocus={handleChanges}
+        inputRef={validation.register({ required: true })}
+        error={!!error}
+        helperText={error?.message || error?.type || ""}
+        endAdornment={<SearchIcon />}
+      />
+    </Form>
+  );
 };
 
 // TODO: update and use
