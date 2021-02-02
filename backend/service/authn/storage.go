@@ -17,7 +17,7 @@ import (
 	"github.com/lyft/clutch/backend/service"
 )
 
-const StorageName = "clutch.service.authnstorage"
+const StorageName = "clutch.service.authn.storage"
 
 func NewStorage(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	c := &authnv1.StorageConfig{}
