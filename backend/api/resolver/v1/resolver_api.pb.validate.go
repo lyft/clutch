@@ -639,8 +639,6 @@ func (m *GetObjectSchemasResponse) Validate() error {
 
 	}
 
-	// no validation rules for IsAutocompleteable
-
 	return nil
 }
 

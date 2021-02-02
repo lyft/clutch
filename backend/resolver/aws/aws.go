@@ -152,6 +152,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 }
 
 func (r *res) AutoComplete(ctx context.Context, typeURL, search string) ([]string, error) {
+	// todo convert resolver type url to -> resource type urt
 	results, _, err := r.topology.Search(ctx, &topologyv1.SearchRequest{
 		PageToken: "0",
 		Limit:     20,

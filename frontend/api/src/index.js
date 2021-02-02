@@ -30648,7 +30648,6 @@ export const clutch = $root.clutch = (() => {
                  * @interface IGetObjectSchemasResponse
                  * @property {string|null} [typeUrl] GetObjectSchemasResponse typeUrl
                  * @property {Array.<clutch.resolver.v1.ISchema>|null} [schemas] GetObjectSchemasResponse schemas
-                 * @property {boolean|null} [isAutocompleteable] GetObjectSchemasResponse isAutocompleteable
                  */
 
                 /**
@@ -30684,14 +30683,6 @@ export const clutch = $root.clutch = (() => {
                 GetObjectSchemasResponse.prototype.schemas = $util.emptyArray;
 
                 /**
-                 * GetObjectSchemasResponse isAutocompleteable.
-                 * @member {boolean} isAutocompleteable
-                 * @memberof clutch.resolver.v1.GetObjectSchemasResponse
-                 * @instance
-                 */
-                GetObjectSchemasResponse.prototype.isAutocompleteable = false;
-
-                /**
                  * Verifies a GetObjectSchemasResponse message.
                  * @function verify
                  * @memberof clutch.resolver.v1.GetObjectSchemasResponse
@@ -30714,9 +30705,6 @@ export const clutch = $root.clutch = (() => {
                                 return "schemas." + error;
                         }
                     }
-                    if (message.isAutocompleteable != null && message.hasOwnProperty("isAutocompleteable"))
-                        if (typeof message.isAutocompleteable !== "boolean")
-                            return "isAutocompleteable: boolean expected";
                     return null;
                 };
 
@@ -30744,8 +30732,6 @@ export const clutch = $root.clutch = (() => {
                             message.schemas[i] = $root.clutch.resolver.v1.Schema.fromObject(object.schemas[i]);
                         }
                     }
-                    if (object.isAutocompleteable != null)
-                        message.isAutocompleteable = Boolean(object.isAutocompleteable);
                     return message;
                 };
 
@@ -30764,10 +30750,8 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.arrays || options.defaults)
                         object.schemas = [];
-                    if (options.defaults) {
+                    if (options.defaults)
                         object.typeUrl = "";
-                        object.isAutocompleteable = false;
-                    }
                     if (message.typeUrl != null && message.hasOwnProperty("typeUrl"))
                         object.typeUrl = message.typeUrl;
                     if (message.schemas && message.schemas.length) {
@@ -30775,8 +30759,6 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < message.schemas.length; ++j)
                             object.schemas[j] = $root.clutch.resolver.v1.Schema.toObject(message.schemas[j], options);
                     }
-                    if (message.isAutocompleteable != null && message.hasOwnProperty("isAutocompleteable"))
-                        object.isAutocompleteable = message.isAutocompleteable;
                     return object;
                 };
 

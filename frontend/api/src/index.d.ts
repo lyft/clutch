@@ -12903,9 +12903,6 @@ export namespace clutch {
 
                 /** GetObjectSchemasResponse schemas */
                 schemas?: (clutch.resolver.v1.ISchema[]|null);
-
-                /** GetObjectSchemasResponse isAutocompleteable */
-                isAutocompleteable?: (boolean|null);
             }
 
             /** Represents a GetObjectSchemasResponse. */
@@ -12922,9 +12919,6 @@ export namespace clutch {
 
                 /** GetObjectSchemasResponse schemas. */
                 public schemas: clutch.resolver.v1.ISchema[];
-
-                /** GetObjectSchemasResponse isAutocompleteable. */
-                public isAutocompleteable: boolean;
 
                 /**
                  * Verifies a GetObjectSchemasResponse message.

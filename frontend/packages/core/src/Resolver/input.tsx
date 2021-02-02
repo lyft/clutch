@@ -34,7 +34,7 @@ const autoComplete = async (type: string, search: string): Promise<string[]> => 
   });
 
   // return { results: response.data?.results || [], failures: response.data?.partialFailures || [] };
-  return { results: response.data?.results || [] };
+  return { results: response?.data?.results || [] };
 };
 
 const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, submitHandler }) => {
@@ -59,19 +59,23 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, submitHandler })
   const isAutocompleteable =
     schemas.map(schema => schema?.metadata?.search?.isAutocompleteable).join() || false;
 
+  // const typeURL = schemas.map(schema => schema?.typeUrl).join();
+  // console.log(typeURL);
+  // console.log(schemas);
+
   if (isAutocompleteable) {
     return (
       <Autocomplete
-        id="test-autocomplete"
+        id="query"
         options={options}
         getOptionLabel={option => option}
         style={{ width: 670 }}
         renderInput={params => <TextField {...params} variant="outlined" />}
         onChange={handleChanges}
         onKeyDown={handleChanges}
-        onFocus={handleChanges}
+        // onFocus={handleChanges}
         onInputChange={(event, value, reason) => {
-          autoComplete("type", value).then(data => {
+          autoComplete("typeURL", value).then(data => {
             setOptions(data.results);
           });
         }}

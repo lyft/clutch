@@ -93,5 +93,4 @@ message GetObjectSchemasRequest {
 message GetObjectSchemasResponse {
   string type_url = 1;
   repeated Schema schemas = 2;
-  bool is_autocompleteable = 3;
 }
