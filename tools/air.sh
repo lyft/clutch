@@ -36,7 +36,14 @@ ensure_binary() {
   fi
 }
 
+ensure_fd() {
+  if [[ "${OSTYPE}" == *"darwin"* ]]; then
+    ulimit -n 1024
+  fi
+}
+
 cd "${REPO_ROOT}/backend"
 ensure_binary
+ensure_fd
 
 "${RELEASE_BINARY}" 
