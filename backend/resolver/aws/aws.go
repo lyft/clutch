@@ -136,3 +136,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("cannot search for type '%s'", typeURL))
 	}
 }
+
+func (r *res) AutoComplete(ctx context.Context, typeURLs, search string) ([]string, error) {
+	return []string{"aws"}, nil
+}

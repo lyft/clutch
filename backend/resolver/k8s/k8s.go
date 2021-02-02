@@ -8,6 +8,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"regexp"
 
 	"github.com/golang/protobuf/descriptor"
@@ -157,6 +158,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 				handler.Add(1)
 				go func(name string) {
 					defer handler.Done()
+					log.Printf("cs %s", name)
 					pod, err := r.svc.DescribePod(ctx, name, "", metav1.NamespaceAll, query)
 					select {
 					case handler.Channel() <- resolver.NewFanoutResult([]*k8sv1api.Pod{pod}, err):
@@ -192,4 +194,8 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	}
 
 	return handler.Results(limit)
+}
+
+func (r *res) AutoComplete(ctx context.Context, typeURLs, search string) ([]string, error) {
+	return []string{"k8s"}, nil
 }

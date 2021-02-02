@@ -21,6 +21,8 @@ const SchemaLabel = styled.div({
 });
 
 const loadSchemas = (type: string, dispatch: React.Dispatch<DispatchAction>) => {
+  // TODO: (mcutalo) this needs to parse the is_autocompleteable field and pass it through 
+  // to index.tsx
   fetchResourceSchemas(type)
     .then(schemas => {
       if (schemas.length === 0) {

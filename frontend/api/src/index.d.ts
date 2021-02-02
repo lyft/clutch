@@ -12410,6 +12410,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public resolve(request: clutch.resolver.v1.IResolveRequest): Promise<clutch.resolver.v1.ResolveResponse>;
+
+                /**
+                 * Calls AutoComplete.
+                 * @param request AutoCompleteRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and AutoCompleteResponse
+                 */
+                public autoComplete(request: clutch.resolver.v1.IAutoCompleteRequest, callback: clutch.resolver.v1.ResolverAPI.AutoCompleteCallback): void;
+
+                /**
+                 * Calls AutoComplete.
+                 * @param request AutoCompleteRequest message or plain object
+                 * @returns Promise
+                 */
+                public autoComplete(request: clutch.resolver.v1.IAutoCompleteRequest): Promise<clutch.resolver.v1.AutoCompleteResponse>;
             }
 
             namespace ResolverAPI {
@@ -12434,6 +12448,115 @@ export namespace clutch {
                  * @param [response] ResolveResponse
                  */
                 type ResolveCallback = (error: (Error|null), response?: clutch.resolver.v1.ResolveResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.resolver.v1.ResolverAPI#autoComplete}.
+                 * @param error Error, if any
+                 * @param [response] AutoCompleteResponse
+                 */
+                type AutoCompleteCallback = (error: (Error|null), response?: clutch.resolver.v1.AutoCompleteResponse) => void;
+            }
+
+            /** Properties of an AutoCompleteRequest. */
+            interface IAutoCompleteRequest {
+
+                /** AutoCompleteRequest want */
+                want?: (string|null);
+
+                /** AutoCompleteRequest search */
+                search?: (string|null);
+            }
+
+            /** Represents an AutoCompleteRequest. */
+            class AutoCompleteRequest implements IAutoCompleteRequest {
+
+                /**
+                 * Constructs a new AutoCompleteRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.resolver.v1.IAutoCompleteRequest);
+
+                /** AutoCompleteRequest want. */
+                public want: string;
+
+                /** AutoCompleteRequest search. */
+                public search: string;
+
+                /**
+                 * Verifies an AutoCompleteRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an AutoCompleteRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns AutoCompleteRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.resolver.v1.AutoCompleteRequest;
+
+                /**
+                 * Creates a plain object from an AutoCompleteRequest message. Also converts values to other types if specified.
+                 * @param message AutoCompleteRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.resolver.v1.AutoCompleteRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this AutoCompleteRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an AutoCompleteResponse. */
+            interface IAutoCompleteResponse {
+
+                /** AutoCompleteResponse results */
+                results?: (string[]|null);
+            }
+
+            /** Represents an AutoCompleteResponse. */
+            class AutoCompleteResponse implements IAutoCompleteResponse {
+
+                /**
+                 * Constructs a new AutoCompleteResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.resolver.v1.IAutoCompleteResponse);
+
+                /** AutoCompleteResponse results. */
+                public results: string[];
+
+                /**
+                 * Verifies an AutoCompleteResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an AutoCompleteResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns AutoCompleteResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.resolver.v1.AutoCompleteResponse;
+
+                /**
+                 * Creates a plain object from an AutoCompleteResponse message. Also converts values to other types if specified.
+                 * @param message AutoCompleteResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.resolver.v1.AutoCompleteResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this AutoCompleteResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
             }
 
             /** Properties of a ResolveRequest. */
@@ -12720,6 +12843,9 @@ export namespace clutch {
 
                 /** GetObjectSchemasResponse schemas */
                 schemas?: (clutch.resolver.v1.ISchema[]|null);
+
+                /** GetObjectSchemasResponse isAutocompleteable */
+                isAutocompleteable?: (boolean|null);
             }
 
             /** Represents a GetObjectSchemasResponse. */
@@ -12736,6 +12862,9 @@ export namespace clutch {
 
                 /** GetObjectSchemasResponse schemas. */
                 public schemas: clutch.resolver.v1.ISchema[];
+
+                /** GetObjectSchemasResponse isAutocompleteable. */
+                public isAutocompleteable: boolean;
 
                 /**
                  * Verifies a GetObjectSchemasResponse message.

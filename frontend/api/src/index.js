@@ -29550,7 +29550,271 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.resolver.v1.ResolverAPI#autoComplete}.
+                 * @memberof clutch.resolver.v1.ResolverAPI
+                 * @typedef AutoCompleteCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.resolver.v1.AutoCompleteResponse} [response] AutoCompleteResponse
+                 */
+
+                /**
+                 * Calls AutoComplete.
+                 * @function autoComplete
+                 * @memberof clutch.resolver.v1.ResolverAPI
+                 * @instance
+                 * @param {clutch.resolver.v1.IAutoCompleteRequest} request AutoCompleteRequest message or plain object
+                 * @param {clutch.resolver.v1.ResolverAPI.AutoCompleteCallback} callback Node-style callback called with the error, if any, and AutoCompleteResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(ResolverAPI.prototype.autoComplete = function autoComplete(request, callback) {
+                    return this.rpcCall(autoComplete, $root.clutch.resolver.v1.AutoCompleteRequest, $root.clutch.resolver.v1.AutoCompleteResponse, request, callback);
+                }, "name", { value: "AutoComplete" });
+
+                /**
+                 * Calls AutoComplete.
+                 * @function autoComplete
+                 * @memberof clutch.resolver.v1.ResolverAPI
+                 * @instance
+                 * @param {clutch.resolver.v1.IAutoCompleteRequest} request AutoCompleteRequest message or plain object
+                 * @returns {Promise<clutch.resolver.v1.AutoCompleteResponse>} Promise
+                 * @variation 2
+                 */
+
                 return ResolverAPI;
+            })();
+
+            v1.AutoCompleteRequest = (function() {
+
+                /**
+                 * Properties of an AutoCompleteRequest.
+                 * @memberof clutch.resolver.v1
+                 * @interface IAutoCompleteRequest
+                 * @property {string|null} [want] AutoCompleteRequest want
+                 * @property {string|null} [search] AutoCompleteRequest search
+                 */
+
+                /**
+                 * Constructs a new AutoCompleteRequest.
+                 * @memberof clutch.resolver.v1
+                 * @classdesc Represents an AutoCompleteRequest.
+                 * @implements IAutoCompleteRequest
+                 * @constructor
+                 * @param {clutch.resolver.v1.IAutoCompleteRequest=} [properties] Properties to set
+                 */
+                function AutoCompleteRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * AutoCompleteRequest want.
+                 * @member {string} want
+                 * @memberof clutch.resolver.v1.AutoCompleteRequest
+                 * @instance
+                 */
+                AutoCompleteRequest.prototype.want = "";
+
+                /**
+                 * AutoCompleteRequest search.
+                 * @member {string} search
+                 * @memberof clutch.resolver.v1.AutoCompleteRequest
+                 * @instance
+                 */
+                AutoCompleteRequest.prototype.search = "";
+
+                /**
+                 * Verifies an AutoCompleteRequest message.
+                 * @function verify
+                 * @memberof clutch.resolver.v1.AutoCompleteRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                AutoCompleteRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.want != null && message.hasOwnProperty("want"))
+                        if (!$util.isString(message.want))
+                            return "want: string expected";
+                    if (message.search != null && message.hasOwnProperty("search"))
+                        if (!$util.isString(message.search))
+                            return "search: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an AutoCompleteRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.resolver.v1.AutoCompleteRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.resolver.v1.AutoCompleteRequest} AutoCompleteRequest
+                 */
+                AutoCompleteRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.resolver.v1.AutoCompleteRequest)
+                        return object;
+                    let message = new $root.clutch.resolver.v1.AutoCompleteRequest();
+                    if (object.want != null)
+                        message.want = String(object.want);
+                    if (object.search != null)
+                        message.search = String(object.search);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an AutoCompleteRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.resolver.v1.AutoCompleteRequest
+                 * @static
+                 * @param {clutch.resolver.v1.AutoCompleteRequest} message AutoCompleteRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                AutoCompleteRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.want = "";
+                        object.search = "";
+                    }
+                    if (message.want != null && message.hasOwnProperty("want"))
+                        object.want = message.want;
+                    if (message.search != null && message.hasOwnProperty("search"))
+                        object.search = message.search;
+                    return object;
+                };
+
+                /**
+                 * Converts this AutoCompleteRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.resolver.v1.AutoCompleteRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                AutoCompleteRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return AutoCompleteRequest;
+            })();
+
+            v1.AutoCompleteResponse = (function() {
+
+                /**
+                 * Properties of an AutoCompleteResponse.
+                 * @memberof clutch.resolver.v1
+                 * @interface IAutoCompleteResponse
+                 * @property {Array.<string>|null} [results] AutoCompleteResponse results
+                 */
+
+                /**
+                 * Constructs a new AutoCompleteResponse.
+                 * @memberof clutch.resolver.v1
+                 * @classdesc Represents an AutoCompleteResponse.
+                 * @implements IAutoCompleteResponse
+                 * @constructor
+                 * @param {clutch.resolver.v1.IAutoCompleteResponse=} [properties] Properties to set
+                 */
+                function AutoCompleteResponse(properties) {
+                    this.results = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * AutoCompleteResponse results.
+                 * @member {Array.<string>} results
+                 * @memberof clutch.resolver.v1.AutoCompleteResponse
+                 * @instance
+                 */
+                AutoCompleteResponse.prototype.results = $util.emptyArray;
+
+                /**
+                 * Verifies an AutoCompleteResponse message.
+                 * @function verify
+                 * @memberof clutch.resolver.v1.AutoCompleteResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                AutoCompleteResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.results != null && message.hasOwnProperty("results")) {
+                        if (!Array.isArray(message.results))
+                            return "results: array expected";
+                        for (let i = 0; i < message.results.length; ++i)
+                            if (!$util.isString(message.results[i]))
+                                return "results: string[] expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates an AutoCompleteResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.resolver.v1.AutoCompleteResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.resolver.v1.AutoCompleteResponse} AutoCompleteResponse
+                 */
+                AutoCompleteResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.resolver.v1.AutoCompleteResponse)
+                        return object;
+                    let message = new $root.clutch.resolver.v1.AutoCompleteResponse();
+                    if (object.results) {
+                        if (!Array.isArray(object.results))
+                            throw TypeError(".clutch.resolver.v1.AutoCompleteResponse.results: array expected");
+                        message.results = [];
+                        for (let i = 0; i < object.results.length; ++i)
+                            message.results[i] = String(object.results[i]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an AutoCompleteResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.resolver.v1.AutoCompleteResponse
+                 * @static
+                 * @param {clutch.resolver.v1.AutoCompleteResponse} message AutoCompleteResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                AutoCompleteResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.results = [];
+                    if (message.results && message.results.length) {
+                        object.results = [];
+                        for (let j = 0; j < message.results.length; ++j)
+                            object.results[j] = message.results[j];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this AutoCompleteResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.resolver.v1.AutoCompleteResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                AutoCompleteResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return AutoCompleteResponse;
             })();
 
             v1.ResolveRequest = (function() {
@@ -30244,6 +30508,7 @@ export const clutch = $root.clutch = (() => {
                  * @interface IGetObjectSchemasResponse
                  * @property {string|null} [typeUrl] GetObjectSchemasResponse typeUrl
                  * @property {Array.<clutch.resolver.v1.ISchema>|null} [schemas] GetObjectSchemasResponse schemas
+                 * @property {boolean|null} [isAutocompleteable] GetObjectSchemasResponse isAutocompleteable
                  */
 
                 /**
@@ -30279,6 +30544,14 @@ export const clutch = $root.clutch = (() => {
                 GetObjectSchemasResponse.prototype.schemas = $util.emptyArray;
 
                 /**
+                 * GetObjectSchemasResponse isAutocompleteable.
+                 * @member {boolean} isAutocompleteable
+                 * @memberof clutch.resolver.v1.GetObjectSchemasResponse
+                 * @instance
+                 */
+                GetObjectSchemasResponse.prototype.isAutocompleteable = false;
+
+                /**
                  * Verifies a GetObjectSchemasResponse message.
                  * @function verify
                  * @memberof clutch.resolver.v1.GetObjectSchemasResponse
@@ -30301,6 +30574,9 @@ export const clutch = $root.clutch = (() => {
                                 return "schemas." + error;
                         }
                     }
+                    if (message.isAutocompleteable != null && message.hasOwnProperty("isAutocompleteable"))
+                        if (typeof message.isAutocompleteable !== "boolean")
+                            return "isAutocompleteable: boolean expected";
                     return null;
                 };
 
@@ -30328,6 +30604,8 @@ export const clutch = $root.clutch = (() => {
                             message.schemas[i] = $root.clutch.resolver.v1.Schema.fromObject(object.schemas[i]);
                         }
                     }
+                    if (object.isAutocompleteable != null)
+                        message.isAutocompleteable = Boolean(object.isAutocompleteable);
                     return message;
                 };
 
@@ -30346,8 +30624,10 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.arrays || options.defaults)
                         object.schemas = [];
-                    if (options.defaults)
+                    if (options.defaults) {
                         object.typeUrl = "";
+                        object.isAutocompleteable = false;
+                    }
                     if (message.typeUrl != null && message.hasOwnProperty("typeUrl"))
                         object.typeUrl = message.typeUrl;
                     if (message.schemas && message.schemas.length) {
@@ -30355,6 +30635,8 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < message.schemas.length; ++j)
                             object.schemas[j] = $root.clutch.resolver.v1.Schema.toObject(message.schemas[j], options);
                     }
+                    if (message.isAutocompleteable != null && message.hasOwnProperty("isAutocompleteable"))
+                        object.isAutocompleteable = message.isAutocompleteable;
                     return object;
                 };
 

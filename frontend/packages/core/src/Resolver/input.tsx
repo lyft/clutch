@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
 import styled from "@emotion/styled";
 import SearchIcon from "@material-ui/icons/Search";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 import {
   Accordion,
@@ -14,6 +15,7 @@ import {
 import { Button } from "../button";
 import { Error } from "../Feedback";
 import { TextField } from "../Input/text-field";
+import { client, parseErrorMessage } from "../network";
 
 import type { ChangeEventTarget } from "./hydrator";
 import { convertChangeEvent, hydrateField } from "./hydrator";
@@ -24,6 +26,15 @@ interface QueryResolverProps {
   schemas: clutch.resolver.v1.Schema[];
   submitHandler: any;
 }
+
+const autoComplete = async (type: string, search: string): Promise<string[]> => {
+  const response = await client.post("/v1/resolver/autocomplete", {
+    want: `type.googleapis.com/clutch.aws.ec2.v1.Instance`,
+    search: search,
+  });
+
+  return { results: response.data?.results || [], failures: response.data?.partialFailures || [] };
+};
 
 const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, submitHandler }) => {
   const validation = useForm({
@@ -41,23 +52,46 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, submitHandler })
     setQueryData(convertChangeEvent(event).target.value);
   };
 
+  const [options, setOptions] = React.useState([]);
   const error = validation.errors?.query;
+
+  // sudo code
+  // if (isAutoCompleteable) {
+  // else { render the TextField
   return (
-    <Form onSubmit={validation.handleSubmit(() => submitHandler({ query: queryData }))} noValidate>
-      <TextField
-        label={typeLabel}
-        name="query"
-        required
-        onChange={handleChanges}
-        onKeyDown={handleChanges}
-        onFocus={handleChanges}
-        inputRef={validation.register({ required: true })}
-        error={!!error}
-        helperText={error?.message || error?.type || ""}
-        endAdornment={<SearchIcon />}
-      />
-    </Form>
+    <Autocomplete
+      id="test-autocomplete"
+      options={options}
+      getOptionLabel={option => option}
+      style={{ width: 670 }}
+      renderInput={params => <TextField {...params} variant="outlined" />}
+      onChange={handleChanges}
+      onKeyDown={handleChanges}
+      onFocus={handleChanges}
+      onInputChange={(event, value, reason) => {
+        autoComplete("type", value).then(data => {
+          setOptions(data.results);
+        });
+      }}
+    />
   );
+
+  // return (
+  //   <Form onSubmit={validation.handleSubmit(() => submitHandler({ query: queryData }))} noValidate>
+  //     <TextField
+  //       label={typeLabel}
+  //       name="query"
+  //       required
+  //       onChange={handleChanges}
+  //       onKeyDown={handleChanges}
+  //       onFocus={handleChanges}
+  //       inputRef={validation.register({ required: true })}
+  //       error={!!error}
+  //       helperText={error?.message || error?.type || ""}
+  //       endAdornment={<SearchIcon />}
+  //     />
+  //     <span>meow</span>
+  //   </Form>
 };
 
 // TODO: update and use

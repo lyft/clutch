@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/golang/protobuf/ptypes"
 	"go.uber.org/zap"
@@ -147,6 +148,7 @@ func (m *managerImpl) Clientsets(ctx context.Context) map[string]ContextClientse
 }
 
 func (m *managerImpl) GetK8sClientset(ctx context.Context, clientset, cluster, namespace string) (ContextClientset, error) {
+	log.Printf("%v", m.clientsets)
 	cs, ok := m.clientsets[clientset]
 	if !ok {
 		return nil, errors.New("not found")
