@@ -55,6 +55,7 @@ func getClutchComponentFromFile(path string) (*Component, bool) {
 	for k, v := range node.Scope.Objects {
 		if strings.HasSuffix(k, "Name") && v.Kind == ast.Con {
 			name = v
+			break
 		}
 	}
 
