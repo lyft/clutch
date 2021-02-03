@@ -81,7 +81,7 @@ export interface TableRowProps extends Pick<MuiTableRowProps, "onClick"> {
   children?: React.ReactNode;
 }
 
-export const TableRow = ({ children = [], onClick}: TableRowProps) => (
+export const TableRow = ({ children = [], onClick }: TableRowProps) => (
   <StyledTableRow onClick={onClick}>
     {React.Children.map(children, (value, index) => (
       // eslint-disable-next-line react/no-array-index-key
