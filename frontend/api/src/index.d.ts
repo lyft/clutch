@@ -12232,6 +12232,60 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a SearchMetadata. */
+            interface ISearchMetadata {
+
+                /** SearchMetadata enabled */
+                enabled?: (boolean|null);
+
+                /** SearchMetadata isAutocompleteable */
+                isAutocompleteable?: (boolean|null);
+            }
+
+            /** Represents a SearchMetadata. */
+            class SearchMetadata implements ISearchMetadata {
+
+                /**
+                 * Constructs a new SearchMetadata.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.resolver.v1.ISearchMetadata);
+
+                /** SearchMetadata enabled. */
+                public enabled: boolean;
+
+                /** SearchMetadata isAutocompleteable. */
+                public isAutocompleteable: boolean;
+
+                /**
+                 * Verifies a SearchMetadata message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a SearchMetadata message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns SearchMetadata
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.resolver.v1.SearchMetadata;
+
+                /**
+                 * Creates a plain object from a SearchMetadata message. Also converts values to other types if specified.
+                 * @param message SearchMetadata
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.resolver.v1.SearchMetadata, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this SearchMetadata to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a SchemaMetadata. */
             interface ISchemaMetadata {
 
@@ -12240,6 +12294,9 @@ export namespace clutch {
 
                 /** SchemaMetadata searchable */
                 searchable?: (boolean|null);
+
+                /** SchemaMetadata search */
+                search?: (clutch.resolver.v1.ISearchMetadata|null);
             }
 
             /** Represents a SchemaMetadata. */
@@ -12256,6 +12313,9 @@ export namespace clutch {
 
                 /** SchemaMetadata searchable. */
                 public searchable: boolean;
+
+                /** SchemaMetadata search. */
+                public search?: (clutch.resolver.v1.ISearchMetadata|null);
 
                 /**
                  * Verifies a SchemaMetadata message.

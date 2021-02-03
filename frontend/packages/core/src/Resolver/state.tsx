@@ -48,7 +48,7 @@ const reducer = (state: ResolverState, action: DispatchAction) => {
         schemaFetchError: "",
         searchableSchemas: action.allSchemas
           .map(schema => {
-            return schema.metadata.searchable ? schema : null;
+            return schema.metadata.searchable || schema.metadata.search.enabled ? schema : null;
           })
           .filter(x => x),
         allSchemas: action.allSchemas,

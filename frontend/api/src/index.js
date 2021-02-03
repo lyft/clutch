@@ -29111,6 +29111,124 @@ export const clutch = $root.clutch = (() => {
                 return FieldMetadata;
             })();
 
+            v1.SearchMetadata = (function() {
+
+                /**
+                 * Properties of a SearchMetadata.
+                 * @memberof clutch.resolver.v1
+                 * @interface ISearchMetadata
+                 * @property {boolean|null} [enabled] SearchMetadata enabled
+                 * @property {boolean|null} [isAutocompleteable] SearchMetadata isAutocompleteable
+                 */
+
+                /**
+                 * Constructs a new SearchMetadata.
+                 * @memberof clutch.resolver.v1
+                 * @classdesc Represents a SearchMetadata.
+                 * @implements ISearchMetadata
+                 * @constructor
+                 * @param {clutch.resolver.v1.ISearchMetadata=} [properties] Properties to set
+                 */
+                function SearchMetadata(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * SearchMetadata enabled.
+                 * @member {boolean} enabled
+                 * @memberof clutch.resolver.v1.SearchMetadata
+                 * @instance
+                 */
+                SearchMetadata.prototype.enabled = false;
+
+                /**
+                 * SearchMetadata isAutocompleteable.
+                 * @member {boolean} isAutocompleteable
+                 * @memberof clutch.resolver.v1.SearchMetadata
+                 * @instance
+                 */
+                SearchMetadata.prototype.isAutocompleteable = false;
+
+                /**
+                 * Verifies a SearchMetadata message.
+                 * @function verify
+                 * @memberof clutch.resolver.v1.SearchMetadata
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                SearchMetadata.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.enabled != null && message.hasOwnProperty("enabled"))
+                        if (typeof message.enabled !== "boolean")
+                            return "enabled: boolean expected";
+                    if (message.isAutocompleteable != null && message.hasOwnProperty("isAutocompleteable"))
+                        if (typeof message.isAutocompleteable !== "boolean")
+                            return "isAutocompleteable: boolean expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a SearchMetadata message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.resolver.v1.SearchMetadata
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.resolver.v1.SearchMetadata} SearchMetadata
+                 */
+                SearchMetadata.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.resolver.v1.SearchMetadata)
+                        return object;
+                    let message = new $root.clutch.resolver.v1.SearchMetadata();
+                    if (object.enabled != null)
+                        message.enabled = Boolean(object.enabled);
+                    if (object.isAutocompleteable != null)
+                        message.isAutocompleteable = Boolean(object.isAutocompleteable);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a SearchMetadata message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.resolver.v1.SearchMetadata
+                 * @static
+                 * @param {clutch.resolver.v1.SearchMetadata} message SearchMetadata
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                SearchMetadata.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.enabled = false;
+                        object.isAutocompleteable = false;
+                    }
+                    if (message.enabled != null && message.hasOwnProperty("enabled"))
+                        object.enabled = message.enabled;
+                    if (message.isAutocompleteable != null && message.hasOwnProperty("isAutocompleteable"))
+                        object.isAutocompleteable = message.isAutocompleteable;
+                    return object;
+                };
+
+                /**
+                 * Converts this SearchMetadata to JSON.
+                 * @function toJSON
+                 * @memberof clutch.resolver.v1.SearchMetadata
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                SearchMetadata.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return SearchMetadata;
+            })();
+
             v1.SchemaMetadata = (function() {
 
                 /**
@@ -29119,6 +29237,7 @@ export const clutch = $root.clutch = (() => {
                  * @interface ISchemaMetadata
                  * @property {string|null} [displayName] SchemaMetadata displayName
                  * @property {boolean|null} [searchable] SchemaMetadata searchable
+                 * @property {clutch.resolver.v1.ISearchMetadata|null} [search] SchemaMetadata search
                  */
 
                 /**
@@ -29153,6 +29272,14 @@ export const clutch = $root.clutch = (() => {
                 SchemaMetadata.prototype.searchable = false;
 
                 /**
+                 * SchemaMetadata search.
+                 * @member {clutch.resolver.v1.ISearchMetadata|null|undefined} search
+                 * @memberof clutch.resolver.v1.SchemaMetadata
+                 * @instance
+                 */
+                SchemaMetadata.prototype.search = null;
+
+                /**
                  * Verifies a SchemaMetadata message.
                  * @function verify
                  * @memberof clutch.resolver.v1.SchemaMetadata
@@ -29169,6 +29296,11 @@ export const clutch = $root.clutch = (() => {
                     if (message.searchable != null && message.hasOwnProperty("searchable"))
                         if (typeof message.searchable !== "boolean")
                             return "searchable: boolean expected";
+                    if (message.search != null && message.hasOwnProperty("search")) {
+                        let error = $root.clutch.resolver.v1.SearchMetadata.verify(message.search);
+                        if (error)
+                            return "search." + error;
+                    }
                     return null;
                 };
 
@@ -29188,6 +29320,11 @@ export const clutch = $root.clutch = (() => {
                         message.displayName = String(object.displayName);
                     if (object.searchable != null)
                         message.searchable = Boolean(object.searchable);
+                    if (object.search != null) {
+                        if (typeof object.search !== "object")
+                            throw TypeError(".clutch.resolver.v1.SchemaMetadata.search: object expected");
+                        message.search = $root.clutch.resolver.v1.SearchMetadata.fromObject(object.search);
+                    }
                     return message;
                 };
 
@@ -29207,11 +29344,14 @@ export const clutch = $root.clutch = (() => {
                     if (options.defaults) {
                         object.displayName = "";
                         object.searchable = false;
+                        object.search = null;
                     }
                     if (message.displayName != null && message.hasOwnProperty("displayName"))
                         object.displayName = message.displayName;
                     if (message.searchable != null && message.hasOwnProperty("searchable"))
                         object.searchable = message.searchable;
+                    if (message.search != null && message.hasOwnProperty("search"))
+                        object.search = $root.clutch.resolver.v1.SearchMetadata.toObject(message.search, options);
                     return object;
                 };
 
