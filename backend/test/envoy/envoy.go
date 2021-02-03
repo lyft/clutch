@@ -7,13 +7,14 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/lyft/clutch/backend/mock/api"
 	bootstrap "github.com/envoyproxy/go-control-plane/envoy/config/bootstrap/v3"
 	cluster "github.com/envoyproxy/go-control-plane/envoy/config/cluster/v3"
 	listener "github.com/envoyproxy/go-control-plane/envoy/config/listener/v3"
 	hcm "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/network/http_connection_manager/v3"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/ptypes"
+
+	apimock "github.com/lyft/clutch/backend/mock/api"
 )
 
 const baseConfig = `

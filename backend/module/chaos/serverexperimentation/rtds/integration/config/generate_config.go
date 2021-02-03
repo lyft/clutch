@@ -5,7 +5,7 @@ import (
 
 	_ "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
 
-	"github.com/lyft/clutch/backend/test/envoy"
+	testenvoy "github.com/lyft/clutch/backend/test/envoy"
 )
 
 const faultFilterConfig = `
