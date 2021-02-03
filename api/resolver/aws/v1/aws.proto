@@ -11,10 +11,8 @@ import "resolver/v1/annotations.proto";
 message InstanceID {
   option (clutch.resolver.v1.schema) = {
     display_name : "instance ID"
-    searchable : true
     search: {
       enabled : true
-      is_autocompleteable : false
     }
   };
 
@@ -34,10 +32,8 @@ message InstanceID {
 message AutoscalingGroupName {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
-    searchable : true
     search: {
       enabled : true
-      is_autocompleteable : false
     }
   };
 
@@ -58,10 +54,8 @@ message AutoscalingGroupName {
 message KinesisStreamName {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
-    searchable : true
     search: {
       enabled : true
-      is_autocompleteable : true
     }
   };
 
