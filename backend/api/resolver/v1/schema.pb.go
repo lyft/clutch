@@ -430,7 +430,7 @@ type SchemaMetadata struct {
 	unknownFields protoimpl.UnknownFields
 
 	DisplayName string `protobuf:"bytes,1,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
-	// Deprecated: searchable has been replaced by SearchMetadata.enabled
+	// Searchable has been replaced by SearchMetadata.enabled and will be deprecated soon
 	Searchable bool            `protobuf:"varint,2,opt,name=searchable,proto3" json:"searchable,omitempty"`
 	Search     *SearchMetadata `protobuf:"bytes,4,opt,name=search,proto3" json:"search,omitempty"`
 }
