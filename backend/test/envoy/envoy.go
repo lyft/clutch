@@ -1,22 +1,19 @@
-package envoy
+package testenvoy
 
 import (
 	"bytes"
-	"encoding/json"
 	"errors"
-	"fmt"
 	"net"
 	"net/http"
 	"time"
 
+	"github.com/lyft/clutch/backend/mock/api"
 	bootstrap "github.com/envoyproxy/go-control-plane/envoy/config/bootstrap/v3"
 	cluster "github.com/envoyproxy/go-control-plane/envoy/config/cluster/v3"
 	listener "github.com/envoyproxy/go-control-plane/envoy/config/listener/v3"
 	hcm "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/network/http_connection_manager/v3"
 	"github.com/golang/protobuf/jsonpb"
-	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-	"gopkg.in/yaml.v3"
 )
 
 const baseConfig = `
@@ -121,11 +118,7 @@ type EnvoyConfig struct {
 func (e *EnvoyConfig) Generate() (string, error) {
 	if e.finalConfig == nil {
 		b := &bootstrap.Bootstrap{}
-
-		err := unmarshalYaml(b, baseConfig)
-		if err != nil {
-			return "", err
-		}
+		apimock.FromYAML(baseConfig, b)
 
 		for _, m := range e.configModifiers {
 			b = m(b)
@@ -151,10 +144,7 @@ func NewEnvoyConfig() *EnvoyConfig {
 func (e *EnvoyConfig) AddRuntimeLayer(input string) error {
 	runtimeLayer := &bootstrap.RuntimeLayer{}
 
-	err := unmarshalYaml(runtimeLayer, input)
-	if err != nil {
-		return err
-	}
+	apimock.FromYAML(input, runtimeLayer)
 
 	e.configModifiers = append(e.configModifiers, func(b *bootstrap.Bootstrap) *bootstrap.Bootstrap {
 		if b.LayeredRuntime == nil {
@@ -170,15 +160,12 @@ func (e *EnvoyConfig) AddRuntimeLayer(input string) error {
 
 // AddCluster adds a cluster to the list of static clusters.
 func (e *EnvoyConfig) AddCluster(input string) error {
-	cluster := &cluster.Cluster{}
+	clusterProto := &cluster.Cluster{}
 
-	err := unmarshalYaml(cluster, input)
-	if err != nil {
-		return err
-	}
+	apimock.FromYAML(input, clusterProto)
 
 	e.configModifiers = append(e.configModifiers, func(b *bootstrap.Bootstrap) *bootstrap.Bootstrap {
-		b.StaticResources.Clusters = append(b.StaticResources.Clusters, cluster)
+		b.StaticResources.Clusters = append(b.StaticResources.Clusters, clusterProto)
 
 		return b
 	})
@@ -189,10 +176,7 @@ func (e *EnvoyConfig) AddCluster(input string) error {
 // AddHTTPFilter adds a HTTP filter in front of the list of HTTP filters for the default listener.
 func (e *EnvoyConfig) AddHTTPFilter(input string) error {
 	filter := &hcm.HttpFilter{}
-	err := unmarshalYaml(filter, input)
-	if err != nil {
-		return err
-	}
+	apimock.FromYAML(input, filter)
 
 	e.configModifiers = append(e.configModifiers, func(b *bootstrap.Bootstrap) *bootstrap.Bootstrap {
 		h := &hcm.HttpConnectionManager{}
@@ -209,29 +193,6 @@ func (e *EnvoyConfig) AddHTTPFilter(input string) error {
 
 		return b
 	})
-
-	return nil
-}
-
-// Helper to convert an input yaml into a typed Protobuf message.
-func unmarshalYaml(m proto.Message, input string) error {
-	intermediate := map[string]interface{}{}
-
-	err := yaml.Unmarshal([]byte(input), intermediate)
-	if err != nil {
-		return fmt.Errorf("error unmarshaling yaml: %s", err)
-	}
-
-	asJSON, err := json.Marshal(intermediate)
-	if err != nil {
-		return fmt.Errorf("error marshaling json: %s", err)
-	}
-
-	u := jsonpb.Unmarshaler{}
-	err = u.Unmarshal(bytes.NewReader(asJSON), m)
-	if err != nil {
-		return fmt.Errorf("error unmarshaling json (%s) to proto: %s", string(asJSON), err)
-	}
 
 	return nil
 }

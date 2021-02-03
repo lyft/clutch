@@ -14,7 +14,7 @@ import (
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds"
-	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds/envoy"
+	"github.com/lyft/clutch/backend/test/envoy"
 	rtds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds/testing"
 )
 
@@ -24,7 +24,7 @@ func TestEnvoyFaults(t *testing.T) {
 	ts := rtds_testing.NewTestServer(t, rtds.New, true)
 	defer ts.Stop()
 
-	e, err := envoy.NewEnvoyHandle()
+	e, err := testenvoy.NewEnvoyHandle()
 	assert.NoError(t, err)
 
 	code, err := e.MakeSimpleCall()
@@ -93,7 +93,7 @@ type awaitReturnValueParams struct {
 	expectedStatus int
 }
 
-func awaitExpectedReturnValueForSimpleCall(t *testing.T, e *envoy.EnvoyHandle, params awaitReturnValueParams) error {
+func awaitExpectedReturnValueForSimpleCall(t *testing.T, e *testenvoy.EnvoyHandle, params awaitReturnValueParams) error {
 	timeout := time.NewTimer(params.timeout)
 
 	for range time.NewTicker(100 * time.Millisecond).C {

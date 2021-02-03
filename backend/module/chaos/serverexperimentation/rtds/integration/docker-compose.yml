@@ -4,7 +4,7 @@ services:
   envoy:
     build:
       context: ../../../../.. # backend root directory
-      dockerfile: module/chaos/serverexperimentation/rtds/integration/Dockerfile-envoy
+      dockerfile: module/chaos/serverexperimentation/rtds/integration/Dockerfile.envoy
     ports:
       - "10000:10000"
       - "9901:9901"
