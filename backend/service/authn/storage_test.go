@@ -33,7 +33,7 @@ func TestNewStorage(t *testing.T) {
 
 	{
 		dbmock.NewMockDB().Register()
-		s, err := newStorage(&authnv1.Storage{
+		s, err := newStorage(&authnv1.StorageConfig{
 			EncryptionPassphrase: "test",
 		})
 		assert.NoError(t, err)
@@ -48,7 +48,7 @@ func TestStoreErrors(t *testing.T) {
 	m := dbmock.NewMockDB()
 	m.Register()
 
-	s, err := newStorage(&authnv1.Storage{EncryptionPassphrase: "test"})
+	s, err := newStorage(&authnv1.StorageConfig{EncryptionPassphrase: "test"})
 	assert.NoError(t, err)
 	assert.NotNil(t, s)
 
@@ -69,7 +69,7 @@ func TestStoreNoIDToken(t *testing.T) {
 	m := dbmock.NewMockDB()
 	m.Register()
 
-	s, err := newStorage(&authnv1.Storage{EncryptionPassphrase: "test"})
+	s, err := newStorage(&authnv1.StorageConfig{EncryptionPassphrase: "test"})
 	assert.NoError(t, err)
 	assert.NotNil(t, s)
 
@@ -95,7 +95,7 @@ func TestStoreWithIDToken(t *testing.T) {
 	m := dbmock.NewMockDB()
 	m.Register()
 
-	s, err := newStorage(&authnv1.Storage{EncryptionPassphrase: "test"})
+	s, err := newStorage(&authnv1.StorageConfig{EncryptionPassphrase: "test"})
 	assert.NoError(t, err)
 	assert.NotNil(t, s)
 
@@ -122,7 +122,7 @@ func TestReadNoRows(t *testing.T) {
 	m := dbmock.NewMockDB()
 	m.Register()
 
-	s, err := newStorage(&authnv1.Storage{EncryptionPassphrase: "test"})
+	s, err := newStorage(&authnv1.StorageConfig{EncryptionPassphrase: "test"})
 	assert.NoError(t, err)
 	assert.NotNil(t, s)
 
@@ -144,7 +144,7 @@ func TestReadWithResult(t *testing.T) {
 	m := dbmock.NewMockDB()
 	m.Register()
 
-	s, err := newStorage(&authnv1.Storage{EncryptionPassphrase: "test"})
+	s, err := newStorage(&authnv1.StorageConfig{EncryptionPassphrase: "test"})
 	assert.NoError(t, err)
 	assert.NotNil(t, s)
 

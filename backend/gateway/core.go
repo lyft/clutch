@@ -68,18 +68,19 @@ var Modules = module.Factory{
 }
 
 var Services = service.Factory{
-	auditservice.Name:    auditservice.New,
-	authnservice.Name:    authnservice.New,
-	authzservice.Name:    authzservice.New,
-	awsservice.Name:      awsservice.New,
-	envoyadmin.Name:      envoyadmin.New,
-	experimentstore.Name: experimentstore.New,
-	github.Name:          github.New,
-	k8sservice.Name:      k8sservice.New,
-	loggingsink.Name:     loggingsink.New,
-	pgservice.Name:       pgservice.New,
-	slack.Name:           slack.New,
-	topologyservice.Name: topologyservice.New,
+	auditservice.Name:        auditservice.New,
+	authnservice.Name:        authnservice.New,
+	authnservice.StorageName: authnservice.NewStorage,
+	authzservice.Name:        authzservice.New,
+	awsservice.Name:          awsservice.New,
+	envoyadmin.Name:          envoyadmin.New,
+	experimentstore.Name:     experimentstore.New,
+	github.Name:              github.New,
+	k8sservice.Name:          k8sservice.New,
+	loggingsink.Name:         loggingsink.New,
+	pgservice.Name:           pgservice.New,
+	slack.Name:               slack.New,
+	topologyservice.Name:     topologyservice.New,
 }
 
 var Resolvers = resolver.Factory{
