@@ -48,7 +48,7 @@ message SchemaMetadata {
   string display_name = 1;
   // Searchable has been replaced by SearchMetadata.enabled and will be deprecated soon
   bool searchable = 2;
-  SearchMetadata search = 4;
+  SearchMetadata search = 3;
 }
 
 message Schema {
