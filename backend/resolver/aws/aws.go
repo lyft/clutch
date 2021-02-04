@@ -21,10 +21,12 @@ import (
 	kinesisv1api "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	awsv1resolver "github.com/lyft/clutch/backend/api/resolver/aws/v1"
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/resolver"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/aws"
+	"github.com/lyft/clutch/backend/service/topology"
 )
 
 const Name = "clutch.resolver.aws"
@@ -67,6 +69,16 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 		return nil, errors.New("service was not the correct type")
 	}
 
+	// if topology is enabled
+	var topologyService topology.Service
+	tc, ok := service.Registry[topology.Name]
+	if ok {
+		topologyService, ok = tc.(topology.Service)
+		if !ok {
+			return nil, errors.New("Unable to get the topology service")
+		}
+	}
+
 	schemas, err := resolver.InputsToSchemas(typeSchemas)
 	if err != nil {
 		return nil, err
@@ -77,15 +89,17 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 	})
 
 	r := &res{
-		client:  c,
-		schemas: schemas,
+		client:   c,
+		topology: topologyService,
+		schemas:  schemas,
 	}
 	return r, nil
 }
 
 type res struct {
-	client  aws.Client
-	schemas resolver.TypeURLToSchemasMap
+	client   aws.Client
+	topology topology.Service
+	schemas  resolver.TypeURLToSchemasMap
 }
 
 func (r *res) determineRegionsForOption(option string) []string {
@@ -135,4 +149,32 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	default:
 		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("cannot search for type '%s'", typeURL))
 	}
+}
+
+func (r *res) AutoComplete(ctx context.Context, typeURL, search string) ([]string, error) {
+	results, _, err := r.topology.Search(ctx, &topologyv1.SearchRequest{
+		PageToken: "0",
+		Limit:     20,
+		Sort: &topologyv1.SearchRequest_Sort{
+			Direction: topologyv1.SearchRequest_Sort_ASCENDING,
+			Field:     "column.id",
+		},
+		Filter: &topologyv1.SearchRequest_Filter{
+			TypeUrl: typeURL,
+			Search: &topologyv1.SearchRequest_Filter_Search{
+				Field: "column.id",
+				Text:  search,
+			},
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	autoCompleteValue := []string{}
+	for _, r := range results {
+		autoCompleteValue = append(autoCompleteValue, r.Id)
+	}
+
+	return autoCompleteValue, nil
 }
