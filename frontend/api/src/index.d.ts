@@ -5676,8 +5676,8 @@ export namespace clutch {
                 /** Namespace experimentation. */
                 namespace experimentation {
 
-                    /** Namespace rtds. */
-                    namespace rtds {
+                    /** Namespace xds. */
+                    namespace xds {
 
                         /** Namespace v1. */
                         namespace v1 {
@@ -5711,7 +5711,7 @@ export namespace clutch {
                                  * Constructs a new Config.
                                  * @param [properties] Properties to set
                                  */
-                                constructor(properties?: clutch.config.module.chaos.experimentation.rtds.v1.IConfig);
+                                constructor(properties?: clutch.config.module.chaos.experimentation.xds.v1.IConfig);
 
                                 /** Config rtdsLayerName. */
                                 public rtdsLayerName: string;
@@ -5743,7 +5743,7 @@ export namespace clutch {
                                  * @param object Plain object
                                  * @returns Config
                                  */
-                                public static fromObject(object: { [k: string]: any }): clutch.config.module.chaos.experimentation.rtds.v1.Config;
+                                public static fromObject(object: { [k: string]: any }): clutch.config.module.chaos.experimentation.xds.v1.Config;
 
                                 /**
                                  * Creates a plain object from a Config message. Also converts values to other types if specified.
@@ -5751,7 +5751,7 @@ export namespace clutch {
                                  * @param [options] Conversion options
                                  * @returns Plain object
                                  */
-                                public static toObject(message: clutch.config.module.chaos.experimentation.rtds.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                                public static toObject(message: clutch.config.module.chaos.experimentation.xds.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                                 /**
                                  * Converts this Config to JSON.

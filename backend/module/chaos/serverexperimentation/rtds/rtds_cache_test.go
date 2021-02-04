@@ -1,4 +1,4 @@
-package rtds
+package xds
 
 import (
 	"context"
@@ -278,9 +278,9 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 }
 
 func TestRefreshCache(t *testing.T) {
-	s := &mockStorer{}
+	s := mockStorer{}
 	testCache := gcpCache.NewSnapshotCache(false, gcpCache.IDHash{}, nil)
-	refreshCache(context.Background(), s, &cacheWrapperV2{testCache}, "test_layer", "ingress", "egress", nil)
+	refreshCache(context.Background(), &s, &cacheWrapperV2{testCache}, "test_layer", "ingress", "egress", nil)
 	assert.Equal(t, s.getExperimentArguments.configType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig")
 }
 
