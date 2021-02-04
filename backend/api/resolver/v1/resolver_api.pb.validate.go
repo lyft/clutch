@@ -36,6 +36,154 @@ var (
 // define the regex for a UUID once up-front
 var _resolver_api_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
+// Validate checks the field values on AutoCompleteRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *AutoCompleteRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetWant()) < 1 {
+		return AutoCompleteRequestValidationError{
+			field:  "Want",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetSearch()) < 1 {
+		return AutoCompleteRequestValidationError{
+			field:  "Search",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	return nil
+}
+
+// AutoCompleteRequestValidationError is the validation error returned by
+// AutoCompleteRequest.Validate if the designated constraints aren't met.
+type AutoCompleteRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AutoCompleteRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AutoCompleteRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AutoCompleteRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AutoCompleteRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AutoCompleteRequestValidationError) ErrorName() string {
+	return "AutoCompleteRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e AutoCompleteRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAutoCompleteRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AutoCompleteRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AutoCompleteRequestValidationError{}
+
+// Validate checks the field values on AutoCompleteResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *AutoCompleteResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// AutoCompleteResponseValidationError is the validation error returned by
+// AutoCompleteResponse.Validate if the designated constraints aren't met.
+type AutoCompleteResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AutoCompleteResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AutoCompleteResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AutoCompleteResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AutoCompleteResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AutoCompleteResponseValidationError) ErrorName() string {
+	return "AutoCompleteResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e AutoCompleteResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAutoCompleteResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AutoCompleteResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AutoCompleteResponseValidationError{}
+
 // Validate checks the field values on ResolveRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.
