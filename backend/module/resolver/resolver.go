@@ -177,6 +177,26 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 	}, nil
 }
 
+func (r *resolverAPI) AutoComplete(ctx context.Context, req *resolverv1.AutoCompleteRequest) (*resolverv1.AutoCompleteResponse, error) {
+	var err error
+	results := []string{}
+
+	for _, res := range resolver.Registry {
+		resSchema := res.Schemas()
+		if _, ok := resSchema[req.Want]; ok {
+			results, err = res.AutoComplete(ctx, req.Want, req.Search)
+			if err != nil {
+				return nil, err
+			}
+			break
+		}
+	}
+
+	return &resolverv1.AutoCompleteResponse{
+		Results: results,
+	}, nil
+}
+
 // Add error information to the schema if it's broken in some way.
 func updateSchemaError(input *resolverv1.Schema) {
 	for _, field := range input.Fields {
