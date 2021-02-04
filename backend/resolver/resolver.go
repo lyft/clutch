@@ -38,7 +38,7 @@ type Resolver interface {
 	Resolve(ctx context.Context, typeURL string, input proto.Message, limit uint32) (*Results, error)
 	// ValidateResolveInput(typeURL string, input proto.Message) for async validation from frontend
 
-	// Autocomplete(query string) (map[string][]proto.Message, error)
+	AutoComplete(ctx context.Context, typeURL, search string) ([]string, error)
 }
 
 const typePrefix = "type.googleapis.com/"
