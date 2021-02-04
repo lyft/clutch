@@ -34,6 +34,23 @@ service ResolverAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
+  rpc AutoComplete(AutoCompleteRequest) returns (AutoCompleteResponse) {
+    option (google.api.http) = {
+      post : "/v1/resolver/autocomplete"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+message AutoCompleteRequest {
+  // The type URL of the desired result.
+  string want = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string search = 2 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message AutoCompleteResponse {
+  repeated string results = 1;
 }
 
 message ResolveRequest {
