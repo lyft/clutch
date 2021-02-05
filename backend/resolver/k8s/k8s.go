@@ -73,8 +73,13 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 		return nil, err
 	}
 
+	clientsets, err := svc.Clientsets(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
 	resolver.HydrateDynamicOptions(schemas, map[string][]*resolverv1.Option{
-		"clientset": makeClientsetOptions(svc.Clientsets(context.Background())),
+		"clientset": makeClientsetOptions(clientsets),
 	})
 
 	r := &res{
@@ -148,11 +153,16 @@ func (r *res) Resolve(ctx context.Context, typeURL string, input proto.Message, 
 }
 
 func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (*resolver.Results, error) {
+	clientsets, err := r.svc.Clientsets(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	ctx, handler := resolver.NewFanoutHandler(ctx)
 	switch typeURL {
 	case typeURLPod:
 		if idPattern.MatchString(query) {
-			for _, name := range r.svc.Clientsets(ctx) {
+			for _, name := range clientsets {
 				handler.Add(1)
 				go func(name string) {
 					defer handler.Done()
@@ -170,7 +180,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 		}
 	case typeURLHPA:
 		if idPattern.MatchString(query) {
-			for _, name := range r.svc.Clientsets(ctx) {
+			for _, name := range clientsets {
 				handler.Add(1)
 				go func(name string) {
 					defer handler.Done()

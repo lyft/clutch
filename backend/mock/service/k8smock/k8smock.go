@@ -189,8 +189,8 @@ func (s *svc) ListConfigMaps(_ context.Context, clientset, cluster, namespace st
 	return configMaps, nil
 }
 
-func (*svc) Clientsets(ctx context.Context) []string {
-	return []string{"fake-user@fake-cluster"}
+func (*svc) Clientsets(ctx context.Context) ([]string, error) {
+	return []string{"fake-user@fake-cluster"}, nil
 }
 
 func New() k8sservice.Service {

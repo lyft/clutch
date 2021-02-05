@@ -33,7 +33,11 @@ func (s *svc) StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.Upda
 		return nil, errors.New("TopologyCaching is already in progress")
 	}
 
-	for name, cs := range s.manager.Clientsets(ctx) {
+	clientsets, err := s.manager.Clientsets(ctx)
+	if err != nil {
+		return nil, err
+	}
+	for name, cs := range clientsets {
 		s.log.Info("starting informer for", zap.String("cluster", name))
 		go s.startInformers(ctx, cs)
 	}
