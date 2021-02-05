@@ -179,3 +179,27 @@ func TestProtoForStatefulSetClusterName(t *testing.T) {
 		})
 	}
 }
+
+func TestDeleteStatefulSet(t *testing.T) {
+	cs := testStatefulSetClientset()
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "default",
+				cluster:   "core-testing",
+			}},
+		},
+	}
+
+	// Not found.
+	err := s.DeleteStatefulSet(context.Background(), "foo", "core-testing", "testing-namespace", "abc")
+	assert.Error(t, err)
+
+	err = s.DeleteStatefulSet(context.Background(), "foo", "core-testing", "testing-namespace", "testing-statefulSet-name")
+	assert.NoError(t, err)
+
+	// Not found.
+	_, err = s.DescribeStatefulSet(context.Background(), "foo", "core-testing", "testing-namespace", "testing-statefulSet-name")
+	assert.Error(t, err)
+}

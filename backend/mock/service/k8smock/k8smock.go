@@ -117,6 +117,10 @@ func (*svc) UpdateStatefulSet(ctx context.Context, clientset, cluster, namespace
 	return nil
 }
 
+func (*svc) DeleteStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) error {
+	return nil
+}
+
 func (*svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error {
 	return nil
 }

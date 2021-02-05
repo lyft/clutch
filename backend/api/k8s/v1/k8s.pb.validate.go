@@ -1913,6 +1913,209 @@ var _ interface {
 	ErrorName() string
 } = StatefulSetValidationError{}
 
+// Validate checks the field values on DescribeStatefulSetRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DescribeStatefulSetRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return DescribeStatefulSetRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return DescribeStatefulSetRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return DescribeStatefulSetRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetName()) < 1 {
+		return DescribeStatefulSetRequestValidationError{
+			field:  "Name",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	for key, val := range m.GetLabels() {
+		_ = val
+
+		if len(key) < 1 {
+			return DescribeStatefulSetRequestValidationError{
+				field:  fmt.Sprintf("Labels[%v]", key),
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+		// no validation rules for Labels[key]
+	}
+
+	return nil
+}
+
+// DescribeStatefulSetRequestValidationError is the validation error returned
+// by DescribeStatefulSetRequest.Validate if the designated constraints aren't met.
+type DescribeStatefulSetRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DescribeStatefulSetRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DescribeStatefulSetRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DescribeStatefulSetRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DescribeStatefulSetRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DescribeStatefulSetRequestValidationError) ErrorName() string {
+	return "DescribeStatefulSetRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DescribeStatefulSetRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDescribeStatefulSetRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DescribeStatefulSetRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DescribeStatefulSetRequestValidationError{}
+
+// Validate checks the field values on DeleteStatefulSetRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DeleteStatefulSetRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return DeleteStatefulSetRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return DeleteStatefulSetRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return DeleteStatefulSetRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetName()) < 1 {
+		return DeleteStatefulSetRequestValidationError{
+			field:  "Name",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	return nil
+}
+
+// DeleteStatefulSetRequestValidationError is the validation error returned by
+// DeleteStatefulSetRequest.Validate if the designated constraints aren't met.
+type DeleteStatefulSetRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeleteStatefulSetRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeleteStatefulSetRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeleteStatefulSetRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeleteStatefulSetRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeleteStatefulSetRequestValidationError) ErrorName() string {
+	return "DeleteStatefulSetRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeleteStatefulSetRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeleteStatefulSetRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeleteStatefulSetRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeleteStatefulSetRequestValidationError{}
+
 // Validate checks the field values on UpdateStatefulSetRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -2024,6 +2227,151 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = UpdateStatefulSetRequestValidationError{}
+
+// Validate checks the field values on DescribeStatefulSetResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DescribeStatefulSetResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetStatefulSet()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DescribeStatefulSetResponseValidationError{
+				field:  "StatefulSet",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// DescribeStatefulSetResponseValidationError is the validation error returned
+// by DescribeStatefulSetResponse.Validate if the designated constraints
+// aren't met.
+type DescribeStatefulSetResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DescribeStatefulSetResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DescribeStatefulSetResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DescribeStatefulSetResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DescribeStatefulSetResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DescribeStatefulSetResponseValidationError) ErrorName() string {
+	return "DescribeStatefulSetResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DescribeStatefulSetResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDescribeStatefulSetResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DescribeStatefulSetResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DescribeStatefulSetResponseValidationError{}
+
+// Validate checks the field values on DeleteStatefulSetResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DeleteStatefulSetResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// DeleteStatefulSetResponseValidationError is the validation error returned by
+// DeleteStatefulSetResponse.Validate if the designated constraints aren't met.
+type DeleteStatefulSetResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeleteStatefulSetResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeleteStatefulSetResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeleteStatefulSetResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeleteStatefulSetResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeleteStatefulSetResponseValidationError) ErrorName() string {
+	return "DeleteStatefulSetResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeleteStatefulSetResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeleteStatefulSetResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeleteStatefulSetResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeleteStatefulSetResponseValidationError{}
 
 // Validate checks the field values on UpdateStatefulSetResponse with the rules
 // defined in the proto definition for this message. If any rules are

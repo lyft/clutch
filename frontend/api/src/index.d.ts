@@ -8568,6 +8568,20 @@ export namespace clutch {
                 public deleteService(request: clutch.k8s.v1.IDeleteServiceRequest): Promise<clutch.k8s.v1.DeleteServiceResponse>;
 
                 /**
+                 * Calls DescribeStatefulSet.
+                 * @param request DescribeStatefulSetRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DescribeStatefulSetResponse
+                 */
+                public describeStatefulSet(request: clutch.k8s.v1.IDescribeStatefulSetRequest, callback: clutch.k8s.v1.K8sAPI.DescribeStatefulSetCallback): void;
+
+                /**
+                 * Calls DescribeStatefulSet.
+                 * @param request DescribeStatefulSetRequest message or plain object
+                 * @returns Promise
+                 */
+                public describeStatefulSet(request: clutch.k8s.v1.IDescribeStatefulSetRequest): Promise<clutch.k8s.v1.DescribeStatefulSetResponse>;
+
+                /**
                  * Calls UpdateStatefulSet.
                  * @param request UpdateStatefulSetRequest message or plain object
                  * @param callback Node-style callback called with the error, if any, and UpdateStatefulSetResponse
@@ -8580,6 +8594,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public updateStatefulSet(request: clutch.k8s.v1.IUpdateStatefulSetRequest): Promise<clutch.k8s.v1.UpdateStatefulSetResponse>;
+
+                /**
+                 * Calls DeleteStatefulSet.
+                 * @param request DeleteStatefulSetRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DeleteStatefulSetResponse
+                 */
+                public deleteStatefulSet(request: clutch.k8s.v1.IDeleteStatefulSetRequest, callback: clutch.k8s.v1.K8sAPI.DeleteStatefulSetCallback): void;
+
+                /**
+                 * Calls DeleteStatefulSet.
+                 * @param request DeleteStatefulSetRequest message or plain object
+                 * @returns Promise
+                 */
+                public deleteStatefulSet(request: clutch.k8s.v1.IDeleteStatefulSetRequest): Promise<clutch.k8s.v1.DeleteStatefulSetResponse>;
 
                 /**
                  * Calls DescribeCronJob.
@@ -8725,11 +8753,25 @@ export namespace clutch {
                 type DeleteServiceCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteServiceResponse) => void;
 
                 /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeStatefulSet}.
+                 * @param error Error, if any
+                 * @param [response] DescribeStatefulSetResponse
+                 */
+                type DescribeStatefulSetCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribeStatefulSetResponse) => void;
+
+                /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateStatefulSet}.
                  * @param error Error, if any
                  * @param [response] UpdateStatefulSetResponse
                  */
                 type UpdateStatefulSetCallback = (error: (Error|null), response?: clutch.k8s.v1.UpdateStatefulSetResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteStatefulSet}.
+                 * @param error Error, if any
+                 * @param [response] DeleteStatefulSetResponse
+                 */
+                type DeleteStatefulSetCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteStatefulSetResponse) => void;
 
                 /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeCronJob}.
@@ -10325,6 +10367,144 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a DescribeStatefulSetRequest. */
+            interface IDescribeStatefulSetRequest {
+
+                /** DescribeStatefulSetRequest clientset */
+                clientset?: (string|null);
+
+                /** DescribeStatefulSetRequest cluster */
+                cluster?: (string|null);
+
+                /** DescribeStatefulSetRequest namespace */
+                namespace?: (string|null);
+
+                /** DescribeStatefulSetRequest name */
+                name?: (string|null);
+
+                /** DescribeStatefulSetRequest labels */
+                labels?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a DescribeStatefulSetRequest. */
+            class DescribeStatefulSetRequest implements IDescribeStatefulSetRequest {
+
+                /**
+                 * Constructs a new DescribeStatefulSetRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeStatefulSetRequest);
+
+                /** DescribeStatefulSetRequest clientset. */
+                public clientset: string;
+
+                /** DescribeStatefulSetRequest cluster. */
+                public cluster: string;
+
+                /** DescribeStatefulSetRequest namespace. */
+                public namespace: string;
+
+                /** DescribeStatefulSetRequest name. */
+                public name: string;
+
+                /** DescribeStatefulSetRequest labels. */
+                public labels: { [k: string]: string };
+
+                /**
+                 * Verifies a DescribeStatefulSetRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeStatefulSetRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeStatefulSetRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeStatefulSetRequest;
+
+                /**
+                 * Creates a plain object from a DescribeStatefulSetRequest message. Also converts values to other types if specified.
+                 * @param message DescribeStatefulSetRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeStatefulSetRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeStatefulSetRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteStatefulSetRequest. */
+            interface IDeleteStatefulSetRequest {
+
+                /** DeleteStatefulSetRequest clientset */
+                clientset?: (string|null);
+
+                /** DeleteStatefulSetRequest cluster */
+                cluster?: (string|null);
+
+                /** DeleteStatefulSetRequest namespace */
+                namespace?: (string|null);
+
+                /** DeleteStatefulSetRequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a DeleteStatefulSetRequest. */
+            class DeleteStatefulSetRequest implements IDeleteStatefulSetRequest {
+
+                /**
+                 * Constructs a new DeleteStatefulSetRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteStatefulSetRequest);
+
+                /** DeleteStatefulSetRequest clientset. */
+                public clientset: string;
+
+                /** DeleteStatefulSetRequest cluster. */
+                public cluster: string;
+
+                /** DeleteStatefulSetRequest namespace. */
+                public namespace: string;
+
+                /** DeleteStatefulSetRequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a DeleteStatefulSetRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteStatefulSetRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteStatefulSetRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteStatefulSetRequest;
+
+                /**
+                 * Creates a plain object from a DeleteStatefulSetRequest message. Also converts values to other types if specified.
+                 * @param message DeleteStatefulSetRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteStatefulSetRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteStatefulSetRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of an UpdateStatefulSetRequest. */
             interface IUpdateStatefulSetRequest {
 
@@ -10452,6 +10632,96 @@ export namespace clutch {
                      */
                     public toJSON(): { [k: string]: any };
                 }
+            }
+
+            /** Properties of a DescribeStatefulSetResponse. */
+            interface IDescribeStatefulSetResponse {
+
+                /** DescribeStatefulSetResponse statefulSet */
+                statefulSet?: (clutch.k8s.v1.IStatefulSet|null);
+            }
+
+            /** Represents a DescribeStatefulSetResponse. */
+            class DescribeStatefulSetResponse implements IDescribeStatefulSetResponse {
+
+                /**
+                 * Constructs a new DescribeStatefulSetResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeStatefulSetResponse);
+
+                /** DescribeStatefulSetResponse statefulSet. */
+                public statefulSet?: (clutch.k8s.v1.IStatefulSet|null);
+
+                /**
+                 * Verifies a DescribeStatefulSetResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeStatefulSetResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeStatefulSetResponse;
+
+                /**
+                 * Creates a plain object from a DescribeStatefulSetResponse message. Also converts values to other types if specified.
+                 * @param message DescribeStatefulSetResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeStatefulSetResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeStatefulSetResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteStatefulSetResponse. */
+            interface IDeleteStatefulSetResponse {
+            }
+
+            /** Represents a DeleteStatefulSetResponse. */
+            class DeleteStatefulSetResponse implements IDeleteStatefulSetResponse {
+
+                /**
+                 * Constructs a new DeleteStatefulSetResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteStatefulSetResponse);
+
+                /**
+                 * Verifies a DeleteStatefulSetResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteStatefulSetResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteStatefulSetResponse;
+
+                /**
+                 * Creates a plain object from a DeleteStatefulSetResponse message. Also converts values to other types if specified.
+                 * @param message DeleteStatefulSetResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteStatefulSetResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteStatefulSetResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
             }
 
             /** Properties of an UpdateStatefulSetResponse. */
