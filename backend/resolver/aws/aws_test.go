@@ -5,14 +5,15 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/uber-go/tally"
+	"go.uber.org/zap/zaptest"
+
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/mock/service/awsmock"
 	"github.com/lyft/clutch/backend/mock/service/topologymock"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/topology"
-	"github.com/stretchr/testify/assert"
-	"github.com/uber-go/tally"
-	"go.uber.org/zap/zaptest"
 )
 
 func TestNewAwsResolver(t *testing.T) {
