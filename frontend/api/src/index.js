@@ -20451,6 +20451,39 @@ export const clutch = $root.clutch = (() => {
                  */
 
                 /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeStatefulSet}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DescribeStatefulSetCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DescribeStatefulSetResponse} [response] DescribeStatefulSetResponse
+                 */
+
+                /**
+                 * Calls DescribeStatefulSet.
+                 * @function describeStatefulSet
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeStatefulSetRequest} request DescribeStatefulSetRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DescribeStatefulSetCallback} callback Node-style callback called with the error, if any, and DescribeStatefulSetResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.describeStatefulSet = function describeStatefulSet(request, callback) {
+                    return this.rpcCall(describeStatefulSet, $root.clutch.k8s.v1.DescribeStatefulSetRequest, $root.clutch.k8s.v1.DescribeStatefulSetResponse, request, callback);
+                }, "name", { value: "DescribeStatefulSet" });
+
+                /**
+                 * Calls DescribeStatefulSet.
+                 * @function describeStatefulSet
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeStatefulSetRequest} request DescribeStatefulSetRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DescribeStatefulSetResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateStatefulSet}.
                  * @memberof clutch.k8s.v1.K8sAPI
                  * @typedef UpdateStatefulSetCallback
@@ -20480,6 +20513,39 @@ export const clutch = $root.clutch = (() => {
                  * @instance
                  * @param {clutch.k8s.v1.IUpdateStatefulSetRequest} request UpdateStatefulSetRequest message or plain object
                  * @returns {Promise<clutch.k8s.v1.UpdateStatefulSetResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteStatefulSet}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DeleteStatefulSetCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DeleteStatefulSetResponse} [response] DeleteStatefulSetResponse
+                 */
+
+                /**
+                 * Calls DeleteStatefulSet.
+                 * @function deleteStatefulSet
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteStatefulSetRequest} request DeleteStatefulSetRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DeleteStatefulSetCallback} callback Node-style callback called with the error, if any, and DeleteStatefulSetResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.deleteStatefulSet = function deleteStatefulSet(request, callback) {
+                    return this.rpcCall(deleteStatefulSet, $root.clutch.k8s.v1.DeleteStatefulSetRequest, $root.clutch.k8s.v1.DeleteStatefulSetResponse, request, callback);
+                }, "name", { value: "DeleteStatefulSet" });
+
+                /**
+                 * Calls DeleteStatefulSet.
+                 * @function deleteStatefulSet
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDeleteStatefulSetRequest} request DeleteStatefulSetRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DeleteStatefulSetResponse>} Promise
                  * @variation 2
                  */
 
@@ -24424,6 +24490,343 @@ export const clutch = $root.clutch = (() => {
                 return StatefulSet;
             })();
 
+            v1.DescribeStatefulSetRequest = (function() {
+
+                /**
+                 * Properties of a DescribeStatefulSetRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeStatefulSetRequest
+                 * @property {string|null} [clientset] DescribeStatefulSetRequest clientset
+                 * @property {string|null} [cluster] DescribeStatefulSetRequest cluster
+                 * @property {string|null} [namespace] DescribeStatefulSetRequest namespace
+                 * @property {string|null} [name] DescribeStatefulSetRequest name
+                 * @property {Object.<string,string>|null} [labels] DescribeStatefulSetRequest labels
+                 */
+
+                /**
+                 * Constructs a new DescribeStatefulSetRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeStatefulSetRequest.
+                 * @implements IDescribeStatefulSetRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeStatefulSetRequest=} [properties] Properties to set
+                 */
+                function DescribeStatefulSetRequest(properties) {
+                    this.labels = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeStatefulSetRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetRequest
+                 * @instance
+                 */
+                DescribeStatefulSetRequest.prototype.clientset = "";
+
+                /**
+                 * DescribeStatefulSetRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetRequest
+                 * @instance
+                 */
+                DescribeStatefulSetRequest.prototype.cluster = "";
+
+                /**
+                 * DescribeStatefulSetRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetRequest
+                 * @instance
+                 */
+                DescribeStatefulSetRequest.prototype.namespace = "";
+
+                /**
+                 * DescribeStatefulSetRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetRequest
+                 * @instance
+                 */
+                DescribeStatefulSetRequest.prototype.name = "";
+
+                /**
+                 * DescribeStatefulSetRequest labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetRequest
+                 * @instance
+                 */
+                DescribeStatefulSetRequest.prototype.labels = $util.emptyObject;
+
+                /**
+                 * Verifies a DescribeStatefulSetRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeStatefulSetRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeStatefulSetRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeStatefulSetRequest} DescribeStatefulSetRequest
+                 */
+                DescribeStatefulSetRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeStatefulSetRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeStatefulSetRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeStatefulSetRequest.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeStatefulSetRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeStatefulSetRequest} message DescribeStatefulSetRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeStatefulSetRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults)
+                        object.labels = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    let keys2;
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeStatefulSetRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeStatefulSetRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeStatefulSetRequest;
+            })();
+
+            v1.DeleteStatefulSetRequest = (function() {
+
+                /**
+                 * Properties of a DeleteStatefulSetRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteStatefulSetRequest
+                 * @property {string|null} [clientset] DeleteStatefulSetRequest clientset
+                 * @property {string|null} [cluster] DeleteStatefulSetRequest cluster
+                 * @property {string|null} [namespace] DeleteStatefulSetRequest namespace
+                 * @property {string|null} [name] DeleteStatefulSetRequest name
+                 */
+
+                /**
+                 * Constructs a new DeleteStatefulSetRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteStatefulSetRequest.
+                 * @implements IDeleteStatefulSetRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteStatefulSetRequest=} [properties] Properties to set
+                 */
+                function DeleteStatefulSetRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DeleteStatefulSetRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetRequest
+                 * @instance
+                 */
+                DeleteStatefulSetRequest.prototype.clientset = "";
+
+                /**
+                 * DeleteStatefulSetRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetRequest
+                 * @instance
+                 */
+                DeleteStatefulSetRequest.prototype.cluster = "";
+
+                /**
+                 * DeleteStatefulSetRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetRequest
+                 * @instance
+                 */
+                DeleteStatefulSetRequest.prototype.namespace = "";
+
+                /**
+                 * DeleteStatefulSetRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetRequest
+                 * @instance
+                 */
+                DeleteStatefulSetRequest.prototype.name = "";
+
+                /**
+                 * Verifies a DeleteStatefulSetRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteStatefulSetRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteStatefulSetRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteStatefulSetRequest} DeleteStatefulSetRequest
+                 */
+                DeleteStatefulSetRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteStatefulSetRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DeleteStatefulSetRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DeleteStatefulSetRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteStatefulSetRequest} message DeleteStatefulSetRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteStatefulSetRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    return object;
+                };
+
+                /**
+                 * Converts this DeleteStatefulSetRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteStatefulSetRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteStatefulSetRequest;
+            })();
+
             v1.UpdateStatefulSetRequest = (function() {
 
                 /**
@@ -24743,6 +25146,189 @@ export const clutch = $root.clutch = (() => {
                 })();
 
                 return UpdateStatefulSetRequest;
+            })();
+
+            v1.DescribeStatefulSetResponse = (function() {
+
+                /**
+                 * Properties of a DescribeStatefulSetResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeStatefulSetResponse
+                 * @property {clutch.k8s.v1.IStatefulSet|null} [statefulSet] DescribeStatefulSetResponse statefulSet
+                 */
+
+                /**
+                 * Constructs a new DescribeStatefulSetResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeStatefulSetResponse.
+                 * @implements IDescribeStatefulSetResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeStatefulSetResponse=} [properties] Properties to set
+                 */
+                function DescribeStatefulSetResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeStatefulSetResponse statefulSet.
+                 * @member {clutch.k8s.v1.IStatefulSet|null|undefined} statefulSet
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetResponse
+                 * @instance
+                 */
+                DescribeStatefulSetResponse.prototype.statefulSet = null;
+
+                /**
+                 * Verifies a DescribeStatefulSetResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeStatefulSetResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.statefulSet != null && message.hasOwnProperty("statefulSet")) {
+                        let error = $root.clutch.k8s.v1.StatefulSet.verify(message.statefulSet);
+                        if (error)
+                            return "statefulSet." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeStatefulSetResponse} DescribeStatefulSetResponse
+                 */
+                DescribeStatefulSetResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeStatefulSetResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeStatefulSetResponse();
+                    if (object.statefulSet != null) {
+                        if (typeof object.statefulSet !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeStatefulSetResponse.statefulSet: object expected");
+                        message.statefulSet = $root.clutch.k8s.v1.StatefulSet.fromObject(object.statefulSet);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeStatefulSetResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeStatefulSetResponse} message DescribeStatefulSetResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeStatefulSetResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.statefulSet = null;
+                    if (message.statefulSet != null && message.hasOwnProperty("statefulSet"))
+                        object.statefulSet = $root.clutch.k8s.v1.StatefulSet.toObject(message.statefulSet, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeStatefulSetResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeStatefulSetResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeStatefulSetResponse;
+            })();
+
+            v1.DeleteStatefulSetResponse = (function() {
+
+                /**
+                 * Properties of a DeleteStatefulSetResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteStatefulSetResponse
+                 */
+
+                /**
+                 * Constructs a new DeleteStatefulSetResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteStatefulSetResponse.
+                 * @implements IDeleteStatefulSetResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteStatefulSetResponse=} [properties] Properties to set
+                 */
+                function DeleteStatefulSetResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies a DeleteStatefulSetResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteStatefulSetResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteStatefulSetResponse} DeleteStatefulSetResponse
+                 */
+                DeleteStatefulSetResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteStatefulSetResponse)
+                        return object;
+                    return new $root.clutch.k8s.v1.DeleteStatefulSetResponse();
+                };
+
+                /**
+                 * Creates a plain object from a DeleteStatefulSetResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteStatefulSetResponse} message DeleteStatefulSetResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteStatefulSetResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this DeleteStatefulSetResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteStatefulSetResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteStatefulSetResponse;
             })();
 
             v1.UpdateStatefulSetResponse = (function() {

@@ -76,6 +76,7 @@ type Service interface {
 	// StatefulSet management functions.
 	DescribeStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.StatefulSet, error)
 	UpdateStatefulSet(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateStatefulSetRequest_Fields) error
+	DeleteStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) error
 
 	// CronJob management functions.
 	DescribeCronJob(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.CronJob, error)
