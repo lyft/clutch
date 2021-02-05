@@ -75,6 +75,7 @@ seed() {
     # Adding labels to resources
     KUBECONFIG=$KUBECONFIG kubectl label configmap "configmap-${env}-test-1" -n "envoy-${env}" app=envoy || true
     KUBECONFIG=$KUBECONFIG kubectl label job "job-${env}-test-1" -n "envoy-${env}" app=envoy || true
+    KUBECONFIG=$KUBECONFIG kubectl annotate job "job-${env}-test-1" -n "envoy-${env}" url=foo@example.com || true
   done
 }
 
