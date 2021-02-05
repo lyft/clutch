@@ -1,6 +1,9 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { TableProps as MuiTableProps } from "@material-ui/core";
+import type {
+  TableProps as MuiTableProps,
+  TableRowProps as MuiTableRowProps,
+} from "@material-ui/core";
 import {
   Paper,
   Table as MuiTable,
@@ -74,12 +77,12 @@ export const Table: React.FC<TableProps> = ({ headings, children, ...props }) =>
   );
 };
 
-export interface TableRowProps {
+export interface TableRowProps extends Pick<MuiTableRowProps, "onClick"> {
   children?: React.ReactNode;
 }
 
-export const TableRow = ({ children = [] }: TableRowProps) => (
-  <StyledTableRow>
+export const TableRow = ({ children = [], onClick }: TableRowProps) => (
+  <StyledTableRow onClick={onClick}>
     {React.Children.map(children, (value, index) => (
       // eslint-disable-next-line react/no-array-index-key
       <TableCell key={index}>{value}</TableCell>
