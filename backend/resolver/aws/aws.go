@@ -69,14 +69,14 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 		return nil, errors.New("service was not the correct type")
 	}
 
-	// if topology is enabled
 	var topologyService topology.Service
-	tc, ok := service.Registry[topology.Name]
+	topologySvc, ok := service.Registry[topology.Name]
 	if ok {
-		topologyService, ok = tc.(topology.Service)
+		topologyService, ok = topologySvc.(topology.Service)
 		if !ok {
-			return nil, errors.New("Unable to get the topology service")
+			return nil, errors.New("topology service was no the correct type")
 		}
+		logger.Info("enabling autocomplete api for the aws resolver")
 	}
 
 	schemas, err := resolver.InputsToSchemas(typeSchemas)
@@ -152,9 +152,13 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 }
 
 func (r *res) AutoComplete(ctx context.Context, typeURL, search string) ([]string, error) {
+	if r.topology == nil {
+		return []string{}, fmt.Errorf("to use the autocomplete api you must first setup the topology service")
+	}
+
 	results, _, err := r.topology.Search(ctx, &topologyv1.SearchRequest{
 		PageToken: "0",
-		Limit:     20,
+		Limit:     resolver.AutoCompleteAPILimit,
 		Sort: &topologyv1.SearchRequest_Sort{
 			Direction: topologyv1.SearchRequest_Sort_ASCENDING,
 			Field:     "column.id",
