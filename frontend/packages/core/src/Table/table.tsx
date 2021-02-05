@@ -50,7 +50,7 @@ export const TableContainer = ({ children }: TableContainerProps) => (
   </MuiTableContainer>
 );
 
-export interface TableProps extends Pick<MuiTableProps, "stickyHeader"> {
+export interface TableProps extends Pick<MuiTableProps, "stickyHeader" | "className"> {
   headings?: string[];
 }
 
