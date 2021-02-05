@@ -7,6 +7,9 @@
 package k8sv1
 
 import (
+	reflect "reflect"
+	sync "sync"
+
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	proto "github.com/golang/protobuf/proto"
 	_struct "github.com/golang/protobuf/ptypes/struct"
@@ -15,8 +18,6 @@ import (
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	reflect "reflect"
-	sync "sync"
 )
 
 const (
@@ -3063,6 +3064,312 @@ func (x *DeleteConfigMapResponse) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DeleteConfigMapResponse.ProtoReflect.Descriptor instead.
 func (*DeleteConfigMapResponse) Descriptor() ([]byte, []int) {
 	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{44}
+}
+
+type Job struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Cluster     string            `protobuf:"bytes,1,opt,name=cluster,proto3" json:"cluster,omitempty"`
+	Namespace   string            `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Name        string            `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Annotations map[string]string `protobuf:"bytes,4,rep,name=annotations,proto3" json:"annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Labels      map[string]string `protobuf:"bytes,5,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (x *Job) Reset() {
+	*x = Job{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_k8s_v1_k8s_proto_msgTypes[41]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Job) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Job) ProtoMessage() {}
+
+func (x *Job) ProtoReflect() protoreflect.Message {
+	mi := &file_k8s_v1_k8s_proto_msgTypes[41]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Job.ProtoReflect.Descriptor instead.
+func (*Job) Descriptor() ([]byte, []int) {
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{41}
+}
+
+func (x *Job) GetCluster() string {
+	if x != nil {
+		return x.Cluster
+	}
+	return ""
+}
+
+func (x *Job) GetNamespace() string {
+	if x != nil {
+		return x.Namespace
+	}
+	return ""
+}
+
+func (x *Job) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Job) GetAnnotations() map[string]string {
+	if x != nil {
+		return x.Annotations
+	}
+	return nil
+}
+
+func (x *Job) GetLabels() map[string]string {
+	if x != nil {
+		return x.Labels
+	}
+	return nil
+}
+
+type ListJobsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Clientset string       `protobuf:"bytes,1,opt,name=clientset,proto3" json:"clientset,omitempty"`
+	Cluster   string       `protobuf:"bytes,2,opt,name=cluster,proto3" json:"cluster,omitempty"`
+	Namespace string       `protobuf:"bytes,3,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Options   *ListOptions `protobuf:"bytes,4,opt,name=options,proto3" json:"options,omitempty"`
+}
+
+func (x *ListJobsRequest) Reset() {
+	*x = ListJobsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_k8s_v1_k8s_proto_msgTypes[42]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListJobsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListJobsRequest) ProtoMessage() {}
+
+func (x *ListJobsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_k8s_v1_k8s_proto_msgTypes[42]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListJobsRequest.ProtoReflect.Descriptor instead.
+func (*ListJobsRequest) Descriptor() ([]byte, []int) {
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{42}
+}
+
+func (x *ListJobsRequest) GetClientset() string {
+	if x != nil {
+		return x.Clientset
+	}
+	return ""
+}
+
+func (x *ListJobsRequest) GetCluster() string {
+	if x != nil {
+		return x.Cluster
+	}
+	return ""
+}
+
+func (x *ListJobsRequest) GetNamespace() string {
+	if x != nil {
+		return x.Namespace
+	}
+	return ""
+}
+
+func (x *ListJobsRequest) GetOptions() *ListOptions {
+	if x != nil {
+		return x.Options
+	}
+	return nil
+}
+
+type ListJobsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Jobs []*Job `protobuf:"bytes,1,rep,name=jobs,proto3" json:"jobs,omitempty"`
+}
+
+func (x *ListJobsResponse) Reset() {
+	*x = ListJobsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_k8s_v1_k8s_proto_msgTypes[43]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListJobsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListJobsResponse) ProtoMessage() {}
+
+func (x *ListJobsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_k8s_v1_k8s_proto_msgTypes[43]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListJobsResponse.ProtoReflect.Descriptor instead.
+func (*ListJobsResponse) Descriptor() ([]byte, []int) {
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{43}
+}
+
+func (x *ListJobsResponse) GetJobs() []*Job {
+	if x != nil {
+		return x.Jobs
+	}
+	return nil
+}
+
+type DeleteJobRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Clientset string `protobuf:"bytes,1,opt,name=clientset,proto3" json:"clientset,omitempty"`
+	Cluster   string `protobuf:"bytes,2,opt,name=cluster,proto3" json:"cluster,omitempty"`
+	Namespace string `protobuf:"bytes,3,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Name      string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (x *DeleteJobRequest) Reset() {
+	*x = DeleteJobRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_k8s_v1_k8s_proto_msgTypes[44]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteJobRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteJobRequest) ProtoMessage() {}
+
+func (x *DeleteJobRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_k8s_v1_k8s_proto_msgTypes[44]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteJobRequest.ProtoReflect.Descriptor instead.
+func (*DeleteJobRequest) Descriptor() ([]byte, []int) {
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{44}
+}
+
+func (x *DeleteJobRequest) GetClientset() string {
+	if x != nil {
+		return x.Clientset
+	}
+	return ""
+}
+
+func (x *DeleteJobRequest) GetCluster() string {
+	if x != nil {
+		return x.Cluster
+	}
+	return ""
+}
+
+func (x *DeleteJobRequest) GetNamespace() string {
+	if x != nil {
+		return x.Namespace
+	}
+	return ""
+}
+
+func (x *DeleteJobRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type DeleteJobResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *DeleteJobResponse) Reset() {
+	*x = DeleteJobResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_k8s_v1_k8s_proto_msgTypes[45]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteJobResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteJobResponse) ProtoMessage() {}
+
+func (x *DeleteJobResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_k8s_v1_k8s_proto_msgTypes[45]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteJobResponse.ProtoReflect.Descriptor instead.
+func (*DeleteJobResponse) Descriptor() ([]byte, []int) {
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{45}
 }
 
 // This message type is used to add support for nullable strings and is an

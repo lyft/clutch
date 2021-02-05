@@ -84,3 +84,19 @@ func TestK8SAPIListConfigMaps(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 }
+
+func TestK8SAPIDeleteJob(t *testing.T) {
+	c := k8smock.New()
+	api := newK8sAPI(c)
+	resp, err := api.DeleteJob(context.Background(), &k8sapiv1.DeleteJobRequest{})
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
+
+func TestK8SAPIListJobs(t *testing.T) {
+	c := k8smock.New()
+	api := newK8sAPI(c)
+	resp, err := api.ListJobs(context.Background(), &k8sapiv1.ListJobsRequest{Options: &k8sapiv1.ListOptions{}})
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}

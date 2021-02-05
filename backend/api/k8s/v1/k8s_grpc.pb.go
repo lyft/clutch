@@ -36,6 +36,8 @@ type K8SAPIClient interface {
 	ListConfigMaps(ctx context.Context, in *ListConfigMapsRequest, opts ...grpc.CallOption) (*ListConfigMapsResponse, error)
 	DescribeConfigMap(ctx context.Context, in *DescribeConfigMapRequest, opts ...grpc.CallOption) (*DescribeConfigMapResponse, error)
 	DeleteConfigMap(ctx context.Context, in *DeleteConfigMapRequest, opts ...grpc.CallOption) (*DeleteConfigMapResponse, error)
+	ListJobs(ctx context.Context, in *ListJobsRequest, opts ...grpc.CallOption) (*ListJobsResponse, error)
+	DeleteJob(ctx context.Context, in *DeleteJobRequest, opts ...grpc.CallOption) (*DeleteJobResponse, error)
 }
 
 type k8SAPIClient struct {
@@ -208,6 +210,24 @@ func (c *k8SAPIClient) DeleteConfigMap(ctx context.Context, in *DeleteConfigMapR
 	return out, nil
 }
 
+func (c *k8SAPIClient) ListJobs(ctx context.Context, in *ListJobsRequest, opts ...grpc.CallOption) (*ListJobsResponse, error) {
+	out := new(ListJobsResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/ListJobs", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *k8SAPIClient) DeleteJob(ctx context.Context, in *DeleteJobRequest, opts ...grpc.CallOption) (*DeleteJobResponse, error) {
+	out := new(DeleteJobResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/DeleteJob", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // K8SAPIServer is the server API for K8SAPI service.
 // All implementations should embed UnimplementedK8SAPIServer
 // for forward compatibility
@@ -230,6 +250,8 @@ type K8SAPIServer interface {
 	ListConfigMaps(context.Context, *ListConfigMapsRequest) (*ListConfigMapsResponse, error)
 	DescribeConfigMap(context.Context, *DescribeConfigMapRequest) (*DescribeConfigMapResponse, error)
 	DeleteConfigMap(context.Context, *DeleteConfigMapRequest) (*DeleteConfigMapResponse, error)
+	ListJobs(context.Context, *ListJobsRequest) (*ListJobsResponse, error)
+	DeleteJob(context.Context, *DeleteJobRequest) (*DeleteJobResponse, error)
 }
 
 // UnimplementedK8SAPIServer should be embedded to have forward compatible implementations.
@@ -289,6 +311,12 @@ func (UnimplementedK8SAPIServer) DescribeConfigMap(context.Context, *DescribeCon
 }
 func (UnimplementedK8SAPIServer) DeleteConfigMap(context.Context, *DeleteConfigMapRequest) (*DeleteConfigMapResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteConfigMap not implemented")
+}
+func (UnimplementedK8SAPIServer) ListJobs(context.Context, *ListJobsRequest) (*ListJobsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListJobs not implemented")
+}
+func (UnimplementedK8SAPIServer) DeleteJob(context.Context, *DeleteJobRequest) (*DeleteJobResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteJob not implemented")
 }
 
 // UnsafeK8SAPIServer may be embedded to opt out of forward compatibility for this service.
@@ -626,6 +654,42 @@ func _K8SAPI_DeleteConfigMap_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _K8SAPI_ListJobs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListJobsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).ListJobs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/ListJobs",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).ListJobs(ctx, req.(*ListJobsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _K8SAPI_DeleteJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteJobRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).DeleteJob(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/DeleteJob",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).DeleteJob(ctx, req.(*DeleteJobRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // K8SAPI_ServiceDesc is the grpc.ServiceDesc for K8SAPI service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -704,6 +768,14 @@ var K8SAPI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteConfigMap",
 			Handler:    _K8SAPI_DeleteConfigMap_Handler,
+		},
+		{
+			MethodName: "ListJobs",
+			Handler:    _K8SAPI_ListJobs_Handler,
+		},
+		{
+			MethodName: "DeleteJob",
+			Handler:    _K8SAPI_DeleteJob_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

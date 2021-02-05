@@ -155,6 +155,22 @@ service K8sAPI {
     };
     option (clutch.api.v1.action).type = DELETE;
   }
+
+  rpc ListJobs(ListJobsRequest) returns (ListJobsResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/listJobs"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
+  rpc DeleteJob(DeleteJobRequest) returns (DeleteJobResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/deleteJob"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = DELETE;
+  }
 }
 
 message DescribePodRequest {
@@ -646,6 +662,49 @@ message DeleteConfigMapRequest {
 }
 
 message DeleteConfigMapResponse {
+}
+
+message Job {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Job",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string cluster = 1;
+  string namespace = 2;
+  string name = 3;
+
+  map<string, string> annotations = 4;
+  map<string, string> labels = 5;
+}
+
+message ListJobsRequest {
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+
+  ListOptions options = 4 [ (validate.rules).message = {required : true} ];
+}
+
+message ListJobsResponse {
+  option (clutch.api.v1.reference).fields = "jobs";
+
+  repeated Job jobs = 1;
+}
+
+message DeleteJobRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Job",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message DeleteJobResponse {
 }
 
 // This message type is used to add support for nullable strings and is an
