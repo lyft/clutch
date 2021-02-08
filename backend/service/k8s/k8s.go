@@ -76,6 +76,7 @@ type Service interface {
 	// StatefulSet management functions.
 	DescribeStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.StatefulSet, error)
 	UpdateStatefulSet(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateStatefulSetRequest_Fields) error
+	DeleteStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) error
 
 	// CronJob management functions.
 	DescribeCronJob(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.CronJob, error)
@@ -85,6 +86,10 @@ type Service interface {
 	DescribeConfigMap(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.ConfigMap, error)
 	DeleteConfigMap(ctx context.Context, clientset, cluster, namespace, name string) error
 	ListConfigMaps(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.ConfigMap, error)
+
+	// Job management functions.
+	DeleteJob(ctx context.Context, clientset, cluster, namespace, name string) error
+	ListJobs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Job, error)
 }
 
 type svc struct {

@@ -88,3 +88,13 @@ func mergeStatefulSetLabelsAndAnnotations(statefulSet *appsv1.StatefulSet, field
 		statefulSet.Spec.Template.ObjectMeta.Annotations = labels.Merge(labels.Set(statefulSet.Spec.Template.ObjectMeta.Annotations), labels.Set(fields.Annotations))
 	}
 }
+
+func (s *svc) DeleteStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) error {
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
+	if err != nil {
+		return err
+	}
+
+	opts := metav1.DeleteOptions{}
+	return cs.AppsV1().StatefulSets(cs.Namespace()).Delete(ctx, name, opts)
+}

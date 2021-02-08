@@ -77,7 +77,7 @@ backend-config-validation:
 
 .PHONY: yarn-install # Install frontend dependencies.
 yarn-install: yarn-ensure
-	$(YARN) --cwd frontend install --frozen-lockfile 
+	$(YARN) --cwd frontend install --frozen-lockfile
 
 .PHONY: frontend # Build production frontend assets.
 frontend: yarn-install
@@ -172,7 +172,7 @@ dev-k8s-up:
 	@echo "Export these environment variables before starting development:"
 	@echo '    export KUBECONFIG=$(PROJECT_ROOT_DIR)/build/kubeconfig-clutch'
 
-.PHONY: k8s-stop
+.PHONY: dev-k8s-down
 dev-k8s-down:
-	tools/kind.sh delete cluster --name clutch-local
+	@tools/kind.sh delete cluster --name clutch-local
 
