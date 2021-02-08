@@ -46,7 +46,7 @@ const reducer = (state: ManagerLayout, action: Action): ManagerLayout => {
     case ManagerAction.HYDRATE_END: {
       const update = {
         isLoading: false,
-        data: {...action.payload?.result || {}, ...state[layoutKey].data},
+        data: { ...(action.payload?.result || {}), ...state[layoutKey].data },
         error: action.payload?.error,
       };
       return {
