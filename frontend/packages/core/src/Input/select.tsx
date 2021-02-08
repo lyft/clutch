@@ -199,7 +199,7 @@ export const Select = ({
   options,
   onChange,
 }: SelectProps) => {
-  if (options.length === 0) {
+  if (options?.length === undefined || options?.length === 0) {
     return null;
   }
 
