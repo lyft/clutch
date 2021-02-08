@@ -21,7 +21,7 @@ type ResolverAPIClient interface {
 	GetObjectSchemas(ctx context.Context, in *GetObjectSchemasRequest, opts ...grpc.CallOption) (*GetObjectSchemasResponse, error)
 	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error)
 	Resolve(ctx context.Context, in *ResolveRequest, opts ...grpc.CallOption) (*ResolveResponse, error)
-	AutoComplete(ctx context.Context, in *AutoCompleteRequest, opts ...grpc.CallOption) (*AutoCompleteResponse, error)
+	AutoComplete(ctx context.Context, in *AutocompleteRequest, opts ...grpc.CallOption) (*AutocompleteResponse, error)
 }
 
 type resolverAPIClient struct {
@@ -59,8 +59,8 @@ func (c *resolverAPIClient) Resolve(ctx context.Context, in *ResolveRequest, opt
 	return out, nil
 }
 
-func (c *resolverAPIClient) AutoComplete(ctx context.Context, in *AutoCompleteRequest, opts ...grpc.CallOption) (*AutoCompleteResponse, error) {
-	out := new(AutoCompleteResponse)
+func (c *resolverAPIClient) AutoComplete(ctx context.Context, in *AutocompleteRequest, opts ...grpc.CallOption) (*AutocompleteResponse, error) {
+	out := new(AutocompleteResponse)
 	err := c.cc.Invoke(ctx, "/clutch.resolver.v1.ResolverAPI/AutoComplete", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -75,7 +75,7 @@ type ResolverAPIServer interface {
 	GetObjectSchemas(context.Context, *GetObjectSchemasRequest) (*GetObjectSchemasResponse, error)
 	Search(context.Context, *SearchRequest) (*SearchResponse, error)
 	Resolve(context.Context, *ResolveRequest) (*ResolveResponse, error)
-	AutoComplete(context.Context, *AutoCompleteRequest) (*AutoCompleteResponse, error)
+	AutoComplete(context.Context, *AutocompleteRequest) (*AutocompleteResponse, error)
 }
 
 // UnimplementedResolverAPIServer should be embedded to have forward compatible implementations.
@@ -91,7 +91,7 @@ func (UnimplementedResolverAPIServer) Search(context.Context, *SearchRequest) (*
 func (UnimplementedResolverAPIServer) Resolve(context.Context, *ResolveRequest) (*ResolveResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Resolve not implemented")
 }
-func (UnimplementedResolverAPIServer) AutoComplete(context.Context, *AutoCompleteRequest) (*AutoCompleteResponse, error) {
+func (UnimplementedResolverAPIServer) AutoComplete(context.Context, *AutocompleteRequest) (*AutocompleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AutoComplete not implemented")
 }
 
@@ -161,7 +161,7 @@ func _ResolverAPI_Resolve_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _ResolverAPI_AutoComplete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AutoCompleteRequest)
+	in := new(AutocompleteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -173,7 +173,7 @@ func _ResolverAPI_AutoComplete_Handler(srv interface{}, ctx context.Context, dec
 		FullMethod: "/clutch.resolver.v1.ResolverAPI/AutoComplete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResolverAPIServer).AutoComplete(ctx, req.(*AutoCompleteRequest))
+		return srv.(ResolverAPIServer).AutoComplete(ctx, req.(*AutocompleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

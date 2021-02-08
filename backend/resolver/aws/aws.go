@@ -74,7 +74,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 	if ok {
 		topologyService, ok = topologySvc.(topology.Service)
 		if !ok {
-			return nil, errors.New("topology service was no the correct type")
+			return nil, errors.New("topology service was not the correct type")
 		}
 		logger.Info("enabling autocomplete api for the aws resolver")
 	}
@@ -153,7 +153,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 
 func (r *res) AutoComplete(ctx context.Context, typeURL, search string) ([]string, error) {
 	if r.topology == nil {
-		return []string{}, fmt.Errorf("to use the autocomplete api you must first setup the topology service")
+		return nil, fmt.Errorf("to use the autocomplete api you must first setup the topology service")
 	}
 
 	results, _, err := r.topology.Search(ctx, &topologyv1.SearchRequest{
@@ -175,7 +175,7 @@ func (r *res) AutoComplete(ctx context.Context, typeURL, search string) ([]strin
 		return nil, err
 	}
 
-	autoCompleteValue := []string{}
+	autoCompleteValue := make([]string, len(results))
 	for _, r := range results {
 		autoCompleteValue = append(autoCompleteValue, r.Id)
 	}
