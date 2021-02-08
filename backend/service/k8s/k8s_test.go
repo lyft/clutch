@@ -61,7 +61,9 @@ func TestNew(t *testing.T) {
 	assert.True(t, ok)
 	assert.NotNil(t, c.log)
 	assert.NotNil(t, c.scope)
-	assert.Len(t, c.manager.Clientsets(context.Background()), 1)
+	clientsets, err := c.manager.Clientsets(context.Background())
+	assert.NoError(t, err)
+	assert.Len(t, clientsets, 1)
 }
 
 func TestNewWithWrongConfig(t *testing.T) {

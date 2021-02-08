@@ -11,7 +11,7 @@ import "resolver/v1/annotations.proto";
 message InstanceID {
   option (clutch.resolver.v1.schema) = {
     display_name : "instance ID"
-    searchable : true
+    search : {enabled : true}
   };
 
   string id = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -30,7 +30,7 @@ message InstanceID {
 message AutoscalingGroupName {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
-    searchable : true
+    search : {enabled : true}
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -50,7 +50,7 @@ message AutoscalingGroupName {
 message KinesisStreamName {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
-    searchable : true
+    search : {enabled : true}
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {

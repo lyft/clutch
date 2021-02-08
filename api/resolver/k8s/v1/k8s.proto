@@ -11,7 +11,7 @@ import "resolver/v1/annotations.proto";
 message PodID {
   option (clutch.resolver.v1.schema) = {
     display_name : "pod ID"
-    searchable : true
+    search : {enabled : true}
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -40,7 +40,7 @@ message PodID {
 message IPAddress {
   option (clutch.resolver.v1.schema) = {
     display_name : "IP address"
-    searchable : false
+    search : {enabled : true}
   };
 
   string ip_address = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -55,7 +55,7 @@ message IPAddress {
 message HPAName {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
-    searchable : true
+    search : {enabled : true}
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -84,7 +84,7 @@ message HPAName {
 message Deployment {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
-    searchable : true
+    search : {enabled : true}
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -113,7 +113,7 @@ message Deployment {
 message StatefulSet {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
-    searchable : true
+    search : {enabled : true}
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -142,7 +142,7 @@ message StatefulSet {
 message Service {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
-    searchable : true
+    search : {enabled : true}
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -171,7 +171,7 @@ message Service {
 message CronJob {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
-    searchable : true
+    search : {enabled : true}
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -200,7 +200,7 @@ message CronJob {
 message ConfigMap {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
-    searchable : true
+    search : {enabled : true}
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -208,6 +208,35 @@ message ConfigMap {
     required : true,
     string_field : {
       placeholder : "my-config-map-name",
+    },
+  } ];
+
+  string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Clientset",
+    required : true,
+    option_field : {include_dynamic_options : "clientset"},
+  } ];
+
+  string namespace = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Namespace",
+    required : true,
+    string_field : {
+      placeholder : "my-namespace",
+    },
+  } ];
+}
+
+message Job {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "name"
+    search : {enabled : true}
+  };
+
+  string name = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Name",
+    required : true,
+    string_field : {
+      placeholder : "my-job-name",
     },
   } ];
 

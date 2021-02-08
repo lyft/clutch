@@ -29,6 +29,10 @@ func clutchDocFromComment(s string) (*ClutchDoc, error) {
 }
 
 func getClutchComponentFromFile(path string) (*Component, bool) {
+	if strings.HasSuffix(path, "_test.go") {
+		return nil, false
+	}
+
 	fileset := token.NewFileSet()
 	node, err := parser.ParseFile(fileset, path, nil, parser.ParseComments)
 	if err != nil {
@@ -47,7 +51,14 @@ func getClutchComponentFromFile(path string) (*Component, bool) {
 		}
 	}
 
-	name := node.Scope.Lookup("Name")
+	var name *ast.Object
+	for k, v := range node.Scope.Objects {
+		if strings.HasSuffix(k, "Name") && v.Kind == ast.Con {
+			name = v
+			break
+		}
+	}
+
 	if name == nil {
 		return nil, false
 	}
