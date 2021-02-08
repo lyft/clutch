@@ -36,23 +36,23 @@ var (
 // define the regex for a UUID once up-front
 var _resolver_api_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
-// Validate checks the field values on AutoCompleteRequest with the rules
+// Validate checks the field values on AutocompleteRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *AutoCompleteRequest) Validate() error {
+func (m *AutocompleteRequest) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if len(m.GetWant()) < 1 {
-		return AutoCompleteRequestValidationError{
+		return AutocompleteRequestValidationError{
 			field:  "Want",
 			reason: "value length must be at least 1 bytes",
 		}
 	}
 
 	if len(m.GetSearch()) < 1 {
-		return AutoCompleteRequestValidationError{
+		return AutocompleteRequestValidationError{
 			field:  "Search",
 			reason: "value length must be at least 1 bytes",
 		}
@@ -61,9 +61,9 @@ func (m *AutoCompleteRequest) Validate() error {
 	return nil
 }
 
-// AutoCompleteRequestValidationError is the validation error returned by
-// AutoCompleteRequest.Validate if the designated constraints aren't met.
-type AutoCompleteRequestValidationError struct {
+// AutocompleteRequestValidationError is the validation error returned by
+// AutocompleteRequest.Validate if the designated constraints aren't met.
+type AutocompleteRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -71,24 +71,24 @@ type AutoCompleteRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e AutoCompleteRequestValidationError) Field() string { return e.field }
+func (e AutocompleteRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e AutoCompleteRequestValidationError) Reason() string { return e.reason }
+func (e AutocompleteRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e AutoCompleteRequestValidationError) Cause() error { return e.cause }
+func (e AutocompleteRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e AutoCompleteRequestValidationError) Key() bool { return e.key }
+func (e AutocompleteRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e AutoCompleteRequestValidationError) ErrorName() string {
-	return "AutoCompleteRequestValidationError"
+func (e AutocompleteRequestValidationError) ErrorName() string {
+	return "AutocompleteRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e AutoCompleteRequestValidationError) Error() string {
+func (e AutocompleteRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -100,14 +100,14 @@ func (e AutoCompleteRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sAutoCompleteRequest.%s: %s%s",
+		"invalid %sAutocompleteRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = AutoCompleteRequestValidationError{}
+var _ error = AutocompleteRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -115,12 +115,12 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = AutoCompleteRequestValidationError{}
+} = AutocompleteRequestValidationError{}
 
-// Validate checks the field values on AutoCompleteResponse with the rules
+// Validate checks the field values on AutocompleteResponse with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *AutoCompleteResponse) Validate() error {
+func (m *AutocompleteResponse) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -128,9 +128,9 @@ func (m *AutoCompleteResponse) Validate() error {
 	return nil
 }
 
-// AutoCompleteResponseValidationError is the validation error returned by
-// AutoCompleteResponse.Validate if the designated constraints aren't met.
-type AutoCompleteResponseValidationError struct {
+// AutocompleteResponseValidationError is the validation error returned by
+// AutocompleteResponse.Validate if the designated constraints aren't met.
+type AutocompleteResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -138,24 +138,24 @@ type AutoCompleteResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e AutoCompleteResponseValidationError) Field() string { return e.field }
+func (e AutocompleteResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e AutoCompleteResponseValidationError) Reason() string { return e.reason }
+func (e AutocompleteResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e AutoCompleteResponseValidationError) Cause() error { return e.cause }
+func (e AutocompleteResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e AutoCompleteResponseValidationError) Key() bool { return e.key }
+func (e AutocompleteResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e AutoCompleteResponseValidationError) ErrorName() string {
-	return "AutoCompleteResponseValidationError"
+func (e AutocompleteResponseValidationError) ErrorName() string {
+	return "AutocompleteResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e AutoCompleteResponseValidationError) Error() string {
+func (e AutocompleteResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -167,14 +167,14 @@ func (e AutoCompleteResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sAutoCompleteResponse.%s: %s%s",
+		"invalid %sAutocompleteResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = AutoCompleteResponseValidationError{}
+var _ error = AutocompleteResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -182,7 +182,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = AutoCompleteResponseValidationError{}
+} = AutocompleteResponseValidationError{}
 
 // Validate checks the field values on ResolveRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, an error

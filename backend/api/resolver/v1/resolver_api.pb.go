@@ -30,7 +30,7 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
-type AutoCompleteRequest struct {
+type AutocompleteRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -40,8 +40,8 @@ type AutoCompleteRequest struct {
 	Search string `protobuf:"bytes,2,opt,name=search,proto3" json:"search,omitempty"`
 }
 
-func (x *AutoCompleteRequest) Reset() {
-	*x = AutoCompleteRequest{}
+func (x *AutocompleteRequest) Reset() {
+	*x = AutocompleteRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_resolver_v1_resolver_api_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -49,13 +49,13 @@ func (x *AutoCompleteRequest) Reset() {
 	}
 }
 
-func (x *AutoCompleteRequest) String() string {
+func (x *AutocompleteRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AutoCompleteRequest) ProtoMessage() {}
+func (*AutocompleteRequest) ProtoMessage() {}
 
-func (x *AutoCompleteRequest) ProtoReflect() protoreflect.Message {
+func (x *AutocompleteRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_resolver_v1_resolver_api_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -67,26 +67,26 @@ func (x *AutoCompleteRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AutoCompleteRequest.ProtoReflect.Descriptor instead.
-func (*AutoCompleteRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use AutocompleteRequest.ProtoReflect.Descriptor instead.
+func (*AutocompleteRequest) Descriptor() ([]byte, []int) {
 	return file_resolver_v1_resolver_api_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AutoCompleteRequest) GetWant() string {
+func (x *AutocompleteRequest) GetWant() string {
 	if x != nil {
 		return x.Want
 	}
 	return ""
 }
 
-func (x *AutoCompleteRequest) GetSearch() string {
+func (x *AutocompleteRequest) GetSearch() string {
 	if x != nil {
 		return x.Search
 	}
 	return ""
 }
 
-type AutoCompleteResponse struct {
+type AutocompleteResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -94,8 +94,8 @@ type AutoCompleteResponse struct {
 	Results []string `protobuf:"bytes,1,rep,name=results,proto3" json:"results,omitempty"`
 }
 
-func (x *AutoCompleteResponse) Reset() {
-	*x = AutoCompleteResponse{}
+func (x *AutocompleteResponse) Reset() {
+	*x = AutocompleteResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_resolver_v1_resolver_api_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -103,13 +103,13 @@ func (x *AutoCompleteResponse) Reset() {
 	}
 }
 
-func (x *AutoCompleteResponse) String() string {
+func (x *AutocompleteResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AutoCompleteResponse) ProtoMessage() {}
+func (*AutocompleteResponse) ProtoMessage() {}
 
-func (x *AutoCompleteResponse) ProtoReflect() protoreflect.Message {
+func (x *AutocompleteResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_resolver_v1_resolver_api_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -121,12 +121,12 @@ func (x *AutoCompleteResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AutoCompleteResponse.ProtoReflect.Descriptor instead.
-func (*AutoCompleteResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use AutocompleteResponse.ProtoReflect.Descriptor instead.
+func (*AutocompleteResponse) Descriptor() ([]byte, []int) {
 	return file_resolver_v1_resolver_api_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *AutoCompleteResponse) GetResults() []string {
+func (x *AutocompleteResponse) GetResults() []string {
 	if x != nil {
 		return x.Results
 	}
@@ -493,13 +493,13 @@ var file_resolver_v1_resolver_api_proto_rawDesc = []byte{
 	0x18, 0x61, 0x70, 0x69, 0x2f, 0x76, 0x31, 0x2f, 0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69,
 	0x6f, 0x6e, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x18, 0x72, 0x65, 0x73, 0x6f, 0x6c,
 	0x76, 0x65, 0x72, 0x2f, 0x76, 0x31, 0x2f, 0x73, 0x63, 0x68, 0x65, 0x6d, 0x61, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x22, 0x53, 0x0a, 0x13, 0x41, 0x75, 0x74, 0x6f, 0x43, 0x6f, 0x6d, 0x70, 0x6c,
+	0x6f, 0x74, 0x6f, 0x22, 0x53, 0x0a, 0x13, 0x41, 0x75, 0x74, 0x6f, 0x63, 0x6f, 0x6d, 0x70, 0x6c,
 	0x65, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1b, 0x0a, 0x04, 0x77, 0x61,
 	0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20,
 	0x01, 0x52, 0x04, 0x77, 0x61, 0x6e, 0x74, 0x12, 0x1f, 0x0a, 0x06, 0x73, 0x65, 0x61, 0x72, 0x63,
 	0x68, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x72, 0x02, 0x20, 0x01,
 	0x52, 0x06, 0x73, 0x65, 0x61, 0x72, 0x63, 0x68, 0x22, 0x30, 0x0a, 0x14, 0x41, 0x75, 0x74, 0x6f,
-	0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
 	0x12, 0x18, 0x0a, 0x07, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28,
 	0x09, 0x52, 0x07, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x73, 0x22, 0x77, 0x0a, 0x0e, 0x52, 0x65,
 	0x73, 0x6f, 0x6c, 0x76, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1b, 0x0a, 0x04,
@@ -571,9 +571,9 @@ var file_resolver_v1_resolver_api_proto_rawDesc = []byte{
 	0x01, 0x2a, 0xaa, 0xe1, 0x1c, 0x02, 0x08, 0x02, 0x12, 0x8d, 0x01, 0x0a, 0x0c, 0x41, 0x75, 0x74,
 	0x6f, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x65, 0x12, 0x27, 0x2e, 0x63, 0x6c, 0x75, 0x74,
 	0x63, 0x68, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x6c, 0x76, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x41,
-	0x75, 0x74, 0x6f, 0x43, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x75, 0x74, 0x6f, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
 	0x73, 0x74, 0x1a, 0x28, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x72, 0x65, 0x73, 0x6f,
-	0x6c, 0x76, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x75, 0x74, 0x6f, 0x43, 0x6f, 0x6d, 0x70,
+	0x6c, 0x76, 0x65, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x75, 0x74, 0x6f, 0x63, 0x6f, 0x6d, 0x70,
 	0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2a, 0x82, 0xd3,
 	0xe4, 0x93, 0x02, 0x1e, 0x22, 0x19, 0x2f, 0x76, 0x31, 0x2f, 0x72, 0x65, 0x73, 0x6f, 0x6c, 0x76,
 	0x65, 0x72, 0x2f, 0x61, 0x75, 0x74, 0x6f, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x65, 0x3a,
@@ -599,6 +599,7 @@ func file_resolver_v1_resolver_api_proto_rawDescGZIP() []byte {
 var file_resolver_v1_resolver_api_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_resolver_v1_resolver_api_proto_goTypes = []interface{}{
 <<<<<<< HEAD
+<<<<<<< HEAD
 	(*ResolveRequest)(nil),           // 0: clutch.resolver.v1.ResolveRequest
 	(*ResolveResponse)(nil),          // 1: clutch.resolver.v1.ResolveResponse
 	(*SearchRequest)(nil),            // 2: clutch.resolver.v1.SearchRequest
@@ -611,6 +612,10 @@ var file_resolver_v1_resolver_api_proto_goTypes = []interface{}{
 =======
 	(*AutoCompleteRequest)(nil),      // 0: clutch.resolver.v1.AutoCompleteRequest
 	(*AutoCompleteResponse)(nil),     // 1: clutch.resolver.v1.AutoCompleteResponse
+=======
+	(*AutocompleteRequest)(nil),      // 0: clutch.resolver.v1.AutocompleteRequest
+	(*AutocompleteResponse)(nil),     // 1: clutch.resolver.v1.AutocompleteResponse
+>>>>>>> comments
 	(*ResolveRequest)(nil),           // 2: clutch.resolver.v1.ResolveRequest
 	(*ResolveResponse)(nil),          // 3: clutch.resolver.v1.ResolveResponse
 	(*SearchRequest)(nil),            // 4: clutch.resolver.v1.SearchRequest
@@ -632,11 +637,11 @@ var file_resolver_v1_resolver_api_proto_depIdxs = []int32{
 	6,  // 6: clutch.resolver.v1.ResolverAPI.GetObjectSchemas:input_type -> clutch.resolver.v1.GetObjectSchemasRequest
 	4,  // 7: clutch.resolver.v1.ResolverAPI.Search:input_type -> clutch.resolver.v1.SearchRequest
 	2,  // 8: clutch.resolver.v1.ResolverAPI.Resolve:input_type -> clutch.resolver.v1.ResolveRequest
-	0,  // 9: clutch.resolver.v1.ResolverAPI.AutoComplete:input_type -> clutch.resolver.v1.AutoCompleteRequest
+	0,  // 9: clutch.resolver.v1.ResolverAPI.AutoComplete:input_type -> clutch.resolver.v1.AutocompleteRequest
 	7,  // 10: clutch.resolver.v1.ResolverAPI.GetObjectSchemas:output_type -> clutch.resolver.v1.GetObjectSchemasResponse
 	5,  // 11: clutch.resolver.v1.ResolverAPI.Search:output_type -> clutch.resolver.v1.SearchResponse
 	3,  // 12: clutch.resolver.v1.ResolverAPI.Resolve:output_type -> clutch.resolver.v1.ResolveResponse
-	1,  // 13: clutch.resolver.v1.ResolverAPI.AutoComplete:output_type -> clutch.resolver.v1.AutoCompleteResponse
+	1,  // 13: clutch.resolver.v1.ResolverAPI.AutoComplete:output_type -> clutch.resolver.v1.AutocompleteResponse
 	10, // [10:14] is the sub-list for method output_type
 	6,  // [6:10] is the sub-list for method input_type
 	6,  // [6:6] is the sub-list for extension type_name
@@ -652,7 +657,7 @@ func file_resolver_v1_resolver_api_proto_init() {
 	file_resolver_v1_schema_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_resolver_v1_resolver_api_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AutoCompleteRequest); i {
+			switch v := v.(*AutocompleteRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -664,7 +669,7 @@ func file_resolver_v1_resolver_api_proto_init() {
 			}
 		}
 		file_resolver_v1_resolver_api_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AutoCompleteResponse); i {
+			switch v := v.(*AutocompleteResponse); i {
 			case 0:
 				return &v.state
 			case 1:
