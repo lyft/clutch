@@ -7,11 +7,11 @@ package xds
 import (
 	"context"
 	"errors"
-	gcpDiscoveryV3 "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v3"
 	"sync/atomic"
 	"time"
 
 	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
+	gcpDiscoveryV3 "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v3"
 	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	gcpServerV3 "github.com/envoyproxy/go-control-plane/pkg/server/v3"
@@ -111,7 +111,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 	}
 
 	rtdsConfig := RTDSConfig{
-		rtdsLayerName: config.GetRtdsLayerName(),
+		layerName:     config.GetRtdsLayerName(),
 		ingressPrefix: config.GetIngressFaultRuntimePrefix(),
 		egressPrefix:  config.GetEgressFaultRuntimePrefix(),
 	}

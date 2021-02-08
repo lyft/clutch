@@ -7,7 +7,6 @@ import (
 
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
-	gcpResourceV3 "github.com/envoyproxy/go-control-plane/pkg/resource/v3"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/mitchellh/hashstructure/v2"
 	"go.uber.org/zap"
@@ -68,7 +67,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 			// in order to remove fault, we need to set the snapshot with empty runtime resource
 			emptyRuntimeResource := generateRTDSResource([]*experimentation.Experiment{}, rtdsConfig, ttl, logger)
 
-			err := setSnapshot(emptyRuntimeResource, cluster, snapshotCache, logger)
+			err := setSnapshot(emptyRuntimeResource, cluster, snapshotCache)
 			if err != nil {
 				logger.Errorw("Unable to unset the fault for cluster", "cluster", cluster,
 					"error", err)
@@ -81,7 +80,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 		logger.Infow("Injecting fault for cluster", "cluster", cluster)
 
 		runtimeResource := generateRTDSResource(experiments, rtdsConfig, ttl, logger)
-		err := setSnapshot(runtimeResource, cluster, snapshotCache, logger)
+		err := setSnapshot(runtimeResource, cluster, snapshotCache)
 		if err != nil {
 			logger.Errorw("Unable to set the fault for cluster", "cluster", cluster,
 				"error", err)
@@ -89,10 +88,9 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 	}
 }
 
-func setSnapshot(resource []gcpTypes.ResourceWithTtl, cluster string, snapshotCache gcpCacheV3.SnapshotCache, logger *zap.SugaredLogger) error {
+func setSnapshot(resource []gcpTypes.ResourceWithTtl, cluster string, snapshotCache gcpCacheV3.SnapshotCache) error {
 	computedVersion, err := computeChecksum(resource)
 	if err != nil {
-		logger.Errorw("Error computing version", "error", err)
 		return err
 	}
 
@@ -104,7 +102,6 @@ func setSnapshot(resource []gcpTypes.ResourceWithTtl, cluster string, snapshotCa
 
 	if currentSnapshotVersion == computedVersion {
 		// No change in snapshot of this cluster
-		logger.Debugw("Fault exists for cluster", "cluster", cluster)
 		return nil
 	}
 
@@ -131,27 +128,6 @@ func maybeUnmarshalFaultTest(experiment *experimentation.Experiment, httpFaultCo
 	default:
 		return false
 	}
-}
-
-func isResourceValid(resources []gcpTypes.ResourceWithTtl, cluster string, snapshotCache gcpCacheV3.SnapshotCache) (bool, error) {
-	computedVersion, err := computeChecksum(resources)
-	if err != nil {
-		return false, err
-	}
-
-	snapshot, err := snapshotCache.GetSnapshot(cluster)
-	if err != nil {
-		return false, err
-	}
-
-	currentSnapshotVersion := snapshot.GetVersion(gcpResourceV3.RuntimeType)
-
-	if currentSnapshotVersion == computedVersion {
-		// No change in snapshot of this cluster
-		return false, nil
-	}
-
-	return true, nil
 }
 
 func computeChecksum(item interface{}) (string, error) {

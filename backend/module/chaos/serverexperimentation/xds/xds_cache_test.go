@@ -2,15 +2,13 @@ package xds
 
 import (
 	"context"
-	"fmt"
 	"testing"
+	"time"
 
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
 	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
-	gcpCache "github.com/envoyproxy/go-control-plane/pkg/cache/v2"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
-	gcpResource "github.com/envoyproxy/go-control-plane/pkg/resource/v2"
 	gcpResourceV3 "github.com/envoyproxy/go-control-plane/pkg/resource/v3"
 	"github.com/golang/protobuf/ptypes"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
@@ -115,60 +113,6 @@ func mockGenerateFaultData(t *testing.T) []*experimentation.Experiment {
 	}
 }
 
-func TestSetSnapshotV2(t *testing.T) {
-	testCache := gcpCache.NewSnapshotCache(false, gcpCache.IDHash{}, nil)
-	testRtdsLayerName := "testRtdsLayerName"
-	ingressPrefix := "ingress"
-	egressPrefix := "egress"
-	testCluster := "serviceA"
-	mockExperimentList := mockGenerateFaultData(t)
-
-	var testClusterFaults []*experimentation.Experiment
-	for _, experiment := range mockExperimentList {
-		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
-		if err != nil {
-			t.Errorf("unmarshalAny failed %v", err)
-		}
-
-		upstream, downstream, err := getClusterPair(config)
-		assert.NoError(t, err)
-		if upstream == testCluster || downstream == testCluster {
-			testClusterFaults = append(testClusterFaults, experiment)
-		}
-	}
-
-	err := setSnapshot(&cacheWrapperV2{testCache}, testRtdsLayerName, testCluster, ingressPrefix, egressPrefix, testClusterFaults, zap.NewNop().Sugar())
-	if err != nil {
-		t.Errorf("setSnapshot failed %v", err)
-	}
-
-	snapshot, err := testCache.GetSnapshot(testCluster)
-	if err != nil {
-		t.Errorf("Snapshot not found for testCluster %s", testCluster)
-	}
-
-	resources := snapshot.GetResources(gcpResource.RuntimeType)
-	if resources == nil {
-		t.Errorf("no resources")
-	}
-
-	resource := resources[testRtdsLayerName]
-	if resources == nil {
-		t.Errorf("no RTDS resources")
-	}
-
-	runtime := resource.(*gcpDiscovery.Runtime)
-	fields := runtime.GetLayer().GetFields()
-	assert.Equal(t, 6, len(fields))
-	assert.EqualValues(t, 10, fields["ingress.serviceB.abort.abort_percent"].GetNumberValue())
-	assert.EqualValues(t, 404, fields["ingress.serviceB.abort.http_status"].GetNumberValue())
-	assert.EqualValues(t, 30, fields["ingress.serviceD.delay.fixed_delay_percent"].GetNumberValue())
-	assert.EqualValues(t, 100, fields["ingress.serviceD.delay.fixed_duration_ms"].GetNumberValue())
-	assert.EqualValues(t, 65, fields["egress.serviceX.abort.abort_percent"].GetNumberValue())
-	assert.EqualValues(t, 400, fields["egress.serviceX.abort.http_status"].GetNumberValue())
-}
-
 func TestSetSnapshotV3(t *testing.T) {
 	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
 	testRtdsLayerName := "testRtdsLayerName"
@@ -177,6 +121,12 @@ func TestSetSnapshotV3(t *testing.T) {
 	testCluster := "serviceA"
 	mockExperimentList := mockGenerateFaultData(t)
 
+	rtdsConfig := RTDSConfig{
+		layerName:     testRtdsLayerName,
+		ingressPrefix: ingressPrefix,
+		egressPrefix:  egressPrefix,
+	}
+
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
@@ -192,7 +142,9 @@ func TestSetSnapshotV3(t *testing.T) {
 		}
 	}
 
-	err := setSnapshot(&cacheWrapperV3{testCache, nil}, testRtdsLayerName, testCluster, ingressPrefix, egressPrefix, testClusterFaults, zap.NewNop().Sugar())
+	runtimeResource := generateRTDSResource(testClusterFaults, &rtdsConfig, nil, zap.NewNop().Sugar())
+	assert.Nil(t, runtimeResource[0].Ttl)
+	err := setSnapshot(runtimeResource, testCluster, testCache)
 	if err != nil {
 		t.Errorf("setSnapshot failed %v", err)
 	}
@@ -229,7 +181,14 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 	ingressPrefix := "ingress"
 	egressPrefix := "egress"
 	testCluster := "serviceA"
+	ttl := time.Duration(2 * 1000 * 1000 * 1000)
 	mockExperimentList := mockGenerateFaultData(t)
+
+	rtdsConfig := RTDSConfig{
+		layerName:     testRtdsLayerName,
+		ingressPrefix: ingressPrefix,
+		egressPrefix:  egressPrefix,
+	}
 
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
@@ -246,7 +205,8 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 		}
 	}
 
-	err := setSnapshot(&cacheWrapperV3{testCache, nil}, testRtdsLayerName, testCluster, ingressPrefix, egressPrefix, testClusterFaults, zap.NewNop().Sugar())
+	runtimeResource := generateRTDSResource(testClusterFaults, &rtdsConfig, &ttl, zap.NewNop().Sugar())
+	err := setSnapshot(runtimeResource, testCluster, testCache)
 	if err != nil {
 		t.Errorf("setSnapshot failed %v", err)
 	}
@@ -256,7 +216,7 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 		t.Errorf("Snapshot not found for cluster %s", testCluster)
 	}
 
-	resources := snapshot.GetResources(gcpResourceV3.RuntimeType)
+	resources := snapshot.GetResourcesAndTtl(gcpResourceV3.RuntimeType)
 	if resources == nil {
 		t.Errorf("no resources")
 	}
@@ -266,7 +226,9 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 		t.Errorf("no RTDS resources")
 	}
 
-	runtime := resource.(*gcpRuntimeServiceV3.Runtime)
+	assert.Equal(t, ttl, *resource.Ttl)
+
+	runtime := resource.Resource.(*gcpRuntimeServiceV3.Runtime)
 	fields := runtime.GetLayer().GetFields()
 	assert.Equal(t, 6, len(fields))
 	assert.EqualValues(t, 10, fields["ingress.serviceB.abort.abort_percent"].GetNumberValue())
@@ -279,78 +241,14 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 
 func TestRefreshCache(t *testing.T) {
 	s := mockStorer{}
-	testCache := gcpCache.NewSnapshotCache(false, gcpCache.IDHash{}, nil)
-	refreshCache(context.Background(), &s, &cacheWrapperV2{testCache}, "test_layer", "ingress", "egress", nil)
-	assert.Equal(t, s.getExperimentArguments.configType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig")
-}
-
-func TestCreateRuntimeKeys(t *testing.T) {
-	testDataList := mockGenerateFaultData(t)
-	ingressPrefix := "ingress"
-	egressPrefix := "egress"
-
-	for _, testExperiment := range testDataList {
-		var expectedPercentageKey string
-		var expectedPercentageValue uint32
-		var expectedFaultKey string
-		var expectedFaultValue uint32
-
-		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(testExperiment.GetConfig(), config)
-		if err != nil {
-			t.Errorf("unmarshalAny failed %v", err)
-		}
-
-		upstream, downstream, err := getClusterPair(config)
-		assert.NoError(t, err)
-
-		switch config.GetFault().(type) {
-		case *serverexperimentation.HTTPFaultConfig_AbortFault:
-			abort := config.GetAbortFault()
-			expectedFaultValue = abort.GetAbortStatus().GetHttpStatusCode()
-			expectedPercentageValue = abort.GetPercentage().GetPercentage()
-
-			switch config.GetFaultTargeting().GetEnforcer().(type) {
-			case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
-				expectedPercentageKey = fmt.Sprintf(HTTPPercentageForExternal, egressPrefix, upstream)
-				expectedFaultKey = fmt.Sprintf(HTTPStatusForExternal, egressPrefix, upstream)
-			case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
-				if downstream == "" {
-					expectedPercentageKey = fmt.Sprintf(HTTPPercentageWithoutDownstream, ingressPrefix)
-					expectedFaultKey = fmt.Sprintf(HTTPStatusWithoutDownstream, ingressPrefix)
-				} else {
-					expectedPercentageKey = fmt.Sprintf(HTTPPercentageWithDownstream, ingressPrefix, downstream)
-					expectedFaultKey = fmt.Sprintf(HTTPStatusWithDownstream, ingressPrefix, downstream)
-				}
-			}
-		case *serverexperimentation.HTTPFaultConfig_LatencyFault:
-			latency := config.GetLatencyFault()
-			expectedFaultValue = latency.GetLatencyDuration().GetFixedDurationMs()
-			expectedPercentageValue = latency.GetPercentage().GetPercentage()
-
-			switch config.GetFaultTargeting().GetEnforcer().(type) {
-			case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
-				expectedPercentageKey = fmt.Sprintf(LatencyPercentageForExternal, egressPrefix, upstream)
-				expectedFaultKey = fmt.Sprintf(LatencyDurationForExternal, egressPrefix, upstream)
-			case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
-				if downstream == "" {
-					expectedPercentageKey = fmt.Sprintf(LatencyPercentageWithoutDownstream, ingressPrefix)
-					expectedFaultKey = fmt.Sprintf(LatencyDurationWithoutDownstream, ingressPrefix)
-				} else {
-					expectedPercentageKey = fmt.Sprintf(LatencyPercentageWithDownstream, ingressPrefix, downstream)
-					expectedFaultKey = fmt.Sprintf(LatencyDurationWithDownstream, ingressPrefix, downstream)
-				}
-			}
-		}
-
-		percentageKey, percentageValue, faultKey, faultValue, err := createRuntimeKeys(upstream, downstream, config, ingressPrefix, egressPrefix, zap.NewNop().Sugar())
-		assert.NoError(t, err)
-
-		assert.Equal(t, expectedPercentageKey, percentageKey)
-		assert.Equal(t, expectedPercentageValue, percentageValue)
-		assert.Equal(t, expectedFaultKey, faultKey)
-		assert.Equal(t, expectedFaultValue, faultValue)
+	rtdsConfig := RTDSConfig{
+		layerName:     "test_layer",
+		ingressPrefix: "ingress",
+		egressPrefix:  "egress",
 	}
+	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
+	refreshCache(context.Background(), &s, testCache, nil, &rtdsConfig, nil)
+	assert.Equal(t, s.getExperimentArguments.configType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig")
 }
 
 func TestComputeVersionReturnValue(t *testing.T) {

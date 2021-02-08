@@ -2,10 +2,10 @@ package xds
 
 import (
 	"fmt"
-	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	"time"
 
 	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
+	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"go.uber.org/zap"
 
@@ -37,7 +37,7 @@ const (
 
 type RTDSConfig struct {
 	// Name of the RTDS layer in Envoy config i.e. envoy.yaml
-	rtdsLayerName string
+	layerName string
 
 	// Runtime prefix for ingress faults
 	ingressPrefix string
@@ -102,7 +102,7 @@ func generateRTDSResource(experiments []*experimentation.Experiment, rtdsConfig 
 
 	return []gcpTypes.ResourceWithTtl{{
 		Resource: &gcpRuntimeServiceV3.Runtime{
-			Name:  rtdsConfig.rtdsLayerName,
+			Name:  rtdsConfig.layerName,
 			Layer: runtimeLayer,
 		},
 		Ttl: resourceTTL,

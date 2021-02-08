@@ -15,7 +15,7 @@ import (
 	awsmod "github.com/lyft/clutch/backend/module/aws"
 	experimentationapi "github.com/lyft/clutch/backend/module/chaos/experimentation/api"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation"
-	rtdsmod "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds"
+	xdsmod "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds"
 	"github.com/lyft/clutch/backend/module/envoytriage"
 	"github.com/lyft/clutch/backend/module/healthcheck"
 	k8smod "github.com/lyft/clutch/backend/module/k8s"
@@ -61,7 +61,7 @@ var Modules = module.Factory{
 	kinesismod.Name:            kinesismod.New,
 	healthcheck.Name:           healthcheck.New,
 	resolvermod.Name:           resolvermod.New,
-	rtdsmod.Name:               rtdsmod.New,
+	xdsmod.Name:                xdsmod.New,
 	serverexperimentation.Name: serverexperimentation.New,
 	sourcecontrol.Name:         sourcecontrol.New,
 	topologymod.Name:           topologymod.New,
