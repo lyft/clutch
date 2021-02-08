@@ -86,6 +86,10 @@ type Service interface {
 	DescribeConfigMap(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.ConfigMap, error)
 	DeleteConfigMap(ctx context.Context, clientset, cluster, namespace, name string) error
 	ListConfigMaps(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.ConfigMap, error)
+
+	// Job management functions.
+	DeleteJob(ctx context.Context, clientset, cluster, namespace, name string) error
+	ListJobs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Job, error)
 }
 
 type svc struct {

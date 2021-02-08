@@ -65,12 +65,17 @@ seed() {
     KUBECONFIG=$KUBECONFIG kubectl expose deployment envoy --port=8080 -n "envoy-${env}" || true
     KUBECONFIG=$KUBECONFIG kubectl create configmap "configmap-${env}-test-1" --from-literal=environment="${env}" -n "envoy-${env}" || true
     KUBECONFIG=$KUBECONFIG kubectl create configmap "configmap-${env}-test-2" --from-literal=environment="${env}" -n "envoy-${env}" || true
+    KUBECONFIG=$KUBECONFIG kubectl create job "job-${env}-test-1" --image busybox -n "envoy-${env}" || true
+    KUBECONFIG=$KUBECONFIG kubectl create job "job-${env}-test-2" --image busybox -n "envoy-${env}" || true
 
-    # Adding labels to a ConfigMap
-    KUBECONFIG=$KUBECONFIG kubectl label configmap "configmap-${env}-test-1" -n "envoy-${env}" app=envoy || true
 
     # Creating resources in `cron-*` namespace
     KUBECONFIG=$KUBECONFIG kubectl create cronjob cron-test --schedule "*/1 * * * *" --image busybox -n "cron-${env}" || true
+
+    # Adding labels to resources
+    KUBECONFIG=$KUBECONFIG kubectl label configmap "configmap-${env}-test-1" -n "envoy-${env}" app=envoy || true
+    KUBECONFIG=$KUBECONFIG kubectl label job "job-${env}-test-1" -n "envoy-${env}" app=envoy || true
+    KUBECONFIG=$KUBECONFIG kubectl annotate job "job-${env}-test-1" -n "envoy-${env}" url=foo@example.com || true
   done
 }
 
