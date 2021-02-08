@@ -134,7 +134,7 @@ func local_request_ResolverAPI_Resolve_0(ctx context.Context, marshaler runtime.
 }
 
 func request_ResolverAPI_AutoComplete_0(ctx context.Context, marshaler runtime.Marshaler, client ResolverAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq AutoCompleteRequest
+	var protoReq AutocompleteRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -151,7 +151,7 @@ func request_ResolverAPI_AutoComplete_0(ctx context.Context, marshaler runtime.M
 }
 
 func local_request_ResolverAPI_AutoComplete_0(ctx context.Context, marshaler runtime.Marshaler, server ResolverAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq AutoCompleteRequest
+	var protoReq AutocompleteRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)

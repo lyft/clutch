@@ -177,10 +177,12 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 	}, nil
 }
 
-func (r *resolverAPI) AutoComplete(ctx context.Context, req *resolverv1.AutoCompleteRequest) (*resolverv1.AutoCompleteResponse, error) {
+func (r *resolverAPI) AutoComplete(ctx context.Context, req *resolverv1.AutocompleteRequest) (*resolverv1.AutocompleteResponse, error) {
 	var err error
 	results := []string{}
 
+	// Iterate through all of the available resolvers & schemas to find the one request
+	// If that schema exists then we call the associated autocomplete function for that resolver
 	for _, res := range resolver.Registry {
 		resSchema := res.Schemas()
 		if _, ok := resSchema[req.Want]; ok {
@@ -192,7 +194,7 @@ func (r *resolverAPI) AutoComplete(ctx context.Context, req *resolverv1.AutoComp
 		}
 	}
 
-	return &resolverv1.AutoCompleteResponse{
+	return &resolverv1.AutocompleteResponse{
 		Results: results,
 	}, nil
 }
