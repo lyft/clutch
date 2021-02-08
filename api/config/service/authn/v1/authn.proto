@@ -12,11 +12,8 @@ message OIDC {
   string client_secret = 3 [ (validate.rules).string = {min_bytes : 1} ];
 
   string redirect_url = 4 [ (validate.rules).string = {min_bytes : 1} ];
-}
 
-message Storage {
-  // Encryption passphrase for credentials stored in the database.
-  string encryption_passphrase = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  repeated string scopes = 5;
 }
 
 message Config {
@@ -26,8 +23,4 @@ message Config {
   oneof type {
     OIDC oidc = 2;
   }
-
-  // Configure storage of refresh_token from the issuer. Currently optional as storage implementation is in-progress.
-  // TODO: Update documentation when actual storage is complete, add required message annotation if necessary.
-  Storage storage = 3;
 }

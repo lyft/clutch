@@ -40,7 +40,7 @@
     "js-cookie": "^2.2.1",
     "jwt-decode": "^3.0.0",
     "lodash": "^4.17.15",
-    "material-table": "1.69.1",
+    "material-table": "1.69.2",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-hook-form": "^6.9.2",
@@ -48,7 +48,7 @@
     "react-router": "^6.0.0-beta",
     "react-router-dom": "^6.0.0-beta",
     "styled-components": "^5.1.1",
-    "superstruct": "~0.13.0",
+    "superstruct": "~0.14.0",
     "yup": "^0.32.8"
   },
   "devDependencies": {

@@ -25,6 +25,8 @@ frontend
 
 The packages within Clutch are separated by functionality, with the intent being that each package provides value to workflows while also not being required.
 
+An interactive playground of our component library is available at [storybook.clutch.sh](https://storybook.clutch.sh).
+
 ### @clutch-sh/core
 
 The Core package consists of various reusable components that are shared between workflows and/or other Clutch packages. This can span from things like the application provider, which renders the Clutch app, and resolver component ([see above](./###Resolver)) to something as simple as a centralized button component.

@@ -38,8 +38,9 @@ const GroupList = styled(List)({
 
 const GroupListItem = styled(ListItem)({
   flexDirection: "column",
-  height: "82px",
+  minHeight: "82px",
   padding: "16px 8px 16px 8px",
+  height: "fit-content",
   "&:hover": {
     backgroundColor: "#F5F6FD",
   },
@@ -73,6 +74,9 @@ const GroupHeading = styled(Typography)({
   lineHeight: "18px",
   flexGrow: 1,
   paddingTop: "11px",
+  width: "100%",
+  textOverflow: "ellipsis",
+  overflow: "hidden",
 });
 
 const Avatar = styled(MuiAvatar)({
@@ -153,11 +157,6 @@ const Group: React.FC<GroupProps> = ({
   }
   // TODO (dschaller): revisit how we handle long groups once we have designs.
   // n.b. this is a stop-gap solution to prevent long groups from looking unreadable.
-  let formattedHeading = heading;
-  if (heading.length > 11) {
-    formattedHeading = `${heading.substring(0, 10)}...`;
-  }
-
   return (
     <GroupList data-qa="workflowGroup">
       <GroupListItem
@@ -170,8 +169,8 @@ const Group: React.FC<GroupProps> = ({
           updateOpenGroup(heading);
         }}
       >
-        <Avatar>{formattedHeading.charAt(0)}</Avatar>
-        <GroupHeading align="center">{formattedHeading}</GroupHeading>
+        <Avatar>{heading.charAt(0)}</Avatar>
+        <GroupHeading align="center">{heading}</GroupHeading>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Popper open={open} anchorEl={anchorRef.current} transition placement="right-start">
             <Paper>

@@ -164,7 +164,7 @@ const StyledAccordionDetails = styled(MuiAccordionDetails)({
   flexWrap: "wrap",
   boxSizing: "border-box",
   "> *": {
-    padding: "8px 8px",
+    margin: "8px 8px",
   },
   ".MuiFormLabel-root": {
     padding: "inherit",

@@ -35,7 +35,7 @@ const hydrate = (key: string): Thunk<ManagerLayout, Action> => {
       if (args.some(element => _.isEmpty(element))) {
         dispatch({
           type: ManagerAction.HYDRATE_END,
-          payload: { key, error: `Missing depedency for data layout: ${key}` },
+          payload: { key, error: `Missing dependency for data layout: ${key}` },
         });
         return;
       }

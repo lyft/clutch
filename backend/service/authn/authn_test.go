@@ -12,8 +12,6 @@ func TestNotImpl(t *testing.T) {
 	a := apimock.AnyFromYAML(`
 "@type": types.google.com/clutch.config.service.authn.v1.Config
 session_secret: my_session_secret
-storage:
-  encryption_passphrase: abcdefg
 `)
 	svc, err := New(a, nil, nil)
 	assert.Error(t, err)
