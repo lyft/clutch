@@ -14,6 +14,7 @@ import {
 import { Button } from "../button";
 import { Error } from "../Feedback";
 import { TextField } from "../Input/text-field";
+import { client, parseErrorMessage } from "../network";
 
 import type { ChangeEventTarget } from "./hydrator";
 import { convertChangeEvent, hydrateField } from "./hydrator";
@@ -24,6 +25,15 @@ interface QueryResolverProps {
   schemas: clutch.resolver.v1.Schema[];
   submitHandler: any;
 }
+
+const autoComplete = async (type: string, search: string): Promise<string[]> => {
+  const response = await client.post("/v1/resolver/autocomplete", {
+    want: `type.googleapis.com/clutch.aws.ec2.v1.AutoscalingGroup`,
+    search,
+  });
+
+  return { results: response?.data?.results || [] };
+};
 
 const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, submitHandler }) => {
   const validation = useForm({
@@ -41,6 +51,16 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, submitHandler })
     setQueryData(convertChangeEvent(event).target.value);
   };
 
+  // if there is more than 1 schema dont enable autocomplete for now
+  let isAutoCompleteable = false;
+  const autoCompleteableSchemas = schemas.map(
+    schema => schema?.metadata?.search?.isAutocompleteable
+  );
+
+  if (autoCompleteableSchemas.length === 1 && autoCompleteableSchemas[0] === true) {
+    isAutoCompleteable = true;
+  }
+
   const error = validation.errors?.query;
   return (
     <Form onSubmit={validation.handleSubmit(() => submitHandler({ query: queryData }))} noValidate>
@@ -55,6 +75,8 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, submitHandler })
         error={!!error}
         helperText={error?.message || error?.type || ""}
         endAdornment={<SearchIcon />}
+        isAutoCompleteable={isAutoCompleteable}
+        autocompleteCallback={autoComplete}
       />
     </Form>
   );

@@ -6,6 +6,7 @@ import type {
 } from "@material-ui/core";
 import { IconButton as MuiIconButton, TextField as MuiTextField } from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/Error";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const KEY_ENTER = 13;
 
@@ -125,6 +126,8 @@ export interface TextFieldProps
       | "required"
       | "type"
       | "value"
+      | "isAutoCompleteable"
+      | "autocompleteCallback"
     >,
     Pick<MuiInputProps, "readOnly" | "endAdornment"> {
   onReturn?: () => void;
@@ -137,6 +140,9 @@ export const TextField = ({
   helperText,
   readOnly,
   endAdornment,
+  // How do i add types?
+  isAutoCompleteable,
+  autocompleteCallback,
   ...props
 }: TextFieldProps) => {
   const onKeyDown = (
@@ -159,6 +165,50 @@ export const TextField = ({
         <ErrorIcon />
         {helperText}
       </>
+    );
+  }
+
+  if (isAutoCompleteable) {
+    const [autoCompleteOptions, setAutoCompleteOptions] = React.useState([]);
+
+    return (
+      <Autocomplete
+        id="query"
+        debug
+        freeSolo
+        fullWidth
+        options={autoCompleteOptions}
+        getOptionLabel={option => option}
+        renderInput={params => (
+          <div ref={params.InputProps.ref}>
+            <StyledTextField
+              {...params}
+              onFocus={onChange}
+              onBlur={onChange}
+              error={error}
+              helperText={helpText}
+              InputProps={{
+                readOnly,
+                endAdornment: endAdornment && <IconButton type="submit">{endAdornment}</IconButton>,
+              }}
+              {...props}
+            />
+          </div>
+        )}
+        // onChange={onChange}
+        // onKeyDown={e => onKeyDown(e)}
+        // onFocus={handleChanges}
+        onInputChange={(event, value, reason) => {
+          autocompleteCallback("typeUrl", value)
+            .then(data => {
+              setAutoCompleteOptions(data.results);
+            })
+            .catch(err => {
+              // TODO: how do i properly handle errors here?
+              console.error(err);
+            });
+        }}
+      />
     );
   }
 
