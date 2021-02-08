@@ -32,6 +32,10 @@ const useDataLayout = (key: string, opts?: object): DataLayout => {
   }
 
   React.useEffect(() => {
+    manager.update(key, { error: "", isLoading: false });
+  }, []);
+
+  React.useEffect(() => {
     if (options.hydrate && (!manager.state[key].cache || _.isEmpty(manager.state[key].data))) {
       manager.hydrate(key);
     }
