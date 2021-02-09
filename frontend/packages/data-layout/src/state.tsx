@@ -46,7 +46,7 @@ const reducer = (state: ManagerLayout, action: Action): ManagerLayout => {
     case ManagerAction.HYDRATE_END: {
       const update = {
         isLoading: false,
-        data: action.payload?.result || {},
+        data: { ...(action.payload?.result || {}), ...state[layoutKey]?.data },
         error: action.payload?.error,
       };
       return {
@@ -58,7 +58,7 @@ const reducer = (state: ManagerLayout, action: Action): ManagerLayout => {
       return {
         ...state,
         [layoutKey]: {
-          ...state[layoutKey],
+          ...state?.[layoutKey],
           data: action.payload?.value,
           isLoading: false,
         },
@@ -83,4 +83,4 @@ const useManagerState = (
   return useThunkReducer(reducer, initialState);
 };
 
-export { ManagerAction, useManagerState };
+export { ManagerAction, reducer, useManagerState };
