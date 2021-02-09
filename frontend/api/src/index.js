@@ -31068,6 +31068,7 @@ export const clutch = $root.clutch = (() => {
                  * @interface IAutocompleteRequest
                  * @property {string|null} [want] AutocompleteRequest want
                  * @property {string|null} [search] AutocompleteRequest search
+                 * @property {number|Long|null} [resultLimit] AutocompleteRequest resultLimit
                  */
 
                 /**
@@ -31102,6 +31103,14 @@ export const clutch = $root.clutch = (() => {
                 AutocompleteRequest.prototype.search = "";
 
                 /**
+                 * AutocompleteRequest resultLimit.
+                 * @member {number|Long} resultLimit
+                 * @memberof clutch.resolver.v1.AutocompleteRequest
+                 * @instance
+                 */
+                AutocompleteRequest.prototype.resultLimit = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+                /**
                  * Verifies an AutocompleteRequest message.
                  * @function verify
                  * @memberof clutch.resolver.v1.AutocompleteRequest
@@ -31118,6 +31127,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.search != null && message.hasOwnProperty("search"))
                         if (!$util.isString(message.search))
                             return "search: string expected";
+                    if (message.resultLimit != null && message.hasOwnProperty("resultLimit"))
+                        if (!$util.isInteger(message.resultLimit) && !(message.resultLimit && $util.isInteger(message.resultLimit.low) && $util.isInteger(message.resultLimit.high)))
+                            return "resultLimit: integer|Long expected";
                     return null;
                 };
 
@@ -31137,6 +31149,15 @@ export const clutch = $root.clutch = (() => {
                         message.want = String(object.want);
                     if (object.search != null)
                         message.search = String(object.search);
+                    if (object.resultLimit != null)
+                        if ($util.Long)
+                            (message.resultLimit = $util.Long.fromValue(object.resultLimit)).unsigned = true;
+                        else if (typeof object.resultLimit === "string")
+                            message.resultLimit = parseInt(object.resultLimit, 10);
+                        else if (typeof object.resultLimit === "number")
+                            message.resultLimit = object.resultLimit;
+                        else if (typeof object.resultLimit === "object")
+                            message.resultLimit = new $util.LongBits(object.resultLimit.low >>> 0, object.resultLimit.high >>> 0).toNumber(true);
                     return message;
                 };
 
@@ -31156,11 +31177,21 @@ export const clutch = $root.clutch = (() => {
                     if (options.defaults) {
                         object.want = "";
                         object.search = "";
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, true);
+                            object.resultLimit = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.resultLimit = options.longs === String ? "0" : 0;
                     }
                     if (message.want != null && message.hasOwnProperty("want"))
                         object.want = message.want;
                     if (message.search != null && message.hasOwnProperty("search"))
                         object.search = message.search;
+                    if (message.resultLimit != null && message.hasOwnProperty("resultLimit"))
+                        if (typeof message.resultLimit === "number")
+                            object.resultLimit = options.longs === String ? String(message.resultLimit) : message.resultLimit;
+                        else
+                            object.resultLimit = options.longs === String ? $util.Long.prototype.toString.call(message.resultLimit) : options.longs === Number ? new $util.LongBits(message.resultLimit.low >>> 0, message.resultLimit.high >>> 0).toNumber(true) : message.resultLimit;
                     return object;
                 };
 

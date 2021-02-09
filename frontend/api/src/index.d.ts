@@ -13125,6 +13125,9 @@ export namespace clutch {
 
                 /** AutocompleteRequest search */
                 search?: (string|null);
+
+                /** AutocompleteRequest resultLimit */
+                resultLimit?: (number|Long|null);
             }
 
             /** Represents an AutocompleteRequest. */
@@ -13141,6 +13144,9 @@ export namespace clutch {
 
                 /** AutocompleteRequest search. */
                 public search: string;
+
+                /** AutocompleteRequest resultLimit. */
+                public resultLimit: (number|Long);
 
                 /**
                  * Verifies an AutocompleteRequest message.

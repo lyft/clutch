@@ -44,7 +44,7 @@ func TestAutoCompleteErrorHandling(t *testing.T) {
 	assert.NotNil(t, aws)
 
 	// Test error handling for topology service not found
-	_, err2 := aws.AutoComplete(context.Background(), "type_url", "search")
+	_, err2 := aws.AutoComplete(context.Background(), "type_url", "search", 0)
 	assert.Error(t, err2)
 
 	// Test error handling for a topology search failure
@@ -53,7 +53,7 @@ func TestAutoCompleteErrorHandling(t *testing.T) {
 			autoCompleteError: fmt.Errorf("error"),
 		},
 	}
-	_, err3 := awsResolver.AutoComplete(context.Background(), "type_url", "search")
+	_, err3 := awsResolver.AutoComplete(context.Background(), "type_url", "search", 0)
 	assert.Error(t, err3)
 }
 
@@ -74,7 +74,7 @@ func TestAutoCompleteResults(t *testing.T) {
 		},
 	}
 
-	results, err := awsResolver.AutoComplete(context.Background(), "type_url", "search")
+	results, err := awsResolver.AutoComplete(context.Background(), "type_url", "search", 0)
 	assert.NoError(t, err)
 	assert.Equal(t, []string{"meow", "cat", "yawn"}, results)
 }

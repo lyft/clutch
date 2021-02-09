@@ -203,6 +203,6 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	return handler.Results(limit)
 }
 
-func (r *res) AutoComplete(ctx context.Context, typeURLs, search string) ([]string, error) {
+func (r *res) AutoComplete(ctx context.Context, typeURLs, search string, limit uint64) ([]string, error) {
 	return []string{}, nil
 }

@@ -151,14 +151,13 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	}
 }
 
-func (r *res) AutoComplete(ctx context.Context, typeURL, search string) ([]string, error) {
+func (r *res) AutoComplete(ctx context.Context, typeURL, search string, limit uint64) ([]string, error) {
 	if r.topology == nil {
 		return nil, fmt.Errorf("to use the autocomplete api you must first setup the topology service")
 	}
 
-	results, _, err := r.topology.Search(ctx, &topologyv1.SearchRequest{
+	searchRequest := &topologyv1.SearchRequest{
 		PageToken: "0",
-		Limit:     resolver.AutoCompleteAPILimit,
 		Sort: &topologyv1.SearchRequest_Sort{
 			Direction: topologyv1.SearchRequest_Sort_ASCENDING,
 			Field:     "column.id",
@@ -170,7 +169,14 @@ func (r *res) AutoComplete(ctx context.Context, typeURL, search string) ([]strin
 				Text:  search,
 			},
 		},
-	})
+	}
+
+	// Limit is optional, if one is not set we use the default set by the topology search api
+	if limit > 0 {
+		searchRequest.Limit = limit
+	}
+
+	results, _, err := r.topology.Search(ctx, searchRequest)
 	if err != nil {
 		return nil, err
 	}
