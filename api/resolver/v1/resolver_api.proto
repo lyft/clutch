@@ -47,6 +47,7 @@ message AutocompleteRequest {
   // The type URL of the desired result.
   string want = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string search = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  uint64 result_limit = 3;
 }
 
 message AutocompleteResponse {

@@ -181,12 +181,12 @@ func (r *resolverAPI) AutoComplete(ctx context.Context, req *resolverv1.Autocomp
 	var err error
 	results := []string{}
 
-	// Iterate through all of the available resolvers & schemas to find the one request
+	// Iterate through all of the available resolvers & schemas to find the one requested
 	// If that schema exists then we call the associated autocomplete function for that resolver
 	for _, res := range resolver.Registry {
 		resSchema := res.Schemas()
 		if _, ok := resSchema[req.Want]; ok {
-			results, err = res.AutoComplete(ctx, req.Want, req.Search)
+			results, err = res.AutoComplete(ctx, req.Want, req.Search, req.ResultLimit)
 			if err != nil {
 				return nil, err
 			}
