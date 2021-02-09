@@ -19,6 +19,8 @@ import (
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/resolver"
+	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/topology"
 )
 
 const Name = "clutch.module.resolver"
@@ -142,6 +144,13 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 
 	// Handle option presentation for matching schemas.
 	for _, schema := range schemas {
+		if shouldAutoCompleteBeEnabled(schema.Metadata) {
+			if schema.Metadata.Search == nil {
+				schema.Metadata.Search = &resolverv1.SearchMetadata{}
+			}
+			schema.Metadata.Search.Autocompleteable = true
+		}
+
 		for _, field := range schema.Fields {
 			fm, ok := field.Metadata.Type.(*resolverv1.FieldMetadata_OptionField)
 			if !ok {
@@ -177,7 +186,11 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 	}, nil
 }
 
+<<<<<<< HEAD
 func (r *resolverAPI) AutoComplete(ctx context.Context, req *resolverv1.AutocompleteRequest) (*resolverv1.AutocompleteResponse, error) {
+=======
+func (r *resolverAPI) Autocomplete(ctx context.Context, req *resolverv1.AutocompleteRequest) (*resolverv1.AutocompleteResponse, error) {
+>>>>>>> resolver-autocomplete-api
 	var err error
 	results := []*resolverv1.AutocompleteResponse_AutocompleteResult{}
 
@@ -194,8 +207,11 @@ func (r *resolverAPI) AutoComplete(ctx context.Context, req *resolverv1.Autocomp
 		}
 	}
 
+<<<<<<< HEAD
 	// fmt.Printf("%v\n", len(results))
 
+=======
+>>>>>>> resolver-autocomplete-api
 	return &resolverv1.AutocompleteResponse{
 		Results: results,
 	}, nil
@@ -213,4 +229,17 @@ func updateSchemaError(input *resolverv1.Schema) {
 			}
 		}
 	}
+}
+
+// Check all prerequesits for the autocomplte functionaity
+func shouldAutoCompleteBeEnabled(metadata *resolverv1.SchemaMetadata) bool {
+	topologySvc, ok := service.Registry[topology.Name]
+	if ok {
+		_, ok := topologySvc.(topology.Service)
+		if !ok {
+			return false
+		}
+	}
+
+	return true
 }

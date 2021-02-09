@@ -20,7 +20,7 @@ const (
 )
 
 type ClientsetManager interface {
-	Clientsets(ctx context.Context) map[string]ContextClientset
+	Clientsets(ctx context.Context) (map[string]ContextClientset, error)
 	GetK8sClientset(ctx context.Context, clientset, cluster, namespace string) (ContextClientset, error)
 }
 
@@ -138,12 +138,12 @@ type managerImpl struct {
 	clientsets map[string]*ctxClientsetImpl
 }
 
-func (m *managerImpl) Clientsets(ctx context.Context) map[string]ContextClientset {
+func (m *managerImpl) Clientsets(ctx context.Context) (map[string]ContextClientset, error) {
 	ret := make(map[string]ContextClientset)
 	for k, v := range m.clientsets {
 		ret[k] = v
 	}
-	return ret
+	return ret, nil
 }
 
 func (m *managerImpl) GetK8sClientset(ctx context.Context, clientset, cluster, namespace string) (ContextClientset, error) {

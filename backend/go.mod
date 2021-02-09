@@ -15,6 +15,8 @@ require (
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/coreos/go-oidc/v3 v3.0.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/docker/docker v17.12.0-ce-rc1.0.20200618181300-9dc6525e6118+incompatible
+	github.com/docker/go-metrics v0.0.1 // indirect
 	github.com/envoyproxy/go-control-plane v0.9.9-0.20201217023817-7fe139bd184a
 	github.com/envoyproxy/protoc-gen-validate v0.4.1
 	github.com/fullstorydev/grpcurl v1.8.0
@@ -42,7 +44,7 @@ require (
 	golang.org/x/net v0.0.0-20210119194325-5f4716e94777
 	golang.org/x/oauth2 v0.0.0-20210201163806-010130855d6c
 	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
-	google.golang.org/genproto v0.0.0-20210126160654-44e461bb6506
+	google.golang.org/genproto v0.0.0-20210207032614-bba0dbe2a9ea
 	google.golang.org/grpc v1.35.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.25.0

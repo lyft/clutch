@@ -117,6 +117,10 @@ func (*svc) UpdateStatefulSet(ctx context.Context, clientset, cluster, namespace
 	return nil
 }
 
+func (*svc) DeleteStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) error {
+	return nil
+}
+
 func (*svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error {
 	return nil
 }
@@ -189,8 +193,32 @@ func (s *svc) ListConfigMaps(_ context.Context, clientset, cluster, namespace st
 	return configMaps, nil
 }
 
-func (*svc) Clientsets(ctx context.Context) []string {
-	return []string{"fake-user@fake-cluster"}
+func (s *svc) ListJobs(_ context.Context, clientset, cluster, namespace string, listOptions *k8sv1.ListOptions) ([]*k8sv1.Job, error) {
+	jobs := []*k8sv1.Job{
+		&k8sv1.Job{
+			Cluster:     "fake-cluster-name",
+			Namespace:   namespace,
+			Name:        "name1",
+			Labels:      listOptions.Labels,
+			Annotations: map[string]string{"Key": "value"},
+		},
+		&k8sv1.Job{
+			Cluster:     "fake-cluster-name",
+			Namespace:   namespace,
+			Name:        "name2",
+			Labels:      listOptions.Labels,
+			Annotations: map[string]string{"Key": "value"},
+		},
+	}
+	return jobs, nil
+}
+
+func (*svc) DeleteJob(ctx context.Context, clientset, cluster, namespace, name string) error {
+	return nil
+}
+
+func (*svc) Clientsets(ctx context.Context) ([]string, error) {
+	return []string{"fake-user@fake-cluster"}, nil
 }
 
 func New() k8sservice.Service {
