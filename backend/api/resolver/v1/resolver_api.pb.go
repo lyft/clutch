@@ -9,14 +9,6 @@ package resolverv1
 import (
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	proto "github.com/golang/protobuf/proto"
-<<<<<<< HEAD
-=======
-	any "github.com/golang/protobuf/ptypes/any"
-<<<<<<< HEAD
-	_struct "github.com/golang/protobuf/ptypes/struct"
->>>>>>> more metadata in the autocomplete result proto
-=======
->>>>>>> simplify autocomplete result proto
 	_ "github.com/lyft/clutch/backend/api/api/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	status "google.golang.org/genproto/googleapis/rpc/status"
@@ -679,36 +671,6 @@ func file_resolver_v1_resolver_api_proto_rawDescGZIP() []byte {
 
 var file_resolver_v1_resolver_api_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_resolver_v1_resolver_api_proto_goTypes = []interface{}{
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	(*ResolveRequest)(nil),           // 0: clutch.resolver.v1.ResolveRequest
-	(*ResolveResponse)(nil),          // 1: clutch.resolver.v1.ResolveResponse
-	(*SearchRequest)(nil),            // 2: clutch.resolver.v1.SearchRequest
-	(*SearchResponse)(nil),           // 3: clutch.resolver.v1.SearchResponse
-	(*GetObjectSchemasRequest)(nil),  // 4: clutch.resolver.v1.GetObjectSchemasRequest
-	(*GetObjectSchemasResponse)(nil), // 5: clutch.resolver.v1.GetObjectSchemasResponse
-	(*anypb.Any)(nil),                // 6: google.protobuf.Any
-	(*status.Status)(nil),            // 7: google.rpc.Status
-	(*Schema)(nil),                   // 8: clutch.resolver.v1.Schema
-=======
-	(*AutoCompleteRequest)(nil),      // 0: clutch.resolver.v1.AutoCompleteRequest
-	(*AutoCompleteResponse)(nil),     // 1: clutch.resolver.v1.AutoCompleteResponse
-=======
-	(*AutocompleteRequest)(nil),      // 0: clutch.resolver.v1.AutocompleteRequest
-	(*AutocompleteResponse)(nil),     // 1: clutch.resolver.v1.AutocompleteResponse
->>>>>>> comments
-	(*ResolveRequest)(nil),           // 2: clutch.resolver.v1.ResolveRequest
-	(*ResolveResponse)(nil),          // 3: clutch.resolver.v1.ResolveResponse
-	(*SearchRequest)(nil),            // 4: clutch.resolver.v1.SearchRequest
-	(*SearchResponse)(nil),           // 5: clutch.resolver.v1.SearchResponse
-	(*GetObjectSchemasRequest)(nil),  // 6: clutch.resolver.v1.GetObjectSchemasRequest
-	(*GetObjectSchemasResponse)(nil), // 7: clutch.resolver.v1.GetObjectSchemasResponse
-	(*any.Any)(nil),                  // 8: google.protobuf.Any
-	(*status.Status)(nil),            // 9: google.rpc.Status
-	(*Schema)(nil),                   // 10: clutch.resolver.v1.Schema
->>>>>>> resolver autocomplete protos
-=======
 	(*AutocompleteRequest)(nil),                     // 0: clutch.resolver.v1.AutocompleteRequest
 	(*AutocompleteResponse)(nil),                    // 1: clutch.resolver.v1.AutocompleteResponse
 	(*ResolveRequest)(nil),                          // 2: clutch.resolver.v1.ResolveRequest
@@ -718,18 +680,9 @@ var file_resolver_v1_resolver_api_proto_goTypes = []interface{}{
 	(*GetObjectSchemasRequest)(nil),                 // 6: clutch.resolver.v1.GetObjectSchemasRequest
 	(*GetObjectSchemasResponse)(nil),                // 7: clutch.resolver.v1.GetObjectSchemasResponse
 	(*AutocompleteResponse_AutocompleteResult)(nil), // 8: clutch.resolver.v1.AutocompleteResponse.AutocompleteResult
-<<<<<<< HEAD
-	nil,                   // 9: clutch.resolver.v1.AutocompleteResponse.AutocompleteResult.MetadataEntry
-	(*any.Any)(nil),       // 10: google.protobuf.Any
-	(*status.Status)(nil), // 11: google.rpc.Status
-	(*Schema)(nil),        // 12: clutch.resolver.v1.Schema
-	(*_struct.Value)(nil), // 13: google.protobuf.Value
->>>>>>> more metadata in the autocomplete result proto
-=======
-	(*any.Any)(nil),                                 // 9: google.protobuf.Any
+	(*anypb.Any)(nil),                               // 9: google.protobuf.Any
 	(*status.Status)(nil),                           // 10: google.rpc.Status
 	(*Schema)(nil),                                  // 11: clutch.resolver.v1.Schema
->>>>>>> simplify autocomplete result proto
 }
 var file_resolver_v1_resolver_api_proto_depIdxs = []int32{
 	8,  // 0: clutch.resolver.v1.AutocompleteResponse.results:type_name -> clutch.resolver.v1.AutocompleteResponse.AutocompleteResult
