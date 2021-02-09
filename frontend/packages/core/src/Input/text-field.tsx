@@ -126,11 +126,11 @@ export interface TextFieldProps
       | "required"
       | "type"
       | "value"
-      | "isAutoCompleteable"
-      | "autocompleteCallback"
     >,
     Pick<MuiInputProps, "readOnly" | "endAdornment"> {
   onReturn?: () => void;
+  isAutoCompleteable?: boolean;
+  autocompleteCallback?: (v: string) => Promise<any>;
 }
 
 export const TextField = ({
@@ -140,7 +140,6 @@ export const TextField = ({
   helperText,
   readOnly,
   endAdornment,
-  // How do i add types?
   isAutoCompleteable,
   autocompleteCallback,
   ...props
@@ -180,32 +179,27 @@ export const TextField = ({
         options={autoCompleteOptions}
         getOptionLabel={option => option}
         renderInput={params => (
-          <div ref={params.InputProps.ref}>
-            <StyledTextField
-              {...params}
-              onFocus={onChange}
-              onBlur={onChange}
-              error={error}
-              helperText={helpText}
-              InputProps={{
-                readOnly,
-                endAdornment: endAdornment && <IconButton type="submit">{endAdornment}</IconButton>,
-              }}
-              {...props}
-            />
-          </div>
+          <StyledTextField
+            {...params}
+            onFocus={onChange}
+            onBlur={onChange}
+            error={error}
+            helperText={helpText}
+            InputProps={{
+              ref: params.InputProps.ref,
+              readOnly,
+              endAdornment: endAdornment && <IconButton type="submit">{endAdornment}</IconButton>,
+            }}
+            {...props}
+          />
         )}
-        // onChange={onChange}
-        // onKeyDown={e => onKeyDown(e)}
-        // onFocus={handleChanges}
         onInputChange={(event, value, reason) => {
-          autocompleteCallback("typeUrl", value)
+          autocompleteCallback(value)
             .then(data => {
               setAutoCompleteOptions(data.results);
             })
             .catch(err => {
-              // TODO: how do i properly handle errors here?
-              console.error(err);
+              helpText = err;
             });
         }}
       />

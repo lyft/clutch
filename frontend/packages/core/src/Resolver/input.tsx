@@ -22,20 +22,21 @@ import { convertChangeEvent, hydrateField } from "./hydrator";
 const Form = styled.form({});
 
 interface QueryResolverProps {
+  inputType: string;
   schemas: clutch.resolver.v1.Schema[];
   submitHandler: any;
 }
 
-const autoComplete = async (type: string, search: string): Promise<string[]> => {
+const autoComplete = async (type: string, search: string): Promise<any> => {
   const response = await client.post("/v1/resolver/autocomplete", {
-    want: `type.googleapis.com/clutch.aws.ec2.v1.AutoscalingGroup`,
+    want: `type.googleapis.com/${type}`,
     search,
   });
 
   return { results: response?.data?.results || [] };
 };
 
-const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, submitHandler }) => {
+const QueryResolver: React.FC<QueryResolverProps> = ({ inputType, schemas, submitHandler }) => {
   const validation = useForm({
     mode: "onSubmit",
     reValidateMode: "onSubmit",
@@ -76,7 +77,7 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ schemas, submitHandler })
         helperText={error?.message || error?.type || ""}
         endAdornment={<SearchIcon />}
         isAutoCompleteable={isAutoCompleteable}
-        autocompleteCallback={autoComplete}
+        autocompleteCallback={v => autoComplete(inputType, v)}
       />
     </Form>
   );
@@ -94,6 +95,7 @@ const SchemaDetails = styled(AccordionDetails)({
   },
 });
 
+// support OG want type
 const SchemaResolver = ({ schema, expanded, onClick, submitHandler }: SchemaResolverProps) => {
   const [data, setData] = React.useState({ "@type": schema.typeUrl });
 
