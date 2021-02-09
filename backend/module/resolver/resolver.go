@@ -194,8 +194,6 @@ func (r *resolverAPI) AutoComplete(ctx context.Context, req *resolverv1.Autocomp
 		}
 	}
 
-	// fmt.Printf("%v\n", len(results))
-
 	return &resolverv1.AutocompleteResponse{
 		Results: results,
 	}, nil
