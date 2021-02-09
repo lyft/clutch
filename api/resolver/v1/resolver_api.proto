@@ -8,6 +8,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 import "google/rpc/status.proto";
 import "validate/validate.proto";
+import "google/protobuf/struct.proto";
 
 import "api/v1/annotations.proto";
 import "resolver/v1/schema.proto";
@@ -51,7 +52,12 @@ message AutocompleteRequest {
 }
 
 message AutocompleteResponse {
-  repeated string results = 1;
+  message AutocompleteResult {
+    string id = 1;
+    map<string, google.protobuf.Value> metadata = 2;
+  }
+
+  repeated AutocompleteResult results = 1;
 }
 
 message ResolveRequest {

@@ -13181,7 +13181,7 @@ export namespace clutch {
             interface IAutocompleteResponse {
 
                 /** AutocompleteResponse results */
-                results?: (string[]|null);
+                results?: (clutch.resolver.v1.AutocompleteResponse.IAutocompleteResult[]|null);
             }
 
             /** Represents an AutocompleteResponse. */
@@ -13194,7 +13194,7 @@ export namespace clutch {
                 constructor(properties?: clutch.resolver.v1.IAutocompleteResponse);
 
                 /** AutocompleteResponse results. */
-                public results: string[];
+                public results: clutch.resolver.v1.AutocompleteResponse.IAutocompleteResult[];
 
                 /**
                  * Verifies an AutocompleteResponse message.
@@ -13223,6 +13223,63 @@ export namespace clutch {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace AutocompleteResponse {
+
+                /** Properties of an AutocompleteResult. */
+                interface IAutocompleteResult {
+
+                    /** AutocompleteResult id */
+                    id?: (string|null);
+
+                    /** AutocompleteResult metadata */
+                    metadata?: ({ [k: string]: google.protobuf.IValue }|null);
+                }
+
+                /** Represents an AutocompleteResult. */
+                class AutocompleteResult implements IAutocompleteResult {
+
+                    /**
+                     * Constructs a new AutocompleteResult.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.v1.AutocompleteResponse.IAutocompleteResult);
+
+                    /** AutocompleteResult id. */
+                    public id: string;
+
+                    /** AutocompleteResult metadata. */
+                    public metadata: { [k: string]: google.protobuf.IValue };
+
+                    /**
+                     * Verifies an AutocompleteResult message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an AutocompleteResult message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns AutocompleteResult
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.v1.AutocompleteResponse.AutocompleteResult;
+
+                    /**
+                     * Creates a plain object from an AutocompleteResult message. Also converts values to other types if specified.
+                     * @param message AutocompleteResult
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.v1.AutocompleteResponse.AutocompleteResult, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this AutocompleteResult to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
             }
 
             /** Properties of a ResolveRequest. */
