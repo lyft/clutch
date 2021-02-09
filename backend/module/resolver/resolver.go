@@ -7,7 +7,6 @@ package resolver
 import (
 	"context"
 	"fmt"
-
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
@@ -60,7 +59,7 @@ func (r *resolverAPI) Resolve(ctx context.Context, req *resolverv1.ResolveReques
 
 		for _, schema := range inputSchemas {
 			if schema.TypeUrl == req.Have.TypeUrl {
-				searchedSchemas = append(searchedSchemas, schema.Metadata.DisplayName)
+				searchedSchemas = append(searchedSchemas, schema.TypeUrl)
 				a := &ptypes.DynamicAny{}
 				if err := ptypes.UnmarshalAny(req.Have, a); err != nil {
 					return nil, err
@@ -99,7 +98,7 @@ func (r *resolverAPI) Search(ctx context.Context, req *resolverv1.SearchRequest)
 		if schemas, ok := resSchemas[req.Want]; ok {
 			for _, ss := range schemas {
 				if ss.Metadata.Searchable || (ss.Metadata.Search != nil && ss.Metadata.Search.Enabled) {
-					searchedSchemas = append(searchedSchemas, ss.Metadata.DisplayName)
+					searchedSchemas = append(searchedSchemas, ss.TypeUrl)
 				}
 			}
 
@@ -116,7 +115,7 @@ func (r *resolverAPI) Search(ctx context.Context, req *resolverv1.SearchRequest)
 	}
 
 	resp.truncate(req.Limit)
-	if err := resp.isError(req.Want, searchedSchemas); err != nil {
+	if err := resp.isError(req.Want	, searchedSchemas); err != nil {
 		return nil, err
 	}
 

@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"strings"
 
 	corev1 "k8s.io/api/core/v1"
@@ -28,9 +30,9 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 	if len(pods.Items) == 1 {
 		return podDescription(&pods.Items[0], cs.Cluster()), nil
 	} else if len(pods.Items) > 1 {
-		return nil, fmt.Errorf("Located multiple Pods")
+		return nil, status.Error(codes.FailedPrecondition, "multiple pods located")
 	}
-	return nil, fmt.Errorf("Unable to locate pod")
+	return nil, status.Errorf(codes.NotFound, "unable to locate pod '%s' in cluster '%s' namespace '%s'", name, cluster, namespace)
 }
 
 func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error {

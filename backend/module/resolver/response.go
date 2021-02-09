@@ -2,6 +2,8 @@ package resolver
 
 import (
 	"fmt"
+	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
+	"google.golang.org/protobuf/types/known/structpb"
 	"strings"
 
 	"github.com/golang/protobuf/ptypes"
@@ -59,18 +61,52 @@ func (r *response) marshalResults(results *resolver.Results) error {
 	return nil
 }
 
+func allStatusMatch(c codes.Code, sl []*statuspb.Status) bool {
+	for _, s := range sl {
+		if s.Code != int32(c) {
+			return false
+		}
+	}
+	return true
+}
+
 func (r *response) isError(wanted string, searchedSchemas []string) error {
+	// If results, errors will be returned as partial failures.
 	if len(r.Results) > 0 {
 		return nil
 	}
 
-	msg := fmt.Sprintf("Did not find a '%s', looked by: %s", wanted, strings.Join(searchedSchemas, ", "))
+	wanted = strings.TrimPrefix(wanted, resolver.TypePrefix)
+
+	msg := fmt.Sprintf("search for '%s' returned no results", wanted)
 
 	if len(r.PartialFailures) > 0 {
-		s := status.New(codes.FailedPrecondition, msg)
-		s, _ = s.WithDetails(resolver.MessageSlice(r.PartialFailures)...)
+		// Determine code.
+		code := codes.NotFound
+		if !allStatusMatch(codes.NotFound, r.PartialFailures) {
+			code = codes.FailedPrecondition
+			msg = fmt.Sprintf("one or more errors were encountered searching for '%s'", wanted)
+		}
+
+		s := status.New(code, msg)
+		s, _ = s.WithDetails(&apiv1.ErrorMetadata{
+			Metadata: map[string]*structpb.Value{
+				"searchedSchemas": stringSliceAsValue(searchedSchemas),
+			},
+			Wrapped: r.PartialFailures,
+		})
+
 		return s.Err()
 	}
 
 	return status.Error(codes.NotFound, msg)
+}
+
+func stringSliceAsValue(v []string) *structpb.Value {
+	iface := make([]interface{}, len(v))
+	for idx, vv := range v {
+		iface[idx] = vv
+	}
+	l, _ := structpb.NewValue(iface)
+	return l
 }
