@@ -34,7 +34,7 @@ service ResolverAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
-  rpc AutoComplete(AutocompleteRequest) returns (AutocompleteResponse) {
+  rpc Autocomplete(AutocompleteRequest) returns (AutocompleteResponse) {
     option (google.api.http) = {
       post : "/v1/resolver/autocomplete"
       body : "*"

@@ -12844,8 +12844,8 @@ export namespace clutch {
                 /** SearchMetadata enabled */
                 enabled?: (boolean|null);
 
-                /** SearchMetadata isAutocompleteable */
-                isAutocompleteable?: (boolean|null);
+                /** SearchMetadata autocompleteable */
+                autocompleteable?: (boolean|null);
             }
 
             /** Represents a SearchMetadata. */
@@ -12860,8 +12860,8 @@ export namespace clutch {
                 /** SearchMetadata enabled. */
                 public enabled: boolean;
 
-                /** SearchMetadata isAutocompleteable. */
-                public isAutocompleteable: boolean;
+                /** SearchMetadata autocompleteable. */
+                public autocompleteable: boolean;
 
                 /**
                  * Verifies a SearchMetadata message.
@@ -13072,18 +13072,18 @@ export namespace clutch {
                 public resolve(request: clutch.resolver.v1.IResolveRequest): Promise<clutch.resolver.v1.ResolveResponse>;
 
                 /**
-                 * Calls AutoComplete.
+                 * Calls Autocomplete.
                  * @param request AutocompleteRequest message or plain object
                  * @param callback Node-style callback called with the error, if any, and AutocompleteResponse
                  */
-                public autoComplete(request: clutch.resolver.v1.IAutocompleteRequest, callback: clutch.resolver.v1.ResolverAPI.AutoCompleteCallback): void;
+                public autocomplete(request: clutch.resolver.v1.IAutocompleteRequest, callback: clutch.resolver.v1.ResolverAPI.AutocompleteCallback): void;
 
                 /**
-                 * Calls AutoComplete.
+                 * Calls Autocomplete.
                  * @param request AutocompleteRequest message or plain object
                  * @returns Promise
                  */
-                public autoComplete(request: clutch.resolver.v1.IAutocompleteRequest): Promise<clutch.resolver.v1.AutocompleteResponse>;
+                public autocomplete(request: clutch.resolver.v1.IAutocompleteRequest): Promise<clutch.resolver.v1.AutocompleteResponse>;
             }
 
             namespace ResolverAPI {
@@ -13110,11 +13110,11 @@ export namespace clutch {
                 type ResolveCallback = (error: (Error|null), response?: clutch.resolver.v1.ResolveResponse) => void;
 
                 /**
-                 * Callback as used by {@link clutch.resolver.v1.ResolverAPI#autoComplete}.
+                 * Callback as used by {@link clutch.resolver.v1.ResolverAPI#autocomplete}.
                  * @param error Error, if any
                  * @param [response] AutocompleteResponse
                  */
-                type AutoCompleteCallback = (error: (Error|null), response?: clutch.resolver.v1.AutocompleteResponse) => void;
+                type AutocompleteCallback = (error: (Error|null), response?: clutch.resolver.v1.AutocompleteResponse) => void;
             }
 
             /** Properties of an AutocompleteRequest. */

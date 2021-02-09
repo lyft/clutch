@@ -30475,7 +30475,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.resolver.v1
                  * @interface ISearchMetadata
                  * @property {boolean|null} [enabled] SearchMetadata enabled
-                 * @property {boolean|null} [isAutocompleteable] SearchMetadata isAutocompleteable
+                 * @property {boolean|null} [autocompleteable] SearchMetadata autocompleteable
                  */
 
                 /**
@@ -30502,12 +30502,12 @@ export const clutch = $root.clutch = (() => {
                 SearchMetadata.prototype.enabled = false;
 
                 /**
-                 * SearchMetadata isAutocompleteable.
-                 * @member {boolean} isAutocompleteable
+                 * SearchMetadata autocompleteable.
+                 * @member {boolean} autocompleteable
                  * @memberof clutch.resolver.v1.SearchMetadata
                  * @instance
                  */
-                SearchMetadata.prototype.isAutocompleteable = false;
+                SearchMetadata.prototype.autocompleteable = false;
 
                 /**
                  * Verifies a SearchMetadata message.
@@ -30523,9 +30523,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.enabled != null && message.hasOwnProperty("enabled"))
                         if (typeof message.enabled !== "boolean")
                             return "enabled: boolean expected";
-                    if (message.isAutocompleteable != null && message.hasOwnProperty("isAutocompleteable"))
-                        if (typeof message.isAutocompleteable !== "boolean")
-                            return "isAutocompleteable: boolean expected";
+                    if (message.autocompleteable != null && message.hasOwnProperty("autocompleteable"))
+                        if (typeof message.autocompleteable !== "boolean")
+                            return "autocompleteable: boolean expected";
                     return null;
                 };
 
@@ -30543,8 +30543,8 @@ export const clutch = $root.clutch = (() => {
                     let message = new $root.clutch.resolver.v1.SearchMetadata();
                     if (object.enabled != null)
                         message.enabled = Boolean(object.enabled);
-                    if (object.isAutocompleteable != null)
-                        message.isAutocompleteable = Boolean(object.isAutocompleteable);
+                    if (object.autocompleteable != null)
+                        message.autocompleteable = Boolean(object.autocompleteable);
                     return message;
                 };
 
@@ -30563,12 +30563,12 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.defaults) {
                         object.enabled = false;
-                        object.isAutocompleteable = false;
+                        object.autocompleteable = false;
                     }
                     if (message.enabled != null && message.hasOwnProperty("enabled"))
                         object.enabled = message.enabled;
-                    if (message.isAutocompleteable != null && message.hasOwnProperty("isAutocompleteable"))
-                        object.isAutocompleteable = message.isAutocompleteable;
+                    if (message.autocompleteable != null && message.hasOwnProperty("autocompleteable"))
+                        object.autocompleteable = message.autocompleteable;
                     return object;
                 };
 
@@ -31025,31 +31025,31 @@ export const clutch = $root.clutch = (() => {
                  */
 
                 /**
-                 * Callback as used by {@link clutch.resolver.v1.ResolverAPI#autoComplete}.
+                 * Callback as used by {@link clutch.resolver.v1.ResolverAPI#autocomplete}.
                  * @memberof clutch.resolver.v1.ResolverAPI
-                 * @typedef AutoCompleteCallback
+                 * @typedef AutocompleteCallback
                  * @type {function}
                  * @param {Error|null} error Error, if any
                  * @param {clutch.resolver.v1.AutocompleteResponse} [response] AutocompleteResponse
                  */
 
                 /**
-                 * Calls AutoComplete.
-                 * @function autoComplete
+                 * Calls Autocomplete.
+                 * @function autocomplete
                  * @memberof clutch.resolver.v1.ResolverAPI
                  * @instance
                  * @param {clutch.resolver.v1.IAutocompleteRequest} request AutocompleteRequest message or plain object
-                 * @param {clutch.resolver.v1.ResolverAPI.AutoCompleteCallback} callback Node-style callback called with the error, if any, and AutocompleteResponse
+                 * @param {clutch.resolver.v1.ResolverAPI.AutocompleteCallback} callback Node-style callback called with the error, if any, and AutocompleteResponse
                  * @returns {undefined}
                  * @variation 1
                  */
-                Object.defineProperty(ResolverAPI.prototype.autoComplete = function autoComplete(request, callback) {
-                    return this.rpcCall(autoComplete, $root.clutch.resolver.v1.AutocompleteRequest, $root.clutch.resolver.v1.AutocompleteResponse, request, callback);
-                }, "name", { value: "AutoComplete" });
+                Object.defineProperty(ResolverAPI.prototype.autocomplete = function autocomplete(request, callback) {
+                    return this.rpcCall(autocomplete, $root.clutch.resolver.v1.AutocompleteRequest, $root.clutch.resolver.v1.AutocompleteResponse, request, callback);
+                }, "name", { value: "Autocomplete" });
 
                 /**
-                 * Calls AutoComplete.
-                 * @function autoComplete
+                 * Calls Autocomplete.
+                 * @function autocomplete
                  * @memberof clutch.resolver.v1.ResolverAPI
                  * @instance
                  * @param {clutch.resolver.v1.IAutocompleteRequest} request AutocompleteRequest message or plain object
