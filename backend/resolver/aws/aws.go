@@ -151,7 +151,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	}
 }
 
-func (r *res) AutoComplete(ctx context.Context, typeURL, search string, limit uint64) ([]string, error) {
+func (r *res) AutoComplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResponse_AutocompleteResult, error) {
 	if r.topology == nil {
 		return nil, fmt.Errorf("to use the autocomplete api you must first setup the topology service")
 	}
@@ -181,9 +181,12 @@ func (r *res) AutoComplete(ctx context.Context, typeURL, search string, limit ui
 		return nil, err
 	}
 
-	autoCompleteValue := make([]string, len(results))
-	for _, r := range results {
-		autoCompleteValue = append(autoCompleteValue, r.Id)
+	autoCompleteValue := make([]*resolverv1.AutocompleteResponse_AutocompleteResult, len(results))
+	for i, r := range results {
+		autoCompleteValue[i] = &resolverv1.AutocompleteResponse_AutocompleteResult{
+			Id:       r.Id,
+			Metadata: r.Metadata,
+		}
 	}
 
 	return autoCompleteValue, nil
