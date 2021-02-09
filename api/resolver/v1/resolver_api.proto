@@ -54,7 +54,7 @@ message AutocompleteRequest {
 message AutocompleteResponse {
   message AutocompleteResult {
     string id = 1;
-    map<string, google.protobuf.Value> metadata = 2;
+    string label = 2;
   }
 
   repeated AutocompleteResult results = 1;

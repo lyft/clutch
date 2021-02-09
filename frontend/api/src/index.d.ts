@@ -12627,8 +12627,8 @@ export namespace clutch {
                     /** AutocompleteResult id */
                     id?: (string|null);
 
-                    /** AutocompleteResult metadata */
-                    metadata?: ({ [k: string]: google.protobuf.IValue }|null);
+                    /** AutocompleteResult label */
+                    label?: (string|null);
                 }
 
                 /** Represents an AutocompleteResult. */
@@ -12643,8 +12643,8 @@ export namespace clutch {
                     /** AutocompleteResult id. */
                     public id: string;
 
-                    /** AutocompleteResult metadata. */
-                    public metadata: { [k: string]: google.protobuf.IValue };
+                    /** AutocompleteResult label. */
+                    public label: string;
 
                     /**
                      * Verifies an AutocompleteResult message.

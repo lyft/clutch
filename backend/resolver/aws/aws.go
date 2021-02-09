@@ -186,8 +186,8 @@ func (r *res) AutoComplete(ctx context.Context, typeURL, search string, limit ui
 	autoCompleteValue := make([]*resolverv1.AutocompleteResponse_AutocompleteResult, len(results))
 	for i, r := range results {
 		autoCompleteValue[i] = &resolverv1.AutocompleteResponse_AutocompleteResult{
-			Id:       r.Id,
-			Metadata: r.Metadata,
+			Id:    r.Id,
+			Label: "meow",
 		}
 	}
 

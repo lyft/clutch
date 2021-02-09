@@ -34,6 +34,7 @@ modules:
   - name: clutch.module.envoytriage
   - name: clutch.module.k8s
   - name: clutch.module.kinesis
+  - name: clutch.module.topology
 services:
   - name: clutch.service.db.postgres
     typed_config:
@@ -62,6 +63,7 @@ services:
   - name: clutch.service.topology
     typed_config:
       "@type": types.google.com/clutch.config.service.topology.v1.Config
+      # cache: {}
 resolvers:
   - name: clutch.resolver.aws
   - name: clutch.resolver.k8s

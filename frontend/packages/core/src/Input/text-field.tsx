@@ -177,7 +177,12 @@ export const TextField = ({
         debug
         freeSolo
         options={autoCompleteOptions}
-        getOptionLabel={option => option}
+        getOptionLabel={option => option.id}
+        renderOption={option => (
+          <span>
+            {option.id} --- {option.label}
+          </span>
+        )}
         renderInput={params => (
           <StyledTextField
             {...params}
@@ -195,13 +200,13 @@ export const TextField = ({
         )}
         onInputChange={(event, value, reason) => {
           // _.debounce(() => {
-            autocompleteCallback(value)
-              .then(data => {
-                setAutoCompleteOptions(data.results);
-              })
-              .catch(err => {
-                helpText = err;
-              });
+          autocompleteCallback(value)
+            .then(data => {
+              setAutoCompleteOptions(data.results);
+            })
+            .catch(err => {
+              helpText = err;
+            });
           // }, 500);
         }}
       />
