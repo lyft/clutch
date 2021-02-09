@@ -13453,20 +13453,20 @@ export const clutch = $root.clutch = (() => {
                      */
                     const experimentation = {};
 
-                    experimentation.rtds = (function() {
+                    experimentation.xds = (function() {
 
                         /**
-                         * Namespace rtds.
+                         * Namespace xds.
                          * @memberof clutch.config.module.chaos.experimentation
                          * @namespace
                          */
-                        const rtds = {};
+                        const xds = {};
 
-                        rtds.v1 = (function() {
+                        xds.v1 = (function() {
 
                             /**
                              * Namespace v1.
-                             * @memberof clutch.config.module.chaos.experimentation.rtds
+                             * @memberof clutch.config.module.chaos.experimentation.xds
                              * @namespace
                              */
                             const v1 = {};
@@ -13475,7 +13475,7 @@ export const clutch = $root.clutch = (() => {
 
                                 /**
                                  * Properties of a Config.
-                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1
                                  * @interface IConfig
                                  * @property {string|null} [rtdsLayerName] Config rtdsLayerName
                                  * @property {google.protobuf.IDuration|null} [cacheRefreshInterval] Config cacheRefreshInterval
@@ -13487,11 +13487,11 @@ export const clutch = $root.clutch = (() => {
 
                                 /**
                                  * Constructs a new Config.
-                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1
                                  * @classdesc Represents a Config.
                                  * @implements IConfig
                                  * @constructor
-                                 * @param {clutch.config.module.chaos.experimentation.rtds.v1.IConfig=} [properties] Properties to set
+                                 * @param {clutch.config.module.chaos.experimentation.xds.v1.IConfig=} [properties] Properties to set
                                  */
                                 function Config(properties) {
                                     if (properties)
@@ -13503,7 +13503,7 @@ export const clutch = $root.clutch = (() => {
                                 /**
                                  * Config rtdsLayerName.
                                  * @member {string} rtdsLayerName
-                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
                                  * @instance
                                  */
                                 Config.prototype.rtdsLayerName = "";
@@ -13511,7 +13511,7 @@ export const clutch = $root.clutch = (() => {
                                 /**
                                  * Config cacheRefreshInterval.
                                  * @member {google.protobuf.IDuration|null|undefined} cacheRefreshInterval
-                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
                                  * @instance
                                  */
                                 Config.prototype.cacheRefreshInterval = null;
@@ -13519,7 +13519,7 @@ export const clutch = $root.clutch = (() => {
                                 /**
                                  * Config ingressFaultRuntimePrefix.
                                  * @member {string} ingressFaultRuntimePrefix
-                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
                                  * @instance
                                  */
                                 Config.prototype.ingressFaultRuntimePrefix = "";
@@ -13527,7 +13527,7 @@ export const clutch = $root.clutch = (() => {
                                 /**
                                  * Config egressFaultRuntimePrefix.
                                  * @member {string} egressFaultRuntimePrefix
-                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
                                  * @instance
                                  */
                                 Config.prototype.egressFaultRuntimePrefix = "";
@@ -13535,7 +13535,7 @@ export const clutch = $root.clutch = (() => {
                                 /**
                                  * Config resourceTtl.
                                  * @member {google.protobuf.IDuration|null|undefined} resourceTtl
-                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
                                  * @instance
                                  */
                                 Config.prototype.resourceTtl = null;
@@ -13543,7 +13543,7 @@ export const clutch = $root.clutch = (() => {
                                 /**
                                  * Config heartbeatInterval.
                                  * @member {google.protobuf.IDuration|null|undefined} heartbeatInterval
-                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
                                  * @instance
                                  */
                                 Config.prototype.heartbeatInterval = null;
@@ -13551,7 +13551,7 @@ export const clutch = $root.clutch = (() => {
                                 /**
                                  * Verifies a Config message.
                                  * @function verify
-                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
                                  * @static
                                  * @param {Object.<string,*>} message Plain object to verify
                                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
@@ -13589,20 +13589,20 @@ export const clutch = $root.clutch = (() => {
                                 /**
                                  * Creates a Config message from a plain object. Also converts values to their respective internal types.
                                  * @function fromObject
-                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
                                  * @static
                                  * @param {Object.<string,*>} object Plain object
-                                 * @returns {clutch.config.module.chaos.experimentation.rtds.v1.Config} Config
+                                 * @returns {clutch.config.module.chaos.experimentation.xds.v1.Config} Config
                                  */
                                 Config.fromObject = function fromObject(object) {
-                                    if (object instanceof $root.clutch.config.module.chaos.experimentation.rtds.v1.Config)
+                                    if (object instanceof $root.clutch.config.module.chaos.experimentation.xds.v1.Config)
                                         return object;
-                                    let message = new $root.clutch.config.module.chaos.experimentation.rtds.v1.Config();
+                                    let message = new $root.clutch.config.module.chaos.experimentation.xds.v1.Config();
                                     if (object.rtdsLayerName != null)
                                         message.rtdsLayerName = String(object.rtdsLayerName);
                                     if (object.cacheRefreshInterval != null) {
                                         if (typeof object.cacheRefreshInterval !== "object")
-                                            throw TypeError(".clutch.config.module.chaos.experimentation.rtds.v1.Config.cacheRefreshInterval: object expected");
+                                            throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.cacheRefreshInterval: object expected");
                                         message.cacheRefreshInterval = $root.google.protobuf.Duration.fromObject(object.cacheRefreshInterval);
                                     }
                                     if (object.ingressFaultRuntimePrefix != null)
@@ -13611,12 +13611,12 @@ export const clutch = $root.clutch = (() => {
                                         message.egressFaultRuntimePrefix = String(object.egressFaultRuntimePrefix);
                                     if (object.resourceTtl != null) {
                                         if (typeof object.resourceTtl !== "object")
-                                            throw TypeError(".clutch.config.module.chaos.experimentation.rtds.v1.Config.resourceTtl: object expected");
+                                            throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.resourceTtl: object expected");
                                         message.resourceTtl = $root.google.protobuf.Duration.fromObject(object.resourceTtl);
                                     }
                                     if (object.heartbeatInterval != null) {
                                         if (typeof object.heartbeatInterval !== "object")
-                                            throw TypeError(".clutch.config.module.chaos.experimentation.rtds.v1.Config.heartbeatInterval: object expected");
+                                            throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.heartbeatInterval: object expected");
                                         message.heartbeatInterval = $root.google.protobuf.Duration.fromObject(object.heartbeatInterval);
                                     }
                                     return message;
@@ -13625,9 +13625,9 @@ export const clutch = $root.clutch = (() => {
                                 /**
                                  * Creates a plain object from a Config message. Also converts values to other types if specified.
                                  * @function toObject
-                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
                                  * @static
-                                 * @param {clutch.config.module.chaos.experimentation.rtds.v1.Config} message Config
+                                 * @param {clutch.config.module.chaos.experimentation.xds.v1.Config} message Config
                                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                                  * @returns {Object.<string,*>} Plain object
                                  */
@@ -13661,7 +13661,7 @@ export const clutch = $root.clutch = (() => {
                                 /**
                                  * Converts this Config to JSON.
                                  * @function toJSON
-                                 * @memberof clutch.config.module.chaos.experimentation.rtds.v1.Config
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
                                  * @instance
                                  * @returns {Object.<string,*>} JSON object
                                  */
@@ -13675,7 +13675,7 @@ export const clutch = $root.clutch = (() => {
                             return v1;
                         })();
 
-                        return rtds;
+                        return xds;
                     })();
 
                     return experimentation;
