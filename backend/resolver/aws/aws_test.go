@@ -9,6 +9,7 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
 
+	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/mock/service/awsmock"
 	"github.com/lyft/clutch/backend/mock/service/topologymock"
@@ -61,22 +62,34 @@ func TestAutoCompleteResults(t *testing.T) {
 	awsResolver := res{
 		topology: &mockTopologySearch{
 			autoCompleteResults: []*topologyv1.Resource{
-				&topologyv1.Resource{
+				{
 					Id: "meow",
 				},
-				&topologyv1.Resource{
+				{
 					Id: "cat",
 				},
-				&topologyv1.Resource{
+				{
 					Id: "yawn",
 				},
 			},
 		},
 	}
 
+	expect := []*resolverv1.AutocompleteResponse_AutocompleteResult{
+		{
+			Id: "meow",
+		},
+		{
+			Id: "cat",
+		},
+		{
+			Id: "yawn",
+		},
+	}
+
 	results, err := awsResolver.AutoComplete(context.Background(), "type_url", "search", 0)
 	assert.NoError(t, err)
-	assert.Equal(t, []string{"meow", "cat", "yawn"}, results)
+	assert.Equal(t, expect, results)
 }
 
 type mockTopologySearch struct {
