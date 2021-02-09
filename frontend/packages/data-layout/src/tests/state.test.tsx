@@ -6,13 +6,13 @@ describe("Manager State", () => {
       let state = {};
       state = reducer(state, {
         type: ManagerAction.SET,
-        payload: { key: "layout1", value: {update: "value"} },
+        payload: { key: "layout1", value: { update: "value" } },
       });
       state = reducer(state, {
         type: ManagerAction.HYDRATE_END,
-        payload: { key: "layout1", result: {hydrate: "value"} },
+        payload: { key: "layout1", result: { hydrate: "value" } },
       });
-      expect(state["layout1"].data).toStrictEqual({update: "value", hydrate: "value"});
+      expect(state.layout1.data).toStrictEqual({ update: "value", hydrate: "value" });
     });
   });
 });
