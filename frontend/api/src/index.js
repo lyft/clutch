@@ -34183,7 +34183,7 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.resolver.v1.AutocompleteResponse
                      * @interface IAutocompleteResult
                      * @property {string|null} [id] AutocompleteResult id
-                     * @property {Object.<string,google.protobuf.IValue>|null} [metadata] AutocompleteResult metadata
+                     * @property {string|null} [label] AutocompleteResult label
                      */
 
                     /**
@@ -34195,7 +34195,6 @@ export const clutch = $root.clutch = (() => {
                      * @param {clutch.resolver.v1.AutocompleteResponse.IAutocompleteResult=} [properties] Properties to set
                      */
                     function AutocompleteResult(properties) {
-                        this.metadata = {};
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -34211,12 +34210,12 @@ export const clutch = $root.clutch = (() => {
                     AutocompleteResult.prototype.id = "";
 
                     /**
-                     * AutocompleteResult metadata.
-                     * @member {Object.<string,google.protobuf.IValue>} metadata
+                     * AutocompleteResult label.
+                     * @member {string} label
                      * @memberof clutch.resolver.v1.AutocompleteResponse.AutocompleteResult
                      * @instance
                      */
-                    AutocompleteResult.prototype.metadata = $util.emptyObject;
+                    AutocompleteResult.prototype.label = "";
 
                     /**
                      * Verifies an AutocompleteResult message.
@@ -34232,16 +34231,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.id != null && message.hasOwnProperty("id"))
                             if (!$util.isString(message.id))
                                 return "id: string expected";
-                        if (message.metadata != null && message.hasOwnProperty("metadata")) {
-                            if (!$util.isObject(message.metadata))
-                                return "metadata: object expected";
-                            let key = Object.keys(message.metadata);
-                            for (let i = 0; i < key.length; ++i) {
-                                let error = $root.google.protobuf.Value.verify(message.metadata[key[i]]);
-                                if (error)
-                                    return "metadata." + error;
-                            }
-                        }
+                        if (message.label != null && message.hasOwnProperty("label"))
+                            if (!$util.isString(message.label))
+                                return "label: string expected";
                         return null;
                     };
 
@@ -34259,16 +34251,8 @@ export const clutch = $root.clutch = (() => {
                         let message = new $root.clutch.resolver.v1.AutocompleteResponse.AutocompleteResult();
                         if (object.id != null)
                             message.id = String(object.id);
-                        if (object.metadata) {
-                            if (typeof object.metadata !== "object")
-                                throw TypeError(".clutch.resolver.v1.AutocompleteResponse.AutocompleteResult.metadata: object expected");
-                            message.metadata = {};
-                            for (let keys = Object.keys(object.metadata), i = 0; i < keys.length; ++i) {
-                                if (typeof object.metadata[keys[i]] !== "object")
-                                    throw TypeError(".clutch.resolver.v1.AutocompleteResponse.AutocompleteResult.metadata: object expected");
-                                message.metadata[keys[i]] = $root.google.protobuf.Value.fromObject(object.metadata[keys[i]]);
-                            }
-                        }
+                        if (object.label != null)
+                            message.label = String(object.label);
                         return message;
                     };
 
@@ -34285,18 +34269,14 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.objects || options.defaults)
-                            object.metadata = {};
-                        if (options.defaults)
+                        if (options.defaults) {
                             object.id = "";
+                            object.label = "";
+                        }
                         if (message.id != null && message.hasOwnProperty("id"))
                             object.id = message.id;
-                        let keys2;
-                        if (message.metadata && (keys2 = Object.keys(message.metadata)).length) {
-                            object.metadata = {};
-                            for (let j = 0; j < keys2.length; ++j)
-                                object.metadata[keys2[j]] = $root.google.protobuf.Value.toObject(message.metadata[keys2[j]], options);
-                        }
+                        if (message.label != null && message.hasOwnProperty("label"))
+                            object.label = message.label;
                         return object;
                     };
 
