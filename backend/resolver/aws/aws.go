@@ -156,6 +156,8 @@ func (r *res) AutoComplete(ctx context.Context, typeURL, search string, limit ui
 		return nil, fmt.Errorf("to use the autocomplete api you must first setup the topology service")
 	}
 
+	// TODO (mcutalo): Before implementing another resource to support autocomplete
+	// consider abstracting this into the topology service.
 	searchRequest := &topologyv1.SearchRequest{
 		PageToken: "0",
 		Sort: &topologyv1.SearchRequest_Sort{
