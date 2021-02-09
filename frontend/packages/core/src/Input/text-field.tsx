@@ -7,6 +7,7 @@ import type {
 import { IconButton as MuiIconButton, TextField as MuiTextField } from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/Error";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import _ from "lodash";
 
 const KEY_ENTER = 13;
 
@@ -175,7 +176,6 @@ export const TextField = ({
         id="query"
         debug
         freeSolo
-        fullWidth
         options={autoCompleteOptions}
         getOptionLabel={option => option}
         renderInput={params => (
@@ -194,13 +194,15 @@ export const TextField = ({
           />
         )}
         onInputChange={(event, value, reason) => {
-          autocompleteCallback(value)
-            .then(data => {
-              setAutoCompleteOptions(data.results);
-            })
-            .catch(err => {
-              helpText = err;
-            });
+          // _.debounce(() => {
+            autocompleteCallback(value)
+              .then(data => {
+                setAutoCompleteOptions(data.results);
+              })
+              .catch(err => {
+                helpText = err;
+              });
+          // }, 500);
         }}
       />
     );

@@ -14,7 +14,7 @@ import {
 import { Button } from "../button";
 import { Error } from "../Feedback";
 import { TextField } from "../Input/text-field";
-import { client, parseErrorMessage } from "../network";
+import { client } from "../network";
 
 import type { ChangeEventTarget } from "./hydrator";
 import { convertChangeEvent, hydrateField } from "./hydrator";
