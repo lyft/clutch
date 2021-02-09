@@ -193,6 +193,6 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	return handler.Results(limit)
 }
 
-func (r *res) AutoComplete(ctx context.Context, typeURLs, search string) ([]string, error) {
-	return []string{}, nil
+func (r *res) AutoComplete(ctx context.Context, typeURLs, search string, limit uint64) ([]*resolverv1.AutocompleteResponse_AutocompleteResult, error) {
+	return []*resolverv1.AutocompleteResponse_AutocompleteResult{}, nil
 }

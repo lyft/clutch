@@ -8,6 +8,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
 import "google/rpc/status.proto";
 import "validate/validate.proto";
+import "google/protobuf/struct.proto";
 
 import "api/v1/annotations.proto";
 import "resolver/v1/schema.proto";
@@ -34,7 +35,7 @@ service ResolverAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
-  rpc AutoComplete(AutoCompleteRequest) returns (AutoCompleteResponse) {
+  rpc AutoComplete(AutocompleteRequest) returns (AutocompleteResponse) {
     option (google.api.http) = {
       post : "/v1/resolver/autocomplete"
       body : "*"
@@ -43,14 +44,20 @@ service ResolverAPI {
   }
 }
 
-message AutoCompleteRequest {
+message AutocompleteRequest {
   // The type URL of the desired result.
   string want = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string search = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  uint64 result_limit = 3;
 }
 
-message AutoCompleteResponse {
-  repeated string results = 1;
+message AutocompleteResponse {
+  message AutocompleteResult {
+    string id = 1;
+    map<string, google.protobuf.Value> metadata = 2;
+  }
+
+  repeated AutocompleteResult results = 1;
 }
 
 message ResolveRequest {

@@ -74,7 +74,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 	if ok {
 		topologyService, ok = topologySvc.(topology.Service)
 		if !ok {
-			return nil, errors.New("topology service was no the correct type")
+			return nil, errors.New("topology service was not the correct type")
 		}
 		logger.Info("enabling autocomplete api for the aws resolver")
 	}
@@ -151,14 +151,15 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	}
 }
 
-func (r *res) AutoComplete(ctx context.Context, typeURL, search string) ([]string, error) {
+func (r *res) AutoComplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResponse_AutocompleteResult, error) {
 	if r.topology == nil {
-		return []string{}, fmt.Errorf("to use the autocomplete api you must first setup the topology service")
+		return nil, fmt.Errorf("to use the autocomplete api you must first setup the topology service")
 	}
 
-	results, _, err := r.topology.Search(ctx, &topologyv1.SearchRequest{
+	// TODO (mcutalo): Before implementing another resource to support autocomplete
+	// consider abstracting this into the topology service.
+	searchRequest := &topologyv1.SearchRequest{
 		PageToken: "0",
-		Limit:     resolver.AutoCompleteAPILimit,
 		Sort: &topologyv1.SearchRequest_Sort{
 			Direction: topologyv1.SearchRequest_Sort_ASCENDING,
 			Field:     "column.id",
@@ -170,14 +171,24 @@ func (r *res) AutoComplete(ctx context.Context, typeURL, search string) ([]strin
 				Text:  search,
 			},
 		},
-	})
+	}
+
+	// Limit is optional, if one is not set we use the default set by the topology search api
+	if limit > 0 {
+		searchRequest.Limit = limit
+	}
+
+	results, _, err := r.topology.Search(ctx, searchRequest)
 	if err != nil {
 		return nil, err
 	}
 
-	autoCompleteValue := []string{}
-	for _, r := range results {
-		autoCompleteValue = append(autoCompleteValue, r.Id)
+	autoCompleteValue := make([]*resolverv1.AutocompleteResponse_AutocompleteResult, len(results))
+	for i, r := range results {
+		autoCompleteValue[i] = &resolverv1.AutocompleteResponse_AutocompleteResult{
+			Id:       r.Id,
+			Metadata: r.Metadata,
+		}
 	}
 
 	return autoCompleteValue, nil
