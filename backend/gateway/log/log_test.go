@@ -54,14 +54,13 @@ func TestGrpcStatusField(t *testing.T) {
 
 	tests := []struct {
 		err             error
-		expectedCode    int
 		expectedMsg     string
+		expectedCode    int
 		expectedDetails []string
 	}{
 		{
-			err:          errors.New("I am a regular error message"),
-			expectedMsg:  "I am a regular error message",
-			expectedCode: 2,
+			err:         errors.New("I am a conventional error message"),
+			expectedMsg: "I am a conventional error message",
 		},
 		{
 			err:          err1,
@@ -83,16 +82,17 @@ func TestGrpcStatusField(t *testing.T) {
 		logger := zap.New(
 			zapcore.NewCore(zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()), zapcore.AddSync(w), zap.DebugLevel),
 		)
-		logger.Info("test", GrpcStatusField("key", test.err))
+		logger.Info("test", NamedError("key", test.err))
 		assert.NoError(t, logger.Sync())
 		assert.NoError(t, w.Flush())
 
 		o := make(map[string]interface{})
 		assert.NoError(t, json.Unmarshal(b.Bytes(), &o))
-
-		assert.Contains(t, b.String(), strconv.Itoa(test.expectedCode))
 		assert.Contains(t, b.String(), test.expectedMsg)
 
+		if test.expectedCode != 0 {
+			assert.Contains(t, b.String(), strconv.Itoa(test.expectedCode))
+		}
 		if test.expectedDetails != nil {
 			for _, detail := range test.expectedDetails {
 				assert.Contains(t, b.String(), detail)

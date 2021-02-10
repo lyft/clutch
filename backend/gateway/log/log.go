@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 
 	"go.uber.org/zap"
-	spb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
@@ -19,22 +18,13 @@ func ProtoField(key string, m proto.Message) zap.Field {
 	return zap.Any(key, json.RawMessage(b))
 }
 
-// GrpcStatusField takes in an error and returns a zap field that logs as the embedded JSON
-// representation of a gRPC Status message.
-func GrpcStatusField(key string, err error) zap.Field {
-	var m *spb.Status
-	// the second return val is a bool reporting whether it was able to
-	// convert the input error to a Status. If false, FromError returns a new Status with
-	// codes.Unknown and the original input error message.
-	// https: //github.com/grpc/grpc-go/blob/master/status/status.go#L81
-	s, _ := status.FromError(err)
-
-	m = s.Proto()
-
-	b, err := protojson.Marshal(m)
-	if err != nil {
-		return zap.Any(key, m)
+// NamedError returns a zap field that logs as the embedded JSON representation of the error.
+// If's a gRPC error, it converts it to a Status and returns
+// the unpacked information. Otherwise, it returns the original error.
+func NamedError(key string, err error) zap.Field {
+	s, ok := status.FromError(err)
+	if !ok {
+		return zap.NamedError(key, err)
 	}
-
-	return zap.Any(key, json.RawMessage(b))
+	return ProtoField(key, s.Proto())
 }
