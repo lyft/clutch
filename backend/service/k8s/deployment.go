@@ -35,6 +35,27 @@ func (s *svc) DescribeDeployment(ctx context.Context, clientset, cluster, namesp
 	return nil, fmt.Errorf("Unable to locate Deployment")
 }
 
+func (s *svc) ListDeployments(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Deployment, error) {
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
+	if err != nil {
+		return nil, err
+	}
+
+	opts := ApplyListOptions(listOptions)
+	deploymentList, err := cs.AppsV1().Deployments(cs.Namespace()).List(ctx, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	var deployments []*k8sapiv1.Deployment
+	for _, d := range deploymentList.Items {
+		deployment := d
+		deployments = append(deployments, ProtoForDeployment(cs.Cluster(), &deployment))
+	}
+
+	return deployments, nil
+}
+
 func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1.Deployment {
 	clusterName := deployment.ClusterName
 	if clusterName == "" {
