@@ -6,6 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
+	"github.com/lyft/clutch/backend/mock/service/topologymock"
+	"github.com/lyft/clutch/backend/service"
 )
 
 func TestUpdateSchemaError(t *testing.T) {
@@ -30,4 +32,13 @@ func TestUpdateSchemaError(t *testing.T) {
 	updateSchemaError(optsSchema)
 	assert.NotNil(t, optsSchema.Error)
 	assert.Contains(t, optsSchema.Error.Message, "missing required options")
+}
+
+func TestShouldAutoCompleteBeEnabled(t *testing.T) {
+	no := shouldAutoCompleteBeEnabled()
+	assert.False(t, no)
+
+	service.Registry["clutch.service.topology"] = topologymock.New()
+	yes := shouldAutoCompleteBeEnabled()
+	assert.True(t, yes)
 }
