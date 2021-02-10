@@ -39,7 +39,7 @@ func TestProtoField(t *testing.T) {
 	assert.Contains(t, b.String(), `{"@type":"type.googleapis.com/clutch.healthcheck.v1.HealthcheckRequest"}`)
 }
 
-func TestNamedError(t *testing.T) {
+func TestNamedErrorField(t *testing.T) {
 	// a Status with no detailed appended
 	s1 := status.New(codes.PermissionDenied, "Permission denied")
 	err1 := s1.Err()
@@ -82,7 +82,7 @@ func TestNamedError(t *testing.T) {
 		logger := zap.New(
 			zapcore.NewCore(zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()), zapcore.AddSync(w), zap.DebugLevel),
 		)
-		logger.Info("test", NamedError("key", test.err))
+		logger.Info("test", NamedErrorField("key", test.err))
 		assert.NoError(t, logger.Sync())
 		assert.NoError(t, w.Flush())
 
@@ -101,7 +101,7 @@ func TestNamedError(t *testing.T) {
 	}
 }
 
-func TestError(t *testing.T) {
+func TestErrorField(t *testing.T) {
 	var b bytes.Buffer
 	w := bufio.NewWriter(&b)
 
@@ -109,7 +109,7 @@ func TestError(t *testing.T) {
 		zapcore.NewCore(zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()), zapcore.AddSync(w), zap.DebugLevel),
 	)
 
-	logger.Info("test", Error(errors.New("yikes")))
+	logger.Info("test", ErrorField(errors.New("yikes")))
 	assert.NoError(t, logger.Sync())
 	assert.NoError(t, w.Flush())
 

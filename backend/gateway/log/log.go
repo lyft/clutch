@@ -18,10 +18,10 @@ func ProtoField(key string, m proto.Message) zap.Field {
 	return zap.Any(key, json.RawMessage(b))
 }
 
-// NamedError returns a zap field that logs as the embedded JSON representation of the error.
+// NamedErrorField returns a zap field that logs as the embedded JSON representation of the error.
 // If it's a gRPC error, it converts it to a Status and returns
 // the unpacked information. Otherwise, it returns the original error.
-func NamedError(key string, err error) zap.Field {
+func NamedErrorField(key string, err error) zap.Field {
 	s, ok := status.FromError(err)
 	if !ok {
 		return zap.NamedError(key, err)
@@ -29,7 +29,7 @@ func NamedError(key string, err error) zap.Field {
 	return ProtoField(key, s.Proto())
 }
 
-// Error calls NamedError with the key "error"
-func Error(err error) zap.Field {
-	return NamedError("error", err)
+// ErrorField calls NamedErrorField with the key "error"
+func ErrorField(err error) zap.Field {
+	return NamedErrorField("error", err)
 }
