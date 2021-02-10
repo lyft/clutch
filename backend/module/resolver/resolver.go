@@ -144,7 +144,7 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 
 	// Handle option presentation for matching schemas.
 	for _, schema := range schemas {
-		if shouldAutoCompleteBeEnabled(schema.Metadata) {
+		if shouldAutoCompleteBeEnabled() {
 			if schema.Metadata.Search == nil {
 				schema.Metadata.Search = &resolverv1.SearchMetadata{}
 			}
@@ -222,15 +222,12 @@ func updateSchemaError(input *resolverv1.Schema) {
 	}
 }
 
-// Check all prerequesits for the autocomplte functionaity
-func shouldAutoCompleteBeEnabled(metadata *resolverv1.SchemaMetadata) bool {
+func shouldAutoCompleteBeEnabled() bool {
 	topologySvc, ok := service.Registry[topology.Name]
 	if ok {
 		_, ok := topologySvc.(topology.Service)
-		if !ok {
-			return false
-		}
+		return ok
 	}
 
-	return true
+	return false
 }
