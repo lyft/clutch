@@ -21,11 +21,7 @@ type ResolverAPIClient interface {
 	GetObjectSchemas(ctx context.Context, in *GetObjectSchemasRequest, opts ...grpc.CallOption) (*GetObjectSchemasResponse, error)
 	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error)
 	Resolve(ctx context.Context, in *ResolveRequest, opts ...grpc.CallOption) (*ResolveResponse, error)
-<<<<<<< HEAD
-	AutoComplete(ctx context.Context, in *AutocompleteRequest, opts ...grpc.CallOption) (*AutocompleteResponse, error)
-=======
 	Autocomplete(ctx context.Context, in *AutocompleteRequest, opts ...grpc.CallOption) (*AutocompleteResponse, error)
->>>>>>> resolver-autocomplete-api
 }
 
 type resolverAPIClient struct {
@@ -63,15 +59,9 @@ func (c *resolverAPIClient) Resolve(ctx context.Context, in *ResolveRequest, opt
 	return out, nil
 }
 
-<<<<<<< HEAD
-func (c *resolverAPIClient) AutoComplete(ctx context.Context, in *AutocompleteRequest, opts ...grpc.CallOption) (*AutocompleteResponse, error) {
-	out := new(AutocompleteResponse)
-	err := c.cc.Invoke(ctx, "/clutch.resolver.v1.ResolverAPI/AutoComplete", in, out, opts...)
-=======
 func (c *resolverAPIClient) Autocomplete(ctx context.Context, in *AutocompleteRequest, opts ...grpc.CallOption) (*AutocompleteResponse, error) {
 	out := new(AutocompleteResponse)
 	err := c.cc.Invoke(ctx, "/clutch.resolver.v1.ResolverAPI/Autocomplete", in, out, opts...)
->>>>>>> resolver-autocomplete-api
 	if err != nil {
 		return nil, err
 	}
@@ -85,11 +75,7 @@ type ResolverAPIServer interface {
 	GetObjectSchemas(context.Context, *GetObjectSchemasRequest) (*GetObjectSchemasResponse, error)
 	Search(context.Context, *SearchRequest) (*SearchResponse, error)
 	Resolve(context.Context, *ResolveRequest) (*ResolveResponse, error)
-<<<<<<< HEAD
-	AutoComplete(context.Context, *AutocompleteRequest) (*AutocompleteResponse, error)
-=======
 	Autocomplete(context.Context, *AutocompleteRequest) (*AutocompleteResponse, error)
->>>>>>> resolver-autocomplete-api
 }
 
 // UnimplementedResolverAPIServer should be embedded to have forward compatible implementations.
@@ -105,13 +91,8 @@ func (UnimplementedResolverAPIServer) Search(context.Context, *SearchRequest) (*
 func (UnimplementedResolverAPIServer) Resolve(context.Context, *ResolveRequest) (*ResolveResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Resolve not implemented")
 }
-<<<<<<< HEAD
-func (UnimplementedResolverAPIServer) AutoComplete(context.Context, *AutocompleteRequest) (*AutocompleteResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AutoComplete not implemented")
-=======
 func (UnimplementedResolverAPIServer) Autocomplete(context.Context, *AutocompleteRequest) (*AutocompleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Autocomplete not implemented")
->>>>>>> resolver-autocomplete-api
 }
 
 // UnsafeResolverAPIServer may be embedded to opt out of forward compatibility for this service.
@@ -179,26 +160,12 @@ func _ResolverAPI_Resolve_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-<<<<<<< HEAD
-func _ResolverAPI_AutoComplete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-=======
 func _ResolverAPI_Autocomplete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
->>>>>>> resolver-autocomplete-api
 	in := new(AutocompleteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-<<<<<<< HEAD
-		return srv.(ResolverAPIServer).AutoComplete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/clutch.resolver.v1.ResolverAPI/AutoComplete",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResolverAPIServer).AutoComplete(ctx, req.(*AutocompleteRequest))
-=======
 		return srv.(ResolverAPIServer).Autocomplete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
@@ -207,7 +174,6 @@ func _ResolverAPI_Autocomplete_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ResolverAPIServer).Autocomplete(ctx, req.(*AutocompleteRequest))
->>>>>>> resolver-autocomplete-api
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -232,13 +198,8 @@ var ResolverAPI_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ResolverAPI_Resolve_Handler,
 		},
 		{
-<<<<<<< HEAD
-			MethodName: "AutoComplete",
-			Handler:    _ResolverAPI_AutoComplete_Handler,
-=======
 			MethodName: "Autocomplete",
 			Handler:    _ResolverAPI_Autocomplete_Handler,
->>>>>>> resolver-autocomplete-api
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

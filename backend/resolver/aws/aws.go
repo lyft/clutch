@@ -189,7 +189,7 @@ func (r *res) AutoComplete(ctx context.Context, typeURL, search string, limit ui
 			Id: r.Id,
 			// TODO (mcutalo): Add more detailed information to the label
 			// the labels value will vary based on resource
-			Label: "",
+			Label: "meow",
 		}
 	}
 

@@ -13,10 +13,6 @@ message InstanceID {
     display_name : "instance ID"
     search : {
       enabled : true
-<<<<<<< HEAD
-      is_autocompleteable: true
-=======
->>>>>>> resolver-autocomplete-api
     }
   };
 
@@ -38,7 +34,6 @@ message AutoscalingGroupName {
     display_name : "name"
     search : {
       enabled : true
-      is_autocompleteable: true
     }
   };
 

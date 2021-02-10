@@ -9,10 +9,7 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
 
-<<<<<<< HEAD
-=======
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
->>>>>>> resolver-autocomplete-api
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/mock/service/awsmock"
 	"github.com/lyft/clutch/backend/mock/service/topologymock"

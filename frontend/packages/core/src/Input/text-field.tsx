@@ -179,9 +179,9 @@ export const TextField = ({
         options={autoCompleteOptions}
         getOptionLabel={option => option.id}
         renderOption={option => (
-          <span>
-            {option.id} --- {option.label}
-          </span>
+          <>
+            {option.id} -- {option.label}
+          </>
         )}
         renderInput={params => (
           <StyledTextField

@@ -186,11 +186,7 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 	}, nil
 }
 
-<<<<<<< HEAD
-func (r *resolverAPI) AutoComplete(ctx context.Context, req *resolverv1.AutocompleteRequest) (*resolverv1.AutocompleteResponse, error) {
-=======
 func (r *resolverAPI) Autocomplete(ctx context.Context, req *resolverv1.AutocompleteRequest) (*resolverv1.AutocompleteResponse, error) {
->>>>>>> resolver-autocomplete-api
 	var err error
 	results := []*resolverv1.AutocompleteResponse_AutocompleteResult{}
 
@@ -207,11 +203,6 @@ func (r *resolverAPI) Autocomplete(ctx context.Context, req *resolverv1.Autocomp
 		}
 	}
 
-<<<<<<< HEAD
-	// fmt.Printf("%v\n", len(results))
-
-=======
->>>>>>> resolver-autocomplete-api
 	return &resolverv1.AutocompleteResponse{
 		Results: results,
 	}, nil

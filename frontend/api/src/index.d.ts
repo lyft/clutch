@@ -13072,20 +13072,6 @@ export namespace clutch {
                 public resolve(request: clutch.resolver.v1.IResolveRequest): Promise<clutch.resolver.v1.ResolveResponse>;
 
                 /**
-<<<<<<< HEAD
-                 * Calls AutoComplete.
-                 * @param request AutocompleteRequest message or plain object
-                 * @param callback Node-style callback called with the error, if any, and AutocompleteResponse
-                 */
-                public autoComplete(request: clutch.resolver.v1.IAutocompleteRequest, callback: clutch.resolver.v1.ResolverAPI.AutoCompleteCallback): void;
-
-                /**
-                 * Calls AutoComplete.
-                 * @param request AutocompleteRequest message or plain object
-                 * @returns Promise
-                 */
-                public autoComplete(request: clutch.resolver.v1.IAutocompleteRequest): Promise<clutch.resolver.v1.AutocompleteResponse>;
-=======
                  * Calls Autocomplete.
                  * @param request AutocompleteRequest message or plain object
                  * @param callback Node-style callback called with the error, if any, and AutocompleteResponse
@@ -13098,7 +13084,6 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public autocomplete(request: clutch.resolver.v1.IAutocompleteRequest): Promise<clutch.resolver.v1.AutocompleteResponse>;
->>>>>>> resolver-autocomplete-api
             }
 
             namespace ResolverAPI {
@@ -13125,19 +13110,11 @@ export namespace clutch {
                 type ResolveCallback = (error: (Error|null), response?: clutch.resolver.v1.ResolveResponse) => void;
 
                 /**
-<<<<<<< HEAD
-                 * Callback as used by {@link clutch.resolver.v1.ResolverAPI#autoComplete}.
-                 * @param error Error, if any
-                 * @param [response] AutocompleteResponse
-                 */
-                type AutoCompleteCallback = (error: (Error|null), response?: clutch.resolver.v1.AutocompleteResponse) => void;
-=======
                  * Callback as used by {@link clutch.resolver.v1.ResolverAPI#autocomplete}.
                  * @param error Error, if any
                  * @param [response] AutocompleteResponse
                  */
                 type AutocompleteCallback = (error: (Error|null), response?: clutch.resolver.v1.AutocompleteResponse) => void;
->>>>>>> resolver-autocomplete-api
             }
 
             /** Properties of an AutocompleteRequest. */

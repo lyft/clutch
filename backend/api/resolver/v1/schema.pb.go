@@ -375,7 +375,8 @@ type SearchMetadata struct {
 	unknownFields protoimpl.UnknownFields
 
 	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	// comment some bits
+	// This field is set by the backend resolver, which acts as a feature flag.
+	// The backend
 	Autocompleteable bool `protobuf:"varint,2,opt,name=autocompleteable,proto3" json:"autocompleteable,omitempty"`
 }
 
