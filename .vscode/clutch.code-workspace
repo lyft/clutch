@@ -16,9 +16,9 @@
 			"path": "../tools"
 		},
 		{
-      "name": "ci",
-      "path": "../.github"
-    }
+			"name": "ci",
+			"path": "../.github"
+		}
 	],
 	"settings": {}
 }
