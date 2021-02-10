@@ -4,7 +4,13 @@ import type {
   InputProps as MuiInputProps,
   StandardTextFieldProps as MuiStandardTextFieldProps,
 } from "@material-ui/core";
-import { IconButton as MuiIconButton, TextField as MuiTextField } from "@material-ui/core";
+import {
+  Grid,
+  IconButton as MuiIconButton,
+  Popper as MuiPopper,
+  TextField as MuiTextField,
+  Typography,
+} from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/Error";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import _ from "lodash";
@@ -94,6 +100,41 @@ const StyledTextField = styled(BaseTextField)({
   },
 });
 
+// popper containing the search result options
+const Popper = styled(MuiPopper)({
+  ".MuiAutocomplete-paper": {
+    border: "1px solid #e7e7ea",
+    boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+  },
+  ".MuiAutocomplete-option": {
+    height: "48px",
+    padding: "0px",
+  },
+  ".MuiAutocomplete-option[data-focus='true']": {
+    background: "#ebedfb",
+  },
+  ".MuiAutocomplete-noOptions": {
+    fontSize: "14px",
+    color: "#0d1030",
+  },
+});
+
+const renderPopper = props => {
+  return <Popper {...props} />;
+};
+
+// search's result options container
+const ResultGrid = styled(Grid)({
+  height: "inherit",
+  padding: "12px 16px 12px 16px",
+});
+
+// search's result options
+const ResultLabel = styled(Typography)({
+  color: "#0d1030",
+  fontSize: "14px",
+});
+
 const IconButton = styled(MuiIconButton)({
   borderRadius: "0",
   backgroundColor: "#3548D4",
@@ -173,15 +214,20 @@ export const TextField = ({
 
     return (
       <Autocomplete
-        id="query"
-        debug
+        size="small"
         freeSolo
         options={autoCompleteOptions}
+        PopperComponent={renderPopper}
         getOptionLabel={option => option.id}
+        onKeyDown={e => onKeyDown(e)}
         renderOption={option => (
-          <>
-            {option.id} -- {option.label}
-          </>
+          <ResultGrid container alignItems="center">
+            <Grid item xs>
+              <ResultLabel>
+                {option.id} {option.label}
+              </ResultLabel>
+            </Grid>
+          </ResultGrid>
         )}
         renderInput={params => (
           <StyledTextField
