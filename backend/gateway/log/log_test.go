@@ -39,7 +39,7 @@ func TestProtoField(t *testing.T) {
 	assert.Contains(t, b.String(), `{"@type":"type.googleapis.com/clutch.healthcheck.v1.HealthcheckRequest"}`)
 }
 
-func TestGrpcStatusField(t *testing.T) {
+func TestNamedError(t *testing.T) {
 	// a Status with no detailed appended
 	s1 := status.New(codes.PermissionDenied, "Permission denied")
 	err1 := s1.Err()
@@ -59,8 +59,8 @@ func TestGrpcStatusField(t *testing.T) {
 		expectedDetails []string
 	}{
 		{
-			err:         errors.New("I am a conventional error message"),
-			expectedMsg: "I am a conventional error message",
+			err:         errors.New("yikes"),
+			expectedMsg: "yikes",
 		},
 		{
 			err:          err1,
@@ -99,4 +99,22 @@ func TestGrpcStatusField(t *testing.T) {
 			}
 		}
 	}
+}
+
+func TestError(t *testing.T) {
+	var b bytes.Buffer
+	w := bufio.NewWriter(&b)
+
+	logger := zap.New(
+		zapcore.NewCore(zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()), zapcore.AddSync(w), zap.DebugLevel),
+	)
+
+	logger.Info("test", Error(errors.New("yikes")))
+	assert.NoError(t, logger.Sync())
+	assert.NoError(t, w.Flush())
+
+	o := make(map[string]interface{})
+	assert.NoError(t, json.Unmarshal(b.Bytes(), &o))
+	assert.Contains(t, b.String(), "error")
+	assert.Contains(t, b.String(), "yikes")
 }
