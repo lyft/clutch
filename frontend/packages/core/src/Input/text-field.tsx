@@ -231,8 +231,7 @@ export const TextField = ({
         size="small"
         options={autoCompleteOptions}
         PopperComponent={renderPopper}
-        getOptionLabel={option => option.id}
-        onKeyDown={e => onKeyDown(e)}
+        getOptionLabel={option => (option.id ? option.id : option)}
         onInputChange={(e, v, r) => autoCompleteDebounce(v)}
         renderOption={option => (
           <ResultGrid container alignItems="center">
