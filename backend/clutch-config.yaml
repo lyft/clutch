@@ -63,8 +63,6 @@ services:
   - name: clutch.service.topology
     typed_config:
       "@type": types.google.com/clutch.config.service.topology.v1.Config
-      # cache:
-        # ttl: 7200s # 2 hours
 resolvers:
   - name: clutch.resolver.aws
   - name: clutch.resolver.k8s

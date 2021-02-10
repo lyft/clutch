@@ -212,20 +212,32 @@ export const TextField = ({
   if (isAutoCompleteable) {
     const [autoCompleteOptions, setAutoCompleteOptions] = React.useState([]);
 
+    const autoCompleteDebounce = React.useRef(
+      _.debounce(value => {
+        autocompleteCallback(value)
+          .then(data => {
+            setAutoCompleteOptions(data.results);
+          })
+          .catch(err => {
+            helpText = err;
+          });
+      }, 500)
+    ).current;
+
+    // TODO: support option.label in the renderOption
     return (
       <Autocomplete
-        size="small"
         freeSolo
+        size="small"
         options={autoCompleteOptions}
         PopperComponent={renderPopper}
         getOptionLabel={option => option.id}
         onKeyDown={e => onKeyDown(e)}
+        onInputChange={(e, v, r) => autoCompleteDebounce(v)}
         renderOption={option => (
           <ResultGrid container alignItems="center">
             <Grid item xs>
-              <ResultLabel>
-                {option.id} {option.label}
-              </ResultLabel>
+              <ResultLabel>{option.id}</ResultLabel>
             </Grid>
           </ResultGrid>
         )}
@@ -244,17 +256,6 @@ export const TextField = ({
             {...props}
           />
         )}
-        onInputChange={(event, value, reason) => {
-          // _.debounce(() => {
-          autocompleteCallback(value)
-            .then(data => {
-              setAutoCompleteOptions(data.results);
-            })
-            .catch(err => {
-              helpText = err;
-            });
-          // }, 500);
-        }}
       />
     );
   }
