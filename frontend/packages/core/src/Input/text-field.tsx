@@ -103,7 +103,6 @@ const StyledTextField = styled(BaseTextField)({
 // popper containing the search result options
 const Popper = styled(MuiPopper)({
   ".MuiAutocomplete-paper": {
-    border: "1px solid #e7e7ea",
     boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
   },
   ".MuiAutocomplete-option": {
