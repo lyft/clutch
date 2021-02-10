@@ -11,9 +11,7 @@ import "resolver/v1/annotations.proto";
 message InstanceID {
   option (clutch.resolver.v1.schema) = {
     display_name : "instance ID"
-    search : {
-      enabled : true
-    }
+    search : {enabled : true}
   };
 
   string id = 1 [ (clutch.resolver.v1.schema_field) = {
