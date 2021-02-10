@@ -4,11 +4,12 @@ import (
 	"context"
 	"testing"
 
-	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/stretchr/testify/assert"
 	v1beta1 "k8s.io/api/batch/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/fake"
+
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func testCronService() *svc {
