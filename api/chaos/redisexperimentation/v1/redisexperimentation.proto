@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package clutch.chaos.redisexperimentation.v1;
+
+import "validate/validate.proto";
+
+option go_package = "github.com/lyft/clutch/backend/api/chaos/redisexperimentation/v1;redisexperimentationv1";
+
+// The configuration of an Redis fault.
+message RedisFaultConfig {
+  // The targeting of the fault describing what requests are being considered for faults.
+  string service_name = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  repeated string redis_commands = 2 [ (validate.rules).repeated = {
+    min_items : 1,
+    items {string {min_bytes : 1}}
+  } ];
+
+  oneof fault {
+    option (validate.required) = true;
+
+    // The abort fault.
+    AbortFault abort_fault = 3;
+    // The latency fault.
+    LatencyFault latency_fault = 4;
+  }
+}
+
+// The definition of an abort fault.
+message AbortFault {
+  // The percentage of requests the fault should be applied to.
+  FaultPercentage percentage = 1 [ (validate.rules).message.required = true ];
+  // The HTTP status code to insert when applying an abort fault.
+  FaultAbortStatus abort_status = 2 [ (validate.rules).message.required = true ];
+}
+
+// The definition of a latency fault.
+message LatencyFault {
+  // The percentage of requests the fault should be applied to.
+  FaultPercentage percentage = 1 [ (validate.rules).message.required = true ];
+  // The latency duration to apply when applying a latency fault.
+  FaultLatencyDuration latency_duration = 2 [ (validate.rules).message.required = true ];
+}
+
+// The fault percentage controlling what percentage of requests considered for a fault injection
+// should have the fault applied.
+message FaultPercentage {
+  // The numerator of a percentage with a fixed denominator equal to 100
+  // (i.e. percentage equal to 50 results in 50/100 = 50%)
+  uint32 percentage = 1 [ (validate.rules).uint32 = {gt : 0, lte : 100} ];
+}
+
+// The abort status to apply as part of an abort fault.
+message FaultAbortStatus {
+  // The abort HTTP status.
+  uint32 http_status_code = 1 [ (validate.rules).uint32 = {gt : 99, lt : 600} ];
+}
+
+// The latency duration to apply as part of a latency fault.
+message FaultLatencyDuration {
+  // The fixed latency duration in milliseconds.
+  uint32 fixed_duration_ms = 1 [ (validate.rules).uint32.gt = 0 ];
+}

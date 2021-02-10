@@ -3586,6 +3586,335 @@ export namespace clutch {
             }
         }
 
+        /** Namespace redisexperimentation. */
+        namespace redisexperimentation {
+
+            /** Namespace v1. */
+            namespace v1 {
+
+                /** Properties of a RedisFaultConfig. */
+                interface IRedisFaultConfig {
+
+                    /** RedisFaultConfig serviceName */
+                    serviceName?: (string|null);
+
+                    /** RedisFaultConfig redisCommands */
+                    redisCommands?: (string[]|null);
+
+                    /** RedisFaultConfig abortFault */
+                    abortFault?: (clutch.chaos.redisexperimentation.v1.IAbortFault|null);
+
+                    /** RedisFaultConfig latencyFault */
+                    latencyFault?: (clutch.chaos.redisexperimentation.v1.ILatencyFault|null);
+                }
+
+                /** Represents a RedisFaultConfig. */
+                class RedisFaultConfig implements IRedisFaultConfig {
+
+                    /**
+                     * Constructs a new RedisFaultConfig.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IRedisFaultConfig);
+
+                    /** RedisFaultConfig serviceName. */
+                    public serviceName: string;
+
+                    /** RedisFaultConfig redisCommands. */
+                    public redisCommands: string[];
+
+                    /** RedisFaultConfig abortFault. */
+                    public abortFault?: (clutch.chaos.redisexperimentation.v1.IAbortFault|null);
+
+                    /** RedisFaultConfig latencyFault. */
+                    public latencyFault?: (clutch.chaos.redisexperimentation.v1.ILatencyFault|null);
+
+                    /** RedisFaultConfig fault. */
+                    public fault?: ("abortFault"|"latencyFault");
+
+                    /**
+                     * Verifies a RedisFaultConfig message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a RedisFaultConfig message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns RedisFaultConfig
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.RedisFaultConfig;
+
+                    /**
+                     * Creates a plain object from a RedisFaultConfig message. Also converts values to other types if specified.
+                     * @param message RedisFaultConfig
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.RedisFaultConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this RedisFaultConfig to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an AbortFault. */
+                interface IAbortFault {
+
+                    /** AbortFault percentage */
+                    percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
+
+                    /** AbortFault abortStatus */
+                    abortStatus?: (clutch.chaos.redisexperimentation.v1.IFaultAbortStatus|null);
+                }
+
+                /** Represents an AbortFault. */
+                class AbortFault implements IAbortFault {
+
+                    /**
+                     * Constructs a new AbortFault.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IAbortFault);
+
+                    /** AbortFault percentage. */
+                    public percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
+
+                    /** AbortFault abortStatus. */
+                    public abortStatus?: (clutch.chaos.redisexperimentation.v1.IFaultAbortStatus|null);
+
+                    /**
+                     * Verifies an AbortFault message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an AbortFault message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns AbortFault
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.AbortFault;
+
+                    /**
+                     * Creates a plain object from an AbortFault message. Also converts values to other types if specified.
+                     * @param message AbortFault
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.AbortFault, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this AbortFault to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a LatencyFault. */
+                interface ILatencyFault {
+
+                    /** LatencyFault percentage */
+                    percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
+
+                    /** LatencyFault latencyDuration */
+                    latencyDuration?: (clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration|null);
+                }
+
+                /** Represents a LatencyFault. */
+                class LatencyFault implements ILatencyFault {
+
+                    /**
+                     * Constructs a new LatencyFault.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.ILatencyFault);
+
+                    /** LatencyFault percentage. */
+                    public percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
+
+                    /** LatencyFault latencyDuration. */
+                    public latencyDuration?: (clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration|null);
+
+                    /**
+                     * Verifies a LatencyFault message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a LatencyFault message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns LatencyFault
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.LatencyFault;
+
+                    /**
+                     * Creates a plain object from a LatencyFault message. Also converts values to other types if specified.
+                     * @param message LatencyFault
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.LatencyFault, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this LatencyFault to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a FaultPercentage. */
+                interface IFaultPercentage {
+
+                    /** FaultPercentage percentage */
+                    percentage?: (number|null);
+                }
+
+                /** Represents a FaultPercentage. */
+                class FaultPercentage implements IFaultPercentage {
+
+                    /**
+                     * Constructs a new FaultPercentage.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IFaultPercentage);
+
+                    /** FaultPercentage percentage. */
+                    public percentage: number;
+
+                    /**
+                     * Verifies a FaultPercentage message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a FaultPercentage message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns FaultPercentage
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.FaultPercentage;
+
+                    /**
+                     * Creates a plain object from a FaultPercentage message. Also converts values to other types if specified.
+                     * @param message FaultPercentage
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.FaultPercentage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this FaultPercentage to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a FaultAbortStatus. */
+                interface IFaultAbortStatus {
+
+                    /** FaultAbortStatus httpStatusCode */
+                    httpStatusCode?: (number|null);
+                }
+
+                /** Represents a FaultAbortStatus. */
+                class FaultAbortStatus implements IFaultAbortStatus {
+
+                    /**
+                     * Constructs a new FaultAbortStatus.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IFaultAbortStatus);
+
+                    /** FaultAbortStatus httpStatusCode. */
+                    public httpStatusCode: number;
+
+                    /**
+                     * Verifies a FaultAbortStatus message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a FaultAbortStatus message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns FaultAbortStatus
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.FaultAbortStatus;
+
+                    /**
+                     * Creates a plain object from a FaultAbortStatus message. Also converts values to other types if specified.
+                     * @param message FaultAbortStatus
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.FaultAbortStatus, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this FaultAbortStatus to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a FaultLatencyDuration. */
+                interface IFaultLatencyDuration {
+
+                    /** FaultLatencyDuration fixedDurationMs */
+                    fixedDurationMs?: (number|null);
+                }
+
+                /** Represents a FaultLatencyDuration. */
+                class FaultLatencyDuration implements IFaultLatencyDuration {
+
+                    /**
+                     * Constructs a new FaultLatencyDuration.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration);
+
+                    /** FaultLatencyDuration fixedDurationMs. */
+                    public fixedDurationMs: number;
+
+                    /**
+                     * Verifies a FaultLatencyDuration message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a FaultLatencyDuration message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns FaultLatencyDuration
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.FaultLatencyDuration;
+
+                    /**
+                     * Creates a plain object from a FaultLatencyDuration message. Also converts values to other types if specified.
+                     * @param message FaultLatencyDuration
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.FaultLatencyDuration, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this FaultLatencyDuration to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+        }
+
         /** Namespace serverexperimentation. */
         namespace serverexperimentation {
 
