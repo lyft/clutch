@@ -31,6 +31,27 @@ func (s *svc) DescribeCronJob(ctx context.Context, clientset, cluster, namespace
 	return nil, fmt.Errorf("Unable to locate cronJob")
 }
 
+func (s *svc) ListCronJobs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.CronJob, error) {
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
+	if err != nil {
+		return nil, err
+	}
+
+	opts := ApplyListOptions(listOptions)
+	cronJobList, err := cs.BatchV1beta1().CronJobs(cs.Namespace()).List(ctx, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	var cronJobs []*k8sapiv1.CronJob
+	for _, d := range cronJobList.Items {
+		cronJob := d
+		cronJobs = append(cronJobs, ProtoForCronJob(cs.Cluster(), &cronJob))
+	}
+
+	return cronJobs, nil
+}
+
 func (s *svc) DeleteCronJob(ctx context.Context, clientset, cluster, namespace, name string) error {
 	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
