@@ -11,7 +11,7 @@ module.exports = {
           "error",
           {
             devDependencies: ["*.config.js"],
-            packageDir: [".", "../tools/"],
+            packageDir: [__dirname, path.join(__dirname, "../tools")],
           },
         ],
       },
