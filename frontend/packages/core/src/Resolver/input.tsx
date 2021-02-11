@@ -52,7 +52,7 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ inputType, schemas, submi
     setQueryData(convertChangeEvent(event).target.value);
   };
 
-  // if there is more than 1 schema dont enable autocomplete for now
+  // If there is more than 1 schema dont enable autocomplete as that is not currently supported
   let isAutoCompleteable = false;
   const autoCompleteableSchemas = schemas.map(schema => schema?.metadata?.search?.autocompleteable);
 
@@ -93,7 +93,7 @@ const SchemaDetails = styled(AccordionDetails)({
   },
 });
 
-// support OG want type
+
 const SchemaResolver = ({ schema, expanded, onClick, submitHandler }: SchemaResolverProps) => {
   const [data, setData] = React.useState({ "@type": schema.typeUrl });
 

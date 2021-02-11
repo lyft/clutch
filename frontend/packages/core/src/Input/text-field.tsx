@@ -210,7 +210,6 @@ export const TextField = ({
 
   if (isAutoCompleteable) {
     const [autoCompleteOptions, setAutoCompleteOptions] = React.useState([]);
-
     const autoCompleteDebounce = React.useRef(
       _.debounce(value => {
         autocompleteCallback(value)
@@ -223,7 +222,7 @@ export const TextField = ({
       }, 500)
     ).current;
 
-    // TODO: support option.label in the renderOption
+    // TODO (mcutalo): support option.label in the renderOption
     return (
       <Autocomplete
         freeSolo
