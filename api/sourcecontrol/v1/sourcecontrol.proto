@@ -29,7 +29,8 @@ service SourceControlAPI {
   }
 }
 
-message GetRepositoryOptionsRequest {}
+message GetRepositoryOptionsRequest {
+}
 
 // An entity encompasses members and organizations who are both owners of or contributors to source code.
 message Entity {
