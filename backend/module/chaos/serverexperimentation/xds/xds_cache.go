@@ -67,7 +67,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 			// in order to remove fault, we need to set the snapshot with empty runtime resource
 			emptyRuntimeResource := generateRTDSResource([]*experimentation.Experiment{}, rtdsConfig, ttl, logger)
 
-			err := setSnapshot(emptyRuntimeResource, cluster, snapshotCache)
+			err := setSnapshot(emptyRuntimeResource, cluster, snapshotCache, logger)
 			if err != nil {
 				logger.Errorw("Unable to unset the fault for cluster", "cluster", cluster,
 					"error", err)
@@ -77,10 +77,10 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 
 	// Create/Update experiments
 	for cluster, experiments := range clusterFaultMap {
-		logger.Infow("Injecting fault for cluster", "cluster", cluster)
+		logger.Debugw("Injecting fault for cluster", "cluster", cluster)
 
 		runtimeResource := generateRTDSResource(experiments, rtdsConfig, ttl, logger)
-		err := setSnapshot(runtimeResource, cluster, snapshotCache)
+		err := setSnapshot(runtimeResource, cluster, snapshotCache, logger)
 		if err != nil {
 			logger.Errorw("Unable to set the fault for cluster", "cluster", cluster,
 				"error", err)
@@ -88,7 +88,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 	}
 }
 
-func setSnapshot(resource []gcpTypes.ResourceWithTtl, cluster string, snapshotCache gcpCacheV3.SnapshotCache) error {
+func setSnapshot(resource []gcpTypes.ResourceWithTtl, cluster string, snapshotCache gcpCacheV3.SnapshotCache, logger *zap.SugaredLogger) error {
 	computedVersion, err := computeChecksum(resource)
 	if err != nil {
 		return err
@@ -105,6 +105,7 @@ func setSnapshot(resource []gcpTypes.ResourceWithTtl, cluster string, snapshotCa
 		return nil
 	}
 
+	logger.Infow("Setting snapshot", "cluster", cluster, "resource", resource)
 	snapshot := gcpCacheV3.NewSnapshotWithTtls(computedVersion, nil, nil, nil, nil, resource, nil)
 	err = snapshotCache.SetSnapshot(cluster, snapshot)
 	if err != nil {
