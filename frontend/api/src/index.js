@@ -13684,6 +13684,210 @@ export const clutch = $root.clutch = (() => {
                 return chaos;
             })();
 
+            module.sourcecontrol = (function() {
+
+                /**
+                 * Namespace sourcecontrol.
+                 * @memberof clutch.config.module
+                 * @namespace
+                 */
+                const sourcecontrol = {};
+
+                sourcecontrol.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.module.sourcecontrol
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    /**
+                     * Visibility enum.
+                     * @name clutch.config.module.sourcecontrol.v1.Visibility
+                     * @enum {number}
+                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                     * @property {number} PUBLIC=1 PUBLIC value
+                     * @property {number} PRIVATE=2 PRIVATE value
+                     */
+                    v1.Visibility = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "PUBLIC"] = 1;
+                        values[valuesById[2] = "PRIVATE"] = 2;
+                        return values;
+                    })();
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.module.sourcecontrol.v1
+                         * @interface IConfig
+                         * @property {Array.<string>|null} [owners] Config owners
+                         * @property {Array.<clutch.config.module.sourcecontrol.v1.Visibility>|null} [visibilityOptions] Config visibilityOptions
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.module.sourcecontrol.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.module.sourcecontrol.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            this.owners = [];
+                            this.visibilityOptions = [];
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Config owners.
+                         * @member {Array.<string>} owners
+                         * @memberof clutch.config.module.sourcecontrol.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.owners = $util.emptyArray;
+
+                        /**
+                         * Config visibilityOptions.
+                         * @member {Array.<clutch.config.module.sourcecontrol.v1.Visibility>} visibilityOptions
+                         * @memberof clutch.config.module.sourcecontrol.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.visibilityOptions = $util.emptyArray;
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.module.sourcecontrol.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.owners != null && message.hasOwnProperty("owners")) {
+                                if (!Array.isArray(message.owners))
+                                    return "owners: array expected";
+                                for (let i = 0; i < message.owners.length; ++i)
+                                    if (!$util.isString(message.owners[i]))
+                                        return "owners: string[] expected";
+                            }
+                            if (message.visibilityOptions != null && message.hasOwnProperty("visibilityOptions")) {
+                                if (!Array.isArray(message.visibilityOptions))
+                                    return "visibilityOptions: array expected";
+                                for (let i = 0; i < message.visibilityOptions.length; ++i)
+                                    switch (message.visibilityOptions[i]) {
+                                    default:
+                                        return "visibilityOptions: enum value[] expected";
+                                    case 0:
+                                    case 1:
+                                    case 2:
+                                        break;
+                                    }
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.module.sourcecontrol.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.module.sourcecontrol.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.module.sourcecontrol.v1.Config)
+                                return object;
+                            let message = new $root.clutch.config.module.sourcecontrol.v1.Config();
+                            if (object.owners) {
+                                if (!Array.isArray(object.owners))
+                                    throw TypeError(".clutch.config.module.sourcecontrol.v1.Config.owners: array expected");
+                                message.owners = [];
+                                for (let i = 0; i < object.owners.length; ++i)
+                                    message.owners[i] = String(object.owners[i]);
+                            }
+                            if (object.visibilityOptions) {
+                                if (!Array.isArray(object.visibilityOptions))
+                                    throw TypeError(".clutch.config.module.sourcecontrol.v1.Config.visibilityOptions: array expected");
+                                message.visibilityOptions = [];
+                                for (let i = 0; i < object.visibilityOptions.length; ++i)
+                                    switch (object.visibilityOptions[i]) {
+                                    default:
+                                    case "UNSPECIFIED":
+                                    case 0:
+                                        message.visibilityOptions[i] = 0;
+                                        break;
+                                    case "PUBLIC":
+                                    case 1:
+                                        message.visibilityOptions[i] = 1;
+                                        break;
+                                    case "PRIVATE":
+                                    case 2:
+                                        message.visibilityOptions[i] = 2;
+                                        break;
+                                    }
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.module.sourcecontrol.v1.Config
+                         * @static
+                         * @param {clutch.config.module.sourcecontrol.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.arrays || options.defaults) {
+                                object.owners = [];
+                                object.visibilityOptions = [];
+                            }
+                            if (message.owners && message.owners.length) {
+                                object.owners = [];
+                                for (let j = 0; j < message.owners.length; ++j)
+                                    object.owners[j] = message.owners[j];
+                            }
+                            if (message.visibilityOptions && message.visibilityOptions.length) {
+                                object.visibilityOptions = [];
+                                for (let j = 0; j < message.visibilityOptions.length; ++j)
+                                    object.visibilityOptions[j] = options.enums === String ? $root.clutch.config.module.sourcecontrol.v1.Visibility[message.visibilityOptions[j]] : message.visibilityOptions[j];
+                            }
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.module.sourcecontrol.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    return v1;
+                })();
+
+                return sourcecontrol;
+            })();
+
             return module;
         })();
 
@@ -33712,6 +33916,39 @@ export const clutch = $root.clutch = (() => {
                 (SourceControlAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = SourceControlAPI;
 
                 /**
+                 * Callback as used by {@link clutch.sourcecontrol.v1.SourceControlAPI#getRepositoryOptions}.
+                 * @memberof clutch.sourcecontrol.v1.SourceControlAPI
+                 * @typedef GetRepositoryOptionsCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.sourcecontrol.v1.GetRepositoryOptionsResponse} [response] GetRepositoryOptionsResponse
+                 */
+
+                /**
+                 * Calls GetRepositoryOptions.
+                 * @function getRepositoryOptions
+                 * @memberof clutch.sourcecontrol.v1.SourceControlAPI
+                 * @instance
+                 * @param {clutch.sourcecontrol.v1.IGetRepositoryOptionsRequest} request GetRepositoryOptionsRequest message or plain object
+                 * @param {clutch.sourcecontrol.v1.SourceControlAPI.GetRepositoryOptionsCallback} callback Node-style callback called with the error, if any, and GetRepositoryOptionsResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(SourceControlAPI.prototype.getRepositoryOptions = function getRepositoryOptions(request, callback) {
+                    return this.rpcCall(getRepositoryOptions, $root.clutch.sourcecontrol.v1.GetRepositoryOptionsRequest, $root.clutch.sourcecontrol.v1.GetRepositoryOptionsResponse, request, callback);
+                }, "name", { value: "GetRepositoryOptions" });
+
+                /**
+                 * Calls GetRepositoryOptions.
+                 * @function getRepositoryOptions
+                 * @memberof clutch.sourcecontrol.v1.SourceControlAPI
+                 * @instance
+                 * @param {clutch.sourcecontrol.v1.IGetRepositoryOptionsRequest} request GetRepositoryOptionsRequest message or plain object
+                 * @returns {Promise<clutch.sourcecontrol.v1.GetRepositoryOptionsResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
                  * Callback as used by {@link clutch.sourcecontrol.v1.SourceControlAPI#createRepository}.
                  * @memberof clutch.sourcecontrol.v1.SourceControlAPI
                  * @typedef CreateRepositoryCallback
@@ -33745,6 +33982,371 @@ export const clutch = $root.clutch = (() => {
                  */
 
                 return SourceControlAPI;
+            })();
+
+            v1.GetRepositoryOptionsRequest = (function() {
+
+                /**
+                 * Properties of a GetRepositoryOptionsRequest.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @interface IGetRepositoryOptionsRequest
+                 */
+
+                /**
+                 * Constructs a new GetRepositoryOptionsRequest.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @classdesc Represents a GetRepositoryOptionsRequest.
+                 * @implements IGetRepositoryOptionsRequest
+                 * @constructor
+                 * @param {clutch.sourcecontrol.v1.IGetRepositoryOptionsRequest=} [properties] Properties to set
+                 */
+                function GetRepositoryOptionsRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies a GetRepositoryOptionsRequest message.
+                 * @function verify
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetRepositoryOptionsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a GetRepositoryOptionsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.sourcecontrol.v1.GetRepositoryOptionsRequest} GetRepositoryOptionsRequest
+                 */
+                GetRepositoryOptionsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.sourcecontrol.v1.GetRepositoryOptionsRequest)
+                        return object;
+                    return new $root.clutch.sourcecontrol.v1.GetRepositoryOptionsRequest();
+                };
+
+                /**
+                 * Creates a plain object from a GetRepositoryOptionsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsRequest
+                 * @static
+                 * @param {clutch.sourcecontrol.v1.GetRepositoryOptionsRequest} message GetRepositoryOptionsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetRepositoryOptionsRequest.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this GetRepositoryOptionsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetRepositoryOptionsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetRepositoryOptionsRequest;
+            })();
+
+            v1.Entity = (function() {
+
+                /**
+                 * Properties of an Entity.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @interface IEntity
+                 * @property {string|null} [name] Entity name
+                 * @property {string|null} [photoUrl] Entity photoUrl
+                 */
+
+                /**
+                 * Constructs a new Entity.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @classdesc Represents an Entity.
+                 * @implements IEntity
+                 * @constructor
+                 * @param {clutch.sourcecontrol.v1.IEntity=} [properties] Properties to set
+                 */
+                function Entity(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Entity name.
+                 * @member {string} name
+                 * @memberof clutch.sourcecontrol.v1.Entity
+                 * @instance
+                 */
+                Entity.prototype.name = "";
+
+                /**
+                 * Entity photoUrl.
+                 * @member {string} photoUrl
+                 * @memberof clutch.sourcecontrol.v1.Entity
+                 * @instance
+                 */
+                Entity.prototype.photoUrl = "";
+
+                /**
+                 * Verifies an Entity message.
+                 * @function verify
+                 * @memberof clutch.sourcecontrol.v1.Entity
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Entity.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.photoUrl != null && message.hasOwnProperty("photoUrl"))
+                        if (!$util.isString(message.photoUrl))
+                            return "photoUrl: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an Entity message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.sourcecontrol.v1.Entity
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.sourcecontrol.v1.Entity} Entity
+                 */
+                Entity.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.sourcecontrol.v1.Entity)
+                        return object;
+                    let message = new $root.clutch.sourcecontrol.v1.Entity();
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.photoUrl != null)
+                        message.photoUrl = String(object.photoUrl);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an Entity message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.sourcecontrol.v1.Entity
+                 * @static
+                 * @param {clutch.sourcecontrol.v1.Entity} message Entity
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Entity.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.name = "";
+                        object.photoUrl = "";
+                    }
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.photoUrl != null && message.hasOwnProperty("photoUrl"))
+                        object.photoUrl = message.photoUrl;
+                    return object;
+                };
+
+                /**
+                 * Converts this Entity to JSON.
+                 * @function toJSON
+                 * @memberof clutch.sourcecontrol.v1.Entity
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Entity.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Entity;
+            })();
+
+            v1.GetRepositoryOptionsResponse = (function() {
+
+                /**
+                 * Properties of a GetRepositoryOptionsResponse.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @interface IGetRepositoryOptionsResponse
+                 * @property {Array.<clutch.sourcecontrol.v1.IEntity>|null} [availableOwners] GetRepositoryOptionsResponse availableOwners
+                 * @property {Array.<clutch.config.module.sourcecontrol.v1.Visibility>|null} [visibilityOptions] GetRepositoryOptionsResponse visibilityOptions
+                 */
+
+                /**
+                 * Constructs a new GetRepositoryOptionsResponse.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @classdesc Represents a GetRepositoryOptionsResponse.
+                 * @implements IGetRepositoryOptionsResponse
+                 * @constructor
+                 * @param {clutch.sourcecontrol.v1.IGetRepositoryOptionsResponse=} [properties] Properties to set
+                 */
+                function GetRepositoryOptionsResponse(properties) {
+                    this.availableOwners = [];
+                    this.visibilityOptions = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetRepositoryOptionsResponse availableOwners.
+                 * @member {Array.<clutch.sourcecontrol.v1.IEntity>} availableOwners
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsResponse
+                 * @instance
+                 */
+                GetRepositoryOptionsResponse.prototype.availableOwners = $util.emptyArray;
+
+                /**
+                 * GetRepositoryOptionsResponse visibilityOptions.
+                 * @member {Array.<clutch.config.module.sourcecontrol.v1.Visibility>} visibilityOptions
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsResponse
+                 * @instance
+                 */
+                GetRepositoryOptionsResponse.prototype.visibilityOptions = $util.emptyArray;
+
+                /**
+                 * Verifies a GetRepositoryOptionsResponse message.
+                 * @function verify
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetRepositoryOptionsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.availableOwners != null && message.hasOwnProperty("availableOwners")) {
+                        if (!Array.isArray(message.availableOwners))
+                            return "availableOwners: array expected";
+                        for (let i = 0; i < message.availableOwners.length; ++i) {
+                            let error = $root.clutch.sourcecontrol.v1.Entity.verify(message.availableOwners[i]);
+                            if (error)
+                                return "availableOwners." + error;
+                        }
+                    }
+                    if (message.visibilityOptions != null && message.hasOwnProperty("visibilityOptions")) {
+                        if (!Array.isArray(message.visibilityOptions))
+                            return "visibilityOptions: array expected";
+                        for (let i = 0; i < message.visibilityOptions.length; ++i)
+                            switch (message.visibilityOptions[i]) {
+                            default:
+                                return "visibilityOptions: enum value[] expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                                break;
+                            }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a GetRepositoryOptionsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.sourcecontrol.v1.GetRepositoryOptionsResponse} GetRepositoryOptionsResponse
+                 */
+                GetRepositoryOptionsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.sourcecontrol.v1.GetRepositoryOptionsResponse)
+                        return object;
+                    let message = new $root.clutch.sourcecontrol.v1.GetRepositoryOptionsResponse();
+                    if (object.availableOwners) {
+                        if (!Array.isArray(object.availableOwners))
+                            throw TypeError(".clutch.sourcecontrol.v1.GetRepositoryOptionsResponse.availableOwners: array expected");
+                        message.availableOwners = [];
+                        for (let i = 0; i < object.availableOwners.length; ++i) {
+                            if (typeof object.availableOwners[i] !== "object")
+                                throw TypeError(".clutch.sourcecontrol.v1.GetRepositoryOptionsResponse.availableOwners: object expected");
+                            message.availableOwners[i] = $root.clutch.sourcecontrol.v1.Entity.fromObject(object.availableOwners[i]);
+                        }
+                    }
+                    if (object.visibilityOptions) {
+                        if (!Array.isArray(object.visibilityOptions))
+                            throw TypeError(".clutch.sourcecontrol.v1.GetRepositoryOptionsResponse.visibilityOptions: array expected");
+                        message.visibilityOptions = [];
+                        for (let i = 0; i < object.visibilityOptions.length; ++i)
+                            switch (object.visibilityOptions[i]) {
+                            default:
+                            case "UNSPECIFIED":
+                            case 0:
+                                message.visibilityOptions[i] = 0;
+                                break;
+                            case "PUBLIC":
+                            case 1:
+                                message.visibilityOptions[i] = 1;
+                                break;
+                            case "PRIVATE":
+                            case 2:
+                                message.visibilityOptions[i] = 2;
+                                break;
+                            }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetRepositoryOptionsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsResponse
+                 * @static
+                 * @param {clutch.sourcecontrol.v1.GetRepositoryOptionsResponse} message GetRepositoryOptionsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetRepositoryOptionsResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults) {
+                        object.availableOwners = [];
+                        object.visibilityOptions = [];
+                    }
+                    if (message.availableOwners && message.availableOwners.length) {
+                        object.availableOwners = [];
+                        for (let j = 0; j < message.availableOwners.length; ++j)
+                            object.availableOwners[j] = $root.clutch.sourcecontrol.v1.Entity.toObject(message.availableOwners[j], options);
+                    }
+                    if (message.visibilityOptions && message.visibilityOptions.length) {
+                        object.visibilityOptions = [];
+                        for (let j = 0; j < message.visibilityOptions.length; ++j)
+                            object.visibilityOptions[j] = options.enums === String ? $root.clutch.config.module.sourcecontrol.v1.Visibility[message.visibilityOptions[j]] : message.visibilityOptions[j];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this GetRepositoryOptionsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetRepositoryOptionsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetRepositoryOptionsResponse;
             })();
 
             v1.CreateRepositoryRequest = (function() {

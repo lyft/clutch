@@ -5763,6 +5763,75 @@ export namespace clutch {
                     }
                 }
             }
+
+            /** Namespace sourcecontrol. */
+            namespace sourcecontrol {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Visibility enum. */
+                    enum Visibility {
+                        UNSPECIFIED = 0,
+                        PUBLIC = 1,
+                        PRIVATE = 2
+                    }
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+
+                        /** Config owners */
+                        owners?: (string[]|null);
+
+                        /** Config visibilityOptions */
+                        visibilityOptions?: (clutch.config.module.sourcecontrol.v1.Visibility[]|null);
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.module.sourcecontrol.v1.IConfig);
+
+                        /** Config owners. */
+                        public owners: string[];
+
+                        /** Config visibilityOptions. */
+                        public visibilityOptions: clutch.config.module.sourcecontrol.v1.Visibility[];
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.sourcecontrol.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.module.sourcecontrol.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
         }
 
         /** Namespace service. */
@@ -14231,6 +14300,20 @@ export namespace clutch {
                 constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
 
                 /**
+                 * Calls GetRepositoryOptions.
+                 * @param request GetRepositoryOptionsRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and GetRepositoryOptionsResponse
+                 */
+                public getRepositoryOptions(request: clutch.sourcecontrol.v1.IGetRepositoryOptionsRequest, callback: clutch.sourcecontrol.v1.SourceControlAPI.GetRepositoryOptionsCallback): void;
+
+                /**
+                 * Calls GetRepositoryOptions.
+                 * @param request GetRepositoryOptionsRequest message or plain object
+                 * @returns Promise
+                 */
+                public getRepositoryOptions(request: clutch.sourcecontrol.v1.IGetRepositoryOptionsRequest): Promise<clutch.sourcecontrol.v1.GetRepositoryOptionsResponse>;
+
+                /**
                  * Calls CreateRepository.
                  * @param request CreateRepositoryRequest message or plain object
                  * @param callback Node-style callback called with the error, if any, and CreateRepositoryResponse
@@ -14248,11 +14331,168 @@ export namespace clutch {
             namespace SourceControlAPI {
 
                 /**
+                 * Callback as used by {@link clutch.sourcecontrol.v1.SourceControlAPI#getRepositoryOptions}.
+                 * @param error Error, if any
+                 * @param [response] GetRepositoryOptionsResponse
+                 */
+                type GetRepositoryOptionsCallback = (error: (Error|null), response?: clutch.sourcecontrol.v1.GetRepositoryOptionsResponse) => void;
+
+                /**
                  * Callback as used by {@link clutch.sourcecontrol.v1.SourceControlAPI#createRepository}.
                  * @param error Error, if any
                  * @param [response] CreateRepositoryResponse
                  */
                 type CreateRepositoryCallback = (error: (Error|null), response?: clutch.sourcecontrol.v1.CreateRepositoryResponse) => void;
+            }
+
+            /** Properties of a GetRepositoryOptionsRequest. */
+            interface IGetRepositoryOptionsRequest {
+            }
+
+            /** Represents a GetRepositoryOptionsRequest. */
+            class GetRepositoryOptionsRequest implements IGetRepositoryOptionsRequest {
+
+                /**
+                 * Constructs a new GetRepositoryOptionsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.sourcecontrol.v1.IGetRepositoryOptionsRequest);
+
+                /**
+                 * Verifies a GetRepositoryOptionsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetRepositoryOptionsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetRepositoryOptionsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.sourcecontrol.v1.GetRepositoryOptionsRequest;
+
+                /**
+                 * Creates a plain object from a GetRepositoryOptionsRequest message. Also converts values to other types if specified.
+                 * @param message GetRepositoryOptionsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.sourcecontrol.v1.GetRepositoryOptionsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetRepositoryOptionsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an Entity. */
+            interface IEntity {
+
+                /** Entity name */
+                name?: (string|null);
+
+                /** Entity photoUrl */
+                photoUrl?: (string|null);
+            }
+
+            /** Represents an Entity. */
+            class Entity implements IEntity {
+
+                /**
+                 * Constructs a new Entity.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.sourcecontrol.v1.IEntity);
+
+                /** Entity name. */
+                public name: string;
+
+                /** Entity photoUrl. */
+                public photoUrl: string;
+
+                /**
+                 * Verifies an Entity message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an Entity message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Entity
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.sourcecontrol.v1.Entity;
+
+                /**
+                 * Creates a plain object from an Entity message. Also converts values to other types if specified.
+                 * @param message Entity
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.sourcecontrol.v1.Entity, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Entity to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a GetRepositoryOptionsResponse. */
+            interface IGetRepositoryOptionsResponse {
+
+                /** GetRepositoryOptionsResponse availableOwners */
+                availableOwners?: (clutch.sourcecontrol.v1.IEntity[]|null);
+
+                /** GetRepositoryOptionsResponse visibilityOptions */
+                visibilityOptions?: (clutch.config.module.sourcecontrol.v1.Visibility[]|null);
+            }
+
+            /** Represents a GetRepositoryOptionsResponse. */
+            class GetRepositoryOptionsResponse implements IGetRepositoryOptionsResponse {
+
+                /**
+                 * Constructs a new GetRepositoryOptionsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.sourcecontrol.v1.IGetRepositoryOptionsResponse);
+
+                /** GetRepositoryOptionsResponse availableOwners. */
+                public availableOwners: clutch.sourcecontrol.v1.IEntity[];
+
+                /** GetRepositoryOptionsResponse visibilityOptions. */
+                public visibilityOptions: clutch.config.module.sourcecontrol.v1.Visibility[];
+
+                /**
+                 * Verifies a GetRepositoryOptionsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a GetRepositoryOptionsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns GetRepositoryOptionsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.sourcecontrol.v1.GetRepositoryOptionsResponse;
+
+                /**
+                 * Creates a plain object from a GetRepositoryOptionsResponse message. Also converts values to other types if specified.
+                 * @param message GetRepositoryOptionsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.sourcecontrol.v1.GetRepositoryOptionsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this GetRepositoryOptionsResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
             }
 
             /** Properties of a CreateRepositoryRequest. */

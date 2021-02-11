@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package clutch.config.module.sourcecontrol.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/config/module/sourcecontrol/v1;sourcecontrolv1";
+
+enum Visibility {
+  UNSPECIFIED = 0;
+  PUBLIC = 1;
+  PRIVATE = 2;
+}
+
+message Config {
+  // Name of the owner for new repositories.
+  repeated string owners = 1;
+
+  // Visibility options for new repositories.
+  repeated Visibility visibility_options = 2;
+}
