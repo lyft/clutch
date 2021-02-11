@@ -1,4 +1,5 @@
 const baseConfig = require("@clutch-sh/tools/.eslintrc.js");
+const path = require("path");
 
 module.exports = {
   ...baseConfig,
