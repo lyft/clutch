@@ -187,25 +187,49 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 }
 
 func (r *resolverAPI) Autocomplete(ctx context.Context, req *resolverv1.AutocompleteRequest) (*resolverv1.AutocompleteResponse, error) {
-	var err error
 	results := []*resolverv1.AutocompleteResponse_AutocompleteResult{}
+
+	limit := resolver.DefaultAutocompleteLimit
+	if req.Limit > 0 {
+		limit = int(req.Limit)
+	}
 
 	// Iterate through all of the available resolvers & schemas to find the one requested
 	// If that schema exists then we call the associated autocomplete function for that resolver
 	for _, res := range resolver.Registry {
 		resSchema := res.Schemas()
 		if _, ok := resSchema[req.Want]; ok {
-			results, err = res.Autocomplete(ctx, req.Want, req.Search, req.Limit)
+			resolverResults, err := res.Autocomplete(ctx, req.Want, req.Search, req.Limit)
 			if err != nil {
 				return nil, err
 			}
-			break
+
+			// Append results from all resolver up to the limit.
+			// Future enhancements here will try to surface the most relevant results
+			// from all resolvers instead of this basic approach
+			appendAutocompleteResultsToLimit(&results, resolverResults, limit)
+			if len(results) >= resolver.DefaultAutocompleteLimit {
+				break
+			}
 		}
 	}
 
 	return &resolverv1.AutocompleteResponse{
 		Results: results,
 	}, nil
+}
+
+func appendAutocompleteResultsToLimit(
+	results *[]*resolverv1.AutocompleteResponse_AutocompleteResult,
+	resolverResults []*resolverv1.AutocompleteResponse_AutocompleteResult,
+	limit int,
+) {
+	freeSpace := limit - len(*results)
+	if freeSpace >= len(resolverResults) {
+		*results = append(*results, resolverResults...)
+	} else {
+		*results = append(*results, resolverResults[:freeSpace]...)
+	}
 }
 
 // Add error information to the schema if it's broken in some way.

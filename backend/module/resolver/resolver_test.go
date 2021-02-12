@@ -1,6 +1,7 @@
 package resolver
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -41,4 +42,33 @@ func TestShouldAutoCompleteBeEnabled(t *testing.T) {
 	service.Registry["clutch.service.topology"] = topologymock.New()
 	yes := shouldAutoCompleteBeEnabled()
 	assert.True(t, yes)
+}
+
+func TestAppendAutocompleteResultsToLimit(t *testing.T) {
+	results := &[]*resolverv1.AutocompleteResponse_AutocompleteResult{}
+	limit := 50
+
+	first := generateAutocompleteResults(25)
+	second := generateAutocompleteResults(25)
+	third := generateAutocompleteResults(1)
+
+	appendAutocompleteResultsToLimit(results, first, limit)
+	assert.Equal(t, 25, len(*results))
+
+	appendAutocompleteResultsToLimit(results, second, limit)
+	assert.Equal(t, 50, len(*results))
+
+	appendAutocompleteResultsToLimit(results, third, limit)
+	assert.Equal(t, 50, len(*results))
+}
+
+func generateAutocompleteResults(limit int) []*resolverv1.AutocompleteResponse_AutocompleteResult {
+	results := []*resolverv1.AutocompleteResponse_AutocompleteResult{}
+	for i := 0; i < limit; i++ {
+		results = append(results, &resolverv1.AutocompleteResponse_AutocompleteResult{
+			Id:    fmt.Sprint(i),
+			Label: fmt.Sprint(i),
+		})
+	}
+	return results
 }

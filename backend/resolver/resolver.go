@@ -16,7 +16,10 @@ import (
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
 )
 
-const OptionAll = "__ALL__"
+const (
+	OptionAll                = "__ALL__"
+	DefaultAutocompleteLimit = 50
+)
 
 type TypeURLToSchemasMap map[string][]*resolverv1.Schema
 

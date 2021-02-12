@@ -160,6 +160,7 @@ func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit ui
 	// consider abstracting this into the topology service.
 	searchRequest := &topologyv1.SearchRequest{
 		PageToken: "0",
+		Limit:     resolver.DefaultAutocompleteLimit,
 		Sort: &topologyv1.SearchRequest_Sort{
 			Direction: topologyv1.SearchRequest_Sort_ASCENDING,
 			Field:     "column.id",
@@ -173,7 +174,7 @@ func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit ui
 		},
 	}
 
-	// Limit is optional, if one is not set we use the default set by the topology search api
+	// Limit is optional, if one is not set we use the default DefaultAutocompleteLimit
 	if limit > 0 {
 		searchRequest.Limit = limit
 	}
