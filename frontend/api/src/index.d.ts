@@ -14046,8 +14046,8 @@ export namespace clutch {
                 /** SearchMetadata enabled */
                 enabled?: (boolean|null);
 
-                /** SearchMetadata autocompleteable */
-                autocompleteable?: (boolean|null);
+                /** SearchMetadata autocompleteEnabled */
+                autocompleteEnabled?: (boolean|null);
             }
 
             /** Represents a SearchMetadata. */
@@ -14062,8 +14062,8 @@ export namespace clutch {
                 /** SearchMetadata enabled. */
                 public enabled: boolean;
 
-                /** SearchMetadata autocompleteable. */
-                public autocompleteable: boolean;
+                /** SearchMetadata autocompleteEnabled. */
+                public autocompleteEnabled: boolean;
 
                 /**
                  * Verifies a SearchMetadata message.
@@ -14328,8 +14328,8 @@ export namespace clutch {
                 /** AutocompleteRequest search */
                 search?: (string|null);
 
-                /** AutocompleteRequest resultLimit */
-                resultLimit?: (number|Long|null);
+                /** AutocompleteRequest limit */
+                limit?: (number|Long|null);
             }
 
             /** Represents an AutocompleteRequest. */
@@ -14347,8 +14347,8 @@ export namespace clutch {
                 /** AutocompleteRequest search. */
                 public search: string;
 
-                /** AutocompleteRequest resultLimit. */
-                public resultLimit: (number|Long);
+                /** AutocompleteRequest limit. */
+                public limit: (number|Long);
 
                 /**
                  * Verifies an AutocompleteRequest message.

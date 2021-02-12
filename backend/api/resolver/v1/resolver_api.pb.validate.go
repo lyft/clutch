@@ -58,7 +58,7 @@ func (m *AutocompleteRequest) Validate() error {
 		}
 	}
 
-	// no validation rules for ResultLimit
+	// no validation rules for Limit
 
 	return nil
 }

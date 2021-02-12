@@ -148,7 +148,7 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 			if schema.Metadata.Search == nil {
 				schema.Metadata.Search = &resolverv1.SearchMetadata{}
 			}
-			schema.Metadata.Search.Autocompleteable = true
+			schema.Metadata.Search.AutocompleteEnabled = true
 		}
 
 		for _, field := range schema.Fields {
@@ -195,7 +195,7 @@ func (r *resolverAPI) Autocomplete(ctx context.Context, req *resolverv1.Autocomp
 	for _, res := range resolver.Registry {
 		resSchema := res.Schemas()
 		if _, ok := resSchema[req.Want]; ok {
-			results, err = res.AutoComplete(ctx, req.Want, req.Search, req.ResultLimit)
+			results, err = res.Autocomplete(ctx, req.Want, req.Search, req.Limit)
 			if err != nil {
 				return nil, err
 			}
