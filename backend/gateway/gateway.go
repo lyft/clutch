@@ -18,6 +18,7 @@ import (
 	"github.com/lyft/clutch/backend/middleware"
 	"github.com/lyft/clutch/backend/middleware/accesslog"
 	"github.com/lyft/clutch/backend/middleware/timeouts"
+	"github.com/lyft/clutch/backend/middleware/unaryerror"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/resolver"
 	"github.com/lyft/clutch/backend/service"
@@ -88,6 +89,14 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	initScope := scope.SubScope("gateway")
 	initScope.Counter("start").Inc(1)
 
+	// Create the error interceptor so services can register error interceptors if desired.
+	var unaryErrorMiddleware *unaryerror.Middleware
+	if m, err := unaryerror.New(); err != nil {
+		logger.Fatal("could not create error interceptor middleware", zap.Error(err))
+	} else {
+		unaryErrorMiddleware = m.(*unaryerror.Middleware)
+	}
+
 	// Instantiate and register services.
 	for _, svcConfig := range cfg.Services {
 		factory, ok := cf.Services[svcConfig.Name]
@@ -110,6 +119,11 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 			logger.Fatal("service instantiation failed", zap.Error(err))
 		}
 		service.Registry[svcConfig.Name] = svc
+
+		if ei, ok := svc.(unaryerror.Interceptor); ok {
+			logger.Info("service registered an error conversion interceptor")
+			unaryErrorMiddleware.AddInterceptor(ei.InterceptError)
+		}
 	}
 
 	for _, resolverCfg := range cfg.Resolvers {
@@ -136,20 +150,27 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	}
 
 	var interceptors []grpc.UnaryServerInterceptor
+
+	// Error interceptors should be first on the stack (last in chain).
+	interceptors = append(interceptors, unaryErrorMiddleware.UnaryInterceptor())
+
+	// Access log.
 	if cfg.Gateway.Accesslog != nil {
-		accesslog, err := accesslog.New(cfg.Gateway.Accesslog, logger, scope)
+		a, err := accesslog.New(cfg.Gateway.Accesslog, logger, scope)
 		if err != nil {
 			logger.Fatal("could not create accesslog interceptor", zap.Error(err))
 		}
-		interceptors = append(interceptors, accesslog.UnaryInterceptor())
+		interceptors = append(interceptors, a.UnaryInterceptor())
 	}
 
+	// Timeouts.
 	timeoutInterceptor, err := timeouts.New(cfg.Gateway.Timeouts, logger, scope)
 	if err != nil {
 		logger.Fatal("could not create timeout interceptor", zap.Error(err))
 	}
 	interceptors = append(interceptors, timeoutInterceptor.UnaryInterceptor())
 
+	// All other configured middleware.
 	for _, mCfg := range cfg.Gateway.Middleware {
 		logger := logger.With(zap.String("moduleName", mCfg.Name))
 
