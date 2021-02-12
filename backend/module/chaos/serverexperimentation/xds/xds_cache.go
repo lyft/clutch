@@ -50,9 +50,9 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 
 		switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
 		case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
-			clusterFaultMap[upstreamCluster] = append(clusterFaultMap[upstreamCluster], experiment)
-		case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
 			clusterFaultMap[downstreamCluster] = append(clusterFaultMap[downstreamCluster], experiment)
+		case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
+			clusterFaultMap[upstreamCluster] = append(clusterFaultMap[upstreamCluster], experiment)
 		default:
 			logger.Errorw("unknown enforcer %v", httpFaultConfig)
 			continue
