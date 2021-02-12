@@ -70,11 +70,10 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 	}
 
 	var topologyService topology.Service
-	topologySvc, ok := service.Registry[topology.Name]
-	if ok {
-		topologyService, ok = topologySvc.(topology.Service)
+	if svc, ok := service.Registry[topology.Name]; ok {
+		topologyService, ok = svc.(topology.Service)
 		if !ok {
-			return nil, errors.New("topology service was not the correct type")
+			return nil, errors.New("incorrect topology service type")
 		}
 		logger.Info("enabling autocomplete api for the aws resolver")
 	}
@@ -93,6 +92,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 		topology: topologyService,
 		schemas:  schemas,
 	}
+
 	return r, nil
 }
 
