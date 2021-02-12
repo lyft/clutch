@@ -66,6 +66,7 @@ type Service interface {
 
 	// Deployment management functions.
 	DescribeDeployment(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Deployment, error)
+	ListDeployments(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Deployment, error)
 	UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error
 	DeleteDeployment(ctx context.Context, clientset, cluster, namespace, name string) error
 
@@ -75,11 +76,13 @@ type Service interface {
 
 	// StatefulSet management functions.
 	DescribeStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.StatefulSet, error)
+	ListStatefulSets(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.StatefulSet, error)
 	UpdateStatefulSet(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateStatefulSetRequest_Fields) error
 	DeleteStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) error
 
 	// CronJob management functions.
 	DescribeCronJob(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.CronJob, error)
+	ListCronJobs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.CronJob, error)
 	DeleteCronJob(ctx context.Context, clientset, cluster, namespace, name string) error
 
 	// ConfigMap management functions.

@@ -14,6 +14,14 @@ func (a *k8sAPI) DescribeStatefulSet(ctx context.Context, req *k8sapiv1.Describe
 	return &k8sapiv1.DescribeStatefulSetResponse{StatefulSet: set}, nil
 }
 
+func (a *k8sAPI) ListStatefulSets(ctx context.Context, req *k8sapiv1.ListStatefulSetsRequest) (*k8sapiv1.ListStatefulSetsResponse, error) {
+	sets, err := a.k8s.ListStatefulSets(ctx, req.Clientset, req.Cluster, req.Namespace, req.Options)
+	if err != nil {
+		return nil, err
+	}
+	return &k8sapiv1.ListStatefulSetsResponse{StatefulSets: sets}, nil
+}
+
 func (a *k8sAPI) UpdateStatefulSet(ctx context.Context, req *k8sapiv1.UpdateStatefulSetRequest) (*k8sapiv1.UpdateStatefulSetResponse, error) {
 	err := a.k8s.UpdateStatefulSet(ctx, req.Clientset, req.Cluster, req.Namespace, req.Name, req.Fields)
 	if err != nil {

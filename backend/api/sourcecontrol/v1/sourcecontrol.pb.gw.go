@@ -236,7 +236,7 @@ func RegisterSourceControlAPIHandlerClient(ctx context.Context, mux *runtime.Ser
 }
 
 var (
-	pattern_SourceControlAPI_GetRepositoryOptions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "sourcecontrol", "repositoryOptions"}, ""))
+	pattern_SourceControlAPI_GetRepositoryOptions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "sourcecontrol", "getRepositoryOptions"}, ""))
 
 	pattern_SourceControlAPI_CreateRepository_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "sourcecontrol", "createRepository"}, ""))
 )

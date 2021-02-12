@@ -9168,6 +9168,34 @@ export namespace clutch {
                 public deleteHPA(request: clutch.k8s.v1.IDeleteHPARequest): Promise<clutch.k8s.v1.DeleteHPAResponse>;
 
                 /**
+                 * Calls DescribeDeployment.
+                 * @param request DescribeDeploymentRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DescribeDeploymentResponse
+                 */
+                public describeDeployment(request: clutch.k8s.v1.IDescribeDeploymentRequest, callback: clutch.k8s.v1.K8sAPI.DescribeDeploymentCallback): void;
+
+                /**
+                 * Calls DescribeDeployment.
+                 * @param request DescribeDeploymentRequest message or plain object
+                 * @returns Promise
+                 */
+                public describeDeployment(request: clutch.k8s.v1.IDescribeDeploymentRequest): Promise<clutch.k8s.v1.DescribeDeploymentResponse>;
+
+                /**
+                 * Calls ListDeployments.
+                 * @param request ListDeploymentsRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and ListDeploymentsResponse
+                 */
+                public listDeployments(request: clutch.k8s.v1.IListDeploymentsRequest, callback: clutch.k8s.v1.K8sAPI.ListDeploymentsCallback): void;
+
+                /**
+                 * Calls ListDeployments.
+                 * @param request ListDeploymentsRequest message or plain object
+                 * @returns Promise
+                 */
+                public listDeployments(request: clutch.k8s.v1.IListDeploymentsRequest): Promise<clutch.k8s.v1.ListDeploymentsResponse>;
+
+                /**
                  * Calls UpdateDeployment.
                  * @param request UpdateDeploymentRequest message or plain object
                  * @param callback Node-style callback called with the error, if any, and UpdateDeploymentResponse
@@ -9238,6 +9266,20 @@ export namespace clutch {
                 public describeStatefulSet(request: clutch.k8s.v1.IDescribeStatefulSetRequest): Promise<clutch.k8s.v1.DescribeStatefulSetResponse>;
 
                 /**
+                 * Calls ListStatefulSets.
+                 * @param request ListStatefulSetsRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and ListStatefulSetsResponse
+                 */
+                public listStatefulSets(request: clutch.k8s.v1.IListStatefulSetsRequest, callback: clutch.k8s.v1.K8sAPI.ListStatefulSetsCallback): void;
+
+                /**
+                 * Calls ListStatefulSets.
+                 * @param request ListStatefulSetsRequest message or plain object
+                 * @returns Promise
+                 */
+                public listStatefulSets(request: clutch.k8s.v1.IListStatefulSetsRequest): Promise<clutch.k8s.v1.ListStatefulSetsResponse>;
+
+                /**
                  * Calls UpdateStatefulSet.
                  * @param request UpdateStatefulSetRequest message or plain object
                  * @param callback Node-style callback called with the error, if any, and UpdateStatefulSetResponse
@@ -9278,6 +9320,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public describeCronJob(request: clutch.k8s.v1.IDescribeCronJobRequest): Promise<clutch.k8s.v1.DescribeCronJobResponse>;
+
+                /**
+                 * Calls ListCronJobs.
+                 * @param request ListCronJobsRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and ListCronJobsResponse
+                 */
+                public listCronJobs(request: clutch.k8s.v1.IListCronJobsRequest, callback: clutch.k8s.v1.K8sAPI.ListCronJobsCallback): void;
+
+                /**
+                 * Calls ListCronJobs.
+                 * @param request ListCronJobsRequest message or plain object
+                 * @returns Promise
+                 */
+                public listCronJobs(request: clutch.k8s.v1.IListCronJobsRequest): Promise<clutch.k8s.v1.ListCronJobsResponse>;
 
                 /**
                  * Calls DeleteCronJob.
@@ -9409,6 +9465,20 @@ export namespace clutch {
                 type DeleteHPACallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteHPAResponse) => void;
 
                 /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeDeployment}.
+                 * @param error Error, if any
+                 * @param [response] DescribeDeploymentResponse
+                 */
+                type DescribeDeploymentCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribeDeploymentResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listDeployments}.
+                 * @param error Error, if any
+                 * @param [response] ListDeploymentsResponse
+                 */
+                type ListDeploymentsCallback = (error: (Error|null), response?: clutch.k8s.v1.ListDeploymentsResponse) => void;
+
+                /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateDeployment}.
                  * @param error Error, if any
                  * @param [response] UpdateDeploymentResponse
@@ -9444,6 +9514,13 @@ export namespace clutch {
                 type DescribeStatefulSetCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribeStatefulSetResponse) => void;
 
                 /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listStatefulSets}.
+                 * @param error Error, if any
+                 * @param [response] ListStatefulSetsResponse
+                 */
+                type ListStatefulSetsCallback = (error: (Error|null), response?: clutch.k8s.v1.ListStatefulSetsResponse) => void;
+
+                /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateStatefulSet}.
                  * @param error Error, if any
                  * @param [response] UpdateStatefulSetResponse
@@ -9463,6 +9540,13 @@ export namespace clutch {
                  * @param [response] DescribeCronJobResponse
                  */
                 type DescribeCronJobCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribeCronJobResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listCronJobs}.
+                 * @param error Error, if any
+                 * @param [response] ListCronJobsResponse
+                 */
+                type ListCronJobsCallback = (error: (Error|null), response?: clutch.k8s.v1.ListCronJobsResponse) => void;
 
                 /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#deleteCronJob}.
@@ -10714,6 +10798,240 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a DescribeDeploymentRequest. */
+            interface IDescribeDeploymentRequest {
+
+                /** DescribeDeploymentRequest clientset */
+                clientset?: (string|null);
+
+                /** DescribeDeploymentRequest cluster */
+                cluster?: (string|null);
+
+                /** DescribeDeploymentRequest namespace */
+                namespace?: (string|null);
+
+                /** DescribeDeploymentRequest name */
+                name?: (string|null);
+
+                /** DescribeDeploymentRequest labels */
+                labels?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a DescribeDeploymentRequest. */
+            class DescribeDeploymentRequest implements IDescribeDeploymentRequest {
+
+                /**
+                 * Constructs a new DescribeDeploymentRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeDeploymentRequest);
+
+                /** DescribeDeploymentRequest clientset. */
+                public clientset: string;
+
+                /** DescribeDeploymentRequest cluster. */
+                public cluster: string;
+
+                /** DescribeDeploymentRequest namespace. */
+                public namespace: string;
+
+                /** DescribeDeploymentRequest name. */
+                public name: string;
+
+                /** DescribeDeploymentRequest labels. */
+                public labels: { [k: string]: string };
+
+                /**
+                 * Verifies a DescribeDeploymentRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeDeploymentRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeDeploymentRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeDeploymentRequest;
+
+                /**
+                 * Creates a plain object from a DescribeDeploymentRequest message. Also converts values to other types if specified.
+                 * @param message DescribeDeploymentRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeDeploymentRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeDeploymentRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DescribeDeploymentResponse. */
+            interface IDescribeDeploymentResponse {
+
+                /** DescribeDeploymentResponse deployment */
+                deployment?: (clutch.k8s.v1.IDeployment|null);
+            }
+
+            /** Represents a DescribeDeploymentResponse. */
+            class DescribeDeploymentResponse implements IDescribeDeploymentResponse {
+
+                /**
+                 * Constructs a new DescribeDeploymentResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeDeploymentResponse);
+
+                /** DescribeDeploymentResponse deployment. */
+                public deployment?: (clutch.k8s.v1.IDeployment|null);
+
+                /**
+                 * Verifies a DescribeDeploymentResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeDeploymentResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeDeploymentResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeDeploymentResponse;
+
+                /**
+                 * Creates a plain object from a DescribeDeploymentResponse message. Also converts values to other types if specified.
+                 * @param message DescribeDeploymentResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeDeploymentResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeDeploymentResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListDeploymentsRequest. */
+            interface IListDeploymentsRequest {
+
+                /** ListDeploymentsRequest clientset */
+                clientset?: (string|null);
+
+                /** ListDeploymentsRequest cluster */
+                cluster?: (string|null);
+
+                /** ListDeploymentsRequest namespace */
+                namespace?: (string|null);
+
+                /** ListDeploymentsRequest options */
+                options?: (clutch.k8s.v1.IListOptions|null);
+            }
+
+            /** Represents a ListDeploymentsRequest. */
+            class ListDeploymentsRequest implements IListDeploymentsRequest {
+
+                /**
+                 * Constructs a new ListDeploymentsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListDeploymentsRequest);
+
+                /** ListDeploymentsRequest clientset. */
+                public clientset: string;
+
+                /** ListDeploymentsRequest cluster. */
+                public cluster: string;
+
+                /** ListDeploymentsRequest namespace. */
+                public namespace: string;
+
+                /** ListDeploymentsRequest options. */
+                public options?: (clutch.k8s.v1.IListOptions|null);
+
+                /**
+                 * Verifies a ListDeploymentsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListDeploymentsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListDeploymentsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListDeploymentsRequest;
+
+                /**
+                 * Creates a plain object from a ListDeploymentsRequest message. Also converts values to other types if specified.
+                 * @param message ListDeploymentsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListDeploymentsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListDeploymentsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListDeploymentsResponse. */
+            interface IListDeploymentsResponse {
+
+                /** ListDeploymentsResponse deployments */
+                deployments?: (clutch.k8s.v1.IDeployment[]|null);
+            }
+
+            /** Represents a ListDeploymentsResponse. */
+            class ListDeploymentsResponse implements IListDeploymentsResponse {
+
+                /**
+                 * Constructs a new ListDeploymentsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListDeploymentsResponse);
+
+                /** ListDeploymentsResponse deployments. */
+                public deployments: clutch.k8s.v1.IDeployment[];
+
+                /**
+                 * Verifies a ListDeploymentsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListDeploymentsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListDeploymentsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListDeploymentsResponse;
+
+                /**
+                 * Creates a plain object from a ListDeploymentsResponse message. Also converts values to other types if specified.
+                 * @param message ListDeploymentsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListDeploymentsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListDeploymentsResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of an UpdateDeploymentRequest. */
             interface IUpdateDeploymentRequest {
 
@@ -11137,6 +11455,168 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a DescribeStatefulSetResponse. */
+            interface IDescribeStatefulSetResponse {
+
+                /** DescribeStatefulSetResponse statefulSet */
+                statefulSet?: (clutch.k8s.v1.IStatefulSet|null);
+            }
+
+            /** Represents a DescribeStatefulSetResponse. */
+            class DescribeStatefulSetResponse implements IDescribeStatefulSetResponse {
+
+                /**
+                 * Constructs a new DescribeStatefulSetResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeStatefulSetResponse);
+
+                /** DescribeStatefulSetResponse statefulSet. */
+                public statefulSet?: (clutch.k8s.v1.IStatefulSet|null);
+
+                /**
+                 * Verifies a DescribeStatefulSetResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeStatefulSetResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeStatefulSetResponse;
+
+                /**
+                 * Creates a plain object from a DescribeStatefulSetResponse message. Also converts values to other types if specified.
+                 * @param message DescribeStatefulSetResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeStatefulSetResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeStatefulSetResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListStatefulSetsRequest. */
+            interface IListStatefulSetsRequest {
+
+                /** ListStatefulSetsRequest clientset */
+                clientset?: (string|null);
+
+                /** ListStatefulSetsRequest cluster */
+                cluster?: (string|null);
+
+                /** ListStatefulSetsRequest namespace */
+                namespace?: (string|null);
+
+                /** ListStatefulSetsRequest options */
+                options?: (clutch.k8s.v1.IListOptions|null);
+            }
+
+            /** Represents a ListStatefulSetsRequest. */
+            class ListStatefulSetsRequest implements IListStatefulSetsRequest {
+
+                /**
+                 * Constructs a new ListStatefulSetsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListStatefulSetsRequest);
+
+                /** ListStatefulSetsRequest clientset. */
+                public clientset: string;
+
+                /** ListStatefulSetsRequest cluster. */
+                public cluster: string;
+
+                /** ListStatefulSetsRequest namespace. */
+                public namespace: string;
+
+                /** ListStatefulSetsRequest options. */
+                public options?: (clutch.k8s.v1.IListOptions|null);
+
+                /**
+                 * Verifies a ListStatefulSetsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListStatefulSetsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListStatefulSetsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListStatefulSetsRequest;
+
+                /**
+                 * Creates a plain object from a ListStatefulSetsRequest message. Also converts values to other types if specified.
+                 * @param message ListStatefulSetsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListStatefulSetsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListStatefulSetsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListStatefulSetsResponse. */
+            interface IListStatefulSetsResponse {
+
+                /** ListStatefulSetsResponse statefulSets */
+                statefulSets?: (clutch.k8s.v1.IStatefulSet[]|null);
+            }
+
+            /** Represents a ListStatefulSetsResponse. */
+            class ListStatefulSetsResponse implements IListStatefulSetsResponse {
+
+                /**
+                 * Constructs a new ListStatefulSetsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListStatefulSetsResponse);
+
+                /** ListStatefulSetsResponse statefulSets. */
+                public statefulSets: clutch.k8s.v1.IStatefulSet[];
+
+                /**
+                 * Verifies a ListStatefulSetsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListStatefulSetsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListStatefulSetsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListStatefulSetsResponse;
+
+                /**
+                 * Creates a plain object from a ListStatefulSetsResponse message. Also converts values to other types if specified.
+                 * @param message ListStatefulSetsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListStatefulSetsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListStatefulSetsResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a DeleteStatefulSetRequest. */
             interface IDeleteStatefulSetRequest {
 
@@ -11198,6 +11678,48 @@ export namespace clutch {
 
                 /**
                  * Converts this DeleteStatefulSetRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DeleteStatefulSetResponse. */
+            interface IDeleteStatefulSetResponse {
+            }
+
+            /** Represents a DeleteStatefulSetResponse. */
+            class DeleteStatefulSetResponse implements IDeleteStatefulSetResponse {
+
+                /**
+                 * Constructs a new DeleteStatefulSetResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDeleteStatefulSetResponse);
+
+                /**
+                 * Verifies a DeleteStatefulSetResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DeleteStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DeleteStatefulSetResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteStatefulSetResponse;
+
+                /**
+                 * Creates a plain object from a DeleteStatefulSetResponse message. Also converts values to other types if specified.
+                 * @param message DeleteStatefulSetResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DeleteStatefulSetResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DeleteStatefulSetResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -11330,96 +11852,6 @@ export namespace clutch {
                      */
                     public toJSON(): { [k: string]: any };
                 }
-            }
-
-            /** Properties of a DescribeStatefulSetResponse. */
-            interface IDescribeStatefulSetResponse {
-
-                /** DescribeStatefulSetResponse statefulSet */
-                statefulSet?: (clutch.k8s.v1.IStatefulSet|null);
-            }
-
-            /** Represents a DescribeStatefulSetResponse. */
-            class DescribeStatefulSetResponse implements IDescribeStatefulSetResponse {
-
-                /**
-                 * Constructs a new DescribeStatefulSetResponse.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.k8s.v1.IDescribeStatefulSetResponse);
-
-                /** DescribeStatefulSetResponse statefulSet. */
-                public statefulSet?: (clutch.k8s.v1.IStatefulSet|null);
-
-                /**
-                 * Verifies a DescribeStatefulSetResponse message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a DescribeStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns DescribeStatefulSetResponse
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeStatefulSetResponse;
-
-                /**
-                 * Creates a plain object from a DescribeStatefulSetResponse message. Also converts values to other types if specified.
-                 * @param message DescribeStatefulSetResponse
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.k8s.v1.DescribeStatefulSetResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this DescribeStatefulSetResponse to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of a DeleteStatefulSetResponse. */
-            interface IDeleteStatefulSetResponse {
-            }
-
-            /** Represents a DeleteStatefulSetResponse. */
-            class DeleteStatefulSetResponse implements IDeleteStatefulSetResponse {
-
-                /**
-                 * Constructs a new DeleteStatefulSetResponse.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.k8s.v1.IDeleteStatefulSetResponse);
-
-                /**
-                 * Verifies a DeleteStatefulSetResponse message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates a DeleteStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns DeleteStatefulSetResponse
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DeleteStatefulSetResponse;
-
-                /**
-                 * Creates a plain object from a DeleteStatefulSetResponse message. Also converts values to other types if specified.
-                 * @param message DeleteStatefulSetResponse
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.k8s.v1.DeleteStatefulSetResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this DeleteStatefulSetResponse to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
             }
 
             /** Properties of an UpdateStatefulSetResponse. */
@@ -11976,6 +12408,120 @@ export namespace clutch {
 
                 /**
                  * Converts this DescribeCronJobResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListCronJobsRequest. */
+            interface IListCronJobsRequest {
+
+                /** ListCronJobsRequest clientset */
+                clientset?: (string|null);
+
+                /** ListCronJobsRequest cluster */
+                cluster?: (string|null);
+
+                /** ListCronJobsRequest namespace */
+                namespace?: (string|null);
+
+                /** ListCronJobsRequest options */
+                options?: (clutch.k8s.v1.IListOptions|null);
+            }
+
+            /** Represents a ListCronJobsRequest. */
+            class ListCronJobsRequest implements IListCronJobsRequest {
+
+                /**
+                 * Constructs a new ListCronJobsRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListCronJobsRequest);
+
+                /** ListCronJobsRequest clientset. */
+                public clientset: string;
+
+                /** ListCronJobsRequest cluster. */
+                public cluster: string;
+
+                /** ListCronJobsRequest namespace. */
+                public namespace: string;
+
+                /** ListCronJobsRequest options. */
+                public options?: (clutch.k8s.v1.IListOptions|null);
+
+                /**
+                 * Verifies a ListCronJobsRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListCronJobsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListCronJobsRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListCronJobsRequest;
+
+                /**
+                 * Creates a plain object from a ListCronJobsRequest message. Also converts values to other types if specified.
+                 * @param message ListCronJobsRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListCronJobsRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListCronJobsRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a ListCronJobsResponse. */
+            interface IListCronJobsResponse {
+
+                /** ListCronJobsResponse cronJobs */
+                cronJobs?: (clutch.k8s.v1.ICronJob[]|null);
+            }
+
+            /** Represents a ListCronJobsResponse. */
+            class ListCronJobsResponse implements IListCronJobsResponse {
+
+                /**
+                 * Constructs a new ListCronJobsResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IListCronJobsResponse);
+
+                /** ListCronJobsResponse cronJobs. */
+                public cronJobs: clutch.k8s.v1.ICronJob[];
+
+                /**
+                 * Verifies a ListCronJobsResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a ListCronJobsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ListCronJobsResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.ListCronJobsResponse;
+
+                /**
+                 * Creates a plain object from a ListCronJobsResponse message. Also converts values to other types if specified.
+                 * @param message ListCronJobsResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.ListCronJobsResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ListCronJobsResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

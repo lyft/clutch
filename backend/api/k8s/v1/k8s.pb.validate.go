@@ -1497,6 +1497,378 @@ var _ interface {
 	ErrorName() string
 } = DeploymentValidationError{}
 
+// Validate checks the field values on DescribeDeploymentRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DescribeDeploymentRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return DescribeDeploymentRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return DescribeDeploymentRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return DescribeDeploymentRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetName()) < 1 {
+		return DescribeDeploymentRequestValidationError{
+			field:  "Name",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	for key, val := range m.GetLabels() {
+		_ = val
+
+		if len(key) < 1 {
+			return DescribeDeploymentRequestValidationError{
+				field:  fmt.Sprintf("Labels[%v]", key),
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+		// no validation rules for Labels[key]
+	}
+
+	return nil
+}
+
+// DescribeDeploymentRequestValidationError is the validation error returned by
+// DescribeDeploymentRequest.Validate if the designated constraints aren't met.
+type DescribeDeploymentRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DescribeDeploymentRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DescribeDeploymentRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DescribeDeploymentRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DescribeDeploymentRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DescribeDeploymentRequestValidationError) ErrorName() string {
+	return "DescribeDeploymentRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DescribeDeploymentRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDescribeDeploymentRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DescribeDeploymentRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DescribeDeploymentRequestValidationError{}
+
+// Validate checks the field values on DescribeDeploymentResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DescribeDeploymentResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetDeployment()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DescribeDeploymentResponseValidationError{
+				field:  "Deployment",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// DescribeDeploymentResponseValidationError is the validation error returned
+// by DescribeDeploymentResponse.Validate if the designated constraints aren't met.
+type DescribeDeploymentResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DescribeDeploymentResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DescribeDeploymentResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DescribeDeploymentResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DescribeDeploymentResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DescribeDeploymentResponseValidationError) ErrorName() string {
+	return "DescribeDeploymentResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DescribeDeploymentResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDescribeDeploymentResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DescribeDeploymentResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DescribeDeploymentResponseValidationError{}
+
+// Validate checks the field values on ListDeploymentsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ListDeploymentsRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return ListDeploymentsRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return ListDeploymentsRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return ListDeploymentsRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if m.GetOptions() == nil {
+		return ListDeploymentsRequestValidationError{
+			field:  "Options",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOptions()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListDeploymentsRequestValidationError{
+				field:  "Options",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// ListDeploymentsRequestValidationError is the validation error returned by
+// ListDeploymentsRequest.Validate if the designated constraints aren't met.
+type ListDeploymentsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListDeploymentsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListDeploymentsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListDeploymentsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListDeploymentsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListDeploymentsRequestValidationError) ErrorName() string {
+	return "ListDeploymentsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListDeploymentsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListDeploymentsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListDeploymentsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListDeploymentsRequestValidationError{}
+
+// Validate checks the field values on ListDeploymentsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ListDeploymentsResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for idx, item := range m.GetDeployments() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListDeploymentsResponseValidationError{
+					field:  fmt.Sprintf("Deployments[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ListDeploymentsResponseValidationError is the validation error returned by
+// ListDeploymentsResponse.Validate if the designated constraints aren't met.
+type ListDeploymentsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListDeploymentsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListDeploymentsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListDeploymentsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListDeploymentsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListDeploymentsResponseValidationError) ErrorName() string {
+	return "ListDeploymentsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListDeploymentsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListDeploymentsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListDeploymentsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListDeploymentsResponseValidationError{}
+
 // Validate checks the field values on UpdateDeploymentRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -2021,6 +2393,271 @@ var _ interface {
 	ErrorName() string
 } = DescribeStatefulSetRequestValidationError{}
 
+// Validate checks the field values on DescribeStatefulSetResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DescribeStatefulSetResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetStatefulSet()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DescribeStatefulSetResponseValidationError{
+				field:  "StatefulSet",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// DescribeStatefulSetResponseValidationError is the validation error returned
+// by DescribeStatefulSetResponse.Validate if the designated constraints
+// aren't met.
+type DescribeStatefulSetResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DescribeStatefulSetResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DescribeStatefulSetResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DescribeStatefulSetResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DescribeStatefulSetResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DescribeStatefulSetResponseValidationError) ErrorName() string {
+	return "DescribeStatefulSetResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DescribeStatefulSetResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDescribeStatefulSetResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DescribeStatefulSetResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DescribeStatefulSetResponseValidationError{}
+
+// Validate checks the field values on ListStatefulSetsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ListStatefulSetsRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return ListStatefulSetsRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return ListStatefulSetsRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return ListStatefulSetsRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if m.GetOptions() == nil {
+		return ListStatefulSetsRequestValidationError{
+			field:  "Options",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOptions()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListStatefulSetsRequestValidationError{
+				field:  "Options",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// ListStatefulSetsRequestValidationError is the validation error returned by
+// ListStatefulSetsRequest.Validate if the designated constraints aren't met.
+type ListStatefulSetsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListStatefulSetsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListStatefulSetsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListStatefulSetsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListStatefulSetsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListStatefulSetsRequestValidationError) ErrorName() string {
+	return "ListStatefulSetsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListStatefulSetsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListStatefulSetsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListStatefulSetsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListStatefulSetsRequestValidationError{}
+
+// Validate checks the field values on ListStatefulSetsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ListStatefulSetsResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for idx, item := range m.GetStatefulSets() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListStatefulSetsResponseValidationError{
+					field:  fmt.Sprintf("StatefulSets[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ListStatefulSetsResponseValidationError is the validation error returned by
+// ListStatefulSetsResponse.Validate if the designated constraints aren't met.
+type ListStatefulSetsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListStatefulSetsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListStatefulSetsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListStatefulSetsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListStatefulSetsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListStatefulSetsResponseValidationError) ErrorName() string {
+	return "ListStatefulSetsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListStatefulSetsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListStatefulSetsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListStatefulSetsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListStatefulSetsResponseValidationError{}
+
 // Validate checks the field values on DeleteStatefulSetRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -2115,6 +2752,73 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeleteStatefulSetRequestValidationError{}
+
+// Validate checks the field values on DeleteStatefulSetResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DeleteStatefulSetResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// DeleteStatefulSetResponseValidationError is the validation error returned by
+// DeleteStatefulSetResponse.Validate if the designated constraints aren't met.
+type DeleteStatefulSetResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeleteStatefulSetResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeleteStatefulSetResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeleteStatefulSetResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeleteStatefulSetResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeleteStatefulSetResponseValidationError) ErrorName() string {
+	return "DeleteStatefulSetResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeleteStatefulSetResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeleteStatefulSetResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeleteStatefulSetResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeleteStatefulSetResponseValidationError{}
 
 // Validate checks the field values on UpdateStatefulSetRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -2227,151 +2931,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = UpdateStatefulSetRequestValidationError{}
-
-// Validate checks the field values on DescribeStatefulSetResponse with the
-// rules defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DescribeStatefulSetResponse) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	if v, ok := interface{}(m.GetStatefulSet()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return DescribeStatefulSetResponseValidationError{
-				field:  "StatefulSet",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	return nil
-}
-
-// DescribeStatefulSetResponseValidationError is the validation error returned
-// by DescribeStatefulSetResponse.Validate if the designated constraints
-// aren't met.
-type DescribeStatefulSetResponseValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e DescribeStatefulSetResponseValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e DescribeStatefulSetResponseValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e DescribeStatefulSetResponseValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e DescribeStatefulSetResponseValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e DescribeStatefulSetResponseValidationError) ErrorName() string {
-	return "DescribeStatefulSetResponseValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e DescribeStatefulSetResponseValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sDescribeStatefulSetResponse.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = DescribeStatefulSetResponseValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = DescribeStatefulSetResponseValidationError{}
-
-// Validate checks the field values on DeleteStatefulSetResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *DeleteStatefulSetResponse) Validate() error {
-	if m == nil {
-		return nil
-	}
-
-	return nil
-}
-
-// DeleteStatefulSetResponseValidationError is the validation error returned by
-// DeleteStatefulSetResponse.Validate if the designated constraints aren't met.
-type DeleteStatefulSetResponseValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e DeleteStatefulSetResponseValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e DeleteStatefulSetResponseValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e DeleteStatefulSetResponseValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e DeleteStatefulSetResponseValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e DeleteStatefulSetResponseValidationError) ErrorName() string {
-	return "DeleteStatefulSetResponseValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e DeleteStatefulSetResponseValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sDeleteStatefulSetResponse.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = DeleteStatefulSetResponseValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = DeleteStatefulSetResponseValidationError{}
 
 // Validate checks the field values on UpdateStatefulSetResponse with the rules
 // defined in the proto definition for this message. If any rules are
@@ -3123,6 +3682,193 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DescribeCronJobResponseValidationError{}
+
+// Validate checks the field values on ListCronJobsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ListCronJobsRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return ListCronJobsRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return ListCronJobsRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return ListCronJobsRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if m.GetOptions() == nil {
+		return ListCronJobsRequestValidationError{
+			field:  "Options",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetOptions()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ListCronJobsRequestValidationError{
+				field:  "Options",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// ListCronJobsRequestValidationError is the validation error returned by
+// ListCronJobsRequest.Validate if the designated constraints aren't met.
+type ListCronJobsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListCronJobsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListCronJobsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListCronJobsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListCronJobsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListCronJobsRequestValidationError) ErrorName() string {
+	return "ListCronJobsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListCronJobsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListCronJobsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListCronJobsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListCronJobsRequestValidationError{}
+
+// Validate checks the field values on ListCronJobsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *ListCronJobsResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for idx, item := range m.GetCronJobs() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListCronJobsResponseValidationError{
+					field:  fmt.Sprintf("CronJobs[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ListCronJobsResponseValidationError is the validation error returned by
+// ListCronJobsResponse.Validate if the designated constraints aren't met.
+type ListCronJobsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListCronJobsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListCronJobsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListCronJobsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListCronJobsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListCronJobsResponseValidationError) ErrorName() string {
+	return "ListCronJobsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListCronJobsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListCronJobsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListCronJobsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListCronJobsResponseValidationError{}
 
 // Validate checks the field values on DeleteCronJobRequest with the rules
 // defined in the proto definition for this message. If any rules are

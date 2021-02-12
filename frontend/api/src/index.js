@@ -21924,6 +21924,72 @@ export const clutch = $root.clutch = (() => {
                  */
 
                 /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeDeployment}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DescribeDeploymentCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DescribeDeploymentResponse} [response] DescribeDeploymentResponse
+                 */
+
+                /**
+                 * Calls DescribeDeployment.
+                 * @function describeDeployment
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeDeploymentRequest} request DescribeDeploymentRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DescribeDeploymentCallback} callback Node-style callback called with the error, if any, and DescribeDeploymentResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.describeDeployment = function describeDeployment(request, callback) {
+                    return this.rpcCall(describeDeployment, $root.clutch.k8s.v1.DescribeDeploymentRequest, $root.clutch.k8s.v1.DescribeDeploymentResponse, request, callback);
+                }, "name", { value: "DescribeDeployment" });
+
+                /**
+                 * Calls DescribeDeployment.
+                 * @function describeDeployment
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeDeploymentRequest} request DescribeDeploymentRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DescribeDeploymentResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listDeployments}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef ListDeploymentsCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.ListDeploymentsResponse} [response] ListDeploymentsResponse
+                 */
+
+                /**
+                 * Calls ListDeployments.
+                 * @function listDeployments
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListDeploymentsRequest} request ListDeploymentsRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.ListDeploymentsCallback} callback Node-style callback called with the error, if any, and ListDeploymentsResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.listDeployments = function listDeployments(request, callback) {
+                    return this.rpcCall(listDeployments, $root.clutch.k8s.v1.ListDeploymentsRequest, $root.clutch.k8s.v1.ListDeploymentsResponse, request, callback);
+                }, "name", { value: "ListDeployments" });
+
+                /**
+                 * Calls ListDeployments.
+                 * @function listDeployments
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListDeploymentsRequest} request ListDeploymentsRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.ListDeploymentsResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateDeployment}.
                  * @memberof clutch.k8s.v1.K8sAPI
                  * @typedef UpdateDeploymentCallback
@@ -22089,6 +22155,39 @@ export const clutch = $root.clutch = (() => {
                  */
 
                 /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listStatefulSets}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef ListStatefulSetsCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.ListStatefulSetsResponse} [response] ListStatefulSetsResponse
+                 */
+
+                /**
+                 * Calls ListStatefulSets.
+                 * @function listStatefulSets
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListStatefulSetsRequest} request ListStatefulSetsRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.ListStatefulSetsCallback} callback Node-style callback called with the error, if any, and ListStatefulSetsResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.listStatefulSets = function listStatefulSets(request, callback) {
+                    return this.rpcCall(listStatefulSets, $root.clutch.k8s.v1.ListStatefulSetsRequest, $root.clutch.k8s.v1.ListStatefulSetsResponse, request, callback);
+                }, "name", { value: "ListStatefulSets" });
+
+                /**
+                 * Calls ListStatefulSets.
+                 * @function listStatefulSets
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListStatefulSetsRequest} request ListStatefulSetsRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.ListStatefulSetsResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
                  * Callback as used by {@link clutch.k8s.v1.K8sAPI#updateStatefulSet}.
                  * @memberof clutch.k8s.v1.K8sAPI
                  * @typedef UpdateStatefulSetCallback
@@ -22184,6 +22283,39 @@ export const clutch = $root.clutch = (() => {
                  * @instance
                  * @param {clutch.k8s.v1.IDescribeCronJobRequest} request DescribeCronJobRequest message or plain object
                  * @returns {Promise<clutch.k8s.v1.DescribeCronJobResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#listCronJobs}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef ListCronJobsCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.ListCronJobsResponse} [response] ListCronJobsResponse
+                 */
+
+                /**
+                 * Calls ListCronJobs.
+                 * @function listCronJobs
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListCronJobsRequest} request ListCronJobsRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.ListCronJobsCallback} callback Node-style callback called with the error, if any, and ListCronJobsResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.listCronJobs = function listCronJobs(request, callback) {
+                    return this.rpcCall(listCronJobs, $root.clutch.k8s.v1.ListCronJobsRequest, $root.clutch.k8s.v1.ListCronJobsResponse, request, callback);
+                }, "name", { value: "ListCronJobs" });
+
+                /**
+                 * Calls ListCronJobs.
+                 * @function listCronJobs
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IListCronJobsRequest} request ListCronJobsRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.ListCronJobsResponse>} Promise
                  * @variation 2
                  */
 
@@ -25332,6 +25464,571 @@ export const clutch = $root.clutch = (() => {
                 return Deployment;
             })();
 
+            v1.DescribeDeploymentRequest = (function() {
+
+                /**
+                 * Properties of a DescribeDeploymentRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeDeploymentRequest
+                 * @property {string|null} [clientset] DescribeDeploymentRequest clientset
+                 * @property {string|null} [cluster] DescribeDeploymentRequest cluster
+                 * @property {string|null} [namespace] DescribeDeploymentRequest namespace
+                 * @property {string|null} [name] DescribeDeploymentRequest name
+                 * @property {Object.<string,string>|null} [labels] DescribeDeploymentRequest labels
+                 */
+
+                /**
+                 * Constructs a new DescribeDeploymentRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeDeploymentRequest.
+                 * @implements IDescribeDeploymentRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeDeploymentRequest=} [properties] Properties to set
+                 */
+                function DescribeDeploymentRequest(properties) {
+                    this.labels = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeDeploymentRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DescribeDeploymentRequest
+                 * @instance
+                 */
+                DescribeDeploymentRequest.prototype.clientset = "";
+
+                /**
+                 * DescribeDeploymentRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DescribeDeploymentRequest
+                 * @instance
+                 */
+                DescribeDeploymentRequest.prototype.cluster = "";
+
+                /**
+                 * DescribeDeploymentRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.DescribeDeploymentRequest
+                 * @instance
+                 */
+                DescribeDeploymentRequest.prototype.namespace = "";
+
+                /**
+                 * DescribeDeploymentRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DescribeDeploymentRequest
+                 * @instance
+                 */
+                DescribeDeploymentRequest.prototype.name = "";
+
+                /**
+                 * DescribeDeploymentRequest labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.DescribeDeploymentRequest
+                 * @instance
+                 */
+                DescribeDeploymentRequest.prototype.labels = $util.emptyObject;
+
+                /**
+                 * Verifies a DescribeDeploymentRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeDeploymentRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeDeploymentRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeDeploymentRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeDeploymentRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeDeploymentRequest} DescribeDeploymentRequest
+                 */
+                DescribeDeploymentRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeDeploymentRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeDeploymentRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeDeploymentRequest.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeDeploymentRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeDeploymentRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeDeploymentRequest} message DescribeDeploymentRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeDeploymentRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults)
+                        object.labels = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    let keys2;
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeDeploymentRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeDeploymentRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeDeploymentRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeDeploymentRequest;
+            })();
+
+            v1.DescribeDeploymentResponse = (function() {
+
+                /**
+                 * Properties of a DescribeDeploymentResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeDeploymentResponse
+                 * @property {clutch.k8s.v1.IDeployment|null} [deployment] DescribeDeploymentResponse deployment
+                 */
+
+                /**
+                 * Constructs a new DescribeDeploymentResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeDeploymentResponse.
+                 * @implements IDescribeDeploymentResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeDeploymentResponse=} [properties] Properties to set
+                 */
+                function DescribeDeploymentResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeDeploymentResponse deployment.
+                 * @member {clutch.k8s.v1.IDeployment|null|undefined} deployment
+                 * @memberof clutch.k8s.v1.DescribeDeploymentResponse
+                 * @instance
+                 */
+                DescribeDeploymentResponse.prototype.deployment = null;
+
+                /**
+                 * Verifies a DescribeDeploymentResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeDeploymentResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeDeploymentResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.deployment != null && message.hasOwnProperty("deployment")) {
+                        let error = $root.clutch.k8s.v1.Deployment.verify(message.deployment);
+                        if (error)
+                            return "deployment." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeDeploymentResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeDeploymentResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeDeploymentResponse} DescribeDeploymentResponse
+                 */
+                DescribeDeploymentResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeDeploymentResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeDeploymentResponse();
+                    if (object.deployment != null) {
+                        if (typeof object.deployment !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeDeploymentResponse.deployment: object expected");
+                        message.deployment = $root.clutch.k8s.v1.Deployment.fromObject(object.deployment);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeDeploymentResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeDeploymentResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeDeploymentResponse} message DescribeDeploymentResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeDeploymentResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.deployment = null;
+                    if (message.deployment != null && message.hasOwnProperty("deployment"))
+                        object.deployment = $root.clutch.k8s.v1.Deployment.toObject(message.deployment, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeDeploymentResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeDeploymentResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeDeploymentResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeDeploymentResponse;
+            })();
+
+            v1.ListDeploymentsRequest = (function() {
+
+                /**
+                 * Properties of a ListDeploymentsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListDeploymentsRequest
+                 * @property {string|null} [clientset] ListDeploymentsRequest clientset
+                 * @property {string|null} [cluster] ListDeploymentsRequest cluster
+                 * @property {string|null} [namespace] ListDeploymentsRequest namespace
+                 * @property {clutch.k8s.v1.IListOptions|null} [options] ListDeploymentsRequest options
+                 */
+
+                /**
+                 * Constructs a new ListDeploymentsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListDeploymentsRequest.
+                 * @implements IListDeploymentsRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListDeploymentsRequest=} [properties] Properties to set
+                 */
+                function ListDeploymentsRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListDeploymentsRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.ListDeploymentsRequest
+                 * @instance
+                 */
+                ListDeploymentsRequest.prototype.clientset = "";
+
+                /**
+                 * ListDeploymentsRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.ListDeploymentsRequest
+                 * @instance
+                 */
+                ListDeploymentsRequest.prototype.cluster = "";
+
+                /**
+                 * ListDeploymentsRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.ListDeploymentsRequest
+                 * @instance
+                 */
+                ListDeploymentsRequest.prototype.namespace = "";
+
+                /**
+                 * ListDeploymentsRequest options.
+                 * @member {clutch.k8s.v1.IListOptions|null|undefined} options
+                 * @memberof clutch.k8s.v1.ListDeploymentsRequest
+                 * @instance
+                 */
+                ListDeploymentsRequest.prototype.options = null;
+
+                /**
+                 * Verifies a ListDeploymentsRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListDeploymentsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListDeploymentsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.options != null && message.hasOwnProperty("options")) {
+                        let error = $root.clutch.k8s.v1.ListOptions.verify(message.options);
+                        if (error)
+                            return "options." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListDeploymentsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListDeploymentsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListDeploymentsRequest} ListDeploymentsRequest
+                 */
+                ListDeploymentsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListDeploymentsRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListDeploymentsRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.options != null) {
+                        if (typeof object.options !== "object")
+                            throw TypeError(".clutch.k8s.v1.ListDeploymentsRequest.options: object expected");
+                        message.options = $root.clutch.k8s.v1.ListOptions.fromObject(object.options);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListDeploymentsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListDeploymentsRequest
+                 * @static
+                 * @param {clutch.k8s.v1.ListDeploymentsRequest} message ListDeploymentsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListDeploymentsRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.options = null;
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.options != null && message.hasOwnProperty("options"))
+                        object.options = $root.clutch.k8s.v1.ListOptions.toObject(message.options, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this ListDeploymentsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListDeploymentsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListDeploymentsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListDeploymentsRequest;
+            })();
+
+            v1.ListDeploymentsResponse = (function() {
+
+                /**
+                 * Properties of a ListDeploymentsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListDeploymentsResponse
+                 * @property {Array.<clutch.k8s.v1.IDeployment>|null} [deployments] ListDeploymentsResponse deployments
+                 */
+
+                /**
+                 * Constructs a new ListDeploymentsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListDeploymentsResponse.
+                 * @implements IListDeploymentsResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListDeploymentsResponse=} [properties] Properties to set
+                 */
+                function ListDeploymentsResponse(properties) {
+                    this.deployments = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListDeploymentsResponse deployments.
+                 * @member {Array.<clutch.k8s.v1.IDeployment>} deployments
+                 * @memberof clutch.k8s.v1.ListDeploymentsResponse
+                 * @instance
+                 */
+                ListDeploymentsResponse.prototype.deployments = $util.emptyArray;
+
+                /**
+                 * Verifies a ListDeploymentsResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListDeploymentsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListDeploymentsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.deployments != null && message.hasOwnProperty("deployments")) {
+                        if (!Array.isArray(message.deployments))
+                            return "deployments: array expected";
+                        for (let i = 0; i < message.deployments.length; ++i) {
+                            let error = $root.clutch.k8s.v1.Deployment.verify(message.deployments[i]);
+                            if (error)
+                                return "deployments." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListDeploymentsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListDeploymentsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListDeploymentsResponse} ListDeploymentsResponse
+                 */
+                ListDeploymentsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListDeploymentsResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListDeploymentsResponse();
+                    if (object.deployments) {
+                        if (!Array.isArray(object.deployments))
+                            throw TypeError(".clutch.k8s.v1.ListDeploymentsResponse.deployments: array expected");
+                        message.deployments = [];
+                        for (let i = 0; i < object.deployments.length; ++i) {
+                            if (typeof object.deployments[i] !== "object")
+                                throw TypeError(".clutch.k8s.v1.ListDeploymentsResponse.deployments: object expected");
+                            message.deployments[i] = $root.clutch.k8s.v1.Deployment.fromObject(object.deployments[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListDeploymentsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListDeploymentsResponse
+                 * @static
+                 * @param {clutch.k8s.v1.ListDeploymentsResponse} message ListDeploymentsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListDeploymentsResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.deployments = [];
+                    if (message.deployments && message.deployments.length) {
+                        object.deployments = [];
+                        for (let j = 0; j < message.deployments.length; ++j)
+                            object.deployments[j] = $root.clutch.k8s.v1.Deployment.toObject(message.deployments[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this ListDeploymentsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListDeploymentsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListDeploymentsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListDeploymentsResponse;
+            })();
+
             v1.UpdateDeploymentRequest = (function() {
 
                 /**
@@ -26346,6 +27043,386 @@ export const clutch = $root.clutch = (() => {
                 return DescribeStatefulSetRequest;
             })();
 
+            v1.DescribeStatefulSetResponse = (function() {
+
+                /**
+                 * Properties of a DescribeStatefulSetResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeStatefulSetResponse
+                 * @property {clutch.k8s.v1.IStatefulSet|null} [statefulSet] DescribeStatefulSetResponse statefulSet
+                 */
+
+                /**
+                 * Constructs a new DescribeStatefulSetResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeStatefulSetResponse.
+                 * @implements IDescribeStatefulSetResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeStatefulSetResponse=} [properties] Properties to set
+                 */
+                function DescribeStatefulSetResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeStatefulSetResponse statefulSet.
+                 * @member {clutch.k8s.v1.IStatefulSet|null|undefined} statefulSet
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetResponse
+                 * @instance
+                 */
+                DescribeStatefulSetResponse.prototype.statefulSet = null;
+
+                /**
+                 * Verifies a DescribeStatefulSetResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeStatefulSetResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.statefulSet != null && message.hasOwnProperty("statefulSet")) {
+                        let error = $root.clutch.k8s.v1.StatefulSet.verify(message.statefulSet);
+                        if (error)
+                            return "statefulSet." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeStatefulSetResponse} DescribeStatefulSetResponse
+                 */
+                DescribeStatefulSetResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeStatefulSetResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeStatefulSetResponse();
+                    if (object.statefulSet != null) {
+                        if (typeof object.statefulSet !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeStatefulSetResponse.statefulSet: object expected");
+                        message.statefulSet = $root.clutch.k8s.v1.StatefulSet.fromObject(object.statefulSet);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeStatefulSetResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeStatefulSetResponse} message DescribeStatefulSetResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeStatefulSetResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.statefulSet = null;
+                    if (message.statefulSet != null && message.hasOwnProperty("statefulSet"))
+                        object.statefulSet = $root.clutch.k8s.v1.StatefulSet.toObject(message.statefulSet, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeStatefulSetResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeStatefulSetResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeStatefulSetResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeStatefulSetResponse;
+            })();
+
+            v1.ListStatefulSetsRequest = (function() {
+
+                /**
+                 * Properties of a ListStatefulSetsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListStatefulSetsRequest
+                 * @property {string|null} [clientset] ListStatefulSetsRequest clientset
+                 * @property {string|null} [cluster] ListStatefulSetsRequest cluster
+                 * @property {string|null} [namespace] ListStatefulSetsRequest namespace
+                 * @property {clutch.k8s.v1.IListOptions|null} [options] ListStatefulSetsRequest options
+                 */
+
+                /**
+                 * Constructs a new ListStatefulSetsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListStatefulSetsRequest.
+                 * @implements IListStatefulSetsRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListStatefulSetsRequest=} [properties] Properties to set
+                 */
+                function ListStatefulSetsRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListStatefulSetsRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.ListStatefulSetsRequest
+                 * @instance
+                 */
+                ListStatefulSetsRequest.prototype.clientset = "";
+
+                /**
+                 * ListStatefulSetsRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.ListStatefulSetsRequest
+                 * @instance
+                 */
+                ListStatefulSetsRequest.prototype.cluster = "";
+
+                /**
+                 * ListStatefulSetsRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.ListStatefulSetsRequest
+                 * @instance
+                 */
+                ListStatefulSetsRequest.prototype.namespace = "";
+
+                /**
+                 * ListStatefulSetsRequest options.
+                 * @member {clutch.k8s.v1.IListOptions|null|undefined} options
+                 * @memberof clutch.k8s.v1.ListStatefulSetsRequest
+                 * @instance
+                 */
+                ListStatefulSetsRequest.prototype.options = null;
+
+                /**
+                 * Verifies a ListStatefulSetsRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListStatefulSetsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListStatefulSetsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.options != null && message.hasOwnProperty("options")) {
+                        let error = $root.clutch.k8s.v1.ListOptions.verify(message.options);
+                        if (error)
+                            return "options." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListStatefulSetsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListStatefulSetsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListStatefulSetsRequest} ListStatefulSetsRequest
+                 */
+                ListStatefulSetsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListStatefulSetsRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListStatefulSetsRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.options != null) {
+                        if (typeof object.options !== "object")
+                            throw TypeError(".clutch.k8s.v1.ListStatefulSetsRequest.options: object expected");
+                        message.options = $root.clutch.k8s.v1.ListOptions.fromObject(object.options);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListStatefulSetsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListStatefulSetsRequest
+                 * @static
+                 * @param {clutch.k8s.v1.ListStatefulSetsRequest} message ListStatefulSetsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListStatefulSetsRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.options = null;
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.options != null && message.hasOwnProperty("options"))
+                        object.options = $root.clutch.k8s.v1.ListOptions.toObject(message.options, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this ListStatefulSetsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListStatefulSetsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListStatefulSetsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListStatefulSetsRequest;
+            })();
+
+            v1.ListStatefulSetsResponse = (function() {
+
+                /**
+                 * Properties of a ListStatefulSetsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListStatefulSetsResponse
+                 * @property {Array.<clutch.k8s.v1.IStatefulSet>|null} [statefulSets] ListStatefulSetsResponse statefulSets
+                 */
+
+                /**
+                 * Constructs a new ListStatefulSetsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListStatefulSetsResponse.
+                 * @implements IListStatefulSetsResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListStatefulSetsResponse=} [properties] Properties to set
+                 */
+                function ListStatefulSetsResponse(properties) {
+                    this.statefulSets = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListStatefulSetsResponse statefulSets.
+                 * @member {Array.<clutch.k8s.v1.IStatefulSet>} statefulSets
+                 * @memberof clutch.k8s.v1.ListStatefulSetsResponse
+                 * @instance
+                 */
+                ListStatefulSetsResponse.prototype.statefulSets = $util.emptyArray;
+
+                /**
+                 * Verifies a ListStatefulSetsResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListStatefulSetsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListStatefulSetsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.statefulSets != null && message.hasOwnProperty("statefulSets")) {
+                        if (!Array.isArray(message.statefulSets))
+                            return "statefulSets: array expected";
+                        for (let i = 0; i < message.statefulSets.length; ++i) {
+                            let error = $root.clutch.k8s.v1.StatefulSet.verify(message.statefulSets[i]);
+                            if (error)
+                                return "statefulSets." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListStatefulSetsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListStatefulSetsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListStatefulSetsResponse} ListStatefulSetsResponse
+                 */
+                ListStatefulSetsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListStatefulSetsResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListStatefulSetsResponse();
+                    if (object.statefulSets) {
+                        if (!Array.isArray(object.statefulSets))
+                            throw TypeError(".clutch.k8s.v1.ListStatefulSetsResponse.statefulSets: array expected");
+                        message.statefulSets = [];
+                        for (let i = 0; i < object.statefulSets.length; ++i) {
+                            if (typeof object.statefulSets[i] !== "object")
+                                throw TypeError(".clutch.k8s.v1.ListStatefulSetsResponse.statefulSets: object expected");
+                            message.statefulSets[i] = $root.clutch.k8s.v1.StatefulSet.fromObject(object.statefulSets[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListStatefulSetsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListStatefulSetsResponse
+                 * @static
+                 * @param {clutch.k8s.v1.ListStatefulSetsResponse} message ListStatefulSetsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListStatefulSetsResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.statefulSets = [];
+                    if (message.statefulSets && message.statefulSets.length) {
+                        object.statefulSets = [];
+                        for (let j = 0; j < message.statefulSets.length; ++j)
+                            object.statefulSets[j] = $root.clutch.k8s.v1.StatefulSet.toObject(message.statefulSets[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this ListStatefulSetsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListStatefulSetsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListStatefulSetsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListStatefulSetsResponse;
+            })();
+
             v1.DeleteStatefulSetRequest = (function() {
 
                 /**
@@ -26496,6 +27573,84 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return DeleteStatefulSetRequest;
+            })();
+
+            v1.DeleteStatefulSetResponse = (function() {
+
+                /**
+                 * Properties of a DeleteStatefulSetResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDeleteStatefulSetResponse
+                 */
+
+                /**
+                 * Constructs a new DeleteStatefulSetResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DeleteStatefulSetResponse.
+                 * @implements IDeleteStatefulSetResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDeleteStatefulSetResponse=} [properties] Properties to set
+                 */
+                function DeleteStatefulSetResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies a DeleteStatefulSetResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DeleteStatefulSetResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DeleteStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DeleteStatefulSetResponse} DeleteStatefulSetResponse
+                 */
+                DeleteStatefulSetResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DeleteStatefulSetResponse)
+                        return object;
+                    return new $root.clutch.k8s.v1.DeleteStatefulSetResponse();
+                };
+
+                /**
+                 * Creates a plain object from a DeleteStatefulSetResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DeleteStatefulSetResponse} message DeleteStatefulSetResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DeleteStatefulSetResponse.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this DeleteStatefulSetResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DeleteStatefulSetResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DeleteStatefulSetResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DeleteStatefulSetResponse;
             })();
 
             v1.UpdateStatefulSetRequest = (function() {
@@ -26817,189 +27972,6 @@ export const clutch = $root.clutch = (() => {
                 })();
 
                 return UpdateStatefulSetRequest;
-            })();
-
-            v1.DescribeStatefulSetResponse = (function() {
-
-                /**
-                 * Properties of a DescribeStatefulSetResponse.
-                 * @memberof clutch.k8s.v1
-                 * @interface IDescribeStatefulSetResponse
-                 * @property {clutch.k8s.v1.IStatefulSet|null} [statefulSet] DescribeStatefulSetResponse statefulSet
-                 */
-
-                /**
-                 * Constructs a new DescribeStatefulSetResponse.
-                 * @memberof clutch.k8s.v1
-                 * @classdesc Represents a DescribeStatefulSetResponse.
-                 * @implements IDescribeStatefulSetResponse
-                 * @constructor
-                 * @param {clutch.k8s.v1.IDescribeStatefulSetResponse=} [properties] Properties to set
-                 */
-                function DescribeStatefulSetResponse(properties) {
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * DescribeStatefulSetResponse statefulSet.
-                 * @member {clutch.k8s.v1.IStatefulSet|null|undefined} statefulSet
-                 * @memberof clutch.k8s.v1.DescribeStatefulSetResponse
-                 * @instance
-                 */
-                DescribeStatefulSetResponse.prototype.statefulSet = null;
-
-                /**
-                 * Verifies a DescribeStatefulSetResponse message.
-                 * @function verify
-                 * @memberof clutch.k8s.v1.DescribeStatefulSetResponse
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                DescribeStatefulSetResponse.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    if (message.statefulSet != null && message.hasOwnProperty("statefulSet")) {
-                        let error = $root.clutch.k8s.v1.StatefulSet.verify(message.statefulSet);
-                        if (error)
-                            return "statefulSet." + error;
-                    }
-                    return null;
-                };
-
-                /**
-                 * Creates a DescribeStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.k8s.v1.DescribeStatefulSetResponse
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.k8s.v1.DescribeStatefulSetResponse} DescribeStatefulSetResponse
-                 */
-                DescribeStatefulSetResponse.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.k8s.v1.DescribeStatefulSetResponse)
-                        return object;
-                    let message = new $root.clutch.k8s.v1.DescribeStatefulSetResponse();
-                    if (object.statefulSet != null) {
-                        if (typeof object.statefulSet !== "object")
-                            throw TypeError(".clutch.k8s.v1.DescribeStatefulSetResponse.statefulSet: object expected");
-                        message.statefulSet = $root.clutch.k8s.v1.StatefulSet.fromObject(object.statefulSet);
-                    }
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from a DescribeStatefulSetResponse message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.k8s.v1.DescribeStatefulSetResponse
-                 * @static
-                 * @param {clutch.k8s.v1.DescribeStatefulSetResponse} message DescribeStatefulSetResponse
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                DescribeStatefulSetResponse.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (options.defaults)
-                        object.statefulSet = null;
-                    if (message.statefulSet != null && message.hasOwnProperty("statefulSet"))
-                        object.statefulSet = $root.clutch.k8s.v1.StatefulSet.toObject(message.statefulSet, options);
-                    return object;
-                };
-
-                /**
-                 * Converts this DescribeStatefulSetResponse to JSON.
-                 * @function toJSON
-                 * @memberof clutch.k8s.v1.DescribeStatefulSetResponse
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                DescribeStatefulSetResponse.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return DescribeStatefulSetResponse;
-            })();
-
-            v1.DeleteStatefulSetResponse = (function() {
-
-                /**
-                 * Properties of a DeleteStatefulSetResponse.
-                 * @memberof clutch.k8s.v1
-                 * @interface IDeleteStatefulSetResponse
-                 */
-
-                /**
-                 * Constructs a new DeleteStatefulSetResponse.
-                 * @memberof clutch.k8s.v1
-                 * @classdesc Represents a DeleteStatefulSetResponse.
-                 * @implements IDeleteStatefulSetResponse
-                 * @constructor
-                 * @param {clutch.k8s.v1.IDeleteStatefulSetResponse=} [properties] Properties to set
-                 */
-                function DeleteStatefulSetResponse(properties) {
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * Verifies a DeleteStatefulSetResponse message.
-                 * @function verify
-                 * @memberof clutch.k8s.v1.DeleteStatefulSetResponse
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                DeleteStatefulSetResponse.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    return null;
-                };
-
-                /**
-                 * Creates a DeleteStatefulSetResponse message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.k8s.v1.DeleteStatefulSetResponse
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.k8s.v1.DeleteStatefulSetResponse} DeleteStatefulSetResponse
-                 */
-                DeleteStatefulSetResponse.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.k8s.v1.DeleteStatefulSetResponse)
-                        return object;
-                    return new $root.clutch.k8s.v1.DeleteStatefulSetResponse();
-                };
-
-                /**
-                 * Creates a plain object from a DeleteStatefulSetResponse message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.k8s.v1.DeleteStatefulSetResponse
-                 * @static
-                 * @param {clutch.k8s.v1.DeleteStatefulSetResponse} message DeleteStatefulSetResponse
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                DeleteStatefulSetResponse.toObject = function toObject() {
-                    return {};
-                };
-
-                /**
-                 * Converts this DeleteStatefulSetResponse to JSON.
-                 * @function toJSON
-                 * @memberof clutch.k8s.v1.DeleteStatefulSetResponse
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                DeleteStatefulSetResponse.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return DeleteStatefulSetResponse;
             })();
 
             v1.UpdateStatefulSetResponse = (function() {
@@ -28377,6 +29349,281 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return DescribeCronJobResponse;
+            })();
+
+            v1.ListCronJobsRequest = (function() {
+
+                /**
+                 * Properties of a ListCronJobsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListCronJobsRequest
+                 * @property {string|null} [clientset] ListCronJobsRequest clientset
+                 * @property {string|null} [cluster] ListCronJobsRequest cluster
+                 * @property {string|null} [namespace] ListCronJobsRequest namespace
+                 * @property {clutch.k8s.v1.IListOptions|null} [options] ListCronJobsRequest options
+                 */
+
+                /**
+                 * Constructs a new ListCronJobsRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListCronJobsRequest.
+                 * @implements IListCronJobsRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListCronJobsRequest=} [properties] Properties to set
+                 */
+                function ListCronJobsRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListCronJobsRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.ListCronJobsRequest
+                 * @instance
+                 */
+                ListCronJobsRequest.prototype.clientset = "";
+
+                /**
+                 * ListCronJobsRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.ListCronJobsRequest
+                 * @instance
+                 */
+                ListCronJobsRequest.prototype.cluster = "";
+
+                /**
+                 * ListCronJobsRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.ListCronJobsRequest
+                 * @instance
+                 */
+                ListCronJobsRequest.prototype.namespace = "";
+
+                /**
+                 * ListCronJobsRequest options.
+                 * @member {clutch.k8s.v1.IListOptions|null|undefined} options
+                 * @memberof clutch.k8s.v1.ListCronJobsRequest
+                 * @instance
+                 */
+                ListCronJobsRequest.prototype.options = null;
+
+                /**
+                 * Verifies a ListCronJobsRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListCronJobsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListCronJobsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.options != null && message.hasOwnProperty("options")) {
+                        let error = $root.clutch.k8s.v1.ListOptions.verify(message.options);
+                        if (error)
+                            return "options." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListCronJobsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListCronJobsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListCronJobsRequest} ListCronJobsRequest
+                 */
+                ListCronJobsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListCronJobsRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListCronJobsRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.options != null) {
+                        if (typeof object.options !== "object")
+                            throw TypeError(".clutch.k8s.v1.ListCronJobsRequest.options: object expected");
+                        message.options = $root.clutch.k8s.v1.ListOptions.fromObject(object.options);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListCronJobsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListCronJobsRequest
+                 * @static
+                 * @param {clutch.k8s.v1.ListCronJobsRequest} message ListCronJobsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListCronJobsRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.options = null;
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.options != null && message.hasOwnProperty("options"))
+                        object.options = $root.clutch.k8s.v1.ListOptions.toObject(message.options, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this ListCronJobsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListCronJobsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListCronJobsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListCronJobsRequest;
+            })();
+
+            v1.ListCronJobsResponse = (function() {
+
+                /**
+                 * Properties of a ListCronJobsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IListCronJobsResponse
+                 * @property {Array.<clutch.k8s.v1.ICronJob>|null} [cronJobs] ListCronJobsResponse cronJobs
+                 */
+
+                /**
+                 * Constructs a new ListCronJobsResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a ListCronJobsResponse.
+                 * @implements IListCronJobsResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IListCronJobsResponse=} [properties] Properties to set
+                 */
+                function ListCronJobsResponse(properties) {
+                    this.cronJobs = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ListCronJobsResponse cronJobs.
+                 * @member {Array.<clutch.k8s.v1.ICronJob>} cronJobs
+                 * @memberof clutch.k8s.v1.ListCronJobsResponse
+                 * @instance
+                 */
+                ListCronJobsResponse.prototype.cronJobs = $util.emptyArray;
+
+                /**
+                 * Verifies a ListCronJobsResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.ListCronJobsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ListCronJobsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.cronJobs != null && message.hasOwnProperty("cronJobs")) {
+                        if (!Array.isArray(message.cronJobs))
+                            return "cronJobs: array expected";
+                        for (let i = 0; i < message.cronJobs.length; ++i) {
+                            let error = $root.clutch.k8s.v1.CronJob.verify(message.cronJobs[i]);
+                            if (error)
+                                return "cronJobs." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a ListCronJobsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.ListCronJobsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.ListCronJobsResponse} ListCronJobsResponse
+                 */
+                ListCronJobsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.ListCronJobsResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.ListCronJobsResponse();
+                    if (object.cronJobs) {
+                        if (!Array.isArray(object.cronJobs))
+                            throw TypeError(".clutch.k8s.v1.ListCronJobsResponse.cronJobs: array expected");
+                        message.cronJobs = [];
+                        for (let i = 0; i < object.cronJobs.length; ++i) {
+                            if (typeof object.cronJobs[i] !== "object")
+                                throw TypeError(".clutch.k8s.v1.ListCronJobsResponse.cronJobs: object expected");
+                            message.cronJobs[i] = $root.clutch.k8s.v1.CronJob.fromObject(object.cronJobs[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a ListCronJobsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.ListCronJobsResponse
+                 * @static
+                 * @param {clutch.k8s.v1.ListCronJobsResponse} message ListCronJobsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ListCronJobsResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.cronJobs = [];
+                    if (message.cronJobs && message.cronJobs.length) {
+                        object.cronJobs = [];
+                        for (let j = 0; j < message.cronJobs.length; ++j)
+                            object.cronJobs[j] = $root.clutch.k8s.v1.CronJob.toObject(message.cronJobs[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this ListCronJobsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.ListCronJobsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ListCronJobsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ListCronJobsResponse;
             })();
 
             v1.DeleteCronJobRequest = (function() {
