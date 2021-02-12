@@ -2,7 +2,6 @@ package k8s
 
 import (
 	"context"
-	"fmt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -29,7 +28,7 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 	if len(hpas.Items) == 1 {
 		return ProtoForHPA(cs.Cluster(), &hpas.Items[0]), nil
 	} else if len(hpas.Items) > 1 {
-		return nil, fmt.Errorf("Located multiple HPAs")
+		return nil, status.Error(codes.FailedPrecondition, "located multiple HPAs")
 	}
 
 	return nil, status.Error(codes.NotFound, "unable to locate HPA")
