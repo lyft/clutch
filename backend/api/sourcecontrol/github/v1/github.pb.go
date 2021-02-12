@@ -131,7 +131,7 @@ func (RepositoryParameters_Visibility) EnumDescriptor() ([]byte, []int) {
 	return file_sourcecontrol_github_v1_github_proto_rawDescGZIP(), []int{0, 0}
 }
 
-// Common parameters for GitHub repostories.
+// Common parameters for GitHub repositories.
 type RepositoryParameters struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
