@@ -15,7 +15,7 @@ import "sourcecontrol/github/v1/github.proto";
 service SourceControlAPI {
   rpc GetRepositoryOptions(GetRepositoryOptionsRequest) returns (GetRepositoryOptionsResponse) {
     option (google.api.http) = {
-      post : "/v1/sourcecontrol/repositoryOptions",
+      post : "/v1/sourcecontrol/getRepositoryOptions",
       body : "*"
     };
     option (clutch.api.v1.action).type = READ;
