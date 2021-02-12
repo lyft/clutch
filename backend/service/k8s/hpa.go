@@ -3,6 +3,8 @@ package k8s
 import (
 	"context"
 	"fmt"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -21,7 +23,7 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 		FieldSelector: "metadata.name=" + name,
 	})
 	if err != nil {
-		return nil, err
+		return nil, ConvertError(err)
 	}
 
 	if len(hpas.Items) == 1 {
@@ -30,7 +32,7 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 		return nil, fmt.Errorf("Located multiple HPAs")
 	}
 
-	return nil, fmt.Errorf("Unable to locate HPA")
+	return nil, status.Error(codes.NotFound, "unable to locate HPA")
 }
 
 func ProtoForHPA(cluster string, autoscaler *autoscalingv1.HorizontalPodAutoscaler) *k8sapiv1.HPA {
@@ -62,7 +64,7 @@ func (s *svc) ResizeHPA(ctx context.Context, clientset, cluster, namespace, name
 	opts := metav1.GetOptions{}
 	hpa, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Get(ctx, name, opts)
 	if err != nil {
-		return err
+		return ConvertError(err)
 	}
 
 	normalizeHPAChanges(hpa, sizing)
@@ -71,7 +73,7 @@ func (s *svc) ResizeHPA(ctx context.Context, clientset, cluster, namespace, name
 		_, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Update(ctx, hpa, metav1.UpdateOptions{})
 		return err
 	})
-	return retryErr
+	return ConvertError(retryErr)
 }
 
 func normalizeHPAChanges(hpa *autoscalingv1.HorizontalPodAutoscaler, sizing *k8sapiv1.ResizeHPARequest_Sizing) {
@@ -91,9 +93,10 @@ func normalizeHPAChanges(hpa *autoscalingv1.HorizontalPodAutoscaler, sizing *k8s
 func (s *svc) DeleteHPA(ctx context.Context, clientset, cluster, namespace, name string) error {
 	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
-		return err
+		return ConvertError(err)
 	}
 
 	opts := metav1.DeleteOptions{}
-	return cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Delete(ctx, name, opts)
+	err = cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Delete(ctx, name, opts)
+	return ConvertError(err)
 }

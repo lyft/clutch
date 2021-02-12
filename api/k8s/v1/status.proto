@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package clutch.k8s.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/k8s/v1;k8sv1";
+
+// Kubernetes protos are generated using non-standard mechanisms, and the Go objects panic when serializing
+// with the v2 proto APIs. These are just repetitions of the structs from K8s metav1 package so they are compliant
+// with proto v2 serialization.
+
+message Status {
+  string status = 1;
+  string message = 2;
+  string reason = 3;
+  int32 code = 4;
+
+  StatusDetails details = 5;
+}
+
+message StatusDetails {
+  string name = 1;
+  string group = 2;
+  string kind = 3;
+  string uid = 4;
+  repeated StatusCause causes = 5;
+}
+
+message StatusCause {
+  string type = 1;
+  string message = 2;
+  string field = 3;
+}
