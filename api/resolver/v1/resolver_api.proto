@@ -55,8 +55,8 @@ message AutocompleteResponse {
     // The primary identifer of the resource
     // This value is used when rendering the autocomplete results on the frontend
     string id = 1;
-    // The label can provide more detailed information about the result which is dispalyed
-    // inline with the auto complete result
+    // The label can provide more detailed information about the result
+    // This is dispalyed inline with the auto complete result
     // eg: what region an ec2 instance resides in
     string label = 2;
   }

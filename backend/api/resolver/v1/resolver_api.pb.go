@@ -490,7 +490,12 @@ type AutocompleteResponse_AutocompleteResult struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id    string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// The primary identifer of the resource
+	// This value is used when rendering the autocomplete results on the frontend
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// The label can provide more detailed information about the result
+	// This is dispalyed inline with the auto complete result
+	// eg: what region an ec2 instance resides in
 	Label string `protobuf:"bytes,2,opt,name=label,proto3" json:"label,omitempty"`
 }
 
