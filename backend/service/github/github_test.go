@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"testing"
 	"time"
 
@@ -149,7 +150,7 @@ func (m *mockRepositories) Create(ctx context.Context, org string, repo *githubv
 	m.actualOrg = org
 
 	ret := &githubv3.Repository{
-		URL: strPtr(fmt.Sprintf("https://example.com/%s/%s", org, *repo.Name)),
+		HTMLURL: strPtr(fmt.Sprintf("https://example.com/%s/%s", org, *repo.Name)),
 	}
 	return ret, nil, nil
 }
@@ -187,27 +188,50 @@ func (m *mockRepositories) GetCommit(ctx context.Context, owner, repo, sha strin
 	}, &githubv3.Response{}, nil
 }
 
+type mockUsers struct {
+	actualUser  string
+	defaultUser string
+}
+
+func (m *mockUsers) Get(ctx context.Context, user string) (*githubv3.User, *githubv3.Response, error) {
+	m.actualUser = user
+
+	var login string
+	if login = user; user == "" {
+		login = m.defaultUser
+	}
+	ret := &githubv3.User{
+		Login: &login,
+	}
+	return ret, nil, nil
+}
+
 var createRepoTests = []struct {
-	req *sourcecontrolv1.CreateRepositoryRequest
+	req   *sourcecontrolv1.CreateRepositoryRequest
+	users *mockUsers
 }{
 	{
 		req: &sourcecontrolv1.CreateRepositoryRequest{
-			Owner:       "foo",
+			Owner:       "organization",
 			Name:        "bar",
-			Description: "this is my repository",
+			Description: "this is an org repository",
 			Options: &sourcecontrolv1.CreateRepositoryRequest_GithubOptions{GithubOptions: &githubv1.CreateRepositoryOptions{
 				Parameters: &githubv1.RepositoryParameters{Visibility: githubv1.RepositoryParameters_PUBLIC},
 			}},
 		},
+		users: &mockUsers{},
 	},
 	{
 		req: &sourcecontrolv1.CreateRepositoryRequest{
-			Owner:       "",
+			Owner:       "user",
 			Name:        "bar",
-			Description: "this is also my repository",
+			Description: "this is my repository",
 			Options: &sourcecontrolv1.CreateRepositoryRequest_GithubOptions{GithubOptions: &githubv1.CreateRepositoryOptions{
 				Parameters: &githubv1.RepositoryParameters{Visibility: githubv1.RepositoryParameters_PRIVATE},
 			}},
+		},
+		users: &mockUsers{
+			defaultUser: "user",
 		},
 	},
 }
@@ -218,27 +242,61 @@ func TestCreateRepository(t *testing.T) {
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
 
-			m := &mockRepositories{}
+			r := &mockRepositories{}
 			s := &svc{rest: v3client{
-				Repositories: m,
+				Repositories: r,
+				Users:        tt.users,
 			}}
 
 			resp, err := s.CreateRepository(context.Background(), tt.req)
 
-			var expectedViz string
+			var expectedOwner string
+			if expectedOwner = tt.req.Owner; tt.req.Owner == "user" {
+				expectedOwner = ""
+			}
+
+			var expectedPrivate bool
 			switch tt.req.GetGithubOptions().Parameters.Visibility {
 			case githubv1.RepositoryParameters_PUBLIC:
-				expectedViz = "public"
+				expectedPrivate = false
 			case githubv1.RepositoryParameters_PRIVATE:
-				expectedViz = "private"
+				expectedPrivate = true
 			}
 
 			assert.NoError(t, err)
-			assert.Equal(t, tt.req.Owner, m.actualOrg)
-			assert.Equal(t, tt.req.Name, *m.actualRepo.Name)
-			assert.Equal(t, expectedViz, *m.actualRepo.Visibility)
-			assert.Equal(t, tt.req.Description, *m.actualRepo.Description)
+			assert.Equal(t, tt.users.actualUser, "")
+			assert.Equal(t, expectedOwner, r.actualOrg)
+			assert.Equal(t, tt.req.Name, *r.actualRepo.Name)
+			assert.Equal(t, expectedPrivate, *r.actualRepo.Private)
+			assert.Equal(t, tt.req.Description, *r.actualRepo.Description)
 			assert.NotEmpty(t, resp.Url)
+		})
+	}
+}
+
+var getUserTests = []struct {
+	username string
+}{
+	{
+		username: "foobar",
+	},
+}
+
+func TestGetUser(t *testing.T) {
+	for idx, tt := range getUserTests {
+		tt := tt
+		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
+			t.Parallel()
+
+			u := &mockUsers{}
+			s := &svc{rest: v3client{
+				Users: u,
+			}}
+
+			resp, err := s.GetUser(context.Background(), tt.username)
+
+			assert.NoError(t, err)
+			assert.Equal(t, u.actualUser, resp.GetLogin())
 		})
 	}
 }
@@ -347,6 +405,181 @@ func TestGetCommit(t *testing.T) {
 			}
 			a.Equal(tt.file, *commit.Files[0].Filename)
 			a.Nil(err)
+		})
+	}
+}
+
+type mockOrganizations struct {
+	actualOrg  string
+	actualUser string
+
+	generalError bool
+	authError    bool
+}
+
+func (m *mockOrganizations) Get(ctx context.Context, org string) (*githubv3.Organization, *githubv3.Response, error) {
+	m.actualOrg = org
+	if m.generalError == true {
+		return nil, nil, errors.New(problem)
+	}
+	return &githubv3.Organization{
+		Name: &org,
+	}, nil, nil
+}
+
+func (m *mockOrganizations) List(ctx context.Context, user string, opts *githubv3.ListOptions) ([]*githubv3.Organization, *githubv3.Response, error) {
+	m.actualUser = user
+	if m.generalError == true {
+		return nil, nil, errors.New(problem)
+	}
+	return []*githubv3.Organization{}, nil, nil
+}
+
+func (m *mockOrganizations) GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, *githubv3.Response, error) {
+	m.actualOrg = org
+	m.actualUser = user
+	if m.generalError {
+		return nil, &githubv3.Response{Response: &http.Response{StatusCode: 500}}, errors.New(problem)
+	}
+	if m.authError {
+		return nil, &githubv3.Response{Response: &http.Response{StatusCode: 403}}, nil
+	}
+	return &githubv3.Membership{}, nil, nil
+}
+
+var getOrganizationTests = []struct {
+	name      string
+	errorText string
+	mockOrgs  *mockOrganizations
+	org       string
+}{
+	{
+		name:      "v3 error",
+		mockOrgs:  &mockOrganizations{generalError: true},
+		errorText: "we've had a problem",
+		org:       "testing",
+	},
+	{
+		name:     "v3 error",
+		mockOrgs: &mockOrganizations{authError: true},
+		org:      "testing",
+	},
+	{
+		name:     "happy path",
+		mockOrgs: &mockOrganizations{},
+		org:      "testing",
+	},
+}
+
+func TestGetOrganization(t *testing.T) {
+	for idx, tt := range getOrganizationTests {
+		tt := tt
+		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
+			t.Parallel()
+
+			s := &svc{rest: v3client{
+				Organizations: tt.mockOrgs,
+			}}
+
+			resp, err := s.GetOrganization(context.Background(), tt.org)
+
+			if tt.errorText != "" {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tt.errorText)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, resp.GetName(), tt.org)
+				assert.Equal(t, tt.mockOrgs.actualOrg, tt.org)
+			}
+		})
+	}
+}
+
+var listOrganizationsTests = []struct {
+	name      string
+	errorText string
+	mockOrgs  *mockOrganizations
+	username  string
+}{
+	{
+		name:      "v3 error",
+		mockOrgs:  &mockOrganizations{generalError: true},
+		errorText: "we've had a problem",
+		username:  "foobar",
+	},
+	{
+		name:     "happy path",
+		mockOrgs: &mockOrganizations{},
+		username: "foobar",
+	},
+}
+
+func TestListOrganizations(t *testing.T) {
+	for idx, tt := range listOrganizationsTests {
+		tt := tt
+		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
+			t.Parallel()
+
+			s := &svc{rest: v3client{
+				Organizations: tt.mockOrgs,
+			}}
+
+			resp, err := s.ListOrganizations(context.Background(), tt.username)
+
+			if tt.errorText != "" {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tt.errorText)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, len(resp), 0)
+				assert.Equal(t, tt.mockOrgs.actualUser, tt.username)
+			}
+		})
+	}
+}
+
+var getOrgMembershipTests = []struct {
+	name      string
+	errorText string
+	mockOrgs  *mockOrganizations
+	username  string
+	org       string
+}{
+	{
+		name:      "v3 error",
+		mockOrgs:  &mockOrganizations{generalError: true},
+		errorText: "we've had a problem",
+		username:  "foobar",
+		org:       "testing",
+	},
+	{
+		name:     "happy path",
+		mockOrgs: &mockOrganizations{},
+		username: "foobar",
+		org:      "testing",
+	},
+}
+
+func TestGetOrgMembership(t *testing.T) {
+	for idx, tt := range getOrgMembershipTests {
+		tt := tt
+		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
+			t.Parallel()
+
+			s := &svc{rest: v3client{
+				Organizations: tt.mockOrgs,
+			}}
+
+			_, err := s.GetOrgMembership(context.Background(), tt.username, tt.org)
+
+			if tt.errorText != "" {
+				assert.Error(t, err)
+				assert.Contains(t, err.Error(), tt.errorText)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.mockOrgs.actualOrg, tt.org)
+				assert.Equal(t, tt.mockOrgs.actualUser, tt.username)
+			}
 		})
 	}
 }

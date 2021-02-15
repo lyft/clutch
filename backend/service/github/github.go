@@ -82,6 +82,10 @@ type Client interface {
 	CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error)
 	GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error)
 	GetRepository(ctx context.Context, ref *RemoteRef) (*Repository, error)
+	GetOrganization(ctx context.Context, organization string) (*githubv3.Organization, error)
+	ListOrganizations(ctx context.Context, user string) ([]*githubv3.Organization, error)
+	GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, error)
+	GetUser(ctx context.Context, username string) (*githubv3.User, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -104,6 +108,49 @@ type svc struct {
 	rawAuth *gittransport.BasicAuth
 }
 
+func (s *svc) GetOrganization(ctx context.Context, organization string) (*githubv3.Organization, error) {
+	org, _, err := s.rest.Organizations.Get(ctx, organization)
+	if err != nil {
+		return nil, err
+	}
+	return org, nil
+}
+
+// ListOrganizations returns all organizations for a specified user.
+// To list organizations for the currently authenticated user set user to "".
+func (s *svc) ListOrganizations(ctx context.Context, user string) ([]*githubv3.Organization, error) {
+	organizations, _, err := s.rest.Organizations.List(ctx, user, &githubv3.ListOptions{})
+	if err != nil {
+		return nil, err
+	}
+	return organizations, nil
+}
+
+// GetOrgMembership returns a specified users membership within a specified organization.
+// To list organizations for the currently authenticated user set user to "".
+func (s *svc) GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, error) {
+	membership, response, err := s.rest.Organizations.GetOrgMembership(ctx, user, org)
+	if err != nil {
+		// A user might be part of an org but not have permissions to get memerbship information if auth is behind SSO.
+		// In this case we return a default Membership.
+		if response.StatusCode == 403 {
+			return &githubv3.Membership{}, nil
+		}
+		return nil, err
+	}
+	return membership, nil
+}
+
+// GetUser returns information about the specified user.
+// To list organizations for the currently authenticated user set user to "".
+func (s *svc) GetUser(ctx context.Context, username string) (*githubv3.User, error) {
+	user, _, err := s.rest.Users.Get(ctx, username)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
 func (s *svc) CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error) {
 	// Validate that we received GitHub Options.
 	_, ok := req.Options.(*sourcecontrolv1.CreateRepositoryRequest_GithubOptions)
@@ -112,19 +159,30 @@ func (s *svc) CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateR
 	}
 
 	opts := req.GetGithubOptions()
-	newRepo := &githubv3.Repository{
+	currentUser, _, err := s.rest.Users.Get(ctx, "")
+	if err != nil {
+		return nil, err
+	}
+
+	var org string
+	if org = req.Owner; currentUser.GetLogin() == req.Owner {
+		// If the specified owner is the same as the current user the GitHub API expects an empty string.
+		org = ""
+	}
+
+	repo := &githubv3.Repository{
 		Name:        strPtr(req.Name),
 		Description: strPtr(req.Description),
-		Visibility:  strPtr(strings.ToLower(opts.Parameters.Visibility.String())),
+		Private:     boolPtr(opts.Parameters.Visibility.String() == "PRIVATE"),
 		AutoInit:    boolPtr(opts.AutoInit),
 	}
-	repo, _, err := s.rest.Repositories.Create(ctx, req.Owner, newRepo)
+	newRepo, _, err := s.rest.Repositories.Create(ctx, org, repo)
 	if err != nil {
 		return nil, err
 	}
 
 	resp := &sourcecontrolv1.CreateRepositoryResponse{
-		Url: *repo.URL,
+		Url: *newRepo.HTMLURL,
 	}
 	return resp, nil
 }
@@ -235,9 +293,11 @@ func newService(config *githubv1.Config) Client {
 	return &svc{
 		graphQL: githubv4.NewClient(httpClient),
 		rest: v3client{
-			Repositories: rest.Repositories,
-			PullRequests: rest.PullRequests,
-			Issues:       rest.Issues,
+			Repositories:  rest.Repositories,
+			PullRequests:  rest.PullRequests,
+			Issues:        rest.Issues,
+			Users:         rest.Users,
+			Organizations: rest.Organizations,
 		},
 		rawAuth: &gittransport.BasicAuth{
 			Username: "token",
