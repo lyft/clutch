@@ -14046,13 +14046,8 @@ export namespace clutch {
                 /** SearchMetadata enabled */
                 enabled?: (boolean|null);
 
-<<<<<<< HEAD
-                /** SearchMetadata autocompleteable */
-                autocompleteable?: (boolean|null);
-=======
                 /** SearchMetadata autocompleteEnabled */
                 autocompleteEnabled?: (boolean|null);
->>>>>>> main
             }
 
             /** Represents a SearchMetadata. */
@@ -14067,13 +14062,8 @@ export namespace clutch {
                 /** SearchMetadata enabled. */
                 public enabled: boolean;
 
-<<<<<<< HEAD
-                /** SearchMetadata autocompleteable. */
-                public autocompleteable: boolean;
-=======
                 /** SearchMetadata autocompleteEnabled. */
                 public autocompleteEnabled: boolean;
->>>>>>> main
 
                 /**
                  * Verifies a SearchMetadata message.
@@ -14488,183 +14478,7 @@ export namespace clutch {
                  * Converts this AutocompleteResponse to JSON.
                  * @returns JSON object
                  */
-<<<<<<< HEAD
-                type ResolveCallback = (error: (Error|null), response?: clutch.resolver.v1.ResolveResponse) => void;
-
-                /**
-                 * Callback as used by {@link clutch.resolver.v1.ResolverAPI#autocomplete}.
-                 * @param error Error, if any
-                 * @param [response] AutocompleteResponse
-                 */
-                type AutocompleteCallback = (error: (Error|null), response?: clutch.resolver.v1.AutocompleteResponse) => void;
-            }
-
-            /** Properties of an AutocompleteRequest. */
-            interface IAutocompleteRequest {
-
-                /** AutocompleteRequest want */
-                want?: (string|null);
-
-                /** AutocompleteRequest search */
-                search?: (string|null);
-
-                /** AutocompleteRequest resultLimit */
-                resultLimit?: (number|Long|null);
-            }
-
-            /** Represents an AutocompleteRequest. */
-            class AutocompleteRequest implements IAutocompleteRequest {
-
-                /**
-                 * Constructs a new AutocompleteRequest.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.resolver.v1.IAutocompleteRequest);
-
-                /** AutocompleteRequest want. */
-                public want: string;
-
-                /** AutocompleteRequest search. */
-                public search: string;
-
-                /** AutocompleteRequest resultLimit. */
-                public resultLimit: (number|Long);
-
-                /**
-                 * Verifies an AutocompleteRequest message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates an AutocompleteRequest message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns AutocompleteRequest
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.resolver.v1.AutocompleteRequest;
-
-                /**
-                 * Creates a plain object from an AutocompleteRequest message. Also converts values to other types if specified.
-                 * @param message AutocompleteRequest
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.resolver.v1.AutocompleteRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this AutocompleteRequest to JSON.
-                 * @returns JSON object
-                 */
                 public toJSON(): { [k: string]: any };
-            }
-
-            /** Properties of an AutocompleteResponse. */
-            interface IAutocompleteResponse {
-
-                /** AutocompleteResponse results */
-                results?: (clutch.resolver.v1.AutocompleteResponse.IAutocompleteResult[]|null);
-            }
-
-            /** Represents an AutocompleteResponse. */
-            class AutocompleteResponse implements IAutocompleteResponse {
-
-                /**
-                 * Constructs a new AutocompleteResponse.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.resolver.v1.IAutocompleteResponse);
-
-                /** AutocompleteResponse results. */
-                public results: clutch.resolver.v1.AutocompleteResponse.IAutocompleteResult[];
-
-                /**
-                 * Verifies an AutocompleteResponse message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
-
-                /**
-                 * Creates an AutocompleteResponse message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns AutocompleteResponse
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.resolver.v1.AutocompleteResponse;
-
-                /**
-                 * Creates a plain object from an AutocompleteResponse message. Also converts values to other types if specified.
-                 * @param message AutocompleteResponse
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.resolver.v1.AutocompleteResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                /**
-                 * Converts this AutocompleteResponse to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
-            }
-
-            namespace AutocompleteResponse {
-
-                /** Properties of an AutocompleteResult. */
-                interface IAutocompleteResult {
-
-                    /** AutocompleteResult id */
-                    id?: (string|null);
-
-                    /** AutocompleteResult label */
-                    label?: (string|null);
-                }
-
-                /** Represents an AutocompleteResult. */
-                class AutocompleteResult implements IAutocompleteResult {
-
-                    /**
-                     * Constructs a new AutocompleteResult.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.resolver.v1.AutocompleteResponse.IAutocompleteResult);
-
-                    /** AutocompleteResult id. */
-                    public id: string;
-
-                    /** AutocompleteResult label. */
-                    public label: string;
-
-                    /**
-                     * Verifies an AutocompleteResult message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates an AutocompleteResult message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns AutocompleteResult
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.resolver.v1.AutocompleteResponse.AutocompleteResult;
-
-                    /**
-                     * Creates a plain object from an AutocompleteResult message. Also converts values to other types if specified.
-                     * @param message AutocompleteResult
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.resolver.v1.AutocompleteResponse.AutocompleteResult, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this AutocompleteResult to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-=======
-                public toJSON(): { [k: string]: any };
->>>>>>> main
             }
 
             /** Properties of a ResolveRequest. */
