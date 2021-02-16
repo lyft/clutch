@@ -443,7 +443,11 @@ func (m *SearchMetadata) Validate() error {
 
 	// no validation rules for Enabled
 
+<<<<<<< HEAD
 	// no validation rules for Autocompleteable
+=======
+	// no validation rules for AutocompleteEnabled
+>>>>>>> main
 
 	return nil
 }

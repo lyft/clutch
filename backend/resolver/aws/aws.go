@@ -70,13 +70,12 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 	}
 
 	var topologyService topology.Service
-	topologySvc, ok := service.Registry[topology.Name]
-	if ok {
-		topologyService, ok = topologySvc.(topology.Service)
+	if svc, ok := service.Registry[topology.Name]; ok {
+		topologyService, ok = svc.(topology.Service)
 		if !ok {
-			return nil, errors.New("topology service was not the correct type")
+			return nil, errors.New("incorrect topology service type")
 		}
-		logger.Info("enabling autocomplete api for the aws resolver")
+		logger.Debug("enabling autocomplete api for the aws resolver")
 	}
 
 	schemas, err := resolver.InputsToSchemas(typeSchemas)
@@ -93,6 +92,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 		topology: topologyService,
 		schemas:  schemas,
 	}
+
 	return r, nil
 }
 
@@ -151,7 +151,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	}
 }
 
-func (r *res) AutoComplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResponse_AutocompleteResult, error) {
+func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResult, error) {
 	if r.topology == nil {
 		return nil, fmt.Errorf("to use the autocomplete api you must first setup the topology service")
 	}
@@ -160,6 +160,7 @@ func (r *res) AutoComplete(ctx context.Context, typeURL, search string, limit ui
 	// consider abstracting this into the topology service.
 	searchRequest := &topologyv1.SearchRequest{
 		PageToken: "0",
+		Limit:     resolver.DefaultAutocompleteLimit,
 		Sort: &topologyv1.SearchRequest_Sort{
 			Direction: topologyv1.SearchRequest_Sort_ASCENDING,
 			Field:     "column.id",
@@ -173,7 +174,7 @@ func (r *res) AutoComplete(ctx context.Context, typeURL, search string, limit ui
 		},
 	}
 
-	// Limit is optional, if one is not set we use the default set by the topology search api
+	// Limit is optional, if one is not set we use the default DefaultAutocompleteLimit
 	if limit > 0 {
 		searchRequest.Limit = limit
 	}
@@ -183,13 +184,13 @@ func (r *res) AutoComplete(ctx context.Context, typeURL, search string, limit ui
 		return nil, err
 	}
 
-	autoCompleteValue := make([]*resolverv1.AutocompleteResponse_AutocompleteResult, len(results))
+	autoCompleteValue := make([]*resolverv1.AutocompleteResult, len(results))
 	for i, r := range results {
-		autoCompleteValue[i] = &resolverv1.AutocompleteResponse_AutocompleteResult{
+		autoCompleteValue[i] = &resolverv1.AutocompleteResult{
 			Id: r.Id,
 			// TODO (mcutalo): Add more detailed information to the label
 			// the labels value will vary based on resource
-			Label: "meow",
+			Label: "",
 		}
 	}
 

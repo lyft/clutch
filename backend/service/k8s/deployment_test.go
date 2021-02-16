@@ -26,6 +26,49 @@ func testDeploymentClientset() k8s.Interface {
 	return fake.NewSimpleClientset(deployment)
 }
 
+func TestDescribeDeployment(t *testing.T) {
+	cs := testDeploymentClientset()
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "default",
+				cluster:   "core-testing",
+			}},
+		},
+	}
+
+	d, err := s.DescribeDeployment(context.Background(), "foo", "core-testing", "testing-namespace", "testing-deployment-name")
+	assert.NoError(t, err)
+	assert.Equal(t, "testing-deployment-name", d.Name)
+	// Not found.
+	_, err = s.DescribeDeployment(context.Background(), "foo", "core-testing", "testing-namespace", "abc")
+	assert.NoError(t, err)
+}
+
+func TestListDeployments(t *testing.T) {
+	cs := testDeploymentClientset()
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "default",
+				cluster:   "core-testing",
+			}},
+		},
+	}
+
+	opts := &k8sapiv1.ListOptions{Labels: map[string]string{"foo": "bar"}}
+	list, err := s.ListDeployments(context.Background(), "foo", "core-testing", "testing-namespace", opts)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, len(list))
+	// Not Found
+	opts = &k8sapiv1.ListOptions{Labels: map[string]string{"unknown": "bar"}}
+	list, err = s.ListDeployments(context.Background(), "foo", "core-testing", "testing-namespace", opts)
+	assert.NoError(t, err)
+	assert.Equal(t, 0, len(list))
+}
+
 func TestUpdateDeployment(t *testing.T) {
 	cs := testDeploymentClientset()
 	s := &svc{

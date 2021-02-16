@@ -24,14 +24,18 @@ type K8SAPIClient interface {
 	UpdatePod(ctx context.Context, in *UpdatePodRequest, opts ...grpc.CallOption) (*UpdatePodResponse, error)
 	ResizeHPA(ctx context.Context, in *ResizeHPARequest, opts ...grpc.CallOption) (*ResizeHPAResponse, error)
 	DeleteHPA(ctx context.Context, in *DeleteHPARequest, opts ...grpc.CallOption) (*DeleteHPAResponse, error)
+	DescribeDeployment(ctx context.Context, in *DescribeDeploymentRequest, opts ...grpc.CallOption) (*DescribeDeploymentResponse, error)
+	ListDeployments(ctx context.Context, in *ListDeploymentsRequest, opts ...grpc.CallOption) (*ListDeploymentsResponse, error)
 	UpdateDeployment(ctx context.Context, in *UpdateDeploymentRequest, opts ...grpc.CallOption) (*UpdateDeploymentResponse, error)
 	DeleteDeployment(ctx context.Context, in *DeleteDeploymentRequest, opts ...grpc.CallOption) (*DeleteDeploymentResponse, error)
 	DescribeService(ctx context.Context, in *DescribeServiceRequest, opts ...grpc.CallOption) (*DescribeServiceResponse, error)
 	DeleteService(ctx context.Context, in *DeleteServiceRequest, opts ...grpc.CallOption) (*DeleteServiceResponse, error)
 	DescribeStatefulSet(ctx context.Context, in *DescribeStatefulSetRequest, opts ...grpc.CallOption) (*DescribeStatefulSetResponse, error)
+	ListStatefulSets(ctx context.Context, in *ListStatefulSetsRequest, opts ...grpc.CallOption) (*ListStatefulSetsResponse, error)
 	UpdateStatefulSet(ctx context.Context, in *UpdateStatefulSetRequest, opts ...grpc.CallOption) (*UpdateStatefulSetResponse, error)
 	DeleteStatefulSet(ctx context.Context, in *DeleteStatefulSetRequest, opts ...grpc.CallOption) (*DeleteStatefulSetResponse, error)
 	DescribeCronJob(ctx context.Context, in *DescribeCronJobRequest, opts ...grpc.CallOption) (*DescribeCronJobResponse, error)
+	ListCronJobs(ctx context.Context, in *ListCronJobsRequest, opts ...grpc.CallOption) (*ListCronJobsResponse, error)
 	DeleteCronJob(ctx context.Context, in *DeleteCronJobRequest, opts ...grpc.CallOption) (*DeleteCronJobResponse, error)
 	ListConfigMaps(ctx context.Context, in *ListConfigMapsRequest, opts ...grpc.CallOption) (*ListConfigMapsResponse, error)
 	DescribeConfigMap(ctx context.Context, in *DescribeConfigMapRequest, opts ...grpc.CallOption) (*DescribeConfigMapResponse, error)
@@ -102,6 +106,24 @@ func (c *k8SAPIClient) DeleteHPA(ctx context.Context, in *DeleteHPARequest, opts
 	return out, nil
 }
 
+func (c *k8SAPIClient) DescribeDeployment(ctx context.Context, in *DescribeDeploymentRequest, opts ...grpc.CallOption) (*DescribeDeploymentResponse, error) {
+	out := new(DescribeDeploymentResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/DescribeDeployment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *k8SAPIClient) ListDeployments(ctx context.Context, in *ListDeploymentsRequest, opts ...grpc.CallOption) (*ListDeploymentsResponse, error) {
+	out := new(ListDeploymentsResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/ListDeployments", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *k8SAPIClient) UpdateDeployment(ctx context.Context, in *UpdateDeploymentRequest, opts ...grpc.CallOption) (*UpdateDeploymentResponse, error) {
 	out := new(UpdateDeploymentResponse)
 	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/UpdateDeployment", in, out, opts...)
@@ -147,6 +169,15 @@ func (c *k8SAPIClient) DescribeStatefulSet(ctx context.Context, in *DescribeStat
 	return out, nil
 }
 
+func (c *k8SAPIClient) ListStatefulSets(ctx context.Context, in *ListStatefulSetsRequest, opts ...grpc.CallOption) (*ListStatefulSetsResponse, error) {
+	out := new(ListStatefulSetsResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/ListStatefulSets", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *k8SAPIClient) UpdateStatefulSet(ctx context.Context, in *UpdateStatefulSetRequest, opts ...grpc.CallOption) (*UpdateStatefulSetResponse, error) {
 	out := new(UpdateStatefulSetResponse)
 	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/UpdateStatefulSet", in, out, opts...)
@@ -168,6 +199,15 @@ func (c *k8SAPIClient) DeleteStatefulSet(ctx context.Context, in *DeleteStateful
 func (c *k8SAPIClient) DescribeCronJob(ctx context.Context, in *DescribeCronJobRequest, opts ...grpc.CallOption) (*DescribeCronJobResponse, error) {
 	out := new(DescribeCronJobResponse)
 	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/DescribeCronJob", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *k8SAPIClient) ListCronJobs(ctx context.Context, in *ListCronJobsRequest, opts ...grpc.CallOption) (*ListCronJobsResponse, error) {
+	out := new(ListCronJobsResponse)
+	err := c.cc.Invoke(ctx, "/clutch.k8s.v1.K8sAPI/ListCronJobs", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -238,14 +278,18 @@ type K8SAPIServer interface {
 	UpdatePod(context.Context, *UpdatePodRequest) (*UpdatePodResponse, error)
 	ResizeHPA(context.Context, *ResizeHPARequest) (*ResizeHPAResponse, error)
 	DeleteHPA(context.Context, *DeleteHPARequest) (*DeleteHPAResponse, error)
+	DescribeDeployment(context.Context, *DescribeDeploymentRequest) (*DescribeDeploymentResponse, error)
+	ListDeployments(context.Context, *ListDeploymentsRequest) (*ListDeploymentsResponse, error)
 	UpdateDeployment(context.Context, *UpdateDeploymentRequest) (*UpdateDeploymentResponse, error)
 	DeleteDeployment(context.Context, *DeleteDeploymentRequest) (*DeleteDeploymentResponse, error)
 	DescribeService(context.Context, *DescribeServiceRequest) (*DescribeServiceResponse, error)
 	DeleteService(context.Context, *DeleteServiceRequest) (*DeleteServiceResponse, error)
 	DescribeStatefulSet(context.Context, *DescribeStatefulSetRequest) (*DescribeStatefulSetResponse, error)
+	ListStatefulSets(context.Context, *ListStatefulSetsRequest) (*ListStatefulSetsResponse, error)
 	UpdateStatefulSet(context.Context, *UpdateStatefulSetRequest) (*UpdateStatefulSetResponse, error)
 	DeleteStatefulSet(context.Context, *DeleteStatefulSetRequest) (*DeleteStatefulSetResponse, error)
 	DescribeCronJob(context.Context, *DescribeCronJobRequest) (*DescribeCronJobResponse, error)
+	ListCronJobs(context.Context, *ListCronJobsRequest) (*ListCronJobsResponse, error)
 	DeleteCronJob(context.Context, *DeleteCronJobRequest) (*DeleteCronJobResponse, error)
 	ListConfigMaps(context.Context, *ListConfigMapsRequest) (*ListConfigMapsResponse, error)
 	DescribeConfigMap(context.Context, *DescribeConfigMapRequest) (*DescribeConfigMapResponse, error)
@@ -276,6 +320,12 @@ func (UnimplementedK8SAPIServer) ResizeHPA(context.Context, *ResizeHPARequest) (
 func (UnimplementedK8SAPIServer) DeleteHPA(context.Context, *DeleteHPARequest) (*DeleteHPAResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteHPA not implemented")
 }
+func (UnimplementedK8SAPIServer) DescribeDeployment(context.Context, *DescribeDeploymentRequest) (*DescribeDeploymentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DescribeDeployment not implemented")
+}
+func (UnimplementedK8SAPIServer) ListDeployments(context.Context, *ListDeploymentsRequest) (*ListDeploymentsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListDeployments not implemented")
+}
 func (UnimplementedK8SAPIServer) UpdateDeployment(context.Context, *UpdateDeploymentRequest) (*UpdateDeploymentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateDeployment not implemented")
 }
@@ -291,6 +341,9 @@ func (UnimplementedK8SAPIServer) DeleteService(context.Context, *DeleteServiceRe
 func (UnimplementedK8SAPIServer) DescribeStatefulSet(context.Context, *DescribeStatefulSetRequest) (*DescribeStatefulSetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DescribeStatefulSet not implemented")
 }
+func (UnimplementedK8SAPIServer) ListStatefulSets(context.Context, *ListStatefulSetsRequest) (*ListStatefulSetsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListStatefulSets not implemented")
+}
 func (UnimplementedK8SAPIServer) UpdateStatefulSet(context.Context, *UpdateStatefulSetRequest) (*UpdateStatefulSetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateStatefulSet not implemented")
 }
@@ -299,6 +352,9 @@ func (UnimplementedK8SAPIServer) DeleteStatefulSet(context.Context, *DeleteState
 }
 func (UnimplementedK8SAPIServer) DescribeCronJob(context.Context, *DescribeCronJobRequest) (*DescribeCronJobResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DescribeCronJob not implemented")
+}
+func (UnimplementedK8SAPIServer) ListCronJobs(context.Context, *ListCronJobsRequest) (*ListCronJobsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListCronJobs not implemented")
 }
 func (UnimplementedK8SAPIServer) DeleteCronJob(context.Context, *DeleteCronJobRequest) (*DeleteCronJobResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCronJob not implemented")
@@ -438,6 +494,42 @@ func _K8SAPI_DeleteHPA_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _K8SAPI_DescribeDeployment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DescribeDeploymentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).DescribeDeployment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/DescribeDeployment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).DescribeDeployment(ctx, req.(*DescribeDeploymentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _K8SAPI_ListDeployments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListDeploymentsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).ListDeployments(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/ListDeployments",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).ListDeployments(ctx, req.(*ListDeploymentsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _K8SAPI_UpdateDeployment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateDeploymentRequest)
 	if err := dec(in); err != nil {
@@ -528,6 +620,24 @@ func _K8SAPI_DescribeStatefulSet_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _K8SAPI_ListStatefulSets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListStatefulSetsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).ListStatefulSets(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/ListStatefulSets",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).ListStatefulSets(ctx, req.(*ListStatefulSetsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _K8SAPI_UpdateStatefulSet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateStatefulSetRequest)
 	if err := dec(in); err != nil {
@@ -578,6 +688,24 @@ func _K8SAPI_DescribeCronJob_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(K8SAPIServer).DescribeCronJob(ctx, req.(*DescribeCronJobRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _K8SAPI_ListCronJobs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListCronJobsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SAPIServer).ListCronJobs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.k8s.v1.K8sAPI/ListCronJobs",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SAPIServer).ListCronJobs(ctx, req.(*ListCronJobsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -722,6 +850,14 @@ var K8SAPI_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _K8SAPI_DeleteHPA_Handler,
 		},
 		{
+			MethodName: "DescribeDeployment",
+			Handler:    _K8SAPI_DescribeDeployment_Handler,
+		},
+		{
+			MethodName: "ListDeployments",
+			Handler:    _K8SAPI_ListDeployments_Handler,
+		},
+		{
 			MethodName: "UpdateDeployment",
 			Handler:    _K8SAPI_UpdateDeployment_Handler,
 		},
@@ -742,6 +878,10 @@ var K8SAPI_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _K8SAPI_DescribeStatefulSet_Handler,
 		},
 		{
+			MethodName: "ListStatefulSets",
+			Handler:    _K8SAPI_ListStatefulSets_Handler,
+		},
+		{
 			MethodName: "UpdateStatefulSet",
 			Handler:    _K8SAPI_UpdateStatefulSet_Handler,
 		},
@@ -752,6 +892,10 @@ var K8SAPI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DescribeCronJob",
 			Handler:    _K8SAPI_DescribeCronJob_Handler,
+		},
+		{
+			MethodName: "ListCronJobs",
+			Handler:    _K8SAPI_ListCronJobs_Handler,
 		},
 		{
 			MethodName: "DeleteCronJob",

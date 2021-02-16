@@ -36,6 +36,80 @@ var (
 // define the regex for a UUID once up-front
 var _resolver_api_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
+<<<<<<< HEAD
+=======
+// Validate checks the field values on AutocompleteResult with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *AutocompleteResult) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Id
+
+	// no validation rules for Label
+
+	return nil
+}
+
+// AutocompleteResultValidationError is the validation error returned by
+// AutocompleteResult.Validate if the designated constraints aren't met.
+type AutocompleteResultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AutocompleteResultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AutocompleteResultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AutocompleteResultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AutocompleteResultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AutocompleteResultValidationError) ErrorName() string {
+	return "AutocompleteResultValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e AutocompleteResultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAutocompleteResult.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AutocompleteResultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AutocompleteResultValidationError{}
+
+>>>>>>> main
 // Validate checks the field values on AutocompleteRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -58,7 +132,11 @@ func (m *AutocompleteRequest) Validate() error {
 		}
 	}
 
+<<<<<<< HEAD
 	// no validation rules for ResultLimit
+=======
+	// no validation rules for Limit
+>>>>>>> main
 
 	return nil
 }

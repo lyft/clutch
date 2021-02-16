@@ -76,7 +76,7 @@ const ExperimentDetails: React.FC<ExperimentDetailsProps> = ({
   };
 
   const faultInjectionClusterRadioGroup = {
-    name: "faultInjectionCluster",
+    name: "upstreamClusterType",
     label: "Upstream Cluster Type",
     type: "radio-group",
     visible:

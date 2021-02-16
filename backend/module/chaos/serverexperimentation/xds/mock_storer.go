@@ -1,4 +1,4 @@
-package rtds
+package xds
 
 import (
 	"context"

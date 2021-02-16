@@ -148,7 +148,7 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 			if schema.Metadata.Search == nil {
 				schema.Metadata.Search = &resolverv1.SearchMetadata{}
 			}
-			schema.Metadata.Search.Autocompleteable = true
+			schema.Metadata.Search.AutocompleteEnabled = true
 		}
 
 		for _, field := range schema.Fields {
@@ -187,25 +187,49 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 }
 
 func (r *resolverAPI) Autocomplete(ctx context.Context, req *resolverv1.AutocompleteRequest) (*resolverv1.AutocompleteResponse, error) {
-	var err error
-	results := []*resolverv1.AutocompleteResponse_AutocompleteResult{}
+	results := []*resolverv1.AutocompleteResult{}
+
+	limit := resolver.DefaultAutocompleteLimit
+	if req.Limit > 0 {
+		limit = int(req.Limit)
+	}
 
 	// Iterate through all of the available resolvers & schemas to find the one requested
 	// If that schema exists then we call the associated autocomplete function for that resolver
 	for _, res := range resolver.Registry {
 		resSchema := res.Schemas()
 		if _, ok := resSchema[req.Want]; ok {
-			results, err = res.AutoComplete(ctx, req.Want, req.Search, req.ResultLimit)
+			resolverResults, err := res.Autocomplete(ctx, req.Want, req.Search, req.Limit)
 			if err != nil {
 				return nil, err
 			}
-			break
+
+			// Append results from all resolvers up to the limit.
+			// Future enhancements here will try to surface the most relevant results
+			// from all resolvers instead of this basic approach
+			appendAutocompleteResultsToLimit(&results, resolverResults, limit)
+			if len(results) >= limit {
+				break
+			}
 		}
 	}
 
 	return &resolverv1.AutocompleteResponse{
 		Results: results,
 	}, nil
+}
+
+func appendAutocompleteResultsToLimit(
+	results *[]*resolverv1.AutocompleteResult,
+	resolverResults []*resolverv1.AutocompleteResult,
+	limit int,
+) {
+	freeSpace := limit - len(*results)
+	if freeSpace >= len(resolverResults) {
+		*results = append(*results, resolverResults...)
+	} else {
+		*results = append(*results, resolverResults[:freeSpace]...)
+	}
 }
 
 // Add error information to the schema if it's broken in some way.

@@ -18,6 +18,9 @@ import (
 
 const (
 	OptionAll = "__ALL__"
+	// TODO: Layout the ground work for resolver configurations
+	// allowing a user to set the default autocomplete limit
+	DefaultAutocompleteLimit = 50
 )
 
 type TypeURLToSchemasMap map[string][]*resolverv1.Schema
@@ -40,7 +43,7 @@ type Resolver interface {
 	Resolve(ctx context.Context, typeURL string, input proto.Message, limit uint32) (*Results, error)
 	// ValidateResolveInput(typeURL string, input proto.Message) for async validation from frontend
 
-	AutoComplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResponse_AutocompleteResult, error)
+	Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResult, error)
 }
 
 const typePrefix = "type.googleapis.com/"

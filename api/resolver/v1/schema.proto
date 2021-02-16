@@ -43,7 +43,7 @@ message SearchMetadata {
   bool enabled = 1;
   // This field is controlled by the backend resolver
   // Acting as a feature flag to the frontend which enables the autocomplete components
-  bool autocompleteable = 2;
+  bool autocomplete_enabled = 2;
 }
 
 message SchemaMetadata {
