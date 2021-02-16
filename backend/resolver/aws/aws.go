@@ -75,7 +75,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 		if !ok {
 			return nil, errors.New("incorrect topology service type")
 		}
-		logger.Info("enabling autocomplete api for the aws resolver")
+		logger.Debug("enabling autocomplete api for the aws resolver")
 	}
 
 	schemas, err := resolver.InputsToSchemas(typeSchemas)

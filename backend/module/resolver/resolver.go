@@ -204,11 +204,11 @@ func (r *resolverAPI) Autocomplete(ctx context.Context, req *resolverv1.Autocomp
 				return nil, err
 			}
 
-			// Append results from all resolver up to the limit.
+			// Append results from all resolvers up to the limit.
 			// Future enhancements here will try to surface the most relevant results
 			// from all resolvers instead of this basic approach
 			appendAutocompleteResultsToLimit(&results, resolverResults, limit)
-			if len(results) >= resolver.DefaultAutocompleteLimit {
+			if len(results) >= limit {
 				break
 			}
 		}
