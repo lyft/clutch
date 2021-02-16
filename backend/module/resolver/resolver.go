@@ -187,7 +187,7 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 }
 
 func (r *resolverAPI) Autocomplete(ctx context.Context, req *resolverv1.AutocompleteRequest) (*resolverv1.AutocompleteResponse, error) {
-	results := []*resolverv1.AutocompleteResponse_AutocompleteResult{}
+	results := []*resolverv1.AutocompleteResult{}
 
 	limit := resolver.DefaultAutocompleteLimit
 	if req.Limit > 0 {
@@ -220,8 +220,8 @@ func (r *resolverAPI) Autocomplete(ctx context.Context, req *resolverv1.Autocomp
 }
 
 func appendAutocompleteResultsToLimit(
-	results *[]*resolverv1.AutocompleteResponse_AutocompleteResult,
-	resolverResults []*resolverv1.AutocompleteResponse_AutocompleteResult,
+	results *[]*resolverv1.AutocompleteResult,
+	resolverResults []*resolverv1.AutocompleteResult,
 	limit int,
 ) {
 	freeSpace := limit - len(*results)

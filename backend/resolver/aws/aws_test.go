@@ -75,7 +75,7 @@ func TestAutoCompleteResults(t *testing.T) {
 		},
 	}
 
-	expect := []*resolverv1.AutocompleteResponse_AutocompleteResult{
+	expect := []*resolverv1.AutocompleteResult{
 		{
 			Id: "meow",
 		},

@@ -43,6 +43,16 @@ service ResolverAPI {
   }
 }
 
+message AutocompleteResult {
+  // The primary identifer of the resource
+  // This value is used when rendering the autocomplete results on the frontend
+  string id = 1;
+  // The label can provide more detailed information about the result
+  // This is dispalyed inline with the auto complete result
+  // eg: what region an ec2 instance resides in
+  string label = 2;
+}
+
 message AutocompleteRequest {
   // The type URL of the desired result.
   string want = 1 [ (validate.rules).string = {min_bytes : 1} ];
@@ -51,16 +61,6 @@ message AutocompleteRequest {
 }
 
 message AutocompleteResponse {
-  message AutocompleteResult {
-    // The primary identifer of the resource
-    // This value is used when rendering the autocomplete results on the frontend
-    string id = 1;
-    // The label can provide more detailed information about the result
-    // This is dispalyed inline with the auto complete result
-    // eg: what region an ec2 instance resides in
-    string label = 2;
-  }
-
   repeated AutocompleteResult results = 1;
 }
 

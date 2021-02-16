@@ -151,7 +151,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	}
 }
 
-func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResponse_AutocompleteResult, error) {
+func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResult, error) {
 	if r.topology == nil {
 		return nil, fmt.Errorf("to use the autocomplete api you must first setup the topology service")
 	}
@@ -184,9 +184,9 @@ func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit ui
 		return nil, err
 	}
 
-	autoCompleteValue := make([]*resolverv1.AutocompleteResponse_AutocompleteResult, len(results))
+	autoCompleteValue := make([]*resolverv1.AutocompleteResult, len(results))
 	for i, r := range results {
-		autoCompleteValue[i] = &resolverv1.AutocompleteResponse_AutocompleteResult{
+		autoCompleteValue[i] = &resolverv1.AutocompleteResult{
 			Id: r.Id,
 			// TODO (mcutalo): Add more detailed information to the label
 			// the labels value will vary based on resource

@@ -45,7 +45,7 @@ func TestShouldAutoCompleteBeEnabled(t *testing.T) {
 }
 
 func TestAppendAutocompleteResultsToLimit(t *testing.T) {
-	results := &[]*resolverv1.AutocompleteResponse_AutocompleteResult{}
+	results := &[]*resolverv1.AutocompleteResult{}
 	limit := 50
 
 	first := generateAutocompleteResults(25)
@@ -62,10 +62,10 @@ func TestAppendAutocompleteResultsToLimit(t *testing.T) {
 	assert.Equal(t, 50, len(*results))
 }
 
-func generateAutocompleteResults(limit int) []*resolverv1.AutocompleteResponse_AutocompleteResult {
-	results := []*resolverv1.AutocompleteResponse_AutocompleteResult{}
+func generateAutocompleteResults(limit int) []*resolverv1.AutocompleteResult {
+	results := []*resolverv1.AutocompleteResult{}
 	for i := 0; i < limit; i++ {
-		results = append(results, &resolverv1.AutocompleteResponse_AutocompleteResult{
+		results = append(results, &resolverv1.AutocompleteResult{
 			Id:    fmt.Sprint(i),
 			Label: fmt.Sprint(i),
 		})

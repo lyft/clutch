@@ -33912,6 +33912,124 @@ export const clutch = $root.clutch = (() => {
                 return ResolverAPI;
             })();
 
+            v1.AutocompleteResult = (function() {
+
+                /**
+                 * Properties of an AutocompleteResult.
+                 * @memberof clutch.resolver.v1
+                 * @interface IAutocompleteResult
+                 * @property {string|null} [id] AutocompleteResult id
+                 * @property {string|null} [label] AutocompleteResult label
+                 */
+
+                /**
+                 * Constructs a new AutocompleteResult.
+                 * @memberof clutch.resolver.v1
+                 * @classdesc Represents an AutocompleteResult.
+                 * @implements IAutocompleteResult
+                 * @constructor
+                 * @param {clutch.resolver.v1.IAutocompleteResult=} [properties] Properties to set
+                 */
+                function AutocompleteResult(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * AutocompleteResult id.
+                 * @member {string} id
+                 * @memberof clutch.resolver.v1.AutocompleteResult
+                 * @instance
+                 */
+                AutocompleteResult.prototype.id = "";
+
+                /**
+                 * AutocompleteResult label.
+                 * @member {string} label
+                 * @memberof clutch.resolver.v1.AutocompleteResult
+                 * @instance
+                 */
+                AutocompleteResult.prototype.label = "";
+
+                /**
+                 * Verifies an AutocompleteResult message.
+                 * @function verify
+                 * @memberof clutch.resolver.v1.AutocompleteResult
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                AutocompleteResult.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (!$util.isString(message.id))
+                            return "id: string expected";
+                    if (message.label != null && message.hasOwnProperty("label"))
+                        if (!$util.isString(message.label))
+                            return "label: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an AutocompleteResult message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.resolver.v1.AutocompleteResult
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.resolver.v1.AutocompleteResult} AutocompleteResult
+                 */
+                AutocompleteResult.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.resolver.v1.AutocompleteResult)
+                        return object;
+                    let message = new $root.clutch.resolver.v1.AutocompleteResult();
+                    if (object.id != null)
+                        message.id = String(object.id);
+                    if (object.label != null)
+                        message.label = String(object.label);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an AutocompleteResult message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.resolver.v1.AutocompleteResult
+                 * @static
+                 * @param {clutch.resolver.v1.AutocompleteResult} message AutocompleteResult
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                AutocompleteResult.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.id = "";
+                        object.label = "";
+                    }
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        object.id = message.id;
+                    if (message.label != null && message.hasOwnProperty("label"))
+                        object.label = message.label;
+                    return object;
+                };
+
+                /**
+                 * Converts this AutocompleteResult to JSON.
+                 * @function toJSON
+                 * @memberof clutch.resolver.v1.AutocompleteResult
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                AutocompleteResult.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return AutocompleteResult;
+            })();
+
             v1.AutocompleteRequest = (function() {
 
                 /**
@@ -34067,7 +34185,7 @@ export const clutch = $root.clutch = (() => {
                  * Properties of an AutocompleteResponse.
                  * @memberof clutch.resolver.v1
                  * @interface IAutocompleteResponse
-                 * @property {Array.<clutch.resolver.v1.AutocompleteResponse.IAutocompleteResult>|null} [results] AutocompleteResponse results
+                 * @property {Array.<clutch.resolver.v1.IAutocompleteResult>|null} [results] AutocompleteResponse results
                  */
 
                 /**
@@ -34088,7 +34206,7 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * AutocompleteResponse results.
-                 * @member {Array.<clutch.resolver.v1.AutocompleteResponse.IAutocompleteResult>} results
+                 * @member {Array.<clutch.resolver.v1.IAutocompleteResult>} results
                  * @memberof clutch.resolver.v1.AutocompleteResponse
                  * @instance
                  */
@@ -34109,7 +34227,7 @@ export const clutch = $root.clutch = (() => {
                         if (!Array.isArray(message.results))
                             return "results: array expected";
                         for (let i = 0; i < message.results.length; ++i) {
-                            let error = $root.clutch.resolver.v1.AutocompleteResponse.AutocompleteResult.verify(message.results[i]);
+                            let error = $root.clutch.resolver.v1.AutocompleteResult.verify(message.results[i]);
                             if (error)
                                 return "results." + error;
                         }
@@ -34136,7 +34254,7 @@ export const clutch = $root.clutch = (() => {
                         for (let i = 0; i < object.results.length; ++i) {
                             if (typeof object.results[i] !== "object")
                                 throw TypeError(".clutch.resolver.v1.AutocompleteResponse.results: object expected");
-                            message.results[i] = $root.clutch.resolver.v1.AutocompleteResponse.AutocompleteResult.fromObject(object.results[i]);
+                            message.results[i] = $root.clutch.resolver.v1.AutocompleteResult.fromObject(object.results[i]);
                         }
                     }
                     return message;
@@ -34160,7 +34278,7 @@ export const clutch = $root.clutch = (() => {
                     if (message.results && message.results.length) {
                         object.results = [];
                         for (let j = 0; j < message.results.length; ++j)
-                            object.results[j] = $root.clutch.resolver.v1.AutocompleteResponse.AutocompleteResult.toObject(message.results[j], options);
+                            object.results[j] = $root.clutch.resolver.v1.AutocompleteResult.toObject(message.results[j], options);
                     }
                     return object;
                 };
@@ -34175,124 +34293,6 @@ export const clutch = $root.clutch = (() => {
                 AutocompleteResponse.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
-
-                AutocompleteResponse.AutocompleteResult = (function() {
-
-                    /**
-                     * Properties of an AutocompleteResult.
-                     * @memberof clutch.resolver.v1.AutocompleteResponse
-                     * @interface IAutocompleteResult
-                     * @property {string|null} [id] AutocompleteResult id
-                     * @property {string|null} [label] AutocompleteResult label
-                     */
-
-                    /**
-                     * Constructs a new AutocompleteResult.
-                     * @memberof clutch.resolver.v1.AutocompleteResponse
-                     * @classdesc Represents an AutocompleteResult.
-                     * @implements IAutocompleteResult
-                     * @constructor
-                     * @param {clutch.resolver.v1.AutocompleteResponse.IAutocompleteResult=} [properties] Properties to set
-                     */
-                    function AutocompleteResult(properties) {
-                        if (properties)
-                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * AutocompleteResult id.
-                     * @member {string} id
-                     * @memberof clutch.resolver.v1.AutocompleteResponse.AutocompleteResult
-                     * @instance
-                     */
-                    AutocompleteResult.prototype.id = "";
-
-                    /**
-                     * AutocompleteResult label.
-                     * @member {string} label
-                     * @memberof clutch.resolver.v1.AutocompleteResponse.AutocompleteResult
-                     * @instance
-                     */
-                    AutocompleteResult.prototype.label = "";
-
-                    /**
-                     * Verifies an AutocompleteResult message.
-                     * @function verify
-                     * @memberof clutch.resolver.v1.AutocompleteResponse.AutocompleteResult
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    AutocompleteResult.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        if (message.id != null && message.hasOwnProperty("id"))
-                            if (!$util.isString(message.id))
-                                return "id: string expected";
-                        if (message.label != null && message.hasOwnProperty("label"))
-                            if (!$util.isString(message.label))
-                                return "label: string expected";
-                        return null;
-                    };
-
-                    /**
-                     * Creates an AutocompleteResult message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof clutch.resolver.v1.AutocompleteResponse.AutocompleteResult
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.resolver.v1.AutocompleteResponse.AutocompleteResult} AutocompleteResult
-                     */
-                    AutocompleteResult.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.resolver.v1.AutocompleteResponse.AutocompleteResult)
-                            return object;
-                        let message = new $root.clutch.resolver.v1.AutocompleteResponse.AutocompleteResult();
-                        if (object.id != null)
-                            message.id = String(object.id);
-                        if (object.label != null)
-                            message.label = String(object.label);
-                        return message;
-                    };
-
-                    /**
-                     * Creates a plain object from an AutocompleteResult message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof clutch.resolver.v1.AutocompleteResponse.AutocompleteResult
-                     * @static
-                     * @param {clutch.resolver.v1.AutocompleteResponse.AutocompleteResult} message AutocompleteResult
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    AutocompleteResult.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        let object = {};
-                        if (options.defaults) {
-                            object.id = "";
-                            object.label = "";
-                        }
-                        if (message.id != null && message.hasOwnProperty("id"))
-                            object.id = message.id;
-                        if (message.label != null && message.hasOwnProperty("label"))
-                            object.label = message.label;
-                        return object;
-                    };
-
-                    /**
-                     * Converts this AutocompleteResult to JSON.
-                     * @function toJSON
-                     * @memberof clutch.resolver.v1.AutocompleteResponse.AutocompleteResult
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    AutocompleteResult.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return AutocompleteResult;
-                })();
 
                 return AutocompleteResponse;
             })();
