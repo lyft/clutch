@@ -17,7 +17,9 @@ import (
 )
 
 const (
-	OptionAll                = "__ALL__"
+	OptionAll = "__ALL__"
+	// TODO: Layout the ground work for resolver configurations
+	// allowing a user to set the default autocomplete limit
 	DefaultAutocompleteLimit = 50
 )
 
