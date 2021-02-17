@@ -118,10 +118,6 @@ const Popper = styled(MuiPopper)({
   },
 });
 
-const renderPopper = props => {
-  return <Popper {...props} />;
-};
-
 // search's result options container
 const ResultGrid = styled(Grid)({
   height: "inherit",
@@ -243,7 +239,7 @@ export const TextField = ({
         freeSolo
         size="small"
         options={autoCompleteOptions}
-        PopperComponent={renderPopper}
+        PopperComponent={Popper}
         getOptionLabel={option => (option?.id ? option.id : option)}
         onInputChange={(__, v) => autoCompleteDebounce(v)}
         renderOption={option => <Result option={option} />}
