@@ -74,16 +74,18 @@ message HTTPFaultConfig {
 
 // The configuration of a Redis fault.
 message RedisFaultConfig {
-  // The targeting of the fault describing what redis requests are being considered for faults.
-  RedisFaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
+  // The redis commands to enforce a fault on. If unset, faults will apply to all redis commands.
+  repeated string redis_commands = 1 [ (validate.rules).repeated = {unique : true} ];
+  // The downstream cluster sending requests to redis upstream.
+  DownstreamEnforcing downstream_enforcing = 2;
 
   oneof fault {
     option (validate.required) = true;
 
     // The error fault responds to redis commands with an error.
-    RedisErrorFault error_fault = 2;
+    RedisErrorFault error_fault = 3;
     // The latency fault delays redis commands.
-    LatencyFault latency_fault = 3;
+    LatencyFault latency_fault = 4;
   }
 }
 
@@ -107,17 +109,6 @@ message LatencyFault {
   FaultPercentage percentage = 1 [ (validate.rules).message.required = true ];
   // The latency duration to apply when applying a latency fault.
   FaultLatencyDuration latency_duration = 2 [ (validate.rules).message.required = true ];
-}
-
-// Enforce faults on upstream redis cluster.
-message RedisFaultTargeting {
-  // The upstream redis cluster.
-  SingleCluster upstream_cluster = 1;
-  // A single downstream cluster sending requests to redis upstream.
-  SingleCluster downstream_cluster = 2;
-
-  // The redis commands to enforce a fault on. If unset, faults will apply to all redis commands.
-  repeated string redis_commands = 3 [ (validate.rules).repeated = {unique : true} ];
 }
 
 // The fault targeting that allows us to control which requests are considered for
