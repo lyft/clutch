@@ -44,9 +44,23 @@ const reducer = (state: ManagerLayout, action: Action): ManagerLayout => {
         [layoutKey]: { ...state[layoutKey], isLoading: true },
       };
     case ManagerAction.HYDRATE_END: {
+      const newData: any = action.payload?.result;
+      const existingData: any = state[layoutKey]?.data;
+      const newDataIsArray = Array.isArray(newData);
+      const existingDataIsArray = Array.isArray(existingData);
+      let data: object;
+      if ((newDataIsArray && !existingDataIsArray) || (!newDataIsArray && existingDataIsArray)) {
+        data = newData;
+      } else {
+        if (newDataIsArray) {
+          data = [ ...newData, ...existingData ];
+        } else {
+          data = { ...newData, ...existingData };
+        }
+      }
       const update = {
         isLoading: false,
-        data: { ...(action.payload?.result || {}), ...state[layoutKey]?.data },
+        data: data,
         error: action.payload?.error,
       };
       return {
