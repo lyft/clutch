@@ -94,6 +94,7 @@ func TestAutoCompleteResults(t *testing.T) {
 
 type mockTopologySearch struct {
 	topology.Service
+
 	autoCompleteError   error
 	autoCompleteResults []*topologyv1.Resource
 }

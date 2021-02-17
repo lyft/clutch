@@ -30,9 +30,7 @@ message InstanceID {
 message AutoscalingGroupName {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
-    search : {
-      enabled : true
-    }
+    search : {enabled : true}
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {
