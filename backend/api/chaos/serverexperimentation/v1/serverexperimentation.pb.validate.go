@@ -918,6 +918,26 @@ func (m *RedisFaultTargeting) Validate() error {
 		return nil
 	}
 
+	if v, ok := interface{}(m.GetUpstreamCluster()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RedisFaultTargetingValidationError{
+				field:  "UpstreamCluster",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetDownstreamCluster()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RedisFaultTargetingValidationError{
+				field:  "DownstreamCluster",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	_RedisFaultTargeting_RedisCommands_Unique := make(map[string]struct{}, len(m.GetRedisCommands()))
 
 	for idx, item := range m.GetRedisCommands() {
@@ -933,28 +953,6 @@ func (m *RedisFaultTargeting) Validate() error {
 		}
 
 		// no validation rules for RedisCommands[idx]
-	}
-
-	switch m.DownstreamType.(type) {
-
-	case *RedisFaultTargeting_DownstreamCluster:
-
-		if v, ok := interface{}(m.GetDownstreamCluster()).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return RedisFaultTargetingValidationError{
-					field:  "DownstreamCluster",
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	default:
-		return RedisFaultTargetingValidationError{
-			field:  "DownstreamType",
-			reason: "value is required",
-		}
-
 	}
 
 	return nil

@@ -111,17 +111,13 @@ message LatencyFault {
 
 // Enforce faults on upstream redis cluster.
 message RedisFaultTargeting {
-  // A downstream responsible for enforcing a fault. Only requests that are started
-  // by the specified downstream are considered for a fault injection.
-  oneof downstream_type {
-    option (validate.required) = true;
-
-    // A single downstream cluster.
-    SingleCluster downstream_cluster = 1;
-  }
+  // The upstream redis cluster.
+  SingleCluster upstream_cluster = 1;
+  // A single downstream cluster sending requests to redis upstream.
+  SingleCluster downstream_cluster = 2;
 
   // The redis commands to enforce a fault on. If unset, faults will apply to all redis commands.
-  repeated string redis_commands = 2 [ (validate.rules).repeated = {unique : true} ];
+  repeated string redis_commands = 3 [ (validate.rules).repeated = {unique : true} ];
 }
 
 // The fault targeting that allows us to control which requests are considered for

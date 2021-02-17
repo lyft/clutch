@@ -4115,6 +4115,9 @@ export namespace clutch {
                 /** Properties of a RedisFaultTargeting. */
                 interface IRedisFaultTargeting {
 
+                    /** RedisFaultTargeting upstreamCluster */
+                    upstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
+
                     /** RedisFaultTargeting downstreamCluster */
                     downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
 
@@ -4131,14 +4134,14 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting);
 
+                    /** RedisFaultTargeting upstreamCluster. */
+                    public upstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
+
                     /** RedisFaultTargeting downstreamCluster. */
                     public downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
 
                     /** RedisFaultTargeting redisCommands. */
                     public redisCommands: string[];
-
-                    /** RedisFaultTargeting downstreamType. */
-                    public downstreamType?: "downstreamCluster";
 
                     /**
                      * Verifies a RedisFaultTargeting message.
