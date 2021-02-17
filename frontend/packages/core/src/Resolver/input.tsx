@@ -52,12 +52,11 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ inputType, schemas, submi
     setQueryData(convertChangeEvent(event).target.value);
   };
 
-  // If there is more than 1 schema dont enable autocomplete as that is not currently supported
-  let autocompleteEnabled = false;
-  const schemasWithAutocomplete = schemas.map(schema => schema?.metadata?.search?.autocompleteable);
-
-  if (autoCompleteableSchemas.length === 1 && autoCompleteableSchemas[0] === true) {
-    isAutoCompleteable = true;
+  let autoCompleteCallback;
+  if (
+    schemas.filter(schema => schema?.metadata?.search?.autocompleteEnabled === true).length >= 1
+  ) {
+    autoCompleteCallback = autoComplete;
   }
 
   const error = validation.errors?.query;
@@ -74,8 +73,7 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ inputType, schemas, submi
         error={!!error}
         helperText={error?.message || error?.type || ""}
         endAdornment={<SearchIcon />}
-        isAutoCompleteable={isAutoCompleteable}
-        autocompleteCallback={v => autoComplete(inputType, v)}
+        autocompleteCallback={v => autoCompleteCallback(inputType, v)}
       />
     </Form>
   );
@@ -92,7 +90,6 @@ const SchemaDetails = styled(AccordionDetails)({
     flex: "1 50%",
   },
 });
-
 
 const SchemaResolver = ({ schema, expanded, onClick, submitHandler }: SchemaResolverProps) => {
   const [data, setData] = React.useState({ "@type": schema.typeUrl });

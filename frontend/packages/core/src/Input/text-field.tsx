@@ -148,6 +148,23 @@ const IconButton = styled(MuiIconButton)({
   },
 });
 
+interface resultOption {
+  id: string;
+  label: string;
+}
+
+interface ResultProps {
+  option: resultOption;
+}
+
+const Result: React.FC<ResultProps> = ({ option }) => (
+  <ResultGrid container alignItems="center">
+    <Grid item xs>
+      <ResultLabel>{option.id}</ResultLabel>
+    </Grid>
+  </ResultGrid>
+);
+
 export interface TextFieldProps
   extends Pick<
       MuiStandardTextFieldProps,
@@ -180,7 +197,6 @@ export const TextField = ({
   helperText,
   readOnly,
   endAdornment,
-  isAutoCompleteable,
   autocompleteCallback,
   ...props
 }: TextFieldProps) => {
@@ -229,17 +245,12 @@ export const TextField = ({
         options={autoCompleteOptions}
         PopperComponent={renderPopper}
         getOptionLabel={option => (option?.id ? option.id : option)}
-        onInputChange={(_, v) => autoCompleteDebounce(v)}
-        renderOption={option => (
-          <ResultGrid container alignItems="center">
-            <Grid item xs>
-              <ResultLabel>{option.id}</ResultLabel>
-            </Grid>
-          </ResultGrid>
-        )}
+        onInputChange={(__, v) => autoCompleteDebounce(v)}
+        renderOption={option => <Result option={option} />}
         renderInput={params => (
           <StyledTextField
             {...params}
+            onKeyDown={e => onKeyDown(e)}
             onFocus={onChange}
             onBlur={onChange}
             error={error}
