@@ -51,16 +51,14 @@ const reducer = (state: ManagerLayout, action: Action): ManagerLayout => {
       let data: object;
       if ((newDataIsArray && !existingDataIsArray) || (!newDataIsArray && existingDataIsArray)) {
         data = newData;
+      } else if (newDataIsArray) {
+        data = [...newData, ...existingData];
       } else {
-        if (newDataIsArray) {
-          data = [ ...newData, ...existingData ];
-        } else {
-          data = { ...newData, ...existingData };
-        }
+        data = { ...newData, ...existingData };
       }
       const update = {
         isLoading: false,
-        data: data,
+        data,
         error: action.payload?.error,
       };
       return {

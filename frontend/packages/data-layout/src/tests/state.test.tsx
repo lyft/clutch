@@ -5,7 +5,10 @@ describe("Manager State", () => {
     describe("preserves existing data", () => {
       it("of lists", () => {
         let state = {};
-        state = reducer(state, { type: ManagerAction.SET, payload: { key: "layout", value: [{ update: "value" }] } });
+        state = reducer(state, {
+          type: ManagerAction.SET,
+          payload: { key: "layout", value: [{ update: "value" }] },
+        });
         state = reducer(state, {
           type: ManagerAction.HYDRATE_END,
           payload: { key: "layout", result: [{ hydrate: "value" }] },
@@ -15,7 +18,10 @@ describe("Manager State", () => {
 
       it("of objects", () => {
         let state = {};
-        state = reducer(state, { type: ManagerAction.SET, payload: { key: "layout", value: { update: "value" } } });
+        state = reducer(state, {
+          type: ManagerAction.SET,
+          payload: { key: "layout", value: { update: "value" } },
+        });
         state = reducer(state, {
           type: ManagerAction.HYDRATE_END,
           payload: { key: "layout", result: { hydrate: "value" } },
@@ -26,7 +32,10 @@ describe("Manager State", () => {
 
     it("gives priority to existing data", () => {
       let state = {};
-      state = reducer(state, { type: ManagerAction.SET, payload: { key: "layout", value: { update: "initialValue" } } });
+      state = reducer(state, {
+        type: ManagerAction.SET,
+        payload: { key: "layout", value: { update: "initialValue" } },
+      });
       state = reducer(state, {
         type: ManagerAction.HYDRATE_END,
         payload: { key: "layout", result: { update: "endingValue" } },
