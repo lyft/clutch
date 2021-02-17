@@ -13,15 +13,15 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
-	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds"
+	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds"
 	"github.com/lyft/clutch/backend/test/envoy"
-	rtds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds/testing"
+	xds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/testing"
 )
 
 // These tests are intended to be run with docker-compose to in order to set up a running Envoy instance
 // to run assertions against.
 func TestEnvoyFaults(t *testing.T) {
-	ts := rtds_testing.NewTestServer(t, rtds.New, true)
+	ts := xds_testing.NewTestServer(t, xds.New, true)
 	defer ts.Stop()
 
 	e, err := testenvoy.NewEnvoyHandle()
@@ -50,7 +50,7 @@ func TestEnvoyFaults(t *testing.T) {
 	assert.NoError(t, err, "did not see faults reverted")
 }
 
-func createTestExperiment(t *testing.T, storer *rtds_testing.SimpleStorer) {
+func createTestExperiment(t *testing.T, storer *xds_testing.SimpleStorer) {
 	now := time.Now()
 	config := serverexperimentation.HTTPFaultConfig{
 		Fault: &serverexperimentation.HTTPFaultConfig_AbortFault{

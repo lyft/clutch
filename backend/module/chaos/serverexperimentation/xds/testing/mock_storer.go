@@ -1,8 +1,4 @@
-<<<<<<< HEAD:backend/module/chaos/serverexperimentation/xds/testing/mock_storer.go
 package testing
-=======
-package xds
->>>>>>> origin/main:backend/module/chaos/serverexperimentation/xds/mock_storer.go
 
 import (
 	"context"
