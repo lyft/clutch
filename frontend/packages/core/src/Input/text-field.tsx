@@ -170,7 +170,6 @@ export interface TextFieldProps
     >,
     Pick<MuiInputProps, "readOnly" | "endAdornment"> {
   onReturn?: () => void;
-  isAutoCompleteable?: boolean;
   autocompleteCallback?: (v: string) => Promise<any>;
 }
 
@@ -208,7 +207,7 @@ export const TextField = ({
     );
   }
 
-  if (isAutoCompleteable) {
+  if (autocompleteCallback !== undefined) {
     const [autoCompleteOptions, setAutoCompleteOptions] = React.useState([]);
     const autoCompleteDebounce = React.useRef(
       _.debounce(value => {
@@ -229,8 +228,8 @@ export const TextField = ({
         size="small"
         options={autoCompleteOptions}
         PopperComponent={renderPopper}
-        getOptionLabel={option => (option.id ? option.id : option)}
-        onInputChange={(e, v, r) => autoCompleteDebounce(v)}
+        getOptionLabel={option => (option?.id ? option.id : option)}
+        onInputChange={(_, v) => autoCompleteDebounce(v)}
         renderOption={option => (
           <ResultGrid container alignItems="center">
             <Grid item xs>

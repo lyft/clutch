@@ -53,8 +53,8 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ inputType, schemas, submi
   };
 
   // If there is more than 1 schema dont enable autocomplete as that is not currently supported
-  let isAutoCompleteable = false;
-  const autoCompleteableSchemas = schemas.map(schema => schema?.metadata?.search?.autocompleteable);
+  let autocompleteEnabled = false;
+  const schemasWithAutocomplete = schemas.map(schema => schema?.metadata?.search?.autocompleteable);
 
   if (autoCompleteableSchemas.length === 1 && autoCompleteableSchemas[0] === true) {
     isAutoCompleteable = true;
