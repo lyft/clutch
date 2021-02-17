@@ -3,6 +3,7 @@ package serverexperimentation
 import (
 	"errors"
 	"fmt"
+	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds"
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -41,8 +42,20 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 }
 
 func (s *Service) Register(r module.Registrar) error {
-	transformation := experimentstore.Transformation{ConfigTypeUrl: "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig", RunTransform: s.transform}
-	return s.storer.RegisterTransformation(transformation)
+	transformation := experimentstore.Transformation{
+		ConfigTypeUrl: "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig",
+		RunTransform: s.transform,
+	}
+	runtimeGeneration := experimentstore.RuntimeGeneration{
+		ConfigTypeUrl: "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig",
+		RuntimeKeysGeneration: xds.RuntimeKeysGeneration,
+		GetEnforcingCluster: xds.GetEnforcingCluster,
+	}
+	err := s.storer.RegisterTransformation(transformation)
+	if err != nil {
+		return err
+	}
+	return s.storer.RegisterRuntimeGeneration(runtimeGeneration)
 }
 
 func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experimentstore.ExperimentConfig) ([]*experimentation.Property, error) {

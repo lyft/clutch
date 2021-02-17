@@ -116,6 +116,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		layerName:     config.GetRtdsLayerName(),
 		ingressPrefix: config.GetIngressFaultRuntimePrefix(),
 		egressPrefix:  config.GetEgressFaultRuntimePrefix(),
+		redisPrefix:   "fault.redis",
 	}
 
 	enabledECDSClusters := make(map[string]struct{})

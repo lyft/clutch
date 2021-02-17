@@ -1,7 +1,6 @@
 package xds
 
 import (
-	"fmt"
 	"time"
 
 	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
@@ -10,29 +9,7 @@ import (
 	"go.uber.org/zap"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
-	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
-)
-
-const (
-	// INGRESS FAULT
-	// a given downstream service to a given upstream service faults
-	LatencyPercentageWithDownstream = `%s.%s.delay.fixed_delay_percent`
-	LatencyDurationWithDownstream   = `%s.%s.delay.fixed_duration_ms`
-	HTTPPercentageWithDownstream    = `%s.%s.abort.abort_percent`
-	HTTPStatusWithDownstream        = `%s.%s.abort.http_status`
-
-	// all downstream service to a given upstream faults
-	LatencyPercentageWithoutDownstream = `%s.delay.fixed_delay_percent`
-	LatencyDurationWithoutDownstream   = `%s.delay.fixed_duration_ms`
-	HTTPPercentageWithoutDownstream    = `%s.abort.abort_percent`
-	HTTPStatusWithoutDownstream        = `%s.abort.http_status`
-
-	// EGRESS FAULT
-	// a given downstream service to a given external upstream faults
-	LatencyPercentageForEgress = `%s.%s.delay.fixed_delay_percent`
-	LatencyDurationForEgress   = `%s.%s.delay.fixed_duration_ms`
-	HTTPPercentageForEgress    = `%s.%s.abort.abort_percent`
-	HTTPStatusForEgress        = `%s.%s.abort.http_status`
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 type RTDSConfig struct {
@@ -44,50 +21,38 @@ type RTDSConfig struct {
 
 	// Runtime prefix for egress faults
 	egressPrefix string
+
+	// Runtime prefix for redis faults
+	RedisPrefix string
 }
 
-func generateRTDSResource(experiments []*experimentation.Experiment, rtdsConfig *RTDSConfig, ttl *time.Duration, logger *zap.SugaredLogger) []gcpTypes.ResourceWithTtl {
+func generateRTDSResource(experiments []*experimentation.Experiment, storer experimentstore.Storer, rtdsConfig *RTDSConfig, ttl *time.Duration, logger *zap.SugaredLogger) []gcpTypes.ResourceWithTtl {
 	var fieldMap = map[string]*pstruct.Value{}
 
 	// No experiments meaning clear all experiments for the given upstream cluster
 	for _, experiment := range experiments {
-		httpFaultConfig := &serverexperimentation.HTTPFaultConfig{}
-		if !maybeUnmarshalFaultTest(experiment, httpFaultConfig) {
-			continue
-		}
-
-		upstreamCluster, downstreamCluster, err := getClusterPair(httpFaultConfig)
+		// get the runtime generation for each experiment
+		runtimeGeneration, err := storer.GetRuntimeGenerator(experiment.GetConfig().GetTypeUrl())
 		if err != nil {
-			logger.Errorw("Invalid http fault config", "config", httpFaultConfig)
+			logger.Errorw("No runtime generation registered to config", "config", experiment.GetConfig())
 			continue
 		}
 
-		percentageKey, percentageValue, faultKey, faultValue, err := createRuntimeKeys(upstreamCluster, downstreamCluster, httpFaultConfig, rtdsConfig)
+		// get runtime values from experiment types runtime generation logic
+		runtimeKeyValues, err := runtimeGeneration.RuntimeKeysGeneration(experiment, rtdsConfig, logger)
 		if err != nil {
-			logger.Errorw("Unable to create RTDS runtime keys", "config", httpFaultConfig)
+			logger.Errorw("Unable to create RTDS runtime keys", "config", experiment)
 			continue
 		}
 
-		fieldMap[percentageKey] = &pstruct.Value{
-			Kind: &pstruct.Value_NumberValue{
-				NumberValue: float64(percentageValue),
-			},
+		// apply list of runtime key values to fieldMap
+		for _, runtimeKeyValue := range runtimeKeyValues {
+			fieldMap[runtimeKeyValue.Key] = &pstruct.Value{
+				Kind: &pstruct.Value_NumberValue{
+					NumberValue: float64(runtimeKeyValue.Value),
+				},
+			}
 		}
-
-		fieldMap[faultKey] = &pstruct.Value{
-			Kind: &pstruct.Value_NumberValue{
-				NumberValue: float64(faultValue),
-			},
-		}
-
-		logger.Debugw("Fault details",
-			"upstream_cluster", upstreamCluster,
-			"downstream_cluster", downstreamCluster,
-			"fault_type", faultKey,
-			"percentage", percentageValue,
-			"value", faultValue,
-			"fault_enforcer", getEnforcer(httpFaultConfig),
-		)
 	}
 
 	runtimeLayer := &pstruct.Struct{
@@ -108,73 +73,4 @@ func generateRTDSResource(experiments []*experimentation.Experiment, rtdsConfig 
 		},
 		Ttl: resourceTTL,
 	}}
-}
-
-func createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFaultConfig *serverexperimentation.HTTPFaultConfig, rtdsConfig *RTDSConfig) (string, uint32, string, uint32, error) {
-	var percentageKey string
-	var percentageValue uint32
-	var faultKey string
-	var faultValue uint32
-
-	ingressPrefix := rtdsConfig.ingressPrefix
-	egressPrefix := rtdsConfig.egressPrefix
-
-	switch httpFaultConfig.GetFault().(type) {
-	case *serverexperimentation.HTTPFaultConfig_AbortFault:
-		abort := httpFaultConfig.GetAbortFault()
-		percentageValue = abort.GetPercentage().GetPercentage()
-		faultValue = abort.GetAbortStatus().GetHttpStatusCode()
-
-		switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
-		case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
-			// Abort Egress Fault
-			percentageKey = fmt.Sprintf(HTTPPercentageForEgress, egressPrefix, upstreamCluster)
-			faultKey = fmt.Sprintf(HTTPStatusForEgress, egressPrefix, upstreamCluster)
-
-		case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
-			// Abort Internal Fault for all downstream services
-			if downstreamCluster == "" {
-				percentageKey = fmt.Sprintf(HTTPPercentageWithoutDownstream, ingressPrefix)
-				faultKey = fmt.Sprintf(HTTPStatusWithoutDownstream, ingressPrefix)
-			} else {
-				// Abort Internal Fault for a given downstream services
-				percentageKey = fmt.Sprintf(HTTPPercentageWithDownstream, ingressPrefix, downstreamCluster)
-				faultKey = fmt.Sprintf(HTTPStatusWithDownstream, ingressPrefix, downstreamCluster)
-			}
-
-		default:
-			return "", 0, "", 0, fmt.Errorf("unknown enforcer %v", httpFaultConfig)
-		}
-
-	case *serverexperimentation.HTTPFaultConfig_LatencyFault:
-		latency := httpFaultConfig.GetLatencyFault()
-		percentageValue = latency.GetPercentage().GetPercentage()
-		faultValue = latency.GetLatencyDuration().GetFixedDurationMs()
-
-		switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
-		case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
-			// Latency Egress Fault
-			percentageKey = fmt.Sprintf(LatencyPercentageForEgress, egressPrefix, upstreamCluster)
-			faultKey = fmt.Sprintf(LatencyDurationForEgress, egressPrefix, upstreamCluster)
-
-		case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
-			// Latency Internal Fault for all downstream services
-			if downstreamCluster == "" {
-				percentageKey = fmt.Sprintf(LatencyPercentageWithoutDownstream, ingressPrefix)
-				faultKey = fmt.Sprintf(LatencyDurationWithoutDownstream, ingressPrefix)
-			} else {
-				// Latency Internal Fault for a given downstream services
-				percentageKey = fmt.Sprintf(LatencyPercentageWithDownstream, ingressPrefix, downstreamCluster)
-				faultKey = fmt.Sprintf(LatencyDurationWithDownstream, ingressPrefix, downstreamCluster)
-			}
-
-		default:
-			return "", 0, "", 0, fmt.Errorf("unknown enforcer %v", httpFaultConfig)
-		}
-
-	default:
-		return "", 0, "", 0, fmt.Errorf("unknown fault type %v", httpFaultConfig)
-	}
-
-	return percentageKey, percentageValue, faultKey, faultValue, nil
 }

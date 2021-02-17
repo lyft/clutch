@@ -28,14 +28,17 @@ type Storer interface {
 	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id string) (*experimentation.ExperimentRunDetails, error)
 	GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error)
+	GetRuntimeGenerator(configTypeUrl string) (*RuntimeGeneration, error)
 	RegisterTransformation(transformation Transformation) error
+	RegisterRuntimeGeneration(runtimeGeneration RuntimeGeneration) error
 	Close()
 }
 
 type storer struct {
-	db          *sql.DB
-	logger      *zap.SugaredLogger
-	transformer *Transformer
+	db               *sql.DB
+	logger           *zap.SugaredLogger
+	transformer      *Transformer
+	runtimeGenerator *RuntimeGenerator
 }
 
 var _ Storer = (*storer)(nil)
@@ -54,10 +57,12 @@ func New(_ *any.Any, logger *zap.Logger, _ tally.Scope) (service.Service, error)
 
 	sugaredLogger := logger.Sugar()
 	transformer := NewTransformer(sugaredLogger)
+	runtimeGenerator := NewRuntimeGenerator(sugaredLogger)
 	return &storer{
 		client.DB(),
 		sugaredLogger,
 		&transformer,
+		&runtimeGenerator,
 	}, nil
 }
 
@@ -292,9 +297,27 @@ func (s *storer) getExperiment(ctx context.Context, runId string) (*Experiment, 
 	return &Experiment{Run: &run, Config: &config}, nil
 }
 
+func (s *storer) GetRuntimeGenerator(configTypeUrl string) (*RuntimeGeneration, error) {
+	runtimeGeneration, exists := s.runtimeGenerator.nameToGenerationMap[configTypeUrl]
+	if !exists {
+		return nil, errors.New("could not find runtime generation for config type")
+	}
+
+	return runtimeGeneration, nil
+}
+
 // Close closes all resources held.
 func (s *storer) Close() {
 	s.db.Close()
+}
+
+func (s *storer) RegisterRuntimeGeneration(runtimeGeneration RuntimeGeneration) error {
+	err := s.runtimeGenerator.Register(runtimeGeneration)
+	if err != nil {
+		s.logger.Fatal("Could not register runtime generation %v", runtimeGeneration)
+	}
+
+	return err
 }
 
 func (s *storer) RegisterTransformation(transformation Transformation) error {
