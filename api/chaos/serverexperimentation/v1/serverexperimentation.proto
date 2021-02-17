@@ -74,21 +74,21 @@ message HTTPFaultConfig {
 
 // The configuration of a Redis fault.
 message RedisFaultConfig {
-  // The targeting of the fault describing what requests are being considered for faults.
-  FaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
+  // The targeting of the fault describing what redis requests are being considered for faults.
+  RedisFaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
 
   oneof fault {
     option (validate.required) = true;
 
     // The error fault responds to redis commands with an error.
-    ErrorFault error_fault = 2;
+    RedisErrorFault error_fault = 2;
     // The latency fault delays redis commands.
     LatencyFault latency_fault = 3;
   }
 }
 
 // The definition of a redis error fault.
-message ErrorFault {
+message RedisErrorFault {
   // The percentage of requests the fault should be applied to.
   FaultPercentage percentage = 1 [ (validate.rules).message.required = true ];
 }
@@ -109,6 +109,21 @@ message LatencyFault {
   FaultLatencyDuration latency_duration = 2 [ (validate.rules).message.required = true ];
 }
 
+// Enforce faults on upstream redis cluster.
+message RedisFaultTargeting {
+  // A downstream responsible for enforcing a fault. Only requests that are started
+  // by the specified downstream are considered for a fault injection.
+  oneof downstream_type {
+    option (validate.required) = true;
+
+    // A single downstream cluster.
+    SingleCluster downstream_cluster = 1;
+  }
+
+  // The redis commands to enforce a fault on. If unset, faults will apply to all redis commands.
+  repeated string redis_commands = 2 [ (validate.rules).repeated = {unique : true} ];
+}
+
 // The fault targeting that allows us to control which requests are considered for
 // fault injection and what part of the system is responsible for applying faults.
 // The `enforcer` abstraction allows us to define a different list of matching criteria
@@ -122,8 +137,6 @@ message FaultTargeting {
     UpstreamEnforcing upstream_enforcing = 1;
     // Enforce a fault on a downstream.
     DownstreamEnforcing downstream_enforcing = 2;
-    // Enforce a fault on upstream redis cluster.
-    RedisUpstreamEnforcing redis_upstream_enforcing = 3;
   }
 }
 
@@ -169,33 +182,6 @@ message DownstreamEnforcing {
     // A single downstream cluster.
     SingleCluster downstream_cluster = 2;
   }
-}
-
-// Enforce faults on upstream redis cluster.
-message RedisUpstreamEnforcing {
-  // An upstream responsible for enforcing a fault. Only requests that are handled
-  // by the specified upstream are considered for the fault injection.
-  oneof upstream_type {
-    option (validate.required) = true;
-
-    // A single upstream cluster.
-    SingleCluster upstream_cluster = 1;
-  }
-
-  // A downstream responsible for enforcing a fault. Only requests that are started
-  // by the specified downstream are considered for a fault injection.
-  oneof downstream_type {
-    option (validate.required) = true;
-
-    // A single downstream cluster.
-    SingleCluster downstream_cluster = 2;
-  }
-
-  // The redis commands to enforce a fault on. Passing in no redis commands, will apply faults on all redis commands.
-  repeated string redis_commands = 3 [ (validate.rules).repeated = {
-    min_items : 0,
-    items {string {min_bytes : 1}}
-  } ];
 }
 
 // A single cluster that is partaking in the fault injection.

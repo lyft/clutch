@@ -3897,10 +3897,10 @@ export namespace clutch {
                 interface IRedisFaultConfig {
 
                     /** RedisFaultConfig faultTargeting */
-                    faultTargeting?: (clutch.chaos.serverexperimentation.v1.IFaultTargeting|null);
+                    faultTargeting?: (clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting|null);
 
                     /** RedisFaultConfig errorFault */
-                    errorFault?: (clutch.chaos.serverexperimentation.v1.IErrorFault|null);
+                    errorFault?: (clutch.chaos.serverexperimentation.v1.IRedisErrorFault|null);
 
                     /** RedisFaultConfig latencyFault */
                     latencyFault?: (clutch.chaos.serverexperimentation.v1.ILatencyFault|null);
@@ -3916,10 +3916,10 @@ export namespace clutch {
                     constructor(properties?: clutch.chaos.serverexperimentation.v1.IRedisFaultConfig);
 
                     /** RedisFaultConfig faultTargeting. */
-                    public faultTargeting?: (clutch.chaos.serverexperimentation.v1.IFaultTargeting|null);
+                    public faultTargeting?: (clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting|null);
 
                     /** RedisFaultConfig errorFault. */
-                    public errorFault?: (clutch.chaos.serverexperimentation.v1.IErrorFault|null);
+                    public errorFault?: (clutch.chaos.serverexperimentation.v1.IRedisErrorFault|null);
 
                     /** RedisFaultConfig latencyFault. */
                     public latencyFault?: (clutch.chaos.serverexperimentation.v1.ILatencyFault|null);
@@ -3956,49 +3956,49 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of an ErrorFault. */
-                interface IErrorFault {
+                /** Properties of a RedisErrorFault. */
+                interface IRedisErrorFault {
 
-                    /** ErrorFault percentage */
+                    /** RedisErrorFault percentage */
                     percentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
                 }
 
-                /** Represents an ErrorFault. */
-                class ErrorFault implements IErrorFault {
+                /** Represents a RedisErrorFault. */
+                class RedisErrorFault implements IRedisErrorFault {
 
                     /**
-                     * Constructs a new ErrorFault.
+                     * Constructs a new RedisErrorFault.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IErrorFault);
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IRedisErrorFault);
 
-                    /** ErrorFault percentage. */
+                    /** RedisErrorFault percentage. */
                     public percentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
 
                     /**
-                     * Verifies an ErrorFault message.
+                     * Verifies a RedisErrorFault message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates an ErrorFault message from a plain object. Also converts values to their respective internal types.
+                     * Creates a RedisErrorFault message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns ErrorFault
+                     * @returns RedisErrorFault
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.ErrorFault;
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.RedisErrorFault;
 
                     /**
-                     * Creates a plain object from an ErrorFault message. Also converts values to other types if specified.
-                     * @param message ErrorFault
+                     * Creates a plain object from a RedisErrorFault message. Also converts values to other types if specified.
+                     * @param message RedisErrorFault
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.ErrorFault, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.RedisErrorFault, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this ErrorFault to JSON.
+                     * Converts this RedisErrorFault to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -4112,6 +4112,63 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
+                /** Properties of a RedisFaultTargeting. */
+                interface IRedisFaultTargeting {
+
+                    /** RedisFaultTargeting downstreamCluster */
+                    downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
+
+                    /** RedisFaultTargeting redisCommands */
+                    redisCommands?: (string[]|null);
+                }
+
+                /** Represents a RedisFaultTargeting. */
+                class RedisFaultTargeting implements IRedisFaultTargeting {
+
+                    /**
+                     * Constructs a new RedisFaultTargeting.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting);
+
+                    /** RedisFaultTargeting downstreamCluster. */
+                    public downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
+
+                    /** RedisFaultTargeting redisCommands. */
+                    public redisCommands: string[];
+
+                    /** RedisFaultTargeting downstreamType. */
+                    public downstreamType?: "downstreamCluster";
+
+                    /**
+                     * Verifies a RedisFaultTargeting message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a RedisFaultTargeting message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns RedisFaultTargeting
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.RedisFaultTargeting;
+
+                    /**
+                     * Creates a plain object from a RedisFaultTargeting message. Also converts values to other types if specified.
+                     * @param message RedisFaultTargeting
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.RedisFaultTargeting, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this RedisFaultTargeting to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
                 /** Properties of a FaultTargeting. */
                 interface IFaultTargeting {
 
@@ -4120,9 +4177,6 @@ export namespace clutch {
 
                     /** FaultTargeting downstreamEnforcing */
                     downstreamEnforcing?: (clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing|null);
-
-                    /** FaultTargeting redisUpstreamEnforcing */
-                    redisUpstreamEnforcing?: (clutch.chaos.serverexperimentation.v1.IRedisUpstreamEnforcing|null);
                 }
 
                 /** Represents a FaultTargeting. */
@@ -4140,11 +4194,8 @@ export namespace clutch {
                     /** FaultTargeting downstreamEnforcing. */
                     public downstreamEnforcing?: (clutch.chaos.serverexperimentation.v1.IDownstreamEnforcing|null);
 
-                    /** FaultTargeting redisUpstreamEnforcing. */
-                    public redisUpstreamEnforcing?: (clutch.chaos.serverexperimentation.v1.IRedisUpstreamEnforcing|null);
-
                     /** FaultTargeting enforcer. */
-                    public enforcer?: ("upstreamEnforcing"|"downstreamEnforcing"|"redisUpstreamEnforcing");
+                    public enforcer?: ("upstreamEnforcing"|"downstreamEnforcing");
 
                     /**
                      * Verifies a FaultTargeting message.
@@ -4296,72 +4347,6 @@ export namespace clutch {
 
                     /**
                      * Converts this DownstreamEnforcing to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a RedisUpstreamEnforcing. */
-                interface IRedisUpstreamEnforcing {
-
-                    /** RedisUpstreamEnforcing upstreamCluster */
-                    upstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
-
-                    /** RedisUpstreamEnforcing downstreamCluster */
-                    downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
-
-                    /** RedisUpstreamEnforcing redisCommands */
-                    redisCommands?: (string[]|null);
-                }
-
-                /** Represents a RedisUpstreamEnforcing. */
-                class RedisUpstreamEnforcing implements IRedisUpstreamEnforcing {
-
-                    /**
-                     * Constructs a new RedisUpstreamEnforcing.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IRedisUpstreamEnforcing);
-
-                    /** RedisUpstreamEnforcing upstreamCluster. */
-                    public upstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
-
-                    /** RedisUpstreamEnforcing downstreamCluster. */
-                    public downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
-
-                    /** RedisUpstreamEnforcing redisCommands. */
-                    public redisCommands: string[];
-
-                    /** RedisUpstreamEnforcing upstreamType. */
-                    public upstreamType?: "upstreamCluster";
-
-                    /** RedisUpstreamEnforcing downstreamType. */
-                    public downstreamType?: "downstreamCluster";
-
-                    /**
-                     * Verifies a RedisUpstreamEnforcing message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a RedisUpstreamEnforcing message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns RedisUpstreamEnforcing
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.RedisUpstreamEnforcing;
-
-                    /**
-                     * Creates a plain object from a RedisUpstreamEnforcing message. Also converts values to other types if specified.
-                     * @param message RedisUpstreamEnforcing
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.RedisUpstreamEnforcing, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this RedisUpstreamEnforcing to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
