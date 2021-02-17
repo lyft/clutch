@@ -183,6 +183,7 @@ export interface TextFieldProps
     >,
     Pick<MuiInputProps, "readOnly" | "endAdornment"> {
   onReturn?: () => void;
+  enableAutocomplete?: boolean;
   autocompleteCallback?: (v: string) => Promise<any>;
 }
 
@@ -193,6 +194,7 @@ export const TextField = ({
   helperText,
   readOnly,
   endAdornment,
+  enableAutocomplete,
   autocompleteCallback,
   ...props
 }: TextFieldProps) => {
@@ -219,7 +221,7 @@ export const TextField = ({
     );
   }
 
-  if (autocompleteCallback !== undefined) {
+  if (enableAutocomplete) {
     const [autoCompleteOptions, setAutoCompleteOptions] = React.useState([]);
     const autoCompleteDebounce = React.useRef(
       _.debounce(value => {

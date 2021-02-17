@@ -52,12 +52,9 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ inputType, schemas, submi
     setQueryData(convertChangeEvent(event).target.value);
   };
 
-  let autoCompleteCallback;
-  if (
-    schemas.filter(schema => schema?.metadata?.search?.autocompleteEnabled === true).length >= 1
-  ) {
-    autoCompleteCallback = autoComplete;
-  }
+  // If there is at least 1 schema that has the ability to autocomplete we will enable it.
+  const isAutoCompleteEnabled =
+    schemas.filter(schema => schema?.metadata?.search?.autocompleteEnabled === true).length >= 1;
 
   const error = validation.errors?.query;
   return (
@@ -73,7 +70,8 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ inputType, schemas, submi
         error={!!error}
         helperText={error?.message || error?.type || ""}
         endAdornment={<SearchIcon />}
-        autocompleteCallback={v => autoCompleteCallback(inputType, v)}
+        enableAutocomplete={isAutoCompleteEnabled}
+        autocompleteCallback={v => autoComplete(inputType, v)}
       />
     </Form>
   );
