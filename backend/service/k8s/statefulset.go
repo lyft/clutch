@@ -35,6 +35,27 @@ func (s *svc) DescribeStatefulSet(ctx context.Context, clientset, cluster, names
 	return nil, fmt.Errorf("Unable to locate StatefulSet")
 }
 
+func (s *svc) ListStatefulSets(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.StatefulSet, error) {
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
+	if err != nil {
+		return nil, err
+	}
+
+	opts := ApplyListOptions(listOptions)
+	statefulSetList, err := cs.AppsV1().StatefulSets(cs.Namespace()).List(ctx, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	var statefulSets []*k8sapiv1.StatefulSet
+	for _, d := range statefulSetList.Items {
+		statefulSet := d
+		statefulSets = append(statefulSets, ProtoForStatefulSet(cs.Cluster(), &statefulSet))
+	}
+
+	return statefulSets, nil
+}
+
 // ProtoForStatefulSet maps a Kubernetes Stateful Set object to a k8sapiv1 object
 func ProtoForStatefulSet(cluster string, statefulSet *appsv1.StatefulSet) *k8sapiv1.StatefulSet {
 	clusterName := statefulSet.ClusterName
@@ -87,4 +108,14 @@ func mergeStatefulSetLabelsAndAnnotations(statefulSet *appsv1.StatefulSet, field
 		statefulSet.Annotations = labels.Merge(labels.Set(statefulSet.Annotations), labels.Set(fields.Annotations))
 		statefulSet.Spec.Template.ObjectMeta.Annotations = labels.Merge(labels.Set(statefulSet.Spec.Template.ObjectMeta.Annotations), labels.Set(fields.Annotations))
 	}
+}
+
+func (s *svc) DeleteStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) error {
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
+	if err != nil {
+		return err
+	}
+
+	opts := metav1.DeleteOptions{}
+	return cs.AppsV1().StatefulSets(cs.Namespace()).Delete(ctx, name, opts)
 }

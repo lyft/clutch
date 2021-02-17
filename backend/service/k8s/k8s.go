@@ -51,7 +51,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 
 type Service interface {
 	// All names of clientsets.
-	Clientsets(ctx context.Context) []string
+	Clientsets(ctx context.Context) ([]string, error)
 
 	// Pod management functions.
 	DescribePod(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Pod, error)
@@ -66,6 +66,7 @@ type Service interface {
 
 	// Deployment management functions.
 	DescribeDeployment(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Deployment, error)
+	ListDeployments(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Deployment, error)
 	UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error
 	DeleteDeployment(ctx context.Context, clientset, cluster, namespace, name string) error
 
@@ -75,16 +76,23 @@ type Service interface {
 
 	// StatefulSet management functions.
 	DescribeStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.StatefulSet, error)
+	ListStatefulSets(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.StatefulSet, error)
 	UpdateStatefulSet(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateStatefulSetRequest_Fields) error
+	DeleteStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) error
 
 	// CronJob management functions.
 	DescribeCronJob(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.CronJob, error)
+	ListCronJobs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.CronJob, error)
 	DeleteCronJob(ctx context.Context, clientset, cluster, namespace, name string) error
 
 	// ConfigMap management functions.
 	DescribeConfigMap(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.ConfigMap, error)
 	DeleteConfigMap(ctx context.Context, clientset, cluster, namespace, name string) error
 	ListConfigMaps(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.ConfigMap, error)
+
+	// Job management functions.
+	DeleteJob(ctx context.Context, clientset, cluster, namespace, name string) error
+	ListJobs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Job, error)
 }
 
 type svc struct {
@@ -106,11 +114,14 @@ func NewWithClientsetManager(manager ClientsetManager, logger *zap.Logger, scope
 	}, nil
 }
 
-func (s *svc) Clientsets(ctx context.Context) []string {
-	cs := s.manager.Clientsets(ctx)
+func (s *svc) Clientsets(ctx context.Context) ([]string, error) {
+	cs, err := s.manager.Clientsets(ctx)
+	if err != nil {
+		return nil, err
+	}
 	ret := make([]string, 0, len(cs))
 	for name := range cs {
 		ret = append(ret, name)
 	}
-	return ret
+	return ret, nil
 }

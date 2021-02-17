@@ -39,9 +39,18 @@ message FieldMetadata {
   }
 }
 
+message SearchMetadata {
+  bool enabled = 1;
+  // This field is controlled by the backend resolver
+  // Acting as a feature flag to the frontend which enables the autocomplete components
+  bool autocomplete_enabled = 2;
+}
+
 message SchemaMetadata {
   string display_name = 1;
+  // Searchable has been replaced by SearchMetadata.enabled and will be deprecated soon
   bool searchable = 2;
+  SearchMetadata search = 3;
 }
 
 message Schema {

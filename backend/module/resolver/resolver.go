@@ -19,6 +19,8 @@ import (
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/resolver"
+	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/topology"
 )
 
 const Name = "clutch.module.resolver"
@@ -98,7 +100,7 @@ func (r *resolverAPI) Search(ctx context.Context, req *resolverv1.SearchRequest)
 		resSchemas := res.Schemas()
 		if schemas, ok := resSchemas[req.Want]; ok {
 			for _, ss := range schemas {
-				if ss.Metadata.Searchable {
+				if ss.Metadata.Searchable || (ss.Metadata.Search != nil && ss.Metadata.Search.Enabled) {
 					searchedSchemas = append(searchedSchemas, ss.Metadata.DisplayName)
 				}
 			}
@@ -142,6 +144,13 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 
 	// Handle option presentation for matching schemas.
 	for _, schema := range schemas {
+		if shouldAutoCompleteBeEnabled() {
+			if schema.Metadata.Search == nil {
+				schema.Metadata.Search = &resolverv1.SearchMetadata{}
+			}
+			schema.Metadata.Search.AutocompleteEnabled = true
+		}
+
 		for _, field := range schema.Fields {
 			fm, ok := field.Metadata.Type.(*resolverv1.FieldMetadata_OptionField)
 			if !ok {
@@ -177,6 +186,52 @@ func (r *resolverAPI) GetObjectSchemas(ctx context.Context, req *resolverv1.GetO
 	}, nil
 }
 
+func (r *resolverAPI) Autocomplete(ctx context.Context, req *resolverv1.AutocompleteRequest) (*resolverv1.AutocompleteResponse, error) {
+	results := []*resolverv1.AutocompleteResult{}
+
+	limit := resolver.DefaultAutocompleteLimit
+	if req.Limit > 0 {
+		limit = int(req.Limit)
+	}
+
+	// Iterate through all of the available resolvers & schemas to find the one requested
+	// If that schema exists then we call the associated autocomplete function for that resolver
+	for _, res := range resolver.Registry {
+		resSchema := res.Schemas()
+		if _, ok := resSchema[req.Want]; ok {
+			resolverResults, err := res.Autocomplete(ctx, req.Want, req.Search, req.Limit)
+			if err != nil {
+				return nil, err
+			}
+
+			// Append results from all resolvers up to the limit.
+			// Future enhancements here will try to surface the most relevant results
+			// from all resolvers instead of this basic approach
+			appendAutocompleteResultsToLimit(&results, resolverResults, limit)
+			if len(results) >= limit {
+				break
+			}
+		}
+	}
+
+	return &resolverv1.AutocompleteResponse{
+		Results: results,
+	}, nil
+}
+
+func appendAutocompleteResultsToLimit(
+	results *[]*resolverv1.AutocompleteResult,
+	resolverResults []*resolverv1.AutocompleteResult,
+	limit int,
+) {
+	freeSpace := limit - len(*results)
+	if freeSpace >= len(resolverResults) {
+		*results = append(*results, resolverResults...)
+	} else {
+		*results = append(*results, resolverResults[:freeSpace]...)
+	}
+}
+
 // Add error information to the schema if it's broken in some way.
 func updateSchemaError(input *resolverv1.Schema) {
 	for _, field := range input.Fields {
@@ -189,4 +244,14 @@ func updateSchemaError(input *resolverv1.Schema) {
 			}
 		}
 	}
+}
+
+func shouldAutoCompleteBeEnabled() bool {
+	topologySvc, ok := service.Registry[topology.Name]
+	if ok {
+		_, ok := topologySvc.(topology.Service)
+		return ok
+	}
+
+	return false
 }

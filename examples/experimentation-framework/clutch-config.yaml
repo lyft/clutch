@@ -19,9 +19,9 @@ modules:
   - name: clutch.module.healthcheck
   - name: clutch.module.resolver
   - name: clutch.module.chaos.experimentation.api
-  - name: clutch.module.chaos.experimentation.rtds
+  - name: clutch.module.chaos.experimentation.xds
     typed_config:
-      "@type": types.google.com/clutch.config.module.chaos.experimentation.rtds.v1.Config
+      "@type": types.google.com/clutch.config.module.chaos.experimentation.xds.v1.Config
       rtds_layer_name: foo
       cache_refresh_interval: "60s"
 services:

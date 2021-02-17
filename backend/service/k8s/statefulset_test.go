@@ -26,6 +26,29 @@ func testStatefulSetClientset() k8s.Interface {
 	return fake.NewSimpleClientset(statefulSet)
 }
 
+func TestListStatefulSets(t *testing.T) {
+	cs := testStatefulSetClientset()
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "default",
+				cluster:   "core-testing",
+			}},
+		},
+	}
+
+	opts := &k8sapiv1.ListOptions{Labels: map[string]string{"foo": "bar"}}
+	list, err := s.ListStatefulSets(context.Background(), "foo", "core-testing", "testing-namespace", opts)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, len(list))
+	// Not Found
+	opts = &k8sapiv1.ListOptions{Labels: map[string]string{"unknown": "bar"}}
+	list, err = s.ListStatefulSets(context.Background(), "foo", "core-testing", "testing-namespace", opts)
+	assert.NoError(t, err)
+	assert.Equal(t, 0, len(list))
+}
+
 func TestUpdateStatefulSet(t *testing.T) {
 	t.Parallel()
 	cs := testStatefulSetClientset()
@@ -178,4 +201,28 @@ func TestProtoForStatefulSetClusterName(t *testing.T) {
 			assert.Equal(t, tt.expectedClusterName, statefulSet.Cluster)
 		})
 	}
+}
+
+func TestDeleteStatefulSet(t *testing.T) {
+	cs := testStatefulSetClientset()
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "default",
+				cluster:   "core-testing",
+			}},
+		},
+	}
+
+	// Not found.
+	err := s.DeleteStatefulSet(context.Background(), "foo", "core-testing", "testing-namespace", "abc")
+	assert.Error(t, err)
+
+	err = s.DeleteStatefulSet(context.Background(), "foo", "core-testing", "testing-namespace", "testing-statefulSet-name")
+	assert.NoError(t, err)
+
+	// Not found.
+	_, err = s.DescribeStatefulSet(context.Background(), "foo", "core-testing", "testing-namespace", "testing-statefulSet-name")
+	assert.Error(t, err)
 }

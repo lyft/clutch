@@ -1,4 +1,8 @@
+<<<<<<< HEAD:backend/module/chaos/serverexperimentation/xds/testing/simple_storer.go
 package testing
+=======
+package xds
+>>>>>>> origin/main:backend/module/chaos/serverexperimentation/xds/simple_storer.go
 
 import (
 	"context"

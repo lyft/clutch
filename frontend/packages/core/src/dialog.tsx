@@ -16,6 +16,8 @@ const DialogPaper = styled(Paper)({
   boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
   boxSizing: "border-box",
   backgroundColor: "#FFFFFF",
+  maxWidth: "fit-content",
+  minWidth: "600px",
 });
 
 const DialogTitle = styled(MuiDialogTitle)({

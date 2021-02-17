@@ -15,7 +15,7 @@ import (
 	awsmod "github.com/lyft/clutch/backend/module/aws"
 	experimentationapi "github.com/lyft/clutch/backend/module/chaos/experimentation/api"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation"
-	rtdsmod "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds"
+	xdsmod "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds"
 	"github.com/lyft/clutch/backend/module/envoytriage"
 	"github.com/lyft/clutch/backend/module/healthcheck"
 	k8smod "github.com/lyft/clutch/backend/module/k8s"
@@ -61,25 +61,26 @@ var Modules = module.Factory{
 	kinesismod.Name:            kinesismod.New,
 	healthcheck.Name:           healthcheck.New,
 	resolvermod.Name:           resolvermod.New,
-	rtdsmod.Name:               rtdsmod.New,
+	xdsmod.Name:                xdsmod.New,
 	serverexperimentation.Name: serverexperimentation.New,
 	sourcecontrol.Name:         sourcecontrol.New,
 	topologymod.Name:           topologymod.New,
 }
 
 var Services = service.Factory{
-	auditservice.Name:    auditservice.New,
-	authnservice.Name:    authnservice.New,
-	authzservice.Name:    authzservice.New,
-	awsservice.Name:      awsservice.New,
-	envoyadmin.Name:      envoyadmin.New,
-	experimentstore.Name: experimentstore.New,
-	github.Name:          github.New,
-	k8sservice.Name:      k8sservice.New,
-	loggingsink.Name:     loggingsink.New,
-	pgservice.Name:       pgservice.New,
-	slack.Name:           slack.New,
-	topologyservice.Name: topologyservice.New,
+	auditservice.Name:        auditservice.New,
+	authnservice.Name:        authnservice.New,
+	authnservice.StorageName: authnservice.NewStorage,
+	authzservice.Name:        authzservice.New,
+	awsservice.Name:          awsservice.New,
+	envoyadmin.Name:          envoyadmin.New,
+	experimentstore.Name:     experimentstore.New,
+	github.Name:              github.New,
+	k8sservice.Name:          k8sservice.New,
+	loggingsink.Name:         loggingsink.New,
+	pgservice.Name:           pgservice.New,
+	slack.Name:               slack.New,
+	topologyservice.Name:     topologyservice.New,
 }
 
 var Resolvers = resolver.Factory{

@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"path": "../api"
+		},
+		{
+			"path": "../backend"
+		},
+		{
+			"path": "../docs"
+		},
+		{
+			"path": "../frontend"
+		},
+		{
+			"path": "../tools"
+		},
+		{
+			"name": "ci",
+			"path": "../.github"
+		}
+	],
+	"settings": {}
+}

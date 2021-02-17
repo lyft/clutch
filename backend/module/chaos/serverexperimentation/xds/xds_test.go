@@ -1,4 +1,4 @@
-package rtds
+package xds
 
 import (
 	"context"
@@ -6,9 +6,7 @@ import (
 	"testing"
 	"time"
 
-	envoy_api_v2 "github.com/envoyproxy/go-control-plane/envoy/api/v2"
 	envoy_config_core_v3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
-	gcpDiscoveryV2 "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
 	gcpDiscoveryV3 "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v3"
 	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	"github.com/golang/protobuf/ptypes"
@@ -17,17 +15,27 @@ import (
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+<<<<<<< HEAD:backend/module/chaos/serverexperimentation/rtds/rtds_test.go
 	rtds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds/testing"
+=======
+	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
+	"github.com/lyft/clutch/backend/module/moduletest"
+	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
+>>>>>>> origin/main:backend/module/chaos/serverexperimentation/xds/xds_test.go
 )
 
 func TestServerStats(t *testing.T) {
 	testServer := rtds_testing.NewTestServer(t, New, false)
 	defer testServer.Stop()
 
+<<<<<<< HEAD:backend/module/chaos/serverexperimentation/rtds/rtds_test.go
 	// Connect to the test server.
 	conn, err := testServer.ClientConn()
 	assert.NoError(t, err)
 
+=======
+>>>>>>> origin/main:backend/module/chaos/serverexperimentation/xds/xds_test.go
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -50,6 +58,7 @@ func TestServerStats(t *testing.T) {
 	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
 	// Async verification here since it appears that we don't get a response back in this case, so we
 	// aren't able to synchronize on the response.
+<<<<<<< HEAD:backend/module/chaos/serverexperimentation/rtds/rtds_test.go
 	awaitCounterEquals(t, testServer.Scope, "test.v3.totalErrorsReceived+", 1)
 
 	// Verify V2 stats.
@@ -78,6 +87,9 @@ func TestServerStats(t *testing.T) {
 	// Async verification here since it appears that we don't get a response back in this case, so we
 	// aren't able to synchronize on the response.
 	awaitCounterEquals(t, testServer.Scope, "test.v2.totalErrorsReceived+", 1)
+=======
+	awaitCounterEquals(t, testServer.scope, "test.v3.totalErrorsReceived+", 1)
+>>>>>>> origin/main:backend/module/chaos/serverexperimentation/xds/xds_test.go
 }
 
 // Verifies that TTL and heartbeating is done when configured to do so.
@@ -198,6 +210,74 @@ func awaitCounterEquals(t *testing.T, scope tally.TestScope, counter string, val
 	}
 }
 
+<<<<<<< HEAD:backend/module/chaos/serverexperimentation/rtds/rtds_test.go
+=======
+// Helper class for initializing a test RTDS server.
+type testServer struct {
+	registrar *moduletest.TestRegistrar
+	scope     tally.TestScope
+	storer    *simpleStorer
+}
+
+func newTestServer(t *testing.T, ttl bool) testServer {
+	t.Helper()
+	server := testServer{}
+
+	server.storer = &simpleStorer{}
+	service.Registry[experimentstore.Name] = server.storer
+
+	// Set up a test server listening to :9000.
+	config := &xdsconfigv1.Config{
+		RtdsLayerName:             "tests",
+		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		IngressFaultRuntimePrefix: "ingress",
+		EgressFaultRuntimePrefix:  "egress",
+	}
+
+	if ttl {
+		config.ResourceTtl = &durationpb.Duration{
+			Seconds: 1,
+		}
+		config.HeartbeatInterval = &durationpb.Duration{
+			Seconds: 1,
+		}
+	}
+
+	any, err := ptypes.MarshalAny(config)
+	assert.NoError(t, err)
+	server.scope = tally.NewTestScope("test", nil)
+
+	logger, err := zap.NewDevelopment()
+	assert.NoError(t, err)
+
+	m, err := New(any, logger, server.scope)
+	assert.NoError(t, err)
+
+	server.registrar = moduletest.NewRegisterChecker()
+
+	err = m.Register(server.registrar)
+	assert.NoError(t, err)
+
+	l, err := net.Listen("tcp", "localhost:9000")
+	assert.NoError(t, err)
+
+	go func() {
+		err := server.registrar.GRPCServer().Serve(l)
+		assert.NoError(t, err)
+	}()
+
+	return server
+}
+
+func (t *testServer) stop() {
+	t.registrar.GRPCServer().Stop()
+}
+
+func (t *testServer) clientConn() (*grpc.ClientConn, error) {
+	return grpc.Dial("localhost:9000", grpc.WithInsecure())
+}
+
+>>>>>>> origin/main:backend/module/chaos/serverexperimentation/xds/xds_test.go
 // Helper class for testing calls over a single RTDS stream.
 type v3StreamWrapper struct {
 	stream  gcpRuntimeServiceV3.RuntimeDiscoveryService_StreamRuntimeClient

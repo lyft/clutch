@@ -386,3 +386,10 @@
     :why: 
     :versions: []
     :when: 2021-01-22 00:04:57.253574509 Z
+- - :license
+  - github.com/DATA-DOG/go-sqlmock
+  - BSD-3-Clause
+  - :who: 
+    :why: 
+    :versions: []
+    :when: 2021-02-01 00:00:01.412574509 Z
