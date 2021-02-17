@@ -515,6 +515,203 @@ var _ interface {
 	ErrorName() string
 } = HTTPFaultConfigValidationError{}
 
+// Validate checks the field values on RedisFaultConfig with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *RedisFaultConfig) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetFaultTargeting() == nil {
+		return RedisFaultConfigValidationError{
+			field:  "FaultTargeting",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetFaultTargeting()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return RedisFaultConfigValidationError{
+				field:  "FaultTargeting",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	switch m.Fault.(type) {
+
+	case *RedisFaultConfig_ErrorFault:
+
+		if v, ok := interface{}(m.GetErrorFault()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return RedisFaultConfigValidationError{
+					field:  "ErrorFault",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *RedisFaultConfig_LatencyFault:
+
+		if v, ok := interface{}(m.GetLatencyFault()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return RedisFaultConfigValidationError{
+					field:  "LatencyFault",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return RedisFaultConfigValidationError{
+			field:  "Fault",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// RedisFaultConfigValidationError is the validation error returned by
+// RedisFaultConfig.Validate if the designated constraints aren't met.
+type RedisFaultConfigValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RedisFaultConfigValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RedisFaultConfigValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RedisFaultConfigValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RedisFaultConfigValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RedisFaultConfigValidationError) ErrorName() string { return "RedisFaultConfigValidationError" }
+
+// Error satisfies the builtin error interface
+func (e RedisFaultConfigValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRedisFaultConfig.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RedisFaultConfigValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RedisFaultConfigValidationError{}
+
+// Validate checks the field values on ErrorFault with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *ErrorFault) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetPercentage() == nil {
+		return ErrorFaultValidationError{
+			field:  "Percentage",
+			reason: "value is required",
+		}
+	}
+
+	if v, ok := interface{}(m.GetPercentage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ErrorFaultValidationError{
+				field:  "Percentage",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// ErrorFaultValidationError is the validation error returned by
+// ErrorFault.Validate if the designated constraints aren't met.
+type ErrorFaultValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ErrorFaultValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ErrorFaultValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ErrorFaultValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ErrorFaultValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ErrorFaultValidationError) ErrorName() string { return "ErrorFaultValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ErrorFaultValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sErrorFault.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ErrorFaultValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ErrorFaultValidationError{}
+
 // Validate checks the field values on AbortFault with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *AbortFault) Validate() error {
@@ -740,6 +937,18 @@ func (m *FaultTargeting) Validate() error {
 			if err := v.Validate(); err != nil {
 				return FaultTargetingValidationError{
 					field:  "DownstreamEnforcing",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *FaultTargeting_RedisUpstreamEnforcing:
+
+		if v, ok := interface{}(m.GetRedisUpstreamEnforcing()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return FaultTargetingValidationError{
+					field:  "RedisUpstreamEnforcing",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -1044,6 +1253,129 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DownstreamEnforcingValidationError{}
+
+// Validate checks the field values on RedisUpstreamEnforcing with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *RedisUpstreamEnforcing) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for idx, item := range m.GetRedisCommands() {
+		_, _ = idx, item
+
+		if len(item) < 1 {
+			return RedisUpstreamEnforcingValidationError{
+				field:  fmt.Sprintf("RedisCommands[%v]", idx),
+				reason: "value length must be at least 1 bytes",
+			}
+		}
+
+	}
+
+	switch m.UpstreamType.(type) {
+
+	case *RedisUpstreamEnforcing_UpstreamCluster:
+
+		if v, ok := interface{}(m.GetUpstreamCluster()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return RedisUpstreamEnforcingValidationError{
+					field:  "UpstreamCluster",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return RedisUpstreamEnforcingValidationError{
+			field:  "UpstreamType",
+			reason: "value is required",
+		}
+
+	}
+
+	switch m.DownstreamType.(type) {
+
+	case *RedisUpstreamEnforcing_DownstreamCluster:
+
+		if v, ok := interface{}(m.GetDownstreamCluster()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return RedisUpstreamEnforcingValidationError{
+					field:  "DownstreamCluster",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		return RedisUpstreamEnforcingValidationError{
+			field:  "DownstreamType",
+			reason: "value is required",
+		}
+
+	}
+
+	return nil
+}
+
+// RedisUpstreamEnforcingValidationError is the validation error returned by
+// RedisUpstreamEnforcing.Validate if the designated constraints aren't met.
+type RedisUpstreamEnforcingValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RedisUpstreamEnforcingValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RedisUpstreamEnforcingValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RedisUpstreamEnforcingValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RedisUpstreamEnforcingValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RedisUpstreamEnforcingValidationError) ErrorName() string {
+	return "RedisUpstreamEnforcingValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RedisUpstreamEnforcingValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRedisUpstreamEnforcing.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RedisUpstreamEnforcingValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RedisUpstreamEnforcingValidationError{}
 
 // Validate checks the field values on SingleCluster with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
