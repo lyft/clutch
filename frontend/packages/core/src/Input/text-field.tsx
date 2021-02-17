@@ -221,6 +221,19 @@ export const TextField = ({
     );
   }
 
+  const StyledTextFieldComponent: React.FC<any> = ({ renderInputProps, inputProps }) => (
+    <StyledTextField
+      {...renderInputProps}
+      onKeyDown={e => onKeyDown(e)}
+      onFocus={onChange}
+      onBlur={onChange}
+      error={error}
+      helperText={helpText}
+      InputProps={inputProps}
+      {...props}
+    />
+  );
+
   if (enableAutocomplete) {
     const [autoCompleteOptions, setAutoCompleteOptions] = React.useState([]);
     const autoCompleteDebounce = React.useRef(
@@ -245,22 +258,32 @@ export const TextField = ({
         getOptionLabel={option => (option?.id ? option.id : option)}
         onInputChange={(__, v) => autoCompleteDebounce(v)}
         renderOption={option => <Result option={option} />}
-        renderInput={params => (
-          <StyledTextField
-            {...params}
-            onKeyDown={e => onKeyDown(e)}
-            onFocus={onChange}
-            onBlur={onChange}
-            error={error}
-            helperText={helpText}
-            InputProps={{
-              ref: params.InputProps.ref,
+        renderInput={inputProps => (
+          <StyledTextFieldComponent
+            renderInputProps={inputProps}
+            inputProps={{
+              ref: inputProps.InputProps.ref,
               readOnly,
               endAdornment: endAdornment && <IconButton type="submit">{endAdornment}</IconButton>,
             }}
-            {...props}
           />
         )}
+        // renderInput={inputProps => (
+        //   <StyledTextField
+        //     {...inputProps}
+        //     onKeyDown={e => onKeyDown(e)}
+        //     onFocus={onChange}
+        //     onBlur={onChange}
+        //     error={error}
+        //     helperText={helpText}
+        //     InputProps={{
+        //       ref: inputProps.InputProps.ref,
+        //       readOnly,
+        //       endAdornment: endAdornment && <IconButton type="submit">{endAdornment}</IconButton>,
+        //     }}
+        //     {...props}
+        //   />
+        // )}
       />
     );
   }
