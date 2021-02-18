@@ -17,7 +17,7 @@ import (
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
-	rtds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/rtds/testing"
+	xds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/testing"
 )
 
 const (
@@ -241,90 +241,15 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 }
 
 func TestRefreshCache(t *testing.T) {
-<<<<<<< HEAD:backend/module/chaos/serverexperimentation/rtds/rtds_cache_test.go
-	s := &rtds_testing.MockStorer{}
-	testCache := gcpCache.NewSnapshotCache(false, gcpCache.IDHash{}, nil)
-	refreshCache(context.Background(), s, &cacheWrapperV2{testCache}, "test_layer", "ingress", "egress", nil)
-	assert.Equal(t, s.GetExperimentArguments.ConfigType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig")
-}
-
-func TestCreateRuntimeKeys(t *testing.T) {
-	testDataList := mockGenerateFaultData(t)
-	ingressPrefix := "ingress"
-	egressPrefix := "egress"
-
-	for _, testExperiment := range testDataList {
-		var expectedPercentageKey string
-		var expectedPercentageValue uint32
-		var expectedFaultKey string
-		var expectedFaultValue uint32
-
-		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(testExperiment.GetConfig(), config)
-		if err != nil {
-			t.Errorf("unmarshalAny failed %v", err)
-		}
-
-		upstream, downstream, err := getClusterPair(config)
-		assert.NoError(t, err)
-
-		switch config.GetFault().(type) {
-		case *serverexperimentation.HTTPFaultConfig_AbortFault:
-			abort := config.GetAbortFault()
-			expectedFaultValue = abort.GetAbortStatus().GetHttpStatusCode()
-			expectedPercentageValue = abort.GetPercentage().GetPercentage()
-
-			switch config.GetFaultTargeting().GetEnforcer().(type) {
-			case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
-				expectedPercentageKey = fmt.Sprintf(HTTPPercentageForExternal, egressPrefix, upstream)
-				expectedFaultKey = fmt.Sprintf(HTTPStatusForExternal, egressPrefix, upstream)
-			case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
-				if downstream == "" {
-					expectedPercentageKey = fmt.Sprintf(HTTPPercentageWithoutDownstream, ingressPrefix)
-					expectedFaultKey = fmt.Sprintf(HTTPStatusWithoutDownstream, ingressPrefix)
-				} else {
-					expectedPercentageKey = fmt.Sprintf(HTTPPercentageWithDownstream, ingressPrefix, downstream)
-					expectedFaultKey = fmt.Sprintf(HTTPStatusWithDownstream, ingressPrefix, downstream)
-				}
-			}
-		case *serverexperimentation.HTTPFaultConfig_LatencyFault:
-			latency := config.GetLatencyFault()
-			expectedFaultValue = latency.GetLatencyDuration().GetFixedDurationMs()
-			expectedPercentageValue = latency.GetPercentage().GetPercentage()
-
-			switch config.GetFaultTargeting().GetEnforcer().(type) {
-			case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
-				expectedPercentageKey = fmt.Sprintf(LatencyPercentageForExternal, egressPrefix, upstream)
-				expectedFaultKey = fmt.Sprintf(LatencyDurationForExternal, egressPrefix, upstream)
-			case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
-				if downstream == "" {
-					expectedPercentageKey = fmt.Sprintf(LatencyPercentageWithoutDownstream, ingressPrefix)
-					expectedFaultKey = fmt.Sprintf(LatencyDurationWithoutDownstream, ingressPrefix)
-				} else {
-					expectedPercentageKey = fmt.Sprintf(LatencyPercentageWithDownstream, ingressPrefix, downstream)
-					expectedFaultKey = fmt.Sprintf(LatencyDurationWithDownstream, ingressPrefix, downstream)
-				}
-			}
-		}
-
-		percentageKey, percentageValue, faultKey, faultValue, err := createRuntimeKeys(upstream, downstream, config, ingressPrefix, egressPrefix, zap.NewNop().Sugar())
-		assert.NoError(t, err)
-
-		assert.Equal(t, expectedPercentageKey, percentageKey)
-		assert.Equal(t, expectedPercentageValue, percentageValue)
-		assert.Equal(t, expectedFaultKey, faultKey)
-		assert.Equal(t, expectedFaultValue, faultValue)
-=======
-	s := mockStorer{}
+	s := xds_testing.MockStorer{}
 	rtdsConfig := RTDSConfig{
 		layerName:     "test_layer",
 		ingressPrefix: "ingress",
 		egressPrefix:  "egress",
->>>>>>> origin/main:backend/module/chaos/serverexperimentation/xds/xds_cache_test.go
 	}
 	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
 	refreshCache(context.Background(), &s, testCache, nil, &rtdsConfig, nil)
-	assert.Equal(t, s.getExperimentArguments.configType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig")
+	assert.Equal(t, s.GetExperimentArguments.ConfigType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig")
 }
 
 func TestComputeVersionReturnValue(t *testing.T) {

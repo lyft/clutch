@@ -16,19 +16,11 @@ import (
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	rtds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/testing"
-	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
-	"github.com/lyft/clutch/backend/module/moduletest"
-	"github.com/lyft/clutch/backend/service"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 func TestServerStats(t *testing.T) {
 	testServer := rtds_testing.NewTestServer(t, New, false)
 	defer testServer.Stop()
-
-	// Connect to the test server.
-	conn, err := testServer.ClientConn()
-	assert.NoError(t, err)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -53,33 +45,6 @@ func TestServerStats(t *testing.T) {
 	// Async verification here since it appears that we don't get a response back in this case, so we
 	// aren't able to synchronize on the response.
 	awaitCounterEquals(t, testServer.Scope, "test.v3.totalErrorsReceived+", 1)
-
-	// Verify V2 stats.
-	v2Client := gcpDiscoveryV2.NewRuntimeDiscoveryServiceClient(conn)
-	v2Stream, err := v2Client.StreamRuntime(ctx)
-	assert.NoError(t, err)
-	defer func() {
-		err := v2Stream.CloseSend()
-		assert.NoError(t, err)
-	}()
-
-	// Regular flow.
-	err = v2Stream.Send(&envoy_api_v2.DiscoveryRequest{})
-	assert.NoError(t, err)
-
-	_, err = v2Stream.Recv()
-	assert.NoError(t, err)
-
-	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.v2.totalResourcesServed+"].Value())
-
-	// Error response from xDS client.
-	err = v2Stream.Send(&envoy_api_v2.DiscoveryRequest{ErrorDetail: &rpc_status.Status{}})
-	assert.NoError(t, err)
-
-	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.v2.totalResourcesServed+"].Value())
-	// Async verification here since it appears that we don't get a response back in this case, so we
-	// aren't able to synchronize on the response.
-	awaitCounterEquals(t, testServer.Scope, "test.v2.totalErrorsReceived+", 1)
 }
 
 // Verifies that TTL and heartbeating is done when configured to do so.
