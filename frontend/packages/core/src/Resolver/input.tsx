@@ -22,8 +22,10 @@ import { convertChangeEvent, hydrateField } from "./hydrator";
 const Form = styled.form({});
 
 interface QueryResolverProps {
-  // The inputType is the orignal resource type requested
-  // eg: clutch.aws.ec2.v1.AutoscalingGroup
+  /**
+   * The inputType is the orignal resource type requested
+   * eg: clutch.aws.ec2.v1.AutoscalingGroup
+   */
   inputType: string;
   schemas: clutch.resolver.v1.Schema[];
   submitHandler: any;
