@@ -8,6 +8,8 @@ import (
 	v1beta1 "k8s.io/api/batch/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/fake"
+
+	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func testCronService() *svc {
@@ -37,6 +39,19 @@ func TestDescribeCron(t *testing.T) {
 	cron, err := s.DescribeCronJob(context.Background(), "foo", "core-testing", "testing-namespace", "testing-cron-name")
 	assert.NoError(t, err)
 	assert.NotNil(t, cron)
+}
+
+func TestListCron(t *testing.T) {
+	s := testCronService()
+	opts := &k8sapiv1.ListOptions{Labels: map[string]string{"test": "foo"}}
+	list, err := s.ListCronJobs(context.Background(), "foo", "core-testing", "testing-namespace", opts)
+	assert.NoError(t, err)
+	assert.Equal(t, 1, len(list))
+	// Not Found
+	opts = &k8sapiv1.ListOptions{Labels: map[string]string{"unknown": "bar"}}
+	list, err = s.ListCronJobs(context.Background(), "foo", "core-testing", "testing-namespace", opts)
+	assert.NoError(t, err)
+	assert.Equal(t, 0, len(list))
 }
 
 func TestDeleteCron(t *testing.T) {

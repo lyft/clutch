@@ -60,6 +60,22 @@ service K8sAPI {
     option (clutch.api.v1.action).type = DELETE;
   }
 
+  rpc DescribeDeployment(DescribeDeploymentRequest) returns (DescribeDeploymentResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/describeDeployment"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
+  rpc ListDeployments(ListDeploymentsRequest) returns (ListDeploymentsResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/listDeployments"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
   rpc UpdateDeployment(UpdateDeploymentRequest) returns (UpdateDeploymentResponse) {
     option (google.api.http) = {
       post : "/v1/k8s/updateDeployment"
@@ -100,6 +116,14 @@ service K8sAPI {
     option (clutch.api.v1.action).type = READ;
   }
 
+  rpc ListStatefulSets(ListStatefulSetsRequest) returns (ListStatefulSetsResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/listStatefulSets"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
   rpc UpdateStatefulSet(UpdateStatefulSetRequest) returns (UpdateStatefulSetResponse) {
     option (google.api.http) = {
       post : "/v1/k8s/updateStatefulSet"
@@ -119,6 +143,14 @@ service K8sAPI {
   rpc DescribeCronJob(DescribeCronJobRequest) returns (DescribeCronJobResponse) {
     option (google.api.http) = {
       post : "/v1/k8s/describeCronJob"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
+  rpc ListCronJobs(ListCronJobsRequest) returns (ListCronJobsResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/listCronJobs"
       body : "*"
     };
     option (clutch.api.v1.action).type = READ;
@@ -151,6 +183,22 @@ service K8sAPI {
   rpc DeleteConfigMap(DeleteConfigMapRequest) returns (DeleteConfigMapResponse) {
     option (google.api.http) = {
       post : "/v1/k8s/deleteConfigMap"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = DELETE;
+  }
+
+  rpc ListJobs(ListJobsRequest) returns (ListJobsResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/listJobs"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+
+  rpc DeleteJob(DeleteJobRequest) returns (DeleteJobResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/deleteJob"
       body : "*"
     };
     option (clutch.api.v1.action).type = DELETE;
@@ -357,6 +405,40 @@ message Deployment {
   map<string, string> annotations = 5;
 }
 
+message DescribeDeploymentRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Deployment",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+
+  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+}
+
+message DescribeDeploymentResponse {
+  option (clutch.api.v1.reference).fields = "deployment";
+
+  Deployment deployment = 1;
+}
+
+message ListDeploymentsRequest {
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+
+  ListOptions options = 4 [ (validate.rules).message = {required : true} ];
+}
+
+message ListDeploymentsResponse {
+  option (clutch.api.v1.reference).fields = "deployments";
+
+  repeated Deployment deployments = 1;
+}
+
 message UpdateDeploymentRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.Deployment",
@@ -427,6 +509,26 @@ message DescribeStatefulSetRequest {
   map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
+message DescribeStatefulSetResponse {
+  option (clutch.api.v1.reference).fields = "stateful_set";
+
+  StatefulSet stateful_set = 1;
+}
+
+message ListStatefulSetsRequest {
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+
+  ListOptions options = 4 [ (validate.rules).message = {required : true} ];
+}
+
+message ListStatefulSetsResponse {
+  option (clutch.api.v1.reference).fields = "stateful_sets";
+
+  repeated StatefulSet stateful_sets = 1;
+}
+
 message DeleteStatefulSetRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.StatefulSet",
@@ -437,6 +539,9 @@ message DeleteStatefulSetRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message DeleteStatefulSetResponse {
 }
 
 message UpdateStatefulSetRequest {
@@ -461,15 +566,6 @@ message UpdateStatefulSetRequest {
   }
 
   Fields fields = 5 [ (validate.rules).message = {required : true} ];
-}
-
-message DescribeStatefulSetResponse {
-  option (clutch.api.v1.reference).fields = "stateful_set";
-
-  StatefulSet stateful_set = 1;
-}
-
-message DeleteStatefulSetResponse {
 }
 
 message UpdateStatefulSetResponse {
@@ -569,6 +665,20 @@ message DescribeCronJobResponse {
   CronJob cronjob = 1;
 }
 
+message ListCronJobsRequest {
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+
+  ListOptions options = 4 [ (validate.rules).message = {required : true} ];
+}
+
+message ListCronJobsResponse {
+  option (clutch.api.v1.reference).fields = "cron_jobs";
+
+  repeated CronJob cron_jobs = 1;
+}
+
 message DeleteCronJobRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.CronJob",
@@ -646,6 +756,49 @@ message DeleteConfigMapRequest {
 }
 
 message DeleteConfigMapResponse {
+}
+
+message Job {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Job",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string cluster = 1;
+  string namespace = 2;
+  string name = 3;
+
+  map<string, string> annotations = 4;
+  map<string, string> labels = 5;
+}
+
+message ListJobsRequest {
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+
+  ListOptions options = 4 [ (validate.rules).message = {required : true} ];
+}
+
+message ListJobsResponse {
+  option (clutch.api.v1.reference).fields = "jobs";
+
+  repeated Job jobs = 1;
+}
+
+message DeleteJobRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Job",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message DeleteJobResponse {
 }
 
 // This message type is used to add support for nullable strings and is an

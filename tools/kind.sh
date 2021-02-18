@@ -58,6 +58,7 @@ seed() {
     # Creating namespaces
     KUBECONFIG=$KUBECONFIG kubectl create ns "envoy-${env}" || true
     KUBECONFIG=$KUBECONFIG kubectl create ns "cron-${env}" || true
+    KUBECONFIG=$KUBECONFIG kubectl create ns "stateful-${env}" || true
 
     # Creating resources in `envoy-*` namespace
     KUBECONFIG=$KUBECONFIG kubectl create deployment envoy --image envoyproxy/envoy:v1.14-latest -n "envoy-${env}" || true
@@ -65,12 +66,22 @@ seed() {
     KUBECONFIG=$KUBECONFIG kubectl expose deployment envoy --port=8080 -n "envoy-${env}" || true
     KUBECONFIG=$KUBECONFIG kubectl create configmap "configmap-${env}-test-1" --from-literal=environment="${env}" -n "envoy-${env}" || true
     KUBECONFIG=$KUBECONFIG kubectl create configmap "configmap-${env}-test-2" --from-literal=environment="${env}" -n "envoy-${env}" || true
+    KUBECONFIG=$KUBECONFIG kubectl create job "job-${env}-test-1" --image busybox -n "envoy-${env}" || true
+    KUBECONFIG=$KUBECONFIG kubectl create job "job-${env}-test-2" --image busybox -n "envoy-${env}" || true
 
-    # Adding labels to a ConfigMap
-    KUBECONFIG=$KUBECONFIG kubectl label configmap "configmap-${env}-test-1" -n "envoy-${env}" app=envoy || true
 
     # Creating resources in `cron-*` namespace
     KUBECONFIG=$KUBECONFIG kubectl create cronjob cron-test --schedule "*/1 * * * *" --image busybox -n "cron-${env}" || true
+
+    # Creating resources in `stateful-*` namespace
+    KUBECONFIG=$KUBECONFIG kubectl apply -f tools/kind-stateful-set.yaml  || true
+
+    # Adding labels to resources
+    KUBECONFIG=$KUBECONFIG kubectl label configmap "configmap-${env}-test-1" -n "envoy-${env}" app=envoy || true
+    KUBECONFIG=$KUBECONFIG kubectl label job "job-${env}-test-1" -n "envoy-${env}" app=envoy || true
+    KUBECONFIG=$KUBECONFIG kubectl label cronjob cron-test -n "cron-${env}" app=cron || true
+    KUBECONFIG=$KUBECONFIG kubectl annotate job "job-${env}-test-1" -n "envoy-${env}" url=foo@example.com || true
+    KUBECONFIG=$KUBECONFIG kubectl annotate cronjob cron-test -n "cron-${env}" url=foo@example.com || true
   done
 }
 

@@ -46,3 +46,7 @@ func (m *mod) Register(r module.Registrar) error {
 func (m *mod) CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error) {
 	return m.github.CreateRepository(ctx, req)
 }
+
+func (m *mod) GetRepositoryOptions(ctx context.Context, req *sourcecontrolv1.GetRepositoryOptionsRequest) (*sourcecontrolv1.GetRepositoryOptionsResponse, error) {
+	return nil, errors.New("implement me")
+}
