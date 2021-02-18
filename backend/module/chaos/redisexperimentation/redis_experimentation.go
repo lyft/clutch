@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
-	redisexperimentation "github.com/lyft/clutch/backend/api/chaos/redisexperimentation/v1"
+	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
@@ -43,24 +43,25 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 }
 
 func (s *Service) Register(r module.Registrar) error {
-	transformation := experimentstore.Transformation{ConfigTypeUrl: "type.googleapis.com/clutch.chaos.redisexperimentation.v1.RedisFaultConfig", RunTransform: s.transform}
+	transformation := experimentstore.Transformation{ConfigTypeUrl: "type.googleapis.com/clutch.chaos.serverexperimentation.v1.RedisFaultConfig", RunTransform: s.transform}
 	return s.storer.RegisterTransformation(transformation)
 }
 
 func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experimentstore.ExperimentConfig) ([]*experimentation.Property, error) {
-	var experimentConfig = redisexperimentation.RedisFaultConfig{}
+	var experimentConfig = serverexperimentation.RedisFaultConfig{}
 	if err := ptypes.UnmarshalAny(config.Config, &experimentConfig); err != nil {
 		return []*experimentation.Property{}, err
 	}
 
-	faultsDescription, err := experimentConfigToString(&experimentConfig)
+	faultsDescription, err := experimentConfigToFaultString(&experimentConfig)
 	if err != nil {
 		return nil, err
 	}
 
 	var downstream, upstream string
-	downstream = experimentConfig.GetServiceName()
-	upstream = strings.Join(experimentConfig.GetRedisCommands(), ",")
+	downstream = experimentConfig.GetFaultTargeting().GetDownstreamCluster().GetName()
+	upstream = experimentConfig.GetFaultTargeting().GetUpstreamCluster().GetName() +
+		strings.Join(experimentConfig.GetFaultTargeting().GetRedisCommands(), ",")
 
 	return []*experimentation.Property{
 		{
@@ -81,18 +82,17 @@ func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experiment
 	}, nil
 }
 
-func experimentConfigToString(experiment *redisexperimentation.RedisFaultConfig) (string, error) {
+func experimentConfigToFaultString(experiment *serverexperimentation.RedisFaultConfig) (string, error) {
 	if experiment == nil {
 		return "", errors.New("experiment is nil")
 	}
 
 	switch experiment.GetFault().(type) {
-	case *redisexperimentation.RedisFaultConfig_AbortFault:
-		return "Abort", nil
-	case *redisexperimentation.RedisFaultConfig_LatencyFault:
-		return "Latency", nil
+	case *serverexperimentation.RedisFaultConfig_ErrorFault:
+		return "Redis Error", nil
+	case *serverexperimentation.RedisFaultConfig_LatencyFault:
+		return "Redis Delay", nil
 	default:
 		return "", fmt.Errorf("unexpected fault type %v", experiment.GetFault())
 	}
 }
-
