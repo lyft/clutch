@@ -4,8 +4,16 @@ import type {
   InputProps as MuiInputProps,
   StandardTextFieldProps as MuiStandardTextFieldProps,
 } from "@material-ui/core";
-import { IconButton as MuiIconButton, TextField as MuiTextField } from "@material-ui/core";
+import {
+  Grid,
+  IconButton as MuiIconButton,
+  Popper as MuiPopper,
+  TextField as MuiTextField,
+  Typography,
+} from "@material-ui/core";
 import ErrorIcon from "@material-ui/icons/Error";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import _ from "lodash";
 
 const KEY_ENTER = 13;
 
@@ -92,6 +100,36 @@ const StyledTextField = styled(BaseTextField)({
   },
 });
 
+// popper containing the search result options
+const Popper = styled(MuiPopper)({
+  ".MuiAutocomplete-paper": {
+    boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+  },
+  ".MuiAutocomplete-option": {
+    height: "48px",
+    padding: "0px",
+  },
+  ".MuiAutocomplete-option[data-focus='true']": {
+    background: "#ebedfb",
+  },
+  ".MuiAutocomplete-noOptions": {
+    fontSize: "14px",
+    color: "#0d1030",
+  },
+});
+
+// search's result options container
+const ResultGrid = styled(Grid)({
+  height: "inherit",
+  padding: "12px 16px 12px 16px",
+});
+
+// search's result options
+const ResultLabel = styled(Typography)({
+  color: "#0d1030",
+  fontSize: "14px",
+});
+
 const IconButton = styled(MuiIconButton)({
   borderRadius: "0",
   backgroundColor: "#3548D4",
@@ -105,6 +143,19 @@ const IconButton = styled(MuiIconButton)({
     backgroundColor: "#2938A5",
   },
 });
+
+interface AutocompleteResultProps {
+  id: string;
+  label: string;
+}
+
+const AutocompleteResult: React.FC<AutocompleteResultProps> = ({ id, label }) => (
+  <ResultGrid container alignItems="center">
+    <Grid item xs>
+      <ResultLabel>{id}</ResultLabel>
+    </Grid>
+  </ResultGrid>
+);
 
 export interface TextFieldProps
   extends Pick<
@@ -128,6 +179,7 @@ export interface TextFieldProps
     >,
     Pick<MuiInputProps, "readOnly" | "endAdornment"> {
   onReturn?: () => void;
+  autocompleteCallback?: (v: string) => Promise<any>;
 }
 
 export const TextField = ({
@@ -137,6 +189,7 @@ export const TextField = ({
   helperText,
   readOnly,
   endAdornment,
+  autocompleteCallback,
   ...props
 }: TextFieldProps) => {
   const onKeyDown = (
@@ -162,20 +215,58 @@ export const TextField = ({
     );
   }
 
-  return (
-    <StyledTextField
-      onKeyDown={e => onKeyDown(e)}
-      onFocus={onChange}
-      onBlur={onChange}
-      error={error}
-      helperText={helpText}
-      InputProps={{
-        readOnly,
-        endAdornment: endAdornment && <IconButton type="submit">{endAdornment}</IconButton>,
-      }}
-      {...props}
-    />
-  );
+  const textFieldProps = {
+    onKeyDown,
+    onFocus: onChange,
+    onBlur: onChange,
+    error,
+    helperText: helpText,
+    InputProps: {
+      readOnly,
+      endAdornment: endAdornment && <IconButton type="submit">{endAdornment}</IconButton>,
+    },
+  };
+
+  if (autocompleteCallback !== undefined) {
+    const [autoCompleteOptions, setAutoCompleteOptions] = React.useState([]);
+    const autoCompleteDebounce = React.useRef(
+      _.debounce(value => {
+        autocompleteCallback(value)
+          .then(data => {
+            setAutoCompleteOptions(data.results);
+          })
+          .catch(err => {
+            helpText = err;
+          });
+      }, 500)
+    ).current;
+
+    // TODO (mcutalo): support option.label in the renderOption
+    return (
+      <Autocomplete
+        freeSolo
+        size="small"
+        options={autoCompleteOptions}
+        PopperComponent={Popper}
+        getOptionLabel={option => (option?.id ? option.id : option)}
+        onInputChange={(__, v) => autoCompleteDebounce(v)}
+        renderOption={option => <AutocompleteResult id={option.id} label={option.label} />}
+        renderInput={inputProps => (
+          <StyledTextField
+            {...inputProps}
+            {...textFieldProps}
+            InputProps={{
+              ...textFieldProps.InputProps,
+              ref: inputProps.InputProps.ref,
+            }}
+            {...props}
+          />
+        )}
+      />
+    );
+  }
+
+  return <StyledTextField {...textFieldProps} {...props} />;
 };
 
 export default TextField;
