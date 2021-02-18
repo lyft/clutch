@@ -72,8 +72,7 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ inputType, schemas, submi
         error={!!error}
         helperText={error?.message || error?.type || ""}
         endAdornment={<SearchIcon />}
-        enableAutocomplete={isAutoCompleteEnabled}
-        autocompleteCallback={v => autoComplete(inputType, v)}
+        autocompleteCallback={isAutoCompleteEnabled ? v => autoComplete(inputType, v) : undefined}
       />
     </Form>
   );

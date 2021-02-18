@@ -183,7 +183,6 @@ export interface TextFieldProps
     >,
     Pick<MuiInputProps, "readOnly" | "endAdornment"> {
   onReturn?: () => void;
-  enableAutocomplete?: boolean;
   autocompleteCallback?: (v: string) => Promise<any>;
 }
 
@@ -194,7 +193,6 @@ export const TextField = ({
   helperText,
   readOnly,
   endAdornment,
-  enableAutocomplete,
   autocompleteCallback,
   ...props
 }: TextFieldProps) => {
@@ -221,20 +219,19 @@ export const TextField = ({
     );
   }
 
-  const StyledTextFieldComponent: React.FC<any> = ({ renderInputProps, inputProps }) => (
-    <StyledTextField
-      {...renderInputProps}
-      onKeyDown={e => onKeyDown(e)}
-      onFocus={onChange}
-      onBlur={onChange}
-      error={error}
-      helperText={helpText}
-      InputProps={inputProps}
-      {...props}
-    />
-  );
+  const textFieldProps = {
+    onKeyDown,
+    onFocus: onChange,
+    onBlur: onChange,
+    error,
+    helperText: helpText,
+    InputProps: {
+      readOnly,
+      endAdornment: endAdornment && <IconButton type="submit">{endAdornment}</IconButton>,
+    },
+  };
 
-  if (enableAutocomplete) {
+  if (autocompleteCallback !== undefined) {
     const [autoCompleteOptions, setAutoCompleteOptions] = React.useState([]);
     const autoCompleteDebounce = React.useRef(
       _.debounce(value => {
@@ -259,49 +256,21 @@ export const TextField = ({
         onInputChange={(__, v) => autoCompleteDebounce(v)}
         renderOption={option => <Result option={option} />}
         renderInput={inputProps => (
-          <StyledTextFieldComponent
-            renderInputProps={inputProps}
-            inputProps={{
+          <StyledTextField
+            {...inputProps}
+            {...textFieldProps}
+            InputProps={{
+              ...textFieldProps.InputProps,
               ref: inputProps.InputProps.ref,
-              readOnly,
-              endAdornment: endAdornment && <IconButton type="submit">{endAdornment}</IconButton>,
             }}
+            {...props}
           />
         )}
-        // renderInput={inputProps => (
-        //   <StyledTextField
-        //     {...inputProps}
-        //     onKeyDown={e => onKeyDown(e)}
-        //     onFocus={onChange}
-        //     onBlur={onChange}
-        //     error={error}
-        //     helperText={helpText}
-        //     InputProps={{
-        //       ref: inputProps.InputProps.ref,
-        //       readOnly,
-        //       endAdornment: endAdornment && <IconButton type="submit">{endAdornment}</IconButton>,
-        //     }}
-        //     {...props}
-        //   />
-        // )}
       />
     );
   }
 
-  return (
-    <StyledTextField
-      onKeyDown={e => onKeyDown(e)}
-      onFocus={onChange}
-      onBlur={onChange}
-      error={error}
-      helperText={helpText}
-      InputProps={{
-        readOnly,
-        endAdornment: endAdornment && <IconButton type="submit">{endAdornment}</IconButton>,
-      }}
-      {...props}
-    />
-  );
+  return <StyledTextField {...textFieldProps} {...props} />;
 };
 
 export default TextField;
