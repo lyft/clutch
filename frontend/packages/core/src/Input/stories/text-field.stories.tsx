@@ -67,5 +67,6 @@ const autoComplete = value => {
 export const Autocomplete = Template.bind({});
 Autocomplete.args = {
   ...Primary.args,
+  placeholder: "Search for `clutch`",
   autocompleteCallback: autoComplete,
 };
