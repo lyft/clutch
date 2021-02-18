@@ -145,16 +145,14 @@ const IconButton = styled(MuiIconButton)({
 });
 
 interface AutocompleteResultProps {
-  option: {
-    id: string;
-    label: string;
-  };
+  id: string;
+  label: string;
 }
 
-const AutocompleteResult: React.FC<AutocompleteResultProps> = ({ option }) => (
+const AutocompleteResult: React.FC<AutocompleteResultProps> = ({ id, label }) => (
   <ResultGrid container alignItems="center">
     <Grid item xs>
-      <ResultLabel>{option.id}</ResultLabel>
+      <ResultLabel>{id}</ResultLabel>
     </Grid>
   </ResultGrid>
 );
@@ -252,7 +250,7 @@ export const TextField = ({
         PopperComponent={Popper}
         getOptionLabel={option => (option?.id ? option.id : option)}
         onInputChange={(__, v) => autoCompleteDebounce(v)}
-        renderOption={option => <AutocompleteResult option={option} />}
+        renderOption={option => <AutocompleteResult id={option.id} label={option.label} />}
         renderInput={inputProps => (
           <StyledTextField
             {...inputProps}
