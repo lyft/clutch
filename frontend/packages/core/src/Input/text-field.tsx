@@ -251,6 +251,9 @@ export const TextField = ({
         getOptionLabel={option => (option?.id ? option.id : option)}
         onInputChange={(__, v) => autoCompleteDebounce(v)}
         renderOption={option => <AutocompleteResult id={option.id} label={option.label} />}
+        onSelectCapture={e =>
+          onChange(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
+        }
         renderInput={inputProps => (
           <StyledTextField
             {...inputProps}
