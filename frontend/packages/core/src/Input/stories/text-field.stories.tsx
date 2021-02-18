@@ -50,3 +50,22 @@ WithEndAdornment.args = {
   defaultValue: "Search",
   endAdornment: <SearchIcon />,
 };
+
+const autoComplete = value => {
+  return new Promise((resolve, reject) => {
+    resolve({
+      results: [
+        { id: "clutch", label: "" },
+        { id: "clutch-auto", label: "" },
+        { id: "clutch-autocomplete", label: "" },
+      ],
+    });
+    reject(new Error("Something bad happened"));
+  });
+};
+
+export const Autocomplete = Template.bind({});
+Autocomplete.args = {
+  ...Primary.args,
+  autocompleteCallback: autoComplete,
+};
