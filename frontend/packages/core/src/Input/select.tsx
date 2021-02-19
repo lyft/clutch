@@ -88,6 +88,7 @@ const StyledSelect = styled(BaseSelect)({
     borderWidth: "1px",
     borderColor: "rgba(13, 16, 48, 0.38)",
     height: "20px",
+    display: "flex",
   },
 
   ul: {
@@ -178,6 +179,7 @@ const StyledSelect = styled(BaseSelect)({
 interface SelectOption {
   label: string;
   value?: string;
+  startAdornment?: React.ReactElement;
 }
 
 export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> {
@@ -186,7 +188,7 @@ export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> 
   label?: string;
   name: string;
   options: SelectOption[];
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
 }
 
 export const Select = ({
@@ -210,11 +212,11 @@ export const Select = ({
     const { value } = event.target;
     const optionValues = options.map(o => o?.value || o.label);
     setSelectedIdx(optionValues.indexOf(value));
-    onChange(value);
+    onChange && onChange(value);
   };
 
   React.useEffect(() => {
-    onChange(options[selectedIdx]?.value || options[selectedIdx].label);
+    onChange && onChange(options[selectedIdx]?.value || options[selectedIdx].label);
   }, []);
 
   return (
@@ -226,6 +228,10 @@ export const Select = ({
       >
         {options.map(option => (
           <MenuItem key={option.label} value={option?.value || option.label}>
+            {option?.startAdornment &&
+              React.cloneElement(option.startAdornment, {
+                style: { height: "100%", marginRight: "8px", ...option.startAdornment.props.style },
+              })}
             {option.label}
           </MenuItem>
         ))}
