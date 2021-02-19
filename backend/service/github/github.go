@@ -173,7 +173,7 @@ func (s *svc) CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateR
 	repo := &githubv3.Repository{
 		Name:        strPtr(req.Name),
 		Description: strPtr(req.Description),
-		Private:     boolPtr(opts.Parameters.Visibility.String() == "PRIVATE"),
+		Private:     boolPtr(opts.Parameters.Visibility.String() == sourcecontrolv1.Visibility_PRIVATE.String()),
 		AutoInit:    boolPtr(opts.AutoInit),
 	}
 	newRepo, _, err := s.rest.Repositories.Create(ctx, org, repo)

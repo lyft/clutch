@@ -189,13 +189,11 @@ func (m *mockRepositories) GetCommit(ctx context.Context, owner, repo, sha strin
 }
 
 type mockUsers struct {
-	actualUser  string
+	user        githubv3.User
 	defaultUser string
 }
 
 func (m *mockUsers) Get(ctx context.Context, user string) (*githubv3.User, *githubv3.Response, error) {
-	m.actualUser = user
-
 	var login string
 	if login = user; user == "" {
 		login = m.defaultUser
@@ -203,6 +201,7 @@ func (m *mockUsers) Get(ctx context.Context, user string) (*githubv3.User, *gith
 	ret := &githubv3.User{
 		Login: &login,
 	}
+	m.user = *ret
 	return ret, nil, nil
 }
 
@@ -264,7 +263,6 @@ func TestCreateRepository(t *testing.T) {
 			}
 
 			assert.NoError(t, err)
-			assert.Equal(t, tt.users.actualUser, "")
 			assert.Equal(t, expectedOwner, r.actualOrg)
 			assert.Equal(t, tt.req.Name, *r.actualRepo.Name)
 			assert.Equal(t, expectedPrivate, *r.actualRepo.Private)
@@ -296,7 +294,7 @@ func TestGetUser(t *testing.T) {
 			resp, err := s.GetUser(context.Background(), tt.username)
 
 			assert.NoError(t, err)
-			assert.Equal(t, u.actualUser, resp.GetLogin())
+			assert.Equal(t, u.user.GetLogin(), resp.GetLogin())
 		})
 	}
 }
