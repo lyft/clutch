@@ -32,6 +32,12 @@ interface QueryResolverProps {
 }
 
 const autoComplete = async (type: string, search: string): Promise<any> => {
+  // Check the length of the search query as the user might empty out the search
+  // which will still trigger the on change handler
+  if (search.length === 0) {
+    return { results: [] };
+  }
+
   const response = await client.post("/v1/resolver/autocomplete", {
     want: `type.googleapis.com/${type}`,
     search,
