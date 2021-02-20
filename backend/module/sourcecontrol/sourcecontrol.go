@@ -106,15 +106,12 @@ func (m *mod) GetRepositoryOptions(ctx context.Context, req *sourcecontrolv1.Get
 		return nil, err
 	}
 
-	configVisibility := m.config.VisibilityOptions
-	var visibilityOptions []sourcecontrolv1.Visibility
-	if configVisibility == nil {
+	visibilityOptions := m.config.VisibilityOptions
+	if visibilityOptions == nil {
 		visibilityOptions = []sourcecontrolv1.Visibility{
 			sourcecontrolv1.Visibility_PUBLIC,
 			sourcecontrolv1.Visibility_PRIVATE,
 		}
-	} else {
-		visibilityOptions = configVisibility
 	}
 	resp := &sourcecontrolv1.GetRepositoryOptionsResponse{
 		AvailableOwners:   writableOrgs,
