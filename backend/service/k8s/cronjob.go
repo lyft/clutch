@@ -3,6 +3,7 @@ package k8s
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	v1beta1 "k8s.io/api/batch/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -83,7 +84,7 @@ func ProtoForCronJob(cluster string, k8scronJob *v1beta1.CronJob) *k8sapiv1.Cron
 	}
 	if k8scronJob.Spec.ConcurrencyPolicy != "" {
 		ret.ConcurrencyPolicy = k8sapiv1.CronJob_ConcurrencyPolicy(
-			k8sapiv1.CronJob_ConcurrencyPolicy_value[string(k8scronJob.Spec.ConcurrencyPolicy)])
+			k8sapiv1.CronJob_ConcurrencyPolicy_value[strings.ToUpper(string(k8scronJob.Spec.ConcurrencyPolicy))])
 	}
 	if k8scronJob.Status.Active != nil {
 		ret.ActiveJobs = int32(len(k8scronJob.Status.Active))
