@@ -12494,10 +12494,9 @@ export namespace clutch {
                 enum ConcurrencyPolicy {
                     UNSPECIFIED = 0,
                     UNKNOWN = 1,
-                    CLUSTER_IP = 2,
-                    NODE_PORT = 3,
-                    LOAD_BALANCER = 4,
-                    EXTERNAL_NAME = 5
+                    ALLOW = 2,
+                    FORBID = 3,
+                    REPLACE = 4
                 }
             }
 

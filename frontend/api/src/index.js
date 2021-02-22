@@ -29453,7 +29453,6 @@ export const clutch = $root.clutch = (() => {
                         case 2:
                         case 3:
                         case 4:
-                        case 5:
                             break;
                         }
                     if (message.startingDeadlineSeconds != null && message.hasOwnProperty("startingDeadlineSeconds"))
@@ -29509,21 +29508,17 @@ export const clutch = $root.clutch = (() => {
                     case 1:
                         message.concurrencyPolicy = 1;
                         break;
-                    case "CLUSTER_IP":
+                    case "ALLOW":
                     case 2:
                         message.concurrencyPolicy = 2;
                         break;
-                    case "NODE_PORT":
+                    case "FORBID":
                     case 3:
                         message.concurrencyPolicy = 3;
                         break;
-                    case "LOAD_BALANCER":
+                    case "REPLACE":
                     case 4:
                         message.concurrencyPolicy = 4;
-                        break;
-                    case "EXTERNAL_NAME":
-                    case 5:
-                        message.concurrencyPolicy = 5;
                         break;
                     }
                     if (object.startingDeadlineSeconds != null)
@@ -29605,19 +29600,17 @@ export const clutch = $root.clutch = (() => {
                  * @enum {number}
                  * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} UNKNOWN=1 UNKNOWN value
-                 * @property {number} CLUSTER_IP=2 CLUSTER_IP value
-                 * @property {number} NODE_PORT=3 NODE_PORT value
-                 * @property {number} LOAD_BALANCER=4 LOAD_BALANCER value
-                 * @property {number} EXTERNAL_NAME=5 EXTERNAL_NAME value
+                 * @property {number} ALLOW=2 ALLOW value
+                 * @property {number} FORBID=3 FORBID value
+                 * @property {number} REPLACE=4 REPLACE value
                  */
                 CronJob.ConcurrencyPolicy = (function() {
                     const valuesById = {}, values = Object.create(valuesById);
                     values[valuesById[0] = "UNSPECIFIED"] = 0;
                     values[valuesById[1] = "UNKNOWN"] = 1;
-                    values[valuesById[2] = "CLUSTER_IP"] = 2;
-                    values[valuesById[3] = "NODE_PORT"] = 3;
-                    values[valuesById[4] = "LOAD_BALANCER"] = 4;
-                    values[valuesById[5] = "EXTERNAL_NAME"] = 5;
+                    values[valuesById[2] = "ALLOW"] = 2;
+                    values[valuesById[3] = "FORBID"] = 3;
+                    values[valuesById[4] = "REPLACE"] = 4;
                     return values;
                 })();
 
