@@ -12406,6 +12406,18 @@ export namespace clutch {
 
                 /** CronJob annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** CronJob suspend */
+                suspend?: (boolean|null);
+
+                /** CronJob active */
+                active?: (number|null);
+
+                /** CronJob concurrencyPolicy */
+                concurrencyPolicy?: (clutch.k8s.v1.CronJob.ConcurrencyPolicy|null);
+
+                /** CronJob startingDeadlineSeconds */
+                startingDeadlineSeconds?: (number|null);
             }
 
             /** Represents a CronJob. */
@@ -12435,6 +12447,18 @@ export namespace clutch {
                 /** CronJob annotations. */
                 public annotations: { [k: string]: string };
 
+                /** CronJob suspend. */
+                public suspend: boolean;
+
+                /** CronJob active. */
+                public active: number;
+
+                /** CronJob concurrencyPolicy. */
+                public concurrencyPolicy: clutch.k8s.v1.CronJob.ConcurrencyPolicy;
+
+                /** CronJob startingDeadlineSeconds. */
+                public startingDeadlineSeconds: number;
+
                 /**
                  * Verifies a CronJob message.
                  * @param message Plain object to verify
@@ -12462,6 +12486,19 @@ export namespace clutch {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace CronJob {
+
+                /** ConcurrencyPolicy enum. */
+                enum ConcurrencyPolicy {
+                    UNSPECIFIED = 0,
+                    UNKNOWN = 1,
+                    CLUSTER_IP = 2,
+                    NODE_PORT = 3,
+                    LOAD_BALANCER = 4,
+                    EXTERNAL_NAME = 5
+                }
             }
 
             /** Properties of a DescribeCronJobRequest. */

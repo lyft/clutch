@@ -29296,6 +29296,10 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [schedule] CronJob schedule
                  * @property {Object.<string,string>|null} [labels] CronJob labels
                  * @property {Object.<string,string>|null} [annotations] CronJob annotations
+                 * @property {boolean|null} [suspend] CronJob suspend
+                 * @property {number|null} [active] CronJob active
+                 * @property {clutch.k8s.v1.CronJob.ConcurrencyPolicy|null} [concurrencyPolicy] CronJob concurrencyPolicy
+                 * @property {number|null} [startingDeadlineSeconds] CronJob startingDeadlineSeconds
                  */
 
                 /**
@@ -29364,6 +29368,38 @@ export const clutch = $root.clutch = (() => {
                 CronJob.prototype.annotations = $util.emptyObject;
 
                 /**
+                 * CronJob suspend.
+                 * @member {boolean} suspend
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @instance
+                 */
+                CronJob.prototype.suspend = false;
+
+                /**
+                 * CronJob active.
+                 * @member {number} active
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @instance
+                 */
+                CronJob.prototype.active = 0;
+
+                /**
+                 * CronJob concurrencyPolicy.
+                 * @member {clutch.k8s.v1.CronJob.ConcurrencyPolicy} concurrencyPolicy
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @instance
+                 */
+                CronJob.prototype.concurrencyPolicy = 0;
+
+                /**
+                 * CronJob startingDeadlineSeconds.
+                 * @member {number} startingDeadlineSeconds
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @instance
+                 */
+                CronJob.prototype.startingDeadlineSeconds = 0;
+
+                /**
                  * Verifies a CronJob message.
                  * @function verify
                  * @memberof clutch.k8s.v1.CronJob
@@ -29402,6 +29438,27 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.annotations[key[i]]))
                                 return "annotations: string{k:string} expected";
                     }
+                    if (message.suspend != null && message.hasOwnProperty("suspend"))
+                        if (typeof message.suspend !== "boolean")
+                            return "suspend: boolean expected";
+                    if (message.active != null && message.hasOwnProperty("active"))
+                        if (!$util.isInteger(message.active))
+                            return "active: integer expected";
+                    if (message.concurrencyPolicy != null && message.hasOwnProperty("concurrencyPolicy"))
+                        switch (message.concurrencyPolicy) {
+                        default:
+                            return "concurrencyPolicy: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+                            break;
+                        }
+                    if (message.startingDeadlineSeconds != null && message.hasOwnProperty("startingDeadlineSeconds"))
+                        if (!$util.isInteger(message.startingDeadlineSeconds))
+                            return "startingDeadlineSeconds: integer expected";
                     return null;
                 };
 
@@ -29439,6 +29496,38 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
                             message.annotations[keys[i]] = String(object.annotations[keys[i]]);
                     }
+                    if (object.suspend != null)
+                        message.suspend = Boolean(object.suspend);
+                    if (object.active != null)
+                        message.active = object.active >>> 0;
+                    switch (object.concurrencyPolicy) {
+                    case "UNSPECIFIED":
+                    case 0:
+                        message.concurrencyPolicy = 0;
+                        break;
+                    case "UNKNOWN":
+                    case 1:
+                        message.concurrencyPolicy = 1;
+                        break;
+                    case "CLUSTER_IP":
+                    case 2:
+                        message.concurrencyPolicy = 2;
+                        break;
+                    case "NODE_PORT":
+                    case 3:
+                        message.concurrencyPolicy = 3;
+                        break;
+                    case "LOAD_BALANCER":
+                    case 4:
+                        message.concurrencyPolicy = 4;
+                        break;
+                    case "EXTERNAL_NAME":
+                    case 5:
+                        message.concurrencyPolicy = 5;
+                        break;
+                    }
+                    if (object.startingDeadlineSeconds != null)
+                        message.startingDeadlineSeconds = object.startingDeadlineSeconds >>> 0;
                     return message;
                 };
 
@@ -29464,6 +29553,10 @@ export const clutch = $root.clutch = (() => {
                         object.namespace = "";
                         object.name = "";
                         object.schedule = "";
+                        object.suspend = false;
+                        object.active = 0;
+                        object.concurrencyPolicy = options.enums === String ? "UNSPECIFIED" : 0;
+                        object.startingDeadlineSeconds = 0;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -29484,6 +29577,14 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < keys2.length; ++j)
                             object.annotations[keys2[j]] = message.annotations[keys2[j]];
                     }
+                    if (message.suspend != null && message.hasOwnProperty("suspend"))
+                        object.suspend = message.suspend;
+                    if (message.active != null && message.hasOwnProperty("active"))
+                        object.active = message.active;
+                    if (message.concurrencyPolicy != null && message.hasOwnProperty("concurrencyPolicy"))
+                        object.concurrencyPolicy = options.enums === String ? $root.clutch.k8s.v1.CronJob.ConcurrencyPolicy[message.concurrencyPolicy] : message.concurrencyPolicy;
+                    if (message.startingDeadlineSeconds != null && message.hasOwnProperty("startingDeadlineSeconds"))
+                        object.startingDeadlineSeconds = message.startingDeadlineSeconds;
                     return object;
                 };
 
@@ -29497,6 +29598,28 @@ export const clutch = $root.clutch = (() => {
                 CronJob.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
+
+                /**
+                 * ConcurrencyPolicy enum.
+                 * @name clutch.k8s.v1.CronJob.ConcurrencyPolicy
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} UNKNOWN=1 UNKNOWN value
+                 * @property {number} CLUSTER_IP=2 CLUSTER_IP value
+                 * @property {number} NODE_PORT=3 NODE_PORT value
+                 * @property {number} LOAD_BALANCER=4 LOAD_BALANCER value
+                 * @property {number} EXTERNAL_NAME=5 EXTERNAL_NAME value
+                 */
+                CronJob.ConcurrencyPolicy = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "UNKNOWN"] = 1;
+                    values[valuesById[2] = "CLUSTER_IP"] = 2;
+                    values[valuesById[3] = "NODE_PORT"] = 3;
+                    values[valuesById[4] = "LOAD_BALANCER"] = 4;
+                    values[valuesById[5] = "EXTERNAL_NAME"] = 5;
+                    return values;
+                })();
 
                 return CronJob;
             })();

@@ -643,6 +643,21 @@ message CronJob {
 
   map<string, string> labels = 5;
   map<string, string> annotations = 6;
+
+  bool suspend = 7;
+  uint32 active = 8;
+
+  enum ConcurrencyPolicy {
+    UNSPECIFIED = 0;
+    UNKNOWN = 1;
+    CLUSTER_IP = 2;
+    NODE_PORT = 3;
+    LOAD_BALANCER = 4;
+    EXTERNAL_NAME = 5;
+  }
+  ConcurrencyPolicy concurrency_policy = 9;
+
+  uint32 starting_deadline_seconds = 10;
 }
 
 message DescribeCronJobRequest {

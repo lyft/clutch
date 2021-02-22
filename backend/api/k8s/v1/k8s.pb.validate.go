@@ -3441,6 +3441,14 @@ func (m *CronJob) Validate() error {
 
 	// no validation rules for Annotations
 
+	// no validation rules for Suspend
+
+	// no validation rules for Active
+
+	// no validation rules for ConcurrencyPolicy
+
+	// no validation rules for StartingDeadlineSeconds
+
 	return nil
 }
 
