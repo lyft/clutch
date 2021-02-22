@@ -203,6 +203,14 @@ service K8sAPI {
     };
     option (clutch.api.v1.action).type = DELETE;
   }
+
+  rpc CreateJob(CreateJobRequest) returns (CreateJobResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/createJob"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = CREATE;
+  }
 }
 
 message DescribePodRequest {
@@ -801,6 +809,27 @@ message DeleteJobRequest {
 message DeleteJobResponse {
 }
 
+message JobConfig {
+  google.protobuf.Value value = 1;
+}
+
+message CreateJobRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Job",
+    pattern : "{cluster}/{namespace}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
+  JobConfig job_config = 4;
+}
+
+message CreateJobResponse {
+  Job job = 1;
+}
+
+// This message type is used to add support for nullable strings and is an
 // This message type is used to add support for nullable strings and is an
 // alternative to the well-known `StringValue` type. We need it, because the
 // grpc-gateway used by Clutch deserializes a null `StringValue` as an empty

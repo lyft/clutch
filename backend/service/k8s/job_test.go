@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/structpb"
 	v1 "k8s.io/api/batch/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -126,6 +127,36 @@ func TestDeleteJob(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+var batchJob = `
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: test-job
+  labels:
+    environment: staging
+    facet-type: batch
+  namespace: testing-namespace
+`
+
+func TestCreateJob(t *testing.T) {
+	cs := testJobClientset()
+
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "testing-namespace",
+				cluster:   "testing-cluster",
+			}},
+		},
+	}
+
+	value := structpb.NewStringValue(batchJob)
+	job, err := s.CreateJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", value)
+	assert.NoError(t, err)
+	assert.NotNil(t, job)
+	assert.Equal(t, "test-job", job.Name)
+}
 func TestProtoForJob(t *testing.T) {
 	t.Parallel()
 

@@ -21,3 +21,11 @@ func (a *k8sAPI) ListJobs(ctx context.Context, req *k8sapiv1.ListJobsRequest) (*
 	}
 	return &k8sapiv1.ListJobsResponse{Jobs: jobs}, nil
 }
+
+func (a *k8sAPI) CreateJob(ctx context.Context, req *k8sapiv1.CreateJobRequest) (*k8sapiv1.CreateJobResponse, error) {
+	job, err := a.k8s.CreateJob(ctx, req.Clientset, req.Cluster, req.Namespace, req.JobConfig.Value)
+	if err != nil {
+		return nil, err
+	}
+	return &k8sapiv1.CreateJobResponse{Job: job}, nil
+}

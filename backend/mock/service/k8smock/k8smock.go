@@ -7,6 +7,7 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/structpb"
 
 	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -277,6 +278,13 @@ func (s *svc) ListJobs(_ context.Context, clientset, cluster, namespace string, 
 
 func (*svc) DeleteJob(ctx context.Context, clientset, cluster, namespace, name string) error {
 	return nil
+}
+
+func (*svc) CreateJob(ctx context.Context, clientset, cluster, namespace string, jobConfig *structpb.Value) (*k8sv1.Job, error) {
+	return &k8sv1.Job{
+		Cluster:   "fake-cluster-name",
+		Namespace: namespace,
+	}, nil
 }
 
 func (*svc) Clientsets(ctx context.Context) ([]string, error) {

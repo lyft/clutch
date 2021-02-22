@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
+	"google.golang.org/protobuf/types/known/structpb"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/mock/service/k8smock"
@@ -97,6 +98,26 @@ func TestK8SAPIListJobs(t *testing.T) {
 	c := k8smock.New()
 	api := newK8sAPI(c)
 	resp, err := api.ListJobs(context.Background(), &k8sapiv1.ListJobsRequest{Options: &k8sapiv1.ListOptions{}})
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
+
+var batchJob = `
+apiVersion: batch/v1
+kind: Job
+metadata:
+  Name: test-job
+`
+
+func TestK8SAPICreateJob(t *testing.T) {
+	c := k8smock.New()
+	api := newK8sAPI(c)
+	value := structpb.NewStringValue(batchJob)
+	config := &k8sapiv1.JobConfig{
+		Value: value,
+	}
+
+	resp, err := api.CreateJob(context.Background(), &k8sapiv1.CreateJobRequest{JobConfig: config})
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 }

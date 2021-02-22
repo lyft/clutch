@@ -12,6 +12,7 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"golang.org/x/sync/semaphore"
+	"google.golang.org/protobuf/types/known/structpb"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 	"k8s.io/client-go/tools/clientcmd"
 
@@ -93,6 +94,7 @@ type Service interface {
 	// Job management functions.
 	DeleteJob(ctx context.Context, clientset, cluster, namespace, name string) error
 	ListJobs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Job, error)
+	CreateJob(ctx context.Context, clientset, cluster, namespace string, jobConfig *structpb.Value) (*k8sapiv1.Job, error)
 }
 
 type svc struct {
