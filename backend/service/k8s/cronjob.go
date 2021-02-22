@@ -67,7 +67,8 @@ func ProtoForCronJob(cluster string, k8scronJob *v1beta1.CronJob) *k8sapiv1.Cron
 	if clusterName == "" {
 		clusterName = cluster
 	}
-	return &k8sapiv1.CronJob{
+	// Required fields
+	ret := &k8sapiv1.CronJob{
 		Cluster:     clusterName,
 		Namespace:   k8scronJob.Namespace,
 		Name:        k8scronJob.Name,
@@ -75,4 +76,20 @@ func ProtoForCronJob(cluster string, k8scronJob *v1beta1.CronJob) *k8sapiv1.Cron
 		Labels:      k8scronJob.Labels,
 		Annotations: k8scronJob.Annotations,
 	}
+
+	// Update optional fields
+	if k8scronJob.Spec.Suspend != nil {
+		ret.Suspend = *k8scronJob.Spec.Suspend
+	}
+	if k8scronJob.Spec.ConcurrencyPolicy != "" {
+		ret.ConcurrencyPolicy = k8sapiv1.CronJob_ConcurrencyPolicy(
+			k8sapiv1.CronJob_ConcurrencyPolicy_value[string(k8scronJob.Spec.ConcurrencyPolicy)])
+	}
+	if k8scronJob.Status.Active != nil {
+		ret.ActiveJobs = int32(len(k8scronJob.Status.Active))
+	}
+	if k8scronJob.Spec.StartingDeadlineSeconds != nil {
+		ret.StartingDeadlineSeconds = *k8scronJob.Spec.StartingDeadlineSeconds
+	}
+	return ret
 }

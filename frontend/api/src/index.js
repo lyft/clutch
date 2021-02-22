@@ -29297,9 +29297,9 @@ export const clutch = $root.clutch = (() => {
                  * @property {Object.<string,string>|null} [labels] CronJob labels
                  * @property {Object.<string,string>|null} [annotations] CronJob annotations
                  * @property {boolean|null} [suspend] CronJob suspend
-                 * @property {number|null} [active] CronJob active
+                 * @property {number|null} [activeJobs] CronJob activeJobs
                  * @property {clutch.k8s.v1.CronJob.ConcurrencyPolicy|null} [concurrencyPolicy] CronJob concurrencyPolicy
-                 * @property {number|null} [startingDeadlineSeconds] CronJob startingDeadlineSeconds
+                 * @property {number|Long|null} [startingDeadlineSeconds] CronJob startingDeadlineSeconds
                  */
 
                 /**
@@ -29376,12 +29376,12 @@ export const clutch = $root.clutch = (() => {
                 CronJob.prototype.suspend = false;
 
                 /**
-                 * CronJob active.
-                 * @member {number} active
+                 * CronJob activeJobs.
+                 * @member {number} activeJobs
                  * @memberof clutch.k8s.v1.CronJob
                  * @instance
                  */
-                CronJob.prototype.active = 0;
+                CronJob.prototype.activeJobs = 0;
 
                 /**
                  * CronJob concurrencyPolicy.
@@ -29393,11 +29393,11 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * CronJob startingDeadlineSeconds.
-                 * @member {number} startingDeadlineSeconds
+                 * @member {number|Long} startingDeadlineSeconds
                  * @memberof clutch.k8s.v1.CronJob
                  * @instance
                  */
-                CronJob.prototype.startingDeadlineSeconds = 0;
+                CronJob.prototype.startingDeadlineSeconds = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
                 /**
                  * Verifies a CronJob message.
@@ -29441,9 +29441,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.suspend != null && message.hasOwnProperty("suspend"))
                         if (typeof message.suspend !== "boolean")
                             return "suspend: boolean expected";
-                    if (message.active != null && message.hasOwnProperty("active"))
-                        if (!$util.isInteger(message.active))
-                            return "active: integer expected";
+                    if (message.activeJobs != null && message.hasOwnProperty("activeJobs"))
+                        if (!$util.isInteger(message.activeJobs))
+                            return "activeJobs: integer expected";
                     if (message.concurrencyPolicy != null && message.hasOwnProperty("concurrencyPolicy"))
                         switch (message.concurrencyPolicy) {
                         default:
@@ -29456,8 +29456,8 @@ export const clutch = $root.clutch = (() => {
                             break;
                         }
                     if (message.startingDeadlineSeconds != null && message.hasOwnProperty("startingDeadlineSeconds"))
-                        if (!$util.isInteger(message.startingDeadlineSeconds))
-                            return "startingDeadlineSeconds: integer expected";
+                        if (!$util.isInteger(message.startingDeadlineSeconds) && !(message.startingDeadlineSeconds && $util.isInteger(message.startingDeadlineSeconds.low) && $util.isInteger(message.startingDeadlineSeconds.high)))
+                            return "startingDeadlineSeconds: integer|Long expected";
                     return null;
                 };
 
@@ -29497,8 +29497,8 @@ export const clutch = $root.clutch = (() => {
                     }
                     if (object.suspend != null)
                         message.suspend = Boolean(object.suspend);
-                    if (object.active != null)
-                        message.active = object.active >>> 0;
+                    if (object.activeJobs != null)
+                        message.activeJobs = object.activeJobs | 0;
                     switch (object.concurrencyPolicy) {
                     case "UNSPECIFIED":
                     case 0:
@@ -29522,7 +29522,14 @@ export const clutch = $root.clutch = (() => {
                         break;
                     }
                     if (object.startingDeadlineSeconds != null)
-                        message.startingDeadlineSeconds = object.startingDeadlineSeconds >>> 0;
+                        if ($util.Long)
+                            (message.startingDeadlineSeconds = $util.Long.fromValue(object.startingDeadlineSeconds)).unsigned = false;
+                        else if (typeof object.startingDeadlineSeconds === "string")
+                            message.startingDeadlineSeconds = parseInt(object.startingDeadlineSeconds, 10);
+                        else if (typeof object.startingDeadlineSeconds === "number")
+                            message.startingDeadlineSeconds = object.startingDeadlineSeconds;
+                        else if (typeof object.startingDeadlineSeconds === "object")
+                            message.startingDeadlineSeconds = new $util.LongBits(object.startingDeadlineSeconds.low >>> 0, object.startingDeadlineSeconds.high >>> 0).toNumber();
                     return message;
                 };
 
@@ -29549,9 +29556,13 @@ export const clutch = $root.clutch = (() => {
                         object.name = "";
                         object.schedule = "";
                         object.suspend = false;
-                        object.active = 0;
+                        object.activeJobs = 0;
                         object.concurrencyPolicy = options.enums === String ? "UNSPECIFIED" : 0;
-                        object.startingDeadlineSeconds = 0;
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, false);
+                            object.startingDeadlineSeconds = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.startingDeadlineSeconds = options.longs === String ? "0" : 0;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -29574,12 +29585,15 @@ export const clutch = $root.clutch = (() => {
                     }
                     if (message.suspend != null && message.hasOwnProperty("suspend"))
                         object.suspend = message.suspend;
-                    if (message.active != null && message.hasOwnProperty("active"))
-                        object.active = message.active;
+                    if (message.activeJobs != null && message.hasOwnProperty("activeJobs"))
+                        object.activeJobs = message.activeJobs;
                     if (message.concurrencyPolicy != null && message.hasOwnProperty("concurrencyPolicy"))
                         object.concurrencyPolicy = options.enums === String ? $root.clutch.k8s.v1.CronJob.ConcurrencyPolicy[message.concurrencyPolicy] : message.concurrencyPolicy;
                     if (message.startingDeadlineSeconds != null && message.hasOwnProperty("startingDeadlineSeconds"))
-                        object.startingDeadlineSeconds = message.startingDeadlineSeconds;
+                        if (typeof message.startingDeadlineSeconds === "number")
+                            object.startingDeadlineSeconds = options.longs === String ? String(message.startingDeadlineSeconds) : message.startingDeadlineSeconds;
+                        else
+                            object.startingDeadlineSeconds = options.longs === String ? $util.Long.prototype.toString.call(message.startingDeadlineSeconds) : options.longs === Number ? new $util.LongBits(message.startingDeadlineSeconds.low >>> 0, message.startingDeadlineSeconds.high >>> 0).toNumber() : message.startingDeadlineSeconds;
                     return object;
                 };
 

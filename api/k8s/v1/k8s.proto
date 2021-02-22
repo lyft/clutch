@@ -645,7 +645,7 @@ message CronJob {
   map<string, string> annotations = 6;
 
   bool suspend = 7;
-  uint32 active = 8;
+  int32 active_jobs = 8;
 
   enum ConcurrencyPolicy {
     UNSPECIFIED = 0;
@@ -656,7 +656,7 @@ message CronJob {
   }
   ConcurrencyPolicy concurrency_policy = 9;
 
-  uint32 starting_deadline_seconds = 10;
+  int64 starting_deadline_seconds = 10;
 }
 
 message DescribeCronJobRequest {

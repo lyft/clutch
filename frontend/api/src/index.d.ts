@@ -12410,14 +12410,14 @@ export namespace clutch {
                 /** CronJob suspend */
                 suspend?: (boolean|null);
 
-                /** CronJob active */
-                active?: (number|null);
+                /** CronJob activeJobs */
+                activeJobs?: (number|null);
 
                 /** CronJob concurrencyPolicy */
                 concurrencyPolicy?: (clutch.k8s.v1.CronJob.ConcurrencyPolicy|null);
 
                 /** CronJob startingDeadlineSeconds */
-                startingDeadlineSeconds?: (number|null);
+                startingDeadlineSeconds?: (number|Long|null);
             }
 
             /** Represents a CronJob. */
@@ -12450,14 +12450,14 @@ export namespace clutch {
                 /** CronJob suspend. */
                 public suspend: boolean;
 
-                /** CronJob active. */
-                public active: number;
+                /** CronJob activeJobs. */
+                public activeJobs: number;
 
                 /** CronJob concurrencyPolicy. */
                 public concurrencyPolicy: clutch.k8s.v1.CronJob.ConcurrencyPolicy;
 
                 /** CronJob startingDeadlineSeconds. */
-                public startingDeadlineSeconds: number;
+                public startingDeadlineSeconds: (number|Long);
 
                 /**
                  * Verifies a CronJob message.

@@ -3443,7 +3443,7 @@ func (m *CronJob) Validate() error {
 
 	// no validation rules for Suspend
 
-	// no validation rules for Active
+	// no validation rules for ActiveJobs
 
 	// no validation rules for ConcurrencyPolicy
 
