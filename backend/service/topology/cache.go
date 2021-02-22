@@ -31,9 +31,8 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 		// We create our own connection to use for acquiring the advisory lock
 		// If the connection is severed for any reason the advisory lock will automatically unlock
 		err := c.getCacheLockConn(ctx)
-		if err != nil {
-			c.log.Error("lost connection to database, trying to reconnect...", zap.Error(err))
-		} else {
+		switch err {
+		case nil:
 			// TODO: We could in the future spread the load of the topology caching
 			// across many clutch instances by having an a lock per service (e.g. AWS, k8s, etc)
 			if c.tryAdvisoryLock(ctx, c.cacheLockConn, advisoryLockId) {
@@ -41,6 +40,8 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 				go c.expireCache(ctx)
 				c.startTopologyCache(ctx)
 			}
+		default:
+			c.log.Error("lost connection to database, trying to reconnect...", zap.Error(err))
 		}
 
 		select {
