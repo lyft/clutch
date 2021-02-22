@@ -55,7 +55,12 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 	}
 }
 
+// Creates a new database connection if cacheLockConn is nil
+// This also handles checking the health of the connection
+// and attempts too reconnect.
 func (c *client) getCacheLockConn(ctx context.Context) error {
+	// Not only does this check if the database connection is active
+	// but will also reestablish a connection if it is not
 	err := c.db.PingContext(ctx)
 	if err != nil {
 		return err
