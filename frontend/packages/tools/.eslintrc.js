@@ -8,7 +8,6 @@ module.exports = {
   extends: [
     "airbnb",
     "prettier",
-    "prettier/react",
     "plugin:cypress/recommended",
     "plugin:import/typescript",
     "plugin:jest/recommended",
