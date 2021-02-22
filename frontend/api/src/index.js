@@ -29296,10 +29296,10 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [schedule] CronJob schedule
                  * @property {Object.<string,string>|null} [labels] CronJob labels
                  * @property {Object.<string,string>|null} [annotations] CronJob annotations
-                 * @property {boolean|null} [suspend] CronJob suspend
-                 * @property {number|null} [activeJobs] CronJob activeJobs
+                 * @property {google.protobuf.IBoolValue|null} [suspend] CronJob suspend
+                 * @property {google.protobuf.IInt32Value|null} [numActiveJobs] CronJob numActiveJobs
                  * @property {clutch.k8s.v1.CronJob.ConcurrencyPolicy|null} [concurrencyPolicy] CronJob concurrencyPolicy
-                 * @property {number|Long|null} [startingDeadlineSeconds] CronJob startingDeadlineSeconds
+                 * @property {google.protobuf.IInt64Value|null} [startingDeadlineSeconds] CronJob startingDeadlineSeconds
                  */
 
                 /**
@@ -29369,19 +29369,19 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * CronJob suspend.
-                 * @member {boolean} suspend
+                 * @member {google.protobuf.IBoolValue|null|undefined} suspend
                  * @memberof clutch.k8s.v1.CronJob
                  * @instance
                  */
-                CronJob.prototype.suspend = false;
+                CronJob.prototype.suspend = null;
 
                 /**
-                 * CronJob activeJobs.
-                 * @member {number} activeJobs
+                 * CronJob numActiveJobs.
+                 * @member {google.protobuf.IInt32Value|null|undefined} numActiveJobs
                  * @memberof clutch.k8s.v1.CronJob
                  * @instance
                  */
-                CronJob.prototype.activeJobs = 0;
+                CronJob.prototype.numActiveJobs = null;
 
                 /**
                  * CronJob concurrencyPolicy.
@@ -29393,11 +29393,11 @@ export const clutch = $root.clutch = (() => {
 
                 /**
                  * CronJob startingDeadlineSeconds.
-                 * @member {number|Long} startingDeadlineSeconds
+                 * @member {google.protobuf.IInt64Value|null|undefined} startingDeadlineSeconds
                  * @memberof clutch.k8s.v1.CronJob
                  * @instance
                  */
-                CronJob.prototype.startingDeadlineSeconds = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+                CronJob.prototype.startingDeadlineSeconds = null;
 
                 /**
                  * Verifies a CronJob message.
@@ -29438,12 +29438,16 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.annotations[key[i]]))
                                 return "annotations: string{k:string} expected";
                     }
-                    if (message.suspend != null && message.hasOwnProperty("suspend"))
-                        if (typeof message.suspend !== "boolean")
-                            return "suspend: boolean expected";
-                    if (message.activeJobs != null && message.hasOwnProperty("activeJobs"))
-                        if (!$util.isInteger(message.activeJobs))
-                            return "activeJobs: integer expected";
+                    if (message.suspend != null && message.hasOwnProperty("suspend")) {
+                        let error = $root.google.protobuf.BoolValue.verify(message.suspend);
+                        if (error)
+                            return "suspend." + error;
+                    }
+                    if (message.numActiveJobs != null && message.hasOwnProperty("numActiveJobs")) {
+                        let error = $root.google.protobuf.Int32Value.verify(message.numActiveJobs);
+                        if (error)
+                            return "numActiveJobs." + error;
+                    }
                     if (message.concurrencyPolicy != null && message.hasOwnProperty("concurrencyPolicy"))
                         switch (message.concurrencyPolicy) {
                         default:
@@ -29455,9 +29459,11 @@ export const clutch = $root.clutch = (() => {
                         case 4:
                             break;
                         }
-                    if (message.startingDeadlineSeconds != null && message.hasOwnProperty("startingDeadlineSeconds"))
-                        if (!$util.isInteger(message.startingDeadlineSeconds) && !(message.startingDeadlineSeconds && $util.isInteger(message.startingDeadlineSeconds.low) && $util.isInteger(message.startingDeadlineSeconds.high)))
-                            return "startingDeadlineSeconds: integer|Long expected";
+                    if (message.startingDeadlineSeconds != null && message.hasOwnProperty("startingDeadlineSeconds")) {
+                        let error = $root.google.protobuf.Int64Value.verify(message.startingDeadlineSeconds);
+                        if (error)
+                            return "startingDeadlineSeconds." + error;
+                    }
                     return null;
                 };
 
@@ -29495,10 +29501,16 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
                             message.annotations[keys[i]] = String(object.annotations[keys[i]]);
                     }
-                    if (object.suspend != null)
-                        message.suspend = Boolean(object.suspend);
-                    if (object.activeJobs != null)
-                        message.activeJobs = object.activeJobs | 0;
+                    if (object.suspend != null) {
+                        if (typeof object.suspend !== "object")
+                            throw TypeError(".clutch.k8s.v1.CronJob.suspend: object expected");
+                        message.suspend = $root.google.protobuf.BoolValue.fromObject(object.suspend);
+                    }
+                    if (object.numActiveJobs != null) {
+                        if (typeof object.numActiveJobs !== "object")
+                            throw TypeError(".clutch.k8s.v1.CronJob.numActiveJobs: object expected");
+                        message.numActiveJobs = $root.google.protobuf.Int32Value.fromObject(object.numActiveJobs);
+                    }
                     switch (object.concurrencyPolicy) {
                     case "UNSPECIFIED":
                     case 0:
@@ -29521,15 +29533,11 @@ export const clutch = $root.clutch = (() => {
                         message.concurrencyPolicy = 4;
                         break;
                     }
-                    if (object.startingDeadlineSeconds != null)
-                        if ($util.Long)
-                            (message.startingDeadlineSeconds = $util.Long.fromValue(object.startingDeadlineSeconds)).unsigned = false;
-                        else if (typeof object.startingDeadlineSeconds === "string")
-                            message.startingDeadlineSeconds = parseInt(object.startingDeadlineSeconds, 10);
-                        else if (typeof object.startingDeadlineSeconds === "number")
-                            message.startingDeadlineSeconds = object.startingDeadlineSeconds;
-                        else if (typeof object.startingDeadlineSeconds === "object")
-                            message.startingDeadlineSeconds = new $util.LongBits(object.startingDeadlineSeconds.low >>> 0, object.startingDeadlineSeconds.high >>> 0).toNumber();
+                    if (object.startingDeadlineSeconds != null) {
+                        if (typeof object.startingDeadlineSeconds !== "object")
+                            throw TypeError(".clutch.k8s.v1.CronJob.startingDeadlineSeconds: object expected");
+                        message.startingDeadlineSeconds = $root.google.protobuf.Int64Value.fromObject(object.startingDeadlineSeconds);
+                    }
                     return message;
                 };
 
@@ -29555,14 +29563,10 @@ export const clutch = $root.clutch = (() => {
                         object.namespace = "";
                         object.name = "";
                         object.schedule = "";
-                        object.suspend = false;
-                        object.activeJobs = 0;
+                        object.suspend = null;
+                        object.numActiveJobs = null;
                         object.concurrencyPolicy = options.enums === String ? "UNSPECIFIED" : 0;
-                        if ($util.Long) {
-                            let long = new $util.Long(0, 0, false);
-                            object.startingDeadlineSeconds = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                        } else
-                            object.startingDeadlineSeconds = options.longs === String ? "0" : 0;
+                        object.startingDeadlineSeconds = null;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -29584,16 +29588,13 @@ export const clutch = $root.clutch = (() => {
                             object.annotations[keys2[j]] = message.annotations[keys2[j]];
                     }
                     if (message.suspend != null && message.hasOwnProperty("suspend"))
-                        object.suspend = message.suspend;
-                    if (message.activeJobs != null && message.hasOwnProperty("activeJobs"))
-                        object.activeJobs = message.activeJobs;
+                        object.suspend = $root.google.protobuf.BoolValue.toObject(message.suspend, options);
+                    if (message.numActiveJobs != null && message.hasOwnProperty("numActiveJobs"))
+                        object.numActiveJobs = $root.google.protobuf.Int32Value.toObject(message.numActiveJobs, options);
                     if (message.concurrencyPolicy != null && message.hasOwnProperty("concurrencyPolicy"))
                         object.concurrencyPolicy = options.enums === String ? $root.clutch.k8s.v1.CronJob.ConcurrencyPolicy[message.concurrencyPolicy] : message.concurrencyPolicy;
                     if (message.startingDeadlineSeconds != null && message.hasOwnProperty("startingDeadlineSeconds"))
-                        if (typeof message.startingDeadlineSeconds === "number")
-                            object.startingDeadlineSeconds = options.longs === String ? String(message.startingDeadlineSeconds) : message.startingDeadlineSeconds;
-                        else
-                            object.startingDeadlineSeconds = options.longs === String ? $util.Long.prototype.toString.call(message.startingDeadlineSeconds) : options.longs === Number ? new $util.LongBits(message.startingDeadlineSeconds.low >>> 0, message.startingDeadlineSeconds.high >>> 0).toNumber() : message.startingDeadlineSeconds;
+                        object.startingDeadlineSeconds = $root.google.protobuf.Int64Value.toObject(message.startingDeadlineSeconds, options);
                     return object;
                 };
 

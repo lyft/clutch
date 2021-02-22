@@ -12408,16 +12408,16 @@ export namespace clutch {
                 annotations?: ({ [k: string]: string }|null);
 
                 /** CronJob suspend */
-                suspend?: (boolean|null);
+                suspend?: (google.protobuf.IBoolValue|null);
 
-                /** CronJob activeJobs */
-                activeJobs?: (number|null);
+                /** CronJob numActiveJobs */
+                numActiveJobs?: (google.protobuf.IInt32Value|null);
 
                 /** CronJob concurrencyPolicy */
                 concurrencyPolicy?: (clutch.k8s.v1.CronJob.ConcurrencyPolicy|null);
 
                 /** CronJob startingDeadlineSeconds */
-                startingDeadlineSeconds?: (number|Long|null);
+                startingDeadlineSeconds?: (google.protobuf.IInt64Value|null);
             }
 
             /** Represents a CronJob. */
@@ -12448,16 +12448,16 @@ export namespace clutch {
                 public annotations: { [k: string]: string };
 
                 /** CronJob suspend. */
-                public suspend: boolean;
+                public suspend?: (google.protobuf.IBoolValue|null);
 
-                /** CronJob activeJobs. */
-                public activeJobs: number;
+                /** CronJob numActiveJobs. */
+                public numActiveJobs?: (google.protobuf.IInt32Value|null);
 
                 /** CronJob concurrencyPolicy. */
                 public concurrencyPolicy: clutch.k8s.v1.CronJob.ConcurrencyPolicy;
 
                 /** CronJob startingDeadlineSeconds. */
-                public startingDeadlineSeconds: (number|Long);
+                public startingDeadlineSeconds?: (google.protobuf.IInt64Value|null);
 
                 /**
                  * Verifies a CronJob message.

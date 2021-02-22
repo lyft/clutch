@@ -3441,13 +3441,37 @@ func (m *CronJob) Validate() error {
 
 	// no validation rules for Annotations
 
-	// no validation rules for Suspend
+	if v, ok := interface{}(m.GetSuspend()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CronJobValidationError{
+				field:  "Suspend",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
-	// no validation rules for ActiveJobs
+	if v, ok := interface{}(m.GetNumActiveJobs()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CronJobValidationError{
+				field:  "NumActiveJobs",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	// no validation rules for ConcurrencyPolicy
 
-	// no validation rules for StartingDeadlineSeconds
+	if v, ok := interface{}(m.GetStartingDeadlineSeconds()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CronJobValidationError{
+				field:  "StartingDeadlineSeconds",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	return nil
 }
