@@ -30,12 +30,12 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 
 		// We create our own connection to use for acquiring the advisory lock
 		// If the connection is severed for any reason the advisory lock will automatically unlock
-		err := c.getCacheLockConn(ctx)
+		conn, err := c.db.Conn(ctx)
 		switch err {
 		case nil:
 			// TODO: We could in the future spread the load of the topology caching
 			// across many clutch instances by having an a lock per service (e.g. AWS, k8s, etc)
-			if c.tryAdvisoryLock(ctx, c.cacheLockConn, advisoryLockId) {
+			if c.tryAdvisoryLock(ctx, conn, advisoryLockId) {
 				c.log.Info("acquired the advisory lock, starting to cache topology now...")
 				go c.expireCache(ctx)
 				c.startTopologyCache(ctx)
@@ -49,36 +49,11 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 			continue
 		case <-ctx.Done():
 			ticker.Stop()
-			c.unlockAdvisoryLock(context.Background(), c.cacheLockConn, advisoryLockId)
-			c.cacheLockConn.Close()
+			c.unlockAdvisoryLock(context.Background(), conn, advisoryLockId)
+			conn.Close()
 			return
 		}
 	}
-}
-
-// Creates a new database connection if cacheLockConn is nil
-// This also handles checking the health of the connection
-// and attempts too reconnect.
-func (c *client) getCacheLockConn(ctx context.Context) error {
-	// Not only does this check if the database connection is active
-	// but will also reestablish a connection if it is not
-	err := c.db.PingContext(ctx)
-	if err != nil {
-		return err
-	}
-
-	if err == nil || c.cacheLockConn == nil {
-		c.cacheLockConn, err = c.db.Conn(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	if err := c.cacheLockConn.PingContext(ctx); err != nil {
-		return err
-	}
-
-	return nil
 }
 
 // TODO: The advisory locking logic can be decomposed into its own service (e.g. "global locking service").

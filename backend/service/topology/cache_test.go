@@ -1,10 +1,8 @@
 package topology
 
 import (
-	"context"
 	"testing"
 
-	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -36,18 +34,4 @@ func TestConvertLockIdToAdvisoryLockId(t *testing.T) {
 			assert.Equal(t, tt.expect, id)
 		})
 	}
-}
-
-func TestGetCacheLockConn(t *testing.T) {
-	db, _, err := sqlmock.New()
-	assert.NoError(t, err)
-
-	topo := &client{
-		db: db,
-	}
-
-	// Assert that the cacheLockConn get created
-	err = topo.getCacheLockConn(context.Background())
-	assert.NoError(t, err)
-	assert.NotNil(t, topo.cacheLockConn)
 }

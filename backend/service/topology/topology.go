@@ -33,10 +33,9 @@ type Service interface {
 type client struct {
 	config *topologyv1cfg.Config
 
-	db            *sql.DB
-	log           *zap.Logger
-	scope         tally.Scope
-	cacheLockConn *sql.Conn
+	db    *sql.DB
+	log   *zap.Logger
+	scope tally.Scope
 }
 
 // CacheableTopology is implemented by a service that wishes to enable the topology API feature set
