@@ -25,10 +25,18 @@
   "packageRules": [
     {
       "extends": ["schedule:weekly"],
-      "packageNames": [
-        "github.com/aws/aws-sdk-go",
-        "golang.org/x/net",
+      "matchPackageNames": [
         "google.golang.org/genproto"
+      ],
+      "matchPackagePatterns": [
+        "^golang.org/x/",
+        "^github.com/aws/"
+      ]
+    },
+    {
+      "enabled": false,
+      "matchPackagePatterns": [
+        "^github.com/cactus/go-statsd-client"
       ]
     }
   ],
