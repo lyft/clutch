@@ -98,51 +98,48 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 // The importance of doing a semi frequent full re-list give us better cache accuracy,
 // while also keeping resources that are infrequently updated from being cleaned up by the cache TTL.
 // This works in tandem with the LightweightInformers above.
+//
+// Notably we intentionally run these in serial, not only can this cause memory pressure but
+// also being mindful of the kubernetes api servers to reduce burst load.
 func (s *svc) cacheFullRelist(ctx context.Context, lwPods, lwDeployments, lwHPA *cache.ListWatch) {
-	ticker := time.NewTicker(time.Minute * 10)
+	ticker := time.NewTicker(time.Hour * 1)
 	for {
 		// The informers will only ever do a full list once on boot
 		// we will wait the hour before doing another full list again
 		select {
 		case <-ticker.C:
-			go func() {
-				pods, err := lwPods.List(metav1.ListOptions{})
-				if err != nil {
-					s.log.Warn("Unable to list pods to populate Kubernetes cache", zap.Error(err))
-					return
-				}
+			pods, err := lwPods.List(metav1.ListOptions{})
+			if err != nil {
+				s.log.Warn("Unable to list pods to populate Kubernetes cache", zap.Error(err))
+				return
+			}
 
-				podItems := pods.(*corev1.PodList).Items
-				for i := range podItems {
-					s.processInformerEvent(&podItems[i], topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
-				}
-			}()
+			podItems := pods.(*corev1.PodList).Items
+			for i := range podItems {
+				s.processInformerEvent(&podItems[i], topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
+			}
 
-			go func() {
-				deployments, err := lwDeployments.List(metav1.ListOptions{})
-				if err != nil {
-					s.log.Warn("Unable to list deployments to populate Kubernetes cache", zap.Error(err))
-					return
-				}
+			deployments, err := lwDeployments.List(metav1.ListOptions{})
+			if err != nil {
+				s.log.Warn("Unable to list deployments to populate Kubernetes cache", zap.Error(err))
+				return
+			}
 
-				deploymentItems := deployments.(*appsv1.DeploymentList).Items
-				for i := range deploymentItems {
-					s.processInformerEvent(&deploymentItems[i], topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
-				}
-			}()
+			deploymentItems := deployments.(*appsv1.DeploymentList).Items
+			for i := range deploymentItems {
+				s.processInformerEvent(&deploymentItems[i], topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
+			}
 
-			go func() {
-				hpas, err := lwHPA.List(metav1.ListOptions{})
-				if err != nil {
-					s.log.Warn("Unable to list HPAs to populate Kubernetes cache", zap.Error(err))
-					return
-				}
+			hpas, err := lwHPA.List(metav1.ListOptions{})
+			if err != nil {
+				s.log.Warn("Unable to list HPAs to populate Kubernetes cache", zap.Error(err))
+				return
+			}
 
-				hpaItems := hpas.(*autoscalingv1.HorizontalPodAutoscalerList).Items
-				for i := range hpaItems {
-					s.processInformerEvent(&hpaItems[i], topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
-				}
-			}()
+			hpaItems := hpas.(*autoscalingv1.HorizontalPodAutoscalerList).Items
+			for i := range hpaItems {
+				s.processInformerEvent(&hpaItems[i], topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
+			}
 		case <-ctx.Done():
 			ticker.Stop()
 			return
