@@ -2,10 +2,12 @@ package k8s
 
 import (
 	"fmt"
-	"github.com/lyft/clutch/backend/service"
+	"strings"
+
 	"google.golang.org/grpc/status"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
-	"strings"
+
+	"github.com/lyft/clutch/backend/service"
 )
 
 type mismatchedAnnotation struct {
@@ -44,4 +46,3 @@ func ConvertError(e error) error {
 
 	return ret.Err()
 }
-
