@@ -9111,6 +9111,287 @@ export const clutch = $root.clutch = (() => {
                     return HTTPFaultConfig;
                 })();
 
+                v1.RedisFaultConfig = (function() {
+
+                    /**
+                     * Properties of a RedisFaultConfig.
+                     * @memberof clutch.chaos.serverexperimentation.v1
+                     * @interface IRedisFaultConfig
+                     * @property {clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting|null} [faultTargeting] RedisFaultConfig faultTargeting
+                     * @property {clutch.chaos.serverexperimentation.v1.IRedisErrorFault|null} [errorFault] RedisFaultConfig errorFault
+                     * @property {clutch.chaos.serverexperimentation.v1.ILatencyFault|null} [latencyFault] RedisFaultConfig latencyFault
+                     */
+
+                    /**
+                     * Constructs a new RedisFaultConfig.
+                     * @memberof clutch.chaos.serverexperimentation.v1
+                     * @classdesc Represents a RedisFaultConfig.
+                     * @implements IRedisFaultConfig
+                     * @constructor
+                     * @param {clutch.chaos.serverexperimentation.v1.IRedisFaultConfig=} [properties] Properties to set
+                     */
+                    function RedisFaultConfig(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * RedisFaultConfig faultTargeting.
+                     * @member {clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting|null|undefined} faultTargeting
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisFaultConfig
+                     * @instance
+                     */
+                    RedisFaultConfig.prototype.faultTargeting = null;
+
+                    /**
+                     * RedisFaultConfig errorFault.
+                     * @member {clutch.chaos.serverexperimentation.v1.IRedisErrorFault|null|undefined} errorFault
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisFaultConfig
+                     * @instance
+                     */
+                    RedisFaultConfig.prototype.errorFault = null;
+
+                    /**
+                     * RedisFaultConfig latencyFault.
+                     * @member {clutch.chaos.serverexperimentation.v1.ILatencyFault|null|undefined} latencyFault
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisFaultConfig
+                     * @instance
+                     */
+                    RedisFaultConfig.prototype.latencyFault = null;
+
+                    // OneOf field names bound to virtual getters and setters
+                    let $oneOfFields;
+
+                    /**
+                     * RedisFaultConfig fault.
+                     * @member {"errorFault"|"latencyFault"|undefined} fault
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisFaultConfig
+                     * @instance
+                     */
+                    Object.defineProperty(RedisFaultConfig.prototype, "fault", {
+                        get: $util.oneOfGetter($oneOfFields = ["errorFault", "latencyFault"]),
+                        set: $util.oneOfSetter($oneOfFields)
+                    });
+
+                    /**
+                     * Verifies a RedisFaultConfig message.
+                     * @function verify
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisFaultConfig
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    RedisFaultConfig.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        let properties = {};
+                        if (message.faultTargeting != null && message.hasOwnProperty("faultTargeting")) {
+                            let error = $root.clutch.chaos.serverexperimentation.v1.RedisFaultTargeting.verify(message.faultTargeting);
+                            if (error)
+                                return "faultTargeting." + error;
+                        }
+                        if (message.errorFault != null && message.hasOwnProperty("errorFault")) {
+                            properties.fault = 1;
+                            {
+                                let error = $root.clutch.chaos.serverexperimentation.v1.RedisErrorFault.verify(message.errorFault);
+                                if (error)
+                                    return "errorFault." + error;
+                            }
+                        }
+                        if (message.latencyFault != null && message.hasOwnProperty("latencyFault")) {
+                            if (properties.fault === 1)
+                                return "fault: multiple values";
+                            properties.fault = 1;
+                            {
+                                let error = $root.clutch.chaos.serverexperimentation.v1.LatencyFault.verify(message.latencyFault);
+                                if (error)
+                                    return "latencyFault." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a RedisFaultConfig message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisFaultConfig
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.serverexperimentation.v1.RedisFaultConfig} RedisFaultConfig
+                     */
+                    RedisFaultConfig.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.RedisFaultConfig)
+                            return object;
+                        let message = new $root.clutch.chaos.serverexperimentation.v1.RedisFaultConfig();
+                        if (object.faultTargeting != null) {
+                            if (typeof object.faultTargeting !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.RedisFaultConfig.faultTargeting: object expected");
+                            message.faultTargeting = $root.clutch.chaos.serverexperimentation.v1.RedisFaultTargeting.fromObject(object.faultTargeting);
+                        }
+                        if (object.errorFault != null) {
+                            if (typeof object.errorFault !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.RedisFaultConfig.errorFault: object expected");
+                            message.errorFault = $root.clutch.chaos.serverexperimentation.v1.RedisErrorFault.fromObject(object.errorFault);
+                        }
+                        if (object.latencyFault != null) {
+                            if (typeof object.latencyFault !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.RedisFaultConfig.latencyFault: object expected");
+                            message.latencyFault = $root.clutch.chaos.serverexperimentation.v1.LatencyFault.fromObject(object.latencyFault);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a RedisFaultConfig message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisFaultConfig
+                     * @static
+                     * @param {clutch.chaos.serverexperimentation.v1.RedisFaultConfig} message RedisFaultConfig
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    RedisFaultConfig.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            object.faultTargeting = null;
+                        if (message.faultTargeting != null && message.hasOwnProperty("faultTargeting"))
+                            object.faultTargeting = $root.clutch.chaos.serverexperimentation.v1.RedisFaultTargeting.toObject(message.faultTargeting, options);
+                        if (message.errorFault != null && message.hasOwnProperty("errorFault")) {
+                            object.errorFault = $root.clutch.chaos.serverexperimentation.v1.RedisErrorFault.toObject(message.errorFault, options);
+                            if (options.oneofs)
+                                object.fault = "errorFault";
+                        }
+                        if (message.latencyFault != null && message.hasOwnProperty("latencyFault")) {
+                            object.latencyFault = $root.clutch.chaos.serverexperimentation.v1.LatencyFault.toObject(message.latencyFault, options);
+                            if (options.oneofs)
+                                object.fault = "latencyFault";
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this RedisFaultConfig to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisFaultConfig
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    RedisFaultConfig.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return RedisFaultConfig;
+                })();
+
+                v1.RedisErrorFault = (function() {
+
+                    /**
+                     * Properties of a RedisErrorFault.
+                     * @memberof clutch.chaos.serverexperimentation.v1
+                     * @interface IRedisErrorFault
+                     * @property {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null} [percentage] RedisErrorFault percentage
+                     */
+
+                    /**
+                     * Constructs a new RedisErrorFault.
+                     * @memberof clutch.chaos.serverexperimentation.v1
+                     * @classdesc Represents a RedisErrorFault.
+                     * @implements IRedisErrorFault
+                     * @constructor
+                     * @param {clutch.chaos.serverexperimentation.v1.IRedisErrorFault=} [properties] Properties to set
+                     */
+                    function RedisErrorFault(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * RedisErrorFault percentage.
+                     * @member {clutch.chaos.serverexperimentation.v1.IFaultPercentage|null|undefined} percentage
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisErrorFault
+                     * @instance
+                     */
+                    RedisErrorFault.prototype.percentage = null;
+
+                    /**
+                     * Verifies a RedisErrorFault message.
+                     * @function verify
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisErrorFault
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    RedisErrorFault.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.percentage != null && message.hasOwnProperty("percentage")) {
+                            let error = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.verify(message.percentage);
+                            if (error)
+                                return "percentage." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a RedisErrorFault message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisErrorFault
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.serverexperimentation.v1.RedisErrorFault} RedisErrorFault
+                     */
+                    RedisErrorFault.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.RedisErrorFault)
+                            return object;
+                        let message = new $root.clutch.chaos.serverexperimentation.v1.RedisErrorFault();
+                        if (object.percentage != null) {
+                            if (typeof object.percentage !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.RedisErrorFault.percentage: object expected");
+                            message.percentage = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.fromObject(object.percentage);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a RedisErrorFault message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisErrorFault
+                     * @static
+                     * @param {clutch.chaos.serverexperimentation.v1.RedisErrorFault} message RedisErrorFault
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    RedisErrorFault.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            object.percentage = null;
+                        if (message.percentage != null && message.hasOwnProperty("percentage"))
+                            object.percentage = $root.clutch.chaos.serverexperimentation.v1.FaultPercentage.toObject(message.percentage, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this RedisErrorFault to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisErrorFault
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    RedisErrorFault.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return RedisErrorFault;
+                })();
+
                 v1.AbortFault = (function() {
 
                     /**
@@ -9365,6 +9646,165 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return LatencyFault;
+                })();
+
+                v1.RedisFaultTargeting = (function() {
+
+                    /**
+                     * Properties of a RedisFaultTargeting.
+                     * @memberof clutch.chaos.serverexperimentation.v1
+                     * @interface IRedisFaultTargeting
+                     * @property {clutch.chaos.serverexperimentation.v1.ISingleCluster|null} [upstreamCluster] RedisFaultTargeting upstreamCluster
+                     * @property {clutch.chaos.serverexperimentation.v1.ISingleCluster|null} [downstreamCluster] RedisFaultTargeting downstreamCluster
+                     * @property {Array.<string>|null} [redisCommands] RedisFaultTargeting redisCommands
+                     */
+
+                    /**
+                     * Constructs a new RedisFaultTargeting.
+                     * @memberof clutch.chaos.serverexperimentation.v1
+                     * @classdesc Represents a RedisFaultTargeting.
+                     * @implements IRedisFaultTargeting
+                     * @constructor
+                     * @param {clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting=} [properties] Properties to set
+                     */
+                    function RedisFaultTargeting(properties) {
+                        this.redisCommands = [];
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * RedisFaultTargeting upstreamCluster.
+                     * @member {clutch.chaos.serverexperimentation.v1.ISingleCluster|null|undefined} upstreamCluster
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisFaultTargeting
+                     * @instance
+                     */
+                    RedisFaultTargeting.prototype.upstreamCluster = null;
+
+                    /**
+                     * RedisFaultTargeting downstreamCluster.
+                     * @member {clutch.chaos.serverexperimentation.v1.ISingleCluster|null|undefined} downstreamCluster
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisFaultTargeting
+                     * @instance
+                     */
+                    RedisFaultTargeting.prototype.downstreamCluster = null;
+
+                    /**
+                     * RedisFaultTargeting redisCommands.
+                     * @member {Array.<string>} redisCommands
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisFaultTargeting
+                     * @instance
+                     */
+                    RedisFaultTargeting.prototype.redisCommands = $util.emptyArray;
+
+                    /**
+                     * Verifies a RedisFaultTargeting message.
+                     * @function verify
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisFaultTargeting
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    RedisFaultTargeting.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.upstreamCluster != null && message.hasOwnProperty("upstreamCluster")) {
+                            let error = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.verify(message.upstreamCluster);
+                            if (error)
+                                return "upstreamCluster." + error;
+                        }
+                        if (message.downstreamCluster != null && message.hasOwnProperty("downstreamCluster")) {
+                            let error = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.verify(message.downstreamCluster);
+                            if (error)
+                                return "downstreamCluster." + error;
+                        }
+                        if (message.redisCommands != null && message.hasOwnProperty("redisCommands")) {
+                            if (!Array.isArray(message.redisCommands))
+                                return "redisCommands: array expected";
+                            for (let i = 0; i < message.redisCommands.length; ++i)
+                                if (!$util.isString(message.redisCommands[i]))
+                                    return "redisCommands: string[] expected";
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a RedisFaultTargeting message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisFaultTargeting
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.chaos.serverexperimentation.v1.RedisFaultTargeting} RedisFaultTargeting
+                     */
+                    RedisFaultTargeting.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.serverexperimentation.v1.RedisFaultTargeting)
+                            return object;
+                        let message = new $root.clutch.chaos.serverexperimentation.v1.RedisFaultTargeting();
+                        if (object.upstreamCluster != null) {
+                            if (typeof object.upstreamCluster !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.RedisFaultTargeting.upstreamCluster: object expected");
+                            message.upstreamCluster = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.fromObject(object.upstreamCluster);
+                        }
+                        if (object.downstreamCluster != null) {
+                            if (typeof object.downstreamCluster !== "object")
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.RedisFaultTargeting.downstreamCluster: object expected");
+                            message.downstreamCluster = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.fromObject(object.downstreamCluster);
+                        }
+                        if (object.redisCommands) {
+                            if (!Array.isArray(object.redisCommands))
+                                throw TypeError(".clutch.chaos.serverexperimentation.v1.RedisFaultTargeting.redisCommands: array expected");
+                            message.redisCommands = [];
+                            for (let i = 0; i < object.redisCommands.length; ++i)
+                                message.redisCommands[i] = String(object.redisCommands[i]);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a RedisFaultTargeting message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisFaultTargeting
+                     * @static
+                     * @param {clutch.chaos.serverexperimentation.v1.RedisFaultTargeting} message RedisFaultTargeting
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    RedisFaultTargeting.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.arrays || options.defaults)
+                            object.redisCommands = [];
+                        if (options.defaults) {
+                            object.upstreamCluster = null;
+                            object.downstreamCluster = null;
+                        }
+                        if (message.upstreamCluster != null && message.hasOwnProperty("upstreamCluster"))
+                            object.upstreamCluster = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.toObject(message.upstreamCluster, options);
+                        if (message.downstreamCluster != null && message.hasOwnProperty("downstreamCluster"))
+                            object.downstreamCluster = $root.clutch.chaos.serverexperimentation.v1.SingleCluster.toObject(message.downstreamCluster, options);
+                        if (message.redisCommands && message.redisCommands.length) {
+                            object.redisCommands = [];
+                            for (let j = 0; j < message.redisCommands.length; ++j)
+                                object.redisCommands[j] = message.redisCommands[j];
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this RedisFaultTargeting to JSON.
+                     * @function toJSON
+                     * @memberof clutch.chaos.serverexperimentation.v1.RedisFaultTargeting
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    RedisFaultTargeting.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return RedisFaultTargeting;
                 })();
 
                 v1.FaultTargeting = (function() {
@@ -13684,6 +14124,194 @@ export const clutch = $root.clutch = (() => {
                 return chaos;
             })();
 
+            module.sourcecontrol = (function() {
+
+                /**
+                 * Namespace sourcecontrol.
+                 * @memberof clutch.config.module
+                 * @namespace
+                 */
+                const sourcecontrol = {};
+
+                sourcecontrol.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.module.sourcecontrol
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.module.sourcecontrol.v1
+                         * @interface IConfig
+                         * @property {Array.<string>|null} [owners] Config owners
+                         * @property {Array.<clutch.sourcecontrol.v1.Visibility>|null} [visibilityOptions] Config visibilityOptions
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.module.sourcecontrol.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.module.sourcecontrol.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            this.owners = [];
+                            this.visibilityOptions = [];
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Config owners.
+                         * @member {Array.<string>} owners
+                         * @memberof clutch.config.module.sourcecontrol.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.owners = $util.emptyArray;
+
+                        /**
+                         * Config visibilityOptions.
+                         * @member {Array.<clutch.sourcecontrol.v1.Visibility>} visibilityOptions
+                         * @memberof clutch.config.module.sourcecontrol.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.visibilityOptions = $util.emptyArray;
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.module.sourcecontrol.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.owners != null && message.hasOwnProperty("owners")) {
+                                if (!Array.isArray(message.owners))
+                                    return "owners: array expected";
+                                for (let i = 0; i < message.owners.length; ++i)
+                                    if (!$util.isString(message.owners[i]))
+                                        return "owners: string[] expected";
+                            }
+                            if (message.visibilityOptions != null && message.hasOwnProperty("visibilityOptions")) {
+                                if (!Array.isArray(message.visibilityOptions))
+                                    return "visibilityOptions: array expected";
+                                for (let i = 0; i < message.visibilityOptions.length; ++i)
+                                    switch (message.visibilityOptions[i]) {
+                                    default:
+                                        return "visibilityOptions: enum value[] expected";
+                                    case 0:
+                                    case 1:
+                                    case 2:
+                                        break;
+                                    }
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.module.sourcecontrol.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.module.sourcecontrol.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.module.sourcecontrol.v1.Config)
+                                return object;
+                            let message = new $root.clutch.config.module.sourcecontrol.v1.Config();
+                            if (object.owners) {
+                                if (!Array.isArray(object.owners))
+                                    throw TypeError(".clutch.config.module.sourcecontrol.v1.Config.owners: array expected");
+                                message.owners = [];
+                                for (let i = 0; i < object.owners.length; ++i)
+                                    message.owners[i] = String(object.owners[i]);
+                            }
+                            if (object.visibilityOptions) {
+                                if (!Array.isArray(object.visibilityOptions))
+                                    throw TypeError(".clutch.config.module.sourcecontrol.v1.Config.visibilityOptions: array expected");
+                                message.visibilityOptions = [];
+                                for (let i = 0; i < object.visibilityOptions.length; ++i)
+                                    switch (object.visibilityOptions[i]) {
+                                    default:
+                                    case "UNSPECIFIED":
+                                    case 0:
+                                        message.visibilityOptions[i] = 0;
+                                        break;
+                                    case "PUBLIC":
+                                    case 1:
+                                        message.visibilityOptions[i] = 1;
+                                        break;
+                                    case "PRIVATE":
+                                    case 2:
+                                        message.visibilityOptions[i] = 2;
+                                        break;
+                                    }
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.module.sourcecontrol.v1.Config
+                         * @static
+                         * @param {clutch.config.module.sourcecontrol.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.arrays || options.defaults) {
+                                object.owners = [];
+                                object.visibilityOptions = [];
+                            }
+                            if (message.owners && message.owners.length) {
+                                object.owners = [];
+                                for (let j = 0; j < message.owners.length; ++j)
+                                    object.owners[j] = message.owners[j];
+                            }
+                            if (message.visibilityOptions && message.visibilityOptions.length) {
+                                object.visibilityOptions = [];
+                                for (let j = 0; j < message.visibilityOptions.length; ++j)
+                                    object.visibilityOptions[j] = options.enums === String ? $root.clutch.sourcecontrol.v1.Visibility[message.visibilityOptions[j]] : message.visibilityOptions[j];
+                            }
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.module.sourcecontrol.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    return v1;
+                })();
+
+                return sourcecontrol;
+            })();
+
             return module;
         })();
 
@@ -17262,6 +17890,1423 @@ export const clutch = $root.clutch = (() => {
         })();
 
         return config;
+    })();
+
+    clutch.sourcecontrol = (function() {
+
+        /**
+         * Namespace sourcecontrol.
+         * @memberof clutch
+         * @namespace
+         */
+        const sourcecontrol = {};
+
+        sourcecontrol.v1 = (function() {
+
+            /**
+             * Namespace v1.
+             * @memberof clutch.sourcecontrol
+             * @namespace
+             */
+            const v1 = {};
+
+            /**
+             * Visibility enum.
+             * @name clutch.sourcecontrol.v1.Visibility
+             * @enum {number}
+             * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+             * @property {number} PUBLIC=1 PUBLIC value
+             * @property {number} PRIVATE=2 PRIVATE value
+             */
+            v1.Visibility = (function() {
+                const valuesById = {}, values = Object.create(valuesById);
+                values[valuesById[0] = "UNSPECIFIED"] = 0;
+                values[valuesById[1] = "PUBLIC"] = 1;
+                values[valuesById[2] = "PRIVATE"] = 2;
+                return values;
+            })();
+
+            v1.SourceControlAPI = (function() {
+
+                /**
+                 * Constructs a new SourceControlAPI service.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @classdesc Represents a SourceControlAPI
+                 * @extends $protobuf.rpc.Service
+                 * @constructor
+                 * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                 * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                 * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                 */
+                function SourceControlAPI(rpcImpl, requestDelimited, responseDelimited) {
+                    $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                }
+
+                (SourceControlAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = SourceControlAPI;
+
+                /**
+                 * Callback as used by {@link clutch.sourcecontrol.v1.SourceControlAPI#getRepositoryOptions}.
+                 * @memberof clutch.sourcecontrol.v1.SourceControlAPI
+                 * @typedef GetRepositoryOptionsCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.sourcecontrol.v1.GetRepositoryOptionsResponse} [response] GetRepositoryOptionsResponse
+                 */
+
+                /**
+                 * Calls GetRepositoryOptions.
+                 * @function getRepositoryOptions
+                 * @memberof clutch.sourcecontrol.v1.SourceControlAPI
+                 * @instance
+                 * @param {clutch.sourcecontrol.v1.IGetRepositoryOptionsRequest} request GetRepositoryOptionsRequest message or plain object
+                 * @param {clutch.sourcecontrol.v1.SourceControlAPI.GetRepositoryOptionsCallback} callback Node-style callback called with the error, if any, and GetRepositoryOptionsResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(SourceControlAPI.prototype.getRepositoryOptions = function getRepositoryOptions(request, callback) {
+                    return this.rpcCall(getRepositoryOptions, $root.clutch.sourcecontrol.v1.GetRepositoryOptionsRequest, $root.clutch.sourcecontrol.v1.GetRepositoryOptionsResponse, request, callback);
+                }, "name", { value: "GetRepositoryOptions" });
+
+                /**
+                 * Calls GetRepositoryOptions.
+                 * @function getRepositoryOptions
+                 * @memberof clutch.sourcecontrol.v1.SourceControlAPI
+                 * @instance
+                 * @param {clutch.sourcecontrol.v1.IGetRepositoryOptionsRequest} request GetRepositoryOptionsRequest message or plain object
+                 * @returns {Promise<clutch.sourcecontrol.v1.GetRepositoryOptionsResponse>} Promise
+                 * @variation 2
+                 */
+
+                /**
+                 * Callback as used by {@link clutch.sourcecontrol.v1.SourceControlAPI#createRepository}.
+                 * @memberof clutch.sourcecontrol.v1.SourceControlAPI
+                 * @typedef CreateRepositoryCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.sourcecontrol.v1.CreateRepositoryResponse} [response] CreateRepositoryResponse
+                 */
+
+                /**
+                 * Calls CreateRepository.
+                 * @function createRepository
+                 * @memberof clutch.sourcecontrol.v1.SourceControlAPI
+                 * @instance
+                 * @param {clutch.sourcecontrol.v1.ICreateRepositoryRequest} request CreateRepositoryRequest message or plain object
+                 * @param {clutch.sourcecontrol.v1.SourceControlAPI.CreateRepositoryCallback} callback Node-style callback called with the error, if any, and CreateRepositoryResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(SourceControlAPI.prototype.createRepository = function createRepository(request, callback) {
+                    return this.rpcCall(createRepository, $root.clutch.sourcecontrol.v1.CreateRepositoryRequest, $root.clutch.sourcecontrol.v1.CreateRepositoryResponse, request, callback);
+                }, "name", { value: "CreateRepository" });
+
+                /**
+                 * Calls CreateRepository.
+                 * @function createRepository
+                 * @memberof clutch.sourcecontrol.v1.SourceControlAPI
+                 * @instance
+                 * @param {clutch.sourcecontrol.v1.ICreateRepositoryRequest} request CreateRepositoryRequest message or plain object
+                 * @returns {Promise<clutch.sourcecontrol.v1.CreateRepositoryResponse>} Promise
+                 * @variation 2
+                 */
+
+                return SourceControlAPI;
+            })();
+
+            v1.GetRepositoryOptionsRequest = (function() {
+
+                /**
+                 * Properties of a GetRepositoryOptionsRequest.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @interface IGetRepositoryOptionsRequest
+                 */
+
+                /**
+                 * Constructs a new GetRepositoryOptionsRequest.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @classdesc Represents a GetRepositoryOptionsRequest.
+                 * @implements IGetRepositoryOptionsRequest
+                 * @constructor
+                 * @param {clutch.sourcecontrol.v1.IGetRepositoryOptionsRequest=} [properties] Properties to set
+                 */
+                function GetRepositoryOptionsRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Verifies a GetRepositoryOptionsRequest message.
+                 * @function verify
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetRepositoryOptionsRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a GetRepositoryOptionsRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.sourcecontrol.v1.GetRepositoryOptionsRequest} GetRepositoryOptionsRequest
+                 */
+                GetRepositoryOptionsRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.sourcecontrol.v1.GetRepositoryOptionsRequest)
+                        return object;
+                    return new $root.clutch.sourcecontrol.v1.GetRepositoryOptionsRequest();
+                };
+
+                /**
+                 * Creates a plain object from a GetRepositoryOptionsRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsRequest
+                 * @static
+                 * @param {clutch.sourcecontrol.v1.GetRepositoryOptionsRequest} message GetRepositoryOptionsRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetRepositoryOptionsRequest.toObject = function toObject() {
+                    return {};
+                };
+
+                /**
+                 * Converts this GetRepositoryOptionsRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetRepositoryOptionsRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetRepositoryOptionsRequest;
+            })();
+
+            v1.Entity = (function() {
+
+                /**
+                 * Properties of an Entity.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @interface IEntity
+                 * @property {string|null} [name] Entity name
+                 * @property {string|null} [photoUrl] Entity photoUrl
+                 */
+
+                /**
+                 * Constructs a new Entity.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @classdesc Represents an Entity.
+                 * @implements IEntity
+                 * @constructor
+                 * @param {clutch.sourcecontrol.v1.IEntity=} [properties] Properties to set
+                 */
+                function Entity(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Entity name.
+                 * @member {string} name
+                 * @memberof clutch.sourcecontrol.v1.Entity
+                 * @instance
+                 */
+                Entity.prototype.name = "";
+
+                /**
+                 * Entity photoUrl.
+                 * @member {string} photoUrl
+                 * @memberof clutch.sourcecontrol.v1.Entity
+                 * @instance
+                 */
+                Entity.prototype.photoUrl = "";
+
+                /**
+                 * Verifies an Entity message.
+                 * @function verify
+                 * @memberof clutch.sourcecontrol.v1.Entity
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Entity.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.photoUrl != null && message.hasOwnProperty("photoUrl"))
+                        if (!$util.isString(message.photoUrl))
+                            return "photoUrl: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an Entity message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.sourcecontrol.v1.Entity
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.sourcecontrol.v1.Entity} Entity
+                 */
+                Entity.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.sourcecontrol.v1.Entity)
+                        return object;
+                    let message = new $root.clutch.sourcecontrol.v1.Entity();
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.photoUrl != null)
+                        message.photoUrl = String(object.photoUrl);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an Entity message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.sourcecontrol.v1.Entity
+                 * @static
+                 * @param {clutch.sourcecontrol.v1.Entity} message Entity
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Entity.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.name = "";
+                        object.photoUrl = "";
+                    }
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.photoUrl != null && message.hasOwnProperty("photoUrl"))
+                        object.photoUrl = message.photoUrl;
+                    return object;
+                };
+
+                /**
+                 * Converts this Entity to JSON.
+                 * @function toJSON
+                 * @memberof clutch.sourcecontrol.v1.Entity
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Entity.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Entity;
+            })();
+
+            v1.GetRepositoryOptionsResponse = (function() {
+
+                /**
+                 * Properties of a GetRepositoryOptionsResponse.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @interface IGetRepositoryOptionsResponse
+                 * @property {Array.<clutch.sourcecontrol.v1.IEntity>|null} [availableOwners] GetRepositoryOptionsResponse availableOwners
+                 * @property {Array.<clutch.sourcecontrol.v1.Visibility>|null} [visibilityOptions] GetRepositoryOptionsResponse visibilityOptions
+                 */
+
+                /**
+                 * Constructs a new GetRepositoryOptionsResponse.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @classdesc Represents a GetRepositoryOptionsResponse.
+                 * @implements IGetRepositoryOptionsResponse
+                 * @constructor
+                 * @param {clutch.sourcecontrol.v1.IGetRepositoryOptionsResponse=} [properties] Properties to set
+                 */
+                function GetRepositoryOptionsResponse(properties) {
+                    this.availableOwners = [];
+                    this.visibilityOptions = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * GetRepositoryOptionsResponse availableOwners.
+                 * @member {Array.<clutch.sourcecontrol.v1.IEntity>} availableOwners
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsResponse
+                 * @instance
+                 */
+                GetRepositoryOptionsResponse.prototype.availableOwners = $util.emptyArray;
+
+                /**
+                 * GetRepositoryOptionsResponse visibilityOptions.
+                 * @member {Array.<clutch.sourcecontrol.v1.Visibility>} visibilityOptions
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsResponse
+                 * @instance
+                 */
+                GetRepositoryOptionsResponse.prototype.visibilityOptions = $util.emptyArray;
+
+                /**
+                 * Verifies a GetRepositoryOptionsResponse message.
+                 * @function verify
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                GetRepositoryOptionsResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.availableOwners != null && message.hasOwnProperty("availableOwners")) {
+                        if (!Array.isArray(message.availableOwners))
+                            return "availableOwners: array expected";
+                        for (let i = 0; i < message.availableOwners.length; ++i) {
+                            let error = $root.clutch.sourcecontrol.v1.Entity.verify(message.availableOwners[i]);
+                            if (error)
+                                return "availableOwners." + error;
+                        }
+                    }
+                    if (message.visibilityOptions != null && message.hasOwnProperty("visibilityOptions")) {
+                        if (!Array.isArray(message.visibilityOptions))
+                            return "visibilityOptions: array expected";
+                        for (let i = 0; i < message.visibilityOptions.length; ++i)
+                            switch (message.visibilityOptions[i]) {
+                            default:
+                                return "visibilityOptions: enum value[] expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                                break;
+                            }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a GetRepositoryOptionsResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.sourcecontrol.v1.GetRepositoryOptionsResponse} GetRepositoryOptionsResponse
+                 */
+                GetRepositoryOptionsResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.sourcecontrol.v1.GetRepositoryOptionsResponse)
+                        return object;
+                    let message = new $root.clutch.sourcecontrol.v1.GetRepositoryOptionsResponse();
+                    if (object.availableOwners) {
+                        if (!Array.isArray(object.availableOwners))
+                            throw TypeError(".clutch.sourcecontrol.v1.GetRepositoryOptionsResponse.availableOwners: array expected");
+                        message.availableOwners = [];
+                        for (let i = 0; i < object.availableOwners.length; ++i) {
+                            if (typeof object.availableOwners[i] !== "object")
+                                throw TypeError(".clutch.sourcecontrol.v1.GetRepositoryOptionsResponse.availableOwners: object expected");
+                            message.availableOwners[i] = $root.clutch.sourcecontrol.v1.Entity.fromObject(object.availableOwners[i]);
+                        }
+                    }
+                    if (object.visibilityOptions) {
+                        if (!Array.isArray(object.visibilityOptions))
+                            throw TypeError(".clutch.sourcecontrol.v1.GetRepositoryOptionsResponse.visibilityOptions: array expected");
+                        message.visibilityOptions = [];
+                        for (let i = 0; i < object.visibilityOptions.length; ++i)
+                            switch (object.visibilityOptions[i]) {
+                            default:
+                            case "UNSPECIFIED":
+                            case 0:
+                                message.visibilityOptions[i] = 0;
+                                break;
+                            case "PUBLIC":
+                            case 1:
+                                message.visibilityOptions[i] = 1;
+                                break;
+                            case "PRIVATE":
+                            case 2:
+                                message.visibilityOptions[i] = 2;
+                                break;
+                            }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a GetRepositoryOptionsResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsResponse
+                 * @static
+                 * @param {clutch.sourcecontrol.v1.GetRepositoryOptionsResponse} message GetRepositoryOptionsResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                GetRepositoryOptionsResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults) {
+                        object.availableOwners = [];
+                        object.visibilityOptions = [];
+                    }
+                    if (message.availableOwners && message.availableOwners.length) {
+                        object.availableOwners = [];
+                        for (let j = 0; j < message.availableOwners.length; ++j)
+                            object.availableOwners[j] = $root.clutch.sourcecontrol.v1.Entity.toObject(message.availableOwners[j], options);
+                    }
+                    if (message.visibilityOptions && message.visibilityOptions.length) {
+                        object.visibilityOptions = [];
+                        for (let j = 0; j < message.visibilityOptions.length; ++j)
+                            object.visibilityOptions[j] = options.enums === String ? $root.clutch.sourcecontrol.v1.Visibility[message.visibilityOptions[j]] : message.visibilityOptions[j];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this GetRepositoryOptionsResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.sourcecontrol.v1.GetRepositoryOptionsResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                GetRepositoryOptionsResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return GetRepositoryOptionsResponse;
+            })();
+
+            v1.CreateRepositoryRequest = (function() {
+
+                /**
+                 * Properties of a CreateRepositoryRequest.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @interface ICreateRepositoryRequest
+                 * @property {string|null} [owner] CreateRepositoryRequest owner
+                 * @property {string|null} [name] CreateRepositoryRequest name
+                 * @property {string|null} [description] CreateRepositoryRequest description
+                 * @property {google.protobuf.IAny|null} [customOptions] CreateRepositoryRequest customOptions
+                 * @property {clutch.sourcecontrol.github.v1.ICreateRepositoryOptions|null} [githubOptions] CreateRepositoryRequest githubOptions
+                 */
+
+                /**
+                 * Constructs a new CreateRepositoryRequest.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @classdesc Represents a CreateRepositoryRequest.
+                 * @implements ICreateRepositoryRequest
+                 * @constructor
+                 * @param {clutch.sourcecontrol.v1.ICreateRepositoryRequest=} [properties] Properties to set
+                 */
+                function CreateRepositoryRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * CreateRepositoryRequest owner.
+                 * @member {string} owner
+                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
+                 * @instance
+                 */
+                CreateRepositoryRequest.prototype.owner = "";
+
+                /**
+                 * CreateRepositoryRequest name.
+                 * @member {string} name
+                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
+                 * @instance
+                 */
+                CreateRepositoryRequest.prototype.name = "";
+
+                /**
+                 * CreateRepositoryRequest description.
+                 * @member {string} description
+                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
+                 * @instance
+                 */
+                CreateRepositoryRequest.prototype.description = "";
+
+                /**
+                 * CreateRepositoryRequest customOptions.
+                 * @member {google.protobuf.IAny|null|undefined} customOptions
+                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
+                 * @instance
+                 */
+                CreateRepositoryRequest.prototype.customOptions = null;
+
+                /**
+                 * CreateRepositoryRequest githubOptions.
+                 * @member {clutch.sourcecontrol.github.v1.ICreateRepositoryOptions|null|undefined} githubOptions
+                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
+                 * @instance
+                 */
+                CreateRepositoryRequest.prototype.githubOptions = null;
+
+                // OneOf field names bound to virtual getters and setters
+                let $oneOfFields;
+
+                /**
+                 * CreateRepositoryRequest options.
+                 * @member {"customOptions"|"githubOptions"|undefined} options
+                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
+                 * @instance
+                 */
+                Object.defineProperty(CreateRepositoryRequest.prototype, "options", {
+                    get: $util.oneOfGetter($oneOfFields = ["customOptions", "githubOptions"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
+                 * Verifies a CreateRepositoryRequest message.
+                 * @function verify
+                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                CreateRepositoryRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    let properties = {};
+                    if (message.owner != null && message.hasOwnProperty("owner"))
+                        if (!$util.isString(message.owner))
+                            return "owner: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.description != null && message.hasOwnProperty("description"))
+                        if (!$util.isString(message.description))
+                            return "description: string expected";
+                    if (message.customOptions != null && message.hasOwnProperty("customOptions")) {
+                        properties.options = 1;
+                        {
+                            let error = $root.google.protobuf.Any.verify(message.customOptions);
+                            if (error)
+                                return "customOptions." + error;
+                        }
+                    }
+                    if (message.githubOptions != null && message.hasOwnProperty("githubOptions")) {
+                        if (properties.options === 1)
+                            return "options: multiple values";
+                        properties.options = 1;
+                        {
+                            let error = $root.clutch.sourcecontrol.github.v1.CreateRepositoryOptions.verify(message.githubOptions);
+                            if (error)
+                                return "githubOptions." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a CreateRepositoryRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.sourcecontrol.v1.CreateRepositoryRequest} CreateRepositoryRequest
+                 */
+                CreateRepositoryRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.sourcecontrol.v1.CreateRepositoryRequest)
+                        return object;
+                    let message = new $root.clutch.sourcecontrol.v1.CreateRepositoryRequest();
+                    if (object.owner != null)
+                        message.owner = String(object.owner);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.description != null)
+                        message.description = String(object.description);
+                    if (object.customOptions != null) {
+                        if (typeof object.customOptions !== "object")
+                            throw TypeError(".clutch.sourcecontrol.v1.CreateRepositoryRequest.customOptions: object expected");
+                        message.customOptions = $root.google.protobuf.Any.fromObject(object.customOptions);
+                    }
+                    if (object.githubOptions != null) {
+                        if (typeof object.githubOptions !== "object")
+                            throw TypeError(".clutch.sourcecontrol.v1.CreateRepositoryRequest.githubOptions: object expected");
+                        message.githubOptions = $root.clutch.sourcecontrol.github.v1.CreateRepositoryOptions.fromObject(object.githubOptions);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a CreateRepositoryRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
+                 * @static
+                 * @param {clutch.sourcecontrol.v1.CreateRepositoryRequest} message CreateRepositoryRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CreateRepositoryRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.owner = "";
+                        object.name = "";
+                        object.description = "";
+                    }
+                    if (message.owner != null && message.hasOwnProperty("owner"))
+                        object.owner = message.owner;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.description != null && message.hasOwnProperty("description"))
+                        object.description = message.description;
+                    if (message.customOptions != null && message.hasOwnProperty("customOptions")) {
+                        object.customOptions = $root.google.protobuf.Any.toObject(message.customOptions, options);
+                        if (options.oneofs)
+                            object.options = "customOptions";
+                    }
+                    if (message.githubOptions != null && message.hasOwnProperty("githubOptions")) {
+                        object.githubOptions = $root.clutch.sourcecontrol.github.v1.CreateRepositoryOptions.toObject(message.githubOptions, options);
+                        if (options.oneofs)
+                            object.options = "githubOptions";
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this CreateRepositoryRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CreateRepositoryRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return CreateRepositoryRequest;
+            })();
+
+            v1.CreateRepositoryResponse = (function() {
+
+                /**
+                 * Properties of a CreateRepositoryResponse.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @interface ICreateRepositoryResponse
+                 * @property {string|null} [url] CreateRepositoryResponse url
+                 */
+
+                /**
+                 * Constructs a new CreateRepositoryResponse.
+                 * @memberof clutch.sourcecontrol.v1
+                 * @classdesc Represents a CreateRepositoryResponse.
+                 * @implements ICreateRepositoryResponse
+                 * @constructor
+                 * @param {clutch.sourcecontrol.v1.ICreateRepositoryResponse=} [properties] Properties to set
+                 */
+                function CreateRepositoryResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * CreateRepositoryResponse url.
+                 * @member {string} url
+                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryResponse
+                 * @instance
+                 */
+                CreateRepositoryResponse.prototype.url = "";
+
+                /**
+                 * Verifies a CreateRepositoryResponse message.
+                 * @function verify
+                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                CreateRepositoryResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.url != null && message.hasOwnProperty("url"))
+                        if (!$util.isString(message.url))
+                            return "url: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a CreateRepositoryResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.sourcecontrol.v1.CreateRepositoryResponse} CreateRepositoryResponse
+                 */
+                CreateRepositoryResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.sourcecontrol.v1.CreateRepositoryResponse)
+                        return object;
+                    let message = new $root.clutch.sourcecontrol.v1.CreateRepositoryResponse();
+                    if (object.url != null)
+                        message.url = String(object.url);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a CreateRepositoryResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryResponse
+                 * @static
+                 * @param {clutch.sourcecontrol.v1.CreateRepositoryResponse} message CreateRepositoryResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CreateRepositoryResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.url = "";
+                    if (message.url != null && message.hasOwnProperty("url"))
+                        object.url = message.url;
+                    return object;
+                };
+
+                /**
+                 * Converts this CreateRepositoryResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CreateRepositoryResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return CreateRepositoryResponse;
+            })();
+
+            return v1;
+        })();
+
+        sourcecontrol.github = (function() {
+
+            /**
+             * Namespace github.
+             * @memberof clutch.sourcecontrol
+             * @namespace
+             */
+            const github = {};
+
+            github.v1 = (function() {
+
+                /**
+                 * Namespace v1.
+                 * @memberof clutch.sourcecontrol.github
+                 * @namespace
+                 */
+                const v1 = {};
+
+                v1.RepositoryParameters = (function() {
+
+                    /**
+                     * Properties of a RepositoryParameters.
+                     * @memberof clutch.sourcecontrol.github.v1
+                     * @interface IRepositoryParameters
+                     * @property {clutch.sourcecontrol.github.v1.RepositoryParameters.Visibility|null} [visibility] RepositoryParameters visibility
+                     * @property {google.protobuf.IBoolValue|null} [allowMergeCommit] RepositoryParameters allowMergeCommit
+                     * @property {google.protobuf.IBoolValue|null} [allowRebaseMerge] RepositoryParameters allowRebaseMerge
+                     * @property {google.protobuf.IBoolValue|null} [allowSquashMerge] RepositoryParameters allowSquashMerge
+                     */
+
+                    /**
+                     * Constructs a new RepositoryParameters.
+                     * @memberof clutch.sourcecontrol.github.v1
+                     * @classdesc Represents a RepositoryParameters.
+                     * @implements IRepositoryParameters
+                     * @constructor
+                     * @param {clutch.sourcecontrol.github.v1.IRepositoryParameters=} [properties] Properties to set
+                     */
+                    function RepositoryParameters(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * RepositoryParameters visibility.
+                     * @member {clutch.sourcecontrol.github.v1.RepositoryParameters.Visibility} visibility
+                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
+                     * @instance
+                     */
+                    RepositoryParameters.prototype.visibility = 0;
+
+                    /**
+                     * RepositoryParameters allowMergeCommit.
+                     * @member {google.protobuf.IBoolValue|null|undefined} allowMergeCommit
+                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
+                     * @instance
+                     */
+                    RepositoryParameters.prototype.allowMergeCommit = null;
+
+                    /**
+                     * RepositoryParameters allowRebaseMerge.
+                     * @member {google.protobuf.IBoolValue|null|undefined} allowRebaseMerge
+                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
+                     * @instance
+                     */
+                    RepositoryParameters.prototype.allowRebaseMerge = null;
+
+                    /**
+                     * RepositoryParameters allowSquashMerge.
+                     * @member {google.protobuf.IBoolValue|null|undefined} allowSquashMerge
+                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
+                     * @instance
+                     */
+                    RepositoryParameters.prototype.allowSquashMerge = null;
+
+                    /**
+                     * Verifies a RepositoryParameters message.
+                     * @function verify
+                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    RepositoryParameters.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.visibility != null && message.hasOwnProperty("visibility"))
+                            switch (message.visibility) {
+                            default:
+                                return "visibility: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                                break;
+                            }
+                        if (message.allowMergeCommit != null && message.hasOwnProperty("allowMergeCommit")) {
+                            let error = $root.google.protobuf.BoolValue.verify(message.allowMergeCommit);
+                            if (error)
+                                return "allowMergeCommit." + error;
+                        }
+                        if (message.allowRebaseMerge != null && message.hasOwnProperty("allowRebaseMerge")) {
+                            let error = $root.google.protobuf.BoolValue.verify(message.allowRebaseMerge);
+                            if (error)
+                                return "allowRebaseMerge." + error;
+                        }
+                        if (message.allowSquashMerge != null && message.hasOwnProperty("allowSquashMerge")) {
+                            let error = $root.google.protobuf.BoolValue.verify(message.allowSquashMerge);
+                            if (error)
+                                return "allowSquashMerge." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a RepositoryParameters message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.sourcecontrol.github.v1.RepositoryParameters} RepositoryParameters
+                     */
+                    RepositoryParameters.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.sourcecontrol.github.v1.RepositoryParameters)
+                            return object;
+                        let message = new $root.clutch.sourcecontrol.github.v1.RepositoryParameters();
+                        switch (object.visibility) {
+                        case "UNSPECIFIED":
+                        case 0:
+                            message.visibility = 0;
+                            break;
+                        case "PUBLIC":
+                        case 1:
+                            message.visibility = 1;
+                            break;
+                        case "PRIVATE":
+                        case 2:
+                            message.visibility = 2;
+                            break;
+                        }
+                        if (object.allowMergeCommit != null) {
+                            if (typeof object.allowMergeCommit !== "object")
+                                throw TypeError(".clutch.sourcecontrol.github.v1.RepositoryParameters.allowMergeCommit: object expected");
+                            message.allowMergeCommit = $root.google.protobuf.BoolValue.fromObject(object.allowMergeCommit);
+                        }
+                        if (object.allowRebaseMerge != null) {
+                            if (typeof object.allowRebaseMerge !== "object")
+                                throw TypeError(".clutch.sourcecontrol.github.v1.RepositoryParameters.allowRebaseMerge: object expected");
+                            message.allowRebaseMerge = $root.google.protobuf.BoolValue.fromObject(object.allowRebaseMerge);
+                        }
+                        if (object.allowSquashMerge != null) {
+                            if (typeof object.allowSquashMerge !== "object")
+                                throw TypeError(".clutch.sourcecontrol.github.v1.RepositoryParameters.allowSquashMerge: object expected");
+                            message.allowSquashMerge = $root.google.protobuf.BoolValue.fromObject(object.allowSquashMerge);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a RepositoryParameters message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
+                     * @static
+                     * @param {clutch.sourcecontrol.github.v1.RepositoryParameters} message RepositoryParameters
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    RepositoryParameters.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.visibility = options.enums === String ? "UNSPECIFIED" : 0;
+                            object.allowMergeCommit = null;
+                            object.allowRebaseMerge = null;
+                            object.allowSquashMerge = null;
+                        }
+                        if (message.visibility != null && message.hasOwnProperty("visibility"))
+                            object.visibility = options.enums === String ? $root.clutch.sourcecontrol.github.v1.RepositoryParameters.Visibility[message.visibility] : message.visibility;
+                        if (message.allowMergeCommit != null && message.hasOwnProperty("allowMergeCommit"))
+                            object.allowMergeCommit = $root.google.protobuf.BoolValue.toObject(message.allowMergeCommit, options);
+                        if (message.allowRebaseMerge != null && message.hasOwnProperty("allowRebaseMerge"))
+                            object.allowRebaseMerge = $root.google.protobuf.BoolValue.toObject(message.allowRebaseMerge, options);
+                        if (message.allowSquashMerge != null && message.hasOwnProperty("allowSquashMerge"))
+                            object.allowSquashMerge = $root.google.protobuf.BoolValue.toObject(message.allowSquashMerge, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this RepositoryParameters to JSON.
+                     * @function toJSON
+                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    RepositoryParameters.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    /**
+                     * Visibility enum.
+                     * @name clutch.sourcecontrol.github.v1.RepositoryParameters.Visibility
+                     * @enum {number}
+                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                     * @property {number} PUBLIC=1 PUBLIC value
+                     * @property {number} PRIVATE=2 PRIVATE value
+                     */
+                    RepositoryParameters.Visibility = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "PUBLIC"] = 1;
+                        values[valuesById[2] = "PRIVATE"] = 2;
+                        return values;
+                    })();
+
+                    return RepositoryParameters;
+                })();
+
+                v1.CreateRepositoryOptions = (function() {
+
+                    /**
+                     * Properties of a CreateRepositoryOptions.
+                     * @memberof clutch.sourcecontrol.github.v1
+                     * @interface ICreateRepositoryOptions
+                     * @property {clutch.sourcecontrol.github.v1.IRepositoryParameters|null} [parameters] CreateRepositoryOptions parameters
+                     * @property {boolean|null} [autoInit] CreateRepositoryOptions autoInit
+                     */
+
+                    /**
+                     * Constructs a new CreateRepositoryOptions.
+                     * @memberof clutch.sourcecontrol.github.v1
+                     * @classdesc Represents a CreateRepositoryOptions.
+                     * @implements ICreateRepositoryOptions
+                     * @constructor
+                     * @param {clutch.sourcecontrol.github.v1.ICreateRepositoryOptions=} [properties] Properties to set
+                     */
+                    function CreateRepositoryOptions(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * CreateRepositoryOptions parameters.
+                     * @member {clutch.sourcecontrol.github.v1.IRepositoryParameters|null|undefined} parameters
+                     * @memberof clutch.sourcecontrol.github.v1.CreateRepositoryOptions
+                     * @instance
+                     */
+                    CreateRepositoryOptions.prototype.parameters = null;
+
+                    /**
+                     * CreateRepositoryOptions autoInit.
+                     * @member {boolean} autoInit
+                     * @memberof clutch.sourcecontrol.github.v1.CreateRepositoryOptions
+                     * @instance
+                     */
+                    CreateRepositoryOptions.prototype.autoInit = false;
+
+                    /**
+                     * Verifies a CreateRepositoryOptions message.
+                     * @function verify
+                     * @memberof clutch.sourcecontrol.github.v1.CreateRepositoryOptions
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    CreateRepositoryOptions.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.parameters != null && message.hasOwnProperty("parameters")) {
+                            let error = $root.clutch.sourcecontrol.github.v1.RepositoryParameters.verify(message.parameters);
+                            if (error)
+                                return "parameters." + error;
+                        }
+                        if (message.autoInit != null && message.hasOwnProperty("autoInit"))
+                            if (typeof message.autoInit !== "boolean")
+                                return "autoInit: boolean expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a CreateRepositoryOptions message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.sourcecontrol.github.v1.CreateRepositoryOptions
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.sourcecontrol.github.v1.CreateRepositoryOptions} CreateRepositoryOptions
+                     */
+                    CreateRepositoryOptions.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.sourcecontrol.github.v1.CreateRepositoryOptions)
+                            return object;
+                        let message = new $root.clutch.sourcecontrol.github.v1.CreateRepositoryOptions();
+                        if (object.parameters != null) {
+                            if (typeof object.parameters !== "object")
+                                throw TypeError(".clutch.sourcecontrol.github.v1.CreateRepositoryOptions.parameters: object expected");
+                            message.parameters = $root.clutch.sourcecontrol.github.v1.RepositoryParameters.fromObject(object.parameters);
+                        }
+                        if (object.autoInit != null)
+                            message.autoInit = Boolean(object.autoInit);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a CreateRepositoryOptions message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.sourcecontrol.github.v1.CreateRepositoryOptions
+                     * @static
+                     * @param {clutch.sourcecontrol.github.v1.CreateRepositoryOptions} message CreateRepositoryOptions
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    CreateRepositoryOptions.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.parameters = null;
+                            object.autoInit = false;
+                        }
+                        if (message.parameters != null && message.hasOwnProperty("parameters"))
+                            object.parameters = $root.clutch.sourcecontrol.github.v1.RepositoryParameters.toObject(message.parameters, options);
+                        if (message.autoInit != null && message.hasOwnProperty("autoInit"))
+                            object.autoInit = message.autoInit;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this CreateRepositoryOptions to JSON.
+                     * @function toJSON
+                     * @memberof clutch.sourcecontrol.github.v1.CreateRepositoryOptions
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    CreateRepositoryOptions.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return CreateRepositoryOptions;
+                })();
+
+                v1.UpdateRepositoryOptions = (function() {
+
+                    /**
+                     * Properties of an UpdateRepositoryOptions.
+                     * @memberof clutch.sourcecontrol.github.v1
+                     * @interface IUpdateRepositoryOptions
+                     * @property {clutch.sourcecontrol.github.v1.IRepositoryParameters|null} [parameters] UpdateRepositoryOptions parameters
+                     * @property {boolean|null} [archived] UpdateRepositoryOptions archived
+                     */
+
+                    /**
+                     * Constructs a new UpdateRepositoryOptions.
+                     * @memberof clutch.sourcecontrol.github.v1
+                     * @classdesc Represents an UpdateRepositoryOptions.
+                     * @implements IUpdateRepositoryOptions
+                     * @constructor
+                     * @param {clutch.sourcecontrol.github.v1.IUpdateRepositoryOptions=} [properties] Properties to set
+                     */
+                    function UpdateRepositoryOptions(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * UpdateRepositoryOptions parameters.
+                     * @member {clutch.sourcecontrol.github.v1.IRepositoryParameters|null|undefined} parameters
+                     * @memberof clutch.sourcecontrol.github.v1.UpdateRepositoryOptions
+                     * @instance
+                     */
+                    UpdateRepositoryOptions.prototype.parameters = null;
+
+                    /**
+                     * UpdateRepositoryOptions archived.
+                     * @member {boolean} archived
+                     * @memberof clutch.sourcecontrol.github.v1.UpdateRepositoryOptions
+                     * @instance
+                     */
+                    UpdateRepositoryOptions.prototype.archived = false;
+
+                    /**
+                     * Verifies an UpdateRepositoryOptions message.
+                     * @function verify
+                     * @memberof clutch.sourcecontrol.github.v1.UpdateRepositoryOptions
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    UpdateRepositoryOptions.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.parameters != null && message.hasOwnProperty("parameters")) {
+                            let error = $root.clutch.sourcecontrol.github.v1.RepositoryParameters.verify(message.parameters);
+                            if (error)
+                                return "parameters." + error;
+                        }
+                        if (message.archived != null && message.hasOwnProperty("archived"))
+                            if (typeof message.archived !== "boolean")
+                                return "archived: boolean expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an UpdateRepositoryOptions message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.sourcecontrol.github.v1.UpdateRepositoryOptions
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.sourcecontrol.github.v1.UpdateRepositoryOptions} UpdateRepositoryOptions
+                     */
+                    UpdateRepositoryOptions.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.sourcecontrol.github.v1.UpdateRepositoryOptions)
+                            return object;
+                        let message = new $root.clutch.sourcecontrol.github.v1.UpdateRepositoryOptions();
+                        if (object.parameters != null) {
+                            if (typeof object.parameters !== "object")
+                                throw TypeError(".clutch.sourcecontrol.github.v1.UpdateRepositoryOptions.parameters: object expected");
+                            message.parameters = $root.clutch.sourcecontrol.github.v1.RepositoryParameters.fromObject(object.parameters);
+                        }
+                        if (object.archived != null)
+                            message.archived = Boolean(object.archived);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an UpdateRepositoryOptions message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.sourcecontrol.github.v1.UpdateRepositoryOptions
+                     * @static
+                     * @param {clutch.sourcecontrol.github.v1.UpdateRepositoryOptions} message UpdateRepositoryOptions
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    UpdateRepositoryOptions.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.parameters = null;
+                            object.archived = false;
+                        }
+                        if (message.parameters != null && message.hasOwnProperty("parameters"))
+                            object.parameters = $root.clutch.sourcecontrol.github.v1.RepositoryParameters.toObject(message.parameters, options);
+                        if (message.archived != null && message.hasOwnProperty("archived"))
+                            object.archived = message.archived;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this UpdateRepositoryOptions to JSON.
+                     * @function toJSON
+                     * @memberof clutch.sourcecontrol.github.v1.UpdateRepositoryOptions
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    UpdateRepositoryOptions.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return UpdateRepositoryOptions;
+                })();
+
+                /**
+                 * CommitCompareStatus enum.
+                 * @name clutch.sourcecontrol.github.v1.CommitCompareStatus
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} UNKNOWN=1 UNKNOWN value
+                 * @property {number} BEHIND=2 BEHIND value
+                 * @property {number} AHEAD=3 AHEAD value
+                 * @property {number} IDENTICAL=4 IDENTICAL value
+                 */
+                v1.CommitCompareStatus = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "UNKNOWN"] = 1;
+                    values[valuesById[2] = "BEHIND"] = 2;
+                    values[valuesById[3] = "AHEAD"] = 3;
+                    values[valuesById[4] = "IDENTICAL"] = 4;
+                    return values;
+                })();
+
+                v1.CommitComparison = (function() {
+
+                    /**
+                     * Properties of a CommitComparison.
+                     * @memberof clutch.sourcecontrol.github.v1
+                     * @interface ICommitComparison
+                     * @property {clutch.sourcecontrol.github.v1.CommitCompareStatus|null} [status] CommitComparison status
+                     */
+
+                    /**
+                     * Constructs a new CommitComparison.
+                     * @memberof clutch.sourcecontrol.github.v1
+                     * @classdesc Represents a CommitComparison.
+                     * @implements ICommitComparison
+                     * @constructor
+                     * @param {clutch.sourcecontrol.github.v1.ICommitComparison=} [properties] Properties to set
+                     */
+                    function CommitComparison(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * CommitComparison status.
+                     * @member {clutch.sourcecontrol.github.v1.CommitCompareStatus} status
+                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
+                     * @instance
+                     */
+                    CommitComparison.prototype.status = 0;
+
+                    /**
+                     * Verifies a CommitComparison message.
+                     * @function verify
+                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    CommitComparison.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            switch (message.status) {
+                            default:
+                                return "status: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                                break;
+                            }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a CommitComparison message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.sourcecontrol.github.v1.CommitComparison} CommitComparison
+                     */
+                    CommitComparison.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.sourcecontrol.github.v1.CommitComparison)
+                            return object;
+                        let message = new $root.clutch.sourcecontrol.github.v1.CommitComparison();
+                        switch (object.status) {
+                        case "UNSPECIFIED":
+                        case 0:
+                            message.status = 0;
+                            break;
+                        case "UNKNOWN":
+                        case 1:
+                            message.status = 1;
+                            break;
+                        case "BEHIND":
+                        case 2:
+                            message.status = 2;
+                            break;
+                        case "AHEAD":
+                        case 3:
+                            message.status = 3;
+                            break;
+                        case "IDENTICAL":
+                        case 4:
+                            message.status = 4;
+                            break;
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a CommitComparison message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
+                     * @static
+                     * @param {clutch.sourcecontrol.github.v1.CommitComparison} message CommitComparison
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    CommitComparison.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            object.status = options.enums === String ? "UNSPECIFIED" : 0;
+                        if (message.status != null && message.hasOwnProperty("status"))
+                            object.status = options.enums === String ? $root.clutch.sourcecontrol.github.v1.CommitCompareStatus[message.status] : message.status;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this CommitComparison to JSON.
+                     * @function toJSON
+                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    CommitComparison.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return CommitComparison;
+                })();
+
+                return v1;
+            })();
+
+            return github;
+        })();
+
+        return sourcecontrol;
     })();
 
     clutch.envoytriage = (function() {
@@ -31722,7 +33767,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.resolver.v1
                  * @interface ISearchMetadata
                  * @property {boolean|null} [enabled] SearchMetadata enabled
-                 * @property {boolean|null} [isAutocompleteable] SearchMetadata isAutocompleteable
+                 * @property {boolean|null} [autocompleteEnabled] SearchMetadata autocompleteEnabled
                  */
 
                 /**
@@ -31749,12 +33794,12 @@ export const clutch = $root.clutch = (() => {
                 SearchMetadata.prototype.enabled = false;
 
                 /**
-                 * SearchMetadata isAutocompleteable.
-                 * @member {boolean} isAutocompleteable
+                 * SearchMetadata autocompleteEnabled.
+                 * @member {boolean} autocompleteEnabled
                  * @memberof clutch.resolver.v1.SearchMetadata
                  * @instance
                  */
-                SearchMetadata.prototype.isAutocompleteable = false;
+                SearchMetadata.prototype.autocompleteEnabled = false;
 
                 /**
                  * Verifies a SearchMetadata message.
@@ -31770,9 +33815,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.enabled != null && message.hasOwnProperty("enabled"))
                         if (typeof message.enabled !== "boolean")
                             return "enabled: boolean expected";
-                    if (message.isAutocompleteable != null && message.hasOwnProperty("isAutocompleteable"))
-                        if (typeof message.isAutocompleteable !== "boolean")
-                            return "isAutocompleteable: boolean expected";
+                    if (message.autocompleteEnabled != null && message.hasOwnProperty("autocompleteEnabled"))
+                        if (typeof message.autocompleteEnabled !== "boolean")
+                            return "autocompleteEnabled: boolean expected";
                     return null;
                 };
 
@@ -31790,8 +33835,8 @@ export const clutch = $root.clutch = (() => {
                     let message = new $root.clutch.resolver.v1.SearchMetadata();
                     if (object.enabled != null)
                         message.enabled = Boolean(object.enabled);
-                    if (object.isAutocompleteable != null)
-                        message.isAutocompleteable = Boolean(object.isAutocompleteable);
+                    if (object.autocompleteEnabled != null)
+                        message.autocompleteEnabled = Boolean(object.autocompleteEnabled);
                     return message;
                 };
 
@@ -31810,12 +33855,12 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.defaults) {
                         object.enabled = false;
-                        object.isAutocompleteable = false;
+                        object.autocompleteEnabled = false;
                     }
                     if (message.enabled != null && message.hasOwnProperty("enabled"))
                         object.enabled = message.enabled;
-                    if (message.isAutocompleteable != null && message.hasOwnProperty("isAutocompleteable"))
-                        object.isAutocompleteable = message.isAutocompleteable;
+                    if (message.autocompleteEnabled != null && message.hasOwnProperty("autocompleteEnabled"))
+                        object.autocompleteEnabled = message.autocompleteEnabled;
                     return object;
                 };
 
@@ -32271,7 +34316,425 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.resolver.v1.ResolverAPI#autocomplete}.
+                 * @memberof clutch.resolver.v1.ResolverAPI
+                 * @typedef AutocompleteCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.resolver.v1.AutocompleteResponse} [response] AutocompleteResponse
+                 */
+
+                /**
+                 * Calls Autocomplete.
+                 * @function autocomplete
+                 * @memberof clutch.resolver.v1.ResolverAPI
+                 * @instance
+                 * @param {clutch.resolver.v1.IAutocompleteRequest} request AutocompleteRequest message or plain object
+                 * @param {clutch.resolver.v1.ResolverAPI.AutocompleteCallback} callback Node-style callback called with the error, if any, and AutocompleteResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(ResolverAPI.prototype.autocomplete = function autocomplete(request, callback) {
+                    return this.rpcCall(autocomplete, $root.clutch.resolver.v1.AutocompleteRequest, $root.clutch.resolver.v1.AutocompleteResponse, request, callback);
+                }, "name", { value: "Autocomplete" });
+
+                /**
+                 * Calls Autocomplete.
+                 * @function autocomplete
+                 * @memberof clutch.resolver.v1.ResolverAPI
+                 * @instance
+                 * @param {clutch.resolver.v1.IAutocompleteRequest} request AutocompleteRequest message or plain object
+                 * @returns {Promise<clutch.resolver.v1.AutocompleteResponse>} Promise
+                 * @variation 2
+                 */
+
                 return ResolverAPI;
+            })();
+
+            v1.AutocompleteResult = (function() {
+
+                /**
+                 * Properties of an AutocompleteResult.
+                 * @memberof clutch.resolver.v1
+                 * @interface IAutocompleteResult
+                 * @property {string|null} [id] AutocompleteResult id
+                 * @property {string|null} [label] AutocompleteResult label
+                 */
+
+                /**
+                 * Constructs a new AutocompleteResult.
+                 * @memberof clutch.resolver.v1
+                 * @classdesc Represents an AutocompleteResult.
+                 * @implements IAutocompleteResult
+                 * @constructor
+                 * @param {clutch.resolver.v1.IAutocompleteResult=} [properties] Properties to set
+                 */
+                function AutocompleteResult(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * AutocompleteResult id.
+                 * @member {string} id
+                 * @memberof clutch.resolver.v1.AutocompleteResult
+                 * @instance
+                 */
+                AutocompleteResult.prototype.id = "";
+
+                /**
+                 * AutocompleteResult label.
+                 * @member {string} label
+                 * @memberof clutch.resolver.v1.AutocompleteResult
+                 * @instance
+                 */
+                AutocompleteResult.prototype.label = "";
+
+                /**
+                 * Verifies an AutocompleteResult message.
+                 * @function verify
+                 * @memberof clutch.resolver.v1.AutocompleteResult
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                AutocompleteResult.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        if (!$util.isString(message.id))
+                            return "id: string expected";
+                    if (message.label != null && message.hasOwnProperty("label"))
+                        if (!$util.isString(message.label))
+                            return "label: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an AutocompleteResult message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.resolver.v1.AutocompleteResult
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.resolver.v1.AutocompleteResult} AutocompleteResult
+                 */
+                AutocompleteResult.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.resolver.v1.AutocompleteResult)
+                        return object;
+                    let message = new $root.clutch.resolver.v1.AutocompleteResult();
+                    if (object.id != null)
+                        message.id = String(object.id);
+                    if (object.label != null)
+                        message.label = String(object.label);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an AutocompleteResult message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.resolver.v1.AutocompleteResult
+                 * @static
+                 * @param {clutch.resolver.v1.AutocompleteResult} message AutocompleteResult
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                AutocompleteResult.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.id = "";
+                        object.label = "";
+                    }
+                    if (message.id != null && message.hasOwnProperty("id"))
+                        object.id = message.id;
+                    if (message.label != null && message.hasOwnProperty("label"))
+                        object.label = message.label;
+                    return object;
+                };
+
+                /**
+                 * Converts this AutocompleteResult to JSON.
+                 * @function toJSON
+                 * @memberof clutch.resolver.v1.AutocompleteResult
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                AutocompleteResult.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return AutocompleteResult;
+            })();
+
+            v1.AutocompleteRequest = (function() {
+
+                /**
+                 * Properties of an AutocompleteRequest.
+                 * @memberof clutch.resolver.v1
+                 * @interface IAutocompleteRequest
+                 * @property {string|null} [want] AutocompleteRequest want
+                 * @property {string|null} [search] AutocompleteRequest search
+                 * @property {number|Long|null} [limit] AutocompleteRequest limit
+                 */
+
+                /**
+                 * Constructs a new AutocompleteRequest.
+                 * @memberof clutch.resolver.v1
+                 * @classdesc Represents an AutocompleteRequest.
+                 * @implements IAutocompleteRequest
+                 * @constructor
+                 * @param {clutch.resolver.v1.IAutocompleteRequest=} [properties] Properties to set
+                 */
+                function AutocompleteRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * AutocompleteRequest want.
+                 * @member {string} want
+                 * @memberof clutch.resolver.v1.AutocompleteRequest
+                 * @instance
+                 */
+                AutocompleteRequest.prototype.want = "";
+
+                /**
+                 * AutocompleteRequest search.
+                 * @member {string} search
+                 * @memberof clutch.resolver.v1.AutocompleteRequest
+                 * @instance
+                 */
+                AutocompleteRequest.prototype.search = "";
+
+                /**
+                 * AutocompleteRequest limit.
+                 * @member {number|Long} limit
+                 * @memberof clutch.resolver.v1.AutocompleteRequest
+                 * @instance
+                 */
+                AutocompleteRequest.prototype.limit = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+                /**
+                 * Verifies an AutocompleteRequest message.
+                 * @function verify
+                 * @memberof clutch.resolver.v1.AutocompleteRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                AutocompleteRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.want != null && message.hasOwnProperty("want"))
+                        if (!$util.isString(message.want))
+                            return "want: string expected";
+                    if (message.search != null && message.hasOwnProperty("search"))
+                        if (!$util.isString(message.search))
+                            return "search: string expected";
+                    if (message.limit != null && message.hasOwnProperty("limit"))
+                        if (!$util.isInteger(message.limit) && !(message.limit && $util.isInteger(message.limit.low) && $util.isInteger(message.limit.high)))
+                            return "limit: integer|Long expected";
+                    return null;
+                };
+
+                /**
+                 * Creates an AutocompleteRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.resolver.v1.AutocompleteRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.resolver.v1.AutocompleteRequest} AutocompleteRequest
+                 */
+                AutocompleteRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.resolver.v1.AutocompleteRequest)
+                        return object;
+                    let message = new $root.clutch.resolver.v1.AutocompleteRequest();
+                    if (object.want != null)
+                        message.want = String(object.want);
+                    if (object.search != null)
+                        message.search = String(object.search);
+                    if (object.limit != null)
+                        if ($util.Long)
+                            (message.limit = $util.Long.fromValue(object.limit)).unsigned = true;
+                        else if (typeof object.limit === "string")
+                            message.limit = parseInt(object.limit, 10);
+                        else if (typeof object.limit === "number")
+                            message.limit = object.limit;
+                        else if (typeof object.limit === "object")
+                            message.limit = new $util.LongBits(object.limit.low >>> 0, object.limit.high >>> 0).toNumber(true);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an AutocompleteRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.resolver.v1.AutocompleteRequest
+                 * @static
+                 * @param {clutch.resolver.v1.AutocompleteRequest} message AutocompleteRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                AutocompleteRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.want = "";
+                        object.search = "";
+                        if ($util.Long) {
+                            let long = new $util.Long(0, 0, true);
+                            object.limit = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        } else
+                            object.limit = options.longs === String ? "0" : 0;
+                    }
+                    if (message.want != null && message.hasOwnProperty("want"))
+                        object.want = message.want;
+                    if (message.search != null && message.hasOwnProperty("search"))
+                        object.search = message.search;
+                    if (message.limit != null && message.hasOwnProperty("limit"))
+                        if (typeof message.limit === "number")
+                            object.limit = options.longs === String ? String(message.limit) : message.limit;
+                        else
+                            object.limit = options.longs === String ? $util.Long.prototype.toString.call(message.limit) : options.longs === Number ? new $util.LongBits(message.limit.low >>> 0, message.limit.high >>> 0).toNumber(true) : message.limit;
+                    return object;
+                };
+
+                /**
+                 * Converts this AutocompleteRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.resolver.v1.AutocompleteRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                AutocompleteRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return AutocompleteRequest;
+            })();
+
+            v1.AutocompleteResponse = (function() {
+
+                /**
+                 * Properties of an AutocompleteResponse.
+                 * @memberof clutch.resolver.v1
+                 * @interface IAutocompleteResponse
+                 * @property {Array.<clutch.resolver.v1.IAutocompleteResult>|null} [results] AutocompleteResponse results
+                 */
+
+                /**
+                 * Constructs a new AutocompleteResponse.
+                 * @memberof clutch.resolver.v1
+                 * @classdesc Represents an AutocompleteResponse.
+                 * @implements IAutocompleteResponse
+                 * @constructor
+                 * @param {clutch.resolver.v1.IAutocompleteResponse=} [properties] Properties to set
+                 */
+                function AutocompleteResponse(properties) {
+                    this.results = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * AutocompleteResponse results.
+                 * @member {Array.<clutch.resolver.v1.IAutocompleteResult>} results
+                 * @memberof clutch.resolver.v1.AutocompleteResponse
+                 * @instance
+                 */
+                AutocompleteResponse.prototype.results = $util.emptyArray;
+
+                /**
+                 * Verifies an AutocompleteResponse message.
+                 * @function verify
+                 * @memberof clutch.resolver.v1.AutocompleteResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                AutocompleteResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.results != null && message.hasOwnProperty("results")) {
+                        if (!Array.isArray(message.results))
+                            return "results: array expected";
+                        for (let i = 0; i < message.results.length; ++i) {
+                            let error = $root.clutch.resolver.v1.AutocompleteResult.verify(message.results[i]);
+                            if (error)
+                                return "results." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates an AutocompleteResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.resolver.v1.AutocompleteResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.resolver.v1.AutocompleteResponse} AutocompleteResponse
+                 */
+                AutocompleteResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.resolver.v1.AutocompleteResponse)
+                        return object;
+                    let message = new $root.clutch.resolver.v1.AutocompleteResponse();
+                    if (object.results) {
+                        if (!Array.isArray(object.results))
+                            throw TypeError(".clutch.resolver.v1.AutocompleteResponse.results: array expected");
+                        message.results = [];
+                        for (let i = 0; i < object.results.length; ++i) {
+                            if (typeof object.results[i] !== "object")
+                                throw TypeError(".clutch.resolver.v1.AutocompleteResponse.results: object expected");
+                            message.results[i] = $root.clutch.resolver.v1.AutocompleteResult.fromObject(object.results[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an AutocompleteResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.resolver.v1.AutocompleteResponse
+                 * @static
+                 * @param {clutch.resolver.v1.AutocompleteResponse} message AutocompleteResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                AutocompleteResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.results = [];
+                    if (message.results && message.results.length) {
+                        object.results = [];
+                        for (let j = 0; j < message.results.length; ++j)
+                            object.results[j] = $root.clutch.resolver.v1.AutocompleteResult.toObject(message.results[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this AutocompleteResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.resolver.v1.AutocompleteResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                AutocompleteResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return AutocompleteResponse;
             })();
 
             v1.ResolveRequest = (function() {
@@ -34301,1009 +36764,6 @@ export const clutch = $root.clutch = (() => {
         })();
 
         return resolver;
-    })();
-
-    clutch.sourcecontrol = (function() {
-
-        /**
-         * Namespace sourcecontrol.
-         * @memberof clutch
-         * @namespace
-         */
-        const sourcecontrol = {};
-
-        sourcecontrol.github = (function() {
-
-            /**
-             * Namespace github.
-             * @memberof clutch.sourcecontrol
-             * @namespace
-             */
-            const github = {};
-
-            github.v1 = (function() {
-
-                /**
-                 * Namespace v1.
-                 * @memberof clutch.sourcecontrol.github
-                 * @namespace
-                 */
-                const v1 = {};
-
-                v1.RepositoryParameters = (function() {
-
-                    /**
-                     * Properties of a RepositoryParameters.
-                     * @memberof clutch.sourcecontrol.github.v1
-                     * @interface IRepositoryParameters
-                     * @property {clutch.sourcecontrol.github.v1.RepositoryParameters.Visibility|null} [visibility] RepositoryParameters visibility
-                     * @property {google.protobuf.IBoolValue|null} [allowMergeCommit] RepositoryParameters allowMergeCommit
-                     * @property {google.protobuf.IBoolValue|null} [allowRebaseMerge] RepositoryParameters allowRebaseMerge
-                     * @property {google.protobuf.IBoolValue|null} [allowSquashMerge] RepositoryParameters allowSquashMerge
-                     */
-
-                    /**
-                     * Constructs a new RepositoryParameters.
-                     * @memberof clutch.sourcecontrol.github.v1
-                     * @classdesc Represents a RepositoryParameters.
-                     * @implements IRepositoryParameters
-                     * @constructor
-                     * @param {clutch.sourcecontrol.github.v1.IRepositoryParameters=} [properties] Properties to set
-                     */
-                    function RepositoryParameters(properties) {
-                        if (properties)
-                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * RepositoryParameters visibility.
-                     * @member {clutch.sourcecontrol.github.v1.RepositoryParameters.Visibility} visibility
-                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
-                     * @instance
-                     */
-                    RepositoryParameters.prototype.visibility = 0;
-
-                    /**
-                     * RepositoryParameters allowMergeCommit.
-                     * @member {google.protobuf.IBoolValue|null|undefined} allowMergeCommit
-                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
-                     * @instance
-                     */
-                    RepositoryParameters.prototype.allowMergeCommit = null;
-
-                    /**
-                     * RepositoryParameters allowRebaseMerge.
-                     * @member {google.protobuf.IBoolValue|null|undefined} allowRebaseMerge
-                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
-                     * @instance
-                     */
-                    RepositoryParameters.prototype.allowRebaseMerge = null;
-
-                    /**
-                     * RepositoryParameters allowSquashMerge.
-                     * @member {google.protobuf.IBoolValue|null|undefined} allowSquashMerge
-                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
-                     * @instance
-                     */
-                    RepositoryParameters.prototype.allowSquashMerge = null;
-
-                    /**
-                     * Verifies a RepositoryParameters message.
-                     * @function verify
-                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    RepositoryParameters.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        if (message.visibility != null && message.hasOwnProperty("visibility"))
-                            switch (message.visibility) {
-                            default:
-                                return "visibility: enum value expected";
-                            case 0:
-                            case 1:
-                            case 2:
-                                break;
-                            }
-                        if (message.allowMergeCommit != null && message.hasOwnProperty("allowMergeCommit")) {
-                            let error = $root.google.protobuf.BoolValue.verify(message.allowMergeCommit);
-                            if (error)
-                                return "allowMergeCommit." + error;
-                        }
-                        if (message.allowRebaseMerge != null && message.hasOwnProperty("allowRebaseMerge")) {
-                            let error = $root.google.protobuf.BoolValue.verify(message.allowRebaseMerge);
-                            if (error)
-                                return "allowRebaseMerge." + error;
-                        }
-                        if (message.allowSquashMerge != null && message.hasOwnProperty("allowSquashMerge")) {
-                            let error = $root.google.protobuf.BoolValue.verify(message.allowSquashMerge);
-                            if (error)
-                                return "allowSquashMerge." + error;
-                        }
-                        return null;
-                    };
-
-                    /**
-                     * Creates a RepositoryParameters message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.sourcecontrol.github.v1.RepositoryParameters} RepositoryParameters
-                     */
-                    RepositoryParameters.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.sourcecontrol.github.v1.RepositoryParameters)
-                            return object;
-                        let message = new $root.clutch.sourcecontrol.github.v1.RepositoryParameters();
-                        switch (object.visibility) {
-                        case "UNSPECIFIED":
-                        case 0:
-                            message.visibility = 0;
-                            break;
-                        case "PUBLIC":
-                        case 1:
-                            message.visibility = 1;
-                            break;
-                        case "PRIVATE":
-                        case 2:
-                            message.visibility = 2;
-                            break;
-                        }
-                        if (object.allowMergeCommit != null) {
-                            if (typeof object.allowMergeCommit !== "object")
-                                throw TypeError(".clutch.sourcecontrol.github.v1.RepositoryParameters.allowMergeCommit: object expected");
-                            message.allowMergeCommit = $root.google.protobuf.BoolValue.fromObject(object.allowMergeCommit);
-                        }
-                        if (object.allowRebaseMerge != null) {
-                            if (typeof object.allowRebaseMerge !== "object")
-                                throw TypeError(".clutch.sourcecontrol.github.v1.RepositoryParameters.allowRebaseMerge: object expected");
-                            message.allowRebaseMerge = $root.google.protobuf.BoolValue.fromObject(object.allowRebaseMerge);
-                        }
-                        if (object.allowSquashMerge != null) {
-                            if (typeof object.allowSquashMerge !== "object")
-                                throw TypeError(".clutch.sourcecontrol.github.v1.RepositoryParameters.allowSquashMerge: object expected");
-                            message.allowSquashMerge = $root.google.protobuf.BoolValue.fromObject(object.allowSquashMerge);
-                        }
-                        return message;
-                    };
-
-                    /**
-                     * Creates a plain object from a RepositoryParameters message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
-                     * @static
-                     * @param {clutch.sourcecontrol.github.v1.RepositoryParameters} message RepositoryParameters
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    RepositoryParameters.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        let object = {};
-                        if (options.defaults) {
-                            object.visibility = options.enums === String ? "UNSPECIFIED" : 0;
-                            object.allowMergeCommit = null;
-                            object.allowRebaseMerge = null;
-                            object.allowSquashMerge = null;
-                        }
-                        if (message.visibility != null && message.hasOwnProperty("visibility"))
-                            object.visibility = options.enums === String ? $root.clutch.sourcecontrol.github.v1.RepositoryParameters.Visibility[message.visibility] : message.visibility;
-                        if (message.allowMergeCommit != null && message.hasOwnProperty("allowMergeCommit"))
-                            object.allowMergeCommit = $root.google.protobuf.BoolValue.toObject(message.allowMergeCommit, options);
-                        if (message.allowRebaseMerge != null && message.hasOwnProperty("allowRebaseMerge"))
-                            object.allowRebaseMerge = $root.google.protobuf.BoolValue.toObject(message.allowRebaseMerge, options);
-                        if (message.allowSquashMerge != null && message.hasOwnProperty("allowSquashMerge"))
-                            object.allowSquashMerge = $root.google.protobuf.BoolValue.toObject(message.allowSquashMerge, options);
-                        return object;
-                    };
-
-                    /**
-                     * Converts this RepositoryParameters to JSON.
-                     * @function toJSON
-                     * @memberof clutch.sourcecontrol.github.v1.RepositoryParameters
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    RepositoryParameters.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    /**
-                     * Visibility enum.
-                     * @name clutch.sourcecontrol.github.v1.RepositoryParameters.Visibility
-                     * @enum {number}
-                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
-                     * @property {number} PUBLIC=1 PUBLIC value
-                     * @property {number} PRIVATE=2 PRIVATE value
-                     */
-                    RepositoryParameters.Visibility = (function() {
-                        const valuesById = {}, values = Object.create(valuesById);
-                        values[valuesById[0] = "UNSPECIFIED"] = 0;
-                        values[valuesById[1] = "PUBLIC"] = 1;
-                        values[valuesById[2] = "PRIVATE"] = 2;
-                        return values;
-                    })();
-
-                    return RepositoryParameters;
-                })();
-
-                v1.CreateRepositoryOptions = (function() {
-
-                    /**
-                     * Properties of a CreateRepositoryOptions.
-                     * @memberof clutch.sourcecontrol.github.v1
-                     * @interface ICreateRepositoryOptions
-                     * @property {clutch.sourcecontrol.github.v1.IRepositoryParameters|null} [parameters] CreateRepositoryOptions parameters
-                     * @property {boolean|null} [autoInit] CreateRepositoryOptions autoInit
-                     */
-
-                    /**
-                     * Constructs a new CreateRepositoryOptions.
-                     * @memberof clutch.sourcecontrol.github.v1
-                     * @classdesc Represents a CreateRepositoryOptions.
-                     * @implements ICreateRepositoryOptions
-                     * @constructor
-                     * @param {clutch.sourcecontrol.github.v1.ICreateRepositoryOptions=} [properties] Properties to set
-                     */
-                    function CreateRepositoryOptions(properties) {
-                        if (properties)
-                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * CreateRepositoryOptions parameters.
-                     * @member {clutch.sourcecontrol.github.v1.IRepositoryParameters|null|undefined} parameters
-                     * @memberof clutch.sourcecontrol.github.v1.CreateRepositoryOptions
-                     * @instance
-                     */
-                    CreateRepositoryOptions.prototype.parameters = null;
-
-                    /**
-                     * CreateRepositoryOptions autoInit.
-                     * @member {boolean} autoInit
-                     * @memberof clutch.sourcecontrol.github.v1.CreateRepositoryOptions
-                     * @instance
-                     */
-                    CreateRepositoryOptions.prototype.autoInit = false;
-
-                    /**
-                     * Verifies a CreateRepositoryOptions message.
-                     * @function verify
-                     * @memberof clutch.sourcecontrol.github.v1.CreateRepositoryOptions
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    CreateRepositoryOptions.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        if (message.parameters != null && message.hasOwnProperty("parameters")) {
-                            let error = $root.clutch.sourcecontrol.github.v1.RepositoryParameters.verify(message.parameters);
-                            if (error)
-                                return "parameters." + error;
-                        }
-                        if (message.autoInit != null && message.hasOwnProperty("autoInit"))
-                            if (typeof message.autoInit !== "boolean")
-                                return "autoInit: boolean expected";
-                        return null;
-                    };
-
-                    /**
-                     * Creates a CreateRepositoryOptions message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof clutch.sourcecontrol.github.v1.CreateRepositoryOptions
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.sourcecontrol.github.v1.CreateRepositoryOptions} CreateRepositoryOptions
-                     */
-                    CreateRepositoryOptions.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.sourcecontrol.github.v1.CreateRepositoryOptions)
-                            return object;
-                        let message = new $root.clutch.sourcecontrol.github.v1.CreateRepositoryOptions();
-                        if (object.parameters != null) {
-                            if (typeof object.parameters !== "object")
-                                throw TypeError(".clutch.sourcecontrol.github.v1.CreateRepositoryOptions.parameters: object expected");
-                            message.parameters = $root.clutch.sourcecontrol.github.v1.RepositoryParameters.fromObject(object.parameters);
-                        }
-                        if (object.autoInit != null)
-                            message.autoInit = Boolean(object.autoInit);
-                        return message;
-                    };
-
-                    /**
-                     * Creates a plain object from a CreateRepositoryOptions message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof clutch.sourcecontrol.github.v1.CreateRepositoryOptions
-                     * @static
-                     * @param {clutch.sourcecontrol.github.v1.CreateRepositoryOptions} message CreateRepositoryOptions
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    CreateRepositoryOptions.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        let object = {};
-                        if (options.defaults) {
-                            object.parameters = null;
-                            object.autoInit = false;
-                        }
-                        if (message.parameters != null && message.hasOwnProperty("parameters"))
-                            object.parameters = $root.clutch.sourcecontrol.github.v1.RepositoryParameters.toObject(message.parameters, options);
-                        if (message.autoInit != null && message.hasOwnProperty("autoInit"))
-                            object.autoInit = message.autoInit;
-                        return object;
-                    };
-
-                    /**
-                     * Converts this CreateRepositoryOptions to JSON.
-                     * @function toJSON
-                     * @memberof clutch.sourcecontrol.github.v1.CreateRepositoryOptions
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    CreateRepositoryOptions.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return CreateRepositoryOptions;
-                })();
-
-                v1.UpdateRepositoryOptions = (function() {
-
-                    /**
-                     * Properties of an UpdateRepositoryOptions.
-                     * @memberof clutch.sourcecontrol.github.v1
-                     * @interface IUpdateRepositoryOptions
-                     * @property {clutch.sourcecontrol.github.v1.IRepositoryParameters|null} [parameters] UpdateRepositoryOptions parameters
-                     * @property {boolean|null} [archived] UpdateRepositoryOptions archived
-                     */
-
-                    /**
-                     * Constructs a new UpdateRepositoryOptions.
-                     * @memberof clutch.sourcecontrol.github.v1
-                     * @classdesc Represents an UpdateRepositoryOptions.
-                     * @implements IUpdateRepositoryOptions
-                     * @constructor
-                     * @param {clutch.sourcecontrol.github.v1.IUpdateRepositoryOptions=} [properties] Properties to set
-                     */
-                    function UpdateRepositoryOptions(properties) {
-                        if (properties)
-                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * UpdateRepositoryOptions parameters.
-                     * @member {clutch.sourcecontrol.github.v1.IRepositoryParameters|null|undefined} parameters
-                     * @memberof clutch.sourcecontrol.github.v1.UpdateRepositoryOptions
-                     * @instance
-                     */
-                    UpdateRepositoryOptions.prototype.parameters = null;
-
-                    /**
-                     * UpdateRepositoryOptions archived.
-                     * @member {boolean} archived
-                     * @memberof clutch.sourcecontrol.github.v1.UpdateRepositoryOptions
-                     * @instance
-                     */
-                    UpdateRepositoryOptions.prototype.archived = false;
-
-                    /**
-                     * Verifies an UpdateRepositoryOptions message.
-                     * @function verify
-                     * @memberof clutch.sourcecontrol.github.v1.UpdateRepositoryOptions
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    UpdateRepositoryOptions.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        if (message.parameters != null && message.hasOwnProperty("parameters")) {
-                            let error = $root.clutch.sourcecontrol.github.v1.RepositoryParameters.verify(message.parameters);
-                            if (error)
-                                return "parameters." + error;
-                        }
-                        if (message.archived != null && message.hasOwnProperty("archived"))
-                            if (typeof message.archived !== "boolean")
-                                return "archived: boolean expected";
-                        return null;
-                    };
-
-                    /**
-                     * Creates an UpdateRepositoryOptions message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof clutch.sourcecontrol.github.v1.UpdateRepositoryOptions
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.sourcecontrol.github.v1.UpdateRepositoryOptions} UpdateRepositoryOptions
-                     */
-                    UpdateRepositoryOptions.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.sourcecontrol.github.v1.UpdateRepositoryOptions)
-                            return object;
-                        let message = new $root.clutch.sourcecontrol.github.v1.UpdateRepositoryOptions();
-                        if (object.parameters != null) {
-                            if (typeof object.parameters !== "object")
-                                throw TypeError(".clutch.sourcecontrol.github.v1.UpdateRepositoryOptions.parameters: object expected");
-                            message.parameters = $root.clutch.sourcecontrol.github.v1.RepositoryParameters.fromObject(object.parameters);
-                        }
-                        if (object.archived != null)
-                            message.archived = Boolean(object.archived);
-                        return message;
-                    };
-
-                    /**
-                     * Creates a plain object from an UpdateRepositoryOptions message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof clutch.sourcecontrol.github.v1.UpdateRepositoryOptions
-                     * @static
-                     * @param {clutch.sourcecontrol.github.v1.UpdateRepositoryOptions} message UpdateRepositoryOptions
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    UpdateRepositoryOptions.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        let object = {};
-                        if (options.defaults) {
-                            object.parameters = null;
-                            object.archived = false;
-                        }
-                        if (message.parameters != null && message.hasOwnProperty("parameters"))
-                            object.parameters = $root.clutch.sourcecontrol.github.v1.RepositoryParameters.toObject(message.parameters, options);
-                        if (message.archived != null && message.hasOwnProperty("archived"))
-                            object.archived = message.archived;
-                        return object;
-                    };
-
-                    /**
-                     * Converts this UpdateRepositoryOptions to JSON.
-                     * @function toJSON
-                     * @memberof clutch.sourcecontrol.github.v1.UpdateRepositoryOptions
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    UpdateRepositoryOptions.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return UpdateRepositoryOptions;
-                })();
-
-                /**
-                 * CommitCompareStatus enum.
-                 * @name clutch.sourcecontrol.github.v1.CommitCompareStatus
-                 * @enum {number}
-                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
-                 * @property {number} UNKNOWN=1 UNKNOWN value
-                 * @property {number} BEHIND=2 BEHIND value
-                 * @property {number} AHEAD=3 AHEAD value
-                 * @property {number} IDENTICAL=4 IDENTICAL value
-                 */
-                v1.CommitCompareStatus = (function() {
-                    const valuesById = {}, values = Object.create(valuesById);
-                    values[valuesById[0] = "UNSPECIFIED"] = 0;
-                    values[valuesById[1] = "UNKNOWN"] = 1;
-                    values[valuesById[2] = "BEHIND"] = 2;
-                    values[valuesById[3] = "AHEAD"] = 3;
-                    values[valuesById[4] = "IDENTICAL"] = 4;
-                    return values;
-                })();
-
-                v1.CommitComparison = (function() {
-
-                    /**
-                     * Properties of a CommitComparison.
-                     * @memberof clutch.sourcecontrol.github.v1
-                     * @interface ICommitComparison
-                     * @property {clutch.sourcecontrol.github.v1.CommitCompareStatus|null} [status] CommitComparison status
-                     */
-
-                    /**
-                     * Constructs a new CommitComparison.
-                     * @memberof clutch.sourcecontrol.github.v1
-                     * @classdesc Represents a CommitComparison.
-                     * @implements ICommitComparison
-                     * @constructor
-                     * @param {clutch.sourcecontrol.github.v1.ICommitComparison=} [properties] Properties to set
-                     */
-                    function CommitComparison(properties) {
-                        if (properties)
-                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                if (properties[keys[i]] != null)
-                                    this[keys[i]] = properties[keys[i]];
-                    }
-
-                    /**
-                     * CommitComparison status.
-                     * @member {clutch.sourcecontrol.github.v1.CommitCompareStatus} status
-                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
-                     * @instance
-                     */
-                    CommitComparison.prototype.status = 0;
-
-                    /**
-                     * Verifies a CommitComparison message.
-                     * @function verify
-                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
-                     * @static
-                     * @param {Object.<string,*>} message Plain object to verify
-                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                     */
-                    CommitComparison.verify = function verify(message) {
-                        if (typeof message !== "object" || message === null)
-                            return "object expected";
-                        if (message.status != null && message.hasOwnProperty("status"))
-                            switch (message.status) {
-                            default:
-                                return "status: enum value expected";
-                            case 0:
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                                break;
-                            }
-                        return null;
-                    };
-
-                    /**
-                     * Creates a CommitComparison message from a plain object. Also converts values to their respective internal types.
-                     * @function fromObject
-                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
-                     * @static
-                     * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.sourcecontrol.github.v1.CommitComparison} CommitComparison
-                     */
-                    CommitComparison.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.sourcecontrol.github.v1.CommitComparison)
-                            return object;
-                        let message = new $root.clutch.sourcecontrol.github.v1.CommitComparison();
-                        switch (object.status) {
-                        case "UNSPECIFIED":
-                        case 0:
-                            message.status = 0;
-                            break;
-                        case "UNKNOWN":
-                        case 1:
-                            message.status = 1;
-                            break;
-                        case "BEHIND":
-                        case 2:
-                            message.status = 2;
-                            break;
-                        case "AHEAD":
-                        case 3:
-                            message.status = 3;
-                            break;
-                        case "IDENTICAL":
-                        case 4:
-                            message.status = 4;
-                            break;
-                        }
-                        return message;
-                    };
-
-                    /**
-                     * Creates a plain object from a CommitComparison message. Also converts values to other types if specified.
-                     * @function toObject
-                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
-                     * @static
-                     * @param {clutch.sourcecontrol.github.v1.CommitComparison} message CommitComparison
-                     * @param {$protobuf.IConversionOptions} [options] Conversion options
-                     * @returns {Object.<string,*>} Plain object
-                     */
-                    CommitComparison.toObject = function toObject(message, options) {
-                        if (!options)
-                            options = {};
-                        let object = {};
-                        if (options.defaults)
-                            object.status = options.enums === String ? "UNSPECIFIED" : 0;
-                        if (message.status != null && message.hasOwnProperty("status"))
-                            object.status = options.enums === String ? $root.clutch.sourcecontrol.github.v1.CommitCompareStatus[message.status] : message.status;
-                        return object;
-                    };
-
-                    /**
-                     * Converts this CommitComparison to JSON.
-                     * @function toJSON
-                     * @memberof clutch.sourcecontrol.github.v1.CommitComparison
-                     * @instance
-                     * @returns {Object.<string,*>} JSON object
-                     */
-                    CommitComparison.prototype.toJSON = function toJSON() {
-                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                    };
-
-                    return CommitComparison;
-                })();
-
-                return v1;
-            })();
-
-            return github;
-        })();
-
-        sourcecontrol.v1 = (function() {
-
-            /**
-             * Namespace v1.
-             * @memberof clutch.sourcecontrol
-             * @namespace
-             */
-            const v1 = {};
-
-            v1.SourceControlAPI = (function() {
-
-                /**
-                 * Constructs a new SourceControlAPI service.
-                 * @memberof clutch.sourcecontrol.v1
-                 * @classdesc Represents a SourceControlAPI
-                 * @extends $protobuf.rpc.Service
-                 * @constructor
-                 * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
-                 * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
-                 * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
-                 */
-                function SourceControlAPI(rpcImpl, requestDelimited, responseDelimited) {
-                    $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
-                }
-
-                (SourceControlAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = SourceControlAPI;
-
-                /**
-                 * Callback as used by {@link clutch.sourcecontrol.v1.SourceControlAPI#createRepository}.
-                 * @memberof clutch.sourcecontrol.v1.SourceControlAPI
-                 * @typedef CreateRepositoryCallback
-                 * @type {function}
-                 * @param {Error|null} error Error, if any
-                 * @param {clutch.sourcecontrol.v1.CreateRepositoryResponse} [response] CreateRepositoryResponse
-                 */
-
-                /**
-                 * Calls CreateRepository.
-                 * @function createRepository
-                 * @memberof clutch.sourcecontrol.v1.SourceControlAPI
-                 * @instance
-                 * @param {clutch.sourcecontrol.v1.ICreateRepositoryRequest} request CreateRepositoryRequest message or plain object
-                 * @param {clutch.sourcecontrol.v1.SourceControlAPI.CreateRepositoryCallback} callback Node-style callback called with the error, if any, and CreateRepositoryResponse
-                 * @returns {undefined}
-                 * @variation 1
-                 */
-                Object.defineProperty(SourceControlAPI.prototype.createRepository = function createRepository(request, callback) {
-                    return this.rpcCall(createRepository, $root.clutch.sourcecontrol.v1.CreateRepositoryRequest, $root.clutch.sourcecontrol.v1.CreateRepositoryResponse, request, callback);
-                }, "name", { value: "CreateRepository" });
-
-                /**
-                 * Calls CreateRepository.
-                 * @function createRepository
-                 * @memberof clutch.sourcecontrol.v1.SourceControlAPI
-                 * @instance
-                 * @param {clutch.sourcecontrol.v1.ICreateRepositoryRequest} request CreateRepositoryRequest message or plain object
-                 * @returns {Promise<clutch.sourcecontrol.v1.CreateRepositoryResponse>} Promise
-                 * @variation 2
-                 */
-
-                return SourceControlAPI;
-            })();
-
-            v1.CreateRepositoryRequest = (function() {
-
-                /**
-                 * Properties of a CreateRepositoryRequest.
-                 * @memberof clutch.sourcecontrol.v1
-                 * @interface ICreateRepositoryRequest
-                 * @property {string|null} [owner] CreateRepositoryRequest owner
-                 * @property {string|null} [name] CreateRepositoryRequest name
-                 * @property {string|null} [description] CreateRepositoryRequest description
-                 * @property {google.protobuf.IAny|null} [customOptions] CreateRepositoryRequest customOptions
-                 * @property {clutch.sourcecontrol.github.v1.ICreateRepositoryOptions|null} [githubOptions] CreateRepositoryRequest githubOptions
-                 */
-
-                /**
-                 * Constructs a new CreateRepositoryRequest.
-                 * @memberof clutch.sourcecontrol.v1
-                 * @classdesc Represents a CreateRepositoryRequest.
-                 * @implements ICreateRepositoryRequest
-                 * @constructor
-                 * @param {clutch.sourcecontrol.v1.ICreateRepositoryRequest=} [properties] Properties to set
-                 */
-                function CreateRepositoryRequest(properties) {
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * CreateRepositoryRequest owner.
-                 * @member {string} owner
-                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
-                 * @instance
-                 */
-                CreateRepositoryRequest.prototype.owner = "";
-
-                /**
-                 * CreateRepositoryRequest name.
-                 * @member {string} name
-                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
-                 * @instance
-                 */
-                CreateRepositoryRequest.prototype.name = "";
-
-                /**
-                 * CreateRepositoryRequest description.
-                 * @member {string} description
-                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
-                 * @instance
-                 */
-                CreateRepositoryRequest.prototype.description = "";
-
-                /**
-                 * CreateRepositoryRequest customOptions.
-                 * @member {google.protobuf.IAny|null|undefined} customOptions
-                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
-                 * @instance
-                 */
-                CreateRepositoryRequest.prototype.customOptions = null;
-
-                /**
-                 * CreateRepositoryRequest githubOptions.
-                 * @member {clutch.sourcecontrol.github.v1.ICreateRepositoryOptions|null|undefined} githubOptions
-                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
-                 * @instance
-                 */
-                CreateRepositoryRequest.prototype.githubOptions = null;
-
-                // OneOf field names bound to virtual getters and setters
-                let $oneOfFields;
-
-                /**
-                 * CreateRepositoryRequest options.
-                 * @member {"customOptions"|"githubOptions"|undefined} options
-                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
-                 * @instance
-                 */
-                Object.defineProperty(CreateRepositoryRequest.prototype, "options", {
-                    get: $util.oneOfGetter($oneOfFields = ["customOptions", "githubOptions"]),
-                    set: $util.oneOfSetter($oneOfFields)
-                });
-
-                /**
-                 * Verifies a CreateRepositoryRequest message.
-                 * @function verify
-                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                CreateRepositoryRequest.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    let properties = {};
-                    if (message.owner != null && message.hasOwnProperty("owner"))
-                        if (!$util.isString(message.owner))
-                            return "owner: string expected";
-                    if (message.name != null && message.hasOwnProperty("name"))
-                        if (!$util.isString(message.name))
-                            return "name: string expected";
-                    if (message.description != null && message.hasOwnProperty("description"))
-                        if (!$util.isString(message.description))
-                            return "description: string expected";
-                    if (message.customOptions != null && message.hasOwnProperty("customOptions")) {
-                        properties.options = 1;
-                        {
-                            let error = $root.google.protobuf.Any.verify(message.customOptions);
-                            if (error)
-                                return "customOptions." + error;
-                        }
-                    }
-                    if (message.githubOptions != null && message.hasOwnProperty("githubOptions")) {
-                        if (properties.options === 1)
-                            return "options: multiple values";
-                        properties.options = 1;
-                        {
-                            let error = $root.clutch.sourcecontrol.github.v1.CreateRepositoryOptions.verify(message.githubOptions);
-                            if (error)
-                                return "githubOptions." + error;
-                        }
-                    }
-                    return null;
-                };
-
-                /**
-                 * Creates a CreateRepositoryRequest message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.sourcecontrol.v1.CreateRepositoryRequest} CreateRepositoryRequest
-                 */
-                CreateRepositoryRequest.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.sourcecontrol.v1.CreateRepositoryRequest)
-                        return object;
-                    let message = new $root.clutch.sourcecontrol.v1.CreateRepositoryRequest();
-                    if (object.owner != null)
-                        message.owner = String(object.owner);
-                    if (object.name != null)
-                        message.name = String(object.name);
-                    if (object.description != null)
-                        message.description = String(object.description);
-                    if (object.customOptions != null) {
-                        if (typeof object.customOptions !== "object")
-                            throw TypeError(".clutch.sourcecontrol.v1.CreateRepositoryRequest.customOptions: object expected");
-                        message.customOptions = $root.google.protobuf.Any.fromObject(object.customOptions);
-                    }
-                    if (object.githubOptions != null) {
-                        if (typeof object.githubOptions !== "object")
-                            throw TypeError(".clutch.sourcecontrol.v1.CreateRepositoryRequest.githubOptions: object expected");
-                        message.githubOptions = $root.clutch.sourcecontrol.github.v1.CreateRepositoryOptions.fromObject(object.githubOptions);
-                    }
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from a CreateRepositoryRequest message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
-                 * @static
-                 * @param {clutch.sourcecontrol.v1.CreateRepositoryRequest} message CreateRepositoryRequest
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                CreateRepositoryRequest.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (options.defaults) {
-                        object.owner = "";
-                        object.name = "";
-                        object.description = "";
-                    }
-                    if (message.owner != null && message.hasOwnProperty("owner"))
-                        object.owner = message.owner;
-                    if (message.name != null && message.hasOwnProperty("name"))
-                        object.name = message.name;
-                    if (message.description != null && message.hasOwnProperty("description"))
-                        object.description = message.description;
-                    if (message.customOptions != null && message.hasOwnProperty("customOptions")) {
-                        object.customOptions = $root.google.protobuf.Any.toObject(message.customOptions, options);
-                        if (options.oneofs)
-                            object.options = "customOptions";
-                    }
-                    if (message.githubOptions != null && message.hasOwnProperty("githubOptions")) {
-                        object.githubOptions = $root.clutch.sourcecontrol.github.v1.CreateRepositoryOptions.toObject(message.githubOptions, options);
-                        if (options.oneofs)
-                            object.options = "githubOptions";
-                    }
-                    return object;
-                };
-
-                /**
-                 * Converts this CreateRepositoryRequest to JSON.
-                 * @function toJSON
-                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryRequest
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                CreateRepositoryRequest.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return CreateRepositoryRequest;
-            })();
-
-            v1.CreateRepositoryResponse = (function() {
-
-                /**
-                 * Properties of a CreateRepositoryResponse.
-                 * @memberof clutch.sourcecontrol.v1
-                 * @interface ICreateRepositoryResponse
-                 * @property {string|null} [url] CreateRepositoryResponse url
-                 */
-
-                /**
-                 * Constructs a new CreateRepositoryResponse.
-                 * @memberof clutch.sourcecontrol.v1
-                 * @classdesc Represents a CreateRepositoryResponse.
-                 * @implements ICreateRepositoryResponse
-                 * @constructor
-                 * @param {clutch.sourcecontrol.v1.ICreateRepositoryResponse=} [properties] Properties to set
-                 */
-                function CreateRepositoryResponse(properties) {
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * CreateRepositoryResponse url.
-                 * @member {string} url
-                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryResponse
-                 * @instance
-                 */
-                CreateRepositoryResponse.prototype.url = "";
-
-                /**
-                 * Verifies a CreateRepositoryResponse message.
-                 * @function verify
-                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryResponse
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                CreateRepositoryResponse.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    if (message.url != null && message.hasOwnProperty("url"))
-                        if (!$util.isString(message.url))
-                            return "url: string expected";
-                    return null;
-                };
-
-                /**
-                 * Creates a CreateRepositoryResponse message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryResponse
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.sourcecontrol.v1.CreateRepositoryResponse} CreateRepositoryResponse
-                 */
-                CreateRepositoryResponse.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.sourcecontrol.v1.CreateRepositoryResponse)
-                        return object;
-                    let message = new $root.clutch.sourcecontrol.v1.CreateRepositoryResponse();
-                    if (object.url != null)
-                        message.url = String(object.url);
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from a CreateRepositoryResponse message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryResponse
-                 * @static
-                 * @param {clutch.sourcecontrol.v1.CreateRepositoryResponse} message CreateRepositoryResponse
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                CreateRepositoryResponse.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (options.defaults)
-                        object.url = "";
-                    if (message.url != null && message.hasOwnProperty("url"))
-                        object.url = message.url;
-                    return object;
-                };
-
-                /**
-                 * Converts this CreateRepositoryResponse to JSON.
-                 * @function toJSON
-                 * @memberof clutch.sourcecontrol.v1.CreateRepositoryResponse
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                CreateRepositoryResponse.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return CreateRepositoryResponse;
-            })();
-
-            return v1;
-        })();
-
-        return sourcecontrol;
     })();
 
     clutch.topology = (function() {

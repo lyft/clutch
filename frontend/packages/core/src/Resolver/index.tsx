@@ -94,7 +94,11 @@ const Resolver: React.FC<ResolverProps> = ({
           {(variant === "dual" || variant === "query") && (
             <>
               <SchemaLabel>Search</SchemaLabel>
-              <QueryResolver schemas={state.searchableSchemas} submitHandler={submitHandler} />
+              <QueryResolver
+                inputType={type}
+                schemas={state.searchableSchemas}
+                submitHandler={submitHandler}
+              />
             </>
           )}
           {variant === "dual" && <HorizontalRule>OR</HorizontalRule>}

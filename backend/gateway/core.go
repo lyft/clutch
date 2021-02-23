@@ -14,6 +14,7 @@ import (
 	authzmod "github.com/lyft/clutch/backend/module/authz"
 	awsmod "github.com/lyft/clutch/backend/module/aws"
 	experimentationapi "github.com/lyft/clutch/backend/module/chaos/experimentation/api"
+	"github.com/lyft/clutch/backend/module/chaos/redisexperimentation"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation"
 	xdsmod "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds"
 	"github.com/lyft/clutch/backend/module/envoytriage"
@@ -63,6 +64,7 @@ var Modules = module.Factory{
 	resolvermod.Name:           resolvermod.New,
 	xdsmod.Name:                xdsmod.New,
 	serverexperimentation.Name: serverexperimentation.New,
+	redisexperimentation.Name:  redisexperimentation.New,
 	sourcecontrol.Name:         sourcecontrol.New,
 	topologymod.Name:           topologymod.New,
 }
