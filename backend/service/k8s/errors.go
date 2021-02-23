@@ -34,6 +34,7 @@ func (p *ExpectedObjectMetaFieldsCheckError) Error() string {
 	return ret.String()
 }
 
+// Take a K8s error, extract the API return code and message in order to create the proper gRPC status.
 func ConvertError(e error) error {
 	as, ok := e.(k8serrors.APIStatus)
 	if !ok {
