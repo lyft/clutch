@@ -38,7 +38,10 @@ func (a *k8sAPI) CreateJob(ctx context.Context, req *k8sapiv1.CreateJobRequest) 
 	if err != nil {
 		return nil, err
 	}
-	job := obj.(*batchv1.Job)
+	job, ok := obj.(*batchv1.Job)
+	if !ok {
+		return nil, errors.New("unable to create Job object. Type assertion to Job failed")
+	}
 	result, err := a.k8s.CreateJob(ctx, req.Clientset, req.Cluster, req.Namespace, job)
 	if err != nil {
 		return nil, err
