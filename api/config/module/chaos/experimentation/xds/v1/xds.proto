@@ -26,4 +26,7 @@ message Config {
 
   // The interval at which to send heartbeat responses for TTL'd resources.
   google.protobuf.Duration heartbeat_interval = 6;
+
+  // list of clusters for which ECDS is enabled. * means it will be enabled for all
+  repeated string ecds_enabled_clusters = 7;
 }

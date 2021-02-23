@@ -21,12 +21,12 @@ func PeriodicallyRefreshCache(s *Server) {
 	go func() {
 		for range ticker.C {
 			s.logger.Info("Refreshing xDS cache")
-			refreshCache(s.ctx, s.storer, s.snapshotCacheV3, s.resourceTTL, s.rtdsConfig, s.logger)
+			refreshCache(s.ctx, s.storer, s.snapshotCacheV3, s.resourceTTL, s.rtdsConfig, s.ecdsConfig, s.logger)
 		}
 	}()
 }
 
-func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCache gcpCacheV3.SnapshotCache, ttl *time.Duration, rtdsConfig *RTDSConfig, logger *zap.SugaredLogger) {
+func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCache gcpCacheV3.SnapshotCache, ttl *time.Duration, rtdsConfig *RTDSConfig, ecdsConfig *ECDSConfig, logger *zap.SugaredLogger) {
 	allRunningExperiments, err := storer.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig", experimentation.GetExperimentsRequest_STATUS_RUNNING)
 	if err != nil {
 		logger.Errorw("Failed to get data from experiments store", "error", err)
@@ -64,10 +64,17 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 		if _, exist := clusterFaultMap[cluster]; !exist {
 			logger.Debugw("Removing experiments for cluster", "cluster", cluster)
 
-			// in order to remove fault, we need to set the snapshot with empty runtime resource
-			emptyRuntimeResource := generateRTDSResource([]*experimentation.Experiment{}, rtdsConfig, ttl, logger)
+			var emptyRuntimeResource []gcpTypes.ResourceWithTtl
+			ecdsClusterEnabled := containsString(ecdsConfig.enabledClusters, cluster) || containsString(ecdsConfig.enabledClusters, "*")
+			if ecdsClusterEnabled {
+				// in order to remove fault, we need to set the snapshot with default ecds config
+				emptyRuntimeResource = generateECDSResource([]*experimentation.Experiment{}, ecdsConfig, ttl, logger)
+			} else {
+				// in order to remove fault, we need to set the snapshot with empty runtime resource
+				emptyRuntimeResource = generateRTDSResource([]*experimentation.Experiment{}, rtdsConfig, ttl, logger)
+			}
 
-			err := setSnapshot(emptyRuntimeResource, cluster, snapshotCache, logger)
+			err := setSnapshot(emptyRuntimeResource, cluster, snapshotCache, ecdsClusterEnabled, logger)
 			if err != nil {
 				logger.Errorw("Unable to unset the fault for cluster", "cluster", cluster,
 					"error", err)
@@ -77,10 +84,19 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 
 	// Create/Update experiments
 	for cluster, experiments := range clusterFaultMap {
+		var resource []gcpTypes.ResourceWithTtl
+
 		logger.Debugw("Injecting fault for cluster", "cluster", cluster)
 
-		runtimeResource := generateRTDSResource(experiments, rtdsConfig, ttl, logger)
-		err := setSnapshot(runtimeResource, cluster, snapshotCache, logger)
+		// Enable ECDS if cluster present in the list of '*' in the list
+		ecdsClusterEnabled := containsString(ecdsConfig.enabledClusters, cluster) || containsString(ecdsConfig.enabledClusters, "*")
+		if ecdsClusterEnabled {
+			resource = generateECDSResource(experiments, ecdsConfig, ttl, logger)
+		} else {
+			resource = generateRTDSResource(experiments, rtdsConfig, ttl, logger)
+		}
+
+		err := setSnapshot(resource, cluster, snapshotCache, ecdsClusterEnabled, logger)
 		if err != nil {
 			logger.Errorw("Unable to set the fault for cluster", "cluster", cluster,
 				"error", err)
@@ -88,7 +104,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 	}
 }
 
-func setSnapshot(resource []gcpTypes.ResourceWithTtl, cluster string, snapshotCache gcpCacheV3.SnapshotCache, logger *zap.SugaredLogger) error {
+func setSnapshot(resource []gcpTypes.ResourceWithTtl, cluster string, snapshotCache gcpCacheV3.SnapshotCache, isECDSResource bool, logger *zap.SugaredLogger) error {
 	computedVersion, err := computeChecksum(resource)
 	if err != nil {
 		return err
@@ -105,8 +121,14 @@ func setSnapshot(resource []gcpTypes.ResourceWithTtl, cluster string, snapshotCa
 		return nil
 	}
 
-	logger.Infow("Setting snapshot", "cluster", cluster, "resource", resource)
-	snapshot := gcpCacheV3.NewSnapshotWithTtls(computedVersion, nil, nil, nil, nil, resource, nil)
+	snapshot := gcpCacheV3.Snapshot{}
+	logger.Infow("Setting snapshot", "cluster", cluster, "resource", resource, "isECDSResource", isECDSResource)
+	if isECDSResource {
+		snapshot.Resources[gcpTypes.ExtensionConfig] = gcpCacheV3.NewResourcesWithTtl(computedVersion, resource)
+	} else {
+		snapshot.Resources[gcpTypes.Runtime] = gcpCacheV3.NewResourcesWithTtl(computedVersion, resource)
+	}
+
 	err = snapshotCache.SetSnapshot(cluster, snapshot)
 	if err != nil {
 		return err
@@ -196,4 +218,14 @@ func getEnforcer(httpFaultConfig *serverexperimentation.HTTPFaultConfig) string 
 	default:
 		return "unknown"
 	}
+}
+
+func containsString(list []string, str string) bool {
+	for _, element := range list {
+		if element == str {
+			return true
+		}
+	}
+
+	return false
 }

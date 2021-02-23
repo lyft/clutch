@@ -64,7 +64,7 @@ func generateRTDSResource(experiments []*experimentation.Experiment, rtdsConfig 
 
 		percentageKey, percentageValue, faultKey, faultValue, err := createRuntimeKeys(upstreamCluster, downstreamCluster, httpFaultConfig, rtdsConfig)
 		if err != nil {
-			logger.Errorw("Unable to create runtime keys", "config", httpFaultConfig)
+			logger.Errorw("Unable to create RTDS runtime keys", "config", httpFaultConfig)
 			continue
 		}
 
@@ -86,7 +86,8 @@ func generateRTDSResource(experiments []*experimentation.Experiment, rtdsConfig 
 			"fault_type", faultKey,
 			"percentage", percentageValue,
 			"value", faultValue,
-			"fault_enforcer", getEnforcer(httpFaultConfig))
+			"fault_enforcer", getEnforcer(httpFaultConfig),
+		)
 	}
 
 	runtimeLayer := &pstruct.Struct{

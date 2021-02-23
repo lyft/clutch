@@ -13923,6 +13923,7 @@ export const clutch = $root.clutch = (() => {
                                  * @property {string|null} [egressFaultRuntimePrefix] Config egressFaultRuntimePrefix
                                  * @property {google.protobuf.IDuration|null} [resourceTtl] Config resourceTtl
                                  * @property {google.protobuf.IDuration|null} [heartbeatInterval] Config heartbeatInterval
+                                 * @property {Array.<string>|null} [ecdsEnabledClusters] Config ecdsEnabledClusters
                                  */
 
                                 /**
@@ -13934,6 +13935,7 @@ export const clutch = $root.clutch = (() => {
                                  * @param {clutch.config.module.chaos.experimentation.xds.v1.IConfig=} [properties] Properties to set
                                  */
                                 function Config(properties) {
+                                    this.ecdsEnabledClusters = [];
                                     if (properties)
                                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                             if (properties[keys[i]] != null)
@@ -13989,6 +13991,14 @@ export const clutch = $root.clutch = (() => {
                                 Config.prototype.heartbeatInterval = null;
 
                                 /**
+                                 * Config ecdsEnabledClusters.
+                                 * @member {Array.<string>} ecdsEnabledClusters
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.ecdsEnabledClusters = $util.emptyArray;
+
+                                /**
                                  * Verifies a Config message.
                                  * @function verify
                                  * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
@@ -14022,6 +14032,13 @@ export const clutch = $root.clutch = (() => {
                                         let error = $root.google.protobuf.Duration.verify(message.heartbeatInterval);
                                         if (error)
                                             return "heartbeatInterval." + error;
+                                    }
+                                    if (message.ecdsEnabledClusters != null && message.hasOwnProperty("ecdsEnabledClusters")) {
+                                        if (!Array.isArray(message.ecdsEnabledClusters))
+                                            return "ecdsEnabledClusters: array expected";
+                                        for (let i = 0; i < message.ecdsEnabledClusters.length; ++i)
+                                            if (!$util.isString(message.ecdsEnabledClusters[i]))
+                                                return "ecdsEnabledClusters: string[] expected";
                                     }
                                     return null;
                                 };
@@ -14059,6 +14076,13 @@ export const clutch = $root.clutch = (() => {
                                             throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.heartbeatInterval: object expected");
                                         message.heartbeatInterval = $root.google.protobuf.Duration.fromObject(object.heartbeatInterval);
                                     }
+                                    if (object.ecdsEnabledClusters) {
+                                        if (!Array.isArray(object.ecdsEnabledClusters))
+                                            throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.ecdsEnabledClusters: array expected");
+                                        message.ecdsEnabledClusters = [];
+                                        for (let i = 0; i < object.ecdsEnabledClusters.length; ++i)
+                                            message.ecdsEnabledClusters[i] = String(object.ecdsEnabledClusters[i]);
+                                    }
                                     return message;
                                 };
 
@@ -14075,6 +14099,8 @@ export const clutch = $root.clutch = (() => {
                                     if (!options)
                                         options = {};
                                     let object = {};
+                                    if (options.arrays || options.defaults)
+                                        object.ecdsEnabledClusters = [];
                                     if (options.defaults) {
                                         object.rtdsLayerName = "";
                                         object.cacheRefreshInterval = null;
@@ -14095,6 +14121,11 @@ export const clutch = $root.clutch = (() => {
                                         object.resourceTtl = $root.google.protobuf.Duration.toObject(message.resourceTtl, options);
                                     if (message.heartbeatInterval != null && message.hasOwnProperty("heartbeatInterval"))
                                         object.heartbeatInterval = $root.google.protobuf.Duration.toObject(message.heartbeatInterval, options);
+                                    if (message.ecdsEnabledClusters && message.ecdsEnabledClusters.length) {
+                                        object.ecdsEnabledClusters = [];
+                                        for (let j = 0; j < message.ecdsEnabledClusters.length; ++j)
+                                            object.ecdsEnabledClusters[j] = message.ecdsEnabledClusters[j];
+                                    }
                                     return object;
                                 };
 

@@ -5873,6 +5873,9 @@ export namespace clutch {
 
                                 /** Config heartbeatInterval */
                                 heartbeatInterval?: (google.protobuf.IDuration|null);
+
+                                /** Config ecdsEnabledClusters */
+                                ecdsEnabledClusters?: (string[]|null);
                             }
 
                             /** Represents a Config. */
@@ -5901,6 +5904,9 @@ export namespace clutch {
 
                                 /** Config heartbeatInterval. */
                                 public heartbeatInterval?: (google.protobuf.IDuration|null);
+
+                                /** Config ecdsEnabledClusters. */
+                                public ecdsEnabledClusters: string[];
 
                                 /**
                                  * Verifies a Config message.

@@ -7,11 +7,13 @@ package xds
 import (
 	"context"
 	"errors"
+	"github.com/lyft/clutch/backend/module"
 	"sync/atomic"
 	"time"
 
 	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
 	gcpDiscoveryV3 "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v3"
+	gcpExtencionServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/extension/v3"
 	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	gcpServerV3 "github.com/envoyproxy/go-control-plane/pkg/server/v3"
@@ -22,7 +24,6 @@ import (
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
 
 	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
-	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
@@ -48,6 +49,8 @@ type Server struct {
 	xdsScope tally.Scope
 
 	rtdsConfig *RTDSConfig
+
+	ecdsConfig *ECDSConfig
 
 	logger *zap.SugaredLogger
 }
@@ -116,12 +119,17 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		egressPrefix:  config.GetEgressFaultRuntimePrefix(),
 	}
 
+	ecdsConfig := ECDSConfig{
+		enabledClusters: config.GetEcdsEnabledClusters(),
+	}
+
 	return &Server{
 		ctx:                  ctx,
 		storer:               storer,
 		snapshotCacheV3:      cacheV3,
 		cacheRefreshInterval: cacheRefreshInterval,
 		rtdsConfig:           &rtdsConfig,
+		ecdsConfig:           &ecdsConfig,
 		resourceTTL:          resourceTTL,
 		xdsScope:             scope,
 		logger:               logger.Sugar(),
@@ -146,9 +154,12 @@ func (s *Server) newScopedStats(subScope string) serverStats {
 func (s *Server) Register(r module.Registrar) error {
 	PeriodicallyRefreshCache(s)
 	// RTDS V3 Server
-	rtdsServer := gcpServerV3.NewServer(s.ctx, s.snapshotCacheV3, &rtdsCallbacks{callbacksBase{s.newScopedStats("v3"),
+	rtdsServer := gcpServerV3.NewServer(s.ctx, s.snapshotCacheV3, &rtdsCallbacks{callbacksBase{s.newScopedStats("rtds"),
 		s.logger, 0}})
 	gcpRuntimeServiceV3.RegisterRuntimeDiscoveryServiceServer(r.GRPCServer(), rtdsServer)
+
+	ecdsServer := NewECDSServer(s.ctx, s.snapshotCacheV3, &ecdsCallbacks{callbacksBase{s.newScopedStats("ecds"), s.logger, 0}})
+	gcpExtencionServiceV3.RegisterExtensionConfigDiscoveryServiceServer(r.GRPCServer(), ecdsServer)
 	return nil
 }
 
@@ -214,4 +225,40 @@ func (c *rtdsCallbacks) OnFetchRequest(context.Context, *gcpDiscoveryV3.Discover
 
 func (c *rtdsCallbacks) OnFetchResponse(*gcpDiscoveryV3.DiscoveryRequest, *gcpDiscoveryV3.DiscoveryResponse) {
 	c.logger.Debugw("RTDS OnFetchResponse")
+}
+
+// ECDS Callbacks
+type ecdsCallbacks struct {
+	callbacksBase
+}
+
+func (c *ecdsCallbacks) OnStreamOpen(ctx context.Context, streamID int64, typeURL string) error {
+	c.logger.Debugw("ECDS onStreamOpen", "streamID", streamID, "typeURL", typeURL)
+	return c.onStreamOpen(ctx)
+}
+
+func (c *ecdsCallbacks) OnStreamClosed(streamID int64) {
+	c.logger.Debugw("ECDS onStreamClosed", "streamID", streamID)
+	c.onStreamClosed(streamID)
+}
+
+func (c *ecdsCallbacks) OnStreamRequest(streamID int64, req *gcpDiscoveryV3.DiscoveryRequest) error {
+	c.logger.Debugw("ECDS OnStreamRequest", "streamID", streamID, "cluster", req.Node.Cluster)
+	c.onStreamRequest(streamID, req.Node.Cluster, req.ErrorDetail)
+
+	return nil
+}
+
+func (c *ecdsCallbacks) OnStreamResponse(streamID int64, request *gcpDiscoveryV3.DiscoveryRequest, response *gcpDiscoveryV3.DiscoveryResponse) {
+	c.logger.Debugw("ECDS OnStreamResponse", "streamID", streamID, "cluster", request.Node.Cluster, "version", request.VersionInfo)
+	c.onStreamResponse(streamID, request.Node.Cluster, request.VersionInfo)
+}
+
+func (c *ecdsCallbacks) OnFetchRequest(context.Context, *gcpDiscoveryV3.DiscoveryRequest) error {
+	c.logger.Debugw("ECDS OnFetchRequest")
+	return nil
+}
+
+func (c *ecdsCallbacks) OnFetchResponse(*gcpDiscoveryV3.DiscoveryRequest, *gcpDiscoveryV3.DiscoveryResponse) {
+	c.logger.Debugw("ECDS OnFetchResponse")
 }
