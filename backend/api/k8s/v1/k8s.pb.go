@@ -4017,7 +4017,6 @@ func (x *CreateJobResponse) GetJob() *Job {
 }
 
 // This message type is used to add support for nullable strings and is an
-// This message type is used to add support for nullable strings and is an
 // alternative to the well-known `StringValue` type. We need it, because the
 // grpc-gateway used by Clutch deserializes a null `StringValue` as an empty
 // string.

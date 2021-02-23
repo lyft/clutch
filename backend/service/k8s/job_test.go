@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"google.golang.org/protobuf/types/known/structpb"
 	v1 "k8s.io/api/batch/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -127,22 +126,6 @@ func TestDeleteJob(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-var batchConfig = `
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: test-job
-  labels:
-    environment: staging
-    facet-type: batch
-`
-var invalidBatchConfig = `
-apiVersion: abc/v1
-kind: foo
-metadata:
-  name: test-job
-`
-
 func TestCreateJob(t *testing.T) {
 	cs := testJobClientset()
 
@@ -156,16 +139,24 @@ func TestCreateJob(t *testing.T) {
 		},
 	}
 
-	value := structpb.NewStringValue(batchConfig)
-	job, err := s.CreateJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", value)
+	jobConfig := &v1.Job{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      "test-job",
+			Namespace: "testing-namespace",
+			Labels:    map[string]string{"foo": "bar"},
+		},
+	}
+
+	job, err := s.CreateJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", jobConfig)
 	assert.NoError(t, err)
 	assert.NotNil(t, job)
 	assert.Equal(t, "test-job", job.Name)
 
-	invalidValue := structpb.NewStringValue(invalidBatchConfig)
-	_, err = s.CreateJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace1", invalidValue)
+	// invalid job config
+	_, err = s.CreateJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace1", nil)
 	assert.Error(t, err)
 }
+
 func TestProtoForJob(t *testing.T) {
 	t.Parallel()
 

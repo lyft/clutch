@@ -7,7 +7,7 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
-	"google.golang.org/protobuf/types/known/structpb"
+	batchv1 "k8s.io/api/batch/v1"
 
 	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -280,7 +280,7 @@ func (*svc) DeleteJob(ctx context.Context, clientset, cluster, namespace, name s
 	return nil
 }
 
-func (*svc) CreateJob(ctx context.Context, clientset, cluster, namespace string, jobConfig *structpb.Value) (*k8sv1.Job, error) {
+func (*svc) CreateJob(ctx context.Context, clientset, cluster, namespace string, job *batchv1.Job) (*k8sv1.Job, error) {
 	return &k8sv1.Job{
 		Cluster:   "fake-cluster-name",
 		Namespace: namespace,

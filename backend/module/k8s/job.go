@@ -2,9 +2,12 @@ package k8s
 
 import (
 	"context"
+	"errors"
+
+	batchv1 "k8s.io/api/batch/v1"
+	"k8s.io/client-go/kubernetes/scheme"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
-	"google.golang.org/protobuf/types/known/structpb"
 )
 
 func (a *k8sAPI) DeleteJob(ctx context.Context, req *k8sapiv1.DeleteJobRequest) (*k8sapiv1.DeleteJobResponse, error) {
@@ -23,34 +26,22 @@ func (a *k8sAPI) ListJobs(ctx context.Context, req *k8sapiv1.ListJobsRequest) (*
 	return &k8sapiv1.ListJobsResponse{Jobs: jobs}, nil
 }
 
-var batchJob = `
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: test-job
-  namespace: envoy-staging
-spec:
-  template:
-    spec:
-      containers:
-      - name: hello
-        image: busybox
-        imagePullPolicy: IfNotPresent
-        args:
-        - /bin/sh
-        - -c
-        - date; echo Hello from the Kubernetes cluster
-      restartPolicy: OnFailure
-`
-
 func (a *k8sAPI) CreateJob(ctx context.Context, req *k8sapiv1.CreateJobRequest) (*k8sapiv1.CreateJobResponse, error) {
-	value := structpb.NewStringValue(batchJob)
-	req.JobConfig = &k8sapiv1.JobConfig{
-		Value: value,
+	if req.JobConfig == nil {
+		return nil, errors.New("unable to create Job object. Job configuration is missing")
 	}
-	job, err := a.k8s.CreateJob(ctx, req.Clientset, req.Cluster, req.Namespace, req.JobConfig.Value)
+	// convert Job config into a runtime object and then type cast to a
+	// batch job
+	config := []byte(req.JobConfig.Value.GetStringValue())
+	decode := scheme.Codecs.UniversalDeserializer().Decode
+	obj, _, err := decode(config, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	return &k8sapiv1.CreateJobResponse{Job: job}, nil
+	job := obj.(*batchv1.Job)
+	result, err := a.k8s.CreateJob(ctx, req.Clientset, req.Cluster, req.Namespace, job)
+	if err != nil {
+		return nil, err
+	}
+	return &k8sapiv1.CreateJobResponse{Job: result}, nil
 }
