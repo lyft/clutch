@@ -102,7 +102,7 @@ func TestK8SAPIListJobs(t *testing.T) {
 	assert.NotNil(t, resp)
 }
 
-var batchJob = `
+var batch = `
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -112,7 +112,7 @@ metadata:
 func TestK8SAPICreateJob(t *testing.T) {
 	c := k8smock.New()
 	api := newK8sAPI(c)
-	value := structpb.NewStringValue(batchJob)
+	value := structpb.NewStringValue(batch)
 	config := &k8sapiv1.JobConfig{
 		Value: value,
 	}

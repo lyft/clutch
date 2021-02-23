@@ -816,7 +816,7 @@ message JobConfig {
 message CreateJobRequest {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.Job",
-    pattern : "{cluster}/{namespace}/{name}"
+    pattern : "{cluster}/{namespace}"
   };
 
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];

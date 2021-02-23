@@ -127,7 +127,7 @@ func TestDeleteJob(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-var batchJob = `
+var batchConfig = `
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -135,7 +135,12 @@ metadata:
   labels:
     environment: staging
     facet-type: batch
-  namespace: testing-namespace
+`
+var invalidBatchConfig = `
+apiVersion: abc/v1
+kind: foo
+metadata:
+  name: test-job
 `
 
 func TestCreateJob(t *testing.T) {
@@ -151,11 +156,15 @@ func TestCreateJob(t *testing.T) {
 		},
 	}
 
-	value := structpb.NewStringValue(batchJob)
+	value := structpb.NewStringValue(batchConfig)
 	job, err := s.CreateJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", value)
 	assert.NoError(t, err)
 	assert.NotNil(t, job)
 	assert.Equal(t, "test-job", job.Name)
+
+	invalidValue := structpb.NewStringValue(invalidBatchConfig)
+	_, err = s.CreateJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace1", invalidValue)
+	assert.Error(t, err)
 }
 func TestProtoForJob(t *testing.T) {
 	t.Parallel()
