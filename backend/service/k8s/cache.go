@@ -4,12 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/golang/protobuf/ptypes"
 	"go.uber.org/zap"
 	appsv1 "k8s.io/api/apps/v1"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/client-go/tools/cache"
 
@@ -52,24 +54,27 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 		DeleteFunc: s.informerDeleteHandler,
 	}
 
+	lwPod := cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "pods", corev1.NamespaceAll, fields.Everything())
 	podInformer := NewLightweightInformer(
-		cache.NewListWatchFromClient(cs.CoreV1().RESTClient(), "pods", corev1.NamespaceAll, fields.Everything()),
+		lwPod,
 		&corev1.Pod{},
 		informerHandlers,
 		false,
 		clusterName,
 	)
 
+	lwDeployment := cache.NewListWatchFromClient(cs.AppsV1().RESTClient(), "deployments", corev1.NamespaceAll, fields.Everything())
 	deploymentInformer := NewLightweightInformer(
-		cache.NewListWatchFromClient(cs.AppsV1().RESTClient(), "deployments", corev1.NamespaceAll, fields.Everything()),
+		lwDeployment,
 		&appsv1.Deployment{},
 		informerHandlers,
 		true,
 		clusterName,
 	)
 
+	lwHPA := cache.NewListWatchFromClient(cs.AutoscalingV1().RESTClient(), "horizontalpodautoscalers", corev1.NamespaceAll, fields.Everything())
 	hpaInformer := NewLightweightInformer(
-		cache.NewListWatchFromClient(cs.AutoscalingV1().RESTClient(), "horizontalpodautoscalers", corev1.NamespaceAll, fields.Everything()),
+		lwHPA,
 		&autoscalingv1.HorizontalPodAutoscaler{},
 		informerHandlers,
 		true,
@@ -80,12 +85,69 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 	go podInformer.Run(stop)
 	go deploymentInformer.Run(stop)
 	go hpaInformer.Run(stop)
+	go s.cacheFullRelist(ctx, lwPod, lwDeployment, lwHPA)
 
 	<-ctx.Done()
 	s.log.Info("Shutting down the kubernetes cache informers")
 	close(stop)
 	close(s.topologyObjectChan)
 	s.topologyInformerLock.Release(topologyInformerLockId)
+}
+
+// cacheFullRelist will list all resources and push them to the topology cache for processing.
+// The importance of doing a semi frequent full re-list give us better cache accuracy,
+// while also keeping resources that are infrequently updated from being cleaned up by the cache TTL.
+// This works in tandem with the LightweightInformers above.
+func (s *svc) cacheFullRelist(ctx context.Context, lwPods, lwDeployments, lwHPA *cache.ListWatch) {
+	ticker := time.NewTicker(time.Minute * 10)
+	for {
+		// The informers will only ever do a full list once on boot
+		// we will wait the hour before doing another full list again
+		select {
+		case <-ticker.C:
+			go func() {
+				pods, err := lwPods.List(metav1.ListOptions{})
+				if err != nil {
+					s.log.Warn("Unable to list pods to populate Kubernetes cache", zap.Error(err))
+					return
+				}
+
+				podItems := pods.(*corev1.PodList).Items
+				for i := range podItems {
+					s.processInformerEvent(&podItems[i], topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
+				}
+			}()
+
+			go func() {
+				deployments, err := lwDeployments.List(metav1.ListOptions{})
+				if err != nil {
+					s.log.Warn("Unable to list deployments to populate Kubernetes cache", zap.Error(err))
+					return
+				}
+
+				deploymentItems := deployments.(*appsv1.DeploymentList).Items
+				for i := range deploymentItems {
+					s.processInformerEvent(&deploymentItems[i], topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
+				}
+			}()
+
+			go func() {
+				hpas, err := lwHPA.List(metav1.ListOptions{})
+				if err != nil {
+					s.log.Warn("Unable to list HPAs to populate Kubernetes cache", zap.Error(err))
+					return
+				}
+
+				hpaItems := hpas.(*autoscalingv1.HorizontalPodAutoscalerList).Items
+				for i := range hpaItems {
+					s.processInformerEvent(&hpaItems[i], topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
+				}
+			}()
+		case <-ctx.Done():
+			ticker.Stop()
+			return
+		}
+	}
 }
 
 func (s *svc) informerAddHandler(obj interface{}) {
