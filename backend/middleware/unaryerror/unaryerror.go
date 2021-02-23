@@ -35,8 +35,8 @@ func (m *Middleware) UnaryInterceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		resp, err := handler(ctx, req)
 		if err != nil {
-			for _, fn := range m.interceptors {
-				err = fn(err)
+			for i := len(m.interceptors) - 1; i >= 0; i-- {
+				err = m.interceptors[i](err)
 			}
 		}
 		return resp, err
