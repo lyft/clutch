@@ -2,6 +2,9 @@ package k8s
 
 import (
 	"fmt"
+	"github.com/lyft/clutch/backend/service"
+	"google.golang.org/grpc/status"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	"strings"
 )
 
@@ -28,3 +31,17 @@ func (p *ExpectedObjectMetaFieldsCheckError) Error() string {
 	}
 	return ret.String()
 }
+
+func ConvertError(e error) error {
+	as, ok := e.(k8serrors.APIStatus)
+	if !ok {
+		return e
+	}
+	s := as.Status()
+
+	c := service.CodeFromHTTPStatus(int(s.Code))
+	ret := status.New(c, s.Message)
+
+	return ret.Err()
+}
+
