@@ -12427,6 +12427,18 @@ export namespace clutch {
 
                 /** CronJob annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** CronJob suspend */
+                suspend?: (boolean|null);
+
+                /** CronJob numActiveJobs */
+                numActiveJobs?: (number|null);
+
+                /** CronJob concurrencyPolicy */
+                concurrencyPolicy?: (clutch.k8s.v1.CronJob.ConcurrencyPolicy|null);
+
+                /** CronJob startingDeadlineSeconds */
+                startingDeadlineSeconds?: (google.protobuf.IInt64Value|null);
             }
 
             /** Represents a CronJob. */
@@ -12456,6 +12468,18 @@ export namespace clutch {
                 /** CronJob annotations. */
                 public annotations: { [k: string]: string };
 
+                /** CronJob suspend. */
+                public suspend: boolean;
+
+                /** CronJob numActiveJobs. */
+                public numActiveJobs: number;
+
+                /** CronJob concurrencyPolicy. */
+                public concurrencyPolicy: clutch.k8s.v1.CronJob.ConcurrencyPolicy;
+
+                /** CronJob startingDeadlineSeconds. */
+                public startingDeadlineSeconds?: (google.protobuf.IInt64Value|null);
+
                 /**
                  * Verifies a CronJob message.
                  * @param message Plain object to verify
@@ -12483,6 +12507,18 @@ export namespace clutch {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace CronJob {
+
+                /** ConcurrencyPolicy enum. */
+                enum ConcurrencyPolicy {
+                    UNSPECIFIED = 0,
+                    UNKNOWN = 1,
+                    ALLOW = 2,
+                    FORBID = 3,
+                    REPLACE = 4
+                }
             }
 
             /** Properties of a DescribeCronJobRequest. */

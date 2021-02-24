@@ -2,10 +2,12 @@ package k8s
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	v1beta1 "k8s.io/api/batch/v1beta1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/fake"
 
@@ -91,7 +93,7 @@ func TestProtoForCron(t *testing.T) {
 			},
 		},
 		{
-			id:                  "custername is not set",
+			id:                  "clustername is not set",
 			inputClusterName:    "staging",
 			expectedClusterName: "staging",
 			expectedName:        "test2",
@@ -99,6 +101,15 @@ func TestProtoForCron(t *testing.T) {
 				ObjectMeta: metav1.ObjectMeta{
 					ClusterName: "",
 					Name:        "test2",
+				},
+				Spec: v1beta1.CronJobSpec{
+					ConcurrencyPolicy:       v1beta1.AllowConcurrent,
+					Schedule:                "5 4 * * *",
+					Suspend:                 &[]bool{true}[0],
+					StartingDeadlineSeconds: &[]int64{69}[0],
+				},
+				Status: v1beta1.CronJobStatus{
+					Active: []v1.ObjectReference{{}, {}},
 				},
 			},
 		},
@@ -112,6 +123,20 @@ func TestProtoForCron(t *testing.T) {
 			cron := ProtoForCronJob(tt.inputClusterName, tt.cron)
 			assert.Equal(t, tt.expectedClusterName, cron.Cluster)
 			assert.Equal(t, tt.expectedName, cron.Name)
+			assert.Equal(t, tt.cron.Spec.Schedule, cron.Schedule)
+
+			if tt.cron.Spec.ConcurrencyPolicy != "" {
+				assert.Equal(t, strings.ToUpper(string(tt.cron.Spec.ConcurrencyPolicy)), cron.ConcurrencyPolicy.String())
+			}
+			if tt.cron.Spec.Suspend != nil {
+				assert.Equal(t, *tt.cron.Spec.Suspend, cron.Suspend)
+			}
+			if tt.cron.Spec.StartingDeadlineSeconds != nil {
+				assert.Equal(t, *tt.cron.Spec.StartingDeadlineSeconds, cron.StartingDeadlineSeconds.Value)
+			}
+			if tt.cron.Status.Active != nil {
+				assert.Equal(t, int32(len(tt.cron.Status.Active)), cron.NumActiveJobs)
+			}
 		})
 	}
 }

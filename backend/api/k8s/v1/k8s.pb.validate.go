@@ -3441,6 +3441,22 @@ func (m *CronJob) Validate() error {
 
 	// no validation rules for Annotations
 
+	// no validation rules for Suspend
+
+	// no validation rules for NumActiveJobs
+
+	// no validation rules for ConcurrencyPolicy
+
+	if v, ok := interface{}(m.GetStartingDeadlineSeconds()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CronJobValidationError{
+				field:  "StartingDeadlineSeconds",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 

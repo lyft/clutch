@@ -7,6 +7,7 @@ option go_package = "github.com/lyft/clutch/backend/api/k8s/v1;k8sv1";
 import "google/api/annotations.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 import "validate/validate.proto";
 
 import "api/v1/annotations.proto";
@@ -651,6 +652,20 @@ message CronJob {
 
   map<string, string> labels = 5;
   map<string, string> annotations = 6;
+
+  bool suspend = 7;
+  int32 num_active_jobs = 8;
+
+  enum ConcurrencyPolicy {
+    UNSPECIFIED = 0;
+    UNKNOWN = 1;
+    ALLOW = 2;
+    FORBID = 3;
+    REPLACE = 4;
+  }
+  ConcurrencyPolicy concurrency_policy = 9;
+
+  google.protobuf.Int64Value starting_deadline_seconds = 10;
 }
 
 message DescribeCronJobRequest {
