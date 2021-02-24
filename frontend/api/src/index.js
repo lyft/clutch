@@ -14360,6 +14360,7 @@ export const clutch = $root.clutch = (() => {
                              * @property {string|null} [token] SlackConfig token
                              * @property {string|null} [channel] SlackConfig channel
                              * @property {clutch.config.service.audit.v1.IFilter|null} [filter] SlackConfig filter
+                             * @property {clutch.config.service.audit.v1.IOverride|null} [override] SlackConfig override
                              */
 
                             /**
@@ -14402,6 +14403,14 @@ export const clutch = $root.clutch = (() => {
                             SlackConfig.prototype.filter = null;
 
                             /**
+                             * SlackConfig override.
+                             * @member {clutch.config.service.audit.v1.IOverride|null|undefined} override
+                             * @memberof clutch.config.service.auditsink.slack.v1.SlackConfig
+                             * @instance
+                             */
+                            SlackConfig.prototype.override = null;
+
+                            /**
                              * Verifies a SlackConfig message.
                              * @function verify
                              * @memberof clutch.config.service.auditsink.slack.v1.SlackConfig
@@ -14422,6 +14431,11 @@ export const clutch = $root.clutch = (() => {
                                     let error = $root.clutch.config.service.audit.v1.Filter.verify(message.filter);
                                     if (error)
                                         return "filter." + error;
+                                }
+                                if (message.override != null && message.hasOwnProperty("override")) {
+                                    let error = $root.clutch.config.service.audit.v1.Override.verify(message.override);
+                                    if (error)
+                                        return "override." + error;
                                 }
                                 return null;
                             };
@@ -14447,6 +14461,11 @@ export const clutch = $root.clutch = (() => {
                                         throw TypeError(".clutch.config.service.auditsink.slack.v1.SlackConfig.filter: object expected");
                                     message.filter = $root.clutch.config.service.audit.v1.Filter.fromObject(object.filter);
                                 }
+                                if (object.override != null) {
+                                    if (typeof object.override !== "object")
+                                        throw TypeError(".clutch.config.service.auditsink.slack.v1.SlackConfig.override: object expected");
+                                    message.override = $root.clutch.config.service.audit.v1.Override.fromObject(object.override);
+                                }
                                 return message;
                             };
 
@@ -14467,6 +14486,7 @@ export const clutch = $root.clutch = (() => {
                                     object.token = "";
                                     object.channel = "";
                                     object.filter = null;
+                                    object.override = null;
                                 }
                                 if (message.token != null && message.hasOwnProperty("token"))
                                     object.token = message.token;
@@ -14474,6 +14494,8 @@ export const clutch = $root.clutch = (() => {
                                     object.channel = message.channel;
                                 if (message.filter != null && message.hasOwnProperty("filter"))
                                     object.filter = $root.clutch.config.service.audit.v1.Filter.toObject(message.filter, options);
+                                if (message.override != null && message.hasOwnProperty("override"))
+                                    object.override = $root.clutch.config.service.audit.v1.Override.toObject(message.override, options);
                                 return object;
                             };
 
@@ -14829,6 +14851,242 @@ export const clutch = $root.clutch = (() => {
                         };
 
                         return Filter;
+                    })();
+
+                    v1.CustomSlackAudit = (function() {
+
+                        /**
+                         * Properties of a CustomSlackAudit.
+                         * @memberof clutch.config.service.audit.v1
+                         * @interface ICustomSlackAudit
+                         * @property {string|null} [method] CustomSlackAudit method
+                         * @property {string|null} [message] CustomSlackAudit message
+                         */
+
+                        /**
+                         * Constructs a new CustomSlackAudit.
+                         * @memberof clutch.config.service.audit.v1
+                         * @classdesc Represents a CustomSlackAudit.
+                         * @implements ICustomSlackAudit
+                         * @constructor
+                         * @param {clutch.config.service.audit.v1.ICustomSlackAudit=} [properties] Properties to set
+                         */
+                        function CustomSlackAudit(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * CustomSlackAudit method.
+                         * @member {string} method
+                         * @memberof clutch.config.service.audit.v1.CustomSlackAudit
+                         * @instance
+                         */
+                        CustomSlackAudit.prototype.method = "";
+
+                        /**
+                         * CustomSlackAudit message.
+                         * @member {string} message
+                         * @memberof clutch.config.service.audit.v1.CustomSlackAudit
+                         * @instance
+                         */
+                        CustomSlackAudit.prototype.message = "";
+
+                        /**
+                         * Verifies a CustomSlackAudit message.
+                         * @function verify
+                         * @memberof clutch.config.service.audit.v1.CustomSlackAudit
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        CustomSlackAudit.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.method != null && message.hasOwnProperty("method"))
+                                if (!$util.isString(message.method))
+                                    return "method: string expected";
+                            if (message.message != null && message.hasOwnProperty("message"))
+                                if (!$util.isString(message.message))
+                                    return "message: string expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a CustomSlackAudit message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.audit.v1.CustomSlackAudit
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.audit.v1.CustomSlackAudit} CustomSlackAudit
+                         */
+                        CustomSlackAudit.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.audit.v1.CustomSlackAudit)
+                                return object;
+                            let message = new $root.clutch.config.service.audit.v1.CustomSlackAudit();
+                            if (object.method != null)
+                                message.method = String(object.method);
+                            if (object.message != null)
+                                message.message = String(object.message);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a CustomSlackAudit message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.audit.v1.CustomSlackAudit
+                         * @static
+                         * @param {clutch.config.service.audit.v1.CustomSlackAudit} message CustomSlackAudit
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        CustomSlackAudit.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.method = "";
+                                object.message = "";
+                            }
+                            if (message.method != null && message.hasOwnProperty("method"))
+                                object.method = message.method;
+                            if (message.message != null && message.hasOwnProperty("message"))
+                                object.message = message.message;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this CustomSlackAudit to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.audit.v1.CustomSlackAudit
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        CustomSlackAudit.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return CustomSlackAudit;
+                    })();
+
+                    v1.Override = (function() {
+
+                        /**
+                         * Properties of an Override.
+                         * @memberof clutch.config.service.audit.v1
+                         * @interface IOverride
+                         * @property {Array.<clutch.config.service.audit.v1.ICustomSlackAudit>|null} [customSlackAudits] Override customSlackAudits
+                         */
+
+                        /**
+                         * Constructs a new Override.
+                         * @memberof clutch.config.service.audit.v1
+                         * @classdesc Represents an Override.
+                         * @implements IOverride
+                         * @constructor
+                         * @param {clutch.config.service.audit.v1.IOverride=} [properties] Properties to set
+                         */
+                        function Override(properties) {
+                            this.customSlackAudits = [];
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Override customSlackAudits.
+                         * @member {Array.<clutch.config.service.audit.v1.ICustomSlackAudit>} customSlackAudits
+                         * @memberof clutch.config.service.audit.v1.Override
+                         * @instance
+                         */
+                        Override.prototype.customSlackAudits = $util.emptyArray;
+
+                        /**
+                         * Verifies an Override message.
+                         * @function verify
+                         * @memberof clutch.config.service.audit.v1.Override
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Override.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.customSlackAudits != null && message.hasOwnProperty("customSlackAudits")) {
+                                if (!Array.isArray(message.customSlackAudits))
+                                    return "customSlackAudits: array expected";
+                                for (let i = 0; i < message.customSlackAudits.length; ++i) {
+                                    let error = $root.clutch.config.service.audit.v1.CustomSlackAudit.verify(message.customSlackAudits[i]);
+                                    if (error)
+                                        return "customSlackAudits." + error;
+                                }
+                            }
+                            return null;
+                        };
+
+                        /**
+                         * Creates an Override message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.audit.v1.Override
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.audit.v1.Override} Override
+                         */
+                        Override.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.audit.v1.Override)
+                                return object;
+                            let message = new $root.clutch.config.service.audit.v1.Override();
+                            if (object.customSlackAudits) {
+                                if (!Array.isArray(object.customSlackAudits))
+                                    throw TypeError(".clutch.config.service.audit.v1.Override.customSlackAudits: array expected");
+                                message.customSlackAudits = [];
+                                for (let i = 0; i < object.customSlackAudits.length; ++i) {
+                                    if (typeof object.customSlackAudits[i] !== "object")
+                                        throw TypeError(".clutch.config.service.audit.v1.Override.customSlackAudits: object expected");
+                                    message.customSlackAudits[i] = $root.clutch.config.service.audit.v1.CustomSlackAudit.fromObject(object.customSlackAudits[i]);
+                                }
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from an Override message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.audit.v1.Override
+                         * @static
+                         * @param {clutch.config.service.audit.v1.Override} message Override
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Override.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.arrays || options.defaults)
+                                object.customSlackAudits = [];
+                            if (message.customSlackAudits && message.customSlackAudits.length) {
+                                object.customSlackAudits = [];
+                                for (let j = 0; j < message.customSlackAudits.length; ++j)
+                                    object.customSlackAudits[j] = $root.clutch.config.service.audit.v1.CustomSlackAudit.toObject(message.customSlackAudits[j], options);
+                            }
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Override to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.audit.v1.Override
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Override.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Override;
                     })();
 
                     v1.SinkConfig = (function() {

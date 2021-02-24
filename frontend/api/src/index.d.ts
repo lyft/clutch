@@ -6021,6 +6021,9 @@ export namespace clutch {
 
                             /** SlackConfig filter */
                             filter?: (clutch.config.service.audit.v1.IFilter|null);
+
+                            /** SlackConfig override */
+                            override?: (clutch.config.service.audit.v1.IOverride|null);
                         }
 
                         /** Represents a SlackConfig. */
@@ -6040,6 +6043,9 @@ export namespace clutch {
 
                             /** SlackConfig filter. */
                             public filter?: (clutch.config.service.audit.v1.IFilter|null);
+
+                            /** SlackConfig override. */
+                            public override?: (clutch.config.service.audit.v1.IOverride|null);
 
                             /**
                              * Verifies a SlackConfig message.
@@ -6196,6 +6202,108 @@ export namespace clutch {
 
                         /**
                          * Converts this Filter to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of a CustomSlackAudit. */
+                    interface ICustomSlackAudit {
+
+                        /** CustomSlackAudit method */
+                        method?: (string|null);
+
+                        /** CustomSlackAudit message */
+                        message?: (string|null);
+                    }
+
+                    /** Represents a CustomSlackAudit. */
+                    class CustomSlackAudit implements ICustomSlackAudit {
+
+                        /**
+                         * Constructs a new CustomSlackAudit.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.audit.v1.ICustomSlackAudit);
+
+                        /** CustomSlackAudit method. */
+                        public method: string;
+
+                        /** CustomSlackAudit message. */
+                        public message: string;
+
+                        /**
+                         * Verifies a CustomSlackAudit message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a CustomSlackAudit message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns CustomSlackAudit
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.audit.v1.CustomSlackAudit;
+
+                        /**
+                         * Creates a plain object from a CustomSlackAudit message. Also converts values to other types if specified.
+                         * @param message CustomSlackAudit
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.audit.v1.CustomSlackAudit, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this CustomSlackAudit to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    /** Properties of an Override. */
+                    interface IOverride {
+
+                        /** Override customSlackAudits */
+                        customSlackAudits?: (clutch.config.service.audit.v1.ICustomSlackAudit[]|null);
+                    }
+
+                    /** Represents an Override. */
+                    class Override implements IOverride {
+
+                        /**
+                         * Constructs a new Override.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.service.audit.v1.IOverride);
+
+                        /** Override customSlackAudits. */
+                        public customSlackAudits: clutch.config.service.audit.v1.ICustomSlackAudit[];
+
+                        /**
+                         * Verifies an Override message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates an Override message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Override
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.audit.v1.Override;
+
+                        /**
+                         * Creates a plain object from an Override message. Also converts values to other types if specified.
+                         * @param message Override
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.service.audit.v1.Override, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Override to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };

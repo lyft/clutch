@@ -37,6 +37,18 @@ message Filter {
   repeated EventFilter rules = 2;
 }
 
+message CustomSlackAudit {
+  // Compare to the method being called
+  string method = 1;
+  // The custom slack audit for the method
+  string message = 2;
+}
+
+message Override {
+  // the methods with a custom slack audit
+  repeated CustomSlackAudit custom_slack_audits = 1;
+}
+
 message SinkConfig {
   // The rule(s) to filter events between audit source and sink emission.
   Filter filter = 1;

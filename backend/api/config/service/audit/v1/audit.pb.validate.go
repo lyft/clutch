@@ -191,6 +191,154 @@ var _ interface {
 	ErrorName() string
 } = FilterValidationError{}
 
+// Validate checks the field values on CustomSlackAudit with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *CustomSlackAudit) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Method
+
+	// no validation rules for Message
+
+	return nil
+}
+
+// CustomSlackAuditValidationError is the validation error returned by
+// CustomSlackAudit.Validate if the designated constraints aren't met.
+type CustomSlackAuditValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CustomSlackAuditValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CustomSlackAuditValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CustomSlackAuditValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CustomSlackAuditValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CustomSlackAuditValidationError) ErrorName() string { return "CustomSlackAuditValidationError" }
+
+// Error satisfies the builtin error interface
+func (e CustomSlackAuditValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCustomSlackAudit.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CustomSlackAuditValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CustomSlackAuditValidationError{}
+
+// Validate checks the field values on Override with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Override) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for idx, item := range m.GetCustomSlackAudits() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return OverrideValidationError{
+					field:  fmt.Sprintf("CustomSlackAudits[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// OverrideValidationError is the validation error returned by
+// Override.Validate if the designated constraints aren't met.
+type OverrideValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e OverrideValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e OverrideValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e OverrideValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e OverrideValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e OverrideValidationError) ErrorName() string { return "OverrideValidationError" }
+
+// Error satisfies the builtin error interface
+func (e OverrideValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sOverride.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = OverrideValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = OverrideValidationError{}
+
 // Validate checks the field values on SinkConfig with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *SinkConfig) Validate() error {

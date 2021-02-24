@@ -68,6 +68,16 @@ func (m *SlackConfig) Validate() error {
 		}
 	}
 
+	if v, ok := interface{}(m.GetOverride()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SlackConfigValidationError{
+				field:  "Override",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 

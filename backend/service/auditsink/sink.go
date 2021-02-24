@@ -39,6 +39,23 @@ func Filter(filter *configv1.Filter, event *auditv1.Event) bool {
 	return filter.Denylist
 }
 
+// CustomSlackAudit returns true if the event's MethodName matched the method in the CustomSlackAudit config, false if not.
+func CustomSlackAudit(override *configv1.Override, event *auditv1.RequestEvent) bool {
+	if override == nil {
+		// no override was specified
+		return false
+	}
+
+	for _, customSlackAudit := range override.CustomSlackAudits {
+		// a custom slack audit was requested for the method
+		if customSlackAudit.Method == event.MethodName {
+			return true
+		}
+	}
+
+	return false
+}
+
 func RunRequestFilter(filter *configv1.EventFilter, event *auditv1.RequestEvent) bool {
 	switch filter.Value.(type) {
 	case *configv1.EventFilter_Text:

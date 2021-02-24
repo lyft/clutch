@@ -13,4 +13,5 @@ message SlackConfig {
   string channel = 2 [ (validate.rules).string = {min_bytes : 1} ];
 
   clutch.config.service.audit.v1.Filter filter = 3;
+  clutch.config.service.audit.v1.Override override = 4;
 }
