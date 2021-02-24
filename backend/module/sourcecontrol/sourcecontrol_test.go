@@ -2,6 +2,7 @@ package sourcecontrol
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -34,4 +35,31 @@ func TestModule(t *testing.T) {
 	resp, err := a.CreateRepository(context.Background(), nil)
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
+}
+
+var containsTests = []struct {
+	source         []string
+	expectedResult bool
+}{
+	{
+		source:         []string{"foo", "bar"},
+		expectedResult: true,
+	},
+	{
+		source:         []string{"bar"},
+		expectedResult: false,
+	},
+}
+
+func TestContains(t *testing.T) {
+	for idx, tt := range containsTests {
+		tt := tt
+		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
+			t.Parallel()
+
+			result := contains(tt.source, "foo")
+
+			assert.Equal(t, result, tt.expectedResult)
+		})
+	}
 }

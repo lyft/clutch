@@ -65,12 +65,12 @@ func contains(s []string, str string) bool {
 }
 
 func (m *mod) ManageableOrganizations(ctx context.Context) ([]*sourcecontrolv1.Entity, error) {
-	organizations, err := m.github.ListOrganizations(ctx, "")
+	organizations, err := m.github.ListOrganizations(ctx, github.CurrentUser)
 	writableOrgs := []*sourcecontrolv1.Entity{}
 	if err != nil {
 		return nil, err
 	}
-	currentUser, err := m.github.GetUser(ctx, "")
+	currentUser, err := m.github.GetUser(ctx, github.CurrentUser)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func (m *mod) ManageableOrganizations(ctx context.Context) ([]*sourcecontrolv1.E
 		if err != nil {
 			return nil, err
 		}
-		membership, err := m.github.GetOrgMembership(ctx, "", org.GetLogin())
+		membership, err := m.github.GetOrgMembership(ctx, github.CurrentUser, org.GetLogin())
 		if err != nil {
 			return nil, err
 		}
@@ -121,7 +121,7 @@ func (m *mod) GetRepositoryOptions(ctx context.Context, req *sourcecontrolv1.Get
 }
 
 func (m *mod) CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error) {
-	desiredOwner := req.Owner
+	desiredOwner := req.GetOwner()
 	if len(m.config.Owners) != 0 && !contains(m.config.Owners, desiredOwner) {
 		return nil, fmt.Errorf("cannot create repository under owner: %s", desiredOwner)
 	}
