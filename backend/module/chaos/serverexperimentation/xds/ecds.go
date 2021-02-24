@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/golang/protobuf/ptypes/duration"
+	"sync"
 	"time"
 
 	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
@@ -25,9 +26,14 @@ const (
 	ExternalFaultFilterConfigName        = `envoy.egress.extension_config.%s`
 	InternalFaultFilterConfigName        = `envoy.extension_config`
 	FaultFilterTypeURL                   = `type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault`
+
+	DelayPercentRuntime    = "%s.http.delay.percentage"
+	DelayDurationRuntime   = "%s.http.delay.fixed_duration_ms"
+	AbortHttpStatusRuntime = "%s.http.abort.http_status"
+	AbortPercentRuntime    = "%s.http.abort.abort_percent"
 )
 
-// Default abort and delay fault configs - https://github.com/lyft/envoy-static-config/blob/9a717c92ab0404221e0fc4601ac45bd975a83c88/templates/envoy_service_to_service.yaml#L74
+// Default abort and delay fault configs
 var DefaultAbortFaultConfig = &gcpFilterFault.FaultAbort{
 	ErrorType: &gcpFilterFault.FaultAbort_HttpStatus{
 		HttpStatus: 503,
@@ -52,16 +58,20 @@ var DefaultDelayFaultConfig = &gcpFilterCommon.FaultDelay{
 
 type ECDSConfig struct {
 	enabledClusters []string
+
+	faultRuntimePrefix string
+
+	requestedResourcesMap sync.Map
 }
 
 func generateECDSResource(experiments []*experimentation.Experiment, ecdsConfig *ECDSConfig, ttl *time.Duration, logger *zap.SugaredLogger) []gcpTypes.ResourceWithTtl {
 	var downstreamCluster string
 	var upstreamCluster string
 	var isExternalFault = false
+
 	abort := DefaultAbortFaultConfig
 	delay := DefaultDelayFaultConfig
 
-	// No experiments meaning clear all experiments for the given upstream cluster
 	for _, experiment := range experiments {
 		httpFaultConfig := &serverexperimentation.HTTPFaultConfig{}
 		if !maybeUnmarshalFaultTest(experiment, httpFaultConfig) {
@@ -81,7 +91,7 @@ func generateECDSResource(experiments []*experimentation.Experiment, ecdsConfig 
 			continue
 		}
 
-		// We can only perform service to service faults with ECDS. Hence we break.
+		// We can only perform one fault test per cluster with ECDS. Hence we break.
 		break
 	}
 
@@ -90,10 +100,10 @@ func generateECDSResource(experiments []*experimentation.Experiment, ecdsConfig 
 		Abort: abort,
 
 		// override runtimes so that default runtime is not used.
-		DelayPercentRuntime:    "ecds-do-not-use-fault.http.delay.percentage",
-		DelayDurationRuntime:   "ecds-do-not-use-fault.http.delay.fixed_duration_ms",
-		AbortHttpStatusRuntime: "ecds-do-not-use-fault.http.abort.http_status",
-		AbortPercentRuntime:    "ecds-do-not-use-fault.http.abort.abort_percent",
+		DelayPercentRuntime:    fmt.Sprintf(DelayPercentRuntime, ecdsConfig.faultRuntimePrefix),
+		DelayDurationRuntime:   fmt.Sprintf(DelayDurationRuntime, ecdsConfig.faultRuntimePrefix),
+		AbortHttpStatusRuntime: fmt.Sprintf(AbortHttpStatusRuntime, ecdsConfig.faultRuntimePrefix),
+		AbortPercentRuntime:    fmt.Sprintf(AbortPercentRuntime, ecdsConfig.faultRuntimePrefix),
 	}
 
 	var faultFilterName string
@@ -103,29 +113,20 @@ func generateECDSResource(experiments []*experimentation.Experiment, ecdsConfig 
 		faultFilterName = InternalFaultFilterConfigName
 
 		// match downstream cluster with request header else fault will be applied to requests coming from all downstream
-		if downstreamCluster != "" {
-			faultFilter.Headers = []*gcpRoute.HeaderMatcher{
-				{
-					Name: HeaderXEnvoyDownstreamServiceCluster,
-					HeaderMatchSpecifier: &gcpRoute.HeaderMatcher_ExactMatch{
-						ExactMatch: downstreamCluster,
-					},
+		faultFilter.Headers = []*gcpRoute.HeaderMatcher{
+			{
+				Name: HeaderXEnvoyDownstreamServiceCluster,
+				HeaderMatchSpecifier: &gcpRoute.HeaderMatcher_ExactMatch{
+					ExactMatch: downstreamCluster,
 				},
-			}
+			},
 		}
 	}
 
 	serializedFaultFilter, err := proto.Marshal(faultFilter)
 	if err != nil {
-		logger.Errorf("Unable to unmarshal ")
-
-	}
-
-	// We only want to set a TTL for non-default configs. This ensures that we don't spam clients with heartbeat responses
-	// unless they have an active filter override.
-	var resourceTTL *time.Duration
-	if abort != DefaultAbortFaultConfig || delay != DefaultDelayFaultConfig {
-		resourceTTL = ttl
+		logger.Warnw("Unable to unmarshal fault filter", "faultFilter", faultFilter)
+		return nil
 	}
 
 	return []gcpTypes.ResourceWithTtl{{
@@ -136,8 +137,49 @@ func generateECDSResource(experiments []*experimentation.Experiment, ecdsConfig 
 				Value:   serializedFaultFilter,
 			},
 		},
-		Ttl: resourceTTL,
+		Ttl: ttl,
 	}}
+}
+
+func generateEmptyECDSResource(cluster string, ecdsConfig *ECDSConfig, logger *zap.SugaredLogger) []gcpTypes.ResourceWithTtl {
+	faultFilter := &gcpFilterFault.HTTPFault{
+		Delay: DefaultDelayFaultConfig,
+		Abort: DefaultAbortFaultConfig,
+
+		// override runtimes so that default runtime is not used.
+		DelayPercentRuntime:    fmt.Sprintf(DelayPercentRuntime, ecdsConfig.faultRuntimePrefix),
+		DelayDurationRuntime:   fmt.Sprintf(DelayDurationRuntime, ecdsConfig.faultRuntimePrefix),
+		AbortHttpStatusRuntime: fmt.Sprintf(AbortHttpStatusRuntime, ecdsConfig.faultRuntimePrefix),
+		AbortPercentRuntime:    fmt.Sprintf(AbortPercentRuntime, ecdsConfig.faultRuntimePrefix),
+	}
+
+	serializedFaultFilter, err := proto.Marshal(faultFilter)
+	if err != nil {
+		logger.Warnw("Unable to unmarshal fault filter", "faultFilter", faultFilter)
+		return nil
+	}
+
+	clusterResources, isPresent := ecdsConfig.requestedResourcesMap.Load(cluster)
+	if !isPresent {
+		return nil
+	}
+
+	var resources []gcpTypes.ResourceWithTtl
+	for _, resourceName := range clusterResources.([]string) {
+		resource := gcpTypes.ResourceWithTtl{
+			Resource: &gcpCoreV3.TypedExtensionConfig{
+				Name: resourceName,
+				TypedConfig: &any.Any{
+					TypeUrl: FaultFilterTypeURL,
+					Value:   serializedFaultFilter,
+				},
+			},
+			Ttl: nil,
+		}
+		resources = append(resources, resource)
+	}
+
+	return resources
 }
 
 func createAbortDelayConfig(httpFaultConfig *serverexperimentation.HTTPFaultConfig, downstreamCluster string) (bool, *gcpFilterFault.FaultAbort, *gcpFilterCommon.FaultDelay, error) {

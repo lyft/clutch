@@ -8,6 +8,7 @@ import (
 	"context"
 	"errors"
 	"github.com/lyft/clutch/backend/module"
+	"sync"
 	"sync/atomic"
 	"time"
 
@@ -120,7 +121,9 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 	}
 
 	ecdsConfig := ECDSConfig{
-		enabledClusters: config.GetEcdsEnabledClusters(),
+		enabledClusters:       config.GetEcdsEnabledClusters(),
+		faultRuntimePrefix:    config.GetEgressFaultRuntimePrefix(),
+		requestedResourcesMap: sync.Map{},
 	}
 
 	return &Server{
@@ -158,7 +161,7 @@ func (s *Server) Register(r module.Registrar) error {
 		s.logger, 0}})
 	gcpRuntimeServiceV3.RegisterRuntimeDiscoveryServiceServer(r.GRPCServer(), rtdsServer)
 
-	ecdsServer := NewECDSServer(s.ctx, s.snapshotCacheV3, &ecdsCallbacks{callbacksBase{s.newScopedStats("ecds"), s.logger, 0}})
+	ecdsServer := NewECDSServer(s.ctx, s.snapshotCacheV3, &ecdsCallbacks{callbacksBase{s.newScopedStats("ecds"), s.logger, 0}, s.ecdsConfig.requestedResourcesMap})
 	gcpExtencionServiceV3.RegisterExtensionConfigDiscoveryServiceServer(r.GRPCServer(), ecdsServer)
 	return nil
 }
@@ -230,6 +233,12 @@ func (c *rtdsCallbacks) OnFetchResponse(*gcpDiscoveryV3.DiscoveryRequest, *gcpDi
 // ECDS Callbacks
 type ecdsCallbacks struct {
 	callbacksBase
+
+	// Track all the seen ECDS resources globally across all the streams. This allows us to query all the requested
+	// resources and present a default value for all the ones that don't have a specific value.
+	// This allows us to set a default value for all the dynamic ECDS resources for all clusters, relying on go-control-plane
+	// to only respond with ones actually requested by the client.
+	requestedECDSResources sync.Map
 }
 
 func (c *ecdsCallbacks) OnStreamOpen(ctx context.Context, streamID int64, typeURL string) error {
@@ -243,6 +252,8 @@ func (c *ecdsCallbacks) OnStreamClosed(streamID int64) {
 }
 
 func (c *ecdsCallbacks) OnStreamRequest(streamID int64, req *gcpDiscoveryV3.DiscoveryRequest) error {
+	c.requestedECDSResources.Store(req.Node.Cluster, req.ResourceNames)
+
 	c.logger.Debugw("ECDS OnStreamRequest", "streamID", streamID, "cluster", req.Node.Cluster)
 	c.onStreamRequest(streamID, req.Node.Cluster, req.ErrorDetail)
 

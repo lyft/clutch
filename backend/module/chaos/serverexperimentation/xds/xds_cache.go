@@ -64,17 +64,21 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 		if _, exist := clusterFaultMap[cluster]; !exist {
 			logger.Debugw("Removing experiments for cluster", "cluster", cluster)
 
-			var emptyRuntimeResource []gcpTypes.ResourceWithTtl
+			var emptyResource []gcpTypes.ResourceWithTtl
 			ecdsClusterEnabled := containsString(ecdsConfig.enabledClusters, cluster) || containsString(ecdsConfig.enabledClusters, "*")
 			if ecdsClusterEnabled {
 				// in order to remove fault, we need to set the snapshot with default ecds config
-				emptyRuntimeResource = generateECDSResource([]*experimentation.Experiment{}, ecdsConfig, ttl, logger)
+				emptyResource = generateEmptyECDSResource(cluster, ecdsConfig, logger)
 			} else {
 				// in order to remove fault, we need to set the snapshot with empty runtime resource
-				emptyRuntimeResource = generateRTDSResource([]*experimentation.Experiment{}, rtdsConfig, ttl, logger)
+				emptyResource = generateRTDSResource([]*experimentation.Experiment{}, rtdsConfig, ttl, logger)
 			}
 
-			err := setSnapshot(emptyRuntimeResource, cluster, snapshotCache, ecdsClusterEnabled, logger)
+			if emptyResource == nil {
+				continue
+			}
+
+			err := setSnapshot(emptyResource, cluster, snapshotCache, ecdsClusterEnabled, logger)
 			if err != nil {
 				logger.Errorw("Unable to unset the fault for cluster", "cluster", cluster,
 					"error", err)
@@ -94,6 +98,11 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 			resource = generateECDSResource(experiments, ecdsConfig, ttl, logger)
 		} else {
 			resource = generateRTDSResource(experiments, rtdsConfig, ttl, logger)
+		}
+
+		if resource == nil {
+			logger.Infow("Unable to set the fault for cluster because resource is null", "cluster", cluster, "ecdsClusterEnabled", ecdsClusterEnabled)
+			continue
 		}
 
 		err := setSnapshot(resource, cluster, snapshotCache, ecdsClusterEnabled, logger)

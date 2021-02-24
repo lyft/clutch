@@ -29,4 +29,7 @@ message Config {
 
   // list of clusters for which ECDS is enabled. * means it will be enabled for all
   repeated string ecds_enabled_clusters = 7;
+
+  // A prefix to use to override runtime keys for ECDS
+  string ecds_fault_runtime_prefix = 8;
 }

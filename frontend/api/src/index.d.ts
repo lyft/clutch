@@ -5876,6 +5876,9 @@ export namespace clutch {
 
                                 /** Config ecdsEnabledClusters */
                                 ecdsEnabledClusters?: (string[]|null);
+
+                                /** Config ecdsFaultRuntimePrefix */
+                                ecdsFaultRuntimePrefix?: (string|null);
                             }
 
                             /** Represents a Config. */
@@ -5907,6 +5910,9 @@ export namespace clutch {
 
                                 /** Config ecdsEnabledClusters. */
                                 public ecdsEnabledClusters: string[];
+
+                                /** Config ecdsFaultRuntimePrefix. */
+                                public ecdsFaultRuntimePrefix: string;
 
                                 /**
                                  * Verifies a Config message.

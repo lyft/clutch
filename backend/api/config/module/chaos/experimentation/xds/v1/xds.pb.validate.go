@@ -84,6 +84,8 @@ func (m *Config) Validate() error {
 		}
 	}
 
+	// no validation rules for EcdsFaultRuntimePrefix
+
 	return nil
 }
 

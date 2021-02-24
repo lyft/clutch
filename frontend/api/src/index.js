@@ -13924,6 +13924,7 @@ export const clutch = $root.clutch = (() => {
                                  * @property {google.protobuf.IDuration|null} [resourceTtl] Config resourceTtl
                                  * @property {google.protobuf.IDuration|null} [heartbeatInterval] Config heartbeatInterval
                                  * @property {Array.<string>|null} [ecdsEnabledClusters] Config ecdsEnabledClusters
+                                 * @property {string|null} [ecdsFaultRuntimePrefix] Config ecdsFaultRuntimePrefix
                                  */
 
                                 /**
@@ -13999,6 +14000,14 @@ export const clutch = $root.clutch = (() => {
                                 Config.prototype.ecdsEnabledClusters = $util.emptyArray;
 
                                 /**
+                                 * Config ecdsFaultRuntimePrefix.
+                                 * @member {string} ecdsFaultRuntimePrefix
+                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
+                                 * @instance
+                                 */
+                                Config.prototype.ecdsFaultRuntimePrefix = "";
+
+                                /**
                                  * Verifies a Config message.
                                  * @function verify
                                  * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
@@ -14040,6 +14049,9 @@ export const clutch = $root.clutch = (() => {
                                             if (!$util.isString(message.ecdsEnabledClusters[i]))
                                                 return "ecdsEnabledClusters: string[] expected";
                                     }
+                                    if (message.ecdsFaultRuntimePrefix != null && message.hasOwnProperty("ecdsFaultRuntimePrefix"))
+                                        if (!$util.isString(message.ecdsFaultRuntimePrefix))
+                                            return "ecdsFaultRuntimePrefix: string expected";
                                     return null;
                                 };
 
@@ -14083,6 +14095,8 @@ export const clutch = $root.clutch = (() => {
                                         for (let i = 0; i < object.ecdsEnabledClusters.length; ++i)
                                             message.ecdsEnabledClusters[i] = String(object.ecdsEnabledClusters[i]);
                                     }
+                                    if (object.ecdsFaultRuntimePrefix != null)
+                                        message.ecdsFaultRuntimePrefix = String(object.ecdsFaultRuntimePrefix);
                                     return message;
                                 };
 
@@ -14108,6 +14122,7 @@ export const clutch = $root.clutch = (() => {
                                         object.egressFaultRuntimePrefix = "";
                                         object.resourceTtl = null;
                                         object.heartbeatInterval = null;
+                                        object.ecdsFaultRuntimePrefix = "";
                                     }
                                     if (message.rtdsLayerName != null && message.hasOwnProperty("rtdsLayerName"))
                                         object.rtdsLayerName = message.rtdsLayerName;
@@ -14126,6 +14141,8 @@ export const clutch = $root.clutch = (() => {
                                         for (let j = 0; j < message.ecdsEnabledClusters.length; ++j)
                                             object.ecdsEnabledClusters[j] = message.ecdsEnabledClusters[j];
                                     }
+                                    if (message.ecdsFaultRuntimePrefix != null && message.hasOwnProperty("ecdsFaultRuntimePrefix"))
+                                        object.ecdsFaultRuntimePrefix = message.ecdsFaultRuntimePrefix;
                                     return object;
                                 };
 
