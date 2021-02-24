@@ -9,11 +9,11 @@ import (
 	"google.golang.org/grpc/status"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 
-	"github.com/lyft/clutch/backend/middleware/unaryerror"
+	"github.com/lyft/clutch/backend/middleware/errorintercept"
 )
 
 func TestImplementsInterceptorInterface(t *testing.T) {
-	assert.Implements(t, (*unaryerror.Interceptor)(nil), (*svc)(nil))
+	assert.Implements(t, (*errorintercept.Interceptor)(nil), (*svc)(nil))
 }
 
 func TestConvertError(t *testing.T) {

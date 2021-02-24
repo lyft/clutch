@@ -17,8 +17,8 @@ import (
 	"github.com/lyft/clutch/backend/gateway/stats"
 	"github.com/lyft/clutch/backend/middleware"
 	"github.com/lyft/clutch/backend/middleware/accesslog"
+	"github.com/lyft/clutch/backend/middleware/errorintercept"
 	"github.com/lyft/clutch/backend/middleware/timeouts"
-	"github.com/lyft/clutch/backend/middleware/unaryerror"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/resolver"
 	"github.com/lyft/clutch/backend/service"
@@ -90,11 +90,11 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	initScope.Counter("start").Inc(1)
 
 	// Create the error interceptor so services can register error interceptors if desired.
-	var unaryErrorMiddleware *unaryerror.Middleware
-	if m, err := unaryerror.New(); err != nil {
+	var unaryErrorMiddleware *errorintercept.Middleware
+	if m, err := errorintercept.New(); err != nil {
 		logger.Fatal("could not create error interceptor middleware", zap.Error(err))
 	} else {
-		unaryErrorMiddleware = m.(*unaryerror.Middleware)
+		unaryErrorMiddleware = m.(*errorintercept.Middleware)
 	}
 
 	// Instantiate and register services.
@@ -120,7 +120,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 		}
 		service.Registry[svcConfig.Name] = svc
 
-		if ei, ok := svc.(unaryerror.Interceptor); ok {
+		if ei, ok := svc.(errorintercept.Interceptor); ok {
 			logger.Info("service registered an error conversion interceptor")
 			unaryErrorMiddleware.AddInterceptor(ei.InterceptError)
 		}

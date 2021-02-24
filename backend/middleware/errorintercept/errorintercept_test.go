@@ -1,4 +1,4 @@
-package unaryerror
+package errorintercept
 
 import (
 	"context"

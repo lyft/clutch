@@ -1,4 +1,4 @@
-package unaryerror
+package errorintercept
 
 // <!-- START clutchdoc -->
 // description: Allows services to register error interceptors in order to rewrite errors with additional information.
@@ -12,7 +12,7 @@ import (
 	"github.com/lyft/clutch/backend/middleware"
 )
 
-const Name = "clutch.middleware.unaryerror"
+const Name = "clutch.middleware.errorintercept"
 
 // Implement this interface in a service to have the ConvertError function registered into middleware.
 type Interceptor interface {
