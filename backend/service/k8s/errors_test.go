@@ -38,7 +38,7 @@ func TestConvertError(t *testing.T) {
 		{
 			err:          k8serrors.NewResourceExpired("expired"),
 			expectStatus: true,
-			expectedCode: codes.Unknown,
+			expectedCode: codes.NotFound,
 		},
 	}
 
