@@ -129,13 +129,13 @@ func TestProtoForCron(t *testing.T) {
 				assert.Equal(t, strings.ToUpper(string(tt.cron.Spec.ConcurrencyPolicy)), cron.ConcurrencyPolicy.String())
 			}
 			if tt.cron.Spec.Suspend != nil {
-				assert.Equal(t, *tt.cron.Spec.Suspend, cron.Suspend.Value)
+				assert.Equal(t, *tt.cron.Spec.Suspend, cron.Suspend)
 			}
 			if tt.cron.Spec.StartingDeadlineSeconds != nil {
 				assert.Equal(t, *tt.cron.Spec.StartingDeadlineSeconds, cron.StartingDeadlineSeconds.Value)
 			}
 			if tt.cron.Status.Active != nil {
-				assert.Equal(t, int32(len(tt.cron.Status.Active)), cron.NumActiveJobs.Value)
+				assert.Equal(t, int32(len(tt.cron.Status.Active)), cron.NumActiveJobs)
 			}
 		})
 	}

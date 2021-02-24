@@ -12408,10 +12408,10 @@ export namespace clutch {
                 annotations?: ({ [k: string]: string }|null);
 
                 /** CronJob suspend */
-                suspend?: (google.protobuf.IBoolValue|null);
+                suspend?: (boolean|null);
 
                 /** CronJob numActiveJobs */
-                numActiveJobs?: (google.protobuf.IInt32Value|null);
+                numActiveJobs?: (number|null);
 
                 /** CronJob concurrencyPolicy */
                 concurrencyPolicy?: (clutch.k8s.v1.CronJob.ConcurrencyPolicy|null);
@@ -12448,10 +12448,10 @@ export namespace clutch {
                 public annotations: { [k: string]: string };
 
                 /** CronJob suspend. */
-                public suspend?: (google.protobuf.IBoolValue|null);
+                public suspend: boolean;
 
                 /** CronJob numActiveJobs. */
-                public numActiveJobs?: (google.protobuf.IInt32Value|null);
+                public numActiveJobs: number;
 
                 /** CronJob concurrencyPolicy. */
                 public concurrencyPolicy: clutch.k8s.v1.CronJob.ConcurrencyPolicy;

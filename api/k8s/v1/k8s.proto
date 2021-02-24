@@ -645,8 +645,8 @@ message CronJob {
   map<string, string> labels = 5;
   map<string, string> annotations = 6;
 
-  google.protobuf.BoolValue suspend = 7;
-  google.protobuf.Int32Value num_active_jobs = 8;
+  bool suspend = 7;
+  int32 num_active_jobs = 8;
 
   enum ConcurrencyPolicy {
     UNSPECIFIED = 0;

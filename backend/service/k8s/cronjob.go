@@ -81,14 +81,14 @@ func ProtoForCronJob(cluster string, k8scronJob *v1beta1.CronJob) *k8sapiv1.Cron
 
 	// Update optional fields
 	if k8scronJob.Spec.Suspend != nil {
-		ret.Suspend = &wrappers.BoolValue{Value: *k8scronJob.Spec.Suspend}
+		ret.Suspend = *k8scronJob.Spec.Suspend
 	}
 	if k8scronJob.Spec.ConcurrencyPolicy != "" {
 		ret.ConcurrencyPolicy = k8sapiv1.CronJob_ConcurrencyPolicy(
 			k8sapiv1.CronJob_ConcurrencyPolicy_value[strings.ToUpper(string(k8scronJob.Spec.ConcurrencyPolicy))])
 	}
 	if k8scronJob.Status.Active != nil {
-		ret.NumActiveJobs = &wrappers.Int32Value{Value: int32(len(k8scronJob.Status.Active))}
+		ret.NumActiveJobs = int32(len(k8scronJob.Status.Active))
 	}
 	if k8scronJob.Spec.StartingDeadlineSeconds != nil {
 		ret.StartingDeadlineSeconds = &wrappers.Int64Value{Value: *k8scronJob.Spec.StartingDeadlineSeconds}
