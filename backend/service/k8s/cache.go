@@ -39,13 +39,13 @@ func (s *svc) StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.Upda
 	}
 	for name, cs := range clientsets {
 		s.log.Info("starting informer for", zap.String("cluster", name))
-		go s.startInformers(ctx, cs)
+		go s.startInformers(ctx, name, cs)
 	}
 
 	return s.topologyObjectChan, nil
 }
 
-func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
+func (s *svc) startInformers(ctx context.Context, clusterName string, cs ContextClientset) {
 	informerHandlers := cache.ResourceEventHandlerFuncs{
 		AddFunc:    s.informerAddHandler,
 		UpdateFunc: s.informerUpdateHandler,
@@ -57,6 +57,7 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 		&corev1.Pod{},
 		informerHandlers,
 		false,
+		clusterName,
 	)
 
 	deploymentInformer := NewLightweightInformer(
@@ -64,6 +65,7 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 		&appsv1.Deployment{},
 		informerHandlers,
 		true,
+		clusterName,
 	)
 
 	hpaInformer := NewLightweightInformer(
@@ -71,6 +73,7 @@ func (s *svc) startInformers(ctx context.Context, cs ContextClientset) {
 		&autoscalingv1.HorizontalPodAutoscaler{},
 		informerHandlers,
 		true,
+		clusterName,
 	)
 
 	stop := make(chan struct{})
