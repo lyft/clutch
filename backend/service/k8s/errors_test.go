@@ -16,19 +16,6 @@ func TestImplementsInterceptorInterface(t *testing.T) {
 	assert.Implements(t, (*unaryerror.Interceptor)(nil), (*svc)(nil))
 }
 
-func TestInterceptError(t *testing.T) {
-	service := &svc{}
-
-	err := k8serrors.NewUnauthorized("nice try")
-	newErr := service.InterceptError(err)
-
-	s, ok := status.FromError(newErr)
-	assert.True(t, ok)
-	assert.NotNil(t, s)
-	assert.Equal(t, codes.Unauthenticated, s.Code())
-	assert.Equal(t, "nice try", s.Message())
-}
-
 func TestConvertError(t *testing.T) {
 	testCases := []struct {
 		err          error
