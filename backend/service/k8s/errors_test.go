@@ -3,6 +3,8 @@ package k8s
 import (
 	"testing"
 
+	"github.com/lyft/clutch/backend/middleware/unaryerror"
+
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -11,6 +13,8 @@ import (
 
 func TestConvertError(t *testing.T) {
 	service := &svc{}
+
+	assert.Implements(t, (*unaryerror.Interceptor)(nil), service)
 
 	err := k8serrors.NewUnauthorized("nice try")
 	newErr := service.InterceptError(err)
