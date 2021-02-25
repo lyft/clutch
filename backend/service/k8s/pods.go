@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"strings"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -30,9 +28,9 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 	if len(pods.Items) == 1 {
 		return podDescription(&pods.Items[0], cs.Cluster()), nil
 	} else if len(pods.Items) > 1 {
-		return nil, status.Error(codes.FailedPrecondition, "expected a single pod but found multiple pods")
+		return nil, fmt.Errorf("Located multiple Pods")
 	}
-	return nil, status.Error(codes.NotFound, "pod not found")
+	return nil, fmt.Errorf("Unable to locate pod")
 }
 
 func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error {
