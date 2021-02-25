@@ -15,17 +15,6 @@ import (
 	"github.com/lyft/clutch/backend/middleware/errorintercept"
 )
 
-func TestErrorToStatus(t *testing.T) {
-	var err error
-	err = k8serrors.NewUnauthorized("nice try")
-	err = ConvertError(err)
-	spb, ok := status.FromError(err)
-	assert.True(t, ok)
-	assert.NotNil(t, spb)
-	assert.Equal(t, "nice try", spb.Message())
-	assert.EqualValues(t, codes.Unauthenticated, spb.Code())
-}
-
 func TestImplementsInterceptorInterface(t *testing.T) {
 	assert.Implements(t, (*errorintercept.Interceptor)(nil), (*svc)(nil))
 }
