@@ -43,14 +43,14 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 		default:
 			c.log.Error("lost connection to database, trying to reconnect...", zap.Error(err))
 		}
+		// Closes the db connection which will also release the advisory lock
+		conn.Close()
 
 		select {
 		case <-ticker.C:
 			continue
 		case <-ctx.Done():
 			ticker.Stop()
-			c.unlockAdvisoryLock(context.Background(), conn, advisoryLockId)
-			conn.Close()
 			return
 		}
 	}
@@ -69,14 +69,6 @@ func (c *client) tryAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uin
 	}
 
 	return lock
-}
-
-func (c *client) unlockAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uint32) bool {
-	var unlock bool
-	if err := conn.QueryRowContext(ctx, "SELECT pg_advisory_unlock($1)", lockId).Scan(&unlock); err != nil {
-		c.log.Error("Unable to perform an advisory unlock", zap.Error(err))
-	}
-	return unlock
 }
 
 func convertLockIdToAdvisoryLockId(lockID string) uint32 {
