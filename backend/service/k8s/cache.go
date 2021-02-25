@@ -102,6 +102,8 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 // Notably we intentionally run these in serial, not only can this cause memory pressure but
 // also being mindful of the kubernetes api servers to reduce burst load.
 func (s *svc) cacheFullRelist(ctx context.Context, lwPods, lwDeployments, lwHPA *cache.ListWatch) {
+	// TODO: When topology TTL configuration is supported this ticker should tick half as fast
+	// as the TTL. eg TTL = 2hours then cache relist = 1hour
 	ticker := time.NewTicker(time.Hour * 1)
 	for {
 		// The informers will only ever do a full list once on boot
@@ -110,8 +112,7 @@ func (s *svc) cacheFullRelist(ctx context.Context, lwPods, lwDeployments, lwHPA 
 		case <-ticker.C:
 			pods, err := lwPods.List(metav1.ListOptions{})
 			if err != nil {
-				s.log.Warn("Unable to list pods to populate Kubernetes cache", zap.Error(err))
-				return
+				s.log.Error("Unable to list pods to populate Kubernetes cache", zap.Error(err))
 			}
 
 			podItems := pods.(*corev1.PodList).Items
@@ -121,8 +122,7 @@ func (s *svc) cacheFullRelist(ctx context.Context, lwPods, lwDeployments, lwHPA 
 
 			deployments, err := lwDeployments.List(metav1.ListOptions{})
 			if err != nil {
-				s.log.Warn("Unable to list deployments to populate Kubernetes cache", zap.Error(err))
-				return
+				s.log.Error("Unable to list deployments to populate Kubernetes cache", zap.Error(err))
 			}
 
 			deploymentItems := deployments.(*appsv1.DeploymentList).Items
@@ -132,8 +132,7 @@ func (s *svc) cacheFullRelist(ctx context.Context, lwPods, lwDeployments, lwHPA 
 
 			hpas, err := lwHPA.List(metav1.ListOptions{})
 			if err != nil {
-				s.log.Warn("Unable to list HPAs to populate Kubernetes cache", zap.Error(err))
-				return
+				s.log.Error("Unable to list HPAs to populate Kubernetes cache", zap.Error(err))
 			}
 
 			hpaItems := hpas.(*autoscalingv1.HorizontalPodAutoscalerList).Items
