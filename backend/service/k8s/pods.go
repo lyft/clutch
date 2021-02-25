@@ -24,7 +24,7 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 		FieldSelector: "metadata.name=" + name,
 	})
 	if err != nil {
-		return nil, ConvertError(err)
+		return nil, err
 	}
 
 	if len(pods.Items) == 1 {
@@ -58,7 +58,7 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 
 	podList, err := cs.CoreV1().Pods(cs.Namespace()).List(ctx, opts)
 	if err != nil {
-		return nil, ConvertError(err)
+		return nil, err
 	}
 
 	var pods []*k8sapiv1.Pod
@@ -94,7 +94,7 @@ func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name
 
 	pod, err := cs.CoreV1().Pods(cs.Namespace()).Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
-		return ConvertError(err)
+		return err
 	}
 
 	// Check that the current state of the pod matches with expectedObjectMetaFields.
@@ -117,7 +117,7 @@ func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name
 	}
 
 	_, err = cs.CoreV1().Pods(cs.Namespace()).Update(ctx, pod, metav1.UpdateOptions{})
-	return ConvertError(err)
+	return err
 }
 
 func (s *svc) checkExpectedObjectMetaFields(expectedObjectMetaFields *k8sapiv1.ExpectedObjectMetaFields, object metav1.Object) error {

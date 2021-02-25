@@ -22,7 +22,7 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 		FieldSelector: "metadata.name=" + name,
 	})
 	if err != nil {
-		return nil, ConvertError(err)
+		return nil, err
 	}
 
 	if len(hpas.Items) == 1 {
@@ -63,7 +63,7 @@ func (s *svc) ResizeHPA(ctx context.Context, clientset, cluster, namespace, name
 	opts := metav1.GetOptions{}
 	hpa, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Get(ctx, name, opts)
 	if err != nil {
-		return ConvertError(err)
+		return err
 	}
 
 	normalizeHPAChanges(hpa, sizing)
@@ -72,7 +72,7 @@ func (s *svc) ResizeHPA(ctx context.Context, clientset, cluster, namespace, name
 		_, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Update(ctx, hpa, metav1.UpdateOptions{})
 		return err
 	})
-	return ConvertError(retryErr)
+	return retryErr
 }
 
 func normalizeHPAChanges(hpa *autoscalingv1.HorizontalPodAutoscaler, sizing *k8sapiv1.ResizeHPARequest_Sizing) {
@@ -92,10 +92,9 @@ func normalizeHPAChanges(hpa *autoscalingv1.HorizontalPodAutoscaler, sizing *k8s
 func (s *svc) DeleteHPA(ctx context.Context, clientset, cluster, namespace, name string) error {
 	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
-		return ConvertError(err)
+		return err
 	}
 
 	opts := metav1.DeleteOptions{}
-	err = cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Delete(ctx, name, opts)
-	return ConvertError(err)
+	return cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Delete(ctx, name, opts)
 }
