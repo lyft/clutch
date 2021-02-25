@@ -3,6 +3,11 @@ package k8s
 import (
 	"fmt"
 	"strings"
+
+	"google.golang.org/grpc/status"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+
+	"github.com/lyft/clutch/backend/service"
 )
 
 type mismatchedAnnotation struct {
@@ -27,4 +32,18 @@ func (p *ExpectedObjectMetaFieldsCheckError) Error() string {
 			mismatchedAnnotation.CurrentValue)
 	}
 	return ret.String()
+}
+
+// Take a K8s error, extract the API return code and message in order to create the proper gRPC status.
+func ConvertError(e error) error {
+	as, ok := e.(k8serrors.APIStatus)
+	if !ok {
+		return e
+	}
+	s := as.Status()
+
+	c := service.CodeFromHTTPStatus(int(s.Code))
+	ret := status.New(c, s.Message)
+
+	return ret.Err()
 }

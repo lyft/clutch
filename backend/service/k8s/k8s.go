@@ -127,3 +127,7 @@ func (s *svc) Clientsets(ctx context.Context) ([]string, error) {
 	}
 	return ret, nil
 }
+
+func (s *svc) InterceptError(e error) error {
+	return ConvertError(e)
+}
