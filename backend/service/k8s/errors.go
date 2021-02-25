@@ -10,6 +10,8 @@ import (
 	"google.golang.org/grpc/status"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	"github.com/lyft/clutch/backend/service"
 )
 
 type mismatchedAnnotation struct {

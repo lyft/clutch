@@ -144,7 +144,7 @@ func TestSetSnapshotV3(t *testing.T) {
 
 	runtimeResource := generateRTDSResource(testClusterFaults, &rtdsConfig, nil, zap.NewNop().Sugar())
 	assert.Nil(t, runtimeResource[0].Ttl)
-	err := setSnapshot(runtimeResource, testCluster, testCache)
+	err := setSnapshot(runtimeResource, testCluster, testCache, zap.NewNop().Sugar())
 	if err != nil {
 		t.Errorf("setSnapshot failed %v", err)
 	}
@@ -206,7 +206,7 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 	}
 
 	runtimeResource := generateRTDSResource(testClusterFaults, &rtdsConfig, &ttl, zap.NewNop().Sugar())
-	err := setSnapshot(runtimeResource, testCluster, testCache)
+	err := setSnapshot(runtimeResource, testCluster, testCache, zap.NewNop().Sugar())
 	if err != nil {
 		t.Errorf("setSnapshot failed %v", err)
 	}

@@ -7,7 +7,7 @@ option go_package = "github.com/lyft/clutch/backend/api/sourcecontrol/github/v1;
 import "google/protobuf/wrappers.proto";
 import "validate/validate.proto";
 
-// Common parameters for GitHub repostories.
+// Common parameters for GitHub repositories.
 message RepositoryParameters {
   enum Visibility {
     UNSPECIFIED = 0;
