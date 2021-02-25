@@ -26,6 +26,7 @@ import (
 	"github.com/lyft/clutch/backend/resolver"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/k8s"
+	"github.com/lyft/clutch/backend/service/topology"
 )
 
 const Name = "clutch.resolver.k8s"
@@ -68,6 +69,15 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 		return nil, errors.New("service was not the correct type")
 	}
 
+	var topologyService topology.Service
+	if svc, ok := service.Registry[topology.Name]; ok {
+		topologyService, ok = svc.(topology.Service)
+		if !ok {
+			return nil, errors.New("incorrect topology service type")
+		}
+		logger.Debug("enabling autocomplete api for the k8s resolver")
+	}
+
 	schemas, err := resolver.InputsToSchemas(typeSchemas)
 	if err != nil {
 		return nil, err
@@ -83,15 +93,17 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 	})
 
 	r := &res{
-		svc:     svc,
-		schemas: schemas,
+		svc:      svc,
+		topology: topologyService,
+		schemas:  schemas,
 	}
 	return r, nil
 }
 
 type res struct {
-	svc     k8s.Service
-	schemas resolver.TypeURLToSchemasMap
+	svc      k8s.Service
+	topology topology.Service
+	schemas  resolver.TypeURLToSchemasMap
 }
 
 func (r *res) Schemas() resolver.TypeURLToSchemasMap { return r.schemas }
@@ -203,6 +215,30 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	return handler.Results(limit)
 }
 
-func (r *res) Autocomplete(ctx context.Context, typeURLs, search string, limit uint64) ([]*resolverv1.AutocompleteResult, error) {
-	return []*resolverv1.AutocompleteResult{}, nil
+func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResult, error) {
+	if r.topology == nil {
+		return nil, fmt.Errorf("to use the autocomplete api you must first setup the topology service")
+	}
+
+	var resultLimit uint64 = resolver.DefaultAutocompleteLimit
+	if limit > 0 {
+		resultLimit = limit
+	}
+
+	results, err := r.topology.Autocomplete(ctx, typeURL, search, resultLimit)
+	if err != nil {
+		return nil, err
+	}
+
+	autoCompleteValue := make([]*resolverv1.AutocompleteResult, len(results))
+	for i, r := range results {
+		autoCompleteValue[i] = &resolverv1.AutocompleteResult{
+			Id: r.Id,
+			// TODO (mcutalo): Add more detailed information to the label
+			// the labels value will vary based on resource
+			Label: "",
+		}
+	}
+
+	return autoCompleteValue, nil
 }
