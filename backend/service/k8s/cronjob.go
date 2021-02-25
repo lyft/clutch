@@ -2,8 +2,10 @@ package k8s
 
 import (
 	"context"
-	"fmt"
 	"strings"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	"github.com/golang/protobuf/ptypes/wrappers"
 	v1beta1 "k8s.io/api/batch/v1beta1"
@@ -28,9 +30,9 @@ func (s *svc) DescribeCronJob(ctx context.Context, clientset, cluster, namespace
 	if len(cronJobs.Items) == 1 {
 		return ProtoForCronJob(cs.Cluster(), &cronJobs.Items[0]), nil
 	} else if len(cronJobs.Items) > 1 {
-		return nil, fmt.Errorf("Located multiple CronJobs")
+		return nil, status.Error(codes.FailedPrecondition, "located multiple cron jobs")
 	}
-	return nil, fmt.Errorf("Unable to locate cronJob")
+	return nil, status.Error(codes.NotFound, "unable to locate specified cron job")
 }
 
 func (s *svc) ListCronJobs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.CronJob, error) {

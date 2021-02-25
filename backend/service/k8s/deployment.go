@@ -2,7 +2,9 @@ package k8s
 
 import (
 	"context"
-	"fmt"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	appsv1 "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -29,10 +31,10 @@ func (s *svc) DescribeDeployment(ctx context.Context, clientset, cluster, namesp
 	if len(deployments.Items) == 1 {
 		return ProtoForDeployment(cs.Cluster(), &deployments.Items[0]), nil
 	} else if len(deployments.Items) > 1 {
-		return nil, fmt.Errorf("Located multiple Deployments")
+		return nil, status.Error(codes.FailedPrecondition, "located multiple deployments")
 	}
 
-	return nil, fmt.Errorf("Unable to locate Deployment")
+	return nil, status.Error(codes.NotFound, "unable to locate specified deployment")
 }
 
 func (s *svc) ListDeployments(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Deployment, error) {

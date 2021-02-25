@@ -2,8 +2,10 @@ package k8s
 
 import (
 	"context"
-	"errors"
 	"fmt"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	"github.com/golang/protobuf/ptypes"
 	"go.uber.org/zap"
@@ -149,11 +151,11 @@ func (m *managerImpl) Clientsets(ctx context.Context) (map[string]ContextClients
 func (m *managerImpl) GetK8sClientset(ctx context.Context, clientset, cluster, namespace string) (ContextClientset, error) {
 	cs, ok := m.clientsets[clientset]
 	if !ok {
-		return nil, errors.New("not found")
+		return nil, status.Errorf(codes.NotFound, "clientset '%s' not found", clientset)
 	}
 
 	if cluster != "" && cluster != cs.cluster {
-		return nil, errors.New("specified cluster does not match clientset")
+		return nil, status.Errorf(codes.InvalidArgument, "specified cluster '%s' does not match clientset '%s'", cluster, clientset)
 	}
 
 	// Shallow copy and update namespace.
