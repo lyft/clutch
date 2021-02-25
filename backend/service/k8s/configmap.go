@@ -2,8 +2,9 @@ package k8s
 
 import (
 	"context"
-	"fmt"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -27,9 +28,9 @@ func (s *svc) DescribeConfigMap(ctx context.Context, clientset, cluster, namespa
 	if len(configMapList.Items) == 1 {
 		return protoForConfigMap(cs.Cluster(), &configMapList.Items[0]), nil
 	} else if len(configMapList.Items) > 1 {
-		return nil, fmt.Errorf("Located multiple configMaps with name %s", name)
+		return nil, status.Errorf(codes.FailedPrecondition, "located multiple config maps with name '%s'", name)
 	}
-	return nil, fmt.Errorf("Unable to locate configMap")
+	return nil, status.Error(codes.NotFound, "unable to locate specified config map")
 }
 
 func (s *svc) DeleteConfigMap(ctx context.Context, clientset, cluster, namespace, name string) error {

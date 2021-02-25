@@ -2,8 +2,9 @@ package k8s
 
 import (
 	"context"
-	"errors"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	batchv1 "k8s.io/api/batch/v1"
 	"k8s.io/client-go/kubernetes/scheme"
 
@@ -28,7 +29,7 @@ func (a *k8sAPI) ListJobs(ctx context.Context, req *k8sapiv1.ListJobsRequest) (*
 
 func (a *k8sAPI) CreateJob(ctx context.Context, req *k8sapiv1.CreateJobRequest) (*k8sapiv1.CreateJobResponse, error) {
 	if req.JobConfig == nil {
-		return nil, errors.New("unable to create Job object. Job configuration is missing")
+		return nil, status.Error(codes.InvalidArgument, "unable to create job object, job configuration is missing")
 	}
 	// convert Job config into a runtime object and then type cast to a
 	// batch job
@@ -40,7 +41,7 @@ func (a *k8sAPI) CreateJob(ctx context.Context, req *k8sapiv1.CreateJobRequest) 
 	}
 	job, ok := obj.(*batchv1.Job)
 	if !ok {
-		return nil, errors.New("unable to create Job object. Type assertion to Job failed")
+		return nil, status.Error(codes.Internal, "unable to create Job object. Type assertion to Job failed")
 	}
 	result, err := a.k8s.CreateJob(ctx, req.Clientset, req.Cluster, req.Namespace, job)
 	if err != nil {
