@@ -75,7 +75,7 @@ func k8sStatusToClutchK8sStatus(s *v1.Status) *k8sv1.Status {
 			Group:  s.Details.Group,
 			Kind:   s.Details.Kind,
 			Uid:    string(s.Details.UID),
-			Causes: make([]*k8sv1.StatusCause, 0, len(ret.Details.Causes)),
+			Causes: make([]*k8sv1.StatusCause, 0, len(s.Details.Causes)),
 		}
 
 		for _, c := range s.Details.Causes {
