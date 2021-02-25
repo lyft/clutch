@@ -23,25 +23,25 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 	advisoryLockId := convertLockIdToAdvisoryLockId(topologyCacheLockId)
 	ticker := time.NewTicker(time.Second * 10)
 
-	// We create our own connection to use for acquiring the advisory lock
-	// If the connection is severed for any reason the advisory lock will automatically unlock
-	conn, err := c.db.Conn(ctx)
-	if err != nil {
-		c.log.Fatal("Unable to connect to the database", zap.Error(err))
-	}
-	defer conn.Close()
-
 	// Infinitely try to acquire the advisory lock
 	// Once the lock is acquired we start caching, this is a blocking operation
 	for {
 		c.log.Info("trying to acquire advisory lock")
 
-		// TODO: We could in the future spread the load of the topology caching
-		// across many clutch instances by having an a lock per service (e.g. AWS, k8s, etc)
-		if c.tryAdvisoryLock(ctx, conn, advisoryLockId) {
-			c.log.Info("acquired the advisory lock, starting to cache topology now...")
-			go c.expireCache(ctx)
-			c.startTopologyCache(ctx)
+		// We create our own connection to use for acquiring the advisory lock
+		// If the connection is severed for any reason the advisory lock will automatically unlock
+		conn, err := c.db.Conn(ctx)
+		switch err {
+		case nil:
+			// TODO: We could in the future spread the load of the topology caching
+			// across many clutch instances by having an a lock per service (e.g. AWS, k8s, etc)
+			if c.tryAdvisoryLock(ctx, conn, advisoryLockId) {
+				c.log.Info("acquired the advisory lock, starting to cache topology now...")
+				go c.expireCache(ctx)
+				c.startTopologyCache(ctx)
+			}
+		default:
+			c.log.Error("lost connection to database, trying to reconnect...", zap.Error(err))
 		}
 
 		select {
@@ -50,6 +50,7 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 		case <-ctx.Done():
 			ticker.Stop()
 			c.unlockAdvisoryLock(context.Background(), conn, advisoryLockId)
+			conn.Close()
 			return
 		}
 	}

@@ -3441,6 +3441,22 @@ func (m *CronJob) Validate() error {
 
 	// no validation rules for Annotations
 
+	// no validation rules for Suspend
+
+	// no validation rules for NumActiveJobs
+
+	// no validation rules for ConcurrencyPolicy
+
+	if v, ok := interface{}(m.GetStartingDeadlineSeconds()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CronJobValidationError{
+				field:  "StartingDeadlineSeconds",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -5069,6 +5085,253 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeleteJobResponseValidationError{}
+
+// Validate checks the field values on JobConfig with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *JobConfig) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetValue()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return JobConfigValidationError{
+				field:  "Value",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// JobConfigValidationError is the validation error returned by
+// JobConfig.Validate if the designated constraints aren't met.
+type JobConfigValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e JobConfigValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e JobConfigValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e JobConfigValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e JobConfigValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e JobConfigValidationError) ErrorName() string { return "JobConfigValidationError" }
+
+// Error satisfies the builtin error interface
+func (e JobConfigValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sJobConfig.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = JobConfigValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = JobConfigValidationError{}
+
+// Validate checks the field values on CreateJobRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *CreateJobRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return CreateJobRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return CreateJobRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetNamespace()) < 1 {
+		return CreateJobRequestValidationError{
+			field:  "Namespace",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if v, ok := interface{}(m.GetJobConfig()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateJobRequestValidationError{
+				field:  "JobConfig",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// CreateJobRequestValidationError is the validation error returned by
+// CreateJobRequest.Validate if the designated constraints aren't met.
+type CreateJobRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateJobRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateJobRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateJobRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateJobRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateJobRequestValidationError) ErrorName() string { return "CreateJobRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e CreateJobRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateJobRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateJobRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateJobRequestValidationError{}
+
+// Validate checks the field values on CreateJobResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *CreateJobResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetJob()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateJobResponseValidationError{
+				field:  "Job",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// CreateJobResponseValidationError is the validation error returned by
+// CreateJobResponse.Validate if the designated constraints aren't met.
+type CreateJobResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateJobResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateJobResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateJobResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateJobResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateJobResponseValidationError) ErrorName() string {
+	return "CreateJobResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateJobResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateJobResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateJobResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateJobResponseValidationError{}
 
 // Validate checks the field values on NullableString with the rules defined in
 // the proto definition for this message. If any rules are violated, an error

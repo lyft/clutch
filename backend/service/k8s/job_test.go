@@ -126,6 +126,37 @@ func TestDeleteJob(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestCreateJob(t *testing.T) {
+	cs := testJobClientset()
+
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"testing-clientset": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "testing-namespace",
+				cluster:   "testing-cluster",
+			}},
+		},
+	}
+
+	jobConfig := &v1.Job{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      "test-job",
+			Namespace: "testing-namespace",
+			Labels:    map[string]string{"foo": "bar"},
+		},
+	}
+
+	job, err := s.CreateJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace", jobConfig)
+	assert.NoError(t, err)
+	assert.NotNil(t, job)
+	assert.Equal(t, "test-job", job.Name)
+
+	// invalid job config
+	_, err = s.CreateJob(context.Background(), "testing-clientset", "testing-cluster", "testing-namespace1", nil)
+	assert.Error(t, err)
+}
+
 func TestProtoForJob(t *testing.T) {
 	t.Parallel()
 

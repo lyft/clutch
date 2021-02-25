@@ -9589,6 +9589,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public deleteJob(request: clutch.k8s.v1.IDeleteJobRequest): Promise<clutch.k8s.v1.DeleteJobResponse>;
+
+                /**
+                 * Calls CreateJob.
+                 * @param request CreateJobRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and CreateJobResponse
+                 */
+                public createJob(request: clutch.k8s.v1.ICreateJobRequest, callback: clutch.k8s.v1.K8sAPI.CreateJobCallback): void;
+
+                /**
+                 * Calls CreateJob.
+                 * @param request CreateJobRequest message or plain object
+                 * @returns Promise
+                 */
+                public createJob(request: clutch.k8s.v1.ICreateJobRequest): Promise<clutch.k8s.v1.CreateJobResponse>;
             }
 
             namespace K8sAPI {
@@ -9760,6 +9774,13 @@ export namespace clutch {
                  * @param [response] DeleteJobResponse
                  */
                 type DeleteJobCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteJobResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#createJob}.
+                 * @param error Error, if any
+                 * @param [response] CreateJobResponse
+                 */
+                type CreateJobCallback = (error: (Error|null), response?: clutch.k8s.v1.CreateJobResponse) => void;
             }
 
             /** Properties of a DescribePodRequest. */
@@ -12406,6 +12427,18 @@ export namespace clutch {
 
                 /** CronJob annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** CronJob suspend */
+                suspend?: (boolean|null);
+
+                /** CronJob numActiveJobs */
+                numActiveJobs?: (number|null);
+
+                /** CronJob concurrencyPolicy */
+                concurrencyPolicy?: (clutch.k8s.v1.CronJob.ConcurrencyPolicy|null);
+
+                /** CronJob startingDeadlineSeconds */
+                startingDeadlineSeconds?: (google.protobuf.IInt64Value|null);
             }
 
             /** Represents a CronJob. */
@@ -12435,6 +12468,18 @@ export namespace clutch {
                 /** CronJob annotations. */
                 public annotations: { [k: string]: string };
 
+                /** CronJob suspend. */
+                public suspend: boolean;
+
+                /** CronJob numActiveJobs. */
+                public numActiveJobs: number;
+
+                /** CronJob concurrencyPolicy. */
+                public concurrencyPolicy: clutch.k8s.v1.CronJob.ConcurrencyPolicy;
+
+                /** CronJob startingDeadlineSeconds. */
+                public startingDeadlineSeconds?: (google.protobuf.IInt64Value|null);
+
                 /**
                  * Verifies a CronJob message.
                  * @param message Plain object to verify
@@ -12462,6 +12507,18 @@ export namespace clutch {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace CronJob {
+
+                /** ConcurrencyPolicy enum. */
+                enum ConcurrencyPolicy {
+                    UNSPECIFIED = 0,
+                    UNKNOWN = 1,
+                    ALLOW = 2,
+                    FORBID = 3,
+                    REPLACE = 4
+                }
             }
 
             /** Properties of a DescribeCronJobRequest. */
@@ -13515,6 +13572,168 @@ export namespace clutch {
 
                 /**
                  * Converts this DeleteJobResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a JobConfig. */
+            interface IJobConfig {
+
+                /** JobConfig value */
+                value?: (google.protobuf.IValue|null);
+            }
+
+            /** Represents a JobConfig. */
+            class JobConfig implements IJobConfig {
+
+                /**
+                 * Constructs a new JobConfig.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IJobConfig);
+
+                /** JobConfig value. */
+                public value?: (google.protobuf.IValue|null);
+
+                /**
+                 * Verifies a JobConfig message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a JobConfig message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns JobConfig
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.JobConfig;
+
+                /**
+                 * Creates a plain object from a JobConfig message. Also converts values to other types if specified.
+                 * @param message JobConfig
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.JobConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this JobConfig to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a CreateJobRequest. */
+            interface ICreateJobRequest {
+
+                /** CreateJobRequest clientset */
+                clientset?: (string|null);
+
+                /** CreateJobRequest cluster */
+                cluster?: (string|null);
+
+                /** CreateJobRequest namespace */
+                namespace?: (string|null);
+
+                /** CreateJobRequest jobConfig */
+                jobConfig?: (clutch.k8s.v1.IJobConfig|null);
+            }
+
+            /** Represents a CreateJobRequest. */
+            class CreateJobRequest implements ICreateJobRequest {
+
+                /**
+                 * Constructs a new CreateJobRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.ICreateJobRequest);
+
+                /** CreateJobRequest clientset. */
+                public clientset: string;
+
+                /** CreateJobRequest cluster. */
+                public cluster: string;
+
+                /** CreateJobRequest namespace. */
+                public namespace: string;
+
+                /** CreateJobRequest jobConfig. */
+                public jobConfig?: (clutch.k8s.v1.IJobConfig|null);
+
+                /**
+                 * Verifies a CreateJobRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CreateJobRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CreateJobRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.CreateJobRequest;
+
+                /**
+                 * Creates a plain object from a CreateJobRequest message. Also converts values to other types if specified.
+                 * @param message CreateJobRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.CreateJobRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CreateJobRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a CreateJobResponse. */
+            interface ICreateJobResponse {
+
+                /** CreateJobResponse job */
+                job?: (clutch.k8s.v1.IJob|null);
+            }
+
+            /** Represents a CreateJobResponse. */
+            class CreateJobResponse implements ICreateJobResponse {
+
+                /**
+                 * Constructs a new CreateJobResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.ICreateJobResponse);
+
+                /** CreateJobResponse job. */
+                public job?: (clutch.k8s.v1.IJob|null);
+
+                /**
+                 * Verifies a CreateJobResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CreateJobResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CreateJobResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.CreateJobResponse;
+
+                /**
+                 * Creates a plain object from a CreateJobResponse message. Also converts values to other types if specified.
+                 * @param message CreateJobResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.CreateJobResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CreateJobResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

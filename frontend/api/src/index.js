@@ -22957,6 +22957,39 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#createJob}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef CreateJobCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.CreateJobResponse} [response] CreateJobResponse
+                 */
+
+                /**
+                 * Calls CreateJob.
+                 * @function createJob
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.ICreateJobRequest} request CreateJobRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.CreateJobCallback} callback Node-style callback called with the error, if any, and CreateJobResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.createJob = function createJob(request, callback) {
+                    return this.rpcCall(createJob, $root.clutch.k8s.v1.CreateJobRequest, $root.clutch.k8s.v1.CreateJobResponse, request, callback);
+                }, "name", { value: "CreateJob" });
+
+                /**
+                 * Calls CreateJob.
+                 * @function createJob
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.ICreateJobRequest} request CreateJobRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.CreateJobResponse>} Promise
+                 * @variation 2
+                 */
+
                 return K8sAPI;
             })();
 
@@ -29296,6 +29329,10 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [schedule] CronJob schedule
                  * @property {Object.<string,string>|null} [labels] CronJob labels
                  * @property {Object.<string,string>|null} [annotations] CronJob annotations
+                 * @property {boolean|null} [suspend] CronJob suspend
+                 * @property {number|null} [numActiveJobs] CronJob numActiveJobs
+                 * @property {clutch.k8s.v1.CronJob.ConcurrencyPolicy|null} [concurrencyPolicy] CronJob concurrencyPolicy
+                 * @property {google.protobuf.IInt64Value|null} [startingDeadlineSeconds] CronJob startingDeadlineSeconds
                  */
 
                 /**
@@ -29364,6 +29401,38 @@ export const clutch = $root.clutch = (() => {
                 CronJob.prototype.annotations = $util.emptyObject;
 
                 /**
+                 * CronJob suspend.
+                 * @member {boolean} suspend
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @instance
+                 */
+                CronJob.prototype.suspend = false;
+
+                /**
+                 * CronJob numActiveJobs.
+                 * @member {number} numActiveJobs
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @instance
+                 */
+                CronJob.prototype.numActiveJobs = 0;
+
+                /**
+                 * CronJob concurrencyPolicy.
+                 * @member {clutch.k8s.v1.CronJob.ConcurrencyPolicy} concurrencyPolicy
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @instance
+                 */
+                CronJob.prototype.concurrencyPolicy = 0;
+
+                /**
+                 * CronJob startingDeadlineSeconds.
+                 * @member {google.protobuf.IInt64Value|null|undefined} startingDeadlineSeconds
+                 * @memberof clutch.k8s.v1.CronJob
+                 * @instance
+                 */
+                CronJob.prototype.startingDeadlineSeconds = null;
+
+                /**
                  * Verifies a CronJob message.
                  * @function verify
                  * @memberof clutch.k8s.v1.CronJob
@@ -29402,6 +29471,28 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.annotations[key[i]]))
                                 return "annotations: string{k:string} expected";
                     }
+                    if (message.suspend != null && message.hasOwnProperty("suspend"))
+                        if (typeof message.suspend !== "boolean")
+                            return "suspend: boolean expected";
+                    if (message.numActiveJobs != null && message.hasOwnProperty("numActiveJobs"))
+                        if (!$util.isInteger(message.numActiveJobs))
+                            return "numActiveJobs: integer expected";
+                    if (message.concurrencyPolicy != null && message.hasOwnProperty("concurrencyPolicy"))
+                        switch (message.concurrencyPolicy) {
+                        default:
+                            return "concurrencyPolicy: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                            break;
+                        }
+                    if (message.startingDeadlineSeconds != null && message.hasOwnProperty("startingDeadlineSeconds")) {
+                        let error = $root.google.protobuf.Int64Value.verify(message.startingDeadlineSeconds);
+                        if (error)
+                            return "startingDeadlineSeconds." + error;
+                    }
                     return null;
                 };
 
@@ -29439,6 +29530,37 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
                             message.annotations[keys[i]] = String(object.annotations[keys[i]]);
                     }
+                    if (object.suspend != null)
+                        message.suspend = Boolean(object.suspend);
+                    if (object.numActiveJobs != null)
+                        message.numActiveJobs = object.numActiveJobs | 0;
+                    switch (object.concurrencyPolicy) {
+                    case "UNSPECIFIED":
+                    case 0:
+                        message.concurrencyPolicy = 0;
+                        break;
+                    case "UNKNOWN":
+                    case 1:
+                        message.concurrencyPolicy = 1;
+                        break;
+                    case "ALLOW":
+                    case 2:
+                        message.concurrencyPolicy = 2;
+                        break;
+                    case "FORBID":
+                    case 3:
+                        message.concurrencyPolicy = 3;
+                        break;
+                    case "REPLACE":
+                    case 4:
+                        message.concurrencyPolicy = 4;
+                        break;
+                    }
+                    if (object.startingDeadlineSeconds != null) {
+                        if (typeof object.startingDeadlineSeconds !== "object")
+                            throw TypeError(".clutch.k8s.v1.CronJob.startingDeadlineSeconds: object expected");
+                        message.startingDeadlineSeconds = $root.google.protobuf.Int64Value.fromObject(object.startingDeadlineSeconds);
+                    }
                     return message;
                 };
 
@@ -29464,6 +29586,10 @@ export const clutch = $root.clutch = (() => {
                         object.namespace = "";
                         object.name = "";
                         object.schedule = "";
+                        object.suspend = false;
+                        object.numActiveJobs = 0;
+                        object.concurrencyPolicy = options.enums === String ? "UNSPECIFIED" : 0;
+                        object.startingDeadlineSeconds = null;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -29484,6 +29610,14 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < keys2.length; ++j)
                             object.annotations[keys2[j]] = message.annotations[keys2[j]];
                     }
+                    if (message.suspend != null && message.hasOwnProperty("suspend"))
+                        object.suspend = message.suspend;
+                    if (message.numActiveJobs != null && message.hasOwnProperty("numActiveJobs"))
+                        object.numActiveJobs = message.numActiveJobs;
+                    if (message.concurrencyPolicy != null && message.hasOwnProperty("concurrencyPolicy"))
+                        object.concurrencyPolicy = options.enums === String ? $root.clutch.k8s.v1.CronJob.ConcurrencyPolicy[message.concurrencyPolicy] : message.concurrencyPolicy;
+                    if (message.startingDeadlineSeconds != null && message.hasOwnProperty("startingDeadlineSeconds"))
+                        object.startingDeadlineSeconds = $root.google.protobuf.Int64Value.toObject(message.startingDeadlineSeconds, options);
                     return object;
                 };
 
@@ -29497,6 +29631,26 @@ export const clutch = $root.clutch = (() => {
                 CronJob.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
+
+                /**
+                 * ConcurrencyPolicy enum.
+                 * @name clutch.k8s.v1.CronJob.ConcurrencyPolicy
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} UNKNOWN=1 UNKNOWN value
+                 * @property {number} ALLOW=2 ALLOW value
+                 * @property {number} FORBID=3 FORBID value
+                 * @property {number} REPLACE=4 REPLACE value
+                 */
+                CronJob.ConcurrencyPolicy = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "UNKNOWN"] = 1;
+                    values[valuesById[2] = "ALLOW"] = 2;
+                    values[valuesById[3] = "FORBID"] = 3;
+                    values[valuesById[4] = "REPLACE"] = 4;
+                    return values;
+                })();
 
                 return CronJob;
             })();
@@ -32026,6 +32180,373 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return DeleteJobResponse;
+            })();
+
+            v1.JobConfig = (function() {
+
+                /**
+                 * Properties of a JobConfig.
+                 * @memberof clutch.k8s.v1
+                 * @interface IJobConfig
+                 * @property {google.protobuf.IValue|null} [value] JobConfig value
+                 */
+
+                /**
+                 * Constructs a new JobConfig.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a JobConfig.
+                 * @implements IJobConfig
+                 * @constructor
+                 * @param {clutch.k8s.v1.IJobConfig=} [properties] Properties to set
+                 */
+                function JobConfig(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * JobConfig value.
+                 * @member {google.protobuf.IValue|null|undefined} value
+                 * @memberof clutch.k8s.v1.JobConfig
+                 * @instance
+                 */
+                JobConfig.prototype.value = null;
+
+                /**
+                 * Verifies a JobConfig message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.JobConfig
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                JobConfig.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.value != null && message.hasOwnProperty("value")) {
+                        let error = $root.google.protobuf.Value.verify(message.value);
+                        if (error)
+                            return "value." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a JobConfig message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.JobConfig
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.JobConfig} JobConfig
+                 */
+                JobConfig.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.JobConfig)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.JobConfig();
+                    if (object.value != null) {
+                        if (typeof object.value !== "object")
+                            throw TypeError(".clutch.k8s.v1.JobConfig.value: object expected");
+                        message.value = $root.google.protobuf.Value.fromObject(object.value);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a JobConfig message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.JobConfig
+                 * @static
+                 * @param {clutch.k8s.v1.JobConfig} message JobConfig
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                JobConfig.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.value = null;
+                    if (message.value != null && message.hasOwnProperty("value"))
+                        object.value = $root.google.protobuf.Value.toObject(message.value, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this JobConfig to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.JobConfig
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                JobConfig.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return JobConfig;
+            })();
+
+            v1.CreateJobRequest = (function() {
+
+                /**
+                 * Properties of a CreateJobRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface ICreateJobRequest
+                 * @property {string|null} [clientset] CreateJobRequest clientset
+                 * @property {string|null} [cluster] CreateJobRequest cluster
+                 * @property {string|null} [namespace] CreateJobRequest namespace
+                 * @property {clutch.k8s.v1.IJobConfig|null} [jobConfig] CreateJobRequest jobConfig
+                 */
+
+                /**
+                 * Constructs a new CreateJobRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a CreateJobRequest.
+                 * @implements ICreateJobRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.ICreateJobRequest=} [properties] Properties to set
+                 */
+                function CreateJobRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * CreateJobRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.CreateJobRequest
+                 * @instance
+                 */
+                CreateJobRequest.prototype.clientset = "";
+
+                /**
+                 * CreateJobRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.CreateJobRequest
+                 * @instance
+                 */
+                CreateJobRequest.prototype.cluster = "";
+
+                /**
+                 * CreateJobRequest namespace.
+                 * @member {string} namespace
+                 * @memberof clutch.k8s.v1.CreateJobRequest
+                 * @instance
+                 */
+                CreateJobRequest.prototype.namespace = "";
+
+                /**
+                 * CreateJobRequest jobConfig.
+                 * @member {clutch.k8s.v1.IJobConfig|null|undefined} jobConfig
+                 * @memberof clutch.k8s.v1.CreateJobRequest
+                 * @instance
+                 */
+                CreateJobRequest.prototype.jobConfig = null;
+
+                /**
+                 * Verifies a CreateJobRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.CreateJobRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                CreateJobRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        if (!$util.isString(message.namespace))
+                            return "namespace: string expected";
+                    if (message.jobConfig != null && message.hasOwnProperty("jobConfig")) {
+                        let error = $root.clutch.k8s.v1.JobConfig.verify(message.jobConfig);
+                        if (error)
+                            return "jobConfig." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a CreateJobRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.CreateJobRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.CreateJobRequest} CreateJobRequest
+                 */
+                CreateJobRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.CreateJobRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.CreateJobRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.namespace != null)
+                        message.namespace = String(object.namespace);
+                    if (object.jobConfig != null) {
+                        if (typeof object.jobConfig !== "object")
+                            throw TypeError(".clutch.k8s.v1.CreateJobRequest.jobConfig: object expected");
+                        message.jobConfig = $root.clutch.k8s.v1.JobConfig.fromObject(object.jobConfig);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a CreateJobRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.CreateJobRequest
+                 * @static
+                 * @param {clutch.k8s.v1.CreateJobRequest} message CreateJobRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CreateJobRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.namespace = "";
+                        object.jobConfig = null;
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = message.namespace;
+                    if (message.jobConfig != null && message.hasOwnProperty("jobConfig"))
+                        object.jobConfig = $root.clutch.k8s.v1.JobConfig.toObject(message.jobConfig, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this CreateJobRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.CreateJobRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CreateJobRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return CreateJobRequest;
+            })();
+
+            v1.CreateJobResponse = (function() {
+
+                /**
+                 * Properties of a CreateJobResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface ICreateJobResponse
+                 * @property {clutch.k8s.v1.IJob|null} [job] CreateJobResponse job
+                 */
+
+                /**
+                 * Constructs a new CreateJobResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a CreateJobResponse.
+                 * @implements ICreateJobResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.ICreateJobResponse=} [properties] Properties to set
+                 */
+                function CreateJobResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * CreateJobResponse job.
+                 * @member {clutch.k8s.v1.IJob|null|undefined} job
+                 * @memberof clutch.k8s.v1.CreateJobResponse
+                 * @instance
+                 */
+                CreateJobResponse.prototype.job = null;
+
+                /**
+                 * Verifies a CreateJobResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.CreateJobResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                CreateJobResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.job != null && message.hasOwnProperty("job")) {
+                        let error = $root.clutch.k8s.v1.Job.verify(message.job);
+                        if (error)
+                            return "job." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a CreateJobResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.CreateJobResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.CreateJobResponse} CreateJobResponse
+                 */
+                CreateJobResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.CreateJobResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.CreateJobResponse();
+                    if (object.job != null) {
+                        if (typeof object.job !== "object")
+                            throw TypeError(".clutch.k8s.v1.CreateJobResponse.job: object expected");
+                        message.job = $root.clutch.k8s.v1.Job.fromObject(object.job);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a CreateJobResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.CreateJobResponse
+                 * @static
+                 * @param {clutch.k8s.v1.CreateJobResponse} message CreateJobResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CreateJobResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.job = null;
+                    if (message.job != null && message.hasOwnProperty("job"))
+                        object.job = $root.clutch.k8s.v1.Job.toObject(message.job, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this CreateJobResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.CreateJobResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CreateJobResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return CreateJobResponse;
             })();
 
             v1.NullableString = (function() {
