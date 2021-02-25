@@ -83,11 +83,11 @@ func protoForConfigMap(cluster string, k8sconfigMap *v1.ConfigMap) *k8sapiv1.Con
 	}
 	// optional fields
 	if k8sconfigMap.Data != nil {
-		dataMap := make(map[string]interface{}, len(k8sconfigMap.Data))
+		dataMap := make(map[string]*structpb.Value, len(k8sconfigMap.Data))
 		for k, v := range k8sconfigMap.Data {
-			dataMap[k] = v
+			dataMap[k], _ = structpb.NewValue(v)
 		}
-		ret.Data, _ = structpb.NewStruct(dataMap)
+		ret.Data = dataMap
 	}
 	return ret
 }

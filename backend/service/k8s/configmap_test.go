@@ -210,10 +210,9 @@ func TestProtoForConfigMap(t *testing.T) {
 
 			if len(tt.configMap.Data) > 0 {
 				mapData := tt.configMap.Data
-				mapResult := configMap.Data.AsMap()
 
-				for key, val := range mapResult {
-					assert.Equal(t, mapData[key], val)
+				for key, val := range configMap.Data {
+					assert.Equal(t, mapData[key], val.GetStringValue())
 				}
 			}
 		})
