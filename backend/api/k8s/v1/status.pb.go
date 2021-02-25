@@ -25,6 +25,10 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
+// Kubernetes protos are generated using non-standard mechanisms, and the Go objects panic when serializing
+// with the v2 proto APIs. These are just repetitions of the structs from K8s metav1 package so they are compliant
+// with proto v2 serialization.
+// https://github.com/kubernetes/apimachinery/blob/44b9a379dc1834b9cee463d1da4dc3e9d7302b35/pkg/apis/meta/v1/types.go#L620-L650
 type Status struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
