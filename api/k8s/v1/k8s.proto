@@ -729,6 +729,10 @@ message ConfigMap {
 
   map<string, string> annotations = 4;
   map<string, string> labels = 5;
+
+  // represents a configmaps data field which is simple
+  // key:value map
+  google.protobuf.Struct data = 6;
 }
 
 message ListConfigMapsRequest {

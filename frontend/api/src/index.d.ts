@@ -12880,6 +12880,9 @@ export namespace clutch {
 
                 /** ConfigMap labels */
                 labels?: ({ [k: string]: string }|null);
+
+                /** ConfigMap data */
+                data?: (google.protobuf.IStruct|null);
             }
 
             /** Represents a ConfigMap. */
@@ -12905,6 +12908,9 @@ export namespace clutch {
 
                 /** ConfigMap labels. */
                 public labels: { [k: string]: string };
+
+                /** ConfigMap data. */
+                public data?: (google.protobuf.IStruct|null);
 
                 /**
                  * Verifies a ConfigMap message.

@@ -184,6 +184,20 @@ func TestProtoForConfigMap(t *testing.T) {
 				},
 			},
 		},
+		{
+			id:                  "data is set",
+			inputClusterName:    "test",
+			expectedClusterName: "test",
+			configMap: &v1.ConfigMap{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "",
+				},
+				Data: map[string]string{
+					"key1": "value1",
+					"key2": "value2",
+				},
+			},
+		},
 	}
 
 	for _, tt := range configMapTestCases {
@@ -193,6 +207,15 @@ func TestProtoForConfigMap(t *testing.T) {
 
 			configMap := protoForConfigMap(tt.inputClusterName, tt.configMap)
 			assert.Equal(t, tt.expectedClusterName, configMap.Cluster)
+
+			if len(tt.configMap.Data) > 0 {
+				mapData := tt.configMap.Data
+				mapResult := configMap.Data.AsMap()
+
+				for key, val := range mapResult {
+					assert.Equal(t, mapData[key], val)
+				}
+			}
 		})
 	}
 }

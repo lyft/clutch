@@ -30461,6 +30461,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [name] ConfigMap name
                  * @property {Object.<string,string>|null} [annotations] ConfigMap annotations
                  * @property {Object.<string,string>|null} [labels] ConfigMap labels
+                 * @property {google.protobuf.IStruct|null} [data] ConfigMap data
                  */
 
                 /**
@@ -30521,6 +30522,14 @@ export const clutch = $root.clutch = (() => {
                 ConfigMap.prototype.labels = $util.emptyObject;
 
                 /**
+                 * ConfigMap data.
+                 * @member {google.protobuf.IStruct|null|undefined} data
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 */
+                ConfigMap.prototype.data = null;
+
+                /**
                  * Verifies a ConfigMap message.
                  * @function verify
                  * @memberof clutch.k8s.v1.ConfigMap
@@ -30555,6 +30564,11 @@ export const clutch = $root.clutch = (() => {
                         for (let i = 0; i < key.length; ++i)
                             if (!$util.isString(message.labels[key[i]]))
                                 return "labels: string{k:string} expected";
+                    }
+                    if (message.data != null && message.hasOwnProperty("data")) {
+                        let error = $root.google.protobuf.Struct.verify(message.data);
+                        if (error)
+                            return "data." + error;
                     }
                     return null;
                 };
@@ -30591,6 +30605,11 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
                             message.labels[keys[i]] = String(object.labels[keys[i]]);
                     }
+                    if (object.data != null) {
+                        if (typeof object.data !== "object")
+                            throw TypeError(".clutch.k8s.v1.ConfigMap.data: object expected");
+                        message.data = $root.google.protobuf.Struct.fromObject(object.data);
+                    }
                     return message;
                 };
 
@@ -30615,6 +30634,7 @@ export const clutch = $root.clutch = (() => {
                         object.cluster = "";
                         object.namespace = "";
                         object.name = "";
+                        object.data = null;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -30633,6 +30653,8 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < keys2.length; ++j)
                             object.labels[keys2[j]] = message.labels[keys2[j]];
                     }
+                    if (message.data != null && message.hasOwnProperty("data"))
+                        object.data = $root.google.protobuf.Struct.toObject(message.data, options);
                     return object;
                 };
 
