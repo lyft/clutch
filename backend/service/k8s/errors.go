@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"strings"
 
-	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
-	"github.com/lyft/clutch/backend/service"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
+	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/service"
 )
 

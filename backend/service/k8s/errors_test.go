@@ -2,15 +2,14 @@ package k8s
 
 import (
 	"errors"
-
-	"github.com/lyft/clutch/backend/middleware/errorintercept"
-
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+
+	"github.com/lyft/clutch/backend/middleware/errorintercept"
 )
 
 func TestErrorToStatus(t *testing.T) {
