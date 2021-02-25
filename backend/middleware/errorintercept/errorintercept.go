@@ -7,7 +7,10 @@ package errorintercept
 import (
 	"context"
 
+	"github.com/uber-go/tally"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	"github.com/lyft/clutch/backend/middleware"
 )
@@ -21,7 +24,11 @@ type Interceptor interface {
 
 type errorInterceptorFunc func(error) error
 
-func New() (middleware.Middleware, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
+	return NewMiddleware(cfg, logger, scope)
+}
+
+func NewMiddleware(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (*Middleware, error) {
 	return &Middleware{}, nil
 }
 

@@ -12,7 +12,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	m, err := New()
+	m, err := New(nil, nil, nil)
 	assert.NoError(t, err)
 	assert.NotNil(t, m)
 }

@@ -90,11 +90,9 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	initScope.Counter("start").Inc(1)
 
 	// Create the error interceptor so services can register error interceptors if desired.
-	var unaryErrorMiddleware *errorintercept.Middleware
-	if m, err := errorintercept.New(); err != nil {
+	errorInterceptMiddleware, err := errorintercept.NewMiddleware(nil, logger, initScope)
+	if err != nil {
 		logger.Fatal("could not create error interceptor middleware", zap.Error(err))
-	} else {
-		unaryErrorMiddleware = m.(*errorintercept.Middleware)
 	}
 
 	// Instantiate and register services.
@@ -122,7 +120,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 
 		if ei, ok := svc.(errorintercept.Interceptor); ok {
 			logger.Info("service registered an error conversion interceptor")
-			unaryErrorMiddleware.AddInterceptor(ei.InterceptError)
+			errorInterceptMiddleware.AddInterceptor(ei.InterceptError)
 		}
 	}
 
@@ -152,7 +150,7 @@ func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets
 	var interceptors []grpc.UnaryServerInterceptor
 
 	// Error interceptors should be first on the stack (last in chain).
-	interceptors = append(interceptors, unaryErrorMiddleware.UnaryInterceptor())
+	interceptors = append(interceptors, errorInterceptMiddleware.UnaryInterceptor())
 
 	// Access log.
 	if cfg.Gateway.Accesslog != nil {
