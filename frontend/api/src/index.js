@@ -33146,6 +33146,503 @@ export const clutch = $root.clutch = (() => {
                 return RemoveObjectMetaFields;
             })();
 
+            v1.Status = (function() {
+
+                /**
+                 * Properties of a Status.
+                 * @memberof clutch.k8s.v1
+                 * @interface IStatus
+                 * @property {string|null} [status] Status status
+                 * @property {string|null} [message] Status message
+                 * @property {string|null} [reason] Status reason
+                 * @property {number|null} [code] Status code
+                 * @property {clutch.k8s.v1.IStatusDetails|null} [details] Status details
+                 */
+
+                /**
+                 * Constructs a new Status.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a Status.
+                 * @implements IStatus
+                 * @constructor
+                 * @param {clutch.k8s.v1.IStatus=} [properties] Properties to set
+                 */
+                function Status(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Status status.
+                 * @member {string} status
+                 * @memberof clutch.k8s.v1.Status
+                 * @instance
+                 */
+                Status.prototype.status = "";
+
+                /**
+                 * Status message.
+                 * @member {string} message
+                 * @memberof clutch.k8s.v1.Status
+                 * @instance
+                 */
+                Status.prototype.message = "";
+
+                /**
+                 * Status reason.
+                 * @member {string} reason
+                 * @memberof clutch.k8s.v1.Status
+                 * @instance
+                 */
+                Status.prototype.reason = "";
+
+                /**
+                 * Status code.
+                 * @member {number} code
+                 * @memberof clutch.k8s.v1.Status
+                 * @instance
+                 */
+                Status.prototype.code = 0;
+
+                /**
+                 * Status details.
+                 * @member {clutch.k8s.v1.IStatusDetails|null|undefined} details
+                 * @memberof clutch.k8s.v1.Status
+                 * @instance
+                 */
+                Status.prototype.details = null;
+
+                /**
+                 * Verifies a Status message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.Status
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Status.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.status != null && message.hasOwnProperty("status"))
+                        if (!$util.isString(message.status))
+                            return "status: string expected";
+                    if (message.message != null && message.hasOwnProperty("message"))
+                        if (!$util.isString(message.message))
+                            return "message: string expected";
+                    if (message.reason != null && message.hasOwnProperty("reason"))
+                        if (!$util.isString(message.reason))
+                            return "reason: string expected";
+                    if (message.code != null && message.hasOwnProperty("code"))
+                        if (!$util.isInteger(message.code))
+                            return "code: integer expected";
+                    if (message.details != null && message.hasOwnProperty("details")) {
+                        let error = $root.clutch.k8s.v1.StatusDetails.verify(message.details);
+                        if (error)
+                            return "details." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Status message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.Status
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.Status} Status
+                 */
+                Status.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.Status)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.Status();
+                    if (object.status != null)
+                        message.status = String(object.status);
+                    if (object.message != null)
+                        message.message = String(object.message);
+                    if (object.reason != null)
+                        message.reason = String(object.reason);
+                    if (object.code != null)
+                        message.code = object.code | 0;
+                    if (object.details != null) {
+                        if (typeof object.details !== "object")
+                            throw TypeError(".clutch.k8s.v1.Status.details: object expected");
+                        message.details = $root.clutch.k8s.v1.StatusDetails.fromObject(object.details);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Status message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.Status
+                 * @static
+                 * @param {clutch.k8s.v1.Status} message Status
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Status.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.status = "";
+                        object.message = "";
+                        object.reason = "";
+                        object.code = 0;
+                        object.details = null;
+                    }
+                    if (message.status != null && message.hasOwnProperty("status"))
+                        object.status = message.status;
+                    if (message.message != null && message.hasOwnProperty("message"))
+                        object.message = message.message;
+                    if (message.reason != null && message.hasOwnProperty("reason"))
+                        object.reason = message.reason;
+                    if (message.code != null && message.hasOwnProperty("code"))
+                        object.code = message.code;
+                    if (message.details != null && message.hasOwnProperty("details"))
+                        object.details = $root.clutch.k8s.v1.StatusDetails.toObject(message.details, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this Status to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.Status
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Status.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Status;
+            })();
+
+            v1.StatusDetails = (function() {
+
+                /**
+                 * Properties of a StatusDetails.
+                 * @memberof clutch.k8s.v1
+                 * @interface IStatusDetails
+                 * @property {string|null} [name] StatusDetails name
+                 * @property {string|null} [group] StatusDetails group
+                 * @property {string|null} [kind] StatusDetails kind
+                 * @property {string|null} [uid] StatusDetails uid
+                 * @property {Array.<clutch.k8s.v1.IStatusCause>|null} [causes] StatusDetails causes
+                 */
+
+                /**
+                 * Constructs a new StatusDetails.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a StatusDetails.
+                 * @implements IStatusDetails
+                 * @constructor
+                 * @param {clutch.k8s.v1.IStatusDetails=} [properties] Properties to set
+                 */
+                function StatusDetails(properties) {
+                    this.causes = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * StatusDetails name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.StatusDetails
+                 * @instance
+                 */
+                StatusDetails.prototype.name = "";
+
+                /**
+                 * StatusDetails group.
+                 * @member {string} group
+                 * @memberof clutch.k8s.v1.StatusDetails
+                 * @instance
+                 */
+                StatusDetails.prototype.group = "";
+
+                /**
+                 * StatusDetails kind.
+                 * @member {string} kind
+                 * @memberof clutch.k8s.v1.StatusDetails
+                 * @instance
+                 */
+                StatusDetails.prototype.kind = "";
+
+                /**
+                 * StatusDetails uid.
+                 * @member {string} uid
+                 * @memberof clutch.k8s.v1.StatusDetails
+                 * @instance
+                 */
+                StatusDetails.prototype.uid = "";
+
+                /**
+                 * StatusDetails causes.
+                 * @member {Array.<clutch.k8s.v1.IStatusCause>} causes
+                 * @memberof clutch.k8s.v1.StatusDetails
+                 * @instance
+                 */
+                StatusDetails.prototype.causes = $util.emptyArray;
+
+                /**
+                 * Verifies a StatusDetails message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.StatusDetails
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                StatusDetails.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.group != null && message.hasOwnProperty("group"))
+                        if (!$util.isString(message.group))
+                            return "group: string expected";
+                    if (message.kind != null && message.hasOwnProperty("kind"))
+                        if (!$util.isString(message.kind))
+                            return "kind: string expected";
+                    if (message.uid != null && message.hasOwnProperty("uid"))
+                        if (!$util.isString(message.uid))
+                            return "uid: string expected";
+                    if (message.causes != null && message.hasOwnProperty("causes")) {
+                        if (!Array.isArray(message.causes))
+                            return "causes: array expected";
+                        for (let i = 0; i < message.causes.length; ++i) {
+                            let error = $root.clutch.k8s.v1.StatusCause.verify(message.causes[i]);
+                            if (error)
+                                return "causes." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a StatusDetails message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.StatusDetails
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.StatusDetails} StatusDetails
+                 */
+                StatusDetails.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.StatusDetails)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.StatusDetails();
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.group != null)
+                        message.group = String(object.group);
+                    if (object.kind != null)
+                        message.kind = String(object.kind);
+                    if (object.uid != null)
+                        message.uid = String(object.uid);
+                    if (object.causes) {
+                        if (!Array.isArray(object.causes))
+                            throw TypeError(".clutch.k8s.v1.StatusDetails.causes: array expected");
+                        message.causes = [];
+                        for (let i = 0; i < object.causes.length; ++i) {
+                            if (typeof object.causes[i] !== "object")
+                                throw TypeError(".clutch.k8s.v1.StatusDetails.causes: object expected");
+                            message.causes[i] = $root.clutch.k8s.v1.StatusCause.fromObject(object.causes[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a StatusDetails message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.StatusDetails
+                 * @static
+                 * @param {clutch.k8s.v1.StatusDetails} message StatusDetails
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                StatusDetails.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.causes = [];
+                    if (options.defaults) {
+                        object.name = "";
+                        object.group = "";
+                        object.kind = "";
+                        object.uid = "";
+                    }
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    if (message.group != null && message.hasOwnProperty("group"))
+                        object.group = message.group;
+                    if (message.kind != null && message.hasOwnProperty("kind"))
+                        object.kind = message.kind;
+                    if (message.uid != null && message.hasOwnProperty("uid"))
+                        object.uid = message.uid;
+                    if (message.causes && message.causes.length) {
+                        object.causes = [];
+                        for (let j = 0; j < message.causes.length; ++j)
+                            object.causes[j] = $root.clutch.k8s.v1.StatusCause.toObject(message.causes[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this StatusDetails to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.StatusDetails
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                StatusDetails.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return StatusDetails;
+            })();
+
+            v1.StatusCause = (function() {
+
+                /**
+                 * Properties of a StatusCause.
+                 * @memberof clutch.k8s.v1
+                 * @interface IStatusCause
+                 * @property {string|null} [type] StatusCause type
+                 * @property {string|null} [message] StatusCause message
+                 * @property {string|null} [field] StatusCause field
+                 */
+
+                /**
+                 * Constructs a new StatusCause.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a StatusCause.
+                 * @implements IStatusCause
+                 * @constructor
+                 * @param {clutch.k8s.v1.IStatusCause=} [properties] Properties to set
+                 */
+                function StatusCause(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * StatusCause type.
+                 * @member {string} type
+                 * @memberof clutch.k8s.v1.StatusCause
+                 * @instance
+                 */
+                StatusCause.prototype.type = "";
+
+                /**
+                 * StatusCause message.
+                 * @member {string} message
+                 * @memberof clutch.k8s.v1.StatusCause
+                 * @instance
+                 */
+                StatusCause.prototype.message = "";
+
+                /**
+                 * StatusCause field.
+                 * @member {string} field
+                 * @memberof clutch.k8s.v1.StatusCause
+                 * @instance
+                 */
+                StatusCause.prototype.field = "";
+
+                /**
+                 * Verifies a StatusCause message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.StatusCause
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                StatusCause.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        if (!$util.isString(message.type))
+                            return "type: string expected";
+                    if (message.message != null && message.hasOwnProperty("message"))
+                        if (!$util.isString(message.message))
+                            return "message: string expected";
+                    if (message.field != null && message.hasOwnProperty("field"))
+                        if (!$util.isString(message.field))
+                            return "field: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a StatusCause message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.StatusCause
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.StatusCause} StatusCause
+                 */
+                StatusCause.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.StatusCause)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.StatusCause();
+                    if (object.type != null)
+                        message.type = String(object.type);
+                    if (object.message != null)
+                        message.message = String(object.message);
+                    if (object.field != null)
+                        message.field = String(object.field);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a StatusCause message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.StatusCause
+                 * @static
+                 * @param {clutch.k8s.v1.StatusCause} message StatusCause
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                StatusCause.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.type = "";
+                        object.message = "";
+                        object.field = "";
+                    }
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        object.type = message.type;
+                    if (message.message != null && message.hasOwnProperty("message"))
+                        object.message = message.message;
+                    if (message.field != null && message.hasOwnProperty("field"))
+                        object.field = message.field;
+                    return object;
+                };
+
+                /**
+                 * Converts this StatusCause to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.StatusCause
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                StatusCause.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return StatusCause;
+            })();
+
             return v1;
         })();
 

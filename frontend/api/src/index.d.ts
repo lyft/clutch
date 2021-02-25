@@ -13957,6 +13957,210 @@ export namespace clutch {
                  */
                 public toJSON(): { [k: string]: any };
             }
+
+            /** Properties of a Status. */
+            interface IStatus {
+
+                /** Status status */
+                status?: (string|null);
+
+                /** Status message */
+                message?: (string|null);
+
+                /** Status reason */
+                reason?: (string|null);
+
+                /** Status code */
+                code?: (number|null);
+
+                /** Status details */
+                details?: (clutch.k8s.v1.IStatusDetails|null);
+            }
+
+            /** Represents a Status. */
+            class Status implements IStatus {
+
+                /**
+                 * Constructs a new Status.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IStatus);
+
+                /** Status status. */
+                public status: string;
+
+                /** Status message. */
+                public message: string;
+
+                /** Status reason. */
+                public reason: string;
+
+                /** Status code. */
+                public code: number;
+
+                /** Status details. */
+                public details?: (clutch.k8s.v1.IStatusDetails|null);
+
+                /**
+                 * Verifies a Status message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Status message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Status
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Status;
+
+                /**
+                 * Creates a plain object from a Status message. Also converts values to other types if specified.
+                 * @param message Status
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.Status, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Status to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a StatusDetails. */
+            interface IStatusDetails {
+
+                /** StatusDetails name */
+                name?: (string|null);
+
+                /** StatusDetails group */
+                group?: (string|null);
+
+                /** StatusDetails kind */
+                kind?: (string|null);
+
+                /** StatusDetails uid */
+                uid?: (string|null);
+
+                /** StatusDetails causes */
+                causes?: (clutch.k8s.v1.IStatusCause[]|null);
+            }
+
+            /** Represents a StatusDetails. */
+            class StatusDetails implements IStatusDetails {
+
+                /**
+                 * Constructs a new StatusDetails.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IStatusDetails);
+
+                /** StatusDetails name. */
+                public name: string;
+
+                /** StatusDetails group. */
+                public group: string;
+
+                /** StatusDetails kind. */
+                public kind: string;
+
+                /** StatusDetails uid. */
+                public uid: string;
+
+                /** StatusDetails causes. */
+                public causes: clutch.k8s.v1.IStatusCause[];
+
+                /**
+                 * Verifies a StatusDetails message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a StatusDetails message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns StatusDetails
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.StatusDetails;
+
+                /**
+                 * Creates a plain object from a StatusDetails message. Also converts values to other types if specified.
+                 * @param message StatusDetails
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.StatusDetails, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this StatusDetails to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a StatusCause. */
+            interface IStatusCause {
+
+                /** StatusCause type */
+                type?: (string|null);
+
+                /** StatusCause message */
+                message?: (string|null);
+
+                /** StatusCause field */
+                field?: (string|null);
+            }
+
+            /** Represents a StatusCause. */
+            class StatusCause implements IStatusCause {
+
+                /**
+                 * Constructs a new StatusCause.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IStatusCause);
+
+                /** StatusCause type. */
+                public type: string;
+
+                /** StatusCause message. */
+                public message: string;
+
+                /** StatusCause field. */
+                public field: string;
+
+                /**
+                 * Verifies a StatusCause message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a StatusCause message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns StatusCause
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.StatusCause;
+
+                /**
+                 * Creates a plain object from a StatusCause message. Also converts values to other types if specified.
+                 * @param message StatusCause
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.StatusCause, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this StatusCause to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
         }
     }
 

@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"strings"
 
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
+	k8sv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 	"github.com/lyft/clutch/backend/service"
 )
 
@@ -34,7 +37,8 @@ func (p *ExpectedObjectMetaFieldsCheckError) Error() string {
 	return ret.String()
 }
 
-// Take a K8s error, extract the API return code and message in order to create the proper gRPC status.
+// ConvertError takes an embedded K8s error and converts it to an error w/ embedded GRPC status containing
+// all of the same information.
 func ConvertError(e error) error {
 	as, ok := e.(k8serrors.APIStatus)
 	if !ok {
@@ -43,7 +47,44 @@ func ConvertError(e error) error {
 	s := as.Status()
 
 	c := service.CodeFromHTTPStatus(int(s.Code))
+	if c == codes.OK {
+		// Shouldn't happen, but I'm sure K8s APIs can behave in mysterious ways.
+		// Just return the original error if so.
+		return e
+	}
+
 	ret := status.New(c, s.Message)
+	ret, _ = ret.WithDetails(k8sStatusToClutchK8sStatus(&s))
 
 	return ret.Err()
+}
+
+// K8s protos panic when serializing with Go v2 proto APIs, so we have our own analogous type to
+// convert the non-compliant struct.
+func k8sStatusToClutchK8sStatus(s *v1.Status) *k8sv1.Status {
+	ret := &k8sv1.Status{
+		Status:  s.Status,
+		Message: s.Message,
+		Reason:  string(s.Reason),
+		Code:    s.Code,
+	}
+
+	if s.Details != nil {
+		ret.Details = &k8sv1.StatusDetails{
+			Name:   s.Details.Name,
+			Group:  s.Details.Group,
+			Kind:   s.Details.Kind,
+			Uid:    string(s.Details.UID),
+			Causes: make([]*k8sv1.StatusCause, 0, len(s.Details.Causes)),
+		}
+
+		for _, c := range s.Details.Causes {
+			ret.Details.Causes = append(ret.Details.Causes, &k8sv1.StatusCause{
+				Message: c.Message,
+				Field:   c.Field,
+				Type:    string(c.Type),
+			})
+		}
+	}
+	return ret
 }
