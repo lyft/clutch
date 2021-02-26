@@ -39,18 +39,18 @@ func Filter(filter *configv1.Filter, event *auditv1.Event) bool {
 	return filter.Denylist
 }
 
-// GetCustomSlackAudit returns the custom slack message if the event's MethodName matched the method in the CustomSlackAudit config.
-// Otherwise ok is false and an empty string is returned.
-func GetCustomSlackAudit(override *configv1.Override, event *auditv1.RequestEvent) (string, bool) {
+// GetCustomSlackText returns the text provided in the config, if the event's MethodName
+// matched the method in the CustomSlackMessage config. Otherwise ok is false and an empty string is returned.
+func GetCustomSlackText(override *configv1.Override, event *auditv1.RequestEvent) (string, bool) {
 	if override == nil {
 		// no override was specified
 		return "", false
 	}
 
-	for _, customSlackAudit := range override.CustomSlackAudits {
-		// a custom slack audit was requested for the method
-		if customSlackAudit.Method == event.MethodName {
-			return customSlackAudit.Message, true
+	for _, customSlack := range override.CustomSlackMessages {
+		// a custom slack message was requested for the method
+		if customSlack.Method == event.MethodName {
+			return customSlack.Message, true
 		}
 	}
 

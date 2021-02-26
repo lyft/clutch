@@ -7,7 +7,7 @@ package slack
 import (
 	"bytes"
 	"fmt"
-	"html/template"
+	"text/template"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
@@ -43,7 +43,6 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	return s, nil
 }
 
-// Has the API's request/response details saved in a audit event
 // The struct is used in a Go template and the fields need to be exported
 type auditEventMetadata struct {
 	Request  proto.Message
@@ -93,18 +92,18 @@ func (s *svc) writeRequestEvent(event *auditv1.RequestEvent) error {
 	// TODO: clean up this if/else flow
 	var messageText string
 	defaultText := formatText(username, event)
-	customTemplate, ok := auditsink.GetCustomSlackAudit(s.override, event)
+	customText, ok := auditsink.GetCustomSlackText(s.override, event)
 	if !ok {
-		// custom slack audit wasn't specified
 		messageText = defaultText
 	} else {
-		customText, err := FormatCustomText(customTemplate, event)
+		// custom slack message was provided for this audit sink event
+		customText, err := FormatCustomText(customText, event)
 		if err != nil {
 			// use the default text as the fallback
 			messageText = defaultText
-			s.logger.Error("Unable to parse custom slack audit template", log.ErrorField(err))
+			s.logger.Error("Unable to parse custom slack message", log.ErrorField(err))
 		} else {
-			// append the default and custom message to the final message text
+			// append the default and custom text to the final message text
 			messageText = fmt.Sprintf("%s\n%s", defaultText, customText)
 		}
 	}

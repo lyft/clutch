@@ -47,11 +47,11 @@ services:
           - field: SERVICE
             text: clutch.aws.ec2.v1.EC2API
       override:
-        custom_slack_audits:
+        custom_slack_messages:
           - method: ResizeHPA
             message: "`Min size` is {{.Request.Sizing.Min}} and `Max size` is {{.Request.Sizing.Max}}"
           - method: DescribePod
-            message: "Pod {{.Request.Name}}'s status is {{.Response.Pod.State}}"
+            message: "Pod `{{.Request.Name}}` status is *{{.Response.Pod.State}}*"
           - method: UpdateDeployment
             message: "Updated `labels` {{.Request.Fields.Labels}}, updated `annotations` {{.Request.Fields.Annotations}}"
   - name: clutch.service.aws

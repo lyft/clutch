@@ -6207,55 +6207,55 @@ export namespace clutch {
                         public toJSON(): { [k: string]: any };
                     }
 
-                    /** Properties of a CustomSlackAudit. */
-                    interface ICustomSlackAudit {
+                    /** Properties of a CustomSlackMessage. */
+                    interface ICustomSlackMessage {
 
-                        /** CustomSlackAudit method */
+                        /** CustomSlackMessage method */
                         method?: (string|null);
 
-                        /** CustomSlackAudit message */
+                        /** CustomSlackMessage message */
                         message?: (string|null);
                     }
 
-                    /** Represents a CustomSlackAudit. */
-                    class CustomSlackAudit implements ICustomSlackAudit {
+                    /** Represents a CustomSlackMessage. */
+                    class CustomSlackMessage implements ICustomSlackMessage {
 
                         /**
-                         * Constructs a new CustomSlackAudit.
+                         * Constructs a new CustomSlackMessage.
                          * @param [properties] Properties to set
                          */
-                        constructor(properties?: clutch.config.service.audit.v1.ICustomSlackAudit);
+                        constructor(properties?: clutch.config.service.audit.v1.ICustomSlackMessage);
 
-                        /** CustomSlackAudit method. */
+                        /** CustomSlackMessage method. */
                         public method: string;
 
-                        /** CustomSlackAudit message. */
+                        /** CustomSlackMessage message. */
                         public message: string;
 
                         /**
-                         * Verifies a CustomSlackAudit message.
+                         * Verifies a CustomSlackMessage message.
                          * @param message Plain object to verify
                          * @returns `null` if valid, otherwise the reason why it is not
                          */
                         public static verify(message: { [k: string]: any }): (string|null);
 
                         /**
-                         * Creates a CustomSlackAudit message from a plain object. Also converts values to their respective internal types.
+                         * Creates a CustomSlackMessage message from a plain object. Also converts values to their respective internal types.
                          * @param object Plain object
-                         * @returns CustomSlackAudit
+                         * @returns CustomSlackMessage
                          */
-                        public static fromObject(object: { [k: string]: any }): clutch.config.service.audit.v1.CustomSlackAudit;
+                        public static fromObject(object: { [k: string]: any }): clutch.config.service.audit.v1.CustomSlackMessage;
 
                         /**
-                         * Creates a plain object from a CustomSlackAudit message. Also converts values to other types if specified.
-                         * @param message CustomSlackAudit
+                         * Creates a plain object from a CustomSlackMessage message. Also converts values to other types if specified.
+                         * @param message CustomSlackMessage
                          * @param [options] Conversion options
                          * @returns Plain object
                          */
-                        public static toObject(message: clutch.config.service.audit.v1.CustomSlackAudit, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                        public static toObject(message: clutch.config.service.audit.v1.CustomSlackMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                         /**
-                         * Converts this CustomSlackAudit to JSON.
+                         * Converts this CustomSlackMessage to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };
@@ -6264,8 +6264,8 @@ export namespace clutch {
                     /** Properties of an Override. */
                     interface IOverride {
 
-                        /** Override customSlackAudits */
-                        customSlackAudits?: (clutch.config.service.audit.v1.ICustomSlackAudit[]|null);
+                        /** Override customSlackMessages */
+                        customSlackMessages?: (clutch.config.service.audit.v1.ICustomSlackMessage[]|null);
                     }
 
                     /** Represents an Override. */
@@ -6277,8 +6277,8 @@ export namespace clutch {
                          */
                         constructor(properties?: clutch.config.service.audit.v1.IOverride);
 
-                        /** Override customSlackAudits. */
-                        public customSlackAudits: clutch.config.service.audit.v1.ICustomSlackAudit[];
+                        /** Override customSlackMessages. */
+                        public customSlackMessages: clutch.config.service.audit.v1.ICustomSlackMessage[];
 
                         /**
                          * Verifies an Override message.

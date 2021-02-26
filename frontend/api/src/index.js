@@ -14853,25 +14853,25 @@ export const clutch = $root.clutch = (() => {
                         return Filter;
                     })();
 
-                    v1.CustomSlackAudit = (function() {
+                    v1.CustomSlackMessage = (function() {
 
                         /**
-                         * Properties of a CustomSlackAudit.
+                         * Properties of a CustomSlackMessage.
                          * @memberof clutch.config.service.audit.v1
-                         * @interface ICustomSlackAudit
-                         * @property {string|null} [method] CustomSlackAudit method
-                         * @property {string|null} [message] CustomSlackAudit message
+                         * @interface ICustomSlackMessage
+                         * @property {string|null} [method] CustomSlackMessage method
+                         * @property {string|null} [message] CustomSlackMessage message
                          */
 
                         /**
-                         * Constructs a new CustomSlackAudit.
+                         * Constructs a new CustomSlackMessage.
                          * @memberof clutch.config.service.audit.v1
-                         * @classdesc Represents a CustomSlackAudit.
-                         * @implements ICustomSlackAudit
+                         * @classdesc Represents a CustomSlackMessage.
+                         * @implements ICustomSlackMessage
                          * @constructor
-                         * @param {clutch.config.service.audit.v1.ICustomSlackAudit=} [properties] Properties to set
+                         * @param {clutch.config.service.audit.v1.ICustomSlackMessage=} [properties] Properties to set
                          */
-                        function CustomSlackAudit(properties) {
+                        function CustomSlackMessage(properties) {
                             if (properties)
                                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                     if (properties[keys[i]] != null)
@@ -14879,30 +14879,30 @@ export const clutch = $root.clutch = (() => {
                         }
 
                         /**
-                         * CustomSlackAudit method.
+                         * CustomSlackMessage method.
                          * @member {string} method
-                         * @memberof clutch.config.service.audit.v1.CustomSlackAudit
+                         * @memberof clutch.config.service.audit.v1.CustomSlackMessage
                          * @instance
                          */
-                        CustomSlackAudit.prototype.method = "";
+                        CustomSlackMessage.prototype.method = "";
 
                         /**
-                         * CustomSlackAudit message.
+                         * CustomSlackMessage message.
                          * @member {string} message
-                         * @memberof clutch.config.service.audit.v1.CustomSlackAudit
+                         * @memberof clutch.config.service.audit.v1.CustomSlackMessage
                          * @instance
                          */
-                        CustomSlackAudit.prototype.message = "";
+                        CustomSlackMessage.prototype.message = "";
 
                         /**
-                         * Verifies a CustomSlackAudit message.
+                         * Verifies a CustomSlackMessage message.
                          * @function verify
-                         * @memberof clutch.config.service.audit.v1.CustomSlackAudit
+                         * @memberof clutch.config.service.audit.v1.CustomSlackMessage
                          * @static
                          * @param {Object.<string,*>} message Plain object to verify
                          * @returns {string|null} `null` if valid, otherwise the reason why it is not
                          */
-                        CustomSlackAudit.verify = function verify(message) {
+                        CustomSlackMessage.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
                             if (message.method != null && message.hasOwnProperty("method"))
@@ -14915,17 +14915,17 @@ export const clutch = $root.clutch = (() => {
                         };
 
                         /**
-                         * Creates a CustomSlackAudit message from a plain object. Also converts values to their respective internal types.
+                         * Creates a CustomSlackMessage message from a plain object. Also converts values to their respective internal types.
                          * @function fromObject
-                         * @memberof clutch.config.service.audit.v1.CustomSlackAudit
+                         * @memberof clutch.config.service.audit.v1.CustomSlackMessage
                          * @static
                          * @param {Object.<string,*>} object Plain object
-                         * @returns {clutch.config.service.audit.v1.CustomSlackAudit} CustomSlackAudit
+                         * @returns {clutch.config.service.audit.v1.CustomSlackMessage} CustomSlackMessage
                          */
-                        CustomSlackAudit.fromObject = function fromObject(object) {
-                            if (object instanceof $root.clutch.config.service.audit.v1.CustomSlackAudit)
+                        CustomSlackMessage.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.audit.v1.CustomSlackMessage)
                                 return object;
-                            let message = new $root.clutch.config.service.audit.v1.CustomSlackAudit();
+                            let message = new $root.clutch.config.service.audit.v1.CustomSlackMessage();
                             if (object.method != null)
                                 message.method = String(object.method);
                             if (object.message != null)
@@ -14934,15 +14934,15 @@ export const clutch = $root.clutch = (() => {
                         };
 
                         /**
-                         * Creates a plain object from a CustomSlackAudit message. Also converts values to other types if specified.
+                         * Creates a plain object from a CustomSlackMessage message. Also converts values to other types if specified.
                          * @function toObject
-                         * @memberof clutch.config.service.audit.v1.CustomSlackAudit
+                         * @memberof clutch.config.service.audit.v1.CustomSlackMessage
                          * @static
-                         * @param {clutch.config.service.audit.v1.CustomSlackAudit} message CustomSlackAudit
+                         * @param {clutch.config.service.audit.v1.CustomSlackMessage} message CustomSlackMessage
                          * @param {$protobuf.IConversionOptions} [options] Conversion options
                          * @returns {Object.<string,*>} Plain object
                          */
-                        CustomSlackAudit.toObject = function toObject(message, options) {
+                        CustomSlackMessage.toObject = function toObject(message, options) {
                             if (!options)
                                 options = {};
                             let object = {};
@@ -14958,17 +14958,17 @@ export const clutch = $root.clutch = (() => {
                         };
 
                         /**
-                         * Converts this CustomSlackAudit to JSON.
+                         * Converts this CustomSlackMessage to JSON.
                          * @function toJSON
-                         * @memberof clutch.config.service.audit.v1.CustomSlackAudit
+                         * @memberof clutch.config.service.audit.v1.CustomSlackMessage
                          * @instance
                          * @returns {Object.<string,*>} JSON object
                          */
-                        CustomSlackAudit.prototype.toJSON = function toJSON() {
+                        CustomSlackMessage.prototype.toJSON = function toJSON() {
                             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                         };
 
-                        return CustomSlackAudit;
+                        return CustomSlackMessage;
                     })();
 
                     v1.Override = (function() {
@@ -14977,7 +14977,7 @@ export const clutch = $root.clutch = (() => {
                          * Properties of an Override.
                          * @memberof clutch.config.service.audit.v1
                          * @interface IOverride
-                         * @property {Array.<clutch.config.service.audit.v1.ICustomSlackAudit>|null} [customSlackAudits] Override customSlackAudits
+                         * @property {Array.<clutch.config.service.audit.v1.ICustomSlackMessage>|null} [customSlackMessages] Override customSlackMessages
                          */
 
                         /**
@@ -14989,7 +14989,7 @@ export const clutch = $root.clutch = (() => {
                          * @param {clutch.config.service.audit.v1.IOverride=} [properties] Properties to set
                          */
                         function Override(properties) {
-                            this.customSlackAudits = [];
+                            this.customSlackMessages = [];
                             if (properties)
                                 for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                     if (properties[keys[i]] != null)
@@ -14997,12 +14997,12 @@ export const clutch = $root.clutch = (() => {
                         }
 
                         /**
-                         * Override customSlackAudits.
-                         * @member {Array.<clutch.config.service.audit.v1.ICustomSlackAudit>} customSlackAudits
+                         * Override customSlackMessages.
+                         * @member {Array.<clutch.config.service.audit.v1.ICustomSlackMessage>} customSlackMessages
                          * @memberof clutch.config.service.audit.v1.Override
                          * @instance
                          */
-                        Override.prototype.customSlackAudits = $util.emptyArray;
+                        Override.prototype.customSlackMessages = $util.emptyArray;
 
                         /**
                          * Verifies an Override message.
@@ -15015,13 +15015,13 @@ export const clutch = $root.clutch = (() => {
                         Override.verify = function verify(message) {
                             if (typeof message !== "object" || message === null)
                                 return "object expected";
-                            if (message.customSlackAudits != null && message.hasOwnProperty("customSlackAudits")) {
-                                if (!Array.isArray(message.customSlackAudits))
-                                    return "customSlackAudits: array expected";
-                                for (let i = 0; i < message.customSlackAudits.length; ++i) {
-                                    let error = $root.clutch.config.service.audit.v1.CustomSlackAudit.verify(message.customSlackAudits[i]);
+                            if (message.customSlackMessages != null && message.hasOwnProperty("customSlackMessages")) {
+                                if (!Array.isArray(message.customSlackMessages))
+                                    return "customSlackMessages: array expected";
+                                for (let i = 0; i < message.customSlackMessages.length; ++i) {
+                                    let error = $root.clutch.config.service.audit.v1.CustomSlackMessage.verify(message.customSlackMessages[i]);
                                     if (error)
-                                        return "customSlackAudits." + error;
+                                        return "customSlackMessages." + error;
                                 }
                             }
                             return null;
@@ -15039,14 +15039,14 @@ export const clutch = $root.clutch = (() => {
                             if (object instanceof $root.clutch.config.service.audit.v1.Override)
                                 return object;
                             let message = new $root.clutch.config.service.audit.v1.Override();
-                            if (object.customSlackAudits) {
-                                if (!Array.isArray(object.customSlackAudits))
-                                    throw TypeError(".clutch.config.service.audit.v1.Override.customSlackAudits: array expected");
-                                message.customSlackAudits = [];
-                                for (let i = 0; i < object.customSlackAudits.length; ++i) {
-                                    if (typeof object.customSlackAudits[i] !== "object")
-                                        throw TypeError(".clutch.config.service.audit.v1.Override.customSlackAudits: object expected");
-                                    message.customSlackAudits[i] = $root.clutch.config.service.audit.v1.CustomSlackAudit.fromObject(object.customSlackAudits[i]);
+                            if (object.customSlackMessages) {
+                                if (!Array.isArray(object.customSlackMessages))
+                                    throw TypeError(".clutch.config.service.audit.v1.Override.customSlackMessages: array expected");
+                                message.customSlackMessages = [];
+                                for (let i = 0; i < object.customSlackMessages.length; ++i) {
+                                    if (typeof object.customSlackMessages[i] !== "object")
+                                        throw TypeError(".clutch.config.service.audit.v1.Override.customSlackMessages: object expected");
+                                    message.customSlackMessages[i] = $root.clutch.config.service.audit.v1.CustomSlackMessage.fromObject(object.customSlackMessages[i]);
                                 }
                             }
                             return message;
@@ -15066,11 +15066,11 @@ export const clutch = $root.clutch = (() => {
                                 options = {};
                             let object = {};
                             if (options.arrays || options.defaults)
-                                object.customSlackAudits = [];
-                            if (message.customSlackAudits && message.customSlackAudits.length) {
-                                object.customSlackAudits = [];
-                                for (let j = 0; j < message.customSlackAudits.length; ++j)
-                                    object.customSlackAudits[j] = $root.clutch.config.service.audit.v1.CustomSlackAudit.toObject(message.customSlackAudits[j], options);
+                                object.customSlackMessages = [];
+                            if (message.customSlackMessages && message.customSlackMessages.length) {
+                                object.customSlackMessages = [];
+                                for (let j = 0; j < message.customSlackMessages.length; ++j)
+                                    object.customSlackMessages[j] = $root.clutch.config.service.audit.v1.CustomSlackMessage.toObject(message.customSlackMessages[j], options);
                             }
                             return object;
                         };
