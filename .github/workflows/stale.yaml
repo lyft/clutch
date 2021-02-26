@@ -4,6 +4,7 @@ on:
     - cron: '0 15,22 * * 1-5'
 jobs:
   check_stale:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/stale@v3
       with:
