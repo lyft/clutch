@@ -196,6 +196,10 @@ func TestProtoForConfigMap(t *testing.T) {
 					"key1": "value1",
 					"key2": "value2",
 				},
+				BinaryData: map[string][]byte{
+					"key3": []byte("value1"),
+					"key4": []byte("value2"),
+				},
 			},
 		},
 	}
@@ -212,7 +216,14 @@ func TestProtoForConfigMap(t *testing.T) {
 				mapData := tt.configMap.Data
 
 				for key, val := range configMap.Data {
-					assert.Equal(t, mapData[key], val.GetStringValue())
+					assert.Equal(t, mapData[key], val)
+				}
+			}
+			if len(tt.configMap.BinaryData) > 0 {
+				mapData := tt.configMap.BinaryData
+
+				for key, val := range configMap.BinaryData {
+					assert.Equal(t, mapData[key], val)
 				}
 			}
 		})

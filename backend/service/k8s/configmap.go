@@ -5,7 +5,6 @@ import (
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/types/known/structpb"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -80,14 +79,9 @@ func protoForConfigMap(cluster string, k8sconfigMap *v1.ConfigMap) *k8sapiv1.Con
 		Name:        k8sconfigMap.Name,
 		Labels:      k8sconfigMap.Labels,
 		Annotations: k8sconfigMap.Annotations,
-	}
-	// optional fields
-	if k8sconfigMap.Data != nil {
-		dataMap := make(map[string]*structpb.Value, len(k8sconfigMap.Data))
-		for k, v := range k8sconfigMap.Data {
-			dataMap[k], _ = structpb.NewValue(v)
-		}
-		ret.Data = dataMap
+		// optional fields
+		Data:       k8sconfigMap.Data,
+		BinaryData: k8sconfigMap.BinaryData,
 	}
 	return ret
 }

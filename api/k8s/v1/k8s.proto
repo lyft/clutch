@@ -730,9 +730,12 @@ message ConfigMap {
   map<string, string> annotations = 4;
   map<string, string> labels = 5;
 
-  // represents a configmaps data field which is a
+  // represents a configmaps Data field which is a
   // key:value map
-  map<string, google.protobuf.Value> data = 6;
+  map<string, string> data = 6;
+  // represents a configmaps BinaryData field which is
+  // a map of binary data.
+  map<string, bytes> binary_data = 7;
 }
 
 message ListConfigMapsRequest {

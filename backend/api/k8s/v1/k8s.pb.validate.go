@@ -4065,22 +4065,9 @@ func (m *ConfigMap) Validate() error {
 
 	// no validation rules for Labels
 
-	for key, val := range m.GetData() {
-		_ = val
+	// no validation rules for Data
 
-		// no validation rules for Data[key]
-
-		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ConfigMapValidationError{
-					field:  fmt.Sprintf("Data[%v]", key),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
+	// no validation rules for BinaryData
 
 	return nil
 }
