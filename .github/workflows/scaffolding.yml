@@ -29,5 +29,3 @@ jobs:
       - name: build scaffolding
         run: make
         working-directory: ${{ github.workspace }}/go/src/github.com/runner/clutch-custom-gateway
-        env:
-          GOFLAGS: -mod=mod # allow modules file to update itself based on actual dependencies for first compile
