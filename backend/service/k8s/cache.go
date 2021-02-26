@@ -14,6 +14,7 @@ import (
 	"k8s.io/client-go/tools/cache"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
 )
 
 // Setting a large channel buffer mostly for first boot and the  resync timer,
@@ -111,7 +112,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 		}
 		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
-				Id: pod.Name,
+				Id: meta.ExtractProtoPatternsValues(pod),
 				Pb: protoPod,
 			},
 			Action: action,
@@ -125,7 +126,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 		}
 		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
-				Id: deployment.Name,
+				Id: meta.ExtractProtoPatternsValues(deployment),
 				Pb: protoDeployment,
 			},
 			Action: action,
@@ -139,7 +140,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 		}
 		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
-				Id: hpa.Name,
+				Id: meta.ExtractProtoPatternsValues(hpa),
 				Pb: protoHpa,
 			},
 			Action: action,

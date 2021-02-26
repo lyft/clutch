@@ -2,6 +2,7 @@ package meta
 
 import (
 	"fmt"
+	"log"
 	"regexp"
 	"strings"
 
@@ -117,6 +118,25 @@ func ResourceNames(pb proto.Message) []*auditv1.Resource {
 	}
 
 	return nil
+}
+
+func ExtractProtoPatternsValues(pb proto.Message) string {
+	m := pb.ProtoReflect()
+	opts := m.Descriptor().Options().ProtoReflect()
+
+	populatedPattern := []string{}
+
+	if opts.Has(identifierTypeDescriptor) {
+		v := opts.Get(identifierTypeDescriptor)
+		id := v.Message().Interface().(*apiv1.Identifier)
+
+		for _, pattern := range id.Patterns {
+			yeet := resolvePattern(pb, pattern)
+			log.Printf("%v", yeet.Id)
+			populatedPattern = append(populatedPattern, yeet.Id)
+		}
+	}
+	return populatedPattern[0]
 }
 
 func resolveField(pb proto.Message, name string) []*auditv1.Resource {
