@@ -106,7 +106,7 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *
 				c.log.Error("Error setting cache", zap.Error(err))
 			}
 		case topologyv1.UpdateCacheRequest_DELETE:
-			if err := c.deleteCache(ctx, obj.Resource.Id); err != nil {
+			if err := c.deleteCache(ctx, obj.Resource.Id, obj.Resource.Pb.TypeUrl); err != nil {
 				c.log.Error("Error deleting cache", zap.Error(err))
 			}
 		default:
@@ -119,7 +119,7 @@ func (c *client) setCache(ctx context.Context, obj *topologyv1.Resource) error {
 	const upsertQuery = `
 		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
 		VALUES ($1, $2, $3, $4)
-		ON CONFLICT (id) DO UPDATE SET
+		ON CONFLICT (id, resolver_type_url) DO UPDATE SET
 			resolver_type_url = EXCLUDED.resolver_type_url,
 			data = EXCLUDED.data,
 			metadata = EXCLUDED.metadata,
@@ -155,12 +155,12 @@ func (c *client) setCache(ctx context.Context, obj *topologyv1.Resource) error {
 	return nil
 }
 
-func (c *client) deleteCache(ctx context.Context, id string) error {
+func (c *client) deleteCache(ctx context.Context, id, type_url string) error {
 	const deleteQuery = `
-		DELETE FROM topology_cache WHERE id = $1
+		DELETE FROM topology_cache WHERE id = $1 and resolver_type_url = $2
 	`
 
-	_, err := c.db.ExecContext(ctx, deleteQuery, id)
+	_, err := c.db.ExecContext(ctx, deleteQuery, id, type_url)
 	if err != nil {
 		c.scope.SubScope("cache").Counter("delete.failure").Inc(1)
 		return err
