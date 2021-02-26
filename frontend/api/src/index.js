@@ -30461,6 +30461,8 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [name] ConfigMap name
                  * @property {Object.<string,string>|null} [annotations] ConfigMap annotations
                  * @property {Object.<string,string>|null} [labels] ConfigMap labels
+                 * @property {Object.<string,string>|null} [data] ConfigMap data
+                 * @property {Object.<string,Uint8Array>|null} [binaryData] ConfigMap binaryData
                  */
 
                 /**
@@ -30474,6 +30476,8 @@ export const clutch = $root.clutch = (() => {
                 function ConfigMap(properties) {
                     this.annotations = {};
                     this.labels = {};
+                    this.data = {};
+                    this.binaryData = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -30521,6 +30525,22 @@ export const clutch = $root.clutch = (() => {
                 ConfigMap.prototype.labels = $util.emptyObject;
 
                 /**
+                 * ConfigMap data.
+                 * @member {Object.<string,string>} data
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 */
+                ConfigMap.prototype.data = $util.emptyObject;
+
+                /**
+                 * ConfigMap binaryData.
+                 * @member {Object.<string,Uint8Array>} binaryData
+                 * @memberof clutch.k8s.v1.ConfigMap
+                 * @instance
+                 */
+                ConfigMap.prototype.binaryData = $util.emptyObject;
+
+                /**
                  * Verifies a ConfigMap message.
                  * @function verify
                  * @memberof clutch.k8s.v1.ConfigMap
@@ -30555,6 +30575,22 @@ export const clutch = $root.clutch = (() => {
                         for (let i = 0; i < key.length; ++i)
                             if (!$util.isString(message.labels[key[i]]))
                                 return "labels: string{k:string} expected";
+                    }
+                    if (message.data != null && message.hasOwnProperty("data")) {
+                        if (!$util.isObject(message.data))
+                            return "data: object expected";
+                        let key = Object.keys(message.data);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.data[key[i]]))
+                                return "data: string{k:string} expected";
+                    }
+                    if (message.binaryData != null && message.hasOwnProperty("binaryData")) {
+                        if (!$util.isObject(message.binaryData))
+                            return "binaryData: object expected";
+                        let key = Object.keys(message.binaryData);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!(message.binaryData[key[i]] && typeof message.binaryData[key[i]].length === "number" || $util.isString(message.binaryData[key[i]])))
+                                return "binaryData: buffer{k:string} expected";
                     }
                     return null;
                 };
@@ -30591,6 +30627,23 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
                             message.labels[keys[i]] = String(object.labels[keys[i]]);
                     }
+                    if (object.data) {
+                        if (typeof object.data !== "object")
+                            throw TypeError(".clutch.k8s.v1.ConfigMap.data: object expected");
+                        message.data = {};
+                        for (let keys = Object.keys(object.data), i = 0; i < keys.length; ++i)
+                            message.data[keys[i]] = String(object.data[keys[i]]);
+                    }
+                    if (object.binaryData) {
+                        if (typeof object.binaryData !== "object")
+                            throw TypeError(".clutch.k8s.v1.ConfigMap.binaryData: object expected");
+                        message.binaryData = {};
+                        for (let keys = Object.keys(object.binaryData), i = 0; i < keys.length; ++i)
+                            if (typeof object.binaryData[keys[i]] === "string")
+                                $util.base64.decode(object.binaryData[keys[i]], message.binaryData[keys[i]] = $util.newBuffer($util.base64.length(object.binaryData[keys[i]])), 0);
+                            else if (object.binaryData[keys[i]].length)
+                                message.binaryData[keys[i]] = object.binaryData[keys[i]];
+                    }
                     return message;
                 };
 
@@ -30610,6 +30663,8 @@ export const clutch = $root.clutch = (() => {
                     if (options.objects || options.defaults) {
                         object.annotations = {};
                         object.labels = {};
+                        object.data = {};
+                        object.binaryData = {};
                     }
                     if (options.defaults) {
                         object.cluster = "";
@@ -30632,6 +30687,16 @@ export const clutch = $root.clutch = (() => {
                         object.labels = {};
                         for (let j = 0; j < keys2.length; ++j)
                             object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    if (message.data && (keys2 = Object.keys(message.data)).length) {
+                        object.data = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.data[keys2[j]] = message.data[keys2[j]];
+                    }
+                    if (message.binaryData && (keys2 = Object.keys(message.binaryData)).length) {
+                        object.binaryData = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.binaryData[keys2[j]] = options.bytes === String ? $util.base64.encode(message.binaryData[keys2[j]], 0, message.binaryData[keys2[j]].length) : options.bytes === Array ? Array.prototype.slice.call(message.binaryData[keys2[j]]) : message.binaryData[keys2[j]];
                     }
                     return object;
                 };

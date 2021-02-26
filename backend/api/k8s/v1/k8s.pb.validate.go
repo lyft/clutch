@@ -4065,6 +4065,10 @@ func (m *ConfigMap) Validate() error {
 
 	// no validation rules for Labels
 
+	// no validation rules for Data
+
+	// no validation rules for BinaryData
+
 	return nil
 }
 

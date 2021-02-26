@@ -72,11 +72,16 @@ func protoForConfigMap(cluster string, k8sconfigMap *v1.ConfigMap) *k8sapiv1.Con
 		clusterName = cluster
 	}
 
-	return &k8sapiv1.ConfigMap{
+	// required fields
+	ret := &k8sapiv1.ConfigMap{
 		Cluster:     clusterName,
 		Namespace:   k8sconfigMap.Namespace,
 		Name:        k8sconfigMap.Name,
 		Labels:      k8sconfigMap.Labels,
 		Annotations: k8sconfigMap.Annotations,
+		// optional fields
+		Data:       k8sconfigMap.Data,
+		BinaryData: k8sconfigMap.BinaryData,
 	}
+	return ret
 }

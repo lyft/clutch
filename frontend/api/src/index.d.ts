@@ -12880,6 +12880,12 @@ export namespace clutch {
 
                 /** ConfigMap labels */
                 labels?: ({ [k: string]: string }|null);
+
+                /** ConfigMap data */
+                data?: ({ [k: string]: string }|null);
+
+                /** ConfigMap binaryData */
+                binaryData?: ({ [k: string]: Uint8Array }|null);
             }
 
             /** Represents a ConfigMap. */
@@ -12905,6 +12911,12 @@ export namespace clutch {
 
                 /** ConfigMap labels. */
                 public labels: { [k: string]: string };
+
+                /** ConfigMap data. */
+                public data: { [k: string]: string };
+
+                /** ConfigMap binaryData. */
+                public binaryData: { [k: string]: Uint8Array };
 
                 /**
                  * Verifies a ConfigMap message.
