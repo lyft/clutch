@@ -7,14 +7,14 @@ package slack
 import (
 	"bytes"
 	"fmt"
-	"text/template"
+	"html/template"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/slack-go/slack"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
-	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/proto"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
@@ -41,6 +41,13 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		channel:  config.Channel,
 	}
 	return s, nil
+}
+
+// Has the API's request/response details saved in a audit event
+// The struct is used in a Go template and the fields need to be exported
+type auditEventMetadata struct {
+	Request  proto.Message
+	Response proto.Message
 }
 
 type svc struct {
@@ -128,25 +135,43 @@ func formatText(username string, event *auditv1.RequestEvent) string {
 	return messageText
 }
 
-// FormatCustomText performs variable substitution in the custom slack template using the audit event metadata
+// FormatCustomText perform variable substitution in the custom text using the audit event metadata
 func FormatCustomText(message string, event *auditv1.RequestEvent) (string, error) {
 	tmpl, err := template.New("customText").Parse(message)
 	if err != nil {
 		return "", err
 	}
 
-	// TODO: handle custom slack templates that request both req and resp metadata
-	reqMetadata := event.RequestMetadata.Body
-	// UnmarshalNew returns the message of the specified type based on the TypeURL
-	m, err := reqMetadata.UnmarshalNew()
+	data, err := getAuditMetadata(event)
 	if err != nil {
 		return "", err
 	}
 
 	var buf bytes.Buffer
-	if err := tmpl.Execute(&buf, m); err != nil {
+	if err := tmpl.Execute(&buf, data); err != nil {
 		return "", err
 	}
 
 	return buf.String(), nil
+}
+
+// returns the API request/response details contained in a audit event
+func getAuditMetadata(event *auditv1.RequestEvent) (*auditEventMetadata, error) {
+	requestMetadata := event.RequestMetadata.Body
+	// UnmarshalNew returns the message of the specified type based on the TypeURL
+	requestProto, err := requestMetadata.UnmarshalNew()
+	if err != nil {
+		return nil, err
+	}
+
+	responseMetdata := event.ResponseMetadata.Body
+	responseProto, err := responseMetdata.UnmarshalNew()
+	if err != nil {
+		return nil, err
+	}
+
+	return &auditEventMetadata{
+		Request:  requestProto,
+		Response: responseProto,
+	}, nil
 }

@@ -49,9 +49,11 @@ services:
       override:
         custom_slack_audits:
           - method: ResizeHPA
-            message: "`Min size` is {{.Sizing.Min}} and `Max size` is {{.Sizing.Max}}"
+            message: "`Min size` is {{.Request.Sizing.Min}} and `Max size` is {{.Request.Sizing.Max}}"
+          - method: DescribePod
+            message: "Pod {{.Request.Name}}'s status is {{.Response.Pod.State}}"
           - method: UpdateDeployment
-            message: "Updated `labels` {{.Fields.Labels}}, updated `annotations` {{.Fields.Annotations}}"
+            message: "Updated `labels` {{.Request.Fields.Labels}}, updated `annotations` {{.Request.Fields.Annotations}}"
   - name: clutch.service.aws
     typed_config:
       "@type": types.google.com/clutch.config.service.aws.v1.Config
