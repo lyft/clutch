@@ -19,6 +19,15 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: 1.16.0
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+            ~/.cache/golangci-lint
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
       - run: make backend
   test:
     runs-on: ubuntu-latest
@@ -27,6 +36,15 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: 1.16.0
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+            ~/.cache/golangci-lint
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
       - run: make backend-test
       - run: make backend-config-validation
   lint:
@@ -36,5 +54,14 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: 1.16.0
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+            ~/.cache/golangci-lint
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
       - run: make backend-lint
       - run: make backend-verify
