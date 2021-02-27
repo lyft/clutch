@@ -35,6 +35,7 @@ jobs:
           key: ${{ runner.os }}-go-build-${{ github.ref }}  
           restore-keys: |
             ${{ runner.os }}-go-build-
+      - run: cd backend && go mod download
       - run: make backend
   test:
     runs-on: ubuntu-latest
