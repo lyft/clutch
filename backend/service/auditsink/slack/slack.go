@@ -92,7 +92,7 @@ func (s *svc) writeRequestEvent(event *auditv1.RequestEvent) error {
 	// TODO: clean up this if/else flow
 	var messageText string
 	defaultText := formatText(username, event)
-	customText, ok := auditsink.GetCustomSlackText(s.override, event)
+	customText, ok := GetSlackOverrideText(s.override, event)
 	if !ok {
 		messageText = defaultText
 	} else {
