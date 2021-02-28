@@ -39,24 +39,6 @@ func Filter(filter *configv1.Filter, event *auditv1.Event) bool {
 	return filter.Denylist
 }
 
-// GetCustomSlackText returns the text provided in the config, if the event's MethodName
-// matched the method in the CustomSlackMessage config. Otherwise ok is false and an empty string is returned.
-func GetCustomSlackText(override *configv1.Override, event *auditv1.RequestEvent) (string, bool) {
-	if override == nil {
-		// no override was specified
-		return "", false
-	}
-
-	for _, customSlack := range override.CustomSlackMessages {
-		// a custom slack message was requested for the method
-		if customSlack.Method == event.MethodName {
-			return customSlack.Message, true
-		}
-	}
-
-	return "", false
-}
-
 func RunRequestFilter(filter *configv1.EventFilter, event *auditv1.RequestEvent) bool {
 	switch filter.Value.(type) {
 	case *configv1.EventFilter_Text:

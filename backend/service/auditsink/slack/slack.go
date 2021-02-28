@@ -54,7 +54,7 @@ type svc struct {
 	scope  tally.Scope
 
 	filter   *auditconfigv1.Filter
-	override *auditconfigv1.Override
+	override *configv1.Override
 
 	slack   *slack.Client
 	channel string

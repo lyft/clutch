@@ -48,11 +48,11 @@ services:
             text: clutch.aws.ec2.v1.EC2API
       override:
         custom_slack_messages:
-          - method: ResizeHPA
+          - full_method: /clutch.k8s.v1.K8sAPI/ResizeHPA
             message: "`Min size` is {{.Request.Sizing.Min}} and `Max size` is {{.Request.Sizing.Max}}"
-          - method: DescribePod
+          - full_method: /clutch.k8s.v1.K8sAPI/DescribePod
             message: "Pod `{{.Request.Name}}` status is *{{.Response.Pod.State}}*"
-          - method: UpdateDeployment
+          - full_method: /clutch.k8s.v1.K8sAPI/UpdateDeployment
             message: "Updated `labels` {{.Request.Fields.Labels}}, updated `annotations` {{.Request.Fields.Annotations}}"
   - name: clutch.service.aws
     typed_config:
