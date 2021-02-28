@@ -13,4 +13,17 @@ message SlackConfig {
   string channel = 2 [ (validate.rules).string = {min_bytes : 1} ];
 
   clutch.config.service.audit.v1.Filter filter = 3;
+  Override override = 4;
+}
+
+message CustomSlackMessage {
+  // The full method in the format of `/SERVICE/METHOD`
+  string full_method = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  // The custom slack message for `/SERVICE/METHOD`
+  string message = 2 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message Override {
+  // The `/SERVICE/METHOD`(s) with a custom slack message
+  repeated CustomSlackMessage custom_slack_messages = 1;
 }
