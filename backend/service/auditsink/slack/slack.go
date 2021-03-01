@@ -189,7 +189,7 @@ func slackList(data interface{}, name string) (string, error) {
 
 func resolveSlice(list protoreflect.List) string {
 	var text string
-	const listFormat = "\n%v"
+	const listFormat = "\n- %v"
 
 	for i := 0; i < list.Len(); i++ {
 		v := list.Get(i)
@@ -200,7 +200,7 @@ func resolveSlice(list protoreflect.List) string {
 
 func resolveMap(mapValue protoreflect.Map) string {
 	var text string
-	const mapFormat = "\n%v: %v"
+	const mapFormat = "\n- %v: %v"
 
 	mapValue.Range(func(k protoreflect.MapKey, v protoreflect.Value) bool {
 		var value interface{}
