@@ -18,7 +18,7 @@ interface DataLayout {
   /**
    * Update existing data with the specified key, value pair.
    */
-  updateData: (key: string, value: object) => void;
+  updateData: (key: string, value: any) => void;
   /**
    * Hydrate the layout data with the return value of the specified function.
    */
@@ -26,11 +26,11 @@ interface DataLayout {
   /**
    * The raw data of the layout.
    */
-  value: object;
+  value: any;
   /**
-   * Returns a json representation of the layout's data if possible, otherwise returns the raw data.
+   * Attempts to return a json representation of the layout's data if possible, otherwise returns the raw data.
    */
-  displayValue: () => object;
+  displayValue: () => any;
   /**
    * Loading state of the layout. This is true when data is being hydrated.
    */
