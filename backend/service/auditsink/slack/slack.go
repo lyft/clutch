@@ -15,6 +15,7 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
@@ -47,6 +48,12 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 type auditEventMetadata struct {
 	Request  proto.Message
 	Response proto.Message
+}
+
+// helper functions to format values in a golang tempalatet
+var funcMap = template.FuncMap{
+	// for values that are type List or Map, returns a formatted slack list
+	"slackList": slackList,
 }
 
 type svc struct {
@@ -136,10 +143,7 @@ func formatText(username string, event *auditv1.RequestEvent) string {
 
 // FormatCustomText perform variable substitution in the custom text using the audit event metadata
 func FormatCustomText(message string, event *auditv1.RequestEvent) (string, error) {
-	tmpl, err := template.New("customText").Parse(message)
-	if err != nil {
-		return "", err
-	}
+	tmpl := template.Must(template.New("customText").Funcs(funcMap).Parse(message))
 
 	data, err := getAuditMetadata(event)
 	if err != nil {
@@ -174,3 +178,61 @@ func getAuditMetadata(event *auditv1.RequestEvent) (*auditEventMetadata, error) 
 		Response: responseProto,
 	}, nil
 }
+
+func slackList(data interface{}, name string) string {
+	pb, ok := data.(proto.Message)
+	if !ok {
+		// not the type we can process
+		return ""
+	}
+	m := pb.ProtoReflect()
+
+	fd := m.Descriptor().Fields().ByName(protoreflect.Name(name))
+	if fd == nil {
+		// didn't find field by name
+		return ""
+	}
+
+	v := m.Get(fd)
+
+	if fd.IsList() {
+		return resolveSlice(v.List())
+	}
+
+	if fd.IsMap() {
+		return resolveMap(v.Map())
+	}
+
+	return ""
+}
+
+func resolveSlice(list protoreflect.List) string {
+	var text string
+	const listFormat = "\n%v"
+
+	for i := 0; i < list.Len(); i++ {
+		v := list.Get(i)
+		text += fmt.Sprintf(listFormat, v.Interface())
+	}
+	return text
+}
+
+func resolveMap(mapValue protoreflect.Map) string {
+	var text string
+	const mapFormat = "\n%v: %v"
+
+	mapValue.Range(func(k protoreflect.MapKey, v protoreflect.Value) bool {
+		var value interface{}
+		switch v.Interface().(type) {
+		case protoreflect.Message:
+			value = v.Message().Interface()
+		default:
+			value = v.Interface()
+		}
+
+		text += fmt.Sprintf(mapFormat, k.Interface(), value)
+		return true
+	})
+	return text
+}
+

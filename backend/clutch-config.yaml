@@ -53,7 +53,9 @@ services:
           - full_method: /clutch.k8s.v1.K8sAPI/DescribePod
             message: "Pod `{{.Request.Name}}` status is *{{.Response.Pod.State}}*"
           - full_method: /clutch.k8s.v1.K8sAPI/UpdateDeployment
-            message: "Updated `labels` {{.Request.Fields.Labels}}, updated `annotations` {{.Request.Fields.Annotations}}"
+            message: "Updated labels: {{slackList .Request.Fields `labels`}}"
+          - full_method: /clutch.k8s.v1.K8sAPI/UpdatePod
+            message: "Expected Preconditions: {{slackList .Request.ExpectedObjectMetaFields `annotations`}}"
   - name: clutch.service.aws
     typed_config:
       "@type": types.google.com/clutch.config.service.aws.v1.Config
