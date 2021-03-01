@@ -19,18 +19,23 @@ func TestImplementsInterceptorInterface(t *testing.T) {
 	assert.Implements(t, (*errorintercept.Interceptor)(nil), (*client)(nil))
 }
 
-func TestConvertError(t *testing.T) {
-	re := &awshttp.ResponseError{
+// Helper function to create ResponseError for testing.
+func newResponseError(statusCode int, wrapped error) error {
+	return &awshttp.ResponseError{
 		ResponseError: &smithyhttp.ResponseError{
 			Response: &smithyhttp.Response{
 				Response: &http.Response{
-					StatusCode: 401,
+					StatusCode: statusCode,
 				},
 			},
-			Err: &smithy.GenericAPIError{Code: "whoopsie", Message: "bad things happened"},
+			Err: wrapped,
 		},
 		RequestID: "amzrequestid",
 	}
+}
+
+func TestConvertError(t *testing.T) {
+	re := newResponseError(401, &smithy.GenericAPIError{Code: "whoopsie", Message: "bad things happened"})
 
 	e := ConvertError(re)
 
@@ -41,23 +46,13 @@ func TestConvertError(t *testing.T) {
 
 func TestConvertErrorNoEmbeddedAPIError(t *testing.T) {
 	origErr := errors.New("something went wrong")
-	re := &awshttp.ResponseError{
-		ResponseError: &smithyhttp.ResponseError{
-			Response: &smithyhttp.Response{
-				Response: &http.Response{
-					StatusCode: 401,
-				},
-			},
-			Err: origErr,
-		},
-		RequestID: "amzrequestid",
-	}
 
+	re := newResponseError(404, origErr)
 	e := ConvertError(re)
 
 	s, ok := status.FromError(e)
 	assert.True(t, ok)
-	assert.Equal(t, codes.Unauthenticated, s.Code())
+	assert.Equal(t, codes.NotFound, s.Code())
 	assert.Equal(t, s.Message(), re.Error())
 }
 
