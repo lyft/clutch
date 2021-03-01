@@ -4,10 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"google.golang.org/protobuf/types/known/structpb"
-
-	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
-
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	statuspb "google.golang.org/genproto/googleapis/rpc/status"
