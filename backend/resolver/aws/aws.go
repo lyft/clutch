@@ -21,7 +21,6 @@ import (
 	kinesisv1api "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	awsv1resolver "github.com/lyft/clutch/backend/api/resolver/aws/v1"
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/resolver"
 	"github.com/lyft/clutch/backend/service"
@@ -156,30 +155,12 @@ func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit ui
 		return nil, fmt.Errorf("to use the autocomplete api you must first setup the topology service")
 	}
 
-	// TODO (mcutalo): Before implementing another resource to support autocomplete
-	// consider abstracting this into the topology service.
-	searchRequest := &topologyv1.SearchRequest{
-		PageToken: "0",
-		Limit:     resolver.DefaultAutocompleteLimit,
-		Sort: &topologyv1.SearchRequest_Sort{
-			Direction: topologyv1.SearchRequest_Sort_ASCENDING,
-			Field:     "column.id",
-		},
-		Filter: &topologyv1.SearchRequest_Filter{
-			TypeUrl: typeURL,
-			Search: &topologyv1.SearchRequest_Filter_Search{
-				Field: "column.id",
-				Text:  search,
-			},
-		},
-	}
-
-	// Limit is optional, if one is not set we use the default DefaultAutocompleteLimit
+	var resultLimit uint64 = resolver.DefaultAutocompleteLimit
 	if limit > 0 {
-		searchRequest.Limit = limit
+		resultLimit = limit
 	}
 
-	results, _, err := r.topology.Search(ctx, searchRequest)
+	results, err := r.topology.Autocomplete(ctx, typeURL, search, resultLimit)
 	if err != nil {
 		return nil, err
 	}

@@ -28,6 +28,7 @@ const Name = "clutch.service.topology"
 type Service interface {
 	GetTopology(ctx context.Context) error
 	Search(ctx context.Context, search *topologyv1.SearchRequest) ([]*topologyv1.Resource, string, error)
+	Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*topologyv1.Resource, error)
 }
 
 type client struct {
@@ -157,4 +158,29 @@ func (c *client) Search(ctx context.Context, req *topologyv1.SearchRequest) ([]*
 	}
 
 	return results, nextPageTokenStr, nil
+}
+
+func (c *client) Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*topologyv1.Resource, error) {
+	searchRequest := &topologyv1.SearchRequest{
+		PageToken: "0",
+		Limit:     limit,
+		Sort: &topologyv1.SearchRequest_Sort{
+			Direction: topologyv1.SearchRequest_Sort_ASCENDING,
+			Field:     "column.id",
+		},
+		Filter: &topologyv1.SearchRequest_Filter{
+			TypeUrl: typeURL,
+			Search: &topologyv1.SearchRequest_Filter_Search{
+				Field: "column.id",
+				Text:  search,
+			},
+		},
+	}
+
+	results, _, err := c.Search(ctx, searchRequest)
+	if err != nil {
+		return nil, err
+	}
+
+	return results, err
 }

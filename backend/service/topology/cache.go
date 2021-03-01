@@ -23,33 +23,34 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 	advisoryLockId := convertLockIdToAdvisoryLockId(topologyCacheLockId)
 	ticker := time.NewTicker(time.Second * 10)
 
-	// We create our own connection to use for acquiring the advisory lock
-	// If the connection is severed for any reason the advisory lock will automatically unlock
-	conn, err := c.db.Conn(ctx)
-	if err != nil {
-		c.log.Fatal("Unable to connect to the database", zap.Error(err))
-	}
-	defer conn.Close()
-
 	// Infinitely try to acquire the advisory lock
 	// Once the lock is acquired we start caching, this is a blocking operation
 	for {
 		c.log.Info("trying to acquire advisory lock")
 
-		// TODO: We could in the future spread the load of the topology caching
-		// across many clutch instances by having an a lock per service (e.g. AWS, k8s, etc)
-		if c.tryAdvisoryLock(ctx, conn, advisoryLockId) {
-			c.log.Info("acquired the advisory lock, starting to cache topology now...")
-			go c.expireCache(ctx)
-			c.startTopologyCache(ctx)
+		// We create our own connection to use for acquiring the advisory lock
+		// If the connection is severed for any reason the advisory lock will automatically unlock
+		conn, err := c.db.Conn(ctx)
+		switch err {
+		case nil:
+			// TODO: We could in the future spread the load of the topology caching
+			// across many clutch instances by having an a lock per service (e.g. AWS, k8s, etc)
+			if c.tryAdvisoryLock(ctx, conn, advisoryLockId) {
+				c.log.Info("acquired the advisory lock, starting to cache topology now...")
+				go c.expireCache(ctx)
+				c.startTopologyCache(ctx)
+			}
+		default:
+			c.log.Error("lost connection to database, trying to reconnect...", zap.Error(err))
 		}
+		// Closes the db connection which will also release the advisory lock
+		conn.Close()
 
 		select {
 		case <-ticker.C:
 			continue
 		case <-ctx.Done():
 			ticker.Stop()
-			c.unlockAdvisoryLock(context.Background(), conn, advisoryLockId)
 			return
 		}
 	}
@@ -68,14 +69,6 @@ func (c *client) tryAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uin
 	}
 
 	return lock
-}
-
-func (c *client) unlockAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uint32) bool {
-	var unlock bool
-	if err := conn.QueryRowContext(ctx, "SELECT pg_advisory_unlock($1)", lockId).Scan(&unlock); err != nil {
-		c.log.Error("Unable to perform an advisory unlock", zap.Error(err))
-	}
-	return unlock
 }
 
 func convertLockIdToAdvisoryLockId(lockID string) uint32 {
@@ -113,7 +106,7 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *
 				c.log.Error("Error setting cache", zap.Error(err))
 			}
 		case topologyv1.UpdateCacheRequest_DELETE:
-			if err := c.deleteCache(ctx, obj.Resource.Id); err != nil {
+			if err := c.deleteCache(ctx, obj.Resource.Id, obj.Resource.Pb.TypeUrl); err != nil {
 				c.log.Error("Error deleting cache", zap.Error(err))
 			}
 		default:
@@ -126,7 +119,7 @@ func (c *client) setCache(ctx context.Context, obj *topologyv1.Resource) error {
 	const upsertQuery = `
 		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
 		VALUES ($1, $2, $3, $4)
-		ON CONFLICT (id) DO UPDATE SET
+		ON CONFLICT (id, resolver_type_url) DO UPDATE SET
 			resolver_type_url = EXCLUDED.resolver_type_url,
 			data = EXCLUDED.data,
 			metadata = EXCLUDED.metadata,
@@ -162,12 +155,12 @@ func (c *client) setCache(ctx context.Context, obj *topologyv1.Resource) error {
 	return nil
 }
 
-func (c *client) deleteCache(ctx context.Context, id string) error {
+func (c *client) deleteCache(ctx context.Context, id, type_url string) error {
 	const deleteQuery = `
-		DELETE FROM topology_cache WHERE id = $1
+		DELETE FROM topology_cache WHERE id = $1 and resolver_type_url = $2
 	`
 
-	_, err := c.db.ExecContext(ctx, deleteQuery, id)
+	_, err := c.db.ExecContext(ctx, deleteQuery, id, type_url)
 	if err != nil {
 		c.scope.SubScope("cache").Counter("delete.failure").Inc(1)
 		return err

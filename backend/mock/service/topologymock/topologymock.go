@@ -39,3 +39,15 @@ func (s *svc) Search(context.Context, *topologyv1.SearchRequest) ([]*topologyv1.
 		},
 	}, "1", nil
 }
+
+func (s *svc) Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*topologyv1.Resource, error) {
+	return []*topologyv1.Resource{
+		{
+			Id: "autocomplete-result",
+			Pb: &any.Any{},
+			Metadata: map[string]*structpb.Value{
+				"label": &structpb.Value{},
+			},
+		},
+	}, nil
+}

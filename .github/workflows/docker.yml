@@ -26,3 +26,4 @@ jobs:
         with:
           tags: ${{ steps.tags.outputs.tags }}
           push: true
+          cache-from: type=registry,ref=lyft/clutch:latest

@@ -18,7 +18,23 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
-          go-version: 1.15.6
+          go-version: 1.16.0
+      - name: go mod cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}  
+          restore-keys: |
+            ${{ runner.os }}-go-mod-
+      - name: go build cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-build-
       - run: make backend
   test:
     runs-on: ubuntu-latest
@@ -26,8 +42,26 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
-          go-version: 1.15.6
+          go-version: 1.16.0
+      - name: go mod cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}  
+          restore-keys: |
+            ${{ runner.os }}-go-mod-
+      - name: go test cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-test-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-test-
       - run: make backend-test
+        env:
+          GOFLAGS: "-count=1" # idiomatic way to disable test caching so they always run
       - run: make backend-config-validation
   lint:
     runs-on: ubuntu-latest
@@ -35,6 +69,23 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
-          go-version: 1.15.6
+          go-version: 1.16.0
+      - name: go mod cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}  
+          restore-keys: |
+            ${{ runner.os }}-go-mod-
+      - name: go lint cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/.cache/golangci-lint
+          key: ${{ runner.os }}-go-lint-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-lint-
       - run: make backend-lint
       - run: make backend-verify
