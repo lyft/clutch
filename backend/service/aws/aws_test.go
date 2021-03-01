@@ -6,10 +6,6 @@ import (
 	"fmt"
 	"testing"
 	"time"
-
-	"github.com/aws/smithy-go"
-	"google.golang.org/grpc/status"
-
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	astypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
