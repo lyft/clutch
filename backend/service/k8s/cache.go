@@ -85,7 +85,7 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 	go podInformer.Run(stop)
 	go deploymentInformer.Run(stop)
 	go hpaInformer.Run(stop)
-	go s.cacheFullRelist(ctx, lwPod, lwDeployment, lwHPA)
+	go s.cacheFullRelist(ctx, clusterName, lwPod, lwDeployment, lwHPA)
 
 	<-ctx.Done()
 	s.log.Info("Shutting down the kubernetes cache informers")
@@ -101,10 +101,10 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 //
 // Notably we intentionally run these in serial, not only can this cause memory pressure but
 // also being mindful of the kubernetes api servers to reduce burst load.
-func (s *svc) cacheFullRelist(ctx context.Context, lwPods, lwDeployments, lwHPA *cache.ListWatch) {
+func (s *svc) cacheFullRelist(ctx context.Context, cluster string, lwPods, lwDeployments, lwHPA *cache.ListWatch) {
 	// TODO: When topology TTL configuration is supported this ticker should tick half as fast
 	// as the TTL. eg TTL = 2hours then cache relist = 1hour
-	ticker := time.NewTicker(time.Hour * 1)
+	ticker := time.NewTicker(time.Second * 30)
 	for {
 		// The informers will only ever do a full list once on boot
 		// we will wait the hour before doing another full list again
@@ -117,7 +117,11 @@ func (s *svc) cacheFullRelist(ctx context.Context, lwPods, lwDeployments, lwHPA 
 
 			podItems := pods.(*corev1.PodList).Items
 			for i := range podItems {
-				s.processInformerEvent(&podItems[i], topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
+				pod := &podItems[i]
+				if err := ApplyClusterMetadata(cluster, pod); err != nil {
+					s.log.Error("Unable to apply cluster name to pod object", zap.Error(err))
+				}
+				s.processInformerEvent(pod, topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
 			}
 
 			deployments, err := lwDeployments.List(metav1.ListOptions{})
@@ -127,7 +131,11 @@ func (s *svc) cacheFullRelist(ctx context.Context, lwPods, lwDeployments, lwHPA 
 
 			deploymentItems := deployments.(*appsv1.DeploymentList).Items
 			for i := range deploymentItems {
-				s.processInformerEvent(&deploymentItems[i], topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
+				deployment := &deploymentItems[i]
+				if err := ApplyClusterMetadata(cluster, deployment); err != nil {
+					s.log.Error("Unable to apply cluster name to deployment object", zap.Error(err))
+				}
+				s.processInformerEvent(deployment, topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
 			}
 
 			hpas, err := lwHPA.List(metav1.ListOptions{})
@@ -137,7 +145,11 @@ func (s *svc) cacheFullRelist(ctx context.Context, lwPods, lwDeployments, lwHPA 
 
 			hpaItems := hpas.(*autoscalingv1.HorizontalPodAutoscalerList).Items
 			for i := range hpaItems {
-				s.processInformerEvent(&hpaItems[i], topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
+				hpa := &hpaItems[i]
+				if err := ApplyClusterMetadata(cluster, hpa); err != nil {
+					s.log.Error("Unable to apply cluster name to deployment object", zap.Error(err))
+				}
+				s.processInformerEvent(hpa, topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE)
 			}
 		case <-ctx.Done():
 			ticker.Stop()
