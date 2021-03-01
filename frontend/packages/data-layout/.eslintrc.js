@@ -1,4 +1,5 @@
 const baseConfig = require("@clutch-sh/tools/.eslintrc.js");
+const path = require("path");
 
 module.exports = {
   ...baseConfig,
@@ -11,7 +12,7 @@ module.exports = {
           "error",
           {
             devDependencies: ["*.config.js"],
-            packageDir: [".", "../tools/"],
+            packageDir: [__dirname, path.join(__dirname, "../tools")],
           },
         ],
       },

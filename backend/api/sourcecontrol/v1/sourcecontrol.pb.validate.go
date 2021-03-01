@@ -36,6 +36,225 @@ var (
 // define the regex for a UUID once up-front
 var _sourcecontrol_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
+// Validate checks the field values on GetRepositoryOptionsRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *GetRepositoryOptionsRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// GetRepositoryOptionsRequestValidationError is the validation error returned
+// by GetRepositoryOptionsRequest.Validate if the designated constraints
+// aren't met.
+type GetRepositoryOptionsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetRepositoryOptionsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetRepositoryOptionsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetRepositoryOptionsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetRepositoryOptionsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetRepositoryOptionsRequestValidationError) ErrorName() string {
+	return "GetRepositoryOptionsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetRepositoryOptionsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetRepositoryOptionsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetRepositoryOptionsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetRepositoryOptionsRequestValidationError{}
+
+// Validate checks the field values on Entity with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Entity) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Name
+
+	// no validation rules for PhotoUrl
+
+	return nil
+}
+
+// EntityValidationError is the validation error returned by Entity.Validate if
+// the designated constraints aren't met.
+type EntityValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e EntityValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e EntityValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e EntityValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e EntityValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e EntityValidationError) ErrorName() string { return "EntityValidationError" }
+
+// Error satisfies the builtin error interface
+func (e EntityValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sEntity.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = EntityValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = EntityValidationError{}
+
+// Validate checks the field values on GetRepositoryOptionsResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *GetRepositoryOptionsResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for idx, item := range m.GetAvailableOwners() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return GetRepositoryOptionsResponseValidationError{
+					field:  fmt.Sprintf("AvailableOwners[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// GetRepositoryOptionsResponseValidationError is the validation error returned
+// by GetRepositoryOptionsResponse.Validate if the designated constraints
+// aren't met.
+type GetRepositoryOptionsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetRepositoryOptionsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetRepositoryOptionsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetRepositoryOptionsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetRepositoryOptionsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetRepositoryOptionsResponseValidationError) ErrorName() string {
+	return "GetRepositoryOptionsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetRepositoryOptionsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetRepositoryOptionsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetRepositoryOptionsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetRepositoryOptionsResponseValidationError{}
+
 // Validate checks the field values on CreateRepositoryRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.

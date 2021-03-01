@@ -12,6 +12,7 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"golang.org/x/sync/semaphore"
+	batchv1 "k8s.io/api/batch/v1"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 	"k8s.io/client-go/tools/clientcmd"
 
@@ -66,6 +67,7 @@ type Service interface {
 
 	// Deployment management functions.
 	DescribeDeployment(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.Deployment, error)
+	ListDeployments(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Deployment, error)
 	UpdateDeployment(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateDeploymentRequest_Fields) error
 	DeleteDeployment(ctx context.Context, clientset, cluster, namespace, name string) error
 
@@ -75,11 +77,13 @@ type Service interface {
 
 	// StatefulSet management functions.
 	DescribeStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.StatefulSet, error)
+	ListStatefulSets(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.StatefulSet, error)
 	UpdateStatefulSet(ctx context.Context, clientset, cluster, namespace, name string, fields *k8sapiv1.UpdateStatefulSetRequest_Fields) error
 	DeleteStatefulSet(ctx context.Context, clientset, cluster, namespace, name string) error
 
 	// CronJob management functions.
 	DescribeCronJob(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.CronJob, error)
+	ListCronJobs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.CronJob, error)
 	DeleteCronJob(ctx context.Context, clientset, cluster, namespace, name string) error
 
 	// ConfigMap management functions.
@@ -90,6 +94,7 @@ type Service interface {
 	// Job management functions.
 	DeleteJob(ctx context.Context, clientset, cluster, namespace, name string) error
 	ListJobs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Job, error)
+	CreateJob(ctx context.Context, clientset, cluster, namespace string, job *batchv1.Job) (*k8sapiv1.Job, error)
 }
 
 type svc struct {
@@ -121,4 +126,8 @@ func (s *svc) Clientsets(ctx context.Context) ([]string, error) {
 		ret = append(ret, name)
 	}
 	return ret, nil
+}
+
+func (s *svc) InterceptError(e error) error {
+	return ConvertError(e)
 }

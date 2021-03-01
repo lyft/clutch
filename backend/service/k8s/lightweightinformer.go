@@ -44,6 +44,7 @@ func NewLightweightInformer(
 	objType runtime.Object,
 	h cache.ResourceEventHandler,
 	recieveUpdates bool,
+	clusterName string,
 ) cache.Controller {
 	cacheStore := cache.NewIndexer(cache.DeletionHandlingMetaNamespaceKeyFunc, cache.Indexers{})
 	fifo := cache.NewDeltaFIFOWithOptions(cache.DeltaFIFOOptions{
@@ -68,6 +69,10 @@ func NewLightweightInformer(
 					Name:      incomingObjectMeta.GetName(),
 					Namespace: incomingObjectMeta.GetNamespace(),
 				}
+
+				// ClusterName is still not set in kube v1.20 so we are setting this manually.
+				// https://github.com/kubernetes/apimachinery/blob/2456ebdaba229616fab2161a615148884b46644b/pkg/apis/meta/v1/types.go#L266-L270
+				incomingObjectMeta.SetClusterName(clusterName)
 
 				switch d.Type {
 				case cache.Sync, cache.Replaced, cache.Added, cache.Updated:

@@ -18,6 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SourceControlAPIClient interface {
+	GetRepositoryOptions(ctx context.Context, in *GetRepositoryOptionsRequest, opts ...grpc.CallOption) (*GetRepositoryOptionsResponse, error)
 	CreateRepository(ctx context.Context, in *CreateRepositoryRequest, opts ...grpc.CallOption) (*CreateRepositoryResponse, error)
 }
 
@@ -27,6 +28,15 @@ type sourceControlAPIClient struct {
 
 func NewSourceControlAPIClient(cc grpc.ClientConnInterface) SourceControlAPIClient {
 	return &sourceControlAPIClient{cc}
+}
+
+func (c *sourceControlAPIClient) GetRepositoryOptions(ctx context.Context, in *GetRepositoryOptionsRequest, opts ...grpc.CallOption) (*GetRepositoryOptionsResponse, error) {
+	out := new(GetRepositoryOptionsResponse)
+	err := c.cc.Invoke(ctx, "/clutch.sourcecontrol.v1.SourceControlAPI/GetRepositoryOptions", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *sourceControlAPIClient) CreateRepository(ctx context.Context, in *CreateRepositoryRequest, opts ...grpc.CallOption) (*CreateRepositoryResponse, error) {
@@ -42,6 +52,7 @@ func (c *sourceControlAPIClient) CreateRepository(ctx context.Context, in *Creat
 // All implementations should embed UnimplementedSourceControlAPIServer
 // for forward compatibility
 type SourceControlAPIServer interface {
+	GetRepositoryOptions(context.Context, *GetRepositoryOptionsRequest) (*GetRepositoryOptionsResponse, error)
 	CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error)
 }
 
@@ -49,6 +60,9 @@ type SourceControlAPIServer interface {
 type UnimplementedSourceControlAPIServer struct {
 }
 
+func (UnimplementedSourceControlAPIServer) GetRepositoryOptions(context.Context, *GetRepositoryOptionsRequest) (*GetRepositoryOptionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRepositoryOptions not implemented")
+}
 func (UnimplementedSourceControlAPIServer) CreateRepository(context.Context, *CreateRepositoryRequest) (*CreateRepositoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRepository not implemented")
 }
@@ -62,6 +76,24 @@ type UnsafeSourceControlAPIServer interface {
 
 func RegisterSourceControlAPIServer(s grpc.ServiceRegistrar, srv SourceControlAPIServer) {
 	s.RegisterService(&SourceControlAPI_ServiceDesc, srv)
+}
+
+func _SourceControlAPI_GetRepositoryOptions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRepositoryOptionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SourceControlAPIServer).GetRepositoryOptions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.sourcecontrol.v1.SourceControlAPI/GetRepositoryOptions",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SourceControlAPIServer).GetRepositoryOptions(ctx, req.(*GetRepositoryOptionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _SourceControlAPI_CreateRepository_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -89,6 +121,10 @@ var SourceControlAPI_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "clutch.sourcecontrol.v1.SourceControlAPI",
 	HandlerType: (*SourceControlAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetRepositoryOptions",
+			Handler:    _SourceControlAPI_GetRepositoryOptions_Handler,
+		},
 		{
 			MethodName: "CreateRepository",
 			Handler:    _SourceControlAPI_CreateRepository_Handler,

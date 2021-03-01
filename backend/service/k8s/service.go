@@ -2,9 +2,10 @@ package k8s
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/iancoleman/strcase"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -27,9 +28,9 @@ func (s *svc) DescribeService(ctx context.Context, clientset, cluster, namespace
 	if len(services.Items) == 1 {
 		return ProtoForService(cs.Cluster(), &services.Items[0]), nil
 	} else if len(services.Items) > 1 {
-		return nil, fmt.Errorf("Located multiple Services")
+		return nil, status.Error(codes.FailedPrecondition, "located multiple services")
 	}
-	return nil, fmt.Errorf("Unable to locate service")
+	return nil, status.Error(codes.NotFound, "unable to locate specified service")
 }
 
 func (s *svc) DeleteService(ctx context.Context, clientset, cluster, namespace, name string) error {

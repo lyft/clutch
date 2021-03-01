@@ -11,7 +11,20 @@ import "validate/validate.proto";
 import "api/v1/annotations.proto";
 import "sourcecontrol/github/v1/github.proto";
 
+enum Visibility {
+  UNSPECIFIED = 0;
+  PUBLIC = 1;
+  PRIVATE = 2;
+}
+
 service SourceControlAPI {
+  rpc GetRepositoryOptions(GetRepositoryOptionsRequest) returns (GetRepositoryOptionsResponse) {
+    option (google.api.http) = {
+      post : "/v1/sourcecontrol/getRepositoryOptions",
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
   rpc CreateRepository(CreateRepositoryRequest) returns (CreateRepositoryResponse) {
     option (google.api.http) = {
       post : "/v1/sourcecontrol/createRepository"
@@ -19,6 +32,20 @@ service SourceControlAPI {
     };
     option (clutch.api.v1.action).type = CREATE;
   }
+}
+
+message GetRepositoryOptionsRequest {
+}
+
+// An entity encompasses members and organizations who are both owners of or contributors to source code.
+message Entity {
+  string name = 1;
+  string photo_url = 2;
+}
+
+message GetRepositoryOptionsResponse {
+  repeated Entity available_owners = 1;
+  repeated Visibility visibility_options = 2;
 }
 
 message CreateRepositoryRequest {
