@@ -7,16 +7,21 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/smithy-go"
+	"google.golang.org/grpc/status"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/autoscaling"
 	astypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
+	"github.com/aws/smithy-go"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
+	"google.golang.org/grpc/status"
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
@@ -341,6 +346,21 @@ func TestDescribeAutoscalingGroupsErrorHandling(t *testing.T) {
 	asg2, err2 := c.DescribeAutoscalingGroups(context.Background(), "unknown-region", []string{"asgname"})
 	assert.Nil(t, asg2)
 	assert.Error(t, err2)
+}
+
+func TestErrorIntercept(t *testing.T) {
+	c := &client{}
+	{
+		origErr := newResponseError(400, &smithy.GenericAPIError{Code: "whoopsie", Message: "bad"})
+		err := c.InterceptError(origErr)
+		_, ok := status.FromError(err)
+		assert.True(t, ok)
+	}
+	{
+		origErr := errors.New("foo")
+		err := c.InterceptError(origErr)
+		assert.Equal(t, origErr, err)
+	}
 }
 
 type mockEC2 struct {

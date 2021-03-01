@@ -42,6 +42,7 @@ func TestConvertError(t *testing.T) {
 	s, ok := status.FromError(e)
 	assert.True(t, ok)
 	assert.Equal(t, codes.Unauthenticated, s.Code())
+	assert.Equal(t, "whoopsie: bad things happened", s.Message())
 }
 
 func TestConvertErrorNoEmbeddedAPIError(t *testing.T) {
