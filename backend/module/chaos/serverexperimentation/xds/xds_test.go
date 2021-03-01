@@ -3,7 +3,6 @@ package xds
 import (
 	"context"
 	"errors"
-	"net"
 	"testing"
 	"time"
 
@@ -13,27 +12,21 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
-	"go.uber.org/zap"
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
-	"google.golang.org/grpc"
-	"google.golang.org/protobuf/types/known/durationpb"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
-	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
-	"github.com/lyft/clutch/backend/module/moduletest"
-	"github.com/lyft/clutch/backend/service"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
+	rtds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/testing"
 )
 
 func TestServerStats(t *testing.T) {
-	testServer := newTestServer(t, false)
-	defer testServer.stop()
+	testServer := rtds_testing.NewTestServer(t, New, false)
+	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	// Verify V3 stats.
-	v3Stream, err := newV3Stream(ctx, "tests", "cluster", testServer)
+	v3Stream, err := newV3Stream(ctx, "rtds", "cluster", testServer)
 	assert.NoError(t, err)
 	defer v3Stream.close(t)
 
@@ -41,23 +34,23 @@ func TestServerStats(t *testing.T) {
 	_, err = v3Stream.sendV3RequestAndAwaitResponse("", "")
 	assert.NoError(t, err)
 
-	assert.Equal(t, int64(1), testServer.scope.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
-	assert.Equal(t, int64(0), testServer.scope.Snapshot().Counters()["test.v3.totalErrorsReceived+"].Value())
+	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
+	assert.Equal(t, int64(0), testServer.Scope.Snapshot().Counters()["test.v3.totalErrorsReceived+"].Value())
 
 	// Error response from xDS client.
 	err = v3Stream.stream.Send(&gcpDiscoveryV3.DiscoveryRequest{ErrorDetail: &rpc_status.Status{}})
 	assert.NoError(t, err)
 
-	assert.Equal(t, int64(1), testServer.scope.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
+	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
 	// Async verification here since it appears that we don't get a response back in this case, so we
 	// aren't able to synchronize on the response.
-	awaitCounterEquals(t, testServer.scope, "test.v3.totalErrorsReceived+", 1)
+	awaitCounterEquals(t, testServer.Scope, "test.v3.totalErrorsReceived+", 1)
 }
 
 // Verifies that TTL and heartbeating is done when configured to do so.
 func TestResourceTTL(t *testing.T) {
-	testServer := newTestServer(t, true)
-	defer testServer.stop()
+	testServer := rtds_testing.NewTestServer(t, New, true)
+	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -94,12 +87,12 @@ func TestResourceTTL(t *testing.T) {
 	a, err := ptypes.MarshalAny(&config)
 	assert.NoError(t, err)
 
-	_, err = testServer.storer.CreateExperiment(context.Background(), a, &now, &now)
+	_, err = testServer.Storer.CreateExperiment(context.Background(), a, &now, &now)
 	assert.NoError(t, err)
 
 	// First we look at a stream for a cluster that has an active fault. This should result in a TTL'd
 	// resource that sends heartbeats.
-	s, err := newV3Stream(ctx, "tests", "cluster", testServer)
+	s, err := newV3Stream(ctx, "rtds", "cluster", testServer)
 	assert.NoError(t, err)
 	defer s.close(t)
 
@@ -127,7 +120,7 @@ func TestResourceTTL(t *testing.T) {
 
 	// Second we look at a stream for a cluster that should not receive any faults.
 	// Here we do not expect to see TTLs or heartbeats.
-	noFaultStream, err := newV3Stream(ctx, "tests", "other-cluster", testServer)
+	noFaultStream, err := newV3Stream(ctx, "rtds", "other-cluster", testServer)
 	assert.NoError(t, err)
 	defer s.close(t)
 
@@ -172,71 +165,6 @@ func awaitCounterEquals(t *testing.T, scope tally.TestScope, counter string, val
 	}
 }
 
-// Helper class for initializing a test RTDS server.
-type testServer struct {
-	registrar *moduletest.TestRegistrar
-	scope     tally.TestScope
-	storer    *simpleStorer
-}
-
-func newTestServer(t *testing.T, ttl bool) testServer {
-	t.Helper()
-	server := testServer{}
-
-	server.storer = &simpleStorer{}
-	service.Registry[experimentstore.Name] = server.storer
-
-	// Set up a test server listening to :9000.
-	config := &xdsconfigv1.Config{
-		RtdsLayerName:             "tests",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
-		IngressFaultRuntimePrefix: "ingress",
-		EgressFaultRuntimePrefix:  "egress",
-	}
-
-	if ttl {
-		config.ResourceTtl = &durationpb.Duration{
-			Seconds: 1,
-		}
-		config.HeartbeatInterval = &durationpb.Duration{
-			Seconds: 1,
-		}
-	}
-
-	any, err := ptypes.MarshalAny(config)
-	assert.NoError(t, err)
-	server.scope = tally.NewTestScope("test", nil)
-
-	logger, err := zap.NewDevelopment()
-	assert.NoError(t, err)
-
-	m, err := New(any, logger, server.scope)
-	assert.NoError(t, err)
-
-	server.registrar = moduletest.NewRegisterChecker()
-
-	err = m.Register(server.registrar)
-	assert.NoError(t, err)
-
-	l, err := net.Listen("tcp", "localhost:9000")
-	assert.NoError(t, err)
-
-	go func() {
-		err := server.registrar.GRPCServer().Serve(l)
-		assert.NoError(t, err)
-	}()
-
-	return server
-}
-
-func (t *testServer) stop() {
-	t.registrar.GRPCServer().Stop()
-}
-
-func (t *testServer) clientConn() (*grpc.ClientConn, error) {
-	return grpc.Dial("localhost:9000", grpc.WithInsecure())
-}
-
 // Helper class for testing calls over a single RTDS stream.
 type v3StreamWrapper struct {
 	stream  gcpRuntimeServiceV3.RuntimeDiscoveryService_StreamRuntimeClient
@@ -244,8 +172,8 @@ type v3StreamWrapper struct {
 	cluster string
 }
 
-func newV3Stream(ctx context.Context, layer string, cluster string, t testServer) (*v3StreamWrapper, error) {
-	conn, err := t.clientConn()
+func newV3Stream(ctx context.Context, layer string, cluster string, t rtds_testing.TestServer) (*v3StreamWrapper, error) {
+	conn, err := t.ClientConn()
 	if err != nil {
 		return nil, err
 	}

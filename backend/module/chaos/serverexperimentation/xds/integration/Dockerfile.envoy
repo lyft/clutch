@@ -1,0 +1,13 @@
+FROM golang:1.15.6 AS build
+
+COPY . /build
+
+RUN cd /build/module/chaos/serverexperimentation/xds/integration/config && go build -o /generate_config
+RUN /generate_config > /config.json
+
+FROM envoyproxy/envoy:v1.17.0
+
+COPY --from=build /config.json /config.json
+
+
+ENTRYPOINT /usr/local/bin/envoy -c /config.json

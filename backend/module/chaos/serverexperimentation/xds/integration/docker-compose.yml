@@ -1,0 +1,17 @@
+version: "3.9"
+   
+services:
+  envoy:
+    build:
+      context: ../../../../.. # backend root directory
+      dockerfile: module/chaos/serverexperimentation/xds/integration/Dockerfile.envoy
+    ports:
+      - "10000:10000"
+      - "9901:9901"
+  test_runner:
+    build:
+      context: ../../../../.. # backend root directory
+      dockerfile: module/chaos/serverexperimentation/xds/integration/Dockerfile
+    command: /test
+    ports:
+      - "9000:9000"
