@@ -7,6 +7,7 @@ package resolver
 import (
 	"context"
 	"fmt"
+
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
@@ -117,7 +118,7 @@ func (r *resolverAPI) Search(ctx context.Context, req *resolverv1.SearchRequest)
 	}
 
 	resp.truncate(req.Limit)
-	if err := resp.isError(req.Want	, searchedSchemas); err != nil {
+	if err := resp.isError(req.Want, searchedSchemas); err != nil {
 		return nil, err
 	}
 
