@@ -120,6 +120,11 @@ type regionalClient struct {
 	autoscaling autoscalingClient
 }
 
+// Implement the interface provided by errorintercept, so errors are caught at middleware and converted to gRPC status.
+func (c *client) InterceptError(e error) error {
+	return ConvertError(e)
+}
+
 func (c *client) ResizeAutoscalingGroup(ctx context.Context, region string, name string, size *ec2v1.AutoscalingGroupSize) error {
 	rc, ok := c.clients[region]
 	if !ok {
