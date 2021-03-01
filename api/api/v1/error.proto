@@ -8,9 +8,9 @@ import "google/protobuf/struct.proto";
 import "google/rpc/status.proto";
 
 message ErrorMetadata {
-    // Arbitrary metadata.
-    map<string, google.protobuf.Value> metadata = 1;
+  // Arbitrary metadata.
+  map<string, google.protobuf.Value> metadata = 1;
 
-    // If there are any underlying errors that were being wrapped, they are presented here.
-    repeated google.rpc.Status wrapped = 2;
+  // If there are any underlying errors that were being wrapped, they are presented here.
+  repeated google.rpc.Status wrapped = 2;
 }
