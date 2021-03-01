@@ -11,33 +11,19 @@ const updateData = (manager: DataManager, layoutKey: string, key: string, value:
 };
 
 interface DataLayout {
-  /**
-   * Overwrite existing data for the layout with the specified data.
-   */
+  /** Overwrite existing data for the layout with the specified data. */
   assign: (data: object) => void;
-  /**
-   * Update existing data with the specified key, value pair.
-   */
+  /** Update existing data with the specified key, value pair. */
   updateData: (key: string, value: any) => void;
-  /**
-   * Hydrate the layout data with the return value of the specified function.
-   */
+  /** Hydrate the layout data with the return value of the specified function. */
   hydrate: () => void;
-  /**
-   * The raw data of the layout.
-   */
+  /** The raw data of the layout. */
   value: any;
-  /**
-   * Attempts to return a json representation of the layout's data if possible, otherwise returns the raw data.
-   */
+  /** Attempts to return a json representation of the layout's data if possible, otherwise returns the raw data. */
   displayValue: () => any;
-  /**
-   * Loading state of the layout. This is true when data is being hydrated.
-   */
+  /** Loading state of the layout. This is true when data is being hydrated. */
   isLoading: boolean;
-  /**
-   * Error state of the layout. This will be a message containing the error encountered when trying to hydrate the lyaout.
-   */
+  /** Error state of the layout. This will be a message containing the error encountered when trying to hydrate the lyaout. */
   error: string;
 }
 
