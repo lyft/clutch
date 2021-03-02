@@ -13,6 +13,7 @@ import (
 	"go.uber.org/zap"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
 )
 
 const topologyObjectChanBufferSize = 5000
@@ -80,15 +81,16 @@ func (c *client) processAllAutoScalingGroups(ctx context.Context, client *region
 		}
 
 		for _, asg := range output.AutoScalingGroups {
-			protoAsg, err := ptypes.MarshalAny(newProtoForAutoscalingGroup(asg))
+			protoAsg := newProtoForAutoscalingGroup(asg)
+			asgAny, err := ptypes.MarshalAny(protoAsg)
 			if err != nil {
 				c.log.Error("unable to marshal asg proto", zap.Error(err))
 				continue
 			}
 			c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 				Resource: &topologyv1.Resource{
-					Id: *asg.AutoScalingGroupName,
-					Pb: protoAsg,
+					Id: meta.ExtractProtoPatternsValues(protoAsg),
+					Pb: asgAny,
 				},
 				Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
 			}
@@ -113,15 +115,16 @@ func (c *client) processAllEC2Instances(ctx context.Context, client *regionalCli
 
 		for _, reservation := range output.Reservations {
 			for _, instance := range reservation.Instances {
-				protoInstance, err := ptypes.MarshalAny(newProtoForInstance(instance))
+				protoInstance := newProtoForInstance(instance)
+				instanceAny, err := ptypes.MarshalAny(protoInstance)
 				if err != nil {
 					c.log.Error("unable to marshal instance proto", zap.Error(err))
 					continue
 				}
 				c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 					Resource: &topologyv1.Resource{
-						Id: *instance.InstanceId,
-						Pb: protoInstance,
+						Id: meta.ExtractProtoPatternsValues(protoInstance),
+						Pb: instanceAny,
 					},
 					Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
 				}
@@ -166,7 +169,7 @@ func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalC
 
 			c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 				Resource: &topologyv1.Resource{
-					Id: v1Stream.StreamName,
+					Id: meta.ExtractProtoPatternsValues(v1Stream),
 					Pb: protoStream,
 				},
 				Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,

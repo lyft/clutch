@@ -30,10 +30,10 @@ modules:
   - name: clutch.module.assets
   - name: clutch.module.healthcheck
   - name: clutch.module.resolver
-  # - name: clutch.module.aws
+  - name: clutch.module.aws
   - name: clutch.module.envoytriage
   - name: clutch.module.k8s
-  # - name: clutch.module.kinesis
+  - name: clutch.module.kinesis
   - name: clutch.module.topology
 services:
   - name: clutch.service.db.postgres
@@ -46,12 +46,12 @@ services:
         ssl_mode: DISABLE
         dbname: clutch
         password: clutch
-  # - name: clutch.service.aws
-  #   typed_config:
-  #     "@type": types.google.com/clutch.config.service.aws.v1.Config
-  #     regions:
-  #       - us-east-1
-  #       - us-west-2
+  - name: clutch.service.aws
+    typed_config:
+      "@type": types.google.com/clutch.config.service.aws.v1.Config
+      regions:
+        - us-east-1
+        - us-west-2
   - name: clutch.service.envoyadmin
     typed_config:
       "@type": types.google.com/clutch.config.service.envoyadmin.v1.Config
@@ -63,7 +63,7 @@ services:
   - name: clutch.service.topology
     typed_config:
       "@type": types.google.com/clutch.config.service.topology.v1.Config
-      cache: {}
+      # cache: {}
 resolvers:
-  # - name: clutch.resolver.aws
+  - name: clutch.resolver.aws
   - name: clutch.resolver.k8s

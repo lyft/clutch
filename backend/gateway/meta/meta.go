@@ -131,9 +131,9 @@ func ExtractProtoPatternsValues(pb proto.Message) string {
 		id := v.Message().Interface().(*apiv1.Identifier)
 
 		for _, pattern := range id.Patterns {
-			yeet := resolvePattern(pb, pattern)
-			log.Printf("%v", yeet.Id)
-			populatedPattern = append(populatedPattern, yeet.Id)
+			rs := resolvePattern(pb, pattern)
+			log.Printf("%v", rs.Id)
+			populatedPattern = append(populatedPattern, rs.Id)
 		}
 	}
 	return populatedPattern[0]
