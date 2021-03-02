@@ -13923,8 +13923,7 @@ export const clutch = $root.clutch = (() => {
                                  * @property {string|null} [egressFaultRuntimePrefix] Config egressFaultRuntimePrefix
                                  * @property {google.protobuf.IDuration|null} [resourceTtl] Config resourceTtl
                                  * @property {google.protobuf.IDuration|null} [heartbeatInterval] Config heartbeatInterval
-                                 * @property {Array.<string>|null} [ecdsEnabledClusters] Config ecdsEnabledClusters
-                                 * @property {string|null} [ecdsFaultRuntimePrefix] Config ecdsFaultRuntimePrefix
+                                 * @property {clutch.config.module.chaos.experimentation.xds.v1.Config.IECDSAllowList|null} [ecdsAllowList] Config ecdsAllowList
                                  */
 
                                 /**
@@ -13936,7 +13935,6 @@ export const clutch = $root.clutch = (() => {
                                  * @param {clutch.config.module.chaos.experimentation.xds.v1.IConfig=} [properties] Properties to set
                                  */
                                 function Config(properties) {
-                                    this.ecdsEnabledClusters = [];
                                     if (properties)
                                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                             if (properties[keys[i]] != null)
@@ -13992,20 +13990,12 @@ export const clutch = $root.clutch = (() => {
                                 Config.prototype.heartbeatInterval = null;
 
                                 /**
-                                 * Config ecdsEnabledClusters.
-                                 * @member {Array.<string>} ecdsEnabledClusters
+                                 * Config ecdsAllowList.
+                                 * @member {clutch.config.module.chaos.experimentation.xds.v1.Config.IECDSAllowList|null|undefined} ecdsAllowList
                                  * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
                                  * @instance
                                  */
-                                Config.prototype.ecdsEnabledClusters = $util.emptyArray;
-
-                                /**
-                                 * Config ecdsFaultRuntimePrefix.
-                                 * @member {string} ecdsFaultRuntimePrefix
-                                 * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
-                                 * @instance
-                                 */
-                                Config.prototype.ecdsFaultRuntimePrefix = "";
+                                Config.prototype.ecdsAllowList = null;
 
                                 /**
                                  * Verifies a Config message.
@@ -14042,16 +14032,11 @@ export const clutch = $root.clutch = (() => {
                                         if (error)
                                             return "heartbeatInterval." + error;
                                     }
-                                    if (message.ecdsEnabledClusters != null && message.hasOwnProperty("ecdsEnabledClusters")) {
-                                        if (!Array.isArray(message.ecdsEnabledClusters))
-                                            return "ecdsEnabledClusters: array expected";
-                                        for (let i = 0; i < message.ecdsEnabledClusters.length; ++i)
-                                            if (!$util.isString(message.ecdsEnabledClusters[i]))
-                                                return "ecdsEnabledClusters: string[] expected";
+                                    if (message.ecdsAllowList != null && message.hasOwnProperty("ecdsAllowList")) {
+                                        let error = $root.clutch.config.module.chaos.experimentation.xds.v1.Config.ECDSAllowList.verify(message.ecdsAllowList);
+                                        if (error)
+                                            return "ecdsAllowList." + error;
                                     }
-                                    if (message.ecdsFaultRuntimePrefix != null && message.hasOwnProperty("ecdsFaultRuntimePrefix"))
-                                        if (!$util.isString(message.ecdsFaultRuntimePrefix))
-                                            return "ecdsFaultRuntimePrefix: string expected";
                                     return null;
                                 };
 
@@ -14088,15 +14073,11 @@ export const clutch = $root.clutch = (() => {
                                             throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.heartbeatInterval: object expected");
                                         message.heartbeatInterval = $root.google.protobuf.Duration.fromObject(object.heartbeatInterval);
                                     }
-                                    if (object.ecdsEnabledClusters) {
-                                        if (!Array.isArray(object.ecdsEnabledClusters))
-                                            throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.ecdsEnabledClusters: array expected");
-                                        message.ecdsEnabledClusters = [];
-                                        for (let i = 0; i < object.ecdsEnabledClusters.length; ++i)
-                                            message.ecdsEnabledClusters[i] = String(object.ecdsEnabledClusters[i]);
+                                    if (object.ecdsAllowList != null) {
+                                        if (typeof object.ecdsAllowList !== "object")
+                                            throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.ecdsAllowList: object expected");
+                                        message.ecdsAllowList = $root.clutch.config.module.chaos.experimentation.xds.v1.Config.ECDSAllowList.fromObject(object.ecdsAllowList);
                                     }
-                                    if (object.ecdsFaultRuntimePrefix != null)
-                                        message.ecdsFaultRuntimePrefix = String(object.ecdsFaultRuntimePrefix);
                                     return message;
                                 };
 
@@ -14113,8 +14094,6 @@ export const clutch = $root.clutch = (() => {
                                     if (!options)
                                         options = {};
                                     let object = {};
-                                    if (options.arrays || options.defaults)
-                                        object.ecdsEnabledClusters = [];
                                     if (options.defaults) {
                                         object.rtdsLayerName = "";
                                         object.cacheRefreshInterval = null;
@@ -14122,7 +14101,7 @@ export const clutch = $root.clutch = (() => {
                                         object.egressFaultRuntimePrefix = "";
                                         object.resourceTtl = null;
                                         object.heartbeatInterval = null;
-                                        object.ecdsFaultRuntimePrefix = "";
+                                        object.ecdsAllowList = null;
                                     }
                                     if (message.rtdsLayerName != null && message.hasOwnProperty("rtdsLayerName"))
                                         object.rtdsLayerName = message.rtdsLayerName;
@@ -14136,13 +14115,8 @@ export const clutch = $root.clutch = (() => {
                                         object.resourceTtl = $root.google.protobuf.Duration.toObject(message.resourceTtl, options);
                                     if (message.heartbeatInterval != null && message.hasOwnProperty("heartbeatInterval"))
                                         object.heartbeatInterval = $root.google.protobuf.Duration.toObject(message.heartbeatInterval, options);
-                                    if (message.ecdsEnabledClusters && message.ecdsEnabledClusters.length) {
-                                        object.ecdsEnabledClusters = [];
-                                        for (let j = 0; j < message.ecdsEnabledClusters.length; ++j)
-                                            object.ecdsEnabledClusters[j] = message.ecdsEnabledClusters[j];
-                                    }
-                                    if (message.ecdsFaultRuntimePrefix != null && message.hasOwnProperty("ecdsFaultRuntimePrefix"))
-                                        object.ecdsFaultRuntimePrefix = message.ecdsFaultRuntimePrefix;
+                                    if (message.ecdsAllowList != null && message.hasOwnProperty("ecdsAllowList"))
+                                        object.ecdsAllowList = $root.clutch.config.module.chaos.experimentation.xds.v1.Config.ECDSAllowList.toObject(message.ecdsAllowList, options);
                                     return object;
                                 };
 
@@ -14156,6 +14130,119 @@ export const clutch = $root.clutch = (() => {
                                 Config.prototype.toJSON = function toJSON() {
                                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                                 };
+
+                                Config.ECDSAllowList = (function() {
+
+                                    /**
+                                     * Properties of a ECDSAllowList.
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
+                                     * @interface IECDSAllowList
+                                     * @property {Array.<string>|null} [enabledClusters] ECDSAllowList enabledClusters
+                                     */
+
+                                    /**
+                                     * Constructs a new ECDSAllowList.
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config
+                                     * @classdesc Represents a ECDSAllowList.
+                                     * @implements IECDSAllowList
+                                     * @constructor
+                                     * @param {clutch.config.module.chaos.experimentation.xds.v1.Config.IECDSAllowList=} [properties] Properties to set
+                                     */
+                                    function ECDSAllowList(properties) {
+                                        this.enabledClusters = [];
+                                        if (properties)
+                                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                                if (properties[keys[i]] != null)
+                                                    this[keys[i]] = properties[keys[i]];
+                                    }
+
+                                    /**
+                                     * ECDSAllowList enabledClusters.
+                                     * @member {Array.<string>} enabledClusters
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config.ECDSAllowList
+                                     * @instance
+                                     */
+                                    ECDSAllowList.prototype.enabledClusters = $util.emptyArray;
+
+                                    /**
+                                     * Verifies a ECDSAllowList message.
+                                     * @function verify
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config.ECDSAllowList
+                                     * @static
+                                     * @param {Object.<string,*>} message Plain object to verify
+                                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                     */
+                                    ECDSAllowList.verify = function verify(message) {
+                                        if (typeof message !== "object" || message === null)
+                                            return "object expected";
+                                        if (message.enabledClusters != null && message.hasOwnProperty("enabledClusters")) {
+                                            if (!Array.isArray(message.enabledClusters))
+                                                return "enabledClusters: array expected";
+                                            for (let i = 0; i < message.enabledClusters.length; ++i)
+                                                if (!$util.isString(message.enabledClusters[i]))
+                                                    return "enabledClusters: string[] expected";
+                                        }
+                                        return null;
+                                    };
+
+                                    /**
+                                     * Creates a ECDSAllowList message from a plain object. Also converts values to their respective internal types.
+                                     * @function fromObject
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config.ECDSAllowList
+                                     * @static
+                                     * @param {Object.<string,*>} object Plain object
+                                     * @returns {clutch.config.module.chaos.experimentation.xds.v1.Config.ECDSAllowList} ECDSAllowList
+                                     */
+                                    ECDSAllowList.fromObject = function fromObject(object) {
+                                        if (object instanceof $root.clutch.config.module.chaos.experimentation.xds.v1.Config.ECDSAllowList)
+                                            return object;
+                                        let message = new $root.clutch.config.module.chaos.experimentation.xds.v1.Config.ECDSAllowList();
+                                        if (object.enabledClusters) {
+                                            if (!Array.isArray(object.enabledClusters))
+                                                throw TypeError(".clutch.config.module.chaos.experimentation.xds.v1.Config.ECDSAllowList.enabledClusters: array expected");
+                                            message.enabledClusters = [];
+                                            for (let i = 0; i < object.enabledClusters.length; ++i)
+                                                message.enabledClusters[i] = String(object.enabledClusters[i]);
+                                        }
+                                        return message;
+                                    };
+
+                                    /**
+                                     * Creates a plain object from a ECDSAllowList message. Also converts values to other types if specified.
+                                     * @function toObject
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config.ECDSAllowList
+                                     * @static
+                                     * @param {clutch.config.module.chaos.experimentation.xds.v1.Config.ECDSAllowList} message ECDSAllowList
+                                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                     * @returns {Object.<string,*>} Plain object
+                                     */
+                                    ECDSAllowList.toObject = function toObject(message, options) {
+                                        if (!options)
+                                            options = {};
+                                        let object = {};
+                                        if (options.arrays || options.defaults)
+                                            object.enabledClusters = [];
+                                        if (message.enabledClusters && message.enabledClusters.length) {
+                                            object.enabledClusters = [];
+                                            for (let j = 0; j < message.enabledClusters.length; ++j)
+                                                object.enabledClusters[j] = message.enabledClusters[j];
+                                        }
+                                        return object;
+                                    };
+
+                                    /**
+                                     * Converts this ECDSAllowList to JSON.
+                                     * @function toJSON
+                                     * @memberof clutch.config.module.chaos.experimentation.xds.v1.Config.ECDSAllowList
+                                     * @instance
+                                     * @returns {Object.<string,*>} JSON object
+                                     */
+                                    ECDSAllowList.prototype.toJSON = function toJSON() {
+                                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                    };
+
+                                    return ECDSAllowList;
+                                })();
 
                                 return Config;
                             })();

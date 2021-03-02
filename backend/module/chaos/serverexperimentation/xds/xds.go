@@ -8,7 +8,6 @@ import (
 	"context"
 	"errors"
 	"github.com/lyft/clutch/backend/module"
-	"sync"
 	"sync/atomic"
 	"time"
 
@@ -120,10 +119,18 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		egressPrefix:  config.GetEgressFaultRuntimePrefix(),
 	}
 
+	enabledECDSClusters := make(map[string]struct{})
+	for _, cluster := range config.GetEcdsAllowList().GetEnabledClusters() {
+		enabledECDSClusters[cluster] = struct{}{}
+	}
+
+	safeECDSResourceMap := SafeEcdsResourceMap{
+		requestedResourcesMap: map[string][]string{},
+	}
+
 	ecdsConfig := ECDSConfig{
-		enabledClusters:       config.GetEcdsEnabledClusters(),
-		faultRuntimePrefix:    config.GetEgressFaultRuntimePrefix(),
-		requestedResourcesMap: sync.Map{},
+		enabledClusters: enabledECDSClusters,
+		ecdsResourceMap: safeECDSResourceMap,
 	}
 
 	return &Server{
@@ -161,7 +168,7 @@ func (s *Server) Register(r module.Registrar) error {
 		s.logger, 0}})
 	gcpRuntimeServiceV3.RegisterRuntimeDiscoveryServiceServer(r.GRPCServer(), rtdsServer)
 
-	ecdsServer := NewECDSServer(s.ctx, s.snapshotCacheV3, &ecdsCallbacks{callbacksBase{s.newScopedStats("ecds"), s.logger, 0}, s.ecdsConfig.requestedResourcesMap})
+	ecdsServer := NewECDSServer(s.ctx, s.snapshotCacheV3, &ecdsCallbacks{callbacksBase{s.newScopedStats("ecds"), s.logger, 0}, s.ecdsConfig.ecdsResourceMap})
 	gcpExtencionServiceV3.RegisterExtensionConfigDiscoveryServiceServer(r.GRPCServer(), ecdsServer)
 	return nil
 }
@@ -238,7 +245,7 @@ type ecdsCallbacks struct {
 	// resources and present a default value for all the ones that don't have a specific value.
 	// This allows us to set a default value for all the dynamic ECDS resources for all clusters, relying on go-control-plane
 	// to only respond with ones actually requested by the client.
-	requestedECDSResources sync.Map
+	safeECDSResources SafeEcdsResourceMap
 }
 
 func (c *ecdsCallbacks) OnStreamOpen(ctx context.Context, streamID int64, typeURL string) error {
@@ -252,9 +259,32 @@ func (c *ecdsCallbacks) OnStreamClosed(streamID int64) {
 }
 
 func (c *ecdsCallbacks) OnStreamRequest(streamID int64, req *gcpDiscoveryV3.DiscoveryRequest) error {
-	c.requestedECDSResources.Store(req.Node.Cluster, req.ResourceNames)
+	c.safeECDSResources.mu.Lock()
+	defer c.safeECDSResources.mu.Unlock()
 
-	c.logger.Debugw("ECDS OnStreamRequest", "streamID", streamID, "cluster", req.Node.Cluster)
+	// if resources are not present in requestedResourcesMap for a cluster, add them
+	if _, exists := c.safeECDSResources.requestedResourcesMap[req.Node.Cluster]; exists {
+		var missingResources []string
+		for _, resourceInRequest := range req.ResourceNames {
+			isMissing := true
+			for _, resource := range c.safeECDSResources.requestedResourcesMap[req.Node.Cluster] {
+				if resource == resourceInRequest {
+					isMissing = false
+					continue
+				}
+			}
+
+			if isMissing {
+				missingResources = append(missingResources, resourceInRequest)
+			}
+		}
+
+		c.safeECDSResources.requestedResourcesMap[req.Node.Cluster] = append(c.safeECDSResources.requestedResourcesMap[req.Node.Cluster], missingResources...)
+	} else {
+		c.safeECDSResources.requestedResourcesMap[req.Node.Cluster] = append([]string{}, req.ResourceNames...)
+	}
+
+	c.logger.Debugw("ECDS OnStreamRequest", "streamID", streamID, "cluster", req.Node.Cluster, "resources", req.ResourceNames)
 	c.onStreamRequest(streamID, req.Node.Cluster, req.ErrorDetail)
 
 	return nil

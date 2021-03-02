@@ -34,8 +34,8 @@ func TestServerStats(t *testing.T) {
 	_, err = v3Stream.sendV3RequestAndAwaitResponse("", "")
 	assert.NoError(t, err)
 
-	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
-	assert.Equal(t, int64(0), testServer.Scope.Snapshot().Counters()["test.v3.totalErrorsReceived+"].Value())
+	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.rtds.totalResourcesServed+"].Value())
+	assert.Equal(t, int64(0), testServer.Scope.Snapshot().Counters()["test.rtds.totalErrorsReceived+"].Value())
 
 	// Error response from xDS client.
 	err = v3Stream.stream.Send(&gcpDiscoveryV3.DiscoveryRequest{ErrorDetail: &rpc_status.Status{}})

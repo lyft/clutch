@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/durationpb"
 
-	rtdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
+	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/module/moduletest"
 	"github.com/lyft/clutch/backend/service"
@@ -35,7 +35,7 @@ func NewTestServer(t *testing.T, c func(cfg *any.Any, logger *zap.Logger, scope 
 	service.Registry[experimentstore.Name] = server.Storer
 
 	// Set up a test server listening to :9000.
-	config := &rtdsconfigv1.Config{
+	config := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
 		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
 		IngressFaultRuntimePrefix: "fault.http",

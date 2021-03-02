@@ -22,15 +22,15 @@ import (
 )
 
 const (
-	HeaderXEnvoyDownstreamServiceCluster = `x-envoy-downstream-service-cluster`
-	ExternalFaultFilterConfigName        = `envoy.egress.extension_config.%s`
-	InternalFaultFilterConfigName        = `envoy.extension_config`
-	FaultFilterTypeURL                   = `type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault`
+	EnvoyDownstreamServiceClusterHeader = `x-envoy-downstream-service-cluster`
+	ExternalFaultFilterConfigName       = `envoy.egress.extension_config.%s`
+	InternalFaultFilterConfigName       = `envoy.extension_config`
+	FaultFilterTypeURL                  = `type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault`
 
-	DelayPercentRuntime    = "%s.http.delay.percentage"
-	DelayDurationRuntime   = "%s.http.delay.fixed_duration_ms"
-	AbortHttpStatusRuntime = "%s.http.abort.http_status"
-	AbortPercentRuntime    = "%s.http.abort.abort_percent"
+	DelayPercentRuntime    = `ecds_runtime_override_do_not_use.http.delay.percentage`
+	DelayDurationRuntime   = `ecds_runtime_override_do_not_use.http.delay.fixed_duration_ms`
+	AbortHttpStatusRuntime = `ecds_runtime_override_do_not_use.http.abort.http_status`
+	AbortPercentRuntime    = `ecds_runtime_override_do_not_use.http.abort.abort_percent`
 )
 
 // Default abort and delay fault configs
@@ -56,12 +56,15 @@ var DefaultDelayFaultConfig = &gcpFilterCommon.FaultDelay{
 	},
 }
 
+type SafeEcdsResourceMap struct {
+	mu                    sync.Mutex
+	requestedResourcesMap map[string][]string
+}
+
 type ECDSConfig struct {
-	enabledClusters []string
+	enabledClusters map[string]struct{}
 
-	faultRuntimePrefix string
-
-	requestedResourcesMap sync.Map
+	ecdsResourceMap SafeEcdsResourceMap
 }
 
 func generateECDSResource(experiments []*experimentation.Experiment, ecdsConfig *ECDSConfig, ttl *time.Duration, logger *zap.SugaredLogger) []gcpTypes.ResourceWithTtl {
@@ -100,10 +103,10 @@ func generateECDSResource(experiments []*experimentation.Experiment, ecdsConfig 
 		Abort: abort,
 
 		// override runtimes so that default runtime is not used.
-		DelayPercentRuntime:    fmt.Sprintf(DelayPercentRuntime, ecdsConfig.faultRuntimePrefix),
-		DelayDurationRuntime:   fmt.Sprintf(DelayDurationRuntime, ecdsConfig.faultRuntimePrefix),
-		AbortHttpStatusRuntime: fmt.Sprintf(AbortHttpStatusRuntime, ecdsConfig.faultRuntimePrefix),
-		AbortPercentRuntime:    fmt.Sprintf(AbortPercentRuntime, ecdsConfig.faultRuntimePrefix),
+		DelayPercentRuntime:    DelayPercentRuntime,
+		DelayDurationRuntime:   DelayDurationRuntime,
+		AbortHttpStatusRuntime: AbortHttpStatusRuntime,
+		AbortPercentRuntime:    AbortPercentRuntime,
 	}
 
 	var faultFilterName string
@@ -115,7 +118,7 @@ func generateECDSResource(experiments []*experimentation.Experiment, ecdsConfig 
 		// match downstream cluster with request header else fault will be applied to requests coming from all downstream
 		faultFilter.Headers = []*gcpRoute.HeaderMatcher{
 			{
-				Name: HeaderXEnvoyDownstreamServiceCluster,
+				Name: EnvoyDownstreamServiceClusterHeader,
 				HeaderMatchSpecifier: &gcpRoute.HeaderMatcher_ExactMatch{
 					ExactMatch: downstreamCluster,
 				},
@@ -126,7 +129,7 @@ func generateECDSResource(experiments []*experimentation.Experiment, ecdsConfig 
 	serializedFaultFilter, err := proto.Marshal(faultFilter)
 	if err != nil {
 		logger.Warnw("Unable to unmarshal fault filter", "faultFilter", faultFilter)
-		return nil
+		return []gcpTypes.ResourceWithTtl{}
 	}
 
 	return []gcpTypes.ResourceWithTtl{{
@@ -147,25 +150,28 @@ func generateEmptyECDSResource(cluster string, ecdsConfig *ECDSConfig, logger *z
 		Abort: DefaultAbortFaultConfig,
 
 		// override runtimes so that default runtime is not used.
-		DelayPercentRuntime:    fmt.Sprintf(DelayPercentRuntime, ecdsConfig.faultRuntimePrefix),
-		DelayDurationRuntime:   fmt.Sprintf(DelayDurationRuntime, ecdsConfig.faultRuntimePrefix),
-		AbortHttpStatusRuntime: fmt.Sprintf(AbortHttpStatusRuntime, ecdsConfig.faultRuntimePrefix),
-		AbortPercentRuntime:    fmt.Sprintf(AbortPercentRuntime, ecdsConfig.faultRuntimePrefix),
+		DelayPercentRuntime:    DelayPercentRuntime,
+		DelayDurationRuntime:   DelayDurationRuntime,
+		AbortHttpStatusRuntime: AbortHttpStatusRuntime,
+		AbortPercentRuntime:    AbortPercentRuntime,
 	}
 
 	serializedFaultFilter, err := proto.Marshal(faultFilter)
 	if err != nil {
 		logger.Warnw("Unable to unmarshal fault filter", "faultFilter", faultFilter)
-		return nil
+		return []gcpTypes.ResourceWithTtl{}
 	}
 
-	clusterResources, isPresent := ecdsConfig.requestedResourcesMap.Load(cluster)
-	if !isPresent {
-		return nil
+	if _, exists := ecdsConfig.ecdsResourceMap.requestedResourcesMap[cluster]; !exists {
+		return []gcpTypes.ResourceWithTtl{}
 	}
+
+	ecdsConfig.ecdsResourceMap.mu.Lock()
+	resourceNames := ecdsConfig.ecdsResourceMap.requestedResourcesMap[cluster]
+	ecdsConfig.ecdsResourceMap.mu.Unlock()
 
 	var resources []gcpTypes.ResourceWithTtl
-	for _, resourceName := range clusterResources.([]string) {
+	for _, resourceName := range resourceNames {
 		resource := gcpTypes.ResourceWithTtl{
 			Resource: &gcpCoreV3.TypedExtensionConfig{
 				Name: resourceName,

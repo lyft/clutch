@@ -2,6 +2,9 @@ package xds
 
 import (
 	"context"
+	"fmt"
+	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
+	gcpFilterFault "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
 	"testing"
 	"time"
 
@@ -114,7 +117,7 @@ func mockGenerateFaultData(t *testing.T) []*experimentation.Experiment {
 	}
 }
 
-func TestSetSnapshotV3(t *testing.T) {
+func TestSetSnapshotRTDS(t *testing.T) {
 	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
 	testRtdsLayerName := "testRtdsLayerName"
 	ingressPrefix := "ingress"
@@ -143,9 +146,10 @@ func TestSetSnapshotV3(t *testing.T) {
 		}
 	}
 
-	runtimeResource := generateRTDSResource(testClusterFaults, &rtdsConfig, nil, zap.NewNop().Sugar())
-	assert.Nil(t, runtimeResource[0].Ttl)
-	err := setSnapshot(runtimeResource, testCluster, testCache, zap.NewNop().Sugar())
+	resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
+	resources[gcpTypes.Runtime] = generateRTDSResource(testClusterFaults, &rtdsConfig, nil, zap.NewNop().Sugar())
+	assert.Nil(t, resources[gcpTypes.Runtime][0].Ttl)
+	err := setSnapshot(resources, testCluster, testCache, zap.NewNop().Sugar())
 	if err != nil {
 		t.Errorf("setSnapshot failed %v", err)
 	}
@@ -155,13 +159,13 @@ func TestSetSnapshotV3(t *testing.T) {
 		t.Errorf("Snapshot not found for cluster %s", testCluster)
 	}
 
-	resources := snapshot.GetResources(gcpResourceV3.RuntimeType)
-	if resources == nil {
+	rtdsResources := snapshot.GetResources(gcpResourceV3.RuntimeType)
+	if rtdsResources == nil {
 		t.Errorf("no resources")
 	}
 
-	resource := resources[testRtdsLayerName]
-	if resources == nil {
+	resource := rtdsResources[testRtdsLayerName]
+	if rtdsResources == nil {
 		t.Errorf("no RTDS resources")
 	}
 
@@ -206,8 +210,9 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 		}
 	}
 
-	runtimeResource := generateRTDSResource(testClusterFaults, &rtdsConfig, &ttl, zap.NewNop().Sugar())
-	err := setSnapshot(runtimeResource, testCluster, testCache, zap.NewNop().Sugar())
+	resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
+	resources[gcpTypes.Runtime] = generateRTDSResource(testClusterFaults, &rtdsConfig, &ttl, zap.NewNop().Sugar())
+	err := setSnapshot(resources, testCluster, testCache, zap.NewNop().Sugar())
 	if err != nil {
 		t.Errorf("setSnapshot failed %v", err)
 	}
@@ -217,13 +222,13 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 		t.Errorf("Snapshot not found for cluster %s", testCluster)
 	}
 
-	resources := snapshot.GetResourcesAndTtl(gcpResourceV3.RuntimeType)
-	if resources == nil {
+	rtdsResources := snapshot.GetResourcesAndTtl(gcpResourceV3.RuntimeType)
+	if rtdsResources == nil {
 		t.Errorf("no resources")
 	}
 
-	resource := resources[testRtdsLayerName]
-	if resources == nil {
+	resource := rtdsResources[testRtdsLayerName]
+	if rtdsResources == nil {
 		t.Errorf("no RTDS resources")
 	}
 
@@ -241,14 +246,21 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 }
 
 func TestRefreshCache(t *testing.T) {
+	testCluster := "clusterA"
 	s := xds_testing.MockStorer{}
 	rtdsConfig := RTDSConfig{
 		layerName:     "test_layer",
 		ingressPrefix: "ingress",
 		egressPrefix:  "egress",
 	}
+
+	ecdsConfig := ECDSConfig{
+		ecdsResourceMap: SafeEcdsResourceMap{},
+		enabledClusters: map[string]struct{}{testCluster: struct{}{}},
+	}
+
 	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
-	refreshCache(context.Background(), &s, testCache, nil, &rtdsConfig, nil)
+	refreshCache(context.Background(), &s, testCache, nil, &rtdsConfig, &ecdsConfig, nil)
 	assert.Equal(t, s.GetExperimentArguments.ConfigType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig")
 }
 
@@ -278,4 +290,142 @@ func TestComputeVersionReturnValue(t *testing.T) {
 
 	checksum2, _ := computeChecksum(mockRuntime2)
 	assert.NotEqual(t, checksum, checksum2)
+}
+
+func TestSetSnapshotECDSInternalFault(t *testing.T) {
+	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
+	testCluster := "serviceA"
+	var downstreamCluster string
+	mockExperimentList := mockGenerateFaultData(t)
+
+	ecdsConfig := ECDSConfig{
+		ecdsResourceMap: SafeEcdsResourceMap{},
+		enabledClusters: map[string]struct{}{testCluster: struct{}{}},
+	}
+
+	var testClusterFaults []*experimentation.Experiment
+	for _, experiment := range mockExperimentList {
+		config := &serverexperimentation.HTTPFaultConfig{}
+		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+		if err != nil {
+			t.Errorf("unmarshalAny failed %v", err)
+		}
+
+		upstream, downstream, err := getClusterPair(config)
+		assert.NoError(t, err)
+
+		downstreamCluster = downstream
+
+		// Test Internal Fault
+		if upstream == testCluster {
+			testClusterFaults = append(testClusterFaults, experiment)
+
+			// Since ECDS can only perform one experiment per cluster
+			break
+		}
+	}
+
+	resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
+	resources[gcpTypes.ExtensionConfig] = generateECDSResource(testClusterFaults, &ecdsConfig, nil, zap.NewNop().Sugar())
+	assert.Nil(t, resources[gcpTypes.ExtensionConfig][0].Ttl)
+	err := setSnapshot(resources, testCluster, testCache, zap.NewNop().Sugar())
+	if err != nil {
+		t.Errorf("setSnapshot failed %v", err)
+	}
+
+	snapshot, err := testCache.GetSnapshot(testCluster)
+	if err != nil {
+		t.Errorf("Snapshot not found for cluster %s", testCluster)
+	}
+
+	ecdsResources := snapshot.Resources[gcpTypes.ExtensionConfig].Items
+	if ecdsResources == nil {
+		t.Errorf("no resources")
+	}
+
+	assert.Contains(t, ecdsResources, InternalFaultFilterConfigName)
+
+	extensionConfig := ecdsResources[InternalFaultFilterConfigName].Resource.(*gcpCoreV3.TypedExtensionConfig)
+
+	httpFaultFilter := &gcpFilterFault.HTTPFault{}
+	err = ptypes.UnmarshalAny(extensionConfig.TypedConfig, httpFaultFilter)
+	if err != nil {
+		t.Errorf("Unable to unmarshall typed config")
+	}
+
+	assert.EqualValues(t, 10, httpFaultFilter.GetAbort().GetPercentage().GetNumerator())
+	assert.EqualValues(t, 404, httpFaultFilter.GetAbort().GetHttpStatus())
+	assert.EqualValues(t, 0, httpFaultFilter.GetDelay().GetPercentage().GetNumerator())
+	assert.EqualValues(t, 0, httpFaultFilter.GetDelay().GetFixedDelay().GetSeconds())
+	assert.EqualValues(t, 1, len(httpFaultFilter.GetHeaders()))
+	assert.EqualValues(t, EnvoyDownstreamServiceClusterHeader, httpFaultFilter.GetHeaders()[0].GetName())
+	assert.EqualValues(t, downstreamCluster, httpFaultFilter.GetHeaders()[0].GetExactMatch())
+}
+
+func TestSetSnapshotECDSExternalFault(t *testing.T) {
+	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
+	testCluster := "serviceF"
+	var upstreamCluster string
+	mockExperimentList := mockGenerateFaultData(t)
+
+	ecdsConfig := ECDSConfig{
+		ecdsResourceMap: SafeEcdsResourceMap{},
+		enabledClusters: map[string]struct{}{testCluster: struct{}{}},
+	}
+
+	var testClusterFaults []*experimentation.Experiment
+	for _, experiment := range mockExperimentList {
+		config := &serverexperimentation.HTTPFaultConfig{}
+		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+		if err != nil {
+			t.Errorf("unmarshalAny failed %v", err)
+		}
+
+		upstream, downstream, err := getClusterPair(config)
+		assert.NoError(t, err)
+
+		upstreamCluster = upstream
+
+		// Test External Fault
+		if downstream == testCluster {
+			testClusterFaults = append(testClusterFaults, experiment)
+
+			// Since ECDS can only perform one experiment per cluster
+			break
+		}
+	}
+
+	resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
+	resources[gcpTypes.ExtensionConfig] = generateECDSResource(testClusterFaults, &ecdsConfig, nil, zap.NewNop().Sugar())
+	assert.Nil(t, resources[gcpTypes.ExtensionConfig][0].Ttl)
+	err := setSnapshot(resources, testCluster, testCache, zap.NewNop().Sugar())
+	if err != nil {
+		t.Errorf("setSnapshot failed %v", err)
+	}
+
+	snapshot, err := testCache.GetSnapshot(testCluster)
+	if err != nil {
+		t.Errorf("Snapshot not found for cluster %s", testCluster)
+	}
+
+	ecdsResources := snapshot.Resources[gcpTypes.ExtensionConfig].Items
+	if ecdsResources == nil {
+		t.Errorf("no resources")
+	}
+
+	assert.Contains(t, ecdsResources, fmt.Sprintf(ExternalFaultFilterConfigName, upstreamCluster))
+
+	extensionConfig := ecdsResources[fmt.Sprintf(ExternalFaultFilterConfigName, upstreamCluster)].Resource.(*gcpCoreV3.TypedExtensionConfig)
+
+	httpFaultFilter := &gcpFilterFault.HTTPFault{}
+	err = ptypes.UnmarshalAny(extensionConfig.TypedConfig, httpFaultFilter)
+	if err != nil {
+		t.Errorf("Unable to unmarshall typed config")
+	}
+
+	assert.EqualValues(t, 0, httpFaultFilter.GetAbort().GetPercentage().GetNumerator())
+	assert.EqualValues(t, 503, httpFaultFilter.GetAbort().GetHttpStatus())
+	assert.EqualValues(t, 40, httpFaultFilter.GetDelay().GetPercentage().GetNumerator())
+	assert.EqualValues(t, 200, httpFaultFilter.GetDelay().GetFixedDelay().GetSeconds())
+	assert.EqualValues(t, 0, len(httpFaultFilter.GetHeaders()))
 }

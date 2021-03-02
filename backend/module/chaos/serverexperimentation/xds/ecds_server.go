@@ -2,6 +2,7 @@ package xds
 
 import (
 	"context"
+	"errors"
 	discovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v3"
 	extensionconfigservice "github.com/envoyproxy/go-control-plane/envoy/service/extension/v3"
 	"github.com/envoyproxy/go-control-plane/pkg/cache/v3"
@@ -30,7 +31,7 @@ func (e ecdsServer) StreamExtensionConfigs(stream extensionconfigservice.Extensi
 }
 
 func (e ecdsServer) DeltaExtensionConfigs(extensionconfigservice.ExtensionConfigDiscoveryService_DeltaExtensionConfigsServer) error {
-	panic("implement me")
+	return errors.New("not implemented")
 }
 
 func (e ecdsServer) FetchExtensionConfigs(ctx context.Context, req *discovery.DiscoveryRequest) (*discovery.DiscoveryResponse, error) {
