@@ -66,10 +66,10 @@ func contains(s []string, str string) bool {
 
 func (m *mod) ManageableOrganizations(ctx context.Context) ([]*sourcecontrolv1.Entity, error) {
 	organizations, err := m.github.ListOrganizations(ctx, github.CurrentUser)
-	writableOrgs := []*sourcecontrolv1.Entity{}
 	if err != nil {
 		return nil, err
 	}
+	writableOrgs := []*sourcecontrolv1.Entity{}
 	currentUser, err := m.github.GetUser(ctx, github.CurrentUser)
 	if err != nil {
 		return nil, err
