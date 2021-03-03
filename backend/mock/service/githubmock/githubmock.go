@@ -49,23 +49,30 @@ func (s svc) GetCommit(ctx context.Context, ref *github.RemoteRef) (*github.Comm
 }
 
 func (s svc) GetRepository(ctx context.Context, ref *github.RemoteRef) (*github.Repository, error) {
-	panic("implement me")
+	return &github.Repository{}, nil
 }
 
 func (s svc) GetOrganization(ctx context.Context, organization string) (*githubv3.Organization, error) {
-	panic("implement me")
+	login := "clutch"
+	return &githubv3.Organization{Login: &login}, nil
 }
 
 func (s svc) ListOrganizations(ctx context.Context, user string) ([]*githubv3.Organization, error) {
-	panic("implement me")
+	login := "clutch"
+	return []*githubv3.Organization{
+		{Login: &login},
+	}, nil
 }
 
 func (s svc) GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, error) {
-	panic("implement me")
+	role := "member"
+	return &githubv3.Membership{Role: &role}, nil
 }
 
 func (s svc) GetUser(ctx context.Context, username string) (*githubv3.User, error) {
-	panic("implement me")
+	login := "user"
+	avatarURL := "https://clutch.sh/img/microsite/logo.svg"
+	return &githubv3.User{Login: &login, AvatarURL: &avatarURL}, nil
 }
 
 func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {

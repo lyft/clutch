@@ -61,3 +61,14 @@ WithoutLabel.args = {
   ...Primary.args,
   label: null,
 };
+
+export const WithStartAdornment = Template.bind({});
+WithStartAdornment.args = {
+  ...Primary.args,
+  options: [
+    {
+      label: "Option 1",
+      startAdornment: <img src="https://clutch.sh/img/microsite/logo.svg" alt="logo" />,
+    },
+  ],
+};
