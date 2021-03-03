@@ -51,11 +51,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, err
 	}
 
-	// This pointer  for MaxIdleConnections so we can check the exsistance of this variable.
-	// Ints are not capable of being nil the default is the value 0, which is a valid input
-	// in this case and we want to fallback to the drivers default if nothing is set.
-	maxIdleConnections := &pgcfg.MaxIdleConnections
-	if maxIdleConnections != nil {
+	if pgcfg.MaxIdleConnections > 2 {
 		sqlDB.SetMaxIdleConns(int(pgcfg.MaxIdleConnections))
 	}
 

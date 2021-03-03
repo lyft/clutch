@@ -32,6 +32,6 @@ message Connection {
 // TODO: Expose more database/sql tunables.
 message Config {
   Connection connection = 1;
-  // The default max idle connections is currently 2
-  int32 max_idle_connections = 2;
+  // The default max idle connections is currently 2 and cannot be configured lower
+  int32 max_idle_connections = 2 [ (validate.rules).int32 = {gt : 2} ];
 }

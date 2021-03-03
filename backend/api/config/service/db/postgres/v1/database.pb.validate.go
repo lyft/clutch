@@ -187,7 +187,12 @@ func (m *Config) Validate() error {
 		}
 	}
 
-	// no validation rules for MaxIdleConnections
+	if m.GetMaxIdleConnections() <= 2 {
+		return ConfigValidationError{
+			field:  "MaxIdleConnections",
+			reason: "value must be greater than 2",
+		}
+	}
 
 	return nil
 }
