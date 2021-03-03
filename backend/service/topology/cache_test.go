@@ -1,7 +1,6 @@
 package topology
 
 import (
-	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -32,7 +31,6 @@ func TestConvertLockIdToAdvisoryLockId(t *testing.T) {
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 			id := convertLockIdToAdvisoryLockId(tt.input)
-			log.Printf("%v", id)
 			assert.Equal(t, tt.expect, id)
 		})
 	}

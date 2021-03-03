@@ -2,8 +2,9 @@ package k8s
 
 import (
 	"context"
-	"fmt"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/util/retry"
@@ -27,10 +28,10 @@ func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, na
 	if len(hpas.Items) == 1 {
 		return ProtoForHPA(cs.Cluster(), &hpas.Items[0]), nil
 	} else if len(hpas.Items) > 1 {
-		return nil, fmt.Errorf("Located multiple HPAs")
+		return nil, status.Error(codes.FailedPrecondition, "located multiple HPAs")
 	}
 
-	return nil, fmt.Errorf("Unable to locate HPA")
+	return nil, status.Error(codes.NotFound, "unable to locate specified HPA")
 }
 
 func ProtoForHPA(cluster string, autoscaler *autoscalingv1.HorizontalPodAutoscaler) *k8sapiv1.HPA {
