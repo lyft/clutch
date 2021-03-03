@@ -26,6 +26,10 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
+// Any error information beyond code and status should be included here and added to the error in the status details
+// field. The frontend knows how to render all of the fields in a user-friendly way. If there is extremely verbose error
+// information, consider adding it using a different type, e.g. from the errdetails package. Any details not using this
+// type will still be accessible to the user in a raw format.
 type ErrorDetails struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
