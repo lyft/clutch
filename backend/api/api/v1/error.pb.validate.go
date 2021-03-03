@@ -44,23 +44,6 @@ func (m *ErrorMetadata) Validate() error {
 		return nil
 	}
 
-	for key, val := range m.GetMetadata() {
-		_ = val
-
-		// no validation rules for Metadata[key]
-
-		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return ErrorMetadataValidationError{
-					field:  fmt.Sprintf("Metadata[%v]", key),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
 	for idx, item := range m.GetWrapped() {
 		_, _ = idx, item
 
