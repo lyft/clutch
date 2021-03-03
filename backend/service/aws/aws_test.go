@@ -60,7 +60,8 @@ func TestNew(t *testing.T) {
 
 func TestNewWithWrongConfigType(t *testing.T) {
 	_, err := New(&any.Any{TypeUrl: "foo"}, nil, nil)
-	assert.EqualError(t, err, "mismatched message type: got \"foo\" want \"clutch.config.service.aws.v1.Config\"")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "mismatched message type")
 }
 
 func TestRegions(t *testing.T) {
@@ -75,13 +76,28 @@ func TestMissingRegionOnEachServiceCall(t *testing.T) {
 	}
 
 	_, err := c.DescribeInstances(context.Background(), "us-north-5", nil)
-	assert.EqualError(t, err, "no client found for region 'us-north-5'")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "no client found")
 
 	err = c.TerminateInstances(context.Background(), "us-north-5", nil)
-	assert.EqualError(t, err, "no client found for region 'us-north-5'")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "no client found")
 
 	err = c.RebootInstances(context.Background(), "us-north-5", nil)
-	assert.EqualError(t, err, "no client found for region 'us-north-5'")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "no client found")
+}
+
+func TestGetRegionalClient(t *testing.T) {
+	c := &client{
+		clients: map[string]*regionalClient{"us-east-1": nil},
+	}
+	_, err := c.getRegionalClient("us-east-1")
+	assert.NoError(t, err)
+
+	_, err = c.getRegionalClient("us-north-5")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "no client found")
 }
 
 var testInstance = ec2types.Instance{

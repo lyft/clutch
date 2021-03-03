@@ -2,9 +2,10 @@ package aws
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/golang/protobuf/proto"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	awsv1resolver "github.com/lyft/clutch/backend/api/resolver/aws/v1"
 	"github.com/lyft/clutch/backend/resolver"
@@ -15,7 +16,7 @@ func (r *res) resolveKinesisStreamForInput(ctx context.Context, input proto.Mess
 	case *awsv1resolver.KinesisStreamName:
 		return r.kinesisResults(ctx, i.Region, i.Name, 1)
 	default:
-		return nil, fmt.Errorf("unrecognized input type %T", i)
+		return nil, status.Errorf(codes.Internal, "resolution for type '%T' not implemented", i)
 	}
 }
 
