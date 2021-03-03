@@ -2,7 +2,6 @@ package meta
 
 import (
 	"fmt"
-	"log"
 	"regexp"
 	"strings"
 
@@ -132,11 +131,45 @@ func ExtractProtoPatternsValues(pb proto.Message) string {
 
 		for _, pattern := range id.Patterns {
 			rs := resolvePattern(pb, pattern)
-			log.Printf("%v", rs.Id)
 			populatedPattern = append(populatedPattern, rs.Id)
 		}
 	}
 	return populatedPattern[0]
+}
+
+func PatternValueMapping(pb proto.Message, value string) (map[string]string, error) {
+	m := pb.ProtoReflect()
+	opts := m.Descriptor().Options().ProtoReflect()
+
+	// Field and Value result map
+	result := map[string]string{}
+
+	if opts.Has(identifierTypeDescriptor) {
+		v := opts.Get(identifierTypeDescriptor)
+		id := v.Message().Interface().(*apiv1.Identifier)
+
+		for _, pattern := range id.Patterns {
+			// The variable names on the pattern
+			variableNames := fieldNameRegexp.FindAllStringSubmatch(pattern.Pattern, -1)
+
+			// Convert the pattern into a regex
+			converedRegex := fieldNameRegexp.ReplaceAllString(pattern.Pattern, "(.*)")
+			patternRegex, err := regexp.Compile(converedRegex)
+			if err != nil {
+				return nil, err
+			}
+
+			if patternRegex.MatchString(value) {
+				// Extract the regex groups, index 0 is always the input string
+				subStringGroups := patternRegex.FindAllStringSubmatch(value, -1)
+				for i, name := range variableNames {
+					// Plus one here because the first value is the input string
+					result[name[1]] = subStringGroups[0][i+1]
+				}
+			}
+		}
+	}
+	return result, nil
 }
 
 func resolveField(pb proto.Message, name string) []*auditv1.Resource {

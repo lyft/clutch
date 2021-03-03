@@ -8,7 +8,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
 
 	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/proto"
@@ -141,7 +140,6 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 		return r.instanceResults(ctx, resolver.OptionAll, []string{id}, limit)
 
 	case typeURLAutoscalingGroup:
-		log.Printf("yes obvi we want ASG")
 		return r.autoscalingGroupResults(ctx, resolver.OptionAll, []string{query}, limit)
 
 	case typeURLKinesisStream:

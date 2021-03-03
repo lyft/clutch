@@ -1,6 +1,7 @@
 package meta
 
 import (
+	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -184,4 +185,14 @@ func TestAuditDisabled(t *testing.T) {
 
 	result = IsAuditDisabled("/nonexistent/doesnotexist")
 	assert.False(t, result)
+}
+
+func TestPatternValueMapping(t *testing.T) {
+	// take a string input
+	// match a pattern
+	// assign values to proto
+	proto := &ec2v1.AutoscalingGroup{}
+	search := "us-east-1/my-asg-name"
+	shouldProto, _ := PatternValueMapping(proto, search)
+	log.Printf("%v", shouldProto)
 }
