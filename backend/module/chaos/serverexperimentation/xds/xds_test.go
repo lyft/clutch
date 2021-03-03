@@ -49,10 +49,10 @@ func TestServerStats(t *testing.T) {
 	err = v3Stream.stream.Send(&gcpDiscoveryV3.DiscoveryRequest{ErrorDetail: &rpc_status.Status{}})
 	assert.NoError(t, err)
 
-	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
+	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.rtds.totalResourcesServed+"].Value())
 	// Async verification here since it appears that we don't get a response back in this case, so we
 	// aren't able to synchronize on the response.
-	awaitCounterEquals(t, testServer.Scope, "test.v3.totalErrorsReceived+", 1)
+	awaitCounterEquals(t, testServer.Scope, "test.rtds.totalErrorsReceived+", 1)
 }
 
 // Verifies that TTL and heartbeating is done when configured to do so.
