@@ -30,7 +30,7 @@ func (r *res) resolveInstancesForInput(ctx context.Context, input proto.Message)
 	case *awsv1.InstanceID:
 		return r.instanceResults(ctx, i.Region, []string{i.Id}, 1)
 	default:
-		return nil, status.Errorf(codes.InvalidArgument, "unrecognized input type %T", i)
+		return nil, status.Errorf(codes.Internal, "unrecognized input type '%T'", i)
 	}
 }
 

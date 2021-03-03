@@ -125,7 +125,7 @@ func (r *res) Resolve(ctx context.Context, wantTypeURL string, input proto.Messa
 		return r.resolveKinesisStreamForInput(ctx, input)
 
 	default:
-		return nil, status.Errorf(codes.Internal, "type resolution for '%s' not implemented", wantTypeURL)
+		return nil, status.Errorf(codes.Internal, "resolver for '%s' not implemented", wantTypeURL)
 	}
 }
 
@@ -145,7 +145,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 		return r.kinesisResults(ctx, resolver.OptionAll, query, limit)
 
 	default:
-		return nil, status.Errorf(codes.Internal, "type search for '%s' not implemented", typeURL)
+		return nil, status.Errorf(codes.Internal, "resolver search for '%s' not implemented", typeURL)
 	}
 }
 

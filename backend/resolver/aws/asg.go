@@ -16,7 +16,7 @@ func (r *res) resolveAutoscalingGroupsForInput(ctx context.Context, input proto.
 	case *awsv1.AutoscalingGroupName:
 		return r.autoscalingGroupResults(ctx, i.Region, []string{i.Name}, 1)
 	default:
-		return nil, status.Errorf(codes.InvalidArgument, "unrecognized input type %T", i)
+		return nil, status.Errorf(codes.Internal, "unrecognized input type '%T'", i)
 	}
 }
 
