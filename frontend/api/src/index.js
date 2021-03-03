@@ -633,24 +633,24 @@ export const clutch = $root.clutch = (() => {
                 return Redacted;
             })();
 
-            v1.ErrorMetadata = (function() {
+            v1.ErrorDetails = (function() {
 
                 /**
-                 * Properties of an ErrorMetadata.
+                 * Properties of an ErrorDetails.
                  * @memberof clutch.api.v1
-                 * @interface IErrorMetadata
-                 * @property {Array.<google.rpc.IStatus>|null} [wrapped] ErrorMetadata wrapped
+                 * @interface IErrorDetails
+                 * @property {Array.<google.rpc.IStatus>|null} [wrapped] ErrorDetails wrapped
                  */
 
                 /**
-                 * Constructs a new ErrorMetadata.
+                 * Constructs a new ErrorDetails.
                  * @memberof clutch.api.v1
-                 * @classdesc Represents an ErrorMetadata.
-                 * @implements IErrorMetadata
+                 * @classdesc Represents an ErrorDetails.
+                 * @implements IErrorDetails
                  * @constructor
-                 * @param {clutch.api.v1.IErrorMetadata=} [properties] Properties to set
+                 * @param {clutch.api.v1.IErrorDetails=} [properties] Properties to set
                  */
-                function ErrorMetadata(properties) {
+                function ErrorDetails(properties) {
                     this.wrapped = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -659,22 +659,22 @@ export const clutch = $root.clutch = (() => {
                 }
 
                 /**
-                 * ErrorMetadata wrapped.
+                 * ErrorDetails wrapped.
                  * @member {Array.<google.rpc.IStatus>} wrapped
-                 * @memberof clutch.api.v1.ErrorMetadata
+                 * @memberof clutch.api.v1.ErrorDetails
                  * @instance
                  */
-                ErrorMetadata.prototype.wrapped = $util.emptyArray;
+                ErrorDetails.prototype.wrapped = $util.emptyArray;
 
                 /**
-                 * Verifies an ErrorMetadata message.
+                 * Verifies an ErrorDetails message.
                  * @function verify
-                 * @memberof clutch.api.v1.ErrorMetadata
+                 * @memberof clutch.api.v1.ErrorDetails
                  * @static
                  * @param {Object.<string,*>} message Plain object to verify
                  * @returns {string|null} `null` if valid, otherwise the reason why it is not
                  */
-                ErrorMetadata.verify = function verify(message) {
+                ErrorDetails.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
                     if (message.wrapped != null && message.hasOwnProperty("wrapped")) {
@@ -690,24 +690,24 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates an ErrorMetadata message from a plain object. Also converts values to their respective internal types.
+                 * Creates an ErrorDetails message from a plain object. Also converts values to their respective internal types.
                  * @function fromObject
-                 * @memberof clutch.api.v1.ErrorMetadata
+                 * @memberof clutch.api.v1.ErrorDetails
                  * @static
                  * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.api.v1.ErrorMetadata} ErrorMetadata
+                 * @returns {clutch.api.v1.ErrorDetails} ErrorDetails
                  */
-                ErrorMetadata.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.api.v1.ErrorMetadata)
+                ErrorDetails.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.api.v1.ErrorDetails)
                         return object;
-                    let message = new $root.clutch.api.v1.ErrorMetadata();
+                    let message = new $root.clutch.api.v1.ErrorDetails();
                     if (object.wrapped) {
                         if (!Array.isArray(object.wrapped))
-                            throw TypeError(".clutch.api.v1.ErrorMetadata.wrapped: array expected");
+                            throw TypeError(".clutch.api.v1.ErrorDetails.wrapped: array expected");
                         message.wrapped = [];
                         for (let i = 0; i < object.wrapped.length; ++i) {
                             if (typeof object.wrapped[i] !== "object")
-                                throw TypeError(".clutch.api.v1.ErrorMetadata.wrapped: object expected");
+                                throw TypeError(".clutch.api.v1.ErrorDetails.wrapped: object expected");
                             message.wrapped[i] = $root.google.rpc.Status.fromObject(object.wrapped[i]);
                         }
                     }
@@ -715,15 +715,15 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Creates a plain object from an ErrorMetadata message. Also converts values to other types if specified.
+                 * Creates a plain object from an ErrorDetails message. Also converts values to other types if specified.
                  * @function toObject
-                 * @memberof clutch.api.v1.ErrorMetadata
+                 * @memberof clutch.api.v1.ErrorDetails
                  * @static
-                 * @param {clutch.api.v1.ErrorMetadata} message ErrorMetadata
+                 * @param {clutch.api.v1.ErrorDetails} message ErrorDetails
                  * @param {$protobuf.IConversionOptions} [options] Conversion options
                  * @returns {Object.<string,*>} Plain object
                  */
-                ErrorMetadata.toObject = function toObject(message, options) {
+                ErrorDetails.toObject = function toObject(message, options) {
                     if (!options)
                         options = {};
                     let object = {};
@@ -738,17 +738,17 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 /**
-                 * Converts this ErrorMetadata to JSON.
+                 * Converts this ErrorDetails to JSON.
                  * @function toJSON
-                 * @memberof clutch.api.v1.ErrorMetadata
+                 * @memberof clutch.api.v1.ErrorDetails
                  * @instance
                  * @returns {Object.<string,*>} JSON object
                  */
-                ErrorMetadata.prototype.toJSON = function toJSON() {
+                ErrorDetails.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                return ErrorMetadata;
+                return ErrorDetails;
             })();
 
             return v1;

@@ -265,49 +265,49 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
-            /** Properties of an ErrorMetadata. */
-            interface IErrorMetadata {
+            /** Properties of an ErrorDetails. */
+            interface IErrorDetails {
 
-                /** ErrorMetadata wrapped */
+                /** ErrorDetails wrapped */
                 wrapped?: (google.rpc.IStatus[]|null);
             }
 
-            /** Represents an ErrorMetadata. */
-            class ErrorMetadata implements IErrorMetadata {
+            /** Represents an ErrorDetails. */
+            class ErrorDetails implements IErrorDetails {
 
                 /**
-                 * Constructs a new ErrorMetadata.
+                 * Constructs a new ErrorDetails.
                  * @param [properties] Properties to set
                  */
-                constructor(properties?: clutch.api.v1.IErrorMetadata);
+                constructor(properties?: clutch.api.v1.IErrorDetails);
 
-                /** ErrorMetadata wrapped. */
+                /** ErrorDetails wrapped. */
                 public wrapped: google.rpc.IStatus[];
 
                 /**
-                 * Verifies an ErrorMetadata message.
+                 * Verifies an ErrorDetails message.
                  * @param message Plain object to verify
                  * @returns `null` if valid, otherwise the reason why it is not
                  */
                 public static verify(message: { [k: string]: any }): (string|null);
 
                 /**
-                 * Creates an ErrorMetadata message from a plain object. Also converts values to their respective internal types.
+                 * Creates an ErrorDetails message from a plain object. Also converts values to their respective internal types.
                  * @param object Plain object
-                 * @returns ErrorMetadata
+                 * @returns ErrorDetails
                  */
-                public static fromObject(object: { [k: string]: any }): clutch.api.v1.ErrorMetadata;
+                public static fromObject(object: { [k: string]: any }): clutch.api.v1.ErrorDetails;
 
                 /**
-                 * Creates a plain object from an ErrorMetadata message. Also converts values to other types if specified.
-                 * @param message ErrorMetadata
+                 * Creates a plain object from an ErrorDetails message. Also converts values to other types if specified.
+                 * @param message ErrorDetails
                  * @param [options] Conversion options
                  * @returns Plain object
                  */
-                public static toObject(message: clutch.api.v1.ErrorMetadata, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                public static toObject(message: clutch.api.v1.ErrorDetails, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                 /**
-                 * Converts this ErrorMetadata to JSON.
+                 * Converts this ErrorDetails to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };

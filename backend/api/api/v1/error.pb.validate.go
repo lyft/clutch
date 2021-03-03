@@ -36,10 +36,10 @@ var (
 // define the regex for a UUID once up-front
 var _error_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
-// Validate checks the field values on ErrorMetadata with the rules defined in
+// Validate checks the field values on ErrorDetails with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.
-func (m *ErrorMetadata) Validate() error {
+func (m *ErrorDetails) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -49,7 +49,7 @@ func (m *ErrorMetadata) Validate() error {
 
 		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return ErrorMetadataValidationError{
+				return ErrorDetailsValidationError{
 					field:  fmt.Sprintf("Wrapped[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -62,9 +62,9 @@ func (m *ErrorMetadata) Validate() error {
 	return nil
 }
 
-// ErrorMetadataValidationError is the validation error returned by
-// ErrorMetadata.Validate if the designated constraints aren't met.
-type ErrorMetadataValidationError struct {
+// ErrorDetailsValidationError is the validation error returned by
+// ErrorDetails.Validate if the designated constraints aren't met.
+type ErrorDetailsValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -72,22 +72,22 @@ type ErrorMetadataValidationError struct {
 }
 
 // Field function returns field value.
-func (e ErrorMetadataValidationError) Field() string { return e.field }
+func (e ErrorDetailsValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ErrorMetadataValidationError) Reason() string { return e.reason }
+func (e ErrorDetailsValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ErrorMetadataValidationError) Cause() error { return e.cause }
+func (e ErrorDetailsValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ErrorMetadataValidationError) Key() bool { return e.key }
+func (e ErrorDetailsValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ErrorMetadataValidationError) ErrorName() string { return "ErrorMetadataValidationError" }
+func (e ErrorDetailsValidationError) ErrorName() string { return "ErrorDetailsValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ErrorMetadataValidationError) Error() string {
+func (e ErrorDetailsValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -99,14 +99,14 @@ func (e ErrorMetadataValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sErrorMetadata.%s: %s%s",
+		"invalid %sErrorDetails.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ErrorMetadataValidationError{}
+var _ error = ErrorDetailsValidationError{}
 
 var _ interface {
 	Field() string
@@ -114,4 +114,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ErrorMetadataValidationError{}
+} = ErrorDetailsValidationError{}

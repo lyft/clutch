@@ -9,7 +9,6 @@ import (
 	statuspb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/types/known/structpb"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	"github.com/lyft/clutch/backend/resolver"
@@ -89,10 +88,8 @@ func (r *response) isError(wanted string, searchedSchemas []string) error {
 		}
 
 		s := status.New(code, msg)
-		s, _ = s.WithDetails(&apiv1.ErrorMetadata{
-			Metadata: map[string]*structpb.Value{
-				"searchedSchemas": stringSliceAsValue(searchedSchemas),
-			},
+		s, _ = s.WithDetails(&apiv1.ErrorDetails{
+			// TODO: include searchedSchemas once add'l metadata support is added to API
 			Wrapped: r.PartialFailures,
 		})
 
@@ -100,13 +97,4 @@ func (r *response) isError(wanted string, searchedSchemas []string) error {
 	}
 
 	return status.Error(codes.NotFound, msg)
-}
-
-func stringSliceAsValue(v []string) *structpb.Value {
-	iface := make([]interface{}, len(v))
-	for idx, vv := range v {
-		iface[idx] = vv
-	}
-	l, _ := structpb.NewValue(iface)
-	return l
 }
