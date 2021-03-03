@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
 
+	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	healthcheckv1 "github.com/lyft/clutch/backend/api/healthcheck/v1"
 	"github.com/lyft/clutch/backend/resolver"
 )
@@ -88,6 +89,11 @@ func TestIsError(t *testing.T) {
 		assert.Error(t, err)
 		s, _ := status.FromError(err)
 		assert.Equal(t, codes.FailedPrecondition, s.Code())
+		assert.Len(t, s.Details(), 1)
+		d, ok := s.Details()[0].(*apiv1.ErrorDetails)
+		assert.True(t, ok)
+		assert.Len(t, d.Wrapped, 1)
+		assert.EqualValues(t, codes.DataLoss, d.Wrapped[0].Code)
 	}
 
 	// Some results, no failures = OK.
