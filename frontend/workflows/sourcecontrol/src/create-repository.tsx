@@ -104,7 +104,7 @@ const Confirm: React.FC<WizardChild> = () => {
     <WizardStep error={repoData.error} isLoading={repoData.isLoading}>
       <Confirmation action="Repository Creation">
         <ConfirmationMessage>
-          Your new repository can be found&nbsp; <Link href={instance.data.url}>here</Link>
+          Your new repository can be found&nbsp; <Link href={instance.data?.url || ""}>here</Link>
         </ConfirmationMessage>
       </Confirmation>
     </WizardStep>
