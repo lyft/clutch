@@ -7017,6 +7017,9 @@ export namespace clutch {
 
                             /** Config connection */
                             connection?: (clutch.config.service.db.postgres.v1.IConnection|null);
+
+                            /** Config maxIdleConnections */
+                            maxIdleConnections?: (number|null);
                         }
 
                         /** Represents a Config. */
@@ -7030,6 +7033,9 @@ export namespace clutch {
 
                             /** Config connection. */
                             public connection?: (clutch.config.service.db.postgres.v1.IConnection|null);
+
+                            /** Config maxIdleConnections. */
+                            public maxIdleConnections: number;
 
                             /**
                              * Verifies a Config message.
