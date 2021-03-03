@@ -1,7 +1,6 @@
 package meta
 
 import (
-	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -188,11 +187,57 @@ func TestAuditDisabled(t *testing.T) {
 }
 
 func TestPatternValueMapping(t *testing.T) {
-	// take a string input
-	// match a pattern
-	// assign values to proto
-	proto := &ec2v1.AutoscalingGroup{}
-	search := "us-east-1/my-asg-name"
-	shouldProto, _ := PatternValueMapping(proto, search)
-	log.Printf("%v", shouldProto)
+	t.Parallel()
+	tests := []struct {
+		id     string
+		pb     proto.Message
+		search string
+		expect map[string]string
+	}{
+		{
+			id:     "aws asg",
+			pb:     &ec2v1.AutoscalingGroup{},
+			search: "us-east-1/my-asg-name",
+			expect: map[string]string{
+				"region": "us-east-1",
+				"name":   "my-asg-name",
+			},
+		},
+		{
+			id:     "aws instance",
+			pb:     &ec2v1.Instance{},
+			search: "us-east-1/i-0000000",
+			expect: map[string]string{
+				"region":      "us-east-1",
+				"instance_id": "i-0000000",
+			},
+		},
+		{
+			id:     "k8s deployment",
+			pb:     &k8sapiv1.Deployment{},
+			search: "mycluster/mynamespace/deploymentname",
+			expect: map[string]string{
+				"cluster":   "mycluster",
+				"namespace": "mynamespace",
+				"name":      "deploymentname",
+			},
+		},
+		{
+			id:     "k8s deployment failed pattern match",
+			pb:     &k8sapiv1.Deployment{},
+			search: "nothecorrectpattern",
+			expect: map[string]string{},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			result, err := PatternValueMapping(tt.pb, tt.search)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.expect, result)
+		})
+	}
 }
