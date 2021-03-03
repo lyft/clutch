@@ -76,12 +76,12 @@ func (r *response) isError(wanted string, searchedSchemas []string) error {
 	}
 
 	wanted = strings.TrimPrefix(wanted, resolver.TypePrefix)
-
+	code := codes.NotFound
 	msg := fmt.Sprintf("search for '%s' returned no results", wanted)
 
+	// If there were failures and no results we wrap the errors.
 	if len(r.PartialFailures) > 0 {
-		// Determine code.
-		code := codes.NotFound
+		// Use 400 unless all codes were 404.
 		if !allStatusMatch(codes.NotFound, r.PartialFailures) {
 			code = codes.FailedPrecondition
 			msg = fmt.Sprintf("one or more errors were encountered searching for '%s'", wanted)
@@ -92,9 +92,8 @@ func (r *response) isError(wanted string, searchedSchemas []string) error {
 			// TODO: include searchedSchemas once add'l metadata support is added to API
 			Wrapped: r.PartialFailures,
 		})
-
 		return s.Err()
 	}
 
-	return status.Error(codes.NotFound, msg)
+	return status.Error(code, msg)
 }
