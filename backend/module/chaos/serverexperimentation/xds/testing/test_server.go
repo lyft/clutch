@@ -3,7 +3,6 @@ package testing
 import (
 	"net"
 	"testing"
-	"time"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
@@ -27,20 +26,12 @@ type TestServer struct {
 	Storer    *SimpleStorer
 }
 
-func NewTestServer(t *testing.T, c func(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error), ttl bool) TestServer {
+func NewTestServer(t *testing.T, config *xdsconfigv1.Config, c func(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error), ttl bool) TestServer {
 	t.Helper()
 	server := TestServer{}
 
 	server.Storer = &SimpleStorer{}
 	service.Registry[experimentstore.Name] = server.Storer
-
-	// Set up a test server listening to :9000.
-	config := &xdsconfigv1.Config{
-		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
-		IngressFaultRuntimePrefix: "fault.http",
-		EgressFaultRuntimePrefix:  "egress",
-	}
 
 	if ttl {
 		config.ResourceTtl = &durationpb.Duration{

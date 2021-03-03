@@ -255,7 +255,7 @@ func TestRefreshCache(t *testing.T) {
 	}
 
 	ecdsConfig := ECDSConfig{
-		ecdsResourceMap: SafeEcdsResourceMap{},
+		ecdsResourceMap: &SafeEcdsResourceMap{},
 		enabledClusters: map[string]struct{}{testCluster: struct{}{}},
 	}
 
@@ -299,7 +299,7 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	mockExperimentList := mockGenerateFaultData(t)
 
 	ecdsConfig := ECDSConfig{
-		ecdsResourceMap: SafeEcdsResourceMap{},
+		ecdsResourceMap: &SafeEcdsResourceMap{},
 		enabledClusters: map[string]struct{}{testCluster: struct{}{}},
 	}
 
@@ -369,7 +369,7 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	mockExperimentList := mockGenerateFaultData(t)
 
 	ecdsConfig := ECDSConfig{
-		ecdsResourceMap: SafeEcdsResourceMap{},
+		ecdsResourceMap: &SafeEcdsResourceMap{},
 		enabledClusters: map[string]struct{}{testCluster: struct{}{}},
 	}
 

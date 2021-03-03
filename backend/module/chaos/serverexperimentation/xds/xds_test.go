@@ -15,11 +15,19 @@ import (
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
 	rtds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/testing"
 )
 
 func TestServerStats(t *testing.T) {
-	testServer := rtds_testing.NewTestServer(t, New, false)
+	xdsConfig := &xdsconfigv1.Config{
+		RtdsLayerName:             "rtds",
+		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		IngressFaultRuntimePrefix: "fault.http",
+		EgressFaultRuntimePrefix:  "egress",
+	}
+
+	testServer := rtds_testing.NewTestServer(t, xdsConfig, New, false)
 	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -49,7 +57,14 @@ func TestServerStats(t *testing.T) {
 
 // Verifies that TTL and heartbeating is done when configured to do so.
 func TestResourceTTL(t *testing.T) {
-	testServer := rtds_testing.NewTestServer(t, New, true)
+	xdsConfig := &xdsconfigv1.Config{
+		RtdsLayerName:             "rtds",
+		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		IngressFaultRuntimePrefix: "fault.http",
+		EgressFaultRuntimePrefix:  "egress",
+	}
+
+	testServer := rtds_testing.NewTestServer(t, xdsConfig, New, true)
 	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())

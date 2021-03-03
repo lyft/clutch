@@ -7,7 +7,6 @@ package xds
 import (
 	"context"
 	"errors"
-	"github.com/lyft/clutch/backend/module"
 	"sync/atomic"
 	"time"
 
@@ -24,6 +23,7 @@ import (
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
 
 	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
+	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
@@ -130,7 +130,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 
 	ecdsConfig := ECDSConfig{
 		enabledClusters: enabledECDSClusters,
-		ecdsResourceMap: safeECDSResourceMap,
+		ecdsResourceMap: &safeECDSResourceMap,
 	}
 
 	return &Server{
@@ -245,7 +245,7 @@ type ecdsCallbacks struct {
 	// resources and present a default value for all the ones that don't have a specific value.
 	// This allows us to set a default value for all the dynamic ECDS resources for all clusters, relying on go-control-plane
 	// to only respond with ones actually requested by the client.
-	safeECDSResources SafeEcdsResourceMap
+	safeECDSResources *SafeEcdsResourceMap
 }
 
 func (c *ecdsCallbacks) OnStreamOpen(ctx context.Context, streamID int64, typeURL string) error {

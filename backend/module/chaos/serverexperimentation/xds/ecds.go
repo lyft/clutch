@@ -2,8 +2,6 @@ package xds
 
 import (
 	"fmt"
-	"github.com/golang/protobuf/ptypes/any"
-	"github.com/golang/protobuf/ptypes/duration"
 	"sync"
 	"time"
 
@@ -13,9 +11,10 @@ import (
 	gcpFilterFault "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
 	gcpType "github.com/envoyproxy/go-control-plane/envoy/type/v3"
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
-	"go.uber.org/zap"
-
 	proto "github.com/golang/protobuf/proto"
+	"github.com/golang/protobuf/ptypes/any"
+	"github.com/golang/protobuf/ptypes/duration"
+	"go.uber.org/zap"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
@@ -64,7 +63,7 @@ type SafeEcdsResourceMap struct {
 type ECDSConfig struct {
 	enabledClusters map[string]struct{}
 
-	ecdsResourceMap SafeEcdsResourceMap
+	ecdsResourceMap *SafeEcdsResourceMap
 }
 
 func generateECDSResource(experiments []*experimentation.Experiment, ecdsConfig *ECDSConfig, ttl *time.Duration, logger *zap.SugaredLogger) []gcpTypes.ResourceWithTtl {
@@ -126,6 +125,8 @@ func generateECDSResource(experiments []*experimentation.Experiment, ecdsConfig 
 		}
 	}
 
+	logger.Debugw("ECDS Fault filter", "faultFilter", faultFilter, "upstreamcluster", upstreamCluster)
+
 	serializedFaultFilter, err := proto.Marshal(faultFilter)
 	if err != nil {
 		logger.Warnw("Unable to unmarshal fault filter", "faultFilter", faultFilter)
@@ -163,6 +164,7 @@ func generateEmptyECDSResource(cluster string, ecdsConfig *ECDSConfig, logger *z
 	}
 
 	if _, exists := ecdsConfig.ecdsResourceMap.requestedResourcesMap[cluster]; !exists {
+		logger.Debugw("Cluster not found in ECDS resource map", "cluster", cluster)
 		return []gcpTypes.ResourceWithTtl{}
 	}
 
@@ -189,7 +191,7 @@ func generateEmptyECDSResource(cluster string, ecdsConfig *ECDSConfig, logger *z
 }
 
 func createAbortDelayConfig(httpFaultConfig *serverexperimentation.HTTPFaultConfig, downstreamCluster string) (bool, *gcpFilterFault.FaultAbort, *gcpFilterCommon.FaultDelay, error) {
-	var isExternalFault = false
+	var isExternalFault bool
 	abort := DefaultAbortFaultConfig
 	delay := DefaultDelayFaultConfig
 

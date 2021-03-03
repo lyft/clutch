@@ -44,22 +44,18 @@ config_discovery:
         - envoy_grpc: 
             cluster_name: clutchxds
       transport_api_version: V3
-    initial_fetch_timeout: 35s
+    initial_fetch_timeout: 5s
     resource_api_version: V3
   default_config: 
-    "@type": type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
+    '@type': type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
     abort: 
       http_status: 503
-      percentage: 
-        denominator: HUNDRED
-        numerator: 0
+      percentage: {denominator: HUNDRED, numerator: 0}
     abort_http_status_runtime: ecds_runtime_override_do_not_use.http.abort.http_status
     abort_percent_runtime: ecds_runtime_override_do_not_use.http.abort.abort_percent
     delay: 
       fixed_delay: 0.001s
-      percentage: 
-        denominator: HUNDRED
-        numerator: 0
+      percentage: {denominator: HUNDRED, numerator: 0}
     delay_duration_runtime: ecds_runtime_override_do_not_use.http.delay.fixed_duration_ms
     delay_percent_runtime: ecds_runtime_override_do_not_use.http.delay.percentage
   apply_default_config_without_warming: false

@@ -42,8 +42,10 @@ const Confirmation: React.FC<{ action: string }> = ({ action, children }) => (
       <Icon />
     </IconContainer>
     <TitleContainer item>
-      <CheckmarkIcon /> {action} Requested!
-    </TitleContainer>
+      <CheckmarkIcon /> {action}
+{' '}
+Requested!
+</TitleContainer>
     <SubtitleContainer>{children}</SubtitleContainer>
   </Grid>
 );
