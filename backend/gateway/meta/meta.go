@@ -119,6 +119,7 @@ func ResourceNames(pb proto.Message) []*auditv1.Resource {
 	return nil
 }
 
+// ExtractProtoPatternsValues takes a proto and returns its pattern populated with values
 func ExtractProtoPatternsValues(pb proto.Message) string {
 	m := pb.ProtoReflect()
 	opts := m.Descriptor().Options().ProtoReflect()
@@ -137,6 +138,23 @@ func ExtractProtoPatternsValues(pb proto.Message) string {
 	return populatedPattern[0]
 }
 
+// PatternValueMapping takes a string value and maps the patterns from a proto pattern
+// this is utilized by the resolver search api
+//
+// For example given the following proto pattern
+// option (clutch.api.v1.id).patterns = {
+//  pattern : "{cluster}/{namespace}/{name}"
+// };
+//
+// And the value of "mycluster/mynamespace/nameofresource"
+// we transform the pattern into a regex and map the values to the pattern names
+//
+// The output for this example is:
+// map[string]string{
+//  cluster: mycluster
+//  namespace: mynamespace
+//  name: nameofresource
+// }
 func PatternValueMapping(pb proto.Message, value string) (map[string]string, error) {
 	m := pb.ProtoReflect()
 	opts := m.Descriptor().Options().ProtoReflect()

@@ -186,6 +186,43 @@ func TestAuditDisabled(t *testing.T) {
 	assert.False(t, result)
 }
 
+func TestExtractProtoPatternsValues(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		id     string
+		pb     proto.Message
+		expect string
+	}{
+		{
+			id: "deployment",
+			pb: &k8sapiv1.Deployment{
+				Cluster:   "foo",
+				Namespace: "bar",
+				Name:      "cat",
+			},
+			expect: "foo/bar/cat",
+		},
+		{
+			id: "ec2 instance",
+			pb: &ec2v1.Instance{
+				Region:     "us-east-1",
+				InstanceId: "i-000000000",
+			},
+			expect: "us-east-1/i-000000000",
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			result := ExtractProtoPatternsValues(tt.pb)
+			assert.Equal(t, tt.expect, result)
+		})
+	}
+}
+
 func TestPatternValueMapping(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
