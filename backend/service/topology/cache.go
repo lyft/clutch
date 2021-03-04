@@ -91,7 +91,7 @@ func (c *client) startTopologyCache(ctx context.Context) {
 					c.log.Error("Unable to start topology caching", zap.String("service", n), zap.Error(err))
 					continue
 				}
-				go c.processTopologyObjectChannel(ctx, topologyChannel)
+				go c.processTopologyObjectChannel(ctx, topologyChannel, n)
 			}
 		}
 	}
@@ -99,8 +99,12 @@ func (c *client) startTopologyCache(ctx context.Context) {
 	<-ctx.Done()
 }
 
-func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest) {
+func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest, service string) {
 	for obj := range objs {
+		c.scope.Tagged(map[string]string{
+			"service": service,
+		}).SubScope("cache").Gauge("object_channel.queue_depth").Update(float64(len(objs)))
+
 		switch obj.Action {
 		case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
 			if err := c.setCache(ctx, obj.Resource); err != nil {
