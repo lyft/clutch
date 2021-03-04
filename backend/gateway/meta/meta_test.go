@@ -250,6 +250,15 @@ func TestPatternValueMapping(t *testing.T) {
 			},
 		},
 		{
+			id:     "test for partial match",
+			pb:     &ec2v1.Instance{},
+			search: "us-east-1/i-0000000/meow",
+			expect: map[string]string{
+				"region":      "us-east-1/i-0000000",
+				"instance_id": "meow",
+			},
+		},
+		{
 			id:     "k8s deployment",
 			pb:     &k8sapiv1.Deployment{},
 			search: "mycluster/mynamespace/deploymentname",
