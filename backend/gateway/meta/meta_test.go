@@ -217,7 +217,7 @@ func TestExtractProtoPatternsValues(t *testing.T) {
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
-			result := ExtractProtoPatternsValues(tt.pb)
+			result := HydratedPatternForProto(tt.pb)
 			assert.Equal(t, tt.expect, result)
 		})
 	}
@@ -272,7 +272,7 @@ func TestPatternValueMapping(t *testing.T) {
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
-			result, err := PatternValueMapping(tt.pb, tt.search)
+			result, err := ExtractPatternValuesFromString(tt.pb, tt.search)
 			assert.NoError(t, err)
 			assert.Equal(t, tt.expect, result)
 		})

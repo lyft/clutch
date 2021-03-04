@@ -174,8 +174,8 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	switch typeURL {
 	case typeURLPod:
 		if idPattern.MatchString(query) {
-			mappedValues, err := meta.PatternValueMapping(&k8sv1api.Pod{}, query)
-			if err == nil && len(mappedValues["cluster"]) > 0 && len(mappedValues["namespace"]) > 0 && len(mappedValues["name"]) > 0 {
+			patternValues, err := meta.ExtractPatternValuesFromString(&k8sv1api.Pod{}, query)
+			if err == nil && len(patternValues["cluster"]) > 0 && len(patternValues["namespace"]) > 0 && len(patternValues["name"]) > 0 {
 				handler.Add(1)
 				go func(cluster, namespace, name string) {
 					defer handler.Done()
@@ -186,7 +186,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 					case <-handler.Cancelled():
 						return
 					}
-				}(mappedValues["cluster"], mappedValues["namespace"], mappedValues["name"])
+				}(patternValues["cluster"], patternValues["namespace"], patternValues["name"])
 			} else {
 				for _, name := range clientsets {
 					handler.Add(1)
@@ -207,8 +207,8 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 		}
 	case typeURLHPA:
 		if idPattern.MatchString(query) {
-			mappedValues, err := meta.PatternValueMapping(&k8sv1api.HPA{}, query)
-			if err == nil && len(mappedValues["cluster"]) > 0 && len(mappedValues["namespace"]) > 0 && len(mappedValues["name"]) > 0 {
+			patternValues, err := meta.ExtractPatternValuesFromString(&k8sv1api.HPA{}, query)
+			if err == nil && len(patternValues["cluster"]) > 0 && len(patternValues["namespace"]) > 0 && len(patternValues["name"]) > 0 {
 				handler.Add(1)
 				go func(cluster, namespace, name string) {
 					defer handler.Done()
@@ -219,7 +219,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 					case <-handler.Cancelled():
 						return
 					}
-				}(mappedValues["cluster"], mappedValues["namespace"], mappedValues["name"])
+				}(patternValues["cluster"], patternValues["namespace"], patternValues["name"])
 			} else {
 				for _, name := range clientsets {
 					handler.Add(1)

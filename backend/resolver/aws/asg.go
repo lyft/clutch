@@ -26,8 +26,8 @@ func (r *res) autoscalingGroupResults(ctx context.Context, region string, ids []
 
 	for _, id := range ids {
 		// if the pattern matches then proceeded
-		mappedValues, err := meta.PatternValueMapping(&ec2v1.AutoscalingGroup{}, id)
-		if err == nil && len(mappedValues["region"]) > 0 && len(mappedValues["name"]) > 0 {
+		patternValues, err := meta.ExtractPatternValuesFromString(&ec2v1.AutoscalingGroup{}, id)
+		if err == nil && len(patternValues["region"]) > 0 && len(patternValues["name"]) > 0 {
 			handler.Add(1)
 			go func(region string, name []string) {
 				defer handler.Done()
@@ -38,7 +38,7 @@ func (r *res) autoscalingGroupResults(ctx context.Context, region string, ids []
 				case <-handler.Cancelled():
 					return
 				}
-			}(mappedValues["region"], []string{mappedValues["name"]})
+			}(patternValues["region"], []string{patternValues["name"]})
 		} else {
 			regions := r.determineRegionsForOption(region)
 			for _, region := range regions {

@@ -112,7 +112,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 		}
 		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
-				Id: meta.ExtractProtoPatternsValues(pod),
+				Id: meta.HydratedPatternForProto(pod),
 				Pb: protoPod,
 			},
 			Action: action,
@@ -126,7 +126,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 		}
 		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
-				Id: meta.ExtractProtoPatternsValues(deployment),
+				Id: meta.HydratedPatternForProto(deployment),
 				Pb: protoDeployment,
 			},
 			Action: action,
@@ -140,7 +140,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 		}
 		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
-				Id: meta.ExtractProtoPatternsValues(hpa),
+				Id: meta.HydratedPatternForProto(hpa),
 				Pb: protoHpa,
 			},
 			Action: action,

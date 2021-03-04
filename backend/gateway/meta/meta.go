@@ -119,8 +119,8 @@ func ResourceNames(pb proto.Message) []*auditv1.Resource {
 	return nil
 }
 
-// ExtractProtoPatternsValues takes a proto and returns its pattern populated with values
-func ExtractProtoPatternsValues(pb proto.Message) string {
+// HydratedPatternForProto takes a proto and returns its pattern populated with values
+func HydratedPatternForProto(pb proto.Message) string {
 	m := pb.ProtoReflect()
 	opts := m.Descriptor().Options().ProtoReflect()
 
@@ -155,7 +155,7 @@ func ExtractProtoPatternsValues(pb proto.Message) string {
 //  namespace: mynamespace
 //  name: nameofresource
 // }
-func PatternValueMapping(pb proto.Message, value string) (map[string]string, error) {
+func ExtractPatternValuesFromString(pb proto.Message, value string) (map[string]string, error) {
 	m := pb.ProtoReflect()
 	opts := m.Descriptor().Options().ProtoReflect()
 

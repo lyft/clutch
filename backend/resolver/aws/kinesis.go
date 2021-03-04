@@ -25,8 +25,8 @@ func (r *res) resolveKinesisStreamForInput(ctx context.Context, input proto.Mess
 func (r *res) kinesisResults(ctx context.Context, region, id string, limit uint32) (*resolver.Results, error) {
 	ctx, handler := resolver.NewFanoutHandler(ctx)
 
-	mappedValues, err := meta.PatternValueMapping(&kinesisv1api.Stream{}, id)
-	if err != nil && len(mappedValues["region"]) > 0 && len(mappedValues["stream_name"]) > 0 {
+	patternValues, err := meta.ExtractPatternValuesFromString(&kinesisv1api.Stream{}, id)
+	if err != nil && len(patternValues["region"]) > 0 && len(patternValues["stream_name"]) > 0 {
 		handler.Add(1)
 		go func(region, id string) {
 			defer handler.Done()
@@ -37,7 +37,7 @@ func (r *res) kinesisResults(ctx context.Context, region, id string, limit uint3
 			case <-handler.Cancelled():
 				return
 			}
-		}(mappedValues["region"], mappedValues["stream_name"])
+		}(patternValues["region"], patternValues["stream_name"])
 	} else {
 		regions := r.determineRegionsForOption(region)
 		for _, region := range regions {

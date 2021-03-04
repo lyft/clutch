@@ -89,7 +89,7 @@ func (c *client) processAllAutoScalingGroups(ctx context.Context, client *region
 			}
 			c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 				Resource: &topologyv1.Resource{
-					Id: meta.ExtractProtoPatternsValues(protoAsg),
+					Id: meta.HydratedPatternForProto(protoAsg),
 					Pb: asgAny,
 				},
 				Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
@@ -123,7 +123,7 @@ func (c *client) processAllEC2Instances(ctx context.Context, client *regionalCli
 				}
 				c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 					Resource: &topologyv1.Resource{
-						Id: meta.ExtractProtoPatternsValues(protoInstance),
+						Id: meta.HydratedPatternForProto(protoInstance),
 						Pb: instanceAny,
 					},
 					Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
@@ -169,7 +169,7 @@ func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalC
 
 			c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 				Resource: &topologyv1.Resource{
-					Id: meta.ExtractProtoPatternsValues(v1Stream),
+					Id: meta.HydratedPatternForProto(v1Stream),
 					Pb: protoStream,
 				},
 				Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
