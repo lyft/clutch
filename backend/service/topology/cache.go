@@ -172,15 +172,15 @@ func (c *client) deleteCache(ctx context.Context, id, type_url string) error {
 }
 
 func (c *client) expireCache(ctx context.Context) {
-	// Default experiate time is two hours
+	const expireQuery = `
+		DELETE FROM topology_cache WHERE updated_at <= NOW() - CAST ( $1 AS INTERVAL );
+	`
+
+	// Default expiration time is two hours
 	expireDuration := time.Hour * 2
 	if c.config.Cache.Ttl != nil {
 		expireDuration = c.config.Cache.Ttl.AsDuration()
 	}
-
-	const expireQuery = `
-		DELETE FROM topology_cache WHERE updated_at <= NOW() - CAST ( $1 AS INTERVAL );
-	`
 
 	ticker := time.NewTicker(time.Minute * 20)
 	for {
