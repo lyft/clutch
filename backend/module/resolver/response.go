@@ -61,6 +61,10 @@ func (r *response) marshalResults(results *resolver.Results) error {
 }
 
 func allStatusMatch(c codes.Code, sl []*statuspb.Status) bool {
+	if len(sl) == 0 {
+		return false
+	}
+
 	for _, s := range sl {
 		if s.Code != int32(c) {
 			return false
