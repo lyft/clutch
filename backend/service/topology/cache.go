@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"encoding/binary"
 	"encoding/json"
+	"strconv"
 	"time"
 
 	"go.uber.org/zap"
@@ -171,14 +172,19 @@ func (c *client) deleteCache(ctx context.Context, id, type_url string) error {
 }
 
 func (c *client) expireCache(ctx context.Context) {
-	// Delete all entries that are older than two hours
 	const expireQuery = `
-		DELETE FROM topology_cache WHERE updated_at <= NOW() - INTERVAL '120minutes';
+		DELETE FROM topology_cache WHERE updated_at <= NOW() - CAST ( $1 AS INTERVAL );
 	`
+
+	// Default expiration time is two hours
+	expireDuration := time.Hour * 2
+	if c.config.Cache.Ttl != nil {
+		expireDuration = c.config.Cache.Ttl.AsDuration()
+	}
 
 	ticker := time.NewTicker(time.Minute * 20)
 	for {
-		result, err := c.db.ExecContext(ctx, expireQuery)
+		result, err := c.db.ExecContext(ctx, expireQuery, strconv.Itoa(int(expireDuration.Seconds())))
 		if err != nil {
 			c.scope.SubScope("cache").Counter("expire.failure").Inc(1)
 			c.log.Error("unable to expire cache", zap.Error(err))
