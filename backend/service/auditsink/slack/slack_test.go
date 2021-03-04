@@ -1,6 +1,7 @@
 package slack
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/golang/protobuf/ptypes"
@@ -66,6 +67,7 @@ func TestFormatCustomText(t *testing.T) {
 		ExpectedObjectMetaFields: &k8sapiv1.ExpectedObjectMetaFields{
 			Annotations: map[string]*k8sapiv1.NullableString{
 				"foo": &k8sapiv1.NullableString{Kind: &k8sapiv1.NullableString_Value{Value: "new-value"}},
+			},
 		},
 		ObjectMetaFields:       &k8sapiv1.ObjectMetaFields{Labels: map[string]string{"foo": "new-value"}},
 		RemoveObjectMetaFields: &k8sapiv1.RemoveObjectMetaFields{Annotations: []string{"foo", "bar"}},
@@ -80,36 +82,53 @@ func TestFormatCustomText(t *testing.T) {
 		expectedErr    bool
 		expectedOutput string
 	}{
-		// using metdata from the API request
+		// metdata from the API request
 		{
-			text: "`Min size` is {{.Request.Size.Min}}, `Max size` is {{.Request.Size.Max}}, `Desired size` is {{.Request.Size.Desired}}",
+			text: "`Min size` is {{.Request.size.min}}, `Max size` is {{.Request.size.max}}, `Desired size` is {{.Request.size.desired}}",
 			event: &auditv1.RequestEvent{
 				RequestMetadata:  &auditv1.RequestMetadata{Body: anyEc2Req},
 				ResponseMetadata: &auditv1.ResponseMetadata{Body: anyEc2Resp},
 			},
 			expectedOutput: "`Min size` is 2, `Max size` is 4, `Desired size` is 3",
 		},
-		// using metadata from both the API request and repsonse
+		// metadata from both the API request and repsonse
 		{
-			text: "{{.Request.Name}} ip address is {{.Response.Pod.PodIp}}",
+			text: "{{.Request.name}} ip address is {{.Response.pod.podIp}}",
 			event: &auditv1.RequestEvent{
 				RequestMetadata:  &auditv1.RequestMetadata{Body: anyK8sDescribeReq},
 				ResponseMetadata: &auditv1.ResponseMetadata{Body: anyK8sDescribeResp},
 			},
 			expectedOutput: "foo ip address is 000",
 		},
-		// using metadata that are type Map and type List
+		// metadata that is a map
 		{
-			text: "*Updated labels* {{slackList .Request.ObjectMetaFields `labels`}}\n*Removed annotations* {{slackList .Request.RemoveObjectMetaFields `annotations`}}",
+			text: "*Updated labels*:{{range $key, $val := .Request.objectMetaFields.labels}}\n- {{$key}}: {{$val}}{{end}}",
 			event: &auditv1.RequestEvent{
 				RequestMetadata:  &auditv1.RequestMetadata{Body: anyK8sUpdateReq},
 				ResponseMetadata: &auditv1.ResponseMetadata{Body: anyK8UpdateResp},
 			},
-			expectedOutput: "*Updated labels* \n- foo: new-value\n*Removed annotations* \n- foo\n- bar",
+			expectedOutput: "*Updated labels*:\n- foo: new-value",
 		},
-		// invalid, field doesn't exist
+		// metdata that is a list
 		{
-			text: "Name is {{.Request.Foo}}",
+			text: "*Removed annotations*:{{range .Request.removeObjectMetaFields.annotations}}\n- {{.}}{{end}}",
+			event: &auditv1.RequestEvent{
+				RequestMetadata:  &auditv1.RequestMetadata{Body: anyK8sUpdateReq},
+				ResponseMetadata: &auditv1.ResponseMetadata{Body: anyK8UpdateResp},
+			},
+			expectedOutput: "*Removed annotations*:\n- foo\n- bar",
+		},
+		// metdata that is a map with a map value is a another map
+		{
+			text: "*Expected Preconditions*:{{range $key, $val := .Request.expectedObjectMetaFields.annotations}}\n- {{$key}}: {{range $i, $j := $val}}{{$j}}{{end}}{{end}}",
+			event: &auditv1.RequestEvent{
+				RequestMetadata:  &auditv1.RequestMetadata{Body: anyK8sUpdateReq},
+				ResponseMetadata: &auditv1.ResponseMetadata{Body: anyK8UpdateResp},
+			},
+			expectedOutput: "*Expected Preconditions*:\n- foo: new-value",
+		},
+		{
+			text: "Name is {{.Foo}}",
 			event: &auditv1.RequestEvent{
 				RequestMetadata:  &auditv1.RequestMetadata{Body: anyK8sDescribeReq},
 				ResponseMetadata: &auditv1.ResponseMetadata{Body: anyK8sDescribeResp},
@@ -131,40 +150,43 @@ func TestFormatCustomText(t *testing.T) {
 }
 
 func TestGetAuditMetadata(t *testing.T) {
-	request := &k8sapiv1.DescribePodRequest{}
-	response := &k8sapiv1.DescribePodResponse{}
-
-	anyReq, _ := anypb.New(request)
-	anyResp, _ := anypb.New(response)
+	anyReq, _ := anypb.New(&k8sapiv1.DescribePodRequest{})
+	anyResp, _ := anypb.New(&k8sapiv1.DescribePodResponse{})
 
 	testCases := []struct {
-		event       *auditv1.RequestEvent
-		expectedErr bool
+		event            *auditv1.RequestEvent
+		expectedReqType  string
+		expectedRespType string
+		expectedEmpty    bool
 	}{
 		{
 			event: &auditv1.RequestEvent{
 				RequestMetadata:  &auditv1.RequestMetadata{Body: anyReq},
 				ResponseMetadata: &auditv1.ResponseMetadata{Body: anyResp},
 			},
+			expectedReqType:  "clutch.k8s.v1.DescribePodRequest",
+			expectedRespType: "clutch.k8s.v1.DescribePodResponse",
 		},
 		{
 			event: &auditv1.RequestEvent{
-				RequestMetadata:  &auditv1.RequestMetadata{Body: anyReq},
+				RequestMetadata:  &auditv1.RequestMetadata{Body: (*anypb.Any)(nil)},
 				ResponseMetadata: &auditv1.ResponseMetadata{Body: (*anypb.Any)(nil)},
 			},
-			expectedErr: true,
+			expectedEmpty: true,
 		},
 	}
 
 	for _, test := range testCases {
 		result, err := getAuditMetadata(test.event)
-		if test.expectedErr {
-			assert.Error(t, err)
-			assert.Nil(t, result)
+		assert.NoError(t, err)
+		if test.expectedEmpty {
+			assert.Empty(t, result.Request)
+			assert.Empty(t, result.Response)
 		} else {
-			assert.NoError(t, err)
-			assert.IsType(t, request, result.Request)
-			assert.IsType(t, response, result.Response)
+			reqB, _ := json.Marshal(result.Request)
+			respB, _ := json.Marshal(result.Response)
+			assert.Contains(t, string(reqB), test.expectedReqType)
+			assert.Contains(t, string(respB), test.expectedRespType)
 		}
 	}
 }

@@ -6,7 +6,7 @@ package slack
 
 import (
 	"bytes"
-	"errors"
+	"encoding/json"
 	"fmt"
 	"text/template"
 
@@ -15,8 +15,7 @@ import (
 	"github.com/slack-go/slack"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
-	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/reflect/protoreflect"
+	"google.golang.org/protobuf/encoding/protojson"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
@@ -45,14 +44,8 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 
 // The struct is used in a Go template and the fields need to be exported
 type auditEventMetadata struct {
-	Request  proto.Message
-	Response proto.Message
-}
-
-// helper functions to format values in the Go template
-var funcMap = template.FuncMap{
-	// for values that are type List or Map, returns a formatted slack list
-	"slackList": slackList,
+	Request  map[string]interface{}
+	Response map[string]interface{}
 }
 
 type svc struct {
@@ -124,7 +117,10 @@ func formatText(username string, event *auditv1.RequestEvent) string {
 
 // FormatCustomText parses out the audit event metdata request for the custom slack message text
 func FormatCustomText(message string, event *auditv1.RequestEvent) (string, error) {
-	tmpl := template.Must(template.New("customText").Funcs(funcMap).Parse(message))
+	tmpl, err := template.New("customText").Parse(message)
+	if err != nil {
+		return "", err
+	}
 
 	data, err := getAuditMetadata(event)
 	if err != nil {
@@ -139,80 +135,33 @@ func FormatCustomText(message string, event *auditv1.RequestEvent) (string, erro
 	return buf.String(), nil
 }
 
-// returns the API request/response details contained in a audit event
+// returns the API request/response details saved in an audit event
 func getAuditMetadata(event *auditv1.RequestEvent) (*auditEventMetadata, error) {
-	requestMetadata := event.RequestMetadata.Body
-	// UnmarshalNew returns the message of the specified type based on the TypeURL
-	requestProto, err := requestMetadata.UnmarshalNew()
+	var requestMetadata map[string]interface{}
+	var responseMetadata map[string]interface{}
+
+	// proto -> json
+	reqJSON, err := protojson.Marshal(event.RequestMetadata.Body)
+	if err != nil {
+		return nil, err
+	}
+	respJSON, err := protojson.Marshal(event.ResponseMetadata.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	responseMetdata := event.ResponseMetadata.Body
-	responseProto, err := responseMetdata.UnmarshalNew()
+	// json -> map[string]interface{}
+	err = json.Unmarshal(reqJSON, &requestMetadata)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(respJSON, &responseMetadata)
 	if err != nil {
 		return nil, err
 	}
 
 	return &auditEventMetadata{
-		Request:  requestProto,
-		Response: responseProto,
+		Request:  requestMetadata,
+		Response: responseMetadata,
 	}, nil
-}
-
-func slackList(data interface{}, name string) (string, error) {
-	pb, ok := data.(proto.Message)
-	if !ok {
-		// not the type we can process
-		return "", errors.New("could not use input as proto message")
-	}
-	m := pb.ProtoReflect()
-
-	fd := m.Descriptor().Fields().ByName(protoreflect.Name(name))
-	if fd == nil {
-		// didn't find field by name
-		return "", errors.New("could not find field by name")
-	}
-
-	v := m.Get(fd)
-
-	if fd.IsList() {
-		return resolveSlice(v.List()), nil
-	}
-
-	if fd.IsMap() {
-		return resolveMap(v.Map()), nil
-	}
-
-	return "", errors.New("input is not type List or Map")
-}
-
-func resolveSlice(list protoreflect.List) string {
-	var text string
-	const listFormat = "\n- %v"
-
-	for i := 0; i < list.Len(); i++ {
-		v := list.Get(i)
-		text += fmt.Sprintf(listFormat, v.Interface())
-	}
-	return text
-}
-
-func resolveMap(mapValue protoreflect.Map) string {
-	var text string
-	const mapFormat = "\n- %v: %v"
-
-	mapValue.Range(func(k protoreflect.MapKey, v protoreflect.Value) bool {
-		var value interface{}
-		switch v.Interface().(type) {
-		case protoreflect.Message:
-			value = v.Message().Interface()
-		default:
-			value = v.Interface()
-		}
-
-		text += fmt.Sprintf(mapFormat, k.Interface(), value)
-		return true
-	})
-	return text
 }

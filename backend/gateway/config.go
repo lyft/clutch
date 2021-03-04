@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"text/template"
 	"time"
 
@@ -105,10 +106,16 @@ func parseFile(path string, pb proto.Message, template bool) error {
 		}
 	}
 
-	// Interpolate environment variables.
-	contents = []byte(os.ExpandEnv(string(contents)))
+	contents = []byte(processContents(contents))
 
 	return parseYAML(contents, pb)
+}
+
+func processContents(contents []byte) string {
+	// Interpolate environment variables
+	expandedData := os.ExpandEnv(string(contents))
+	// Replace the Clutch-specific templating token with the Go $ templating token
+	return strings.ReplaceAll(expandedData, "%%", "$")
 }
 
 func parseYAML(contents []byte, pb proto.Message) error {
