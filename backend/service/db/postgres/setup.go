@@ -51,6 +51,12 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return nil, err
 	}
 
+	// Zero is used as the default, this will utilize the default database/sql value
+	// Specifying -1 will disable Idle connections
+	if pgcfg.MaxIdleConnections != 0 {
+		sqlDB.SetMaxIdleConns(int(pgcfg.MaxIdleConnections))
+	}
+
 	return &client{logger: logger, scope: scope, sqlDB: sqlDB}, nil
 }
 

@@ -14,7 +14,7 @@ import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
 import { Dialog, DialogActions, DialogContent } from "./dialog";
 import { Error, Hint, Note, NoteConfig, NotePanel, Warning } from "./Feedback";
-import { StatusIcon } from "./icon";
+import { AvatarIcon, StatusIcon } from "./icon";
 import { Link } from "./link";
 import Loadable from "./loading";
 import { client, ClientError } from "./network";
@@ -29,6 +29,7 @@ export {
   Accordion,
   AccordionDetails,
   AccordionRow,
+  AvatarIcon,
   ClutchApp,
   BaseWorkflowProps,
   Button,

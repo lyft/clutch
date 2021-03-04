@@ -1,4 +1,5 @@
 import React from "react";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import {
   Accordion,
   AccordionDetails,
@@ -33,7 +34,7 @@ const InstanceIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
 const InstanceDetails: React.FC<WizardChild> = () => {
   const { onSubmit, onBack } = useWizardContext();
   const resourceData = useDataLayout("resourceData");
-  const instance = resourceData.displayValue();
+  const instance = resourceData.displayValue() as IClutch.aws.ec2.v1.Instance;
 
   const data = [
     { name: "Instance ID", value: instance.instanceId },
@@ -73,7 +74,7 @@ const InstanceDetails: React.FC<WizardChild> = () => {
 
 const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const terminationData = useDataLayout("terminationData");
-  const instance = useDataLayout("resourceData").displayValue();
+  const instance = useDataLayout("resourceData").displayValue() as IClutch.aws.ec2.v1.Instance;
 
   const data = [
     { name: "Instance ID", value: instance.instanceId },

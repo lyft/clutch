@@ -1,5 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import {
   Button,
   ButtonGroup,
@@ -49,7 +50,7 @@ const StreamDetails: React.FC<WizardChild> = () => {
   });
   const { onSubmit, onBack } = useWizardContext();
   const resourceData = useDataLayout("resourceData");
-  const stream = resourceData.displayValue();
+  const stream = resourceData.displayValue() as IClutch.aws.kinesis.v1.Stream;
   const handleTargetShardCountChange = (value: string) => {
     resourceData.updateData("targetShardCount", value);
   };

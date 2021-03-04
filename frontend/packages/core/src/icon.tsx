@@ -9,6 +9,12 @@ const StyledStatusIcon = styled(FiberManualRecordTwoToneIcon)`
   `}
 `;
 
+export const AvatarIcon = styled.img({
+  borderRadius: "50%",
+  maxHeight: "100%",
+  maxWidth: "initial",
+});
+
 export interface StatusProps {
   variant?: "neutral" | "success" | "failure";
   align?: "left" | "center" | "right";

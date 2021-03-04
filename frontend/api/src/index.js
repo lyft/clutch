@@ -17079,6 +17079,7 @@ export const clutch = $root.clutch = (() => {
                              * @memberof clutch.config.service.db.postgres.v1
                              * @interface IConfig
                              * @property {clutch.config.service.db.postgres.v1.IConnection|null} [connection] Config connection
+                             * @property {number|null} [maxIdleConnections] Config maxIdleConnections
                              */
 
                             /**
@@ -17105,6 +17106,14 @@ export const clutch = $root.clutch = (() => {
                             Config.prototype.connection = null;
 
                             /**
+                             * Config maxIdleConnections.
+                             * @member {number} maxIdleConnections
+                             * @memberof clutch.config.service.db.postgres.v1.Config
+                             * @instance
+                             */
+                            Config.prototype.maxIdleConnections = 0;
+
+                            /**
                              * Verifies a Config message.
                              * @function verify
                              * @memberof clutch.config.service.db.postgres.v1.Config
@@ -17120,6 +17129,9 @@ export const clutch = $root.clutch = (() => {
                                     if (error)
                                         return "connection." + error;
                                 }
+                                if (message.maxIdleConnections != null && message.hasOwnProperty("maxIdleConnections"))
+                                    if (!$util.isInteger(message.maxIdleConnections))
+                                        return "maxIdleConnections: integer expected";
                                 return null;
                             };
 
@@ -17140,6 +17152,8 @@ export const clutch = $root.clutch = (() => {
                                         throw TypeError(".clutch.config.service.db.postgres.v1.Config.connection: object expected");
                                     message.connection = $root.clutch.config.service.db.postgres.v1.Connection.fromObject(object.connection);
                                 }
+                                if (object.maxIdleConnections != null)
+                                    message.maxIdleConnections = object.maxIdleConnections | 0;
                                 return message;
                             };
 
@@ -17156,10 +17170,14 @@ export const clutch = $root.clutch = (() => {
                                 if (!options)
                                     options = {};
                                 let object = {};
-                                if (options.defaults)
+                                if (options.defaults) {
                                     object.connection = null;
+                                    object.maxIdleConnections = 0;
+                                }
                                 if (message.connection != null && message.hasOwnProperty("connection"))
                                     object.connection = $root.clutch.config.service.db.postgres.v1.Connection.toObject(message.connection, options);
+                                if (message.maxIdleConnections != null && message.hasOwnProperty("maxIdleConnections"))
+                                    object.maxIdleConnections = message.maxIdleConnections;
                                 return object;
                             };
 

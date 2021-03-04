@@ -128,6 +128,7 @@ func (s *svc) Clientsets(ctx context.Context) ([]string, error) {
 	return ret, nil
 }
 
+// Implement the interface provided by errorintercept, so errors are caught at middleware and converted to gRPC status.
 func (s *svc) InterceptError(e error) error {
 	return ConvertError(e)
 }

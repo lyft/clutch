@@ -187,6 +187,8 @@ func (m *Config) Validate() error {
 		}
 	}
 
+	// no validation rules for MaxIdleConnections
+
 	return nil
 }
 
