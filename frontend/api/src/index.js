@@ -633,6 +633,124 @@ export const clutch = $root.clutch = (() => {
                 return Redacted;
             })();
 
+            v1.ErrorDetails = (function() {
+
+                /**
+                 * Properties of an ErrorDetails.
+                 * @memberof clutch.api.v1
+                 * @interface IErrorDetails
+                 * @property {Array.<google.rpc.IStatus>|null} [wrapped] ErrorDetails wrapped
+                 */
+
+                /**
+                 * Constructs a new ErrorDetails.
+                 * @memberof clutch.api.v1
+                 * @classdesc Represents an ErrorDetails.
+                 * @implements IErrorDetails
+                 * @constructor
+                 * @param {clutch.api.v1.IErrorDetails=} [properties] Properties to set
+                 */
+                function ErrorDetails(properties) {
+                    this.wrapped = [];
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * ErrorDetails wrapped.
+                 * @member {Array.<google.rpc.IStatus>} wrapped
+                 * @memberof clutch.api.v1.ErrorDetails
+                 * @instance
+                 */
+                ErrorDetails.prototype.wrapped = $util.emptyArray;
+
+                /**
+                 * Verifies an ErrorDetails message.
+                 * @function verify
+                 * @memberof clutch.api.v1.ErrorDetails
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                ErrorDetails.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.wrapped != null && message.hasOwnProperty("wrapped")) {
+                        if (!Array.isArray(message.wrapped))
+                            return "wrapped: array expected";
+                        for (let i = 0; i < message.wrapped.length; ++i) {
+                            let error = $root.google.rpc.Status.verify(message.wrapped[i]);
+                            if (error)
+                                return "wrapped." + error;
+                        }
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates an ErrorDetails message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.api.v1.ErrorDetails
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.api.v1.ErrorDetails} ErrorDetails
+                 */
+                ErrorDetails.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.api.v1.ErrorDetails)
+                        return object;
+                    let message = new $root.clutch.api.v1.ErrorDetails();
+                    if (object.wrapped) {
+                        if (!Array.isArray(object.wrapped))
+                            throw TypeError(".clutch.api.v1.ErrorDetails.wrapped: array expected");
+                        message.wrapped = [];
+                        for (let i = 0; i < object.wrapped.length; ++i) {
+                            if (typeof object.wrapped[i] !== "object")
+                                throw TypeError(".clutch.api.v1.ErrorDetails.wrapped: object expected");
+                            message.wrapped[i] = $root.google.rpc.Status.fromObject(object.wrapped[i]);
+                        }
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from an ErrorDetails message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.api.v1.ErrorDetails
+                 * @static
+                 * @param {clutch.api.v1.ErrorDetails} message ErrorDetails
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                ErrorDetails.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.arrays || options.defaults)
+                        object.wrapped = [];
+                    if (message.wrapped && message.wrapped.length) {
+                        object.wrapped = [];
+                        for (let j = 0; j < message.wrapped.length; ++j)
+                            object.wrapped[j] = $root.google.rpc.Status.toObject(message.wrapped[j], options);
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this ErrorDetails to JSON.
+                 * @function toJSON
+                 * @memberof clutch.api.v1.ErrorDetails
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                ErrorDetails.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return ErrorDetails;
+            })();
+
             return v1;
         })();
 
@@ -54772,6 +54890,172 @@ export const google = $root.google = (() => {
         return protobuf;
     })();
 
+    google.rpc = (function() {
+
+        /**
+         * Namespace rpc.
+         * @memberof google
+         * @namespace
+         */
+        const rpc = {};
+
+        rpc.Status = (function() {
+
+            /**
+             * Properties of a Status.
+             * @memberof google.rpc
+             * @interface IStatus
+             * @property {number|null} [code] Status code
+             * @property {string|null} [message] Status message
+             * @property {Array.<google.protobuf.IAny>|null} [details] Status details
+             */
+
+            /**
+             * Constructs a new Status.
+             * @memberof google.rpc
+             * @classdesc Represents a Status.
+             * @implements IStatus
+             * @constructor
+             * @param {google.rpc.IStatus=} [properties] Properties to set
+             */
+            function Status(properties) {
+                this.details = [];
+                if (properties)
+                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * Status code.
+             * @member {number} code
+             * @memberof google.rpc.Status
+             * @instance
+             */
+            Status.prototype.code = 0;
+
+            /**
+             * Status message.
+             * @member {string} message
+             * @memberof google.rpc.Status
+             * @instance
+             */
+            Status.prototype.message = "";
+
+            /**
+             * Status details.
+             * @member {Array.<google.protobuf.IAny>} details
+             * @memberof google.rpc.Status
+             * @instance
+             */
+            Status.prototype.details = $util.emptyArray;
+
+            /**
+             * Verifies a Status message.
+             * @function verify
+             * @memberof google.rpc.Status
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Status.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.code != null && message.hasOwnProperty("code"))
+                    if (!$util.isInteger(message.code))
+                        return "code: integer expected";
+                if (message.message != null && message.hasOwnProperty("message"))
+                    if (!$util.isString(message.message))
+                        return "message: string expected";
+                if (message.details != null && message.hasOwnProperty("details")) {
+                    if (!Array.isArray(message.details))
+                        return "details: array expected";
+                    for (let i = 0; i < message.details.length; ++i) {
+                        let error = $root.google.protobuf.Any.verify(message.details[i]);
+                        if (error)
+                            return "details." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Status message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof google.rpc.Status
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {google.rpc.Status} Status
+             */
+            Status.fromObject = function fromObject(object) {
+                if (object instanceof $root.google.rpc.Status)
+                    return object;
+                let message = new $root.google.rpc.Status();
+                if (object.code != null)
+                    message.code = object.code | 0;
+                if (object.message != null)
+                    message.message = String(object.message);
+                if (object.details) {
+                    if (!Array.isArray(object.details))
+                        throw TypeError(".google.rpc.Status.details: array expected");
+                    message.details = [];
+                    for (let i = 0; i < object.details.length; ++i) {
+                        if (typeof object.details[i] !== "object")
+                            throw TypeError(".google.rpc.Status.details: object expected");
+                        message.details[i] = $root.google.protobuf.Any.fromObject(object.details[i]);
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Status message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof google.rpc.Status
+             * @static
+             * @param {google.rpc.Status} message Status
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Status.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                let object = {};
+                if (options.arrays || options.defaults)
+                    object.details = [];
+                if (options.defaults) {
+                    object.code = 0;
+                    object.message = "";
+                }
+                if (message.code != null && message.hasOwnProperty("code"))
+                    object.code = message.code;
+                if (message.message != null && message.hasOwnProperty("message"))
+                    object.message = message.message;
+                if (message.details && message.details.length) {
+                    object.details = [];
+                    for (let j = 0; j < message.details.length; ++j)
+                        object.details[j] = $root.google.protobuf.Any.toObject(message.details[j], options);
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Status to JSON.
+             * @function toJSON
+             * @memberof google.rpc.Status
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Status.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return Status;
+        })();
+
+        return rpc;
+    })();
+
     google.api = (function() {
 
         /**
@@ -55364,172 +55648,6 @@ export const google = $root.google = (() => {
         })();
 
         return api;
-    })();
-
-    google.rpc = (function() {
-
-        /**
-         * Namespace rpc.
-         * @memberof google
-         * @namespace
-         */
-        const rpc = {};
-
-        rpc.Status = (function() {
-
-            /**
-             * Properties of a Status.
-             * @memberof google.rpc
-             * @interface IStatus
-             * @property {number|null} [code] Status code
-             * @property {string|null} [message] Status message
-             * @property {Array.<google.protobuf.IAny>|null} [details] Status details
-             */
-
-            /**
-             * Constructs a new Status.
-             * @memberof google.rpc
-             * @classdesc Represents a Status.
-             * @implements IStatus
-             * @constructor
-             * @param {google.rpc.IStatus=} [properties] Properties to set
-             */
-            function Status(properties) {
-                this.details = [];
-                if (properties)
-                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-
-            /**
-             * Status code.
-             * @member {number} code
-             * @memberof google.rpc.Status
-             * @instance
-             */
-            Status.prototype.code = 0;
-
-            /**
-             * Status message.
-             * @member {string} message
-             * @memberof google.rpc.Status
-             * @instance
-             */
-            Status.prototype.message = "";
-
-            /**
-             * Status details.
-             * @member {Array.<google.protobuf.IAny>} details
-             * @memberof google.rpc.Status
-             * @instance
-             */
-            Status.prototype.details = $util.emptyArray;
-
-            /**
-             * Verifies a Status message.
-             * @function verify
-             * @memberof google.rpc.Status
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            Status.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.code != null && message.hasOwnProperty("code"))
-                    if (!$util.isInteger(message.code))
-                        return "code: integer expected";
-                if (message.message != null && message.hasOwnProperty("message"))
-                    if (!$util.isString(message.message))
-                        return "message: string expected";
-                if (message.details != null && message.hasOwnProperty("details")) {
-                    if (!Array.isArray(message.details))
-                        return "details: array expected";
-                    for (let i = 0; i < message.details.length; ++i) {
-                        let error = $root.google.protobuf.Any.verify(message.details[i]);
-                        if (error)
-                            return "details." + error;
-                    }
-                }
-                return null;
-            };
-
-            /**
-             * Creates a Status message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof google.rpc.Status
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {google.rpc.Status} Status
-             */
-            Status.fromObject = function fromObject(object) {
-                if (object instanceof $root.google.rpc.Status)
-                    return object;
-                let message = new $root.google.rpc.Status();
-                if (object.code != null)
-                    message.code = object.code | 0;
-                if (object.message != null)
-                    message.message = String(object.message);
-                if (object.details) {
-                    if (!Array.isArray(object.details))
-                        throw TypeError(".google.rpc.Status.details: array expected");
-                    message.details = [];
-                    for (let i = 0; i < object.details.length; ++i) {
-                        if (typeof object.details[i] !== "object")
-                            throw TypeError(".google.rpc.Status.details: object expected");
-                        message.details[i] = $root.google.protobuf.Any.fromObject(object.details[i]);
-                    }
-                }
-                return message;
-            };
-
-            /**
-             * Creates a plain object from a Status message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof google.rpc.Status
-             * @static
-             * @param {google.rpc.Status} message Status
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            Status.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                let object = {};
-                if (options.arrays || options.defaults)
-                    object.details = [];
-                if (options.defaults) {
-                    object.code = 0;
-                    object.message = "";
-                }
-                if (message.code != null && message.hasOwnProperty("code"))
-                    object.code = message.code;
-                if (message.message != null && message.hasOwnProperty("message"))
-                    object.message = message.message;
-                if (message.details && message.details.length) {
-                    object.details = [];
-                    for (let j = 0; j < message.details.length; ++j)
-                        object.details[j] = $root.google.protobuf.Any.toObject(message.details[j], options);
-                }
-                return object;
-            };
-
-            /**
-             * Converts this Status to JSON.
-             * @function toJSON
-             * @memberof google.rpc.Status
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            Status.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            return Status;
-        })();
-
-        return rpc;
     })();
 
     return google;
