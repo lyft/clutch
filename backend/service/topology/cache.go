@@ -82,16 +82,16 @@ func convertLockIdToAdvisoryLockId(lockID string) uint32 {
 // topology objects until the context has been cancelled.
 //
 func (c *client) startTopologyCache(ctx context.Context) {
-	for n, s := range service.Registry {
+	for name, s := range service.Registry {
 		if svc, ok := s.(CacheableTopology); ok {
 			if svc.CacheEnabled() {
-				c.log.Info("Processing Topology Objects for service", zap.String("service", n))
+				c.log.Info("Processing Topology Objects for service", zap.String("service", name))
 				topologyChannel, err := svc.StartTopologyCaching(ctx)
 				if err != nil {
-					c.log.Error("Unable to start topology caching", zap.String("service", n), zap.Error(err))
+					c.log.Error("Unable to start topology caching", zap.String("service", name), zap.Error(err))
 					continue
 				}
-				go c.processTopologyObjectChannel(ctx, topologyChannel)
+				go c.processTopologyObjectChannel(ctx, topologyChannel, name)
 			}
 		}
 	}
@@ -99,8 +99,12 @@ func (c *client) startTopologyCache(ctx context.Context) {
 	<-ctx.Done()
 }
 
-func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest) {
+func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest, service string) {
 	for obj := range objs {
+		c.scope.Tagged(map[string]string{
+			"service": service,
+		}).SubScope("cache").Gauge("object_channel.queue_depth").Update(float64(len(objs)))
+
 		switch obj.Action {
 		case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
 			if err := c.setCache(ctx, obj.Resource); err != nil {
