@@ -123,7 +123,7 @@ func (r *res) resolveForPod(ctx context.Context, input proto.Message) ([]*k8sv1a
 		return r.locateByPodID(ctx, i)
 	default:
 		// TODO: IP address via List
-		return nil, fmt.Errorf("unrecognized input type %T", i)
+		return nil, status.Errorf(codes.Internal, "unrecognized input type %T", i)
 	}
 }
 
@@ -141,7 +141,7 @@ func (r *res) resolveForHPA(ctx context.Context, input proto.Message) ([]*k8sv1a
 	case *k8sv1resolver.HPAName:
 		return r.locateByHPAName(ctx, i)
 	default:
-		return nil, fmt.Errorf("unrecognized input type %T", i)
+		return nil, status.Errorf(codes.Internal, "unrecognized input type '%T'", i)
 	}
 }
 
@@ -160,7 +160,7 @@ func (r *res) Resolve(ctx context.Context, typeURL string, input proto.Message, 
 		}
 		return &resolver.Results{Messages: resolver.MessageSlice(result)}, nil
 	default:
-		return nil, fmt.Errorf("don't know how to resolve type %s", typeURL)
+		return nil, status.Errorf(codes.Internal, "don't know how to resolve type %s", typeURL)
 	}
 }
 
@@ -209,7 +209,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 			return nil, status.Error(codes.InvalidArgument, "did not understand input")
 		}
 	default:
-		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("cannot search for type '%s'", typeURL))
+		return nil, status.Error(codes.Internal, fmt.Sprintf("cannot search for type '%s'", typeURL))
 	}
 
 	return handler.Results(limit)
@@ -217,7 +217,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 
 func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResult, error) {
 	if r.topology == nil {
-		return nil, fmt.Errorf("to use the autocomplete api you must first setup the topology service")
+		return nil, status.Error(codes.FailedPrecondition, "topology service must be enabled to use the K8s autocomplete API")
 	}
 
 	var resultLimit uint64 = resolver.DefaultAutocompleteLimit
