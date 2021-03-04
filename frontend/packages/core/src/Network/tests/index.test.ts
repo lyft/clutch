@@ -1,20 +1,11 @@
 import type { AxiosError } from "axios";
 
-import type { ClientError, ClutchError, NetworkError } from "../errors";
+import type { ClutchError } from "../errors";
 import { client, errorInterceptor } from "../index";
 
 describe("error interceptor", () => {
-  const axiosError = {
-    response: {
-      data: {
-        code: 5,
-        message: "Could not find resource",
-      },
-    },
-  } as AxiosError;
-
   describe("on axios error", () => {
-    let err: Promise<ClientError | ClutchError | NetworkError>;
+    let err: Promise<ClutchError>;
     beforeAll(() => {
       err = errorInterceptor({
         message: "Request timeout of 1ms reached",
@@ -22,15 +13,29 @@ describe("error interceptor", () => {
       } as AxiosError);
     });
 
-    it("returns a ClientError", () => {
+    it("returns a ClutchError", () => {
       return expect(err).rejects.toEqual({
-        message: "Client Error: Request timeout of 1ms reached",
+        status: {
+          code: 500,
+          text: "Client Error",
+        },
+        message: "Request timeout of 1ms reached",
       });
     });
   });
 
   describe("on known error", () => {
-    let err: Promise<ClientError | ClutchError | NetworkError>;
+    const axiosError = {
+      response: {
+        status: 404,
+        statusText: "Not Found",
+        data: {
+          code: 5,
+          message: "Could not find resource",
+        },
+      },
+    } as AxiosError;
+    let err: Promise<ClutchError>;
     beforeAll(() => {
       err = errorInterceptor(axiosError);
     });
@@ -48,7 +53,7 @@ describe("error interceptor", () => {
   });
 
   describe("on unknown error", () => {
-    let err: Promise<ClientError | ClutchError | NetworkError>;
+    let err: Promise<ClutchError>;
     beforeAll(() => {
       err = errorInterceptor({
         isAxiosError: false,
@@ -68,7 +73,7 @@ describe("error interceptor", () => {
       });
     });
 
-    it("returns a NetworkError", () => {
+    it("returns a ClutchError", () => {
       return expect(err).rejects.toEqual({
         data: {},
         message: "Unauthorized to perform action",

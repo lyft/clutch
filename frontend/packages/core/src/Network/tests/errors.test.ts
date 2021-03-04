@@ -1,12 +1,13 @@
 import type { AxiosError } from "axios";
 
 import type { ClutchError, Help } from "../errors";
-import clutchError from "../errors";
-import * as grpcCodeToHttpStatus from "../grpc";
+import grpcResponseToError from "../errors";
 
 describe("clutch error", () => {
   const axiosError = {
     response: {
+      status: 404,
+      statusText: "Not Found",
       data: {
         code: 5,
         message: "Could not find resource",
@@ -17,7 +18,7 @@ describe("clutch error", () => {
   describe("returns a basic ClutchError object", () => {
     let err: ClutchError;
     beforeAll(() => {
-      err = clutchError(axiosError);
+      err = grpcResponseToError(axiosError);
     });
 
     it("with a error code", () => {
@@ -56,7 +57,7 @@ describe("clutch error", () => {
           ],
         },
       ];
-      err = clutchError(complexAxiosError);
+      err = grpcResponseToError(complexAxiosError);
     });
 
     it("with a list of details", () => {
@@ -67,11 +68,5 @@ describe("clutch error", () => {
       const helpDetails = err.details[0] as Help;
       expect(helpDetails.links).toHaveLength(1);
     });
-  });
-
-  it("converts code to an http status", () => {
-    const grpcCodeToStatusMock = jest.spyOn(grpcCodeToHttpStatus, "default");
-    clutchError(axiosError);
-    expect(grpcCodeToStatusMock).toHaveBeenLastCalledWith(5);
   });
 });

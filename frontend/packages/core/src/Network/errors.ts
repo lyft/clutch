@@ -1,6 +1,5 @@
 import type { AxiosError } from "axios";
 
-import grpcCodeToHttpStatus from "./grpc";
 import type { HttpStatus } from "./index";
 
 /**
@@ -214,16 +213,10 @@ export interface Help {
   }[];
 }
 
-/**
- * Provides a generic interface for error details. This should only be used if
- * the error type cannot be mapped to a more specific type.
- */
-export interface Details {
-  [key: string]: string;
-}
-
-/** An RPC error that occurred on the server. */
-export interface GrpcError extends Error {
+/** An error received from the backend of Clutch. */
+export interface ClutchError extends Error {
+  /** The HTTP status information. */
+  status: HttpStatus;
   /** The status code. */
   code?: number;
   /**
@@ -242,35 +235,10 @@ export interface GrpcError extends Error {
     | RequestInfo
     | ResourceInfo
     | Help
-    | Details
+    | any
   )[];
-}
-
-/** An error received from the backend of Clutch. */
-export interface ClutchError extends GrpcError {
-  status: HttpStatus;
-}
-
-/**
- * An error received from a HTTP request.
- *
- * This should be used for all network errors that occur
- * talking to hosts other than the Clutch backend.
- */
-export interface NetworkError extends Error {
-  status: HttpStatus;
-  message: string;
-  data: any;
-}
-
-/**
- * An error received from the network client.
- *
- * For example, a request timeout due to client
- * configuration having a timeout value too low.
- */
-export interface ClientError {
-  message: string;
+  /** Data present on the response object, if any. */
+  data?: any;
 }
 
 const GRPC_DETAIL_TYPES_MAP = {
@@ -290,13 +258,16 @@ const GRPC_DETAIL_TYPES_MAP = {
  *
  * @param clientError A client error object.
  */
-const clutchError = (clientError: AxiosError) => {
+const grpcResponseToError = (clientError: AxiosError): ClutchError => {
   const { data } = clientError?.response;
 
   const error = {
     code: data.code,
     message: data.message,
-    status: grpcCodeToHttpStatus(data.code),
+    status: {
+      code: clientError.response.status,
+      text: clientError.response.statusText,
+    } as HttpStatus,
   } as ClutchError;
 
   if (data?.details !== undefined && data.details.length > 0) {
@@ -308,7 +279,7 @@ const clutchError = (clientError: AxiosError) => {
         }
       });
     } else {
-      details = data.details as Details;
+      details = data.details;
     }
     error.details = details;
   }
@@ -316,4 +287,4 @@ const clutchError = (clientError: AxiosError) => {
   return error;
 };
 
-export default clutchError;
+export default grpcResponseToError;

@@ -1,8 +1,8 @@
 import type { AxiosError } from "axios";
 import axios from "axios";
 
-import type { ClientError, ClutchError, NetworkError } from "./errors";
-import clutchError from "./errors";
+import type { ClutchError } from "./errors";
+import grpcResponseToError from "./errors";
 
 /**
  * HTTP response status.
@@ -21,21 +21,25 @@ export interface HttpStatus {
   text: string;
 }
 
-const errorInterceptor = (error: AxiosError): Promise<ClutchError | NetworkError | ClientError> => {
+const errorInterceptor = (error: AxiosError): Promise<ClutchError> => {
   if (error.isAxiosError) {
-    const clientError = { message: `Client Error: ${error.message}` } as ClientError;
+    const clientError = {
+      status: {
+        code: 500,
+        text: "Client Error",
+      },
+      message: error.message,
+    } as ClutchError;
     return Promise.reject(clientError);
   }
 
-  // n.b. we are guaranteed to have a response object on the error from this point on
+  // we are guaranteed to have a response object on the error from this point on
   // since we have already accounted for axios errors.
-
-  // TODO: check for authentication errors and handle
   const responseData = error?.response.data;
-  // n.b. if the response data has a code on it we know it's a gRPC response.
+  // if the response data has a code on it we know it's a gRPC response.
   let err;
   if (responseData?.code !== undefined) {
-    err = clutchError(error);
+    err = grpcResponseToError(error);
   } else {
     err = {
       status: {
@@ -44,14 +48,14 @@ const errorInterceptor = (error: AxiosError): Promise<ClutchError | NetworkError
       } as HttpStatus,
       message: error?.message || error.response.statusText,
       data: responseData,
-    } as NetworkError;
+    } as ClutchError;
   }
-
   return Promise.reject(err);
 };
 
 const createClient = () => {
   const axiosClient = axios.create({
+    // n.b. the client will treat any response code >= 400 as an error and apply the error interceptor.
     validateStatus: status => {
       return status < 400;
     },
