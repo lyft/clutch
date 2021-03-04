@@ -82,16 +82,16 @@ func convertLockIdToAdvisoryLockId(lockID string) uint32 {
 // topology objects until the context has been cancelled.
 //
 func (c *client) startTopologyCache(ctx context.Context) {
-	for n, s := range service.Registry {
+	for name, s := range service.Registry {
 		if svc, ok := s.(CacheableTopology); ok {
 			if svc.CacheEnabled() {
-				c.log.Info("Processing Topology Objects for service", zap.String("service", n))
+				c.log.Info("Processing Topology Objects for service", zap.String("service", name))
 				topologyChannel, err := svc.StartTopologyCaching(ctx)
 				if err != nil {
-					c.log.Error("Unable to start topology caching", zap.String("service", n), zap.Error(err))
+					c.log.Error("Unable to start topology caching", zap.String("service", name), zap.Error(err))
 					continue
 				}
-				go c.processTopologyObjectChannel(ctx, topologyChannel, n)
+				go c.processTopologyObjectChannel(ctx, topologyChannel, name)
 			}
 		}
 	}
