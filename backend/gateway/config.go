@@ -106,16 +106,17 @@ func parseFile(path string, pb proto.Message, template bool) error {
 		}
 	}
 
-	contents = []byte(processContents(contents))
+	// Interpolate environment variables
+	expandedData := os.ExpandEnv(string(contents))
+
+	contents = []byte(processTemplateToken(expandedData))
 
 	return parseYAML(contents, pb)
 }
 
-func processContents(contents []byte) string {
-	// Interpolate environment variables
-	expandedData := os.ExpandEnv(string(contents))
-	// Replace the Clutch-specific templating token with the Go $ templating token
-	return strings.ReplaceAll(expandedData, "%%", "$")
+// Replace the Clutch-specific templating token with the Go $ template syntax
+func processTemplateToken(data string) string {
+	return strings.ReplaceAll(data, "%%", "$")
 }
 
 func parseYAML(contents []byte, pb proto.Message) error {

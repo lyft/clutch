@@ -7,7 +7,9 @@ package slack
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"reflect"
 	"text/template"
 
 	"github.com/golang/protobuf/ptypes"
@@ -46,6 +48,13 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 type auditEventMetadata struct {
 	Request  map[string]interface{}
 	Response map[string]interface{}
+}
+
+// helper functions to format values in the Go template
+var funcMap = template.FuncMap{
+	// for inputs that are type slice/map, returns a formatted slack list OR `N/A` if the slice/map is empty
+	// currently only iterates 1-level deep
+	"slackList": slackList,
 }
 
 type svc struct {
@@ -117,7 +126,7 @@ func formatText(username string, event *auditv1.RequestEvent) string {
 
 // FormatCustomText parses out the audit event metdata request for the custom slack message text
 func FormatCustomText(message string, event *auditv1.RequestEvent) (string, error) {
-	tmpl, err := template.New("customText").Parse(message)
+	tmpl, err := template.New("customText").Funcs(funcMap).Parse(message)
 	if err != nil {
 		return "", err
 	}
@@ -164,4 +173,40 @@ func getAuditMetadata(event *auditv1.RequestEvent) (*auditEventMetadata, error) 
 		Request:  requestMetadata,
 		Response: responseMetadata,
 	}, nil
+}
+
+// for inputs that are type slice/map, returns a formatted slack list OR `N/A` if the slice/map is empty
+func slackList(data interface{}) (string, error) {
+	var text string
+	const listItemFormat = "\n- %v"
+	const mapItemFormat = "\n- %v: %v"
+
+	switch reflect.TypeOf(data).Kind() {
+	case reflect.Slice:
+		s := reflect.ValueOf(data)
+		if s.Len() == 0 {
+			return "`N/A`", nil
+		}
+		// example:
+		// - foo
+		// - bar
+		for i := 0; i < s.Len(); i++ {
+			text += fmt.Sprintf(listItemFormat, s.Index(i).Interface())
+		}
+		return text, nil
+	case reflect.Map:
+		m := reflect.ValueOf(data)
+		if m.Len() == 0 {
+			return "`N/A`", nil
+		}
+		// example:
+		// foo: value
+		// bar: value
+		for _, k := range m.MapKeys() {
+			v := m.MapIndex(k)
+			text += fmt.Sprintf(mapItemFormat, k.Interface(), v.Interface())
+		}
+		return text, nil
+	}
+	return "", errors.New("input type is not Slice or Map")
 }

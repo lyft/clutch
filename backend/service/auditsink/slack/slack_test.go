@@ -100,25 +100,26 @@ func TestFormatCustomText(t *testing.T) {
 			},
 			expectedOutput: "foo ip address is 000",
 		},
-		// metadata that is a map
+		// metadata that is a map, uses helper slackList
 		{
-			text: "*Updated labels*:{{range $key, $val := .Request.objectMetaFields.labels}}\n- {{$key}}: {{$val}}{{end}}",
+			text: "*Updated labels*:{{slackList .Request.objectMetaFields.labels}}",
 			event: &auditv1.RequestEvent{
 				RequestMetadata:  &auditv1.RequestMetadata{Body: anyK8sUpdateReq},
 				ResponseMetadata: &auditv1.ResponseMetadata{Body: anyK8UpdateResp},
 			},
 			expectedOutput: "*Updated labels*:\n- foo: new-value",
 		},
-		// metdata that is a list
+		// metdata that is a list, uses helper slackList
 		{
-			text: "*Removed annotations*:{{range .Request.removeObjectMetaFields.annotations}}\n- {{.}}{{end}}",
+			text: "*Removed annotations*:{{slackList .Request.removeObjectMetaFields.annotations}}",
 			event: &auditv1.RequestEvent{
 				RequestMetadata:  &auditv1.RequestMetadata{Body: anyK8sUpdateReq},
 				ResponseMetadata: &auditv1.ResponseMetadata{Body: anyK8UpdateResp},
 			},
 			expectedOutput: "*Removed annotations*:\n- foo\n- bar",
 		},
-		// metdata that is a map with a map value is a another map
+		// metdata that is a map, map value is a another map
+		// uses the Golang template `range`
 		{
 			text: "*Expected Preconditions*:{{range $key, $val := .Request.expectedObjectMetaFields.annotations}}\n- {{$key}}: {{range $i, $j := $val}}{{$j}}{{end}}{{end}}",
 			event: &auditv1.RequestEvent{
@@ -127,6 +128,7 @@ func TestFormatCustomText(t *testing.T) {
 			},
 			expectedOutput: "*Expected Preconditions*:\n- foo: new-value",
 		},
+		// invalid field name
 		{
 			text: "Name is {{.Foo}}",
 			event: &auditv1.RequestEvent{
@@ -144,6 +146,53 @@ func TestFormatCustomText(t *testing.T) {
 			assert.Empty(t, result)
 		} else {
 			assert.NoError(t, err)
+			assert.Equal(t, test.expectedOutput, result)
+		}
+	}
+}
+
+func TestSlackList(t *testing.T) {
+	testCases := []struct {
+		input          interface{}
+		expectedOutput string
+		expectedErr    bool
+	}{
+		{
+			input:       "hello",
+			expectedErr: true,
+		},
+		{
+			input:          []string{"foo"},
+			expectedOutput: "\n- foo",
+		},
+		{
+			input:          []int{1},
+			expectedOutput: "\n- 1",
+		},
+		{
+			input:          map[string]string{"foo": "value"},
+			expectedOutput: "\n- foo: value",
+		},
+		{
+			input:          map[string]bool{"foo": true},
+			expectedOutput: "\n- foo: true",
+		},
+		{
+			input:          map[string]string{},
+			expectedOutput: "`N/A`",
+		},
+		{
+			input:          []string{},
+			expectedOutput: "`N/A`",
+		},
+	}
+
+	for _, test := range testCases {
+		result, err := slackList(test.input)
+		if test.expectedErr {
+			assert.Error(t, err)
+			assert.Empty(t, result)
+		} else {
 			assert.Equal(t, test.expectedOutput, result)
 		}
 	}

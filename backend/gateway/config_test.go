@@ -124,3 +124,16 @@ func TestComputeMaximumTimeout(t *testing.T) {
 		})
 	}
 }
+
+func TestProcessTemplateToken(t *testing.T) {
+	config := `
+	foo: bar
+	message: {{range %%v, %%k := .Bar}}{{%%k}}: {{%%v}}{{end}}
+	`
+	expected := `
+	foo: bar
+	message: {{range $v, $k := .Bar}}{{$k}}: {{$v}}{{end}}
+	`
+	contents := processTemplateToken(config)
+	assert.Equal(t, expected, contents)
+}
