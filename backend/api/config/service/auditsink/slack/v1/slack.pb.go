@@ -101,7 +101,7 @@ func (x *SlackConfig) GetOverrides() []*CustomMessage {
 //
 //By default, the sink provides a formatted message using a subset of info in an audit event. A custom
 //message can alo be created for a `/SERVICE/METHOD` using the metadata (API Request/Response) in an
-//audit event. The custom message will be appened to the default message for a richer slack audit.
+//audit event. The custom message will be appended to the default message for a richer slack audit.
 type CustomMessage struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -112,7 +112,7 @@ type CustomMessage struct {
 	//
 	//The slack sink uses the Go text/template pacakge. Example of a custom message for /clutch.k8s.v1.K8sAPI/ResizeHPA:
 	//"{{Min size: $$Request.sizing.min\nMax size: $$Request.sizing.max}}"
-	//See https://api.slack.com/reference/surfaces/formatting for Slack markdown formatting
+	//See https://api.slack.com/reference/surfaces/formatting for slack markdown formatting
 	Message string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 }
 

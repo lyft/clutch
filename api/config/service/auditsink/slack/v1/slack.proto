@@ -17,11 +17,11 @@ message SlackConfig {
   repeated CustomMessage overrides = 4;
 }
 
-// TODO: (sperry) update docs (& clutch.sh) when templatting approach finalized
+// TODO: (sperry) update docs (& clutch.sh) when templating approach finalized
 /*
 By default, the sink provides a formatted message using a subset of info in an audit event. A custom
 message can alo be created for a `/SERVICE/METHOD` using the metadata (API Request/Response) in an
-audit event. The custom message will be appened to the default message for a richer slack audit.
+audit event. The custom message will be appended to the default message for a richer slack audit.
 */
 message CustomMessage {
   // The full method in the format of `/SERVICE/METHOD`
@@ -29,7 +29,7 @@ message CustomMessage {
   /*
   The slack sink uses the Go text/template pacakge. Example of a custom message for /clutch.k8s.v1.K8sAPI/ResizeHPA:
   "{{Min size: $$Request.sizing.min\nMax size: $$Request.sizing.max}}"
-  See https://api.slack.com/reference/surfaces/formatting for Slack markdown formatting
+  See https://api.slack.com/reference/surfaces/formatting for slack markdown formatting
   */
   string message = 2 [ (validate.rules).string = {min_bytes : 1} ];
 }
