@@ -18,7 +18,7 @@ var instanceIDPattern = regexp.MustCompile("[a-fA-F0-9]{17}")
 func normalizeInstanceID(input string) (string, error) {
 	instanceID := instanceIDPattern.FindString(input)
 	if instanceID == "" {
-		return "", status.Error(codes.InvalidArgument, "did not understand input")
+		return "", status.Error(codes.InvalidArgument, "the expected format for instance IDs is i-0123456789abcdef0")
 	}
 
 	return fmt.Sprintf("i-%s", instanceID), nil
@@ -30,7 +30,7 @@ func (r *res) resolveInstancesForInput(ctx context.Context, input proto.Message)
 	case *awsv1.InstanceID:
 		return r.instanceResults(ctx, i.Region, []string{i.Id}, 1)
 	default:
-		return nil, fmt.Errorf("unrecognized input type %T", i)
+		return nil, status.Errorf(codes.Internal, "unrecognized input type '%T'", i)
 	}
 }
 

@@ -6,7 +6,6 @@ package aws
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -20,12 +19,13 @@ import (
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/iancoleman/strcase"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"golang.org/x/sync/semaphore"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
@@ -38,9 +38,9 @@ const (
 	Name = "clutch.service.aws"
 )
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	ac := &awsv1.Config{}
-	err := ptypes.UnmarshalAny(cfg, ac)
+	err := cfg.UnmarshalTo(ac)
 	if err != nil {
 		return nil, err
 	}
@@ -125,10 +125,18 @@ func (c *client) InterceptError(e error) error {
 	return ConvertError(e)
 }
 
-func (c *client) ResizeAutoscalingGroup(ctx context.Context, region string, name string, size *ec2v1.AutoscalingGroupSize) error {
+func (c *client) getRegionalClient(region string) (*regionalClient, error) {
 	rc, ok := c.clients[region]
 	if !ok {
-		return fmt.Errorf("no client found for region '%s'", region)
+		return nil, status.Errorf(codes.NotFound, "no client found for region '%s'", region)
+	}
+	return rc, nil
+}
+
+func (c *client) ResizeAutoscalingGroup(ctx context.Context, region string, name string, size *ec2v1.AutoscalingGroupSize) error {
+	rc, err := c.getRegionalClient(region)
+	if err != nil {
+		return err
 	}
 
 	input := &autoscaling.UpdateAutoScalingGroupInput{
@@ -138,14 +146,14 @@ func (c *client) ResizeAutoscalingGroup(ctx context.Context, region string, name
 		MinSize:              aws.Int32(int32(size.Min)),
 	}
 
-	_, err := rc.autoscaling.UpdateAutoScalingGroup(ctx, input)
+	_, err = rc.autoscaling.UpdateAutoScalingGroup(ctx, input)
 	return err
 }
 
 func (c *client) DescribeAutoscalingGroups(ctx context.Context, region string, names []string) ([]*ec2v1.AutoscalingGroup, error) {
-	cl, ok := c.clients[region]
-	if !ok {
-		return nil, fmt.Errorf("no client found for region '%s'", region)
+	cl, err := c.getRegionalClient(region)
+	if err != nil {
+		return nil, err
 	}
 
 	input := &autoscaling.DescribeAutoScalingGroupsInput{
@@ -236,9 +244,9 @@ func (c *client) Regions() []string {
 }
 
 func (c *client) DescribeInstances(ctx context.Context, region string, ids []string) ([]*ec2v1.Instance, error) {
-	cl, ok := c.clients[region]
-	if !ok {
-		return nil, fmt.Errorf("no client found for region '%s'", region)
+	cl, err := c.getRegionalClient(region)
+	if err != nil {
+		return nil, err
 	}
 
 	input := &ec2.DescribeInstancesInput{InstanceIds: ids}
@@ -259,25 +267,25 @@ func (c *client) DescribeInstances(ctx context.Context, region string, ids []str
 }
 
 func (c *client) TerminateInstances(ctx context.Context, region string, ids []string) error {
-	cl, ok := c.clients[region]
-	if !ok {
-		return fmt.Errorf("no client found for region '%s'", region)
+	cl, err := c.getRegionalClient(region)
+	if err != nil {
+		return err
 	}
 
 	input := &ec2.TerminateInstancesInput{InstanceIds: ids}
-	_, err := cl.ec2.TerminateInstances(ctx, input)
+	_, err = cl.ec2.TerminateInstances(ctx, input)
 
 	return err
 }
 
 func (c *client) RebootInstances(ctx context.Context, region string, ids []string) error {
-	cl, ok := c.clients[region]
-	if !ok {
-		return fmt.Errorf("no client found for region '%s'", region)
+	cl, err := c.getRegionalClient(region)
+	if err != nil {
+		return err
 	}
 
 	input := &ec2.RebootInstancesInput{InstanceIds: ids}
-	_, err := cl.ec2.RebootInstances(ctx, input)
+	_, err = cl.ec2.RebootInstances(ctx, input)
 
 	return err
 }
