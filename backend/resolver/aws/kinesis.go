@@ -6,7 +6,9 @@ import (
 
 	"github.com/golang/protobuf/proto"
 
+	kinesisv1api "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	awsv1resolver "github.com/lyft/clutch/backend/api/resolver/aws/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/resolver"
 )
 
@@ -23,10 +25,10 @@ func (r *res) resolveKinesisStreamForInput(ctx context.Context, input proto.Mess
 func (r *res) kinesisResults(ctx context.Context, region, id string, limit uint32) (*resolver.Results, error) {
 	ctx, handler := resolver.NewFanoutHandler(ctx)
 
-	regions := r.determineRegionsForOption(region)
-	for _, region := range regions {
+	mappedValues, err := meta.PatternValueMapping(&kinesisv1api.Stream{}, id)
+	if err != nil && len(mappedValues["region"]) > 0 && len(mappedValues["stream_name"]) > 0 {
 		handler.Add(1)
-		go func(region string) {
+		go func(region, id string) {
 			defer handler.Done()
 			stream, err := r.client.DescribeKinesisStream(ctx, region, id)
 			select {
@@ -35,7 +37,22 @@ func (r *res) kinesisResults(ctx context.Context, region, id string, limit uint3
 			case <-handler.Cancelled():
 				return
 			}
-		}(region)
+		}(mappedValues["region"], mappedValues["stream_name"])
+	} else {
+		regions := r.determineRegionsForOption(region)
+		for _, region := range regions {
+			handler.Add(1)
+			go func(region string) {
+				defer handler.Done()
+				stream, err := r.client.DescribeKinesisStream(ctx, region, id)
+				select {
+				case handler.Channel() <- resolver.NewSingleFanoutResult(stream, err):
+					return
+				case <-handler.Cancelled():
+					return
+				}
+			}(region)
+		}
 	}
 
 	return handler.Results(limit)
