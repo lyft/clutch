@@ -6,15 +6,15 @@ import (
 	"github.com/lyft/clutch/backend/middleware"
 )
 
-// GetSlackOverrideText returns the custom slack message from the slack override config if the FullMethod matches
-// the serive and method in the audit event. Otherwise ok is false and an empty string is returned.
-func GetSlackOverrideText(override *configv1.Override, event *auditv1.RequestEvent) (string, bool) {
-	if override == nil {
-		// no slack overrides
+// GetOverrideMessage returns the custom slack message from the slack config if the FullMethod matches
+// the service and method in the audit event. Otherwise ok is false and an empty string is returned.
+func GetOverrideMessage(overrides []*configv1.CustomMessage, event *auditv1.RequestEvent) (string, bool) {
+	if overrides == nil {
+		// no overrides
 		return "", false
 	}
 
-	for _, customSlack := range override.CustomSlackMessages {
+	for _, customSlack := range overrides {
 		service, method, ok := middleware.SplitFullMethod(customSlack.FullMethod)
 		if !ok {
 			return "", false

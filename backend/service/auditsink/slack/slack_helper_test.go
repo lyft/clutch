@@ -11,42 +11,32 @@ import (
 
 func TestGetSlackOverrideText(t *testing.T) {
 	testCases := []struct {
-		override     *configv1.Override
+		override     []*configv1.CustomMessage
 		event        *auditv1.RequestEvent
 		expectedOk   bool
 		expectedText string
 	}{
 		// no override specified
 		{
-			override:   &configv1.Override{},
+			override:   []*configv1.CustomMessage{},
 			event:      &auditv1.RequestEvent{},
 			expectedOk: false,
 		},
 		// the override's FullMethod is invalid
 		{
-			override: &configv1.Override{
-				CustomSlackMessages: []*configv1.CustomSlackMessage{{FullMethod: "foo", Message: "foo"}},
-			},
+			override:   []*configv1.CustomMessage{{FullMethod: "foo", Message: "foo"}},
 			event:      &auditv1.RequestEvent{},
 			expectedOk: false,
 		},
-		// the override's FullMethod does not matche the service and method in the audit event
+		// the override's FullMethod does not match the service and method in the audit event
 		{
-			override: &configv1.Override{
-				CustomSlackMessages: []*configv1.CustomSlackMessage{
-					{FullMethod: "/clutch.k8s.v1.K8sAPI/DescribePod", Message: "foo"},
-				},
-			},
+			override:   []*configv1.CustomMessage{{FullMethod: "/clutch.k8s.v1.K8sAPI/DescribePod", Message: "foo"}},
 			event:      &auditv1.RequestEvent{ServiceName: "clutch.k8s.v1.K8sAPI", MethodName: "ResizeHPA"},
 			expectedOk: false,
 		},
 		// the override's FullMethod matches the service and method in the audit event
 		{
-			override: &configv1.Override{
-				CustomSlackMessages: []*configv1.CustomSlackMessage{
-					{FullMethod: "/clutch.k8s.v1.K8sAPI/DescribePod", Message: "foo"},
-				},
-			},
+			override:     []*configv1.CustomMessage{{FullMethod: "/clutch.k8s.v1.K8sAPI/DescribePod", Message: "foo"}},
 			event:        &auditv1.RequestEvent{ServiceName: "clutch.k8s.v1.K8sAPI", MethodName: "DescribePod"},
 			expectedOk:   true,
 			expectedText: "foo",
@@ -54,7 +44,7 @@ func TestGetSlackOverrideText(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		result, ok := GetSlackOverrideText(test.override, test.event)
+		result, ok := GetOverrideMessage(test.override, test.event)
 		if !test.expectedOk {
 			assert.False(t, ok)
 			assert.Empty(t, result)

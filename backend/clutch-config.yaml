@@ -44,8 +44,7 @@ services:
         rules:
           - field: SERVICE
             text: clutch.k8s.v1.K8sAPI
-      override:
-        custom_slack_messages:
+      overrides:
           - full_method: /clutch.k8s.v1.K8sAPI/DescribePod
             message: "Pod `{{.Request.Name}}` status is *{{.Response.Pod.State}}*"
   - name: clutch.service.aws
