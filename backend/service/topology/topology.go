@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"strconv"
 	"syscall"
+	"time"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
@@ -44,10 +45,9 @@ type client struct {
 // By implementing this interface the topology service will automatically setup all services which implement it.
 // Automatically ingesting Resource objects via the `GetTopologyObjectChannel()` function.
 // This enables users to make use of the Topology APIs with these new Topology Resources.
-//
 type CacheableTopology interface {
 	CacheEnabled() bool
-	StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.UpdateCacheRequest, error)
+	StartTopologyCaching(ctx context.Context, ttl time.Duration) (<-chan *topologyv1.UpdateCacheRequest, error)
 }
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
@@ -77,6 +77,11 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	if topologyConfig.Cache == nil {
 		c.log.Info("Topology caching is disabled")
 		return c, nil
+	}
+
+	// If TTL is not set default to two hours
+	if c.config.Cache.Ttl == nil {
+		c.config.Cache.Ttl = ptypes.DurationProto(time.Hour * 2)
 	}
 
 	ctx, ctxCancelFunc := context.WithCancel(context.Background())

@@ -20,12 +20,15 @@ func TestStartTopologyCache(t *testing.T) {
 		log:                log,
 	}
 
-	buff, err := c.StartTopologyCaching(context.Background())
+	// Not currently used by AWS caching but its a required parameter
+	cacheTtl := time.Minute * 1
+
+	buff, err := c.StartTopologyCaching(context.Background(), cacheTtl)
 	assert.NoError(t, err)
 	assert.NotNil(t, buff)
 
 	// Asserts that the topologyLock has already been aquired
-	_, err = c.StartTopologyCaching(context.Background())
+	_, err = c.StartTopologyCaching(context.Background(), cacheTtl)
 	assert.Error(t, err)
 }
 

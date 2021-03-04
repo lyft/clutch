@@ -28,7 +28,7 @@ func (s *svc) CacheEnabled() bool {
 	return true
 }
 
-func (s *svc) StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.UpdateCacheRequest, error) {
+func (s *svc) StartTopologyCaching(ctx context.Context, ttl time.Duration) (<-chan *topologyv1.UpdateCacheRequest, error) {
 	// There should only ever be one instances of all the informers for topology caching
 	// We lock here until the context is closed
 	if !s.topologyInformerLock.TryAcquire(topologyInformerLockId) {
@@ -41,13 +41,13 @@ func (s *svc) StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.Upda
 	}
 	for name, cs := range clientsets {
 		s.log.Info("starting informer for", zap.String("cluster", name))
-		go s.startInformers(ctx, name, cs)
+		go s.startInformers(ctx, name, cs, ttl)
 	}
 
 	return s.topologyObjectChan, nil
 }
 
-func (s *svc) startInformers(ctx context.Context, clusterName string, cs ContextClientset) {
+func (s *svc) startInformers(ctx context.Context, clusterName string, cs ContextClientset, ttl time.Duration) {
 	informerHandlers := cache.ResourceEventHandlerFuncs{
 		AddFunc:    s.informerAddHandler,
 		UpdateFunc: s.informerUpdateHandler,
@@ -85,7 +85,7 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 	go podInformer.Run(stop)
 	go deploymentInformer.Run(stop)
 	go hpaInformer.Run(stop)
-	go s.cacheFullRelist(ctx, clusterName, lwPod, lwDeployment, lwHPA)
+	go s.cacheFullRelist(ctx, clusterName, lwPod, lwDeployment, lwHPA, ttl)
 
 	<-ctx.Done()
 	s.log.Info("Shutting down the kubernetes cache informers")
@@ -101,13 +101,13 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 //
 // Notably we intentionally run these in serial, not only can this cause memory pressure but
 // also being mindful of the kubernetes api servers to reduce burst load.
-func (s *svc) cacheFullRelist(ctx context.Context, cluster string, lwPods, lwDeployments, lwHPA *cache.ListWatch) {
-	// TODO: When topology TTL configuration is supported this ticker should tick half as fast
-	// as the TTL. eg TTL = 2hours then cache relist = 1hour
-	ticker := time.NewTicker(time.Second * 30)
+func (s *svc) cacheFullRelist(ctx context.Context, cluster string, lwPods, lwDeployments, lwHPA *cache.ListWatch, ttl time.Duration) {
+	// Refresh the cache here at half the time it takes for the cache to expire
+	// eg: 2 hour TTL would result in refreshing this cache every 1 hour
+	ticker := time.NewTicker(ttl / 2)
 	for {
 		// The informers will only ever do a full list once on boot
-		// we will wait the hour before doing another full list again
+		// we will half the time of the cache TTL before doing a full relist
 		select {
 		case <-ticker.C:
 			pods, err := lwPods.List(metav1.ListOptions{})

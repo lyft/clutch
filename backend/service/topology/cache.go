@@ -86,7 +86,7 @@ func (c *client) startTopologyCache(ctx context.Context) {
 		if svc, ok := s.(CacheableTopology); ok {
 			if svc.CacheEnabled() {
 				c.log.Info("Processing Topology Objects for service", zap.String("service", name))
-				topologyChannel, err := svc.StartTopologyCaching(ctx)
+				topologyChannel, err := svc.StartTopologyCaching(ctx, c.config.Cache.Ttl.AsDuration())
 				if err != nil {
 					c.log.Error("Unable to start topology caching", zap.String("service", name), zap.Error(err))
 					continue
@@ -180,15 +180,9 @@ func (c *client) expireCache(ctx context.Context) {
 		DELETE FROM topology_cache WHERE updated_at <= NOW() - CAST ( $1 AS INTERVAL );
 	`
 
-	// Default expiration time is two hours
-	expireDuration := time.Hour * 2
-	if c.config.Cache.Ttl != nil {
-		expireDuration = c.config.Cache.Ttl.AsDuration()
-	}
-
 	ticker := time.NewTicker(time.Minute * 20)
 	for {
-		result, err := c.db.ExecContext(ctx, expireQuery, strconv.Itoa(int(expireDuration.Seconds())))
+		result, err := c.db.ExecContext(ctx, expireQuery, strconv.Itoa(int(c.config.Cache.Ttl.AsDuration().Seconds())))
 		if err != nil {
 			c.scope.SubScope("cache").Counter("expire.failure").Inc(1)
 			c.log.Error("unable to expire cache", zap.Error(err))
