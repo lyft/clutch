@@ -88,7 +88,10 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 
 		// Enable ECDS if cluster present in the map
 		if _, exists := ecdsConfig.enabledClusters[cluster]; exists {
-			resources[gcpTypes.ExtensionConfig] = generateECDSResource(experiments, ecdsConfig, ttl, logger)
+			resources[gcpTypes.ExtensionConfig] = generateECDSResource(experiments, ttl, logger)
+
+			// generate empty Runtime config to clear any existing RTDS faults
+			resources[gcpTypes.Runtime] = generateRTDSResource([]*experimentation.Experiment{}, rtdsConfig, ttl, logger)
 		} else {
 			resources[gcpTypes.Runtime] = generateRTDSResource(experiments, rtdsConfig, ttl, logger)
 			resources[gcpTypes.ExtensionConfig] = generateEmptyECDSResource(cluster, ecdsConfig, logger)
@@ -131,7 +134,7 @@ func setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTt
 		return nil
 	}
 
-	logger.Infow("Setting snapshot", "cluster", cluster, "snapshot", snapshot, "resources", resourceMap)
+	logger.Infow("Setting snapshot", "cluster", cluster, "resources", resourceMap)
 	err = snapshotCache.SetSnapshot(cluster, snapshot)
 	if err != nil {
 		return err

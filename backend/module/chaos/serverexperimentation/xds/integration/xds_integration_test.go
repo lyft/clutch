@@ -12,6 +12,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds"
@@ -39,7 +40,7 @@ func TestEnvoyFaults(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, 503, code)
 
-	createTestExperiment(t, 400, "test-cluster", ts.Storer)
+	_ = createTestExperiment(t, 400, ts.Storer)
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
 		timeout:        2 * time.Second,
@@ -58,7 +59,7 @@ func TestEnvoyFaults(t *testing.T) {
 	assert.NoError(t, err, "did not see faults reverted")
 }
 
-func createTestExperiment(t *testing.T, faultHttpStatus int, upstreamCluster string, storer *xds_testing.SimpleStorer) {
+func createTestExperiment(t *testing.T, faultHttpStatus int, storer *xds_testing.SimpleStorer) *experimentationv1.Experiment {
 	now := time.Now()
 	config := serverexperimentation.HTTPFaultConfig{
 		Fault: &serverexperimentation.HTTPFaultConfig_AbortFault{
@@ -76,7 +77,7 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, upstreamCluster str
 				UpstreamEnforcing: &serverexperimentation.UpstreamEnforcing{
 					UpstreamType: &serverexperimentation.UpstreamEnforcing_UpstreamCluster{
 						UpstreamCluster: &serverexperimentation.SingleCluster{
-							Name: upstreamCluster,
+							Name: "test-cluster",
 						},
 					},
 					DownstreamType: &serverexperimentation.UpstreamEnforcing_DownstreamCluster{
@@ -92,8 +93,10 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, upstreamCluster str
 	a, err := ptypes.MarshalAny(&config)
 	assert.NoError(t, err)
 
-	_, err = storer.CreateExperiment(context.Background(), a, &now, &now)
+	experiment, err := storer.CreateExperiment(context.Background(), a, &now, &now)
 	assert.NoError(t, err)
+
+	return experiment
 }
 
 type awaitReturnValueParams struct {
@@ -139,7 +142,7 @@ func TestEnvoyECDSFaults(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, 503, code)
 
-	createTestExperiment(t, 404, "test-cluster", ts.Storer)
+	experiment := createTestExperiment(t, 404, ts.Storer)
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
 		timeout:        2 * time.Second,
@@ -147,9 +150,8 @@ func TestEnvoyECDSFaults(t *testing.T) {
 	})
 	assert.NoError(t, err, "did not see faults enabled")
 
-	// We know that faults have been applied, now try to kill the server and ensure that we eventually reset the faults.
-	// This verifies that we're properly setting TTLs and that Envoy will honor this.
-	ts.Stop()
+	// Not testing TTL by stopping the server as its currently not supported for ECDS in Upstream Envoy
+	ts.Storer.CancelExperimentRun(context.Background(), experiment.Id)
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
 		timeout:        10 * time.Second,

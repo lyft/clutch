@@ -3,11 +3,11 @@ package xds
 import (
 	"context"
 	"fmt"
-	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
-	gcpFilterFault "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
 	"testing"
 	"time"
 
+	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
+	gcpFilterFault "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
 	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
@@ -298,11 +298,6 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	var downstreamCluster string
 	mockExperimentList := mockGenerateFaultData(t)
 
-	ecdsConfig := ECDSConfig{
-		ecdsResourceMap: &SafeEcdsResourceMap{},
-		enabledClusters: map[string]struct{}{testCluster: struct{}{}},
-	}
-
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
@@ -326,7 +321,7 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	}
 
 	resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
-	resources[gcpTypes.ExtensionConfig] = generateECDSResource(testClusterFaults, &ecdsConfig, nil, zap.NewNop().Sugar())
+	resources[gcpTypes.ExtensionConfig] = generateECDSResource(testClusterFaults, nil, zap.NewNop().Sugar())
 	assert.Nil(t, resources[gcpTypes.ExtensionConfig][0].Ttl)
 	err := setSnapshot(resources, testCluster, testCache, zap.NewNop().Sugar())
 	if err != nil {
@@ -368,11 +363,6 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	var upstreamCluster string
 	mockExperimentList := mockGenerateFaultData(t)
 
-	ecdsConfig := ECDSConfig{
-		ecdsResourceMap: &SafeEcdsResourceMap{},
-		enabledClusters: map[string]struct{}{testCluster: struct{}{}},
-	}
-
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
@@ -396,7 +386,7 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	}
 
 	resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
-	resources[gcpTypes.ExtensionConfig] = generateECDSResource(testClusterFaults, &ecdsConfig, nil, zap.NewNop().Sugar())
+	resources[gcpTypes.ExtensionConfig] = generateECDSResource(testClusterFaults, nil, zap.NewNop().Sugar())
 	assert.Nil(t, resources[gcpTypes.ExtensionConfig][0].Ttl)
 	err := setSnapshot(resources, testCluster, testCache, zap.NewNop().Sugar())
 	if err != nil {
