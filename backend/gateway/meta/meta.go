@@ -155,7 +155,7 @@ func HydratedPatternForProto(pb proto.Message) string {
 //  namespace: mynamespace
 //  name: nameofresource
 // }
-func ExtractPatternValuesFromString(pb proto.Message, value string) (map[string]string, error) {
+func ExtractPatternValuesFromString(pb proto.Message, value string) (map[string]string, bool, error) {
 	m := pb.ProtoReflect()
 	opts := m.Descriptor().Options().ProtoReflect()
 
@@ -174,7 +174,7 @@ func ExtractPatternValuesFromString(pb proto.Message, value string) (map[string]
 			convertedRegex := fmt.Sprintf("^%s$", fieldNameRegexp.ReplaceAllString(pattern.Pattern, "(.*)"))
 			patternRegex, err := regexp.Compile(convertedRegex)
 			if err != nil {
-				return nil, err
+				return nil, false, err
 			}
 
 			// Extract the regex groups, index 0 is always the input string
@@ -187,7 +187,7 @@ func ExtractPatternValuesFromString(pb proto.Message, value string) (map[string]
 			}
 		}
 	}
-	return result, nil
+	return result, true, nil
 }
 
 func extractProtoPatternFieldNames(pattern *apiv1.Pattern) []string {

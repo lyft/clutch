@@ -26,8 +26,12 @@ func (r *res) autoscalingGroupResults(ctx context.Context, region string, ids []
 
 	for _, id := range ids {
 		// if the pattern matches then proceeded
-		patternValues, err := meta.ExtractPatternValuesFromString((*ec2v1.AutoscalingGroup)(nil), id)
-		if err == nil && len(patternValues["region"]) > 0 && len(patternValues["name"]) > 0 {
+		patternValues, ok, err := meta.ExtractPatternValuesFromString((*ec2v1.AutoscalingGroup)(nil), id)
+		if err != nil {
+			return nil, err
+		}
+
+		if ok && len(patternValues["region"]) > 0 && len(patternValues["name"]) > 0 {
 			handler.Add(1)
 			go func(region string, name []string) {
 				defer handler.Done()

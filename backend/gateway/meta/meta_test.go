@@ -229,50 +229,56 @@ func TestPatternValueMapping(t *testing.T) {
 		id     string
 		pb     proto.Message
 		search string
-		expect map[string]string
+		result map[string]string
+		ok     bool
 	}{
 		{
 			id:     "aws asg",
 			pb:     &ec2v1.AutoscalingGroup{},
 			search: "us-east-1/my-asg-name",
-			expect: map[string]string{
+			result: map[string]string{
 				"region": "us-east-1",
 				"name":   "my-asg-name",
 			},
+			ok: true,
 		},
 		{
 			id:     "aws instance",
 			pb:     &ec2v1.Instance{},
 			search: "us-east-1/i-0000000",
-			expect: map[string]string{
+			result: map[string]string{
 				"region":      "us-east-1",
 				"instance_id": "i-0000000",
 			},
+			ok: true,
 		},
 		{
 			id:     "test for partial match",
 			pb:     &ec2v1.Instance{},
 			search: "us-east-1/i-0000000/meow",
-			expect: map[string]string{
+			result: map[string]string{
 				"region":      "us-east-1/i-0000000",
 				"instance_id": "meow",
 			},
+			ok: true,
 		},
 		{
 			id:     "k8s deployment",
 			pb:     &k8sapiv1.Deployment{},
 			search: "mycluster/mynamespace/deploymentname",
-			expect: map[string]string{
+			result: map[string]string{
 				"cluster":   "mycluster",
 				"namespace": "mynamespace",
 				"name":      "deploymentname",
 			},
+			ok: true,
 		},
 		{
 			id:     "k8s deployment failed pattern match",
 			pb:     &k8sapiv1.Deployment{},
 			search: "nothecorrectpattern",
-			expect: map[string]string{},
+			result: map[string]string{},
+			ok:     true,
 		},
 	}
 
@@ -281,9 +287,10 @@ func TestPatternValueMapping(t *testing.T) {
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
-			result, err := ExtractPatternValuesFromString(tt.pb, tt.search)
+			result, ok, err := ExtractPatternValuesFromString(tt.pb, tt.search)
 			assert.NoError(t, err)
-			assert.Equal(t, tt.expect, result)
+			assert.Equal(t, tt.ok, ok)
+			assert.Equal(t, tt.result, result)
 		})
 	}
 }
