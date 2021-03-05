@@ -287,3 +287,43 @@ func TestPatternValueMapping(t *testing.T) {
 		})
 	}
 }
+
+func TestExtractProtoPatternFieldNames(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		id      string
+		pattern *apiv1.Pattern
+		expect  []string
+	}{
+		{
+			id:      "3 fields",
+			pattern: &apiv1.Pattern{Pattern: "{name}/{of}/{fields}"},
+			expect:  []string{"name", "of", "fields"},
+		},
+		{
+			id:      "2 fields",
+			pattern: &apiv1.Pattern{Pattern: "{name}/{of}"},
+			expect:  []string{"name", "of"},
+		},
+		{
+			id:      "1 fields",
+			pattern: &apiv1.Pattern{Pattern: "{name}"},
+			expect:  []string{"name"},
+		},
+		{
+			id:      "different delimiters",
+			pattern: &apiv1.Pattern{Pattern: "{cat}/{meow}-{nom}_{food}--{tasty}"},
+			expect:  []string{"cat", "meow", "nom", "food", "tasty"},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			actual := extractProtoPatternFieldNames(tt.pattern)
+			assert.Equal(t, tt.expect, actual)
+		})
+	}
+}

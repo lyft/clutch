@@ -168,7 +168,7 @@ func ExtractPatternValuesFromString(pb proto.Message, value string) (map[string]
 
 		for _, pattern := range id.Patterns {
 			// The variable names on the pattern
-			variableNames := fieldNameRegexp.FindAllStringSubmatch(pattern.Pattern, -1)
+			patternFields := extractProtoPatternFieldNames(pattern)
 
 			// Convert the pattern into a regex
 			converedRegex := fmt.Sprintf("^%s$", fieldNameRegexp.ReplaceAllString(pattern.Pattern, "(.*)"))
@@ -177,17 +177,26 @@ func ExtractPatternValuesFromString(pb proto.Message, value string) (map[string]
 				return nil, err
 			}
 
-			if patternRegex.MatchString(value) {
-				// Extract the regex groups, index 0 is always the input string
-				subStringGroups := patternRegex.FindAllStringSubmatch(value, -1)
-				for i, name := range variableNames {
+			// Extract the regex groups, index 0 is always the input string
+			subStringGroups := patternRegex.FindAllStringSubmatch(value, -1)
+			if subStringGroups != nil {
+				for i, name := range patternFields {
 					// Plus one here because the first value is the input string
-					result[name[1]] = subStringGroups[0][i+1]
+					result[name] = subStringGroups[0][i+1]
 				}
 			}
 		}
 	}
 	return result, nil
+}
+
+func extractProtoPatternFieldNames(pattern *apiv1.Pattern) []string {
+	results := []string{}
+	variableNames := fieldNameRegexp.FindAllStringSubmatch(pattern.Pattern, -1)
+	for _, name := range variableNames {
+		results = append(results, name[1])
+	}
+	return results
 }
 
 func resolveField(pb proto.Message, name string) []*auditv1.Resource {
