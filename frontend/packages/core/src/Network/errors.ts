@@ -241,18 +241,6 @@ export interface ClutchError extends Error {
   data?: any;
 }
 
-const GRPC_DETAIL_TYPES_MAP = {
-  "types.google.com/google.rpc.RetryInfo": {} as RetryInfo,
-  "types.google.com/google.rpc.DebugInfo": {} as DebugInfo,
-  "types.google.com/google.rpc.QuotaFailure": {} as QuotaFailure,
-  "types.google.com/google.rpc.ErrorInfo": {} as ErrorInfo,
-  "types.google.com/google.rpc.PreconditionFailure": {} as PreconditionFailure,
-  "types.google.com/google.rpc.BadRequest": {} as BadRequest,
-  "types.google.com/google.rpc.RequestInfo": {} as RequestInfo,
-  "types.google.com/google.rpc.ResourceInfo": {} as ResourceInfo,
-  "types.google.com/google.rpc.Help": {} as Help,
-};
-
 /**
  * Construct a ClutchError from an AxiosError.
  *
@@ -271,17 +259,7 @@ const grpcResponseToError = (clientError: AxiosError): ClutchError => {
   } as ClutchError;
 
   if (data?.details !== undefined && data.details.length > 0) {
-    let details = GRPC_DETAIL_TYPES_MAP[data.details["@type"]];
-    if (details !== undefined) {
-      Object.keys(data.details).forEach(detailKey => {
-        if (detailKey !== "@type") {
-          details[detailKey] = data.details[detailKey];
-        }
-      });
-    } else {
-      details = data.details;
-    }
-    error.details = details;
+    error.details = data.details;
   }
 
   return error;
