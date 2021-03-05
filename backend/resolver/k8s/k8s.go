@@ -179,7 +179,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 				return nil, err
 			}
 
-			if ok && len(patternValues["cluster"]) > 0 && len(patternValues["namespace"]) > 0 && len(patternValues["name"]) > 0 {
+			if ok {
 				handler.Add(1)
 				go func(cluster, namespace, name string) {
 					defer handler.Done()
@@ -216,7 +216,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 				return nil, err
 			}
 
-			if ok && len(patternValues["cluster"]) > 0 && len(patternValues["namespace"]) > 0 && len(patternValues["name"]) > 0 {
+			if ok {
 				handler.Add(1)
 				go func(cluster, namespace, name string) {
 					defer handler.Done()

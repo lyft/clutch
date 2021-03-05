@@ -30,7 +30,7 @@ func (r *res) kinesisResults(ctx context.Context, region, id string, limit uint3
 		return nil, err
 	}
 
-	if ok && len(patternValues["region"]) > 0 && len(patternValues["stream_name"]) > 0 {
+	if ok {
 		handler.Add(1)
 		go func(region, id string) {
 			defer handler.Done()
