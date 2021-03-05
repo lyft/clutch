@@ -25,7 +25,7 @@ func (r *res) resolveKinesisStreamForInput(ctx context.Context, input proto.Mess
 func (r *res) kinesisResults(ctx context.Context, region, id string, limit uint32) (*resolver.Results, error) {
 	ctx, handler := resolver.NewFanoutHandler(ctx)
 
-	patternValues, err := meta.ExtractPatternValuesFromString(&kinesisv1api.Stream{}, id)
+	patternValues, err := meta.ExtractPatternValuesFromString((*kinesisv1api.Stream)(nil), id)
 	if err != nil && len(patternValues["region"]) > 0 && len(patternValues["stream_name"]) > 0 {
 		handler.Add(1)
 		go func(region, id string) {

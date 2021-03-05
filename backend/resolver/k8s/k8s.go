@@ -174,7 +174,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	switch typeURL {
 	case typeURLPod:
 		if idPattern.MatchString(query) {
-			patternValues, err := meta.ExtractPatternValuesFromString(&k8sv1api.Pod{}, query)
+			patternValues, err := meta.ExtractPatternValuesFromString((*k8sv1api.Pod)(nil), query)
 			if err == nil && len(patternValues["cluster"]) > 0 && len(patternValues["namespace"]) > 0 && len(patternValues["name"]) > 0 {
 				handler.Add(1)
 				go func(cluster, namespace, name string) {
@@ -207,7 +207,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 		}
 	case typeURLHPA:
 		if idPattern.MatchString(query) {
-			patternValues, err := meta.ExtractPatternValuesFromString(&k8sv1api.HPA{}, query)
+			patternValues, err := meta.ExtractPatternValuesFromString((*k8sv1api.HPA)(nil), query)
 			if err == nil && len(patternValues["cluster"]) > 0 && len(patternValues["namespace"]) > 0 && len(patternValues["name"]) > 0 {
 				handler.Add(1)
 				go func(cluster, namespace, name string) {

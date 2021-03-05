@@ -171,8 +171,8 @@ func ExtractPatternValuesFromString(pb proto.Message, value string) (map[string]
 			patternFields := extractProtoPatternFieldNames(pattern)
 
 			// Convert the pattern into a regex
-			converedRegex := fmt.Sprintf("^%s$", fieldNameRegexp.ReplaceAllString(pattern.Pattern, "(.*)"))
-			patternRegex, err := regexp.Compile(converedRegex)
+			convertedRegex := fmt.Sprintf("^%s$", fieldNameRegexp.ReplaceAllString(pattern.Pattern, "(.*)"))
+			patternRegex, err := regexp.Compile(convertedRegex)
 			if err != nil {
 				return nil, err
 			}
