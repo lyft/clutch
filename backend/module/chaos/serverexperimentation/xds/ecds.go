@@ -46,7 +46,7 @@ var DefaultAbortFaultConfig = &gcpFilterFault.FaultAbort{
 var DefaultDelayFaultConfig = &gcpFilterCommon.FaultDelay{
 	FaultDelaySecifier: &gcpFilterCommon.FaultDelay_FixedDelay{
 		FixedDelay: &duration.Duration{
-			Seconds: 0,
+			Nanos: 1000000, // 0.001 second
 		},
 	},
 	Percentage: &gcpType.FractionalPercent{

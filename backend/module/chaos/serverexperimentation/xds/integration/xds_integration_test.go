@@ -126,7 +126,7 @@ func TestEnvoyECDSFaults(t *testing.T) {
 		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
 		IngressFaultRuntimePrefix: "fault.http",
 		EgressFaultRuntimePrefix:  "egress",
-		EcdsAllowList:             &xdsconfigv1.Config_ECDSAllowList{EnabledClusters: []string{"test-cluster1"}},
+		EcdsAllowList:             &xdsconfigv1.Config_ECDSAllowList{EnabledClusters: []string{"test-cluster"}},
 	}
 
 	ts := xds_testing.NewTestServer(t, xdsConfig, xds.New, true)
@@ -139,7 +139,7 @@ func TestEnvoyECDSFaults(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, 503, code)
 
-	createTestExperiment(t, 404, "test-cluster1", ts.Storer)
+	createTestExperiment(t, 404, "test-cluster", ts.Storer)
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
 		timeout:        2 * time.Second,

@@ -44,7 +44,7 @@ config_discovery:
         - envoy_grpc: 
             cluster_name: clutchxds
       transport_api_version: V3
-    initial_fetch_timeout: 5s
+    initial_fetch_timeout: 10s
     resource_api_version: V3
   default_config: 
     '@type': type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
