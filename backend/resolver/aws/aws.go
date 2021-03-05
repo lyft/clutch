@@ -133,11 +133,7 @@ func (r *res) Resolve(ctx context.Context, wantTypeURL string, input proto.Messa
 func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (*resolver.Results, error) {
 	switch typeURL {
 	case typeURLInstance:
-		id, err := normalizeInstanceID(query)
-		if err != nil {
-			return nil, err
-		}
-		return r.instanceResults(ctx, resolver.OptionAll, []string{id}, limit)
+		return r.instanceResults(ctx, resolver.OptionAll, []string{query}, limit)
 
 	case typeURLAutoscalingGroup:
 		return r.autoscalingGroupResults(ctx, resolver.OptionAll, []string{query}, limit)
