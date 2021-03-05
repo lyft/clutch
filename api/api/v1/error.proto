@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package clutch.api.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/api/v1;apiv1";
+
+import "google/rpc/status.proto";
+
+// Any error information beyond code and status should be included here and added to the error in the status details
+// field. The frontend knows how to render all of the fields in a user-friendly way. If there is extremely verbose error
+// information, consider adding it using a different type, e.g. from the errdetails package. Any details not using this
+// type will still be accessible to the user in a raw format.
+message ErrorDetails {
+  // If there are any underlying errors that were being wrapped, they are presented here.
+  repeated google.rpc.Status wrapped = 1;
+}

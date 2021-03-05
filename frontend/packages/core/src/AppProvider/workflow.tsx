@@ -87,11 +87,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     const { error, errorInfo, showDetails } = this.state;
 
     const defaultErrorMsg = (
-      <>
-Failed to load{workflow.displayName}
-{' '}
-workflow. Please contact the developer
-</>
+      <>Failed to load{workflow.displayName} workflow. Please contact the developer</>
     );
     if (error) {
       let message = defaultErrorMsg;
@@ -104,10 +100,8 @@ workflow. Please contact the developer
         );
         message = (
           <>
-            {defaultErrorMsg}
-:{link}
-.
-</>
+            {defaultErrorMsg}:{link}.
+          </>
         );
       }
 

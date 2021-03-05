@@ -2,20 +2,21 @@ package aws
 
 import (
 	"context"
-	"fmt"
 	"math"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis"
 	"github.com/aws/aws-sdk-go-v2/service/kinesis/types"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	kinesisv1 "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 )
 
 func (c *client) DescribeKinesisStream(ctx context.Context, region string, streamName string) (*kinesisv1.Stream, error) {
-	cl, ok := c.clients[region]
-	if !ok {
-		return nil, fmt.Errorf("no client found for region '%s'", region)
+	cl, err := c.getRegionalClient(region)
+	if err != nil {
+		return nil, err
 	}
 
 	input := &kinesis.DescribeStreamSummaryInput{StreamName: aws.String(streamName)}
@@ -26,7 +27,7 @@ func (c *client) DescribeKinesisStream(ctx context.Context, region string, strea
 
 	currentShardCount := aws.ToInt32(result.StreamDescriptionSummary.OpenShardCount)
 	if currentShardCount < 0 {
-		return nil, fmt.Errorf("AWS returned a negative value for the current shard count")
+		return nil, status.Error(codes.Internal, "AWS returned a negative value for the current shard count")
 	}
 
 	var ret = &kinesisv1.Stream{
@@ -53,21 +54,21 @@ func getRecommendedShardSizes(currentShardCount int32) map[int32]bool {
 func isRecommendedChange(stream *kinesis.DescribeStreamSummaryOutput, targetShardCount int32) error {
 	currentShardCount := aws.ToInt32(stream.StreamDescriptionSummary.OpenShardCount)
 	if currentShardCount < 0 {
-		return fmt.Errorf("AWS returned a negative value for the current shard count")
+		return status.Error(codes.Internal, "AWS returned a negative value for the current shard count")
 	}
 
 	recommendedValues := getRecommendedShardSizes(currentShardCount)
 	if !recommendedValues[targetShardCount] {
-		return fmt.Errorf("new shard count should be a 25%% increment of current shard count ranging from 50-200%%")
+		return status.Error(codes.FailedPrecondition, "new shard count should be a 25% increment of current shard count ranging from 50-200%")
 	}
 
 	return nil
 }
 
 func (c *client) UpdateKinesisShardCount(ctx context.Context, region string, streamName string, targetShardCount int32) error {
-	cl, ok := c.clients[region]
-	if !ok {
-		return fmt.Errorf("no client found for region '%s'", region)
+	cl, err := c.getRegionalClient(region)
+	if err != nil {
+		return err
 	}
 
 	describeInput := &kinesis.DescribeStreamSummaryInput{StreamName: aws.String(streamName)}

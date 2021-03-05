@@ -39,11 +39,7 @@ const PrimaryTemplate = ({ stepCount, activeStep }: StepperProps & { stepCount: 
         ))}
       </Stepper>
       <div>
-        <Text>
-Step{curStep + 1}
-{' '}
-content
-</Text>
+        <Text>Step{curStep + 1} content</Text>
 
         {curStep === stepCount - 1 ? (
           <Button onClick={handleReset} text="Reset" variant="neutral" />
@@ -86,11 +82,7 @@ const FailureTemplate = ({ failedStep = 2, activeStep }: StepperProps & { failed
         ))}
       </Stepper>
       <div>
-        <Text>
-Step{curStep + 1}
-{' '}
-content
-</Text>
+        <Text>Step{curStep + 1} content</Text>
 
         {curStep === stepCount - 1 || curStep === failedStep ? (
           <ButtonGroup justify="flex-start">

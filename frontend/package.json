@@ -73,7 +73,7 @@
     "@typescript-eslint/parser": "^4.13.0",
     "babel-loader": "^8.1.0",
     "eslint": "^7.11.0",
-    "lerna": "^3.22.1",
+    "lerna": "^4.0.0",
     "license-checker": "^25.0.1",
     "prettier": "^2.2.1",
     "react": "^16.8.0",

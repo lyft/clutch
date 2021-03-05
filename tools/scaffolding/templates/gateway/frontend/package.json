@@ -18,10 +18,10 @@
     "upgrade": "yarn upgrade"
   },
   "dependencies": {
-    "protobufjs": "https://github.com/natiz/protobuf.js#1d626f84db4a4f339004609f654a9f24a211b716"
+    "protobufjs": "6.10.2"
   },
   "devDependencies": {
-    "lerna": "^3.20.0",
+    "lerna": "^4.0.0",
     "@clutch-sh/ec2": "^1.0.0-beta",
     "@{{ .RepoName }}/echo": "^0.0.0",
     "@clutch-sh/core": "^1.0.0-beta",

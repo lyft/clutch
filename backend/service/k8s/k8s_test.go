@@ -12,6 +12,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	restclient "k8s.io/client-go/rest"
 
 	k8sv1 "github.com/lyft/clutch/backend/api/config/service/k8s/v1"
@@ -115,4 +118,17 @@ func TestApplyRestClientConfig(t *testing.T) {
 			assert.Equal(t, tt.restConfig.Burst, tt.expectedRestConfig.Burst)
 		})
 	}
+}
+
+func TestInterceptError(t *testing.T) {
+	service := &svc{}
+
+	err := k8serrors.NewUnauthorized("nice try")
+	newErr := service.InterceptError(err)
+
+	s, ok := status.FromError(newErr)
+	assert.True(t, ok)
+	assert.NotNil(t, s)
+	assert.Equal(t, codes.Unauthenticated, s.Code())
+	assert.Equal(t, "nice try", s.Message())
 }

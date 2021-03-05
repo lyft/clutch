@@ -1,4 +1,5 @@
 import React from "react";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import {
   Button,
   ButtonGroup,
@@ -33,7 +34,7 @@ const GroupIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
 const GroupDetails: React.FC<WizardChild> = () => {
   const { onSubmit, onBack } = useWizardContext();
   const groupData = useDataLayout("groupData");
-  const group = groupData.displayValue();
+  const group = groupData.displayValue() as IClutch.aws.ec2.v1.AutoscalingGroup;
   const update = (key: string, value: string) => {
     groupData.updateData(key, value);
   };
@@ -91,7 +92,7 @@ const GroupDetails: React.FC<WizardChild> = () => {
 
 // TODO (sperry): possibly show the previous size values
 const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
-  const group = useDataLayout("groupData").displayValue();
+  const group = useDataLayout("groupData").displayValue() as IClutch.aws.ec2.v1.AutoscalingGroup;
   const resizeData = useDataLayout("resizeData");
 
   return (

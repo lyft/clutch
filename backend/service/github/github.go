@@ -35,6 +35,7 @@ import (
 )
 
 const Name = "clutch.service.github"
+const CurrentUser = ""
 
 type FileMap map[string]io.ReadCloser
 

@@ -101,6 +101,10 @@ module.exports = {
     "no-console": ["error"],
     "no-empty": ["off"],
     "no-nested-ternary": ["off"],
+    "no-unused-expressions": [
+      "error",
+      { "allowShortCircuit": true }
+    ],
     "react/jsx-filename-extension": [
       1,
       {
