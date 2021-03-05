@@ -125,15 +125,30 @@ func TestComputeMaximumTimeout(t *testing.T) {
 	}
 }
 
-func TestProcessTemplateToken(t *testing.T) {
+func TestReplaceClutchTokens(t *testing.T) {
 	config := `
 	foo: bar
-	message: {{range %%v, %%k := .Bar}}{{%%k}}: {{%%v}}{{end}}
+	message: [[range $$v, $$k := .Bar]][[$$k]]: [[$$v]][[end]]
 	`
+	expected := `
+	foo: bar
+	message: {{range @#@v, @#@k := .Bar}}{{@#@k}}: {{@#@v}}{{end}}
+	`
+	contents := replaceClutchTokens(config)
+	assert.Equal(t, expected, contents)
+}
+
+func TestReplaceToken(t *testing.T) {
+	config := `
+	foo: bar
+	message: {{range @#@v, @#@k := .Bar}}{{@#@k}}: {{@#@v}}{{end}}
+	`
+
 	expected := `
 	foo: bar
 	message: {{range $v, $k := .Bar}}{{$k}}: {{$v}}{{end}}
 	`
-	contents := processTemplateToken(config)
+
+	contents := replaceToken(config, "@#@", "$")
 	assert.Equal(t, expected, contents)
 }

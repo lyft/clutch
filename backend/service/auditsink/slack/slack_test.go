@@ -155,11 +155,10 @@ func TestSlackList(t *testing.T) {
 	testCases := []struct {
 		input          interface{}
 		expectedOutput string
-		expectedErr    bool
 	}{
 		{
-			input:       "hello",
-			expectedErr: true,
+			input:          "hello",
+			expectedOutput: "ERR_INPUT_NOT_SLICE_OR_MAP",
 		},
 		{
 			input:          []string{"foo"},
@@ -179,26 +178,21 @@ func TestSlackList(t *testing.T) {
 		},
 		{
 			input:          map[string]string{},
-			expectedOutput: "`N/A`",
+			expectedOutput: "None",
 		},
 		{
 			input:          []string{},
-			expectedOutput: "`N/A`",
+			expectedOutput: "None",
 		},
 	}
 
 	for _, test := range testCases {
-		result, err := slackList(test.input)
-		if test.expectedErr {
-			assert.Error(t, err)
-			assert.Empty(t, result)
-		} else {
-			assert.Equal(t, test.expectedOutput, result)
-		}
+		result := slackList(test.input)
+		assert.Equal(t, test.expectedOutput, result)
 	}
 }
 
-func TestGetAuditMetadata(t *testing.T) {
+func TestGetAuditTemplateData(t *testing.T) {
 	anyReq, _ := anypb.New(&k8sapiv1.DescribePodRequest{})
 	anyResp, _ := anypb.New(&k8sapiv1.DescribePodResponse{})
 
@@ -226,7 +220,7 @@ func TestGetAuditMetadata(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		result, err := getAuditMetadata(test.event)
+		result, err := getAuditTemplateData(test.event)
 		assert.NoError(t, err)
 		if test.expectedEmpty {
 			assert.Empty(t, result.Request)

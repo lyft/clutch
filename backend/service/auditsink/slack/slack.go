@@ -7,9 +7,9 @@ package slack
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"reflect"
+	"strings"
 	"text/template"
 
 	"github.com/golang/protobuf/ptypes"
@@ -45,7 +45,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 }
 
 // The struct is used in a Go template and the fields need to be exported
-type auditEventMetadata struct {
+type auditTemplateData struct {
 	Request  map[string]interface{}
 	Response map[string]interface{}
 }
@@ -131,7 +131,7 @@ func FormatCustomText(message string, event *auditv1.RequestEvent) (string, erro
 		return "", err
 	}
 
-	data, err := getAuditMetadata(event)
+	data, err := getAuditTemplateData(event)
 	if err != nil {
 		return "", err
 	}
@@ -145,10 +145,7 @@ func FormatCustomText(message string, event *auditv1.RequestEvent) (string, erro
 }
 
 // returns the API request/response details saved in an audit event
-func getAuditMetadata(event *auditv1.RequestEvent) (*auditEventMetadata, error) {
-	var requestMetadata map[string]interface{}
-	var responseMetadata map[string]interface{}
-
+func getAuditTemplateData(event *auditv1.RequestEvent) (*auditTemplateData, error) {
 	// proto -> json
 	reqJSON, err := protojson.Marshal(event.RequestMetadata.Body)
 	if err != nil {
@@ -159,6 +156,8 @@ func getAuditMetadata(event *auditv1.RequestEvent) (*auditEventMetadata, error) 
 		return nil, err
 	}
 
+	var requestMetadata map[string]interface{}
+	var responseMetadata map[string]interface{}
 	// json -> map[string]interface{}
 	err = json.Unmarshal(reqJSON, &requestMetadata)
 	if err != nil {
@@ -169,44 +168,44 @@ func getAuditMetadata(event *auditv1.RequestEvent) (*auditEventMetadata, error) 
 		return nil, err
 	}
 
-	return &auditEventMetadata{
+	return &auditTemplateData{
 		Request:  requestMetadata,
 		Response: responseMetadata,
 	}, nil
 }
 
-// for inputs that are type slice/map, returns a formatted slack list OR `N/A` if the slice/map is empty
-func slackList(data interface{}) (string, error) {
-	var text string
-	const listItemFormat = "\n- %v"
+// for inputs that are type slice/map, returns a formatted slack list OR "None" if the slice/map is empty
+func slackList(data interface{}) string {
+	var b strings.Builder
+	const sliceItemFormat = "\n- %v"
 	const mapItemFormat = "\n- %v: %v"
 
 	switch reflect.TypeOf(data).Kind() {
 	case reflect.Slice:
 		s := reflect.ValueOf(data)
 		if s.Len() == 0 {
-			return "`N/A`", nil
+			return "None"
 		}
 		// example:
 		// - foo
 		// - bar
 		for i := 0; i < s.Len(); i++ {
-			text += fmt.Sprintf(listItemFormat, s.Index(i).Interface())
+			fmt.Fprintf(&b, sliceItemFormat, s.Index(i).Interface())
 		}
-		return text, nil
+		return b.String()
 	case reflect.Map:
 		m := reflect.ValueOf(data)
 		if m.Len() == 0 {
-			return "`N/A`", nil
+			return "None"
 		}
 		// example:
-		// foo: value
-		// bar: value
+		// - foo: value
+		// - bar: value
 		for _, k := range m.MapKeys() {
 			v := m.MapIndex(k)
-			text += fmt.Sprintf(mapItemFormat, k.Interface(), v.Interface())
+			fmt.Fprintf(&b, mapItemFormat, k.Interface(), v.Interface())
 		}
-		return text, nil
+		return b.String()
 	}
-	return "", errors.New("input type is not Slice or Map")
+	return "ERR_INPUT_NOT_SLICE_OR_MAP"
 }

@@ -106,17 +106,40 @@ func parseFile(path string, pb proto.Message, template bool) error {
 		}
 	}
 
-	// Interpolate environment variables
-	expandedData := os.ExpandEnv(string(contents))
+	/*
+		We want to support defining Go templates in the clutch-config that can be executed at
+		a later time.
+		Two issues that needed to be addressed:
+		1) os.ExpandEnv removes the $ and there isn't a way to provide an escape
+		(open upstream issue: https://github.com/golang/go/issues/43482)
+		2) the config itself can be executed as a template, and so the nested templates would also
+		be executed.
 
-	contents = []byte(processTemplateToken(expandedData))
+		Solution is to use Clutch-specific templating tokens in the config that are then replaced
+		with the Go Template synax
+		1) $$ in lieu $
+		2) [[ ]] in lieu of {{ }}
+	*/
+
+	tokenContent := replaceClutchTokens(string(contents))
+
+	// Interpolate environment variables
+	expandedContent := os.ExpandEnv(tokenContent)
+
+	contents = []byte(replaceToken(expandedContent, "@#@", "$"))
 
 	return parseYAML(contents, pb)
 }
 
-// Replace the Clutch-specific templating token with the Go $ template syntax
-func processTemplateToken(data string) string {
-	return strings.ReplaceAll(data, "%%", "$")
+func replaceClutchTokens(data string) string {
+	data = replaceToken(data, "[[", "{{")
+	data = replaceToken(data, "]]", "}}")
+	// this last replace is done so that os.ExpandEnv does not remove the $
+	return replaceToken(data, "$$", "@#@")
+}
+
+func replaceToken(data string, old string, new string) string {
+	return strings.ReplaceAll(data, old, new)
 }
 
 func parseYAML(contents []byte, pb proto.Message) error {
