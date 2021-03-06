@@ -2,8 +2,10 @@ package experimentstoremock
 
 import (
 	"context"
+	"fmt"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
+	"time"
 
-	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -12,46 +14,45 @@ import (
 	"github.com/lyft/clutch/backend/service"
 )
 
-type mockExperimentStore struct {
-}
 
 func NewMock(_ *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
-	return &mockExperimentStore{}, nil
+	return &MockStorer{}, nil
 }
-func (fs *mockExperimentStore) CreateExperiments(context.Context, []*experimentation.Experiment) error {
-	// does nothing
+
+type MockStorer struct {
+	GetExperimentArguments getExperimentArguments
+}
+
+type getExperimentArguments struct {
+	ConfigType string
+}
+
+func (fs *MockStorer) CreateExperiment(ctx context.Context, config *any.Any, startTime *time.Time, endTime *time.Time) (*experimentation.Experiment, error) {
+	return nil, nil
+}
+
+func (fs *MockStorer) CancelExperimentRun(ctx context.Context, id uint64) error {
 	return nil
 }
 
-// DeleteExperiments deletes the specified experiments from the store.
-func (fs *mockExperimentStore) DeleteExperiments(context.Context, []uint64) error {
-	// does nothing
-	return nil
+func (fs *MockStorer) GetExperiments(ctx context.Context, configTypes string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
+	fs.GetExperimentArguments = getExperimentArguments{ConfigType: configTypes}
+	return nil, nil
 }
 
-// GetExperiments gets all experiments
-func (fs *mockExperimentStore) GetExperiments(context.Context) ([]*experimentation.Experiment, error) {
-	var experiments []*experimentation.Experiment
-	var experiment experimentation.Experiment
-
-	details :=
-		`{"@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig",
-			"fault":{"abortFault":{"percentage":{"percentage":100}}, "abortStatus":{"httpStatusCode":401}},
-			"faultTargeting": {"enforcer":{"upstreamEnforcing":{"upstreamType":{"upstreamCluster":{"name":"uCluster"}}, "downstreamType":{"downstreamCluster":{"name":"dCluster"}}}}}}`
-
-	anyConfig := &any.Any{}
-	err := jsonpb.UnmarshalString(details, anyConfig)
-	if err != nil {
-		return nil, err
-	}
-
-	experiment.Id = 1
-	experiment.Config = anyConfig
-
-	experiments = append(experiments, &experiment)
-
-	return experiments, nil
+func (fs *MockStorer) GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error) {
+	return nil, nil
 }
 
-func (fs *mockExperimentStore) Close() {
+func (fs *MockStorer) GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error) {
+	return nil, nil
 }
+
+func (fs *MockStorer) RegisterTransformation(transformation experimentstore.Transformation) error {
+	return fmt.Errorf("Not implemented")
+}
+
+func (fs *MockStorer) Close() {
+}
+
+var _ experimentstore.Storer = &MockStorer{}

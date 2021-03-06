@@ -1,6 +1,7 @@
 package testing
 
 import (
+	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
 	"net"
 	"testing"
 	"time"
@@ -24,14 +25,14 @@ import (
 type TestServer struct {
 	registrar *moduletest.TestRegistrar
 	Scope     tally.TestScope
-	Storer    *SimpleStorer
+	Storer    *experimentstoremock.SimpleStorer
 }
 
 func NewTestServer(t *testing.T, c func(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error), ttl bool) TestServer {
 	t.Helper()
 	server := TestServer{}
 
-	server.Storer = &SimpleStorer{}
+	server.Storer = &experimentstoremock.SimpleStorer{}
 	service.Registry[experimentstore.Name] = server.Storer
 
 	// Set up a test server listening to :9000.

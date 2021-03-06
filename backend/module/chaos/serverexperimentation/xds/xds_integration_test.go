@@ -5,6 +5,7 @@ package xds
 import (
 	"context"
 	"fmt"
+	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
 	"testing"
 	"time"
 
@@ -49,7 +50,7 @@ func TestEnvoyFaults(t *testing.T) {
 	assert.NoError(t, err, "did not see faults reverted")
 }
 
-func createTestExperiment(t *testing.T, storer *xds_testing.SimpleStorer) {
+func createTestExperiment(t *testing.T, storer *experimentstoremock.SimpleStorer) {
 	now := time.Now()
 	config := serverexperimentation.HTTPFaultConfig{
 		Fault: &serverexperimentation.HTTPFaultConfig_AbortFault{
