@@ -1,19 +1,21 @@
 package xdstest
 
 import (
+	"time"
+
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
-	rtdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
-	"github.com/lyft/clutch/backend/internal/test/integration/helper/testserver"
-	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
-	"github.com/lyft/clutch/backend/module"
-	"github.com/lyft/clutch/backend/service"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/durationpb"
-	"time"
+
+	rtdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
+	xdstest "github.com/lyft/clutch/backend/internal/test/integration/helper/testserver"
+	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
+	"github.com/lyft/clutch/backend/module"
+	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 // Helper class for initializing a test RTDS server.
@@ -62,6 +64,4 @@ func NewTestModuleServer(c func(cfg *any.Any, logger *zap.Logger, scope tally.Sc
 	ms.Run()
 
 	return ms
-
 }
-

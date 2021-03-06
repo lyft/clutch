@@ -3,7 +3,6 @@ package experimentstoremock
 import (
 	"context"
 	"fmt"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
@@ -12,8 +11,8 @@ import (
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
-
 
 func NewMock(_ *any.Any, _ *zap.Logger, _ tally.Scope) (service.Service, error) {
 	return &MockStorer{}, nil

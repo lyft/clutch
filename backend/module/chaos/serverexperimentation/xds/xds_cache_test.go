@@ -2,7 +2,6 @@ package xds
 
 import (
 	"context"
-	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
 	"testing"
 	"time"
 
@@ -18,6 +17,7 @@ import (
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
 )
 
 const (

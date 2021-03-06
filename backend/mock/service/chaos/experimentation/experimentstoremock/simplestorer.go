@@ -2,12 +2,14 @@ package experimentstoremock
 
 import (
 	"context"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
-	"google.golang.org/protobuf/types/known/anypb"
 	"sync"
 	"time"
+
+	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
+
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 type SimpleExperiment struct {

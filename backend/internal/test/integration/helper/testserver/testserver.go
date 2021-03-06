@@ -1,12 +1,14 @@
 package xdstest
 
 import (
-	"github.com/lyft/clutch/backend/module"
-	"github.com/lyft/clutch/backend/module/moduletest"
+	"net"
+
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"net"
+
+	"github.com/lyft/clutch/backend/module"
+	"github.com/lyft/clutch/backend/module/moduletest"
 )
 
 type TestServer struct {

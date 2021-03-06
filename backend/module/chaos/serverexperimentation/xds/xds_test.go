@@ -3,7 +3,6 @@ package xds
 import (
 	"context"
 	"errors"
-	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
 	"testing"
 	"time"
 
@@ -16,6 +15,7 @@ import (
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
 )
 
 func TestServerStats(t *testing.T) {
