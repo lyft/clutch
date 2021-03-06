@@ -278,7 +278,7 @@ func TestPatternValueMapping(t *testing.T) {
 			pb:     &k8sapiv1.Deployment{},
 			search: "nothecorrectpattern",
 			result: map[string]string{},
-			ok:     true,
+			ok:     false,
 		},
 	}
 
