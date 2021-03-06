@@ -8,7 +8,6 @@ module.exports = {
   extends: [
     "airbnb",
     "prettier",
-    "prettier/react",
     "plugin:cypress/recommended",
     "plugin:import/typescript",
     "plugin:jest/recommended",
@@ -102,6 +101,10 @@ module.exports = {
     "no-console": ["error"],
     "no-empty": ["off"],
     "no-nested-ternary": ["off"],
+    "no-unused-expressions": [
+      "error",
+      { "allowShortCircuit": true }
+    ],
     "react/jsx-filename-extension": [
       1,
       {

@@ -2,8 +2,9 @@ package k8s
 
 import (
 	"context"
-	"fmt"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	appsv1 "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -29,10 +30,10 @@ func (s *svc) DescribeStatefulSet(ctx context.Context, clientset, cluster, names
 	if len(statefulSets.Items) == 1 {
 		return ProtoForStatefulSet(cs.Cluster(), &statefulSets.Items[0]), nil
 	} else if len(statefulSets.Items) > 1 {
-		return nil, fmt.Errorf("Located multiple StatefulSets")
+		return nil, status.Error(codes.FailedPrecondition, "located multiple stateful sets")
 	}
 
-	return nil, fmt.Errorf("Unable to locate StatefulSet")
+	return nil, status.Error(codes.NotFound, "unable to locate specified stateful set")
 }
 
 func (s *svc) ListStatefulSets(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.StatefulSet, error) {

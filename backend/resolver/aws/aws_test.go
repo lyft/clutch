@@ -99,10 +99,10 @@ type mockTopologySearch struct {
 	autoCompleteResults []*topologyv1.Resource
 }
 
-func (m *mockTopologySearch) Search(ctx context.Context, search *topologyv1.SearchRequest) ([]*topologyv1.Resource, string, error) {
+func (m *mockTopologySearch) Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*topologyv1.Resource, error) {
 	if m.autoCompleteError != nil {
-		return nil, "", m.autoCompleteError
+		return nil, m.autoCompleteError
 	}
 
-	return m.autoCompleteResults, "0", nil
+	return m.autoCompleteResults, nil
 }

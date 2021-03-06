@@ -32,4 +32,7 @@ message Connection {
 // TODO: Expose more database/sql tunables.
 message Config {
   Connection connection = 1;
+  // The default max idle connections is 2
+  // Use -1 to specify zero idle connections
+  int32 max_idle_connections = 2;
 }

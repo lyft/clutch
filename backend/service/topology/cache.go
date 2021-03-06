@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"encoding/binary"
 	"encoding/json"
+	"strconv"
 	"time"
 
 	"go.uber.org/zap"
@@ -23,33 +24,34 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 	advisoryLockId := convertLockIdToAdvisoryLockId(topologyCacheLockId)
 	ticker := time.NewTicker(time.Second * 10)
 
-	// We create our own connection to use for acquiring the advisory lock
-	// If the connection is severed for any reason the advisory lock will automatically unlock
-	conn, err := c.db.Conn(ctx)
-	if err != nil {
-		c.log.Fatal("Unable to connect to the database", zap.Error(err))
-	}
-	defer conn.Close()
-
 	// Infinitely try to acquire the advisory lock
 	// Once the lock is acquired we start caching, this is a blocking operation
 	for {
 		c.log.Info("trying to acquire advisory lock")
 
-		// TODO: We could in the future spread the load of the topology caching
-		// across many clutch instances by having an a lock per service (e.g. AWS, k8s, etc)
-		if c.tryAdvisoryLock(ctx, conn, advisoryLockId) {
-			c.log.Info("acquired the advisory lock, starting to cache topology now...")
-			go c.expireCache(ctx)
-			c.startTopologyCache(ctx)
+		// We create our own connection to use for acquiring the advisory lock
+		// If the connection is severed for any reason the advisory lock will automatically unlock
+		conn, err := c.db.Conn(ctx)
+		switch err {
+		case nil:
+			// TODO: We could in the future spread the load of the topology caching
+			// across many clutch instances by having an a lock per service (e.g. AWS, k8s, etc)
+			if c.tryAdvisoryLock(ctx, conn, advisoryLockId) {
+				c.log.Info("acquired the advisory lock, starting to cache topology now...")
+				go c.expireCache(ctx)
+				c.startTopologyCache(ctx)
+			}
+		default:
+			c.log.Error("lost connection to database, trying to reconnect...", zap.Error(err))
 		}
+		// Closes the db connection which will also release the advisory lock
+		conn.Close()
 
 		select {
 		case <-ticker.C:
 			continue
 		case <-ctx.Done():
 			ticker.Stop()
-			c.unlockAdvisoryLock(context.Background(), conn, advisoryLockId)
 			return
 		}
 	}
@@ -70,14 +72,6 @@ func (c *client) tryAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uin
 	return lock
 }
 
-func (c *client) unlockAdvisoryLock(ctx context.Context, conn *sql.Conn, lockId uint32) bool {
-	var unlock bool
-	if err := conn.QueryRowContext(ctx, "SELECT pg_advisory_unlock($1)", lockId).Scan(&unlock); err != nil {
-		c.log.Error("Unable to perform an advisory unlock", zap.Error(err))
-	}
-	return unlock
-}
-
 func convertLockIdToAdvisoryLockId(lockID string) uint32 {
 	x := sha256.New().Sum([]byte(lockID))
 	return binary.BigEndian.Uint32(x)
@@ -88,16 +82,16 @@ func convertLockIdToAdvisoryLockId(lockID string) uint32 {
 // topology objects until the context has been cancelled.
 //
 func (c *client) startTopologyCache(ctx context.Context) {
-	for n, s := range service.Registry {
+	for name, s := range service.Registry {
 		if svc, ok := s.(CacheableTopology); ok {
 			if svc.CacheEnabled() {
-				c.log.Info("Processing Topology Objects for service", zap.String("service", n))
+				c.log.Info("Processing Topology Objects for service", zap.String("service", name))
 				topologyChannel, err := svc.StartTopologyCaching(ctx)
 				if err != nil {
-					c.log.Error("Unable to start topology caching", zap.String("service", n), zap.Error(err))
+					c.log.Error("Unable to start topology caching", zap.String("service", name), zap.Error(err))
 					continue
 				}
-				go c.processTopologyObjectChannel(ctx, topologyChannel)
+				go c.processTopologyObjectChannel(ctx, topologyChannel, name)
 			}
 		}
 	}
@@ -105,15 +99,19 @@ func (c *client) startTopologyCache(ctx context.Context) {
 	<-ctx.Done()
 }
 
-func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest) {
+func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest, service string) {
 	for obj := range objs {
+		c.scope.Tagged(map[string]string{
+			"service": service,
+		}).SubScope("cache").Gauge("object_channel.queue_depth").Update(float64(len(objs)))
+
 		switch obj.Action {
 		case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
 			if err := c.setCache(ctx, obj.Resource); err != nil {
 				c.log.Error("Error setting cache", zap.Error(err))
 			}
 		case topologyv1.UpdateCacheRequest_DELETE:
-			if err := c.deleteCache(ctx, obj.Resource.Id); err != nil {
+			if err := c.deleteCache(ctx, obj.Resource.Id, obj.Resource.Pb.TypeUrl); err != nil {
 				c.log.Error("Error deleting cache", zap.Error(err))
 			}
 		default:
@@ -126,7 +124,7 @@ func (c *client) setCache(ctx context.Context, obj *topologyv1.Resource) error {
 	const upsertQuery = `
 		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
 		VALUES ($1, $2, $3, $4)
-		ON CONFLICT (id) DO UPDATE SET
+		ON CONFLICT (id, resolver_type_url) DO UPDATE SET
 			resolver_type_url = EXCLUDED.resolver_type_url,
 			data = EXCLUDED.data,
 			metadata = EXCLUDED.metadata,
@@ -162,12 +160,12 @@ func (c *client) setCache(ctx context.Context, obj *topologyv1.Resource) error {
 	return nil
 }
 
-func (c *client) deleteCache(ctx context.Context, id string) error {
+func (c *client) deleteCache(ctx context.Context, id, type_url string) error {
 	const deleteQuery = `
-		DELETE FROM topology_cache WHERE id = $1
+		DELETE FROM topology_cache WHERE id = $1 and resolver_type_url = $2
 	`
 
-	_, err := c.db.ExecContext(ctx, deleteQuery, id)
+	_, err := c.db.ExecContext(ctx, deleteQuery, id, type_url)
 	if err != nil {
 		c.scope.SubScope("cache").Counter("delete.failure").Inc(1)
 		return err
@@ -178,14 +176,19 @@ func (c *client) deleteCache(ctx context.Context, id string) error {
 }
 
 func (c *client) expireCache(ctx context.Context) {
-	// Delete all entries that are older than two hours
 	const expireQuery = `
-		DELETE FROM topology_cache WHERE updated_at <= NOW() - INTERVAL '120minutes';
+		DELETE FROM topology_cache WHERE updated_at <= NOW() - CAST ( $1 AS INTERVAL );
 	`
+
+	// Default expiration time is two hours
+	expireDuration := time.Hour * 2
+	if c.config.Cache.Ttl != nil {
+		expireDuration = c.config.Cache.Ttl.AsDuration()
+	}
 
 	ticker := time.NewTicker(time.Minute * 20)
 	for {
-		result, err := c.db.ExecContext(ctx, expireQuery)
+		result, err := c.db.ExecContext(ctx, expireQuery, strconv.Itoa(int(expireDuration.Seconds())))
 		if err != nil {
 			c.scope.SubScope("cache").Counter("expire.failure").Inc(1)
 			c.log.Error("unable to expire cache", zap.Error(err))

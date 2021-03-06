@@ -75,7 +75,7 @@ const Landing: React.FC<{}> = () => {
       <div className="welcome">
         <MonsterGraphic />
         <div className="welcomeText">
-          <div className="title">Welcome {userId()}</div>
+          <div className="title">Welcome&nbsp;{userId()}</div>
           <div className="subtitle">
             Clutch will assist you in safely modifying resources outside of the normal orchestration
             process.

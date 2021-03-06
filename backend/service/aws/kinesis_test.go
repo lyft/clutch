@@ -90,7 +90,8 @@ func TestDescribeStreamWithBadData(t *testing.T) {
 	}
 
 	_, err := c.DescribeKinesisStream(context.Background(), "us-east-1", "test-stream")
-	assert.EqualError(t, err, "AWS returned a negative value for the current shard count")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "AWS returned a negative value for the current shard count")
 }
 
 func TestUpdateShardCount(t *testing.T) {
@@ -109,7 +110,8 @@ func TestUpdateShardCount(t *testing.T) {
 	assert.EqualError(t, err1, "error")
 
 	err2 := c.UpdateKinesisShardCount(context.Background(), "us-east-1", "test-stream", 10)
-	assert.EqualError(t, err2, "new shard count should be a 25% increment of current shard count ranging from 50-200%")
+	assert.Error(t, err2)
+	assert.Contains(t, err2.Error(), "new shard count should be a 25% increment of current shard count ranging from 50-200%")
 }
 
 func TestGetRecommendedShardSizes(t *testing.T) {
@@ -155,8 +157,9 @@ func TestIsRecommendedChangeWithGoodData(t *testing.T) {
 }
 
 func TestIsRecommendedChangeWithBadData(t *testing.T) {
-	err1 := isRecommendedChange(testAwsStreamOuputWithBadData, int32(-100))
-	assert.EqualError(t, err1, "AWS returned a negative value for the current shard count")
+	err := isRecommendedChange(testAwsStreamOuputWithBadData, int32(-100))
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "AWS returned a negative value for the current shard count")
 }
 
 type mockKinesis struct {

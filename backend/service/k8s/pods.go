@@ -2,10 +2,10 @@ package k8s
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"strings"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -28,9 +28,9 @@ func (s *svc) DescribePod(ctx context.Context, clientset, cluster, namespace, na
 	if len(pods.Items) == 1 {
 		return podDescription(&pods.Items[0], cs.Cluster()), nil
 	} else if len(pods.Items) > 1 {
-		return nil, fmt.Errorf("Located multiple Pods")
+		return nil, status.Error(codes.FailedPrecondition, "located multiple pods")
 	}
-	return nil, fmt.Errorf("Unable to locate pod")
+	return nil, status.Error(codes.NotFound, "unable to locate specified pod")
 }
 
 func (s *svc) DeletePod(ctx context.Context, clientset, cluster, namespace, name string) error {
@@ -73,7 +73,7 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 // TODO: add support for updating pod labels
 func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name string, expectedObjectMetaFields *k8sapiv1.ExpectedObjectMetaFields, objectMetaFields *k8sapiv1.ObjectMetaFields, removeObjectMetaFields *k8sapiv1.RemoveObjectMetaFields) error {
 	if len(objectMetaFields.GetLabels()) > 0 || len(removeObjectMetaFields.GetLabels()) > 0 {
-		return errors.New("update of pod labels not implemented")
+		return status.Error(codes.InvalidArgument, "update of pod labels not implemented")
 	}
 
 	// Ensure that the caller is not trying to delete an annotation and update it at the same time
@@ -81,7 +81,7 @@ func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name
 	for _, annotation := range removeObjectMetaFields.GetAnnotations() {
 		_, annotationIsUpdated := newAnnotations[annotation]
 		if annotationIsUpdated {
-			return fmt.Errorf("annotation '%s' can't be updated and removed at once", annotation)
+			return status.Errorf(codes.InvalidArgument, "annotation '%s' can't be updated and removed at once", annotation)
 		}
 	}
 
@@ -120,7 +120,7 @@ func (s *svc) UpdatePod(ctx context.Context, clientset, cluster, namespace, name
 
 func (s *svc) checkExpectedObjectMetaFields(expectedObjectMetaFields *k8sapiv1.ExpectedObjectMetaFields, object metav1.Object) error {
 	if len(expectedObjectMetaFields.Labels) > 0 {
-		return errors.New("checking label expectations not implemented")
+		return status.Error(codes.InvalidArgument, "checking label expectations not implemented")
 	}
 
 	podAnnotations := object.GetAnnotations()

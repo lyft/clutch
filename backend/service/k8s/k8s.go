@@ -12,6 +12,7 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"golang.org/x/sync/semaphore"
+	batchv1 "k8s.io/api/batch/v1"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 	"k8s.io/client-go/tools/clientcmd"
 
@@ -93,6 +94,7 @@ type Service interface {
 	// Job management functions.
 	DeleteJob(ctx context.Context, clientset, cluster, namespace, name string) error
 	ListJobs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Job, error)
+	CreateJob(ctx context.Context, clientset, cluster, namespace string, job *batchv1.Job) (*k8sapiv1.Job, error)
 }
 
 type svc struct {
@@ -124,4 +126,9 @@ func (s *svc) Clientsets(ctx context.Context) ([]string, error) {
 		ret = append(ret, name)
 	}
 	return ret, nil
+}
+
+// Implement the interface provided by errorintercept, so errors are caught at middleware and converted to gRPC status.
+func (s *svc) InterceptError(e error) error {
+	return ConvertError(e)
 }

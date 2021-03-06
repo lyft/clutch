@@ -46,11 +46,11 @@ type Resolver interface {
 	Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResult, error)
 }
 
-const typePrefix = "type.googleapis.com/"
+const TypePrefix = "type.googleapis.com/"
 
 // Deprecated: use meta.TypeURL instead, will require moving to new proto APIs.
 func TypeURL(m proto.Message) string {
-	return typePrefix + string(proto.MessageReflect(m).Descriptor().FullName())
+	return TypePrefix + string(proto.MessageReflect(m).Descriptor().FullName())
 }
 
 func MarshalProtoSlice(pbs interface{}) ([]*any.Any, error) {

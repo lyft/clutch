@@ -7,7 +7,6 @@ package aws
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/proto"
@@ -21,7 +20,6 @@ import (
 	kinesisv1api "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	awsv1resolver "github.com/lyft/clutch/backend/api/resolver/aws/v1"
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/resolver"
 	"github.com/lyft/clutch/backend/service"
@@ -127,7 +125,7 @@ func (r *res) Resolve(ctx context.Context, wantTypeURL string, input proto.Messa
 		return r.resolveKinesisStreamForInput(ctx, input)
 
 	default:
-		return nil, fmt.Errorf("don't know how to resolve type %s", wantTypeURL)
+		return nil, status.Errorf(codes.Internal, "resolver for '%s' not implemented", wantTypeURL)
 	}
 }
 
@@ -147,39 +145,21 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 		return r.kinesisResults(ctx, resolver.OptionAll, query, limit)
 
 	default:
-		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("cannot search for type '%s'", typeURL))
+		return nil, status.Errorf(codes.Internal, "resolver search for '%s' not implemented", typeURL)
 	}
 }
 
 func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResult, error) {
 	if r.topology == nil {
-		return nil, fmt.Errorf("to use the autocomplete api you must first setup the topology service")
+		return nil, status.Error(codes.FailedPrecondition, "topology service must be enabled to use the AWS autocomplete API")
 	}
 
-	// TODO (mcutalo): Before implementing another resource to support autocomplete
-	// consider abstracting this into the topology service.
-	searchRequest := &topologyv1.SearchRequest{
-		PageToken: "0",
-		Limit:     resolver.DefaultAutocompleteLimit,
-		Sort: &topologyv1.SearchRequest_Sort{
-			Direction: topologyv1.SearchRequest_Sort_ASCENDING,
-			Field:     "column.id",
-		},
-		Filter: &topologyv1.SearchRequest_Filter{
-			TypeUrl: typeURL,
-			Search: &topologyv1.SearchRequest_Filter_Search{
-				Field: "column.id",
-				Text:  search,
-			},
-		},
-	}
-
-	// Limit is optional, if one is not set we use the default DefaultAutocompleteLimit
+	var resultLimit uint64 = resolver.DefaultAutocompleteLimit
 	if limit > 0 {
-		searchRequest.Limit = limit
+		resultLimit = limit
 	}
 
-	results, _, err := r.topology.Search(ctx, searchRequest)
+	results, err := r.topology.Autocomplete(ctx, typeURL, search, resultLimit)
 	if err != nil {
 		return nil, err
 	}

@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	"github.com/lyft/clutch/backend/resolver"
 )
 
@@ -59,18 +60,44 @@ func (r *response) marshalResults(results *resolver.Results) error {
 	return nil
 }
 
+func allStatusMatch(c codes.Code, sl []*statuspb.Status) bool {
+	if len(sl) == 0 {
+		return false
+	}
+
+	for _, s := range sl {
+		if s.Code != int32(c) {
+			return false
+		}
+	}
+	return true
+}
+
 func (r *response) isError(wanted string, searchedSchemas []string) error {
+	// If results, errors will be returned as partial failures.
 	if len(r.Results) > 0 {
 		return nil
 	}
 
-	msg := fmt.Sprintf("Did not find a '%s', looked by: %s", wanted, strings.Join(searchedSchemas, ", "))
+	wanted = strings.TrimPrefix(wanted, resolver.TypePrefix)
+	code := codes.NotFound
+	msg := fmt.Sprintf("search for '%s' returned no results", wanted)
 
+	// If there were failures and no results we wrap the errors.
 	if len(r.PartialFailures) > 0 {
-		s := status.New(codes.FailedPrecondition, msg)
-		s, _ = s.WithDetails(resolver.MessageSlice(r.PartialFailures)...)
+		// Use 400 unless all codes were 404.
+		if !allStatusMatch(codes.NotFound, r.PartialFailures) {
+			code = codes.FailedPrecondition
+			msg = fmt.Sprintf("one or more errors were encountered searching for '%s'", wanted)
+		}
+
+		s := status.New(code, msg)
+		s, _ = s.WithDetails(&apiv1.ErrorDetails{
+			// TODO: include searchedSchemas once add'l metadata support is added to API
+			Wrapped: r.PartialFailures,
+		})
 		return s.Err()
 	}
 
-	return status.Error(codes.NotFound, msg)
+	return status.Error(code, msg)
 }

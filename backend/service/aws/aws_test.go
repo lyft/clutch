@@ -12,11 +12,13 @@ import (
 	astypes "github.com/aws/aws-sdk-go-v2/service/autoscaling/types"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
+	"github.com/aws/smithy-go"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
+	"google.golang.org/grpc/status"
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
@@ -58,7 +60,8 @@ func TestNew(t *testing.T) {
 
 func TestNewWithWrongConfigType(t *testing.T) {
 	_, err := New(&any.Any{TypeUrl: "foo"}, nil, nil)
-	assert.EqualError(t, err, "mismatched message type: got \"foo\" want \"clutch.config.service.aws.v1.Config\"")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "mismatched message type")
 }
 
 func TestRegions(t *testing.T) {
@@ -73,13 +76,28 @@ func TestMissingRegionOnEachServiceCall(t *testing.T) {
 	}
 
 	_, err := c.DescribeInstances(context.Background(), "us-north-5", nil)
-	assert.EqualError(t, err, "no client found for region 'us-north-5'")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "no client found")
 
 	err = c.TerminateInstances(context.Background(), "us-north-5", nil)
-	assert.EqualError(t, err, "no client found for region 'us-north-5'")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "no client found")
 
 	err = c.RebootInstances(context.Background(), "us-north-5", nil)
-	assert.EqualError(t, err, "no client found for region 'us-north-5'")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "no client found")
+}
+
+func TestGetRegionalClient(t *testing.T) {
+	c := &client{
+		clients: map[string]*regionalClient{"us-east-1": nil},
+	}
+	_, err := c.getRegionalClient("us-east-1")
+	assert.NoError(t, err)
+
+	_, err = c.getRegionalClient("us-north-5")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "no client found")
 }
 
 var testInstance = ec2types.Instance{
@@ -341,6 +359,21 @@ func TestDescribeAutoscalingGroupsErrorHandling(t *testing.T) {
 	asg2, err2 := c.DescribeAutoscalingGroups(context.Background(), "unknown-region", []string{"asgname"})
 	assert.Nil(t, asg2)
 	assert.Error(t, err2)
+}
+
+func TestErrorIntercept(t *testing.T) {
+	c := &client{}
+	{
+		origErr := newResponseError(400, &smithy.GenericAPIError{Code: "whoopsie", Message: "bad"})
+		err := c.InterceptError(origErr)
+		_, ok := status.FromError(err)
+		assert.True(t, ok)
+	}
+	{
+		origErr := errors.New("foo")
+		err := c.InterceptError(origErr)
+		assert.Equal(t, origErr, err)
+	}
 }
 
 type mockEC2 struct {

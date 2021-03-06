@@ -8,7 +8,7 @@ TOOLS_MODULE_DIR := $(shell cd backend && go list -f "{{ "{{" }} .Dir {{ "}}" }}
 MY_ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 .PHONY: all # Generate API, Frontend, and backend assets.
-all: api frontend backend-with-assets
+all: api frontend backend-tidy backend-with-assets
 
 .PHONY: api
 api: yarn-ensure
@@ -25,6 +25,9 @@ backend-dev:
 .PHONY: backend-test
 backend-test:
 	cd backend && go test -race -covermode=atomic ./...
+
+backend-tidy:
+	cd backend && go mod tidy
 
 .PHONY: backend-with-assets
 backend-with-assets: frontend

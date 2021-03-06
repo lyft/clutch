@@ -20,6 +20,22 @@ func (s *svc) DeleteJob(ctx context.Context, clientset, cluster, namespace, name
 	return cs.BatchV1().Jobs(cs.Namespace()).Delete(ctx, name, opts)
 }
 
+func (s *svc) CreateJob(ctx context.Context, clientset, cluster, namespace string, job *v1.Job) (*k8sapiv1.Job, error) {
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
+	if err != nil {
+		return nil, err
+	}
+
+	opts := metav1.CreateOptions{}
+
+	resultJob, err := cs.BatchV1().Jobs(cs.Namespace()).Create(ctx, job, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	return protoForJob(cs.Cluster(), resultJob), nil
+}
+
 func (s *svc) ListJobs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Job, error) {
 	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {

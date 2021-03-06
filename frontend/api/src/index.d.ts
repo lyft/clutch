@@ -264,6 +264,54 @@ export namespace clutch {
                  */
                 public toJSON(): { [k: string]: any };
             }
+
+            /** Properties of an ErrorDetails. */
+            interface IErrorDetails {
+
+                /** ErrorDetails wrapped */
+                wrapped?: (google.rpc.IStatus[]|null);
+            }
+
+            /** Represents an ErrorDetails. */
+            class ErrorDetails implements IErrorDetails {
+
+                /**
+                 * Constructs a new ErrorDetails.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.api.v1.IErrorDetails);
+
+                /** ErrorDetails wrapped. */
+                public wrapped: google.rpc.IStatus[];
+
+                /**
+                 * Verifies an ErrorDetails message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an ErrorDetails message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns ErrorDetails
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.api.v1.ErrorDetails;
+
+                /**
+                 * Creates a plain object from an ErrorDetails message. Also converts values to other types if specified.
+                 * @param message ErrorDetails
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.api.v1.ErrorDetails, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this ErrorDetails to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
         }
     }
 
@@ -3893,6 +3941,117 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
+                /** Properties of a RedisFaultConfig. */
+                interface IRedisFaultConfig {
+
+                    /** RedisFaultConfig faultTargeting */
+                    faultTargeting?: (clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting|null);
+
+                    /** RedisFaultConfig errorFault */
+                    errorFault?: (clutch.chaos.serverexperimentation.v1.IRedisErrorFault|null);
+
+                    /** RedisFaultConfig latencyFault */
+                    latencyFault?: (clutch.chaos.serverexperimentation.v1.ILatencyFault|null);
+                }
+
+                /** Represents a RedisFaultConfig. */
+                class RedisFaultConfig implements IRedisFaultConfig {
+
+                    /**
+                     * Constructs a new RedisFaultConfig.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IRedisFaultConfig);
+
+                    /** RedisFaultConfig faultTargeting. */
+                    public faultTargeting?: (clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting|null);
+
+                    /** RedisFaultConfig errorFault. */
+                    public errorFault?: (clutch.chaos.serverexperimentation.v1.IRedisErrorFault|null);
+
+                    /** RedisFaultConfig latencyFault. */
+                    public latencyFault?: (clutch.chaos.serverexperimentation.v1.ILatencyFault|null);
+
+                    /** RedisFaultConfig fault. */
+                    public fault?: ("errorFault"|"latencyFault");
+
+                    /**
+                     * Verifies a RedisFaultConfig message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a RedisFaultConfig message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns RedisFaultConfig
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.RedisFaultConfig;
+
+                    /**
+                     * Creates a plain object from a RedisFaultConfig message. Also converts values to other types if specified.
+                     * @param message RedisFaultConfig
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.RedisFaultConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this RedisFaultConfig to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a RedisErrorFault. */
+                interface IRedisErrorFault {
+
+                    /** RedisErrorFault percentage */
+                    percentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
+                }
+
+                /** Represents a RedisErrorFault. */
+                class RedisErrorFault implements IRedisErrorFault {
+
+                    /**
+                     * Constructs a new RedisErrorFault.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IRedisErrorFault);
+
+                    /** RedisErrorFault percentage. */
+                    public percentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
+
+                    /**
+                     * Verifies a RedisErrorFault message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a RedisErrorFault message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns RedisErrorFault
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.RedisErrorFault;
+
+                    /**
+                     * Creates a plain object from a RedisErrorFault message. Also converts values to other types if specified.
+                     * @param message RedisErrorFault
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.RedisErrorFault, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this RedisErrorFault to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
                 /** Properties of an AbortFault. */
                 interface IAbortFault {
 
@@ -3996,6 +4155,66 @@ export namespace clutch {
 
                     /**
                      * Converts this LatencyFault to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a RedisFaultTargeting. */
+                interface IRedisFaultTargeting {
+
+                    /** RedisFaultTargeting upstreamCluster */
+                    upstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
+
+                    /** RedisFaultTargeting downstreamCluster */
+                    downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
+
+                    /** RedisFaultTargeting redisCommands */
+                    redisCommands?: (string[]|null);
+                }
+
+                /** Represents a RedisFaultTargeting. */
+                class RedisFaultTargeting implements IRedisFaultTargeting {
+
+                    /**
+                     * Constructs a new RedisFaultTargeting.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting);
+
+                    /** RedisFaultTargeting upstreamCluster. */
+                    public upstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
+
+                    /** RedisFaultTargeting downstreamCluster. */
+                    public downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
+
+                    /** RedisFaultTargeting redisCommands. */
+                    public redisCommands: string[];
+
+                    /**
+                     * Verifies a RedisFaultTargeting message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a RedisFaultTargeting message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns RedisFaultTargeting
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.RedisFaultTargeting;
+
+                    /**
+                     * Creates a plain object from a RedisFaultTargeting message. Also converts values to other types if specified.
+                     * @param message RedisFaultTargeting
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.serverexperimentation.v1.RedisFaultTargeting, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this RedisFaultTargeting to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -6846,6 +7065,9 @@ export namespace clutch {
 
                             /** Config connection */
                             connection?: (clutch.config.service.db.postgres.v1.IConnection|null);
+
+                            /** Config maxIdleConnections */
+                            maxIdleConnections?: (number|null);
                         }
 
                         /** Represents a Config. */
@@ -6859,6 +7081,9 @@ export namespace clutch {
 
                             /** Config connection. */
                             public connection?: (clutch.config.service.db.postgres.v1.IConnection|null);
+
+                            /** Config maxIdleConnections. */
+                            public maxIdleConnections: number;
 
                             /**
                              * Verifies a Config message.
@@ -9418,6 +9643,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public deleteJob(request: clutch.k8s.v1.IDeleteJobRequest): Promise<clutch.k8s.v1.DeleteJobResponse>;
+
+                /**
+                 * Calls CreateJob.
+                 * @param request CreateJobRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and CreateJobResponse
+                 */
+                public createJob(request: clutch.k8s.v1.ICreateJobRequest, callback: clutch.k8s.v1.K8sAPI.CreateJobCallback): void;
+
+                /**
+                 * Calls CreateJob.
+                 * @param request CreateJobRequest message or plain object
+                 * @returns Promise
+                 */
+                public createJob(request: clutch.k8s.v1.ICreateJobRequest): Promise<clutch.k8s.v1.CreateJobResponse>;
             }
 
             namespace K8sAPI {
@@ -9589,6 +9828,13 @@ export namespace clutch {
                  * @param [response] DeleteJobResponse
                  */
                 type DeleteJobCallback = (error: (Error|null), response?: clutch.k8s.v1.DeleteJobResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#createJob}.
+                 * @param error Error, if any
+                 * @param [response] CreateJobResponse
+                 */
+                type CreateJobCallback = (error: (Error|null), response?: clutch.k8s.v1.CreateJobResponse) => void;
             }
 
             /** Properties of a DescribePodRequest. */
@@ -12235,6 +12481,18 @@ export namespace clutch {
 
                 /** CronJob annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** CronJob suspend */
+                suspend?: (boolean|null);
+
+                /** CronJob numActiveJobs */
+                numActiveJobs?: (number|null);
+
+                /** CronJob concurrencyPolicy */
+                concurrencyPolicy?: (clutch.k8s.v1.CronJob.ConcurrencyPolicy|null);
+
+                /** CronJob startingDeadlineSeconds */
+                startingDeadlineSeconds?: (google.protobuf.IInt64Value|null);
             }
 
             /** Represents a CronJob. */
@@ -12264,6 +12522,18 @@ export namespace clutch {
                 /** CronJob annotations. */
                 public annotations: { [k: string]: string };
 
+                /** CronJob suspend. */
+                public suspend: boolean;
+
+                /** CronJob numActiveJobs. */
+                public numActiveJobs: number;
+
+                /** CronJob concurrencyPolicy. */
+                public concurrencyPolicy: clutch.k8s.v1.CronJob.ConcurrencyPolicy;
+
+                /** CronJob startingDeadlineSeconds. */
+                public startingDeadlineSeconds?: (google.protobuf.IInt64Value|null);
+
                 /**
                  * Verifies a CronJob message.
                  * @param message Plain object to verify
@@ -12291,6 +12561,18 @@ export namespace clutch {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace CronJob {
+
+                /** ConcurrencyPolicy enum. */
+                enum ConcurrencyPolicy {
+                    UNSPECIFIED = 0,
+                    UNKNOWN = 1,
+                    ALLOW = 2,
+                    FORBID = 3,
+                    REPLACE = 4
+                }
             }
 
             /** Properties of a DescribeCronJobRequest. */
@@ -12652,6 +12934,12 @@ export namespace clutch {
 
                 /** ConfigMap labels */
                 labels?: ({ [k: string]: string }|null);
+
+                /** ConfigMap data */
+                data?: ({ [k: string]: string }|null);
+
+                /** ConfigMap binaryData */
+                binaryData?: ({ [k: string]: Uint8Array }|null);
             }
 
             /** Represents a ConfigMap. */
@@ -12677,6 +12965,12 @@ export namespace clutch {
 
                 /** ConfigMap labels. */
                 public labels: { [k: string]: string };
+
+                /** ConfigMap data. */
+                public data: { [k: string]: string };
+
+                /** ConfigMap binaryData. */
+                public binaryData: { [k: string]: Uint8Array };
 
                 /**
                  * Verifies a ConfigMap message.
@@ -13349,6 +13643,168 @@ export namespace clutch {
                 public toJSON(): { [k: string]: any };
             }
 
+            /** Properties of a JobConfig. */
+            interface IJobConfig {
+
+                /** JobConfig value */
+                value?: (google.protobuf.IValue|null);
+            }
+
+            /** Represents a JobConfig. */
+            class JobConfig implements IJobConfig {
+
+                /**
+                 * Constructs a new JobConfig.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IJobConfig);
+
+                /** JobConfig value. */
+                public value?: (google.protobuf.IValue|null);
+
+                /**
+                 * Verifies a JobConfig message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a JobConfig message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns JobConfig
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.JobConfig;
+
+                /**
+                 * Creates a plain object from a JobConfig message. Also converts values to other types if specified.
+                 * @param message JobConfig
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.JobConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this JobConfig to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a CreateJobRequest. */
+            interface ICreateJobRequest {
+
+                /** CreateJobRequest clientset */
+                clientset?: (string|null);
+
+                /** CreateJobRequest cluster */
+                cluster?: (string|null);
+
+                /** CreateJobRequest namespace */
+                namespace?: (string|null);
+
+                /** CreateJobRequest jobConfig */
+                jobConfig?: (clutch.k8s.v1.IJobConfig|null);
+            }
+
+            /** Represents a CreateJobRequest. */
+            class CreateJobRequest implements ICreateJobRequest {
+
+                /**
+                 * Constructs a new CreateJobRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.ICreateJobRequest);
+
+                /** CreateJobRequest clientset. */
+                public clientset: string;
+
+                /** CreateJobRequest cluster. */
+                public cluster: string;
+
+                /** CreateJobRequest namespace. */
+                public namespace: string;
+
+                /** CreateJobRequest jobConfig. */
+                public jobConfig?: (clutch.k8s.v1.IJobConfig|null);
+
+                /**
+                 * Verifies a CreateJobRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CreateJobRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CreateJobRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.CreateJobRequest;
+
+                /**
+                 * Creates a plain object from a CreateJobRequest message. Also converts values to other types if specified.
+                 * @param message CreateJobRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.CreateJobRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CreateJobRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a CreateJobResponse. */
+            interface ICreateJobResponse {
+
+                /** CreateJobResponse job */
+                job?: (clutch.k8s.v1.IJob|null);
+            }
+
+            /** Represents a CreateJobResponse. */
+            class CreateJobResponse implements ICreateJobResponse {
+
+                /**
+                 * Constructs a new CreateJobResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.ICreateJobResponse);
+
+                /** CreateJobResponse job. */
+                public job?: (clutch.k8s.v1.IJob|null);
+
+                /**
+                 * Verifies a CreateJobResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CreateJobResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CreateJobResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.CreateJobResponse;
+
+                /**
+                 * Creates a plain object from a CreateJobResponse message. Also converts values to other types if specified.
+                 * @param message CreateJobResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.CreateJobResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CreateJobResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
             /** Properties of a NullableString. */
             interface INullableString {
 
@@ -13563,6 +14019,210 @@ export namespace clutch {
 
                 /**
                  * Converts this RemoveObjectMetaFields to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Status. */
+            interface IStatus {
+
+                /** Status status */
+                status?: (string|null);
+
+                /** Status message */
+                message?: (string|null);
+
+                /** Status reason */
+                reason?: (string|null);
+
+                /** Status code */
+                code?: (number|null);
+
+                /** Status details */
+                details?: (clutch.k8s.v1.IStatusDetails|null);
+            }
+
+            /** Represents a Status. */
+            class Status implements IStatus {
+
+                /**
+                 * Constructs a new Status.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IStatus);
+
+                /** Status status. */
+                public status: string;
+
+                /** Status message. */
+                public message: string;
+
+                /** Status reason. */
+                public reason: string;
+
+                /** Status code. */
+                public code: number;
+
+                /** Status details. */
+                public details?: (clutch.k8s.v1.IStatusDetails|null);
+
+                /**
+                 * Verifies a Status message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Status message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Status
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Status;
+
+                /**
+                 * Creates a plain object from a Status message. Also converts values to other types if specified.
+                 * @param message Status
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.Status, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Status to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a StatusDetails. */
+            interface IStatusDetails {
+
+                /** StatusDetails name */
+                name?: (string|null);
+
+                /** StatusDetails group */
+                group?: (string|null);
+
+                /** StatusDetails kind */
+                kind?: (string|null);
+
+                /** StatusDetails uid */
+                uid?: (string|null);
+
+                /** StatusDetails causes */
+                causes?: (clutch.k8s.v1.IStatusCause[]|null);
+            }
+
+            /** Represents a StatusDetails. */
+            class StatusDetails implements IStatusDetails {
+
+                /**
+                 * Constructs a new StatusDetails.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IStatusDetails);
+
+                /** StatusDetails name. */
+                public name: string;
+
+                /** StatusDetails group. */
+                public group: string;
+
+                /** StatusDetails kind. */
+                public kind: string;
+
+                /** StatusDetails uid. */
+                public uid: string;
+
+                /** StatusDetails causes. */
+                public causes: clutch.k8s.v1.IStatusCause[];
+
+                /**
+                 * Verifies a StatusDetails message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a StatusDetails message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns StatusDetails
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.StatusDetails;
+
+                /**
+                 * Creates a plain object from a StatusDetails message. Also converts values to other types if specified.
+                 * @param message StatusDetails
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.StatusDetails, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this StatusDetails to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a StatusCause. */
+            interface IStatusCause {
+
+                /** StatusCause type */
+                type?: (string|null);
+
+                /** StatusCause message */
+                message?: (string|null);
+
+                /** StatusCause field */
+                field?: (string|null);
+            }
+
+            /** Represents a StatusCause. */
+            class StatusCause implements IStatusCause {
+
+                /**
+                 * Constructs a new StatusCause.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IStatusCause);
+
+                /** StatusCause type. */
+                public type: string;
+
+                /** StatusCause message. */
+                public message: string;
+
+                /** StatusCause field. */
+                public field: string;
+
+                /**
+                 * Verifies a StatusCause message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a StatusCause message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns StatusCause
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.StatusCause;
+
+                /**
+                 * Creates a plain object from a StatusCause message. Also converts values to other types if specified.
+                 * @param message StatusCause
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.StatusCause, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this StatusCause to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -21265,6 +21925,70 @@ export namespace google {
         }
     }
 
+    /** Namespace rpc. */
+    namespace rpc {
+
+        /** Properties of a Status. */
+        interface IStatus {
+
+            /** Status code */
+            code?: (number|null);
+
+            /** Status message */
+            message?: (string|null);
+
+            /** Status details */
+            details?: (google.protobuf.IAny[]|null);
+        }
+
+        /** Represents a Status. */
+        class Status implements IStatus {
+
+            /**
+             * Constructs a new Status.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: google.rpc.IStatus);
+
+            /** Status code. */
+            public code: number;
+
+            /** Status message. */
+            public message: string;
+
+            /** Status details. */
+            public details: google.protobuf.IAny[];
+
+            /**
+             * Verifies a Status message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Status message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Status
+             */
+            public static fromObject(object: { [k: string]: any }): google.rpc.Status;
+
+            /**
+             * Creates a plain object from a Status message. Also converts values to other types if specified.
+             * @param message Status
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: google.rpc.Status, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Status to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+    }
+
     /** Namespace api. */
     namespace api {
 
@@ -21476,70 +22200,6 @@ export namespace google {
 
             /**
              * Converts this CustomHttpPattern to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-    }
-
-    /** Namespace rpc. */
-    namespace rpc {
-
-        /** Properties of a Status. */
-        interface IStatus {
-
-            /** Status code */
-            code?: (number|null);
-
-            /** Status message */
-            message?: (string|null);
-
-            /** Status details */
-            details?: (google.protobuf.IAny[]|null);
-        }
-
-        /** Represents a Status. */
-        class Status implements IStatus {
-
-            /**
-             * Constructs a new Status.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: google.rpc.IStatus);
-
-            /** Status code. */
-            public code: number;
-
-            /** Status message. */
-            public message: string;
-
-            /** Status details. */
-            public details: google.protobuf.IAny[];
-
-            /**
-             * Verifies a Status message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a Status message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns Status
-             */
-            public static fromObject(object: { [k: string]: any }): google.rpc.Status;
-
-            /**
-             * Creates a plain object from a Status message. Also converts values to other types if specified.
-             * @param message Status
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.rpc.Status, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this Status to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
