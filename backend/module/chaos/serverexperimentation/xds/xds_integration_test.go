@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
+	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
 	"testing"
 	"time"
 
@@ -15,13 +16,12 @@ import (
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/internal/test/integration/helper/envoytest"
-	xds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/testing"
 )
 
 // These tests are intended to be run with docker-compose to in order to set up a running Envoy instance
 // to run assertions against.
 func TestEnvoyFaults(t *testing.T) {
-	ts := xds_testing.NewTestServer(New, true)
+	ts := xdstest.NewTestModuleServer(New, true)
 	defer ts.Stop()
 
 	e, err := envoytest.NewEnvoyHandle()

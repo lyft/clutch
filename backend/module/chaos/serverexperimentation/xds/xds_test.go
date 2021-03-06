@@ -3,6 +3,7 @@ package xds
 import (
 	"context"
 	"errors"
+	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
 	"testing"
 	"time"
 
@@ -15,11 +16,10 @@ import (
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
-	rtds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/testing"
 )
 
 func TestServerStats(t *testing.T) {
-	testServer := rtds_testing.NewTestServer(New, false)
+	testServer := xdstest.NewTestModuleServer(New, false)
 	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -49,7 +49,7 @@ func TestServerStats(t *testing.T) {
 
 // Verifies that TTL and heartbeating is done when configured to do so.
 func TestResourceTTL(t *testing.T) {
-	testServer := rtds_testing.NewTestServer(New, true)
+	testServer := xdstest.NewTestModuleServer(New, true)
 	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -172,7 +172,7 @@ type v3StreamWrapper struct {
 	cluster string
 }
 
-func newV3Stream(ctx context.Context, layer string, cluster string, t rtds_testing.TestServer) (*v3StreamWrapper, error) {
+func newV3Stream(ctx context.Context, layer string, cluster string, t *xdstest.TestModuleServer) (*v3StreamWrapper, error) {
 	conn, err := t.ClientConn()
 	if err != nil {
 		return nil, err
