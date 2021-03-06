@@ -1,6 +1,6 @@
 // +build integration_only
 
-package rtds
+package xds
 
 import (
 	"context"
@@ -13,15 +13,14 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
-	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds"
-	"github.com/lyft/clutch/backend/test/envoy"
 	xds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/testing"
+	"github.com/lyft/clutch/backend/test/envoy"
 )
 
 // These tests are intended to be run with docker-compose to in order to set up a running Envoy instance
 // to run assertions against.
 func TestEnvoyFaults(t *testing.T) {
-	ts := xds_testing.NewTestServer(t, xds.New, true)
+	ts := xds_testing.NewTestServer(t, New, true)
 	defer ts.Stop()
 
 	e, err := testenvoy.NewEnvoyHandle()
