@@ -14,17 +14,17 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	"github.com/lyft/clutch/backend/internal/test/integration/helper/envoytest"
 	xds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/testing"
-	"github.com/lyft/clutch/backend/test/envoy"
 )
 
 // These tests are intended to be run with docker-compose to in order to set up a running Envoy instance
 // to run assertions against.
 func TestEnvoyFaults(t *testing.T) {
-	ts := xds_testing.NewTestServer(t, New, true)
+	ts := xds_testing.NewTestServer(New, true)
 	defer ts.Stop()
 
-	e, err := testenvoy.NewEnvoyHandle()
+	e, err := envoytest.NewEnvoyHandle()
 	assert.NoError(t, err)
 
 	code, err := e.MakeSimpleCall()
@@ -93,7 +93,7 @@ type awaitReturnValueParams struct {
 	expectedStatus int
 }
 
-func awaitExpectedReturnValueForSimpleCall(t *testing.T, e *testenvoy.EnvoyHandle, params awaitReturnValueParams) error {
+func awaitExpectedReturnValueForSimpleCall(t *testing.T, e *envoytest.EnvoyHandle, params awaitReturnValueParams) error {
 	timeout := time.NewTimer(params.timeout)
 
 	for range time.NewTicker(100 * time.Millisecond).C {

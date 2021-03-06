@@ -19,7 +19,7 @@ import (
 )
 
 func TestServerStats(t *testing.T) {
-	testServer := rtds_testing.NewTestServer(t, New, false)
+	testServer := rtds_testing.NewTestServer(New, false)
 	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -49,7 +49,7 @@ func TestServerStats(t *testing.T) {
 
 // Verifies that TTL and heartbeating is done when configured to do so.
 func TestResourceTTL(t *testing.T) {
-	testServer := rtds_testing.NewTestServer(t, New, true)
+	testServer := rtds_testing.NewTestServer(New, true)
 	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())

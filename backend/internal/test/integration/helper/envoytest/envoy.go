@@ -1,4 +1,4 @@
-package testenvoy
+package envoytest
 
 import (
 	"bytes"

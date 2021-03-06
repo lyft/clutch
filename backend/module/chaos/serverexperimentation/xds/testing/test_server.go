@@ -3,12 +3,10 @@ package testing
 import (
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
 	"net"
-	"testing"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -28,8 +26,7 @@ type TestServer struct {
 	Storer    *experimentstoremock.SimpleStorer
 }
 
-func NewTestServer(t *testing.T, c func(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error), ttl bool) TestServer {
-	t.Helper()
+func NewTestServer(c func(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error), ttl bool) TestServer {
 	server := TestServer{}
 
 	server.Storer = &experimentstoremock.SimpleStorer{}
@@ -54,25 +51,37 @@ func NewTestServer(t *testing.T, c func(cfg *any.Any, logger *zap.Logger, scope 
 
 	server.registrar = moduletest.NewRegisterChecker()
 
-	any, err := ptypes.MarshalAny(config)
-	assert.NoError(t, err)
+	cfg, err := ptypes.MarshalAny(config)
+	if err != nil {
+		panic(err)
+	}
 	server.Scope = tally.NewTestScope("test", nil)
 
 	logger, err := zap.NewDevelopment()
-	assert.NoError(t, err)
-	m, err := c(any, logger, server.Scope)
-	assert.NoError(t, err)
+	if err != nil {
+		panic(err)
+	}
+	m, err := c(cfg, logger, server.Scope)
+	if err != nil {
+		panic(err)
+	}
 
 	err = m.Register(server.registrar)
-	assert.NoError(t, err)
+	if err != nil {
+		panic(err)
+	}
 
 	go func() {
 		//nolint:gosec
 		l, err := net.Listen("tcp", "0.0.0.0:9000")
-		assert.NoError(t, err)
+		if err != nil {
+			panic(err)
+		}
 
 		err = server.registrar.GRPCServer().Serve(l)
-		assert.NoError(t, err)
+		if err != nil {
+			panic(err)
+		}
 	}()
 
 	return server
