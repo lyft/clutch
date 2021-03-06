@@ -50,6 +50,7 @@ type auditTemplateData struct {
 	Response map[string]interface{}
 }
 
+// TODO: (sperry) expand on helper funcs
 // helper functions to format values in the Go template
 var funcMap = template.FuncMap{
 	// for inputs that are type slice/map, returns a formatted slack list OR `N/A` if the slice/map is empty
@@ -141,7 +142,11 @@ func FormatCustomText(message string, event *auditv1.RequestEvent) (string, erro
 		return "", err
 	}
 
-	return buf.String(), nil
+	// When a value is nil, the Go Template returns "<no value>" in its place. Replacing this with null instead.
+	// We hit this scenario with https://github.com/lyft/clutch/blob/main/api/k8s/v1/k8s.proto#L860
+	sanitized := strings.ReplaceAll(buf.String(), "<no value>", "null")
+
+	return sanitized, nil
 }
 
 // returns the API request/response details saved in an audit event
@@ -176,6 +181,9 @@ func getAuditTemplateData(event *auditv1.RequestEvent) (*auditTemplateData, erro
 
 // for inputs that are type slice/map, returns a formatted slack list OR "None" if the slice/map is empty
 func slackList(data interface{}) string {
+	if data == nil {
+		return "None"
+	}
 	var b strings.Builder
 	const sliceItemFormat = "\n- %v"
 	const mapItemFormat = "\n- %v: %v"

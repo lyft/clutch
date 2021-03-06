@@ -61,11 +61,12 @@ func TestFormatCustomText(t *testing.T) {
 	anyEc2Resp, _ := anypb.New(&ec2v1.ResizeAutoscalingGroupResponse{})
 
 	anyK8sDescribeReq, _ := anypb.New(&k8sapiv1.DescribePodRequest{Name: "foo"})
-	anyK8sDescribeResp, _ := anypb.New(&k8sapiv1.DescribePodResponse{Pod: &k8sapiv1.Pod{PodIp: "000"}})
+	anyK8sDescribeResp, _ := anypb.New(&k8sapiv1.DescribePodResponse{Pod: &k8sapiv1.Pod{PodIp: "000", Labels: map[string]string{}}})
 
 	k8sUpdateReq := &k8sapiv1.UpdatePodRequest{
 		ExpectedObjectMetaFields: &k8sapiv1.ExpectedObjectMetaFields{
 			Annotations: map[string]*k8sapiv1.NullableString{
+				"baz": &k8sapiv1.NullableString{Kind: &k8sapiv1.NullableString_Null{}},
 				"foo": &k8sapiv1.NullableString{Kind: &k8sapiv1.NullableString_Value{Value: "new-value"}},
 			},
 		},
@@ -100,6 +101,15 @@ func TestFormatCustomText(t *testing.T) {
 			},
 			expectedOutput: "foo ip address is 000",
 		},
+		// metdata (labels) value is nil
+		{
+			text: "{{.Request.name}} labels: {{slackList .Response.pod.labels}}",
+			event: &auditv1.RequestEvent{
+				RequestMetadata:  &auditv1.RequestMetadata{Body: anyK8sDescribeReq},
+				ResponseMetadata: &auditv1.ResponseMetadata{Body: anyK8sDescribeResp},
+			},
+			expectedOutput: "foo labels: None",
+		},
 		// metadata that is a map, uses helper slackList
 		{
 			text: "*Updated labels*:{{slackList .Request.objectMetaFields.labels}}",
@@ -126,7 +136,7 @@ func TestFormatCustomText(t *testing.T) {
 				RequestMetadata:  &auditv1.RequestMetadata{Body: anyK8sUpdateReq},
 				ResponseMetadata: &auditv1.ResponseMetadata{Body: anyK8UpdateResp},
 			},
-			expectedOutput: "*Expected Preconditions*:\n- foo: new-value",
+			expectedOutput: "*Expected Preconditions*:\n- baz: null\n- foo: new-value",
 		},
 		// invalid field name
 		{
@@ -182,6 +192,10 @@ func TestSlackList(t *testing.T) {
 		},
 		{
 			input:          []string{},
+			expectedOutput: "None",
+		},
+		{
+			input:          nil,
 			expectedOutput: "None",
 		},
 	}

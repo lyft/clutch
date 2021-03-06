@@ -117,7 +117,7 @@ func parseFile(path string, pb proto.Message, template bool) error {
 
 		Solution is to use Clutch-specific templating tokens in the config that are then replaced
 		with the Go Template synax
-		1) $$ in lieu $
+		1) $$ in lieu of $
 		2) [[ ]] in lieu of {{ }}
 	*/
 
