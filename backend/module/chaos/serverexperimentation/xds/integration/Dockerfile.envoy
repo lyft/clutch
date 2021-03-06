@@ -1,7 +1,5 @@
-FROM golang:1.15.6 AS build
-
-COPY . /build
-
+FROM golang:1.16.0 AS build
+COPY . /code
 RUN cd /build/module/chaos/serverexperimentation/xds/integration/config && go build -o /generate_config
 RUN /generate_config > /config.json
 

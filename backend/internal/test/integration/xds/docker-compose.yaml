@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  envoy:
+    build:
+      context: ../../../.. # backend root directory
+      dockerfile: internal/test/integration/xds/envoy.Dockerfile
+    ports:
+      - "10000:10000"
+      - "9901:9901"
