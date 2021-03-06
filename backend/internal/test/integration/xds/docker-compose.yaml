@@ -8,3 +8,10 @@ services:
     ports:
       - "10000:10000"
       - "9901:9901"
+  test_runner:
+    build:
+      context: ../../../.. # backend root directory
+      dockerfile: internal/test/integration/xds/testrunner.Dockerfile
+    command: /testrunner
+    ports:
+      - "9000:9000"
