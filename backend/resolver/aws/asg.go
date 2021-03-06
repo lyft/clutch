@@ -25,7 +25,6 @@ func (r *res) autoscalingGroupResults(ctx context.Context, region string, ids []
 	ctx, handler := resolver.NewFanoutHandler(ctx)
 
 	for _, id := range ids {
-		// if the pattern matches then proceeded
 		patternValues, ok, err := meta.ExtractPatternValuesFromString((*ec2v1.AutoscalingGroup)(nil), id)
 		if err != nil {
 			return nil, err

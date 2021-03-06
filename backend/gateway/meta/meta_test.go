@@ -280,6 +280,13 @@ func TestPatternValueMapping(t *testing.T) {
 			result: map[string]string{},
 			ok:     false,
 		},
+		{
+			id:     "failed match results should have nil values",
+			pb:     &k8sapiv1.Deployment{},
+			search: "cluster/namespace",
+			result: map[string]string{},
+			ok:     false,
+		},
 	}
 
 	for _, tt := range tests {
