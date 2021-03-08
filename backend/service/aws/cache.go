@@ -87,9 +87,16 @@ func (c *client) processAllAutoScalingGroups(ctx context.Context, client *region
 				c.log.Error("unable to marshal asg proto", zap.Error(err))
 				continue
 			}
+
+			patternId, err := meta.HydratedPatternForProto(protoAsg)
+			if err != nil {
+				c.log.Error("unable to get proto id from pattern", zap.Error(err))
+				continue
+			}
+
 			c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 				Resource: &topologyv1.Resource{
-					Id: meta.HydratedPatternForProto(protoAsg),
+					Id: patternId,
 					Pb: asgAny,
 				},
 				Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
@@ -121,9 +128,16 @@ func (c *client) processAllEC2Instances(ctx context.Context, client *regionalCli
 					c.log.Error("unable to marshal instance proto", zap.Error(err))
 					continue
 				}
+
+				patternId, err := meta.HydratedPatternForProto(protoInstance)
+				if err != nil {
+					c.log.Error("unable to get proto id from pattern", zap.Error(err))
+					continue
+				}
+
 				c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 					Resource: &topologyv1.Resource{
-						Id: meta.HydratedPatternForProto(protoInstance),
+						Id: patternId,
 						Pb: instanceAny,
 					},
 					Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
@@ -167,9 +181,15 @@ func (c *client) processAllKinesisStreams(ctx context.Context, client *regionalC
 				continue
 			}
 
+			patternId, err := meta.HydratedPatternForProto(v1Stream)
+			if err != nil {
+				c.log.Error("unable to get proto id from pattern", zap.Error(err))
+				continue
+			}
+
 			c.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 				Resource: &topologyv1.Resource{
-					Id: meta.HydratedPatternForProto(v1Stream),
+					Id: patternId,
 					Pb: protoStream,
 				},
 				Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,

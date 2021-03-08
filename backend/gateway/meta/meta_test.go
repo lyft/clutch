@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
@@ -189,9 +190,10 @@ func TestAuditDisabled(t *testing.T) {
 func TestExtractProtoPatternsValues(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
-		id     string
-		pb     proto.Message
-		expect string
+		id          string
+		pb          proto.Message
+		expect      string
+		shouldError bool
 	}{
 		{
 			id: "deployment",
@@ -200,7 +202,8 @@ func TestExtractProtoPatternsValues(t *testing.T) {
 				Namespace: "bar",
 				Name:      "cat",
 			},
-			expect: "foo/bar/cat",
+			expect:      "foo/bar/cat",
+			shouldError: false,
 		},
 		{
 			id: "ec2 instance",
@@ -208,7 +211,14 @@ func TestExtractProtoPatternsValues(t *testing.T) {
 				Region:     "us-east-1",
 				InstanceId: "i-000000000",
 			},
-			expect: "us-east-1/i-000000000",
+			expect:      "us-east-1/i-000000000",
+			shouldError: false,
+		},
+		{
+			id:          "no pattern found",
+			pb:          &anypb.Any{},
+			expect:      "",
+			shouldError: true,
 		},
 	}
 
@@ -217,8 +227,14 @@ func TestExtractProtoPatternsValues(t *testing.T) {
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
 
-			result := HydratedPatternForProto(tt.pb)
-			assert.Equal(t, tt.expect, result)
+			result, err := HydratedPatternForProto(tt.pb)
+			if tt.shouldError {
+				assert.Empty(t, result)
+				assert.Error(t, err)
+			} else {
+				assert.Equal(t, tt.expect, result)
+				assert.NoError(t, err)
+			}
 		})
 	}
 }

@@ -110,9 +110,16 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 			s.log.Error("unable to marshal pod", zap.Error(err))
 			return
 		}
+
+		patternId, err := meta.HydratedPatternForProto(pod)
+		if err != nil {
+			s.log.Error("unable to get proto id from pattern", zap.Error(err))
+			return
+		}
+
 		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
-				Id: meta.HydratedPatternForProto(pod),
+				Id: patternId,
 				Pb: protoPod,
 			},
 			Action: action,
@@ -124,9 +131,16 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 			s.log.Error("unable to marshal deployment", zap.Error(err))
 			return
 		}
+
+		patternId, err := meta.HydratedPatternForProto(deployment)
+		if err != nil {
+			s.log.Error("unable to get proto id from pattern", zap.Error(err))
+			return
+		}
+
 		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
-				Id: meta.HydratedPatternForProto(deployment),
+				Id: patternId,
 				Pb: protoDeployment,
 			},
 			Action: action,
@@ -138,9 +152,16 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 			s.log.Error("unable to marshal hpa", zap.Error(err))
 			return
 		}
+
+		patternId, err := meta.HydratedPatternForProto(hpa)
+		if err != nil {
+			s.log.Error("unable to get proto id from pattern", zap.Error(err))
+			return
+		}
+
 		s.topologyObjectChan <- &topologyv1.UpdateCacheRequest{
 			Resource: &topologyv1.Resource{
-				Id: meta.HydratedPatternForProto(hpa),
+				Id: patternId,
 				Pb: protoHpa,
 			},
 			Action: action,

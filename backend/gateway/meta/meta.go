@@ -120,7 +120,7 @@ func ResourceNames(pb proto.Message) []*auditv1.Resource {
 }
 
 // HydratedPatternForProto takes a proto and returns its pattern populated with values
-func HydratedPatternForProto(pb proto.Message) string {
+func HydratedPatternForProto(pb proto.Message) (string, error) {
 	m := pb.ProtoReflect()
 	opts := m.Descriptor().Options().ProtoReflect()
 
@@ -137,11 +137,10 @@ func HydratedPatternForProto(pb proto.Message) string {
 
 		// At the time of writing there is only support for a single pattern
 		// this list should only have one item to return
-		return populatedPattern[0]
+		return populatedPattern[0], nil
 	}
 
-	// todo: rethink error case
-	return ""
+	return "", fmt.Errorf("the supplied proto does not have a pattern: [%T]", pb)
 }
 
 // ExtractPatternValuesFromString takes a string value and maps the patterns from a proto pattern
