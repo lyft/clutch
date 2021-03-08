@@ -20,7 +20,7 @@ import (
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
-	xds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/testing"
+	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
 )
 
 const (
@@ -247,7 +247,7 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 
 func TestRefreshCache(t *testing.T) {
 	testCluster := "clusterA"
-	s := xds_testing.MockStorer{}
+	s := experimentstoremock.MockStorer{}
 	rtdsConfig := RTDSConfig{
 		layerName:     "test_layer",
 		ingressPrefix: "ingress",

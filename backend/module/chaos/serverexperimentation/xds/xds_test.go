@@ -16,7 +16,7 @@ import (
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
-	rtds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/testing"
+	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
 )
 
 func TestServerStats(t *testing.T) {
@@ -27,7 +27,7 @@ func TestServerStats(t *testing.T) {
 		EgressFaultRuntimePrefix:  "egress",
 	}
 
-	testServer := rtds_testing.NewTestServer(t, xdsConfig, New, false)
+	testServer := xdstest.NewTestModuleServer(New, false, xdsConfig)
 	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -64,7 +64,7 @@ func TestResourceTTL(t *testing.T) {
 		EgressFaultRuntimePrefix:  "egress",
 	}
 
-	testServer := rtds_testing.NewTestServer(t, xdsConfig, New, true)
+	testServer := xdstest.NewTestModuleServer(New, true, xdsConfig)
 	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -187,7 +187,7 @@ type v3StreamWrapper struct {
 	cluster string
 }
 
-func newV3Stream(ctx context.Context, layer string, cluster string, t rtds_testing.TestServer) (*v3StreamWrapper, error) {
+func newV3Stream(ctx context.Context, layer string, cluster string, t *xdstest.TestModuleServer) (*v3StreamWrapper, error) {
 	conn, err := t.ClientConn()
 	if err != nil {
 		return nil, err

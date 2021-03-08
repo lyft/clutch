@@ -1,10 +1,12 @@
 // +build integration_only
 
-package rtds
+package xds
 
 import (
 	"context"
 	"fmt"
+	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
+	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
 	"testing"
 	"time"
 
@@ -14,10 +16,7 @@ import (
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
-	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
-	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds"
-	xds_testing "github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/testing"
-	"github.com/lyft/clutch/backend/test/envoy"
+	"github.com/lyft/clutch/backend/internal/test/integration/helper/envoytest"
 )
 
 // These tests are intended to be run with docker-compose to in order to set up a running Envoy instance
@@ -30,10 +29,10 @@ func TestEnvoyFaults(t *testing.T) {
 		EgressFaultRuntimePrefix:  "egress",
 	}
 
-	ts := xds_testing.NewTestServer(t, xdsConfig, xds.New, true)
+	ts := xdstest.NewTestModuleServer(New, true, xdsConfig)
 	defer ts.Stop()
 
-	e, err := testenvoy.NewEnvoyHandle()
+	e, err := envoytest.NewEnvoyHandle()
 	assert.NoError(t, err)
 
 	code, err := e.MakeSimpleCall()
@@ -59,7 +58,7 @@ func TestEnvoyFaults(t *testing.T) {
 	assert.NoError(t, err, "did not see faults reverted")
 }
 
-func createTestExperiment(t *testing.T, faultHttpStatus int, storer *xds_testing.SimpleStorer) *experimentationv1.Experiment {
+func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experimentstoremock.SimpleStorer) {
 	now := time.Now()
 	config := serverexperimentation.HTTPFaultConfig{
 		Fault: &serverexperimentation.HTTPFaultConfig_AbortFault{
@@ -104,7 +103,7 @@ type awaitReturnValueParams struct {
 	expectedStatus int
 }
 
-func awaitExpectedReturnValueForSimpleCall(t *testing.T, e *testenvoy.EnvoyHandle, params awaitReturnValueParams) error {
+func awaitExpectedReturnValueForSimpleCall(t *testing.T, e *envoytest.EnvoyHandle, params awaitReturnValueParams) error {
 	timeout := time.NewTimer(params.timeout)
 
 	for range time.NewTicker(100 * time.Millisecond).C {
