@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package {{ .RepoOwner }}.echo.v1;
+package {{ .RepoOwner | .SanitizeProto3 }}.echo.v1;
 
 option go_package = "{{ .RepoProvider}}/{{ .RepoOwner }}/{{ .RepoName}}/backend/api/echo/v1;echov1";
 

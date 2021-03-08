@@ -19,6 +19,13 @@ const (
 	defaultRepoName              = "clutch-custom-gateway"
 )
 
+// Replace any special characters, that might appear in repository owners or organizations names, but are not supported
+// in proto3 package names.
+var sanitizeProto3Identifier = strings.NewReplacer(
+	"-", "_",
+	"/", "_",
+)
+
 type workflowTemplateValues struct {
 	Name           string
 	PackageName    string
@@ -33,6 +40,11 @@ type gatewayTemplateValues struct {
 	RepoOwner    string
 	RepoName     string
 	RepoProvider string
+}
+
+// SanitizeProto3 identifiers by replacing unsupported characters.
+func (gatewayTemplateValues) SanitizeProto3(s string) string {
+	return sanitizeProto3Identifier.Replace(s)
 }
 
 func promptOrDefault(prompt string, defaultValue string) string {
