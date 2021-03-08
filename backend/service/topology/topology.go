@@ -4,10 +4,12 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"log"
 	"os"
 	"os/signal"
 	"strconv"
 	"syscall"
+	"time"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
@@ -37,6 +39,8 @@ type client struct {
 	db    *sql.DB
 	log   *zap.Logger
 	scope tally.Scope
+
+	cacheTTL time.Duration
 }
 
 // CacheableTopology is implemented by a service that wishes to enable the topology API feature set
@@ -44,10 +48,12 @@ type client struct {
 // By implementing this interface the topology service will automatically setup all services which implement it.
 // Automatically ingesting Resource objects via the `GetTopologyObjectChannel()` function.
 // This enables users to make use of the Topology APIs with these new Topology Resources.
-//
 type CacheableTopology interface {
 	CacheEnabled() bool
-	StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.UpdateCacheRequest, error)
+
+	// Notably the cache TTL is provided, this information can be used to ensure
+	// all active resources are added to the cache more often than the cache TTL.
+	StartTopologyCaching(ctx context.Context, ttl time.Duration) (<-chan *topologyv1.UpdateCacheRequest, error)
 }
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
@@ -78,6 +84,14 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		c.log.Info("Topology caching is disabled")
 		return c, nil
 	}
+
+	// If TTL is not set default to two hours
+	c.cacheTTL = time.Hour * 2
+	if c.config.Cache.Ttl != nil {
+		c.cacheTTL = c.config.Cache.Ttl.AsDuration()
+	}
+
+	log.Printf("%v", c.cacheTTL)
 
 	ctx, ctxCancelFunc := context.WithCancel(context.Background())
 	sigc := make(chan os.Signal, 1)

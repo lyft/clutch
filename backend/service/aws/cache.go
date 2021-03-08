@@ -22,7 +22,7 @@ func (c *client) CacheEnabled() bool {
 	return true
 }
 
-func (c *client) StartTopologyCaching(ctx context.Context) (<-chan *topologyv1.UpdateCacheRequest, error) {
+func (c *client) StartTopologyCaching(ctx context.Context, ttl time.Duration) (<-chan *topologyv1.UpdateCacheRequest, error) {
 	if !c.topologyLock.TryAcquire(topologyLockId) {
 		return nil, errors.New("TopologyCaching is already in progress")
 	}
