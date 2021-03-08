@@ -30,7 +30,13 @@ func (r *res) kinesisResults(ctx context.Context, region, id string, limit uint3
 		return nil, err
 	}
 
+	regions := r.determineRegionsForOption(region)
 	if ok {
+		id = patternValues["stream_name"]
+		regions = []string{patternValues["region"]}
+	}
+
+	for _, region := range regions {
 		handler.Add(1)
 		go func(region, id string) {
 			defer handler.Done()
@@ -41,22 +47,7 @@ func (r *res) kinesisResults(ctx context.Context, region, id string, limit uint3
 			case <-handler.Cancelled():
 				return
 			}
-		}(patternValues["region"], patternValues["stream_name"])
-	} else {
-		regions := r.determineRegionsForOption(region)
-		for _, region := range regions {
-			handler.Add(1)
-			go func(region string) {
-				defer handler.Done()
-				stream, err := r.client.DescribeKinesisStream(ctx, region, id)
-				select {
-				case handler.Channel() <- resolver.NewSingleFanoutResult(stream, err):
-					return
-				case <-handler.Cancelled():
-					return
-				}
-			}(region)
-		}
+		}(region, id)
 	}
 
 	return handler.Results(limit)

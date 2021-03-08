@@ -46,37 +46,29 @@ func (r *res) instanceResults(ctx context.Context, region string, ids []string, 
 			return nil, err
 		}
 
+		regions := r.determineRegionsForOption(region)
 		if ok {
+			id = patternValues["instance_id"]
+			regions = []string{patternValues["region"]}
+		} else {
+			id, err = normalizeInstanceID(id)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		for _, region := range regions {
 			handler.Add(1)
-			go func(region, instanceId string) {
+			go func(region, id string) {
 				defer handler.Done()
-				instances, err := r.client.DescribeInstances(ctx, region, []string{instanceId})
+				instances, err := r.client.DescribeInstances(ctx, region, []string{id})
 				select {
 				case handler.Channel() <- resolver.NewFanoutResult(instances, err):
 					return
 				case <-handler.Cancelled():
 					return
 				}
-			}(patternValues["region"], patternValues["instance_id"])
-		} else {
-			normalizedId, err := normalizeInstanceID(id)
-			if err != nil {
-				return nil, err
-			}
-			regions := r.determineRegionsForOption(region)
-			for _, region := range regions {
-				handler.Add(1)
-				go func(region string) {
-					defer handler.Done()
-					instances, err := r.client.DescribeInstances(ctx, region, []string{normalizedId})
-					select {
-					case handler.Channel() <- resolver.NewFanoutResult(instances, err):
-						return
-					case <-handler.Cancelled():
-						return
-					}
-				}(region)
-			}
+			}(region, id)
 		}
 	}
 

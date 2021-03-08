@@ -134,8 +134,14 @@ func HydratedPatternForProto(pb proto.Message) string {
 			rs := resolvePattern(pb, pattern)
 			populatedPattern = append(populatedPattern, rs.Id)
 		}
+
+		// At the time of writing there is only support for a single pattern
+		// this list should only have one item to return
+		return populatedPattern[0]
 	}
-	return populatedPattern[0]
+
+	// todo: rethink error case
+	return ""
 }
 
 // ExtractPatternValuesFromString takes a string value and maps the patterns from a proto pattern

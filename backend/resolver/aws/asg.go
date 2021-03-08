@@ -30,33 +30,25 @@ func (r *res) autoscalingGroupResults(ctx context.Context, region string, ids []
 			return nil, err
 		}
 
+		asgName := id
+		regions := r.determineRegionsForOption(region)
 		if ok {
+			regions = []string{patternValues["region"]}
+			asgName = patternValues["name"]
+		}
+
+		for _, region := range regions {
 			handler.Add(1)
-			go func(region string, name []string) {
+			go func(region, name string) {
 				defer handler.Done()
-				groups, err := r.client.DescribeAutoscalingGroups(ctx, region, name)
+				groups, err := r.client.DescribeAutoscalingGroups(ctx, region, []string{name})
 				select {
 				case handler.Channel() <- resolver.NewFanoutResult(groups, err):
 					return
 				case <-handler.Cancelled():
 					return
 				}
-			}(patternValues["region"], []string{patternValues["name"]})
-		} else {
-			regions := r.determineRegionsForOption(region)
-			for _, region := range regions {
-				handler.Add(1)
-				go func(region string) {
-					defer handler.Done()
-					groups, err := r.client.DescribeAutoscalingGroups(ctx, region, ids)
-					select {
-					case handler.Channel() <- resolver.NewFanoutResult(groups, err):
-						return
-					case <-handler.Cancelled():
-						return
-					}
-				}(region)
-			}
+			}(region, asgName)
 		}
 	}
 	return handler.Results(limit)
