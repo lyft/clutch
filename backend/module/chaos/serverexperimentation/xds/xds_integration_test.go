@@ -16,6 +16,7 @@ import (
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
 	"github.com/lyft/clutch/backend/internal/test/integration/helper/envoytest"
 )
 
@@ -39,7 +40,7 @@ func TestEnvoyFaults(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, 503, code)
 
-	_ = createTestExperiment(t, 400, ts.Storer)
+	createTestExperiment(t, 400, ts.Storer)
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
 		timeout:        2 * time.Second,
@@ -58,7 +59,7 @@ func TestEnvoyFaults(t *testing.T) {
 	assert.NoError(t, err, "did not see faults reverted")
 }
 
-func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experimentstoremock.SimpleStorer) {
+func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experimentstoremock.SimpleStorer) *experimentationv1.Experiment {
 	now := time.Now()
 	config := serverexperimentation.HTTPFaultConfig{
 		Fault: &serverexperimentation.HTTPFaultConfig_AbortFault{
@@ -131,10 +132,10 @@ func TestEnvoyECDSFaults(t *testing.T) {
 		EcdsAllowList:             &xdsconfigv1.Config_ECDSAllowList{EnabledClusters: []string{"test-cluster"}},
 	}
 
-	ts := xds_testing.NewTestServer(t, xdsConfig, xds.New, true)
+	ts := xdstest.NewTestModuleServer(New, true, xdsConfig)
 	defer ts.Stop()
 
-	e, err := testenvoy.NewEnvoyHandle()
+	e, err := envoytest.NewEnvoyHandle()
 	assert.NoError(t, err)
 
 	code, err := e.MakeSimpleCall()
