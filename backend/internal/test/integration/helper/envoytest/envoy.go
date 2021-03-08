@@ -69,7 +69,7 @@ type EnvoyHandle struct{}
 
 // NewEnvoyHandle creates a new handle for the Envoy under test after waiting for it to initialize.
 func NewEnvoyHandle() (*EnvoyHandle, error) {
-	timeout := time.NewTimer(20 * time.Second)
+	timeout := time.NewTimer(40 * time.Second)
 
 	for range time.NewTicker(100 * time.Millisecond).C {
 		select {

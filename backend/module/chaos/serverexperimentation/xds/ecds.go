@@ -21,9 +21,9 @@ import (
 )
 
 const (
-	EnvoyDownstreamServiceClusterHeader = `x-envoy-downstream-service-cluster`
-	ExternalFaultFilterConfigName       = `envoy.egress.extension_config.%s`
-	InternalFaultFilterConfigName       = `envoy.extension_config`
+	EnvoyDownstreamServiceClusterHeader   = `x-envoy-downstream-service-cluster`
+	FaultFilterConfigNameForExternalFault = `envoy.egress.extension_config.%s`
+	FaultFilterConfigNameForInternalFault = `envoy.extension_config`
 
 	faultFilterTypeURL = `type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault`
 
@@ -111,9 +111,9 @@ func generateECDSResource(experiments []*experimentation.Experiment, ttl *time.D
 
 	var faultFilterName string
 	if isExternalFault {
-		faultFilterName = fmt.Sprintf(ExternalFaultFilterConfigName, upstreamCluster)
+		faultFilterName = fmt.Sprintf(FaultFilterConfigNameForExternalFault, upstreamCluster)
 	} else {
-		faultFilterName = InternalFaultFilterConfigName
+		faultFilterName = FaultFilterConfigNameForInternalFault
 
 		// match downstream cluster with request header else fault will be applied to requests coming from all downstream
 		faultFilter.Headers = []*gcpRoute.HeaderMatcher{

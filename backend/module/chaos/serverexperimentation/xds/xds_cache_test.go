@@ -338,9 +338,9 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 		t.Errorf("no resources")
 	}
 
-	assert.Contains(t, ecdsResources, InternalFaultFilterConfigName)
+	assert.Contains(t, ecdsResources, FaultFilterConfigNameForInternalFault)
 
-	extensionConfig := ecdsResources[InternalFaultFilterConfigName].Resource.(*gcpCoreV3.TypedExtensionConfig)
+	extensionConfig := ecdsResources[FaultFilterConfigNameForInternalFault].Resource.(*gcpCoreV3.TypedExtensionConfig)
 
 	httpFaultFilter := &gcpFilterFault.HTTPFault{}
 	err = ptypes.UnmarshalAny(extensionConfig.TypedConfig, httpFaultFilter)
@@ -403,9 +403,9 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 		t.Errorf("no resources")
 	}
 
-	assert.Contains(t, ecdsResources, fmt.Sprintf(ExternalFaultFilterConfigName, upstreamCluster))
+	assert.Contains(t, ecdsResources, fmt.Sprintf(FaultFilterConfigNameForExternalFault, upstreamCluster))
 
-	extensionConfig := ecdsResources[fmt.Sprintf(ExternalFaultFilterConfigName, upstreamCluster)].Resource.(*gcpCoreV3.TypedExtensionConfig)
+	extensionConfig := ecdsResources[fmt.Sprintf(FaultFilterConfigNameForExternalFault, upstreamCluster)].Resource.(*gcpCoreV3.TypedExtensionConfig)
 
 	httpFaultFilter := &gcpFilterFault.HTTPFault{}
 	err = ptypes.UnmarshalAny(extensionConfig.TypedConfig, httpFaultFilter)
