@@ -30,7 +30,7 @@ func (r *res) autoscalingGroupResults(ctx context.Context, region string, ids []
 			return nil, err
 		}
 
-		if ok && len(patternValues["region"]) > 0 && len(patternValues["name"]) > 0 {
+		if ok {
 			handler.Add(1)
 			go func(region string, name []string) {
 				defer handler.Done()

@@ -138,7 +138,7 @@ func HydratedPatternForProto(pb proto.Message) string {
 	return populatedPattern[0]
 }
 
-// PatternValueMapping takes a string value and maps the patterns from a proto pattern
+// ExtractPatternValuesFromString takes a string value and maps the patterns from a proto pattern
 // this is utilized by the resolver search api
 //
 // For example given the following proto pattern
@@ -204,8 +204,8 @@ func ExtractPatternValuesFromString(pb proto.Message, value string) (map[string]
 }
 
 func extractProtoPatternFieldNames(pattern *apiv1.Pattern) []string {
-	results := []string{}
 	variableNames := fieldNameRegexp.FindAllStringSubmatch(pattern.Pattern, -1)
+	results := make([]string, 0, len(variableNames))
 	for _, name := range variableNames {
 		results = append(results, name[1])
 	}
