@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"log"
 	"os"
 	"os/signal"
 	"strconv"
@@ -90,8 +89,6 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	if c.config.Cache.Ttl != nil {
 		c.cacheTTL = c.config.Cache.Ttl.AsDuration()
 	}
-
-	log.Printf("%v", c.cacheTTL)
 
 	ctx, ctxCancelFunc := context.WithCancel(context.Background())
 	sigc := make(chan os.Signal, 1)
