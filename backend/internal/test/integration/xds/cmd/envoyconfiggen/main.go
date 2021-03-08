@@ -34,23 +34,6 @@ rtds_layer:
           cluster_name: clutchxds
 `
 
-const rtdsCluster = `
-connect_timeout: 0.250s
-http2_protocol_options: {}
-lb_policy: ROUND_ROBIN
-load_assignment:
-  cluster_name: clutchxds
-  endpoints:
-  - lb_endpoints:
-    - endpoint:
-        address:
-          socket_address: 
-            address: "test_runner"
-            port_value: 9000
-name: clutchxds
-type: STRICT_DNS
-`
-
 const ecdsFilterConfig = `
 name: envoy.extension_config
 config_discovery:
