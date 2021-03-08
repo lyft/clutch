@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"log"
 	"os"
 	"os/signal"
 	"strconv"
@@ -38,6 +39,8 @@ type client struct {
 	db    *sql.DB
 	log   *zap.Logger
 	scope tally.Scope
+
+	cacheTTL time.Duration
 }
 
 // CacheableTopology is implemented by a service that wishes to enable the topology API feature set
@@ -47,6 +50,9 @@ type client struct {
 // This enables users to make use of the Topology APIs with these new Topology Resources.
 type CacheableTopology interface {
 	CacheEnabled() bool
+
+	// Notably the cache TTL is provided, this information can be used to ensure
+	// all active resources are added to the cache more often than the cache TTL.
 	StartTopologyCaching(ctx context.Context, ttl time.Duration) (<-chan *topologyv1.UpdateCacheRequest, error)
 }
 
@@ -80,9 +86,12 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	}
 
 	// If TTL is not set default to two hours
-	if c.config.Cache.Ttl == nil {
-		c.config.Cache.Ttl = ptypes.DurationProto(time.Hour * 2)
+	c.cacheTTL = time.Hour * 2
+	if c.config.Cache.Ttl != nil {
+		c.cacheTTL = c.config.Cache.Ttl.AsDuration()
 	}
+
+	log.Printf("%v", c.cacheTTL)
 
 	ctx, ctxCancelFunc := context.WithCancel(context.Background())
 	sigc := make(chan os.Signal, 1)

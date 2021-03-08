@@ -86,7 +86,7 @@ func (c *client) startTopologyCache(ctx context.Context) {
 		if svc, ok := s.(CacheableTopology); ok {
 			if svc.CacheEnabled() {
 				c.log.Info("Processing Topology Objects for service", zap.String("service", name))
-				topologyChannel, err := svc.StartTopologyCaching(ctx, c.config.Cache.Ttl.AsDuration())
+				topologyChannel, err := svc.StartTopologyCaching(ctx, c.cacheTTL)
 				if err != nil {
 					c.log.Error("Unable to start topology caching", zap.String("service", name), zap.Error(err))
 					continue
@@ -182,7 +182,7 @@ func (c *client) expireCache(ctx context.Context) {
 
 	ticker := time.NewTicker(time.Minute * 20)
 	for {
-		result, err := c.db.ExecContext(ctx, expireQuery, strconv.Itoa(int(c.config.Cache.Ttl.AsDuration().Seconds())))
+		result, err := c.db.ExecContext(ctx, expireQuery, strconv.Itoa(int(c.cacheTTL.Seconds())))
 		if err != nil {
 			c.scope.SubScope("cache").Counter("expire.failure").Inc(1)
 			c.log.Error("unable to expire cache", zap.Error(err))
