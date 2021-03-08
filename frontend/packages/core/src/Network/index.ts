@@ -2,7 +2,7 @@ import type { AxiosError } from "axios";
 import axios from "axios";
 
 import type { ClutchError } from "./errors";
-import grpcResponseToError from "./errors";
+import { grpcResponseToError } from "./errors";
 
 /**
  * HTTP response status.

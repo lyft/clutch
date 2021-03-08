@@ -1,3 +1,4 @@
+import type { clutch as IClutch } from "@clutch-sh/api";
 import type { AxiosError } from "axios";
 
 import type { HttpStatus } from "./index";
@@ -213,6 +214,19 @@ export interface Help {
   }[];
 }
 
+export type ErrorDetails =
+  | RetryInfo
+  | DebugInfo
+  | QuotaFailure
+  | ErrorInfo
+  | PreconditionFailure
+  | BadRequest
+  | RequestInfo
+  | ResourceInfo
+  | Help
+  | IClutch.api.v1.ErrorDetails
+  | any;
+
 /** An error received from the backend of Clutch. */
 export interface ClutchError extends Error {
   /** The HTTP status information. */
@@ -225,18 +239,7 @@ export interface ClutchError extends Error {
    */
   message: string;
   /** A list of objects that carry error details from the server. */
-  details?: (
-    | RetryInfo
-    | DebugInfo
-    | QuotaFailure
-    | ErrorInfo
-    | PreconditionFailure
-    | BadRequest
-    | RequestInfo
-    | ResourceInfo
-    | Help
-    | any
-  )[];
+  details?: ErrorDetails[];
   /** Data present on the response object, if any. */
   data?: any;
 }
@@ -265,4 +268,12 @@ const grpcResponseToError = (clientError: AxiosError): ClutchError => {
   return error;
 };
 
-export default grpcResponseToError;
+const isHelpDetails = (details: ErrorDetails): details is Help => {
+  return (details as Help).links !== undefined;
+};
+
+const isClutchErrorDetails = (details: ErrorDetails): details is IClutch.api.v1.ErrorDetails => {
+  return (details as IClutch.api.v1.ErrorDetails).wrapped !== undefined;
+};
+
+export { grpcResponseToError, isClutchErrorDetails, isHelpDetails };

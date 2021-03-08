@@ -1,7 +1,8 @@
+import type { clutch as IClutch } from "@clutch-sh/api";
 import type { AxiosError } from "axios";
 
 import type { ClutchError, Help } from "../errors";
-import grpcResponseToError from "../errors";
+import { grpcResponseToError, isClutchErrorDetails, isHelpDetails } from "../errors";
 
 describe("clutch error", () => {
   const axiosError = {
@@ -68,5 +69,63 @@ describe("clutch error", () => {
       const helpDetails = err.details[0] as Help;
       expect(helpDetails.links).toHaveLength(1);
     });
+  });
+});
+
+describe("isHelpDetails", () => {
+  it("returns true for help details", () => {
+    const details = {
+      links: [
+        {
+          description: "Please file a ticket here for more help.",
+          url: "https://www.example.com",
+        },
+      ],
+    } as Help;
+
+    expect(isHelpDetails(details)).toBe(true);
+  });
+
+  it("returns false for non-help details", () => {
+    const details = {
+      type: "randomType",
+      something: [
+        {
+          key: "value",
+        },
+      ],
+    };
+    expect(isHelpDetails(details)).toBe(false);
+  });
+});
+
+describe("isClutchErrorDetails", () => {
+  it("returns true for Clutch specific error details", () => {
+    const details = {
+      wrapped: [
+        {
+          code: 2,
+          message: "core-staging-0: yikes",
+        },
+        {
+          code: 16,
+          message: "core-staging-1: nono",
+        },
+      ],
+    } as IClutch.api.v1.ErrorDetails;
+
+    expect(isClutchErrorDetails(details)).toBe(true);
+  });
+
+  it("returns false for non-Clutch specific error details", () => {
+    const details = {
+      type: "randomType",
+      something: [
+        {
+          key: "value",
+        },
+      ],
+    };
+    expect(isClutchErrorDetails(details)).toBe(false);
   });
 });
