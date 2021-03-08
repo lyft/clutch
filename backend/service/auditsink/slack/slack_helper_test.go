@@ -5,52 +5,100 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	configv1 "github.com/lyft/clutch/backend/api/config/service/auditsink/slack/v1"
 )
 
-func TestGetSlackOverrideText(t *testing.T) {
+func TestNewOverrideLookup(t *testing.T) {
 	testCases := []struct {
-		override     []*configv1.CustomMessage
-		event        *auditv1.RequestEvent
+		override    []*configv1.CustomMessage
+		output      *OverrideLookup
+		expectedNil bool
+	}{
+		// no overrides
+		{
+			override:    []*configv1.CustomMessage{},
+			output:      nil,
+			expectedNil: true,
+		},
+		{
+			override: []*configv1.CustomMessage{{FullMethod: "foo", Message: "bar"}},
+			output: &OverrideLookup{
+				messages: map[string]*configv1.CustomMessage{
+					"foo": &configv1.CustomMessage{FullMethod: "foo", Message: "bar"},
+				},
+			},
+		},
+	}
+	for _, test := range testCases {
+		result := NewOverrideLookup(test.override)
+		if test.expectedNil {
+			assert.Nil(t, result)
+		} else {
+			assert.Equal(t, 1, len(result.messages))
+
+			v, ok := result.messages["foo"]
+			assert.True(t, ok)
+			assert.Equal(t, "bar", v.Message)
+		}
+	}
+}
+
+func TestGetOverrideMessage(t *testing.T) {
+	testCases := []struct {
+		input        *OverrideLookup
+		service      string
+		method       string
 		expectedOk   bool
 		expectedText string
 	}{
-		// no override specified
+		// OverrideLookup is nil
 		{
-			override:   []*configv1.CustomMessage{},
-			event:      &auditv1.RequestEvent{},
+			input:      nil,
+			service:    "foo",
+			method:     "bar",
 			expectedOk: false,
 		},
-		// the override's FullMethod is invalid
+		// OverrideLookup map is empty
 		{
-			override:   []*configv1.CustomMessage{{FullMethod: "foo", Message: "foo"}},
-			event:      &auditv1.RequestEvent{},
+			input:      &OverrideLookup{messages: map[string]*configv1.CustomMessage{}},
+			service:    "foo",
+			method:     "bar",
 			expectedOk: false,
 		},
-		// the override's FullMethod does not match the service and method in the audit event
+		// no match
 		{
-			override:   []*configv1.CustomMessage{{FullMethod: "/clutch.k8s.v1.K8sAPI/DescribePod", Message: "foo"}},
-			event:      &auditv1.RequestEvent{ServiceName: "clutch.k8s.v1.K8sAPI", MethodName: "ResizeHPA"},
+			input: &OverrideLookup{
+				messages: map[string]*configv1.CustomMessage{
+					"/clutch.k8s.v1.K8sAPI/DescribePod": &configv1.CustomMessage{FullMethod: "/clutch.k8s.v1.K8sAPI/DescribePod", Message: "foo"},
+				},
+			},
+			service:    "clutch.k8s.v1.K8sAPI",
+			method:     "ResizeHPA",
 			expectedOk: false,
 		},
-		// the override's FullMethod matches the service and method in the audit event
+		// match
 		{
-			override:     []*configv1.CustomMessage{{FullMethod: "/clutch.k8s.v1.K8sAPI/DescribePod", Message: "foo"}},
-			event:        &auditv1.RequestEvent{ServiceName: "clutch.k8s.v1.K8sAPI", MethodName: "DescribePod"},
+			input: &OverrideLookup{
+				messages: map[string]*configv1.CustomMessage{
+					"/clutch.k8s.v1.K8sAPI/DescribePod": &configv1.CustomMessage{FullMethod: "/clutch.k8s.v1.K8sAPI/DescribePod", Message: "foo"},
+					"foo":                               &configv1.CustomMessage{FullMethod: "foo", Message: "foo"},
+				},
+			},
+			service:      "clutch.k8s.v1.K8sAPI",
+			method:       "DescribePod",
 			expectedOk:   true,
 			expectedText: "foo",
 		},
 	}
 
 	for _, test := range testCases {
-		result, ok := GetOverrideMessage(test.override, test.event)
+		message, ok := test.input.GetOverrideMessage(test.service, test.method)
 		if !test.expectedOk {
 			assert.False(t, ok)
-			assert.Empty(t, result)
+			assert.Empty(t, message)
 		} else {
 			assert.True(t, ok)
-			assert.Equal(t, test.expectedText, result)
+			assert.Equal(t, test.expectedText, message)
 		}
 	}
 }

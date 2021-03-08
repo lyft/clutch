@@ -40,7 +40,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	s := &svc{
 		logger:    logger,
 		filter:    config.Filter,
-		overrides: config.Overrides,
+		overrides: NewOverrideLookup(config.Overrides),
 		scope:     scope,
 		slack:     slack.New(config.Token),
 		channel:   config.Channel,
@@ -62,12 +62,18 @@ var funcMap = template.FuncMap{
 	"slackList": slackList,
 }
 
+// OverrideLookup stores a map of custom slack messages that are
+// provided in the slack config
+type OverrideLookup struct {
+	messages map[string]*configv1.CustomMessage
+}
+
 type svc struct {
 	logger *zap.Logger
 	scope  tally.Scope
 
 	filter    *auditconfigv1.Filter
-	overrides []*configv1.CustomMessage
+	overrides *OverrideLookup
 
 	slack   *slack.Client
 	channel string

@@ -1,28 +1,46 @@
 package slack
 
 import (
-	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
+	"fmt"
+
 	configv1 "github.com/lyft/clutch/backend/api/config/service/auditsink/slack/v1"
-	"github.com/lyft/clutch/backend/middleware"
 )
 
-// GetOverrideMessage returns the custom slack message from the slack config if the FullMethod matches
-// the service and method in the audit event. Otherwise ok is false and an empty string is returned.
-func GetOverrideMessage(overrides []*configv1.CustomMessage, event *auditv1.RequestEvent) (string, bool) {
-	if overrides == nil {
+// NewOverrideLookup creates a map from the overrides. The generated OverrideLookup is
+// used to easily retrieve an override by key (/service/method).
+func NewOverrideLookup(overrides []*configv1.CustomMessage) *OverrideLookup {
+	if len(overrides) == 0 {
+		// no overrides
+		return nil
+	}
+
+	messages := make(map[string]*configv1.CustomMessage, len(overrides))
+	for _, override := range overrides {
+		messages[override.FullMethod] = override
+	}
+
+	return &OverrideLookup{
+		messages,
+	}
+}
+
+// GetOverrideMessage uses the OverrideLookup and the audit event's service + method name to
+// check if an override exists for the key service/method. If found, the custom message is returned.
+// Otherwise ok is false.
+func (o *OverrideLookup) GetOverrideMessage(service, method string) (string, bool) {
+	// /service/method
+	// ex. /clutch.k8s.v1.K8sAPI/DescribePod
+	pattern := "/%s/%s"
+
+	if o == nil || len(o.messages) == 0 {
 		// no overrides
 		return "", false
 	}
 
-	for _, customSlack := range overrides {
-		service, method, ok := middleware.SplitFullMethod(customSlack.FullMethod)
-		if !ok {
-			return "", false
-		}
-		if service == event.ServiceName && method == event.MethodName {
-			return customSlack.Message, true
-		}
+	cm, ok := o.messages[fmt.Sprintf(pattern, service, method)]
+	if !ok {
+		// no custom message for this /service/method
+		return "", false
 	}
-
-	return "", false
+	return cm.Message, true
 }
