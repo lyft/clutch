@@ -35,18 +35,6 @@ modules:
   - name: clutch.module.k8s
   - name: clutch.module.kinesis
 services:
-  - name: clutch.service.auditsink.slack
-    typed_config:
-      "@type": types.google.com/clutch.config.service.auditsink.slack.v1.SlackConfig
-      token: "foo"
-      channel: "bar"
-      filter:
-        rules:
-          - field: SERVICE
-            text: clutch.k8s.v1.K8sAPI
-      overrides:
-          - full_method: /clutch.k8s.v1.K8sAPI/DescribePod
-            message: "Pod `{{.Request.Name}}` status is *{{.Response.Pod.State}}*"
   - name: clutch.service.aws
     typed_config:
       "@type": types.google.com/clutch.config.service.aws.v1.Config
