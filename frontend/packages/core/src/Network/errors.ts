@@ -4,7 +4,7 @@ import type { AxiosError } from "axios";
 import type { HttpStatus } from "./index";
 
 interface Details {
-  type: string;
+  _type: string;
 }
 
 /**
@@ -270,7 +270,7 @@ const grpcResponseToError = (clientError: AxiosError): ClutchError => {
   if (data?.details !== undefined && data.details.length > 0) {
     // reassign the @type prop to make the details TS friendly.
     const details = data.details.map(detail => {
-      const filteredDetail = { ...detail, type: detail["@type"] };
+      const filteredDetail = { ...detail, _type: detail["@type"] };
       delete filteredDetail["@type"];
       return filteredDetail;
     });
@@ -280,12 +280,14 @@ const grpcResponseToError = (clientError: AxiosError): ClutchError => {
   return error;
 };
 
+/* eslint-disable no-underscore-dangle */
 const isHelpDetails = (details: ErrorDetails): details is Help => {
-  return details.type === "types.google.com/google.rpc.Help";
+  return details._type === "types.googleapis.com/google.rpc.Help";
 };
 
 const isClutchErrorDetails = (details: ErrorDetails): details is IClutch.api.v1.ErrorDetails => {
-  return details.type === "type.googleapis.com/clutch.api.v1.ErrorDetails";
+  return details._type === "type.googleapis.com/clutch.api.v1.ErrorDetails";
 };
+/* eslint-enable */
 
 export { grpcResponseToError, isClutchErrorDetails, isHelpDetails };

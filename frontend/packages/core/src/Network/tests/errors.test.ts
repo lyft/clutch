@@ -48,7 +48,7 @@ describe("clutch error", () => {
       const complexAxiosError = { ...axiosError };
       complexAxiosError.response.data.details = [
         {
-          "@type": "types.google.com/google.rpc.Help",
+          "@type": "types.googleapis.com/google.rpc.Help",
           links: [
             {
               description: "This is a link",
@@ -74,7 +74,7 @@ describe("clutch error", () => {
 describe("isHelpDetails", () => {
   it("returns true for help details", () => {
     const details = {
-      type: "types.google.com/google.rpc.Help",
+      _type: "types.googleapis.com/google.rpc.Help",
       links: [
         {
           description: "Please file a ticket here for more help.",
@@ -102,7 +102,7 @@ describe("isHelpDetails", () => {
 describe("isClutchErrorDetails", () => {
   it("returns true for Clutch specific error details", () => {
     const details = {
-      type: "type.googleapis.com/clutch.api.v1.ErrorDetails",
+      _type: "type.googleapis.com/clutch.api.v1.ErrorDetails",
       wrapped: [
         {
           code: 2,
