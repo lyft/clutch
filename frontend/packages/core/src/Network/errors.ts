@@ -268,6 +268,7 @@ const grpcResponseToError = (clientError: AxiosError): ClutchError => {
   } as ClutchError;
 
   if (data?.details !== undefined && data.details.length > 0) {
+    // reassign the @type prop to make the details TS friendly.
     const details = data.details.map(detail => {
       const filteredDetail = { ...detail, type: detail["@type"] };
       delete filteredDetail["@type"];
