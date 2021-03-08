@@ -125,7 +125,7 @@ func TestComputeMaximumTimeout(t *testing.T) {
 	}
 }
 
-func TestReplaceClutchTokens(t *testing.T) {
+func TestBulkReplaceTemplateTokens(t *testing.T) {
 	config := `
 	foo: bar
 	message: [[range $$v, $$k := .Bar]][[$$k]]: [[$$v]][[end]]
@@ -134,7 +134,7 @@ func TestReplaceClutchTokens(t *testing.T) {
 	foo: bar
 	message: {{range @#@v, @#@k := .Bar}}{{@#@k}}: {{@#@v}}{{end}}
 	`
-	contents := replaceClutchTokens(config)
+	contents := bulkReplaceTemplateTokens(config)
 	assert.Equal(t, expected, contents)
 }
 
@@ -149,6 +149,6 @@ func TestReplaceToken(t *testing.T) {
 	message: {{range $v, $k := .Bar}}{{$k}}: {{$v}}{{end}}
 	`
 
-	contents := replaceToken(config, "@#@", "$")
+	contents := replaceVarTemplateToken(config)
 	assert.Equal(t, expected, contents)
 }

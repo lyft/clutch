@@ -142,8 +142,8 @@ func FormatCustomText(message string, event *auditv1.RequestEvent) (string, erro
 		return "", err
 	}
 
-	// When a value is nil, the Go Template returns "<no value>" in its place. Replacing this with null instead.
-	// We hit this scenario with https://github.com/lyft/clutch/blob/main/api/k8s/v1/k8s.proto#L860
+	// When a value is nil, the Go Template sets the value as "<no value>".
+	// Ex of when we hit this scenario: https://github.com/lyft/clutch/blob/main/api/k8s/v1/k8s.proto#L860
 	sanitized := strings.ReplaceAll(buf.String(), "<no value>", "null")
 
 	return sanitized, nil
@@ -179,11 +179,12 @@ func getAuditTemplateData(event *auditv1.RequestEvent) (*auditTemplateData, erro
 	}, nil
 }
 
-// for inputs that are type slice/map, returns a formatted slack list OR "None" if the slice/map is empty
+// for inputs that are type slice/map, returns a formatted slack list
 func slackList(data interface{}) string {
 	if data == nil {
 		return "None"
 	}
+
 	var b strings.Builder
 	const sliceItemFormat = "\n- %v"
 	const mapItemFormat = "\n- %v: %v"

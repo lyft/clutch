@@ -116,30 +116,36 @@ func parseFile(path string, pb proto.Message, template bool) error {
 		be executed.
 
 		Solution is to use Clutch-specific templating tokens in the config that are then replaced
-		with the Go Template synax
+		with the Go Template syntax
 		1) $$ in lieu of $
 		2) [[ ]] in lieu of {{ }}
 	*/
 
-	tokenContent := replaceClutchTokens(string(contents))
+	tokenContent := bulkReplaceTemplateTokens(string(contents))
 
 	// Interpolate environment variables
 	expandedContent := os.ExpandEnv(tokenContent)
 
-	contents = []byte(replaceToken(expandedContent, "@#@", "$"))
+	contents = []byte(replaceVarTemplateToken(expandedContent))
 
 	return parseYAML(contents, pb)
 }
 
-func replaceClutchTokens(data string) string {
-	data = replaceToken(data, "[[", "{{")
-	data = replaceToken(data, "]]", "}}")
-	// this last replace is done so that os.ExpandEnv does not remove the $
-	return replaceToken(data, "$$", "@#@")
+// swaps the Clutch "Action" tokens for the Go Template "Action" tokens
+// swaps the dollar signs with other characters, otherwise os.ExpandEnv
+// would remove the dollar signs
+func bulkReplaceTemplateTokens(data string) string {
+	sanitize := strings.NewReplacer(
+		"[[", "{{",
+		"]]", "}}",
+		"$$", "@#@",
+	)
+	return sanitize.Replace(data)
 }
 
-func replaceToken(data string, old string, new string) string {
-	return strings.ReplaceAll(data, old, new)
+// swaps the Clutch variable token with the Go Template variable token
+func replaceVarTemplateToken(data string) string {
+	return strings.ReplaceAll(data, "@#@", "$")
 }
 
 func parseYAML(contents []byte, pb proto.Message) error {
