@@ -26,7 +26,10 @@ import (
 	"github.com/lyft/clutch/backend/service/auditsink"
 )
 
-const Name = "clutch.service.auditsink.slack"
+const (
+	Name        = "clutch.service.auditsink.slack"
+	defaultNone = "None"
+)
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	config := &configv1.SlackConfig{}
@@ -144,7 +147,7 @@ func FormatCustomText(message string, event *auditv1.RequestEvent) (string, erro
 
 	// When a value is nil, the Go Template sets the value as "<no value>".
 	// Ex of when we hit this scenario: https://github.com/lyft/clutch/blob/main/api/k8s/v1/k8s.proto#L860
-	sanitized := strings.ReplaceAll(buf.String(), "<no value>", "null")
+	sanitized := strings.ReplaceAll(buf.String(), "<no value>", defaultNone)
 
 	return sanitized, nil
 }
@@ -182,7 +185,7 @@ func getAuditTemplateData(event *auditv1.RequestEvent) (*auditTemplateData, erro
 // for inputs that are type slice/map, returns a formatted slack list
 func slackList(data interface{}) string {
 	if data == nil {
-		return "None"
+		return defaultNone
 	}
 
 	var b strings.Builder
@@ -193,7 +196,7 @@ func slackList(data interface{}) string {
 	case reflect.Slice:
 		s := reflect.ValueOf(data)
 		if s.Len() == 0 {
-			return "None"
+			return defaultNone
 		}
 		// example:
 		// - foo
@@ -205,7 +208,7 @@ func slackList(data interface{}) string {
 	case reflect.Map:
 		m := reflect.ValueOf(data)
 		if m.Len() == 0 {
-			return "None"
+			return defaultNone
 		}
 		// example:
 		// - foo: value
@@ -216,5 +219,7 @@ func slackList(data interface{}) string {
 		}
 		return b.String()
 	}
+	// We don't return an error so that the custom slack message is still returned
+	// in this way, the user will know they didn't pass the correct input type to slackList
 	return "ERR_INPUT_NOT_SLICE_OR_MAP"
 }

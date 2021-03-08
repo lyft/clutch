@@ -83,7 +83,7 @@ func TestFormatCustomText(t *testing.T) {
 		expectedErr    bool
 		expectedOutput string
 	}{
-		// metdata from the API request
+		// metadata from the API request
 		{
 			text: "`Min size` is {{.Request.size.min}}, `Max size` is {{.Request.size.max}}, `Desired size` is {{.Request.size.desired}}",
 			event: &auditv1.RequestEvent{
@@ -136,7 +136,7 @@ func TestFormatCustomText(t *testing.T) {
 				RequestMetadata:  &auditv1.RequestMetadata{Body: anyK8sUpdateReq},
 				ResponseMetadata: &auditv1.ResponseMetadata{Body: anyK8UpdateResp},
 			},
-			expectedOutput: "*Expected Preconditions*:\n- baz: null\n- foo: new-value",
+			expectedOutput: "*Expected Preconditions*:\n- baz: None\n- foo: new-value",
 		},
 		// invalid field name
 		{
