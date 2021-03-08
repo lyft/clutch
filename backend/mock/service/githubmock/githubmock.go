@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/golang/protobuf/ptypes/any"
-	githubv3 "github.com/google/go-github/v32/github"
+	githubv3 "github.com/google/go-github/v33/github"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 
