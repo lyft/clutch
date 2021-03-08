@@ -138,7 +138,7 @@ func TestBulkReplaceTemplateTokens(t *testing.T) {
 	assert.Equal(t, expected, contents)
 }
 
-func TestReplaceToken(t *testing.T) {
+func TestReplaceVarTemplateToken(t *testing.T) {
 	config := `
 	foo: bar
 	message: {{range @#@v, @#@k := .Bar}}{{@#@k}}: {{@#@v}}{{end}}

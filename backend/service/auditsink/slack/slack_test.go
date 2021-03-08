@@ -101,7 +101,7 @@ func TestFormatCustomText(t *testing.T) {
 			},
 			expectedOutput: "foo ip address is 000",
 		},
-		// metdata (labels) value is nil
+		// metadata (labels) value is nil
 		{
 			text: "{{.Request.name}} labels: {{slackList .Response.pod.labels}}",
 			event: &auditv1.RequestEvent{
@@ -119,7 +119,7 @@ func TestFormatCustomText(t *testing.T) {
 			},
 			expectedOutput: "*Updated labels*:\n- foo: new-value",
 		},
-		// metdata that is a list, uses helper slackList
+		// metadata that is a list, uses helper slackList
 		{
 			text: "*Removed annotations*:{{slackList .Request.removeObjectMetaFields.annotations}}",
 			event: &auditv1.RequestEvent{
@@ -128,7 +128,7 @@ func TestFormatCustomText(t *testing.T) {
 			},
 			expectedOutput: "*Removed annotations*:\n- foo\n- bar",
 		},
-		// metdata that is a map, map value is a another map
+		// metadata that is a map, map value is a another map
 		// uses the Golang template `range`
 		{
 			text: "*Expected Preconditions*:{{range $key, $val := .Request.expectedObjectMetaFields.annotations}}\n- {{$key}}: {{range $i, $j := $val}}{{$j}}{{end}}{{end}}",

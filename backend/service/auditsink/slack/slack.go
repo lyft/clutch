@@ -56,7 +56,7 @@ type auditTemplateData struct {
 // TODO: (sperry) expand on helper funcs
 // helper functions to format values in the Go template
 var funcMap = template.FuncMap{
-	// for inputs that are type slice/map, returns a formatted slack list OR `N/A` if the slice/map is empty
+	// for inputs that are type slice/map, returns a formatted slack list
 	// currently only iterates 1-level deep
 	"slackList": slackList,
 }
@@ -128,7 +128,7 @@ func formatText(username string, event *auditv1.RequestEvent) string {
 	return messageText
 }
 
-// FormatCustomText parses out the audit event metdata request for the custom slack message text
+// FormatCustomText applies the audit event metadata to the custom slack message
 func FormatCustomText(message string, event *auditv1.RequestEvent) (string, error) {
 	tmpl, err := template.New("customText").Funcs(funcMap).Parse(message)
 	if err != nil {
