@@ -3,6 +3,10 @@ import type { AxiosError } from "axios";
 
 import type { HttpStatus } from "./index";
 
+interface Details {
+  type: string;
+}
+
 /**
  * Describes when a failed request can be retried.
  *
@@ -10,13 +14,13 @@ import type { HttpStatus } from "./index";
  * increase the delay between retries based on `retryDelay`, until either a maximum number of retries
  * have been reached or a maximum retry delay cap has been reached.
  */
-export interface RetryInfo {
+export interface RetryInfo extends Details {
   /** Amount of time to wait since receiving the error response before retrying. */
   retryDelay?: number;
 }
 
 /** Describes additional debugging info. */
-export interface DebugInfo {
+export interface DebugInfo extends Details {
   /** The stack trace entries indicating where the error occurred. */
   stackEntries?: string[];
   /** Additional debugging information provided by the server. */
@@ -33,7 +37,7 @@ export interface DebugInfo {
  * the server could respond with the project id and set `service_disabled`
  * to true.
  */
-export interface QuotaFailure {
+export interface QuotaFailure extends Details {
   /**
    * A message type used to describe a single quota violation. For example, a
    * daily quota or a custom quota that was exceeded.
@@ -59,7 +63,7 @@ export interface QuotaFailure {
 }
 
 /** Describes the cause of the error with structured details. */
-export interface ErrorInfo {
+export interface ErrorInfo extends Details {
   /**
    * The reason of the error. This is a constant value that identifies the
    * proximate cause of the error. Error reasons are unique within a particular
@@ -100,7 +104,7 @@ export interface ErrorInfo {
  * acknowledged, it could list the terms of service violation in the
  * PreconditionFailure message.
  */
-export interface PreconditionFailure {
+export interface PreconditionFailure extends Details {
   /** Describes all precondition violations. */
   violations?: {
     /**
@@ -131,7 +135,7 @@ export interface PreconditionFailure {
  * Describes violations in a client request. This error type focuses on the
  * syntactic aspects of the request.
  */
-export interface BadRequest {
+export interface BadRequest extends Details {
   /** Describes all violations in a client request. */
   fieldViolations: {
     /**
@@ -149,7 +153,7 @@ export interface BadRequest {
  * Contains metadata about the request that can be attached when filing a bug
  * or providing other forms of feedback.
  */
-export interface RequestInfo {
+export interface RequestInfo extends Details {
   /**
    * An opaque string that should only be interpreted by the service generating
    * it.
@@ -167,7 +171,7 @@ export interface RequestInfo {
 }
 
 /** Describes the resource that is being accessed. */
-export interface ResourceInfo {
+export interface ResourceInfo extends Details {
   /**
    * A name for the type of resource being accessed, e.g. "sql table",
    * "cloud storage bucket", "file", "Google calendar"; or the type URL
@@ -202,7 +206,7 @@ export interface ResourceInfo {
  * project hasn't enabled the accessed service, this can contain a URL pointing
  * directly to the right place in the developer console to flip the bit.
  */
-export interface Help {
+export interface Help extends Details {
   /** URL(s) pointing to additional information on handling the current error. */
   links?: {
     /** Describes what the link offers. */
@@ -214,6 +218,8 @@ export interface Help {
   }[];
 }
 
+export interface ClutchErrorDetails extends IClutch.api.v1.ErrorDetails, Details {}
+
 export type ErrorDetails =
   | RetryInfo
   | DebugInfo
@@ -224,7 +230,7 @@ export type ErrorDetails =
   | RequestInfo
   | ResourceInfo
   | Help
-  | IClutch.api.v1.ErrorDetails
+  | ClutchErrorDetails
   | any;
 
 /** An error received from the backend of Clutch. */
@@ -262,18 +268,23 @@ const grpcResponseToError = (clientError: AxiosError): ClutchError => {
   } as ClutchError;
 
   if (data?.details !== undefined && data.details.length > 0) {
-    error.details = data.details;
+    const details = data.details.map(detail => {
+      const filteredDetail = { ...detail, type: detail["@type"] };
+      delete filteredDetail["@type"];
+      return filteredDetail;
+    });
+    error.details = details;
   }
 
   return error;
 };
 
 const isHelpDetails = (details: ErrorDetails): details is Help => {
-  return (details as Help).links !== undefined;
+  return details.type === "types.google.com/google.rpc.Help";
 };
 
 const isClutchErrorDetails = (details: ErrorDetails): details is IClutch.api.v1.ErrorDetails => {
-  return (details as IClutch.api.v1.ErrorDetails).wrapped !== undefined;
+  return details.type === "type.googleapis.com/clutch.api.v1.ErrorDetails";
 };
 
 export { grpcResponseToError, isClutchErrorDetails, isHelpDetails };

@@ -1,7 +1,6 @@
-import type { clutch as IClutch } from "@clutch-sh/api";
 import type { AxiosError } from "axios";
 
-import type { ClutchError, Help } from "../errors";
+import type { ClutchError, ClutchErrorDetails, Help } from "../errors";
 import { grpcResponseToError, isClutchErrorDetails, isHelpDetails } from "../errors";
 
 describe("clutch error", () => {
@@ -75,6 +74,7 @@ describe("clutch error", () => {
 describe("isHelpDetails", () => {
   it("returns true for help details", () => {
     const details = {
+      type: "types.google.com/google.rpc.Help",
       links: [
         {
           description: "Please file a ticket here for more help.",
@@ -88,7 +88,7 @@ describe("isHelpDetails", () => {
 
   it("returns false for non-help details", () => {
     const details = {
-      type: "randomType",
+      type: "unknownType",
       something: [
         {
           key: "value",
@@ -102,6 +102,7 @@ describe("isHelpDetails", () => {
 describe("isClutchErrorDetails", () => {
   it("returns true for Clutch specific error details", () => {
     const details = {
+      type: "type.googleapis.com/clutch.api.v1.ErrorDetails",
       wrapped: [
         {
           code: 2,
@@ -112,14 +113,14 @@ describe("isClutchErrorDetails", () => {
           message: "core-staging-1: nono",
         },
       ],
-    } as IClutch.api.v1.ErrorDetails;
+    } as ClutchErrorDetails;
 
     expect(isClutchErrorDetails(details)).toBe(true);
   });
 
   it("returns false for non-Clutch specific error details", () => {
     const details = {
-      type: "randomType",
+      type: "unknownType",
       something: [
         {
           key: "value",
