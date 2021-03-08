@@ -100,18 +100,31 @@ func (x *SlackConfig) GetOverrides() []*CustomMessage {
 
 //
 //By default, the sink provides a formatted message using a subset of info in an audit event. A custom
-//message can alo be created for a `/SERVICE/METHOD` using the metadata (API Request/Response) in an
-//audit event. The custom message will be appended to the default message for a richer slack audit.
+//message can alo be created for a /SERVICE/METHOD using the audit event's metadata (API Request/Response).
+//The custom message will be appended to the default message for a richer slack audit.
 type CustomMessage struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The full method in the format of `/SERVICE/METHOD`
+	// The full method in the format of /SERVICE/METHOD
 	FullMethod string `protobuf:"bytes,1,opt,name=full_method,json=fullMethod,proto3" json:"full_method,omitempty"`
 	//
-	//The slack sink uses the Go text/template pacakge. Example of a custom message for /clutch.k8s.v1.K8sAPI/ResizeHPA:
-	//"{{Min size: $$Request.sizing.min\nMax size: $$Request.sizing.max}}"
+	//The slack sink uses the Go text/template package. Note: Use Clutch templating tokens for the following:
+	//1) For the Go Template Action syntax, use [[ ]] in lieu of {{ }}
+	//2) For the Go Template Variable syntax, use $$ in lieu of $
+	//
+	//Examples:
+	//full_method: /clutch.k8s.v1.K8sAPI/ResizeHPA
+	//message: "Min size: [[.Request.sizing.min]]\nMax size: [[.Request.sizing.max]]"
+	//
+	//full_method: /clutch.k8s.v1.K8sAPI/UpdateDeployment:
+	//1. Using `range`
+	//message: "*Updated Labels*: [[range $$k, $$v := .Request.fields.labels]]\n- [[$$k]]: [[$$v]][[end]]"
+	//
+	//2. Using Clutch helper `slackList`
+	//message: "*Updated Labels*: [[slackList .Request.fields.labels]]"
+	//
 	//See https://api.slack.com/reference/surfaces/formatting for slack markdown formatting
 	Message string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 }

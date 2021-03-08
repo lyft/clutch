@@ -62,18 +62,12 @@ var funcMap = template.FuncMap{
 	"slackList": slackList,
 }
 
-// OverrideLookup stores a map of custom slack messages that are
-// provided in the slack config
-type OverrideLookup struct {
-	messages map[string]*configv1.CustomMessage
-}
-
 type svc struct {
 	logger *zap.Logger
 	scope  tally.Scope
 
 	filter    *auditconfigv1.Filter
-	overrides *OverrideLookup
+	overrides OverrideLookup
 
 	slack   *slack.Client
 	channel string
