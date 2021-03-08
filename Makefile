@@ -79,6 +79,10 @@ backend-config-validation:
 yarn-install: yarn-ensure
 	$(YARN) --cwd frontend install --frozen-lockfile
 
+.PHONY: backend-integration-test
+backend-integration-test:
+	cd backend/internal/test/integration/xds && docker-compose up --build --abort-on-container-exit
+
 .PHONY: frontend # Build production frontend assets.
 frontend: yarn-install
 	$(YARN) --cwd frontend build

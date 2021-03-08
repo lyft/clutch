@@ -17,6 +17,7 @@ import (
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
 )
 
 const (
@@ -240,7 +241,7 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 }
 
 func TestRefreshCache(t *testing.T) {
-	s := mockStorer{}
+	s := experimentstoremock.MockStorer{}
 	rtdsConfig := RTDSConfig{
 		layerName:     "test_layer",
 		ingressPrefix: "ingress",
@@ -248,7 +249,7 @@ func TestRefreshCache(t *testing.T) {
 	}
 	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
 	refreshCache(context.Background(), &s, testCache, nil, &rtdsConfig, nil)
-	assert.Equal(t, s.getExperimentArguments.configType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig")
+	assert.Equal(t, s.GetExperimentArguments.ConfigType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig")
 }
 
 func TestComputeVersionReturnValue(t *testing.T) {

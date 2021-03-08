@@ -63,6 +63,7 @@ jobs:
         env:
           GOFLAGS: "-count=1" # idiomatic way to disable test caching so they always run
       - run: make backend-config-validation
+      - run: make backend-integration-test
   lint:
     runs-on: ubuntu-latest
     steps:
