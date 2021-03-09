@@ -4,7 +4,6 @@ import (
 	"context"
 	"strings"
 
-	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -170,10 +169,7 @@ func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 	var startTimestamp *timestamppb.Timestamp
 	startTime := k8spod.Status.StartTime
 	if startTime != nil {
-		startTimeProto, err := ptypes.TimestampProto(startTime.Time)
-		if err == nil {
-			startTimestamp = startTimeProto
-		}
+		startTimestamp = timestamppb.New(startTime.Time)
 	}
 
 	clusterName := k8spod.ClusterName
