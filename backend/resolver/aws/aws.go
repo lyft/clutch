@@ -17,6 +17,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	ec2v1api "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	kinesisv1api "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	awsv1resolver "github.com/lyft/clutch/backend/api/resolver/aws/v1"
@@ -133,12 +134,39 @@ func (r *res) Resolve(ctx context.Context, wantTypeURL string, input proto.Messa
 func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (*resolver.Results, error) {
 	switch typeURL {
 	case typeURLInstance:
-		return r.instanceResults(ctx, resolver.OptionAll, []string{query}, limit)
+		patternValues, ok, err := meta.ExtractPatternValuesFromString((*ec2v1api.Instance)(nil), query)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
+			return r.instanceResults(ctx, patternValues["region"], []string{patternValues["instance_id"]}, limit)
+		}
+
+		id, err := normalizeInstanceID(query)
+		if err != nil {
+			return nil, err
+		}
+		return r.instanceResults(ctx, resolver.OptionAll, []string{id}, limit)
 
 	case typeURLAutoscalingGroup:
+		patternValues, ok, err := meta.ExtractPatternValuesFromString((*ec2v1.AutoscalingGroup)(nil), query)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
+			return r.autoscalingGroupResults(ctx, patternValues["region"], []string{patternValues["name"]}, limit)
+		}
 		return r.autoscalingGroupResults(ctx, resolver.OptionAll, []string{query}, limit)
 
 	case typeURLKinesisStream:
+		patternValues, ok, err := meta.ExtractPatternValuesFromString((*kinesisv1api.Stream)(nil), query)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
+			return r.kinesisResults(ctx, patternValues["region"], patternValues["stream_name"], limit)
+		}
+
 		return r.kinesisResults(ctx, resolver.OptionAll, query, limit)
 
 	default:

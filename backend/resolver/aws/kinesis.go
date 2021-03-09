@@ -6,9 +6,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 
-	kinesisv1api "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	awsv1resolver "github.com/lyft/clutch/backend/api/resolver/aws/v1"
-	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/resolver"
 )
 
@@ -25,20 +23,10 @@ func (r *res) resolveKinesisStreamForInput(ctx context.Context, input proto.Mess
 func (r *res) kinesisResults(ctx context.Context, region, id string, limit uint32) (*resolver.Results, error) {
 	ctx, handler := resolver.NewFanoutHandler(ctx)
 
-	patternValues, ok, err := meta.ExtractPatternValuesFromString((*kinesisv1api.Stream)(nil), id)
-	if err != nil {
-		return nil, err
-	}
-
 	regions := r.determineRegionsForOption(region)
-	if ok {
-		id = patternValues["stream_name"]
-		regions = []string{patternValues["region"]}
-	}
-
 	for _, region := range regions {
 		handler.Add(1)
-		go func(region, id string) {
+		go func(region string) {
 			defer handler.Done()
 			stream, err := r.client.DescribeKinesisStream(ctx, region, id)
 			select {
@@ -47,7 +35,7 @@ func (r *res) kinesisResults(ctx context.Context, region, id string, limit uint3
 			case <-handler.Cancelled():
 				return
 			}
-		}(region, id)
+		}(region)
 	}
 
 	return handler.Results(limit)
