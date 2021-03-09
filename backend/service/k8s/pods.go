@@ -4,8 +4,10 @@ import (
 	"context"
 	"strings"
 
+	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -165,25 +167,28 @@ func (s *svc) checkExpectedObjectMetaFields(expectedObjectMetaFields *k8sapiv1.E
 }
 
 func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
-	// TODO: There's a mismatch between the serialization of the timestamp here and what's expected
-	// on the frontend.
-	// var launch *timestamp.Timestamp
-	// if converted, err := ptypes.TimestampProto(k8spod.Status.StartTime.Time); err == nil {
-	// 	launch = converted
-	// }
+	var startTimestamp *timestamppb.Timestamp
+	startTime := k8spod.Status.StartTime
+	if startTime != nil {
+		startTimeProto, err := ptypes.TimestampProto(startTime.Time)
+		if err == nil {
+			startTimestamp = startTimeProto
+		}
+	}
+
 	clusterName := k8spod.ClusterName
 	if clusterName == "" {
 		clusterName = cluster
 	}
 	return &k8sapiv1.Pod{
-		Cluster:    clusterName,
-		Namespace:  k8spod.Namespace,
-		Name:       k8spod.Name,
-		Containers: makeContainers(k8spod.Status.ContainerStatuses),
-		NodeIp:     k8spod.Status.HostIP,
-		PodIp:      k8spod.Status.PodIP,
-		State:      protoForPodState(k8spod.Status.Phase),
-		//StartTime:   launch,
+		Cluster:     clusterName,
+		Namespace:   k8spod.Namespace,
+		Name:        k8spod.Name,
+		Containers:  makeContainers(k8spod.Status.ContainerStatuses),
+		NodeIp:      k8spod.Status.HostIP,
+		PodIp:       k8spod.Status.PodIP,
+		State:       protoForPodState(k8spod.Status.Phase),
+		StartTime:   startTimestamp,
 		Labels:      k8spod.Labels,
 		Annotations: k8spod.Annotations,
 	}

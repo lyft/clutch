@@ -30,6 +30,7 @@ func TestProtoForContainerState(t *testing.T) {
 }
 
 func testPodClientset() *fake.Clientset {
+	now := metav1.Now()
 	testPods := []runtime.Object{
 		&corev1.Pod{
 			ObjectMeta: metav1.ObjectMeta{
@@ -40,7 +41,7 @@ func testPodClientset() *fake.Clientset {
 				Annotations: map[string]string{"baz": "quuz"},
 			},
 			Status: corev1.PodStatus{
-				StartTime: &metav1.Time{},
+				StartTime: &now,
 				ContainerStatuses: []corev1.ContainerStatus{
 					{Name: "container1"},
 					{Name: "container2"},
@@ -57,7 +58,7 @@ func testPodClientset() *fake.Clientset {
 				Annotations: map[string]string{"baz": "quuz"},
 			},
 			Status: corev1.PodStatus{
-				StartTime: &metav1.Time{},
+				StartTime: &now,
 				ContainerStatuses: []corev1.ContainerStatus{
 					{Name: "container1"},
 					{Name: "container2"},
@@ -73,7 +74,7 @@ func testPodClientset() *fake.Clientset {
 				Annotations: map[string]string{"baz": "quuz"},
 			},
 			Status: corev1.PodStatus{
-				StartTime: &metav1.Time{},
+				StartTime: &now,
 				ContainerStatuses: []corev1.ContainerStatus{
 					{Name: "container1"},
 					{Name: "container2"},
@@ -88,6 +89,7 @@ func testPodClientset() *fake.Clientset {
 
 func testListFakeClientset(numPods int) *fake.Clientset {
 	var fakeClient fake.Clientset
+	now := metav1.Now()
 	fakeClient.AddReactor("list", "pods",
 		func(action k8stesting.Action) (handled bool, ret runtime.Object, err error) {
 			pods := corev1.PodList{}
@@ -98,6 +100,9 @@ func testListFakeClientset(numPods int) *fake.Clientset {
 						Name:        fmt.Sprintf("testing-pod-name-%b", i),
 						Namespace:   "testing-namespace",
 						ClusterName: "staging",
+					},
+					Status: corev1.PodStatus{
+						StartTime: &now,
 					},
 				})
 			}
@@ -156,6 +161,7 @@ func TestDescribePod(t *testing.T) {
 	)
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
+	assert.NotNil(t, result.StartTime)
 }
 
 func TestDeletePod(t *testing.T) {
