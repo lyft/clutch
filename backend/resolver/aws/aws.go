@@ -17,7 +17,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	ec2v1api "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	kinesisv1api "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	awsv1resolver "github.com/lyft/clutch/backend/api/resolver/aws/v1"
@@ -149,7 +148,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 		return r.instanceResults(ctx, resolver.OptionAll, []string{id}, limit)
 
 	case typeURLAutoscalingGroup:
-		patternValues, ok, err := meta.ExtractPatternValuesFromString((*ec2v1.AutoscalingGroup)(nil), query)
+		patternValues, ok, err := meta.ExtractPatternValuesFromString((*ec2v1api.AutoscalingGroup)(nil), query)
 		if err != nil {
 			return nil, err
 		}
