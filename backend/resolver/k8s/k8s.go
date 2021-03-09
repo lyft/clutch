@@ -179,17 +179,17 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 				return nil, err
 			}
 
+			namespace := metav1.NamespaceAll
+			podQuery := query
+			cluster := ""
+
+			if ok {
+				namespace = patternValues["namespace"]
+				podQuery = patternValues["name"]
+				cluster = patternValues["cluster"]
+			}
+
 			for _, clientset := range clientsets {
-				namespace := metav1.NamespaceAll
-				podQuery := query
-				cluster := ""
-
-				if ok {
-					namespace = patternValues["namespace"]
-					podQuery = patternValues["name"]
-					cluster = patternValues["cluster"]
-				}
-
 				handler.Add(1)
 				go func(clientset, cluster, namespace, name string) {
 					defer handler.Done()
@@ -212,17 +212,17 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 				return nil, err
 			}
 
+			namespace := metav1.NamespaceAll
+			hpaQuery := query
+			cluster := ""
+
+			if ok {
+				namespace = patternValues["namespace"]
+				hpaQuery = patternValues["name"]
+				cluster = patternValues["cluster"]
+			}
+
 			for _, clientset := range clientsets {
-				namespace := metav1.NamespaceAll
-				hpaQuery := query
-				cluster := ""
-
-				if ok {
-					namespace = patternValues["namespace"]
-					hpaQuery = patternValues["name"]
-					cluster = patternValues["cluster"]
-				}
-
 				handler.Add(1)
 				go func(clientset, cluster, namespace, query string) {
 					defer handler.Done()
