@@ -123,7 +123,7 @@ func awaitExpectedReturnValueForSimpleCall(t *testing.T, e *envoytest.EnvoyHandl
 	return nil
 }
 
-func TestEnvclearoyECDSFaults(t *testing.T) {
+func TestEnvoyECDSFaults(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
 		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
