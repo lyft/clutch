@@ -38,13 +38,12 @@ func (t *TestServer) Register(m module.Module) {
 }
 
 func (t *TestServer) Run() {
+	//nolint:gosec
+	l, err := net.Listen("tcp", "0.0.0.0:9000")
+	if err != nil {
+		panic(err)
+	}
 	go func() {
-		//nolint:gosec
-		l, err := net.Listen("tcp", "0.0.0.0:9000")
-		if err != nil {
-			panic(err)
-		}
-
 		err = t.registrar.GRPCServer().Serve(l)
 		if err != nil {
 			panic(err)
