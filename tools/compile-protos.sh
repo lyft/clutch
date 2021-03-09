@@ -103,7 +103,7 @@ main() {
 
       for proto in "${PROTOS[@]}"; do
         if ! output=$("${PROTOC_BIN}" \
-          -I"${PROTOC_INCLUDE_DIR}" -I"${API_ROOT}" \
+          -I"${PROTOC_INCLUDE_DIR}" -I"${API_ROOT}" -I"${CLUTCH_API_ROOT}" \
           -I"${grpc_gateway_include_path}" -I"${pg_validate_include_path}" \
           --buf-check-lint_out=. \
           "--buf-check-lint_opt={\"input_config\": ${buf_lint_config}}" \
