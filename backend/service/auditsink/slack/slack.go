@@ -38,11 +38,12 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	}
 
 	s := &svc{
-		logger:  logger,
-		filter:  config.Filter,
-		scope:   scope,
-		slack:   slack.New(config.Token),
-		channel: config.Channel,
+		logger:    logger,
+		filter:    config.Filter,
+		overrides: NewOverrideLookup(config.Overrides),
+		scope:     scope,
+		slack:     slack.New(config.Token),
+		channel:   config.Channel,
 	}
 	return s, nil
 }
@@ -65,7 +66,8 @@ type svc struct {
 	logger *zap.Logger
 	scope  tally.Scope
 
-	filter *auditconfigv1.Filter
+	filter    *auditconfigv1.Filter
+	overrides OverrideLookup
 
 	slack   *slack.Client
 	channel string

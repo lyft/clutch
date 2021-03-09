@@ -6069,6 +6069,9 @@ export namespace clutch {
 
                             /** SlackConfig filter */
                             filter?: (clutch.config.service.audit.v1.IFilter|null);
+
+                            /** SlackConfig overrides */
+                            overrides?: (clutch.config.service.auditsink.slack.v1.ICustomMessage[]|null);
                         }
 
                         /** Represents a SlackConfig. */
@@ -6088,6 +6091,9 @@ export namespace clutch {
 
                             /** SlackConfig filter. */
                             public filter?: (clutch.config.service.audit.v1.IFilter|null);
+
+                            /** SlackConfig overrides. */
+                            public overrides: clutch.config.service.auditsink.slack.v1.ICustomMessage[];
 
                             /**
                              * Verifies a SlackConfig message.
@@ -6113,6 +6119,60 @@ export namespace clutch {
 
                             /**
                              * Converts this SlackConfig to JSON.
+                             * @returns JSON object
+                             */
+                            public toJSON(): { [k: string]: any };
+                        }
+
+                        /** Properties of a CustomMessage. */
+                        interface ICustomMessage {
+
+                            /** CustomMessage fullMethod */
+                            fullMethod?: (string|null);
+
+                            /** CustomMessage message */
+                            message?: (string|null);
+                        }
+
+                        /** Represents a CustomMessage. */
+                        class CustomMessage implements ICustomMessage {
+
+                            /**
+                             * Constructs a new CustomMessage.
+                             * @param [properties] Properties to set
+                             */
+                            constructor(properties?: clutch.config.service.auditsink.slack.v1.ICustomMessage);
+
+                            /** CustomMessage fullMethod. */
+                            public fullMethod: string;
+
+                            /** CustomMessage message. */
+                            public message: string;
+
+                            /**
+                             * Verifies a CustomMessage message.
+                             * @param message Plain object to verify
+                             * @returns `null` if valid, otherwise the reason why it is not
+                             */
+                            public static verify(message: { [k: string]: any }): (string|null);
+
+                            /**
+                             * Creates a CustomMessage message from a plain object. Also converts values to their respective internal types.
+                             * @param object Plain object
+                             * @returns CustomMessage
+                             */
+                            public static fromObject(object: { [k: string]: any }): clutch.config.service.auditsink.slack.v1.CustomMessage;
+
+                            /**
+                             * Creates a plain object from a CustomMessage message. Also converts values to other types if specified.
+                             * @param message CustomMessage
+                             * @param [options] Conversion options
+                             * @returns Plain object
+                             */
+                            public static toObject(message: clutch.config.service.auditsink.slack.v1.CustomMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                            /**
+                             * Converts this CustomMessage to JSON.
                              * @returns JSON object
                              */
                             public toJSON(): { [k: string]: any };
