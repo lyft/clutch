@@ -259,30 +259,7 @@ func (c *ecdsCallbacks) OnStreamClosed(streamID int64) {
 }
 
 func (c *ecdsCallbacks) OnStreamRequest(streamID int64, req *gcpDiscoveryV3.DiscoveryRequest) error {
-	c.safeECDSResources.mu.Lock()
-	defer c.safeECDSResources.mu.Unlock()
-
-	// if resources are not present in requestedResourcesMap for a cluster, add them
-	if _, exists := c.safeECDSResources.requestedResourcesMap[req.Node.Cluster]; exists {
-		var missingResources []string
-		for _, resourceInRequest := range req.ResourceNames {
-			isMissing := true
-			for _, resource := range c.safeECDSResources.requestedResourcesMap[req.Node.Cluster] {
-				if resource == resourceInRequest {
-					isMissing = false
-					continue
-				}
-			}
-
-			if isMissing {
-				missingResources = append(missingResources, resourceInRequest)
-			}
-		}
-
-		c.safeECDSResources.requestedResourcesMap[req.Node.Cluster] = append(c.safeECDSResources.requestedResourcesMap[req.Node.Cluster], missingResources...)
-	} else {
-		c.safeECDSResources.requestedResourcesMap[req.Node.Cluster] = append([]string{}, req.ResourceNames...)
-	}
+	c.safeECDSResources.setResourcesForCluster(req.Node.Cluster, req.ResourceNames)
 
 	c.logger.Debugw("ECDS OnStreamRequest", "streamID", streamID, "cluster", req.Node.Cluster, "resources", req.ResourceNames)
 	c.onStreamRequest(streamID, req.Node.Cluster, req.ErrorDetail)

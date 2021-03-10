@@ -88,7 +88,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 
 		// Enable ECDS if cluster present in the map
 		if _, exists := ecdsConfig.enabledClusters[cluster]; exists {
-			resources[gcpTypes.ExtensionConfig] = generateECDSResource(experiments, ttl, logger)
+			resources[gcpTypes.ExtensionConfig] = generateECDSResource(experiments, cluster, ttl, logger)
 
 			// generate empty Runtime config to clear any existing RTDS faults
 			resources[gcpTypes.Runtime] = generateRTDSResource([]*experimentation.Experiment{}, rtdsConfig, ttl, logger)
@@ -106,36 +106,32 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 }
 
 func setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl, cluster string, snapshotCache gcpCacheV3.SnapshotCache, logger *zap.SugaredLogger) error {
-	currentSnapshotVersion := ""
-	currentSnapshot, err := snapshotCache.GetSnapshot(cluster)
-	if err == nil {
-		currentSnapshotVersion, _ = computeChecksum(currentSnapshot)
-	}
+	currentSnapshot, _ := snapshotCache.GetSnapshot(cluster)
 
 	snapshot := gcpCacheV3.Snapshot{}
+	isNewSnapshotSame := true
 	for resourceType, resources := range resourceMap {
-		computedVersion, err := computeChecksum(resources)
+		newComputedVersion, err := computeChecksum(resources)
 		if err != nil {
-			continue
+			logger.Errorw("Unable to compute checksum", "cluster", cluster, "resourceType", resourceType, "resources", resources)
+			return nil
 		}
 
-		snapshot.Resources[resourceType] = gcpCacheV3.NewResourcesWithTtl(computedVersion, resources)
+		if newComputedVersion != currentSnapshot.Resources[resourceType].Version {
+			isNewSnapshotSame = false
+		}
+
+		snapshot.Resources[resourceType] = gcpCacheV3.NewResourcesWithTtl(newComputedVersion, resources)
 	}
 
-	newSnapshotVersion, err := computeChecksum(snapshot)
-	if err != nil {
-		logger.Errorw("Error generating version for new snapshot", "cluster", cluster, "currentSnapshot", currentSnapshot, "error", err)
-		return nil
-	}
-
-	if currentSnapshotVersion == newSnapshotVersion {
+	if isNewSnapshotSame {
 		// No change in snapshot of this cluster
 		logger.Debugw("Not setting snapshot as its same as old one", "cluster", cluster, "snapshot", currentSnapshot, "resourceMap", resourceMap)
 		return nil
 	}
 
 	logger.Infow("Setting snapshot", "cluster", cluster, "resources", resourceMap)
-	err = snapshotCache.SetSnapshot(cluster, snapshot)
+	err := snapshotCache.SetSnapshot(cluster, snapshot)
 	if err != nil {
 		return err
 	}

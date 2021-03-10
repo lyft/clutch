@@ -302,9 +302,7 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
 		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
-		if err != nil {
-			t.Errorf("unmarshalAny failed %v", err)
-		}
+		assert.NoError(t, err)
 
 		upstream, downstream, err := getClusterPair(config)
 		assert.NoError(t, err)
@@ -315,13 +313,13 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 		if upstream == testCluster {
 			testClusterFaults = append(testClusterFaults, experiment)
 
-			// Since ECDS can only perform one experiment per cluster
+			// Currently ECDS can only perform one experiment per cluster. We pick the first experiment in the list.
 			break
 		}
 	}
 
 	resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
-	resources[gcpTypes.ExtensionConfig] = generateECDSResource(testClusterFaults, nil, zap.NewNop().Sugar())
+	resources[gcpTypes.ExtensionConfig] = generateECDSResource(testClusterFaults, testCluster, nil, zap.NewNop().Sugar())
 	assert.Nil(t, resources[gcpTypes.ExtensionConfig][0].Ttl)
 	err := setSnapshot(resources, testCluster, testCache, zap.NewNop().Sugar())
 	if err != nil {
@@ -338,9 +336,9 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 		t.Errorf("no resources")
 	}
 
-	assert.Contains(t, ecdsResources, FaultFilterConfigNameForInternalFault)
+	assert.Contains(t, ecdsResources, faultFilterConfigNameForInternalFault)
 
-	extensionConfig := ecdsResources[FaultFilterConfigNameForInternalFault].Resource.(*gcpCoreV3.TypedExtensionConfig)
+	extensionConfig := ecdsResources[faultFilterConfigNameForInternalFault].Resource.(*gcpCoreV3.TypedExtensionConfig)
 
 	httpFaultFilter := &gcpFilterFault.HTTPFault{}
 	err = ptypes.UnmarshalAny(extensionConfig.TypedConfig, httpFaultFilter)
@@ -353,7 +351,7 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	assert.EqualValues(t, 0, httpFaultFilter.GetDelay().GetPercentage().GetNumerator())
 	assert.EqualValues(t, 0, httpFaultFilter.GetDelay().GetFixedDelay().GetSeconds())
 	assert.EqualValues(t, 1, len(httpFaultFilter.GetHeaders()))
-	assert.EqualValues(t, EnvoyDownstreamServiceClusterHeader, httpFaultFilter.GetHeaders()[0].GetName())
+	assert.EqualValues(t, envoyDownstreamServiceClusterHeader, httpFaultFilter.GetHeaders()[0].GetName())
 	assert.EqualValues(t, downstreamCluster, httpFaultFilter.GetHeaders()[0].GetExactMatch())
 }
 
@@ -386,7 +384,7 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	}
 
 	resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
-	resources[gcpTypes.ExtensionConfig] = generateECDSResource(testClusterFaults, nil, zap.NewNop().Sugar())
+	resources[gcpTypes.ExtensionConfig] = generateECDSResource(testClusterFaults, testCluster, nil, zap.NewNop().Sugar())
 	assert.Nil(t, resources[gcpTypes.ExtensionConfig][0].Ttl)
 	err := setSnapshot(resources, testCluster, testCache, zap.NewNop().Sugar())
 	if err != nil {
@@ -403,9 +401,9 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 		t.Errorf("no resources")
 	}
 
-	assert.Contains(t, ecdsResources, fmt.Sprintf(FaultFilterConfigNameForExternalFault, upstreamCluster))
+	assert.Contains(t, ecdsResources, fmt.Sprintf(faultFilterConfigNameForExternalFault, upstreamCluster))
 
-	extensionConfig := ecdsResources[fmt.Sprintf(FaultFilterConfigNameForExternalFault, upstreamCluster)].Resource.(*gcpCoreV3.TypedExtensionConfig)
+	extensionConfig := ecdsResources[fmt.Sprintf(faultFilterConfigNameForExternalFault, upstreamCluster)].Resource.(*gcpCoreV3.TypedExtensionConfig)
 
 	httpFaultFilter := &gcpFilterFault.HTTPFault{}
 	err = ptypes.UnmarshalAny(extensionConfig.TypedConfig, httpFaultFilter)
