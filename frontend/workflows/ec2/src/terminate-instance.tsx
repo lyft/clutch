@@ -38,6 +38,7 @@ const InstanceDetails: React.FC<WizardChild> = () => {
 
   const data = [
     { name: "Instance ID", value: instance.instanceId },
+    { name: "Name", value: instance?.tags?.Name },
     { name: "Region", value: instance.region },
     { name: "State", value: instance.state },
     { name: "Instance Type", value: instance.instanceType },
@@ -46,10 +47,10 @@ const InstanceDetails: React.FC<WizardChild> = () => {
     { name: "Availability Zone", value: instance.availabilityZone },
   ];
 
-  const metadata = [];
+  const tags = [];
   if (instance.tags) {
     Object.keys(instance.tags).forEach(key => {
-      metadata.push({ name: key, value: instance.tags[key] });
+      tags.push({ name: key, value: instance.tags[key] });
     });
   }
 
@@ -57,10 +58,10 @@ const InstanceDetails: React.FC<WizardChild> = () => {
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
       <strong>Instance Details</strong>
       <MetadataTable data={data} />
-      {metadata.length > 0 && (
-        <Accordion title="Metadata">
+      {tags.length > 0 && (
+        <Accordion title="Tags">
           <AccordionDetails>
-            <MetadataTable data={metadata} />
+            <MetadataTable data={tags} />
           </AccordionDetails>
         </Accordion>
       )}
