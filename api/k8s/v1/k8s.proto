@@ -322,6 +322,11 @@ message ListOptions {
 }
 
 message ListPodsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -499,6 +504,11 @@ message DescribeDeploymentResponse {
 }
 
 message ListDeploymentsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -587,6 +597,11 @@ message DescribeStatefulSetResponse {
 }
 
 message ListStatefulSetsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -747,6 +762,11 @@ message DescribeCronJobResponse {
 }
 
 message ListCronJobsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -797,6 +817,11 @@ message ConfigMap {
 }
 
 message ListConfigMapsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
@@ -858,6 +883,11 @@ message Job {
 }
 
 message ListJobsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{namespace}"
+  };
+
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
