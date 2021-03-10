@@ -26,8 +26,9 @@ func TestProcessInformerEvent(t *testing.T) {
 
 	pod := &corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      "test-pod-1",
-			Namespace: "testing-namespace",
+			ClusterName: "cluster",
+			Name:        "test-pod-1",
+			Namespace:   "testing-namespace",
 		},
 	}
 
@@ -37,7 +38,7 @@ func TestProcessInformerEvent(t *testing.T) {
 
 	expectedUpdateCacheRequest := &topologyv1.UpdateCacheRequest{
 		Resource: &topologyv1.Resource{
-			Id: "test-pod-1",
+			Id: "cluster/testing-namespace/test-pod-1",
 			Pb: protoPod,
 		},
 		Action: topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,

@@ -119,6 +119,104 @@ func ResourceNames(pb proto.Message) []*auditv1.Resource {
 	return nil
 }
 
+// HydratedPatternForProto takes a proto and returns its pattern populated with values
+func HydratedPatternForProto(pb proto.Message) (string, error) {
+	m := pb.ProtoReflect()
+	opts := m.Descriptor().Options().ProtoReflect()
+
+	populatedPattern := []string{}
+
+	if opts.Has(identifierTypeDescriptor) {
+		v := opts.Get(identifierTypeDescriptor)
+		id := v.Message().Interface().(*apiv1.Identifier)
+
+		for _, pattern := range id.Patterns {
+			rs := resolvePattern(pb, pattern)
+			populatedPattern = append(populatedPattern, rs.Id)
+		}
+
+		// At the time of writing there is only support for a single pattern
+		// this list should only have one item to return
+		return populatedPattern[0], nil
+	}
+
+	return "", fmt.Errorf("the supplied proto does not have a pattern: [%T]", pb)
+}
+
+// ExtractPatternValuesFromString takes a string value and maps the patterns from a proto pattern
+// this is utilized by the resolver search api
+//
+// For example given the following proto pattern
+// option (clutch.api.v1.id).patterns = {
+//  pattern : "{cluster}/{namespace}/{name}"
+// };
+//
+// And the value of "mycluster/mynamespace/nameofresource"
+// we transform the pattern into a regex and map the values to the pattern names
+//
+// The output for this example is:
+// map[string]string{
+//  cluster: mycluster
+//  namespace: mynamespace
+//  name: nameofresource
+// }
+func ExtractPatternValuesFromString(pb proto.Message, value string) (map[string]string, bool, error) {
+	m := pb.ProtoReflect()
+	opts := m.Descriptor().Options().ProtoReflect()
+
+	// Field and Value result map
+	result := map[string]string{}
+
+	if opts.Has(identifierTypeDescriptor) {
+		v := opts.Get(identifierTypeDescriptor)
+		id := v.Message().Interface().(*apiv1.Identifier)
+
+		for _, pattern := range id.Patterns {
+			// The variable names on the pattern
+			patternFields := extractProtoPatternFieldNames(pattern)
+
+			// Convert the pattern into a regex
+			convertedRegex := fmt.Sprintf("^%s$", fieldNameRegexp.ReplaceAllString(pattern.Pattern, "(.*)"))
+			patternRegex, err := regexp.Compile(convertedRegex)
+			if err != nil {
+				return nil, false, err
+			}
+
+			// Extract the regex groups, index 0 is always the input string
+			subStringGroups := patternRegex.FindAllStringSubmatch(value, -1)
+			if subStringGroups != nil {
+				for i, name := range patternFields {
+					// Plus one here because the first value is the input string
+					result[name] = subStringGroups[0][i+1]
+				}
+			}
+		}
+	}
+
+	// If we dont have any results then we can just return false
+	if len(result) == 0 {
+		return result, false, nil
+	}
+
+	// Check that all of the fields have values
+	for _, value := range result {
+		if len(value) == 0 {
+			return result, false, nil
+		}
+	}
+
+	return result, true, nil
+}
+
+func extractProtoPatternFieldNames(pattern *apiv1.Pattern) []string {
+	variableNames := fieldNameRegexp.FindAllStringSubmatch(pattern.Pattern, -1)
+	results := make([]string, 0, len(variableNames))
+	for _, name := range variableNames {
+		results = append(results, name[1])
+	}
+	return results
+}
+
 func resolveField(pb proto.Message, name string) []*auditv1.Resource {
 	m := pb.ProtoReflect()
 	fd := m.Descriptor().Fields().ByName(protoreflect.Name(name))

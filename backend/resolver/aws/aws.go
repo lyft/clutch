@@ -132,6 +132,14 @@ func (r *res) Resolve(ctx context.Context, wantTypeURL string, input proto.Messa
 func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (*resolver.Results, error) {
 	switch typeURL {
 	case typeURLInstance:
+		patternValues, ok, err := meta.ExtractPatternValuesFromString((*ec2v1api.Instance)(nil), query)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
+			return r.instanceResults(ctx, patternValues["region"], []string{patternValues["instance_id"]}, limit)
+		}
+
 		id, err := normalizeInstanceID(query)
 		if err != nil {
 			return nil, err
@@ -139,9 +147,24 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 		return r.instanceResults(ctx, resolver.OptionAll, []string{id}, limit)
 
 	case typeURLAutoscalingGroup:
+		patternValues, ok, err := meta.ExtractPatternValuesFromString((*ec2v1api.AutoscalingGroup)(nil), query)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
+			return r.autoscalingGroupResults(ctx, patternValues["region"], []string{patternValues["name"]}, limit)
+		}
 		return r.autoscalingGroupResults(ctx, resolver.OptionAll, []string{query}, limit)
 
 	case typeURLKinesisStream:
+		patternValues, ok, err := meta.ExtractPatternValuesFromString((*kinesisv1api.Stream)(nil), query)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
+			return r.kinesisResults(ctx, patternValues["region"], patternValues["stream_name"], limit)
+		}
+
 		return r.kinesisResults(ctx, resolver.OptionAll, query, limit)
 
 	default:

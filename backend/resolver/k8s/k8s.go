@@ -174,36 +174,66 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 	switch typeURL {
 	case typeURLPod:
 		if idPattern.MatchString(query) {
-			for _, name := range clientsets {
+			patternValues, ok, err := meta.ExtractPatternValuesFromString((*k8sv1api.Pod)(nil), query)
+			if err != nil {
+				return nil, err
+			}
+
+			namespace := metav1.NamespaceAll
+			podQuery := query
+			cluster := ""
+
+			if ok {
+				namespace = patternValues["namespace"]
+				podQuery = patternValues["name"]
+				cluster = patternValues["cluster"]
+			}
+
+			for _, clientset := range clientsets {
 				handler.Add(1)
-				go func(name string) {
+				go func(clientset, cluster, namespace, name string) {
 					defer handler.Done()
-					pod, err := r.svc.DescribePod(ctx, name, "", metav1.NamespaceAll, query)
+					pod, err := r.svc.DescribePod(ctx, clientset, cluster, namespace, name)
 					select {
 					case handler.Channel() <- resolver.NewFanoutResult([]*k8sv1api.Pod{pod}, err):
 						return
 					case <-handler.Cancelled():
 						return
 					}
-				}(name)
+				}(clientset, cluster, namespace, podQuery)
 			}
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "did not understand input")
 		}
 	case typeURLHPA:
 		if idPattern.MatchString(query) {
-			for _, name := range clientsets {
+			patternValues, ok, err := meta.ExtractPatternValuesFromString((*k8sv1api.HPA)(nil), query)
+			if err != nil {
+				return nil, err
+			}
+
+			namespace := metav1.NamespaceAll
+			hpaQuery := query
+			cluster := ""
+
+			if ok {
+				namespace = patternValues["namespace"]
+				hpaQuery = patternValues["name"]
+				cluster = patternValues["cluster"]
+			}
+
+			for _, clientset := range clientsets {
 				handler.Add(1)
-				go func(name string) {
+				go func(clientset, cluster, namespace, query string) {
 					defer handler.Done()
-					hpa, err := r.svc.DescribeHPA(ctx, name, "", metav1.NamespaceAll, query)
+					hpa, err := r.svc.DescribeHPA(ctx, clientset, cluster, namespace, query)
 					select {
 					case handler.Channel() <- resolver.NewFanoutResult([]*k8sv1api.HPA{hpa}, err):
 						return
 					case <-handler.Cancelled():
 						return
 					}
-				}(name)
+				}(clientset, cluster, namespace, hpaQuery)
 			}
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "did not understand input")

@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
@@ -184,4 +185,175 @@ func TestAuditDisabled(t *testing.T) {
 
 	result = IsAuditDisabled("/nonexistent/doesnotexist")
 	assert.False(t, result)
+}
+
+func TestExtractProtoPatternsValues(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		id          string
+		pb          proto.Message
+		expect      string
+		shouldError bool
+	}{
+		{
+			id: "deployment",
+			pb: &k8sapiv1.Deployment{
+				Cluster:   "foo",
+				Namespace: "bar",
+				Name:      "cat",
+			},
+			expect:      "foo/bar/cat",
+			shouldError: false,
+		},
+		{
+			id: "ec2 instance",
+			pb: &ec2v1.Instance{
+				Region:     "us-east-1",
+				InstanceId: "i-000000000",
+			},
+			expect:      "us-east-1/i-000000000",
+			shouldError: false,
+		},
+		{
+			id:          "no pattern found",
+			pb:          &anypb.Any{},
+			expect:      "",
+			shouldError: true,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			result, err := HydratedPatternForProto(tt.pb)
+			if tt.shouldError {
+				assert.Empty(t, result)
+				assert.Error(t, err)
+			} else {
+				assert.Equal(t, tt.expect, result)
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestPatternValueMapping(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		id     string
+		pb     proto.Message
+		search string
+		result map[string]string
+		ok     bool
+	}{
+		{
+			id:     "aws asg",
+			pb:     &ec2v1.AutoscalingGroup{},
+			search: "us-east-1/my-asg-name",
+			result: map[string]string{
+				"region": "us-east-1",
+				"name":   "my-asg-name",
+			},
+			ok: true,
+		},
+		{
+			id:     "aws instance",
+			pb:     &ec2v1.Instance{},
+			search: "us-east-1/i-0000000",
+			result: map[string]string{
+				"region":      "us-east-1",
+				"instance_id": "i-0000000",
+			},
+			ok: true,
+		},
+		{
+			id:     "test for partial match",
+			pb:     &ec2v1.Instance{},
+			search: "us-east-1/i-0000000/meow",
+			result: map[string]string{
+				"region":      "us-east-1/i-0000000",
+				"instance_id": "meow",
+			},
+			ok: true,
+		},
+		{
+			id:     "k8s deployment",
+			pb:     &k8sapiv1.Deployment{},
+			search: "mycluster/mynamespace/deploymentname",
+			result: map[string]string{
+				"cluster":   "mycluster",
+				"namespace": "mynamespace",
+				"name":      "deploymentname",
+			},
+			ok: true,
+		},
+		{
+			id:     "k8s deployment failed pattern match",
+			pb:     &k8sapiv1.Deployment{},
+			search: "nothecorrectpattern",
+			result: map[string]string{},
+			ok:     false,
+		},
+		{
+			id:     "failed match results should have nil values",
+			pb:     &k8sapiv1.Deployment{},
+			search: "cluster/namespace",
+			result: map[string]string{},
+			ok:     false,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			result, ok, err := ExtractPatternValuesFromString(tt.pb, tt.search)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.ok, ok)
+			assert.Equal(t, tt.result, result)
+		})
+	}
+}
+
+func TestExtractProtoPatternFieldNames(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		id      string
+		pattern *apiv1.Pattern
+		expect  []string
+	}{
+		{
+			id:      "3 fields",
+			pattern: &apiv1.Pattern{Pattern: "{name}/{of}/{fields}"},
+			expect:  []string{"name", "of", "fields"},
+		},
+		{
+			id:      "2 fields",
+			pattern: &apiv1.Pattern{Pattern: "{name}/{of}"},
+			expect:  []string{"name", "of"},
+		},
+		{
+			id:      "1 fields",
+			pattern: &apiv1.Pattern{Pattern: "{name}"},
+			expect:  []string{"name"},
+		},
+		{
+			id:      "different delimiters",
+			pattern: &apiv1.Pattern{Pattern: "{cat}/{meow}-{nom}_{food}--{tasty}"},
+			expect:  []string{"cat", "meow", "nom", "food", "tasty"},
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			actual := extractProtoPatternFieldNames(tt.pattern)
+			assert.Equal(t, tt.expect, actual)
+		})
+	}
 }
