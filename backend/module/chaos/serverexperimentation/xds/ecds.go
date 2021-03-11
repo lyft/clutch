@@ -286,7 +286,7 @@ func createAbortDelayConfig(httpFaultConfig *serverexperimentation.HTTPFaultConf
 		delay = &gcpFilterCommon.FaultDelay{
 			FaultDelaySecifier: &gcpFilterCommon.FaultDelay_FixedDelay{
 				FixedDelay: &duration.Duration{
-					Seconds: int64(httpFaultConfig.GetLatencyFault().GetLatencyDuration().GetFixedDurationMs()),
+					Nanos: int32(httpFaultConfig.GetLatencyFault().GetLatencyDuration().GetFixedDurationMs() * 1000000),
 				},
 			},
 			Percentage: &gcpType.FractionalPercent{

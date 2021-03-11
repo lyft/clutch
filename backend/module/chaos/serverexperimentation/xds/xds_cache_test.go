@@ -2,21 +2,27 @@ package xds
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"testing"
 	"time"
 
 	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
+	gcpRoute "github.com/envoyproxy/go-control-plane/envoy/config/route/v3"
+	gcpFilterCommon "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/common/fault/v3"
 	gcpFilterFault "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
 	gcpDiscovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
 	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
+	gcpType "github.com/envoyproxy/go-control-plane/envoy/type/v3"
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	gcpResourceV3 "github.com/envoyproxy/go-control-plane/pkg/resource/v3"
 	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/duration"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/proto"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
@@ -115,6 +121,14 @@ func mockGenerateFaultData(t *testing.T) []*experimentation.Experiment {
 		// Latency - Service F -> Service Y (External)
 		createExperiment(t, "serviceY", "serviceF", 40, 200, EXTERNAL, LATENCY),
 	}
+}
+
+func ProtoEqual(t *testing.T, a, b proto.Message) {
+	t.Helper()
+
+	jsonA, _ := json.Marshal(a)
+	jsonB, _ := json.Marshal(b)
+	assert.True(t, proto.Equal(a, b), "not equal: \n"+string(jsonA)+"\n"+string(jsonB))
 }
 
 func TestSetSnapshotRTDS(t *testing.T) {
@@ -346,13 +360,44 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 		t.Errorf("Unable to unmarshall typed config")
 	}
 
-	assert.EqualValues(t, 10, httpFaultFilter.GetAbort().GetPercentage().GetNumerator())
-	assert.EqualValues(t, 404, httpFaultFilter.GetAbort().GetHttpStatus())
-	assert.EqualValues(t, 0, httpFaultFilter.GetDelay().GetPercentage().GetNumerator())
-	assert.EqualValues(t, 0, httpFaultFilter.GetDelay().GetFixedDelay().GetSeconds())
-	assert.EqualValues(t, 1, len(httpFaultFilter.GetHeaders()))
-	assert.EqualValues(t, envoyDownstreamServiceClusterHeader, httpFaultFilter.GetHeaders()[0].GetName())
-	assert.EqualValues(t, downstreamCluster, httpFaultFilter.GetHeaders()[0].GetExactMatch())
+	expectedHTTPFaultFilter := &gcpFilterFault.HTTPFault{
+		Delay: &gcpFilterCommon.FaultDelay{
+			FaultDelaySecifier: &gcpFilterCommon.FaultDelay_FixedDelay{
+				FixedDelay: &duration.Duration{
+					Nanos: 1000000, // 0.001 second
+				},
+			},
+			Percentage: &gcpType.FractionalPercent{
+				Numerator:   0,
+				Denominator: gcpType.FractionalPercent_HUNDRED,
+			},
+		},
+		Abort: &gcpFilterFault.FaultAbort{
+			ErrorType: &gcpFilterFault.FaultAbort_HttpStatus{
+				HttpStatus: 404,
+			},
+			Percentage: &gcpType.FractionalPercent{
+				Numerator:   10,
+				Denominator: gcpType.FractionalPercent_HUNDRED,
+			},
+		},
+		Headers: []*gcpRoute.HeaderMatcher{
+			{
+				Name: envoyDownstreamServiceClusterHeader,
+				HeaderMatchSpecifier: &gcpRoute.HeaderMatcher_ExactMatch{
+					ExactMatch: downstreamCluster,
+				},
+			},
+		},
+
+		// override runtimes so that default runtime is not used.
+		DelayPercentRuntime:    delayPercentRuntime,
+		DelayDurationRuntime:   delayDurationRuntime,
+		AbortHttpStatusRuntime: abortHttpStatusRuntime,
+		AbortPercentRuntime:    abortPercentRuntime,
+	}
+
+	ProtoEqual(t, httpFaultFilter, expectedHTTPFaultFilter)
 }
 
 func TestSetSnapshotECDSExternalFault(t *testing.T) {
@@ -411,9 +456,34 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 		t.Errorf("Unable to unmarshall typed config")
 	}
 
-	assert.EqualValues(t, 0, httpFaultFilter.GetAbort().GetPercentage().GetNumerator())
-	assert.EqualValues(t, 503, httpFaultFilter.GetAbort().GetHttpStatus())
-	assert.EqualValues(t, 40, httpFaultFilter.GetDelay().GetPercentage().GetNumerator())
-	assert.EqualValues(t, 200, httpFaultFilter.GetDelay().GetFixedDelay().GetSeconds())
-	assert.EqualValues(t, 0, len(httpFaultFilter.GetHeaders()))
+	expectedHTTPFaultFilter := &gcpFilterFault.HTTPFault{
+		Delay: &gcpFilterCommon.FaultDelay{
+			FaultDelaySecifier: &gcpFilterCommon.FaultDelay_FixedDelay{
+				FixedDelay: &duration.Duration{
+					Nanos: 200000000, // 200 ms
+				},
+			},
+			Percentage: &gcpType.FractionalPercent{
+				Numerator:   40,
+				Denominator: gcpType.FractionalPercent_HUNDRED,
+			},
+		},
+		Abort: &gcpFilterFault.FaultAbort{
+			ErrorType: &gcpFilterFault.FaultAbort_HttpStatus{
+				HttpStatus: 503,
+			},
+			Percentage: &gcpType.FractionalPercent{
+				Numerator:   0,
+				Denominator: gcpType.FractionalPercent_HUNDRED,
+			},
+		},
+
+		// override runtimes so that default runtime is not used.
+		DelayPercentRuntime:    delayPercentRuntime,
+		DelayDurationRuntime:   delayDurationRuntime,
+		AbortHttpStatusRuntime: abortHttpStatusRuntime,
+		AbortPercentRuntime:    abortPercentRuntime,
+	}
+
+	ProtoEqual(t, httpFaultFilter, expectedHTTPFaultFilter)
 }

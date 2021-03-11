@@ -145,12 +145,13 @@ func TestEnvoyECDSFaults(t *testing.T) {
 	experiment := createTestExperiment(t, 404, ts.Storer)
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
-		timeout:        2 * time.Second,
+		// Timeout needs to be higher since envoy has exponential back-off request timeout
+		timeout:        4 * time.Second,
 		expectedStatus: 404,
 	})
 	assert.NoError(t, err, "did not see faults enabled")
 
-	// Not testing TTL by stopping the server as its currently not supported for ECDS in Upstream Envoy
+	// TODO(kathan24): Test TTL by stopping the server instead of canceling the experiment. Currently, TTL is not not supported for ECDS in the upstream Envoy
 	ts.Storer.CancelExperimentRun(context.Background(), experiment.Id)
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
