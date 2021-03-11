@@ -125,7 +125,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 	}
 
 	safeECDSResourceMap := SafeEcdsResourceMap{
-		requestedResourcesMap: map[string][]string{},
+		requestedResourcesMap: make(map[string]map[string]struct{}),
 	}
 
 	ecdsConfig := ECDSConfig{

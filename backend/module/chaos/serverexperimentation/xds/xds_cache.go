@@ -66,10 +66,8 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 
 			logger.Debugw("Removing experiments for cluster", "cluster", cluster)
 
-			// in order to remove fault, we need to set the snapshot with default ecds config
+			// in order to remove fault, we need to set the snapshot with default ecds config and default runtime resource
 			emptyResources[gcpTypes.ExtensionConfig] = generateEmptyECDSResource(cluster, ecdsConfig, logger)
-
-			// in order to remove fault, we need to set the snapshot with empty runtime resource
 			emptyResources[gcpTypes.Runtime] = generateRTDSResource([]*experimentation.Experiment{}, rtdsConfig, ttl, logger)
 
 			err := setSnapshot(emptyResources, cluster, snapshotCache, logger)
@@ -86,11 +84,9 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 
 		logger.Debugw("Injecting fault for cluster", "cluster", cluster)
 
-		// Enable ECDS if cluster present in the map
+		// Enable ECDS if cluster is ECDS enabled else enable RTDS
 		if _, exists := ecdsConfig.enabledClusters[cluster]; exists {
 			resources[gcpTypes.ExtensionConfig] = generateECDSResource(experiments, cluster, ttl, logger)
-
-			// generate empty Runtime config to clear any existing RTDS faults
 			resources[gcpTypes.Runtime] = generateRTDSResource([]*experimentation.Experiment{}, rtdsConfig, ttl, logger)
 		} else {
 			resources[gcpTypes.Runtime] = generateRTDSResource(experiments, rtdsConfig, ttl, logger)

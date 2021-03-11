@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	// INTERNAL FAULT
+	// INGRESS FAULT
 	// a given downstream service to a given upstream service faults
 	LatencyPercentageWithDownstream = `%s.%s.delay.fixed_delay_percent`
 	LatencyDurationWithDownstream   = `%s.%s.delay.fixed_duration_ms`
@@ -27,12 +27,12 @@ const (
 	HTTPPercentageWithoutDownstream    = `%s.abort.abort_percent`
 	HTTPStatusWithoutDownstream        = `%s.abort.http_status`
 
-	// EXTERNAL FAULT
+	// EGRESS FAULT
 	// a given downstream service to a given external upstream faults
-	LatencyPercentageForExternal = `%s.%s.delay.fixed_delay_percent`
-	LatencyDurationForExternal   = `%s.%s.delay.fixed_duration_ms`
-	HTTPPercentageForExternal    = `%s.%s.abort.abort_percent`
-	HTTPStatusForExternal        = `%s.%s.abort.http_status`
+	LatencyPercentageForEgress = `%s.%s.delay.fixed_delay_percent`
+	LatencyDurationForEgress   = `%s.%s.delay.fixed_duration_ms`
+	HTTPPercentageForEgress    = `%s.%s.abort.abort_percent`
+	HTTPStatusForEgress        = `%s.%s.abort.http_status`
 )
 
 type RTDSConfig struct {
@@ -127,9 +127,9 @@ func createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFau
 
 		switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
 		case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
-			// Abort External Fault
-			percentageKey = fmt.Sprintf(HTTPPercentageForExternal, egressPrefix, upstreamCluster)
-			faultKey = fmt.Sprintf(HTTPStatusForExternal, egressPrefix, upstreamCluster)
+			// Abort Egress Fault
+			percentageKey = fmt.Sprintf(HTTPPercentageForEgress, egressPrefix, upstreamCluster)
+			faultKey = fmt.Sprintf(HTTPStatusForEgress, egressPrefix, upstreamCluster)
 
 		case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
 			// Abort Internal Fault for all downstream services
@@ -153,9 +153,9 @@ func createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFau
 
 		switch httpFaultConfig.GetFaultTargeting().GetEnforcer().(type) {
 		case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
-			// Latency External Fault
-			percentageKey = fmt.Sprintf(LatencyPercentageForExternal, egressPrefix, upstreamCluster)
-			faultKey = fmt.Sprintf(LatencyDurationForExternal, egressPrefix, upstreamCluster)
+			// Latency Egress Fault
+			percentageKey = fmt.Sprintf(LatencyPercentageForEgress, egressPrefix, upstreamCluster)
+			faultKey = fmt.Sprintf(LatencyDurationForEgress, egressPrefix, upstreamCluster)
 
 		case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
 			// Latency Internal Fault for all downstream services
