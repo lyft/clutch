@@ -187,6 +187,13 @@ process shutting down.
 
 
 ```yaml title="backend/clutch-config.yaml"
+gateway:
+...
+  middleware:
+    ...
+    // highlight-start
+    - name: clutch.middleware.audit
+    // highlight-end
 ...
 services:
   ...
@@ -213,6 +220,13 @@ services:
 Below is sample configuration to show how the services described are enabled. Note that because services are instantiated in the order they are listed, order matters! Since the audit service depends on both the database and the sink, it needs to be listed after them.
 
 ```yaml title="backend/clutch-config.yaml"
+gateway:
+...
+  middleware:
+    ...
+    // highlight-start
+    - name: clutch.middleware.audit
+    // highlight-end
 ...
 services:
   ...
