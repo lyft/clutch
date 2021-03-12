@@ -44,8 +44,8 @@ func TestCreateRuntimeKeys(t *testing.T) {
 
 			switch config.GetFaultTargeting().GetEnforcer().(type) {
 			case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
-				expectedPercentageKey = fmt.Sprintf(HTTPPercentageForExternal, egressPrefix, upstream)
-				expectedFaultKey = fmt.Sprintf(HTTPStatusForExternal, egressPrefix, upstream)
+				expectedPercentageKey = fmt.Sprintf(HTTPPercentageForEgress, egressPrefix, upstream)
+				expectedFaultKey = fmt.Sprintf(HTTPStatusForEgress, egressPrefix, upstream)
 			case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
 				if downstream == "" {
 					expectedPercentageKey = fmt.Sprintf(HTTPPercentageWithoutDownstream, ingressPrefix)
@@ -62,8 +62,8 @@ func TestCreateRuntimeKeys(t *testing.T) {
 
 			switch config.GetFaultTargeting().GetEnforcer().(type) {
 			case *serverexperimentation.FaultTargeting_DownstreamEnforcing:
-				expectedPercentageKey = fmt.Sprintf(LatencyPercentageForExternal, egressPrefix, upstream)
-				expectedFaultKey = fmt.Sprintf(LatencyDurationForExternal, egressPrefix, upstream)
+				expectedPercentageKey = fmt.Sprintf(LatencyPercentageForEgress, egressPrefix, upstream)
+				expectedFaultKey = fmt.Sprintf(LatencyDurationForEgress, egressPrefix, upstream)
 			case *serverexperimentation.FaultTargeting_UpstreamEnforcing:
 				if downstream == "" {
 					expectedPercentageKey = fmt.Sprintf(LatencyPercentageWithoutDownstream, ingressPrefix)

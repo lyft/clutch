@@ -5921,6 +5921,9 @@ export namespace clutch {
 
                                 /** Config heartbeatInterval */
                                 heartbeatInterval?: (google.protobuf.IDuration|null);
+
+                                /** Config ecdsAllowList */
+                                ecdsAllowList?: (clutch.config.module.chaos.experimentation.xds.v1.Config.IECDSAllowList|null);
                             }
 
                             /** Represents a Config. */
@@ -5950,6 +5953,9 @@ export namespace clutch {
                                 /** Config heartbeatInterval. */
                                 public heartbeatInterval?: (google.protobuf.IDuration|null);
 
+                                /** Config ecdsAllowList. */
+                                public ecdsAllowList?: (clutch.config.module.chaos.experimentation.xds.v1.Config.IECDSAllowList|null);
+
                                 /**
                                  * Verifies a Config message.
                                  * @param message Plain object to verify
@@ -5977,6 +5983,57 @@ export namespace clutch {
                                  * @returns JSON object
                                  */
                                 public toJSON(): { [k: string]: any };
+                            }
+
+                            namespace Config {
+
+                                /** Properties of a ECDSAllowList. */
+                                interface IECDSAllowList {
+
+                                    /** ECDSAllowList enabledClusters */
+                                    enabledClusters?: (string[]|null);
+                                }
+
+                                /** Represents a ECDSAllowList. */
+                                class ECDSAllowList implements IECDSAllowList {
+
+                                    /**
+                                     * Constructs a new ECDSAllowList.
+                                     * @param [properties] Properties to set
+                                     */
+                                    constructor(properties?: clutch.config.module.chaos.experimentation.xds.v1.Config.IECDSAllowList);
+
+                                    /** ECDSAllowList enabledClusters. */
+                                    public enabledClusters: string[];
+
+                                    /**
+                                     * Verifies a ECDSAllowList message.
+                                     * @param message Plain object to verify
+                                     * @returns `null` if valid, otherwise the reason why it is not
+                                     */
+                                    public static verify(message: { [k: string]: any }): (string|null);
+
+                                    /**
+                                     * Creates a ECDSAllowList message from a plain object. Also converts values to their respective internal types.
+                                     * @param object Plain object
+                                     * @returns ECDSAllowList
+                                     */
+                                    public static fromObject(object: { [k: string]: any }): clutch.config.module.chaos.experimentation.xds.v1.Config.ECDSAllowList;
+
+                                    /**
+                                     * Creates a plain object from a ECDSAllowList message. Also converts values to other types if specified.
+                                     * @param message ECDSAllowList
+                                     * @param [options] Conversion options
+                                     * @returns Plain object
+                                     */
+                                    public static toObject(message: clutch.config.module.chaos.experimentation.xds.v1.Config.ECDSAllowList, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                                    /**
+                                     * Converts this ECDSAllowList to JSON.
+                                     * @returns JSON object
+                                     */
+                                    public toJSON(): { [k: string]: any };
+                                }
                             }
                         }
                     }

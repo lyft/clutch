@@ -1,16 +1,13 @@
 package xdstest
 
 import (
-	"time"
-
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/durationpb"
 
-	rtdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
+	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
 	xdstest "github.com/lyft/clutch/backend/internal/test/integration/helper/testserver"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
 	"github.com/lyft/clutch/backend/module"
@@ -25,15 +22,8 @@ type TestModuleServer struct {
 	Storer *experimentstoremock.SimpleStorer
 }
 
-func NewTestModuleServer(c func(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error), ttl bool) *TestModuleServer {
+func NewTestModuleServer(c func(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error), ttl bool, config *xdsconfigv1.Config) *TestModuleServer {
 	// Set up a test server listening to :9000.
-	config := &rtdsconfigv1.Config{
-		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
-		IngressFaultRuntimePrefix: "fault.http",
-		EgressFaultRuntimePrefix:  "egress",
-	}
-
 	if ttl {
 		config.ResourceTtl = &durationpb.Duration{
 			Seconds: 1,

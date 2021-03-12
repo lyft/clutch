@@ -14,14 +14,23 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
 	"github.com/lyft/clutch/backend/internal/test/integration/helper/envoytest"
 )
 
 // These tests are intended to be run with docker-compose to in order to set up a running Envoy instance
 // to run assertions against.
 func TestEnvoyFaults(t *testing.T) {
-	ts := xdstest.NewTestModuleServer(New, true)
+	xdsConfig := &xdsconfigv1.Config{
+		RtdsLayerName:             "rtds",
+		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		IngressFaultRuntimePrefix: "fault.http",
+		EgressFaultRuntimePrefix:  "egress",
+	}
+
+	ts := xdstest.NewTestModuleServer(New, true, xdsConfig)
 	defer ts.Stop()
 
 	e, err := envoytest.NewEnvoyHandle()
@@ -31,7 +40,7 @@ func TestEnvoyFaults(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, 503, code)
 
-	createTestExperiment(t, ts.Storer)
+	createTestExperiment(t, 400, ts.Storer)
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
 		timeout:        2 * time.Second,
@@ -50,7 +59,7 @@ func TestEnvoyFaults(t *testing.T) {
 	assert.NoError(t, err, "did not see faults reverted")
 }
 
-func createTestExperiment(t *testing.T, storer *experimentstoremock.SimpleStorer) {
+func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experimentstoremock.SimpleStorer) *experimentationv1.Experiment {
 	now := time.Now()
 	config := serverexperimentation.HTTPFaultConfig{
 		Fault: &serverexperimentation.HTTPFaultConfig_AbortFault{
@@ -59,7 +68,7 @@ func createTestExperiment(t *testing.T, storer *experimentstoremock.SimpleStorer
 					Percentage: 100,
 				},
 				AbortStatus: &serverexperimentation.FaultAbortStatus{
-					HttpStatusCode: 400,
+					HttpStatusCode: uint32(faultHttpStatus),
 				},
 			},
 		},
@@ -84,8 +93,10 @@ func createTestExperiment(t *testing.T, storer *experimentstoremock.SimpleStorer
 	a, err := ptypes.MarshalAny(&config)
 	assert.NoError(t, err)
 
-	_, err = storer.CreateExperiment(context.Background(), a, &now, &now)
+	experiment, err := storer.CreateExperiment(context.Background(), a, &now, &now)
 	assert.NoError(t, err)
+
+	return experiment
 }
 
 type awaitReturnValueParams struct {
@@ -110,4 +121,42 @@ func awaitExpectedReturnValueForSimpleCall(t *testing.T, e *envoytest.EnvoyHandl
 	}
 
 	return nil
+}
+
+func TestEnvoyECDSFaults(t *testing.T) {
+	xdsConfig := &xdsconfigv1.Config{
+		RtdsLayerName:             "rtds",
+		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		IngressFaultRuntimePrefix: "fault.http",
+		EgressFaultRuntimePrefix:  "egress",
+		EcdsAllowList:             &xdsconfigv1.Config_ECDSAllowList{EnabledClusters: []string{"test-cluster"}},
+	}
+
+	ts := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	defer ts.Stop()
+
+	e, err := envoytest.NewEnvoyHandle()
+	assert.NoError(t, err)
+
+	code, err := e.MakeSimpleCall()
+	assert.NoError(t, err)
+	assert.Equal(t, 503, code)
+
+	experiment := createTestExperiment(t, 404, ts.Storer)
+
+	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
+		// Timeout needs to be higher since envoy has exponential back-off request timeout
+		timeout:        4 * time.Second,
+		expectedStatus: 404,
+	})
+	assert.NoError(t, err, "did not see faults enabled")
+
+	// TODO(kathan24): Test TTL by stopping the server instead of canceling the experiment. Currently, TTL is not not supported for ECDS in the upstream Envoy
+	ts.Storer.CancelExperimentRun(context.Background(), experiment.Id)
+
+	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
+		timeout:        10 * time.Second,
+		expectedStatus: 503,
+	})
+	assert.NoError(t, err, "did not see faults reverted")
 }

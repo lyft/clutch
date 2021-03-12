@@ -15,11 +15,19 @@ import (
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
 )
 
 func TestServerStats(t *testing.T) {
-	testServer := xdstest.NewTestModuleServer(New, false)
+	xdsConfig := &xdsconfigv1.Config{
+		RtdsLayerName:             "rtds",
+		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		IngressFaultRuntimePrefix: "fault.http",
+		EgressFaultRuntimePrefix:  "egress",
+	}
+
+	testServer := xdstest.NewTestModuleServer(New, false, xdsConfig)
 	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -34,22 +42,29 @@ func TestServerStats(t *testing.T) {
 	_, err = v3Stream.sendV3RequestAndAwaitResponse("", "")
 	assert.NoError(t, err)
 
-	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
-	assert.Equal(t, int64(0), testServer.Scope.Snapshot().Counters()["test.v3.totalErrorsReceived+"].Value())
+	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.rtds.totalResourcesServed+"].Value())
+	assert.Equal(t, int64(0), testServer.Scope.Snapshot().Counters()["test.rtds.totalErrorsReceived+"].Value())
 
 	// Error response from xDS client.
 	err = v3Stream.stream.Send(&gcpDiscoveryV3.DiscoveryRequest{ErrorDetail: &rpc_status.Status{}})
 	assert.NoError(t, err)
 
-	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.v3.totalResourcesServed+"].Value())
+	assert.Equal(t, int64(1), testServer.Scope.Snapshot().Counters()["test.rtds.totalResourcesServed+"].Value())
 	// Async verification here since it appears that we don't get a response back in this case, so we
 	// aren't able to synchronize on the response.
-	awaitCounterEquals(t, testServer.Scope, "test.v3.totalErrorsReceived+", 1)
+	awaitCounterEquals(t, testServer.Scope, "test.rtds.totalErrorsReceived+", 1)
 }
 
 // Verifies that TTL and heartbeating is done when configured to do so.
 func TestResourceTTL(t *testing.T) {
-	testServer := xdstest.NewTestModuleServer(New, true)
+	xdsConfig := &xdsconfigv1.Config{
+		RtdsLayerName:             "rtds",
+		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		IngressFaultRuntimePrefix: "fault.http",
+		EgressFaultRuntimePrefix:  "egress",
+	}
+
+	testServer := xdstest.NewTestModuleServer(New, true, xdsConfig)
 	defer testServer.Stop()
 
 	ctx, cancel := context.WithCancel(context.Background())

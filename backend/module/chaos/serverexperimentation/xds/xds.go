@@ -12,6 +12,7 @@ import (
 
 	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
 	gcpDiscoveryV3 "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v3"
+	gcpExtencionServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/extension/v3"
 	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	gcpServerV3 "github.com/envoyproxy/go-control-plane/pkg/server/v3"
@@ -48,6 +49,8 @@ type Server struct {
 	xdsScope tally.Scope
 
 	rtdsConfig *RTDSConfig
+
+	ecdsConfig *ECDSConfig
 
 	logger *zap.SugaredLogger
 }
@@ -116,12 +119,27 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		egressPrefix:  config.GetEgressFaultRuntimePrefix(),
 	}
 
+	enabledECDSClusters := make(map[string]struct{})
+	for _, cluster := range config.GetEcdsAllowList().GetEnabledClusters() {
+		enabledECDSClusters[cluster] = struct{}{}
+	}
+
+	safeECDSResourceMap := SafeEcdsResourceMap{
+		requestedResourcesMap: make(map[string]map[string]struct{}),
+	}
+
+	ecdsConfig := ECDSConfig{
+		enabledClusters: enabledECDSClusters,
+		ecdsResourceMap: &safeECDSResourceMap,
+	}
+
 	return &Server{
 		ctx:                  ctx,
 		storer:               storer,
 		snapshotCacheV3:      cacheV3,
 		cacheRefreshInterval: cacheRefreshInterval,
 		rtdsConfig:           &rtdsConfig,
+		ecdsConfig:           &ecdsConfig,
 		resourceTTL:          resourceTTL,
 		xdsScope:             scope,
 		logger:               logger.Sugar(),
@@ -146,9 +164,12 @@ func (s *Server) newScopedStats(subScope string) serverStats {
 func (s *Server) Register(r module.Registrar) error {
 	PeriodicallyRefreshCache(s)
 	// RTDS V3 Server
-	rtdsServer := gcpServerV3.NewServer(s.ctx, s.snapshotCacheV3, &rtdsCallbacks{callbacksBase{s.newScopedStats("v3"),
+	rtdsServer := gcpServerV3.NewServer(s.ctx, s.snapshotCacheV3, &rtdsCallbacks{callbacksBase{s.newScopedStats("rtds"),
 		s.logger, 0}})
 	gcpRuntimeServiceV3.RegisterRuntimeDiscoveryServiceServer(r.GRPCServer(), rtdsServer)
+
+	ecdsServer := NewECDSServer(s.ctx, s.snapshotCacheV3, &ecdsCallbacks{callbacksBase{s.newScopedStats("ecds"), s.logger, 0}, s.ecdsConfig.ecdsResourceMap})
+	gcpExtencionServiceV3.RegisterExtensionConfigDiscoveryServiceServer(r.GRPCServer(), ecdsServer)
 	return nil
 }
 
@@ -214,4 +235,48 @@ func (c *rtdsCallbacks) OnFetchRequest(context.Context, *gcpDiscoveryV3.Discover
 
 func (c *rtdsCallbacks) OnFetchResponse(*gcpDiscoveryV3.DiscoveryRequest, *gcpDiscoveryV3.DiscoveryResponse) {
 	c.logger.Debugw("RTDS OnFetchResponse")
+}
+
+// ECDS Callbacks
+type ecdsCallbacks struct {
+	callbacksBase
+
+	// Track all the seen ECDS resources globally across all the streams. This allows us to query all the requested
+	// resources and present a default value for all the ones that don't have a specific value.
+	// This allows us to set a default value for all the dynamic ECDS resources for all clusters, relying on go-control-plane
+	// to only respond with ones actually requested by the client.
+	safeECDSResources *SafeEcdsResourceMap
+}
+
+func (c *ecdsCallbacks) OnStreamOpen(ctx context.Context, streamID int64, typeURL string) error {
+	c.logger.Debugw("ECDS onStreamOpen", "streamID", streamID, "typeURL", typeURL)
+	return c.onStreamOpen(ctx)
+}
+
+func (c *ecdsCallbacks) OnStreamClosed(streamID int64) {
+	c.logger.Debugw("ECDS onStreamClosed", "streamID", streamID)
+	c.onStreamClosed(streamID)
+}
+
+func (c *ecdsCallbacks) OnStreamRequest(streamID int64, req *gcpDiscoveryV3.DiscoveryRequest) error {
+	c.safeECDSResources.setResourcesForCluster(req.Node.Cluster, req.ResourceNames)
+
+	c.logger.Debugw("ECDS OnStreamRequest", "streamID", streamID, "cluster", req.Node.Cluster, "resources", req.ResourceNames)
+	c.onStreamRequest(streamID, req.Node.Cluster, req.ErrorDetail)
+
+	return nil
+}
+
+func (c *ecdsCallbacks) OnStreamResponse(streamID int64, request *gcpDiscoveryV3.DiscoveryRequest, response *gcpDiscoveryV3.DiscoveryResponse) {
+	c.logger.Debugw("ECDS OnStreamResponse", "streamID", streamID, "cluster", request.Node.Cluster, "version", request.VersionInfo)
+	c.onStreamResponse(streamID, request.Node.Cluster, request.VersionInfo)
+}
+
+func (c *ecdsCallbacks) OnFetchRequest(context.Context, *gcpDiscoveryV3.DiscoveryRequest) error {
+	c.logger.Debugw("ECDS OnFetchRequest")
+	return nil
+}
+
+func (c *ecdsCallbacks) OnFetchResponse(*gcpDiscoveryV3.DiscoveryRequest, *gcpDiscoveryV3.DiscoveryResponse) {
+	c.logger.Debugw("ECDS OnFetchResponse")
 }
