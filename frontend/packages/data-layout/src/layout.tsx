@@ -1,4 +1,5 @@
 import React from "react";
+import type { ClutchError } from "@clutch-sh/core";
 import _ from "lodash";
 
 import { useManagerContext } from "./context";
@@ -24,7 +25,7 @@ interface DataLayout {
   /** Loading state of the layout. This is true when data is being hydrated. */
   isLoading: boolean;
   /** Error state of the layout. This will be a message containing the error encountered when trying to hydrate the lyaout. */
-  error: string;
+  error: ClutchError;
 }
 
 /**
@@ -47,7 +48,7 @@ const useDataLayout = (key: string): DataLayout => {
   // n.b. reset error and loading state on load.
   // This prevents previous errors from rendering until hydration is finished.
   React.useEffect(() => {
-    manager.update(key, { error: "", isLoading: false });
+    manager.update(key, { error: undefined, isLoading: false });
   }, []);
 
   React.useEffect(() => {

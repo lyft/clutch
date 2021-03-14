@@ -40,6 +40,8 @@ const IconButton = styled(MuiIconButton)({
 });
 
 const DialogContent = styled(MuiDialogContent)({
+  display: "flex",
+  flexDirection: "column",
   padding: "16px 32px 32px 32px",
   fontSize: "16px",
   fontWeight: 400,

@@ -1,6 +1,8 @@
 import React from "react";
 import type { clutch } from "@clutch-sh/api";
 
+import type { ClutchError } from "../Network/errors";
+
 enum ResolverAction {
   SCHEMAS_LOADING,
   SCHEMAS_SUCCCESS,
@@ -14,25 +16,25 @@ const initialState = {
   schemasLoading: true,
   allSchemas: [],
   searchableSchemas: [],
-  schemaFetchError: "",
+  schemaFetchError: undefined,
   resolverLoading: false,
   resolverData: {},
-  resolverFetchError: "",
+  resolverFetchError: undefined,
 };
 
 interface ResolverState {
   allSchemas: clutch.resolver.v1.Schema[];
   resolverData: object;
-  resolverFetchError: string;
+  resolverFetchError: ClutchError;
   resolverLoading: boolean;
-  schemaFetchError: string;
+  schemaFetchError: ClutchError;
   schemasLoading: boolean;
   searchableSchemas: clutch.resolver.v1.Schema[];
 }
 
 export interface DispatchAction {
   allSchemas?: any[];
-  error?: string;
+  error?: ClutchError;
   schema?: any;
   type: ResolverAction;
 }
@@ -45,7 +47,7 @@ const reducer = (state: ResolverState, action: DispatchAction) => {
       return {
         ...state,
         schemasLoading: false,
-        schemaFetchError: "",
+        schemaFetchError: undefined,
         searchableSchemas: action.allSchemas
           .map(schema => {
             return schema.metadata.searchable || schema.metadata.search.enabled ? schema : null;
@@ -63,7 +65,7 @@ const reducer = (state: ResolverState, action: DispatchAction) => {
       return {
         ...state,
         resolverLoading: true,
-        resolverFetchError: "",
+        resolverFetchError: undefined,
       };
     case ResolverAction.RESOLVE_ERROR:
       return {
@@ -75,7 +77,7 @@ const reducer = (state: ResolverState, action: DispatchAction) => {
       return {
         ...state,
         resolverLoading: false,
-        resolverFetchError: "",
+        resolverFetchError: undefined,
       };
     default:
       throw new Error(`Unknown resolver action: ${action.type}`);

@@ -1,6 +1,7 @@
 import type React from "react";
 import type { Thunk } from "react-hook-thunk-reducer";
 import useThunkReducer from "react-hook-thunk-reducer";
+import type { ClutchError } from "@clutch-sh/core";
 
 enum ManagerAction {
   HYDRATE_START,
@@ -13,10 +14,10 @@ export interface ManagerLayout {
   [key: string]: {
     isLoading?: boolean;
     data?: object;
-    error?: string;
+    error?: ClutchError;
     hydrator?: (...args: any[]) => any;
     transformResponse?: (...args: any[]) => any;
-    transformError?: (...args: any[]) => any;
+    transformError?: (...args: any[]) => ClutchError;
     deps?: string[];
     cache?: boolean;
   };
@@ -26,7 +27,7 @@ interface ActionPayload {
   key?: string;
   value?: object;
   result?: object;
-  error?: string;
+  error?: ClutchError;
 }
 
 export interface Action {
