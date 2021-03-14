@@ -4,7 +4,7 @@ import { IconButton } from "@material-ui/core";
 import MuiOpenInNewIcon from "@material-ui/icons/OpenInNew";
 import RefreshIcon from "@material-ui/icons/Refresh";
 
-import { StyledLink } from "../../link";
+import { Link } from "../../link";
 import type { ClutchError } from "../../Network/errors";
 import { isHelpDetails } from "../../Network/errors";
 import { Alert } from "../alert";
@@ -22,7 +22,7 @@ const ErrorSummaryMessage = styled.div({
   flex: "1",
 });
 
-const ErrorSummaryLink = styled(StyledLink)({
+const ErrorSummaryLink = styled(Link)({
   fontSize: "14px",
   fontWeight: 400,
   color: "rgb(13,16,48,0.6)",
