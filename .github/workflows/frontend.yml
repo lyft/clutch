@@ -125,7 +125,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    needs: [build, lint, test]
+    needs: [build, lint, test-unit, test-e2e]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Node
