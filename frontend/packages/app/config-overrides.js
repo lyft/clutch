@@ -30,7 +30,7 @@ module.exports = {
     return configFunction;
   },
   // The paths config to use when compiling your react app for development or production.
-  paths(paths, env) {
+  paths(paths, _) {
     return paths;
   },
 };
