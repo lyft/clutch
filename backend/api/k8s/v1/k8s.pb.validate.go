@@ -240,6 +240,8 @@ func (m *Container) Validate() error {
 
 	// no validation rules for Ready
 
+	// no validation rules for RestartCount
+
 	return nil
 }
 
