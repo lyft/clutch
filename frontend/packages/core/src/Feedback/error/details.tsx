@@ -13,6 +13,7 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
 import type { ClutchError } from "../../Network/errors";
 import { isClutchErrorDetails } from "../../Network/errors";
+import { grpcCodeToHttpCode, grpcCodeToText } from "../../Network/grpc";
 
 import ErrorDetailsDialog from "./dialog";
 
@@ -65,6 +66,7 @@ const ListItem = styled.li({
   "::marker": {
     color: "rgba(13, 16, 48, 0.6)",
   },
+  margin: "2px 0",
 });
 
 const ErrorDetailContainer = styled.div({
@@ -144,13 +146,21 @@ const ErrorDetails = ({ error }: ErrorDetailsProps) => {
                       const remainingItems = detail.wrapped.length - renderMax;
                       return (
                         <>
-                          {renderItems.map(wrapped => (
-                            <ListItem key={wrapped.message}>
-                              <ErrorDetailText style={{ fontWeight: 500 }}>
-                                {wrapped.message}
-                              </ErrorDetailText>
-                            </ListItem>
-                          ))}
+                          {renderItems.map((wrapped, idx) => {
+                            const color =
+                              grpcCodeToHttpCode(wrapped.code) >= 500 ? "#DB3615" : "#daca37";
+                            return (
+                              // eslint-disable-next-line react/no-array-index-key
+                              <ListItem key={`${idx}-${wrapped.message}`}>
+                                <ErrorDetailText style={{ fontWeight: 500 }}>
+                                  <span style={{ color }}>
+                                    {grpcCodeToText(wrapped.code)}&nbsp;
+                                  </span>
+                                  {wrapped.message}
+                                </ErrorDetailText>
+                              </ListItem>
+                            );
+                          })}
                           <ErrorDetailText>and {remainingItems} more...</ErrorDetailText>
                         </>
                       );

@@ -25,12 +25,12 @@ const Pre = styled.pre({
 
 interface CodeProps {
   children: string;
-  isCopiable?: boolean;
+  showCopyButton?: boolean;
 }
 
-const Code = ({ children, isCopiable = true }: CodeProps) => (
+const Code = ({ children, showCopyButton = true }: CodeProps) => (
   <Pre>
-    {isCopiable && (
+    {showCopyButton && (
       <CopyButtonContainer container justify="flex-end">
         <Fab variant="round" size="small">
           <ClipboardButton text={children} />

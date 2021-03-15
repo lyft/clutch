@@ -16,11 +16,7 @@ const ErrorDetailsDialog = ({ error, open, onClose }: ErrorDetailsDialogProps) =
   return (
     <Dialog title="Full Error Details" onClose={onClose} open={open}>
       <DialogContent>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <div>Request ID:&nbsp;</div>
-          {/* TODO: Plumb request ID through */}
-          <Code isCopiable={false}>ade67hea-4dbb-89hj-33ddbb87cae</Code>
-        </div>
+        {/* TODO: Plumb request ID through once we have it */}
         <Code>{prettyPrintError}</Code>
       </DialogContent>
     </Dialog>
