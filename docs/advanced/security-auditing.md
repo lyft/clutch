@@ -136,7 +136,7 @@ All of this information is passed along to the audit [service](./###Service) to 
 
 The configuration for the audit middleware looks like:
 
-```yaml title="backend/clutch-config.yaml
+```yaml title="backend/clutch-config.yaml"
 gateway:
 ...
   middleware:
