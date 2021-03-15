@@ -32,7 +32,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: build
-        run: make frontend
+        run: yarn build
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -62,6 +62,7 @@ jobs:
       - run: make frontend-verify
       - run: yarn --cwd frontend test:licenses
   test:
+    name: test e2e
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -86,8 +87,6 @@ jobs:
         run: yarn --cwd frontend install
       - name: Compile packages
         run: yarn --cwd frontend compile:dev
-      - name: Test [unit]
-        run: yarn --cwd frontend test:coverage
       - name: Test [e2e]
         id: e2e
         run: make frontend-e2e
@@ -97,6 +96,32 @@ jobs:
         with:
           name: screenshots
           path: ./frontend/packages/app/cypress/screenshots
+  test:
+    name: test unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+          check-latest: true
+      - name: Enforce consistent Yarn version
+        run: ./tools/install-yarn.sh
+      - name: Get yarn cache
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn --cwd frontend install
+      - name: Test [unit]
+        run: yarn --cwd frontend test:coverage
   publish:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
