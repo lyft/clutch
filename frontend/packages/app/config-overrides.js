@@ -1,11 +1,11 @@
-const paths = require("path");
+const path = require("path");
 
 module.exports = {
   // The Webpack config to use when compiling your react app for development or production.
-  webpack(config, env) {
+  webpack(config, _) {
     config.module.rules.unshift({
       test: /\.(js|mjs|jsx|ts|tsx)$/,
-      include: [paths.join(__dirname, "src")],
+      include: [path.join(__dirname, "src")],
       use: [
         {
           loader: "esbuild-loader",
