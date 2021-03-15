@@ -134,6 +134,19 @@ On each request, the [above annotations](#annotations) are read along with what 
 
 All of this information is passed along to the audit [service](./###Service) to persist.
 
+The configuration for the audit middleware looks like:
+
+```yaml title="backend/clutch-config.yaml
+gateway:
+...
+  middleware:
+    ...
+    // highlight-start
+    - name: clutch.middleware.audit
+    // highlight-end
+...
+```
+
 ### Service
 
 The audit service has two behaviors: write requests somewhere, and read them back out. It takes events from the middleware and saves them, and it also pushes them to later "sinks" for further processing.
