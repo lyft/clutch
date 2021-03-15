@@ -32,7 +32,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: build
-        run: yarn -cwd frontend build
+        run: yarn --cwd frontend build
   lint:
     runs-on: ubuntu-latest
     steps:
