@@ -3,7 +3,8 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "isolatedModules": true,
   },
   "include": [
     "src/**/*",

@@ -71,7 +71,7 @@ interface Error {
   message: string;
 }
 
-interface DataManager {
+export interface DataManager {
   state: object;
   assign: (key: string, value: object) => void;
   hydrate: (key: string) => void;
@@ -109,4 +109,4 @@ const useDataLayoutManager = (layouts: ManagerLayout): DataManager => {
   };
 };
 
-export { DataManager, useDataLayoutManager };
+export default useDataLayoutManager;

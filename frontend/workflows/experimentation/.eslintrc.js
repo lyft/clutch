@@ -5,7 +5,7 @@ module.exports = {
   overrides: [
     ...baseConfig.overrides,
     {
-      files: ["**/*.test.*"],
+      files: ["**/*.test.*", "**/*.mjs"],
       rules: {
         "import/no-extraneous-dependencies": ["off"],
       },

@@ -1,19 +1,17 @@
 import { Grid } from "@material-ui/core";
 
-// @ts-ignore
-import { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 import { CheckboxPanel } from "./Input/checkbox";
 import Form from "./Input/form";
-import { RadioGroup } from "./Input/radio-group";
+import RadioGroup from "./Input/radio-group";
 import { Select } from "./Input/select";
 import { TextField } from "./Input/text-field";
 import { Accordion, AccordionDetails } from "./accordion";
 import ClutchApp from "./AppProvider";
-import { Button, ButtonGroup, ButtonProps, ClipboardButton } from "./button";
+import { Button, ButtonGroup, ClipboardButton } from "./button";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
 import { Dialog, DialogActions, DialogContent } from "./dialog";
-import { Error, Hint, Note, NoteConfig, NotePanel, Warning } from "./Feedback";
+import { Error, Hint, Note, NotePanel, Warning } from "./Feedback";
 import { AvatarIcon, StatusIcon } from "./icon";
 import { Link } from "./link";
 import Loadable from "./loading";
@@ -31,10 +29,8 @@ export {
   AccordionRow,
   AvatarIcon,
   ClutchApp,
-  BaseWorkflowProps,
   Button,
   ButtonGroup,
-  ButtonProps,
   CheckboxPanel,
   client,
   ClientError,
@@ -52,7 +48,6 @@ export {
   Loadable,
   MetadataTable,
   Note,
-  NoteConfig,
   NotePanel,
   Paper,
   RadioGroup,
@@ -71,5 +66,8 @@ export {
   useWizardContext,
   Warning,
   WizardContext,
-  WorkflowConfiguration,
 };
+
+export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
+export type { ButtonProps } from "./button";
+export type { NoteConfig } from "./Feedback";

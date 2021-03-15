@@ -1,4 +1,5 @@
 import WizardStep from "./step";
-import Wizard, { WizardChild } from "./wizard";
+import Wizard from "./wizard";
 
-export { Wizard, WizardChild, WizardStep };
+export { Wizard, WizardStep };
+export type { WizardChild } from "./wizard";

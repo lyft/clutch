@@ -1,7 +1,6 @@
 import { DataLayoutContext } from "./context";
 import useDataLayout from "./layout";
-import { useDataLayoutManager } from "./manager";
-// @ts-ignore
-import { ManagerLayout } from "./state";
+import useDataLayoutManager from "./manager";
 
-export { ManagerLayout, useDataLayout, useDataLayoutManager, DataLayoutContext };
+export { useDataLayout, useDataLayoutManager, DataLayoutContext };
+export type { ManagerLayout } from "./state";
