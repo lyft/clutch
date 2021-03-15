@@ -1,3 +1,4 @@
+// Package statuserr provides helper functions for dealing with errors and gRPC status objects.
 package statuserr
 
 import (
