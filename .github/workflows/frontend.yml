@@ -85,7 +85,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
       - name: Compile packages
-        run: yarn --cwd frontend compile
+        run: yarn --cwd frontend compile:dev
       - name: Test [unit]
         run: yarn --cwd frontend test:coverage
       - name: Test [e2e]
