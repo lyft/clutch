@@ -81,12 +81,26 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
       - uses: actions/cache@v2
         with:
-          path: |
-            ${{ steps.yarn-cache.outputs.dir }}
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-e2e-${{ hashFiles('**/yarn.lock', '**/go.sum') }}
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-e2e-
+            ${{ runner.os }}-yarn-
+      - name: go mod cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}  
+          restore-keys: |
+            ${{ runner.os }}-go-mod-
+      - name: go build cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-build-
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
