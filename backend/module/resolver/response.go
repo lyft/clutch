@@ -74,7 +74,7 @@ func (r *response) isError(wanted string, searchedSchemas []string) error {
 	// If there were failures and no results we wrap the errors.
 	if len(r.PartialFailures) > 0 {
 		// Use 400 unless all codes were 404.
-		if !statuserr.AllStatusMatch(codes.NotFound, r.PartialFailures...) {
+		if !statuserr.AllProtoCodesMatch(codes.NotFound, r.PartialFailures...) {
 			code = codes.FailedPrecondition
 			msg = fmt.Sprintf("one or more errors were encountered searching for '%s'", wanted)
 		}

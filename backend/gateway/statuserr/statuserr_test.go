@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-func TestAllStatusMatch(t *testing.T) {
+func TestAllProtoCodesMatch(t *testing.T) {
 	cases := []struct {
 		name   string
 		code   codes.Code
@@ -55,7 +55,7 @@ func TestAllStatusMatch(t *testing.T) {
 	for _, c := range cases {
 		c := c
 		t.Run(c.name, func(t *testing.T) {
-			assert.Equal(t, c.expect, AllStatusMatch(c.code, c.status...))
+			assert.Equal(t, c.expect, AllProtoCodesMatch(c.code, c.status...))
 		})
 	}
 }

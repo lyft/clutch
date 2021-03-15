@@ -5,7 +5,7 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-func AllStatusMatch(c codes.Code, spb ...*statuspb.Status) bool {
+func AllProtoCodesMatch(c codes.Code, spb ...*statuspb.Status) bool {
 	if len(spb) == 0 {
 		return false
 	}
