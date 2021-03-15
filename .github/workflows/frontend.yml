@@ -31,6 +31,9 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn --cwd frontend install
       - name: build
         run: yarn --cwd frontend build
   lint:
@@ -89,7 +92,7 @@ jobs:
         run: yarn --cwd frontend compile:dev
       - name: Test [e2e]
         id: e2e
-        run: make frontend-e2e
+        run: ./tools/frontend-e2e.sh
       - name: Upload end-to-end artifacts
         uses: actions/upload-artifact@v2
         if: failure() && steps.e2e.outcome == 'failure'
@@ -120,6 +123,8 @@ jobs:
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
+      - name: Compile packages
+        run: yarn --cwd frontend compile:dev
       - name: Test [unit]
         run: yarn --cwd frontend test:coverage
   publish:
