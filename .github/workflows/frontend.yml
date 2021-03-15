@@ -61,7 +61,7 @@ jobs:
       - run: make frontend-lint
       - run: make frontend-verify
       - run: yarn --cwd frontend test:licenses
-  test:
+  test-e2e:
     name: test e2e
     runs-on: ubuntu-latest
     steps:
@@ -96,7 +96,7 @@ jobs:
         with:
           name: screenshots
           path: ./frontend/packages/app/cypress/screenshots
-  test:
+  test-unit:
     name: test unit
     runs-on: ubuntu-latest
     steps:
