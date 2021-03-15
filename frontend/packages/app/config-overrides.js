@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
   // The Webpack config to use when compiling your react app for development or production.
-  webpack(config, _) {
+  webpack(config) {
     config.module.rules.unshift({
       test: /\.(js|mjs|jsx|ts|tsx)$/,
       include: [path.join(__dirname, "src")],
@@ -30,7 +30,7 @@ module.exports = {
     return configFunction;
   },
   // The paths config to use when compiling your react app for development or production.
-  paths(paths, _) {
+  paths(paths) {
     return paths;
   },
 };
