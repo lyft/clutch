@@ -36,6 +36,94 @@ func TestNew(t *testing.T) {
 	assert.True(t, ok)
 }
 
+func TestAuditEventToMessage(t *testing.T) {
+	userName := "foo"
+
+	defaultEvent := &auditv1.RequestEvent{
+		ServiceName: "service",
+		MethodName:  "method",
+		Resources: []*auditv1.Resource{{
+			TypeUrl: "clutch.aws.v1.Instance",
+			Id:      "i-01234567890abcdef0",
+		}},
+	}
+
+	defaultMessage := "`foo` performed `method` via `service` using Clutch on resource(s):\n- i-01234567890abcdef0 (`clutch.aws.v1.Instance`)"
+
+	anyEC2Req, _ := anypb.New(&ec2v1.GetInstanceRequest{InstanceId: "i-01234567890abcdef0"})
+	anEC2Resp, _ := anypb.New(&ec2v1.GetInstanceResponse{Instance: &ec2v1.Instance{Region: "us"}})
+	ec2EventMetadata := &auditv1.RequestEvent{
+		ServiceName: "clutch.aws.v1.Instance",
+		MethodName:  "GetInstance",
+		Resources: []*auditv1.Resource{{
+			Id:      "i-01234567890abcdef0",
+			TypeUrl: "clutch.aws.v1.Instance",
+		}},
+		RequestMetadata:  &auditv1.RequestMetadata{Body: anyEC2Req},
+		ResponseMetadata: &auditv1.ResponseMetadata{Body: anEC2Resp},
+	}
+
+	log := zaptest.NewLogger(t)
+
+	testCases := []struct {
+		svc      *svc
+		user     string
+		event    *auditv1.RequestEvent
+		expected string
+	}{
+		// no overrides
+		{
+			svc:      &svc{logger: log, overrides: OverrideLookup{}},
+			user:     userName,
+			event:    defaultEvent,
+			expected: defaultMessage,
+		},
+		// no overrides for the slack event
+		{
+			svc: &svc{logger: log, overrides: OverrideLookup{
+				messages: map[string]*configv1.CustomMessage{
+					"foo": &configv1.CustomMessage{FullMethod: "foo", Message: "{{.Request.name}}"},
+				},
+			}},
+			user:     userName,
+			event:    defaultEvent,
+			expected: defaultMessage,
+		},
+		// success case
+		{
+			svc: &svc{logger: log, overrides: OverrideLookup{
+				messages: map[string]*configv1.CustomMessage{
+					"/clutch.aws.v1.Instance/GetInstance": &configv1.CustomMessage{
+						FullMethod: "/clutch.aws.v1.Instance/GetInstance",
+						Message:    "Instance `{{.Request.instanceId}}` region is `{{.Response.instance.region}}`",
+					}},
+			}},
+			user:  userName,
+			event: ec2EventMetadata,
+			expected: "`foo` performed `GetInstance` via `clutch.aws.v1.Instance` using Clutch on resource(s):\n- i-01234567890abcdef0 (`clutch.aws.v1.Instance`)" +
+				"\nInstance `i-01234567890abcdef0` region is `us`",
+		},
+		// error with the custom message template, return default slack message
+		{
+			svc: &svc{logger: log, overrides: OverrideLookup{
+				messages: map[string]*configv1.CustomMessage{
+					"/clutch.aws.v1.Instance/GetInstance": &configv1.CustomMessage{
+						FullMethod: "/clutch.aws.v1.Instance/GetInstance",
+						Message:    "{{Foo}}",
+					}},
+			}},
+			user:     userName,
+			event:    ec2EventMetadata,
+			expected: "`foo` performed `GetInstance` via `clutch.aws.v1.Instance` using Clutch on resource(s):\n- i-01234567890abcdef0 (`clutch.aws.v1.Instance`)",
+		},
+	}
+
+	for _, test := range testCases {
+		message := test.svc.auditEventToMessage(test.user, test.event)
+		assert.Equal(t, test.expected, message)
+	}
+}
+
 func TestFormat(t *testing.T) {
 	t.Parallel()
 

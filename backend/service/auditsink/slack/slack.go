@@ -22,6 +22,7 @@ import (
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
 	configv1 "github.com/lyft/clutch/backend/api/config/service/auditsink/slack/v1"
+	"github.com/lyft/clutch/backend/gateway/log"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/auditsink"
 )
@@ -102,7 +103,7 @@ func (s *svc) writeRequestEvent(event *auditv1.RequestEvent) error {
 		username = fmt.Sprintf("<@%s>", user.ID)
 	}
 
-	messageText := formatText(username, event)
+	messageText := s.auditEventToMessage(username, event)
 
 	// Post
 	if _, _, err := s.slack.PostMessage(s.channel, slack.MsgOptionText(messageText, false)); err != nil {
@@ -154,6 +155,23 @@ func FormatCustomText(message string, event *auditv1.RequestEvent) (string, erro
 	return sanitized, nil
 }
 
+func (s *svc) auditEventToMessage(username string, event *auditv1.RequestEvent) string {
+	message := formatText(username, event)
+
+	// check for a custom message override for the slack event
+	cm, ok := s.overrides.GetOverrideMessage(event.ServiceName, event.MethodName)
+	if ok {
+		if customText, err := FormatCustomText(cm, event); err != nil {
+			s.logger.Error("create custom message error", log.ErrorField(err))
+		} else {
+			// append custom message to the default message
+			message = fmt.Sprintf("%s\n%s", message, customText)
+		}
+	}
+
+	return message
+}
+
 // returns the API request/response details saved in an audit event
 func getAuditTemplateData(event *auditv1.RequestEvent) (*auditTemplateData, error) {
 	// proto -> json
@@ -184,6 +202,7 @@ func getAuditTemplateData(event *auditv1.RequestEvent) (*auditTemplateData, erro
 	}, nil
 }
 
+// helper func for formatting custom slack messages
 // for inputs that are type slice/map, returns a formatted slack list
 func slackList(data interface{}) string {
 	if data == nil {
