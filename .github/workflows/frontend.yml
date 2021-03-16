@@ -66,7 +66,9 @@ jobs:
         run: ./tools/install-yarn.sh
       - uses: actions/cache@v2
         with:
-          path: '**/node_modules'
+          path: |
+            '**/node_modules'
+            ~/.cache/Cypress
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: go mod cache
         uses: actions/cache@v2
