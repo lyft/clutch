@@ -161,7 +161,9 @@ const ErrorDetails = ({ error }: ErrorDetailsProps) => {
                               </ListItem>
                             );
                           })}
-                          <ErrorDetailText>and {remainingItems} more...</ErrorDetailText>
+                          {remainingItems > 0 && (
+                            <ErrorDetailText>and {remainingItems} more...</ErrorDetailText>
+                          )}
                         </>
                       );
                     }
