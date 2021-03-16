@@ -22,16 +22,10 @@ jobs:
           check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
-      - name: get yarn cache dir
-        id: yarn-cache-dir
-        run: echo "::set-output name=dir::$(yarn cache dir)"
       - uses: actions/cache@v2
-        id: yarn-cache
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+        path: '**/node_modules'
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn --cwd frontend install
       - name: build
@@ -47,16 +41,10 @@ jobs:
           check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
-      - name: Get yarn cache
-        id: yarn-cache-dir
-        run: echo "::set-output name=dir::$(yarn cache dir)"
       - uses: actions/cache@v2
-        id: yarn-cache
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+        path: '**/node_modules'
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn --cwd frontend install
       - name: Compile packages
@@ -76,16 +64,10 @@ jobs:
           check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
-      - name: Get yarn cache
-        id: yarn-cache-dir
-        run: echo "::set-output name=dir::$(yarn cache dir)"
       - uses: actions/cache@v2
-        id: yarn-cache
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+        path: '**/node_modules'
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: go mod cache
         uses: actions/cache@v2
         with:
@@ -128,16 +110,10 @@ jobs:
           check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
-      - name: Get yarn cache
-        id: yarn-cache-dir
-        run: echo "::set-output name=dir::$(yarn cache dir)"
       - uses: actions/cache@v2
-        id: yarn-cache
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+        path: '**/node_modules'
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn --cwd frontend install
       - name: Compile packages
@@ -158,16 +134,10 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
-      - name: Get yarn cache
-        id: yarn-cache-dir
-        run: echo "::set-output name=dir::$(yarn cache dir)"
       - uses: actions/cache@v2
-        id: yarn-cache
         with:
-          path: ${{ steps.yarn-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+        path: '**/node_modules'
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn --cwd frontend install
       - name: publish
