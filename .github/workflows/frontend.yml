@@ -23,12 +23,14 @@ jobs:
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
       - name: node_modules cache
+        id: node-modules-cache
         uses: actions/cache@v2
         with:
           path: |
             **/node_modules
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
       - name: build
         run: yarn --cwd frontend build
@@ -44,12 +46,14 @@ jobs:
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
       - name: node_modules cache
+        id: node-modules-cache
         uses: actions/cache@v2
         with:
           path: |
             **/node_modules
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
       - name: Compile packages
         run: yarn --cwd frontend compile:dev
@@ -76,6 +80,7 @@ jobs:
             ~/.cache/Cypress
           key: ${{ runner.os }}-cypress-${{ hashFiles('**/yarn.lock') }}
       - name: node_modules cache
+        id: node-modules-cache
         if: steps.cypress-cache.outputs.cache-hit == 'true'
         uses: actions/cache@v2
         with:
@@ -100,6 +105,7 @@ jobs:
             ${{ runner.os }}-go-build-
             ${{ runner.os }}-go-mock-build-
       - name: Install dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
       - name: Compile packages
         run: yarn --cwd frontend compile:dev
@@ -125,12 +131,14 @@ jobs:
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
       - name: node_modules cache
+        id: node-modules-cache
         uses: actions/cache@v2
         with:
           path: |
             **/node_modules
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
       - name: Compile packages
         run: yarn --cwd frontend compile:dev
@@ -151,12 +159,14 @@ jobs:
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
       - name: node_modules cache
+        id: node-modules-cache
         uses: actions/cache@v2
         with:
           path: |
             **/node_modules
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
       - name: publish
         run: yarn --cwd frontend publishBeta
