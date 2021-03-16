@@ -10088,6 +10088,9 @@ export namespace clutch {
 
                 /** Container ready */
                 ready?: (boolean|null);
+
+                /** Container restartCount */
+                restartCount?: (number|null);
             }
 
             /** Represents a Container. */
@@ -10110,6 +10113,9 @@ export namespace clutch {
 
                 /** Container ready. */
                 public ready: boolean;
+
+                /** Container restartCount. */
+                public restartCount: number;
 
                 /**
                  * Verifies a Container message.

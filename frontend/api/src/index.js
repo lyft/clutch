@@ -23718,6 +23718,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [image] Container image
                  * @property {clutch.k8s.v1.Container.State|null} [state] Container state
                  * @property {boolean|null} [ready] Container ready
+                 * @property {number|null} [restartCount] Container restartCount
                  */
 
                 /**
@@ -23768,6 +23769,14 @@ export const clutch = $root.clutch = (() => {
                 Container.prototype.ready = false;
 
                 /**
+                 * Container restartCount.
+                 * @member {number} restartCount
+                 * @memberof clutch.k8s.v1.Container
+                 * @instance
+                 */
+                Container.prototype.restartCount = 0;
+
+                /**
                  * Verifies a Container message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Container
@@ -23798,6 +23807,9 @@ export const clutch = $root.clutch = (() => {
                     if (message.ready != null && message.hasOwnProperty("ready"))
                         if (typeof message.ready !== "boolean")
                             return "ready: boolean expected";
+                    if (message.restartCount != null && message.hasOwnProperty("restartCount"))
+                        if (!$util.isInteger(message.restartCount))
+                            return "restartCount: integer expected";
                     return null;
                 };
 
@@ -23841,6 +23853,8 @@ export const clutch = $root.clutch = (() => {
                     }
                     if (object.ready != null)
                         message.ready = Boolean(object.ready);
+                    if (object.restartCount != null)
+                        message.restartCount = object.restartCount | 0;
                     return message;
                 };
 
@@ -23862,6 +23876,7 @@ export const clutch = $root.clutch = (() => {
                         object.image = "";
                         object.state = options.enums === String ? "UNSPECIFIED" : 0;
                         object.ready = false;
+                        object.restartCount = 0;
                     }
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
@@ -23871,6 +23886,8 @@ export const clutch = $root.clutch = (() => {
                         object.state = options.enums === String ? $root.clutch.k8s.v1.Container.State[message.state] : message.state;
                     if (message.ready != null && message.hasOwnProperty("ready"))
                         object.ready = message.ready;
+                    if (message.restartCount != null && message.hasOwnProperty("restartCount"))
+                        object.restartCount = message.restartCount;
                     return object;
                 };
 

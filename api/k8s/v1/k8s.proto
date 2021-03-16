@@ -249,6 +249,7 @@ message Container {
   }
   State state = 3;
   bool ready = 4;
+  int32 restart_count = 5;
 }
 
 message Pod {
