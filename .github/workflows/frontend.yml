@@ -22,7 +22,8 @@ jobs:
           check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
-      - uses: actions/cache@v2
+      - name: node_modules cache
+        uses: actions/cache@v2
         with:
           path: |
             **/node_modules
@@ -43,7 +44,8 @@ jobs:
           check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
-      - uses: actions/cache@v2
+      - name: node_modules cache
+        uses: actions/cache@v2
         with:
           path: |
             **/node_modules
@@ -68,7 +70,8 @@ jobs:
           check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
-      - uses: actions/cache@v2
+      - name: node_modules cache
+        uses: actions/cache@v2
         with:
           path: |
             **/node_modules
@@ -116,7 +119,8 @@ jobs:
           check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
-      - uses: actions/cache@v2
+      - name: node_modules cache
+        uses: actions/cache@v2
         with:
           path: |
             **/node_modules
@@ -142,7 +146,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
-      - uses: actions/cache@v2
+      - name: node_modules cache
+        uses: actions/cache@v2
         with:
           path: |
             **/node_modules
