@@ -33,7 +33,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
       - name: build
         run: yarn --cwd frontend build
@@ -59,7 +58,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
       - name: Compile packages
         run: yarn --cwd frontend compile:dev
@@ -106,7 +104,6 @@ jobs:
             ${{ runner.os }}-go-build-
             ${{ runner.os }}-go-mock-build-
       - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
       - name: Compile packages
         run: yarn --cwd frontend compile:dev
@@ -142,7 +139,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
       - name: Compile packages
         run: yarn --cwd frontend compile:dev
@@ -173,7 +169,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
       - name: publish
         run: yarn --cwd frontend publishBeta
