@@ -25,7 +25,8 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: |
-            '**/node_modules'
+            **/node_modules
+            ~/.cache/Cypress
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn --cwd frontend install
@@ -45,7 +46,8 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: |
-            '**/node_modules'
+            **/node_modules
+            ~/.cache/Cypress
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn --cwd frontend install
@@ -70,12 +72,8 @@ jobs:
         with:
           path: |
             **/node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - uses: actions/cache@v2
-        with:
-          path: |
             ~/.cache/Cypress
-          key: ${{ runner.os }}-cypress-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: go mod cache
         uses: actions/cache@v2
         with:
@@ -121,7 +119,8 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: |
-            '**/node_modules'
+            **/node_modules
+            ~/.cache/Cypress
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn --cwd frontend install
@@ -146,7 +145,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: |
-            '**/node_modules'
+            **/node_modules
             ~/.cache/Cypress
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
