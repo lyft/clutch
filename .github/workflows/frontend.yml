@@ -69,7 +69,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: |
-            '**/node_modules'
+            **/node_modules
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/cache@v2
         with:
