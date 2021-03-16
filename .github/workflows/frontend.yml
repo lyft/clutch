@@ -68,13 +68,6 @@ jobs:
           check-latest: true
       - name: Enforce consistent Yarn version
         run: ./tools/install-yarn.sh
-      - name: node_modules cache
-        id: node-modules-cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: cypress cache
         id: cypress-cache
         uses: actions/cache@v2
@@ -82,6 +75,13 @@ jobs:
           path: |
             ~/.cache/Cypress
           key: ${{ runner.os }}-cypress-${{ hashFiles('**/yarn.lock') }}
+      - name: node_modules cache
+        if: steps.cypress-cache.outputs.cache-hit == 'true'
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: go mod cache
         uses: actions/cache@v2
         with:
@@ -100,7 +100,6 @@ jobs:
             ${{ runner.os }}-go-build-
             ${{ runner.os }}-go-mock-build-
       - name: Install dependencies
-        if: steps.node-modules-cache.outputs.cache-hit != 'true' || steps.cypress-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
       - name: Compile packages
         run: yarn --cwd frontend compile:dev
@@ -156,7 +155,6 @@ jobs:
         with:
           path: |
             **/node_modules
-            ~/.cache/Cypress
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn --cwd frontend install
