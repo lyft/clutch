@@ -24,8 +24,8 @@ jobs:
         run: ./tools/install-yarn.sh
       - uses: actions/cache@v2
         with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn --cwd frontend install
       - name: build
@@ -43,8 +43,8 @@ jobs:
         run: ./tools/install-yarn.sh
       - uses: actions/cache@v2
         with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn --cwd frontend install
       - name: Compile packages
@@ -66,8 +66,8 @@ jobs:
         run: ./tools/install-yarn.sh
       - uses: actions/cache@v2
         with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: go mod cache
         uses: actions/cache@v2
         with:
@@ -112,8 +112,8 @@ jobs:
         run: ./tools/install-yarn.sh
       - uses: actions/cache@v2
         with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn --cwd frontend install
       - name: Compile packages
@@ -136,8 +136,8 @@ jobs:
         run: ./tools/install-yarn.sh
       - uses: actions/cache@v2
         with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn --cwd frontend install
       - name: publish
