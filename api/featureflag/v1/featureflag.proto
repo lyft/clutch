@@ -2,9 +2,10 @@ syntax = "proto3";
 
 package clutch.featureflag.v1;
 
-option go_package = "featureflagv1";
+option go_package = "github.com/lyft/clutch/backend/api/featureflag/v1;featureflagv1";
 
 import "google/api/annotations.proto";
+
 import "api/v1/annotations.proto";
 
 service FeatureFlagAPI {

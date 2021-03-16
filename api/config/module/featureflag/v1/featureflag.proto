@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.config.module.featureflag.v1;
 
-option go_package = "featureflagv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/module/featureflag/v1;featureflagv1";
 
 message Simple {
   map<string, bool> flags = 1;
