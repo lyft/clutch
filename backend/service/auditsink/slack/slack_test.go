@@ -63,6 +63,8 @@ func TestAuditEventToMessage(t *testing.T) {
 		ResponseMetadata: &auditv1.ResponseMetadata{Body: anEC2Resp},
 	}
 
+	log := zaptest.NewLogger(t)
+
 	testCases := []struct {
 		svc      *svc
 		user     string
@@ -71,14 +73,14 @@ func TestAuditEventToMessage(t *testing.T) {
 	}{
 		// no overrides
 		{
-			svc:      &svc{overrides: OverrideLookup{}},
+			svc:      &svc{logger: log, overrides: OverrideLookup{}},
 			user:     userName,
 			event:    defaultEvent,
 			expected: defaultMessage,
 		},
 		// no overrides for the slack event
 		{
-			svc: &svc{overrides: OverrideLookup{
+			svc: &svc{logger: log, overrides: OverrideLookup{
 				messages: map[string]*configv1.CustomMessage{
 					"foo": &configv1.CustomMessage{FullMethod: "foo", Message: "{{.Request.name}}"},
 				},
@@ -89,7 +91,7 @@ func TestAuditEventToMessage(t *testing.T) {
 		},
 		// success case
 		{
-			svc: &svc{overrides: OverrideLookup{
+			svc: &svc{logger: log, overrides: OverrideLookup{
 				messages: map[string]*configv1.CustomMessage{
 					"/clutch.aws.v1.Instance/GetInstance": &configv1.CustomMessage{
 						FullMethod: "/clutch.aws.v1.Instance/GetInstance",
@@ -103,7 +105,7 @@ func TestAuditEventToMessage(t *testing.T) {
 		},
 		// error with the custom message template, return default slack message
 		{
-			svc: &svc{overrides: OverrideLookup{
+			svc: &svc{logger: log, overrides: OverrideLookup{
 				messages: map[string]*configv1.CustomMessage{
 					"/clutch.aws.v1.Instance/GetInstance": &configv1.CustomMessage{
 						FullMethod: "/clutch.aws.v1.Instance/GetInstance",
