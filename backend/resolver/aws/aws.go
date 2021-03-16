@@ -7,7 +7,6 @@ package aws
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/proto"
@@ -21,17 +20,19 @@ import (
 	kinesisv1api "github.com/lyft/clutch/backend/api/aws/kinesis/v1"
 	awsv1resolver "github.com/lyft/clutch/backend/api/resolver/aws/v1"
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/resolver"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/aws"
+	"github.com/lyft/clutch/backend/service/topology"
 )
 
 const Name = "clutch.resolver.aws"
 
 // Output types (want).
-var typeURLInstance = resolver.TypeURL((*ec2v1api.Instance)(nil))
-var typeURLAutoscalingGroup = resolver.TypeURL((*ec2v1api.AutoscalingGroup)(nil))
-var typeURLKinesisStream = resolver.TypeURL((*kinesisv1api.Stream)(nil))
+var typeURLInstance = meta.TypeURL((*ec2v1api.Instance)(nil))
+var typeURLAutoscalingGroup = meta.TypeURL((*ec2v1api.AutoscalingGroup)(nil))
+var typeURLKinesisStream = meta.TypeURL((*kinesisv1api.Stream)(nil))
 
 var typeSchemas = map[string][]descriptor.Message{
 	typeURLInstance: {
@@ -66,6 +67,15 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 		return nil, errors.New("service was not the correct type")
 	}
 
+	var topologyService topology.Service
+	if svc, ok := service.Registry[topology.Name]; ok {
+		topologyService, ok = svc.(topology.Service)
+		if !ok {
+			return nil, errors.New("incorrect topology service type")
+		}
+		logger.Debug("enabling autocomplete api for the aws resolver")
+	}
+
 	schemas, err := resolver.InputsToSchemas(typeSchemas)
 	if err != nil {
 		return nil, err
@@ -76,15 +86,18 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 	})
 
 	r := &res{
-		client:  c,
-		schemas: schemas,
+		client:   c,
+		topology: topologyService,
+		schemas:  schemas,
 	}
+
 	return r, nil
 }
 
 type res struct {
-	client  aws.Client
-	schemas resolver.TypeURLToSchemasMap
+	client   aws.Client
+	topology topology.Service
+	schemas  resolver.TypeURLToSchemasMap
 }
 
 func (r *res) determineRegionsForOption(option string) []string {
@@ -112,13 +125,21 @@ func (r *res) Resolve(ctx context.Context, wantTypeURL string, input proto.Messa
 		return r.resolveKinesisStreamForInput(ctx, input)
 
 	default:
-		return nil, fmt.Errorf("don't know how to resolve type %s", wantTypeURL)
+		return nil, status.Errorf(codes.Internal, "resolver for '%s' not implemented", wantTypeURL)
 	}
 }
 
 func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (*resolver.Results, error) {
 	switch typeURL {
 	case typeURLInstance:
+		patternValues, ok, err := meta.ExtractPatternValuesFromString((*ec2v1api.Instance)(nil), query)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
+			return r.instanceResults(ctx, patternValues["region"], []string{patternValues["instance_id"]}, limit)
+		}
+
 		id, err := normalizeInstanceID(query)
 		if err != nil {
 			return nil, err
@@ -126,12 +147,55 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 		return r.instanceResults(ctx, resolver.OptionAll, []string{id}, limit)
 
 	case typeURLAutoscalingGroup:
+		patternValues, ok, err := meta.ExtractPatternValuesFromString((*ec2v1api.AutoscalingGroup)(nil), query)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
+			return r.autoscalingGroupResults(ctx, patternValues["region"], []string{patternValues["name"]}, limit)
+		}
 		return r.autoscalingGroupResults(ctx, resolver.OptionAll, []string{query}, limit)
 
 	case typeURLKinesisStream:
+		patternValues, ok, err := meta.ExtractPatternValuesFromString((*kinesisv1api.Stream)(nil), query)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
+			return r.kinesisResults(ctx, patternValues["region"], patternValues["stream_name"], limit)
+		}
+
 		return r.kinesisResults(ctx, resolver.OptionAll, query, limit)
 
 	default:
-		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("cannot search for type '%s'", typeURL))
+		return nil, status.Errorf(codes.Internal, "resolver search for '%s' not implemented", typeURL)
 	}
+}
+
+func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResult, error) {
+	if r.topology == nil {
+		return nil, status.Error(codes.FailedPrecondition, "topology service must be enabled to use the AWS autocomplete API")
+	}
+
+	var resultLimit uint64 = resolver.DefaultAutocompleteLimit
+	if limit > 0 {
+		resultLimit = limit
+	}
+
+	results, err := r.topology.Autocomplete(ctx, typeURL, search, resultLimit)
+	if err != nil {
+		return nil, err
+	}
+
+	autoCompleteValue := make([]*resolverv1.AutocompleteResult, len(results))
+	for i, r := range results {
+		autoCompleteValue[i] = &resolverv1.AutocompleteResult{
+			Id: r.Id,
+			// TODO (mcutalo): Add more detailed information to the label
+			// the labels value will vary based on resource
+			Label: "",
+		}
+	}
+
+	return autoCompleteValue, nil
 }

@@ -433,6 +433,75 @@ var _ interface {
 	ErrorName() string
 } = FieldMetadataValidationError{}
 
+// Validate checks the field values on SearchMetadata with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *SearchMetadata) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Enabled
+
+	// no validation rules for AutocompleteEnabled
+
+	return nil
+}
+
+// SearchMetadataValidationError is the validation error returned by
+// SearchMetadata.Validate if the designated constraints aren't met.
+type SearchMetadataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SearchMetadataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SearchMetadataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SearchMetadataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SearchMetadataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SearchMetadataValidationError) ErrorName() string { return "SearchMetadataValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SearchMetadataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSearchMetadata.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SearchMetadataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SearchMetadataValidationError{}
+
 // Validate checks the field values on SchemaMetadata with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.
@@ -444,6 +513,16 @@ func (m *SchemaMetadata) Validate() error {
 	// no validation rules for DisplayName
 
 	// no validation rules for Searchable
+
+	if v, ok := interface{}(m.GetSearch()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SchemaMetadataValidationError{
+				field:  "Search",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	return nil
 }
@@ -534,6 +613,16 @@ func (m *Schema) Validate() error {
 			}
 		}
 
+	}
+
+	if v, ok := interface{}(m.GetError()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SchemaValidationError{
+				field:  "Error",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
 	}
 
 	return nil

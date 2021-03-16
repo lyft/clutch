@@ -1,66 +1,56 @@
 import React from "react";
+import styled from "@emotion/styled";
 import { Grid, Paper } from "@material-ui/core";
 import type { Color } from "@material-ui/lab/Alert";
-import Alert from "@material-ui/lab/Alert";
-import styled from "styled-components";
 
-const Container = styled(Paper)`
-  ${({ ...props }) => `
-  margin: 1%;
-  width: 100%;
-  max-width: ${props["data-max-width"]};
-  `}
-`;
+import { Alert } from "./alert";
 
-interface NoteProps {
+const NotePanelContainer = styled(Grid)({
+  "> *": {
+    padding: "4px 0",
+  },
+});
+
+export interface NoteProps {
   severity?: Color;
-  maxWidth?: string;
-  direction?: "row" | "column";
 }
 
 export interface NoteConfig extends NoteProps {
   text: string;
 }
 
-interface NotePanelProps {
+export interface NotePanelProps {
   direction?: "row" | "column";
-  notes: NoteConfig[];
+  notes?: NoteConfig[];
 }
 
-const NotePanel: React.FC<NotePanelProps> = ({ direction = "column", notes }) => {
-  const isColumnLayout = direction === "column";
-  const maxWidth = isColumnLayout ? "100%" : "300px";
-  const noteDirection = isColumnLayout ? "row" : "column";
+const Note: React.FC<NoteProps> = ({ severity = "info", children }) => {
   return (
-    <Grid
-      container
-      direction={direction}
-      justify="center"
-      alignContent="space-between"
-      wrap="nowrap"
-    >
-      {notes.map((note: NoteConfig) => (
-        <Note
-          key={note.text}
-          severity={note.severity}
-          maxWidth={maxWidth}
-          direction={noteDirection}
-        >
-          {note.text}
-        </Note>
-      ))}
-    </Grid>
+    <Paper elevation={0}>
+      <Alert severity={severity}>
+        <Grid container justify="center" alignItems="center">
+          {children}
+        </Grid>
+      </Alert>
+    </Paper>
   );
 };
 
-const Note: React.FC<NoteProps> = ({ severity = "info", maxWidth, direction, children }) => {
-  return (
-    <Container elevation={0} data-max-width={maxWidth}>
-      <Grid container justify="center" alignItems="center" direction={direction}>
-        <Alert severity={severity}>{children}</Alert>
-      </Grid>
-    </Container>
-  );
-};
+const NotePanel: React.FC<NotePanelProps> = ({ direction = "column", notes, children }) => (
+  <NotePanelContainer
+    container
+    direction={direction}
+    justify="center"
+    alignContent="space-between"
+    wrap="nowrap"
+  >
+    {notes?.map((note: NoteConfig) => (
+      <Note key={note.text} severity={note.severity}>
+        {note.text}
+      </Note>
+    ))}
+    {children}
+  </NotePanelContainer>
+);
 
 export { Note, NotePanel };

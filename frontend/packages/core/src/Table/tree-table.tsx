@@ -11,28 +11,28 @@ import MaterialTable from "material-table";
 // n.b. this exists to bridge incompatibilities between the
 // latest material-ui and material-table.
 const icons = {
-  DetailPanel: forwardRef((props, ref: React.LegacyRef<SVGSVGElement>) => (
+  DetailPanel: forwardRef((props, ref: React.RefObject<SVGSVGElement>) => (
     <ChevronRight {...props} ref={ref} />
   )),
-  FirstPage: forwardRef((props, ref: React.LegacyRef<SVGSVGElement>) => (
+  FirstPage: forwardRef((props, ref: React.RefObject<SVGSVGElement>) => (
     <FirstPage {...props} ref={ref} />
   )),
-  LastPage: forwardRef((props, ref: React.LegacyRef<SVGSVGElement>) => (
+  LastPage: forwardRef((props, ref: React.RefObject<SVGSVGElement>) => (
     <LastPage {...props} ref={ref} />
   )),
-  NextPage: forwardRef((props, ref: React.LegacyRef<SVGSVGElement>) => (
+  NextPage: forwardRef((props, ref: React.RefObject<SVGSVGElement>) => (
     <ChevronRight {...props} ref={ref} />
   )),
-  PreviousPage: forwardRef((props, ref: React.LegacyRef<SVGSVGElement>) => (
+  PreviousPage: forwardRef((props, ref: React.RefObject<SVGSVGElement>) => (
     <ChevronLeft {...props} ref={ref} />
   )),
-  ResetSearch: forwardRef((props, ref: React.LegacyRef<SVGSVGElement>) => (
+  ResetSearch: forwardRef((props, ref: React.RefObject<SVGSVGElement>) => (
     <Clear {...props} ref={ref} />
   )),
-  Search: forwardRef((props, ref: React.LegacyRef<SVGSVGElement>) => (
+  Search: forwardRef((props, ref: React.RefObject<SVGSVGElement>) => (
     <Search {...props} ref={ref} />
   )),
-  SortArrow: forwardRef((props, ref: React.LegacyRef<SVGSVGElement>) => (
+  SortArrow: forwardRef((props, ref: React.RefObject<SVGSVGElement>) => (
     <ArrowUpward {...props} ref={ref} />
   )),
 };
@@ -59,7 +59,7 @@ const flattenTreeData = (data: object, parentId?: string) => {
 };
 
 interface TreeTableProps {
-  title: string;
+  title?: string;
   data: object;
 }
 

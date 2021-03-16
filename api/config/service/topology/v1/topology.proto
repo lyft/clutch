@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package clutch.config.service.topology.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/config/service/topology/v1;topologyv1";
+
+import "validate/validate.proto";
+import "google/protobuf/duration.proto";
+
+message Config {
+  Cache cache = 1;
+}
+
+// To enable topology caching you must specific the cache configuration below, by default it is disabled.
+message Cache {
+  // The time to live (ttl) for an item in cache, the default is 2 hours (7200 seconds).
+  google.protobuf.Duration ttl = 1 [ (validate.rules).duration.gt.seconds = 1 ];
+}

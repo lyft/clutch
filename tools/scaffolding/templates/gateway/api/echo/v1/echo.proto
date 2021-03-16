@@ -1,12 +1,13 @@
 syntax = "proto3";
 
-package {{ .RepoOwner }}.echo.v1;
+package {{ .RepoOwner | .SanitizeProto3 }}.echo.v1;
 
-option go_package = "echov1";
+option go_package = "{{ .RepoProvider}}/{{ .RepoOwner }}/{{ .RepoName}}/backend/api/echo/v1;echov1";
 
 import "google/api/annotations.proto";
-
 import "validate/validate.proto";
+
+import "api/v1/annotations.proto";
 
 service EchoAPI {
   rpc SayHello(SayHelloRequest) returns (SayHelloResponse) {
@@ -14,6 +15,7 @@ service EchoAPI {
       post : "/v1/echo/sayHello"
       body : "*"
     };
+    option (clutch.api.v1.action).type = READ;
   }
 }
 

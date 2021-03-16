@@ -7,6 +7,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 *.tsbuildinfo
+package-lock.json
+**/.eslintcache
 
 # dependencies
 *node_modules
@@ -20,6 +22,7 @@ yarn-error.log*
 # production
 **/build
 **/dist
+storybook-static
 
 # misc
 .DS_Store

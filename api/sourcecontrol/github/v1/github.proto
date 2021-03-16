@@ -2,12 +2,12 @@ syntax = "proto3";
 
 package clutch.sourcecontrol.github.v1;
 
-option go_package = "githubv1";
+option go_package = "github.com/lyft/clutch/backend/api/sourcecontrol/github/v1;githubv1";
 
 import "google/protobuf/wrappers.proto";
 import "validate/validate.proto";
 
-// Common parameters for GitHub repostories.
+// Common parameters for GitHub repositories.
 message RepositoryParameters {
   enum Visibility {
     UNSPECIFIED = 0;
@@ -34,4 +34,16 @@ message UpdateRepositoryOptions {
 
   // Pass true to archive this repository. Note: You cannot unarchive repositories through the API.
   bool archived = 2;
+}
+
+enum CommitCompareStatus {
+  UNSPECIFIED = 0;
+  UNKNOWN = 1;
+  BEHIND = 2;
+  AHEAD = 3;
+  IDENTICAL = 4;
+}
+
+message CommitComparison {
+  CommitCompareStatus status = 1;
 }

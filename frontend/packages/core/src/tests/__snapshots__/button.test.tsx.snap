@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Destructive Button component renders correctly 1`] = `
+"<Styled(WithStyles(ForwardRef(Button))) variant=\\"contained\\" disableElevation={true} data-color={{...}}>
+  test
+</Styled(WithStyles(ForwardRef(Button)))>"
+`;
+
+exports[`Neutral Button component renders correctly 1`] = `
+"<Styled(WithStyles(ForwardRef(Button))) variant=\\"contained\\" disableElevation={true} data-color={{...}}>
+  test
+</Styled(WithStyles(ForwardRef(Button)))>"
+`;
+
+exports[`Primary Button component renders correctly 1`] = `
+"<Styled(WithStyles(ForwardRef(Button))) variant=\\"contained\\" disableElevation={true} data-color={{...}}>
+  test
+</Styled(WithStyles(ForwardRef(Button)))>"
+`;

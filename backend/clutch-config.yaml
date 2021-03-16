@@ -2,6 +2,17 @@ gateway:
   logger:
     pretty: true
     level: DEBUG
+  accesslog:
+    # log http 5xx errors by default
+    status_code_filters:
+      # Unknown - http.StatusInternalServerError
+      - equals: 2
+      # DeadlineExceeded - http.StatusInternalServerError
+      - equals: 4
+      # Unimplemented - http.StatusNotImplemented
+      - equals: 12
+      # Unavailable - http.StatusServiceUnavailable
+      - equals: 14
   stats:
     flush_interval: 1s
     log_reporter: {}

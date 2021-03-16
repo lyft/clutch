@@ -3,8 +3,7 @@ package github
 import (
 	"context"
 
-	githubv3 "github.com/google/go-github/v32/github"
-
+	githubv3 "github.com/google/go-github/v33/github"
 	"github.com/shurcooL/githubv4"
 )
 
@@ -12,9 +11,11 @@ import (
 // testing strategy (wrap the struct) than most libraries (mock the interface)
 // See https://github.com/google/go-github/issues/113#issuecomment-46023864
 type v3client struct {
-	Repositories v3repositories
-	PullRequests v3pullrequests
-	Issues       v3issues
+	Repositories  v3repositories
+	PullRequests  v3pullrequests
+	Issues        v3issues
+	Users         v3users
+	Organizations v3organizations
 }
 
 // Interface for struct defined in https://github.com/google/go-github/blob/master/github/repos.go.
@@ -22,6 +23,9 @@ type v3client struct {
 type v3repositories interface {
 	// Create a new repository. If an org is specified, the new repository will be created under that org. If the empty string is specified, it will be created for the authenticated user.
 	Create(ctx context.Context, org string, repo *githubv3.Repository) (*githubv3.Repository, *githubv3.Response, error)
+	GetContents(ctx context.Context, owner, repo, path string, opt *githubv3.RepositoryContentGetOptions) (*githubv3.RepositoryContent, []*githubv3.RepositoryContent, *githubv3.Response, error)
+	CompareCommits(ctx context.Context, owner, repo string, base, head string) (*githubv3.CommitsComparison, *githubv3.Response, error)
+	GetCommit(ctx context.Context, owner, repo, sha string) (*githubv3.RepositoryCommit, *githubv3.Response, error)
 }
 
 // Interface for struct defined in https://github.com/google/go-github/blob/master/github/pulls.go.
@@ -44,4 +48,14 @@ type v3issues interface {
 		number int,
 		comment *githubv3.IssueComment,
 	) (*githubv3.IssueComment, *githubv3.Response, error)
+}
+
+type v3users interface {
+	Get(ctx context.Context, user string) (*githubv3.User, *githubv3.Response, error)
+}
+
+type v3organizations interface {
+	Get(ctx context.Context, org string) (*githubv3.Organization, *githubv3.Response, error)
+	List(ctx context.Context, user string, opts *githubv3.ListOptions) ([]*githubv3.Organization, *githubv3.Response, error)
+	GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, *githubv3.Response, error)
 }

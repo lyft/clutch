@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Resize Autoscaling Group workflow renders correctly 1`] = `
+"<Wizard dataLayout={{...}} heading={[undefined]}>
+  <HPAIdentifier name=\\"Lookup\\" resolverType=\\"clutch.aws.k8s.v1.HPA\\" />
+  <HPADetails name=\\"Modify\\" />
+  <Confirm name=\\"Confirmation\\" notes={{...}} />
+</Wizard>"
+`;

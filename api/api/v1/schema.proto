@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.api.v1;
 
-option go_package = "apiv1";
+option go_package = "github.com/lyft/clutch/backend/api/api/v1;apiv1";
 
 enum ActionType {
   UNSPECIFIED = 0;
@@ -34,4 +34,9 @@ message Reference {
   // The field(s) which contain nested ResourceIdentifiers to
   // identify resources contained in the message.
   repeated string fields = 1;
+}
+
+// Message used to represent redacted messages.
+message Redacted {
+  string redacted_type_url = 1;
 }

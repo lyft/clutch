@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.config.service.authn.v1;
 
-option go_package = "authnv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/service/authn/v1;authnv1";
 
 import "validate/validate.proto";
 
@@ -12,6 +12,8 @@ message OIDC {
   string client_secret = 3 [ (validate.rules).string = {min_bytes : 1} ];
 
   string redirect_url = 4 [ (validate.rules).string = {min_bytes : 1} ];
+
+  repeated string scopes = 5;
 }
 
 message Config {

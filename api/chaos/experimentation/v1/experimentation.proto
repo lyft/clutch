@@ -2,102 +2,101 @@ syntax = "proto3";
 
 package clutch.chaos.experimentation.v1;
 
-import "google/api/annotations.proto";
-import "validate/validate.proto";
-
 import "api/v1/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
 
-option go_package = "experimentationv1";
+import "chaos/experimentation/v1/experiment.proto";
+import "chaos/experimentation/v1/list_view_item.proto";
+import "chaos/experimentation/v1/experiment_run_details.proto";
 
-message TestSpecification {
-  oneof config {
-    AbortFault abort = 2;
-    LatencyFault latency = 3;
-  }
+option go_package = "github.com/lyft/clutch/backend/api/chaos/experimentation/v1;experimentationv1";
+
+message CreateExperimentRequest {
+  // The experiment configuration specific to the type of experiment
+  google.protobuf.Any config = 1;
+  // The time when the experiment should start. If unspecified, defaults to 'now'
+  google.protobuf.Timestamp start_time = 2;
+  // The time when the experiment should end, If unspecified, the experiment runs indefinitely.
+  google.protobuf.Timestamp end_time = 3;
 }
 
-message Experiment {
-  fixed64 id = 1;
-  TestSpecification test_specification = 2;
-}
-
-// Targets requests from downstream_cluster -> upstream_cluster
-message ClusterPairTarget {
-  // The name of the downstream cluster
-  string downstream_cluster = 1 [ (validate.rules).string = {min_bytes : 1} ];
-
-  // The name of the upstream cluster
-  string upstream_cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
-}
-
-message AbortFault {
-  oneof target {
-    ClusterPairTarget cluster_pair = 1;
-  }
-
-  // The percentage of requests that will be faulted.
-  float percent = 2 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
-
-  // The abort HTTP status that will be returned.
-  int32 http_status = 3 [ (validate.rules).int32 = {gt : 99, lt : 600} ];
-}
-
-message LatencyFault {
-  oneof target {
-    ClusterPairTarget cluster_pair = 1;
-  }
-
-  // The percentage of requests that will be slowed down.
-  float percent = 2 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
-
-  // The latency duration in milliseconds.
-  int32 duration_ms = 3 [ (validate.rules).int32.gt = 0 ];
-}
-
-message CreateExperimentsRequest {
-  repeated Experiment experiments = 1 [ (validate.rules).repeated = {min_items : 1} ];
-}
-
-message CreateExperimentsResponse {
-  repeated Experiment experiments = 1;
+message CreateExperimentResponse {
+  Experiment experiment = 1;
 }
 
 message GetExperimentsRequest {
-  repeated uint64 ids = 1;
+  enum Status {
+    STATUS_UNSPECIFIED = 0;
+    STATUS_RUNNING = 1;
+  }
+
+  string config_type = 1;
+  Status status = 2;
 }
 
 message GetExperimentsResponse {
-  repeated Experiment experiments = 3;
+  repeated Experiment experiments = 1;
 }
 
-message DeleteExperimentsRequest {
-  repeated uint64 ids = 1;
+message CancelExperimentRunRequest {
+  uint64 id = 1;
 }
 
-message DeleteExperimentsResponse {
+message CancelExperimentRunResponse {
+}
+
+message GetListViewRequest {
+}
+
+message GetListViewResponse {
+  repeated ListViewItem items = 1;
+}
+
+message GetExperimentRunDetailsRequest {
+  uint64 id = 1;
+}
+
+message GetExperimentRunDetailsResponse {
+  ExperimentRunDetails run_details = 1;
 }
 
 // Simple CRUD API for experiments
 service ExperimentsAPI {
-  rpc CreateExperiments(CreateExperimentsRequest) returns (CreateExperimentsResponse) {
+  rpc CreateExperiment(CreateExperimentRequest) returns (CreateExperimentResponse) {
     option (google.api.http) = {
-      post : "/v1/experiments/create"
+      post : "/v1/chaos/experimentation/createExperiment"
       body : "*"
     };
     option (clutch.api.v1.action).type = CREATE;
   }
+  rpc CancelExperimentRun(CancelExperimentRunRequest) returns (CancelExperimentRunResponse) {
+    option (google.api.http) = {
+      post : "/v1/chaos/experimentation/cancelExperimentRun"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = DELETE;
+  }
   rpc GetExperiments(GetExperimentsRequest) returns (GetExperimentsResponse) {
     option (google.api.http) = {
-      post : "/v1/experiments/get"
+      post : "/v1/chaos/experimentation/getExperiments"
       body : "*"
     };
     option (clutch.api.v1.action).type = READ;
   }
-  rpc DeleteExperiments(DeleteExperimentsRequest) returns (DeleteExperimentsResponse) {
+  rpc GetListView(GetListViewRequest) returns (GetListViewResponse) {
     option (google.api.http) = {
-      post : "/v1/experiments/delete"
+      post : "/v1/chaos/experimentation/getListView"
       body : "*"
     };
-    option (clutch.api.v1.action).type = DELETE;
+    option (clutch.api.v1.action).type = READ;
+  }
+  rpc GetExperimentRunDetails(GetExperimentRunDetailsRequest) returns (GetExperimentRunDetailsResponse) {
+    option (google.api.http) = {
+      post : "/v1/chaos/experimentation/getExperimentRunDetails"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
   }
 }

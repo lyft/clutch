@@ -1,0 +1,53 @@
+{
+  "extends": [
+    "config:base",
+    ":automergeLinters",
+    ":combinePatchMinorReleases",
+    ":enableVulnerabilityAlerts",
+    ":preserveSemverRanges",
+    ":separateMajorReleases",
+    ":separateMultipleMajorReleases",
+    ":unpublishSafe",
+    "group:definitelyTyped",
+    "group:docusaurusMonorepo",
+    "group:materialMonorepo",
+    "group:reactMonorepo",
+    "group:reactrouterMonorepo"
+  ],
+  "commitMessagePrefix": "housekeeping:",
+  "rebaseWhen": "conflicted",
+  "labels": [
+    "dependencies"
+  ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "extends": ["schedule:weekly"],
+      "matchPackageNames": [
+        "google.golang.org/genproto"
+      ],
+      "matchPackagePatterns": [
+        "^golang.org/x/",
+        "^github.com/aws/"
+      ]
+    },
+    {
+      "enabled": false,
+      "matchPackagePatterns": [
+        "^github.com/cactus/go-statsd-client"
+      ]
+    }
+  ],
+  "postUpdateOptions": [
+    "gomodTidy"
+  ],
+  "yarnrc": "",
+  "ignoreDeps": [
+    "@date-io/core",
+    "babel-jest",
+    "eslint",
+    "jest"
+  ]
+}

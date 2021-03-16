@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/data-layout",
-  "version": "0.0.0",
+  "version": "1.0.0-beta",
   "description": "Data Layout manager for clutch",
   "homepage": "https://clutch.sh/docs/development/frontend#clutch-shdata-layout",
   "license": "Apache-2.0",
@@ -19,18 +19,18 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "prepublishOnly": "yarn run build",
-    "publishAlpha": "yarn publish --new-version=\"0.0.0-$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')-$(git rev-parse --short=12 HEAD)\" --access public",
+    "publishBeta": "../../../tools/publish-frontend.sh data-layout",
     "test": "jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
     "lodash": "^4.17.15",
-    "react": "^16.8",
+    "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-hook-thunk-reducer": "^0.2.1"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^0.0.0"
+    "@clutch-sh/tools": "^1.0.0-beta"
   }
 }

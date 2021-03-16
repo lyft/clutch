@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.aws.kinesis.v1;
 
-option go_package = "kinesisv1";
+option go_package = "github.com/lyft/clutch/backend/api/aws/kinesis/v1;kinesisv1";
 
 import "google/api/annotations.proto";
 
@@ -40,7 +40,7 @@ message GetStreamResponse {
 message UpdateShardCountRequest {
   string stream_name = 1;
   string region = 2;
-  uint32 target_shard_count = 3;
+  int32 target_shard_count = 3;
 }
 
 message UpdateShardCountResponse {
@@ -54,5 +54,5 @@ message Stream {
 
   string stream_name = 1;
   string region = 2;
-  uint32 current_shard_count = 3;
+  int32 current_shard_count = 3;
 }

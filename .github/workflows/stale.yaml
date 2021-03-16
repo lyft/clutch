@@ -1,0 +1,17 @@
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 15,22 * * 1-5'
+jobs:
+  check_stale:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/stale@v3
+      with:
+        days-before-stale: 7
+        days-before-close: 3
+        exempt-pr-labels: 'on hold'
+        stale-pr-message: >
+          This PR has been marked as stale after 7 or more days of inactivity.
+          Please have a maintainer add the `on hold` label if this PR should remain open.
+          If there is no further activity or the `on hold` label is not added, this PR will be closed in 3 days.

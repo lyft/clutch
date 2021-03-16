@@ -15,7 +15,7 @@ Clutch has configurable middleware to save data on each incoming request, a modu
 | ----------------------------- | ----------- |
 | `clutch.module.audit`         | Module to retrieve audit events, called from outside of Clutch and calls the audit service. |
 | `clutch.middleware.audit`     | Middleware that runs on each request. Calls the audit service to store request information. |
-| `clutch.service.audit`        | Called to save or retrieve request information. |
+| `clutch.service.audit`        | Handler in front of storage services. Called to save or retrieve request information. |
 | `clutch.service.audit.sink.*` | Calls the audit service to retrieve request information. Call out of Clutch to forward the events. |
 
 The annotations are read by middleware for each request and response, which forwards the information to the audit service for storage. The audit service is responsible for persistence as well as forwarding to other sinks to fan-out the messages. Each step of saving and forwarding is configurable with filters based on event attributes.
@@ -30,7 +30,7 @@ These annotations let customizable data on each request be logged and reviewed.
 
 Clutch will save the the "type" of action that was performed (create, read, update, or delete or CRUD operations) for each request. The request type comes from an API annotation on each RPC.
 
-From the [`AmiiboAPI` example proto](/docs/development/feature-development#2-api-define-the-schema), to show that the `GetCharacters` endpoint is a "read" operation, an extra `option` annotation would be needed.
+From the [`AmiiboAPI` example proto](/docs/development/feature#2-api-define-the-schema), to show that the `GetCharacters` endpoint is a "read" operation, an extra `option` annotation would be needed.
 
 ```protobuf title="api/amiibo/v1/amiibo.proto"
 syntax = "proto3";
@@ -134,6 +134,19 @@ On each request, the [above annotations](#annotations) are read along with what 
 
 All of this information is passed along to the audit [service](./###Service) to persist.
 
+The configuration for the audit middleware looks like:
+
+```yaml title="backend/clutch-config.yaml"
+gateway:
+...
+  middleware:
+    ...
+    // highlight-start
+    - name: clutch.middleware.audit
+    // highlight-end
+...
+```
+
 ### Service
 
 The audit service has two behaviors: write requests somewhere, and read them back out. It takes events from the middleware and saves them, and it also pushes them to later "sinks" for further processing.
@@ -178,9 +191,55 @@ Clutch's audit events can also be viewed by querying the audit module if it is e
 
 ### Example config
 
+#### Local Adhoc Use
+
+Clutch ships with an in-memory storage for events which allows it to be used without
+setting up a Postgres database. It is not recommended to run this way outside of a trial
+or adhoc temporary use. All history of actions taken with Clutch will be lost with the
+process shutting down.
+
+
+```yaml title="backend/clutch-config.yaml"
+gateway:
+...
+  middleware:
+    ...
+    // highlight-start
+    - name: clutch.middleware.audit
+    // highlight-end
+...
+services:
+  ...
+  // highlight-start
+  - name: clutch.service.audit.sink.logger
+  - name: clutch.service.audit
+    typed_config:
+      "@type": types.google.com/clutch.config.service.audit.v1.Config
+      in_memory: true
+      filter:
+        denylist: true
+        rules:
+          - field: METHOD
+            text: Healthcheck
+      sinks:
+        - clutch.service.audit.sink.slack
+  // highlight-end
+```
+
+
+
+#### Recommended Production Setup
+
 Below is sample configuration to show how the services described are enabled. Note that because services are instantiated in the order they are listed, order matters! Since the audit service depends on both the database and the sink, it needs to be listed after them.
 
 ```yaml title="backend/clutch-config.yaml"
+gateway:
+...
+  middleware:
+    ...
+    // highlight-start
+    - name: clutch.middleware.audit
+    // highlight-end
 ...
 services:
   ...

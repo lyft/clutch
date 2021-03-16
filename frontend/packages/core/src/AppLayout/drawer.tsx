@@ -1,193 +1,213 @@
-import React from "react";
+import * as React from "react";
 import { Link as RouterLink } from "react-router-dom";
+import styled from "@emotion/styled";
 import {
+  Avatar as MuiAvatar,
+  ClickAwayListener,
   Collapse,
-  Divider as MuiDivider,
   Drawer as MuiDrawer,
-  Grid,
   List,
   ListItem,
   ListItemText,
-  SvgIcon,
+  Paper as MuiPaper,
+  Popper as MuiPopper,
   Typography,
 } from "@material-ui/core";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import styled from "styled-components";
 
-import { useTheme } from "../AppProvider/themes";
 import { useAppContext } from "../Contexts";
-import { TrendingUpIcon } from "../icon";
 
-import Logo from "./logo";
-import { userId } from "./user";
 import { routesByGrouping, sortedGroupings } from "./utils";
 
-const mobileDrawerWidth = "90%";
-const drawerWidth = "300px";
+// sidebar
+const DrawerPanel = styled(MuiDrawer)({
+  width: "100px",
+  ".MuiDrawer-paper": {
+    top: "unset",
+    width: "inherit",
+    backgroundColor: "#FFFFFF",
+    boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
+    position: "relative",
+    display: "flex",
+  },
+});
 
-const DrawerPanel = styled(MuiDrawer)`
-  ${({ theme }) => `
-  flex-shrink: 0;
-  min-width: ${drawerWidth};
-  @media screen and (max-width: 800px) {
-    min-width: ${mobileDrawerWidth};
-  }
-  div[class*="MuiDrawer-paper"] {
-    min-width: ${drawerWidth};
-    background-color: ${theme.palette.secondary.main};
-    padding: ${theme.spacing(2)}px;
-    @media screen and (max-width: 800px) {
-      min-width: ${mobileDrawerWidth};
-    }
-  }
-  `}
-`;
+// sidebar groupings
+const GroupList = styled(List)({
+  padding: "0px",
+});
 
-const DrawerHeader = styled(Grid)`
-  ${({ theme }) => `
-    justify: flex-start;
-    direction: row;
-    ${theme.mixins.toolbar};
-  `}
-`;
+const GroupListItem = styled(ListItem)({
+  flexDirection: "column",
+  minHeight: "82px",
+  padding: "16px 8px 16px 8px",
+  height: "fit-content",
+  "&:hover": {
+    backgroundColor: "#F5F6FD",
+  },
+  "&:active": {
+    backgroundColor: "#D7DAF6",
+  },
+  // avatar and label
+  "&:hover, &:active, &.Mui-selected": {
+    ".MuiAvatar-root": {
+      backgroundColor: "#3548D4",
+    },
+    ".MuiTypography-root": {
+      color: "#3548D4",
+    },
+  },
+  "&.Mui-selected": {
+    backgroundColor: "#EBEDFB",
+    "&:hover": {
+      backgroundColor: "#F5F6FD",
+    },
+    "&:active": {
+      backgroundColor: "#D7DAF6",
+    },
+  },
+});
 
-const GroupIcon = styled(SvgIcon)`
-  ${({ theme }) => `
-  color: ${theme.palette.primary.main};
-  `}
-`;
+const GroupHeading = styled(Typography)({
+  color: "rgba(13, 16, 48, 0.6)",
+  fontWeight: 500,
+  fontSize: "14px",
+  lineHeight: "18px",
+  flexGrow: 1,
+  paddingTop: "11px",
+  width: "100%",
+  textOverflow: "ellipsis",
+  overflow: "hidden",
+});
 
-const GroupHeading = styled(Typography)`
-  ${({ theme }) => `
-  color: ${theme.palette.primary.main};
-  padding-top: 0.25rem;
-  font-weight: bolder;
-  `}
-`;
+const Avatar = styled(MuiAvatar)({
+  background: "rgba(13, 16, 48, 0.6)",
+  height: "24px",
+  width: "24px",
+  color: "#FFFFFF",
+  fontSize: "14px",
+  borderRadius: "4px",
+});
 
-const TrendingIcon = styled(TrendingUpIcon)`
-  fontsize: 20px;
-  marginleft: 10px;
-`;
+// sidebar submenu
+const Popper = styled(MuiPopper)({
+  zIndex: 1201,
+  paddingTop: "16px",
+});
 
-const NavigationLink = styled(RouterLink)`
-  ${({ theme }) => `
-  color: ${theme.palette.text.secondary};
-  `}
-`;
+const Paper = styled(MuiPaper)({
+  minWidth: "230px",
+  border: "1px solid #E7E7EA",
+  boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
+  // sidebar submenu groupings
+  ".MuiListItem-root[data-qa='workflowGroupItem']": {
+    backgroundColor: "#FFFFFF",
+    height: "48px",
+    "&:hover": {
+      backgroundColor: "#F5F6FD",
+    },
+    "&:active": {
+      backgroundColor: "#D7DAF6",
+    },
+    "&.Mui-selected": {
+      backgroundColor: "#FFFFFF",
+      "&:hover": {
+        backgroundColor: "#F5F6FD",
+      },
+      "&:active": {
+        backgroundColor: "#D7DAF6",
+      },
+    },
+    "&:hover, &:active, &.Mui-selected": {
+      ".MuiTypography-root": {
+        color: "#3548D4",
+      },
+    },
+  },
+});
 
-interface HeaderProps {
-  onNavigate: () => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
-  return (
-    <DrawerHeader container flex-wrap="wrap">
-      <Grid item>
-        <NavigationLink to="/" onClick={onNavigate} data-qa="logo">
-          <Logo />
-        </NavigationLink>
-      </Grid>
-      <Grid item>
-        <Grid container justify="center" direction="column">
-          <Typography
-            style={{ lineHeight: "1.3", margin: "-5px 0px 10px 10px" }}
-            component="span"
-            color="primary"
-            data-qa="title"
-          >
-            <NavigationLink to="/" onClick={onNavigate}>
-              <GroupHeading>clutch</GroupHeading>
-            </NavigationLink>
-            <Typography variant="caption">Welcome {userId()}!</Typography>
-          </Typography>
-        </Grid>
-      </Grid>
-    </DrawerHeader>
-  );
-};
-
-const Divider = styled(MuiDivider)`
-  ${({ theme }) => `
-  background-color: ${theme.palette.accent.main};
-  `}
-`;
+const LinkListItemText = styled(ListItemText)({
+  ".MuiTypography-root": {
+    color: "rgba(13, 16, 48, 0.6)",
+    fontWeight: 500,
+    fontSize: "14px",
+    lineHeight: "18px",
+  },
+});
 
 interface GroupProps {
   heading: string;
   open: boolean;
   updateOpenGroup: (heading: string) => void;
-  onNavigate: () => void;
+  closeGroup: () => void;
 }
 
 const Group: React.FC<GroupProps> = ({
   heading,
   open = false,
   updateOpenGroup,
-  onNavigate,
+  closeGroup,
   children,
 }) => {
-  const childrenList = React.Children.toArray(children);
+  const anchorRef = React.useRef(null);
 
   // n.b. if a Workflow Grouping has no workflows in it don't display it even if
   // it's not explicitly marked as hidden.
-  if (childrenList.length === 0) {
+  if (React.Children.count(children) === 0) {
     return null;
   }
+  // TODO (dschaller): revisit how we handle long groups once we have designs.
+  // n.b. this is a stop-gap solution to prevent long groups from looking unreadable.
   return (
-    <List data-qa="workflowGroup">
-      <ListItem button onClick={() => updateOpenGroup(heading)}>
-        <GroupHeading color="primary" variant="h6">
-          {heading}
-        </GroupHeading>
-        <Grid container justify="flex-end" data-qa="toggle">
-          {open ? <GroupIcon component={ExpandLess} /> : <GroupIcon component={ExpandMore} />}
-        </Grid>
-      </ListItem>
-      {!open ? <Divider variant="middle" /> : null}
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {childrenList.map((c: React.ReactElement) => {
-            return React.cloneElement(c, { onClick: onNavigate });
-          })}
-        </List>
-      </Collapse>
-    </List>
+    <GroupList data-qa="workflowGroup">
+      <GroupListItem
+        button
+        selected={open}
+        ref={anchorRef}
+        aria-controls={open ? "workflow-options" : undefined}
+        aria-haspopup="true"
+        onClick={() => {
+          updateOpenGroup(heading);
+        }}
+      >
+        <Avatar>{heading.charAt(0)}</Avatar>
+        <GroupHeading align="center">{heading}</GroupHeading>
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <Popper open={open} anchorEl={anchorRef.current} transition placement="right-start">
+            <Paper>
+              <ClickAwayListener onClickAway={closeGroup}>
+                <List component="div" disablePadding id="workflow-options">
+                  {children}
+                </List>
+              </ClickAwayListener>
+            </Paper>
+          </Popper>
+        </Collapse>
+      </GroupListItem>
+    </GroupList>
   );
 };
 
 interface LinkProps {
   to: string;
   text: string;
-  onClick: () => void;
-  trending?: boolean;
 }
 
-const Link: React.FC<LinkProps> = ({ to, text, onClick, trending = false }) => {
-  const theme = useTheme();
+const Link: React.FC<LinkProps> = ({ to, text }) => {
   const isSelected = window.location.pathname.replace("/", "") === to;
-  const selectedStyle = isSelected ? { color: theme.palette.accent.main } : {};
   return (
     <ListItem
-      component={NavigationLink}
-      onClick={onClick}
+      selected={isSelected}
+      component={RouterLink}
       to={to}
       dense
       data-qa="workflowGroupItem"
     >
-      <ListItemText primary={text} style={selectedStyle} />
-      {trending && <TrendingIcon />}
+      <LinkListItemText>{text}</LinkListItemText>
     </ListItem>
   );
 };
 
-interface DrawerProps {
-  open: boolean;
-  onClose: () => void;
-}
-
-const Drawer: React.FC<DrawerProps> = ({ open, onClose }) => {
+const Drawer: React.FC = () => {
   const { workflows } = useAppContext();
   const [openGroup, setOpenGroup] = React.useState("");
 
@@ -200,8 +220,7 @@ const Drawer: React.FC<DrawerProps> = ({ open, onClose }) => {
   };
 
   return (
-    <DrawerPanel open={open} onClose={onClose} data-qa="drawer">
-      <Header onNavigate={onClose} />
+    <DrawerPanel data-qa="drawer" variant="permanent">
       {sortedGroupings(workflows).map(grouping => {
         const value = routesByGrouping(workflows)[grouping];
         return (
@@ -210,15 +229,13 @@ const Drawer: React.FC<DrawerProps> = ({ open, onClose }) => {
             heading={grouping}
             open={openGroup === grouping}
             updateOpenGroup={updateOpenGroup}
-            onNavigate={onClose}
+            closeGroup={() => setOpenGroup("")}
           >
             {value.workflows.map(workflow => (
               <Link
-                trending={workflow.trending}
                 key={workflow.path.replace("/", "")}
                 to={workflow.path}
                 text={workflow.displayName}
-                onClick={onClose}
               />
             ))}
           </Group>

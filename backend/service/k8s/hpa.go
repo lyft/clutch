@@ -3,30 +3,44 @@ package k8s
 import (
 	"context"
 
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/util/retry"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
 func (s *svc) DescribeHPA(ctx context.Context, clientset, cluster, namespace, name string) (*k8sapiv1.HPA, error) {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return nil, err
 	}
 
-	getOpts := metav1.GetOptions{}
-	hpa, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Get(name, getOpts)
+	hpas, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).List(ctx, metav1.ListOptions{
+		FieldSelector: "metadata.name=" + name,
+	})
 	if err != nil {
 		return nil, err
 	}
-	return ProtoForHPA(hpa), nil
+
+	if len(hpas.Items) == 1 {
+		return ProtoForHPA(cs.Cluster(), &hpas.Items[0]), nil
+	} else if len(hpas.Items) > 1 {
+		return nil, status.Error(codes.FailedPrecondition, "located multiple HPAs")
+	}
+
+	return nil, status.Error(codes.NotFound, "unable to locate specified HPA")
 }
 
-func ProtoForHPA(autoscaler *autoscalingv1.HorizontalPodAutoscaler) *k8sapiv1.HPA {
+func ProtoForHPA(cluster string, autoscaler *autoscalingv1.HorizontalPodAutoscaler) *k8sapiv1.HPA {
+	clusterName := autoscaler.ClusterName
+	if clusterName == "" {
+		clusterName = cluster
+	}
 	return &k8sapiv1.HPA{
-		Cluster:   autoscaler.ClusterName,
+		Cluster:   clusterName,
 		Namespace: autoscaler.Namespace,
 		Name:      autoscaler.Name,
 		Sizing: &k8sapiv1.HPA_Sizing{
@@ -41,20 +55,24 @@ func ProtoForHPA(autoscaler *autoscalingv1.HorizontalPodAutoscaler) *k8sapiv1.HP
 }
 
 func (s *svc) ResizeHPA(ctx context.Context, clientset, cluster, namespace, name string, sizing *k8sapiv1.ResizeHPARequest_Sizing) error {
-	cs, err := s.manager.GetK8sClientset(clientset, cluster, namespace)
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
 	if err != nil {
 		return err
 	}
 
 	opts := metav1.GetOptions{}
-	hpa, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Get(name, opts)
+	hpa, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Get(ctx, name, opts)
 	if err != nil {
 		return err
 	}
 
 	normalizeHPAChanges(hpa, sizing)
-	_, err = cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Update(hpa)
-	return err
+
+	retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
+		_, err := cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Update(ctx, hpa, metav1.UpdateOptions{})
+		return err
+	})
+	return retryErr
 }
 
 func normalizeHPAChanges(hpa *autoscalingv1.HorizontalPodAutoscaler, sizing *k8sapiv1.ResizeHPARequest_Sizing) {
@@ -69,4 +87,14 @@ func normalizeHPAChanges(hpa *autoscalingv1.HorizontalPodAutoscaler, sizing *k8s
 	if *hpa.Spec.MinReplicas > hpa.Spec.MaxReplicas {
 		hpa.Spec.MaxReplicas = *hpa.Spec.MinReplicas
 	}
+}
+
+func (s *svc) DeleteHPA(ctx context.Context, clientset, cluster, namespace, name string) error {
+	cs, err := s.manager.GetK8sClientset(ctx, clientset, cluster, namespace)
+	if err != nil {
+		return err
+	}
+
+	opts := metav1.DeleteOptions{}
+	return cs.AutoscalingV1().HorizontalPodAutoscalers(cs.Namespace()).Delete(ctx, name, opts)
 }

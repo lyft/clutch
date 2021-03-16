@@ -3,11 +3,10 @@ package module
 import (
 	"context"
 
+	"github.com/golang/protobuf/ptypes/any"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
-
-	"github.com/golang/protobuf/ptypes/any"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 )
 

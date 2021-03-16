@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.healthcheck.v1;
 
-option go_package = "healthcheckv1";
+option go_package = "github.com/lyft/clutch/backend/api/healthcheck/v1;healthcheckv1";
 
 import "google/api/annotations.proto";
 import "api/v1/annotations.proto";
@@ -12,9 +12,10 @@ service HealthcheckAPI {
     option (google.api.http) = {
       get : "/v1/healthcheck"
 
-      additional_bindings : [ {get : "/healthcheck"} ]
+      additional_bindings : {get : "/healthcheck"}
     };
     option (clutch.api.v1.action).type = READ;
+    option (clutch.api.v1.disable_audit) = true;
   }
 }
 

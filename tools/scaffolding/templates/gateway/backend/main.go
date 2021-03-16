@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/lyft/clutch/backend/gateway"
 
+	"{{ .RepoProvider}}/{{ .RepoOwner }}/{{ .RepoName }}/backend/cmd/assets"
 	"{{ .RepoProvider}}/{{ .RepoOwner }}/{{ .RepoName }}/backend/module/echo"
 )
 
@@ -14,5 +15,5 @@ func main() {
 	// Add custom components.
 	components.Modules[echo.Name] = echo.New
 
-	gateway.Run(flags, components)
+	gateway.Run(flags, components, assets.VirtualFS)
 }

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.resolver.v1;
 
-option go_package = "resolverv1";
+option go_package = "github.com/lyft/clutch/backend/api/resolver/v1;resolverv1";
 
 import "google/api/annotations.proto";
 import "google/protobuf/any.proto";
@@ -34,6 +34,34 @@ service ResolverAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
+  rpc Autocomplete(AutocompleteRequest) returns (AutocompleteResponse) {
+    option (google.api.http) = {
+      post : "/v1/resolver/autocomplete"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
+}
+
+message AutocompleteResult {
+  // The primary identifer of the resource
+  // This value is used when rendering the autocomplete results on the frontend
+  string id = 1;
+  // The label can provide more detailed information about the result
+  // This is dispalyed inline with the auto complete result
+  // eg: what region an ec2 instance resides in
+  string label = 2;
+}
+
+message AutocompleteRequest {
+  // The type URL of the desired result.
+  string want = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string search = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  uint64 limit = 3;
+}
+
+message AutocompleteResponse {
+  repeated AutocompleteResult results = 1;
 }
 
 message ResolveRequest {

@@ -1,7 +1,7 @@
+import type { clutch as IClutch } from "@clutch-sh/api";
+import * as $pbclutch from "@clutch-sh/api";
 import _ from "lodash";
 
-import type { clutch as IClutch } from "../../../../api";
-import * as $pbclutch from "../../../../api";
 import { client, parseErrorMessage } from "../network";
 
 const fetchResourceSchemas = async (type: string): Promise<IClutch.resolver.v1.Schema[]> => {
@@ -45,7 +45,7 @@ const resolveFields = async (
     have: fields,
     limit,
   });
-  return { results: response.data.results, failures: response.data.partialFailures };
+  return { results: response.data?.results || [], failures: response.data?.partialFailures || [] };
 };
 
 const resolveResource = async (
@@ -55,12 +55,19 @@ const resolveResource = async (
     [key: string]: any;
   },
   onResolve: (resultObjects: any[], failureMessages: string[]) => void,
-  onError: (message: string) => void
+  onError: (message: string) => void,
+  apiPackage?: any
 ) => {
   const resolver = fields?.query !== undefined ? resolveQuery : resolveFields;
   return resolver(type, limit, fields)
     .then(({ results, failures }) => {
-      const resultObjects = results.map(result => _.get($pbclutch, type).fromObject(result));
+      // n.b. default to using the open source @clutch-sh/api package to resolve the
+      // resource against unless a custom package has been specified by the workflow.
+      let pbClutch = _.get($pbclutch, type);
+      if (apiPackage) {
+        pbClutch = _.get(apiPackage, type);
+      }
+      const resultObjects = results.map(result => pbClutch.fromObject(result));
       const failureMessages = failures.map(failure => parseErrorMessage(failure.message).summary);
       if (_.some(resultObjects) !== undefined) {
         onResolve(resultObjects, failureMessages);
@@ -73,7 +80,7 @@ const resolveResource = async (
         return;
       }
 
-      onError(err.response.displayText);
+      onError(err.response.displayText || err.response.statusText);
     });
 };
 

@@ -13,9 +13,10 @@ const EchoInput = () => {
       <TextField
         InputLabelProps={ { color: "secondary" } }
         label="Enter in text to echo back"
-        name="echoData"
+        name="name"
         required
         onChange={e => echoInput.assign({ [e.target.name]: e.target.value })}
+        onReturn={onSubmit}
       />
       <Button text="Echo" destructive onClick={onSubmit} />
     </WizardStep>
@@ -27,7 +28,7 @@ const EchoOutput = () => {
 
   return (
     <WizardStep error={echoData.error} isLoading={echoData.isLoading}>
-      <Typography>{echoData.message}</Typography>
+      <Typography>{echoData.displayValue()?.data?.message}</Typography>
     </WizardStep>
   );
 };

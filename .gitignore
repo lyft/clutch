@@ -3,4 +3,5 @@
 
 build/
 
+backend/.air/
 backend/cmd/assets/generated_assets.go

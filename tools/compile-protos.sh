@@ -2,13 +2,13 @@
 set -euo pipefail
 
 # https://github.com/protocolbuffers/protobuf/releases
-PROTOC_RELEASE=3.11.4
-PROTO_ZIP_RELEASE_MD5_LINUX=7c0babfc7d2ae4eff6ce3e47c2de90c2
-PROTO_ZIP_RELEASE_MD5_OSX=58c8716eabdbc1259d14880ace6e719a
+PROTOC_RELEASE=3.14.0
+PROTO_ZIP_RELEASE_MD5_LINUX=cef4dc2f438e44e5d1af64ba4f9dbaa6
+PROTO_ZIP_RELEASE_MD5_OSX=ac2977d94676a7371b9e92fa3a29bc21
 
-# https://github.com/protobufjs/protobuf.js
-PROTOBUFJS_SHA=1d626f84db4a4f339004609f654a9f24a211b716
-PROTOBUFJS_FORK=https://github.com/natiz/protobuf.js
+# https://github.com/protobufjs/protobuf.js/releases
+# NOTE: should match frontend/package.json
+PROTOBUFJS_RELEASE=6.10.2
 
 # https://github.com/angular/clang-format/releases
 ANGULAR_CLANG_FORMAT_RELEASE=1.4.0
@@ -17,15 +17,18 @@ ANGULAR_CLANG_FORMAT_RELEASE_MD5_OSX=c3ebe742599dcc38b9dc6544cacd69bb
 
 PROTOS=()
 PROTO_DIRS=()
-CLUTCH_PROTOS=()
+
+SCRIPT_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
 
 # parse options
 ACTION="compile"
 LINT_FIX=false
-while getopts "lf" opt; do
+CLUTCH_API_ROOT=""
+while getopts "lfc:" opt; do
   case $opt in
     l) ACTION="lint" ;;
     f) LINT_FIX=true ;;
+    c) CLUTCH_API_ROOT="${OPTARG}" ;;
     *) echo "usage: $0 [-l]" >&2
      exit 1 ;;
   esac
@@ -33,7 +36,7 @@ done
 shift "$((OPTIND-1))" # shift so that $@, $1, etc. refer to the non-option arguments
 
 main() {
-  SCRIPT_ROOT="$(realpath "$(dirname "${BASH_SOURCE[0]}")/..")"
+  check_prereqs
 
   REPO_ROOT="${SCRIPT_ROOT}"
   # Use alternate root if provided as command line argument.
@@ -41,7 +44,33 @@ main() {
     REPO_ROOT="${1}"
   fi
 
-  CLUTCH_API_ROOT="${SCRIPT_ROOT}/api"
+  if [[ -z "${CLUTCH_API_ROOT}" ]]; then
+    # if core is not provided then we need to use a downloaded version.
+    CORE_VERSION=$(cd "${REPO_ROOT}/backend" && go list -f "{{ .Version }}" -m github.com/lyft/clutch/backend)
+    if [[ "${CORE_VERSION}" == *-*-* ]]; then
+      # if a pseudo-version, figure out just the SHA
+      CORE_VERSION=$(echo "${CORE_VERSION}" | awk -F"-" '{print $NF}')
+    fi
+
+    core_out="${REPO_ROOT}/build/bin/clutch-api-${CORE_VERSION}"
+    if [[ ! -d "${core_out}" ]]; then
+      echo "info: downloading core APIs ${CORE_VERSION} to build environment..."
+
+      core_zip_out="/tmp/clutch-${CORE_VERSION}.tar.gz"
+      core_tmp_out="/tmp/clutch-${CORE_VERSION}"
+      curl -sSL -o "${core_zip_out}" \
+        "https://github.com/lyft/clutch/archive/${CORE_VERSION}.zip"
+
+      mkdir -p "${core_tmp_out}"
+      unzip -q -o "${core_zip_out}" -d "${core_tmp_out}"
+
+      mkdir -p "${core_out}"
+      mv "${core_tmp_out}"/clutch-*/api "${core_out}"
+    fi
+
+    CLUTCH_API_ROOT="${core_out}/api"
+  fi
+
   API_ROOT="${REPO_ROOT}/api"
   BUILD_ROOT="${REPO_ROOT}/build"
 
@@ -50,7 +79,7 @@ main() {
   prepare_build_environment
   discover_protos
 
-  grpc_gateway_include_path="$(modpath github.com/grpc-ecosystem/grpc-gateway)/third_party/googleapis"
+  grpc_gateway_include_path="$(modpath github.com/grpc-ecosystem/grpc-gateway/v2)/third_party/googleapis"
   pg_validate_include_path="$(modpath github.com/envoyproxy/protoc-gen-validate)"
 
   # Lint (fix) and exit if requested.
@@ -74,7 +103,7 @@ main() {
 
       for proto in "${PROTOS[@]}"; do
         if ! output=$("${PROTOC_BIN}" \
-          -I"${PROTOC_INCLUDE_DIR}" -I"${API_ROOT}" \
+          -I"${PROTOC_INCLUDE_DIR}" -I"${API_ROOT}" -I"${CLUTCH_API_ROOT}" \
           -I"${grpc_gateway_include_path}" -I"${pg_validate_include_path}" \
           --buf-check-lint_out=. \
           "--buf-check-lint_opt={\"input_config\": ${buf_lint_config}}" \
@@ -94,43 +123,30 @@ main() {
   proto_out_dir="${REPO_ROOT}/backend/api"
   mkdir -p "${proto_out_dir}"
 
-  MFLAGS=""
-  package_dir="$(grep -m1 module go.mod | cut -d' ' -f2)/api"
-
-  for proto in "${PROTOS[@]}"; do
-    relative_path="${proto/#${API_ROOT}\/}"
-    MFLAGS+="M${relative_path}=$(dirname "${package_dir}/${relative_path}"),"
-  done
-
-  # Add MFLAGS for Clutch protos when this is running for a private gateway.
-  if [[ "${CLUTCH_API_ROOT}" != "${API_ROOT}" ]]; then
-    discover_clutch_protos
-    readonly CLUTCH_PREFIX="github.com/lyft/clutch/backend/api"
-    for proto in "${CLUTCH_PROTOS[@]}"; do
-      relative_path="${proto/#${CLUTCH_API_ROOT}\/}"
-      MFLAGS+="M${relative_path}=${CLUTCH_PREFIX}/$(dirname "${relative_path}"),"
-    done
-  fi
-
   echo "info: compiling go"
   for proto_dir in "${PROTO_DIRS[@]}"; do
     echo "${proto_dir}"
     "${PROTOC_BIN}" \
       -I"${PROTOC_INCLUDE_DIR}" -I"${API_ROOT}" -I"${CLUTCH_API_ROOT}" \
       -I"${grpc_gateway_include_path}" -I"${pg_validate_include_path}" \
-      --go_out="${MFLAGS}"plugins=grpc:"${proto_out_dir}" \
-      --validate_out="${MFLAGS}"lang=go:"${proto_out_dir}" \
-      --grpc-gateway_out="${proto_out_dir}" \
-      --plugin=protoc-gen-go="${GOBIN}/protoc-gen-go" \
-      --plugin=protoc-gen-grpc-gateway="${GOBIN}/protoc-gen-grpc-gateway" \
-      --plugin=protoc-gen-validate="${GOBIN}/protoc-gen-validate" \
+      --go_out "${proto_out_dir}" \
+      --go_opt paths=source_relative \
+      --go-grpc_out "${proto_out_dir}" \
+      --go-grpc_opt require_unimplemented_servers=false,paths=source_relative \
+      --validate_out paths=source_relative,lang=go:"${proto_out_dir}" \
+      --grpc-gateway_out "${proto_out_dir}" \
+      --grpc-gateway_opt warn_on_unbound_methods=true,paths=source_relative \
+      --plugin protoc-gen-go="${GOBIN}/protoc-gen-go" \
+      --plugin protoc-gen-go-grpc="${GOBIN}/protoc-gen-go-grpc" \
+      --plugin protoc-gen-grpc-gateway="${GOBIN}/protoc-gen-grpc-gateway" \
+      --plugin protoc-gen-validate="${GOBIN}/protoc-gen-validate" \
       "${proto_dir}"/*.proto
   done
 
   echo "info: compiling javascript bundle"
   cd ..
-  mkdir -p "${REPO_ROOT}/frontend/api"
-  js_out="frontend/api/index.js"
+  mkdir -p "${REPO_ROOT}/frontend/api/src"
+  js_out="frontend/api/src/index.js"
   "${PROTOBUFJS_DIR}/node_modules/.bin/pbjs" \
     -p "${PROTOC_INCLUDE_DIR}" -p "${API_ROOT}" -p"${CLUTCH_API_ROOT}" \
     -p "${grpc_gateway_include_path}" -p "${pg_validate_include_path}" \
@@ -141,10 +157,10 @@ main() {
     "${PROTOS[@]}"
   echo -e "// Code generated by protobuf.js in compile-protos.sh. DO NOT EDIT.\n\n$(cat "${js_out}")" > "${js_out}"
 
-  ts_out="frontend/api/index.d.ts"
+  ts_out="frontend/api/src/index.d.ts"
   "${PROTOBUFJS_DIR}/node_modules/.bin/pbts" \
     -o "${ts_out}" \
-    "frontend/api/index.js"
+    "frontend/api/src/index.js"
   echo -e "// Code generated by protobuf.js in compile-protos.sh. DO NOT EDIT.\n\n$(cat "${ts_out}")" > "${ts_out}"
 
   echo "OK"
@@ -159,13 +175,6 @@ discover_protos() {
     PROTO_DIRS+=("${proto_dirs}")
   done <  <(find "${API_ROOT}" -name '*.proto' -exec dirname {} \; | tr '\n' '\0' | sort -sdzu)
 }
-
-discover_clutch_protos() {
-  while IFS= read -r -d '' proto; do
-    CLUTCH_PROTOS+=("${proto}")
-  done <  <(find "${CLUTCH_API_ROOT}" -name '*.proto' -print0 | sort -sdzu)
-}
-
 
 # Get the directory that the go module is stored in and ensure that it's the correct version.
 modpath() {
@@ -189,12 +198,19 @@ prepare_build_environment() {
   fi
 }
 
+check_prereqs() {
+  if ! command -v "npm" &> /dev/null; then
+    echo "ERROR: npm not found, see https://github.com/lyft/clutch/wiki/Requirements#nodejs for more information."
+    exit 1
+  fi
+}
+
 install_protobufjs() {
-  export PROTOBUFJS_DIR="${BUILD_ROOT}/bin/protobufjs-${PROTOBUFJS_SHA}"
+  export PROTOBUFJS_DIR="${BUILD_ROOT}/bin/protobufjs-${PROTOBUFJS_RELEASE}"
   if [[ ! -f "${PROTOBUFJS_DIR}/node_modules/.bin/pbjs" ]]; then
     echo "info: Downloading protobufjs to build environment"
     mkdir -p "${PROTOBUFJS_DIR}"
-    yarn --cwd "${PROTOBUFJS_DIR}" add --frozen-lockfile "${PROTOBUFJS_FORK}#${PROTOBUFJS_SHA}"
+    "${BUILD_ROOT}/bin/yarn.sh" --cwd "${PROTOBUFJS_DIR}" add --frozen-lockfile "protobufjs@${PROTOBUFJS_RELEASE}"
   fi
 }
 
@@ -223,11 +239,11 @@ install_protoc() {
 
   go install \
     github.com/bufbuild/buf/cmd/protoc-gen-buf-check-lint \
-    github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway \
-    github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger \
-    github.com/golang/protobuf/protoc-gen-go \
-    github.com/go-swagger/go-swagger/cmd/swagger \
-    github.com/envoyproxy/protoc-gen-validate
+    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
+    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
+    github.com/envoyproxy/protoc-gen-validate \
+    google.golang.org/protobuf/cmd/protoc-gen-go \
+    google.golang.org/grpc/cmd/protoc-gen-go-grpc
 
   if [[ ! -f "${PROTOC_BIN}" || ! -d "${PROTOC_INCLUDE_DIR}" ]]; then
     echo "info: Downloading protoc-v${PROTOC_RELEASE} to build environment"

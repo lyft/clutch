@@ -356,6 +356,16 @@ func (m *Stats) Validate() error {
 
 	}
 
+	if v, ok := interface{}(m.GetGoRuntimeStats()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StatsValidationError{
+				field:  "GoRuntimeStats",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	switch m.Reporter.(type) {
 
 	case *Stats_LogReporter_:
@@ -642,6 +652,28 @@ func (m *GatewayOptions) Validate() error {
 
 	}
 
+	if v, ok := interface{}(m.GetAssets()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GatewayOptionsValidationError{
+				field:  "Assets",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for EnablePprof
+
+	if v, ok := interface{}(m.GetAccesslog()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GatewayOptionsValidationError{
+				field:  "Accesslog",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -698,6 +730,86 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GatewayOptionsValidationError{}
+
+// Validate checks the field values on Assets with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Assets) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	switch m.Provider.(type) {
+
+	case *Assets_S3:
+
+		if v, ok := interface{}(m.GetS3()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return AssetsValidationError{
+					field:  "S3",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// AssetsValidationError is the validation error returned by Assets.Validate if
+// the designated constraints aren't met.
+type AssetsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AssetsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AssetsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AssetsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AssetsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AssetsValidationError) ErrorName() string { return "AssetsValidationError" }
+
+// Error satisfies the builtin error interface
+func (e AssetsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAssets.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AssetsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AssetsValidationError{}
 
 // Validate checks the field values on Logger with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
@@ -1248,6 +1360,94 @@ var _ interface {
 	ErrorName() string
 } = Stats_StatsdReporterValidationError{}
 
+// Validate checks the field values on Stats_GoRuntimeStats with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *Stats_GoRuntimeStats) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if d := m.GetCollectionInterval(); d != nil {
+		dur, err := ptypes.Duration(d)
+		if err != nil {
+			return Stats_GoRuntimeStatsValidationError{
+				field:  "CollectionInterval",
+				reason: "value is not a valid duration",
+				cause:  err,
+			}
+		}
+
+		gte := time.Duration(0*time.Second + 100000000*time.Nanosecond)
+
+		if dur < gte {
+			return Stats_GoRuntimeStatsValidationError{
+				field:  "CollectionInterval",
+				reason: "value must be greater than or equal to 100ms",
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Stats_GoRuntimeStatsValidationError is the validation error returned by
+// Stats_GoRuntimeStats.Validate if the designated constraints aren't met.
+type Stats_GoRuntimeStatsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Stats_GoRuntimeStatsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Stats_GoRuntimeStatsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Stats_GoRuntimeStatsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Stats_GoRuntimeStatsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Stats_GoRuntimeStatsValidationError) ErrorName() string {
+	return "Stats_GoRuntimeStatsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Stats_GoRuntimeStatsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStats_GoRuntimeStats.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Stats_GoRuntimeStatsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Stats_GoRuntimeStatsValidationError{}
+
 // Validate checks the field values on Stats_StatsdReporter_PointTags with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
@@ -1419,3 +1619,76 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = Timeouts_EntryValidationError{}
+
+// Validate checks the field values on Assets_S3Provider with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *Assets_S3Provider) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Region
+
+	// no validation rules for Bucket
+
+	// no validation rules for Key
+
+	return nil
+}
+
+// Assets_S3ProviderValidationError is the validation error returned by
+// Assets_S3Provider.Validate if the designated constraints aren't met.
+type Assets_S3ProviderValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Assets_S3ProviderValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Assets_S3ProviderValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Assets_S3ProviderValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Assets_S3ProviderValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Assets_S3ProviderValidationError) ErrorName() string {
+	return "Assets_S3ProviderValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Assets_S3ProviderValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAssets_S3Provider.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Assets_S3ProviderValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Assets_S3ProviderValidationError{}

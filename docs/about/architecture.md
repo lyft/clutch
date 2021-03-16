@@ -38,7 +38,7 @@ For more information on APIs in Clutch visit the [API Development](/docs/develop
 
 ### Gateway
 
-`gateway` is responsible for reading the [configuration](/docs/configuration-guide) file, instantiating the specified components, and placing them in a component registry for runtime usage.
+`gateway` is responsible for reading the [configuration](/docs/configuration) file, instantiating the specified components, and placing them in a component registry for runtime usage.
 
 The gateway also manages the JSON/gRPC server and listeners, making use of [grpc-ecosystem/grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway).
 
@@ -73,7 +73,7 @@ Services are always exposed as an interface, so they can easily be replaced with
 
 Most workflows start with the need to locate one or more resources. Resources such as nodes, services, and databases can be found in any organization, but are rarely referred to in the same way or by the same common name. This can be due to team or service structure, migration from another system, legacy systems, individual requirements, or many other reasons.
 
-In addition to locating resources, resolvers also describe how they locate resources by producing schemas for user input. These schemas can be rendered by the frontend or other clients dynamically so that workflows can remain agnostic to resource location. See [Frontend Resolver Component](#resolver-component) for more information.
+In addition to locating resources, resolvers also describe how they locate resources by producing schemas for user input. These schemas can be rendered by the frontend or other clients dynamically so that workflows can remain agnostic to resource location. See [Frontend Resolver Component](/docs/development/frontend#using-the-resolver-component) for more information.
 
 #### `have` and `want`
 

@@ -13,6 +13,10 @@ import (
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
+var (
+	newInt32 = func(n int32) *int32 { return &n }
+)
+
 func testHPAClientset() k8s.Interface {
 	hpa := &autoscalingv1.HorizontalPodAutoscaler{
 		ObjectMeta: metav1.ObjectMeta{
@@ -28,10 +32,6 @@ func testHPAClientset() k8s.Interface {
 
 func TestNormalizeChanges(t *testing.T) {
 	t.Parallel()
-
-	var (
-		newInt32 = func(n int32) *int32 { return &n }
-	)
 
 	var applyScalingTestCases = []struct {
 		id         string
@@ -119,4 +119,78 @@ func TestResizeHPA(t *testing.T) {
 
 	err = s.ResizeHPA(context.Background(), "foo", "core-testing", "testing-namespace", "testing-hpa-name", nil)
 	assert.NoError(t, err)
+}
+
+func TestProtoForHPAClusterName(t *testing.T) {
+	t.Parallel()
+
+	var hpaTestCases = []struct {
+		id                  string
+		inputClusterName    string
+		expectedClusterName string
+		hpa                 *autoscalingv1.HorizontalPodAutoscaler
+	}{
+		{
+			id:                  "clustername already set",
+			inputClusterName:    "notprod",
+			expectedClusterName: "production",
+			hpa: &autoscalingv1.HorizontalPodAutoscaler{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "production",
+				},
+				Spec: autoscalingv1.HorizontalPodAutoscalerSpec{
+					MinReplicas: newInt32(1),
+					MaxReplicas: 2,
+				},
+			},
+		},
+		{
+			id:                  "custername is not set",
+			inputClusterName:    "staging",
+			expectedClusterName: "staging",
+			hpa: &autoscalingv1.HorizontalPodAutoscaler{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "",
+				},
+				Spec: autoscalingv1.HorizontalPodAutoscalerSpec{
+					MinReplicas: newInt32(1),
+					MaxReplicas: 2,
+				},
+			},
+		},
+	}
+
+	for _, tt := range hpaTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			hpa := ProtoForHPA(tt.inputClusterName, tt.hpa)
+			assert.Equal(t, tt.expectedClusterName, hpa.Cluster)
+		})
+	}
+}
+
+func TestDeleteHPA(t *testing.T) {
+	cs := testHPAClientset()
+	s := &svc{
+		manager: &managerImpl{
+			clientsets: map[string]*ctxClientsetImpl{"foo": &ctxClientsetImpl{
+				Interface: cs,
+				namespace: "default",
+				cluster:   "core-testing",
+			}},
+		},
+	}
+
+	// Not found.
+	err := s.DeleteHPA(context.Background(), "foo", "core-testing", "testing-namespace", "abc")
+	assert.Error(t, err)
+
+	err = s.DeleteHPA(context.Background(), "foo", "core-testing", "testing-namespace", "testing-hpa-name")
+	assert.NoError(t, err)
+
+	// Not found.
+	_, err = s.DescribeHPA(context.Background(), "foo", "core-testing", "testing-namespace", "testing-hpa-name")
+	assert.Error(t, err)
 }

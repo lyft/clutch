@@ -35,7 +35,7 @@ const hydrate = (key: string): Thunk<ManagerLayout, Action> => {
       if (args.some(element => _.isEmpty(element))) {
         dispatch({
           type: ManagerAction.HYDRATE_END,
-          payload: { key, error: `Missing depedency for data layout: ${key}` },
+          payload: { key, error: `Missing dependency for data layout: ${key}` },
         });
         return;
       }
@@ -88,14 +88,14 @@ const useDataLayoutManager = (layouts: ManagerLayout): DataManager => {
   Object.keys(layouts).forEach(key => {
     const layout = layouts[key];
     initialState[key] = { data: {}, isLoading: true, error: null };
-    if (layout?.["hydrator"] !== undefined) {
+    if (layout?.hydrator !== undefined) {
       initialState[key] = {
         ...initialState[key],
         hydrator: layout?.hydrator || (() => {}),
         transformResponse: layout.transformResponse || defaultTransform,
         transformError: layout.transformError || defaultErrorTransform,
         deps: layout?.deps || [],
-        cache: layout.cache ?? true,
+        cache: layout.cache ?? false,
       };
     }
   });

@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Remote Triage workflow renders correctly 1`] = `
+"<Wizard dataLayout={{...}} heading={[undefined]}>
+  <TriageIdentifier name=\\"Lookup\\" />
+  <TriageDetails name=\\"Details\\" />
+</Wizard>"
+`;

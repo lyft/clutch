@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.resolver.k8s.v1;
 
-option go_package = "k8sv1";
+option go_package = "github.com/lyft/clutch/backend/api/resolver/k8s/v1;k8sv1";
 
 import "google/protobuf/descriptor.proto";
 
@@ -11,7 +11,7 @@ import "resolver/v1/annotations.proto";
 message PodID {
   option (clutch.resolver.v1.schema) = {
     display_name : "pod ID"
-    searchable : true
+    search : {enabled : true}
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -24,7 +24,8 @@ message PodID {
 
   string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
     display_name : "Clientset",
-    option_field : {include_dynamic_options : [ "clientset" ]},
+    required : true,
+    option_field : {include_dynamic_options : "clientset"},
   } ];
 
   string namespace = 3 [ (clutch.resolver.v1.schema_field) = {
@@ -39,7 +40,7 @@ message PodID {
 message IPAddress {
   option (clutch.resolver.v1.schema) = {
     display_name : "IP address"
-    searchable : false
+    search : {enabled : true}
   };
 
   string ip_address = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -54,7 +55,7 @@ message IPAddress {
 message HPAName {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
-    searchable : true
+    search : {enabled : true}
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -67,7 +68,182 @@ message HPAName {
 
   string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
     display_name : "Clientset",
-    option_field : {include_dynamic_options : [ "clientset" ]},
+    required : true,
+    option_field : {include_dynamic_options : "clientset"},
+  } ];
+
+  string namespace = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Namespace",
+    required : true,
+    string_field : {
+      placeholder : "my-namespace",
+    },
+  } ];
+}
+
+message Deployment {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "name"
+    search : {enabled : true}
+  };
+
+  string name = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Name",
+    required : true,
+    string_field : {
+      placeholder : "my-deployment-name",
+    },
+  } ];
+
+  string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Clientset",
+    required : true,
+    option_field : {include_dynamic_options : "clientset"},
+  } ];
+
+  string namespace = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Namespace",
+    required : true,
+    string_field : {
+      placeholder : "my-namespace",
+    },
+  } ];
+}
+
+message StatefulSet {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "name"
+    search : {enabled : true}
+  };
+
+  string name = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Name",
+    required : true,
+    string_field : {
+      placeholder : "my-statefulset-name",
+    },
+  } ];
+
+  string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Clientset",
+    required : true,
+    option_field : {include_dynamic_options : "clientset"},
+  } ];
+
+  string namespace = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Namespace",
+    required : true,
+    string_field : {
+      placeholder : "my-namespace",
+    },
+  } ];
+}
+
+message Service {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "name"
+    search : {enabled : true}
+  };
+
+  string name = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Name",
+    required : true,
+    string_field : {
+      placeholder : "my-service-name",
+    },
+  } ];
+
+  string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Clientset",
+    required : true,
+    option_field : {include_dynamic_options : "clientset"},
+  } ];
+
+  string namespace = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Namespace",
+    required : true,
+    string_field : {
+      placeholder : "my-namespace",
+    },
+  } ];
+}
+
+message CronJob {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "name"
+    search : {enabled : true}
+  };
+
+  string name = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Name",
+    required : true,
+    string_field : {
+      placeholder : "my-cronjob-name",
+    },
+  } ];
+
+  string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Clientset",
+    required : true,
+    option_field : {include_dynamic_options : "clientset"},
+  } ];
+
+  string namespace = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Namespace",
+    required : true,
+    string_field : {
+      placeholder : "my-namespace",
+    },
+  } ];
+}
+
+message ConfigMap {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "name"
+    search : {enabled : true}
+  };
+
+  string name = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Name",
+    required : true,
+    string_field : {
+      placeholder : "my-config-map-name",
+    },
+  } ];
+
+  string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Clientset",
+    required : true,
+    option_field : {include_dynamic_options : "clientset"},
+  } ];
+
+  string namespace = 3 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Namespace",
+    required : true,
+    string_field : {
+      placeholder : "my-namespace",
+    },
+  } ];
+}
+
+message Job {
+  option (clutch.resolver.v1.schema) = {
+    display_name : "name"
+    search : {enabled : true}
+  };
+
+  string name = 1 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Name",
+    required : true,
+    string_field : {
+      placeholder : "my-job-name",
+    },
+  } ];
+
+  string clientset = 2 [ (clutch.resolver.v1.schema_field) = {
+    display_name : "Clientset",
+    required : true,
+    option_field : {include_dynamic_options : "clientset"},
   } ];
 
   string namespace = 3 [ (clutch.resolver.v1.schema_field) = {

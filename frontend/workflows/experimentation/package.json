@@ -1,38 +1,37 @@
 {
   "name": "@clutch-sh/experimentation",
-  "version": "0.0.0",
+  "version": "1.0.0-beta",
   "description": "Clutch Experimentation Workflows",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
   "main": "dist/index.js",
   "scripts": {
     "build": "yarn clean && yarn compile",
-    "clean": "rm -rf dist",
-    "compile": "BABEL_ENV=build babel src --out-dir dist --source-maps --extensions .js,.jsx --delete-dir-on-start --no-comments --ignore **/tests",
-    "compile:watch": "yarn run compile --watch",
+    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
+    "compile": "tsc -b",
+    "compile:dev": "tsc --sourceMap",
+    "compile:watch": "BABEL_ENV=build babel src --out-dir dist --source-maps --extensions .js,.jsx,.ts,.tsx --ignore **/tests --watch",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
-    "lint:fix": "yarn run lint --fix",
-    "publishAlpha": "yarn publish --new-version=\"0.0.0-$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')-$(git rev-parse --short=12 HEAD)\" --access public",
+    "lint:fix": "yarn lint --fix",
+    "publishBeta": "../../../tools/publish-frontend.sh experimentation",
     "test": "jest --passWithNoTests",
-    "test:coverage": "yarn run test --collect-coverage",
-    "test:watch": "yarn run test --watch",
-    "upgrade": "yarn upgrade"
+    "test:coverage": "yarn test --collect-coverage",
+    "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@clutch-sh/core": "^0.0.0",
-    "@clutch-sh/data-layout": "^0.0.0",
-    "@clutch-sh/wizard": "^0.0.0",
-    "@material-ui/core": "^4.9.1",
-    "lodash": "^4.17.15",
-    "react": "^16.8",
+    "@clutch-sh/api": "^1.0.0-beta",
+    "@clutch-sh/core": "^1.0.0-beta",
+    "@clutch-sh/data-layout": "^1.0.0-beta",
+    "@emotion/styled": "^11.0.0",
+    "@material-ui/core": "^4.11.0",
+    "history": "^5.0.0",
+    "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-is": "^16.8.0",
-    "react-router": "^6.0.0-alpha",
-    "react-router-dom": "^6.0.0-alpha.2",
-    "styled-components": "^5.0.1",
-    "yup": "^0.29.0"
+    "react-router-dom": "^6.0.0-beta",
+    "yup": "^0.32.8"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^0.0.0"
+    "@clutch-sh/tools": "^1.0.0-beta"
   }
 }

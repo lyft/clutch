@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppLayout component renders correctly 1`] = `
+"<Styled(WithStyles(ForwardRef(Grid))) container={true} direction=\\"column\\">
+  <Header />
+  <Styled(WithStyles(ForwardRef(Grid))) container={true} wrap=\\"nowrap\\">
+    <Drawer />
+    <Outlet />
+  </Styled(WithStyles(ForwardRef(Grid)))>
+  <FeedbackButton />
+</Styled(WithStyles(ForwardRef(Grid)))>"
+`;

@@ -25,6 +25,8 @@ frontend
 
 The packages within Clutch are separated by functionality, with the intent being that each package provides value to workflows while also not being required.
 
+An interactive playground of our component library is available at [storybook.clutch.sh](https://storybook.clutch.sh).
+
 ### @clutch-sh/core
 
 The Core package consists of various reusable components that are shared between workflows and/or other Clutch packages. This can span from things like the application provider, which renders the Clutch app, and resolver component ([see above](./###Resolver)) to something as simple as a centralized button component.
@@ -122,7 +124,7 @@ const { onSubmit, onBack } = useWizardContext();
 
 Workflows are essentially a combination of the packages listed above with configration values for routing and display purposes. Bear in mind that while, at the time of writing this, the out of the box workflows are all linear and serve a single purpose not all workflows need to follow that design. A workflow could be anything from a dashboard of information to a single form for submission.
 
-The most important piece of a workflow, even before the implementation is the configuration. A workflows configuration allows it to be registered on the Clutch app, allows for users to override default values to suit their sepcific needs, and provides ownership details for others.
+The most important piece of a workflow, even before the implementation is the configuration. A workflows configuration allows it to be registered on the Clutch app, allows for users to override default values to suit their specific needs, and provides ownership details for others.
 
 ```jsx
 import RemoteTriage from "./remote-triage";
@@ -194,6 +196,6 @@ const InstanceIdentifier = ({ resolverType }) => {
 
 Notice that the resolver specified only three properties: a type, search limit, and a callback on resolution.
 
-  - `type`: this property denotes the type of resource the resolver will prompt the user for and pass back to the onResolve callback. For example, `clutch.aws.ec2.v1.Instance`. In the above example this value is being passed in as a prop from its parent which has it injected from the [application configuration](./configuration).
+  - `type`: this property denotes the type of resource the resolver will prompt the user for and pass back to the onResolve callback. For example, `clutch.aws.ec2.v1.Instance`. In the above example this value is being passed in as a prop from its parent which has it injected from the [application configuration](/docs/configuration).
   - `searchLimit`: allows developers to specify a threshold for the number of resources to search for. This is particularly useful when searching across multiple environments for a small number of resources as the server will respond as soon as this threshold is satisfied. This also denotes the expected number of environments to search, allowing the resolver component to warn when searches fail in specific environments.
   - `onResolve`: when the resolver completes a lookup and casts the response to a specified protobuf object it will need a way to pass the results back to a workflow. This property allows users to specify a callback that takes the results and use them in the appropriate way for that workflow.

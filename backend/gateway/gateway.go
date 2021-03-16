@@ -3,28 +3,31 @@ package gateway
 import (
 	"context"
 	"fmt"
-	"os"
+	"net/http"
+	"strings"
+	"time"
 
 	"github.com/uber-go/tally"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
+	"github.com/lyft/clutch/backend/gateway/mux"
 	"github.com/lyft/clutch/backend/gateway/stats"
 	"github.com/lyft/clutch/backend/middleware"
+	"github.com/lyft/clutch/backend/middleware/accesslog"
+	"github.com/lyft/clutch/backend/middleware/errorintercept"
 	"github.com/lyft/clutch/backend/middleware/timeouts"
-	"github.com/lyft/clutch/backend/resolver"
-
-	"net/http"
-	"time"
-
-	"github.com/lyft/clutch/backend/service"
-
-	"go.uber.org/zap"
-
-	"github.com/lyft/clutch/backend/gateway/mux"
 	"github.com/lyft/clutch/backend/module"
+	"github.com/lyft/clutch/backend/resolver"
+	"github.com/lyft/clutch/backend/service"
 )
+
+// The purpose of this identifier is to trim the prefix off clutch component names,
+// such as services, modules and resolver.
+// This is used when constructing the stats namespace for a given component.
+const clutchComponentPrefix = "clutch."
 
 // All available components supply their factory here.
 // Whether or not they are used at runtime is dependent on the configuration passed to the Gateway.
@@ -35,28 +38,13 @@ type ComponentFactory struct {
 	Modules    module.Factory
 }
 
-func Run(f *Flags, cf *ComponentFactory) {
-	// Use a temporary logger to parse the configuration and output.
-	tmpLogger := newTmpLogger().With(zap.String("filename", f.ConfigPath))
-
-	var cfg gatewayv1.Config
-	if err := parseFile(f.ConfigPath, &cfg, f.Template); err != nil {
-		tmpLogger.Fatal("parsing configuration failed", zap.Error(err))
-	}
-	if err := cfg.Validate(); err != nil {
-		tmpLogger.Fatal("validating configuration failed", zap.Error(err))
-	}
-
-	if f.Validate {
-		tmpLogger.Info("configuration validation was successful")
-		os.Exit(0)
-	}
-
-	RunWithConfig(&cfg, cf)
+func Run(f *Flags, cf *ComponentFactory, assets http.FileSystem) {
+	cfg := MustReadOrValidateConfig(f)
+	RunWithConfig(f, cfg, cf, assets)
 }
 
-func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory) {
-	// Init the logger.
+func RunWithConfig(f *Flags, cfg *gatewayv1.Config, cf *ComponentFactory, assets http.FileSystem) {
+	// Init the server's logger.
 	logger, err := newLogger(cfg.Gateway.Logger)
 	if err != nil {
 		newTmpLogger().Fatal("could not instantiate logger", zap.Error(err))
@@ -66,6 +54,8 @@ func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory) {
 			panic(err)
 		}
 	}()
+
+	logger.Info("using configuration", zap.String("file", f.ConfigPath))
 
 	// Init stats.
 	var reporter tally.StatsReporter
@@ -88,7 +78,7 @@ func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory) {
 			Reporter: reporter,
 			Prefix:   "clutch",
 		},
-		duration(cfg.Gateway.Stats.FlushInterval),
+		cfg.Gateway.Stats.FlushInterval.AsDuration(),
 	)
 	defer func() {
 		if err := scopeCloser.Close(); err != nil {
@@ -98,6 +88,12 @@ func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory) {
 
 	initScope := scope.SubScope("gateway")
 	initScope.Counter("start").Inc(1)
+
+	// Create the error interceptor so services can register error interceptors if desired.
+	errorInterceptMiddleware, err := errorintercept.NewMiddleware(nil, logger, initScope)
+	if err != nil {
+		logger.Fatal("could not create error interceptor middleware", zap.Error(err))
+	}
 
 	// Instantiate and register services.
 	for _, svcConfig := range cfg.Services {
@@ -115,11 +111,17 @@ func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory) {
 		}
 
 		logger.Info("registering service")
-		svc, err := factory(svcConfig.TypedConfig, logger, scope.SubScope("service"))
+		svc, err := factory(svcConfig.TypedConfig, logger, scope.SubScope(
+			strings.TrimPrefix(svcConfig.Name, clutchComponentPrefix)))
 		if err != nil {
 			logger.Fatal("service instantiation failed", zap.Error(err))
 		}
 		service.Registry[svcConfig.Name] = svc
+
+		if ei, ok := svc.(errorintercept.Interceptor); ok {
+			logger.Info("service registered an error conversion interceptor")
+			errorInterceptMiddleware.AddInterceptor(ei.InterceptError)
+		}
 	}
 
 	for _, resolverCfg := range cfg.Resolvers {
@@ -137,18 +139,36 @@ func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory) {
 		}
 
 		logger.Info("registering resolver")
-		res, err := factory(resolverCfg.TypedConfig, logger, scope.SubScope("resolver"))
+		res, err := factory(resolverCfg.TypedConfig, logger, scope.SubScope(
+			strings.TrimPrefix(resolverCfg.Name, clutchComponentPrefix)))
 		if err != nil {
 			logger.Fatal("resolver instantiation failed", zap.Error(err))
 		}
 		resolver.Registry[resolverCfg.Name] = res
 	}
 
+	var interceptors []grpc.UnaryServerInterceptor
+
+	// Error interceptors should be first on the stack (last in chain).
+	interceptors = append(interceptors, errorInterceptMiddleware.UnaryInterceptor())
+
+	// Access log.
+	if cfg.Gateway.Accesslog != nil {
+		a, err := accesslog.New(cfg.Gateway.Accesslog, logger, scope)
+		if err != nil {
+			logger.Fatal("could not create accesslog interceptor", zap.Error(err))
+		}
+		interceptors = append(interceptors, a.UnaryInterceptor())
+	}
+
+	// Timeouts.
 	timeoutInterceptor, err := timeouts.New(cfg.Gateway.Timeouts, logger, scope)
 	if err != nil {
 		logger.Fatal("could not create timeout interceptor", zap.Error(err))
 	}
-	interceptors := []grpc.UnaryServerInterceptor{timeoutInterceptor.UnaryInterceptor()}
+	interceptors = append(interceptors, timeoutInterceptor.UnaryInterceptor())
+
+	// All other configured middleware.
 	for _, mCfg := range cfg.Gateway.Middleware {
 		logger := logger.With(zap.String("moduleName", mCfg.Name))
 
@@ -174,7 +194,10 @@ func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory) {
 	}
 
 	// Instantiate and register modules listed in the configuration.
-	rpcMux := mux.New(interceptors)
+	rpcMux, err := mux.New(interceptors, assets, cfg.Gateway)
+	if err != nil {
+		panic(err)
+	}
 	ctx := context.TODO()
 
 	// Create a client connection for the registrar to make grpc-gateway's handlers available.
@@ -215,7 +238,8 @@ func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory) {
 		}
 
 		logger.Info("registering module")
-		mod, err := factory(modCfg.TypedConfig, logger, scope.SubScope("module"))
+		mod, err := factory(modCfg.TypedConfig, logger, scope.SubScope(
+			strings.TrimPrefix(modCfg.Name, clutchComponentPrefix)))
 		if err != nil {
 			logger.Fatal("module instantiation failed", zap.Error(err))
 		}
@@ -238,7 +262,7 @@ func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory) {
 	case *gatewayv1.Listener_Tcp:
 		// OK
 	default:
-		logger.Fatal("socket not supported", zap.Any("type", t))
+		logger.Fatal("socket not supported", zap.String("type", fmt.Sprintf("%T", t)))
 	}
 
 	if cfg.Gateway.Listener.GetTcp().Secure {
@@ -247,11 +271,24 @@ func RunWithConfig(cfg *gatewayv1.Config, cf *ComponentFactory) {
 
 	addr := fmt.Sprintf("%s:%d", cfg.Gateway.Listener.GetTcp().Address, cfg.Gateway.Listener.GetTcp().Port)
 	logger.Info("listening", zap.Namespace("tcp"), zap.String("addr", addr))
+
+	// Figure out the maximum global timeout and set as a backstop (with 1s buffer).
+	timeout := computeMaximumTimeout(cfg.Gateway.Timeouts)
+	if timeout > 0 {
+		timeout += time.Second
+	}
+
+	// Start collecting go runtime stats if enabled
+	if cfg.Gateway.Stats != nil && cfg.Gateway.Stats.GoRuntimeStats != nil {
+		runtimeStats := stats.NewRuntimeStats(scope, cfg.Gateway.Stats.GoRuntimeStats)
+		go runtimeStats.Collect(ctx)
+	}
+
 	srv := &http.Server{
 		Handler:      mux.InsecureHandler(rpcMux),
 		Addr:         addr,
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
+		ReadTimeout:  timeout,
+		WriteTimeout: timeout,
 	}
 	logger.Fatal("error bringing up listener", zap.Error(srv.ListenAndServe()))
 }

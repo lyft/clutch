@@ -2,11 +2,12 @@ syntax = "proto3";
 
 package clutch.config.gateway.v1;
 
-option go_package = "gatewayv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/gateway/v1;gatewayv1";
 
 import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "validate/validate.proto";
+import "config/middleware/accesslog/v1/accesslog.proto";
 
 message Config {
   GatewayOptions gateway = 1 [ (validate.rules).message = {required : true} ];
@@ -55,6 +56,14 @@ message Stats {
     StatsdReporter statsd_reporter = 3;
     //  TODO: Prometheus support.
   }
+
+  message GoRuntimeStats {
+    // Collection interval defaults to 10 seconds
+    google.protobuf.Duration collection_interval = 1 [ (validate.rules).duration.gte.nanos = 100000000 ];
+  }
+
+  // Collect go runtime stats, this is disabled by default.
+  GoRuntimeStats go_runtime_stats = 4;
 }
 
 message Timeouts {
@@ -85,6 +94,28 @@ message GatewayOptions {
   Timeouts timeouts = 5;
 
   repeated Middleware middleware = 6;
+
+  Assets assets = 7;
+
+  bool enable_pprof = 8;
+
+  clutch.config.middleware.accesslog.v1.Config accesslog = 9;
+}
+
+// Assets configuration provide a passthrough host for frontend static assets.
+// This is useful if you dont have the ability to enable sticky sessions or a blue/green deploy system in place.
+message Assets {
+  // To use the S3Provider you must have the AWS service configured
+  message S3Provider {
+    string region = 1;
+    string bucket = 2;
+    // key is the path to clutchs frontend static assets in the configured bucket
+    string key = 3;
+  }
+
+  oneof provider {
+    S3Provider s3 = 1;
+  }
 }
 
 message Logger {

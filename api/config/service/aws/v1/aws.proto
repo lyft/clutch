@@ -2,10 +2,16 @@ syntax = "proto3";
 
 package clutch.config.service.aws.v1;
 
-option go_package = "awsv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/service/aws/v1;awsv1";
 
 import "validate/validate.proto";
 
 message Config {
   repeated string regions = 1 [ (validate.rules).repeated = {min_items : 1} ];
+  ClientConfig client_config = 2;
+}
+
+message ClientConfig {
+  // If not set explicity, retries default to 0
+  int32 retries = 1 [ (validate.rules).int32.gte = 0 ];
 }

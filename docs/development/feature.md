@@ -77,7 +77,6 @@ package clutch.amiibo.v1;
 
 option go_package = "amiibov1";
 
-// highlight-next-line
 import "google/api/annotations.proto";
 
 service AmiiboAPI {
@@ -163,7 +162,7 @@ make api
 ```
 
 The resulting generated code will be in:
-- `frontend/api/index.js`, the unified bundle of all frontend generated objects.
+- `frontend/api/src/index.js`, the unified bundle of all frontend generated objects.
 - `backend/api/amiibo/v1/`, the `amiibov1` package.
 
 ### 3. Backend: Implement the APIs
@@ -342,6 +341,7 @@ The module and service must be in the component list at compile time in order fo
 package main
 
 import (
+    "github.com/lyft/clutch/backend/cmd/assets"
     "github.com/lyft/clutch/backend/gateway"
     // highlight-start
     amiibomod "github.com/lyft/clutch/backend/module/amiibo"
@@ -357,7 +357,7 @@ func main() {
     components.Services[amiiboservice.Name] = amiiboservice.New
     // highlight-end
 
-	gateway.Run(flags, components)
+	gateway.Run(flags, components, assets.VirtualFS)
 }
 ```
 
@@ -427,13 +427,17 @@ Define a functional component for the amiibo lookup by adding the highlighted li
 import React, { ChangeEvent } from "react";
 import {
   Button,
+  ButtonGroup,
   useWizardContext,
   TextField,
 } from "@clutch-sh/core";
 
 import { useDataLayout } from "@clutch-sh/data-layout";
 // highlight-end
+import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
+
+import type { WorkflowProps } from ".";
 ...
 // highlight-start
 const AmiiboLookup: React.FC<WizardChild> = () => {
@@ -447,7 +451,9 @@ const AmiiboLookup: React.FC<WizardChild> = () => {
   return (
     <>
       <TextField onChange={onChange} onReturn={onSubmit}/>
-      <Button text="Search" onClick={onSubmit}/>
+      <ButtonGroup>
+        <Button text="Search" onClick={onSubmit}/>
+      </ButtonGroup>
     </>
   );
 };
@@ -471,7 +477,7 @@ import {
 	// highlight-next-line
 	Table,
 	// highlight-next-line
-	Row,
+	TableRow,
 	TextField,
 } from "@clutch-sh/core";
 ...
@@ -486,10 +492,14 @@ const AmiiboDetails: React.FC<WizardChild> = () => {
   return (
     <WizardStep error={amiiboData.error} isLoading={amiiboData.isLoading}>
       <Table headings={["Name", "Image", "Series", "Type"]}>
-        {amiiboResults.map(amiibo => {
-          const image = <img src={amiibo.imageUrl} height="75px"/>;
-          return <Row data={[amiibo.name, image, amiibo.amiiboSeries, amiibo.type]} />;
-        })}
+        {amiiboResults.map((amiibo, index: number) => (
+          <TableRow key={index}>
+            {amiibo.name}
+            <img src={amiibo.imageUrl} height="75px"/>
+            {amiibo.amiiboSeries}
+            {amiibo.type}
+          </TableRow>
+        ))}
       </Table>
     </WizardStep>
   );
@@ -548,7 +558,40 @@ Here we define the data layout structure and pass it to the wizard along with th
 
 ##### Configuration
 
-The final step is registering this new Amiibo workflow with the Clutch app. Open your `clutch.config.js` file and add the following:
+The final step is registering this new Amiibo workflow with the Clutch app. First update the component name by replacing the scaffolded default (`HelloWorld`) in our workflow's registration function.
+
+```tsx title="frontend/workflows/amiibo/src/index.tsx"
+import type { BaseWorkflowProps, WorkflowConfiguration } from "@clutch-sh/core";
+// highlight-next-line
+import Amiibo from "./hello-world";
+
+export interface WorkflowProps extends BaseWorkflowProps {}
+
+const register = (): WorkflowConfiguration => {
+  return {
+    developer: {
+      name: "Name McName",
+      contactUrl: "mailto:foo@foo-email.com",
+    },
+    path: "amiibo",
+    group: "Amiibo",
+    displayName: "Amiibo",
+    routes: {
+      landing: {
+  // highlight-next-line
+        path: "/lookup",
+        description: "Lookup all Amiibo by name.",
+	// highlight-next-line
+        component: Amiibo,
+      },
+    },
+  };
+};
+
+export default register;
+```
+
+Next, open your `clutch.config.js` file and add the following:
 
 ```js title="clutch.config.js"
 module.exports = {

@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`AppLayout component renders correctly 1`] = `
-"<Fragment>
-  <Header />
-  <FeedbackButton />
-  <Outlet />
-</Fragment>"
-`;

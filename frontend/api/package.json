@@ -1,0 +1,15 @@
+{
+  "name": "@clutch-sh/api",
+  "version": "1.0.0-beta",
+  "description": "Clutch API",
+  "license": "Apache-2.0",
+  "author": "clutch@lyft.com",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "scripts": {
+    "publishBeta": "../../tools/publish-frontend.sh api"
+  },
+  "dependencies": {
+    "protobufjs": "6.10.2"
+  }
+}

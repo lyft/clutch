@@ -10,7 +10,7 @@ module.exports = {
     'https://fonts.googleapis.com/css2?family=Roboto&family=Open+Sans&display=swap',
     'https://cdn.rawgit.com/luizbills/feather-icon-font/v4.7.0/dist/feather.css',
   ],
-  plugins: ['@docusaurus/plugin-google-analytics'],
+  plugins: [],
   customFields: {
     tagDescription: 'An extensible platform for infrastructure management.',
     hero: {
@@ -105,12 +105,16 @@ module.exports = {
     },
   },
   themeConfig: {
-    disableDarkMode: true,
+    colorMode: {
+      disableSwitch: true,
+    },
     googleAnalytics: {
       trackingID: 'UA-170615678-4',
       anonymizeIP: true,
     },
     algolia : {
+      // This is a read-only, search-only key served directly by the front-end, managed by Algolia via their
+      // free DocSearch program. The key is not sensitive. See https://docsearch.algolia.com/ for more details.
       apiKey: '32f1f7956b3d2c3c90fbe259c7901d94',
       indexName: 'lyft_clutch',
     },
@@ -123,45 +127,13 @@ module.exports = {
         alt: 'Clutch Logo',
         src: 'img/navigation/logoMark.svg',
       },
-      links: [
-        {
-          to: 'docs/about/what-is-clutch',
-          activeBasePath: 'docs',
-          icon: "fe fe-book",
-          label: 'Docs',
-        },
-        {
-          to: 'docs/community',
-          activeBasePath: 'docs',
-          icon: "fe fe-message-square",
-          label: 'Community',
-        },
-        {
-          href: 'https://github.com/lyft/clutch',
-          icon: "fe fe-github",
-          label: 'GitHub',
-        },
-      ],
+      items: [], // items are defined directly in the swizzled component so they can have an icon attr.
     },
     footer: {
       style: 'light',
       logo: {
         src: "img/navigation/logo.svg"
       },
-      socialLinks: [
-        {
-          icon: 'fe fe-github',
-          href: 'https://github.com/lyft/clutch',
-        },
-        {
-          icon: 'fe fe-twitter',
-          href: 'https://twitter.com/clutchdotsh',
-        },
-        {
-          icon: 'fe fe-slack',
-          href: 'https://join.slack.com/t/lyftoss/shared_invite/zt-casz6lz4-G7gOx1OhHfeMsZKFe1emSA',
-        },
-      ],
       links: [
         {
           title: 'About',
@@ -208,6 +180,10 @@ module.exports = {
               label: 'Backend',
               to: 'docs/components#backend',
             },
+            {
+              label: 'Storybook',
+              to: 'https://storybook.clutch.sh',
+            },
           ],
         },
         {
@@ -225,6 +201,7 @@ module.exports = {
               label: 'Twitter',
               to: 'https://twitter.com/clutchdotsh',
             },
+            {label: 'Blog', to: 'blog'},
             {
               label: 'More',
               to: 'docs/community',
@@ -242,6 +219,15 @@ module.exports = {
         docs: {
           path: "generated/docs",
           sidebarPath: require.resolve('../sidebars.json'),
+        },
+        blog: {
+          path: "generated/blog",
+          blogTitle: 'Clutch Open-source Developer Blog',
+          blogDescription: 'Where Clutch open-source maintainers and contributors share their work and thoughts on development.',
+          feedOptions: {
+            type: 'all',
+            copyright: `Copyright © ${new Date().getFullYear()} <a href="https://lyft.com" target="blank">Lyft, Inc.</a>`,
+          },
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

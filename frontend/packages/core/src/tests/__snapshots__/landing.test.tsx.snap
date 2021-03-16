@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Landing component renders correctly 1`] = `
+"<Router action=\\"POP\\" location={{...}} navigator={{...}}>
+  <Landing />
+</Router>"
+`;

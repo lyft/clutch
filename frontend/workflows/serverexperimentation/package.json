@@ -1,0 +1,38 @@
+{
+  "name": "@clutch-sh/server-experimentation",
+  "version": "1.0.0-beta",
+  "private": true,
+  "description": "Clutch Server Experimentation Workflows",
+  "license": "Apache-2.0",
+  "author": "clutch@lyft.com",
+  "main": "dist/index.js",
+  "scripts": {
+    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
+    "compile": "tsc -b",
+    "compile:dev": "tsc --sourceMap",
+    "compile:watch": "BABEL_ENV=build babel src --out-dir dist --source-maps --extensions .js,.jsx,.ts,.tsx --ignore **/tests --watch",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
+    "lint:fix": "yarn run lint --fix",
+    "test": "jest --passWithNoTests",
+    "test:coverage": "yarn run test --collect-coverage",
+    "test:watch": "yarn run test --watch"
+  },
+  "dependencies": {
+    "@clutch-sh/api": "^1.0.0-beta",
+    "@clutch-sh/core": "^1.0.0-beta",
+    "@clutch-sh/data-layout": "^1.0.0-beta",
+    "@clutch-sh/experimentation": "^1.0.0-beta",
+    "@clutch-sh/wizard": "^1.0.0-beta",
+    "@emotion/styled": "^11.0.0",
+    "@hookform/resolvers": "2.0.0-beta.3",
+    "@material-ui/core": "^4.11.0",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "react-hook-form": "^6.9.2",
+    "react-router-dom": "^6.0.0-beta",
+    "yup": "^0.32.8"
+  },
+  "devDependencies": {
+    "@clutch-sh/tools": "^1.0.0-beta"
+  }
+}

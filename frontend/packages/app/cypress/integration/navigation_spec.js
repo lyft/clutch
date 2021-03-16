@@ -1,12 +1,10 @@
-const MENU_BUTTON = "menuBtn";
 const DRAWER = "drawer";
 const WORKFLOW_GROUP = "workflowGroup";
-const TOGGLE = "toggle";
+const WORKFLOW_GROUP_ITEM = "workflowGroupItem";
 
 describe("Navigation drawer", () => {
   before(() => {
     cy.visit("localhost:3000");
-    cy.element(MENU_BUTTON).click();
     cy.element(DRAWER).should("be.visible");
   });
 
@@ -16,71 +14,33 @@ describe("Navigation drawer", () => {
     });
   });
 
-  it("displays routes", () => {
+  it("displays and hides routes", () => {
     cy.element(WORKFLOW_GROUP).each((_, idx) => {
-      cy.element(WORKFLOW_GROUP).eq(idx).descendent(TOGGLE).click();
-      cy.element(WORKFLOW_GROUP)
-        .eq(idx)
-        .find("a")
-        .each(link => {
-          cy.wrap(link).should("have.attr", "href");
-        });
-      cy.element(WORKFLOW_GROUP).eq(idx).descendent(TOGGLE).click();
-    });
-  });
-
-  it("hides routes", () => {
-    cy.element(WORKFLOW_GROUP).each((_, idx) => {
-      cy.element(WORKFLOW_GROUP).eq(idx).descendent(TOGGLE).click();
-      cy.element(WORKFLOW_GROUP).eq(idx).find("a").should("not.be.visible");
-      cy.element(WORKFLOW_GROUP).eq(idx).descendent(TOGGLE).click();
-    });
-  });
-
-  describe("routes to homepage", () => {
-    it("via nav icon", () => {
-      cy.element(DRAWER).element("logo").click();
-      cy.url().should("equal", "http://localhost:3000/");
-    });
-
-    it("via nav title", () => {
-      cy.element(MENU_BUTTON).click();
-      cy.element(DRAWER).element("title").click();
-      cy.url().should("equal", "http://localhost:3000/");
+      cy.element(WORKFLOW_GROUP).eq(idx).click();
+      cy.element(WORKFLOW_GROUP_ITEM).each(link => {
+        cy.wrap(link).should("have.attr", "href");
+      });
+      cy.element(WORKFLOW_GROUP).eq(idx).click();
+      cy.element(WORKFLOW_GROUP).eq(idx).descendent(WORKFLOW_GROUP_ITEM).should("not.exist");
     });
   });
 
   describe("routes to workflows", () => {
-    const groupItemId = "workflowGroupItem";
-    beforeEach(() => {
-      cy.element(MENU_BUTTON).click();
-    });
-
     it("can route correctly", () => {
       return cy.element(WORKFLOW_GROUP).each((_, groupIdx) => {
-        cy.element(WORKFLOW_GROUP).eq(groupIdx).descendent(TOGGLE).click();
-        cy.element(WORKFLOW_GROUP)
-          .eq(groupIdx)
-          .descendent(groupItemId)
-          .each((__, itemIdx) => {
-            cy.element(WORKFLOW_GROUP)
-              .eq(groupIdx)
-              .descendent(groupItemId)
-              .eq(itemIdx)
-              .should("be.visible");
-            cy.element(WORKFLOW_GROUP)
-              .eq(groupIdx)
-              .descendent(groupItemId)
-              .eq(itemIdx)
-              .should("have.attr", "href")
-              .then(href => {
-                cy.element(WORKFLOW_GROUP).eq(groupIdx).descendent(groupItemId).eq(itemIdx).click();
-                cy.url().should("include", href);
-                cy.element(MENU_BUTTON).click();
-              });
-
-            // TODO: validate header of workflow here when it's landed
-          });
+        cy.element(WORKFLOW_GROUP).eq(groupIdx).click();
+        cy.element(WORKFLOW_GROUP_ITEM).each((__, linkIdx) => {
+          cy.element(WORKFLOW_GROUP_ITEM).eq(linkIdx).should("be.visible");
+          cy.element(WORKFLOW_GROUP_ITEM)
+            .eq(linkIdx)
+            .should("have.attr", "href")
+            .then(href => {
+              cy.element(WORKFLOW_GROUP_ITEM).eq(linkIdx).click();
+              cy.url().should("include", href);
+            });
+          cy.element(WORKFLOW_GROUP).eq(groupIdx).click();
+          // TODO: validate header of workflow here when it's landed
+        });
       });
     });
   });

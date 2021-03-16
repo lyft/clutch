@@ -8,7 +8,6 @@ module.exports = {
   extends: [
     "airbnb",
     "prettier",
-    "prettier/react",
     "plugin:cypress/recommended",
     "plugin:import/typescript",
     "plugin:jest/recommended",
@@ -43,7 +42,7 @@ module.exports = {
   },
   reportUnusedDisableDirectives: true,
   rules: {
-    "simple-import-sort/sort": [
+    "simple-import-sort/imports": [
       "error",
       {
         // Groups taken from example, plus internal packages since plugin doesn't do import resolution.
@@ -55,7 +54,7 @@ module.exports = {
           ],
           [
             // Internal packages.
-            "^(components|workflows)(/.*|$)"
+            "^(packages|workflows)(/.*|$)"
           ],
           [
             "^\\u0000"
@@ -75,9 +74,7 @@ module.exports = {
         ]
       }
     ],
-    "consistent-return": [
-      "off"
-    ],
+    "consistent-return": ["off"],
     "jest/expect-expect": [
       "error",
       {
@@ -98,17 +95,15 @@ module.exports = {
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": ["*.config.js"],
+        "devDependencies": ["**/*.config.js", "**/.eslintrc.js"],
       }
     ],
-    "no-console": [
-      "error"
-    ],
-    "no-empty": [
-      "off"
-    ],
-    "no-nested-ternary": [
-      "off"
+    "no-console": ["error"],
+    "no-empty": ["off"],
+    "no-nested-ternary": ["off"],
+    "no-unused-expressions": [
+      "error",
+      { "allowShortCircuit": true }
     ],
     "react/jsx-filename-extension": [
       1,
@@ -116,9 +111,7 @@ module.exports = {
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     ],
-    "react-hooks/exhaustive-deps": [
-      "off"
-    ],
+    "react-hooks/exhaustive-deps": ["off"],
     "react/jsx-no-duplicate-props": [
       1,
       {
@@ -126,9 +119,8 @@ module.exports = {
         "ignoreCase": false,
       }
     ],
-    "react/prop-types": [
-      "off"
-    ],
+    "react/prop-types": ["off"],
+    "react/require-default-props": ["off"],
     "react/jsx-props-no-spreading": [
       "off",
       {
@@ -147,7 +139,7 @@ module.exports = {
           ]
         }
       }
-    ]
+    ],
   },
   overrides: [
     {
@@ -157,9 +149,13 @@ module.exports = {
         "@typescript-eslint"
       ],
       rules: {
-        "no-undef": "off",
-        "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": ["error"]
+        "no-undef": ["off"],
+        "no-unused-vars": ["off"],
+        "@typescript-eslint/no-unused-vars": ["error", {"args": "none"}],
+        "no-use-before-define": ["off"],
+        "@typescript-eslint/no-use-before-define": ["error"],
+        "no-shadow": ["off"],
+        "@typescript-eslint/no-shadow": ["error"],
       }
     },
   ]

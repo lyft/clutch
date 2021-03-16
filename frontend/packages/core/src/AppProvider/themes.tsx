@@ -1,7 +1,10 @@
-import { createMuiTheme, ThemeOptions } from "@material-ui/core";
+import React from "react";
+import { ThemeProvider as EmotionThemeProvider } from "@emotion/react";
+import { createMuiTheme, CssBaseline, MuiThemeProvider, ThemeOptions } from "@material-ui/core";
 import { useTheme as useMuiTheme } from "@material-ui/core/styles";
 import type { PaletteOptions } from "@material-ui/core/styles/createPalette";
-import {} from "styled-components";
+import { StylesProvider } from "@material-ui/styles";
+import { ThemeProvider as StyledThemeProvider } from "styled-components";
 
 interface ClutchPalette extends PaletteOptions {
   accent: {
@@ -17,7 +20,8 @@ interface ClutchTheme extends ThemeOptions {
 }
 
 declare module "styled-components" {
-  export interface ClutchTheme extends ThemeOptions {
+  export interface ClutchTheme // eslint-disable-line @typescript-eslint/no-shadow
+    extends ThemeOptions {
     palette: ClutchPalette;
   }
 }
@@ -53,9 +57,37 @@ const lightPalette = (): ClutchPalette => {
   };
 };
 
-const getTheme = () => {
+const lightTheme = () => {
   return createMuiTheme({
     palette: lightPalette(),
+    transitions: {
+      // https://material-ui.com/getting-started/faq/#how-can-i-disable-transitions-globally
+      create: () => "none",
+    },
+    props: {
+      MuiButtonBase: {
+        // https://material-ui.com/getting-started/faq/#how-can-i-disable-the-ripple-effect-globally
+        disableRipple: true,
+      },
+    },
+    overrides: {
+      MuiAccordion: {
+        root: {
+          "&$expanded": {
+            // remove the additional margin rule when expanded so the original margin is used.
+            margin: null,
+          },
+        },
+      },
+      MuiTypography: {
+        colorPrimary: {
+          color: NAVY,
+        },
+        colorSecondary: {
+          color: GRAY,
+        },
+      },
+    },
   });
 };
 
@@ -63,4 +95,22 @@ const useTheme = () => {
   return useMuiTheme() as ClutchTheme;
 };
 
-export { getTheme, useTheme };
+interface ThemeProps {
+  variant?: "light";
+}
+
+const Theme: React.FC<ThemeProps> = ({ children }) => {
+  const theme = lightTheme;
+  return (
+    <MuiThemeProvider theme={theme()}>
+      <EmotionThemeProvider theme={theme()}>
+        <StyledThemeProvider theme={theme()}>
+          <CssBaseline />
+          <StylesProvider injectFirst>{children}</StylesProvider>
+        </StyledThemeProvider>
+      </EmotionThemeProvider>
+    </MuiThemeProvider>
+  );
+};
+
+export { Theme, useTheme };

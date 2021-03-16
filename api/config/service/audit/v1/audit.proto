@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.config.service.audit.v1;
 
-option go_package = "auditv1";
+option go_package = "github.com/lyft/clutch/backend/api/config/service/audit/v1;auditv1";
 
 import "validate/validate.proto";
 
@@ -43,12 +43,18 @@ message SinkConfig {
 }
 
 message Config {
-  // The name of the service where the auditor will persist events.
-  string db_provider = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  oneof storage_provider {
+    // The name of the service where the auditor will persist events.
+    string db_provider = 1 [ (validate.rules).string = {min_bytes : 1} ];
+
+    // A flag to store audit messages in-memory before flushing to sinks.
+    // This is not recommended for production environments.
+    bool in_memory = 2;
+  }
 
   // The rule to apply before between request ingress and the database.
-  Filter filter = 2;
+  Filter filter = 3;
 
   // The registered name of sinks to fan-out events to.
-  repeated string sinks = 3;
+  repeated string sinks = 4;
 }

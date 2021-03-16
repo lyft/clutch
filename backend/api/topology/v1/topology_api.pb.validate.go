@@ -200,6 +200,177 @@ var _ interface {
 	ErrorName() string
 } = GetTopologyResponseValidationError{}
 
+// Validate checks the field values on SearchRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *SearchRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetSort()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SearchRequestValidationError{
+				field:  "Sort",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for PageToken
+
+	// no validation rules for Limit
+
+	if v, ok := interface{}(m.GetFilter()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SearchRequestValidationError{
+				field:  "Filter",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// SearchRequestValidationError is the validation error returned by
+// SearchRequest.Validate if the designated constraints aren't met.
+type SearchRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SearchRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SearchRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SearchRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SearchRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SearchRequestValidationError) ErrorName() string { return "SearchRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SearchRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSearchRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SearchRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SearchRequestValidationError{}
+
+// Validate checks the field values on SearchResponse with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *SearchResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	for idx, item := range m.GetResources() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SearchResponseValidationError{
+					field:  fmt.Sprintf("Resources[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	// no validation rules for NextPageToken
+
+	return nil
+}
+
+// SearchResponseValidationError is the validation error returned by
+// SearchResponse.Validate if the designated constraints aren't met.
+type SearchResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SearchResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SearchResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SearchResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SearchResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SearchResponseValidationError) ErrorName() string { return "SearchResponseValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SearchResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSearchResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SearchResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SearchResponseValidationError{}
+
 // Validate checks the field values on FeatureQuery with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.
@@ -840,3 +1011,414 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = EdgeValidationError{}
+
+// Validate checks the field values on Resource with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Resource) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Id
+
+	if v, ok := interface{}(m.GetPb()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ResourceValidationError{
+				field:  "Pb",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	for key, val := range m.GetMetadata() {
+		_ = val
+
+		// no validation rules for Metadata[key]
+
+		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ResourceValidationError{
+					field:  fmt.Sprintf("Metadata[%v]", key),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// ResourceValidationError is the validation error returned by
+// Resource.Validate if the designated constraints aren't met.
+type ResourceValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ResourceValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ResourceValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ResourceValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ResourceValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ResourceValidationError) ErrorName() string { return "ResourceValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ResourceValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sResource.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ResourceValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ResourceValidationError{}
+
+// Validate checks the field values on UpdateCacheRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *UpdateCacheRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetResource()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateCacheRequestValidationError{
+				field:  "Resource",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for Action
+
+	return nil
+}
+
+// UpdateCacheRequestValidationError is the validation error returned by
+// UpdateCacheRequest.Validate if the designated constraints aren't met.
+type UpdateCacheRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateCacheRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateCacheRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateCacheRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateCacheRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateCacheRequestValidationError) ErrorName() string {
+	return "UpdateCacheRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateCacheRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateCacheRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateCacheRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateCacheRequestValidationError{}
+
+// Validate checks the field values on SearchRequest_Sort with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *SearchRequest_Sort) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Direction
+
+	if utf8.RuneCountInString(m.GetField()) < 1 {
+		return SearchRequest_SortValidationError{
+			field:  "Field",
+			reason: "value length must be at least 1 runes",
+		}
+	}
+
+	return nil
+}
+
+// SearchRequest_SortValidationError is the validation error returned by
+// SearchRequest_Sort.Validate if the designated constraints aren't met.
+type SearchRequest_SortValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SearchRequest_SortValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SearchRequest_SortValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SearchRequest_SortValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SearchRequest_SortValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SearchRequest_SortValidationError) ErrorName() string {
+	return "SearchRequest_SortValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SearchRequest_SortValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSearchRequest_Sort.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SearchRequest_SortValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SearchRequest_SortValidationError{}
+
+// Validate checks the field values on SearchRequest_Filter with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *SearchRequest_Filter) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetSearch()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SearchRequest_FilterValidationError{
+				field:  "Search",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for TypeUrl
+
+	// no validation rules for Metadata
+
+	return nil
+}
+
+// SearchRequest_FilterValidationError is the validation error returned by
+// SearchRequest_Filter.Validate if the designated constraints aren't met.
+type SearchRequest_FilterValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SearchRequest_FilterValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SearchRequest_FilterValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SearchRequest_FilterValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SearchRequest_FilterValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SearchRequest_FilterValidationError) ErrorName() string {
+	return "SearchRequest_FilterValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SearchRequest_FilterValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSearchRequest_Filter.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SearchRequest_FilterValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SearchRequest_FilterValidationError{}
+
+// Validate checks the field values on SearchRequest_Filter_Search with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *SearchRequest_Filter_Search) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if utf8.RuneCountInString(m.GetField()) < 1 {
+		return SearchRequest_Filter_SearchValidationError{
+			field:  "Field",
+			reason: "value length must be at least 1 runes",
+		}
+	}
+
+	if utf8.RuneCountInString(m.GetText()) < 1 {
+		return SearchRequest_Filter_SearchValidationError{
+			field:  "Text",
+			reason: "value length must be at least 1 runes",
+		}
+	}
+
+	return nil
+}
+
+// SearchRequest_Filter_SearchValidationError is the validation error returned
+// by SearchRequest_Filter_Search.Validate if the designated constraints
+// aren't met.
+type SearchRequest_Filter_SearchValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SearchRequest_Filter_SearchValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SearchRequest_Filter_SearchValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SearchRequest_Filter_SearchValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SearchRequest_Filter_SearchValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SearchRequest_Filter_SearchValidationError) ErrorName() string {
+	return "SearchRequest_Filter_SearchValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e SearchRequest_Filter_SearchValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSearchRequest_Filter_Search.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SearchRequest_Filter_SearchValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SearchRequest_Filter_SearchValidationError{}

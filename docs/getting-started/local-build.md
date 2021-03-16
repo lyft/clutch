@@ -76,7 +76,7 @@ Launch Clutch with back-end configuration [clutch-config.yaml](https://github.co
 #### 4. Use
 :tada: Clutch should now be accessible from `localhost:8080` in the browser.
 
-<img style={ {border: "1px solid black"} } alt="Clutch Landing Page Screenshot" src={useBaseUrl('img/docs/screenshot-landing.png')} width="50%" />
+<img alt="Clutch Landing Page Screenshot" src={useBaseUrl('img/docs/landing-page.png')} width="50%" />
 
 :::info
 Clutch may have external dependencies, to run Clutch with mocked dependencies see [Mock Gateway](/docs/getting-started/mock-gateway).

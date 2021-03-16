@@ -1,9 +1,14 @@
 import React from "react";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import {
+  Accordion,
+  AccordionDetails,
+  Button,
   ButtonGroup,
   client,
   Confirmation,
   MetadataTable,
+  NotePanel,
   Resolver,
   useWizardContext,
 } from "@clutch-sh/core";
@@ -11,7 +16,7 @@ import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 
-import type { ResolverChild, WorkflowProps } from ".";
+import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
 const InstanceIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
   const { onSubmit } = useWizardContext();
@@ -29,55 +34,64 @@ const InstanceIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
 const InstanceDetails: React.FC<WizardChild> = () => {
   const { onSubmit, onBack } = useWizardContext();
   const resourceData = useDataLayout("resourceData");
-  const instance = resourceData.displayValue();
+  const instance = resourceData.displayValue() as IClutch.aws.ec2.v1.Instance;
+
+  const data = [
+    { name: "Instance ID", value: instance.instanceId },
+    { name: "Name", value: instance?.tags?.Name },
+    { name: "Region", value: instance.region },
+    { name: "State", value: instance.state },
+    { name: "Instance Type", value: instance.instanceType },
+    { name: "Public IP Address", value: instance.publicIpAddress },
+    { name: "Private IP Address", value: instance.privateIpAddress },
+    { name: "Availability Zone", value: instance.availabilityZone },
+  ];
+
+  const tags = [];
+  if (instance.tags) {
+    Object.keys(instance.tags).forEach(key => {
+      tags.push({ name: key, value: instance.tags[key] });
+    });
+  }
 
   return (
     <WizardStep error={resourceData.error} isLoading={resourceData.isLoading}>
-      <MetadataTable
-        data={[
-          { name: "Instance ID", value: instance.instanceId },
-          { name: "Region", value: instance.region },
-          { name: "State", value: instance.state },
-          { name: "Instance Type", value: instance.instanceType },
-          { name: "Public IP Address", value: instance.publicIpAddress },
-          { name: "Private IP Address", value: instance.privateIpAddress },
-          { name: "Availability Zone", value: instance.availabilityZone },
-        ]}
-      />
-      <ButtonGroup
-        buttons={[
-          {
-            text: "Back",
-            onClick: onBack,
-          },
-          {
-            text: "Terminate",
-            onClick: onSubmit,
-            destructive: true,
-          },
-        ]}
-      />
+      <strong>Instance Details</strong>
+      <MetadataTable data={data} />
+      {tags.length > 0 && (
+        <Accordion title="Tags">
+          <AccordionDetails>
+            <MetadataTable data={tags} />
+          </AccordionDetails>
+        </Accordion>
+      )}
+      <ButtonGroup>
+        <Button text="Back" variant="neutral" onClick={onBack} />
+        <Button text="Terminate" variant="destructive" onClick={onSubmit} />
+      </ButtonGroup>
     </WizardStep>
   );
 };
 
-/*
-TODO: Need information boxes for
-  These changes are not permanent, and will be overwritten on your next deploy. Adjust your manifest.yaml to persist changes across deploys.
-and
-  Note: the HPA should take just a few minutes to scale in either direction.
-*/
-const Confirm: React.FC<WizardChild> = () => {
+const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
   const terminationData = useDataLayout("terminationData");
+  const instance = useDataLayout("resourceData").displayValue() as IClutch.aws.ec2.v1.Instance;
+
+  const data = [
+    { name: "Instance ID", value: instance.instanceId },
+    { name: "Region", value: instance.region },
+  ];
 
   return (
     <WizardStep error={terminationData.error} isLoading={terminationData.isLoading}>
       <Confirmation action="Termination" />
+      <MetadataTable data={data} />
+      <NotePanel notes={notes} />
     </WizardStep>
   );
 };
 
-const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType }) => {
+const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType, notes = [] }) => {
   const dataLayout = {
     resourceData: {},
     terminationData: {
@@ -94,8 +108,8 @@ const TerminateInstance: React.FC<WorkflowProps> = ({ heading, resolverType }) =
   return (
     <Wizard dataLayout={dataLayout} heading={heading}>
       <InstanceIdentifier name="Lookup" resolverType={resolverType} />
-      <InstanceDetails name="Modify" />
-      <Confirm name="Confirmation" />
+      <InstanceDetails name="Verify" />
+      <Confirm name="Confirmation" notes={notes} />
     </Wizard>
   );
 };

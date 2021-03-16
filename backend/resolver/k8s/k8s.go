@@ -17,24 +17,26 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	k8sv1api "github.com/lyft/clutch/backend/api/k8s/v1"
 	k8sv1resolver "github.com/lyft/clutch/backend/api/resolver/k8s/v1"
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/resolver"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/k8s"
+	"github.com/lyft/clutch/backend/service/topology"
 )
 
 const Name = "clutch.resolver.k8s"
 
-var typeURLPod = resolver.TypeURL((*k8sv1api.Pod)(nil))
-var typeURLHPA = resolver.TypeURL((*k8sv1api.HPA)(nil))
+var typeURLPod = meta.TypeURL((*k8sv1api.Pod)(nil))
+var typeURLHPA = meta.TypeURL((*k8sv1api.HPA)(nil))
 
 var typeSchemas = map[string][]descriptor.Message{
 	typeURLPod: {
 		(*k8sv1resolver.PodID)(nil),
-		(*k8sv1resolver.IPAddress)(nil),
 	},
 	typeURLHPA: {
 		(*k8sv1resolver.HPAName)(nil),
@@ -67,25 +69,41 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (resolver.Resolver
 		return nil, errors.New("service was not the correct type")
 	}
 
+	var topologyService topology.Service
+	if svc, ok := service.Registry[topology.Name]; ok {
+		topologyService, ok = svc.(topology.Service)
+		if !ok {
+			return nil, errors.New("incorrect topology service type")
+		}
+		logger.Debug("enabling autocomplete api for the k8s resolver")
+	}
+
 	schemas, err := resolver.InputsToSchemas(typeSchemas)
 	if err != nil {
 		return nil, err
 	}
 
+	clientsets, err := svc.Clientsets(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
 	resolver.HydrateDynamicOptions(schemas, map[string][]*resolverv1.Option{
-		"clientset": makeClientsetOptions(svc.Clientsets()),
+		"clientset": makeClientsetOptions(clientsets),
 	})
 
 	r := &res{
-		svc:     svc,
-		schemas: schemas,
+		svc:      svc,
+		topology: topologyService,
+		schemas:  schemas,
 	}
 	return r, nil
 }
 
 type res struct {
-	svc     k8s.Service
-	schemas resolver.TypeURLToSchemasMap
+	svc      k8s.Service
+	topology topology.Service
+	schemas  resolver.TypeURLToSchemasMap
 }
 
 func (r *res) Schemas() resolver.TypeURLToSchemasMap { return r.schemas }
@@ -105,7 +123,7 @@ func (r *res) resolveForPod(ctx context.Context, input proto.Message) ([]*k8sv1a
 		return r.locateByPodID(ctx, i)
 	default:
 		// TODO: IP address via List
-		return nil, fmt.Errorf("unrecognized input type %T", i)
+		return nil, status.Errorf(codes.Internal, "unrecognized input type %T", i)
 	}
 }
 
@@ -123,7 +141,7 @@ func (r *res) resolveForHPA(ctx context.Context, input proto.Message) ([]*k8sv1a
 	case *k8sv1resolver.HPAName:
 		return r.locateByHPAName(ctx, i)
 	default:
-		return nil, fmt.Errorf("unrecognized input type %T", i)
+		return nil, status.Errorf(codes.Internal, "unrecognized input type '%T'", i)
 	}
 }
 
@@ -142,52 +160,115 @@ func (r *res) Resolve(ctx context.Context, typeURL string, input proto.Message, 
 		}
 		return &resolver.Results{Messages: resolver.MessageSlice(result)}, nil
 	default:
-		return nil, fmt.Errorf("don't know how to resolve type %s", typeURL)
+		return nil, status.Errorf(codes.Internal, "don't know how to resolve type %s", typeURL)
 	}
 }
 
 func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (*resolver.Results, error) {
+	clientsets, err := r.svc.Clientsets(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	ctx, handler := resolver.NewFanoutHandler(ctx)
 	switch typeURL {
 	case typeURLPod:
-		if id := idPattern.FindString(query); id != "" {
-			for _, name := range r.svc.Clientsets() {
+		if idPattern.MatchString(query) {
+			patternValues, ok, err := meta.ExtractPatternValuesFromString((*k8sv1api.Pod)(nil), query)
+			if err != nil {
+				return nil, err
+			}
+
+			namespace := metav1.NamespaceAll
+			podQuery := query
+			cluster := ""
+
+			if ok {
+				namespace = patternValues["namespace"]
+				podQuery = patternValues["name"]
+				cluster = patternValues["cluster"]
+			}
+
+			for _, clientset := range clientsets {
 				handler.Add(1)
-				go func(name string) {
+				go func(clientset, cluster, namespace, name string) {
 					defer handler.Done()
-					pod, err := r.svc.DescribePod(ctx, name, "", "", id)
+					pod, err := r.svc.DescribePod(ctx, clientset, cluster, namespace, name)
 					select {
 					case handler.Channel() <- resolver.NewFanoutResult([]*k8sv1api.Pod{pod}, err):
 						return
 					case <-handler.Cancelled():
 						return
 					}
-				}(name)
+				}(clientset, cluster, namespace, podQuery)
 			}
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "did not understand input")
 		}
 	case typeURLHPA:
-		if id := idPattern.FindString(query); id != "" {
-			for _, name := range r.svc.Clientsets() {
+		if idPattern.MatchString(query) {
+			patternValues, ok, err := meta.ExtractPatternValuesFromString((*k8sv1api.HPA)(nil), query)
+			if err != nil {
+				return nil, err
+			}
+
+			namespace := metav1.NamespaceAll
+			hpaQuery := query
+			cluster := ""
+
+			if ok {
+				namespace = patternValues["namespace"]
+				hpaQuery = patternValues["name"]
+				cluster = patternValues["cluster"]
+			}
+
+			for _, clientset := range clientsets {
 				handler.Add(1)
-				go func(name string) {
+				go func(clientset, cluster, namespace, query string) {
 					defer handler.Done()
-					hpa, err := r.svc.DescribeHPA(ctx, name, "", "", id)
+					hpa, err := r.svc.DescribeHPA(ctx, clientset, cluster, namespace, query)
 					select {
 					case handler.Channel() <- resolver.NewFanoutResult([]*k8sv1api.HPA{hpa}, err):
 						return
 					case <-handler.Cancelled():
 						return
 					}
-				}(name)
+				}(clientset, cluster, namespace, hpaQuery)
 			}
 		} else {
 			return nil, status.Error(codes.InvalidArgument, "did not understand input")
 		}
 	default:
-		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("cannot search for type '%s'", typeURL))
+		return nil, status.Error(codes.Internal, fmt.Sprintf("cannot search for type '%s'", typeURL))
 	}
 
 	return handler.Results(limit)
+}
+
+func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResult, error) {
+	if r.topology == nil {
+		return nil, status.Error(codes.FailedPrecondition, "topology service must be enabled to use the K8s autocomplete API")
+	}
+
+	var resultLimit uint64 = resolver.DefaultAutocompleteLimit
+	if limit > 0 {
+		resultLimit = limit
+	}
+
+	results, err := r.topology.Autocomplete(ctx, typeURL, search, resultLimit)
+	if err != nil {
+		return nil, err
+	}
+
+	autoCompleteValue := make([]*resolverv1.AutocompleteResult, len(results))
+	for i, r := range results {
+		autoCompleteValue[i] = &resolverv1.AutocompleteResult{
+			Id: r.Id,
+			// TODO (mcutalo): Add more detailed information to the label
+			// the labels value will vary based on resource
+			Label: "",
+		}
+	}
+
+	return autoCompleteValue, nil
 }

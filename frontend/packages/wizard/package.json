@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/wizard",
-  "version": "0.0.0",
+  "version": "1.0.0-beta",
   "description": "Wizard Components to drive frontend workflows",
   "homepage": "https://clutch.sh/docs/development/frontend#clutch-shwizard",
   "license": "Apache-2.0",
@@ -19,21 +19,24 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn run lint --fix",
     "prepublishOnly": "yarn run build",
-    "publishAlpha": "yarn publish --new-version=\"0.0.0-$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')-$(git rev-parse --short=12 HEAD)\" --access public",
+    "publishBeta": "../../../tools/publish-frontend.sh wizard",
     "test": "jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage",
     "test:watch": "yarn run test --watch"
   },
   "dependencies": {
-    "@clutch-sh/core": "^0.0.0",
-    "@clutch-sh/data-layout": "^0.0.0",
-    "@material-ui/core": "^4.9.1",
+    "@clutch-sh/core": "^1.0.0-beta",
+    "@clutch-sh/data-layout": "^1.0.0-beta",
+    "@emotion/react": "^11.0.0",
+    "@emotion/styled": "^11.0.0",
+    "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "clsx": "^1.1.1",
-    "react": "^16.8",
-    "styled-components": "^5.0.1"
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "react-is": "^16.8.0"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^0.0.0"
+    "@clutch-sh/tools": "^1.0.0-beta"
   }
 }

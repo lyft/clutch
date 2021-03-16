@@ -1,5 +1,7 @@
 import React from "react";
+import type { clutch as IClutch } from "@clutch-sh/api";
 import {
+  Button,
   ButtonGroup,
   client,
   Confirmation,
@@ -11,8 +13,8 @@ import {
 import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
-import { Paper } from "@material-ui/core";
-import { number } from "yup";
+import { number, ref } from "yup";
+import type Reference from "yup/lib/Reference";
 
 import type { ConfirmChild, ResolverChild, WorkflowProps } from ".";
 
@@ -32,13 +34,14 @@ const GroupIdentifier: React.FC<ResolverChild> = ({ resolverType }) => {
 const GroupDetails: React.FC<WizardChild> = () => {
   const { onSubmit, onBack } = useWizardContext();
   const groupData = useDataLayout("groupData");
-  const group = groupData.displayValue();
+  const group = groupData.displayValue() as IClutch.aws.ec2.v1.AutoscalingGroup;
   const update = (key: string, value: string) => {
     groupData.updateData(key, value);
   };
 
   return (
     <WizardStep error={groupData.error} isLoading={groupData.isLoading}>
+      <strong>ASG Details</strong>
       <MetadataTable
         onUpdate={update}
         data={[
@@ -57,50 +60,52 @@ const GroupDetails: React.FC<WizardChild> = () => {
           {
             name: "Max Size",
             value: group.size.max,
-            input: { type: "number", key: "size.max" },
+            input: {
+              type: "number",
+              key: "size.max",
+              validation: number()
+                .integer()
+                .min(ref("Min Size") as Reference<number>),
+            },
           },
           {
             name: "Desired Size",
             value: group.size.desired,
-            input: { type: "number", key: "size.desired" },
+            input: {
+              type: "number",
+              key: "size.desired",
+              validation: number()
+                .integer()
+                .min(ref("Min Size") as Reference<number>),
+            },
           },
           { name: "Availability Zone", value: group.zones },
         ]}
       />
-      <ButtonGroup
-        buttons={[
-          {
-            text: "Back",
-            onClick: onBack,
-          },
-          {
-            text: "Resize",
-            onClick: onSubmit,
-            destructive: true,
-          },
-        ]}
-      />
+      <ButtonGroup>
+        <Button text="Back" variant="neutral" onClick={onBack} />
+        <Button text="Resize" variant="destructive" onClick={onSubmit} />
+      </ButtonGroup>
     </WizardStep>
   );
 };
 
+// TODO (sperry): possibly show the previous size values
 const Confirm: React.FC<ConfirmChild> = ({ notes }) => {
-  const group = useDataLayout("groupData").displayValue();
+  const group = useDataLayout("groupData").displayValue() as IClutch.aws.ec2.v1.AutoscalingGroup;
   const resizeData = useDataLayout("resizeData");
 
   return (
     <WizardStep error={resizeData.error} isLoading={resizeData.isLoading}>
       <Confirmation action="Resize" />
-      <Paper style={{ width: "100%", margin: "2.5% 0" }} elevation={3}>
-        <MetadataTable
-          data={[
-            { name: "Name", value: group.name },
-            { name: "New Min Size", value: group.size.min },
-            { name: "New Max Size", value: group.size.max },
-            { name: "New Desired Size", value: group.size.desired },
-          ]}
-        />
-      </Paper>
+      <MetadataTable
+        data={[
+          { name: "Name", value: group.name },
+          { name: "New Min Size", value: group.size.min },
+          { name: "New Max Size", value: group.size.max },
+          { name: "New Desired Size", value: group.size.desired },
+        ]}
+      />
       <NotePanel notes={notes} />
     </WizardStep>
   );

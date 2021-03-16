@@ -16,7 +16,12 @@ import (
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
 )
 
-const OptionAll = "__ALL__"
+const (
+	OptionAll = "__ALL__"
+	// TODO: Layout the ground work for resolver configurations
+	// allowing a user to set the default autocomplete limit
+	DefaultAutocompleteLimit = 50
+)
 
 type TypeURLToSchemasMap map[string][]*resolverv1.Schema
 
@@ -38,13 +43,14 @@ type Resolver interface {
 	Resolve(ctx context.Context, typeURL string, input proto.Message, limit uint32) (*Results, error)
 	// ValidateResolveInput(typeURL string, input proto.Message) for async validation from frontend
 
-	// Autocomplete(query string) (map[string][]proto.Message, error)
+	Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResult, error)
 }
 
-const typePrefix = "type.googleapis.com/"
+const TypePrefix = "type.googleapis.com/"
 
+// Deprecated: use meta.TypeURL instead, will require moving to new proto APIs.
 func TypeURL(m proto.Message) string {
-	return typePrefix + proto.MessageName(m)
+	return TypePrefix + string(proto.MessageReflect(m).Descriptor().FullName())
 }
 
 func MarshalProtoSlice(pbs interface{}) ([]*any.Any, error) {
@@ -122,20 +128,23 @@ func InputsToSchemas(typeSchemas map[string][]descriptor.Message) (TypeURLToSche
 					return nil, err
 				}
 
-				FieldMeta := fext.(*resolverv1.FieldMetadata)
+				fieldMeta := fext.(*resolverv1.FieldMetadata)
+
+				// Clone the fieldMeta since it's mutable (i.e. dynamic options).
+				fieldMeta = proto.Clone(fieldMeta).(*resolverv1.FieldMetadata)
 
 				// TODO(maybe): this should probably respond with Name instead of JsonName for gRPC clients.
 				// Would need to check context and add a flag.
 				name := *field.JsonName
 
 				// Use default display name of field name if none was provided.
-				if FieldMeta.DisplayName == "" {
-					FieldMeta.DisplayName = name
+				if fieldMeta.DisplayName == "" {
+					fieldMeta.DisplayName = name
 				}
 
 				schema.Fields[j] = &resolverv1.Field{
 					Name:     name,
-					Metadata: FieldMeta,
+					Metadata: fieldMeta,
 				}
 			}
 

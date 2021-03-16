@@ -9,6 +9,8 @@ on:
     paths:
       - 'api/**'
       - 'backend/api/**'
+      - backend/go.mod
+      - backend/go.sum
       - 'frontend/api/**'
       - tools/compile-protos.sh
       - .github/workflows/api.yml
@@ -20,11 +22,12 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
-          go-version: 1.14.4
+          go-version: 1.16.0
       - name: Set up Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '12.x'
+          node-version: '14.x'
+          check-latest: true
       - name: build and verify
         run: make api-verify
   lint:
@@ -33,6 +36,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
-          go-version: 1.14.4
+          go-version: 1.16.0
       - name: lint
         run: make api-lint

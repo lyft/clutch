@@ -1,6 +1,6 @@
 {
   "name": "@clutch-sh/envoy",
-  "version": "0.0.0",
+  "version": "1.0.0-beta",
   "description": "Clutch Envoy Workflows",
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
@@ -10,32 +10,33 @@
   ],
   "scripts": {
     "build": "yarn clean && yarn compile",
-    "clean": "rm -rf dist",
-    "compile": "BABEL_ENV=build babel src --out-dir dist --extensions .js,.jsx,.ts,.tsx --no-comments --ignore **/tests",
-    "compile:dev": "yarn compile --source-maps",
-    "compile:watch": "yarn compile --watch",
+    "clean": "rm -rf ./dist && rm -f tsconfig.tsbuildinfo",
+    "compile": "tsc -b",
+    "compile:dev": "tsc --sourceMap",
+    "compile:watch": "BABEL_ENV=build babel src --out-dir dist --source-maps --extensions .js,.jsx,.ts,.tsx --ignore **/tests --watch",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "yarn lint --fix",
-    "publishAlpha": "yarn publish --new-version=\"0.0.0-$(git log -1 --format=%cd --date=format:'%Y%m%d%H%M%S')-$(git rev-parse --short=12 HEAD)\" --access public",
+    "publishBeta": "../../../tools/publish-frontend.sh envoy",
     "test": "jest --passWithNoTests",
     "test:coverage": "yarn test --collect-coverage",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@clutch-sh/core": "^0.0.0",
-    "@clutch-sh/data-layout": "^0.0.0",
-    "@clutch-sh/wizard": "^0.0.0",
-    "@material-ui/core": "^4.9.1",
+    "@clutch-sh/api": "^1.0.0-beta",
+    "@clutch-sh/core": "^1.0.0-beta",
+    "@clutch-sh/data-layout": "^1.0.0-beta",
+    "@clutch-sh/wizard": "^1.0.0-beta",
+    "@emotion/styled": "^11.0.0",
+    "@material-ui/core": "^4.11.0",
+    "@nivo/core": "0.64.0",
+    "@nivo/pie": "0.64.0",
     "lodash": "^4.17.15",
-    "react": "^16.8",
+    "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-is": "^16.8.0",
-    "react-router": "^6.0.0-alpha",
-    "react-router-dom": "^6.0.0-alpha.2",
-    "styled-components": "^5.0.1",
-    "yup": "^0.29.0"
+    "yup": "^0.32.8"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^0.0.0"
+    "@clutch-sh/tools": "^1.0.0-beta"
   }
 }

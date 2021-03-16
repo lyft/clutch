@@ -13,31 +13,29 @@ import (
 	"strings"
 	"time"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
-	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
-
 	"github.com/go-git/go-billy/v5/memfs"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	gittransport "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/go-git/go-git/v5/storage/memory"
-
-	githubv3 "github.com/google/go-github/v32/github"
-
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
+	githubv3 "github.com/google/go-github/v33/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"golang.org/x/oauth2"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	githubv1 "github.com/lyft/clutch/backend/api/config/service/github/v1"
+	scgithubv1 "github.com/lyft/clutch/backend/api/sourcecontrol/github/v1"
+	sourcecontrolv1 "github.com/lyft/clutch/backend/api/sourcecontrol/v1"
 	"github.com/lyft/clutch/backend/service"
 )
 
 const Name = "clutch.service.github"
+const CurrentUser = ""
 
 type FileMap map[string]io.ReadCloser
 
@@ -59,6 +57,13 @@ type RemoteRef struct {
 	Ref string
 }
 
+// Repository contains information about a requested repository.
+type Repository struct {
+	Name          string
+	Owner         string
+	DefaultBranch string
+}
+
 // File contains information about a requested file, including its content.
 type File struct {
 	Path             string
@@ -72,9 +77,16 @@ type File struct {
 type Client interface {
 	GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, error)
 	CreateBranch(ctx context.Context, req *CreateBranchRequest) error
-	CreatePullRequest(ctx context.Context, ref *RemoteRef, title, body string) (*PullRequestInfo, error)
+	CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title, body string) (*PullRequestInfo, error)
 	CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error)
 	CreateIssueComment(ctx context.Context, ref *RemoteRef, number int, body string) error
+	CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error)
+	GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error)
+	GetRepository(ctx context.Context, ref *RemoteRef) (*Repository, error)
+	GetOrganization(ctx context.Context, organization string) (*githubv3.Organization, error)
+	ListOrganizations(ctx context.Context, user string) ([]*githubv3.Organization, error)
+	GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, error)
+	GetUser(ctx context.Context, username string) (*githubv3.User, error)
 }
 
 // This func can be used to create comments for PRs or Issues
@@ -97,6 +109,49 @@ type svc struct {
 	rawAuth *gittransport.BasicAuth
 }
 
+func (s *svc) GetOrganization(ctx context.Context, organization string) (*githubv3.Organization, error) {
+	org, _, err := s.rest.Organizations.Get(ctx, organization)
+	if err != nil {
+		return nil, err
+	}
+	return org, nil
+}
+
+// ListOrganizations returns all organizations for a specified user.
+// To list organizations for the currently authenticated user set user to "".
+func (s *svc) ListOrganizations(ctx context.Context, user string) ([]*githubv3.Organization, error) {
+	organizations, _, err := s.rest.Organizations.List(ctx, user, &githubv3.ListOptions{})
+	if err != nil {
+		return nil, err
+	}
+	return organizations, nil
+}
+
+// GetOrgMembership returns a specified users membership within a specified organization.
+// To list organizations for the currently authenticated user set user to "".
+func (s *svc) GetOrgMembership(ctx context.Context, user, org string) (*githubv3.Membership, error) {
+	membership, response, err := s.rest.Organizations.GetOrgMembership(ctx, user, org)
+	if err != nil {
+		// A user might be part of an org but not have permissions to get memerbship information if auth is behind SSO.
+		// In this case we return a default Membership.
+		if response.StatusCode == 403 {
+			return &githubv3.Membership{}, nil
+		}
+		return nil, err
+	}
+	return membership, nil
+}
+
+// GetUser returns information about the specified user.
+// To list organizations for the currently authenticated user set user to "".
+func (s *svc) GetUser(ctx context.Context, username string) (*githubv3.User, error) {
+	user, _, err := s.rest.Users.Get(ctx, username)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
 func (s *svc) CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateRepositoryRequest) (*sourcecontrolv1.CreateRepositoryResponse, error) {
 	// Validate that we received GitHub Options.
 	_, ok := req.Options.(*sourcecontrolv1.CreateRepositoryRequest_GithubOptions)
@@ -105,19 +160,30 @@ func (s *svc) CreateRepository(ctx context.Context, req *sourcecontrolv1.CreateR
 	}
 
 	opts := req.GetGithubOptions()
-	newRepo := &githubv3.Repository{
+	currentUser, _, err := s.rest.Users.Get(ctx, "")
+	if err != nil {
+		return nil, err
+	}
+
+	var org string
+	if org = req.Owner; currentUser.GetLogin() == req.Owner {
+		// If the specified owner is the same as the current user the GitHub API expects an empty string.
+		org = ""
+	}
+
+	repo := &githubv3.Repository{
 		Name:        strPtr(req.Name),
 		Description: strPtr(req.Description),
-		Visibility:  strPtr(strings.ToLower(opts.Parameters.Visibility.String())),
+		Private:     boolPtr(opts.Parameters.Visibility.String() == sourcecontrolv1.Visibility_PRIVATE.String()),
 		AutoInit:    boolPtr(opts.AutoInit),
 	}
-	repo, _, err := s.rest.Repositories.Create(ctx, req.Owner, newRepo)
+	newRepo, _, err := s.rest.Repositories.Create(ctx, org, repo)
 	if err != nil {
 		return nil, err
 	}
 
 	resp := &sourcecontrolv1.CreateRepositoryResponse{
-		Url: *repo.URL,
+		Url: *newRepo.HTMLURL,
 	}
 	return resp, nil
 }
@@ -130,11 +196,11 @@ func boolPtr(b bool) *bool {
 	return &b
 }
 
-func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, title, body string) (*PullRequestInfo, error) {
+func (s *svc) CreatePullRequest(ctx context.Context, ref *RemoteRef, base, title, body string) (*PullRequestInfo, error) {
 	req := &githubv3.NewPullRequest{
 		Title:               strPtr(title),
 		Head:                strPtr(ref.Ref),
-		Base:                strPtr("master"),
+		Base:                strPtr(base),
 		Body:                strPtr(body),
 		MaintainerCanModify: boolPtr(true),
 	}
@@ -228,9 +294,11 @@ func newService(config *githubv1.Config) Client {
 	return &svc{
 		graphQL: githubv4.NewClient(httpClient),
 		rest: v3client{
-			Repositories: rest.Repositories,
-			PullRequests: rest.PullRequests,
-			Issues:       rest.Issues,
+			Repositories:  rest.Repositories,
+			PullRequests:  rest.PullRequests,
+			Issues:        rest.Issues,
+			Users:         rest.Users,
+			Organizations: rest.Organizations,
 		},
 		rawAuth: &gittransport.BasicAuth{
 			Username: "token",
@@ -276,4 +344,55 @@ func (s *svc) GetFile(ctx context.Context, ref *RemoteRef, path string) (*File, 
 	}
 
 	return f, nil
+}
+
+func (s *svc) CompareCommits(ctx context.Context, ref *RemoteRef, compareSHA string) (*scgithubv1.CommitComparison, error) {
+	comp, _, err := s.rest.Repositories.CompareCommits(ctx, ref.RepoOwner, ref.RepoName, compareSHA, ref.Ref)
+	if err != nil {
+		return nil, fmt.Errorf("Could not get compare status for %s and %s. %+v", ref.Ref, compareSHA, err)
+	}
+
+	status, ok := scgithubv1.CommitCompareStatus_value[strings.ToUpper(comp.GetStatus())]
+	if !ok {
+		return nil, fmt.Errorf("unknown status %s", comp.GetStatus())
+	}
+
+	return &scgithubv1.CommitComparison{
+		Status: scgithubv1.CommitCompareStatus(status),
+	}, nil
+}
+
+type Commit struct {
+	Files []*githubv3.CommitFile
+}
+
+func (s *svc) GetCommit(ctx context.Context, ref *RemoteRef) (*Commit, error) {
+	commit, _, err := s.rest.Repositories.GetCommit(ctx, ref.RepoOwner, ref.RepoName, ref.Ref)
+	if err != nil {
+		return nil, err
+	}
+	return &Commit{
+		Files: commit.Files,
+	}, nil
+}
+
+func (s *svc) GetRepository(ctx context.Context, repo *RemoteRef) (*Repository, error) {
+	q := &getRepositoryQuery{}
+	params := map[string]interface{}{
+		"owner": githubv4.String(repo.RepoOwner),
+		"name":  githubv4.String(repo.RepoName),
+	}
+
+	err := s.graphQL.Query(ctx, q, params)
+	if err != nil {
+		return nil, err
+	}
+
+	r := &Repository{
+		Name:          repo.RepoName,
+		Owner:         repo.RepoOwner,
+		DefaultBranch: string(q.Repository.DefaultBranchRef.Name),
+	}
+
+	return r, nil
 }

@@ -9,7 +9,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/Masterminds/sprig"
+	"github.com/Masterminds/sprig/v3"
 )
 
 const repoRoot = "../../../"
@@ -108,6 +108,10 @@ func getTemplateData() *templateData {
 	}
 
 	for _, file := range files {
+		if strings.Contains(file, "node_modules") {
+			// ignore sub packages from builds.
+			continue
+		}
 		w := getWorkflowPackage(file)
 		td.WorkflowPackages = append(td.WorkflowPackages, w)
 	}
@@ -147,6 +151,10 @@ func main() {
 	for _, f := range files {
 		relpath, _ := filepath.Rel(docsRoot, f)
 		dest := filepath.Join(destRoot, relpath)
+
+		if strings.Contains(dest, "docs/blog") {
+			dest = strings.Replace(dest, "/docs/blog", "/blog", 1)
+		}
 
 		// Make directory if it doesn't exist.
 		if err := os.MkdirAll(filepath.Dir(dest), 0755); err != nil {

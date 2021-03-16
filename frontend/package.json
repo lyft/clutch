@@ -9,17 +9,18 @@
     "infrastructure",
     "infra"
   ],
-  "homepage": "https://github.com/clutch-sh/clutch#readme",
+  "homepage": "https://clutch.sh",
   "bugs": {
-    "url": "https://github.com/clutch-sh/clutch/issues"
+    "url": "https://github.com/lyft/clutch/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/clutch-sh/clutch.git"
+    "url": "git+https://github.com/lyft/clutch.git"
   },
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
   "workspaces": [
+    "api",
     "packages/*",
     "workflows/*"
   ],
@@ -27,15 +28,18 @@
     "build": "yarn compile && yarn workspace @clutch-sh/app build",
     "build:dev": "yarn compile:dev && yarn workspace @clutch-sh/app register-workflows",
     "clean": "lerna run clean --parallel",
-    "compile": "lerna run compile --parallel",
+    "compile": "lerna run compile",
     "compile:dev": "lerna run compile:dev",
     "compile:watch": "lerna run compile:watch --parallel",
     "lint": "lerna run lint --no-bail",
     "lint:fix": "lerna run lint:fix --no-bail",
-    "lint:packages": "npx sort-package-json package.json packages/**/package.json --check",
-    "lint:packages:fix": "npx sort-package-json package.json packages/**/package.json",
-    "publishAlpha": "lerna run compile && lerna run publishAlpha --no-bail -- --no-git-tag-version",
-    "start": "yarn compile:watch & yarn workspace @clutch-sh/app start",
+    "lint:packages": "sort-package-json package.json packages/**/package.json --check",
+    "lint:packages:fix": "sort-package-json package.json packages/**/package.json",
+    "package": "func() { yarn workspace @clutch-sh/\"$@\"; }; func",
+    "publishBeta": "lerna run compile && lerna run publishBeta --no-bail",
+    "start": "yarn clean && yarn compile:watch & FORCE_COLOR=true yarn workspace @clutch-sh/app start | cat",
+    "storybook": "rm -rf node_modules/.cache/storybook/ && start-storybook -p 6006 -h localhost",
+    "storybook:build": "NODE_OPTIONS=--max_old_space_size=4096 build-storybook --no-dll -o netlify/storybook-static",
     "test": "lerna run test --stream --no-bail --",
     "test:coverage": "lerna run test:coverage --stream --no-bail --",
     "test:e2e": "lerna run test:e2e",
@@ -55,16 +59,33 @@
       "last 1 safari version"
     ]
   },
-  "dependencies": {
-    "protobufjs": "https://github.com/natiz/protobuf.js#1d626f84db4a4f339004609f654a9f24a211b716"
-  },
   "devDependencies": {
-    "husky": "^4.2.5",
-    "lerna": "^3.20.0",
+    "@babel/core": "^7.9.0",
+    "@material-ui/core": "^4.11.0",
+    "@storybook/addon-actions": "^6.1.15",
+    "@storybook/addon-essentials": "^6.1.15",
+    "@storybook/addon-links": "^6.1.15",
+    "@storybook/node-logger": "^6.1.15",
+    "@storybook/preset-typescript": "^3.0.0",
+    "@storybook/react": "^6.1.15",
+    "@storybook/theming": "^6.1.15",
+    "@typescript-eslint/eslint-plugin": "^4.13.0",
+    "@typescript-eslint/parser": "^4.13.0",
+    "babel-loader": "^8.1.0",
+    "eslint": "^7.11.0",
+    "lerna": "^4.0.0",
     "license-checker": "^25.0.1",
-    "npx": "^10.2.2"
+    "prettier": "^2.2.1",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "react-is": "^16.8.0",
+    "react-scripts": "^4.0.1",
+    "sort-package-json": "^1.48.1",
+    "styled-components": "^5.1.1",
+    "typescript": "^4.1.3",
+    "webpack": "4.44.2"
   },
   "engines": {
-    "node": ">=11.10.1"
+    "node": ">=12.0.0"
   }
 }

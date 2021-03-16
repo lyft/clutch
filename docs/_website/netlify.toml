@@ -1,0 +1,3 @@
+# Fix for https://community.netlify.com/t/builds-cancelled-for-a-new-branch-due-to-no-content-change/17169/2
+[build]
+   ignore = "/bin/false"

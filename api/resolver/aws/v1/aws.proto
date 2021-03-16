@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package clutch.resolver.aws.v1;
 
-option go_package = "awsv1";
+option go_package = "github.com/lyft/clutch/backend/api/resolver/aws/v1;awsv1";
 
 import "google/protobuf/descriptor.proto";
 
@@ -11,7 +11,7 @@ import "resolver/v1/annotations.proto";
 message InstanceID {
   option (clutch.resolver.v1.schema) = {
     display_name : "instance ID"
-    searchable : true
+    search : {enabled : true}
   };
 
   string id = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -23,17 +23,14 @@ message InstanceID {
   } ];
   string region = 2 [ (clutch.resolver.v1.schema_field) = {
     display_name : "Region",
-    option_field : {
-      include_all_option : true,
-      include_dynamic_options : [ "regions" ]
-    },
+    option_field : {include_all_option : true, include_dynamic_options : "regions"},
   } ];
 }
 
 message AutoscalingGroupName {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
-    searchable : true
+    search : {enabled : true}
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -46,17 +43,14 @@ message AutoscalingGroupName {
 
   string region = 2 [ (clutch.resolver.v1.schema_field) = {
     display_name : "Region",
-    option_field : {
-      include_all_option : true,
-      include_dynamic_options : [ "regions" ]
-    },
+    option_field : {include_all_option : true, include_dynamic_options : "regions"},
   } ];
 }
 
 message KinesisStreamName {
   option (clutch.resolver.v1.schema) = {
     display_name : "name"
-    searchable : true
+    search : {enabled : true}
   };
 
   string name = 1 [ (clutch.resolver.v1.schema_field) = {
@@ -69,9 +63,6 @@ message KinesisStreamName {
 
   string region = 2 [ (clutch.resolver.v1.schema_field) = {
     display_name : "Region",
-    option_field : {
-      include_all_option : true,
-      include_dynamic_options : [ "regions" ]
-    },
+    option_field : {include_all_option : true, include_dynamic_options : "regions"},
   } ];
 }
