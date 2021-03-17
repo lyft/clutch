@@ -1,10 +1,16 @@
+.idea/
+.DS_STORE
+
 # git
 .git/
 **/.gitattributes
 **/.gitignore
 
-# backend
+# build tools
 build/
+
+# backend
+backend/.air/
 backend/cmd/assets/generated_assets.go
 
 # frontend
