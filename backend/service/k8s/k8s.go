@@ -109,7 +109,7 @@ type svc struct {
 func NewWithClientsetManager(manager ClientsetManager, logger *zap.Logger, scope tally.Scope) (Service, error) {
 	return &svc{
 		manager:              manager,
-		topologyObjectChan:   make(chan *topologyv1.UpdateCacheRequest, topologyObjectChanBufferSize),
+		topologyObjectChan:   make(chan *topologyv1.UpdateCacheRequest),
 		topologyInformerLock: semaphore.NewWeighted(1),
 		log:                  logger,
 		scope:                scope,

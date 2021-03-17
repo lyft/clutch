@@ -19,10 +19,6 @@ import (
 	"github.com/lyft/clutch/backend/gateway/meta"
 )
 
-// Setting a large channel buffer mostly for first boot and the  resync timer,
-// this really should be sized according to the size of your k8s deployment.
-// However this should be a large enough buffer for the datastore to keep up with.
-const topologyObjectChanBufferSize = 5000
 const topologyInformerLockId = 1
 
 func (s *svc) CacheEnabled() bool {
