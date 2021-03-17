@@ -37,6 +37,9 @@ var (
 	_ = apiv1.ActionType(0)
 )
 
+// define the regex for a UUID once up-front
+var _audit_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
+
 // Validate checks the field values on TimeRange with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *TimeRange) Validate() error {

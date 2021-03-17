@@ -17401,9 +17401,6 @@ export namespace validate {
 
         /** FloatRules notIn */
         notIn?: (number[]|null);
-
-        /** FloatRules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents a FloatRules. */
@@ -17435,9 +17432,6 @@ export namespace validate {
 
         /** FloatRules notIn. */
         public notIn: number[];
-
-        /** FloatRules ignoreEmpty. */
-        public ignoreEmpty: boolean;
 
         /**
          * Verifies a FloatRules message.
@@ -17491,9 +17485,6 @@ export namespace validate {
 
         /** DoubleRules notIn */
         notIn?: (number[]|null);
-
-        /** DoubleRules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents a DoubleRules. */
@@ -17525,9 +17516,6 @@ export namespace validate {
 
         /** DoubleRules notIn. */
         public notIn: number[];
-
-        /** DoubleRules ignoreEmpty. */
-        public ignoreEmpty: boolean;
 
         /**
          * Verifies a DoubleRules message.
@@ -17581,9 +17569,6 @@ export namespace validate {
 
         /** Int32Rules notIn */
         notIn?: (number[]|null);
-
-        /** Int32Rules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents an Int32Rules. */
@@ -17615,9 +17600,6 @@ export namespace validate {
 
         /** Int32Rules notIn. */
         public notIn: number[];
-
-        /** Int32Rules ignoreEmpty. */
-        public ignoreEmpty: boolean;
 
         /**
          * Verifies an Int32Rules message.
@@ -17671,9 +17653,6 @@ export namespace validate {
 
         /** Int64Rules notIn */
         notIn?: ((number|Long)[]|null);
-
-        /** Int64Rules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents an Int64Rules. */
@@ -17705,9 +17684,6 @@ export namespace validate {
 
         /** Int64Rules notIn. */
         public notIn: (number|Long)[];
-
-        /** Int64Rules ignoreEmpty. */
-        public ignoreEmpty: boolean;
 
         /**
          * Verifies an Int64Rules message.
@@ -17761,9 +17737,6 @@ export namespace validate {
 
         /** UInt32Rules notIn */
         notIn?: (number[]|null);
-
-        /** UInt32Rules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents a UInt32Rules. */
@@ -17795,9 +17768,6 @@ export namespace validate {
 
         /** UInt32Rules notIn. */
         public notIn: number[];
-
-        /** UInt32Rules ignoreEmpty. */
-        public ignoreEmpty: boolean;
 
         /**
          * Verifies a UInt32Rules message.
@@ -17851,9 +17821,6 @@ export namespace validate {
 
         /** UInt64Rules notIn */
         notIn?: ((number|Long)[]|null);
-
-        /** UInt64Rules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents a UInt64Rules. */
@@ -17885,9 +17852,6 @@ export namespace validate {
 
         /** UInt64Rules notIn. */
         public notIn: (number|Long)[];
-
-        /** UInt64Rules ignoreEmpty. */
-        public ignoreEmpty: boolean;
 
         /**
          * Verifies a UInt64Rules message.
@@ -17941,9 +17905,6 @@ export namespace validate {
 
         /** SInt32Rules notIn */
         notIn?: (number[]|null);
-
-        /** SInt32Rules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents a SInt32Rules. */
@@ -17975,9 +17936,6 @@ export namespace validate {
 
         /** SInt32Rules notIn. */
         public notIn: number[];
-
-        /** SInt32Rules ignoreEmpty. */
-        public ignoreEmpty: boolean;
 
         /**
          * Verifies a SInt32Rules message.
@@ -18031,9 +17989,6 @@ export namespace validate {
 
         /** SInt64Rules notIn */
         notIn?: ((number|Long)[]|null);
-
-        /** SInt64Rules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents a SInt64Rules. */
@@ -18065,9 +18020,6 @@ export namespace validate {
 
         /** SInt64Rules notIn. */
         public notIn: (number|Long)[];
-
-        /** SInt64Rules ignoreEmpty. */
-        public ignoreEmpty: boolean;
 
         /**
          * Verifies a SInt64Rules message.
@@ -18121,9 +18073,6 @@ export namespace validate {
 
         /** Fixed32Rules notIn */
         notIn?: (number[]|null);
-
-        /** Fixed32Rules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents a Fixed32Rules. */
@@ -18155,9 +18104,6 @@ export namespace validate {
 
         /** Fixed32Rules notIn. */
         public notIn: number[];
-
-        /** Fixed32Rules ignoreEmpty. */
-        public ignoreEmpty: boolean;
 
         /**
          * Verifies a Fixed32Rules message.
@@ -18211,9 +18157,6 @@ export namespace validate {
 
         /** Fixed64Rules notIn */
         notIn?: ((number|Long)[]|null);
-
-        /** Fixed64Rules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents a Fixed64Rules. */
@@ -18245,9 +18188,6 @@ export namespace validate {
 
         /** Fixed64Rules notIn. */
         public notIn: (number|Long)[];
-
-        /** Fixed64Rules ignoreEmpty. */
-        public ignoreEmpty: boolean;
 
         /**
          * Verifies a Fixed64Rules message.
@@ -18301,9 +18241,6 @@ export namespace validate {
 
         /** SFixed32Rules notIn */
         notIn?: (number[]|null);
-
-        /** SFixed32Rules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents a SFixed32Rules. */
@@ -18335,9 +18272,6 @@ export namespace validate {
 
         /** SFixed32Rules notIn. */
         public notIn: number[];
-
-        /** SFixed32Rules ignoreEmpty. */
-        public ignoreEmpty: boolean;
 
         /**
          * Verifies a SFixed32Rules message.
@@ -18391,9 +18325,6 @@ export namespace validate {
 
         /** SFixed64Rules notIn */
         notIn?: ((number|Long)[]|null);
-
-        /** SFixed64Rules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents a SFixed64Rules. */
@@ -18425,9 +18356,6 @@ export namespace validate {
 
         /** SFixed64Rules notIn. */
         public notIn: (number|Long)[];
-
-        /** SFixed64Rules ignoreEmpty. */
-        public ignoreEmpty: boolean;
 
         /**
          * Verifies a SFixed64Rules message.
@@ -18583,9 +18511,6 @@ export namespace validate {
 
         /** StringRules strict */
         strict?: (boolean|null);
-
-        /** StringRules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents a StringRules. */
@@ -18672,9 +18597,6 @@ export namespace validate {
         /** StringRules strict. */
         public strict: boolean;
 
-        /** StringRules ignoreEmpty. */
-        public ignoreEmpty: boolean;
-
         /** StringRules wellKnown. */
         public wellKnown?: ("email"|"hostname"|"ip"|"ipv4"|"ipv6"|"uri"|"uriRef"|"address"|"uuid"|"wellKnownRegex");
 
@@ -18755,9 +18677,6 @@ export namespace validate {
 
         /** BytesRules ipv6 */
         ipv6?: (boolean|null);
-
-        /** BytesRules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents a BytesRules. */
@@ -18807,9 +18726,6 @@ export namespace validate {
 
         /** BytesRules ipv6. */
         public ipv6: boolean;
-
-        /** BytesRules ignoreEmpty. */
-        public ignoreEmpty: boolean;
 
         /** BytesRules wellKnown. */
         public wellKnown?: ("ip"|"ipv4"|"ipv6");
@@ -18977,9 +18893,6 @@ export namespace validate {
 
         /** RepeatedRules items */
         items?: (validate.IFieldRules|null);
-
-        /** RepeatedRules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents a RepeatedRules. */
@@ -19002,9 +18915,6 @@ export namespace validate {
 
         /** RepeatedRules items. */
         public items?: (validate.IFieldRules|null);
-
-        /** RepeatedRules ignoreEmpty. */
-        public ignoreEmpty: boolean;
 
         /**
          * Verifies a RepeatedRules message.
@@ -19052,9 +18962,6 @@ export namespace validate {
 
         /** MapRules values */
         values?: (validate.IFieldRules|null);
-
-        /** MapRules ignoreEmpty */
-        ignoreEmpty?: (boolean|null);
     }
 
     /** Represents a MapRules. */
@@ -19080,9 +18987,6 @@ export namespace validate {
 
         /** MapRules values. */
         public values?: (validate.IFieldRules|null);
-
-        /** MapRules ignoreEmpty. */
-        public ignoreEmpty: boolean;
 
         /**
          * Verifies a MapRules message.
@@ -20523,9 +20427,6 @@ export namespace google {
 
             /** MessageOptions .validate.disabled */
             ".validate.disabled"?: (boolean|null);
-
-            /** MessageOptions .validate.ignored */
-            ".validate.ignored"?: (boolean|null);
 
             /** MessageOptions .clutch.resolver.v1.schema */
             ".clutch.resolver.v1.schema"?: (clutch.resolver.v1.ISchemaMetadata|null);
