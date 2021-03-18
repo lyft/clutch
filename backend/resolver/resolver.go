@@ -6,10 +6,10 @@ import (
 	"reflect"
 
 	"github.com/lyft/clutch/backend/gateway/meta"
-	proto2 "google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/golang/protobuf/proto"
+	protodeprecated "github.com/golang/protobuf/proto"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/status"
@@ -24,6 +24,13 @@ const (
 	DefaultAutocompleteLimit = 50
 )
 
+// Input map from resolvers with the type URL of the resolved object mapped to the schema's message.
+// e.g. {"v1.Instance": [v1.Name, v1.IPAddress]}
+type TypeURLToSchemaMessagesMap map[string][]proto.Message
+
+// Output map used by the resolver after the input TypeURLToSchemaMessagesMap was used to read metadata from the
+// protobuf objects.
+// e.g. {"v1.Instance": [{"DisplayName": "Name", "Searchable": true}, {"DisplayName": "IP Address", "Searchable": true}]}
 type TypeURLToSchemasMap map[string][]*resolverv1.Schema
 
 type Factory map[string]func(*anypb.Any, *zap.Logger, tally.Scope) (Resolver, error)
@@ -31,7 +38,7 @@ type Factory map[string]func(*anypb.Any, *zap.Logger, tally.Scope) (Resolver, er
 var Registry = map[string]Resolver{}
 
 type Results struct {
-	Messages        []proto2.Message
+	Messages        []proto.Message
 	PartialFailures []*status.Status
 }
 
@@ -41,7 +48,7 @@ type Resolver interface {
 	Search(ctx context.Context, typeURL, query string, limit uint32) (*Results, error)
 	// ValidateSearch(typeURL string, query string) error for async validation from frontend
 
-	Resolve(ctx context.Context, typeURL string, input proto.Message, limit uint32) (*Results, error)
+	Resolve(ctx context.Context, typeURL string, input protodeprecated.Message, limit uint32) (*Results, error)
 	// ValidateResolveInput(typeURL string, input proto.Message) for async validation from frontend
 
 	Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResult, error)
@@ -50,8 +57,8 @@ type Resolver interface {
 const TypePrefix = "type.googleapis.com/"
 
 // Deprecated: use meta.TypeURL instead, will require moving to new proto APIs.
-func TypeURL(m proto.Message) string {
-	return TypePrefix + string(proto.MessageReflect(m).Descriptor().FullName())
+func TypeURL(m protodeprecated.Message) string {
+	return TypePrefix + string(protodeprecated.MessageReflect(m).Descriptor().FullName())
 }
 
 func MarshalProtoSlice(pbs interface{}) ([]*anypb.Any, error) {
@@ -71,7 +78,7 @@ func MarshalProtoSlice(pbs interface{}) ([]*anypb.Any, error) {
 	for i := 0; i < s.Len(); i++ {
 		item := s.Index(i)
 
-		v, ok := item.Interface().(proto2.Message)
+		v, ok := item.Interface().(proto.Message)
 		if !ok {
 			return nil, fmt.Errorf("could not use %s as proto.Message", item.Kind())
 		}
@@ -103,14 +110,14 @@ func HydrateDynamicOptions(schemas TypeURLToSchemasMap, options map[string][]*re
 }
 
 // Pass in annotated resolver input objects and return schemas for them.
-func InputsToSchemas(typeSchemas map[string][]proto2.Message) (TypeURLToSchemasMap, error) {
+func InputsToSchemas(typeSchemas TypeURLToSchemaMessagesMap) (TypeURLToSchemasMap, error) {
 	schemas := make(TypeURLToSchemasMap, len(typeSchemas))
 
 	for typeURL, inputObjects := range typeSchemas {
 		schemas[typeURL] = make([]*resolverv1.Schema, len(inputObjects))
 		for i, inputObject := range inputObjects {
 			desc := inputObject.ProtoReflect().Descriptor()
-			ext := proto2.GetExtension(desc.Options(), resolverv1.E_Schema)
+			ext := proto.GetExtension(desc.Options(), resolverv1.E_Schema)
 			md := ext.(*resolverv1.SchemaMetadata)
 
 			fds := desc.Fields()
@@ -124,10 +131,10 @@ func InputsToSchemas(typeSchemas map[string][]proto2.Message) (TypeURLToSchemasM
 			// Fill fields from per-field annotations.
 			for j := 0; j < fds.Len(); j++ {
 				fd := fds.Get(j)
-				fext := proto2.GetExtension(fd.Options(), resolverv1.E_SchemaField)
+				fext := proto.GetExtension(fd.Options(), resolverv1.E_SchemaField)
 				fieldMeta := fext.(*resolverv1.FieldMetadata)
 				// Clone the fieldMeta since it's mutable (i.e. dynamic options).
-				fieldMeta = proto2.Clone(fieldMeta).(*resolverv1.FieldMetadata)
+				fieldMeta = proto.Clone(fieldMeta).(*resolverv1.FieldMetadata)
 
 				name := string(fd.Name())
 				if fd.HasJSONName() {

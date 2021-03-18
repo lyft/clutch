@@ -8,7 +8,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	proto2 "google.golang.org/protobuf/proto"
 	"regexp"
 
 	"github.com/golang/protobuf/proto"
@@ -34,7 +33,7 @@ const Name = "clutch.resolver.k8s"
 var typeURLPod = meta.TypeURL((*k8sv1api.Pod)(nil))
 var typeURLHPA = meta.TypeURL((*k8sv1api.HPA)(nil))
 
-var typeSchemas = map[string][]proto2.Message{
+var typeSchemas = resolver.TypeURLToSchemaMessagesMap{
 	typeURLPod: {
 		(*k8sv1resolver.PodID)(nil),
 	},
