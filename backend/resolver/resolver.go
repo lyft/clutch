@@ -3,10 +3,11 @@ package resolver
 import (
 	"context"
 	"fmt"
+	"github.com/lyft/clutch/backend/gateway/meta"
+	proto2 "google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 	"reflect"
 
-	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/uber-go/tally"
@@ -102,40 +103,38 @@ func HydrateDynamicOptions(schemas TypeURLToSchemasMap, options map[string][]*re
 }
 
 // Pass in annotated resolver input objects and return schemas for them.
-func InputsToSchemas(typeSchemas map[string][]descriptor.Message) (TypeURLToSchemasMap, error) {
+func InputsToSchemas(typeSchemas map[string][]proto2.Message) (TypeURLToSchemasMap, error) {
 	schemas := make(TypeURLToSchemasMap, len(typeSchemas))
 
 	for typeURL, inputObjects := range typeSchemas {
 		schemas[typeURL] = make([]*resolverv1.Schema, len(inputObjects))
 		for i, inputObject := range inputObjects {
-			_, descriptorMeta := descriptor.ForMessage(inputObject)
-			ext, err := proto.GetExtension(descriptorMeta.Options, resolverv1.E_Schema)
-			if err != nil {
-				return nil, err
-			}
+			desc := inputObject.ProtoReflect().Descriptor()
+			ext := proto2.GetExtension(desc.Options(), resolverv1.E_Schema)
 			md := ext.(*resolverv1.SchemaMetadata)
 
+			fds := desc.Fields()
+
 			schema := &resolverv1.Schema{
-				TypeUrl:  TypeURL(inputObject),
-				Fields:   make([]*resolverv1.Field, len(descriptorMeta.Field)),
+				TypeUrl:  meta.TypeURL(inputObject),
+				Fields:   make([]*resolverv1.Field, fds.Len()),
 				Metadata: md,
 			}
 
 			// Fill fields from per-field annotations.
-			for j, field := range descriptorMeta.Field {
-				fext, err := proto.GetExtension(field.Options, resolverv1.E_SchemaField)
-				if err != nil {
-					return nil, err
-				}
-
+			for j := 0; j < fds.Len(); j++ {
+				fd := fds.Get(j)
+				fext := proto2.GetExtension(fd.Options(), resolverv1.E_SchemaField)
 				fieldMeta := fext.(*resolverv1.FieldMetadata)
-
 				// Clone the fieldMeta since it's mutable (i.e. dynamic options).
-				fieldMeta = proto.Clone(fieldMeta).(*resolverv1.FieldMetadata)
+				fieldMeta = proto2.Clone(fieldMeta).(*resolverv1.FieldMetadata)
 
-				// TODO(maybe): this should probably respond with Name instead of JsonName for gRPC clients.
-				// Would need to check context and add a flag.
-				name := *field.JsonName
+				name := string(fd.Name())
+				if fd.HasJSONName() {
+					// TODO(maybe): this should probably always respond with Name instead of JsonName for gRPC clients.
+					// Would need to check context and add a flag.
+					name = fd.JSONName()
+				}
 
 				// Use default display name of field name if none was provided.
 				if fieldMeta.DisplayName == "" {
@@ -147,11 +146,8 @@ func InputsToSchemas(typeSchemas map[string][]descriptor.Message) (TypeURLToSche
 					Metadata: fieldMeta,
 				}
 			}
-
-			schema.Metadata = md
 			schemas[typeURL][i] = schema
 		}
 	}
-
 	return schemas, nil
 }
