@@ -5,7 +5,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
-	proto2 "google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
@@ -26,7 +26,7 @@ func TestTypeURL(t *testing.T) {
 
 func TestInputsToSchema(t *testing.T) {
 	tp := "type.googleapis.com/foo.v1.Bar"
-	m, err := InputsToSchemas(map[string][]proto2.Message{
+	m, err := InputsToSchemas(map[string][]proto.Message{
 		tp: {
 			(*k8sv1resolver.PodID)(nil),
 		},
