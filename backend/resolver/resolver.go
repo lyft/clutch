@@ -3,12 +3,12 @@ package resolver
 import (
 	"context"
 	"fmt"
+	"google.golang.org/protobuf/types/known/anypb"
 	"reflect"
 
 	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/status"
@@ -25,7 +25,7 @@ const (
 
 type TypeURLToSchemasMap map[string][]*resolverv1.Schema
 
-type Factory map[string]func(*any.Any, *zap.Logger, tally.Scope) (Resolver, error)
+type Factory map[string]func(*anypb.Any, *zap.Logger, tally.Scope) (Resolver, error)
 
 var Registry = map[string]Resolver{}
 
@@ -53,7 +53,7 @@ func TypeURL(m proto.Message) string {
 	return TypePrefix + string(proto.MessageReflect(m).Descriptor().FullName())
 }
 
-func MarshalProtoSlice(pbs interface{}) ([]*any.Any, error) {
+func MarshalProtoSlice(pbs interface{}) ([]*anypb.Any, error) {
 	if pbs == nil {
 		return nil, nil
 	}
@@ -66,7 +66,7 @@ func MarshalProtoSlice(pbs interface{}) ([]*any.Any, error) {
 	}
 
 	s := reflect.ValueOf(pbs)
-	ret := make([]*any.Any, s.Len())
+	ret := make([]*anypb.Any, s.Len())
 	for i := 0; i < s.Len(); i++ {
 		item := s.Index(i)
 
