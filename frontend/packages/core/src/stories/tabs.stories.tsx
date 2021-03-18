@@ -33,5 +33,5 @@ export const FullWidth = Template.bind({});
 FullWidth.args = {
   tabCount: 2,
   value: 1,
-  variant: "fullWidth"
+  variant: "fullWidth",
 };
