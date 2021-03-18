@@ -12,8 +12,8 @@ export default {
   },
 } as Meta;
 
-const Template = ({ tabCount, value }: TabsProps & { tabCount: number }) => (
-  <Tabs value={value - 1}>
+const Template = ({ tabCount, value, variant }: TabsProps & { tabCount: number }) => (
+  <Tabs value={value - 1} variant={variant}>
     {[...Array(tabCount)].map((_, index: number) => (
       // eslint-disable-next-line react/no-array-index-key
       <Tab key={index} label={`Tab ${index + 1}`} value={index}>
@@ -27,4 +27,11 @@ export const Primary = Template.bind({});
 Primary.args = {
   tabCount: 2,
   value: 1,
+};
+
+export const FullWidth = Template.bind({});
+FullWidth.args = {
+  tabCount: 2,
+  value: 1,
+  variant: "fullWidth"
 };
