@@ -3,13 +3,13 @@ package resolver
 import (
 	"context"
 	"fmt"
+	"reflect"
+
 	"github.com/lyft/clutch/backend/gateway/meta"
 	proto2 "google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
-	"reflect"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/status"
@@ -31,7 +31,7 @@ type Factory map[string]func(*anypb.Any, *zap.Logger, tally.Scope) (Resolver, er
 var Registry = map[string]Resolver{}
 
 type Results struct {
-	Messages        []proto.Message
+	Messages        []proto2.Message
 	PartialFailures []*status.Status
 }
 
@@ -71,11 +71,11 @@ func MarshalProtoSlice(pbs interface{}) ([]*anypb.Any, error) {
 	for i := 0; i < s.Len(); i++ {
 		item := s.Index(i)
 
-		v, ok := item.Interface().(proto.Message)
+		v, ok := item.Interface().(proto2.Message)
 		if !ok {
 			return nil, fmt.Errorf("could not use %s as proto.Message", item.Kind())
 		}
-		a, err := ptypes.MarshalAny(v)
+		a, err := anypb.New(v)
 		if err != nil {
 			return nil, err
 		}

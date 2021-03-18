@@ -8,9 +8,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	proto2 "google.golang.org/protobuf/proto"
 	"regexp"
 
-	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -34,7 +34,7 @@ const Name = "clutch.resolver.k8s"
 var typeURLPod = meta.TypeURL((*k8sv1api.Pod)(nil))
 var typeURLHPA = meta.TypeURL((*k8sv1api.HPA)(nil))
 
-var typeSchemas = map[string][]descriptor.Message{
+var typeSchemas = map[string][]proto2.Message{
 	typeURLPod: {
 		(*k8sv1resolver.PodID)(nil),
 	},

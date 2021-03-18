@@ -7,8 +7,8 @@ package aws
 import (
 	"context"
 	"errors"
+	proto2 "google.golang.org/protobuf/proto"
 
-	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -34,7 +34,7 @@ var typeURLInstance = meta.TypeURL((*ec2v1api.Instance)(nil))
 var typeURLAutoscalingGroup = meta.TypeURL((*ec2v1api.AutoscalingGroup)(nil))
 var typeURLKinesisStream = meta.TypeURL((*kinesisv1api.Stream)(nil))
 
-var typeSchemas = map[string][]descriptor.Message{
+var typeSchemas = map[string][]proto2.Message{
 	typeURLInstance: {
 		(*awsv1resolver.InstanceID)(nil),
 	},
