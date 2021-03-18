@@ -212,6 +212,14 @@ service K8sAPI {
     };
     option (clutch.api.v1.action).type = CREATE;
   }
+
+  rpc DescribeNamespace(DescribeNamespaceRequest) returns (DescribeNamespaceResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/describeNamespace"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
 }
 
 message DescribePodRequest {
@@ -850,6 +858,38 @@ message CreateJobRequest {
 
 message CreateJobResponse {
   Job job = 1;
+}
+
+message Namespace {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{name}"
+  };
+
+  string cluster = 1;
+  string name = 2;
+
+  map<string, string> annotations = 3;
+  map<string, string> labels = 4;
+}
+
+message DescribeNamespaceRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 3 [ (validate.rules).string = {min_bytes : 1} ];
+
+  map<string, string> labels = 4 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
+}
+
+message DescribeNamespaceResponse {
+  option (clutch.api.v1.reference).fields = "namespace";
+
+  Namespace namespace = 1;
 }
 
 // This message type is used to add support for nullable strings and is an
