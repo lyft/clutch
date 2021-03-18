@@ -1,4 +1,5 @@
 #!/bin/bash
+# Test comment
 trap "exit" INT TERM
 trap 'kill $(jobs -p)' EXIT
 set -euo pipefail
