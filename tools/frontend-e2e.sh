@@ -14,7 +14,7 @@ until curl --output /dev/null --silent --head --fail http://localhost:3000; do
     #     echo "Error: could not start frontend dev server"
     #     exit 1
     # fi;
-    # ((FE_STARTUP_COUNT++))
+    ((FE_STARTUP_COUNT++))
     sleep 1
 done
 
@@ -23,7 +23,7 @@ until curl --output /dev/null --silent --fail http://localhost:8080/healthcheck;
     #     echo "Error: could not start backend mock server"
     #     exit 1
     # fi;
-    # ((BE_STARTUP_COUNT++))
+    ((BE_STARTUP_COUNT++))
     sleep 1
 done
 (
