@@ -5,16 +5,15 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/lyft/clutch/backend/gateway/meta"
-	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/types/known/anypb"
-
 	protodeprecated "github.com/golang/protobuf/proto"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
 )
 
 const (

@@ -7,6 +7,7 @@ package aws
 import (
 	"context"
 	"errors"
+
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"

@@ -2,12 +2,12 @@ package resolver
 
 import (
 	"fmt"
-	"google.golang.org/protobuf/types/known/anypb"
 	"strings"
 
 	statuspb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	"github.com/lyft/clutch/backend/gateway/statuserr"

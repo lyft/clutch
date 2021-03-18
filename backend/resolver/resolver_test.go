@@ -1,17 +1,17 @@
 package resolver
 
 import (
-	"github.com/lyft/clutch/backend/gateway/meta"
-	proto2 "google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/types/known/anypb"
 	"testing"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
+	proto2 "google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	k8sv1resolver "github.com/lyft/clutch/backend/api/resolver/k8s/v1"
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
 )
 
 // Check that our TypeURL function matches proto's interpretation of the URL.
