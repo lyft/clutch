@@ -31,6 +31,7 @@ interface CodeProps {
 const Code = ({ children, showCopyButton = true }: CodeProps) => (
   <Pre>
     {showCopyButton && (
+      // TODO: Figure out a more permanent fix for the copy button
       <CopyButtonContainer container justify="flex-end">
         <Fab variant="round" size="small">
           <ClipboardButton text={children} />

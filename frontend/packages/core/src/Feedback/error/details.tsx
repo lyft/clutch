@@ -13,9 +13,11 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
 import type { ClutchError } from "../../Network/errors";
 import { isClutchErrorDetails } from "../../Network/errors";
-import { grpcCodeToHttpCode, grpcCodeToText } from "../../Network/grpc";
+import { grpcCodeToText } from "../../Network/grpc";
 
 import ErrorDetailsDialog from "./dialog";
+
+const ERROR_DETAILS_RENDER_MAX = 4;
 
 const ErrorDetailDivider = styled.div({
   background: "linear-gradient(to right, #DB3615 8px, rgba(219, 54, 21, 0.4) 0%)",
@@ -141,14 +143,13 @@ const ErrorDetails = ({ error }: ErrorDetailsProps) => {
                   {error.details.map(detail => {
                     // Only render Clutch Error wrapped details errors here
                     if (isClutchErrorDetails(detail)) {
-                      const renderMax = 2;
-                      const renderItems = detail.wrapped.slice(0, renderMax);
-                      const remainingItems = detail.wrapped.length - renderMax;
+                      const renderItems = detail.wrapped.slice(0, ERROR_DETAILS_RENDER_MAX);
+                      const remainingItems = detail.wrapped.length - ERROR_DETAILS_RENDER_MAX;
                       return (
                         <>
                           {renderItems.map((wrapped, idx) => {
-                            const color =
-                              grpcCodeToHttpCode(wrapped.code) >= 500 ? "#DB3615" : "#daca37";
+                            // TODO: This color should be colored according to status code
+                            const color = "#DB3615";
                             return (
                               // eslint-disable-next-line react/no-array-index-key
                               <ListItem key={`${idx}-${wrapped.message}`}>
