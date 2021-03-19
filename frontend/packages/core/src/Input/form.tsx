@@ -4,7 +4,7 @@ const Form = styled.form({
   "> *": {
     margin: "8px 0",
   },
-  width: inherit,
+  width: "inherit",
 });
 
 export default Form;
