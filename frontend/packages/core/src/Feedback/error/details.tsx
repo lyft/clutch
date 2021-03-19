@@ -68,7 +68,8 @@ const ListItem = styled.li({
   "::marker": {
     color: "rgba(13, 16, 48, 0.6)",
   },
-  margin: "2px 0",
+  padding: "2px 0",
+  lineHeight: "24px",
 });
 
 const ErrorDetailContainer = styled.div({
@@ -139,7 +140,7 @@ const ErrorDetails = ({ error }: ErrorDetailsProps) => {
                 <ErrorDetailText style={{ color: "#0D1030" }}>
                   The following errors were encountered:
                 </ErrorDetailText>
-                <ul>
+                <ul style={{ paddingLeft: "16px" }}>
                   {error.details.map(detail => {
                     // Only render Clutch Error wrapped details errors here
                     if (isClutchErrorDetails(detail)) {
