@@ -18,13 +18,13 @@ const ErrorSummaryContainer = styled.div({
 });
 
 const ErrorSummaryMessage = styled.div({
-  height: "24px",
+  lineHeight: "24px",
+  margin: "4px 0",
   flex: "1",
 });
 
 const ErrorSummaryLink = styled(Link)({
   fontSize: "14px",
-  lineHeigh: "24px",
   fontWeight: 400,
   color: "rgb(13,16,48,0.6)",
   display: "flex",
