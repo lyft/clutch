@@ -2,8 +2,9 @@ package k8s
 
 import (
 	"context"
-	"fmt"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -26,9 +27,9 @@ func (s *svc) DescribeNamespace(ctx context.Context, clientset, cluster, name st
 	if len(namespaces.Items) == 1 {
 		return ProtoForNamespace(cs.Cluster(), &namespaces.Items[0]), nil
 	} else if len(namespaces.Items) > 1 {
-		return nil, fmt.Errorf("Located multiple Namespaces")
+		return nil, status.Error(codes.FailedPrecondition, "located multiple Namespaces")
 	}
-	return nil, fmt.Errorf("Unable to locate namespaces")
+	return nil, status.Error(codes.NotFound, "unable to locate namespaces")
 }
 
 func ProtoForNamespace(cluster string, k8snamespace *corev1.Namespace) *k8sapiv1.Namespace {
