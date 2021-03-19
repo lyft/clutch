@@ -66,7 +66,7 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
     return [goBackButton, destructiveButton];
   }
 
-  if (experiment === undefined && error === "") {
+  if (experiment === undefined) {
     client
       .post("/v1/chaos/experimentation/getExperimentRunDetails", { id: runID })
       .then(response => {
