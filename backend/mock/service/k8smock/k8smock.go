@@ -287,6 +287,14 @@ func (*svc) CreateJob(ctx context.Context, clientset, cluster, namespace string,
 	}, nil
 }
 
+func (s *svc) DescribeNamespace(_ context.Context, clientset, cluster, name string) (*k8sv1.Namespace, error) {
+	return &k8sv1.Namespace{
+		Cluster: "fake-cluster-name",
+		Name:    name,
+		Labels:  map[string]string{"Key": "value"},
+	}, nil
+}
+
 func (*svc) Clientsets(ctx context.Context) ([]string, error) {
 	return []string{"fake-user@fake-cluster"}, nil
 }

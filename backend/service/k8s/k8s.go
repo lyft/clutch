@@ -95,6 +95,9 @@ type Service interface {
 	DeleteJob(ctx context.Context, clientset, cluster, namespace, name string) error
 	ListJobs(ctx context.Context, clientset, cluster, namespace string, listOptions *k8sapiv1.ListOptions) ([]*k8sapiv1.Job, error)
 	CreateJob(ctx context.Context, clientset, cluster, namespace string, job *batchv1.Job) (*k8sapiv1.Job, error)
+
+	// Namespace management functions.
+	DescribeNamespace(ctx context.Context, clientset, cluster, name string) (*k8sapiv1.Namespace, error)
 }
 
 type svc struct {
