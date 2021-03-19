@@ -175,6 +175,15 @@ func (p *OIDCProvider) Verify(ctx context.Context, rawToken string) (*Claims, er
 		return nil, err
 	}
 
+	// If the token doesn't exist in the token storage anymore, it must have been revoked.
+	// Fail verification in this case.
+	if p.tokenStorage != nil {
+		token, err := p.tokenStorage.Read(ctx, claims.Subject, p.providerAlias)
+		if token == nil {
+			return nil, err
+		}
+	}
+
 	if err := claims.Valid(); err != nil {
 		return nil, err
 	}

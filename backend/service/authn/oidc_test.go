@@ -106,3 +106,59 @@ oidc:
 	assert.NotNil(t, c)
 	assert.Equal(t, email, c.Subject)
 }
+
+func TestTokenRevocationFlow(t *testing.T) {
+	cfg := &authnv1.Config{}
+	apimock.FromYAML(`
+session_secret: this_is_my_secret
+oidc:
+  issuer: http://foo.example.com
+  client_id: my_client_id
+  client_secret: my_client_secret
+  redirect_url: "http://localhost:12000/v1/authn/callback"
+  scopes:
+  - openid
+  - email
+`, cfg)
+
+	email := "user@example.com"
+
+	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	defer mockprovider.Close()
+
+	mockStorage := authnmock.NewMockStorage()
+
+	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
+	
+	p, err := NewOIDCProvider(ctx, cfg, mockStorage)
+	assert.NoError(t, err)
+	assert.NotNil(t, p)
+
+	authURL, err := p.GetAuthCodeURL(context.Background(), "myState")
+	assert.NoError(t, err)
+	assert.True(t, strings.HasPrefix(authURL, "http://foo.example.com/oauth2/v1/authorize"))
+	assert.True(t, strings.Contains(authURL, "access_type=offline"))
+	assert.True(t, strings.Contains(authURL, "state=myState"))
+
+	token, err := p.Exchange(context.Background(), "aaa")
+	assert.NoError(t, err)
+	assert.NotNil(t, token)
+
+	// Check the store to make sure we recorded the token.
+	storedToken, err := mockStorage.Read(context.Background(), "user@example.com", "foo.example.com")
+	assert.NoError(t, err)
+	assert.NotNil(t, storedToken)
+
+	c, err := p.Verify(context.Background(), token.AccessToken)
+	assert.NoError(t, err)
+	assert.NotNil(t, c)
+	assert.Equal(t, email, c.Subject)
+
+	// Revoke all the tokens for foo.example.com
+	delete(mockStorage.Tokens, "foo.example.com")
+
+	// Verification should now fail.
+	c, err = p.Verify(context.Background(), token.AccessToken)
+	assert.Error(t, err)
+	assert.Nil(t, c)
+}
