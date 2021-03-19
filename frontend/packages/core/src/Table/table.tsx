@@ -79,13 +79,14 @@ export const Table: React.FC<TableProps> = ({ headings, children, ...props }) =>
 
 export interface TableRowProps extends Pick<MuiTableRowProps, "onClick"> {
   children?: React.ReactNode;
+  defaultValue?: string;
 }
 
-export const TableRow = ({ children = [], onClick }: TableRowProps) => (
+export const TableRow = ({ children = [], onClick, defaultValue = "", }: TableRowProps) => (
   <StyledTableRow onClick={onClick}>
     {React.Children.map(children, (value, index) => (
       // eslint-disable-next-line react/no-array-index-key
-      <TableCell key={index}>{value}</TableCell>
+      <TableCell key={index}>{(value == null) ? defaultValue : value}</TableCell>
     ))}
   </StyledTableRow>
 );
