@@ -14026,9 +14026,6 @@ export namespace clutch {
 
                 /** DescribeNamespaceRequest name */
                 name?: (string|null);
-
-                /** DescribeNamespaceRequest labels */
-                labels?: ({ [k: string]: string }|null);
             }
 
             /** Represents a DescribeNamespaceRequest. */
@@ -14048,9 +14045,6 @@ export namespace clutch {
 
                 /** DescribeNamespaceRequest name. */
                 public name: string;
-
-                /** DescribeNamespaceRequest labels. */
-                public labels: { [k: string]: string };
 
                 /**
                  * Verifies a DescribeNamespaceRequest message.

@@ -33281,7 +33281,6 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [clientset] DescribeNamespaceRequest clientset
                  * @property {string|null} [cluster] DescribeNamespaceRequest cluster
                  * @property {string|null} [name] DescribeNamespaceRequest name
-                 * @property {Object.<string,string>|null} [labels] DescribeNamespaceRequest labels
                  */
 
                 /**
@@ -33293,7 +33292,6 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.k8s.v1.IDescribeNamespaceRequest=} [properties] Properties to set
                  */
                 function DescribeNamespaceRequest(properties) {
-                    this.labels = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -33325,14 +33323,6 @@ export const clutch = $root.clutch = (() => {
                 DescribeNamespaceRequest.prototype.name = "";
 
                 /**
-                 * DescribeNamespaceRequest labels.
-                 * @member {Object.<string,string>} labels
-                 * @memberof clutch.k8s.v1.DescribeNamespaceRequest
-                 * @instance
-                 */
-                DescribeNamespaceRequest.prototype.labels = $util.emptyObject;
-
-                /**
                  * Verifies a DescribeNamespaceRequest message.
                  * @function verify
                  * @memberof clutch.k8s.v1.DescribeNamespaceRequest
@@ -33352,14 +33342,6 @@ export const clutch = $root.clutch = (() => {
                     if (message.name != null && message.hasOwnProperty("name"))
                         if (!$util.isString(message.name))
                             return "name: string expected";
-                    if (message.labels != null && message.hasOwnProperty("labels")) {
-                        if (!$util.isObject(message.labels))
-                            return "labels: object expected";
-                        let key = Object.keys(message.labels);
-                        for (let i = 0; i < key.length; ++i)
-                            if (!$util.isString(message.labels[key[i]]))
-                                return "labels: string{k:string} expected";
-                    }
                     return null;
                 };
 
@@ -33381,13 +33363,6 @@ export const clutch = $root.clutch = (() => {
                         message.cluster = String(object.cluster);
                     if (object.name != null)
                         message.name = String(object.name);
-                    if (object.labels) {
-                        if (typeof object.labels !== "object")
-                            throw TypeError(".clutch.k8s.v1.DescribeNamespaceRequest.labels: object expected");
-                        message.labels = {};
-                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
-                            message.labels[keys[i]] = String(object.labels[keys[i]]);
-                    }
                     return message;
                 };
 
@@ -33404,8 +33379,6 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.objects || options.defaults)
-                        object.labels = {};
                     if (options.defaults) {
                         object.clientset = "";
                         object.cluster = "";
@@ -33417,12 +33390,6 @@ export const clutch = $root.clutch = (() => {
                         object.cluster = message.cluster;
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
-                    let keys2;
-                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
-                        object.labels = {};
-                        for (let j = 0; j < keys2.length; ++j)
-                            object.labels[keys2[j]] = message.labels[keys2[j]];
-                    }
                     return object;
                 };
 

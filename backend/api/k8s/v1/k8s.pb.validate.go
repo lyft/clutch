@@ -5440,19 +5440,6 @@ func (m *DescribeNamespaceRequest) Validate() error {
 		}
 	}
 
-	for key, val := range m.GetLabels() {
-		_ = val
-
-		if len(key) < 1 {
-			return DescribeNamespaceRequestValidationError{
-				field:  fmt.Sprintf("Labels[%v]", key),
-				reason: "value length must be at least 1 bytes",
-			}
-		}
-
-		// no validation rules for Labels[key]
-	}
-
 	return nil
 }
 

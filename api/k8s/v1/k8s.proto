@@ -882,8 +882,6 @@ message DescribeNamespaceRequest {
   string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 3 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 4 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeNamespaceResponse {
