@@ -12,9 +12,9 @@ import {
   AccordionProps,
 } from "../accordion";
 import { Button } from "../button";
-import { Error } from "../Feedback";
+import { Alert } from "../Feedback";
 import { TextField } from "../Input/text-field";
-import { client } from "../network";
+import { client } from "../Network";
 
 import type { ChangeEventTarget } from "./hydrator";
 import { convertChangeEvent, hydrateField } from "./hydrator";
@@ -122,7 +122,7 @@ const SchemaResolver = ({ schema, expanded, onClick, submitHandler }: SchemaReso
       >
         <SchemaDetails>
           {schema.error ? (
-            <Error message={`Schema Error: ${schema.error.message}`} />
+            <Alert severity="error">Schema Error: ${schema.error.message}</Alert>
           ) : (
             schema.fields.map(field => hydrateField(field, onChange, schemaValidation))
           )}
