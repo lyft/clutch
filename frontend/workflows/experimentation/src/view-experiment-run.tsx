@@ -19,7 +19,7 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
   const [experiment, setExperiment] = useState<
     IClutch.chaos.experimentation.v1.ExperimentRunDetails | undefined
   >(undefined);
-  const [error, setError] = useState(undefined);
+  const [error, setError] = useState<ClutchError | undefined>(undefined);
 
   const { runID } = useParams();
   const navigate = useNavigate();

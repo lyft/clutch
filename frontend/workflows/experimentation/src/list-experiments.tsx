@@ -21,7 +21,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, lin
   const [experiments, setExperiments] = useState<
     IClutch.chaos.experimentation.v1.ListViewItem[] | undefined
   >(undefined);
-  const [error, setError] = useState(undefined);
+  const [error, setError] = useState<ClutchError | undefined>(undefined);
 
   const navigate = useNavigate();
 
