@@ -103,7 +103,13 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
         <Grid container justify="center">
           {((state.activeStep === lastStepIndex && !isLoading && isMultistep) || hasError) && (
             <ButtonGroup>
-              <Button text="Start Over" onClick={() => dispatch(WizardAction.RESET)} />
+              <Button
+                text="Start Over"
+                onClick={() => {
+                  dataLayoutManager.reset();
+                  dispatch(WizardAction.RESET);
+                }}
+              />
             </ButtonGroup>
           )}
         </Grid>

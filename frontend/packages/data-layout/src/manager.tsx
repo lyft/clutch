@@ -13,6 +13,14 @@ const assign = (key: string, value: object): Thunk<ManagerLayout, Action> => {
   };
 };
 
+const reset = (): Thunk<ManagerLayout, Action> => {
+  return dispatch => {
+    dispatch({
+      type: ManagerAction.RESET,
+    });
+  };
+};
+
 const update = (key: string, value: object): Thunk<ManagerLayout, Action> => {
   return dispatch => {
     dispatch({
@@ -76,6 +84,7 @@ interface DataManager {
   assign: (key: string, value: object) => void;
   hydrate: (key: string) => void;
   update: (key: string, value: object) => void;
+  reset: () => void;
 }
 
 const defaultTransform = (data: object): object => data;
@@ -83,14 +92,16 @@ const defaultErrorTransform = (err: Error): string => {
   return err?.response?.displayText ?? err.message;
 };
 
-const useDataLayoutManager = (layouts: ManagerLayout): DataManager => {
-  const initialState = {};
+const initialLayoutStepState = { data: {}, isLoading: true, error: null };
+
+const defaultState = (layouts: ManagerLayout) => {
+  const initializedLayouts = {};
   Object.keys(layouts).forEach(key => {
     const layout = layouts[key];
-    initialState[key] = { data: {}, isLoading: true, error: null };
+    initializedLayouts[key] = initialLayoutStepState;
     if (layout?.hydrator !== undefined) {
-      initialState[key] = {
-        ...initialState[key],
+      initializedLayouts[key] = {
+        ...initializedLayouts[key],
         hydrator: layout?.hydrator || (() => {}),
         transformResponse: layout.transformResponse || defaultTransform,
         transformError: layout.transformError || defaultErrorTransform,
@@ -99,6 +110,11 @@ const useDataLayoutManager = (layouts: ManagerLayout): DataManager => {
       };
     }
   });
+  return initializedLayouts;
+};
+
+const useDataLayoutManager = (layouts: ManagerLayout): DataManager => {
+  const initialState = defaultState(layouts);
 
   const [state, dispatch] = useManagerState(initialState);
   return {
@@ -106,6 +122,7 @@ const useDataLayoutManager = (layouts: ManagerLayout): DataManager => {
     assign: (key, value) => dispatch(assign(key, value)),
     hydrate: key => dispatch(hydrate(key)),
     update: (key, value) => dispatch(update(key, value)),
+    reset: () => dispatch(reset()),
   };
 };
 
