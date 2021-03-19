@@ -82,11 +82,11 @@ export interface TableRowProps extends Pick<MuiTableRowProps, "onClick"> {
   defaultValue?: string;
 }
 
-export const TableRow = ({ children = [], onClick, defaultValue = "", }: TableRowProps) => (
+export const TableRow = ({ children = [], onClick, defaultValue = "" }: TableRowProps) => (
   <StyledTableRow onClick={onClick}>
     {React.Children.map(children, (value, index) => (
       // eslint-disable-next-line react/no-array-index-key
-      <TableCell key={index}>{(value == null) ? defaultValue : value}</TableCell>
+      <TableCell key={index}>{value == null ? defaultValue : value}</TableCell>
     ))}
   </StyledTableRow>
 );
