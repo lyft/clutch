@@ -1,5 +1,5 @@
 import React from "react";
-import { Error } from "@clutch-sh/core";
+import { Alert } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Container, Grid, Typography } from "@material-ui/core";
 
@@ -26,7 +26,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ heading, error, children }) => 
         <Heading variant="h5">
           <strong>{heading}</strong>
         </Heading>
-        {hasError && <Error message={error} />}
+        {hasError && <Alert severity="error">{error}</Alert>}
         <Grid>{children}</Grid>
       </Container>
     </PageContainer>

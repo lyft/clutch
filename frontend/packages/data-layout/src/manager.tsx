@@ -1,4 +1,5 @@
 import type { Thunk } from "react-hook-thunk-reducer";
+import type { ClutchError } from "@clutch-sh/core";
 import _ from "lodash";
 
 import type { Action, ManagerLayout } from "./state";
@@ -43,7 +44,16 @@ const hydrate = (key: string): Thunk<ManagerLayout, Action> => {
       if (args.some(element => _.isEmpty(element))) {
         dispatch({
           type: ManagerAction.HYDRATE_END,
-          payload: { key, error: `Missing dependency for data layout: ${key}` },
+          payload: {
+            key,
+            error: {
+              message: `Missing dependency for data layout: '${key}'`,
+              status: {
+                code: 404,
+                text: "Not Found",
+              },
+            } as ClutchError,
+          },
         });
         return;
       }
@@ -72,13 +82,6 @@ const hydrate = (key: string): Thunk<ManagerLayout, Action> => {
   };
 };
 
-interface Error {
-  response?: {
-    displayText?: string;
-  };
-  message: string;
-}
-
 interface DataManager {
   state: object;
   assign: (key: string, value: object) => void;
@@ -88,9 +91,7 @@ interface DataManager {
 }
 
 const defaultTransform = (data: object): object => data;
-const defaultErrorTransform = (err: Error): string => {
-  return err?.response?.displayText ?? err.message;
-};
+const defaultErrorTransform = (err: any): ClutchError => err;
 
 const initialLayoutStepState = { data: {}, isLoading: true, error: null };
 

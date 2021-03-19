@@ -7,17 +7,19 @@ import Form from "./Input/form";
 import { RadioGroup } from "./Input/radio-group";
 import { Select } from "./Input/select";
 import { TextField } from "./Input/text-field";
+// @ts-ignore
+import { ClutchError } from "./Network/errors";
 import { Accordion, AccordionDetails } from "./accordion";
 import ClutchApp from "./AppProvider";
 import { Button, ButtonGroup, ButtonProps, ClipboardButton } from "./button";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
 import { Dialog, DialogActions, DialogContent } from "./dialog";
-import { Error, Hint, Note, NoteConfig, NotePanel, Warning } from "./Feedback";
+import { Alert, Error, Hint, Note, NoteConfig, NotePanel, Warning } from "./Feedback";
 import { AvatarIcon, StatusIcon } from "./icon";
 import { Link } from "./link";
 import Loadable from "./loading";
-import { client, ClientError } from "./network";
+import { client } from "./Network";
 import ExpansionPanel from "./panel";
 import { Paper } from "./paper";
 import Resolver from "./Resolver";
@@ -29,6 +31,7 @@ export {
   Accordion,
   AccordionDetails,
   AccordionRow,
+  Alert,
   AvatarIcon,
   ClutchApp,
   BaseWorkflowProps,
@@ -37,8 +40,8 @@ export {
   ButtonProps,
   CheckboxPanel,
   client,
-  ClientError,
   ClipboardButton,
+  ClutchError,
   Confirmation,
   Dialog,
   DialogActions,
