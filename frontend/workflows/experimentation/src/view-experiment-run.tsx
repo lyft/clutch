@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { clutch as IClutch } from "@clutch-sh/api";
+import type { ClutchError } from "@clutch-sh/core";
 import {
   BaseWorkflowProps,
   Button,
@@ -18,7 +19,7 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
   const [experiment, setExperiment] = useState<
     IClutch.chaos.experimentation.v1.ExperimentRunDetails | undefined
   >(undefined);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(undefined);
 
   const { runID } = useParams();
   const navigate = useNavigate();
@@ -55,8 +56,8 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
             .then(() => {
               setExperiment(undefined);
             })
-            .catch(err => {
-              setError(err.response.statusText);
+            .catch((err: ClutchError) => {
+              setError(err);
             });
         }}
       />
@@ -71,8 +72,8 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
       .then(response => {
         setExperiment(response?.data?.runDetails);
       })
-      .catch(err => {
-        setError(err.response.statusText);
+      .catch((err: ClutchError) => {
+        setError(err);
       });
   }
 
