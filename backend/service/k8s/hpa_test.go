@@ -216,6 +216,7 @@ func TestProtoForHPAClusterName(t *testing.T) {
 			if tt.hpa.Status.CurrentCPUUtilizationPercentage != nil {
 				assert.Equal(t, *tt.hpa.Status.CurrentCPUUtilizationPercentage, hpa.CurrentCpuUtilizationPercentage.Value)
 			}
+
 			assert.Equal(t, tt.hpa.Status.CurrentReplicas, int32(hpa.Sizing.CurrentReplicas))
 			assert.Equal(t, tt.hpa.Status.DesiredReplicas, int32(hpa.Sizing.DesiredReplicas))
 		})
