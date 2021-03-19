@@ -6,7 +6,9 @@ import (
 	"database/sql"
 	"encoding/binary"
 	"encoding/json"
+	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"go.uber.org/zap"
@@ -100,16 +102,15 @@ func (c *client) startTopologyCache(ctx context.Context) {
 }
 
 func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest, service string) {
-	for obj := range objs {
-		c.scope.Tagged(map[string]string{
-			"service": service,
-		}).SubScope("cache").Gauge("object_channel.queue_depth").Update(float64(len(objs)))
 
+	// batch to a number and then send it over
+	var batchInsert []*topologyv1.Resource
+	// var batchDelete []*topologyv1.Resource
+
+	for obj := range objs {
 		switch obj.Action {
 		case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
-			if err := c.setCache(ctx, obj.Resource); err != nil {
-				c.log.Error("Error setting cache", zap.Error(err))
-			}
+			batchInsert = append(batchInsert, obj.Resource)
 		case topologyv1.UpdateCacheRequest_DELETE:
 			if err := c.deleteCache(ctx, obj.Resource.Id, obj.Resource.Pb.TypeUrl); err != nil {
 				c.log.Error("Error deleting cache", zap.Error(err))
@@ -117,47 +118,120 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *
 		default:
 			c.log.Warn("UpdateCacheRequest action is not implemented", zap.String("action", obj.Action.String()))
 		}
+
+		// yes i know this wont work but testing with it anyway
+		if len(batchInsert) >= 2 {
+			if err := c.setCache(ctx, batchInsert); err != nil {
+				c.log.Error("Error setting cache", zap.Error(err))
+			}
+
+			// Once the batch is set successfully, clear it.
+			batchInsert = []*topologyv1.Resource{}
+		}
 	}
+
+	// for obj := range objs {
+	// 	c.scope.Tagged(map[string]string{
+	// 		"service": service,
+	// 	}).SubScope("cache").Gauge("object_channel.queue_depth").Update(float64(len(objs)))
+
+	// 	switch obj.Action {
+	// 	case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
+	// 		if err := c.setCache(ctx, obj.Resource); err != nil {
+	// 			c.log.Error("Error setting cache", zap.Error(err))
+	// 		}
+	// 	case topologyv1.UpdateCacheRequest_DELETE:
+	// 		if err := c.deleteCache(ctx, obj.Resource.Id, obj.Resource.Pb.TypeUrl); err != nil {
+	// 			c.log.Error("Error deleting cache", zap.Error(err))
+	// 		}
+	// 	default:
+	// 		c.log.Warn("UpdateCacheRequest action is not implemented", zap.String("action", obj.Action.String()))
+	// 	}
+	// }
 }
 
-func (c *client) setCache(ctx context.Context, obj *topologyv1.Resource) error {
-	const upsertQuery = `
+func (c *client) setCache(ctx context.Context, obj []*topologyv1.Resource) error {
+	queryString := make([]string, 0, len(obj))
+	queryArgs := make([]interface{}, 0, len(obj)*4)
+
+	i := 0
+	for _, o := range obj {
+		queryString = append(queryString, fmt.Sprintf("($%d, $%d, $%d, $%d)", i*4+1, i*4+2, i*4+3, i*4+4))
+
+		metadataJson, err := json.Marshal(o.Metadata)
+		if err != nil {
+			c.scope.SubScope("cache").Counter("set.failure").Inc(1)
+			return err
+		}
+
+		dataJson, err := protojson.Marshal(o.Pb)
+		if err != nil {
+			c.scope.SubScope("cache").Counter("set.failure").Inc(1)
+			return err
+		}
+
+		// append args in column order
+		queryArgs = append(queryArgs, o.Id)
+		queryArgs = append(queryArgs, o.Pb.GetTypeUrl())
+		queryArgs = append(queryArgs, dataJson)
+		queryArgs = append(queryArgs, metadataJson)
+
+		i++
+	}
+
+	upsertQuery := fmt.Sprintf(`
 		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
-		VALUES ($1, $2, $3, $4)
+		VALUES %s
 		ON CONFLICT (id, resolver_type_url) DO UPDATE SET
 			resolver_type_url = EXCLUDED.resolver_type_url,
 			data = EXCLUDED.data,
 			metadata = EXCLUDED.metadata,
 			updated_at = NOW()
-	`
+	`, strings.Join(queryString, ","))
 
-	metadataJson, err := json.Marshal(obj.Metadata)
-	if err != nil {
-		c.scope.SubScope("cache").Counter("set.failure").Inc(1)
-		return err
-	}
-
-	dataJson, err := protojson.Marshal(obj.Pb)
-	if err != nil {
-		c.scope.SubScope("cache").Counter("set.failure").Inc(1)
-		return err
-	}
-
-	_, err = c.db.ExecContext(
+	_, err := c.db.ExecContext(
 		ctx,
 		upsertQuery,
-		obj.Id,
-		obj.Pb.GetTypeUrl(),
-		dataJson,
-		metadataJson,
+		queryArgs...,
 	)
 	if err != nil {
 		c.scope.SubScope("cache").Counter("set.failure").Inc(1)
 		return err
 	}
 
-	c.scope.SubScope("cache").Counter("set.success").Inc(1)
+	for _, _ = range obj {
+		c.scope.SubScope("cache").Counter("set.success").Inc(1)
+	}
+
 	return nil
+
+	// metadataJson, err := json.Marshal(obj.Metadata)
+	// if err != nil {
+	// 	c.scope.SubScope("cache").Counter("set.failure").Inc(1)
+	// 	return err
+	// }
+
+	// dataJson, err := protojson.Marshal(obj.Pb)
+	// if err != nil {
+	// 	c.scope.SubScope("cache").Counter("set.failure").Inc(1)
+	// 	return err
+	// }
+
+	// _, err = c.db.ExecContext(
+	// 	ctx,
+	// 	upsertQuery,
+	// 	obj.Id,
+	// 	obj.Pb.GetTypeUrl(),
+	// 	dataJson,
+	// 	metadataJson,
+	// )
+	// if err != nil {
+	// 	c.scope.SubScope("cache").Counter("set.failure").Inc(1)
+	// 	return err
+	// }
+
+	// c.scope.SubScope("cache").Counter("set.success").Inc(1)
+	// return nil
 }
 
 func (c *client) deleteCache(ctx context.Context, id, type_url string) error {
