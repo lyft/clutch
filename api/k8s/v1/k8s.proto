@@ -232,8 +232,6 @@ message DescribePodRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribePodResponse {
@@ -433,8 +431,6 @@ message DescribeDeploymentRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeDeploymentResponse {
@@ -523,8 +519,6 @@ message DescribeStatefulSetRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeStatefulSetResponse {
@@ -623,8 +617,6 @@ message DescribeServiceRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeServiceResponse {
@@ -687,8 +679,6 @@ message DescribeCronJobRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeCronJobResponse {
@@ -771,9 +761,6 @@ message DescribeConfigMapRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
-  map<string, string> annotations = 6 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeConfigMapResponse {

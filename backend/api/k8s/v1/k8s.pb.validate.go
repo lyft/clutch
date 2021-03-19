@@ -76,19 +76,6 @@ func (m *DescribePodRequest) Validate() error {
 		}
 	}
 
-	for key, val := range m.GetLabels() {
-		_ = val
-
-		if len(key) < 1 {
-			return DescribePodRequestValidationError{
-				field:  fmt.Sprintf("Labels[%v]", key),
-				reason: "value length must be at least 1 bytes",
-			}
-		}
-
-		// no validation rules for Labels[key]
-	}
-
 	return nil
 }
 
@@ -1535,19 +1522,6 @@ func (m *DescribeDeploymentRequest) Validate() error {
 		}
 	}
 
-	for key, val := range m.GetLabels() {
-		_ = val
-
-		if len(key) < 1 {
-			return DescribeDeploymentRequestValidationError{
-				field:  fmt.Sprintf("Labels[%v]", key),
-				reason: "value length must be at least 1 bytes",
-			}
-		}
-
-		// no validation rules for Labels[key]
-	}
-
 	return nil
 }
 
@@ -2321,19 +2295,6 @@ func (m *DescribeStatefulSetRequest) Validate() error {
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
-	}
-
-	for key, val := range m.GetLabels() {
-		_ = val
-
-		if len(key) < 1 {
-			return DescribeStatefulSetRequestValidationError{
-				field:  fmt.Sprintf("Labels[%v]", key),
-				reason: "value length must be at least 1 bytes",
-			}
-		}
-
-		// no validation rules for Labels[key]
 	}
 
 	return nil
@@ -3113,19 +3074,6 @@ func (m *DescribeServiceRequest) Validate() error {
 		}
 	}
 
-	for key, val := range m.GetLabels() {
-		_ = val
-
-		if len(key) < 1 {
-			return DescribeServiceRequestValidationError{
-				field:  fmt.Sprintf("Labels[%v]", key),
-				reason: "value length must be at least 1 bytes",
-			}
-		}
-
-		// no validation rules for Labels[key]
-	}
-
 	return nil
 }
 
@@ -3550,19 +3498,6 @@ func (m *DescribeCronJobRequest) Validate() error {
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
-	}
-
-	for key, val := range m.GetLabels() {
-		_ = val
-
-		if len(key) < 1 {
-			return DescribeCronJobRequestValidationError{
-				field:  fmt.Sprintf("Labels[%v]", key),
-				reason: "value length must be at least 1 bytes",
-			}
-		}
-
-		// no validation rules for Labels[key]
 	}
 
 	return nil
@@ -4349,32 +4284,6 @@ func (m *DescribeConfigMapRequest) Validate() error {
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
-	}
-
-	for key, val := range m.GetLabels() {
-		_ = val
-
-		if len(key) < 1 {
-			return DescribeConfigMapRequestValidationError{
-				field:  fmt.Sprintf("Labels[%v]", key),
-				reason: "value length must be at least 1 bytes",
-			}
-		}
-
-		// no validation rules for Labels[key]
-	}
-
-	for key, val := range m.GetAnnotations() {
-		_ = val
-
-		if len(key) < 1 {
-			return DescribeConfigMapRequestValidationError{
-				field:  fmt.Sprintf("Annotations[%v]", key),
-				reason: "value length must be at least 1 bytes",
-			}
-		}
-
-		// no validation rules for Annotations[key]
 	}
 
 	return nil
