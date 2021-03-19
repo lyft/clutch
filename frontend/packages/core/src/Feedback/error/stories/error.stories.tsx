@@ -134,8 +134,12 @@ WithWrappedDetails.args = {
             message: "core-staging-0: yikes",
           },
           {
+            code: 3,
+            message: "core-staging-1: fail",
+          },
+          {
             code: 16,
-            message: "core-staging-1: nono",
+            message: "core-staging-2: nono",
             details: [
               {
                 type: "type.googleapis.com/clutch.k8s.v1.Status",
@@ -145,6 +149,14 @@ WithWrappedDetails.args = {
                 code: 401,
               },
             ],
+          },
+          {
+            code: 4,
+            message: "core-staging-3: oops",
+          },
+          {
+            code: 4,
+            message: "core-staging-4: ohno",
           },
         ],
       },

@@ -61,7 +61,6 @@ const AccordionDetails = styled(MuiAccordionDetails)({
   borderBottomRightRadius: "8px",
   display: "flex",
   flexDirection: "column",
-  // boxShadow: "0px 4px 6px rgba(53, 72, 212, 0.2)",
 });
 
 const ListItem = styled.li({
@@ -69,7 +68,6 @@ const ListItem = styled.li({
     color: "rgba(13, 16, 48, 0.6)",
   },
   padding: "2px 0",
-  lineHeight: "24px",
 });
 
 const ErrorDetailContainer = styled.div({
@@ -83,6 +81,7 @@ const ErrorDetailContainer = styled.div({
 const ErrorDetailText = styled.div({
   color: "rgba(13, 16, 48, 0.6)",
   fontSize: "14px",
+  lineHeight: "24px",
 });
 
 const DialogButton = styled(Button)({
@@ -140,7 +139,7 @@ const ErrorDetails = ({ error }: ErrorDetailsProps) => {
                 <ErrorDetailText style={{ color: "#0D1030" }}>
                   The following errors were encountered:
                 </ErrorDetailText>
-                <ul style={{ paddingLeft: "16px" }}>
+                <ul style={{ paddingLeft: "16px", margin: "4px 0" }}>
                   {error.details.map(detail => {
                     // Only render Clutch Error wrapped details errors here
                     if (isClutchErrorDetails(detail)) {
@@ -164,7 +163,9 @@ const ErrorDetails = ({ error }: ErrorDetailsProps) => {
                             );
                           })}
                           {remainingItems > 0 && (
-                            <ErrorDetailText>and {remainingItems} more...</ErrorDetailText>
+                            <ErrorDetailText style={{ margin: "2px 0" }}>
+                              and {remainingItems} more...
+                            </ErrorDetailText>
                           )}
                         </>
                       );
