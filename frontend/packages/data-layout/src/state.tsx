@@ -7,6 +7,7 @@ enum ManagerAction {
   HYDRATE_END,
   SET,
   UPDATE,
+  RESET,
 }
 
 export interface ManagerLayout {
@@ -36,6 +37,7 @@ export interface Action {
 
 const reducer = (state: ManagerLayout, action: Action): ManagerLayout => {
   const layoutKey = action?.payload?.key;
+  const stateClone = { ...state };
 
   switch (action.type) {
     case ManagerAction.HYDRATE_START:
@@ -84,6 +86,16 @@ const reducer = (state: ManagerLayout, action: Action): ManagerLayout => {
           ...action.payload?.value,
         },
       };
+    case ManagerAction.RESET:
+      Object.keys(state).forEach(key => {
+        stateClone[key] = {
+          ...state[key],
+          data: {},
+          isLoading: true,
+          error: null,
+        };
+      });
+      return stateClone;
     default:
       throw new Error(`Unknown data manager action: ${action.type}`);
   }
