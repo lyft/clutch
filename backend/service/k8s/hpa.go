@@ -3,6 +3,7 @@ package k8s
 import (
 	"context"
 
+	"github.com/golang/protobuf/ptypes/wrappers"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
@@ -39,7 +40,7 @@ func ProtoForHPA(cluster string, autoscaler *autoscalingv1.HorizontalPodAutoscal
 	if clusterName == "" {
 		clusterName = cluster
 	}
-	return &k8sapiv1.HPA{
+	ret := &k8sapiv1.HPA{
 		Cluster:   clusterName,
 		Namespace: autoscaler.Namespace,
 		Name:      autoscaler.Name,
@@ -52,6 +53,15 @@ func ProtoForHPA(cluster string, autoscaler *autoscalingv1.HorizontalPodAutoscal
 		Labels:      autoscaler.Labels,
 		Annotations: autoscaler.Annotations,
 	}
+
+	if autoscaler.Spec.TargetCPUUtilizationPercentage != nil {
+		ret.TargetCpuUtilizationPercentage = &wrappers.Int32Value{Value: *autoscaler.Spec.TargetCPUUtilizationPercentage}
+	}
+
+	if autoscaler.Status.CurrentCPUUtilizationPercentage != nil {
+		ret.CurrentCpuUtilizationPercentage = &wrappers.Int32Value{Value: *autoscaler.Status.CurrentCPUUtilizationPercentage}
+	}
+	return ret
 }
 
 func (s *svc) ResizeHPA(ctx context.Context, clientset, cluster, namespace, name string, sizing *k8sapiv1.ResizeHPARequest_Sizing) error {

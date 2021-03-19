@@ -10689,6 +10689,12 @@ export namespace clutch {
 
                 /** HPA annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** HPA currentCpuUtilizationPercentage */
+                currentCpuUtilizationPercentage?: (google.protobuf.IInt32Value|null);
+
+                /** HPA targetCpuUtilizationPercentage */
+                targetCpuUtilizationPercentage?: (google.protobuf.IInt32Value|null);
             }
 
             /** Represents a HPA. */
@@ -10717,6 +10723,12 @@ export namespace clutch {
 
                 /** HPA annotations. */
                 public annotations: { [k: string]: string };
+
+                /** HPA currentCpuUtilizationPercentage. */
+                public currentCpuUtilizationPercentage?: (google.protobuf.IInt32Value|null);
+
+                /** HPA targetCpuUtilizationPercentage. */
+                public targetCpuUtilizationPercentage?: (google.protobuf.IInt32Value|null);
 
                 /**
                  * Verifies a HPA message.

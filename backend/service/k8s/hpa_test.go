@@ -158,6 +158,46 @@ func TestProtoForHPAClusterName(t *testing.T) {
 				},
 			},
 		},
+		{
+			id:                  "foo",
+			inputClusterName:    "staging",
+			expectedClusterName: "staging",
+			hpa: &autoscalingv1.HorizontalPodAutoscaler{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "",
+				},
+				Spec: autoscalingv1.HorizontalPodAutoscalerSpec{
+					MinReplicas:                    newInt32(1),
+					MaxReplicas:                    69,
+					TargetCPUUtilizationPercentage: newInt32(69),
+				},
+				Status: autoscalingv1.HorizontalPodAutoscalerStatus{
+					CurrentReplicas:                 69,
+					DesiredReplicas:                 69,
+					CurrentCPUUtilizationPercentage: newInt32(69),
+				},
+			},
+		},
+		{
+			id:                  "bar",
+			inputClusterName:    "prod",
+			expectedClusterName: "prod",
+			hpa: &autoscalingv1.HorizontalPodAutoscaler{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "",
+				},
+				Spec: autoscalingv1.HorizontalPodAutoscalerSpec{
+					MinReplicas:                    newInt32(1),
+					MaxReplicas:                    3,
+					TargetCPUUtilizationPercentage: newInt32(42),
+				},
+				Status: autoscalingv1.HorizontalPodAutoscalerStatus{
+					CurrentReplicas:                 69,
+					DesiredReplicas:                 420,
+					CurrentCPUUtilizationPercentage: newInt32(88),
+				},
+			},
+		},
 	}
 
 	for _, tt := range hpaTestCases {
@@ -167,6 +207,18 @@ func TestProtoForHPAClusterName(t *testing.T) {
 
 			hpa := ProtoForHPA(tt.inputClusterName, tt.hpa)
 			assert.Equal(t, tt.expectedClusterName, hpa.Cluster)
+			assert.Equal(t, *tt.hpa.Spec.MinReplicas, int32(hpa.Sizing.MinReplicas))
+			assert.Equal(t, tt.hpa.Spec.MaxReplicas, int32(hpa.Sizing.MaxReplicas))
+
+			if tt.hpa.Spec.TargetCPUUtilizationPercentage != nil {
+				assert.Equal(t, *tt.hpa.Spec.TargetCPUUtilizationPercentage, hpa.TargetCpuUtilizationPercentage.Value)
+			}
+
+			if tt.hpa.Status.CurrentCPUUtilizationPercentage != nil {
+				assert.Equal(t, *tt.hpa.Status.CurrentCPUUtilizationPercentage, hpa.CurrentCpuUtilizationPercentage.Value)
+			}
+			assert.Equal(t, tt.hpa.Status.CurrentReplicas, int32(hpa.Sizing.CurrentReplicas))
+			assert.Equal(t, tt.hpa.Status.DesiredReplicas, int32(hpa.Sizing.DesiredReplicas))
 		})
 	}
 }
