@@ -79,7 +79,7 @@ export const Table: React.FC<TableProps> = ({ headings, children, ...props }) =>
 
 export interface TableRowProps extends Pick<MuiTableRowProps, "onClick"> {
   children?: React.ReactNode;
-  defaultValue?: any;
+  defaultValue?: React.ReactNode;
 }
 
 export const TableRow = ({ children = [], onClick, defaultValue }: TableRowProps) => (
