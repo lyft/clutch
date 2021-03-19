@@ -153,8 +153,8 @@ const ErrorDetails = ({ error }: ErrorDetailsProps) => {
                             return (
                               // eslint-disable-next-line react/no-array-index-key
                               <ListItem key={`${idx}-${wrapped.message}`}>
-                                <ErrorDetailText style={{ fontWeight: 500 }}>
-                                  <span style={{ color }}>
+                                <ErrorDetailText>
+                                  <span style={{ fontWeight: 500, color }}>
                                     {grpcCodeToText(wrapped.code)}&nbsp;
                                   </span>
                                   {wrapped.message}
