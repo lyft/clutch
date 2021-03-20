@@ -6,6 +6,7 @@ import { ClipboardButton } from "./button";
 
 const CopyButtonContainer = styled(Grid)({
   marginLeft: "7px",
+  flex: 0,
 });
 
 const Pre = styled.pre({
@@ -38,7 +39,7 @@ const Code = ({ children, showCopyButton = true }: CodeProps) => (
         </Fab>
       </CopyButtonContainer>
     )}
-    <Grid container justify="flex-start" alignItems="center">
+    <Grid style={{ flex: 1 }}container justify="flex-start" alignItems="center">
       {children}
     </Grid>
   </Pre>
