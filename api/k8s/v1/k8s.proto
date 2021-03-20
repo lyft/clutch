@@ -425,14 +425,9 @@ message Deployment {
   map<string, string> labels = 4;
   map<string, string> annotations = 5;
 
-  enum State {
-    UNSPECIFIED = 0;
-    UNKNOWN = 1;
-    ERROR = 2;
-    UPDATING = 3;
-    RUNNING = 4;
-  }
-  State state = 6;
+  uint32 replicas = 6;
+  uint32 updated_replicas = 7;
+  
 }
 
 message DescribeDeploymentRequest {

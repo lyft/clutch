@@ -6,7 +6,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	appsv1 "k8s.io/api/apps/v1"
-	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
@@ -64,29 +63,12 @@ func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1
 		clusterName = cluster
 	}
 
-	// Code below is same as lyftKube
-	// TODO: Should it go somewhere else?
-	var state k8sapiv1.Deployment_State
-	if deployment.Status.Replicas != deployment.Status.UpdatedReplicas {
-		state = k8sapiv1.Deployment_UPDATING
-		for _, cond := range deployment.Status.Conditions {
-			if cond.Type == appsv1.DeploymentProgressing {
-				if cond.Status != v1.ConditionTrue {
-					state = k8sapiv1.Deployment_ERROR
-				}
-			}
-		}
-	} else {
-		state = k8sapiv1.Deployment_RUNNING
-	}
-
 	return &k8sapiv1.Deployment{
 		Cluster:     clusterName,
 		Namespace:   deployment.Namespace,
 		Name:        deployment.Name,
 		Labels:      deployment.Labels,
 		Annotations: deployment.Annotations,
-		State:       state,
 	}
 }
 
