@@ -9,6 +9,10 @@ const CopyButtonContainer = styled(Grid)({
   flex: 0,
 });
 
+const ContentContainer = styled(Grid)({
+  flex: 1,
+});
+
 const Pre = styled.pre({
   border: "1px solid rgba(13, 16, 48, 0.38)",
   backgroundColor: "rgba(13,16,48,0.12)",
@@ -39,9 +43,9 @@ const Code = ({ children, showCopyButton = true }: CodeProps) => (
         </Fab>
       </CopyButtonContainer>
     )}
-    <Grid style={{ flex: 1 }}container justify="flex-start" alignItems="center">
+    <ContentContainer justify="flex-start" alignItems="center">
       {children}
-    </Grid>
+    </ContentContainer>
   </Pre>
 );
 
