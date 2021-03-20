@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	appsv1 "k8s.io/api/apps/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
@@ -242,6 +243,91 @@ func TestProtoForDeploymentClusterName(t *testing.T) {
 
 			deployment := ProtoForDeployment(tt.inputClusterName, tt.deployment)
 			assert.Equal(t, tt.expectedClusterName, deployment.Cluster)
+		})
+	}
+}
+
+func TestProtoForDeploymentState(t *testing.T) {
+	t.Parallel()
+
+	var deploymentTestCases = []struct {
+		id            string
+		expectedState k8sapiv1.Deployment_State
+		deployment    *appsv1.Deployment
+	}{
+		{
+			id:            "shrek",
+			expectedState: k8sapiv1.Deployment_ERROR,
+			deployment: &appsv1.Deployment{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "production",
+				},
+				Status: appsv1.DeploymentStatus{
+					Replicas:        69,
+					UpdatedReplicas: 420,
+					Conditions: []appsv1.DeploymentCondition{
+						{
+							Type:   appsv1.DeploymentProgressing,
+							Status: v1.ConditionFalse,
+						},
+					},
+				},
+			},
+		},
+		{
+			id:            "foo",
+			expectedState: k8sapiv1.Deployment_RUNNING,
+			deployment: &appsv1.Deployment{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "production",
+				},
+				Status: appsv1.DeploymentStatus{
+					Replicas:        69,
+					UpdatedReplicas: 69,
+				},
+			},
+		},
+		{
+			id:            "bar",
+			expectedState: k8sapiv1.Deployment_UPDATING,
+			deployment: &appsv1.Deployment{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "production",
+				},
+				Status: appsv1.DeploymentStatus{
+					Replicas:        69,
+					UpdatedReplicas: 420,
+				},
+			},
+		},
+		{
+			id:            "baz",
+			expectedState: k8sapiv1.Deployment_UPDATING,
+			deployment: &appsv1.Deployment{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "production",
+				},
+				Status: appsv1.DeploymentStatus{
+					Replicas:        69,
+					UpdatedReplicas: 420,
+					Conditions: []appsv1.DeploymentCondition{
+						{
+							Type:   appsv1.DeploymentProgressing,
+							Status: v1.ConditionTrue,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	for _, tt := range deploymentTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			deployment := ProtoForDeployment("", tt.deployment)
+			assert.Equal(t, tt.expectedState, deployment.State)
 		})
 	}
 }

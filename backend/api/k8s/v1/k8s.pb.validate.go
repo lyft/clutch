@@ -1462,6 +1462,8 @@ func (m *Deployment) Validate() error {
 
 	// no validation rules for Annotations
 
+	// no validation rules for State
+
 	return nil
 }
 

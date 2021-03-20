@@ -11145,6 +11145,9 @@ export namespace clutch {
 
                 /** Deployment annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** Deployment state */
+                state?: (clutch.k8s.v1.Deployment.State|null);
             }
 
             /** Represents a Deployment. */
@@ -11170,6 +11173,9 @@ export namespace clutch {
 
                 /** Deployment annotations. */
                 public annotations: { [k: string]: string };
+
+                /** Deployment state. */
+                public state: clutch.k8s.v1.Deployment.State;
 
                 /**
                  * Verifies a Deployment message.
@@ -11198,6 +11204,18 @@ export namespace clutch {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace Deployment {
+
+                /** State enum. */
+                enum State {
+                    UNSPECIFIED = 0,
+                    UNKNOWN = 1,
+                    ERROR = 2,
+                    UPDATING = 3,
+                    RUNNING = 4
+                }
             }
 
             /** Properties of a DescribeDeploymentRequest. */

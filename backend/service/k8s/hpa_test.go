@@ -223,6 +223,97 @@ func TestProtoForHPAClusterName(t *testing.T) {
 	}
 }
 
+func TestProtoForHPA(t *testing.T) {
+	t.Parallel()
+
+	var hpaTestCases = []struct {
+		id  string
+		hpa *autoscalingv1.HorizontalPodAutoscaler
+	}{
+		{
+			id: "clustername already set",
+			hpa: &autoscalingv1.HorizontalPodAutoscaler{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "production",
+				},
+				Spec: autoscalingv1.HorizontalPodAutoscalerSpec{
+					MinReplicas: newInt32(1),
+					MaxReplicas: 2,
+				},
+			},
+		},
+		{
+			id: "custername is not set",
+			hpa: &autoscalingv1.HorizontalPodAutoscaler{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "",
+				},
+				Spec: autoscalingv1.HorizontalPodAutoscalerSpec{
+					MinReplicas: newInt32(1),
+					MaxReplicas: 2,
+				},
+			},
+		},
+		{
+			id: "foo",
+			hpa: &autoscalingv1.HorizontalPodAutoscaler{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "",
+				},
+				Spec: autoscalingv1.HorizontalPodAutoscalerSpec{
+					MinReplicas:                    newInt32(1),
+					MaxReplicas:                    69,
+					TargetCPUUtilizationPercentage: newInt32(69),
+				},
+				Status: autoscalingv1.HorizontalPodAutoscalerStatus{
+					CurrentReplicas:                 69,
+					DesiredReplicas:                 69,
+					CurrentCPUUtilizationPercentage: newInt32(69),
+				},
+			},
+		},
+		{
+			id: "bar",
+			hpa: &autoscalingv1.HorizontalPodAutoscaler{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName: "",
+				},
+				Spec: autoscalingv1.HorizontalPodAutoscalerSpec{
+					MinReplicas:                    newInt32(1),
+					MaxReplicas:                    3,
+					TargetCPUUtilizationPercentage: newInt32(42),
+				},
+				Status: autoscalingv1.HorizontalPodAutoscalerStatus{
+					CurrentReplicas:                 69,
+					DesiredReplicas:                 420,
+					CurrentCPUUtilizationPercentage: newInt32(88),
+				},
+			},
+		},
+	}
+
+	for _, tt := range hpaTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			hpa := ProtoForHPA("", tt.hpa)
+			assert.Equal(t, *tt.hpa.Spec.MinReplicas, int32(hpa.Sizing.MinReplicas))
+			assert.Equal(t, tt.hpa.Spec.MaxReplicas, int32(hpa.Sizing.MaxReplicas))
+
+			if tt.hpa.Spec.TargetCPUUtilizationPercentage != nil {
+				assert.Equal(t, *tt.hpa.Spec.TargetCPUUtilizationPercentage, hpa.TargetCpuUtilizationPercentage.Value)
+			}
+			if tt.hpa.Status.CurrentCPUUtilizationPercentage != nil {
+				assert.Equal(t, *tt.hpa.Status.CurrentCPUUtilizationPercentage, hpa.CurrentCpuUtilizationPercentage.Value)
+			}
+
+			assert.Equal(t, tt.hpa.Status.CurrentReplicas, int32(hpa.Sizing.CurrentReplicas))
+			assert.Equal(t, tt.hpa.Status.DesiredReplicas, int32(hpa.Sizing.DesiredReplicas))
+		})
+	}
+}
+
 func TestDeleteHPA(t *testing.T) {
 	cs := testHPAClientset()
 	s := &svc{

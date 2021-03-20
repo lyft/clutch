@@ -26267,6 +26267,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [name] Deployment name
                  * @property {Object.<string,string>|null} [labels] Deployment labels
                  * @property {Object.<string,string>|null} [annotations] Deployment annotations
+                 * @property {clutch.k8s.v1.Deployment.State|null} [state] Deployment state
                  */
 
                 /**
@@ -26327,6 +26328,14 @@ export const clutch = $root.clutch = (() => {
                 Deployment.prototype.annotations = $util.emptyObject;
 
                 /**
+                 * Deployment state.
+                 * @member {clutch.k8s.v1.Deployment.State} state
+                 * @memberof clutch.k8s.v1.Deployment
+                 * @instance
+                 */
+                Deployment.prototype.state = 0;
+
+                /**
                  * Verifies a Deployment message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Deployment
@@ -26362,6 +26371,17 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.annotations[key[i]]))
                                 return "annotations: string{k:string} expected";
                     }
+                    if (message.state != null && message.hasOwnProperty("state"))
+                        switch (message.state) {
+                        default:
+                            return "state: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                            break;
+                        }
                     return null;
                 };
 
@@ -26397,6 +26417,28 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
                             message.annotations[keys[i]] = String(object.annotations[keys[i]]);
                     }
+                    switch (object.state) {
+                    case "UNSPECIFIED":
+                    case 0:
+                        message.state = 0;
+                        break;
+                    case "UNKNOWN":
+                    case 1:
+                        message.state = 1;
+                        break;
+                    case "ERROR":
+                    case 2:
+                        message.state = 2;
+                        break;
+                    case "UPDATING":
+                    case 3:
+                        message.state = 3;
+                        break;
+                    case "RUNNING":
+                    case 4:
+                        message.state = 4;
+                        break;
+                    }
                     return message;
                 };
 
@@ -26421,6 +26463,7 @@ export const clutch = $root.clutch = (() => {
                         object.cluster = "";
                         object.namespace = "";
                         object.name = "";
+                        object.state = options.enums === String ? "UNSPECIFIED" : 0;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -26439,6 +26482,8 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < keys2.length; ++j)
                             object.annotations[keys2[j]] = message.annotations[keys2[j]];
                     }
+                    if (message.state != null && message.hasOwnProperty("state"))
+                        object.state = options.enums === String ? $root.clutch.k8s.v1.Deployment.State[message.state] : message.state;
                     return object;
                 };
 
@@ -26452,6 +26497,26 @@ export const clutch = $root.clutch = (() => {
                 Deployment.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
+
+                /**
+                 * State enum.
+                 * @name clutch.k8s.v1.Deployment.State
+                 * @enum {number}
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} UNKNOWN=1 UNKNOWN value
+                 * @property {number} ERROR=2 ERROR value
+                 * @property {number} UPDATING=3 UPDATING value
+                 * @property {number} RUNNING=4 RUNNING value
+                 */
+                Deployment.State = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "UNKNOWN"] = 1;
+                    values[valuesById[2] = "ERROR"] = 2;
+                    values[valuesById[3] = "UPDATING"] = 3;
+                    values[valuesById[4] = "RUNNING"] = 4;
+                    return values;
+                })();
 
                 return Deployment;
             })();
