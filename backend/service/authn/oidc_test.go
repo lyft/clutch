@@ -129,7 +129,7 @@ oidc:
 	mockStorage := authnmock.NewMockStorage()
 
 	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
-	
+
 	p, err := NewOIDCProvider(ctx, cfg, mockStorage)
 	assert.NoError(t, err)
 	assert.NotNil(t, p)
