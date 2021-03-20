@@ -1,5 +1,6 @@
 import React from "react";
-import { Alert } from "@clutch-sh/core";
+import type { ClutchError } from "@clutch-sh/core";
+import { Error } from "@clutch-sh/core";
 import styled from "@emotion/styled";
 import { Container, Grid, Typography } from "@material-ui/core";
 
@@ -15,18 +16,18 @@ const Heading = styled(Typography)({
 
 interface PageLayoutProps {
   heading: string;
-  error?: any;
+  error?: ClutchError;
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({ heading, error, children }) => {
-  const hasError = error !== undefined && error !== "" && error !== null;
+  const hasError = error !== undefined && error !== null;
   return (
     <PageContainer>
       <Container>
         <Heading variant="h5">
           <strong>{heading}</strong>
         </Heading>
-        {hasError && <Alert severity="error">{error}</Alert>}
+        {hasError && <Error subject={error} />}
         <Grid>{children}</Grid>
       </Container>
     </PageContainer>
