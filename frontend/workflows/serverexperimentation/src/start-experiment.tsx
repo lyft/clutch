@@ -16,7 +16,8 @@ import { PageLayout } from "@clutch-sh/experimentation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import { FormFields, FormItem } from "./form-fields";
+import type { FormItem } from "./form-fields";
+import FormFields from "./form-fields";
 
 enum FaultType {
   ABORT = "Abort",

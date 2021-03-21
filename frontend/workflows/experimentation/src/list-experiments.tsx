@@ -4,7 +4,8 @@ import type { clutch as IClutch } from "@clutch-sh/api";
 import { BaseWorkflowProps, Button, ButtonGroup, client } from "@clutch-sh/core";
 
 import PageLayout from "./core/page-layout";
-import { Column, ListView } from "./list-view";
+import type { Column } from "./list-view";
+import ListView from "./list-view";
 
 interface ExperimentTypeLinkProps {
   displayName: string;
