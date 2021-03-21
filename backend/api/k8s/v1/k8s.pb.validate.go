@@ -1031,6 +1031,26 @@ func (m *HPA) Validate() error {
 
 	// no validation rules for Annotations
 
+	if v, ok := interface{}(m.GetCurrentCpuUtilizationPercentage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return HPAValidationError{
+				field:  "CurrentCpuUtilizationPercentage",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetTargetCpuUtilizationPercentage()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return HPAValidationError{
+				field:  "TargetCpuUtilizationPercentage",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 
@@ -1441,6 +1461,10 @@ func (m *Deployment) Validate() error {
 	// no validation rules for Labels
 
 	// no validation rules for Annotations
+
+	// no validation rules for StatusReplicas
+
+	// no validation rules for StatusUpdatedReplicas
 
 	return nil
 }

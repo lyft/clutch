@@ -245,3 +245,48 @@ func TestProtoForDeploymentClusterName(t *testing.T) {
 		})
 	}
 }
+
+func TestProtoForDeploymentReplicas(t *testing.T) {
+	t.Parallel()
+
+	var deploymentTestCases = []struct {
+		id                      string
+		expectedReplicas        uint32
+		expectedUpdatedReplicas uint32
+		deployment              *appsv1.Deployment
+	}{
+		{
+			id:                      "foo",
+			expectedReplicas:        69,
+			expectedUpdatedReplicas: 420,
+			deployment: &appsv1.Deployment{
+				Status: appsv1.DeploymentStatus{
+					Replicas:        69,
+					UpdatedReplicas: 420,
+				},
+			},
+		},
+		{
+			id:                      "oof",
+			expectedReplicas:        42,
+			expectedUpdatedReplicas: 314,
+			deployment: &appsv1.Deployment{
+				Status: appsv1.DeploymentStatus{
+					Replicas:        42,
+					UpdatedReplicas: 314,
+				},
+			},
+		},
+	}
+
+	for _, tt := range deploymentTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			deployment := ProtoForDeployment("", tt.deployment)
+			assert.Equal(t, tt.expectedReplicas, deployment.StatusReplicas)
+			assert.Equal(t, tt.expectedUpdatedReplicas, deployment.StatusUpdatedReplicas)
+		})
+	}
+}

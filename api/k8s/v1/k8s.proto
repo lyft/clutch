@@ -371,6 +371,9 @@ message HPA {
 
   map<string, string> labels = 5;
   map<string, string> annotations = 6;
+
+  google.protobuf.Int32Value current_cpu_utilization_percentage = 7;
+  google.protobuf.Int32Value target_cpu_utilization_percentage = 8;
 }
 
 message ResizeHPARequest {
@@ -421,6 +424,9 @@ message Deployment {
 
   map<string, string> labels = 4;
   map<string, string> annotations = 5;
+
+  uint32 status_replicas = 6;
+  uint32 status_updated_replicas = 7;
 }
 
 message DescribeDeploymentRequest {

@@ -25250,6 +25250,8 @@ export const clutch = $root.clutch = (() => {
                  * @property {clutch.k8s.v1.HPA.ISizing|null} [sizing] HPA sizing
                  * @property {Object.<string,string>|null} [labels] HPA labels
                  * @property {Object.<string,string>|null} [annotations] HPA annotations
+                 * @property {google.protobuf.IInt32Value|null} [currentCpuUtilizationPercentage] HPA currentCpuUtilizationPercentage
+                 * @property {google.protobuf.IInt32Value|null} [targetCpuUtilizationPercentage] HPA targetCpuUtilizationPercentage
                  */
 
                 /**
@@ -25318,6 +25320,22 @@ export const clutch = $root.clutch = (() => {
                 HPA.prototype.annotations = $util.emptyObject;
 
                 /**
+                 * HPA currentCpuUtilizationPercentage.
+                 * @member {google.protobuf.IInt32Value|null|undefined} currentCpuUtilizationPercentage
+                 * @memberof clutch.k8s.v1.HPA
+                 * @instance
+                 */
+                HPA.prototype.currentCpuUtilizationPercentage = null;
+
+                /**
+                 * HPA targetCpuUtilizationPercentage.
+                 * @member {google.protobuf.IInt32Value|null|undefined} targetCpuUtilizationPercentage
+                 * @memberof clutch.k8s.v1.HPA
+                 * @instance
+                 */
+                HPA.prototype.targetCpuUtilizationPercentage = null;
+
+                /**
                  * Verifies a HPA message.
                  * @function verify
                  * @memberof clutch.k8s.v1.HPA
@@ -25357,6 +25375,16 @@ export const clutch = $root.clutch = (() => {
                         for (let i = 0; i < key.length; ++i)
                             if (!$util.isString(message.annotations[key[i]]))
                                 return "annotations: string{k:string} expected";
+                    }
+                    if (message.currentCpuUtilizationPercentage != null && message.hasOwnProperty("currentCpuUtilizationPercentage")) {
+                        let error = $root.google.protobuf.Int32Value.verify(message.currentCpuUtilizationPercentage);
+                        if (error)
+                            return "currentCpuUtilizationPercentage." + error;
+                    }
+                    if (message.targetCpuUtilizationPercentage != null && message.hasOwnProperty("targetCpuUtilizationPercentage")) {
+                        let error = $root.google.protobuf.Int32Value.verify(message.targetCpuUtilizationPercentage);
+                        if (error)
+                            return "targetCpuUtilizationPercentage." + error;
                     }
                     return null;
                 };
@@ -25398,6 +25426,16 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
                             message.annotations[keys[i]] = String(object.annotations[keys[i]]);
                     }
+                    if (object.currentCpuUtilizationPercentage != null) {
+                        if (typeof object.currentCpuUtilizationPercentage !== "object")
+                            throw TypeError(".clutch.k8s.v1.HPA.currentCpuUtilizationPercentage: object expected");
+                        message.currentCpuUtilizationPercentage = $root.google.protobuf.Int32Value.fromObject(object.currentCpuUtilizationPercentage);
+                    }
+                    if (object.targetCpuUtilizationPercentage != null) {
+                        if (typeof object.targetCpuUtilizationPercentage !== "object")
+                            throw TypeError(".clutch.k8s.v1.HPA.targetCpuUtilizationPercentage: object expected");
+                        message.targetCpuUtilizationPercentage = $root.google.protobuf.Int32Value.fromObject(object.targetCpuUtilizationPercentage);
+                    }
                     return message;
                 };
 
@@ -25423,6 +25461,8 @@ export const clutch = $root.clutch = (() => {
                         object.namespace = "";
                         object.name = "";
                         object.sizing = null;
+                        object.currentCpuUtilizationPercentage = null;
+                        object.targetCpuUtilizationPercentage = null;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -25443,6 +25483,10 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < keys2.length; ++j)
                             object.annotations[keys2[j]] = message.annotations[keys2[j]];
                     }
+                    if (message.currentCpuUtilizationPercentage != null && message.hasOwnProperty("currentCpuUtilizationPercentage"))
+                        object.currentCpuUtilizationPercentage = $root.google.protobuf.Int32Value.toObject(message.currentCpuUtilizationPercentage, options);
+                    if (message.targetCpuUtilizationPercentage != null && message.hasOwnProperty("targetCpuUtilizationPercentage"))
+                        object.targetCpuUtilizationPercentage = $root.google.protobuf.Int32Value.toObject(message.targetCpuUtilizationPercentage, options);
                     return object;
                 };
 
@@ -26223,6 +26267,8 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [name] Deployment name
                  * @property {Object.<string,string>|null} [labels] Deployment labels
                  * @property {Object.<string,string>|null} [annotations] Deployment annotations
+                 * @property {number|null} [statusReplicas] Deployment statusReplicas
+                 * @property {number|null} [statusUpdatedReplicas] Deployment statusUpdatedReplicas
                  */
 
                 /**
@@ -26283,6 +26329,22 @@ export const clutch = $root.clutch = (() => {
                 Deployment.prototype.annotations = $util.emptyObject;
 
                 /**
+                 * Deployment statusReplicas.
+                 * @member {number} statusReplicas
+                 * @memberof clutch.k8s.v1.Deployment
+                 * @instance
+                 */
+                Deployment.prototype.statusReplicas = 0;
+
+                /**
+                 * Deployment statusUpdatedReplicas.
+                 * @member {number} statusUpdatedReplicas
+                 * @memberof clutch.k8s.v1.Deployment
+                 * @instance
+                 */
+                Deployment.prototype.statusUpdatedReplicas = 0;
+
+                /**
                  * Verifies a Deployment message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Deployment
@@ -26318,6 +26380,12 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.annotations[key[i]]))
                                 return "annotations: string{k:string} expected";
                     }
+                    if (message.statusReplicas != null && message.hasOwnProperty("statusReplicas"))
+                        if (!$util.isInteger(message.statusReplicas))
+                            return "statusReplicas: integer expected";
+                    if (message.statusUpdatedReplicas != null && message.hasOwnProperty("statusUpdatedReplicas"))
+                        if (!$util.isInteger(message.statusUpdatedReplicas))
+                            return "statusUpdatedReplicas: integer expected";
                     return null;
                 };
 
@@ -26353,6 +26421,10 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
                             message.annotations[keys[i]] = String(object.annotations[keys[i]]);
                     }
+                    if (object.statusReplicas != null)
+                        message.statusReplicas = object.statusReplicas >>> 0;
+                    if (object.statusUpdatedReplicas != null)
+                        message.statusUpdatedReplicas = object.statusUpdatedReplicas >>> 0;
                     return message;
                 };
 
@@ -26377,6 +26449,8 @@ export const clutch = $root.clutch = (() => {
                         object.cluster = "";
                         object.namespace = "";
                         object.name = "";
+                        object.statusReplicas = 0;
+                        object.statusUpdatedReplicas = 0;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -26395,6 +26469,10 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < keys2.length; ++j)
                             object.annotations[keys2[j]] = message.annotations[keys2[j]];
                     }
+                    if (message.statusReplicas != null && message.hasOwnProperty("statusReplicas"))
+                        object.statusReplicas = message.statusReplicas;
+                    if (message.statusUpdatedReplicas != null && message.hasOwnProperty("statusUpdatedReplicas"))
+                        object.statusUpdatedReplicas = message.statusUpdatedReplicas;
                     return object;
                 };
 

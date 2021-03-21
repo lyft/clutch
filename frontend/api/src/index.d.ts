@@ -10710,6 +10710,12 @@ export namespace clutch {
 
                 /** HPA annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** HPA currentCpuUtilizationPercentage */
+                currentCpuUtilizationPercentage?: (google.protobuf.IInt32Value|null);
+
+                /** HPA targetCpuUtilizationPercentage */
+                targetCpuUtilizationPercentage?: (google.protobuf.IInt32Value|null);
             }
 
             /** Represents a HPA. */
@@ -10738,6 +10744,12 @@ export namespace clutch {
 
                 /** HPA annotations. */
                 public annotations: { [k: string]: string };
+
+                /** HPA currentCpuUtilizationPercentage. */
+                public currentCpuUtilizationPercentage?: (google.protobuf.IInt32Value|null);
+
+                /** HPA targetCpuUtilizationPercentage. */
+                public targetCpuUtilizationPercentage?: (google.protobuf.IInt32Value|null);
 
                 /**
                  * Verifies a HPA message.
@@ -11133,6 +11145,12 @@ export namespace clutch {
 
                 /** Deployment annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** Deployment statusReplicas */
+                statusReplicas?: (number|null);
+
+                /** Deployment statusUpdatedReplicas */
+                statusUpdatedReplicas?: (number|null);
             }
 
             /** Represents a Deployment. */
@@ -11158,6 +11176,12 @@ export namespace clutch {
 
                 /** Deployment annotations. */
                 public annotations: { [k: string]: string };
+
+                /** Deployment statusReplicas. */
+                public statusReplicas: number;
+
+                /** Deployment statusUpdatedReplicas. */
+                public statusUpdatedReplicas: number;
 
                 /**
                  * Verifies a Deployment message.

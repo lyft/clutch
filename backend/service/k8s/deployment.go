@@ -63,11 +63,13 @@ func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1
 		clusterName = cluster
 	}
 	return &k8sapiv1.Deployment{
-		Cluster:     clusterName,
-		Namespace:   deployment.Namespace,
-		Name:        deployment.Name,
-		Labels:      deployment.Labels,
-		Annotations: deployment.Annotations,
+		Cluster:               clusterName,
+		Namespace:             deployment.Namespace,
+		Name:                  deployment.Name,
+		Labels:                deployment.Labels,
+		Annotations:           deployment.Annotations,
+		StatusReplicas:        uint32(deployment.Status.Replicas),
+		StatusUpdatedReplicas: uint32(deployment.Status.UpdatedReplicas),
 	}
 }
 
