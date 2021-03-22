@@ -7,8 +7,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/uber-go/tally"
-
 	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
 	gcpRoute "github.com/envoyproxy/go-control-plane/envoy/config/route/v3"
 	gcpFilterCommon "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/common/fault/v3"
