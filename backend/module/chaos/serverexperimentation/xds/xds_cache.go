@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/uber-go/tally"
-
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	"github.com/golang/protobuf/ptypes"
