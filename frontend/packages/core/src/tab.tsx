@@ -7,7 +7,7 @@ import { TabContext, TabList, TabPanel as MuiTabPanel } from "@material-ui/lab";
 const StyledTab = styled(MuiTab)({
   minWidth: "111px",
   height: "46px",
-  padding: "0",
+  padding: "12px 32px",
   color: "rgba(13, 16, 48, 0.6)",
   borderBottom: "3px solid #E7E7EA",
   fontSize: "14px",
