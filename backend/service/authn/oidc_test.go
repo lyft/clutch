@@ -144,18 +144,26 @@ oidc:
 	assert.NoError(t, err)
 	assert.NotNil(t, token)
 
-	// Check the store to make sure we recorded the token.
-	storedToken, err := mockStorage.Read(context.Background(), "user@example.com", "foo.example.com")
+	// Check the store to make sure we recorded the provider token.
+	providerToken, err := mockStorage.Read(context.Background(), "user@example.com", "foo.example.com")
 	assert.NoError(t, err)
-	assert.NotNil(t, storedToken)
+	assert.NotNil(t, providerToken)
+
+	// Check the store to make sure we recorded the clutch issued token.
+	clutchToken, err := mockStorage.Read(context.Background(), "user@example.com", clutchProviderName)
+	assert.NoError(t, err)
+	assert.NotNil(t, clutchToken)
+
+	assert.NotEqual(t, providerToken, clutchToken)
 
 	c, err := p.Verify(context.Background(), token.AccessToken)
 	assert.NoError(t, err)
 	assert.NotNil(t, c)
 	assert.Equal(t, email, c.Subject)
 
-	// Revoke all the tokens for foo.example.com
-	delete(mockStorage.Tokens, "foo.example.com")
+	// Revoke all the tokens for clutch, leaving the provider token. This verifies that we explicitly
+	// check for the existence of the clutch issued token in the database.
+	delete(mockStorage.Tokens, clutchProviderName)
 
 	// Verification should now fail.
 	c, err = p.Verify(context.Background(), token.AccessToken)
