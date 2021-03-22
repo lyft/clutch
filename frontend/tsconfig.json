@@ -16,7 +16,10 @@
     },
     "preserveConstEnums": true,
     "target": "ES2018",
-    "types": ["jest", "node", "long"]
+    "types": ["jest", "node", "long"],
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "isolatedModules": true,
   },
   "exclude": [
     "node_modules",

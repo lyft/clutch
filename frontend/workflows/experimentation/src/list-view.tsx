@@ -101,7 +101,7 @@ const EnhancedTableHead: React.FC<EnhancedTableHeadProps> = ({
   );
 };
 
-interface Column {
+export interface Column {
   id: string;
   header: string;
   sortable?: boolean;
@@ -190,4 +190,4 @@ const ListView: React.FC<ListViewProps> = ({ columns, items, onRowSelection }) =
   );
 };
 
-export { Column, ListView };
+export default ListView;
