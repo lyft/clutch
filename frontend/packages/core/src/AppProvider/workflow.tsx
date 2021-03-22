@@ -4,6 +4,7 @@ import LaunchIcon from "@material-ui/icons/Launch";
 import { Alert } from "@material-ui/lab";
 
 import { Dialog, DialogContent } from "../dialog";
+import Code from "../text";
 
 export interface BaseWorkflowProps {
   heading: string;
@@ -109,10 +110,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
         <Grid container direction="column" justify="center" alignItems="center">
           <Dialog onClose={this.onDetailsClose} open={showDetails} title="Stack Trace">
             <DialogContent>
-              {errorInfo?.componentStack?.split("\n").map((i, key) => {
-                /* eslint-disable-next-line react/no-array-index-key */
-                return <div key={key}>{i}</div>;
-              })}
+              <Code>{errorInfo?.componentStack || "Could not determine stack trace"}</Code>
             </DialogContent>
           </Dialog>
           <Alert
