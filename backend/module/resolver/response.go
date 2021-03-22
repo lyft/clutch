@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
 	statuspb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	"github.com/lyft/clutch/backend/gateway/statuserr"
@@ -17,14 +16,14 @@ import (
 
 func newResponse() *response {
 	return &response{
-		Results:         []*any.Any{},
+		Results:         []*anypb.Any{},
 		PartialFailures: []*statuspb.Status{},
 	}
 }
 
 // Generic object to handle common operations for SearchResponse and ResolveResponse.
 type response struct {
-	Results         []*any.Any
+	Results         []*anypb.Any
 	PartialFailures []*statuspb.Status
 }
 
@@ -47,7 +46,7 @@ func (r *response) truncate(limit uint32) {
 
 func (r *response) marshalResults(results *resolver.Results) error {
 	for _, result := range results.Messages {
-		asAny, err := ptypes.MarshalAny(result)
+		asAny, err := anypb.New(result)
 		if err != nil {
 			return err
 		}

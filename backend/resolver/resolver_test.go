@@ -3,28 +3,30 @@ package resolver
 import (
 	"testing"
 
-	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	k8sv1resolver "github.com/lyft/clutch/backend/api/resolver/k8s/v1"
 	resolverv1 "github.com/lyft/clutch/backend/api/resolver/v1"
+	"github.com/lyft/clutch/backend/gateway/meta"
 )
 
 // Check that our TypeURL function matches proto's interpretation of the URL.
 func TestTypeURL(t *testing.T) {
-	u := TypeURL((*resolverv1.Schema)(nil))
+	u := meta.TypeURL((*resolverv1.Schema)(nil))
 
 	s := &resolverv1.Schema{}
-	a, _ := ptypes.MarshalAny(s)
+	a, _ := anypb.New(s)
 	assert.Equal(t, u, a.TypeUrl)
 	assert.Equal(t, u, "type.googleapis.com/clutch.resolver.v1.Schema")
 }
 
 func TestInputsToSchema(t *testing.T) {
 	tp := "type.googleapis.com/foo.v1.Bar"
-	m, err := InputsToSchemas(map[string][]descriptor.Message{
+	m, err := InputsToSchemas(map[string][]proto.Message{
 		tp: {
 			(*k8sv1resolver.PodID)(nil),
 		},
@@ -32,7 +34,7 @@ func TestInputsToSchema(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Len(t, m, 1)
 	assert.Len(t, m[tp], 1)
-	assert.Equal(t, TypeURL((*k8sv1resolver.PodID)(nil)), m[tp][0].TypeUrl)
+	assert.Equal(t, meta.TypeURL((*k8sv1resolver.PodID)(nil)), m[tp][0].TypeUrl)
 	assert.NotEmpty(t, m[tp][0].Metadata.DisplayName)
 	assert.NotEmpty(t, m[tp][0].Fields)
 }
