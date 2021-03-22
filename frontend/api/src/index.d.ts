@@ -9989,9 +9989,6 @@ export namespace clutch {
 
                 /** DescribePodRequest name */
                 name?: (string|null);
-
-                /** DescribePodRequest labels */
-                labels?: ({ [k: string]: string }|null);
             }
 
             /** Represents a DescribePodRequest. */
@@ -10014,9 +10011,6 @@ export namespace clutch {
 
                 /** DescribePodRequest name. */
                 public name: string;
-
-                /** DescribePodRequest labels. */
-                public labels: { [k: string]: string };
 
                 /**
                  * Verifies a DescribePodRequest message.
@@ -11202,9 +11196,6 @@ export namespace clutch {
 
                 /** DescribeDeploymentRequest name */
                 name?: (string|null);
-
-                /** DescribeDeploymentRequest labels */
-                labels?: ({ [k: string]: string }|null);
             }
 
             /** Represents a DescribeDeploymentRequest. */
@@ -11227,9 +11218,6 @@ export namespace clutch {
 
                 /** DescribeDeploymentRequest name. */
                 public name: string;
-
-                /** DescribeDeploymentRequest labels. */
-                public labels: { [k: string]: string };
 
                 /**
                  * Verifies a DescribeDeploymentRequest message.
@@ -11787,9 +11775,6 @@ export namespace clutch {
 
                 /** DescribeStatefulSetRequest name */
                 name?: (string|null);
-
-                /** DescribeStatefulSetRequest labels */
-                labels?: ({ [k: string]: string }|null);
             }
 
             /** Represents a DescribeStatefulSetRequest. */
@@ -11812,9 +11797,6 @@ export namespace clutch {
 
                 /** DescribeStatefulSetRequest name. */
                 public name: string;
-
-                /** DescribeStatefulSetRequest labels. */
-                public labels: { [k: string]: string };
 
                 /**
                  * Verifies a DescribeStatefulSetRequest message.
@@ -12391,9 +12373,6 @@ export namespace clutch {
 
                 /** DescribeServiceRequest name */
                 name?: (string|null);
-
-                /** DescribeServiceRequest labels */
-                labels?: ({ [k: string]: string }|null);
             }
 
             /** Represents a DescribeServiceRequest. */
@@ -12416,9 +12395,6 @@ export namespace clutch {
 
                 /** DescribeServiceRequest name. */
                 public name: string;
-
-                /** DescribeServiceRequest labels. */
-                public labels: { [k: string]: string };
 
                 /**
                  * Verifies a DescribeServiceRequest message.
@@ -12733,9 +12709,6 @@ export namespace clutch {
 
                 /** DescribeCronJobRequest name */
                 name?: (string|null);
-
-                /** DescribeCronJobRequest labels */
-                labels?: ({ [k: string]: string }|null);
             }
 
             /** Represents a DescribeCronJobRequest. */
@@ -12758,9 +12731,6 @@ export namespace clutch {
 
                 /** DescribeCronJobRequest name. */
                 public name: string;
-
-                /** DescribeCronJobRequest labels. */
-                public labels: { [k: string]: string };
 
                 /**
                  * Verifies a DescribeCronJobRequest message.
@@ -13273,12 +13243,6 @@ export namespace clutch {
 
                 /** DescribeConfigMapRequest name */
                 name?: (string|null);
-
-                /** DescribeConfigMapRequest labels */
-                labels?: ({ [k: string]: string }|null);
-
-                /** DescribeConfigMapRequest annotations */
-                annotations?: ({ [k: string]: string }|null);
             }
 
             /** Represents a DescribeConfigMapRequest. */
@@ -13301,12 +13265,6 @@ export namespace clutch {
 
                 /** DescribeConfigMapRequest name. */
                 public name: string;
-
-                /** DescribeConfigMapRequest labels. */
-                public labels: { [k: string]: string };
-
-                /** DescribeConfigMapRequest annotations. */
-                public annotations: { [k: string]: string };
 
                 /**
                  * Verifies a DescribeConfigMapRequest message.
