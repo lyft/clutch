@@ -23,7 +23,7 @@ type MockStorer struct {
 }
 
 type getExperimentArguments struct {
-	ConfigType string
+	ConfigType []string
 }
 
 func (fs *MockStorer) CreateExperiment(ctx context.Context, config *any.Any, startTime *time.Time, endTime *time.Time) (*experimentation.Experiment, error) {
@@ -34,9 +34,13 @@ func (fs *MockStorer) CancelExperimentRun(ctx context.Context, id uint64) error 
 	return nil
 }
 
-func (fs *MockStorer) GetExperiments(ctx context.Context, configTypes string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
+func (fs *MockStorer) GetExperiments(ctx context.Context, configTypes []string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
 	fs.GetExperimentArguments = getExperimentArguments{ConfigType: configTypes}
 	return nil, nil
+}
+
+func (fs *MockStorer) TerminateExperiment(ctx context.Context, id uint64, errorDetails string) error {
+	return nil
 }
 
 func (fs *MockStorer) GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error) {

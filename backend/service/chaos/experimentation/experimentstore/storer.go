@@ -27,10 +27,11 @@ const Name = "clutch.service.chaos.experimentation.store"
 type Storer interface {
 	CreateExperiment(context.Context, *any.Any, *time.Time, *time.Time) (*experimentation.Experiment, error)
 	CancelExperimentRun(context.Context, uint64) error
-	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
+	GetExperiments(ctx context.Context, configTypes []string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
 	GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error)
 	RegisterTransformation(transformation Transformation) error
+	TerminateExperiment(ctx context.Context, id uint64, errorReason string) error
 	Close()
 }
 
@@ -138,6 +139,17 @@ func (s *storer) CancelExperimentRun(ctx context.Context, id uint64) error {
          WHERE id = $1 AND cancellation_time IS NULL AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
 
 	_, err := s.db.ExecContext(ctx, sql, id)
+	return err
+}
+
+func (s *storer) TerminateExperimentRun(ctx context.Context, id uint64, terminationReason string) error {
+	sql :=
+		`UPDATE experiment_run 
+         SET cancellation_time = NOW()
+		 SET termination_reason = $2
+         WHERE id = $1 AND cancellation_time IS NULL AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
+
+	_, err := s.db.ExecContext(ctx, sql, id, terminationReason)
 	return err
 }
 

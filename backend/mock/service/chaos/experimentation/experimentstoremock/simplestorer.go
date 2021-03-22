@@ -46,6 +46,10 @@ func (s *SimpleStorer) CreateExperiment(ctx context.Context, config *anypb.Any, 
 	return s.experiments[len(s.experiments)-1].toProto(), nil
 }
 
+func (fs *SimpleStorer) TerminateExperiment(ctx context.Context, id uint64, errorDetails string) error {
+	return nil
+}
+
 func (s *SimpleStorer) CancelExperimentRun(ctx context.Context, id uint64) error {
 	s.Lock()
 	defer s.Unlock()
@@ -63,7 +67,7 @@ func (s *SimpleStorer) CancelExperimentRun(ctx context.Context, id uint64) error
 	return nil
 }
 
-func (s *SimpleStorer) GetExperiments(ctx context.Context, configType string, status experimentationv1.GetExperimentsRequest_Status) ([]*experimentationv1.Experiment, error) {
+func (s *SimpleStorer) GetExperiments(ctx context.Context, configType []string, status experimentationv1.GetExperimentsRequest_Status) ([]*experimentationv1.Experiment, error) {
 	s.Lock()
 	defer s.Unlock()
 
