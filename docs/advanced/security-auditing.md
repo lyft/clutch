@@ -270,7 +270,7 @@ Adding and customizing audit sinks lets you save or process infrastructure event
 #### Slack Sink
 By default, the Slack sink creates a formatted Slack message using a subset of information saved in an audit event. The default Slack message provides a summary that answers questions such as what operation was performed, who performed the operation, and what resources were operated on.
 
-< insert gif or picture >
+TODO: insert picture/gif
 
 The Slack sink requires your [Slack app’s](https://api.slack.com/start) bot token and the channel to post the messages. You can optionally provide filter rules to control what kinds of slack audits are sent to your channel.
 
@@ -296,12 +296,8 @@ services:
     typed_config:
       "@type": types.google.com/clutch.config.service.audit.v1.Config
       db_provider: clutch.service.db.postgres
-      filter:
-        denylist: true
-        rules:
-          - field: METHOD
-            text: Healthcheck
-      // highlight-next-line
+      // highlight-start
       sinks:
         - clutch.service.audit.sink.slack
+     // highlight-end
 ```
