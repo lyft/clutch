@@ -7,6 +7,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/uber-go/tally"
+
 	gcpCoreV3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
 	gcpRoute "github.com/envoyproxy/go-control-plane/envoy/config/route/v3"
 	gcpFilterCommon "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/common/fault/v3"
@@ -21,6 +23,7 @@ import (
 	"github.com/golang/protobuf/ptypes/duration"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/stretchr/testify/assert"
+	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
 
@@ -138,6 +141,7 @@ func TestSetSnapshotRTDS(t *testing.T) {
 	egressPrefix := "egress"
 	testCluster := "serviceA"
 	mockExperimentList := mockGenerateFaultData(t)
+	scope := tally.NewTestScope("", nil)
 
 	rtdsConfig := RTDSConfig{
 		layerName:     testRtdsLayerName,
@@ -163,7 +167,7 @@ func TestSetSnapshotRTDS(t *testing.T) {
 	resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
 	resources[gcpTypes.Runtime] = generateRTDSResource(testClusterFaults, &rtdsConfig, nil, zap.NewNop().Sugar())
 	assert.Nil(t, resources[gcpTypes.Runtime][0].Ttl)
-	err := setSnapshot(resources, testCluster, testCache, zap.NewNop().Sugar())
+	err := setSnapshot(resources, testCluster, testCache, false, zap.NewNop().Sugar(), scope)
 	if err != nil {
 		t.Errorf("setSnapshot failed %v", err)
 	}
@@ -202,6 +206,7 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 	testCluster := "serviceA"
 	ttl := time.Duration(2 * 1000 * 1000 * 1000)
 	mockExperimentList := mockGenerateFaultData(t)
+	scope := tally.NewTestScope("", nil)
 
 	rtdsConfig := RTDSConfig{
 		layerName:     testRtdsLayerName,
@@ -226,7 +231,7 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 
 	resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
 	resources[gcpTypes.Runtime] = generateRTDSResource(testClusterFaults, &rtdsConfig, &ttl, zap.NewNop().Sugar())
-	err := setSnapshot(resources, testCluster, testCache, zap.NewNop().Sugar())
+	err := setSnapshot(resources, testCluster, testCache, false, zap.NewNop().Sugar(), scope)
 	if err != nil {
 		t.Errorf("setSnapshot failed %v", err)
 	}
@@ -262,6 +267,8 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 func TestRefreshCache(t *testing.T) {
 	testCluster := "clusterA"
 	s := experimentstoremock.MockStorer{}
+	scope := tally.NewTestScope("", nil)
+
 	rtdsConfig := RTDSConfig{
 		layerName:     "test_layer",
 		ingressPrefix: "ingress",
@@ -274,7 +281,7 @@ func TestRefreshCache(t *testing.T) {
 	}
 
 	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
-	refreshCache(context.Background(), &s, testCache, nil, &rtdsConfig, &ecdsConfig, nil)
+	refreshCache(context.Background(), &s, testCache, nil, &rtdsConfig, &ecdsConfig, scope, nil)
 	assert.Equal(t, s.GetExperimentArguments.ConfigType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig")
 }
 
@@ -311,6 +318,7 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	testCluster := "serviceA"
 	var downstreamCluster string
 	mockExperimentList := mockGenerateFaultData(t)
+	scope := tally.NewTestScope("", nil)
 
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
@@ -335,7 +343,7 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
 	resources[gcpTypes.ExtensionConfig] = generateECDSResource(testClusterFaults, testCluster, nil, zap.NewNop().Sugar())
 	assert.Nil(t, resources[gcpTypes.ExtensionConfig][0].Ttl)
-	err := setSnapshot(resources, testCluster, testCache, zap.NewNop().Sugar())
+	err := setSnapshot(resources, testCluster, testCache, false, zap.NewNop().Sugar(), scope)
 	if err != nil {
 		t.Errorf("setSnapshot failed %v", err)
 	}
@@ -405,6 +413,7 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	testCluster := "serviceF"
 	var upstreamCluster string
 	mockExperimentList := mockGenerateFaultData(t)
+	scope := tally.NewTestScope("", nil)
 
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
@@ -431,7 +440,7 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
 	resources[gcpTypes.ExtensionConfig] = generateECDSResource(testClusterFaults, testCluster, nil, zap.NewNop().Sugar())
 	assert.Nil(t, resources[gcpTypes.ExtensionConfig][0].Ttl)
-	err := setSnapshot(resources, testCluster, testCache, zap.NewNop().Sugar())
+	err := setSnapshot(resources, testCluster, testCache, false, zap.NewNop().Sugar(), scope)
 	if err != nil {
 		t.Errorf("setSnapshot failed %v", err)
 	}

@@ -5,10 +5,13 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/uber-go/tally"
+
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/mitchellh/hashstructure/v2"
+	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
@@ -21,12 +24,12 @@ func PeriodicallyRefreshCache(s *Server) {
 	go func() {
 		for range ticker.C {
 			s.logger.Info("Refreshing xDS cache")
-			refreshCache(s.ctx, s.storer, s.snapshotCacheV3, s.resourceTTL, s.rtdsConfig, s.ecdsConfig, s.logger)
+			refreshCache(s.ctx, s.storer, s.snapshotCacheV3, s.resourceTTL, s.rtdsConfig, s.ecdsConfig, s.xdsScope, s.logger)
 		}
 	}()
 }
 
-func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCache gcpCacheV3.SnapshotCache, ttl *time.Duration, rtdsConfig *RTDSConfig, ecdsConfig *ECDSConfig, logger *zap.SugaredLogger) {
+func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCache gcpCacheV3.SnapshotCache, ttl *time.Duration, rtdsConfig *RTDSConfig, ecdsConfig *ECDSConfig, scope tally.Scope, logger *zap.SugaredLogger) {
 	allRunningExperiments, err := storer.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig", experimentation.GetExperimentsRequest_STATUS_RUNNING)
 	if err != nil {
 		logger.Errorw("Failed to get data from experiments store", "error", err)
@@ -70,7 +73,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 			emptyResources[gcpTypes.ExtensionConfig] = generateEmptyECDSResource(cluster, ecdsConfig, logger)
 			emptyResources[gcpTypes.Runtime] = generateRTDSResource([]*experimentation.Experiment{}, rtdsConfig, ttl, logger)
 
-			err := setSnapshot(emptyResources, cluster, snapshotCache, logger)
+			err := setSnapshot(emptyResources, cluster, snapshotCache, true, logger, scope)
 			if err != nil {
 				logger.Errorw("Unable to unset the fault for cluster", "cluster", cluster,
 					"error", err)
@@ -93,7 +96,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 			resources[gcpTypes.ExtensionConfig] = generateEmptyECDSResource(cluster, ecdsConfig, logger)
 		}
 
-		err := setSnapshot(resources, cluster, snapshotCache, logger)
+		err := setSnapshot(resources, cluster, snapshotCache, false, logger, scope)
 		if err != nil {
 			logger.Errorw("Unable to set the fault for cluster", "cluster", cluster,
 				"error", err)
@@ -101,7 +104,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 	}
 }
 
-func setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl, cluster string, snapshotCache gcpCacheV3.SnapshotCache, logger *zap.SugaredLogger) error {
+func setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl, cluster string, snapshotCache gcpCacheV3.SnapshotCache, isSnapshotEmpty bool, logger *zap.SugaredLogger, scope tally.Scope) error {
 	currentSnapshot, _ := snapshotCache.GetSnapshot(cluster)
 
 	snapshot := gcpCacheV3.Snapshot{}
@@ -130,6 +133,16 @@ func setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTt
 	err := snapshotCache.SetSnapshot(cluster, snapshot)
 	if err != nil {
 		return err
+	}
+
+	if isSnapshotEmpty {
+		scope.Tagged(map[string]string{
+			"cluster": cluster,
+		}).Counter("active_faults").Inc(-1)
+	} else {
+		scope.Tagged(map[string]string{
+			"cluster": cluster,
+		}).Counter("active_faults").Inc(1)
 	}
 
 	return nil
