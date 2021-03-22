@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"strconv"
+	"sync"
 	"syscall"
 	"time"
 
@@ -39,7 +40,8 @@ type client struct {
 	log   *zap.Logger
 	scope tally.Scope
 
-	cacheTTL time.Duration
+	cacheTTL        time.Duration
+	bulkInsertMutex sync.RWMutex
 }
 
 // CacheableTopology is implemented by a service that wishes to enable the topology API feature set
@@ -73,10 +75,11 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	}
 
 	c := &client{
-		config: topologyConfig,
-		db:     dbClient.DB(),
-		log:    logger,
-		scope:  scope,
+		config:          topologyConfig,
+		db:              dbClient.DB(),
+		log:             logger,
+		scope:           scope,
+		bulkInsertMutex: sync.RWMutex{},
 	}
 
 	if topologyConfig.Cache == nil {
