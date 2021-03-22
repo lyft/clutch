@@ -258,11 +258,11 @@ func TestProtoForDeploymentReplicas(t *testing.T) {
 		{
 			id:                      "foo",
 			expectedReplicas:        60,
-			expectedUpdatedReplicas: 42,
+			expectedUpdatedReplicas: 60,
 			deployment: &appsv1.Deployment{
 				Status: appsv1.DeploymentStatus{
 					Replicas:        60,
-					UpdatedReplicas: 42,
+					UpdatedReplicas: 60,
 				},
 			},
 		},
