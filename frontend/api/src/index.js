@@ -26267,8 +26267,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [name] Deployment name
                  * @property {Object.<string,string>|null} [labels] Deployment labels
                  * @property {Object.<string,string>|null} [annotations] Deployment annotations
-                 * @property {number|null} [statusReplicas] Deployment statusReplicas
-                 * @property {number|null} [statusUpdatedReplicas] Deployment statusUpdatedReplicas
+                 * @property {clutch.k8s.v1.Deployment.IStatus|null} [status] Deployment status
                  */
 
                 /**
@@ -26329,20 +26328,12 @@ export const clutch = $root.clutch = (() => {
                 Deployment.prototype.annotations = $util.emptyObject;
 
                 /**
-                 * Deployment statusReplicas.
-                 * @member {number} statusReplicas
+                 * Deployment status.
+                 * @member {clutch.k8s.v1.Deployment.IStatus|null|undefined} status
                  * @memberof clutch.k8s.v1.Deployment
                  * @instance
                  */
-                Deployment.prototype.statusReplicas = 0;
-
-                /**
-                 * Deployment statusUpdatedReplicas.
-                 * @member {number} statusUpdatedReplicas
-                 * @memberof clutch.k8s.v1.Deployment
-                 * @instance
-                 */
-                Deployment.prototype.statusUpdatedReplicas = 0;
+                Deployment.prototype.status = null;
 
                 /**
                  * Verifies a Deployment message.
@@ -26380,12 +26371,11 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.annotations[key[i]]))
                                 return "annotations: string{k:string} expected";
                     }
-                    if (message.statusReplicas != null && message.hasOwnProperty("statusReplicas"))
-                        if (!$util.isInteger(message.statusReplicas))
-                            return "statusReplicas: integer expected";
-                    if (message.statusUpdatedReplicas != null && message.hasOwnProperty("statusUpdatedReplicas"))
-                        if (!$util.isInteger(message.statusUpdatedReplicas))
-                            return "statusUpdatedReplicas: integer expected";
+                    if (message.status != null && message.hasOwnProperty("status")) {
+                        let error = $root.clutch.k8s.v1.Deployment.Status.verify(message.status);
+                        if (error)
+                            return "status." + error;
+                    }
                     return null;
                 };
 
@@ -26421,10 +26411,11 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
                             message.annotations[keys[i]] = String(object.annotations[keys[i]]);
                     }
-                    if (object.statusReplicas != null)
-                        message.statusReplicas = object.statusReplicas >>> 0;
-                    if (object.statusUpdatedReplicas != null)
-                        message.statusUpdatedReplicas = object.statusUpdatedReplicas >>> 0;
+                    if (object.status != null) {
+                        if (typeof object.status !== "object")
+                            throw TypeError(".clutch.k8s.v1.Deployment.status: object expected");
+                        message.status = $root.clutch.k8s.v1.Deployment.Status.fromObject(object.status);
+                    }
                     return message;
                 };
 
@@ -26449,8 +26440,7 @@ export const clutch = $root.clutch = (() => {
                         object.cluster = "";
                         object.namespace = "";
                         object.name = "";
-                        object.statusReplicas = 0;
-                        object.statusUpdatedReplicas = 0;
+                        object.status = null;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -26469,10 +26459,8 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < keys2.length; ++j)
                             object.annotations[keys2[j]] = message.annotations[keys2[j]];
                     }
-                    if (message.statusReplicas != null && message.hasOwnProperty("statusReplicas"))
-                        object.statusReplicas = message.statusReplicas;
-                    if (message.statusUpdatedReplicas != null && message.hasOwnProperty("statusUpdatedReplicas"))
-                        object.statusUpdatedReplicas = message.statusUpdatedReplicas;
+                    if (message.status != null && message.hasOwnProperty("status"))
+                        object.status = $root.clutch.k8s.v1.Deployment.Status.toObject(message.status, options);
                     return object;
                 };
 
@@ -26486,6 +26474,124 @@ export const clutch = $root.clutch = (() => {
                 Deployment.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
+
+                Deployment.Status = (function() {
+
+                    /**
+                     * Properties of a Status.
+                     * @memberof clutch.k8s.v1.Deployment
+                     * @interface IStatus
+                     * @property {number|null} [replicas] Status replicas
+                     * @property {number|null} [updatedReplicas] Status updatedReplicas
+                     */
+
+                    /**
+                     * Constructs a new Status.
+                     * @memberof clutch.k8s.v1.Deployment
+                     * @classdesc Represents a Status.
+                     * @implements IStatus
+                     * @constructor
+                     * @param {clutch.k8s.v1.Deployment.IStatus=} [properties] Properties to set
+                     */
+                    function Status(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Status replicas.
+                     * @member {number} replicas
+                     * @memberof clutch.k8s.v1.Deployment.Status
+                     * @instance
+                     */
+                    Status.prototype.replicas = 0;
+
+                    /**
+                     * Status updatedReplicas.
+                     * @member {number} updatedReplicas
+                     * @memberof clutch.k8s.v1.Deployment.Status
+                     * @instance
+                     */
+                    Status.prototype.updatedReplicas = 0;
+
+                    /**
+                     * Verifies a Status message.
+                     * @function verify
+                     * @memberof clutch.k8s.v1.Deployment.Status
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Status.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.replicas != null && message.hasOwnProperty("replicas"))
+                            if (!$util.isInteger(message.replicas))
+                                return "replicas: integer expected";
+                        if (message.updatedReplicas != null && message.hasOwnProperty("updatedReplicas"))
+                            if (!$util.isInteger(message.updatedReplicas))
+                                return "updatedReplicas: integer expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Status message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.k8s.v1.Deployment.Status
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.k8s.v1.Deployment.Status} Status
+                     */
+                    Status.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.k8s.v1.Deployment.Status)
+                            return object;
+                        let message = new $root.clutch.k8s.v1.Deployment.Status();
+                        if (object.replicas != null)
+                            message.replicas = object.replicas >>> 0;
+                        if (object.updatedReplicas != null)
+                            message.updatedReplicas = object.updatedReplicas >>> 0;
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Status message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.k8s.v1.Deployment.Status
+                     * @static
+                     * @param {clutch.k8s.v1.Deployment.Status} message Status
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Status.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.replicas = 0;
+                            object.updatedReplicas = 0;
+                        }
+                        if (message.replicas != null && message.hasOwnProperty("replicas"))
+                            object.replicas = message.replicas;
+                        if (message.updatedReplicas != null && message.hasOwnProperty("updatedReplicas"))
+                            object.updatedReplicas = message.updatedReplicas;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Status to JSON.
+                     * @function toJSON
+                     * @memberof clutch.k8s.v1.Deployment.Status
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Status.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Status;
+                })();
 
                 return Deployment;
             })();

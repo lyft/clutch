@@ -1462,9 +1462,15 @@ func (m *Deployment) Validate() error {
 
 	// no validation rules for Annotations
 
-	// no validation rules for StatusReplicas
-
-	// no validation rules for StatusUpdatedReplicas
+	if v, ok := interface{}(m.GetStatus()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DeploymentValidationError{
+				field:  "Status",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	return nil
 }
@@ -6120,6 +6126,77 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ResizeHPARequest_SizingValidationError{}
+
+// Validate checks the field values on Deployment_Status with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *Deployment_Status) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Replicas
+
+	// no validation rules for UpdatedReplicas
+
+	return nil
+}
+
+// Deployment_StatusValidationError is the validation error returned by
+// Deployment_Status.Validate if the designated constraints aren't met.
+type Deployment_StatusValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Deployment_StatusValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Deployment_StatusValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Deployment_StatusValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Deployment_StatusValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Deployment_StatusValidationError) ErrorName() string {
+	return "Deployment_StatusValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Deployment_StatusValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeployment_Status.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Deployment_StatusValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Deployment_StatusValidationError{}
 
 // Validate checks the field values on UpdateDeploymentRequest_Fields with the
 // rules defined in the proto definition for this message. If any rules are

@@ -425,8 +425,11 @@ message Deployment {
   map<string, string> labels = 4;
   map<string, string> annotations = 5;
 
-  uint32 status_replicas = 6;
-  uint32 status_updated_replicas = 7;
+  message Status {
+    uint32 replicas = 1;
+    uint32 updated_replicas = 2;
+  }
+  Status status = 6;
 }
 
 message DescribeDeploymentRequest {

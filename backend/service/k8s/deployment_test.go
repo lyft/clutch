@@ -285,8 +285,8 @@ func TestProtoForDeploymentReplicas(t *testing.T) {
 			t.Parallel()
 
 			deployment := ProtoForDeployment("", tt.deployment)
-			assert.Equal(t, tt.expectedReplicas, deployment.StatusReplicas)
-			assert.Equal(t, tt.expectedUpdatedReplicas, deployment.StatusUpdatedReplicas)
+			assert.Equal(t, tt.expectedReplicas, deployment.Status.Replicas)
+			assert.Equal(t, tt.expectedUpdatedReplicas, deployment.Status.UpdatedReplicas)
 		})
 	}
 }

@@ -11146,11 +11146,8 @@ export namespace clutch {
                 /** Deployment annotations */
                 annotations?: ({ [k: string]: string }|null);
 
-                /** Deployment statusReplicas */
-                statusReplicas?: (number|null);
-
-                /** Deployment statusUpdatedReplicas */
-                statusUpdatedReplicas?: (number|null);
+                /** Deployment status */
+                status?: (clutch.k8s.v1.Deployment.IStatus|null);
             }
 
             /** Represents a Deployment. */
@@ -11177,11 +11174,8 @@ export namespace clutch {
                 /** Deployment annotations. */
                 public annotations: { [k: string]: string };
 
-                /** Deployment statusReplicas. */
-                public statusReplicas: number;
-
-                /** Deployment statusUpdatedReplicas. */
-                public statusUpdatedReplicas: number;
+                /** Deployment status. */
+                public status?: (clutch.k8s.v1.Deployment.IStatus|null);
 
                 /**
                  * Verifies a Deployment message.
@@ -11210,6 +11204,63 @@ export namespace clutch {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace Deployment {
+
+                /** Properties of a Status. */
+                interface IStatus {
+
+                    /** Status replicas */
+                    replicas?: (number|null);
+
+                    /** Status updatedReplicas */
+                    updatedReplicas?: (number|null);
+                }
+
+                /** Represents a Status. */
+                class Status implements IStatus {
+
+                    /**
+                     * Constructs a new Status.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.k8s.v1.Deployment.IStatus);
+
+                    /** Status replicas. */
+                    public replicas: number;
+
+                    /** Status updatedReplicas. */
+                    public updatedReplicas: number;
+
+                    /**
+                     * Verifies a Status message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Status message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Status
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment.Status;
+
+                    /**
+                     * Creates a plain object from a Status message. Also converts values to other types if specified.
+                     * @param message Status
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.k8s.v1.Deployment.Status, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Status to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
             }
 
             /** Properties of a DescribeDeploymentRequest. */
