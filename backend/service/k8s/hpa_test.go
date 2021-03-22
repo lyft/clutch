@@ -207,12 +207,12 @@ func TestProtoForHPA(t *testing.T) {
 			hpa: &autoscalingv1.HorizontalPodAutoscaler{
 				Spec: autoscalingv1.HorizontalPodAutoscalerSpec{
 					MinReplicas:                    newInt32(1),
-					MaxReplicas:                    69,
-					TargetCPUUtilizationPercentage: newInt32(69),
+					MaxReplicas:                    99,
+					TargetCPUUtilizationPercentage: newInt32(99),
 				},
 				Status: autoscalingv1.HorizontalPodAutoscalerStatus{
-					CurrentReplicas:                 69,
-					DesiredReplicas:                 69,
+					CurrentReplicas:                 9,
+					DesiredReplicas:                 9,
 					CurrentCPUUtilizationPercentage: newInt32(69),
 				},
 			},
@@ -226,8 +226,8 @@ func TestProtoForHPA(t *testing.T) {
 					TargetCPUUtilizationPercentage: newInt32(42),
 				},
 				Status: autoscalingv1.HorizontalPodAutoscalerStatus{
-					CurrentReplicas:                 69,
-					DesiredReplicas:                 420,
+					CurrentReplicas:                 6,
+					DesiredReplicas:                 4,
 					CurrentCPUUtilizationPercentage: newInt32(88),
 				},
 			},
