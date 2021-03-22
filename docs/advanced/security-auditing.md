@@ -177,14 +177,6 @@ services:
   // highlight-end
 ```
 
-### Sinks
-
-Sinks asynchronously propagate events to other systems after they are persisted to Clutch's database.
-
-Clutch ships with a logging sink as a scaffold for your own, as well as a sink for Slack.
-
-Adding and customizing audit sinks lets you save or process infrastructure events however appropriate for your needs.
-
 ### Module
 
 Clutch's audit events can also be viewed by querying the audit module if it is enabled.
@@ -226,8 +218,6 @@ services:
   // highlight-end
 ```
 
-
-
 #### Recommended Production Setup
 
 Below is sample configuration to show how the services described are enabled. Note that because services are instantiated in the order they are listed, order matters! Since the audit service depends on both the database and the sink, it needs to be listed after them.
@@ -267,4 +257,51 @@ services:
       sinks:
         - clutch.service.audit.sink.slack
   // highlight-end
+```
+
+### Sinks
+
+Sinks asynchronously propagate events to other systems after they are persisted to Clutch's database.
+
+Clutch ships with a logging sink as a scaffold for your own, as well as a sink for Slack.
+
+Adding and customizing audit sinks lets you save or process infrastructure events however appropriate for your needs.
+
+#### Slack Sink
+By default, the Slack sink creates a formatted Slack message using a subset of information saved in an audit event. The default Slack message provides a summary that answers questions such as what operation was performed, who performed the operation, and what resources were operated on.
+
+< insert gif or picture >
+
+The Slack sink requires your [Slack app’s](https://api.slack.com/start) bot token and the channel to post the messages. You can optionally provide filter rules to control what kinds of slack audits are sent to your channel.
+
+Example Config:
+```yaml title="backend/clutch-config.yaml"
+...
+services:
+  ...
+  - name: clutch.service.db.postgres
+  ...
+  // highlight-start
+  - name: clutch.service.auditsink.slack
+    typed_config:
+      "@type": types.google.com/clutch.config.service.auditsink.slack.v1.SlackConfig
+      token: <token>
+      channel: <channel>
+      filter:
+        rules:
+          - field: SERVICE
+            text: clutch.k8s.v1.K8sAPI
+  // highlight-end
+  - name: clutch.service.audit
+    typed_config:
+      "@type": types.google.com/clutch.config.service.audit.v1.Config
+      db_provider: clutch.service.db.postgres
+      filter:
+        denylist: true
+        rules:
+          - field: METHOD
+            text: Healthcheck
+      // highlight-next-line
+      sinks:
+        - clutch.service.audit.sink.slack
 ```
