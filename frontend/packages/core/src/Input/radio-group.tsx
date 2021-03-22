@@ -32,7 +32,7 @@ interface RadioGroupOption {
   value?: string;
 }
 
-interface RadioGroupProps {
+export interface RadioGroupProps {
   defaultOption?: number;
   label?: string;
   disabled?: boolean;
@@ -95,4 +95,4 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   );
 };
 
-export { RadioGroup, RadioGroupProps };
+export default RadioGroup;
