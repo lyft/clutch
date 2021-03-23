@@ -11221,7 +11221,7 @@ export namespace clutch {
                     unavailableReplicas?: (number|null);
 
                     /** DeploymentStatus deploymentConditions */
-                    deploymentConditions?: (clutch.k8s.v1.Deployment.DeploymentStatus.IDeploymentCondition[]|null);
+                    deploymentConditions?: (clutch.k8s.v1.Deployment.DeploymentStatus.ICondition[]|null);
                 }
 
                 /** Represents a DeploymentStatus. */
@@ -11249,7 +11249,7 @@ export namespace clutch {
                     public unavailableReplicas: number;
 
                     /** DeploymentStatus deploymentConditions. */
-                    public deploymentConditions: clutch.k8s.v1.Deployment.DeploymentStatus.IDeploymentCondition[];
+                    public deploymentConditions: clutch.k8s.v1.Deployment.DeploymentStatus.ICondition[];
 
                     /**
                      * Verifies a DeploymentStatus message.
@@ -11282,81 +11282,89 @@ export namespace clutch {
 
                 namespace DeploymentStatus {
 
-                    /** Properties of a DeploymentCondition. */
-                    interface IDeploymentCondition {
+                    /** Properties of a Condition. */
+                    interface ICondition {
 
-                        /** DeploymentCondition deploymentConditionType */
-                        deploymentConditionType?: (clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition.DeploymentConditionType|null);
+                        /** Condition type */
+                        type?: (clutch.k8s.v1.Deployment.DeploymentStatus.Condition.Type|null);
 
-                        /** DeploymentCondition conditionStatus */
-                        conditionStatus?: (google.protobuf.IBoolValue|null);
+                        /** Condition conditionStatus */
+                        conditionStatus?: (clutch.k8s.v1.Deployment.DeploymentStatus.Condition.ConditionStatus|null);
 
-                        /** DeploymentCondition reason */
+                        /** Condition reason */
                         reason?: (string|null);
 
-                        /** DeploymentCondition message */
+                        /** Condition message */
                         message?: (string|null);
                     }
 
-                    /** Represents a DeploymentCondition. */
-                    class DeploymentCondition implements IDeploymentCondition {
+                    /** Represents a Condition. */
+                    class Condition implements ICondition {
 
                         /**
-                         * Constructs a new DeploymentCondition.
+                         * Constructs a new Condition.
                          * @param [properties] Properties to set
                          */
-                        constructor(properties?: clutch.k8s.v1.Deployment.DeploymentStatus.IDeploymentCondition);
+                        constructor(properties?: clutch.k8s.v1.Deployment.DeploymentStatus.ICondition);
 
-                        /** DeploymentCondition deploymentConditionType. */
-                        public deploymentConditionType: clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition.DeploymentConditionType;
+                        /** Condition type. */
+                        public type: clutch.k8s.v1.Deployment.DeploymentStatus.Condition.Type;
 
-                        /** DeploymentCondition conditionStatus. */
-                        public conditionStatus?: (google.protobuf.IBoolValue|null);
+                        /** Condition conditionStatus. */
+                        public conditionStatus: clutch.k8s.v1.Deployment.DeploymentStatus.Condition.ConditionStatus;
 
-                        /** DeploymentCondition reason. */
+                        /** Condition reason. */
                         public reason: string;
 
-                        /** DeploymentCondition message. */
+                        /** Condition message. */
                         public message: string;
 
                         /**
-                         * Verifies a DeploymentCondition message.
+                         * Verifies a Condition message.
                          * @param message Plain object to verify
                          * @returns `null` if valid, otherwise the reason why it is not
                          */
                         public static verify(message: { [k: string]: any }): (string|null);
 
                         /**
-                         * Creates a DeploymentCondition message from a plain object. Also converts values to their respective internal types.
+                         * Creates a Condition message from a plain object. Also converts values to their respective internal types.
                          * @param object Plain object
-                         * @returns DeploymentCondition
+                         * @returns Condition
                          */
-                        public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition;
+                        public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment.DeploymentStatus.Condition;
 
                         /**
-                         * Creates a plain object from a DeploymentCondition message. Also converts values to other types if specified.
-                         * @param message DeploymentCondition
+                         * Creates a plain object from a Condition message. Also converts values to other types if specified.
+                         * @param message Condition
                          * @param [options] Conversion options
                          * @returns Plain object
                          */
-                        public static toObject(message: clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                        public static toObject(message: clutch.k8s.v1.Deployment.DeploymentStatus.Condition, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                         /**
-                         * Converts this DeploymentCondition to JSON.
+                         * Converts this Condition to JSON.
                          * @returns JSON object
                          */
                         public toJSON(): { [k: string]: any };
                     }
 
-                    namespace DeploymentCondition {
+                    namespace Condition {
 
-                        /** DeploymentConditionType enum. */
-                        enum DeploymentConditionType {
+                        /** Type enum. */
+                        enum Type {
                             UNSPECIFIED = 0,
                             UNKNOWN = 1,
                             AVAILABLE = 2,
                             PROGRESSING = 3,
                             REPLICA_FAILURE = 4
+                        }
+
+                        /** ConditionStatus enum. */
+                        enum ConditionStatus {
+                            CONDITION_UNSPECIFIED = 0,
+                            CONDITION_TRUE = 1,
+                            CONDITION_FALSE = 2,
+                            CONDITION_UNKNOWN = 3
                         }
                     }
                 }

@@ -429,8 +429,10 @@ message Deployment {
     uint32 ready_replicas = 3;
     uint32 available_replicas = 4;
     uint32 unavailable_replicas = 5;
-    message DeploymentCondition {
-      enum DeploymentConditionType {
+    message Condition {
+      // This is mirroring upstream values here:
+      // https://pkg.go.dev/k8s.io/api/apps/v1#DeploymentConditionType
+      enum Type {
         UNSPECIFIED = 0;
         UNKNOWN = 1;
         AVAILABLE = 2;
@@ -438,13 +440,20 @@ message Deployment {
         REPLICA_FAILURE = 4;
       }
 
-      DeploymentConditionType deployment_condition_type = 1;
-      google.protobuf.BoolValue condition_status = 2;
+      Type type = 1;
+      enum ConditionStatus {
+        CONDITION_UNSPECIFIED = 0;
+        CONDITION_TRUE = 1;
+        CONDITION_FALSE = 2;
+        CONDITION_UNKNOWN = 3;
+
+      } 
+      ConditionStatus condition_status = 2;
 
       string reason = 5;
       string message = 6;
     }
-    repeated DeploymentCondition deployment_conditions = 6;
+    repeated Condition deployment_conditions = 6;
   }
   DeploymentStatus deployment_status = 6;
 }

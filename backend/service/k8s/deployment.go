@@ -4,7 +4,6 @@ import (
 	"context"
 	"strings"
 
-	"github.com/golang/protobuf/ptypes/wrappers"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	appsv1 "k8s.io/api/apps/v1"
@@ -76,32 +75,32 @@ func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1
 }
 
 func ProtoForDeploymentStatus(deploymentStatus appsv1.DeploymentStatus) *k8sapiv1.Deployment_DeploymentStatus {
-	var deploymentConditions []*k8sapiv1.Deployment_DeploymentStatus_DeploymentCondition
+	var deploymentConditions []*k8sapiv1.Deployment_DeploymentStatus_Condition
 	for _, cond := range deploymentStatus.Conditions {
-		var deploymentConditionType k8sapiv1.Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType
+		var deploymentConditionType k8sapiv1.Deployment_DeploymentStatus_Condition_Type
 		if cond.Type != "" {
-			deploymentConditionType = k8sapiv1.Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType(
-				k8sapiv1.Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType_value[strings.ToUpper(string(cond.Type))])
+			deploymentConditionType = k8sapiv1.Deployment_DeploymentStatus_Condition_Type(
+				k8sapiv1.Deployment_DeploymentStatus_Condition_Type_value[strings.ToUpper(string(cond.Type))])
 		}
-		var condStatus *wrappers.BoolValue
+		var condStatus k8sapiv1.Deployment_DeploymentStatus_Condition_ConditionStatus
 		switch cond.Status {
 		case v1.ConditionTrue:
 			{
-				condStatus = &wrappers.BoolValue{Value: true}
+				condStatus = k8sapiv1.Deployment_DeploymentStatus_Condition_CONDITION_TRUE
 			}
 		case v1.ConditionFalse:
 			{
-				condStatus = &wrappers.BoolValue{Value: false}
+				condStatus = k8sapiv1.Deployment_DeploymentStatus_Condition_CONDITION_FALSE
 			}
 		default:
-			condStatus = nil
+			condStatus = k8sapiv1.Deployment_DeploymentStatus_Condition_CONDITION_UNKNOWN
 		}
 
-		newCond := &k8sapiv1.Deployment_DeploymentStatus_DeploymentCondition{
-			DeploymentConditionType: deploymentConditionType,
-			ConditionStatus:         condStatus,
-			Reason:                  cond.Reason,
-			Message:                 cond.Message,
+		newCond := &k8sapiv1.Deployment_DeploymentStatus_Condition{
+			Type:            deploymentConditionType,
+			ConditionStatus: condStatus,
+			Reason:          cond.Reason,
+			Message:         cond.Message,
 		}
 		deploymentConditions = append(deploymentConditions, newCond)
 	}
