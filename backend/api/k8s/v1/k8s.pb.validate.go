@@ -6150,26 +6150,6 @@ func (m *Deployment_DeploymentStatus_DeploymentCondition) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetLastUpdateTime()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return Deployment_DeploymentStatus_DeploymentConditionValidationError{
-				field:  "LastUpdateTime",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if v, ok := interface{}(m.GetLastTransitionTime()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return Deployment_DeploymentStatus_DeploymentConditionValidationError{
-				field:  "LastTransitionTime",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
 	// no validation rules for Reason
 
 	// no validation rules for Message

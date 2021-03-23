@@ -26652,8 +26652,6 @@ export const clutch = $root.clutch = (() => {
                          * @interface IDeploymentCondition
                          * @property {clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition.DeploymentConditionType|null} [deploymentConditionType] DeploymentCondition deploymentConditionType
                          * @property {google.protobuf.IBoolValue|null} [conditionStatus] DeploymentCondition conditionStatus
-                         * @property {google.protobuf.ITimestamp|null} [lastUpdateTime] DeploymentCondition lastUpdateTime
-                         * @property {google.protobuf.ITimestamp|null} [lastTransitionTime] DeploymentCondition lastTransitionTime
                          * @property {string|null} [reason] DeploymentCondition reason
                          * @property {string|null} [message] DeploymentCondition message
                          */
@@ -26688,22 +26686,6 @@ export const clutch = $root.clutch = (() => {
                          * @instance
                          */
                         DeploymentCondition.prototype.conditionStatus = null;
-
-                        /**
-                         * DeploymentCondition lastUpdateTime.
-                         * @member {google.protobuf.ITimestamp|null|undefined} lastUpdateTime
-                         * @memberof clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition
-                         * @instance
-                         */
-                        DeploymentCondition.prototype.lastUpdateTime = null;
-
-                        /**
-                         * DeploymentCondition lastTransitionTime.
-                         * @member {google.protobuf.ITimestamp|null|undefined} lastTransitionTime
-                         * @memberof clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition
-                         * @instance
-                         */
-                        DeploymentCondition.prototype.lastTransitionTime = null;
 
                         /**
                          * DeploymentCondition reason.
@@ -26747,16 +26729,6 @@ export const clutch = $root.clutch = (() => {
                                 let error = $root.google.protobuf.BoolValue.verify(message.conditionStatus);
                                 if (error)
                                     return "conditionStatus." + error;
-                            }
-                            if (message.lastUpdateTime != null && message.hasOwnProperty("lastUpdateTime")) {
-                                let error = $root.google.protobuf.Timestamp.verify(message.lastUpdateTime);
-                                if (error)
-                                    return "lastUpdateTime." + error;
-                            }
-                            if (message.lastTransitionTime != null && message.hasOwnProperty("lastTransitionTime")) {
-                                let error = $root.google.protobuf.Timestamp.verify(message.lastTransitionTime);
-                                if (error)
-                                    return "lastTransitionTime." + error;
                             }
                             if (message.reason != null && message.hasOwnProperty("reason"))
                                 if (!$util.isString(message.reason))
@@ -26806,16 +26778,6 @@ export const clutch = $root.clutch = (() => {
                                     throw TypeError(".clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition.conditionStatus: object expected");
                                 message.conditionStatus = $root.google.protobuf.BoolValue.fromObject(object.conditionStatus);
                             }
-                            if (object.lastUpdateTime != null) {
-                                if (typeof object.lastUpdateTime !== "object")
-                                    throw TypeError(".clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition.lastUpdateTime: object expected");
-                                message.lastUpdateTime = $root.google.protobuf.Timestamp.fromObject(object.lastUpdateTime);
-                            }
-                            if (object.lastTransitionTime != null) {
-                                if (typeof object.lastTransitionTime !== "object")
-                                    throw TypeError(".clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition.lastTransitionTime: object expected");
-                                message.lastTransitionTime = $root.google.protobuf.Timestamp.fromObject(object.lastTransitionTime);
-                            }
                             if (object.reason != null)
                                 message.reason = String(object.reason);
                             if (object.message != null)
@@ -26839,8 +26801,6 @@ export const clutch = $root.clutch = (() => {
                             if (options.defaults) {
                                 object.deploymentConditionType = options.enums === String ? "UNSPECIFIED" : 0;
                                 object.conditionStatus = null;
-                                object.lastUpdateTime = null;
-                                object.lastTransitionTime = null;
                                 object.reason = "";
                                 object.message = "";
                             }
@@ -26848,10 +26808,6 @@ export const clutch = $root.clutch = (() => {
                                 object.deploymentConditionType = options.enums === String ? $root.clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition.DeploymentConditionType[message.deploymentConditionType] : message.deploymentConditionType;
                             if (message.conditionStatus != null && message.hasOwnProperty("conditionStatus"))
                                 object.conditionStatus = $root.google.protobuf.BoolValue.toObject(message.conditionStatus, options);
-                            if (message.lastUpdateTime != null && message.hasOwnProperty("lastUpdateTime"))
-                                object.lastUpdateTime = $root.google.protobuf.Timestamp.toObject(message.lastUpdateTime, options);
-                            if (message.lastTransitionTime != null && message.hasOwnProperty("lastTransitionTime"))
-                                object.lastTransitionTime = $root.google.protobuf.Timestamp.toObject(message.lastTransitionTime, options);
                             if (message.reason != null && message.hasOwnProperty("reason"))
                                 object.reason = message.reason;
                             if (message.message != null && message.hasOwnProperty("message"))

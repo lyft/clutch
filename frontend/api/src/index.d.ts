@@ -11291,12 +11291,6 @@ export namespace clutch {
                         /** DeploymentCondition conditionStatus */
                         conditionStatus?: (google.protobuf.IBoolValue|null);
 
-                        /** DeploymentCondition lastUpdateTime */
-                        lastUpdateTime?: (google.protobuf.ITimestamp|null);
-
-                        /** DeploymentCondition lastTransitionTime */
-                        lastTransitionTime?: (google.protobuf.ITimestamp|null);
-
                         /** DeploymentCondition reason */
                         reason?: (string|null);
 
@@ -11318,12 +11312,6 @@ export namespace clutch {
 
                         /** DeploymentCondition conditionStatus. */
                         public conditionStatus?: (google.protobuf.IBoolValue|null);
-
-                        /** DeploymentCondition lastUpdateTime. */
-                        public lastUpdateTime?: (google.protobuf.ITimestamp|null);
-
-                        /** DeploymentCondition lastTransitionTime. */
-                        public lastTransitionTime?: (google.protobuf.ITimestamp|null);
 
                         /** DeploymentCondition reason. */
                         public reason: string;

@@ -440,8 +440,7 @@ message Deployment {
 
       DeploymentConditionType deployment_condition_type = 1;
       google.protobuf.BoolValue condition_status = 2;
-      google.protobuf.Timestamp last_update_time = 3;
-      google.protobuf.Timestamp last_transition_time = 4;
+
       string reason = 5;
       string message = 6;
     }
