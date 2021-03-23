@@ -86,7 +86,9 @@ export const TableRow = ({ children = [], onClick, defaultCellValue }: TableRowP
   <StyledTableRow onClick={onClick}>
     {React.Children.map(children, (value, index) => (
       // eslint-disable-next-line react/no-array-index-key
-      <TableCell key={index}>{value === undefined ? defaultCellValue : value}</TableCell>
+      <TableCell key={index}>
+        {value === null && defaultCellValue !== undefined ? defaultCellValue : value}
+      </TableCell>
     ))}
   </StyledTableRow>
 );
