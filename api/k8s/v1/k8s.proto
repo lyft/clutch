@@ -446,8 +446,7 @@ message Deployment {
         CONDITION_TRUE = 1;
         CONDITION_FALSE = 2;
         CONDITION_UNKNOWN = 3;
-
-      } 
+      }
       ConditionStatus condition_status = 2;
 
       string reason = 5;
