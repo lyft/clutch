@@ -5,8 +5,6 @@ package xds
 import (
 	"context"
 	"fmt"
-	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
-	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
 	"testing"
 	"time"
 
@@ -18,6 +16,8 @@ import (
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
 	"github.com/lyft/clutch/backend/internal/test/integration/helper/envoytest"
+	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
+	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
 )
 
 // These tests are intended to be run with docker-compose to in order to set up a running Envoy instance
@@ -90,7 +90,7 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experiments
 		},
 	}
 
-	a, err := ptypes.MarshalAny(&config)
+	a, err := anypb.New(&config)
 	assert.NoError(t, err)
 
 	experiment, err := storer.CreateExperiment(context.Background(), a, &now, &now)

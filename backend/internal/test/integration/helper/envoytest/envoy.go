@@ -12,7 +12,7 @@ import (
 	listener "github.com/envoyproxy/go-control-plane/envoy/config/listener/v3"
 	hcm "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/network/http_connection_manager/v3"
 	"github.com/golang/protobuf/jsonpb"
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	apimock "github.com/lyft/clutch/backend/mock/api"
 )
@@ -186,7 +186,7 @@ func (e *EnvoyConfig) AddHTTPFilter(input string) error {
 
 		h.HttpFilters = append([]*hcm.HttpFilter{filter}, h.HttpFilters...)
 
-		a, _ := ptypes.MarshalAny(h)
+		a, _ := anypb.New(h)
 
 		b.StaticResources.Listeners[0].FilterChains[0].Filters[0].ConfigType = &listener.Filter_TypedConfig{
 			TypedConfig: a,

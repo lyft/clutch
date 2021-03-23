@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	envoyadminv1 "github.com/lyft/clutch/backend/api/config/service/envoyadmin/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -47,6 +47,6 @@ func (m *mockTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 
 func NewAsService(*any.Any, *zap.Logger, tally.Scope) (service.Service, error) {
 	httpClient := &http.Client{Transport: &mockTransport{}}
-	a, _ := ptypes.MarshalAny(&envoyadminv1.Config{Secure: false, DefaultRemotePort: 9999})
+	a, _ := anypb.New(&envoyadminv1.Config{Secure: false, DefaultRemotePort: 9999})
 	return envoyadmin.NewWithHTTPClient(a, nil, nil, httpClient)
 }
