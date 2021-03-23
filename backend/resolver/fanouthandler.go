@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/golang/protobuf/proto"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 )
 
 type FanoutResult struct {

@@ -4,9 +4,10 @@ import _ from "lodash";
 
 import { AccordionGroup } from "../accordion";
 import { useWizardContext } from "../Contexts";
-import { CompressedError, Error } from "../Feedback";
+import { Error } from "../Feedback";
 import { HorizontalRule } from "../horizontal-rule";
 import Loadable from "../loading";
+import type { ClutchError } from "../Network/errors";
 
 import { fetchResourceSchemas, resolveResource } from "./fetch";
 import { QueryResolver, SchemaResolver } from "./input";
@@ -26,14 +27,20 @@ const loadSchemas = (type: string, dispatch: React.Dispatch<DispatchAction>) => 
       if (schemas.length === 0) {
         dispatch({
           type: ResolverAction.SCHEMAS_ERROR,
-          error: `No schemas found for type '${type}'`,
+          error: {
+            message: `No schemas found for type '${type}'`,
+            status: {
+              code: 404,
+              text: "Not Found",
+            },
+          } as ClutchError,
         });
       } else {
         dispatch({ type: ResolverAction.SCHEMAS_SUCCCESS, allSchemas: schemas });
       }
     })
     .catch(err => {
-      dispatch({ type: ResolverAction.SCHEMAS_ERROR, error: err.message });
+      dispatch({ type: ResolverAction.SCHEMAS_ERROR, error: err });
     });
 };
 
@@ -72,10 +79,10 @@ const Resolver: React.FC<ResolverProps> = ({
       type,
       searchLimit,
       inputData,
-      (results, failures) => {
+      (results, partialFailures) => {
         onResolve({ results, input: inputData });
-        if (!_.isEmpty(failures)) {
-          displayWarnings(failures);
+        if (!_.isEmpty(partialFailures)) {
+          displayWarnings(partialFailures);
         }
         dispatch({ type: ResolverAction.RESOLVE_SUCCESS });
       },
@@ -86,11 +93,11 @@ const Resolver: React.FC<ResolverProps> = ({
 
   return (
     <Loadable isLoading={state.schemasLoading}>
-      {state.schemaFetchError !== "" ? (
-        <Error message={state.schemaFetchError} onRetry={() => loadSchemas(type, dispatch)} />
+      {state.schemaFetchError ? (
+        <Error subject={state.schemaFetchError} onRetry={() => loadSchemas(type, dispatch)} />
       ) : (
         <Loadable variant="overlay" isLoading={state.resolverLoading}>
-          <CompressedError title="Error" message={state.resolverFetchError} />
+          {state.resolverFetchError && <Error subject={state.resolverFetchError} />}
           {(variant === "dual" || variant === "query") && (
             <>
               <SchemaLabel>Search</SchemaLabel>

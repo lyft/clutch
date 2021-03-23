@@ -23415,6 +23415,39 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeNamespace}.
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @typedef DescribeNamespaceCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.k8s.v1.DescribeNamespaceResponse} [response] DescribeNamespaceResponse
+                 */
+
+                /**
+                 * Calls DescribeNamespace.
+                 * @function describeNamespace
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeNamespaceRequest} request DescribeNamespaceRequest message or plain object
+                 * @param {clutch.k8s.v1.K8sAPI.DescribeNamespaceCallback} callback Node-style callback called with the error, if any, and DescribeNamespaceResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(K8sAPI.prototype.describeNamespace = function describeNamespace(request, callback) {
+                    return this.rpcCall(describeNamespace, $root.clutch.k8s.v1.DescribeNamespaceRequest, $root.clutch.k8s.v1.DescribeNamespaceResponse, request, callback);
+                }, "name", { value: "DescribeNamespace" });
+
+                /**
+                 * Calls DescribeNamespace.
+                 * @function describeNamespace
+                 * @memberof clutch.k8s.v1.K8sAPI
+                 * @instance
+                 * @param {clutch.k8s.v1.IDescribeNamespaceRequest} request DescribeNamespaceRequest message or plain object
+                 * @returns {Promise<clutch.k8s.v1.DescribeNamespaceResponse>} Promise
+                 * @variation 2
+                 */
+
                 return K8sAPI;
             })();
 
@@ -23428,7 +23461,6 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [cluster] DescribePodRequest cluster
                  * @property {string|null} [namespace] DescribePodRequest namespace
                  * @property {string|null} [name] DescribePodRequest name
-                 * @property {Object.<string,string>|null} [labels] DescribePodRequest labels
                  */
 
                 /**
@@ -23440,7 +23472,6 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.k8s.v1.IDescribePodRequest=} [properties] Properties to set
                  */
                 function DescribePodRequest(properties) {
-                    this.labels = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -23480,14 +23511,6 @@ export const clutch = $root.clutch = (() => {
                 DescribePodRequest.prototype.name = "";
 
                 /**
-                 * DescribePodRequest labels.
-                 * @member {Object.<string,string>} labels
-                 * @memberof clutch.k8s.v1.DescribePodRequest
-                 * @instance
-                 */
-                DescribePodRequest.prototype.labels = $util.emptyObject;
-
-                /**
                  * Verifies a DescribePodRequest message.
                  * @function verify
                  * @memberof clutch.k8s.v1.DescribePodRequest
@@ -23510,14 +23533,6 @@ export const clutch = $root.clutch = (() => {
                     if (message.name != null && message.hasOwnProperty("name"))
                         if (!$util.isString(message.name))
                             return "name: string expected";
-                    if (message.labels != null && message.hasOwnProperty("labels")) {
-                        if (!$util.isObject(message.labels))
-                            return "labels: object expected";
-                        let key = Object.keys(message.labels);
-                        for (let i = 0; i < key.length; ++i)
-                            if (!$util.isString(message.labels[key[i]]))
-                                return "labels: string{k:string} expected";
-                    }
                     return null;
                 };
 
@@ -23541,13 +23556,6 @@ export const clutch = $root.clutch = (() => {
                         message.namespace = String(object.namespace);
                     if (object.name != null)
                         message.name = String(object.name);
-                    if (object.labels) {
-                        if (typeof object.labels !== "object")
-                            throw TypeError(".clutch.k8s.v1.DescribePodRequest.labels: object expected");
-                        message.labels = {};
-                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
-                            message.labels[keys[i]] = String(object.labels[keys[i]]);
-                    }
                     return message;
                 };
 
@@ -23564,8 +23572,6 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.objects || options.defaults)
-                        object.labels = {};
                     if (options.defaults) {
                         object.clientset = "";
                         object.cluster = "";
@@ -23580,12 +23586,6 @@ export const clutch = $root.clutch = (() => {
                         object.namespace = message.namespace;
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
-                    let keys2;
-                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
-                        object.labels = {};
-                        for (let j = 0; j < keys2.length; ++j)
-                            object.labels[keys2[j]] = message.labels[keys2[j]];
-                    }
                     return object;
                 };
 
@@ -26389,7 +26389,6 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [cluster] DescribeDeploymentRequest cluster
                  * @property {string|null} [namespace] DescribeDeploymentRequest namespace
                  * @property {string|null} [name] DescribeDeploymentRequest name
-                 * @property {Object.<string,string>|null} [labels] DescribeDeploymentRequest labels
                  */
 
                 /**
@@ -26401,7 +26400,6 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.k8s.v1.IDescribeDeploymentRequest=} [properties] Properties to set
                  */
                 function DescribeDeploymentRequest(properties) {
-                    this.labels = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -26441,14 +26439,6 @@ export const clutch = $root.clutch = (() => {
                 DescribeDeploymentRequest.prototype.name = "";
 
                 /**
-                 * DescribeDeploymentRequest labels.
-                 * @member {Object.<string,string>} labels
-                 * @memberof clutch.k8s.v1.DescribeDeploymentRequest
-                 * @instance
-                 */
-                DescribeDeploymentRequest.prototype.labels = $util.emptyObject;
-
-                /**
                  * Verifies a DescribeDeploymentRequest message.
                  * @function verify
                  * @memberof clutch.k8s.v1.DescribeDeploymentRequest
@@ -26471,14 +26461,6 @@ export const clutch = $root.clutch = (() => {
                     if (message.name != null && message.hasOwnProperty("name"))
                         if (!$util.isString(message.name))
                             return "name: string expected";
-                    if (message.labels != null && message.hasOwnProperty("labels")) {
-                        if (!$util.isObject(message.labels))
-                            return "labels: object expected";
-                        let key = Object.keys(message.labels);
-                        for (let i = 0; i < key.length; ++i)
-                            if (!$util.isString(message.labels[key[i]]))
-                                return "labels: string{k:string} expected";
-                    }
                     return null;
                 };
 
@@ -26502,13 +26484,6 @@ export const clutch = $root.clutch = (() => {
                         message.namespace = String(object.namespace);
                     if (object.name != null)
                         message.name = String(object.name);
-                    if (object.labels) {
-                        if (typeof object.labels !== "object")
-                            throw TypeError(".clutch.k8s.v1.DescribeDeploymentRequest.labels: object expected");
-                        message.labels = {};
-                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
-                            message.labels[keys[i]] = String(object.labels[keys[i]]);
-                    }
                     return message;
                 };
 
@@ -26525,8 +26500,6 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.objects || options.defaults)
-                        object.labels = {};
                     if (options.defaults) {
                         object.clientset = "";
                         object.cluster = "";
@@ -26541,12 +26514,6 @@ export const clutch = $root.clutch = (() => {
                         object.namespace = message.namespace;
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
-                    let keys2;
-                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
-                        object.labels = {};
-                        for (let j = 0; j < keys2.length; ++j)
-                            object.labels[keys2[j]] = message.labels[keys2[j]];
-                    }
                     return object;
                 };
 
@@ -27783,7 +27750,6 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [cluster] DescribeStatefulSetRequest cluster
                  * @property {string|null} [namespace] DescribeStatefulSetRequest namespace
                  * @property {string|null} [name] DescribeStatefulSetRequest name
-                 * @property {Object.<string,string>|null} [labels] DescribeStatefulSetRequest labels
                  */
 
                 /**
@@ -27795,7 +27761,6 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.k8s.v1.IDescribeStatefulSetRequest=} [properties] Properties to set
                  */
                 function DescribeStatefulSetRequest(properties) {
-                    this.labels = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -27835,14 +27800,6 @@ export const clutch = $root.clutch = (() => {
                 DescribeStatefulSetRequest.prototype.name = "";
 
                 /**
-                 * DescribeStatefulSetRequest labels.
-                 * @member {Object.<string,string>} labels
-                 * @memberof clutch.k8s.v1.DescribeStatefulSetRequest
-                 * @instance
-                 */
-                DescribeStatefulSetRequest.prototype.labels = $util.emptyObject;
-
-                /**
                  * Verifies a DescribeStatefulSetRequest message.
                  * @function verify
                  * @memberof clutch.k8s.v1.DescribeStatefulSetRequest
@@ -27865,14 +27822,6 @@ export const clutch = $root.clutch = (() => {
                     if (message.name != null && message.hasOwnProperty("name"))
                         if (!$util.isString(message.name))
                             return "name: string expected";
-                    if (message.labels != null && message.hasOwnProperty("labels")) {
-                        if (!$util.isObject(message.labels))
-                            return "labels: object expected";
-                        let key = Object.keys(message.labels);
-                        for (let i = 0; i < key.length; ++i)
-                            if (!$util.isString(message.labels[key[i]]))
-                                return "labels: string{k:string} expected";
-                    }
                     return null;
                 };
 
@@ -27896,13 +27845,6 @@ export const clutch = $root.clutch = (() => {
                         message.namespace = String(object.namespace);
                     if (object.name != null)
                         message.name = String(object.name);
-                    if (object.labels) {
-                        if (typeof object.labels !== "object")
-                            throw TypeError(".clutch.k8s.v1.DescribeStatefulSetRequest.labels: object expected");
-                        message.labels = {};
-                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
-                            message.labels[keys[i]] = String(object.labels[keys[i]]);
-                    }
                     return message;
                 };
 
@@ -27919,8 +27861,6 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.objects || options.defaults)
-                        object.labels = {};
                     if (options.defaults) {
                         object.clientset = "";
                         object.cluster = "";
@@ -27935,12 +27875,6 @@ export const clutch = $root.clutch = (() => {
                         object.namespace = message.namespace;
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
-                    let keys2;
-                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
-                        object.labels = {};
-                        for (let j = 0; j < keys2.length; ++j)
-                            object.labels[keys2[j]] = message.labels[keys2[j]];
-                    }
                     return object;
                 };
 
@@ -29249,7 +29183,6 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [cluster] DescribeServiceRequest cluster
                  * @property {string|null} [namespace] DescribeServiceRequest namespace
                  * @property {string|null} [name] DescribeServiceRequest name
-                 * @property {Object.<string,string>|null} [labels] DescribeServiceRequest labels
                  */
 
                 /**
@@ -29261,7 +29194,6 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.k8s.v1.IDescribeServiceRequest=} [properties] Properties to set
                  */
                 function DescribeServiceRequest(properties) {
-                    this.labels = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -29301,14 +29233,6 @@ export const clutch = $root.clutch = (() => {
                 DescribeServiceRequest.prototype.name = "";
 
                 /**
-                 * DescribeServiceRequest labels.
-                 * @member {Object.<string,string>} labels
-                 * @memberof clutch.k8s.v1.DescribeServiceRequest
-                 * @instance
-                 */
-                DescribeServiceRequest.prototype.labels = $util.emptyObject;
-
-                /**
                  * Verifies a DescribeServiceRequest message.
                  * @function verify
                  * @memberof clutch.k8s.v1.DescribeServiceRequest
@@ -29331,14 +29255,6 @@ export const clutch = $root.clutch = (() => {
                     if (message.name != null && message.hasOwnProperty("name"))
                         if (!$util.isString(message.name))
                             return "name: string expected";
-                    if (message.labels != null && message.hasOwnProperty("labels")) {
-                        if (!$util.isObject(message.labels))
-                            return "labels: object expected";
-                        let key = Object.keys(message.labels);
-                        for (let i = 0; i < key.length; ++i)
-                            if (!$util.isString(message.labels[key[i]]))
-                                return "labels: string{k:string} expected";
-                    }
                     return null;
                 };
 
@@ -29362,13 +29278,6 @@ export const clutch = $root.clutch = (() => {
                         message.namespace = String(object.namespace);
                     if (object.name != null)
                         message.name = String(object.name);
-                    if (object.labels) {
-                        if (typeof object.labels !== "object")
-                            throw TypeError(".clutch.k8s.v1.DescribeServiceRequest.labels: object expected");
-                        message.labels = {};
-                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
-                            message.labels[keys[i]] = String(object.labels[keys[i]]);
-                    }
                     return message;
                 };
 
@@ -29385,8 +29294,6 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.objects || options.defaults)
-                        object.labels = {};
                     if (options.defaults) {
                         object.clientset = "";
                         object.cluster = "";
@@ -29401,12 +29308,6 @@ export const clutch = $root.clutch = (() => {
                         object.namespace = message.namespace;
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
-                    let keys2;
-                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
-                        object.labels = {};
-                        for (let j = 0; j < keys2.length; ++j)
-                            object.labels[keys2[j]] = message.labels[keys2[j]];
-                    }
                     return object;
                 };
 
@@ -30107,7 +30008,6 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [cluster] DescribeCronJobRequest cluster
                  * @property {string|null} [namespace] DescribeCronJobRequest namespace
                  * @property {string|null} [name] DescribeCronJobRequest name
-                 * @property {Object.<string,string>|null} [labels] DescribeCronJobRequest labels
                  */
 
                 /**
@@ -30119,7 +30019,6 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.k8s.v1.IDescribeCronJobRequest=} [properties] Properties to set
                  */
                 function DescribeCronJobRequest(properties) {
-                    this.labels = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -30159,14 +30058,6 @@ export const clutch = $root.clutch = (() => {
                 DescribeCronJobRequest.prototype.name = "";
 
                 /**
-                 * DescribeCronJobRequest labels.
-                 * @member {Object.<string,string>} labels
-                 * @memberof clutch.k8s.v1.DescribeCronJobRequest
-                 * @instance
-                 */
-                DescribeCronJobRequest.prototype.labels = $util.emptyObject;
-
-                /**
                  * Verifies a DescribeCronJobRequest message.
                  * @function verify
                  * @memberof clutch.k8s.v1.DescribeCronJobRequest
@@ -30189,14 +30080,6 @@ export const clutch = $root.clutch = (() => {
                     if (message.name != null && message.hasOwnProperty("name"))
                         if (!$util.isString(message.name))
                             return "name: string expected";
-                    if (message.labels != null && message.hasOwnProperty("labels")) {
-                        if (!$util.isObject(message.labels))
-                            return "labels: object expected";
-                        let key = Object.keys(message.labels);
-                        for (let i = 0; i < key.length; ++i)
-                            if (!$util.isString(message.labels[key[i]]))
-                                return "labels: string{k:string} expected";
-                    }
                     return null;
                 };
 
@@ -30220,13 +30103,6 @@ export const clutch = $root.clutch = (() => {
                         message.namespace = String(object.namespace);
                     if (object.name != null)
                         message.name = String(object.name);
-                    if (object.labels) {
-                        if (typeof object.labels !== "object")
-                            throw TypeError(".clutch.k8s.v1.DescribeCronJobRequest.labels: object expected");
-                        message.labels = {};
-                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
-                            message.labels[keys[i]] = String(object.labels[keys[i]]);
-                    }
                     return message;
                 };
 
@@ -30243,8 +30119,6 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.objects || options.defaults)
-                        object.labels = {};
                     if (options.defaults) {
                         object.clientset = "";
                         object.cluster = "";
@@ -30259,12 +30133,6 @@ export const clutch = $root.clutch = (() => {
                         object.namespace = message.namespace;
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
-                    let keys2;
-                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
-                        object.labels = {};
-                        for (let j = 0; j < keys2.length; ++j)
-                            object.labels[keys2[j]] = message.labels[keys2[j]];
-                    }
                     return object;
                 };
 
@@ -31442,8 +31310,6 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [cluster] DescribeConfigMapRequest cluster
                  * @property {string|null} [namespace] DescribeConfigMapRequest namespace
                  * @property {string|null} [name] DescribeConfigMapRequest name
-                 * @property {Object.<string,string>|null} [labels] DescribeConfigMapRequest labels
-                 * @property {Object.<string,string>|null} [annotations] DescribeConfigMapRequest annotations
                  */
 
                 /**
@@ -31455,8 +31321,6 @@ export const clutch = $root.clutch = (() => {
                  * @param {clutch.k8s.v1.IDescribeConfigMapRequest=} [properties] Properties to set
                  */
                 function DescribeConfigMapRequest(properties) {
-                    this.labels = {};
-                    this.annotations = {};
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -31496,22 +31360,6 @@ export const clutch = $root.clutch = (() => {
                 DescribeConfigMapRequest.prototype.name = "";
 
                 /**
-                 * DescribeConfigMapRequest labels.
-                 * @member {Object.<string,string>} labels
-                 * @memberof clutch.k8s.v1.DescribeConfigMapRequest
-                 * @instance
-                 */
-                DescribeConfigMapRequest.prototype.labels = $util.emptyObject;
-
-                /**
-                 * DescribeConfigMapRequest annotations.
-                 * @member {Object.<string,string>} annotations
-                 * @memberof clutch.k8s.v1.DescribeConfigMapRequest
-                 * @instance
-                 */
-                DescribeConfigMapRequest.prototype.annotations = $util.emptyObject;
-
-                /**
                  * Verifies a DescribeConfigMapRequest message.
                  * @function verify
                  * @memberof clutch.k8s.v1.DescribeConfigMapRequest
@@ -31534,22 +31382,6 @@ export const clutch = $root.clutch = (() => {
                     if (message.name != null && message.hasOwnProperty("name"))
                         if (!$util.isString(message.name))
                             return "name: string expected";
-                    if (message.labels != null && message.hasOwnProperty("labels")) {
-                        if (!$util.isObject(message.labels))
-                            return "labels: object expected";
-                        let key = Object.keys(message.labels);
-                        for (let i = 0; i < key.length; ++i)
-                            if (!$util.isString(message.labels[key[i]]))
-                                return "labels: string{k:string} expected";
-                    }
-                    if (message.annotations != null && message.hasOwnProperty("annotations")) {
-                        if (!$util.isObject(message.annotations))
-                            return "annotations: object expected";
-                        let key = Object.keys(message.annotations);
-                        for (let i = 0; i < key.length; ++i)
-                            if (!$util.isString(message.annotations[key[i]]))
-                                return "annotations: string{k:string} expected";
-                    }
                     return null;
                 };
 
@@ -31573,20 +31405,6 @@ export const clutch = $root.clutch = (() => {
                         message.namespace = String(object.namespace);
                     if (object.name != null)
                         message.name = String(object.name);
-                    if (object.labels) {
-                        if (typeof object.labels !== "object")
-                            throw TypeError(".clutch.k8s.v1.DescribeConfigMapRequest.labels: object expected");
-                        message.labels = {};
-                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
-                            message.labels[keys[i]] = String(object.labels[keys[i]]);
-                    }
-                    if (object.annotations) {
-                        if (typeof object.annotations !== "object")
-                            throw TypeError(".clutch.k8s.v1.DescribeConfigMapRequest.annotations: object expected");
-                        message.annotations = {};
-                        for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
-                            message.annotations[keys[i]] = String(object.annotations[keys[i]]);
-                    }
                     return message;
                 };
 
@@ -31603,10 +31421,6 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.objects || options.defaults) {
-                        object.labels = {};
-                        object.annotations = {};
-                    }
                     if (options.defaults) {
                         object.clientset = "";
                         object.cluster = "";
@@ -31621,17 +31435,6 @@ export const clutch = $root.clutch = (() => {
                         object.namespace = message.namespace;
                     if (message.name != null && message.hasOwnProperty("name"))
                         object.name = message.name;
-                    let keys2;
-                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
-                        object.labels = {};
-                        for (let j = 0; j < keys2.length; ++j)
-                            object.labels[keys2[j]] = message.labels[keys2[j]];
-                    }
-                    if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
-                        object.annotations = {};
-                        for (let j = 0; j < keys2.length; ++j)
-                            object.annotations[keys2[j]] = message.annotations[keys2[j]];
-                    }
                     return object;
                 };
 
@@ -33054,6 +32857,429 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return CreateJobResponse;
+            })();
+
+            v1.Namespace = (function() {
+
+                /**
+                 * Properties of a Namespace.
+                 * @memberof clutch.k8s.v1
+                 * @interface INamespace
+                 * @property {string|null} [cluster] Namespace cluster
+                 * @property {string|null} [name] Namespace name
+                 * @property {Object.<string,string>|null} [annotations] Namespace annotations
+                 * @property {Object.<string,string>|null} [labels] Namespace labels
+                 */
+
+                /**
+                 * Constructs a new Namespace.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a Namespace.
+                 * @implements INamespace
+                 * @constructor
+                 * @param {clutch.k8s.v1.INamespace=} [properties] Properties to set
+                 */
+                function Namespace(properties) {
+                    this.annotations = {};
+                    this.labels = {};
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * Namespace cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.Namespace
+                 * @instance
+                 */
+                Namespace.prototype.cluster = "";
+
+                /**
+                 * Namespace name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.Namespace
+                 * @instance
+                 */
+                Namespace.prototype.name = "";
+
+                /**
+                 * Namespace annotations.
+                 * @member {Object.<string,string>} annotations
+                 * @memberof clutch.k8s.v1.Namespace
+                 * @instance
+                 */
+                Namespace.prototype.annotations = $util.emptyObject;
+
+                /**
+                 * Namespace labels.
+                 * @member {Object.<string,string>} labels
+                 * @memberof clutch.k8s.v1.Namespace
+                 * @instance
+                 */
+                Namespace.prototype.labels = $util.emptyObject;
+
+                /**
+                 * Verifies a Namespace message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.Namespace
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                Namespace.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    if (message.annotations != null && message.hasOwnProperty("annotations")) {
+                        if (!$util.isObject(message.annotations))
+                            return "annotations: object expected";
+                        let key = Object.keys(message.annotations);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.annotations[key[i]]))
+                                return "annotations: string{k:string} expected";
+                    }
+                    if (message.labels != null && message.hasOwnProperty("labels")) {
+                        if (!$util.isObject(message.labels))
+                            return "labels: object expected";
+                        let key = Object.keys(message.labels);
+                        for (let i = 0; i < key.length; ++i)
+                            if (!$util.isString(message.labels[key[i]]))
+                                return "labels: string{k:string} expected";
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a Namespace message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.Namespace
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.Namespace} Namespace
+                 */
+                Namespace.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.Namespace)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.Namespace();
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    if (object.annotations) {
+                        if (typeof object.annotations !== "object")
+                            throw TypeError(".clutch.k8s.v1.Namespace.annotations: object expected");
+                        message.annotations = {};
+                        for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
+                            message.annotations[keys[i]] = String(object.annotations[keys[i]]);
+                    }
+                    if (object.labels) {
+                        if (typeof object.labels !== "object")
+                            throw TypeError(".clutch.k8s.v1.Namespace.labels: object expected");
+                        message.labels = {};
+                        for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
+                            message.labels[keys[i]] = String(object.labels[keys[i]]);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a Namespace message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.Namespace
+                 * @static
+                 * @param {clutch.k8s.v1.Namespace} message Namespace
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                Namespace.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.objects || options.defaults) {
+                        object.annotations = {};
+                        object.labels = {};
+                    }
+                    if (options.defaults) {
+                        object.cluster = "";
+                        object.name = "";
+                    }
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    let keys2;
+                    if (message.annotations && (keys2 = Object.keys(message.annotations)).length) {
+                        object.annotations = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                    }
+                    if (message.labels && (keys2 = Object.keys(message.labels)).length) {
+                        object.labels = {};
+                        for (let j = 0; j < keys2.length; ++j)
+                            object.labels[keys2[j]] = message.labels[keys2[j]];
+                    }
+                    return object;
+                };
+
+                /**
+                 * Converts this Namespace to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.Namespace
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                Namespace.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return Namespace;
+            })();
+
+            v1.DescribeNamespaceRequest = (function() {
+
+                /**
+                 * Properties of a DescribeNamespaceRequest.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeNamespaceRequest
+                 * @property {string|null} [clientset] DescribeNamespaceRequest clientset
+                 * @property {string|null} [cluster] DescribeNamespaceRequest cluster
+                 * @property {string|null} [name] DescribeNamespaceRequest name
+                 */
+
+                /**
+                 * Constructs a new DescribeNamespaceRequest.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeNamespaceRequest.
+                 * @implements IDescribeNamespaceRequest
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeNamespaceRequest=} [properties] Properties to set
+                 */
+                function DescribeNamespaceRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeNamespaceRequest clientset.
+                 * @member {string} clientset
+                 * @memberof clutch.k8s.v1.DescribeNamespaceRequest
+                 * @instance
+                 */
+                DescribeNamespaceRequest.prototype.clientset = "";
+
+                /**
+                 * DescribeNamespaceRequest cluster.
+                 * @member {string} cluster
+                 * @memberof clutch.k8s.v1.DescribeNamespaceRequest
+                 * @instance
+                 */
+                DescribeNamespaceRequest.prototype.cluster = "";
+
+                /**
+                 * DescribeNamespaceRequest name.
+                 * @member {string} name
+                 * @memberof clutch.k8s.v1.DescribeNamespaceRequest
+                 * @instance
+                 */
+                DescribeNamespaceRequest.prototype.name = "";
+
+                /**
+                 * Verifies a DescribeNamespaceRequest message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeNamespaceRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeNamespaceRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        if (!$util.isString(message.clientset))
+                            return "clientset: string expected";
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        if (!$util.isString(message.cluster))
+                            return "cluster: string expected";
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        if (!$util.isString(message.name))
+                            return "name: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeNamespaceRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeNamespaceRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeNamespaceRequest} DescribeNamespaceRequest
+                 */
+                DescribeNamespaceRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeNamespaceRequest)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeNamespaceRequest();
+                    if (object.clientset != null)
+                        message.clientset = String(object.clientset);
+                    if (object.cluster != null)
+                        message.cluster = String(object.cluster);
+                    if (object.name != null)
+                        message.name = String(object.name);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeNamespaceRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeNamespaceRequest
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeNamespaceRequest} message DescribeNamespaceRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeNamespaceRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.clientset = "";
+                        object.cluster = "";
+                        object.name = "";
+                    }
+                    if (message.clientset != null && message.hasOwnProperty("clientset"))
+                        object.clientset = message.clientset;
+                    if (message.cluster != null && message.hasOwnProperty("cluster"))
+                        object.cluster = message.cluster;
+                    if (message.name != null && message.hasOwnProperty("name"))
+                        object.name = message.name;
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeNamespaceRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeNamespaceRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeNamespaceRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeNamespaceRequest;
+            })();
+
+            v1.DescribeNamespaceResponse = (function() {
+
+                /**
+                 * Properties of a DescribeNamespaceResponse.
+                 * @memberof clutch.k8s.v1
+                 * @interface IDescribeNamespaceResponse
+                 * @property {clutch.k8s.v1.INamespace|null} [namespace] DescribeNamespaceResponse namespace
+                 */
+
+                /**
+                 * Constructs a new DescribeNamespaceResponse.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a DescribeNamespaceResponse.
+                 * @implements IDescribeNamespaceResponse
+                 * @constructor
+                 * @param {clutch.k8s.v1.IDescribeNamespaceResponse=} [properties] Properties to set
+                 */
+                function DescribeNamespaceResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * DescribeNamespaceResponse namespace.
+                 * @member {clutch.k8s.v1.INamespace|null|undefined} namespace
+                 * @memberof clutch.k8s.v1.DescribeNamespaceResponse
+                 * @instance
+                 */
+                DescribeNamespaceResponse.prototype.namespace = null;
+
+                /**
+                 * Verifies a DescribeNamespaceResponse message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.DescribeNamespaceResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                DescribeNamespaceResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.namespace != null && message.hasOwnProperty("namespace")) {
+                        let error = $root.clutch.k8s.v1.Namespace.verify(message.namespace);
+                        if (error)
+                            return "namespace." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a DescribeNamespaceResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.DescribeNamespaceResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.DescribeNamespaceResponse} DescribeNamespaceResponse
+                 */
+                DescribeNamespaceResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.DescribeNamespaceResponse)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.DescribeNamespaceResponse();
+                    if (object.namespace != null) {
+                        if (typeof object.namespace !== "object")
+                            throw TypeError(".clutch.k8s.v1.DescribeNamespaceResponse.namespace: object expected");
+                        message.namespace = $root.clutch.k8s.v1.Namespace.fromObject(object.namespace);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a DescribeNamespaceResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.DescribeNamespaceResponse
+                 * @static
+                 * @param {clutch.k8s.v1.DescribeNamespaceResponse} message DescribeNamespaceResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                DescribeNamespaceResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.namespace = null;
+                    if (message.namespace != null && message.hasOwnProperty("namespace"))
+                        object.namespace = $root.clutch.k8s.v1.Namespace.toObject(message.namespace, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this DescribeNamespaceResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.DescribeNamespaceResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                DescribeNamespaceResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return DescribeNamespaceResponse;
             })();
 
             v1.NullableString = (function() {
@@ -38280,6 +38506,124 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     return Job;
+                })();
+
+                v1.Namespace = (function() {
+
+                    /**
+                     * Properties of a Namespace.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @interface INamespace
+                     * @property {string|null} [name] Namespace name
+                     * @property {string|null} [clientset] Namespace clientset
+                     */
+
+                    /**
+                     * Constructs a new Namespace.
+                     * @memberof clutch.resolver.k8s.v1
+                     * @classdesc Represents a Namespace.
+                     * @implements INamespace
+                     * @constructor
+                     * @param {clutch.resolver.k8s.v1.INamespace=} [properties] Properties to set
+                     */
+                    function Namespace(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Namespace name.
+                     * @member {string} name
+                     * @memberof clutch.resolver.k8s.v1.Namespace
+                     * @instance
+                     */
+                    Namespace.prototype.name = "";
+
+                    /**
+                     * Namespace clientset.
+                     * @member {string} clientset
+                     * @memberof clutch.resolver.k8s.v1.Namespace
+                     * @instance
+                     */
+                    Namespace.prototype.clientset = "";
+
+                    /**
+                     * Verifies a Namespace message.
+                     * @function verify
+                     * @memberof clutch.resolver.k8s.v1.Namespace
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Namespace.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            if (!$util.isString(message.clientset))
+                                return "clientset: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Namespace message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.resolver.k8s.v1.Namespace
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.resolver.k8s.v1.Namespace} Namespace
+                     */
+                    Namespace.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.resolver.k8s.v1.Namespace)
+                            return object;
+                        let message = new $root.clutch.resolver.k8s.v1.Namespace();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.clientset != null)
+                            message.clientset = String(object.clientset);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Namespace message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.resolver.k8s.v1.Namespace
+                     * @static
+                     * @param {clutch.resolver.k8s.v1.Namespace} message Namespace
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Namespace.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.name = "";
+                            object.clientset = "";
+                        }
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.clientset != null && message.hasOwnProperty("clientset"))
+                            object.clientset = message.clientset;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Namespace to JSON.
+                     * @function toJSON
+                     * @memberof clutch.resolver.k8s.v1.Namespace
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Namespace.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Namespace;
                 })();
 
                 return v1;

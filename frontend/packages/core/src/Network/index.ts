@@ -22,7 +22,8 @@ export interface HttpStatus {
 }
 
 const errorInterceptor = (error: AxiosError): Promise<ClutchError> => {
-  if (error.isAxiosError) {
+  const response = error?.response;
+  if (response === undefined) {
     const clientError = {
       status: {
         code: 500,
@@ -35,18 +36,22 @@ const errorInterceptor = (error: AxiosError): Promise<ClutchError> => {
 
   // we are guaranteed to have a response object on the error from this point on
   // since we have already accounted for axios errors.
-  const responseData = error?.response.data;
+  const responseData = error?.response?.data;
   // if the response data has a code on it we know it's a gRPC response.
   let err;
   if (responseData?.code !== undefined) {
     err = grpcResponseToError(error);
   } else {
+    const message =
+      typeof error.response?.data === "string"
+        ? error.response.data
+        : error?.message || error.response.statusText;
     err = {
       status: {
         code: error.response.status,
         text: error.response.statusText,
       } as HttpStatus,
-      message: error?.message || error.response.statusText,
+      message,
       data: responseData,
     } as ClutchError;
   }

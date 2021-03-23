@@ -7,7 +7,7 @@ import { TabContext, TabList, TabPanel as MuiTabPanel } from "@material-ui/lab";
 const StyledTab = styled(MuiTab)({
   minWidth: "111px",
   height: "46px",
-  padding: "0",
+  padding: "12px 32px",
   color: "rgba(13, 16, 48, 0.6)",
   borderBottom: "3px solid #E7E7EA",
   fontSize: "14px",
@@ -66,26 +66,28 @@ const TabPanel = styled(MuiTabPanel)({
   maxWidth: "100%",
 });
 
-export interface TabsProps extends Pick<MuiTabsProps, "value"> {
+export interface TabsProps extends Pick<MuiTabsProps, "value" | "variant"> {
   children: React.ReactElement<TabProps> | React.ReactElement<TabProps>[];
 }
 
-export const Tabs = ({ children, value }: TabsProps) => {
+export const Tabs = ({ children, value, variant }: TabsProps) => {
   const [selectedIndex, setSelectedIndex] = React.useState((value || 0).toString());
   const onChangeMiddleware = (_, v: string) => {
     setSelectedIndex(v);
   };
 
   return (
-    <TabContext value={selectedIndex}>
-      <StyledTabs onChange={onChangeMiddleware}>
-        {React.Children.map(children, (child, index) =>
-          React.cloneElement(child, { value: index.toString() })
-        )}
-      </StyledTabs>
-      {React.Children.map(children, (tab, index) => (
-        <TabPanel value={index.toString()}>{tab.props?.children}</TabPanel>
-      ))}
-    </TabContext>
+    <div style={{ width: "100%" }}>
+      <TabContext value={selectedIndex}>
+        <StyledTabs variant={variant} onChange={onChangeMiddleware}>
+          {React.Children.map(children, (child, index) =>
+            React.cloneElement(child, { value: index.toString() })
+          )}
+        </StyledTabs>
+        {React.Children.map(children, (tab, index) => (
+          <TabPanel value={index.toString()}>{tab.props?.children}</TabPanel>
+        ))}
+      </TabContext>
+    </div>
   );
 };

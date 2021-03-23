@@ -9774,6 +9774,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public createJob(request: clutch.k8s.v1.ICreateJobRequest): Promise<clutch.k8s.v1.CreateJobResponse>;
+
+                /**
+                 * Calls DescribeNamespace.
+                 * @param request DescribeNamespaceRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and DescribeNamespaceResponse
+                 */
+                public describeNamespace(request: clutch.k8s.v1.IDescribeNamespaceRequest, callback: clutch.k8s.v1.K8sAPI.DescribeNamespaceCallback): void;
+
+                /**
+                 * Calls DescribeNamespace.
+                 * @param request DescribeNamespaceRequest message or plain object
+                 * @returns Promise
+                 */
+                public describeNamespace(request: clutch.k8s.v1.IDescribeNamespaceRequest): Promise<clutch.k8s.v1.DescribeNamespaceResponse>;
             }
 
             namespace K8sAPI {
@@ -9952,6 +9966,13 @@ export namespace clutch {
                  * @param [response] CreateJobResponse
                  */
                 type CreateJobCallback = (error: (Error|null), response?: clutch.k8s.v1.CreateJobResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.k8s.v1.K8sAPI#describeNamespace}.
+                 * @param error Error, if any
+                 * @param [response] DescribeNamespaceResponse
+                 */
+                type DescribeNamespaceCallback = (error: (Error|null), response?: clutch.k8s.v1.DescribeNamespaceResponse) => void;
             }
 
             /** Properties of a DescribePodRequest. */
@@ -9968,9 +9989,6 @@ export namespace clutch {
 
                 /** DescribePodRequest name */
                 name?: (string|null);
-
-                /** DescribePodRequest labels */
-                labels?: ({ [k: string]: string }|null);
             }
 
             /** Represents a DescribePodRequest. */
@@ -9993,9 +10011,6 @@ export namespace clutch {
 
                 /** DescribePodRequest name. */
                 public name: string;
-
-                /** DescribePodRequest labels. */
-                public labels: { [k: string]: string };
 
                 /**
                  * Verifies a DescribePodRequest message.
@@ -11181,9 +11196,6 @@ export namespace clutch {
 
                 /** DescribeDeploymentRequest name */
                 name?: (string|null);
-
-                /** DescribeDeploymentRequest labels */
-                labels?: ({ [k: string]: string }|null);
             }
 
             /** Represents a DescribeDeploymentRequest. */
@@ -11206,9 +11218,6 @@ export namespace clutch {
 
                 /** DescribeDeploymentRequest name. */
                 public name: string;
-
-                /** DescribeDeploymentRequest labels. */
-                public labels: { [k: string]: string };
 
                 /**
                  * Verifies a DescribeDeploymentRequest message.
@@ -11766,9 +11775,6 @@ export namespace clutch {
 
                 /** DescribeStatefulSetRequest name */
                 name?: (string|null);
-
-                /** DescribeStatefulSetRequest labels */
-                labels?: ({ [k: string]: string }|null);
             }
 
             /** Represents a DescribeStatefulSetRequest. */
@@ -11791,9 +11797,6 @@ export namespace clutch {
 
                 /** DescribeStatefulSetRequest name. */
                 public name: string;
-
-                /** DescribeStatefulSetRequest labels. */
-                public labels: { [k: string]: string };
 
                 /**
                  * Verifies a DescribeStatefulSetRequest message.
@@ -12370,9 +12373,6 @@ export namespace clutch {
 
                 /** DescribeServiceRequest name */
                 name?: (string|null);
-
-                /** DescribeServiceRequest labels */
-                labels?: ({ [k: string]: string }|null);
             }
 
             /** Represents a DescribeServiceRequest. */
@@ -12395,9 +12395,6 @@ export namespace clutch {
 
                 /** DescribeServiceRequest name. */
                 public name: string;
-
-                /** DescribeServiceRequest labels. */
-                public labels: { [k: string]: string };
 
                 /**
                  * Verifies a DescribeServiceRequest message.
@@ -12712,9 +12709,6 @@ export namespace clutch {
 
                 /** DescribeCronJobRequest name */
                 name?: (string|null);
-
-                /** DescribeCronJobRequest labels */
-                labels?: ({ [k: string]: string }|null);
             }
 
             /** Represents a DescribeCronJobRequest. */
@@ -12737,9 +12731,6 @@ export namespace clutch {
 
                 /** DescribeCronJobRequest name. */
                 public name: string;
-
-                /** DescribeCronJobRequest labels. */
-                public labels: { [k: string]: string };
 
                 /**
                  * Verifies a DescribeCronJobRequest message.
@@ -13252,12 +13243,6 @@ export namespace clutch {
 
                 /** DescribeConfigMapRequest name */
                 name?: (string|null);
-
-                /** DescribeConfigMapRequest labels */
-                labels?: ({ [k: string]: string }|null);
-
-                /** DescribeConfigMapRequest annotations */
-                annotations?: ({ [k: string]: string }|null);
             }
 
             /** Represents a DescribeConfigMapRequest. */
@@ -13280,12 +13265,6 @@ export namespace clutch {
 
                 /** DescribeConfigMapRequest name. */
                 public name: string;
-
-                /** DescribeConfigMapRequest labels. */
-                public labels: { [k: string]: string };
-
-                /** DescribeConfigMapRequest annotations. */
-                public annotations: { [k: string]: string };
 
                 /**
                  * Verifies a DescribeConfigMapRequest message.
@@ -13923,6 +13902,180 @@ export namespace clutch {
 
                 /**
                  * Converts this CreateJobResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a Namespace. */
+            interface INamespace {
+
+                /** Namespace cluster */
+                cluster?: (string|null);
+
+                /** Namespace name */
+                name?: (string|null);
+
+                /** Namespace annotations */
+                annotations?: ({ [k: string]: string }|null);
+
+                /** Namespace labels */
+                labels?: ({ [k: string]: string }|null);
+            }
+
+            /** Represents a Namespace. */
+            class Namespace implements INamespace {
+
+                /**
+                 * Constructs a new Namespace.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.INamespace);
+
+                /** Namespace cluster. */
+                public cluster: string;
+
+                /** Namespace name. */
+                public name: string;
+
+                /** Namespace annotations. */
+                public annotations: { [k: string]: string };
+
+                /** Namespace labels. */
+                public labels: { [k: string]: string };
+
+                /**
+                 * Verifies a Namespace message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a Namespace message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns Namespace
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Namespace;
+
+                /**
+                 * Creates a plain object from a Namespace message. Also converts values to other types if specified.
+                 * @param message Namespace
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.Namespace, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this Namespace to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DescribeNamespaceRequest. */
+            interface IDescribeNamespaceRequest {
+
+                /** DescribeNamespaceRequest clientset */
+                clientset?: (string|null);
+
+                /** DescribeNamespaceRequest cluster */
+                cluster?: (string|null);
+
+                /** DescribeNamespaceRequest name */
+                name?: (string|null);
+            }
+
+            /** Represents a DescribeNamespaceRequest. */
+            class DescribeNamespaceRequest implements IDescribeNamespaceRequest {
+
+                /**
+                 * Constructs a new DescribeNamespaceRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeNamespaceRequest);
+
+                /** DescribeNamespaceRequest clientset. */
+                public clientset: string;
+
+                /** DescribeNamespaceRequest cluster. */
+                public cluster: string;
+
+                /** DescribeNamespaceRequest name. */
+                public name: string;
+
+                /**
+                 * Verifies a DescribeNamespaceRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeNamespaceRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeNamespaceRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeNamespaceRequest;
+
+                /**
+                 * Creates a plain object from a DescribeNamespaceRequest message. Also converts values to other types if specified.
+                 * @param message DescribeNamespaceRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeNamespaceRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeNamespaceRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a DescribeNamespaceResponse. */
+            interface IDescribeNamespaceResponse {
+
+                /** DescribeNamespaceResponse namespace */
+                namespace?: (clutch.k8s.v1.INamespace|null);
+            }
+
+            /** Represents a DescribeNamespaceResponse. */
+            class DescribeNamespaceResponse implements IDescribeNamespaceResponse {
+
+                /**
+                 * Constructs a new DescribeNamespaceResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IDescribeNamespaceResponse);
+
+                /** DescribeNamespaceResponse namespace. */
+                public namespace?: (clutch.k8s.v1.INamespace|null);
+
+                /**
+                 * Verifies a DescribeNamespaceResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a DescribeNamespaceResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns DescribeNamespaceResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.DescribeNamespaceResponse;
+
+                /**
+                 * Creates a plain object from a DescribeNamespaceResponse message. Also converts values to other types if specified.
+                 * @param message DescribeNamespaceResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.DescribeNamespaceResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this DescribeNamespaceResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
@@ -16124,6 +16277,60 @@ export namespace clutch {
 
                     /**
                      * Converts this Job to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a Namespace. */
+                interface INamespace {
+
+                    /** Namespace name */
+                    name?: (string|null);
+
+                    /** Namespace clientset */
+                    clientset?: (string|null);
+                }
+
+                /** Represents a Namespace. */
+                class Namespace implements INamespace {
+
+                    /**
+                     * Constructs a new Namespace.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.resolver.k8s.v1.INamespace);
+
+                    /** Namespace name. */
+                    public name: string;
+
+                    /** Namespace clientset. */
+                    public clientset: string;
+
+                    /**
+                     * Verifies a Namespace message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Namespace message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Namespace
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.resolver.k8s.v1.Namespace;
+
+                    /**
+                     * Creates a plain object from a Namespace message. Also converts values to other types if specified.
+                     * @param message Namespace
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.resolver.k8s.v1.Namespace, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Namespace to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };

@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 
-import { FormFields } from "../form-fields";
+import FormFields from "../form-fields";
 import { ExperimentDetails } from "../start-experiment";
 
 jest.mock("react-router-dom", () => {

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
+import type { ClutchError } from "@clutch-sh/core";
 import { BaseWorkflowProps, Button, ButtonGroup, client } from "@clutch-sh/core";
 
 import PageLayout from "./core/page-layout";
-import { Column, ListView } from "./list-view";
+import type { Column } from "./list-view";
+import ListView from "./list-view";
 
 interface ExperimentTypeLinkProps {
   displayName: string;
@@ -20,7 +22,7 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, lin
   const [experiments, setExperiments] = useState<
     IClutch.chaos.experimentation.v1.ListViewItem[] | undefined
   >(undefined);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ClutchError | undefined>(undefined);
 
   const navigate = useNavigate();
 
@@ -34,8 +36,8 @@ const ListExperiments: React.FC<ListExperimentsProps> = ({ heading, columns, lin
       .then(response => {
         setExperiments(response?.data?.items || []);
       })
-      .catch(err => {
-        setError(err.response.statusText);
+      .catch((err: ClutchError) => {
+        setError(err);
       });
   }, []);
 

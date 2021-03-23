@@ -76,19 +76,6 @@ func (m *DescribePodRequest) Validate() error {
 		}
 	}
 
-	for key, val := range m.GetLabels() {
-		_ = val
-
-		if len(key) < 1 {
-			return DescribePodRequestValidationError{
-				field:  fmt.Sprintf("Labels[%v]", key),
-				reason: "value length must be at least 1 bytes",
-			}
-		}
-
-		// no validation rules for Labels[key]
-	}
-
 	return nil
 }
 
@@ -1535,19 +1522,6 @@ func (m *DescribeDeploymentRequest) Validate() error {
 		}
 	}
 
-	for key, val := range m.GetLabels() {
-		_ = val
-
-		if len(key) < 1 {
-			return DescribeDeploymentRequestValidationError{
-				field:  fmt.Sprintf("Labels[%v]", key),
-				reason: "value length must be at least 1 bytes",
-			}
-		}
-
-		// no validation rules for Labels[key]
-	}
-
 	return nil
 }
 
@@ -2321,19 +2295,6 @@ func (m *DescribeStatefulSetRequest) Validate() error {
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
-	}
-
-	for key, val := range m.GetLabels() {
-		_ = val
-
-		if len(key) < 1 {
-			return DescribeStatefulSetRequestValidationError{
-				field:  fmt.Sprintf("Labels[%v]", key),
-				reason: "value length must be at least 1 bytes",
-			}
-		}
-
-		// no validation rules for Labels[key]
 	}
 
 	return nil
@@ -3113,19 +3074,6 @@ func (m *DescribeServiceRequest) Validate() error {
 		}
 	}
 
-	for key, val := range m.GetLabels() {
-		_ = val
-
-		if len(key) < 1 {
-			return DescribeServiceRequestValidationError{
-				field:  fmt.Sprintf("Labels[%v]", key),
-				reason: "value length must be at least 1 bytes",
-			}
-		}
-
-		// no validation rules for Labels[key]
-	}
-
 	return nil
 }
 
@@ -3550,19 +3498,6 @@ func (m *DescribeCronJobRequest) Validate() error {
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
-	}
-
-	for key, val := range m.GetLabels() {
-		_ = val
-
-		if len(key) < 1 {
-			return DescribeCronJobRequestValidationError{
-				field:  fmt.Sprintf("Labels[%v]", key),
-				reason: "value length must be at least 1 bytes",
-			}
-		}
-
-		// no validation rules for Labels[key]
 	}
 
 	return nil
@@ -4349,32 +4284,6 @@ func (m *DescribeConfigMapRequest) Validate() error {
 			field:  "Name",
 			reason: "value length must be at least 1 bytes",
 		}
-	}
-
-	for key, val := range m.GetLabels() {
-		_ = val
-
-		if len(key) < 1 {
-			return DescribeConfigMapRequestValidationError{
-				field:  fmt.Sprintf("Labels[%v]", key),
-				reason: "value length must be at least 1 bytes",
-			}
-		}
-
-		// no validation rules for Labels[key]
-	}
-
-	for key, val := range m.GetAnnotations() {
-		_ = val
-
-		if len(key) < 1 {
-			return DescribeConfigMapRequestValidationError{
-				field:  fmt.Sprintf("Annotations[%v]", key),
-				reason: "value length must be at least 1 bytes",
-			}
-		}
-
-		// no validation rules for Annotations[key]
 	}
 
 	return nil
@@ -5338,6 +5247,243 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreateJobResponseValidationError{}
+
+// Validate checks the field values on Namespace with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Namespace) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Cluster
+
+	// no validation rules for Name
+
+	// no validation rules for Annotations
+
+	// no validation rules for Labels
+
+	return nil
+}
+
+// NamespaceValidationError is the validation error returned by
+// Namespace.Validate if the designated constraints aren't met.
+type NamespaceValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e NamespaceValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e NamespaceValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e NamespaceValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e NamespaceValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e NamespaceValidationError) ErrorName() string { return "NamespaceValidationError" }
+
+// Error satisfies the builtin error interface
+func (e NamespaceValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sNamespace.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = NamespaceValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = NamespaceValidationError{}
+
+// Validate checks the field values on DescribeNamespaceRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DescribeNamespaceRequest) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetClientset()) < 1 {
+		return DescribeNamespaceRequestValidationError{
+			field:  "Clientset",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetCluster()) < 1 {
+		return DescribeNamespaceRequestValidationError{
+			field:  "Cluster",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetName()) < 1 {
+		return DescribeNamespaceRequestValidationError{
+			field:  "Name",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	return nil
+}
+
+// DescribeNamespaceRequestValidationError is the validation error returned by
+// DescribeNamespaceRequest.Validate if the designated constraints aren't met.
+type DescribeNamespaceRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DescribeNamespaceRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DescribeNamespaceRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DescribeNamespaceRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DescribeNamespaceRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DescribeNamespaceRequestValidationError) ErrorName() string {
+	return "DescribeNamespaceRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DescribeNamespaceRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDescribeNamespaceRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DescribeNamespaceRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DescribeNamespaceRequestValidationError{}
+
+// Validate checks the field values on DescribeNamespaceResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *DescribeNamespaceResponse) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetNamespace()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DescribeNamespaceResponseValidationError{
+				field:  "Namespace",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// DescribeNamespaceResponseValidationError is the validation error returned by
+// DescribeNamespaceResponse.Validate if the designated constraints aren't met.
+type DescribeNamespaceResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DescribeNamespaceResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DescribeNamespaceResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DescribeNamespaceResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DescribeNamespaceResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DescribeNamespaceResponseValidationError) ErrorName() string {
+	return "DescribeNamespaceResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DescribeNamespaceResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDescribeNamespaceResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DescribeNamespaceResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DescribeNamespaceResponseValidationError{}
 
 // Validate checks the field values on NullableString with the rules defined in
 // the proto definition for this message. If any rules are violated, an error

@@ -41,6 +41,11 @@ message GetExperimentsResponse {
 }
 
 message CancelExperimentRunRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.chaos.experimentation.v1.CancelExperimentRunRequest",
+    pattern : "{id}"
+  };
+
   uint64 id = 1;
 }
 
@@ -55,6 +60,11 @@ message GetListViewResponse {
 }
 
 message GetExperimentRunDetailsRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest",
+    pattern : "{id}"
+  };
+
   uint64 id = 1;
 }
 
