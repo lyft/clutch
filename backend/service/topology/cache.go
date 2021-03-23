@@ -82,7 +82,6 @@ func convertLockIdToAdvisoryLockId(lockID string) uint32 {
 // This will check all services that are currently registered for the given clutch configuration
 // If any of the services implement the CacheableTopology interface we will start consuming
 // topology objects until the context has been cancelled.
-//
 func (c *client) startTopologyCache(ctx context.Context) {
 	for name, s := range service.Registry {
 		if svc, ok := s.(CacheableTopology); ok {
@@ -129,14 +128,18 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *
 	go func() {
 		ticker := time.NewTicker(time.Second * 30)
 		for {
-			select {
-			case <-ticker.C:
-				c.bulkInsertMutex.Lock()
+			c.bulkInsertMutex.Lock()
+			if len(batchInsert) > 0 {
 				if err := c.setCache(ctx, batchInsert); err != nil {
 					c.log.Error("Error setting cache", zap.Error(err))
 				}
 				batchInsert = []*topologyv1.Resource{}
-				c.bulkInsertMutex.Unlock()
+			}
+			c.bulkInsertMutex.Unlock()
+
+			select {
+			case <-ticker.C:
+				continue
 			case <-ctx.Done():
 				ticker.Stop()
 				return
@@ -145,16 +148,15 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *
 	}()
 }
 
-func (c *client) prepareSetCacheBulkValues(obj []*topologyv1.Resource) ([]interface{}, string) {
-	queryString := make([]string, 0, len(obj))
-	// Total object length x 4 as 4 is the number of columns we need to populate
+func (c *client) prepareBulkCacheInsert(obj []*topologyv1.Resource) ([]interface{}, string) {
+	queryParams := make([]string, 0, len(obj))
+	// Total object length x 4 as 4 is the number of columns we need to populate.
 	queryArgs := make([]interface{}, 0, len(obj)*4)
 
-	i := 0
-	for _, o := range obj {
+	for i, o := range obj {
 		// To parameterize all of the inputs for the bulk insert we need to increment the variable name.
-		// Read the unit test to understand more about the expected output.
-		queryString = append(queryString, fmt.Sprintf("($%d, $%d, $%d, $%d)", i*4+1, i*4+2, i*4+3, i*4+4))
+		// EG: A bulk insert of two items should look like so "($1, $2, $3, $4),($5, $6, $7, $8)"
+		queryParams = append(queryParams, fmt.Sprintf("($%d, $%d, $%d, $%d)", i*4+1, i*4+2, i*4+3, i*4+4))
 
 		metadataJson, err := json.Marshal(o.Metadata)
 		if err != nil {
@@ -173,15 +175,13 @@ func (c *client) prepareSetCacheBulkValues(obj []*topologyv1.Resource) ([]interf
 		queryArgs = append(queryArgs, o.Pb.GetTypeUrl())
 		queryArgs = append(queryArgs, dataJson)
 		queryArgs = append(queryArgs, metadataJson)
-
-		i++
 	}
 
-	return queryArgs, strings.Join(queryString, ",")
+	return queryArgs, strings.Join(queryParams, ",")
 }
 
 func (c *client) setCache(ctx context.Context, obj []*topologyv1.Resource) error {
-	args, queryString := c.prepareSetCacheBulkValues(obj)
+	args, queryString := c.prepareBulkCacheInsert(obj)
 	upsertQuery := fmt.Sprintf(`
 		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
 		VALUES %s

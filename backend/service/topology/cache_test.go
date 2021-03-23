@@ -78,7 +78,7 @@ func TestPrepareSetCacheBulkValues(t *testing.T) {
 		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
-			_, queryString := topology.prepareSetCacheBulkValues(tt.input)
+			_, queryString := topology.prepareBulkCacheInsert(tt.input)
 			assert.Equal(t, tt.expectQueryString, queryString)
 		})
 	}
