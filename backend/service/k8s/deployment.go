@@ -2,15 +2,18 @@ package k8s
 
 import (
 	"context"
+	"strings"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	appsv1 "k8s.io/api/apps/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/util/retry"
 
+	"github.com/golang/protobuf/ptypes/wrappers"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
@@ -63,15 +66,55 @@ func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1
 		clusterName = cluster
 	}
 	return &k8sapiv1.Deployment{
-		Cluster:     clusterName,
-		Namespace:   deployment.Namespace,
-		Name:        deployment.Name,
-		Labels:      deployment.Labels,
-		Annotations: deployment.Annotations,
-		Status: &k8sapiv1.Deployment_Status{
-			Replicas:        uint32(deployment.Status.Replicas),
-			UpdatedReplicas: uint32(deployment.Status.UpdatedReplicas),
-		},
+		Cluster:          clusterName,
+		Namespace:        deployment.Namespace,
+		Name:             deployment.Name,
+		Labels:           deployment.Labels,
+		Annotations:      deployment.Annotations,
+		DeploymentStatus: ProtoForDeploymentStatus(deployment.Status),
+	}
+}
+
+func ProtoForDeploymentStatus(deploymentStatus appsv1.DeploymentStatus) *k8sapiv1.Deployment_DeploymentStatus {
+
+	var deploymentConditions []*k8sapiv1.Deployment_DeploymentStatus_DeploymentCondition
+	for _, cond := range deploymentStatus.Conditions {
+
+		var deploymentConditionType k8sapiv1.Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType
+		if cond.Type != "" {
+			deploymentConditionType = k8sapiv1.Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType(
+				k8sapiv1.Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType_value[strings.ToUpper(string(cond.Type))])
+		}
+		var condStatus *wrappers.BoolValue
+		switch cond.Status {
+		case v1.ConditionTrue:
+			{
+				condStatus = &wrappers.BoolValue{Value: true}
+			}
+		case v1.ConditionFalse:
+			{
+				condStatus = &wrappers.BoolValue{Value: false}
+			}
+		default:
+			condStatus = nil
+		}
+
+		newCond := &k8sapiv1.Deployment_DeploymentStatus_DeploymentCondition{
+			DeploymentConditionType: deploymentConditionType,
+			ConditionStatus:         condStatus,
+			Reason:                  cond.Reason,
+			Message:                 cond.Message,
+		}
+		deploymentConditions = append(deploymentConditions, newCond)
+	}
+
+	return &k8sapiv1.Deployment_DeploymentStatus{
+		Replicas:             uint32(deploymentStatus.Replicas),
+		UpdatedReplicas:      uint32(deploymentStatus.UpdatedReplicas),
+		ReadyReplicas:        uint32(deploymentStatus.ReadyReplicas),
+		AvailableReplicas:    uint32(deploymentStatus.AvailableReplicas),
+		UnavailableReplicas:  uint32(deploymentStatus.UnavailableReplicas),
+		DeploymentConditions: deploymentConditions,
 	}
 }
 

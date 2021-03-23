@@ -1449,10 +1449,10 @@ func (m *Deployment) Validate() error {
 
 	// no validation rules for Annotations
 
-	if v, ok := interface{}(m.GetStatus()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetDeploymentStatus()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return DeploymentValidationError{
-				field:  "Status",
+				field:  "DeploymentStatus",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}
@@ -6036,10 +6036,10 @@ var _ interface {
 	ErrorName() string
 } = ResizeHPARequest_SizingValidationError{}
 
-// Validate checks the field values on Deployment_Status with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *Deployment_Status) Validate() error {
+// Validate checks the field values on Deployment_DeploymentStatus with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *Deployment_DeploymentStatus) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -6048,12 +6048,34 @@ func (m *Deployment_Status) Validate() error {
 
 	// no validation rules for UpdatedReplicas
 
+	// no validation rules for ReadyReplicas
+
+	// no validation rules for AvailableReplicas
+
+	// no validation rules for UnavailableReplicas
+
+	for idx, item := range m.GetDeploymentConditions() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Deployment_DeploymentStatusValidationError{
+					field:  fmt.Sprintf("DeploymentConditions[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
 	return nil
 }
 
-// Deployment_StatusValidationError is the validation error returned by
-// Deployment_Status.Validate if the designated constraints aren't met.
-type Deployment_StatusValidationError struct {
+// Deployment_DeploymentStatusValidationError is the validation error returned
+// by Deployment_DeploymentStatus.Validate if the designated constraints
+// aren't met.
+type Deployment_DeploymentStatusValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -6061,24 +6083,24 @@ type Deployment_StatusValidationError struct {
 }
 
 // Field function returns field value.
-func (e Deployment_StatusValidationError) Field() string { return e.field }
+func (e Deployment_DeploymentStatusValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e Deployment_StatusValidationError) Reason() string { return e.reason }
+func (e Deployment_DeploymentStatusValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e Deployment_StatusValidationError) Cause() error { return e.cause }
+func (e Deployment_DeploymentStatusValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e Deployment_StatusValidationError) Key() bool { return e.key }
+func (e Deployment_DeploymentStatusValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e Deployment_StatusValidationError) ErrorName() string {
-	return "Deployment_StatusValidationError"
+func (e Deployment_DeploymentStatusValidationError) ErrorName() string {
+	return "Deployment_DeploymentStatusValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e Deployment_StatusValidationError) Error() string {
+func (e Deployment_DeploymentStatusValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -6090,14 +6112,14 @@ func (e Deployment_StatusValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sDeployment_Status.%s: %s%s",
+		"invalid %sDeployment_DeploymentStatus.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = Deployment_StatusValidationError{}
+var _ error = Deployment_DeploymentStatusValidationError{}
 
 var _ interface {
 	Field() string
@@ -6105,7 +6127,117 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = Deployment_StatusValidationError{}
+} = Deployment_DeploymentStatusValidationError{}
+
+// Validate checks the field values on
+// Deployment_DeploymentStatus_DeploymentCondition with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *Deployment_DeploymentStatus_DeploymentCondition) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for DeploymentConditionType
+
+	if v, ok := interface{}(m.GetConditionStatus()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Deployment_DeploymentStatus_DeploymentConditionValidationError{
+				field:  "ConditionStatus",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetLastUpdateTime()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Deployment_DeploymentStatus_DeploymentConditionValidationError{
+				field:  "LastUpdateTime",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if v, ok := interface{}(m.GetLastTransitionTime()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return Deployment_DeploymentStatus_DeploymentConditionValidationError{
+				field:  "LastTransitionTime",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for Reason
+
+	// no validation rules for Message
+
+	return nil
+}
+
+// Deployment_DeploymentStatus_DeploymentConditionValidationError is the
+// validation error returned by
+// Deployment_DeploymentStatus_DeploymentCondition.Validate if the designated
+// constraints aren't met.
+type Deployment_DeploymentStatus_DeploymentConditionValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Deployment_DeploymentStatus_DeploymentConditionValidationError) Field() string {
+	return e.field
+}
+
+// Reason function returns reason value.
+func (e Deployment_DeploymentStatus_DeploymentConditionValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e Deployment_DeploymentStatus_DeploymentConditionValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Deployment_DeploymentStatus_DeploymentConditionValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Deployment_DeploymentStatus_DeploymentConditionValidationError) ErrorName() string {
+	return "Deployment_DeploymentStatus_DeploymentConditionValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Deployment_DeploymentStatus_DeploymentConditionValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeployment_DeploymentStatus_DeploymentCondition.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Deployment_DeploymentStatus_DeploymentConditionValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Deployment_DeploymentStatus_DeploymentConditionValidationError{}
 
 // Validate checks the field values on UpdateDeploymentRequest_Fields with the
 // rules defined in the proto definition for this message. If any rules are

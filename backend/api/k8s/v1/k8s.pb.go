@@ -146,6 +146,61 @@ func (Pod_State) EnumDescriptor() ([]byte, []int) {
 	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{3, 0}
 }
 
+type Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType int32
+
+const (
+	Deployment_DeploymentStatus_DeploymentCondition_UNSPECIFIED     Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType = 0
+	Deployment_DeploymentStatus_DeploymentCondition_UNKNOWN         Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType = 1
+	Deployment_DeploymentStatus_DeploymentCondition_AVAILABLE       Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType = 2
+	Deployment_DeploymentStatus_DeploymentCondition_PROGRESSING     Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType = 3
+	Deployment_DeploymentStatus_DeploymentCondition_REPLICA_FAILURE Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType = 4
+)
+
+// Enum value maps for Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType.
+var (
+	Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType_name = map[int32]string{
+		0: "UNSPECIFIED",
+		1: "UNKNOWN",
+		2: "AVAILABLE",
+		3: "PROGRESSING",
+		4: "REPLICA_FAILURE",
+	}
+	Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType_value = map[string]int32{
+		"UNSPECIFIED":     0,
+		"UNKNOWN":         1,
+		"AVAILABLE":       2,
+		"PROGRESSING":     3,
+		"REPLICA_FAILURE": 4,
+	}
+)
+
+func (x Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType) Enum() *Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType {
+	p := new(Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType)
+	*p = x
+	return p
+}
+
+func (x Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType) Descriptor() protoreflect.EnumDescriptor {
+	return file_k8s_v1_k8s_proto_enumTypes[2].Descriptor()
+}
+
+func (Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType) Type() protoreflect.EnumType {
+	return &file_k8s_v1_k8s_proto_enumTypes[2]
+}
+
+func (x Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType.Descriptor instead.
+func (Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType) EnumDescriptor() ([]byte, []int) {
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{16, 2, 0, 0}
+}
+
 type Service_Type int32
 
 const (
@@ -188,11 +243,11 @@ func (x Service_Type) String() string {
 }
 
 func (Service_Type) Descriptor() protoreflect.EnumDescriptor {
-	return file_k8s_v1_k8s_proto_enumTypes[2].Descriptor()
+	return file_k8s_v1_k8s_proto_enumTypes[3].Descriptor()
 }
 
 func (Service_Type) Type() protoreflect.EnumType {
-	return &file_k8s_v1_k8s_proto_enumTypes[2]
+	return &file_k8s_v1_k8s_proto_enumTypes[3]
 }
 
 func (x Service_Type) Number() protoreflect.EnumNumber {
@@ -243,11 +298,11 @@ func (x CronJob_ConcurrencyPolicy) String() string {
 }
 
 func (CronJob_ConcurrencyPolicy) Descriptor() protoreflect.EnumDescriptor {
-	return file_k8s_v1_k8s_proto_enumTypes[3].Descriptor()
+	return file_k8s_v1_k8s_proto_enumTypes[4].Descriptor()
 }
 
 func (CronJob_ConcurrencyPolicy) Type() protoreflect.EnumType {
-	return &file_k8s_v1_k8s_proto_enumTypes[3]
+	return &file_k8s_v1_k8s_proto_enumTypes[4]
 }
 
 func (x CronJob_ConcurrencyPolicy) Number() protoreflect.EnumNumber {
@@ -1322,12 +1377,12 @@ type Deployment struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Cluster     string             `protobuf:"bytes,1,opt,name=cluster,proto3" json:"cluster,omitempty"`
-	Namespace   string             `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	Name        string             `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	Labels      map[string]string  `protobuf:"bytes,4,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	Annotations map[string]string  `protobuf:"bytes,5,rep,name=annotations,proto3" json:"annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	Status      *Deployment_Status `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`
+	Cluster          string                       `protobuf:"bytes,1,opt,name=cluster,proto3" json:"cluster,omitempty"`
+	Namespace        string                       `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Name             string                       `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Labels           map[string]string            `protobuf:"bytes,4,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Annotations      map[string]string            `protobuf:"bytes,5,rep,name=annotations,proto3" json:"annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	DeploymentStatus *Deployment_DeploymentStatus `protobuf:"bytes,6,opt,name=deployment_status,json=deploymentStatus,proto3" json:"deployment_status,omitempty"`
 }
 
 func (x *Deployment) Reset() {
@@ -1397,9 +1452,9 @@ func (x *Deployment) GetAnnotations() map[string]string {
 	return nil
 }
 
-func (x *Deployment) GetStatus() *Deployment_Status {
+func (x *Deployment) GetDeploymentStatus() *Deployment_DeploymentStatus {
 	if x != nil {
-		return x.Status
+		return x.DeploymentStatus
 	}
 	return nil
 }
@@ -4661,17 +4716,21 @@ func (x *ResizeHPARequest_Sizing) GetMax() uint32 {
 	return 0
 }
 
-type Deployment_Status struct {
+type Deployment_DeploymentStatus struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Replicas        uint32 `protobuf:"varint,1,opt,name=replicas,proto3" json:"replicas,omitempty"`
-	UpdatedReplicas uint32 `protobuf:"varint,2,opt,name=updated_replicas,json=updatedReplicas,proto3" json:"updated_replicas,omitempty"`
+	Replicas             uint32                                             `protobuf:"varint,1,opt,name=replicas,proto3" json:"replicas,omitempty"`
+	UpdatedReplicas      uint32                                             `protobuf:"varint,2,opt,name=updated_replicas,json=updatedReplicas,proto3" json:"updated_replicas,omitempty"`
+	ReadyReplicas        uint32                                             `protobuf:"varint,3,opt,name=ready_replicas,json=readyReplicas,proto3" json:"ready_replicas,omitempty"`
+	AvailableReplicas    uint32                                             `protobuf:"varint,4,opt,name=available_replicas,json=availableReplicas,proto3" json:"available_replicas,omitempty"`
+	UnavailableReplicas  uint32                                             `protobuf:"varint,5,opt,name=unavailable_replicas,json=unavailableReplicas,proto3" json:"unavailable_replicas,omitempty"`
+	DeploymentConditions []*Deployment_DeploymentStatus_DeploymentCondition `protobuf:"bytes,6,rep,name=deployment_conditions,json=deploymentConditions,proto3" json:"deployment_conditions,omitempty"`
 }
 
-func (x *Deployment_Status) Reset() {
-	*x = Deployment_Status{}
+func (x *Deployment_DeploymentStatus) Reset() {
+	*x = Deployment_DeploymentStatus{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_k8s_v1_k8s_proto_msgTypes[77]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4679,13 +4738,13 @@ func (x *Deployment_Status) Reset() {
 	}
 }
 
-func (x *Deployment_Status) String() string {
+func (x *Deployment_DeploymentStatus) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Deployment_Status) ProtoMessage() {}
+func (*Deployment_DeploymentStatus) ProtoMessage() {}
 
-func (x *Deployment_Status) ProtoReflect() protoreflect.Message {
+func (x *Deployment_DeploymentStatus) ProtoReflect() protoreflect.Message {
 	mi := &file_k8s_v1_k8s_proto_msgTypes[77]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -4697,23 +4756,138 @@ func (x *Deployment_Status) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Deployment_Status.ProtoReflect.Descriptor instead.
-func (*Deployment_Status) Descriptor() ([]byte, []int) {
+// Deprecated: Use Deployment_DeploymentStatus.ProtoReflect.Descriptor instead.
+func (*Deployment_DeploymentStatus) Descriptor() ([]byte, []int) {
 	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{16, 2}
 }
 
-func (x *Deployment_Status) GetReplicas() uint32 {
+func (x *Deployment_DeploymentStatus) GetReplicas() uint32 {
 	if x != nil {
 		return x.Replicas
 	}
 	return 0
 }
 
-func (x *Deployment_Status) GetUpdatedReplicas() uint32 {
+func (x *Deployment_DeploymentStatus) GetUpdatedReplicas() uint32 {
 	if x != nil {
 		return x.UpdatedReplicas
 	}
 	return 0
+}
+
+func (x *Deployment_DeploymentStatus) GetReadyReplicas() uint32 {
+	if x != nil {
+		return x.ReadyReplicas
+	}
+	return 0
+}
+
+func (x *Deployment_DeploymentStatus) GetAvailableReplicas() uint32 {
+	if x != nil {
+		return x.AvailableReplicas
+	}
+	return 0
+}
+
+func (x *Deployment_DeploymentStatus) GetUnavailableReplicas() uint32 {
+	if x != nil {
+		return x.UnavailableReplicas
+	}
+	return 0
+}
+
+func (x *Deployment_DeploymentStatus) GetDeploymentConditions() []*Deployment_DeploymentStatus_DeploymentCondition {
+	if x != nil {
+		return x.DeploymentConditions
+	}
+	return nil
+}
+
+type Deployment_DeploymentStatus_DeploymentCondition struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	DeploymentConditionType Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType `protobuf:"varint,1,opt,name=deployment_condition_type,json=deploymentConditionType,proto3,enum=clutch.k8s.v1.Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType" json:"deployment_condition_type,omitempty"`
+	ConditionStatus         *wrapperspb.BoolValue                                                   `protobuf:"bytes,2,opt,name=condition_status,json=conditionStatus,proto3" json:"condition_status,omitempty"`
+	LastUpdateTime          *timestamppb.Timestamp                                                  `protobuf:"bytes,3,opt,name=last_update_time,json=lastUpdateTime,proto3" json:"last_update_time,omitempty"`
+	LastTransitionTime      *timestamppb.Timestamp                                                  `protobuf:"bytes,4,opt,name=last_transition_time,json=lastTransitionTime,proto3" json:"last_transition_time,omitempty"`
+	Reason                  string                                                                  `protobuf:"bytes,5,opt,name=reason,proto3" json:"reason,omitempty"`
+	Message                 string                                                                  `protobuf:"bytes,6,opt,name=message,proto3" json:"message,omitempty"`
+}
+
+func (x *Deployment_DeploymentStatus_DeploymentCondition) Reset() {
+	*x = Deployment_DeploymentStatus_DeploymentCondition{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_k8s_v1_k8s_proto_msgTypes[78]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Deployment_DeploymentStatus_DeploymentCondition) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Deployment_DeploymentStatus_DeploymentCondition) ProtoMessage() {}
+
+func (x *Deployment_DeploymentStatus_DeploymentCondition) ProtoReflect() protoreflect.Message {
+	mi := &file_k8s_v1_k8s_proto_msgTypes[78]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Deployment_DeploymentStatus_DeploymentCondition.ProtoReflect.Descriptor instead.
+func (*Deployment_DeploymentStatus_DeploymentCondition) Descriptor() ([]byte, []int) {
+	return file_k8s_v1_k8s_proto_rawDescGZIP(), []int{16, 2, 0}
+}
+
+func (x *Deployment_DeploymentStatus_DeploymentCondition) GetDeploymentConditionType() Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType {
+	if x != nil {
+		return x.DeploymentConditionType
+	}
+	return Deployment_DeploymentStatus_DeploymentCondition_UNSPECIFIED
+}
+
+func (x *Deployment_DeploymentStatus_DeploymentCondition) GetConditionStatus() *wrapperspb.BoolValue {
+	if x != nil {
+		return x.ConditionStatus
+	}
+	return nil
+}
+
+func (x *Deployment_DeploymentStatus_DeploymentCondition) GetLastUpdateTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.LastUpdateTime
+	}
+	return nil
+}
+
+func (x *Deployment_DeploymentStatus_DeploymentCondition) GetLastTransitionTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.LastTransitionTime
+	}
+	return nil
+}
+
+func (x *Deployment_DeploymentStatus_DeploymentCondition) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+func (x *Deployment_DeploymentStatus_DeploymentCondition) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
 }
 
 // Fields are merged with the existing deployment object, existing
@@ -4733,7 +4907,7 @@ type UpdateDeploymentRequest_Fields struct {
 func (x *UpdateDeploymentRequest_Fields) Reset() {
 	*x = UpdateDeploymentRequest_Fields{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[78]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[79]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4746,7 +4920,7 @@ func (x *UpdateDeploymentRequest_Fields) String() string {
 func (*UpdateDeploymentRequest_Fields) ProtoMessage() {}
 
 func (x *UpdateDeploymentRequest_Fields) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[78]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[79]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4793,7 +4967,7 @@ type UpdateStatefulSetRequest_Fields struct {
 func (x *UpdateStatefulSetRequest_Fields) Reset() {
 	*x = UpdateStatefulSetRequest_Fields{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_k8s_v1_k8s_proto_msgTypes[83]
+		mi := &file_k8s_v1_k8s_proto_msgTypes[84]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -4806,7 +4980,7 @@ func (x *UpdateStatefulSetRequest_Fields) String() string {
 func (*UpdateStatefulSetRequest_Fields) ProtoMessage() {}
 
 func (x *UpdateStatefulSetRequest_Fields) ProtoReflect() protoreflect.Message {
-	mi := &file_k8s_v1_k8s_proto_msgTypes[83]
+	mi := &file_k8s_v1_k8s_proto_msgTypes[84]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5091,7 +5265,7 @@ var file_k8s_v1_k8s_proto_rawDesc = []byte{
 	0x76, 0x31, 0x2e, 0x48, 0x50, 0x41, 0x12, 0x1c, 0x7b, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72,
 	0x7d, 0x2f, 0x7b, 0x6e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x7d, 0x2f, 0x7b, 0x6e,
 	0x61, 0x6d, 0x65, 0x7d, 0x22, 0x13, 0x0a, 0x11, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x48, 0x50,
-	0x41, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xab, 0x04, 0x0a, 0x0a, 0x44, 0x65,
+	0x41, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xfb, 0x0a, 0x0a, 0x0a, 0x44, 0x65,
 	0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6c, 0x75, 0x73,
 	0x74, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6c, 0x75, 0x73, 0x74,
 	0x65, 0x72, 0x12, 0x1c, 0x0a, 0x09, 0x6e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x18,
@@ -5106,23 +5280,76 @@ var file_k8s_v1_k8s_proto_rawDesc = []byte{
 	0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d,
 	0x65, 0x6e, 0x74, 0x2e, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x45,
 	0x6e, 0x74, 0x72, 0x79, 0x52, 0x0b, 0x61, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x73, 0x12, 0x38, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x06, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x20, 0x2e, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76,
-	0x31, 0x2e, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x2e, 0x53, 0x74, 0x61,
-	0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x1a, 0x39, 0x0a, 0x0b, 0x4c,
-	0x61, 0x62, 0x65, 0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65,
-	0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05,
-	0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c,
-	0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x1a, 0x3e, 0x0a, 0x10, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65,
-	0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05,
-	0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c,
-	0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x1a, 0x4f, 0x0a, 0x06, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73,
-	0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x73, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x0d, 0x52, 0x08, 0x72, 0x65, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x73, 0x12, 0x29, 0x0a, 0x10,
-	0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x72, 0x65, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x73,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0f, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x52,
-	0x65, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x73, 0x3a, 0x3e, 0xb2, 0xe1, 0x1c, 0x3a, 0x0a, 0x38, 0x0a,
+	0x73, 0x12, 0x57, 0x0a, 0x11, 0x64, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x5f,
+	0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x63,
+	0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x70,
+	0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x2e, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65,
+	0x6e, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x10, 0x64, 0x65, 0x70, 0x6c, 0x6f, 0x79,
+	0x6d, 0x65, 0x6e, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x1a, 0x39, 0x0a, 0x0b, 0x4c, 0x61,
+	0x62, 0x65, 0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76,
+	0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75,
+	0x65, 0x3a, 0x02, 0x38, 0x01, 0x1a, 0x3e, 0x0a, 0x10, 0x41, 0x6e, 0x6e, 0x6f, 0x74, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76,
+	0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75,
+	0x65, 0x3a, 0x02, 0x38, 0x01, 0x1a, 0xff, 0x06, 0x0a, 0x10, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79,
+	0x6d, 0x65, 0x6e, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65,
+	0x70, 0x6c, 0x69, 0x63, 0x61, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x08, 0x72, 0x65,
+	0x70, 0x6c, 0x69, 0x63, 0x61, 0x73, 0x12, 0x29, 0x0a, 0x10, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x64, 0x5f, 0x72, 0x65, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d,
+	0x52, 0x0f, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x52, 0x65, 0x70, 0x6c, 0x69, 0x63, 0x61,
+	0x73, 0x12, 0x25, 0x0a, 0x0e, 0x72, 0x65, 0x61, 0x64, 0x79, 0x5f, 0x72, 0x65, 0x70, 0x6c, 0x69,
+	0x63, 0x61, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0d, 0x72, 0x65, 0x61, 0x64, 0x79,
+	0x52, 0x65, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x73, 0x12, 0x2d, 0x0a, 0x12, 0x61, 0x76, 0x61, 0x69,
+	0x6c, 0x61, 0x62, 0x6c, 0x65, 0x5f, 0x72, 0x65, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x73, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x0d, 0x52, 0x11, 0x61, 0x76, 0x61, 0x69, 0x6c, 0x61, 0x62, 0x6c, 0x65, 0x52,
+	0x65, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x73, 0x12, 0x31, 0x0a, 0x14, 0x75, 0x6e, 0x61, 0x76, 0x61,
+	0x69, 0x6c, 0x61, 0x62, 0x6c, 0x65, 0x5f, 0x72, 0x65, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x73, 0x18,
+	0x05, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x13, 0x75, 0x6e, 0x61, 0x76, 0x61, 0x69, 0x6c, 0x61, 0x62,
+	0x6c, 0x65, 0x52, 0x65, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x73, 0x12, 0x73, 0x0a, 0x15, 0x64, 0x65,
+	0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x63, 0x6f, 0x6e, 0x64, 0x69, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x3e, 0x2e, 0x63, 0x6c, 0x75, 0x74,
+	0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79,
+	0x6d, 0x65, 0x6e, 0x74, 0x2e, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x53,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x2e, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74,
+	0x43, 0x6f, 0x6e, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x14, 0x64, 0x65, 0x70, 0x6c, 0x6f,
+	0x79, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x6f, 0x6e, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x1a,
+	0xa5, 0x04, 0x0a, 0x13, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x6f,
+	0x6e, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x92, 0x01, 0x0a, 0x19, 0x64, 0x65, 0x70, 0x6c,
+	0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x63, 0x6f, 0x6e, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e,
+	0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x56, 0x2e, 0x63, 0x6c,
+	0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x70, 0x6c,
+	0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x2e, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e,
+	0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x2e, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65,
+	0x6e, 0x74, 0x43, 0x6f, 0x6e, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x44, 0x65, 0x70, 0x6c,
+	0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x6f, 0x6e, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x54,
+	0x79, 0x70, 0x65, 0x52, 0x17, 0x64, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x43,
+	0x6f, 0x6e, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x12, 0x45, 0x0a, 0x10,
+	0x63, 0x6f, 0x6e, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42, 0x6f, 0x6f, 0x6c, 0x56, 0x61, 0x6c,
+	0x75, 0x65, 0x52, 0x0f, 0x63, 0x6f, 0x6e, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x74, 0x61,
+	0x74, 0x75, 0x73, 0x12, 0x44, 0x0a, 0x10, 0x6c, 0x61, 0x73, 0x74, 0x5f, 0x75, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e,
+	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
+	0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x0e, 0x6c, 0x61, 0x73, 0x74, 0x55,
+	0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x12, 0x4c, 0x0a, 0x14, 0x6c, 0x61, 0x73,
+	0x74, 0x5f, 0x74, 0x72, 0x61, 0x6e, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x69, 0x6d,
+	0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74,
+	0x61, 0x6d, 0x70, 0x52, 0x12, 0x6c, 0x61, 0x73, 0x74, 0x54, 0x72, 0x61, 0x6e, 0x73, 0x69, 0x74,
+	0x69, 0x6f, 0x6e, 0x54, 0x69, 0x6d, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x65, 0x61, 0x73, 0x6f,
+	0x6e, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x72, 0x65, 0x61, 0x73, 0x6f, 0x6e, 0x12,
+	0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x6c, 0x0a, 0x17, 0x44, 0x65, 0x70,
+	0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x6f, 0x6e, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e,
+	0x54, 0x79, 0x70, 0x65, 0x12, 0x0f, 0x0a, 0x0b, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46,
+	0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x0b, 0x0a, 0x07, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e,
+	0x10, 0x01, 0x12, 0x0d, 0x0a, 0x09, 0x41, 0x56, 0x41, 0x49, 0x4c, 0x41, 0x42, 0x4c, 0x45, 0x10,
+	0x02, 0x12, 0x0f, 0x0a, 0x0b, 0x50, 0x52, 0x4f, 0x47, 0x52, 0x45, 0x53, 0x53, 0x49, 0x4e, 0x47,
+	0x10, 0x03, 0x12, 0x13, 0x0a, 0x0f, 0x52, 0x45, 0x50, 0x4c, 0x49, 0x43, 0x41, 0x5f, 0x46, 0x41,
+	0x49, 0x4c, 0x55, 0x52, 0x45, 0x10, 0x04, 0x3a, 0x3e, 0xb2, 0xe1, 0x1c, 0x3a, 0x0a, 0x38, 0x0a,
 	0x18, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2e, 0x6b, 0x38, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44,
 	0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x1c, 0x7b, 0x63, 0x6c, 0x75, 0x73,
 	0x74, 0x65, 0x72, 0x7d, 0x2f, 0x7b, 0x6e, 0x61, 0x6d, 0x65, 0x73, 0x70, 0x61, 0x63, 0x65, 0x7d,
@@ -6041,250 +6268,258 @@ func file_k8s_v1_k8s_proto_rawDescGZIP() []byte {
 	return file_k8s_v1_k8s_proto_rawDescData
 }
 
-var file_k8s_v1_k8s_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_k8s_v1_k8s_proto_msgTypes = make([]protoimpl.MessageInfo, 102)
+var file_k8s_v1_k8s_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
+var file_k8s_v1_k8s_proto_msgTypes = make([]protoimpl.MessageInfo, 103)
 var file_k8s_v1_k8s_proto_goTypes = []interface{}{
-	(Container_State)(0),                    // 0: clutch.k8s.v1.Container.State
-	(Pod_State)(0),                          // 1: clutch.k8s.v1.Pod.State
-	(Service_Type)(0),                       // 2: clutch.k8s.v1.Service.Type
-	(CronJob_ConcurrencyPolicy)(0),          // 3: clutch.k8s.v1.CronJob.ConcurrencyPolicy
-	(*DescribePodRequest)(nil),              // 4: clutch.k8s.v1.DescribePodRequest
-	(*DescribePodResponse)(nil),             // 5: clutch.k8s.v1.DescribePodResponse
-	(*Container)(nil),                       // 6: clutch.k8s.v1.Container
-	(*Pod)(nil),                             // 7: clutch.k8s.v1.Pod
-	(*ListOptions)(nil),                     // 8: clutch.k8s.v1.ListOptions
-	(*ListPodsRequest)(nil),                 // 9: clutch.k8s.v1.ListPodsRequest
-	(*ListPodsResponse)(nil),                // 10: clutch.k8s.v1.ListPodsResponse
-	(*DeletePodRequest)(nil),                // 11: clutch.k8s.v1.DeletePodRequest
-	(*DeletePodResponse)(nil),               // 12: clutch.k8s.v1.DeletePodResponse
-	(*UpdatePodRequest)(nil),                // 13: clutch.k8s.v1.UpdatePodRequest
-	(*UpdatePodResponse)(nil),               // 14: clutch.k8s.v1.UpdatePodResponse
-	(*HPA)(nil),                             // 15: clutch.k8s.v1.HPA
-	(*ResizeHPARequest)(nil),                // 16: clutch.k8s.v1.ResizeHPARequest
-	(*ResizeHPAResponse)(nil),               // 17: clutch.k8s.v1.ResizeHPAResponse
-	(*DeleteHPARequest)(nil),                // 18: clutch.k8s.v1.DeleteHPARequest
-	(*DeleteHPAResponse)(nil),               // 19: clutch.k8s.v1.DeleteHPAResponse
-	(*Deployment)(nil),                      // 20: clutch.k8s.v1.Deployment
-	(*DescribeDeploymentRequest)(nil),       // 21: clutch.k8s.v1.DescribeDeploymentRequest
-	(*DescribeDeploymentResponse)(nil),      // 22: clutch.k8s.v1.DescribeDeploymentResponse
-	(*ListDeploymentsRequest)(nil),          // 23: clutch.k8s.v1.ListDeploymentsRequest
-	(*ListDeploymentsResponse)(nil),         // 24: clutch.k8s.v1.ListDeploymentsResponse
-	(*UpdateDeploymentRequest)(nil),         // 25: clutch.k8s.v1.UpdateDeploymentRequest
-	(*UpdateDeploymentResponse)(nil),        // 26: clutch.k8s.v1.UpdateDeploymentResponse
-	(*DeleteDeploymentRequest)(nil),         // 27: clutch.k8s.v1.DeleteDeploymentRequest
-	(*DeleteDeploymentResponse)(nil),        // 28: clutch.k8s.v1.DeleteDeploymentResponse
-	(*StatefulSet)(nil),                     // 29: clutch.k8s.v1.StatefulSet
-	(*DescribeStatefulSetRequest)(nil),      // 30: clutch.k8s.v1.DescribeStatefulSetRequest
-	(*DescribeStatefulSetResponse)(nil),     // 31: clutch.k8s.v1.DescribeStatefulSetResponse
-	(*ListStatefulSetsRequest)(nil),         // 32: clutch.k8s.v1.ListStatefulSetsRequest
-	(*ListStatefulSetsResponse)(nil),        // 33: clutch.k8s.v1.ListStatefulSetsResponse
-	(*DeleteStatefulSetRequest)(nil),        // 34: clutch.k8s.v1.DeleteStatefulSetRequest
-	(*DeleteStatefulSetResponse)(nil),       // 35: clutch.k8s.v1.DeleteStatefulSetResponse
-	(*UpdateStatefulSetRequest)(nil),        // 36: clutch.k8s.v1.UpdateStatefulSetRequest
-	(*UpdateStatefulSetResponse)(nil),       // 37: clutch.k8s.v1.UpdateStatefulSetResponse
-	(*Service)(nil),                         // 38: clutch.k8s.v1.Service
-	(*DescribeServiceRequest)(nil),          // 39: clutch.k8s.v1.DescribeServiceRequest
-	(*DescribeServiceResponse)(nil),         // 40: clutch.k8s.v1.DescribeServiceResponse
-	(*DeleteServiceRequest)(nil),            // 41: clutch.k8s.v1.DeleteServiceRequest
-	(*DeleteServiceResponse)(nil),           // 42: clutch.k8s.v1.DeleteServiceResponse
-	(*CronJob)(nil),                         // 43: clutch.k8s.v1.CronJob
-	(*DescribeCronJobRequest)(nil),          // 44: clutch.k8s.v1.DescribeCronJobRequest
-	(*DescribeCronJobResponse)(nil),         // 45: clutch.k8s.v1.DescribeCronJobResponse
-	(*ListCronJobsRequest)(nil),             // 46: clutch.k8s.v1.ListCronJobsRequest
-	(*ListCronJobsResponse)(nil),            // 47: clutch.k8s.v1.ListCronJobsResponse
-	(*DeleteCronJobRequest)(nil),            // 48: clutch.k8s.v1.DeleteCronJobRequest
-	(*DeleteCronJobResponse)(nil),           // 49: clutch.k8s.v1.DeleteCronJobResponse
-	(*ConfigMap)(nil),                       // 50: clutch.k8s.v1.ConfigMap
-	(*ListConfigMapsRequest)(nil),           // 51: clutch.k8s.v1.ListConfigMapsRequest
-	(*ListConfigMapsResponse)(nil),          // 52: clutch.k8s.v1.ListConfigMapsResponse
-	(*DescribeConfigMapRequest)(nil),        // 53: clutch.k8s.v1.DescribeConfigMapRequest
-	(*DescribeConfigMapResponse)(nil),       // 54: clutch.k8s.v1.DescribeConfigMapResponse
-	(*DeleteConfigMapRequest)(nil),          // 55: clutch.k8s.v1.DeleteConfigMapRequest
-	(*DeleteConfigMapResponse)(nil),         // 56: clutch.k8s.v1.DeleteConfigMapResponse
-	(*Job)(nil),                             // 57: clutch.k8s.v1.Job
-	(*ListJobsRequest)(nil),                 // 58: clutch.k8s.v1.ListJobsRequest
-	(*ListJobsResponse)(nil),                // 59: clutch.k8s.v1.ListJobsResponse
-	(*DeleteJobRequest)(nil),                // 60: clutch.k8s.v1.DeleteJobRequest
-	(*DeleteJobResponse)(nil),               // 61: clutch.k8s.v1.DeleteJobResponse
-	(*JobConfig)(nil),                       // 62: clutch.k8s.v1.JobConfig
-	(*CreateJobRequest)(nil),                // 63: clutch.k8s.v1.CreateJobRequest
-	(*CreateJobResponse)(nil),               // 64: clutch.k8s.v1.CreateJobResponse
-	(*Namespace)(nil),                       // 65: clutch.k8s.v1.Namespace
-	(*DescribeNamespaceRequest)(nil),        // 66: clutch.k8s.v1.DescribeNamespaceRequest
-	(*DescribeNamespaceResponse)(nil),       // 67: clutch.k8s.v1.DescribeNamespaceResponse
-	(*NullableString)(nil),                  // 68: clutch.k8s.v1.NullableString
-	(*ExpectedObjectMetaFields)(nil),        // 69: clutch.k8s.v1.ExpectedObjectMetaFields
-	(*ObjectMetaFields)(nil),                // 70: clutch.k8s.v1.ObjectMetaFields
-	(*RemoveObjectMetaFields)(nil),          // 71: clutch.k8s.v1.RemoveObjectMetaFields
-	nil,                                     // 72: clutch.k8s.v1.Pod.LabelsEntry
-	nil,                                     // 73: clutch.k8s.v1.Pod.AnnotationsEntry
-	nil,                                     // 74: clutch.k8s.v1.ListOptions.LabelsEntry
-	(*HPA_Sizing)(nil),                      // 75: clutch.k8s.v1.HPA.Sizing
-	nil,                                     // 76: clutch.k8s.v1.HPA.LabelsEntry
-	nil,                                     // 77: clutch.k8s.v1.HPA.AnnotationsEntry
-	(*ResizeHPARequest_Sizing)(nil),         // 78: clutch.k8s.v1.ResizeHPARequest.Sizing
-	nil,                                     // 79: clutch.k8s.v1.Deployment.LabelsEntry
-	nil,                                     // 80: clutch.k8s.v1.Deployment.AnnotationsEntry
-	(*Deployment_Status)(nil),               // 81: clutch.k8s.v1.Deployment.Status
-	(*UpdateDeploymentRequest_Fields)(nil),  // 82: clutch.k8s.v1.UpdateDeploymentRequest.Fields
-	nil,                                     // 83: clutch.k8s.v1.UpdateDeploymentRequest.Fields.LabelsEntry
-	nil,                                     // 84: clutch.k8s.v1.UpdateDeploymentRequest.Fields.AnnotationsEntry
-	nil,                                     // 85: clutch.k8s.v1.StatefulSet.LabelsEntry
-	nil,                                     // 86: clutch.k8s.v1.StatefulSet.AnnotationsEntry
-	(*UpdateStatefulSetRequest_Fields)(nil), // 87: clutch.k8s.v1.UpdateStatefulSetRequest.Fields
-	nil,                                     // 88: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.LabelsEntry
-	nil,                                     // 89: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.AnnotationsEntry
-	nil,                                     // 90: clutch.k8s.v1.Service.LabelsEntry
-	nil,                                     // 91: clutch.k8s.v1.Service.AnnotationsEntry
-	nil,                                     // 92: clutch.k8s.v1.CronJob.LabelsEntry
-	nil,                                     // 93: clutch.k8s.v1.CronJob.AnnotationsEntry
-	nil,                                     // 94: clutch.k8s.v1.ConfigMap.AnnotationsEntry
-	nil,                                     // 95: clutch.k8s.v1.ConfigMap.LabelsEntry
-	nil,                                     // 96: clutch.k8s.v1.ConfigMap.DataEntry
-	nil,                                     // 97: clutch.k8s.v1.ConfigMap.BinaryDataEntry
-	nil,                                     // 98: clutch.k8s.v1.Job.AnnotationsEntry
-	nil,                                     // 99: clutch.k8s.v1.Job.LabelsEntry
-	nil,                                     // 100: clutch.k8s.v1.Namespace.AnnotationsEntry
-	nil,                                     // 101: clutch.k8s.v1.Namespace.LabelsEntry
-	nil,                                     // 102: clutch.k8s.v1.ExpectedObjectMetaFields.LabelsEntry
-	nil,                                     // 103: clutch.k8s.v1.ExpectedObjectMetaFields.AnnotationsEntry
-	nil,                                     // 104: clutch.k8s.v1.ObjectMetaFields.LabelsEntry
-	nil,                                     // 105: clutch.k8s.v1.ObjectMetaFields.AnnotationsEntry
-	(*timestamppb.Timestamp)(nil),           // 106: google.protobuf.Timestamp
-	(*wrapperspb.Int32Value)(nil),           // 107: google.protobuf.Int32Value
-	(*wrapperspb.Int64Value)(nil),           // 108: google.protobuf.Int64Value
-	(*structpb.Value)(nil),                  // 109: google.protobuf.Value
-	(structpb.NullValue)(0),                 // 110: google.protobuf.NullValue
+	(Container_State)(0), // 0: clutch.k8s.v1.Container.State
+	(Pod_State)(0),       // 1: clutch.k8s.v1.Pod.State
+	(Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType)(0), // 2: clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition.DeploymentConditionType
+	(Service_Type)(0),                   // 3: clutch.k8s.v1.Service.Type
+	(CronJob_ConcurrencyPolicy)(0),      // 4: clutch.k8s.v1.CronJob.ConcurrencyPolicy
+	(*DescribePodRequest)(nil),          // 5: clutch.k8s.v1.DescribePodRequest
+	(*DescribePodResponse)(nil),         // 6: clutch.k8s.v1.DescribePodResponse
+	(*Container)(nil),                   // 7: clutch.k8s.v1.Container
+	(*Pod)(nil),                         // 8: clutch.k8s.v1.Pod
+	(*ListOptions)(nil),                 // 9: clutch.k8s.v1.ListOptions
+	(*ListPodsRequest)(nil),             // 10: clutch.k8s.v1.ListPodsRequest
+	(*ListPodsResponse)(nil),            // 11: clutch.k8s.v1.ListPodsResponse
+	(*DeletePodRequest)(nil),            // 12: clutch.k8s.v1.DeletePodRequest
+	(*DeletePodResponse)(nil),           // 13: clutch.k8s.v1.DeletePodResponse
+	(*UpdatePodRequest)(nil),            // 14: clutch.k8s.v1.UpdatePodRequest
+	(*UpdatePodResponse)(nil),           // 15: clutch.k8s.v1.UpdatePodResponse
+	(*HPA)(nil),                         // 16: clutch.k8s.v1.HPA
+	(*ResizeHPARequest)(nil),            // 17: clutch.k8s.v1.ResizeHPARequest
+	(*ResizeHPAResponse)(nil),           // 18: clutch.k8s.v1.ResizeHPAResponse
+	(*DeleteHPARequest)(nil),            // 19: clutch.k8s.v1.DeleteHPARequest
+	(*DeleteHPAResponse)(nil),           // 20: clutch.k8s.v1.DeleteHPAResponse
+	(*Deployment)(nil),                  // 21: clutch.k8s.v1.Deployment
+	(*DescribeDeploymentRequest)(nil),   // 22: clutch.k8s.v1.DescribeDeploymentRequest
+	(*DescribeDeploymentResponse)(nil),  // 23: clutch.k8s.v1.DescribeDeploymentResponse
+	(*ListDeploymentsRequest)(nil),      // 24: clutch.k8s.v1.ListDeploymentsRequest
+	(*ListDeploymentsResponse)(nil),     // 25: clutch.k8s.v1.ListDeploymentsResponse
+	(*UpdateDeploymentRequest)(nil),     // 26: clutch.k8s.v1.UpdateDeploymentRequest
+	(*UpdateDeploymentResponse)(nil),    // 27: clutch.k8s.v1.UpdateDeploymentResponse
+	(*DeleteDeploymentRequest)(nil),     // 28: clutch.k8s.v1.DeleteDeploymentRequest
+	(*DeleteDeploymentResponse)(nil),    // 29: clutch.k8s.v1.DeleteDeploymentResponse
+	(*StatefulSet)(nil),                 // 30: clutch.k8s.v1.StatefulSet
+	(*DescribeStatefulSetRequest)(nil),  // 31: clutch.k8s.v1.DescribeStatefulSetRequest
+	(*DescribeStatefulSetResponse)(nil), // 32: clutch.k8s.v1.DescribeStatefulSetResponse
+	(*ListStatefulSetsRequest)(nil),     // 33: clutch.k8s.v1.ListStatefulSetsRequest
+	(*ListStatefulSetsResponse)(nil),    // 34: clutch.k8s.v1.ListStatefulSetsResponse
+	(*DeleteStatefulSetRequest)(nil),    // 35: clutch.k8s.v1.DeleteStatefulSetRequest
+	(*DeleteStatefulSetResponse)(nil),   // 36: clutch.k8s.v1.DeleteStatefulSetResponse
+	(*UpdateStatefulSetRequest)(nil),    // 37: clutch.k8s.v1.UpdateStatefulSetRequest
+	(*UpdateStatefulSetResponse)(nil),   // 38: clutch.k8s.v1.UpdateStatefulSetResponse
+	(*Service)(nil),                     // 39: clutch.k8s.v1.Service
+	(*DescribeServiceRequest)(nil),      // 40: clutch.k8s.v1.DescribeServiceRequest
+	(*DescribeServiceResponse)(nil),     // 41: clutch.k8s.v1.DescribeServiceResponse
+	(*DeleteServiceRequest)(nil),        // 42: clutch.k8s.v1.DeleteServiceRequest
+	(*DeleteServiceResponse)(nil),       // 43: clutch.k8s.v1.DeleteServiceResponse
+	(*CronJob)(nil),                     // 44: clutch.k8s.v1.CronJob
+	(*DescribeCronJobRequest)(nil),      // 45: clutch.k8s.v1.DescribeCronJobRequest
+	(*DescribeCronJobResponse)(nil),     // 46: clutch.k8s.v1.DescribeCronJobResponse
+	(*ListCronJobsRequest)(nil),         // 47: clutch.k8s.v1.ListCronJobsRequest
+	(*ListCronJobsResponse)(nil),        // 48: clutch.k8s.v1.ListCronJobsResponse
+	(*DeleteCronJobRequest)(nil),        // 49: clutch.k8s.v1.DeleteCronJobRequest
+	(*DeleteCronJobResponse)(nil),       // 50: clutch.k8s.v1.DeleteCronJobResponse
+	(*ConfigMap)(nil),                   // 51: clutch.k8s.v1.ConfigMap
+	(*ListConfigMapsRequest)(nil),       // 52: clutch.k8s.v1.ListConfigMapsRequest
+	(*ListConfigMapsResponse)(nil),      // 53: clutch.k8s.v1.ListConfigMapsResponse
+	(*DescribeConfigMapRequest)(nil),    // 54: clutch.k8s.v1.DescribeConfigMapRequest
+	(*DescribeConfigMapResponse)(nil),   // 55: clutch.k8s.v1.DescribeConfigMapResponse
+	(*DeleteConfigMapRequest)(nil),      // 56: clutch.k8s.v1.DeleteConfigMapRequest
+	(*DeleteConfigMapResponse)(nil),     // 57: clutch.k8s.v1.DeleteConfigMapResponse
+	(*Job)(nil),                         // 58: clutch.k8s.v1.Job
+	(*ListJobsRequest)(nil),             // 59: clutch.k8s.v1.ListJobsRequest
+	(*ListJobsResponse)(nil),            // 60: clutch.k8s.v1.ListJobsResponse
+	(*DeleteJobRequest)(nil),            // 61: clutch.k8s.v1.DeleteJobRequest
+	(*DeleteJobResponse)(nil),           // 62: clutch.k8s.v1.DeleteJobResponse
+	(*JobConfig)(nil),                   // 63: clutch.k8s.v1.JobConfig
+	(*CreateJobRequest)(nil),            // 64: clutch.k8s.v1.CreateJobRequest
+	(*CreateJobResponse)(nil),           // 65: clutch.k8s.v1.CreateJobResponse
+	(*Namespace)(nil),                   // 66: clutch.k8s.v1.Namespace
+	(*DescribeNamespaceRequest)(nil),    // 67: clutch.k8s.v1.DescribeNamespaceRequest
+	(*DescribeNamespaceResponse)(nil),   // 68: clutch.k8s.v1.DescribeNamespaceResponse
+	(*NullableString)(nil),              // 69: clutch.k8s.v1.NullableString
+	(*ExpectedObjectMetaFields)(nil),    // 70: clutch.k8s.v1.ExpectedObjectMetaFields
+	(*ObjectMetaFields)(nil),            // 71: clutch.k8s.v1.ObjectMetaFields
+	(*RemoveObjectMetaFields)(nil),      // 72: clutch.k8s.v1.RemoveObjectMetaFields
+	nil,                                 // 73: clutch.k8s.v1.Pod.LabelsEntry
+	nil,                                 // 74: clutch.k8s.v1.Pod.AnnotationsEntry
+	nil,                                 // 75: clutch.k8s.v1.ListOptions.LabelsEntry
+	(*HPA_Sizing)(nil),                  // 76: clutch.k8s.v1.HPA.Sizing
+	nil,                                 // 77: clutch.k8s.v1.HPA.LabelsEntry
+	nil,                                 // 78: clutch.k8s.v1.HPA.AnnotationsEntry
+	(*ResizeHPARequest_Sizing)(nil),     // 79: clutch.k8s.v1.ResizeHPARequest.Sizing
+	nil,                                 // 80: clutch.k8s.v1.Deployment.LabelsEntry
+	nil,                                 // 81: clutch.k8s.v1.Deployment.AnnotationsEntry
+	(*Deployment_DeploymentStatus)(nil), // 82: clutch.k8s.v1.Deployment.DeploymentStatus
+	(*Deployment_DeploymentStatus_DeploymentCondition)(nil), // 83: clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition
+	(*UpdateDeploymentRequest_Fields)(nil),                  // 84: clutch.k8s.v1.UpdateDeploymentRequest.Fields
+	nil,                                                     // 85: clutch.k8s.v1.UpdateDeploymentRequest.Fields.LabelsEntry
+	nil,                                                     // 86: clutch.k8s.v1.UpdateDeploymentRequest.Fields.AnnotationsEntry
+	nil,                                                     // 87: clutch.k8s.v1.StatefulSet.LabelsEntry
+	nil,                                                     // 88: clutch.k8s.v1.StatefulSet.AnnotationsEntry
+	(*UpdateStatefulSetRequest_Fields)(nil),                 // 89: clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+	nil,                                                     // 90: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.LabelsEntry
+	nil,                                                     // 91: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.AnnotationsEntry
+	nil,                                                     // 92: clutch.k8s.v1.Service.LabelsEntry
+	nil,                                                     // 93: clutch.k8s.v1.Service.AnnotationsEntry
+	nil,                                                     // 94: clutch.k8s.v1.CronJob.LabelsEntry
+	nil,                                                     // 95: clutch.k8s.v1.CronJob.AnnotationsEntry
+	nil,                                                     // 96: clutch.k8s.v1.ConfigMap.AnnotationsEntry
+	nil,                                                     // 97: clutch.k8s.v1.ConfigMap.LabelsEntry
+	nil,                                                     // 98: clutch.k8s.v1.ConfigMap.DataEntry
+	nil,                                                     // 99: clutch.k8s.v1.ConfigMap.BinaryDataEntry
+	nil,                                                     // 100: clutch.k8s.v1.Job.AnnotationsEntry
+	nil,                                                     // 101: clutch.k8s.v1.Job.LabelsEntry
+	nil,                                                     // 102: clutch.k8s.v1.Namespace.AnnotationsEntry
+	nil,                                                     // 103: clutch.k8s.v1.Namespace.LabelsEntry
+	nil,                                                     // 104: clutch.k8s.v1.ExpectedObjectMetaFields.LabelsEntry
+	nil,                                                     // 105: clutch.k8s.v1.ExpectedObjectMetaFields.AnnotationsEntry
+	nil,                                                     // 106: clutch.k8s.v1.ObjectMetaFields.LabelsEntry
+	nil,                                                     // 107: clutch.k8s.v1.ObjectMetaFields.AnnotationsEntry
+	(*timestamppb.Timestamp)(nil),                           // 108: google.protobuf.Timestamp
+	(*wrapperspb.Int32Value)(nil),                           // 109: google.protobuf.Int32Value
+	(*wrapperspb.Int64Value)(nil),                           // 110: google.protobuf.Int64Value
+	(*structpb.Value)(nil),                                  // 111: google.protobuf.Value
+	(structpb.NullValue)(0),                                 // 112: google.protobuf.NullValue
+	(*wrapperspb.BoolValue)(nil),                            // 113: google.protobuf.BoolValue
 }
 var file_k8s_v1_k8s_proto_depIdxs = []int32{
-	7,   // 0: clutch.k8s.v1.DescribePodResponse.pod:type_name -> clutch.k8s.v1.Pod
+	8,   // 0: clutch.k8s.v1.DescribePodResponse.pod:type_name -> clutch.k8s.v1.Pod
 	0,   // 1: clutch.k8s.v1.Container.state:type_name -> clutch.k8s.v1.Container.State
-	6,   // 2: clutch.k8s.v1.Pod.containers:type_name -> clutch.k8s.v1.Container
+	7,   // 2: clutch.k8s.v1.Pod.containers:type_name -> clutch.k8s.v1.Container
 	1,   // 3: clutch.k8s.v1.Pod.state:type_name -> clutch.k8s.v1.Pod.State
-	106, // 4: clutch.k8s.v1.Pod.start_time:type_name -> google.protobuf.Timestamp
-	72,  // 5: clutch.k8s.v1.Pod.labels:type_name -> clutch.k8s.v1.Pod.LabelsEntry
-	73,  // 6: clutch.k8s.v1.Pod.annotations:type_name -> clutch.k8s.v1.Pod.AnnotationsEntry
-	74,  // 7: clutch.k8s.v1.ListOptions.labels:type_name -> clutch.k8s.v1.ListOptions.LabelsEntry
-	8,   // 8: clutch.k8s.v1.ListPodsRequest.options:type_name -> clutch.k8s.v1.ListOptions
-	7,   // 9: clutch.k8s.v1.ListPodsResponse.pods:type_name -> clutch.k8s.v1.Pod
-	69,  // 10: clutch.k8s.v1.UpdatePodRequest.expected_object_meta_fields:type_name -> clutch.k8s.v1.ExpectedObjectMetaFields
-	70,  // 11: clutch.k8s.v1.UpdatePodRequest.object_meta_fields:type_name -> clutch.k8s.v1.ObjectMetaFields
-	71,  // 12: clutch.k8s.v1.UpdatePodRequest.remove_object_meta_fields:type_name -> clutch.k8s.v1.RemoveObjectMetaFields
-	75,  // 13: clutch.k8s.v1.HPA.sizing:type_name -> clutch.k8s.v1.HPA.Sizing
-	76,  // 14: clutch.k8s.v1.HPA.labels:type_name -> clutch.k8s.v1.HPA.LabelsEntry
-	77,  // 15: clutch.k8s.v1.HPA.annotations:type_name -> clutch.k8s.v1.HPA.AnnotationsEntry
-	107, // 16: clutch.k8s.v1.HPA.current_cpu_utilization_percentage:type_name -> google.protobuf.Int32Value
-	107, // 17: clutch.k8s.v1.HPA.target_cpu_utilization_percentage:type_name -> google.protobuf.Int32Value
-	78,  // 18: clutch.k8s.v1.ResizeHPARequest.sizing:type_name -> clutch.k8s.v1.ResizeHPARequest.Sizing
-	79,  // 19: clutch.k8s.v1.Deployment.labels:type_name -> clutch.k8s.v1.Deployment.LabelsEntry
-	80,  // 20: clutch.k8s.v1.Deployment.annotations:type_name -> clutch.k8s.v1.Deployment.AnnotationsEntry
-	81,  // 21: clutch.k8s.v1.Deployment.status:type_name -> clutch.k8s.v1.Deployment.Status
-	20,  // 22: clutch.k8s.v1.DescribeDeploymentResponse.deployment:type_name -> clutch.k8s.v1.Deployment
-	8,   // 23: clutch.k8s.v1.ListDeploymentsRequest.options:type_name -> clutch.k8s.v1.ListOptions
-	20,  // 24: clutch.k8s.v1.ListDeploymentsResponse.deployments:type_name -> clutch.k8s.v1.Deployment
-	82,  // 25: clutch.k8s.v1.UpdateDeploymentRequest.fields:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields
-	85,  // 26: clutch.k8s.v1.StatefulSet.labels:type_name -> clutch.k8s.v1.StatefulSet.LabelsEntry
-	86,  // 27: clutch.k8s.v1.StatefulSet.annotations:type_name -> clutch.k8s.v1.StatefulSet.AnnotationsEntry
-	29,  // 28: clutch.k8s.v1.DescribeStatefulSetResponse.stateful_set:type_name -> clutch.k8s.v1.StatefulSet
-	8,   // 29: clutch.k8s.v1.ListStatefulSetsRequest.options:type_name -> clutch.k8s.v1.ListOptions
-	29,  // 30: clutch.k8s.v1.ListStatefulSetsResponse.stateful_sets:type_name -> clutch.k8s.v1.StatefulSet
-	87,  // 31: clutch.k8s.v1.UpdateStatefulSetRequest.fields:type_name -> clutch.k8s.v1.UpdateStatefulSetRequest.Fields
-	2,   // 32: clutch.k8s.v1.Service.type:type_name -> clutch.k8s.v1.Service.Type
-	90,  // 33: clutch.k8s.v1.Service.labels:type_name -> clutch.k8s.v1.Service.LabelsEntry
-	91,  // 34: clutch.k8s.v1.Service.annotations:type_name -> clutch.k8s.v1.Service.AnnotationsEntry
-	38,  // 35: clutch.k8s.v1.DescribeServiceResponse.service:type_name -> clutch.k8s.v1.Service
-	92,  // 36: clutch.k8s.v1.CronJob.labels:type_name -> clutch.k8s.v1.CronJob.LabelsEntry
-	93,  // 37: clutch.k8s.v1.CronJob.annotations:type_name -> clutch.k8s.v1.CronJob.AnnotationsEntry
-	3,   // 38: clutch.k8s.v1.CronJob.concurrency_policy:type_name -> clutch.k8s.v1.CronJob.ConcurrencyPolicy
-	108, // 39: clutch.k8s.v1.CronJob.starting_deadline_seconds:type_name -> google.protobuf.Int64Value
-	43,  // 40: clutch.k8s.v1.DescribeCronJobResponse.cronjob:type_name -> clutch.k8s.v1.CronJob
-	8,   // 41: clutch.k8s.v1.ListCronJobsRequest.options:type_name -> clutch.k8s.v1.ListOptions
-	43,  // 42: clutch.k8s.v1.ListCronJobsResponse.cron_jobs:type_name -> clutch.k8s.v1.CronJob
-	94,  // 43: clutch.k8s.v1.ConfigMap.annotations:type_name -> clutch.k8s.v1.ConfigMap.AnnotationsEntry
-	95,  // 44: clutch.k8s.v1.ConfigMap.labels:type_name -> clutch.k8s.v1.ConfigMap.LabelsEntry
-	96,  // 45: clutch.k8s.v1.ConfigMap.data:type_name -> clutch.k8s.v1.ConfigMap.DataEntry
-	97,  // 46: clutch.k8s.v1.ConfigMap.binary_data:type_name -> clutch.k8s.v1.ConfigMap.BinaryDataEntry
-	8,   // 47: clutch.k8s.v1.ListConfigMapsRequest.options:type_name -> clutch.k8s.v1.ListOptions
-	50,  // 48: clutch.k8s.v1.ListConfigMapsResponse.config_maps:type_name -> clutch.k8s.v1.ConfigMap
-	50,  // 49: clutch.k8s.v1.DescribeConfigMapResponse.config_map:type_name -> clutch.k8s.v1.ConfigMap
-	98,  // 50: clutch.k8s.v1.Job.annotations:type_name -> clutch.k8s.v1.Job.AnnotationsEntry
-	99,  // 51: clutch.k8s.v1.Job.labels:type_name -> clutch.k8s.v1.Job.LabelsEntry
-	8,   // 52: clutch.k8s.v1.ListJobsRequest.options:type_name -> clutch.k8s.v1.ListOptions
-	57,  // 53: clutch.k8s.v1.ListJobsResponse.jobs:type_name -> clutch.k8s.v1.Job
-	109, // 54: clutch.k8s.v1.JobConfig.value:type_name -> google.protobuf.Value
-	62,  // 55: clutch.k8s.v1.CreateJobRequest.job_config:type_name -> clutch.k8s.v1.JobConfig
-	57,  // 56: clutch.k8s.v1.CreateJobResponse.job:type_name -> clutch.k8s.v1.Job
-	100, // 57: clutch.k8s.v1.Namespace.annotations:type_name -> clutch.k8s.v1.Namespace.AnnotationsEntry
-	101, // 58: clutch.k8s.v1.Namespace.labels:type_name -> clutch.k8s.v1.Namespace.LabelsEntry
-	65,  // 59: clutch.k8s.v1.DescribeNamespaceResponse.namespace:type_name -> clutch.k8s.v1.Namespace
-	110, // 60: clutch.k8s.v1.NullableString.null:type_name -> google.protobuf.NullValue
-	102, // 61: clutch.k8s.v1.ExpectedObjectMetaFields.labels:type_name -> clutch.k8s.v1.ExpectedObjectMetaFields.LabelsEntry
-	103, // 62: clutch.k8s.v1.ExpectedObjectMetaFields.annotations:type_name -> clutch.k8s.v1.ExpectedObjectMetaFields.AnnotationsEntry
-	104, // 63: clutch.k8s.v1.ObjectMetaFields.labels:type_name -> clutch.k8s.v1.ObjectMetaFields.LabelsEntry
-	105, // 64: clutch.k8s.v1.ObjectMetaFields.annotations:type_name -> clutch.k8s.v1.ObjectMetaFields.AnnotationsEntry
-	83,  // 65: clutch.k8s.v1.UpdateDeploymentRequest.Fields.labels:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.LabelsEntry
-	84,  // 66: clutch.k8s.v1.UpdateDeploymentRequest.Fields.annotations:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.AnnotationsEntry
-	88,  // 67: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.labels:type_name -> clutch.k8s.v1.UpdateStatefulSetRequest.Fields.LabelsEntry
-	89,  // 68: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.annotations:type_name -> clutch.k8s.v1.UpdateStatefulSetRequest.Fields.AnnotationsEntry
-	68,  // 69: clutch.k8s.v1.ExpectedObjectMetaFields.LabelsEntry.value:type_name -> clutch.k8s.v1.NullableString
-	68,  // 70: clutch.k8s.v1.ExpectedObjectMetaFields.AnnotationsEntry.value:type_name -> clutch.k8s.v1.NullableString
-	4,   // 71: clutch.k8s.v1.K8sAPI.DescribePod:input_type -> clutch.k8s.v1.DescribePodRequest
-	9,   // 72: clutch.k8s.v1.K8sAPI.ListPods:input_type -> clutch.k8s.v1.ListPodsRequest
-	11,  // 73: clutch.k8s.v1.K8sAPI.DeletePod:input_type -> clutch.k8s.v1.DeletePodRequest
-	13,  // 74: clutch.k8s.v1.K8sAPI.UpdatePod:input_type -> clutch.k8s.v1.UpdatePodRequest
-	16,  // 75: clutch.k8s.v1.K8sAPI.ResizeHPA:input_type -> clutch.k8s.v1.ResizeHPARequest
-	18,  // 76: clutch.k8s.v1.K8sAPI.DeleteHPA:input_type -> clutch.k8s.v1.DeleteHPARequest
-	21,  // 77: clutch.k8s.v1.K8sAPI.DescribeDeployment:input_type -> clutch.k8s.v1.DescribeDeploymentRequest
-	23,  // 78: clutch.k8s.v1.K8sAPI.ListDeployments:input_type -> clutch.k8s.v1.ListDeploymentsRequest
-	25,  // 79: clutch.k8s.v1.K8sAPI.UpdateDeployment:input_type -> clutch.k8s.v1.UpdateDeploymentRequest
-	27,  // 80: clutch.k8s.v1.K8sAPI.DeleteDeployment:input_type -> clutch.k8s.v1.DeleteDeploymentRequest
-	39,  // 81: clutch.k8s.v1.K8sAPI.DescribeService:input_type -> clutch.k8s.v1.DescribeServiceRequest
-	41,  // 82: clutch.k8s.v1.K8sAPI.DeleteService:input_type -> clutch.k8s.v1.DeleteServiceRequest
-	30,  // 83: clutch.k8s.v1.K8sAPI.DescribeStatefulSet:input_type -> clutch.k8s.v1.DescribeStatefulSetRequest
-	32,  // 84: clutch.k8s.v1.K8sAPI.ListStatefulSets:input_type -> clutch.k8s.v1.ListStatefulSetsRequest
-	36,  // 85: clutch.k8s.v1.K8sAPI.UpdateStatefulSet:input_type -> clutch.k8s.v1.UpdateStatefulSetRequest
-	34,  // 86: clutch.k8s.v1.K8sAPI.DeleteStatefulSet:input_type -> clutch.k8s.v1.DeleteStatefulSetRequest
-	44,  // 87: clutch.k8s.v1.K8sAPI.DescribeCronJob:input_type -> clutch.k8s.v1.DescribeCronJobRequest
-	46,  // 88: clutch.k8s.v1.K8sAPI.ListCronJobs:input_type -> clutch.k8s.v1.ListCronJobsRequest
-	48,  // 89: clutch.k8s.v1.K8sAPI.DeleteCronJob:input_type -> clutch.k8s.v1.DeleteCronJobRequest
-	51,  // 90: clutch.k8s.v1.K8sAPI.ListConfigMaps:input_type -> clutch.k8s.v1.ListConfigMapsRequest
-	53,  // 91: clutch.k8s.v1.K8sAPI.DescribeConfigMap:input_type -> clutch.k8s.v1.DescribeConfigMapRequest
-	55,  // 92: clutch.k8s.v1.K8sAPI.DeleteConfigMap:input_type -> clutch.k8s.v1.DeleteConfigMapRequest
-	58,  // 93: clutch.k8s.v1.K8sAPI.ListJobs:input_type -> clutch.k8s.v1.ListJobsRequest
-	60,  // 94: clutch.k8s.v1.K8sAPI.DeleteJob:input_type -> clutch.k8s.v1.DeleteJobRequest
-	63,  // 95: clutch.k8s.v1.K8sAPI.CreateJob:input_type -> clutch.k8s.v1.CreateJobRequest
-	66,  // 96: clutch.k8s.v1.K8sAPI.DescribeNamespace:input_type -> clutch.k8s.v1.DescribeNamespaceRequest
-	5,   // 97: clutch.k8s.v1.K8sAPI.DescribePod:output_type -> clutch.k8s.v1.DescribePodResponse
-	10,  // 98: clutch.k8s.v1.K8sAPI.ListPods:output_type -> clutch.k8s.v1.ListPodsResponse
-	12,  // 99: clutch.k8s.v1.K8sAPI.DeletePod:output_type -> clutch.k8s.v1.DeletePodResponse
-	14,  // 100: clutch.k8s.v1.K8sAPI.UpdatePod:output_type -> clutch.k8s.v1.UpdatePodResponse
-	17,  // 101: clutch.k8s.v1.K8sAPI.ResizeHPA:output_type -> clutch.k8s.v1.ResizeHPAResponse
-	19,  // 102: clutch.k8s.v1.K8sAPI.DeleteHPA:output_type -> clutch.k8s.v1.DeleteHPAResponse
-	22,  // 103: clutch.k8s.v1.K8sAPI.DescribeDeployment:output_type -> clutch.k8s.v1.DescribeDeploymentResponse
-	24,  // 104: clutch.k8s.v1.K8sAPI.ListDeployments:output_type -> clutch.k8s.v1.ListDeploymentsResponse
-	26,  // 105: clutch.k8s.v1.K8sAPI.UpdateDeployment:output_type -> clutch.k8s.v1.UpdateDeploymentResponse
-	28,  // 106: clutch.k8s.v1.K8sAPI.DeleteDeployment:output_type -> clutch.k8s.v1.DeleteDeploymentResponse
-	40,  // 107: clutch.k8s.v1.K8sAPI.DescribeService:output_type -> clutch.k8s.v1.DescribeServiceResponse
-	42,  // 108: clutch.k8s.v1.K8sAPI.DeleteService:output_type -> clutch.k8s.v1.DeleteServiceResponse
-	31,  // 109: clutch.k8s.v1.K8sAPI.DescribeStatefulSet:output_type -> clutch.k8s.v1.DescribeStatefulSetResponse
-	33,  // 110: clutch.k8s.v1.K8sAPI.ListStatefulSets:output_type -> clutch.k8s.v1.ListStatefulSetsResponse
-	37,  // 111: clutch.k8s.v1.K8sAPI.UpdateStatefulSet:output_type -> clutch.k8s.v1.UpdateStatefulSetResponse
-	35,  // 112: clutch.k8s.v1.K8sAPI.DeleteStatefulSet:output_type -> clutch.k8s.v1.DeleteStatefulSetResponse
-	45,  // 113: clutch.k8s.v1.K8sAPI.DescribeCronJob:output_type -> clutch.k8s.v1.DescribeCronJobResponse
-	47,  // 114: clutch.k8s.v1.K8sAPI.ListCronJobs:output_type -> clutch.k8s.v1.ListCronJobsResponse
-	49,  // 115: clutch.k8s.v1.K8sAPI.DeleteCronJob:output_type -> clutch.k8s.v1.DeleteCronJobResponse
-	52,  // 116: clutch.k8s.v1.K8sAPI.ListConfigMaps:output_type -> clutch.k8s.v1.ListConfigMapsResponse
-	54,  // 117: clutch.k8s.v1.K8sAPI.DescribeConfigMap:output_type -> clutch.k8s.v1.DescribeConfigMapResponse
-	56,  // 118: clutch.k8s.v1.K8sAPI.DeleteConfigMap:output_type -> clutch.k8s.v1.DeleteConfigMapResponse
-	59,  // 119: clutch.k8s.v1.K8sAPI.ListJobs:output_type -> clutch.k8s.v1.ListJobsResponse
-	61,  // 120: clutch.k8s.v1.K8sAPI.DeleteJob:output_type -> clutch.k8s.v1.DeleteJobResponse
-	64,  // 121: clutch.k8s.v1.K8sAPI.CreateJob:output_type -> clutch.k8s.v1.CreateJobResponse
-	67,  // 122: clutch.k8s.v1.K8sAPI.DescribeNamespace:output_type -> clutch.k8s.v1.DescribeNamespaceResponse
-	97,  // [97:123] is the sub-list for method output_type
-	71,  // [71:97] is the sub-list for method input_type
-	71,  // [71:71] is the sub-list for extension type_name
-	71,  // [71:71] is the sub-list for extension extendee
-	0,   // [0:71] is the sub-list for field type_name
+	108, // 4: clutch.k8s.v1.Pod.start_time:type_name -> google.protobuf.Timestamp
+	73,  // 5: clutch.k8s.v1.Pod.labels:type_name -> clutch.k8s.v1.Pod.LabelsEntry
+	74,  // 6: clutch.k8s.v1.Pod.annotations:type_name -> clutch.k8s.v1.Pod.AnnotationsEntry
+	75,  // 7: clutch.k8s.v1.ListOptions.labels:type_name -> clutch.k8s.v1.ListOptions.LabelsEntry
+	9,   // 8: clutch.k8s.v1.ListPodsRequest.options:type_name -> clutch.k8s.v1.ListOptions
+	8,   // 9: clutch.k8s.v1.ListPodsResponse.pods:type_name -> clutch.k8s.v1.Pod
+	70,  // 10: clutch.k8s.v1.UpdatePodRequest.expected_object_meta_fields:type_name -> clutch.k8s.v1.ExpectedObjectMetaFields
+	71,  // 11: clutch.k8s.v1.UpdatePodRequest.object_meta_fields:type_name -> clutch.k8s.v1.ObjectMetaFields
+	72,  // 12: clutch.k8s.v1.UpdatePodRequest.remove_object_meta_fields:type_name -> clutch.k8s.v1.RemoveObjectMetaFields
+	76,  // 13: clutch.k8s.v1.HPA.sizing:type_name -> clutch.k8s.v1.HPA.Sizing
+	77,  // 14: clutch.k8s.v1.HPA.labels:type_name -> clutch.k8s.v1.HPA.LabelsEntry
+	78,  // 15: clutch.k8s.v1.HPA.annotations:type_name -> clutch.k8s.v1.HPA.AnnotationsEntry
+	109, // 16: clutch.k8s.v1.HPA.current_cpu_utilization_percentage:type_name -> google.protobuf.Int32Value
+	109, // 17: clutch.k8s.v1.HPA.target_cpu_utilization_percentage:type_name -> google.protobuf.Int32Value
+	79,  // 18: clutch.k8s.v1.ResizeHPARequest.sizing:type_name -> clutch.k8s.v1.ResizeHPARequest.Sizing
+	80,  // 19: clutch.k8s.v1.Deployment.labels:type_name -> clutch.k8s.v1.Deployment.LabelsEntry
+	81,  // 20: clutch.k8s.v1.Deployment.annotations:type_name -> clutch.k8s.v1.Deployment.AnnotationsEntry
+	82,  // 21: clutch.k8s.v1.Deployment.deployment_status:type_name -> clutch.k8s.v1.Deployment.DeploymentStatus
+	21,  // 22: clutch.k8s.v1.DescribeDeploymentResponse.deployment:type_name -> clutch.k8s.v1.Deployment
+	9,   // 23: clutch.k8s.v1.ListDeploymentsRequest.options:type_name -> clutch.k8s.v1.ListOptions
+	21,  // 24: clutch.k8s.v1.ListDeploymentsResponse.deployments:type_name -> clutch.k8s.v1.Deployment
+	84,  // 25: clutch.k8s.v1.UpdateDeploymentRequest.fields:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields
+	87,  // 26: clutch.k8s.v1.StatefulSet.labels:type_name -> clutch.k8s.v1.StatefulSet.LabelsEntry
+	88,  // 27: clutch.k8s.v1.StatefulSet.annotations:type_name -> clutch.k8s.v1.StatefulSet.AnnotationsEntry
+	30,  // 28: clutch.k8s.v1.DescribeStatefulSetResponse.stateful_set:type_name -> clutch.k8s.v1.StatefulSet
+	9,   // 29: clutch.k8s.v1.ListStatefulSetsRequest.options:type_name -> clutch.k8s.v1.ListOptions
+	30,  // 30: clutch.k8s.v1.ListStatefulSetsResponse.stateful_sets:type_name -> clutch.k8s.v1.StatefulSet
+	89,  // 31: clutch.k8s.v1.UpdateStatefulSetRequest.fields:type_name -> clutch.k8s.v1.UpdateStatefulSetRequest.Fields
+	3,   // 32: clutch.k8s.v1.Service.type:type_name -> clutch.k8s.v1.Service.Type
+	92,  // 33: clutch.k8s.v1.Service.labels:type_name -> clutch.k8s.v1.Service.LabelsEntry
+	93,  // 34: clutch.k8s.v1.Service.annotations:type_name -> clutch.k8s.v1.Service.AnnotationsEntry
+	39,  // 35: clutch.k8s.v1.DescribeServiceResponse.service:type_name -> clutch.k8s.v1.Service
+	94,  // 36: clutch.k8s.v1.CronJob.labels:type_name -> clutch.k8s.v1.CronJob.LabelsEntry
+	95,  // 37: clutch.k8s.v1.CronJob.annotations:type_name -> clutch.k8s.v1.CronJob.AnnotationsEntry
+	4,   // 38: clutch.k8s.v1.CronJob.concurrency_policy:type_name -> clutch.k8s.v1.CronJob.ConcurrencyPolicy
+	110, // 39: clutch.k8s.v1.CronJob.starting_deadline_seconds:type_name -> google.protobuf.Int64Value
+	44,  // 40: clutch.k8s.v1.DescribeCronJobResponse.cronjob:type_name -> clutch.k8s.v1.CronJob
+	9,   // 41: clutch.k8s.v1.ListCronJobsRequest.options:type_name -> clutch.k8s.v1.ListOptions
+	44,  // 42: clutch.k8s.v1.ListCronJobsResponse.cron_jobs:type_name -> clutch.k8s.v1.CronJob
+	96,  // 43: clutch.k8s.v1.ConfigMap.annotations:type_name -> clutch.k8s.v1.ConfigMap.AnnotationsEntry
+	97,  // 44: clutch.k8s.v1.ConfigMap.labels:type_name -> clutch.k8s.v1.ConfigMap.LabelsEntry
+	98,  // 45: clutch.k8s.v1.ConfigMap.data:type_name -> clutch.k8s.v1.ConfigMap.DataEntry
+	99,  // 46: clutch.k8s.v1.ConfigMap.binary_data:type_name -> clutch.k8s.v1.ConfigMap.BinaryDataEntry
+	9,   // 47: clutch.k8s.v1.ListConfigMapsRequest.options:type_name -> clutch.k8s.v1.ListOptions
+	51,  // 48: clutch.k8s.v1.ListConfigMapsResponse.config_maps:type_name -> clutch.k8s.v1.ConfigMap
+	51,  // 49: clutch.k8s.v1.DescribeConfigMapResponse.config_map:type_name -> clutch.k8s.v1.ConfigMap
+	100, // 50: clutch.k8s.v1.Job.annotations:type_name -> clutch.k8s.v1.Job.AnnotationsEntry
+	101, // 51: clutch.k8s.v1.Job.labels:type_name -> clutch.k8s.v1.Job.LabelsEntry
+	9,   // 52: clutch.k8s.v1.ListJobsRequest.options:type_name -> clutch.k8s.v1.ListOptions
+	58,  // 53: clutch.k8s.v1.ListJobsResponse.jobs:type_name -> clutch.k8s.v1.Job
+	111, // 54: clutch.k8s.v1.JobConfig.value:type_name -> google.protobuf.Value
+	63,  // 55: clutch.k8s.v1.CreateJobRequest.job_config:type_name -> clutch.k8s.v1.JobConfig
+	58,  // 56: clutch.k8s.v1.CreateJobResponse.job:type_name -> clutch.k8s.v1.Job
+	102, // 57: clutch.k8s.v1.Namespace.annotations:type_name -> clutch.k8s.v1.Namespace.AnnotationsEntry
+	103, // 58: clutch.k8s.v1.Namespace.labels:type_name -> clutch.k8s.v1.Namespace.LabelsEntry
+	66,  // 59: clutch.k8s.v1.DescribeNamespaceResponse.namespace:type_name -> clutch.k8s.v1.Namespace
+	112, // 60: clutch.k8s.v1.NullableString.null:type_name -> google.protobuf.NullValue
+	104, // 61: clutch.k8s.v1.ExpectedObjectMetaFields.labels:type_name -> clutch.k8s.v1.ExpectedObjectMetaFields.LabelsEntry
+	105, // 62: clutch.k8s.v1.ExpectedObjectMetaFields.annotations:type_name -> clutch.k8s.v1.ExpectedObjectMetaFields.AnnotationsEntry
+	106, // 63: clutch.k8s.v1.ObjectMetaFields.labels:type_name -> clutch.k8s.v1.ObjectMetaFields.LabelsEntry
+	107, // 64: clutch.k8s.v1.ObjectMetaFields.annotations:type_name -> clutch.k8s.v1.ObjectMetaFields.AnnotationsEntry
+	83,  // 65: clutch.k8s.v1.Deployment.DeploymentStatus.deployment_conditions:type_name -> clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition
+	2,   // 66: clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition.deployment_condition_type:type_name -> clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition.DeploymentConditionType
+	113, // 67: clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition.condition_status:type_name -> google.protobuf.BoolValue
+	108, // 68: clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition.last_update_time:type_name -> google.protobuf.Timestamp
+	108, // 69: clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition.last_transition_time:type_name -> google.protobuf.Timestamp
+	85,  // 70: clutch.k8s.v1.UpdateDeploymentRequest.Fields.labels:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.LabelsEntry
+	86,  // 71: clutch.k8s.v1.UpdateDeploymentRequest.Fields.annotations:type_name -> clutch.k8s.v1.UpdateDeploymentRequest.Fields.AnnotationsEntry
+	90,  // 72: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.labels:type_name -> clutch.k8s.v1.UpdateStatefulSetRequest.Fields.LabelsEntry
+	91,  // 73: clutch.k8s.v1.UpdateStatefulSetRequest.Fields.annotations:type_name -> clutch.k8s.v1.UpdateStatefulSetRequest.Fields.AnnotationsEntry
+	69,  // 74: clutch.k8s.v1.ExpectedObjectMetaFields.LabelsEntry.value:type_name -> clutch.k8s.v1.NullableString
+	69,  // 75: clutch.k8s.v1.ExpectedObjectMetaFields.AnnotationsEntry.value:type_name -> clutch.k8s.v1.NullableString
+	5,   // 76: clutch.k8s.v1.K8sAPI.DescribePod:input_type -> clutch.k8s.v1.DescribePodRequest
+	10,  // 77: clutch.k8s.v1.K8sAPI.ListPods:input_type -> clutch.k8s.v1.ListPodsRequest
+	12,  // 78: clutch.k8s.v1.K8sAPI.DeletePod:input_type -> clutch.k8s.v1.DeletePodRequest
+	14,  // 79: clutch.k8s.v1.K8sAPI.UpdatePod:input_type -> clutch.k8s.v1.UpdatePodRequest
+	17,  // 80: clutch.k8s.v1.K8sAPI.ResizeHPA:input_type -> clutch.k8s.v1.ResizeHPARequest
+	19,  // 81: clutch.k8s.v1.K8sAPI.DeleteHPA:input_type -> clutch.k8s.v1.DeleteHPARequest
+	22,  // 82: clutch.k8s.v1.K8sAPI.DescribeDeployment:input_type -> clutch.k8s.v1.DescribeDeploymentRequest
+	24,  // 83: clutch.k8s.v1.K8sAPI.ListDeployments:input_type -> clutch.k8s.v1.ListDeploymentsRequest
+	26,  // 84: clutch.k8s.v1.K8sAPI.UpdateDeployment:input_type -> clutch.k8s.v1.UpdateDeploymentRequest
+	28,  // 85: clutch.k8s.v1.K8sAPI.DeleteDeployment:input_type -> clutch.k8s.v1.DeleteDeploymentRequest
+	40,  // 86: clutch.k8s.v1.K8sAPI.DescribeService:input_type -> clutch.k8s.v1.DescribeServiceRequest
+	42,  // 87: clutch.k8s.v1.K8sAPI.DeleteService:input_type -> clutch.k8s.v1.DeleteServiceRequest
+	31,  // 88: clutch.k8s.v1.K8sAPI.DescribeStatefulSet:input_type -> clutch.k8s.v1.DescribeStatefulSetRequest
+	33,  // 89: clutch.k8s.v1.K8sAPI.ListStatefulSets:input_type -> clutch.k8s.v1.ListStatefulSetsRequest
+	37,  // 90: clutch.k8s.v1.K8sAPI.UpdateStatefulSet:input_type -> clutch.k8s.v1.UpdateStatefulSetRequest
+	35,  // 91: clutch.k8s.v1.K8sAPI.DeleteStatefulSet:input_type -> clutch.k8s.v1.DeleteStatefulSetRequest
+	45,  // 92: clutch.k8s.v1.K8sAPI.DescribeCronJob:input_type -> clutch.k8s.v1.DescribeCronJobRequest
+	47,  // 93: clutch.k8s.v1.K8sAPI.ListCronJobs:input_type -> clutch.k8s.v1.ListCronJobsRequest
+	49,  // 94: clutch.k8s.v1.K8sAPI.DeleteCronJob:input_type -> clutch.k8s.v1.DeleteCronJobRequest
+	52,  // 95: clutch.k8s.v1.K8sAPI.ListConfigMaps:input_type -> clutch.k8s.v1.ListConfigMapsRequest
+	54,  // 96: clutch.k8s.v1.K8sAPI.DescribeConfigMap:input_type -> clutch.k8s.v1.DescribeConfigMapRequest
+	56,  // 97: clutch.k8s.v1.K8sAPI.DeleteConfigMap:input_type -> clutch.k8s.v1.DeleteConfigMapRequest
+	59,  // 98: clutch.k8s.v1.K8sAPI.ListJobs:input_type -> clutch.k8s.v1.ListJobsRequest
+	61,  // 99: clutch.k8s.v1.K8sAPI.DeleteJob:input_type -> clutch.k8s.v1.DeleteJobRequest
+	64,  // 100: clutch.k8s.v1.K8sAPI.CreateJob:input_type -> clutch.k8s.v1.CreateJobRequest
+	67,  // 101: clutch.k8s.v1.K8sAPI.DescribeNamespace:input_type -> clutch.k8s.v1.DescribeNamespaceRequest
+	6,   // 102: clutch.k8s.v1.K8sAPI.DescribePod:output_type -> clutch.k8s.v1.DescribePodResponse
+	11,  // 103: clutch.k8s.v1.K8sAPI.ListPods:output_type -> clutch.k8s.v1.ListPodsResponse
+	13,  // 104: clutch.k8s.v1.K8sAPI.DeletePod:output_type -> clutch.k8s.v1.DeletePodResponse
+	15,  // 105: clutch.k8s.v1.K8sAPI.UpdatePod:output_type -> clutch.k8s.v1.UpdatePodResponse
+	18,  // 106: clutch.k8s.v1.K8sAPI.ResizeHPA:output_type -> clutch.k8s.v1.ResizeHPAResponse
+	20,  // 107: clutch.k8s.v1.K8sAPI.DeleteHPA:output_type -> clutch.k8s.v1.DeleteHPAResponse
+	23,  // 108: clutch.k8s.v1.K8sAPI.DescribeDeployment:output_type -> clutch.k8s.v1.DescribeDeploymentResponse
+	25,  // 109: clutch.k8s.v1.K8sAPI.ListDeployments:output_type -> clutch.k8s.v1.ListDeploymentsResponse
+	27,  // 110: clutch.k8s.v1.K8sAPI.UpdateDeployment:output_type -> clutch.k8s.v1.UpdateDeploymentResponse
+	29,  // 111: clutch.k8s.v1.K8sAPI.DeleteDeployment:output_type -> clutch.k8s.v1.DeleteDeploymentResponse
+	41,  // 112: clutch.k8s.v1.K8sAPI.DescribeService:output_type -> clutch.k8s.v1.DescribeServiceResponse
+	43,  // 113: clutch.k8s.v1.K8sAPI.DeleteService:output_type -> clutch.k8s.v1.DeleteServiceResponse
+	32,  // 114: clutch.k8s.v1.K8sAPI.DescribeStatefulSet:output_type -> clutch.k8s.v1.DescribeStatefulSetResponse
+	34,  // 115: clutch.k8s.v1.K8sAPI.ListStatefulSets:output_type -> clutch.k8s.v1.ListStatefulSetsResponse
+	38,  // 116: clutch.k8s.v1.K8sAPI.UpdateStatefulSet:output_type -> clutch.k8s.v1.UpdateStatefulSetResponse
+	36,  // 117: clutch.k8s.v1.K8sAPI.DeleteStatefulSet:output_type -> clutch.k8s.v1.DeleteStatefulSetResponse
+	46,  // 118: clutch.k8s.v1.K8sAPI.DescribeCronJob:output_type -> clutch.k8s.v1.DescribeCronJobResponse
+	48,  // 119: clutch.k8s.v1.K8sAPI.ListCronJobs:output_type -> clutch.k8s.v1.ListCronJobsResponse
+	50,  // 120: clutch.k8s.v1.K8sAPI.DeleteCronJob:output_type -> clutch.k8s.v1.DeleteCronJobResponse
+	53,  // 121: clutch.k8s.v1.K8sAPI.ListConfigMaps:output_type -> clutch.k8s.v1.ListConfigMapsResponse
+	55,  // 122: clutch.k8s.v1.K8sAPI.DescribeConfigMap:output_type -> clutch.k8s.v1.DescribeConfigMapResponse
+	57,  // 123: clutch.k8s.v1.K8sAPI.DeleteConfigMap:output_type -> clutch.k8s.v1.DeleteConfigMapResponse
+	60,  // 124: clutch.k8s.v1.K8sAPI.ListJobs:output_type -> clutch.k8s.v1.ListJobsResponse
+	62,  // 125: clutch.k8s.v1.K8sAPI.DeleteJob:output_type -> clutch.k8s.v1.DeleteJobResponse
+	65,  // 126: clutch.k8s.v1.K8sAPI.CreateJob:output_type -> clutch.k8s.v1.CreateJobResponse
+	68,  // 127: clutch.k8s.v1.K8sAPI.DescribeNamespace:output_type -> clutch.k8s.v1.DescribeNamespaceResponse
+	102, // [102:128] is the sub-list for method output_type
+	76,  // [76:102] is the sub-list for method input_type
+	76,  // [76:76] is the sub-list for extension type_name
+	76,  // [76:76] is the sub-list for extension extendee
+	0,   // [0:76] is the sub-list for field type_name
 }
 
 func init() { file_k8s_v1_k8s_proto_init() }
@@ -7134,7 +7369,7 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[77].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Deployment_Status); i {
+			switch v := v.(*Deployment_DeploymentStatus); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -7146,6 +7381,18 @@ func file_k8s_v1_k8s_proto_init() {
 			}
 		}
 		file_k8s_v1_k8s_proto_msgTypes[78].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Deployment_DeploymentStatus_DeploymentCondition); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_k8s_v1_k8s_proto_msgTypes[79].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateDeploymentRequest_Fields); i {
 			case 0:
 				return &v.state
@@ -7157,7 +7404,7 @@ func file_k8s_v1_k8s_proto_init() {
 				return nil
 			}
 		}
-		file_k8s_v1_k8s_proto_msgTypes[83].Exporter = func(v interface{}, i int) interface{} {
+		file_k8s_v1_k8s_proto_msgTypes[84].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateStatefulSetRequest_Fields); i {
 			case 0:
 				return &v.state
@@ -7179,8 +7426,8 @@ func file_k8s_v1_k8s_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_k8s_v1_k8s_proto_rawDesc,
-			NumEnums:      4,
-			NumMessages:   102,
+			NumEnums:      5,
+			NumMessages:   103,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

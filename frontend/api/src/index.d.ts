@@ -11140,8 +11140,8 @@ export namespace clutch {
                 /** Deployment annotations */
                 annotations?: ({ [k: string]: string }|null);
 
-                /** Deployment status */
-                status?: (clutch.k8s.v1.Deployment.IStatus|null);
+                /** Deployment deploymentStatus */
+                deploymentStatus?: (clutch.k8s.v1.Deployment.IDeploymentStatus|null);
             }
 
             /** Represents a Deployment. */
@@ -11168,8 +11168,8 @@ export namespace clutch {
                 /** Deployment annotations. */
                 public annotations: { [k: string]: string };
 
-                /** Deployment status. */
-                public status?: (clutch.k8s.v1.Deployment.IStatus|null);
+                /** Deployment deploymentStatus. */
+                public deploymentStatus?: (clutch.k8s.v1.Deployment.IDeploymentStatus|null);
 
                 /**
                  * Verifies a Deployment message.
@@ -11202,58 +11202,175 @@ export namespace clutch {
 
             namespace Deployment {
 
-                /** Properties of a Status. */
-                interface IStatus {
+                /** Properties of a DeploymentStatus. */
+                interface IDeploymentStatus {
 
-                    /** Status replicas */
+                    /** DeploymentStatus replicas */
                     replicas?: (number|null);
 
-                    /** Status updatedReplicas */
+                    /** DeploymentStatus updatedReplicas */
                     updatedReplicas?: (number|null);
+
+                    /** DeploymentStatus readyReplicas */
+                    readyReplicas?: (number|null);
+
+                    /** DeploymentStatus availableReplicas */
+                    availableReplicas?: (number|null);
+
+                    /** DeploymentStatus unavailableReplicas */
+                    unavailableReplicas?: (number|null);
+
+                    /** DeploymentStatus deploymentConditions */
+                    deploymentConditions?: (clutch.k8s.v1.Deployment.DeploymentStatus.IDeploymentCondition[]|null);
                 }
 
-                /** Represents a Status. */
-                class Status implements IStatus {
+                /** Represents a DeploymentStatus. */
+                class DeploymentStatus implements IDeploymentStatus {
 
                     /**
-                     * Constructs a new Status.
+                     * Constructs a new DeploymentStatus.
                      * @param [properties] Properties to set
                      */
-                    constructor(properties?: clutch.k8s.v1.Deployment.IStatus);
+                    constructor(properties?: clutch.k8s.v1.Deployment.IDeploymentStatus);
 
-                    /** Status replicas. */
+                    /** DeploymentStatus replicas. */
                     public replicas: number;
 
-                    /** Status updatedReplicas. */
+                    /** DeploymentStatus updatedReplicas. */
                     public updatedReplicas: number;
 
+                    /** DeploymentStatus readyReplicas. */
+                    public readyReplicas: number;
+
+                    /** DeploymentStatus availableReplicas. */
+                    public availableReplicas: number;
+
+                    /** DeploymentStatus unavailableReplicas. */
+                    public unavailableReplicas: number;
+
+                    /** DeploymentStatus deploymentConditions. */
+                    public deploymentConditions: clutch.k8s.v1.Deployment.DeploymentStatus.IDeploymentCondition[];
+
                     /**
-                     * Verifies a Status message.
+                     * Verifies a DeploymentStatus message.
                      * @param message Plain object to verify
                      * @returns `null` if valid, otherwise the reason why it is not
                      */
                     public static verify(message: { [k: string]: any }): (string|null);
 
                     /**
-                     * Creates a Status message from a plain object. Also converts values to their respective internal types.
+                     * Creates a DeploymentStatus message from a plain object. Also converts values to their respective internal types.
                      * @param object Plain object
-                     * @returns Status
+                     * @returns DeploymentStatus
                      */
-                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment.Status;
+                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment.DeploymentStatus;
 
                     /**
-                     * Creates a plain object from a Status message. Also converts values to other types if specified.
-                     * @param message Status
+                     * Creates a plain object from a DeploymentStatus message. Also converts values to other types if specified.
+                     * @param message DeploymentStatus
                      * @param [options] Conversion options
                      * @returns Plain object
                      */
-                    public static toObject(message: clutch.k8s.v1.Deployment.Status, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    public static toObject(message: clutch.k8s.v1.Deployment.DeploymentStatus, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
                     /**
-                     * Converts this Status to JSON.
+                     * Converts this DeploymentStatus to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                namespace DeploymentStatus {
+
+                    /** Properties of a DeploymentCondition. */
+                    interface IDeploymentCondition {
+
+                        /** DeploymentCondition deploymentConditionType */
+                        deploymentConditionType?: (clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition.DeploymentConditionType|null);
+
+                        /** DeploymentCondition conditionStatus */
+                        conditionStatus?: (google.protobuf.IBoolValue|null);
+
+                        /** DeploymentCondition lastUpdateTime */
+                        lastUpdateTime?: (google.protobuf.ITimestamp|null);
+
+                        /** DeploymentCondition lastTransitionTime */
+                        lastTransitionTime?: (google.protobuf.ITimestamp|null);
+
+                        /** DeploymentCondition reason */
+                        reason?: (string|null);
+
+                        /** DeploymentCondition message */
+                        message?: (string|null);
+                    }
+
+                    /** Represents a DeploymentCondition. */
+                    class DeploymentCondition implements IDeploymentCondition {
+
+                        /**
+                         * Constructs a new DeploymentCondition.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.k8s.v1.Deployment.DeploymentStatus.IDeploymentCondition);
+
+                        /** DeploymentCondition deploymentConditionType. */
+                        public deploymentConditionType: clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition.DeploymentConditionType;
+
+                        /** DeploymentCondition conditionStatus. */
+                        public conditionStatus?: (google.protobuf.IBoolValue|null);
+
+                        /** DeploymentCondition lastUpdateTime. */
+                        public lastUpdateTime?: (google.protobuf.ITimestamp|null);
+
+                        /** DeploymentCondition lastTransitionTime. */
+                        public lastTransitionTime?: (google.protobuf.ITimestamp|null);
+
+                        /** DeploymentCondition reason. */
+                        public reason: string;
+
+                        /** DeploymentCondition message. */
+                        public message: string;
+
+                        /**
+                         * Verifies a DeploymentCondition message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a DeploymentCondition message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns DeploymentCondition
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition;
+
+                        /**
+                         * Creates a plain object from a DeploymentCondition message. Also converts values to other types if specified.
+                         * @param message DeploymentCondition
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.k8s.v1.Deployment.DeploymentStatus.DeploymentCondition, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this DeploymentCondition to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    namespace DeploymentCondition {
+
+                        /** DeploymentConditionType enum. */
+                        enum DeploymentConditionType {
+                            UNSPECIFIED = 0,
+                            UNKNOWN = 1,
+                            AVAILABLE = 2,
+                            PROGRESSING = 3,
+                            REPLICA_FAILURE = 4
+                        }
+                    }
                 }
             }
 
