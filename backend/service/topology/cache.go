@@ -114,6 +114,10 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *
 				return
 			}
 
+			c.scope.Tagged(map[string]string{
+				"service": service,
+			}).SubScope("cache").Gauge("object_channel.queue_depth").Update(float64(len(objs)))
+
 			switch obj.Action {
 			case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
 				batchInsert = append(batchInsert, obj.Resource)
@@ -175,7 +179,7 @@ func (c *client) prepareBulkCacheInsert(obj []*topologyv1.Resource) ([]interface
 }
 
 func (c *client) setCache(ctx context.Context, obj []*topologyv1.Resource) error {
-	args, queryString := c.prepareBulkCacheInsert(obj)
+	args, queryParams := c.prepareBulkCacheInsert(obj)
 	upsertQuery := fmt.Sprintf(`
 		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
 		VALUES %s
@@ -184,7 +188,7 @@ func (c *client) setCache(ctx context.Context, obj []*topologyv1.Resource) error
 			data = EXCLUDED.data,
 			metadata = EXCLUDED.metadata,
 			updated_at = NOW()
-	`, queryString)
+	`, queryParams)
 
 	_, err := c.db.ExecContext(
 		ctx,
