@@ -117,7 +117,7 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *
 			c.log.Warn("UpdateCacheRequest action is not implemented", zap.String("action", obj.Action.String()))
 		}
 
-		if len(batchInsert) >= 2 {
+		if len(batchInsert) >= int(c.config.Cache.BatchInsertSize) {
 			if err := c.setCache(ctx, batchInsert); err != nil {
 				c.log.Error("Error setting cache", zap.Error(err))
 			}

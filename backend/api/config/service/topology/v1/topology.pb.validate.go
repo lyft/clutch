@@ -138,6 +138,8 @@ func (m *Cache) Validate() error {
 
 	}
 
+	// no validation rules for BatchInsertSize
+
 	return nil
 }
 

@@ -18207,6 +18207,7 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.service.topology.v1
                          * @interface ICache
                          * @property {google.protobuf.IDuration|null} [ttl] Cache ttl
+                         * @property {number|null} [batchInsertSize] Cache batchInsertSize
                          */
 
                         /**
@@ -18233,6 +18234,14 @@ export const clutch = $root.clutch = (() => {
                         Cache.prototype.ttl = null;
 
                         /**
+                         * Cache batchInsertSize.
+                         * @member {number} batchInsertSize
+                         * @memberof clutch.config.service.topology.v1.Cache
+                         * @instance
+                         */
+                        Cache.prototype.batchInsertSize = 0;
+
+                        /**
                          * Verifies a Cache message.
                          * @function verify
                          * @memberof clutch.config.service.topology.v1.Cache
@@ -18248,6 +18257,9 @@ export const clutch = $root.clutch = (() => {
                                 if (error)
                                     return "ttl." + error;
                             }
+                            if (message.batchInsertSize != null && message.hasOwnProperty("batchInsertSize"))
+                                if (!$util.isInteger(message.batchInsertSize))
+                                    return "batchInsertSize: integer expected";
                             return null;
                         };
 
@@ -18268,6 +18280,8 @@ export const clutch = $root.clutch = (() => {
                                     throw TypeError(".clutch.config.service.topology.v1.Cache.ttl: object expected");
                                 message.ttl = $root.google.protobuf.Duration.fromObject(object.ttl);
                             }
+                            if (object.batchInsertSize != null)
+                                message.batchInsertSize = object.batchInsertSize | 0;
                             return message;
                         };
 
@@ -18284,10 +18298,14 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.defaults)
+                            if (options.defaults) {
                                 object.ttl = null;
+                                object.batchInsertSize = 0;
+                            }
                             if (message.ttl != null && message.hasOwnProperty("ttl"))
                                 object.ttl = $root.google.protobuf.Duration.toObject(message.ttl, options);
+                            if (message.batchInsertSize != null && message.hasOwnProperty("batchInsertSize"))
+                                object.batchInsertSize = message.batchInsertSize;
                             return object;
                         };
 

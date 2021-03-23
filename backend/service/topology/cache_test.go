@@ -3,9 +3,10 @@ package topology
 import (
 	"testing"
 
-	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/anypb"
+
+	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
 func TestConvertLockIdToAdvisoryLockId(t *testing.T) {
