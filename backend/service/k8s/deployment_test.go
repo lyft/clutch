@@ -251,10 +251,8 @@ func TestProtoForDeploymentStatus(t *testing.T) {
 	t.Parallel()
 
 	var deploymentTestCases = []struct {
-		id                      string
-		expectedReplicas        uint32
-		expectedUpdatedReplicas uint32
-		deployment              *appsv1.Deployment
+		id         string
+		deployment *appsv1.Deployment
 	}{
 		{
 			id: "foo",
