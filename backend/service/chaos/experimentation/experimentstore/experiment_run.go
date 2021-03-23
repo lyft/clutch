@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
@@ -19,15 +19,8 @@ type ExperimentRun struct {
 
 func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Property, error) {
 	status := timesToStatus(er.StartTime, er.EndTime, er.CancellationTime, now)
-	startTimeTimestamp, err := ptypes.TimestampProto(er.StartTime)
-	if err != nil {
-		return nil, err
-	}
-
-	creationTimeTimestamp, err := ptypes.TimestampProto(er.creationTime)
-	if err != nil {
-		return nil, err
-	}
+	startTimeTimestamp := timestamppb.New(er.StartTime)
+	creationTimeTimestamp := timestamppb.New(er.creationTime)
 
 	properties := []*experimentation.Property{
 		{

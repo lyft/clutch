@@ -9,7 +9,6 @@ import (
 	"time"
 
 	_ "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
@@ -25,7 +24,7 @@ import (
 func TestEnvoyFaults(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		CacheRefreshInterval:      durationpb.New(time.Second),
 		IngressFaultRuntimePrefix: "fault.http",
 		EgressFaultRuntimePrefix:  "egress",
 	}
@@ -126,7 +125,7 @@ func awaitExpectedReturnValueForSimpleCall(t *testing.T, e *envoytest.EnvoyHandl
 func TestEnvoyECDSFaults(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		CacheRefreshInterval:      durationpb.New(time.Second),
 		IngressFaultRuntimePrefix: "fault.http",
 		EgressFaultRuntimePrefix:  "egress",
 		EcdsAllowList:             &xdsconfigv1.Config_ECDSAllowList{EnabledClusters: []string{"test-cluster"}},

@@ -16,7 +16,6 @@ import (
 	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	gcpServerV3 "github.com/envoyproxy/go-control-plane/pkg/server/v3"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -72,10 +71,11 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		return nil, err
 	}
 
-	cacheRefreshInterval, err := ptypes.Duration(config.GetCacheRefreshInterval())
-	if err != nil {
+	if err := config.GetCacheRefreshInterval().CheckValid(); err != nil {
 		return nil, errors.New("error parsing duration")
 	}
+
+	cacheRefreshInterval := config.GetCacheRefreshInterval().AsDuration()
 
 	store, ok := service.Registry[experimentstore.Name]
 	if !ok {
@@ -90,17 +90,11 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 	var heartbeatInterval *time.Duration
 	var resourceTTL *time.Duration
 	if config.ResourceTtl != nil {
-		d, err := ptypes.Duration(config.ResourceTtl)
-		if err != nil {
-			return nil, err
-		}
+		d := config.ResourceTtl.AsDuration()
 		resourceTTL = &d
 
 		if config.HeartbeatInterval != nil {
-			d, err := ptypes.Duration(config.HeartbeatInterval)
-			if err != nil {
-				return nil, err
-			}
+			d := config.HeartbeatInterval.AsDuration()
 			heartbeatInterval = &d
 		}
 	}

@@ -9,11 +9,13 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/jsonpb"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/id"
@@ -25,7 +27,7 @@ const Name = "clutch.service.chaos.experimentation.store"
 
 // Storer stores experiment data
 type Storer interface {
-	CreateExperiment(context.Context, *any.Any, *time.Time, *time.Time) (*experimentation.Experiment, error)
+	CreateExperiment(context.Context, *anypb.Any, *time.Time, *time.Time) (*experimentation.Experiment, error)
 	CancelExperimentRun(context.Context, uint64) error
 	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
@@ -41,7 +43,7 @@ type storer struct {
 }
 
 // New returns a new NewExperimentStore instance.
-func New(_ *any.Any, logger *zap.Logger, _ tally.Scope) (service.Service, error) {
+func New(_ *anypb.Any, logger *zap.Logger, _ tally.Scope) (service.Service, error) {
 	p, ok := service.Registry[pgservice.Name]
 	if !ok {
 		return nil, errors.New("could not find database service")
@@ -61,7 +63,7 @@ func New(_ *any.Any, logger *zap.Logger, _ tally.Scope) (service.Service, error)
 	}, nil
 }
 
-func (s *storer) CreateExperiment(ctx context.Context, config *any.Any, startTime *time.Time, endTime *time.Time) (*experimentation.Experiment, error) {
+func (s *storer) CreateExperiment(ctx context.Context, config *anypb.Any, startTime *time.Time, endTime *time.Time) (*experimentation.Experiment, error) {
 	// This API call will eventually be broken into 2 separate calls:
 	// 1) creating the config
 	// 2) starting a new experiment with the config
@@ -216,13 +218,13 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 	for rows.Next() {
 		var details string
 		run := ExperimentRun{}
-		config := ExperimentConfig{Config: &any.Any{}}
+		config := ExperimentConfig{Config: &anypb.Any{}}
 		err = rows.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.creationTime, &config.id, &details)
 		if err != nil {
 			return nil, err
 		}
 
-		if err = jsonpb.Unmarshal(strings.NewReader(details), config.Config); err != nil {
+		if err = protojson.Unmarshal([]byte(details), config.Config); err != nil {
 			return nil, err
 		}
 
@@ -291,12 +293,12 @@ func toProto(t *time.Time) (*timestamp.Timestamp, error) {
 		return nil, nil
 	}
 
-	timestampProto, err := ptypes.TimestampProto(*t)
-	if err != nil {
+	pb := timestamppb.New(*t)
+	if err := pb.CheckValid(); err != nil {
 		return nil, err
 	}
 
-	return timestampProto, nil
+	return pb, nil
 }
 
 func marshalConfig(config *any.Any) (string, error) {

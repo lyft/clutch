@@ -17,7 +17,6 @@ import (
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	gcpResourceV3 "github.com/envoyproxy/go-control-plane/pkg/resource/v3"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/duration"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/stretchr/testify/assert"
@@ -213,8 +212,8 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
-		if err != nil {
+
+		if err := experiment.GetConfig().UnmarshalTo(config); err != nil {
 			t.Errorf("unmarshalAny failed %v", err)
 		}
 
@@ -356,8 +355,8 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	extensionConfig := ecdsResources[faultFilterConfigNameForIngressFault].Resource.(*gcpCoreV3.TypedExtensionConfig)
 
 	httpFaultFilter := &gcpFilterFault.HTTPFault{}
-	err = ptypes.UnmarshalAny(extensionConfig.TypedConfig, httpFaultFilter)
-	if err != nil {
+
+	if err := extensionConfig.TypedConfig.UnmarshalTo(httpFaultFilter); err != nil {
 		t.Errorf("Unable to unmarshall typed config")
 	}
 
@@ -452,8 +451,8 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	extensionConfig := ecdsResources[fmt.Sprintf(faultFilterConfigNameForEgressFault, upstreamCluster)].Resource.(*gcpCoreV3.TypedExtensionConfig)
 
 	httpFaultFilter := &gcpFilterFault.HTTPFault{}
-	err = ptypes.UnmarshalAny(extensionConfig.TypedConfig, httpFaultFilter)
-	if err != nil {
+
+	if err := extensionConfig.TypedConfig.UnmarshalTo(httpFaultFilter); err != nil {
 		t.Errorf("Unable to unmarshall typed config")
 	}
 

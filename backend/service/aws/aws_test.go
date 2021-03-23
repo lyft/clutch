@@ -13,8 +13,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/aws/smithy-go"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
@@ -60,7 +58,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestNewWithWrongConfigType(t *testing.T) {
-	_, err := New(&any.Any{TypeUrl: "foo"}, nil, nil)
+	_, err := New(&anypb.Any{TypeUrl: "foo"}, nil, nil)
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "mismatched message type")
 }

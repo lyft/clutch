@@ -9,11 +9,11 @@ import (
 	envoy_config_core_v3 "github.com/envoyproxy/go-control-plane/envoy/config/core/v3"
 	gcpDiscoveryV3 "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v3"
 	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/durationpb"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
@@ -23,7 +23,7 @@ import (
 func TestServerStats(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		CacheRefreshInterval:      durationpb.New(time.Second),
 		IngressFaultRuntimePrefix: "fault.http",
 		EgressFaultRuntimePrefix:  "egress",
 	}
@@ -60,7 +60,7 @@ func TestServerStats(t *testing.T) {
 func TestResourceTTL(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		CacheRefreshInterval:      durationpb.New(time.Second),
 		IngressFaultRuntimePrefix: "fault.http",
 		EgressFaultRuntimePrefix:  "egress",
 	}
@@ -149,7 +149,7 @@ func TestResourceTTL(t *testing.T) {
 	assert.NoError(t, err)
 
 	runtime := &gcpRuntimeServiceV3.Runtime{}
-	assert.NoError(t, ptypes.UnmarshalAny(r.Resources[0], runtime))
+	assert.NoError(t, r.Resources[0].UnmarshalTo(runtime))
 
 	assert.Empty(t, runtime.Layer.Fields)
 
