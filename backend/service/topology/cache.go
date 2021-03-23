@@ -100,6 +100,10 @@ func (c *client) startTopologyCache(ctx context.Context) {
 	<-ctx.Done()
 }
 
+// Processes all topology cache update requests.
+// This supports insert batching which defaults to 1, and can be configured by settting BatchInsertSize.
+// Notably a flush will happen every 30 seconds, ensuring all items make it into cache even if the
+// configured BatchInsertSize is not met.
 func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest, service string) {
 	var batchInsert []*topologyv1.Resource
 

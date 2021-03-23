@@ -1,11 +1,14 @@
 package topology
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/structpb"
 
+	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	topologyv1 "github.com/lyft/clutch/backend/api/topology/v1"
 )
 
@@ -39,38 +42,27 @@ func TestConvertLockIdToAdvisoryLockId(t *testing.T) {
 	}
 }
 
-func TestPrepareSetCacheBulkValues(t *testing.T) {
+func TestPrepareBulkCacheInsert(t *testing.T) {
 	t.Parallel()
 
 	topology := &client{}
 	tests := []struct {
-		id                string
-		input             []*topologyv1.Resource
-		expectQueryString string
+		id                    string
+		input                 []*topologyv1.Resource
+		expectedQueryParams   string
+		expectedQueryArgsSize int
 	}{
 		{
-			id: "one item",
-			input: []*topologyv1.Resource{
-				{
-					Id: "one",
-					Pb: &anypb.Any{},
-				},
-			},
-			expectQueryString: "($1, $2, $3, $4)",
+			id:                    "one item",
+			input:                 generatePrepareBulkCacheInsertInput(1),
+			expectedQueryParams:   "($1, $2, $3, $4)",
+			expectedQueryArgsSize: 4,
 		},
 		{
-			id: "two items",
-			input: []*topologyv1.Resource{
-				{
-					Id: "one",
-					Pb: &anypb.Any{},
-				},
-				{
-					Id: "two",
-					Pb: &anypb.Any{},
-				},
-			},
-			expectQueryString: "($1, $2, $3, $4),($5, $6, $7, $8)",
+			id:                    "two items",
+			input:                 generatePrepareBulkCacheInsertInput(2),
+			expectedQueryParams:   "($1, $2, $3, $4),($5, $6, $7, $8)",
+			expectedQueryArgsSize: 8,
 		},
 	}
 
@@ -78,8 +70,32 @@ func TestPrepareSetCacheBulkValues(t *testing.T) {
 		tt := tt
 		t.Run(tt.id, func(t *testing.T) {
 			t.Parallel()
-			_, queryString := topology.prepareBulkCacheInsert(tt.input)
-			assert.Equal(t, tt.expectQueryString, queryString)
+			queryArgs, queryParams := topology.prepareBulkCacheInsert(tt.input)
+			assert.Equal(t, tt.expectedQueryParams, queryParams)
+			assert.Equal(t, tt.expectedQueryArgsSize, len(queryArgs))
 		})
 	}
+}
+
+func generatePrepareBulkCacheInsertInput(count int) []*topologyv1.Resource {
+	results := []*topologyv1.Resource{}
+
+	for i := 0; i < count; i++ {
+		instance := ec2v1.Instance{
+			InstanceId: fmt.Sprintf("%d", i),
+		}
+
+		instancePb, err := anypb.New(&instance)
+		if err != nil {
+			panic(err)
+		}
+
+		results = append(results, &topologyv1.Resource{
+			Id:       instance.InstanceId,
+			Pb:       instancePb,
+			Metadata: make(map[string]*structpb.Value),
+		})
+	}
+
+	return results
 }
