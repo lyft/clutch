@@ -14,7 +14,6 @@ import (
 	"golang.org/x/net/context"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
-	serverexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experiment_terminator"
@@ -36,16 +35,6 @@ type Service struct {
 	getExperimentRunDetailsStat tally.Counter
 }
 
-type timeBasedCriteria struct {
-}
-
-func (timeBasedCriteria) ShouldTerminate(started time.Time, experiment interface{}) error {
-	// if started.Add(5 * time.Second).Before(time.Now()) {
-	// 	return errors.New("timed out")
-	// }
-
-	return nil
-}
 // New instantiates a Service object.
 func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
 	store, ok := service.Registry[experimentstore.Name]
@@ -58,8 +47,15 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 		return nil, errors.New("could not find valid experiment store")
 	}
 
-	t := experiment_terminator.NewTerminator(experimentStore, []string{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"}, []experiment_terminator.TerminationCriteria{timeBasedCriteria{}})
-	t.Run()
+	// TODO(snowp): Figure out where this should go. Which facet? Dedicated facet?
+	t := experiment_terminator.Terminator{
+		Store:                      experimentStore,
+		EnabledConfigTypes:         []string{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"},
+		Criterias:                  []experiment_terminator.TerminationCriteria{},
+		OuterLoopInterval:          10 * time.Second,
+		PerExperimentCheckInterval: 2 * time.Second,
+	}
+	t.Run(context.Background())
 
 	return &Service{
 		storer:                      experimentStore,
@@ -118,7 +114,7 @@ func (s *Service) CancelExperimentRun(ctx context.Context, req *experimentation.
 // GetExperiments returns all experiments from the experiment store.
 func (s *Service) GetExperiments(ctx context.Context, request *experimentation.GetExperimentsRequest) (*experimentation.GetExperimentsResponse, error) {
 	s.getExperimentsStat.Inc(1)
-	experiments, err := s.storer.GetExperiments(ctx, request.GetConfigType(), request.GetStatus())
+	experiments, err := s.storer.GetExperiments(ctx, []string{request.GetConfigType()}, request.GetStatus())
 	if err != nil {
 		s.logger.Errorw("GetExperiments: Unable to retrieve experiments", "error", err)
 		return &experimentation.GetExperimentsResponse{}, err

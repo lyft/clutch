@@ -8,6 +8,7 @@ import (
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
 	"testing"
+	"errors"
 	"time"
 
 	_ "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
@@ -15,11 +16,24 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experiment_terminator"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
 	"github.com/lyft/clutch/backend/internal/test/integration/helper/envoytest"
 )
 
+type timeBasedCriteria struct {
+}
+
+func (timeBasedCriteria) ShouldTerminate(started time.Time, experiment interface{}) error {
+	fmt.Println("MAYBE SHOULD TERMINATE")
+	if started.Add(1 * time.Second).Before(time.Now()) {
+	fmt.Println("TERMINATING")
+		return errors.New("timed out")
+	}
+
+	return nil
+}
 // These tests are intended to be run with docker-compose to in order to set up a running Envoy instance
 // to run assertions against.
 func TestEnvoyFaults(t *testing.T) {
@@ -32,6 +46,9 @@ func TestEnvoyFaults(t *testing.T) {
 
 	ts := xdstest.NewTestModuleServer(New, true, xdsConfig)
 	defer ts.Stop()
+
+	terminator := experiment_terminator.NewTerminator(ts.Storer, []string{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"}, []experiment_terminator.TerminationCriteria{timeBasedCriteria{}})
+	terminator.Run()
 
 	e, err := envoytest.NewEnvoyHandle()
 	assert.NoError(t, err)
