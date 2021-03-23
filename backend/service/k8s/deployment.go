@@ -78,6 +78,7 @@ func ProtoForDeploymentStatus(deploymentStatus appsv1.DeploymentStatus) *k8sapiv
 	var deploymentConditions []*k8sapiv1.Deployment_DeploymentStatus_Condition
 	for _, cond := range deploymentStatus.Conditions {
 		var deploymentConditionType k8sapiv1.Deployment_DeploymentStatus_Condition_Type
+		// TODO: Is this the preferred way of converting from one enum to another?
 		if cond.Type != "" {
 			deploymentConditionType = k8sapiv1.Deployment_DeploymentStatus_Condition_Type(
 				k8sapiv1.Deployment_DeploymentStatus_Condition_Type_value[strings.ToUpper(string(cond.Type))])
