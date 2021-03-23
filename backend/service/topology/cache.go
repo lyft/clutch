@@ -107,49 +107,39 @@ func (c *client) startTopologyCache(ctx context.Context) {
 func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest, service string) {
 	var batchInsert []*topologyv1.Resource
 
-	for obj := range objs {
-		c.bulkInsertMutex.Lock()
-		switch obj.Action {
-		case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
-			batchInsert = append(batchInsert, obj.Resource)
-		case topologyv1.UpdateCacheRequest_DELETE:
-			if err := c.deleteCache(ctx, obj.Resource.Id, obj.Resource.Pb.TypeUrl); err != nil {
-				c.log.Error("Error deleting cache", zap.Error(err))
+	for {
+		select {
+		case obj, ok := <-objs:
+			if !ok {
+				return
 			}
-		default:
-			c.log.Warn("UpdateCacheRequest action is not implemented", zap.String("action", obj.Action.String()))
-		}
 
-		if len(batchInsert) >= int(c.config.Cache.BatchInsertSize) {
-			if err := c.setCache(ctx, batchInsert); err != nil {
-				c.log.Error("Error setting cache", zap.Error(err))
+			switch obj.Action {
+			case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
+				batchInsert = append(batchInsert, obj.Resource)
+			case topologyv1.UpdateCacheRequest_DELETE:
+				if err := c.deleteCache(ctx, obj.Resource.Id, obj.Resource.Pb.TypeUrl); err != nil {
+					c.log.Error("Error deleting cache", zap.Error(err))
+				}
+			default:
+				c.log.Warn("UpdateCacheRequest action is not implemented", zap.String("action", obj.Action.String()))
 			}
-			batchInsert = []*topologyv1.Resource{}
-		}
-		c.bulkInsertMutex.Unlock()
-	}
 
-	go func() {
-		ticker := time.NewTicker(time.Second * 30)
-		for {
-			c.bulkInsertMutex.Lock()
+			if len(batchInsert) >= int(c.config.Cache.BatchInsertSize) {
+				if err := c.setCache(ctx, batchInsert); err != nil {
+					c.log.Error("Error setting cache", zap.Error(err))
+				}
+				batchInsert = []*topologyv1.Resource{}
+			}
+		case <-time.After(time.Second * 30):
 			if len(batchInsert) > 0 {
 				if err := c.setCache(ctx, batchInsert); err != nil {
 					c.log.Error("Error setting cache", zap.Error(err))
 				}
 				batchInsert = []*topologyv1.Resource{}
 			}
-			c.bulkInsertMutex.Unlock()
-
-			select {
-			case <-ticker.C:
-				continue
-			case <-ctx.Done():
-				ticker.Stop()
-				return
-			}
 		}
-	}()
+	}
 }
 
 func (c *client) prepareBulkCacheInsert(obj []*topologyv1.Resource) ([]interface{}, string) {
