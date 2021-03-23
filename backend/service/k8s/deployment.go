@@ -4,6 +4,7 @@ import (
 	"context"
 	"strings"
 
+	"github.com/golang/protobuf/ptypes/wrappers"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	appsv1 "k8s.io/api/apps/v1"
@@ -13,7 +14,6 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/util/retry"
 
-	"github.com/golang/protobuf/ptypes/wrappers"
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
 
@@ -76,10 +76,8 @@ func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1
 }
 
 func ProtoForDeploymentStatus(deploymentStatus appsv1.DeploymentStatus) *k8sapiv1.Deployment_DeploymentStatus {
-
 	var deploymentConditions []*k8sapiv1.Deployment_DeploymentStatus_DeploymentCondition
 	for _, cond := range deploymentStatus.Conditions {
-
 		var deploymentConditionType k8sapiv1.Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType
 		if cond.Type != "" {
 			deploymentConditionType = k8sapiv1.Deployment_DeploymentStatus_DeploymentCondition_DeploymentConditionType(
