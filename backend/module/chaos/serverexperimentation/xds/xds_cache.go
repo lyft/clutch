@@ -136,11 +136,11 @@ func setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTt
 	if isSnapshotEmpty {
 		scope.Tagged(map[string]string{
 			"cluster": cluster,
-		}).Counter("active_faults").Inc(-1)
+		}).Gauge("active_faults").Update(-1)
 	} else {
 		scope.Tagged(map[string]string{
 			"cluster": cluster,
-		}).Counter("active_faults").Inc(1)
+		}).Gauge("active_faults").Update(1)
 	}
 
 	return nil
