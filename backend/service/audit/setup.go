@@ -11,10 +11,9 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/jsonpb"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
@@ -28,9 +27,9 @@ import (
 
 const Name = "clutch.service.audit"
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	config := &auditconfigv1.Config{}
-	if err := ptypes.UnmarshalAny(cfg, config); err != nil {
+	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err
 	}
 

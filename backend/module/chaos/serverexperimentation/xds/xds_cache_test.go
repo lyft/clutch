@@ -148,7 +148,7 @@ func TestSetSnapshotRTDS(t *testing.T) {
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+		err := experiment.GetConfig().UnmarshalTo(config)
 		if err != nil {
 			t.Errorf("unmarshalAny failed %v", err)
 		}
@@ -315,7 +315,7 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+		err := experiment.GetConfig().UnmarshalTo(config)
 		assert.NoError(t, err)
 
 		upstream, downstream, err := getClusterPair(config)
@@ -409,7 +409,7 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+		err := experiment.GetConfig().UnmarshalTo(config)
 		if err != nil {
 			t.Errorf("unmarshalAny failed %v", err)
 		}

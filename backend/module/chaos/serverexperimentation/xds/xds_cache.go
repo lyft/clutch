@@ -7,7 +7,6 @@ import (
 
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/mitchellh/hashstructure/v2"
 	"go.uber.org/zap"
 
@@ -136,7 +135,7 @@ func setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTt
 }
 
 func maybeUnmarshalFaultTest(experiment *experimentation.Experiment, httpFaultConfig *serverexperimentation.HTTPFaultConfig) bool {
-	err := ptypes.UnmarshalAny(experiment.GetConfig(), httpFaultConfig)
+	err := experiment.GetConfig().UnmarshalTo(httpFaultConfig)
 	if err != nil {
 		return false
 	}

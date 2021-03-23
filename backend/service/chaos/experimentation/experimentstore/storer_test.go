@@ -175,7 +175,7 @@ func TestGetExperimentsUnmarshalsExperimentConfiguration(t *testing.T) {
 	assert.Equal(uint64(1234), experiment.GetId())
 
 	config := &serverexperimentation.HTTPFaultConfig{}
-	err = ptypes.UnmarshalAny(experiment.GetConfig(), config)
+	err = experiment.GetConfig().UnmarshalTo(config)
 	assert.NoError(err)
 	assert.Nil(config.GetLatencyFault())
 	abort := config.GetAbortFault()

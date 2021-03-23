@@ -3,7 +3,6 @@ package resolver
 import (
 	"testing"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
@@ -109,10 +108,10 @@ func TestMarshalProtoSliceToAny(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, len(pbs), len(v))
 	var instance ec2v1.Instance
-	err = ptypes.UnmarshalAny(v[0], &instance)
+	err = v[0].UnmarshalTo(&instance)
 	assert.NoError(t, err)
 	assert.Equal(t, "123", instance.InstanceId)
-	err = ptypes.UnmarshalAny(v[1], &instance)
+	err = v[1].UnmarshalTo(&instance)
 	assert.NoError(t, err)
 	assert.Equal(t, "456", instance.InstanceId)
 }
