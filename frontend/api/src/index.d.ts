@@ -8180,55 +8180,59 @@ export namespace clutch {
     /** Namespace core. */
     namespace core {
 
-        /** Namespace v1. */
-        namespace v1 {
+        /** Namespace envoy. */
+        namespace envoy {
 
-            /** Properties of a Cluster. */
-            interface ICluster {
+            /** Namespace v1. */
+            namespace v1 {
 
-                /** Cluster name */
-                name?: (string|null);
-            }
+                /** Properties of a Cluster. */
+                interface ICluster {
 
-            /** Represents a Cluster. */
-            class Cluster implements ICluster {
+                    /** Cluster name */
+                    name?: (string|null);
+                }
 
-                /**
-                 * Constructs a new Cluster.
-                 * @param [properties] Properties to set
-                 */
-                constructor(properties?: clutch.core.v1.ICluster);
+                /** Represents a Cluster. */
+                class Cluster implements ICluster {
 
-                /** Cluster name. */
-                public name: string;
+                    /**
+                     * Constructs a new Cluster.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.envoy.v1.ICluster);
 
-                /**
-                 * Verifies a Cluster message.
-                 * @param message Plain object to verify
-                 * @returns `null` if valid, otherwise the reason why it is not
-                 */
-                public static verify(message: { [k: string]: any }): (string|null);
+                    /** Cluster name. */
+                    public name: string;
 
-                /**
-                 * Creates a Cluster message from a plain object. Also converts values to their respective internal types.
-                 * @param object Plain object
-                 * @returns Cluster
-                 */
-                public static fromObject(object: { [k: string]: any }): clutch.core.v1.Cluster;
+                    /**
+                     * Verifies a Cluster message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
 
-                /**
-                 * Creates a plain object from a Cluster message. Also converts values to other types if specified.
-                 * @param message Cluster
-                 * @param [options] Conversion options
-                 * @returns Plain object
-                 */
-                public static toObject(message: clutch.core.v1.Cluster, options?: $protobuf.IConversionOptions): { [k: string]: any };
+                    /**
+                     * Creates a Cluster message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Cluster
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.envoy.v1.Cluster;
 
-                /**
-                 * Converts this Cluster to JSON.
-                 * @returns JSON object
-                 */
-                public toJSON(): { [k: string]: any };
+                    /**
+                     * Creates a plain object from a Cluster message. Also converts values to other types if specified.
+                     * @param message Cluster
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.envoy.v1.Cluster, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Cluster to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
             }
         }
     }
