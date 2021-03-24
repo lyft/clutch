@@ -10205,6 +10205,9 @@ export namespace clutch {
 
                 /** Pod annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** Pod age */
+                age?: (string|null);
             }
 
             /** Represents a Pod. */
@@ -10245,6 +10248,9 @@ export namespace clutch {
 
                 /** Pod annotations. */
                 public annotations: { [k: string]: string };
+
+                /** Pod age. */
+                public age: string;
 
                 /**
                  * Verifies a Pod message.

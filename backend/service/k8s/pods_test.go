@@ -484,3 +484,42 @@ func TestMakeContainers(t *testing.T) {
 		})
 	}
 }
+
+func TestProtoTranslateTimestampSince(t *testing.T) {
+	t.Parallel()
+
+	var podTestCases = []struct {
+		id  string
+		pod *corev1.Pod
+	}{
+		{
+			id: "foo",
+			pod: &corev1.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName:       "production",
+					CreationTimestamp: metav1.Now(),
+				},
+			},
+		},
+		{
+			id: "oof",
+			pod: &corev1.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					ClusterName:       "",
+					CreationTimestamp: metav1.Time{},
+				},
+			},
+		},
+	}
+
+	for _, tt := range podTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			pod := podDescription(tt.pod, "")
+			assert.NotNil(t, pod.Age)
+		})
+	}
+
+}

@@ -3,11 +3,13 @@ package k8s
 import (
 	"context"
 	"strings"
+	"time"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/duration"
 
 	k8sapiv1 "github.com/lyft/clutch/backend/api/k8s/v1"
 )
@@ -186,7 +188,16 @@ func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 		//StartTime:   launch,
 		Labels:      k8spod.Labels,
 		Annotations: k8spod.Annotations,
+		Age:         translateTimestampSince(k8spod.CreationTimestamp.Time),
 	}
+}
+
+// translateTimestampSince returns the elapsed time since timestamp in human-readable approximation.
+func translateTimestampSince(timestamp time.Time) string {
+	if timestamp.IsZero() {
+		return "<unknown>"
+	}
+	return duration.HumanDuration(time.Since(timestamp))
 }
 
 func makeContainers(statuses []corev1.ContainerStatus) []*k8sapiv1.Container {
