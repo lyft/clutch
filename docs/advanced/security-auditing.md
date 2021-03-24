@@ -301,3 +301,45 @@ services:
         - clutch.service.audit.sink.slack
      // highlight-end
 ```
+
+**Custom Slack Messages**
+
+A custom slack message can be created for a given `/service/method` using the available metadata (the API request and response body) in an audit event. The custom message will then be appended to the default message for a richer slack audit.
+
+TODO: insert picture/gif
+
+The feature is powered by the Golang [Template](https://golang.org/pkg/text/template/) package. In the clutch-config, you can provide a template with the field names from the API request and/or response, which will then be replaced by the values saved in the audit event metadata. The template can also include Slack [`mrkdwn`](https://api.slack.com/reference/surfaces/formatting#basics) for adding useful visual highlights to the custom message.
+
+**Creating a Custom Messsage**
+- `.Request.<key>` to obtain data from the API request
+- `.Response.<key>` to obtain data from the API response
+- Any of the Golang Template [functions](https://golang.org/pkg/text/template/#hdr-Functions) can be used in the custom template
+
+- `[[ ]]` in lieu of the Golang Template action syntax ( `{{ }}`)
+- `$$` in lieu of the Golang Template variable syntax ( `$`)
+
+
+Example Config:
+```yaml title="backend/clutch-config.yaml"
+...
+services:
+  ...
+  - name: clutch.service.db.postgres
+  ...
+  - name: clutch.service.auditsink.slack
+    typed_config:
+      "@type": types.google.com/clutch.config.service.auditsink.slack.v1.SlackConfig
+      token: <token>
+      channel: <channel>
+      filter:
+        rules:
+          - field: SERVICE
+            text: clutch.k8s.v1.K8sAPI
+      // highlight-start
+      overrides:
+        - full_method: /clutch.k8s.v1.K8sAPI/ResizeHPA
+        - message: |
+          *Min size*: [[.Request.sizing.min]]
+          *Max size*: [[.Request.sizing.max]]
+      // highlight-end
+```
