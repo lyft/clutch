@@ -1,6 +1,10 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { ButtonProps as MuiButtonProps, GridJustification } from "@material-ui/core";
+import type {
+  ButtonProps as MuiButtonProps,
+  GridJustification,
+  IconButtonProps as MuiIconButtonProps,
+} from "@material-ui/core";
 import { Button as MuiButton, Grid, IconButton as MuiIconButton } from "@material-ui/core";
 import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
@@ -14,6 +18,7 @@ const COLORS = {
       disabled: "#FFFFFF",
     },
     font: "#0D1030",
+    fontDisabled: "#0D1030",
   },
   primary: {
     background: {
@@ -23,6 +28,7 @@ const COLORS = {
       disabled: "#E7E7EA",
     },
     font: "#FFFFFF",
+    fontDisabled: "rgba(13, 16, 48, 0.38)",
   },
   danger: {
     background: {
@@ -32,6 +38,7 @@ const COLORS = {
       disabled: "#F1B3A6",
     },
     font: "#FFFFFF",
+    fontDisabled: "#FFFFFF",
   },
 };
 
@@ -55,7 +62,7 @@ const StyledButton = styled(MuiButton)(
       backgroundColor: props["data-color"].background.active,
     },
     "&:disabled": {
-      color: props["data-color"].font,
+      color: props["data-color"].fontDisabled,
       backgroundColor: props["data-color"].background.disabled,
       opacity: "0.38",
     },
@@ -91,6 +98,33 @@ const Button: React.FC<ButtonProps> = ({ text, variant = "primary", ...props }) 
   );
 };
 
+const StyledIconButton = styled(MuiIconButton)({
+  height: "48px",
+  width: "48px",
+  padding: "12px",
+  color: COLORS.primary.font,
+  backgroundColor: COLORS.primary.background.primary,
+  "&:hover": {
+    backgroundColor: COLORS.primary.background.hover,
+  },
+  "&:active": {
+    backgroundColor: COLORS.primary.background.active,
+  },
+  "&:disabled": {
+    color: "rgba(13, 16, 48, 0.38)",
+    backgroundColor: COLORS.primary.background.disabled,
+    opacity: "0.38",
+  },
+});
+
+export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type"> {
+  children: React.ReactElement;
+}
+
+const IconButton = ({ children, ...props }: IconButtonProps) => (
+  <StyledIconButton {...props}>{children}</StyledIconButton>
+);
+
 const ButtonGroupContainer = styled(Grid)(
   {
     "> *": {
@@ -123,7 +157,7 @@ const ButtonGroup = ({ children, justify = "flex-end", border = "top" }: ButtonG
   </ButtonGroupContainer>
 );
 
-const IconButton = styled(MuiIconButton)({
+const ClipboardIconButton = styled(MuiIconButton)({
   color: "#000000",
   ":hover": {
     backgroundColor: "transparent",
@@ -151,15 +185,15 @@ const ClipboardButton: React.FC<ClipboardButtonProps> = ({ text }) => {
   }, [clicked]);
 
   return (
-    <IconButton
+    <ClipboardIconButton
       onClick={() => {
         setClicked(true);
         navigator.clipboard.writeText(text);
       }}
     >
       {clicked ? <CheckCircleOutlinedIcon /> : <FileCopyOutlinedIcon />}
-    </IconButton>
+    </ClipboardIconButton>
   );
 };
 
-export { Button, ButtonGroup, ClipboardButton };
+export { Button, ButtonGroup, ClipboardButton, IconButton };

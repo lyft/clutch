@@ -7,7 +7,7 @@ import { Select } from "./Input/select";
 import { TextField } from "./Input/text-field";
 import { Accordion, AccordionDetails } from "./accordion";
 import ClutchApp from "./AppProvider";
-import { Button, ButtonGroup, ClipboardButton } from "./button";
+import { Button, ButtonGroup, ClipboardButton, IconButton } from "./button";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
 import { Dialog, DialogActions, DialogContent } from "./dialog";
@@ -49,6 +49,7 @@ export {
   Form,
   Grid,
   Hint,
+  IconButton,
   Link,
   Loadable,
   MetadataTable,
