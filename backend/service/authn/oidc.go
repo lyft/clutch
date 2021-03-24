@@ -184,17 +184,6 @@ func (p *OIDCProvider) Verify(ctx context.Context, rawToken string) (*Claims, er
 		return nil, err
 	}
 
-	// If the token doesn't exist in the token storage anymore, it must have been revoked.
-	// Fail verification in this case.
-	// TODO(perf): Cache the lookup result in-memory for min(60, timeToExpiry) to prevent
-	// hitting the DB on each request. This should also cache whether we didn't find a token.
-	if p.tokenStorage != nil {
-		token, err := p.tokenStorage.Read(ctx, claims.Subject, clutchProvider)
-		if token == nil {
-			return nil, err
-		}
-	}
-
 	if err := claims.Valid(); err != nil {
 		return nil, err
 	}
