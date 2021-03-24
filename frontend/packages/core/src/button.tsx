@@ -1,6 +1,10 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { ButtonProps as MuiButtonProps, GridJustification, IconButtonProps as MuiIconButtonProps } from "@material-ui/core";
+import type {
+  ButtonProps as MuiButtonProps,
+  GridJustification,
+  IconButtonProps as MuiIconButtonProps,
+} from "@material-ui/core";
 import { Button as MuiButton, Grid, IconButton as MuiIconButton } from "@material-ui/core";
 import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
@@ -115,7 +119,7 @@ const StyledIconButton = styled(MuiIconButton)({
 
 export interface IconButtonProps extends Pick<MuiIconButtonProps, "disabled" | "type"> {
   children: React.ReactElement;
-};
+}
 
 const IconButton = ({ children, ...props }: IconButtonProps) => (
   <StyledIconButton {...props}>{children}</StyledIconButton>
