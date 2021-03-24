@@ -289,8 +289,7 @@ message Pod {
   map<string, string> labels = 9;
   map<string, string> annotations = 10;
 
-  // human friendly, based off
-  // https://github.com/lyft/lyftkube/blob/1394f8f8e17d9f3472a0387c901bdb506dde083a/lib/printers/time_format.go#L11
+  // human friendly representation of time since creation
   string age = 11;
 }
 
