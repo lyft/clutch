@@ -2,10 +2,12 @@ package k8s
 
 import (
 	"context"
+	"strings"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	appsv1 "k8s.io/api/apps/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
@@ -63,11 +65,54 @@ func ProtoForDeployment(cluster string, deployment *appsv1.Deployment) *k8sapiv1
 		clusterName = cluster
 	}
 	return &k8sapiv1.Deployment{
-		Cluster:     clusterName,
-		Namespace:   deployment.Namespace,
-		Name:        deployment.Name,
-		Labels:      deployment.Labels,
-		Annotations: deployment.Annotations,
+		Cluster:          clusterName,
+		Namespace:        deployment.Namespace,
+		Name:             deployment.Name,
+		Labels:           deployment.Labels,
+		Annotations:      deployment.Annotations,
+		DeploymentStatus: ProtoForDeploymentStatus(deployment.Status),
+	}
+}
+
+func ProtoForDeploymentStatus(deploymentStatus appsv1.DeploymentStatus) *k8sapiv1.Deployment_DeploymentStatus {
+	var deploymentConditions []*k8sapiv1.Deployment_DeploymentStatus_Condition
+	for _, cond := range deploymentStatus.Conditions {
+		var deploymentConditionType k8sapiv1.Deployment_DeploymentStatus_Condition_Type
+		// TODO: Is this the preferred way of converting from one enum to another?
+		if cond.Type != "" {
+			deploymentConditionType = k8sapiv1.Deployment_DeploymentStatus_Condition_Type(
+				k8sapiv1.Deployment_DeploymentStatus_Condition_Type_value[strings.ToUpper(string(cond.Type))])
+		}
+		var condStatus k8sapiv1.Deployment_DeploymentStatus_Condition_ConditionStatus
+		switch cond.Status {
+		case v1.ConditionTrue:
+			{
+				condStatus = k8sapiv1.Deployment_DeploymentStatus_Condition_CONDITION_TRUE
+			}
+		case v1.ConditionFalse:
+			{
+				condStatus = k8sapiv1.Deployment_DeploymentStatus_Condition_CONDITION_FALSE
+			}
+		default:
+			condStatus = k8sapiv1.Deployment_DeploymentStatus_Condition_CONDITION_UNKNOWN
+		}
+
+		newCond := &k8sapiv1.Deployment_DeploymentStatus_Condition{
+			Type:            deploymentConditionType,
+			ConditionStatus: condStatus,
+			Reason:          cond.Reason,
+			Message:         cond.Message,
+		}
+		deploymentConditions = append(deploymentConditions, newCond)
+	}
+
+	return &k8sapiv1.Deployment_DeploymentStatus{
+		Replicas:             uint32(deploymentStatus.Replicas),
+		UpdatedReplicas:      uint32(deploymentStatus.UpdatedReplicas),
+		ReadyReplicas:        uint32(deploymentStatus.ReadyReplicas),
+		AvailableReplicas:    uint32(deploymentStatus.AvailableReplicas),
+		UnavailableReplicas:  uint32(deploymentStatus.UnavailableReplicas),
+		DeploymentConditions: deploymentConditions,
 	}
 }
 
