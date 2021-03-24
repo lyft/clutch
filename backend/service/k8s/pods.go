@@ -186,9 +186,9 @@ func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 		PodIp:      k8spod.Status.PodIP,
 		State:      protoForPodState(k8spod.Status.Phase),
 		//StartTime:   launch,
-		Labels:      k8spod.Labels,
-		Annotations: k8spod.Annotations,
-		Age:         translateTimestampSince(k8spod.CreationTimestamp.Time),
+		Labels:         k8spod.Labels,
+		Annotations:    k8spod.Annotations,
+		StartTimeHuman: translateTimestampSince(k8spod.CreationTimestamp.Time),
 	}
 }
 

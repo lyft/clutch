@@ -334,7 +334,7 @@ func (m *Pod) Validate() error {
 
 	// no validation rules for Annotations
 
-	// no validation rules for Age
+	// no validation rules for StartTimeHuman
 
 	return nil
 }

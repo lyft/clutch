@@ -23941,7 +23941,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {google.protobuf.ITimestamp|null} [startTime] Pod startTime
                  * @property {Object.<string,string>|null} [labels] Pod labels
                  * @property {Object.<string,string>|null} [annotations] Pod annotations
-                 * @property {string|null} [age] Pod age
+                 * @property {string|null} [startTimeHuman] Pod startTimeHuman
                  */
 
                 /**
@@ -24043,12 +24043,12 @@ export const clutch = $root.clutch = (() => {
                 Pod.prototype.annotations = $util.emptyObject;
 
                 /**
-                 * Pod age.
-                 * @member {string} age
+                 * Pod startTimeHuman.
+                 * @member {string} startTimeHuman
                  * @memberof clutch.k8s.v1.Pod
                  * @instance
                  */
-                Pod.prototype.age = "";
+                Pod.prototype.startTimeHuman = "";
 
                 /**
                  * Verifies a Pod message.
@@ -24118,9 +24118,9 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.annotations[key[i]]))
                                 return "annotations: string{k:string} expected";
                     }
-                    if (message.age != null && message.hasOwnProperty("age"))
-                        if (!$util.isString(message.age))
-                            return "age: string expected";
+                    if (message.startTimeHuman != null && message.hasOwnProperty("startTimeHuman"))
+                        if (!$util.isString(message.startTimeHuman))
+                            return "startTimeHuman: string expected";
                     return null;
                 };
 
@@ -24201,8 +24201,8 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
                             message.annotations[keys[i]] = String(object.annotations[keys[i]]);
                     }
-                    if (object.age != null)
-                        message.age = String(object.age);
+                    if (object.startTimeHuman != null)
+                        message.startTimeHuman = String(object.startTimeHuman);
                     return message;
                 };
 
@@ -24233,7 +24233,7 @@ export const clutch = $root.clutch = (() => {
                         object.podIp = "";
                         object.state = options.enums === String ? "UNSPECIFIED" : 0;
                         object.startTime = null;
-                        object.age = "";
+                        object.startTimeHuman = "";
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -24265,8 +24265,8 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < keys2.length; ++j)
                             object.annotations[keys2[j]] = message.annotations[keys2[j]];
                     }
-                    if (message.age != null && message.hasOwnProperty("age"))
-                        object.age = message.age;
+                    if (message.startTimeHuman != null && message.hasOwnProperty("startTimeHuman"))
+                        object.startTimeHuman = message.startTimeHuman;
                     return object;
                 };
 

@@ -290,7 +290,7 @@ message Pod {
   map<string, string> annotations = 10;
 
   // human friendly representation of time since creation
-  string age = 11;
+  string start_time_human = 11;
 }
 
 message ListOptions {
