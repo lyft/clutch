@@ -518,7 +518,7 @@ func TestProtoTranslateTimestampSince(t *testing.T) {
 			t.Parallel()
 
 			pod := podDescription(tt.pod, "")
-			assert.NotNil(t, pod.Age)
+			assert.NotNil(t, pod.StartTimeHuman)
 		})
 	}
 }
