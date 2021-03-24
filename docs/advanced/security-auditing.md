@@ -270,7 +270,7 @@ Adding and customizing audit sinks lets you save or process infrastructure event
 #### Slack Sink
 By default, the Slack sink creates a formatted Slack message using a subset of information saved in an audit event. The default Slack message provides a summary that answers questions such as what operation was performed, who performed the operation, and what resources were operated on.
 
-TODO: insert picture/gif
+<img style={ {border: "1px solid black"} } alt="slack audits" src="https://user-images.githubusercontent.com/39421794/112361590-f1431880-8ca9-11eb-9d65-a4a843b6b08c.gif" />
 
 The Slack sink requires your [Slack app’s](https://api.slack.com/start) bot token and the channel to post the messages. You can optionally provide filter rules to control what kinds of Slack audits are sent to the channel.
 
