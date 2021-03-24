@@ -306,7 +306,7 @@ services:
 
 A custom Slack message can be created for a given `/service/method` using the available metadata (the API request and response body) in an audit event. The custom message will then be appended to the default Slack message for a richer Slack audit.
 
-TODO: insert picture/gif
+<img style={ {border: "1px solid black"} } alt="slack audits" src="https://user-images.githubusercontent.com/39421794/112363388-d2458600-8cab-11eb-80d6-1324c5e5b64a.png" />
 
 **Creating a Custom Slack Messages**
 
