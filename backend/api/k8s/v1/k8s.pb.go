@@ -472,8 +472,7 @@ type Pod struct {
 	StartTime   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
 	Labels      map[string]string      `protobuf:"bytes,9,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	Annotations map[string]string      `protobuf:"bytes,10,rep,name=annotations,proto3" json:"annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// human friendly, based off
-	// https://github.com/lyft/lyftkube/blob/1394f8f8e17d9f3472a0387c901bdb506dde083a/lib/printers/time_format.go#L11
+	// human friendly representation of time since creation
 	Age string `protobuf:"bytes,11,opt,name=age,proto3" json:"age,omitempty"`
 }
 
