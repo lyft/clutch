@@ -194,3 +194,64 @@ func TestDeleteHPA(t *testing.T) {
 	_, err = s.DescribeHPA(context.Background(), "foo", "core-testing", "testing-namespace", "testing-hpa-name")
 	assert.Error(t, err)
 }
+
+func TestProtoForHPA(t *testing.T) {
+	t.Parallel()
+
+	var hpaTestCases = []struct {
+		id  string
+		hpa *autoscalingv1.HorizontalPodAutoscaler
+	}{
+		{
+			id: "foo",
+			hpa: &autoscalingv1.HorizontalPodAutoscaler{
+				Spec: autoscalingv1.HorizontalPodAutoscalerSpec{
+					MinReplicas:                    newInt32(1),
+					MaxReplicas:                    99,
+					TargetCPUUtilizationPercentage: newInt32(99),
+				},
+				Status: autoscalingv1.HorizontalPodAutoscalerStatus{
+					CurrentReplicas:                 9,
+					DesiredReplicas:                 9,
+					CurrentCPUUtilizationPercentage: newInt32(69),
+				},
+			},
+		},
+		{
+			id: "bar",
+			hpa: &autoscalingv1.HorizontalPodAutoscaler{
+				Spec: autoscalingv1.HorizontalPodAutoscalerSpec{
+					MinReplicas:                    newInt32(1),
+					MaxReplicas:                    3,
+					TargetCPUUtilizationPercentage: newInt32(42),
+				},
+				Status: autoscalingv1.HorizontalPodAutoscalerStatus{
+					CurrentReplicas:                 6,
+					DesiredReplicas:                 4,
+					CurrentCPUUtilizationPercentage: newInt32(88),
+				},
+			},
+		},
+	}
+
+	for _, tt := range hpaTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			hpa := ProtoForHPA("", tt.hpa)
+			assert.Equal(t, *tt.hpa.Spec.MinReplicas, int32(hpa.Sizing.MinReplicas))
+			assert.Equal(t, tt.hpa.Spec.MaxReplicas, int32(hpa.Sizing.MaxReplicas))
+
+			if tt.hpa.Spec.TargetCPUUtilizationPercentage != nil {
+				assert.Equal(t, *tt.hpa.Spec.TargetCPUUtilizationPercentage, hpa.TargetCpuUtilizationPercentage.Value)
+			}
+			if tt.hpa.Status.CurrentCPUUtilizationPercentage != nil {
+				assert.Equal(t, *tt.hpa.Status.CurrentCPUUtilizationPercentage, hpa.CurrentCpuUtilizationPercentage.Value)
+			}
+
+			assert.Equal(t, tt.hpa.Status.CurrentReplicas, int32(hpa.Sizing.CurrentReplicas))
+			assert.Equal(t, tt.hpa.Status.DesiredReplicas, int32(hpa.Sizing.DesiredReplicas))
+		})
+	}
+}

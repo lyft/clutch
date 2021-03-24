@@ -25234,6 +25234,8 @@ export const clutch = $root.clutch = (() => {
                  * @property {clutch.k8s.v1.HPA.ISizing|null} [sizing] HPA sizing
                  * @property {Object.<string,string>|null} [labels] HPA labels
                  * @property {Object.<string,string>|null} [annotations] HPA annotations
+                 * @property {google.protobuf.IInt32Value|null} [currentCpuUtilizationPercentage] HPA currentCpuUtilizationPercentage
+                 * @property {google.protobuf.IInt32Value|null} [targetCpuUtilizationPercentage] HPA targetCpuUtilizationPercentage
                  */
 
                 /**
@@ -25302,6 +25304,22 @@ export const clutch = $root.clutch = (() => {
                 HPA.prototype.annotations = $util.emptyObject;
 
                 /**
+                 * HPA currentCpuUtilizationPercentage.
+                 * @member {google.protobuf.IInt32Value|null|undefined} currentCpuUtilizationPercentage
+                 * @memberof clutch.k8s.v1.HPA
+                 * @instance
+                 */
+                HPA.prototype.currentCpuUtilizationPercentage = null;
+
+                /**
+                 * HPA targetCpuUtilizationPercentage.
+                 * @member {google.protobuf.IInt32Value|null|undefined} targetCpuUtilizationPercentage
+                 * @memberof clutch.k8s.v1.HPA
+                 * @instance
+                 */
+                HPA.prototype.targetCpuUtilizationPercentage = null;
+
+                /**
                  * Verifies a HPA message.
                  * @function verify
                  * @memberof clutch.k8s.v1.HPA
@@ -25341,6 +25359,16 @@ export const clutch = $root.clutch = (() => {
                         for (let i = 0; i < key.length; ++i)
                             if (!$util.isString(message.annotations[key[i]]))
                                 return "annotations: string{k:string} expected";
+                    }
+                    if (message.currentCpuUtilizationPercentage != null && message.hasOwnProperty("currentCpuUtilizationPercentage")) {
+                        let error = $root.google.protobuf.Int32Value.verify(message.currentCpuUtilizationPercentage);
+                        if (error)
+                            return "currentCpuUtilizationPercentage." + error;
+                    }
+                    if (message.targetCpuUtilizationPercentage != null && message.hasOwnProperty("targetCpuUtilizationPercentage")) {
+                        let error = $root.google.protobuf.Int32Value.verify(message.targetCpuUtilizationPercentage);
+                        if (error)
+                            return "targetCpuUtilizationPercentage." + error;
                     }
                     return null;
                 };
@@ -25382,6 +25410,16 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
                             message.annotations[keys[i]] = String(object.annotations[keys[i]]);
                     }
+                    if (object.currentCpuUtilizationPercentage != null) {
+                        if (typeof object.currentCpuUtilizationPercentage !== "object")
+                            throw TypeError(".clutch.k8s.v1.HPA.currentCpuUtilizationPercentage: object expected");
+                        message.currentCpuUtilizationPercentage = $root.google.protobuf.Int32Value.fromObject(object.currentCpuUtilizationPercentage);
+                    }
+                    if (object.targetCpuUtilizationPercentage != null) {
+                        if (typeof object.targetCpuUtilizationPercentage !== "object")
+                            throw TypeError(".clutch.k8s.v1.HPA.targetCpuUtilizationPercentage: object expected");
+                        message.targetCpuUtilizationPercentage = $root.google.protobuf.Int32Value.fromObject(object.targetCpuUtilizationPercentage);
+                    }
                     return message;
                 };
 
@@ -25407,6 +25445,8 @@ export const clutch = $root.clutch = (() => {
                         object.namespace = "";
                         object.name = "";
                         object.sizing = null;
+                        object.currentCpuUtilizationPercentage = null;
+                        object.targetCpuUtilizationPercentage = null;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -25427,6 +25467,10 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < keys2.length; ++j)
                             object.annotations[keys2[j]] = message.annotations[keys2[j]];
                     }
+                    if (message.currentCpuUtilizationPercentage != null && message.hasOwnProperty("currentCpuUtilizationPercentage"))
+                        object.currentCpuUtilizationPercentage = $root.google.protobuf.Int32Value.toObject(message.currentCpuUtilizationPercentage, options);
+                    if (message.targetCpuUtilizationPercentage != null && message.hasOwnProperty("targetCpuUtilizationPercentage"))
+                        object.targetCpuUtilizationPercentage = $root.google.protobuf.Int32Value.toObject(message.targetCpuUtilizationPercentage, options);
                     return object;
                 };
 
@@ -26207,6 +26251,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [name] Deployment name
                  * @property {Object.<string,string>|null} [labels] Deployment labels
                  * @property {Object.<string,string>|null} [annotations] Deployment annotations
+                 * @property {clutch.k8s.v1.Deployment.IDeploymentStatus|null} [deploymentStatus] Deployment deploymentStatus
                  */
 
                 /**
@@ -26267,6 +26312,14 @@ export const clutch = $root.clutch = (() => {
                 Deployment.prototype.annotations = $util.emptyObject;
 
                 /**
+                 * Deployment deploymentStatus.
+                 * @member {clutch.k8s.v1.Deployment.IDeploymentStatus|null|undefined} deploymentStatus
+                 * @memberof clutch.k8s.v1.Deployment
+                 * @instance
+                 */
+                Deployment.prototype.deploymentStatus = null;
+
+                /**
                  * Verifies a Deployment message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Deployment
@@ -26301,6 +26354,11 @@ export const clutch = $root.clutch = (() => {
                         for (let i = 0; i < key.length; ++i)
                             if (!$util.isString(message.annotations[key[i]]))
                                 return "annotations: string{k:string} expected";
+                    }
+                    if (message.deploymentStatus != null && message.hasOwnProperty("deploymentStatus")) {
+                        let error = $root.clutch.k8s.v1.Deployment.DeploymentStatus.verify(message.deploymentStatus);
+                        if (error)
+                            return "deploymentStatus." + error;
                     }
                     return null;
                 };
@@ -26337,6 +26395,11 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
                             message.annotations[keys[i]] = String(object.annotations[keys[i]]);
                     }
+                    if (object.deploymentStatus != null) {
+                        if (typeof object.deploymentStatus !== "object")
+                            throw TypeError(".clutch.k8s.v1.Deployment.deploymentStatus: object expected");
+                        message.deploymentStatus = $root.clutch.k8s.v1.Deployment.DeploymentStatus.fromObject(object.deploymentStatus);
+                    }
                     return message;
                 };
 
@@ -26361,6 +26424,7 @@ export const clutch = $root.clutch = (() => {
                         object.cluster = "";
                         object.namespace = "";
                         object.name = "";
+                        object.deploymentStatus = null;
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -26379,6 +26443,8 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < keys2.length; ++j)
                             object.annotations[keys2[j]] = message.annotations[keys2[j]];
                     }
+                    if (message.deploymentStatus != null && message.hasOwnProperty("deploymentStatus"))
+                        object.deploymentStatus = $root.clutch.k8s.v1.Deployment.DeploymentStatus.toObject(message.deploymentStatus, options);
                     return object;
                 };
 
@@ -26392,6 +26458,452 @@ export const clutch = $root.clutch = (() => {
                 Deployment.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
+
+                Deployment.DeploymentStatus = (function() {
+
+                    /**
+                     * Properties of a DeploymentStatus.
+                     * @memberof clutch.k8s.v1.Deployment
+                     * @interface IDeploymentStatus
+                     * @property {number|null} [replicas] DeploymentStatus replicas
+                     * @property {number|null} [updatedReplicas] DeploymentStatus updatedReplicas
+                     * @property {number|null} [readyReplicas] DeploymentStatus readyReplicas
+                     * @property {number|null} [availableReplicas] DeploymentStatus availableReplicas
+                     * @property {number|null} [unavailableReplicas] DeploymentStatus unavailableReplicas
+                     * @property {Array.<clutch.k8s.v1.Deployment.DeploymentStatus.ICondition>|null} [deploymentConditions] DeploymentStatus deploymentConditions
+                     */
+
+                    /**
+                     * Constructs a new DeploymentStatus.
+                     * @memberof clutch.k8s.v1.Deployment
+                     * @classdesc Represents a DeploymentStatus.
+                     * @implements IDeploymentStatus
+                     * @constructor
+                     * @param {clutch.k8s.v1.Deployment.IDeploymentStatus=} [properties] Properties to set
+                     */
+                    function DeploymentStatus(properties) {
+                        this.deploymentConditions = [];
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * DeploymentStatus replicas.
+                     * @member {number} replicas
+                     * @memberof clutch.k8s.v1.Deployment.DeploymentStatus
+                     * @instance
+                     */
+                    DeploymentStatus.prototype.replicas = 0;
+
+                    /**
+                     * DeploymentStatus updatedReplicas.
+                     * @member {number} updatedReplicas
+                     * @memberof clutch.k8s.v1.Deployment.DeploymentStatus
+                     * @instance
+                     */
+                    DeploymentStatus.prototype.updatedReplicas = 0;
+
+                    /**
+                     * DeploymentStatus readyReplicas.
+                     * @member {number} readyReplicas
+                     * @memberof clutch.k8s.v1.Deployment.DeploymentStatus
+                     * @instance
+                     */
+                    DeploymentStatus.prototype.readyReplicas = 0;
+
+                    /**
+                     * DeploymentStatus availableReplicas.
+                     * @member {number} availableReplicas
+                     * @memberof clutch.k8s.v1.Deployment.DeploymentStatus
+                     * @instance
+                     */
+                    DeploymentStatus.prototype.availableReplicas = 0;
+
+                    /**
+                     * DeploymentStatus unavailableReplicas.
+                     * @member {number} unavailableReplicas
+                     * @memberof clutch.k8s.v1.Deployment.DeploymentStatus
+                     * @instance
+                     */
+                    DeploymentStatus.prototype.unavailableReplicas = 0;
+
+                    /**
+                     * DeploymentStatus deploymentConditions.
+                     * @member {Array.<clutch.k8s.v1.Deployment.DeploymentStatus.ICondition>} deploymentConditions
+                     * @memberof clutch.k8s.v1.Deployment.DeploymentStatus
+                     * @instance
+                     */
+                    DeploymentStatus.prototype.deploymentConditions = $util.emptyArray;
+
+                    /**
+                     * Verifies a DeploymentStatus message.
+                     * @function verify
+                     * @memberof clutch.k8s.v1.Deployment.DeploymentStatus
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    DeploymentStatus.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.replicas != null && message.hasOwnProperty("replicas"))
+                            if (!$util.isInteger(message.replicas))
+                                return "replicas: integer expected";
+                        if (message.updatedReplicas != null && message.hasOwnProperty("updatedReplicas"))
+                            if (!$util.isInteger(message.updatedReplicas))
+                                return "updatedReplicas: integer expected";
+                        if (message.readyReplicas != null && message.hasOwnProperty("readyReplicas"))
+                            if (!$util.isInteger(message.readyReplicas))
+                                return "readyReplicas: integer expected";
+                        if (message.availableReplicas != null && message.hasOwnProperty("availableReplicas"))
+                            if (!$util.isInteger(message.availableReplicas))
+                                return "availableReplicas: integer expected";
+                        if (message.unavailableReplicas != null && message.hasOwnProperty("unavailableReplicas"))
+                            if (!$util.isInteger(message.unavailableReplicas))
+                                return "unavailableReplicas: integer expected";
+                        if (message.deploymentConditions != null && message.hasOwnProperty("deploymentConditions")) {
+                            if (!Array.isArray(message.deploymentConditions))
+                                return "deploymentConditions: array expected";
+                            for (let i = 0; i < message.deploymentConditions.length; ++i) {
+                                let error = $root.clutch.k8s.v1.Deployment.DeploymentStatus.Condition.verify(message.deploymentConditions[i]);
+                                if (error)
+                                    return "deploymentConditions." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a DeploymentStatus message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.k8s.v1.Deployment.DeploymentStatus
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.k8s.v1.Deployment.DeploymentStatus} DeploymentStatus
+                     */
+                    DeploymentStatus.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.k8s.v1.Deployment.DeploymentStatus)
+                            return object;
+                        let message = new $root.clutch.k8s.v1.Deployment.DeploymentStatus();
+                        if (object.replicas != null)
+                            message.replicas = object.replicas >>> 0;
+                        if (object.updatedReplicas != null)
+                            message.updatedReplicas = object.updatedReplicas >>> 0;
+                        if (object.readyReplicas != null)
+                            message.readyReplicas = object.readyReplicas >>> 0;
+                        if (object.availableReplicas != null)
+                            message.availableReplicas = object.availableReplicas >>> 0;
+                        if (object.unavailableReplicas != null)
+                            message.unavailableReplicas = object.unavailableReplicas >>> 0;
+                        if (object.deploymentConditions) {
+                            if (!Array.isArray(object.deploymentConditions))
+                                throw TypeError(".clutch.k8s.v1.Deployment.DeploymentStatus.deploymentConditions: array expected");
+                            message.deploymentConditions = [];
+                            for (let i = 0; i < object.deploymentConditions.length; ++i) {
+                                if (typeof object.deploymentConditions[i] !== "object")
+                                    throw TypeError(".clutch.k8s.v1.Deployment.DeploymentStatus.deploymentConditions: object expected");
+                                message.deploymentConditions[i] = $root.clutch.k8s.v1.Deployment.DeploymentStatus.Condition.fromObject(object.deploymentConditions[i]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a DeploymentStatus message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.k8s.v1.Deployment.DeploymentStatus
+                     * @static
+                     * @param {clutch.k8s.v1.Deployment.DeploymentStatus} message DeploymentStatus
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    DeploymentStatus.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.arrays || options.defaults)
+                            object.deploymentConditions = [];
+                        if (options.defaults) {
+                            object.replicas = 0;
+                            object.updatedReplicas = 0;
+                            object.readyReplicas = 0;
+                            object.availableReplicas = 0;
+                            object.unavailableReplicas = 0;
+                        }
+                        if (message.replicas != null && message.hasOwnProperty("replicas"))
+                            object.replicas = message.replicas;
+                        if (message.updatedReplicas != null && message.hasOwnProperty("updatedReplicas"))
+                            object.updatedReplicas = message.updatedReplicas;
+                        if (message.readyReplicas != null && message.hasOwnProperty("readyReplicas"))
+                            object.readyReplicas = message.readyReplicas;
+                        if (message.availableReplicas != null && message.hasOwnProperty("availableReplicas"))
+                            object.availableReplicas = message.availableReplicas;
+                        if (message.unavailableReplicas != null && message.hasOwnProperty("unavailableReplicas"))
+                            object.unavailableReplicas = message.unavailableReplicas;
+                        if (message.deploymentConditions && message.deploymentConditions.length) {
+                            object.deploymentConditions = [];
+                            for (let j = 0; j < message.deploymentConditions.length; ++j)
+                                object.deploymentConditions[j] = $root.clutch.k8s.v1.Deployment.DeploymentStatus.Condition.toObject(message.deploymentConditions[j], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this DeploymentStatus to JSON.
+                     * @function toJSON
+                     * @memberof clutch.k8s.v1.Deployment.DeploymentStatus
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    DeploymentStatus.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    DeploymentStatus.Condition = (function() {
+
+                        /**
+                         * Properties of a Condition.
+                         * @memberof clutch.k8s.v1.Deployment.DeploymentStatus
+                         * @interface ICondition
+                         * @property {clutch.k8s.v1.Deployment.DeploymentStatus.Condition.Type|null} [type] Condition type
+                         * @property {clutch.k8s.v1.Deployment.DeploymentStatus.Condition.ConditionStatus|null} [conditionStatus] Condition conditionStatus
+                         * @property {string|null} [reason] Condition reason
+                         * @property {string|null} [message] Condition message
+                         */
+
+                        /**
+                         * Constructs a new Condition.
+                         * @memberof clutch.k8s.v1.Deployment.DeploymentStatus
+                         * @classdesc Represents a Condition.
+                         * @implements ICondition
+                         * @constructor
+                         * @param {clutch.k8s.v1.Deployment.DeploymentStatus.ICondition=} [properties] Properties to set
+                         */
+                        function Condition(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Condition type.
+                         * @member {clutch.k8s.v1.Deployment.DeploymentStatus.Condition.Type} type
+                         * @memberof clutch.k8s.v1.Deployment.DeploymentStatus.Condition
+                         * @instance
+                         */
+                        Condition.prototype.type = 0;
+
+                        /**
+                         * Condition conditionStatus.
+                         * @member {clutch.k8s.v1.Deployment.DeploymentStatus.Condition.ConditionStatus} conditionStatus
+                         * @memberof clutch.k8s.v1.Deployment.DeploymentStatus.Condition
+                         * @instance
+                         */
+                        Condition.prototype.conditionStatus = 0;
+
+                        /**
+                         * Condition reason.
+                         * @member {string} reason
+                         * @memberof clutch.k8s.v1.Deployment.DeploymentStatus.Condition
+                         * @instance
+                         */
+                        Condition.prototype.reason = "";
+
+                        /**
+                         * Condition message.
+                         * @member {string} message
+                         * @memberof clutch.k8s.v1.Deployment.DeploymentStatus.Condition
+                         * @instance
+                         */
+                        Condition.prototype.message = "";
+
+                        /**
+                         * Verifies a Condition message.
+                         * @function verify
+                         * @memberof clutch.k8s.v1.Deployment.DeploymentStatus.Condition
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Condition.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.type != null && message.hasOwnProperty("type"))
+                                switch (message.type) {
+                                default:
+                                    return "type: enum value expected";
+                                case 0:
+                                case 1:
+                                case 2:
+                                case 3:
+                                case 4:
+                                    break;
+                                }
+                            if (message.conditionStatus != null && message.hasOwnProperty("conditionStatus"))
+                                switch (message.conditionStatus) {
+                                default:
+                                    return "conditionStatus: enum value expected";
+                                case 0:
+                                case 1:
+                                case 2:
+                                case 3:
+                                    break;
+                                }
+                            if (message.reason != null && message.hasOwnProperty("reason"))
+                                if (!$util.isString(message.reason))
+                                    return "reason: string expected";
+                            if (message.message != null && message.hasOwnProperty("message"))
+                                if (!$util.isString(message.message))
+                                    return "message: string expected";
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Condition message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.k8s.v1.Deployment.DeploymentStatus.Condition
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.k8s.v1.Deployment.DeploymentStatus.Condition} Condition
+                         */
+                        Condition.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.k8s.v1.Deployment.DeploymentStatus.Condition)
+                                return object;
+                            let message = new $root.clutch.k8s.v1.Deployment.DeploymentStatus.Condition();
+                            switch (object.type) {
+                            case "UNSPECIFIED":
+                            case 0:
+                                message.type = 0;
+                                break;
+                            case "UNKNOWN":
+                            case 1:
+                                message.type = 1;
+                                break;
+                            case "AVAILABLE":
+                            case 2:
+                                message.type = 2;
+                                break;
+                            case "PROGRESSING":
+                            case 3:
+                                message.type = 3;
+                                break;
+                            case "REPLICA_FAILURE":
+                            case 4:
+                                message.type = 4;
+                                break;
+                            }
+                            switch (object.conditionStatus) {
+                            case "CONDITION_UNSPECIFIED":
+                            case 0:
+                                message.conditionStatus = 0;
+                                break;
+                            case "CONDITION_TRUE":
+                            case 1:
+                                message.conditionStatus = 1;
+                                break;
+                            case "CONDITION_FALSE":
+                            case 2:
+                                message.conditionStatus = 2;
+                                break;
+                            case "CONDITION_UNKNOWN":
+                            case 3:
+                                message.conditionStatus = 3;
+                                break;
+                            }
+                            if (object.reason != null)
+                                message.reason = String(object.reason);
+                            if (object.message != null)
+                                message.message = String(object.message);
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Condition message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.k8s.v1.Deployment.DeploymentStatus.Condition
+                         * @static
+                         * @param {clutch.k8s.v1.Deployment.DeploymentStatus.Condition} message Condition
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Condition.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults) {
+                                object.type = options.enums === String ? "UNSPECIFIED" : 0;
+                                object.conditionStatus = options.enums === String ? "CONDITION_UNSPECIFIED" : 0;
+                                object.reason = "";
+                                object.message = "";
+                            }
+                            if (message.type != null && message.hasOwnProperty("type"))
+                                object.type = options.enums === String ? $root.clutch.k8s.v1.Deployment.DeploymentStatus.Condition.Type[message.type] : message.type;
+                            if (message.conditionStatus != null && message.hasOwnProperty("conditionStatus"))
+                                object.conditionStatus = options.enums === String ? $root.clutch.k8s.v1.Deployment.DeploymentStatus.Condition.ConditionStatus[message.conditionStatus] : message.conditionStatus;
+                            if (message.reason != null && message.hasOwnProperty("reason"))
+                                object.reason = message.reason;
+                            if (message.message != null && message.hasOwnProperty("message"))
+                                object.message = message.message;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Condition to JSON.
+                         * @function toJSON
+                         * @memberof clutch.k8s.v1.Deployment.DeploymentStatus.Condition
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Condition.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        /**
+                         * Type enum.
+                         * @name clutch.k8s.v1.Deployment.DeploymentStatus.Condition.Type
+                         * @enum {number}
+                         * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                         * @property {number} UNKNOWN=1 UNKNOWN value
+                         * @property {number} AVAILABLE=2 AVAILABLE value
+                         * @property {number} PROGRESSING=3 PROGRESSING value
+                         * @property {number} REPLICA_FAILURE=4 REPLICA_FAILURE value
+                         */
+                        Condition.Type = (function() {
+                            const valuesById = {}, values = Object.create(valuesById);
+                            values[valuesById[0] = "UNSPECIFIED"] = 0;
+                            values[valuesById[1] = "UNKNOWN"] = 1;
+                            values[valuesById[2] = "AVAILABLE"] = 2;
+                            values[valuesById[3] = "PROGRESSING"] = 3;
+                            values[valuesById[4] = "REPLICA_FAILURE"] = 4;
+                            return values;
+                        })();
+
+                        /**
+                         * ConditionStatus enum.
+                         * @name clutch.k8s.v1.Deployment.DeploymentStatus.Condition.ConditionStatus
+                         * @enum {number}
+                         * @property {number} CONDITION_UNSPECIFIED=0 CONDITION_UNSPECIFIED value
+                         * @property {number} CONDITION_TRUE=1 CONDITION_TRUE value
+                         * @property {number} CONDITION_FALSE=2 CONDITION_FALSE value
+                         * @property {number} CONDITION_UNKNOWN=3 CONDITION_UNKNOWN value
+                         */
+                        Condition.ConditionStatus = (function() {
+                            const valuesById = {}, values = Object.create(valuesById);
+                            values[valuesById[0] = "CONDITION_UNSPECIFIED"] = 0;
+                            values[valuesById[1] = "CONDITION_TRUE"] = 1;
+                            values[valuesById[2] = "CONDITION_FALSE"] = 2;
+                            values[valuesById[3] = "CONDITION_UNKNOWN"] = 3;
+                            return values;
+                        })();
+
+                        return Condition;
+                    })();
+
+                    return DeploymentStatus;
+                })();
 
                 return Deployment;
             })();
