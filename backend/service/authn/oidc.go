@@ -21,7 +21,7 @@ import (
 // Compatible with Okta offline access, a holdover from previous defaults.
 var defaultScopes = []string{oidc.ScopeOpenID, oidc.ScopeOfflineAccess, "email"}
 
-const clutchProviderName = "clutch"
+const clutchProvider = "clutch"
 
 type OIDCProvider struct {
 	provider *oidc.Provider
@@ -146,7 +146,7 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 	}
 
 	if p.tokenStorage != nil {
-		err := p.tokenStorage.Store(ctx, claims.Subject, clutchProviderName, t)
+		err := p.tokenStorage.Store(ctx, claims.Subject, clutchProvider, t)
 		if err != nil {
 			return nil, err
 		}
@@ -186,8 +186,10 @@ func (p *OIDCProvider) Verify(ctx context.Context, rawToken string) (*Claims, er
 
 	// If the token doesn't exist in the token storage anymore, it must have been revoked.
 	// Fail verification in this case.
+	// TODO(perf): Cache the lookup result in-memory for min(60, timeToExpiry) to prevent
+	// hitting the DB on each request. This should also cache whether we didn't find a token.
 	if p.tokenStorage != nil {
-		token, err := p.tokenStorage.Read(ctx, claims.Subject, clutchProviderName)
+		token, err := p.tokenStorage.Read(ctx, claims.Subject, clutchProvider)
 		if token == nil {
 			return nil, err
 		}
