@@ -272,7 +272,7 @@ By default, the Slack sink creates a formatted Slack message using a subset of i
 
 TODO: insert picture/gif
 
-The Slack sink requires your [Slack app’s](https://api.slack.com/start) bot token and the channel to post the messages. You can optionally provide filter rules to control what kinds of slack audits are sent to your channel.
+The Slack sink requires your [Slack app’s](https://api.slack.com/start) bot token and the channel to post the messages. You can optionally provide filter rules to control what kinds of Slack audits are sent to the channel.
 
 Example Config:
 ```yaml title="backend/clutch-config.yaml"
@@ -304,20 +304,19 @@ services:
 
 **Custom Slack Messages**
 
-A custom slack message can be created for a given `/service/method` using the available metadata (the API request and response body) in an audit event. The custom message will then be appended to the default message for a richer slack audit.
+A custom Slack message can be created for a given `/service/method` using the available metadata (the API request and response body) in an audit event. The custom message will then be appended to the default Slack message for a richer Slack audit.
 
 TODO: insert picture/gif
 
-The feature is powered by the Golang [Template](https://golang.org/pkg/text/template/) package. In the clutch-config, you can provide a template with the field names from the API request and/or response, which will then be replaced by the values saved in the audit event metadata. The template can also include Slack [`mrkdwn`](https://api.slack.com/reference/surfaces/formatting#basics) for adding useful visual highlights to the custom message.
+**Creating a Custom Slack Messages**
 
-**Creating a Custom Messsage**
-- `.Request.<key>` to obtain data from the API request
-- `.Response.<key>` to obtain data from the API response
-- Any of the Golang Template [functions](https://golang.org/pkg/text/template/#hdr-Functions) can be used in the custom template
+The feature is powered by the Golang [Template](https://golang.org/pkg/text/template/) package. In the clutch-config, you can provide a template with the field names from the API request and/or response, which will be replaced with the values of the those fields at parse time. The template can also include Slack [`mrkdwn`](https://api.slack.com/reference/surfaces/formatting#basics) to add useful visual highlights to the custom message.
 
-- `[[ ]]` in lieu of the Golang Template action syntax ( `{{ }}`)
-- `$$` in lieu of the Golang Template variable syntax ( `$`)
-
+Creating the template:
+- `.Request.key_name` to obtain data from the API request
+- `.Response.key_name` to obtain data from the API response
+- Clutch-specific [templating tokens](https://github.com/lyft/clutch/blob/0aa1c00b37513900c351be1106cc131498b1aad0/backend/gateway/config.go#L110-L122) in lieu of the standard Golang Template Action and Variable syntax
+- Any of the Golang Template [functions](https://golang.org/pkg/text/template/#hdr-Functions) can be used in the template
 
 Example Config:
 ```yaml title="backend/clutch-config.yaml"
