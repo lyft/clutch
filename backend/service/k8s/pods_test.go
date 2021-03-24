@@ -521,5 +521,4 @@ func TestProtoTranslateTimestampSince(t *testing.T) {
 			assert.NotNil(t, pod.Age)
 		})
 	}
-
 }
