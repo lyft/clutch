@@ -133,16 +133,10 @@ func (e *EnvoyHandle) EnsureControlPlaneConnectivity(prefix string) error {
 	case <-ticker.C:
 		// TODO(snowp): Have this parse out a generic map of stats values to make it easier to query
 		// arbitrary stats.
-		resp, err := client.Do(r)
-		if err != nil {
-			return err
-		}
-
-		allStatsString, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			return err
-		}
-
+		// We intentionally ignore errors here, as the proxy might be periodically unavailable but we
+		// don't care as long as it recovers within the timeout.
+		resp, _ := client.Do(r)
+		allStatsString, _ := ioutil.ReadAll(resp.Body)
 		splitStats := strings.Split(string(allStatsString), "\n")
 
 		for _, statString := range splitStats {
@@ -152,7 +146,7 @@ func (e *EnvoyHandle) EnsureControlPlaneConnectivity(prefix string) error {
 
 			nameAndValue := strings.Split(statString, ":")
 
-			if strings.Trim(nameAndValue[1], " ") == "1" {
+			if strings.TrimSpace(nameAndValue[1]) == "1" {
 				return nil
 			}
 		}
