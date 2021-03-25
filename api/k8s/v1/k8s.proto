@@ -369,9 +369,6 @@ message HPA {
 
   map<string, string> labels = 5;
   map<string, string> annotations = 6;
-
-  google.protobuf.Int32Value current_cpu_utilization_percentage = 7;
-  google.protobuf.Int32Value target_cpu_utilization_percentage = 8;
 }
 
 message ResizeHPARequest {
@@ -422,39 +419,6 @@ message Deployment {
 
   map<string, string> labels = 4;
   map<string, string> annotations = 5;
-
-  message DeploymentStatus {
-    uint32 replicas = 1;
-    uint32 updated_replicas = 2;
-    uint32 ready_replicas = 3;
-    uint32 available_replicas = 4;
-    uint32 unavailable_replicas = 5;
-    message Condition {
-      // This is mirroring upstream values here:
-      // https://pkg.go.dev/k8s.io/api/apps/v1#DeploymentConditionType
-      enum Type {
-        UNSPECIFIED = 0;
-        UNKNOWN = 1;
-        AVAILABLE = 2;
-        PROGRESSING = 3;
-        REPLICA_FAILURE = 4;
-      }
-
-      Type type = 1;
-      enum ConditionStatus {
-        CONDITION_UNSPECIFIED = 0;
-        CONDITION_TRUE = 1;
-        CONDITION_FALSE = 2;
-        CONDITION_UNKNOWN = 3;
-      }
-      ConditionStatus condition_status = 2;
-
-      string reason = 5;
-      string message = 6;
-    }
-    repeated Condition deployment_conditions = 6;
-  }
-  DeploymentStatus deployment_status = 6;
 }
 
 message DescribeDeploymentRequest {
