@@ -17,47 +17,6 @@ import (
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
 )
 
-type testCriteria struct {
-	evaluation bool
-
-	sync.Mutex
-}
-
-func (t *testCriteria) ShouldTerminate(experimentStarted time.Time, config interface{}) error {
-	t.Lock()
-	defer t.Unlock()
-
-	if t.evaluation {
-		return errors.New("terminated")
-	}
-
-	return nil
-}
-
-func (t *testCriteria) update(evaluation bool) {
-	t.Lock()
-	defer t.Unlock()
-
-	t.evaluation = evaluation
-}
-
-func awaitGaugeValue(ctx context.Context, t *testing.T, testScope tally.TestScope, name string, value float64) {
-	checkTicker := time.NewTicker(100 * time.Millisecond)
-	for {
-		select {
-		case <-checkTicker.C:
-			g, ok := testScope.Snapshot().Gauges()[name+"+"]
-			if ok {
-			}
-			if ok && g.Value() == value {
-				return
-			}
-		case <-ctx.Done():
-			t.Errorf(context.Canceled.Error())
-			return
-		}
-	}
-}
 func TestTerminator(t *testing.T) {
 	l, err := zap.NewDevelopment()
 	assert.NoError(t, err)
@@ -69,7 +28,7 @@ func TestTerminator(t *testing.T) {
 	monitor := monitor{
 		store:                      store,
 		enabledConfigTypes:         []string{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"},
-		criterias:                  []terminationCriteria{criteria},
+		criterias:                  []TerminationCriteria{criteria},
 		outerLoopInterval:          time.Millisecond,
 		perExperimentCheckInterval: time.Millisecond,
 		log:                        l.Sugar(),
@@ -81,7 +40,7 @@ func TestTerminator(t *testing.T) {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
-	monitor.run(ctx)
+	monitor.Run(ctx)
 
 	createTestExperiment(t, 500, store)
 
@@ -140,4 +99,44 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experiments
 	assert.NoError(t, err)
 
 	return experiment
+}
+
+type testCriteria struct {
+	evaluation bool
+
+	sync.Mutex
+}
+
+func (t *testCriteria) ShouldTerminate(experimentStarted time.Time, config interface{}) error {
+	t.Lock()
+	defer t.Unlock()
+
+	if t.evaluation {
+		return errors.New("terminated")
+	}
+
+	return nil
+}
+
+func (t *testCriteria) update(evaluation bool) {
+	t.Lock()
+	defer t.Unlock()
+
+	t.evaluation = evaluation
+}
+
+func awaitGaugeValue(ctx context.Context, t *testing.T, testScope tally.TestScope, name string, value float64) {
+	checkTicker := time.NewTicker(100 * time.Millisecond)
+	for {
+		select {
+		case <-checkTicker.C:
+			g, ok := testScope.Snapshot().Gauges()[name+"+"]
+			if ok && g.Value() == value {
+				return
+			}
+		case <-ctx.Done():
+			t.Errorf(context.Canceled.Error())
+			return
+		}
+	}
 }

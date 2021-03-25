@@ -270,12 +270,12 @@ func TestRefreshCache(t *testing.T) {
 
 	ecdsConfig := ECDSConfig{
 		ecdsResourceMap: &SafeEcdsResourceMap{},
-		enabledClusters: map[string]struct{}{testCluster: struct{}{}},
+		enabledClusters: map[string]struct{}{testCluster: {}},
 	}
 
 	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
 	refreshCache(context.Background(), &s, testCache, nil, &rtdsConfig, &ecdsConfig, nil)
-	assert.Equal(t, s.GetExperimentArguments.ConfigType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig")
+	assert.Equal(t, s.GetExperimentArguments.ConfigType, []string{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"})
 }
 
 func TestComputeVersionReturnValue(t *testing.T) {

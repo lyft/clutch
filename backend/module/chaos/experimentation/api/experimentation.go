@@ -16,7 +16,6 @@ import (
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/module"
 	"github.com/lyft/clutch/backend/service"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experiment_terminator"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
@@ -46,16 +45,6 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 	if !ok {
 		return nil, errors.New("could not find valid experiment store")
 	}
-
-	// TODO(snowp): Figure out where this should go. Which facet? Dedicated facet?
-	t := experiment_terminator.Terminator{
-		Store:                      experimentStore,
-		EnabledConfigTypes:         []string{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"},
-		Criterias:                  []experiment_terminator.TerminationCriteria{},
-		OuterLoopInterval:          10 * time.Second,
-		PerExperimentCheckInterval: 2 * time.Second,
-	}
-	t.Run(context.Background())
 
 	return &Service{
 		storer:                      experimentStore,

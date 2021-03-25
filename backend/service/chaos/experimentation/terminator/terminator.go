@@ -13,7 +13,7 @@ import (
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
-type terminationCriteria interface {
+type TerminationCriteria interface {
 	ShouldTerminate(experimentStarted time.Time, config interface{}) error
 }
 
@@ -30,10 +30,28 @@ func (t *trackingGauge) dec() {
 	t.gauge.Update(float64(atomic.AddUint32(&t.value, ^uint32(0))))
 }
 
+type Monitor interface {
+	Run(ctx context.Context)
+}
+
+// TODO(snowp): Remove this once we have a proper service object that we can create.
+func NewTestMonitor(store experimentstore.Storer, enabledConfigTypes []string, criterias []TerminationCriteria, log *zap.SugaredLogger, stats tally.Scope) Monitor {
+	return &monitor{
+		store:                      store,
+		enabledConfigTypes:         enabledConfigTypes,
+		criterias:                  criterias,
+		outerLoopInterval:          1,
+		perExperimentCheckInterval: 1,
+		log:                        log,
+		activeMonitoringRoutines:   trackingGauge{gauge: stats.Gauge("active_monitoring_routines")},
+		terminationCount:           stats.Counter("terminations"),
+	}
+}
+
 type monitor struct {
 	store              experimentstore.Storer
 	enabledConfigTypes []string
-	criterias          []terminationCriteria
+	criterias          []TerminationCriteria
 
 	outerLoopInterval          time.Duration
 	perExperimentCheckInterval time.Duration
@@ -44,14 +62,14 @@ type monitor struct {
 	terminationCount         tally.Counter
 }
 
-func (t *monitor) run(ctx context.Context) {
+func (t *monitor) Run(ctx context.Context) {
 	// Start a single goroutine that monitors all the active experiments at a fixed interval. Whenever a new (new to this goroutine)
 	// experiment is found, open up a goroutine that periodically evaluates all the termination criteria for the experiment.
 	//
 	// This approach ensures provides a steady DB pressure (mostly outer loop, some from triggering termination) and relatively high
 	// fairness, as checking the termination conditions for one experiment should not be delaying the checks for another experiment
 	// unless we're under very heavy load.
-	go func(store experimentstore.Storer, enabledConfigTypes []string, criterias []terminationCriteria, activeMonitoringRoutines *trackingGauge) {
+	go func(store experimentstore.Storer, enabledConfigTypes []string, criterias []TerminationCriteria, activeMonitoringRoutines *trackingGauge) {
 		trackedExperiments := map[uint64]context.CancelFunc{}
 		ticker := time.NewTicker(t.outerLoopInterval)
 
@@ -99,6 +117,7 @@ func (t *monitor) run(ctx context.Context) {
 											if err != nil {
 												t.log.Errorw("failed to terminate experiment", "err", err, "experimentId", e.Id)
 											} else {
+												t.log.Errorw("terminated experiment", "experimentId", e.Id)
 												t.terminationCount.Inc(1)
 												terminated = true
 											}
