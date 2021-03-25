@@ -6,7 +6,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	appsv1 "k8s.io/api/apps/v1"
-	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
@@ -243,68 +242,6 @@ func TestProtoForDeploymentClusterName(t *testing.T) {
 
 			deployment := ProtoForDeployment(tt.inputClusterName, tt.deployment)
 			assert.Equal(t, tt.expectedClusterName, deployment.Cluster)
-		})
-	}
-}
-
-func TestProtoForDeploymentStatus(t *testing.T) {
-	t.Parallel()
-
-	var deploymentTestCases = []struct {
-		id         string
-		deployment *appsv1.Deployment
-	}{
-		{
-			id: "foo",
-			deployment: &appsv1.Deployment{
-				Status: appsv1.DeploymentStatus{
-					Replicas:            60,
-					UpdatedReplicas:     60,
-					AvailableReplicas:   10,
-					UnavailableReplicas: 20,
-					Conditions: []appsv1.DeploymentCondition{
-						{
-							Type:    appsv1.DeploymentAvailable,
-							Status:  v1.ConditionTrue,
-							Reason:  "reason",
-							Message: "message",
-						},
-					},
-				},
-			},
-		},
-		{
-			id: "oof",
-			deployment: &appsv1.Deployment{
-				Status: appsv1.DeploymentStatus{
-					Replicas:            40,
-					UpdatedReplicas:     314,
-					AvailableReplicas:   3,
-					UnavailableReplicas: 8,
-					Conditions: []appsv1.DeploymentCondition{
-						{
-							Type:    appsv1.DeploymentReplicaFailure,
-							Status:  v1.ConditionFalse,
-							Reason:  "space",
-							Message: "moon",
-						},
-					},
-				},
-			},
-		},
-	}
-
-	for _, tt := range deploymentTestCases {
-		tt := tt
-		t.Run(tt.id, func(t *testing.T) {
-			t.Parallel()
-
-			deployment := ProtoForDeployment("", tt.deployment)
-			assert.Equal(t, tt.deployment.Status.Replicas, int32(deployment.DeploymentStatus.Replicas))
-			assert.Equal(t, tt.deployment.Status.UpdatedReplicas, int32(deployment.DeploymentStatus.UpdatedReplicas))
-			assert.Equal(t, tt.deployment.Status.ReadyReplicas, int32(deployment.DeploymentStatus.ReadyReplicas))
-			assert.Equal(t, tt.deployment.Status.AvailableReplicas, int32(deployment.DeploymentStatus.AvailableReplicas))
-			assert.Equal(t, len(tt.deployment.Status.Conditions), len(deployment.DeploymentStatus.DeploymentConditions))
 		})
 	}
 }

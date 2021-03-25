@@ -4,9 +4,9 @@ import (
 	"context"
 	"strings"
 
+	"github.com/golang/protobuf/ptypes/wrappers"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
 	v1beta1 "k8s.io/api/batch/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -92,7 +92,7 @@ func ProtoForCronJob(cluster string, k8scronJob *v1beta1.CronJob) *k8sapiv1.Cron
 		ret.NumActiveJobs = int32(len(k8scronJob.Status.Active))
 	}
 	if k8scronJob.Spec.StartingDeadlineSeconds != nil {
-		ret.StartingDeadlineSeconds = &wrapperspb.Int64Value{Value: *k8scronJob.Spec.StartingDeadlineSeconds}
+		ret.StartingDeadlineSeconds = &wrappers.Int64Value{Value: *k8scronJob.Spec.StartingDeadlineSeconds}
 	}
 	return ret
 }
