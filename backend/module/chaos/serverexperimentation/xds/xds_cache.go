@@ -71,7 +71,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 			emptyResources[gcpTypes.ExtensionConfig] = generateEmptyECDSResource(cluster, ecdsConfig, logger)
 			emptyResources[gcpTypes.Runtime] = generateRTDSResource([]*experimentation.Experiment{}, rtdsConfig, ttl, logger)
 
-			err := setSnapshot(emptyResources, cluster, snapshotCache, true, logger, scope)
+			err := setSnapshot(emptyResources, cluster, snapshotCache, logger)
 			if err != nil {
 				logger.Errorw("Unable to unset the fault for cluster", "cluster", cluster,
 					"error", err)
@@ -80,7 +80,10 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 	}
 
 	// Create/Update experiments
+	activeFaults := 0
 	for cluster, experiments := range clusterFaultMap {
+		activeFaults += 1
+
 		resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
 
 		logger.Debugw("Injecting fault for cluster", "cluster", cluster)
@@ -94,15 +97,17 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 			resources[gcpTypes.ExtensionConfig] = generateEmptyECDSResource(cluster, ecdsConfig, logger)
 		}
 
-		err := setSnapshot(resources, cluster, snapshotCache, false, logger, scope)
+		err := setSnapshot(resources, cluster, snapshotCache, logger)
 		if err != nil {
 			logger.Errorw("Unable to set the fault for cluster", "cluster", cluster,
 				"error", err)
 		}
 	}
+
+	scope.Gauge("active_faults").Update(float64(activeFaults))
 }
 
-func setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl, cluster string, snapshotCache gcpCacheV3.SnapshotCache, isSnapshotEmpty bool, logger *zap.SugaredLogger, scope tally.Scope) error {
+func setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl, cluster string, snapshotCache gcpCacheV3.SnapshotCache, logger *zap.SugaredLogger) error {
 	currentSnapshot, _ := snapshotCache.GetSnapshot(cluster)
 
 	snapshot := gcpCacheV3.Snapshot{}
@@ -131,16 +136,6 @@ func setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTt
 	err := snapshotCache.SetSnapshot(cluster, snapshot)
 	if err != nil {
 		return err
-	}
-
-	if isSnapshotEmpty {
-		scope.Tagged(map[string]string{
-			"cluster": cluster,
-		}).Gauge("active_faults").Update(-1)
-	} else {
-		scope.Tagged(map[string]string{
-			"cluster": cluster,
-		}).Gauge("active_faults").Update(1)
 	}
 
 	return nil
