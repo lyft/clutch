@@ -6,11 +6,12 @@ package authn
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"golang.org/x/oauth2"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
 
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
@@ -60,9 +61,9 @@ func newStorage(cfg *authnv1.StorageConfig) (Storage, error) {
 
 func (s *storage) Store(ctx context.Context, userID, provider string, t *oauth2.Token) error {
 	if t == nil {
-		return fmt.Errorf("token provided for storage was nil")
-	} else if userID == "" || provider == "" {
-		return fmt.Errorf("userID '%s' or provider '%s' were blank", userID, provider)
+		return status.Errorf(codes.InvalidArgument, "token provided for storage was nil")
+	} else if userID == "" || provider == "" || t.AccessToken == "" {
+		return status.Errorf(codes.InvalidArgument, "userID '%s' or provider '%s' were blank", userID, provider)
 	}
 
 	at, err := s.crypto.Encrypt([]byte(t.AccessToken))
@@ -70,29 +71,32 @@ func (s *storage) Store(ctx context.Context, userID, provider string, t *oauth2.
 		return err
 	}
 
-	rt, err := s.crypto.Encrypt([]byte(t.RefreshToken))
-	if err != nil {
-		return err
+	dbToken := &authnToken{
+		userID:      userID,
+		provider:    provider,
+		accessToken: at,
+		expiry:      t.Expiry,
 	}
 
-	// Encrypt and store ID token if present.
-	var idToken []byte
-	it, ok := t.Extra("id_token").(string)
-	if ok {
-		idToken, err = s.crypto.Encrypt([]byte(it))
+	// Encrypt and store refresh token if present.
+	if t.RefreshToken != "" {
+		rt, err := s.crypto.Encrypt([]byte(t.RefreshToken))
 		if err != nil {
 			return err
 		}
+		dbToken.refreshToken = rt
 	}
 
-	err = s.repo.createOrUpdateProviderToken(ctx, &authnToken{
-		userID:       userID,
-		provider:     provider,
-		accessToken:  at,
-		refreshToken: rt,
-		idToken:      idToken,
-		expiry:       t.Expiry,
-	})
+	// Encrypt and store ID token if present.
+	if it, ok := t.Extra("id_token").(string); ok {
+		idToken, err := s.crypto.Encrypt([]byte(it))
+		if err != nil {
+			return err
+		}
+		dbToken.idToken = idToken
+	}
+
+	err = s.repo.createOrUpdateProviderToken(ctx, dbToken)
 
 	return err
 }
@@ -107,15 +111,19 @@ func (s *storage) Read(ctx context.Context, userID string, provider string) (*oa
 	if err != nil {
 		return nil, err
 	}
-	rt, err := s.crypto.Decrypt(t.refreshToken)
-	if err != nil {
-		return nil, err
-	}
 
 	ret := &oauth2.Token{
-		AccessToken:  string(at),
-		RefreshToken: string(rt),
-		Expiry:       t.expiry,
+		AccessToken: string(at),
+		Expiry:      t.expiry,
+	}
+
+	// Set refresh token if it exists on the db record.
+	if len(t.refreshToken) > 0 {
+		rt, err := s.crypto.Decrypt(t.refreshToken)
+		if err != nil {
+			return nil, err
+		}
+		ret.RefreshToken = string(rt)
 	}
 
 	// Set idToken if it exists on the database record.
