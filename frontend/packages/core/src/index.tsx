@@ -1,7 +1,7 @@
 import { Grid } from "@material-ui/core";
 
 import { CheckboxPanel } from "./Input/checkbox";
-import Form from "./Input/form";
+import { Form, FormRow } from "./Input/form";
 import RadioGroup from "./Input/radio-group";
 import { Select } from "./Input/select";
 import { TextField } from "./Input/text-field";
@@ -47,6 +47,7 @@ export {
   Error,
   ExpansionPanel,
   Form,
+  FormRow,
   Grid,
   Hint,
   IconButton,
