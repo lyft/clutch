@@ -1,38 +1,59 @@
-package experiment_terminator
+package terminator
 
 import (
 	"context"
-	"fmt"
+	"sync/atomic"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
+	"github.com/uber-go/tally"
+	"go.uber.org/zap"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
-type TerminationCriteria interface {
+type terminationCriteria interface {
 	ShouldTerminate(experimentStarted time.Time, config interface{}) error
 }
-type Terminator struct {
-	Store              experimentstore.Storer
-	EnabledConfigTypes []string
-	Criterias          []TerminationCriteria
 
-	OuterLoopInterval          time.Duration
-	PerExperimentCheckInterval time.Duration
+type trackingGauge struct {
+	gauge tally.Gauge
+	value uint32
 }
 
-func (t *Terminator) Run(ctx context.Context) {
+func (t *trackingGauge) inc() {
+	t.gauge.Update(float64(atomic.AddUint32(&t.value, 1)))
+}
+
+func (t *trackingGauge) dec() {
+	t.gauge.Update(float64(atomic.AddUint32(&t.value, ^uint32(0))))
+}
+
+type monitor struct {
+	store              experimentstore.Storer
+	enabledConfigTypes []string
+	criterias          []terminationCriteria
+
+	outerLoopInterval          time.Duration
+	perExperimentCheckInterval time.Duration
+
+	log *zap.SugaredLogger
+
+	activeMonitoringRoutines trackingGauge
+	terminationCount         tally.Counter
+}
+
+func (t *monitor) run(ctx context.Context) {
 	// Start a single goroutine that monitors all the active experiments at a fixed interval. Whenever a new (new to this goroutine)
 	// experiment is found, open up a goroutine that periodically evaluates all the termination criteria for the experiment.
 	//
 	// This approach ensures provides a steady DB pressure (mostly outer loop, some from triggering termination) and relatively high
 	// fairness, as checking the termination conditions for one experiment should not be delaying the checks for another experiment
 	// unless we're under very heavy load.
-	go func(store experimentstore.Storer, enabledConfigTypes []string, criterias []TerminationCriteria) {
+	go func(store experimentstore.Storer, enabledConfigTypes []string, criterias []terminationCriteria, activeMonitoringRoutines *trackingGauge) {
 		trackedExperiments := map[uint64]context.CancelFunc{}
-		ticker := time.NewTicker(t.OuterLoopInterval)
+		ticker := time.NewTicker(t.outerLoopInterval)
 
 		for {
 			select {
@@ -41,8 +62,8 @@ func (t *Terminator) Run(ctx context.Context) {
 			case <-ticker.C:
 				es, err := store.GetExperiments(context.Background(), enabledConfigTypes, experimentationv1.GetExperimentsRequest_STATUS_RUNNING)
 				if err != nil {
-					// log
-					fmt.Println("TODO")
+					t.log.Errorw("failed to retrieve experiments from experiment store", "err", err, "enableConfigTypes", enabledConfigTypes)
+					continue
 				}
 
 				// For each active experiment, create a monitoring goroutine if necessary.
@@ -52,8 +73,12 @@ func (t *Terminator) Run(ctx context.Context) {
 					if _, ok := trackedExperiments[e.Id]; !ok {
 						ctx, cancel := context.WithCancel(context.Background())
 						trackedExperiments[e.Id] = cancel
+
+						activeMonitoringRoutines.inc()
 						go func() {
-							ticker := time.NewTicker(t.PerExperimentCheckInterval)
+							defer t.activeMonitoringRoutines.dec()
+
+							ticker := time.NewTicker(t.perExperimentCheckInterval)
 							terminated := false
 
 							for {
@@ -72,8 +97,9 @@ func (t *Terminator) Run(ctx context.Context) {
 										if err != nil {
 											err := store.TerminateExperiment(context.Background(), e.Id, err.Error())
 											if err != nil {
-												// log
+												t.log.Errorw("failed to terminate experiment", "err", err, "experimentId", e.Id)
 											} else {
+												t.terminationCount.Inc(1)
 												terminated = true
 											}
 										}
@@ -96,5 +122,5 @@ func (t *Terminator) Run(ctx context.Context) {
 				}
 			}
 		}
-	}(t.Store, t.EnabledConfigTypes, t.Criterias)
+	}(t.store, t.enabledConfigTypes, t.criterias, &t.activeMonitoringRoutines)
 }
