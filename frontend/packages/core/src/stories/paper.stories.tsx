@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
-import { Paper } from "../paper";
+import Paper from "../paper";
 
 export default {
   title: "Core/Paper",

@@ -182,7 +182,7 @@ export interface TextFieldProps
   autocompleteCallback?: (v: string) => Promise<any>;
 }
 
-export const TextField = ({
+const TextField = ({
   onChange,
   onReturn,
   error,

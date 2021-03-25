@@ -1,13 +1,12 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
-import type { SwitchProps } from "../toggle";
-import { Switch } from "../toggle";
+import type { SwitchProps } from "../switch";
+import Switch from "../switch";
 
 export default {
   title: "Core/Input/Switch",
   component: Switch,
-  name: "Switch",
   argTypes: {
     onChange: { action: "onChange event" },
   },
