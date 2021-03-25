@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package clutch.core.envoy.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/core/envoy/v1;envoyv1";
+
+// Represents a single Envoy Cluster
+message Cluster {
+  string name = 1;
+}

@@ -19734,6 +19734,142 @@ export const clutch = $root.clutch = (() => {
         return sourcecontrol;
     })();
 
+    clutch.core = (function() {
+
+        /**
+         * Namespace core.
+         * @memberof clutch
+         * @namespace
+         */
+        const core = {};
+
+        core.envoy = (function() {
+
+            /**
+             * Namespace envoy.
+             * @memberof clutch.core
+             * @namespace
+             */
+            const envoy = {};
+
+            envoy.v1 = (function() {
+
+                /**
+                 * Namespace v1.
+                 * @memberof clutch.core.envoy
+                 * @namespace
+                 */
+                const v1 = {};
+
+                v1.Cluster = (function() {
+
+                    /**
+                     * Properties of a Cluster.
+                     * @memberof clutch.core.envoy.v1
+                     * @interface ICluster
+                     * @property {string|null} [name] Cluster name
+                     */
+
+                    /**
+                     * Constructs a new Cluster.
+                     * @memberof clutch.core.envoy.v1
+                     * @classdesc Represents a Cluster.
+                     * @implements ICluster
+                     * @constructor
+                     * @param {clutch.core.envoy.v1.ICluster=} [properties] Properties to set
+                     */
+                    function Cluster(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Cluster name.
+                     * @member {string} name
+                     * @memberof clutch.core.envoy.v1.Cluster
+                     * @instance
+                     */
+                    Cluster.prototype.name = "";
+
+                    /**
+                     * Verifies a Cluster message.
+                     * @function verify
+                     * @memberof clutch.core.envoy.v1.Cluster
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Cluster.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Cluster message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.core.envoy.v1.Cluster
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.core.envoy.v1.Cluster} Cluster
+                     */
+                    Cluster.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.core.envoy.v1.Cluster)
+                            return object;
+                        let message = new $root.clutch.core.envoy.v1.Cluster();
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Cluster message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.core.envoy.v1.Cluster
+                     * @static
+                     * @param {clutch.core.envoy.v1.Cluster} message Cluster
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Cluster.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            object.name = "";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Cluster to JSON.
+                     * @function toJSON
+                     * @memberof clutch.core.envoy.v1.Cluster
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Cluster.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Cluster;
+                })();
+
+                return v1;
+            })();
+
+            return envoy;
+        })();
+
+        return core;
+    })();
+
     clutch.envoytriage = (function() {
 
         /**
