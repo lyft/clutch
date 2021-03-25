@@ -1,8 +1,8 @@
 import * as React from "react";
 import type { Meta } from "@storybook/react";
 
-import type { SwitchProps } from "../_switch";
-import Switch from "../_switch";
+import type { SwitchProps } from "../switchToggle";
+import Switch from "../switchToggle";
 
 export default {
   title: "Core/Input/Switch",
