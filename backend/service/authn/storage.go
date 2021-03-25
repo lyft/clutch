@@ -63,7 +63,7 @@ func (s *storage) Store(ctx context.Context, userID, provider string, t *oauth2.
 	if t == nil {
 		return status.Errorf(codes.InvalidArgument, "token provided for storage was nil")
 	} else if userID == "" || provider == "" || t.AccessToken == "" {
-		return status.Errorf(codes.InvalidArgument, "userID '%s' or provider '%s' were blank", userID, provider)
+		return status.Errorf(codes.InvalidArgument, "userID '%s', provider '%s', or access token were blank", userID, provider)
 	}
 
 	at, err := s.crypto.Encrypt([]byte(t.AccessToken))
