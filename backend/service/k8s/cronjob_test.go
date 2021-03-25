@@ -106,7 +106,7 @@ func TestProtoForCron(t *testing.T) {
 					ConcurrencyPolicy:       v1beta1.AllowConcurrent,
 					Schedule:                "5 4 * * *",
 					Suspend:                 &[]bool{true}[0],
-					StartingDeadlineSeconds: &[]int64{60}[0],
+					StartingDeadlineSeconds: &[]int64{69}[0],
 				},
 				Status: v1beta1.CronJobStatus{
 					Active: []v1.ObjectReference{{}, {}},
