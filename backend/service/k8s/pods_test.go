@@ -454,7 +454,7 @@ func TestMakeContainers(t *testing.T) {
 			id: "cont2",
 			expectedContainers: []*k8sv1.Container{
 				{
-					Name:         "Shrek",
+					Name:         "foo",
 					Image:        "giraffe",
 					Ready:        true,
 					RestartCount: 1,
@@ -463,7 +463,7 @@ func TestMakeContainers(t *testing.T) {
 			},
 			statuses: []corev1.ContainerStatus{
 				{
-					Name:         "Shrek",
+					Name:         "fooo",
 					Image:        "giraffe",
 					Ready:        true,
 					RestartCount: 1,
