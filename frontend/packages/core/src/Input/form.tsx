@@ -1,26 +1,23 @@
-import * as React from "react";
 import styled from "@emotion/styled";
 
-const StyledForm = styled.form(
-  {
-    width: "inherit",
-    display: "flex",
+const Form = styled.form({
+  width: "inherit",
+  "> *": {
+    margin: "8px 0",
   },
-  props => ({
-    "> *": {
-      margin: props["data-direction"] === "row" ? "0 8px" : "8px 0",
-    },
-    flexDirection: props["data-direction"],
-  })
-);
+});
 
-export interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {
-  direction?: "row" | "column";
-}
+const FormRow = styled.div({
+  display: "flex",
+  "> *": {
+    margin: "0 8px",
+  },
+  "> *:first-child": {
+    margin: "0 8px 0 0",
+  },
+  "> *:last-child": {
+    margin: "0 0 0 8px",
+  },
+});
 
-const Form = ({ children, direction = "column", ...props }: FormProps) => (
-  <StyledForm data-direction={direction} {...props}>
-    {children}
-  </StyledForm>
-);
-export default Form;
+export { Form, FormRow };
