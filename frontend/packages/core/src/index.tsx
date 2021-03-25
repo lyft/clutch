@@ -1,11 +1,11 @@
 import { Grid } from "@material-ui/core";
 
+import Switch from "./Input/_switch";
 import { Checkbox, CheckboxPanel } from "./Input/checkbox";
 import { Form, FormRow } from "./Input/form";
 import Radio from "./Input/radio";
 import RadioGroup from "./Input/radio-group";
 import Select from "./Input/select";
-import Switch from "./Input/switch";
 import TextField from "./Input/text-field";
 import { Accordion, AccordionDetails } from "./accordion";
 import ClutchApp from "./AppProvider";
