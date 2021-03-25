@@ -24,6 +24,13 @@ func (a notEmptyBytes) Match(v driver.Value) bool {
 	return true
 }
 
+type emptyBytes struct{}
+
+func (e emptyBytes) Match(v driver.Value) bool {
+	b, ok := v.([]byte)
+	return ok && len(b) == 0
+}
+
 func TestNewStorage(t *testing.T) {
 	{
 		s, err := newStorage(nil)
@@ -118,6 +125,32 @@ func TestStoreWithIDToken(t *testing.T) {
 	m.MustMeetExpectations()
 }
 
+func TestStoreWithoutRefreshToken(t *testing.T) {
+	m := dbmock.NewMockDB()
+	m.Register()
+
+	s, err := newStorage(&authnv1.StorageConfig{EncryptionPassphrase: "test"})
+	assert.NoError(t, err)
+	assert.NotNil(t, s)
+
+	now := time.Now().UTC()
+	tok := &oauth2.Token{
+		AccessToken: "a",
+		Expiry:      now,
+	}
+	tok = tok.WithExtra(map[string]interface{}{"id_token": "i"})
+
+	m.Mock.ExpectExec("INSERT INTO authn_tokens").
+		WithArgs(
+			"user@example.com", "clutch.example.com", notEmptyBytes{}, emptyBytes{}, notEmptyBytes{}, now,
+		).WillReturnResult(sqlmock.NewResult(1, 1))
+
+	err = s.Store(context.Background(), "user@example.com", "clutch.example.com", tok)
+	assert.NoError(t, err)
+
+	m.MustMeetExpectations()
+}
+
 func TestReadNoRows(t *testing.T) {
 	m := dbmock.NewMockDB()
 	m.Register()
@@ -169,6 +202,38 @@ func TestReadWithResult(t *testing.T) {
 	assert.Equal(t, tok.AccessToken, "Access")
 	assert.Equal(t, tok.RefreshToken, "REFRESH")
 	assert.Equal(t, tok.Extra("id_token"), "id")
+	assert.Equal(t, tok.Expiry, now)
+
+	m.MustMeetExpectations()
+}
+
+func TestReadWithoutRefreshOrIDToken(t *testing.T) {
+	m := dbmock.NewMockDB()
+	m.Register()
+
+	s, err := newStorage(&authnv1.StorageConfig{EncryptionPassphrase: "test"})
+	assert.NoError(t, err)
+	assert.NotNil(t, s)
+
+	now := time.Now().UTC()
+
+	at, _ := s.(*storage).crypto.Encrypt([]byte("Access"))
+
+	rows := sqlmock.NewRows([]string{"user_id", "provider", "access_token", "refresh_token", "id_token", "expiry"})
+	rows.AddRow("user@example.com", "clutch.example.com", at, nil, nil, now)
+
+	m.Mock.ExpectQuery("SELECT .*? FROM authn_tokens").
+		WithArgs(
+			"user@example.com", "clutch.example.com",
+		).WillReturnRows(rows)
+
+	tok, err := s.Read(context.Background(), "user@example.com", "clutch.example.com")
+	assert.NoError(t, err)
+	assert.NotNil(t, tok)
+
+	assert.Equal(t, tok.AccessToken, "Access")
+	assert.Empty(t, tok.RefreshToken)
+	assert.Empty(t, tok.Extra("id_token"))
 	assert.Equal(t, tok.Expiry, now)
 
 	m.MustMeetExpectations()
