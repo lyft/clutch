@@ -419,14 +419,14 @@ func TestMakeContainers(t *testing.T) {
 					Image:        "baz",
 					Ready:        false,
 					RestartCount: 0,
-					State:        3,
+					State:        k8sv1.Container_RUNNING,
 				},
 				{
 					Name:         "TheContainer",
 					Image:        "foo",
 					Ready:        true,
 					RestartCount: 5,
-					State:        3,
+					State:        k8sv1.Container_RUNNING,
 				},
 			},
 			statuses: []corev1.ContainerStatus{
@@ -458,12 +458,12 @@ func TestMakeContainers(t *testing.T) {
 					Image:        "giraffe",
 					Ready:        true,
 					RestartCount: 1,
-					State:        3,
+					State:        k8sv1.Container_RUNNING,
 				},
 			},
 			statuses: []corev1.ContainerStatus{
 				{
-					Name:         "fooo",
+					Name:         "foo",
 					Image:        "giraffe",
 					Ready:        true,
 					RestartCount: 1,
