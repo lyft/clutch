@@ -3,7 +3,7 @@ import { action } from "@storybook/addon-actions";
 import type { Meta } from "@storybook/react";
 
 import { Button } from "../../button";
-import Form from "../form";
+import { Form, FormRow } from "../form";
 import { TextField } from "../text-field";
 
 export default {
@@ -11,19 +11,30 @@ export default {
   component: Form,
 } as Meta;
 
-const Template = () => (
-  <Form
-    onSubmit={e => {
-      e.preventDefault();
-      action("onSubmit event")(e);
-    }}
-  >
-    <TextField />
-    <Button text="Submit Form" type="submit" />
-  </Form>
-);
+const Template = ({ hasRow = false }: { hasRow: boolean }) => {
+  const children = (
+    <>
+      <TextField />
+      <TextField />
+    </>
+  );
+  return (
+    <Form
+      onSubmit={e => {
+        e.preventDefault();
+        action("onSubmit event")(e);
+      }}
+    >
+      {hasRow && <FormRow>{children}</FormRow>}
+      {children}
+      <Button text="Submit Form" type="submit" />
+    </Form>
+  );
+};
 
 export const Primary = Template.bind({});
-Primary.args = {
-  selected: false,
+
+export const WithRows = Template.bind({});
+WithRows.args = {
+  hasRow: true,
 };
