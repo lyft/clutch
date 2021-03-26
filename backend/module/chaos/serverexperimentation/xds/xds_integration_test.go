@@ -23,31 +23,6 @@ import (
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/terminator"
 )
 
-type testCriteria struct {
-	startCheckingTime bool
-	sync.Mutex
-}
-
-// We want the time check to be low but also avoid races, so this lets us prevent the criteria from activating until
-// we know that we're seeing faults enabled.
-func (t *testCriteria) start() {
-	t.Lock()
-	defer t.Unlock()
-
-	t.startCheckingTime = true
-}
-
-func (t *testCriteria) ShouldTerminate(started time.Time, experiment interface{}) error {
-	t.Lock()
-	defer t.Unlock()
-
-	if t.startCheckingTime && started.Add(1 * time.Second).Before(time.Now()) {
-		return errors.New("timed out")
-	}
-
-	return nil
-}
-
 // These tests are intended to be run with docker-compose to in order to set up a running Envoy instance
 // to run assertions against.
 func TestEnvoyFaults(t *testing.T) {
@@ -79,7 +54,6 @@ func TestEnvoyFaults(t *testing.T) {
 	})
 	assert.NoError(t, err, "did not see faults enabled")
 
-	time.Sleep(time.Second)
 	// // We know that faults have been applied, now try to kill the server and ensure that we eventually reset the faults.
 	// // This verifies that we're properly setting TTLs and that Envoy will honor this.
 	ts.Stop()
@@ -127,6 +101,47 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 	assert.Equal(t, 503, code)
 
 	// Since we've enabled a time based automatic termination, we expect to see faults get disabled on their own after some time.
+	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
+		timeout:        10 * time.Second,
+		expectedStatus: 503,
+	})
+	assert.NoError(t, err, "did not see faults reverted")
+}
+
+func TestEnvoyECDSFaults(t *testing.T) {
+	xdsConfig := &xdsconfigv1.Config{
+		RtdsLayerName:             "rtds",
+		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		IngressFaultRuntimePrefix: "fault.http",
+		EgressFaultRuntimePrefix:  "egress",
+		EcdsAllowList:             &xdsconfigv1.Config_ECDSAllowList{EnabledClusters: []string{"test-cluster"}},
+	}
+
+	ts := xdstest.NewTestModuleServer(New, true, xdsConfig)
+	defer ts.Stop()
+
+	e, err := envoytest.NewEnvoyHandle()
+	assert.NoError(t, err)
+
+	err = e.EnsureControlPlaneConnectivity(envoytest.EcdsStatPrefix)
+	assert.NoError(t, err)
+
+	code, err := e.MakeSimpleCall()
+	assert.NoError(t, err)
+	assert.Equal(t, 503, code)
+
+	experiment := createTestExperiment(t, 404, ts.Storer)
+
+	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
+		// Timeout needs to be higher since envoy has exponential back-off request timeout
+		timeout:        8 * time.Second,
+		expectedStatus: 404,
+	})
+	assert.NoError(t, err, "did not see faults enabled")
+
+	// TODO(kathan24): Test TTL by stopping the server instead of canceling the experiment. Currently, TTL is not not supported for ECDS in the upstream Envoy
+	ts.Storer.CancelExperimentRun(context.Background(), experiment.Id)
+
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
 		timeout:        10 * time.Second,
 		expectedStatus: 503,
@@ -197,43 +212,28 @@ func awaitExpectedReturnValueForSimpleCall(t *testing.T, e *envoytest.EnvoyHandl
 
 	return nil
 }
-func TestEnvoyECDSFaults(t *testing.T) {
-	xdsConfig := &xdsconfigv1.Config{
-		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
-		IngressFaultRuntimePrefix: "fault.http",
-		EgressFaultRuntimePrefix:  "egress",
-		EcdsAllowList:             &xdsconfigv1.Config_ECDSAllowList{EnabledClusters: []string{"test-cluster"}},
+
+type testCriteria struct {
+	startCheckingTime bool
+	sync.Mutex
+}
+
+// We want the time check to be low but also avoid races, so this lets us prevent the criteria from activating until
+// we know that we're seeing faults enabled.
+func (t *testCriteria) start() {
+	t.Lock()
+	defer t.Unlock()
+
+	t.startCheckingTime = true
+}
+
+func (t *testCriteria) ShouldTerminate(started time.Time, experiment interface{}) error {
+	t.Lock()
+	defer t.Unlock()
+
+	if t.startCheckingTime && started.Add(1 * time.Second).Before(time.Now()) {
+		return errors.New("timed out")
 	}
 
-	ts := xdstest.NewTestModuleServer(New, true, xdsConfig)
-	defer ts.Stop()
-
-	e, err := envoytest.NewEnvoyHandle()
-	assert.NoError(t, err)
-
-	err = e.EnsureControlPlaneConnectivity(envoytest.EcdsStatPrefix)
-	assert.NoError(t, err)
-
-	code, err := e.MakeSimpleCall()
-	assert.NoError(t, err)
-	assert.Equal(t, 503, code)
-
-	experiment := createTestExperiment(t, 404, ts.Storer)
-
-	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
-		// Timeout needs to be higher since envoy has exponential back-off request timeout
-		timeout:        8 * time.Second,
-		expectedStatus: 404,
-	})
-	assert.NoError(t, err, "did not see faults enabled")
-
-	// TODO(kathan24): Test TTL by stopping the server instead of canceling the experiment. Currently, TTL is not not supported for ECDS in the upstream Envoy
-	ts.Storer.CancelExperimentRun(context.Background(), experiment.Id)
-
-	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
-		timeout:        10 * time.Second,
-		expectedStatus: 503,
-	})
-	assert.NoError(t, err, "did not see faults reverted")
+	return nil
 }
