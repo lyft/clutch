@@ -1,4 +1,5 @@
 import type { Thunk } from "react-hook-thunk-reducer";
+import type { ClutchError } from "@clutch-sh/core";
 import _ from "lodash";
 
 import type { Action, ManagerLayout } from "./state";
@@ -9,6 +10,14 @@ const assign = (key: string, value: object): Thunk<ManagerLayout, Action> => {
     dispatch({
       type: ManagerAction.SET,
       payload: { key, value },
+    });
+  };
+};
+
+const reset = (): Thunk<ManagerLayout, Action> => {
+  return dispatch => {
+    dispatch({
+      type: ManagerAction.RESET,
     });
   };
 };
@@ -35,7 +44,16 @@ const hydrate = (key: string): Thunk<ManagerLayout, Action> => {
       if (args.some(element => _.isEmpty(element))) {
         dispatch({
           type: ManagerAction.HYDRATE_END,
-          payload: { key, error: `Missing dependency for data layout: ${key}` },
+          payload: {
+            key,
+            error: {
+              message: `Missing dependency for data layout: '${key}'`,
+              status: {
+                code: 404,
+                text: "Not Found",
+              },
+            } as ClutchError,
+          },
         });
         return;
       }
@@ -64,33 +82,27 @@ const hydrate = (key: string): Thunk<ManagerLayout, Action> => {
   };
 };
 
-interface Error {
-  response?: {
-    displayText?: string;
-  };
-  message: string;
-}
-
 export interface DataManager {
   state: object;
   assign: (key: string, value: object) => void;
   hydrate: (key: string) => void;
   update: (key: string, value: object) => void;
+  reset: () => void;
 }
 
 const defaultTransform = (data: object): object => data;
-const defaultErrorTransform = (err: Error): string => {
-  return err?.response?.displayText ?? err.message;
-};
+const defaultErrorTransform = (err: any): ClutchError => err;
 
-const useDataLayoutManager = (layouts: ManagerLayout): DataManager => {
-  const initialState = {};
+const initialLayoutStepState = { data: {}, isLoading: true, error: null };
+
+const defaultState = (layouts: ManagerLayout) => {
+  const initializedLayouts = {};
   Object.keys(layouts).forEach(key => {
     const layout = layouts[key];
-    initialState[key] = { data: {}, isLoading: true, error: null };
+    initializedLayouts[key] = initialLayoutStepState;
     if (layout?.hydrator !== undefined) {
-      initialState[key] = {
-        ...initialState[key],
+      initializedLayouts[key] = {
+        ...initializedLayouts[key],
         hydrator: layout?.hydrator || (() => {}),
         transformResponse: layout.transformResponse || defaultTransform,
         transformError: layout.transformError || defaultErrorTransform,
@@ -99,6 +111,11 @@ const useDataLayoutManager = (layouts: ManagerLayout): DataManager => {
       };
     }
   });
+  return initializedLayouts;
+};
+
+const useDataLayoutManager = (layouts: ManagerLayout): DataManager => {
+  const initialState = defaultState(layouts);
 
   const [state, dispatch] = useManagerState(initialState);
   return {
@@ -106,6 +123,7 @@ const useDataLayoutManager = (layouts: ManagerLayout): DataManager => {
     assign: (key, value) => dispatch(assign(key, value)),
     hydrate: key => dispatch(hydrate(key)),
     update: (key, value) => dispatch(update(key, value)),
+    reset: () => dispatch(reset()),
   };
 };
 

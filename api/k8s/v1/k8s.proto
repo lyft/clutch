@@ -212,6 +212,14 @@ service K8sAPI {
     };
     option (clutch.api.v1.action).type = CREATE;
   }
+
+  rpc DescribeNamespace(DescribeNamespaceRequest) returns (DescribeNamespaceResponse) {
+    option (google.api.http) = {
+      post : "/v1/k8s/describeNamespace"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = READ;
+  }
 }
 
 message DescribePodRequest {
@@ -224,8 +232,6 @@ message DescribePodRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribePodResponse {
@@ -249,6 +255,7 @@ message Container {
   }
   State state = 3;
   bool ready = 4;
+  int32 restart_count = 5;
 }
 
 message Pod {
@@ -424,8 +431,6 @@ message DescribeDeploymentRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeDeploymentResponse {
@@ -514,8 +519,6 @@ message DescribeStatefulSetRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeStatefulSetResponse {
@@ -614,8 +617,6 @@ message DescribeServiceRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeServiceResponse {
@@ -678,8 +679,6 @@ message DescribeCronJobRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeCronJobResponse {
@@ -762,9 +761,6 @@ message DescribeConfigMapRequest {
   string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
   string namespace = 3 [ (validate.rules).string = {min_bytes : 1} ];
   string name = 4 [ (validate.rules).string = {min_bytes : 1} ];
-
-  map<string, string> labels = 5 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
-  map<string, string> annotations = 6 [ (validate.rules).map.keys.string = {min_bytes : 1} ];
 }
 
 message DescribeConfigMapResponse {
@@ -849,6 +845,36 @@ message CreateJobRequest {
 
 message CreateJobResponse {
   Job job = 1;
+}
+
+message Namespace {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{name}"
+  };
+
+  string cluster = 1;
+  string name = 2;
+
+  map<string, string> annotations = 3;
+  map<string, string> labels = 4;
+}
+
+message DescribeNamespaceRequest {
+  option (clutch.api.v1.id).patterns = {
+    type_url : "clutch.k8s.v1.Namespace",
+    pattern : "{cluster}/{name}"
+  };
+
+  string clientset = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  string cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
+  string name = 3 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+message DescribeNamespaceResponse {
+  option (clutch.api.v1.reference).fields = "namespace";
+
+  Namespace namespace = 1;
 }
 
 // This message type is used to add support for nullable strings and is an

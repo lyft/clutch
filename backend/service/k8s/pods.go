@@ -193,10 +193,11 @@ func makeContainers(statuses []corev1.ContainerStatus) []*k8sapiv1.Container {
 	containers := make([]*k8sapiv1.Container, 0, len(statuses))
 	for _, status := range statuses {
 		container := &k8sapiv1.Container{
-			Name:  status.Name,
-			Image: status.Image,
-			State: protoForContainerState(status.State),
-			Ready: status.Ready,
+			Name:         status.Name,
+			Image:        status.Image,
+			State:        protoForContainerState(status.State),
+			Ready:        status.Ready,
+			RestartCount: status.RestartCount,
 		}
 		containers = append(containers, container)
 	}

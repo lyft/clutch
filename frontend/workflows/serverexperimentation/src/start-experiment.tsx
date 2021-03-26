@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import type { clutch as IClutch } from "@clutch-sh/api";
-import type { BaseWorkflowProps } from "@clutch-sh/core";
+import type { BaseWorkflowProps, ClutchError } from "@clutch-sh/core";
 import {
   Button,
   ButtonGroup,
@@ -16,7 +16,8 @@ import { PageLayout } from "@clutch-sh/experimentation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import { FormFields, FormItem } from "./form-fields";
+import type { FormItem } from "./form-fields";
+import FormFields from "./form-fields";
 
 enum FaultType {
   ABORT = "Abort",
@@ -245,7 +246,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
     navigate(`/experimentation/run/${id}`);
   };
 
-  const handleOnCreatedExperimentFailure = (err: string) => {
+  const handleOnCreatedExperimentFailure = (err: ClutchError) => {
     setExperimentData(undefined);
     setError(err);
   };
@@ -320,8 +321,8 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
       .then(response => {
         handleOnCreatedExperiment(response?.data.experiment.id);
       })
-      .catch(err => {
-        handleOnCreatedExperimentFailure(err.response.statusText);
+      .catch((err: ClutchError) => {
+        handleOnCreatedExperimentFailure(err);
       });
   };
 

@@ -402,3 +402,85 @@ func TestUpdatePod(t *testing.T) {
 	assert.True(t, annotationPresent)
 	assert.Equal(t, "new-value", annotationValue)
 }
+
+func TestMakeContainers(t *testing.T) {
+	t.Parallel()
+
+	var podTestCases = []struct {
+		id                 string
+		expectedContainers []*k8sv1.Container
+		statuses           []corev1.ContainerStatus
+	}{
+		{
+			id: "cont1",
+			expectedContainers: []*k8sv1.Container{
+				{
+					Name:         "bar",
+					Image:        "baz",
+					Ready:        false,
+					RestartCount: 0,
+					State:        k8sv1.Container_RUNNING,
+				},
+				{
+					Name:         "TheContainer",
+					Image:        "foo",
+					Ready:        true,
+					RestartCount: 5,
+					State:        k8sv1.Container_RUNNING,
+				},
+			},
+			statuses: []corev1.ContainerStatus{
+				{
+					Name:         "bar",
+					Image:        "baz",
+					Ready:        false,
+					RestartCount: 0,
+					State: corev1.ContainerState{
+						Running: &corev1.ContainerStateRunning{},
+					},
+				},
+				{
+					Name:         "TheContainer",
+					Image:        "foo",
+					Ready:        true,
+					RestartCount: 5,
+					State: corev1.ContainerState{
+						Running: &corev1.ContainerStateRunning{},
+					},
+				},
+			},
+		},
+		{
+			id: "cont2",
+			expectedContainers: []*k8sv1.Container{
+				{
+					Name:         "foo",
+					Image:        "giraffe",
+					Ready:        true,
+					RestartCount: 1,
+					State:        k8sv1.Container_RUNNING,
+				},
+			},
+			statuses: []corev1.ContainerStatus{
+				{
+					Name:         "foo",
+					Image:        "giraffe",
+					Ready:        true,
+					RestartCount: 1,
+					State: corev1.ContainerState{
+						Running: &corev1.ContainerStateRunning{},
+					},
+				},
+			},
+		},
+	}
+
+	for _, tt := range podTestCases {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+			containers := makeContainers(tt.statuses)
+			assert.ElementsMatch(t, tt.expectedContainers, containers)
+		})
+	}
+}

@@ -19,6 +19,7 @@ const StyledAlert = styled(MuiAlert)(
   {
     borderRadius: "8px",
     padding: "16px",
+    paddingLeft: "24px",
     paddingBottom: "20px",
     color: "rgba(13, 16, 48, 0.6)",
     fontSize: "14px",

@@ -1,22 +1,24 @@
 import type React from "react";
 import type { Thunk } from "react-hook-thunk-reducer";
 import useThunkReducer from "react-hook-thunk-reducer";
+import type { ClutchError } from "@clutch-sh/core";
 
 enum ManagerAction {
   HYDRATE_START,
   HYDRATE_END,
   SET,
   UPDATE,
+  RESET,
 }
 
 export interface ManagerLayout {
   [key: string]: {
     isLoading?: boolean;
     data?: object;
-    error?: string;
+    error?: ClutchError;
     hydrator?: (...args: any[]) => any;
     transformResponse?: (...args: any[]) => any;
-    transformError?: (...args: any[]) => any;
+    transformError?: (...args: any[]) => ClutchError;
     deps?: string[];
     cache?: boolean;
   };
@@ -26,7 +28,7 @@ interface ActionPayload {
   key?: string;
   value?: object;
   result?: object;
-  error?: string;
+  error?: ClutchError;
 }
 
 export interface Action {
@@ -36,6 +38,7 @@ export interface Action {
 
 const reducer = (state: ManagerLayout, action: Action): ManagerLayout => {
   const layoutKey = action?.payload?.key;
+  const stateClone = { ...state };
 
   switch (action.type) {
     case ManagerAction.HYDRATE_START:
@@ -84,6 +87,16 @@ const reducer = (state: ManagerLayout, action: Action): ManagerLayout => {
           ...action.payload?.value,
         },
       };
+    case ManagerAction.RESET:
+      Object.keys(state).forEach(key => {
+        stateClone[key] = {
+          ...state[key],
+          data: {},
+          isLoading: true,
+          error: null,
+        };
+      });
+      return stateClone;
     default:
       throw new Error(`Unknown data manager action: ${action.type}`);
   }

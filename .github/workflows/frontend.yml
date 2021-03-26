@@ -10,6 +10,7 @@ on:
     - 'frontend/**'
     - .github/workflows/frontend.yml
     - Makefile
+    - tools/frontend-e2e.sh
 jobs:
   build:
     runs-on: ubuntu-latest

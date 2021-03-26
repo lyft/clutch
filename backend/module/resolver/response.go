@@ -4,26 +4,26 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
 	statuspb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
+	"github.com/lyft/clutch/backend/gateway/statuserr"
 	"github.com/lyft/clutch/backend/resolver"
 )
 
 func newResponse() *response {
 	return &response{
-		Results:         []*any.Any{},
+		Results:         []*anypb.Any{},
 		PartialFailures: []*statuspb.Status{},
 	}
 }
 
 // Generic object to handle common operations for SearchResponse and ResolveResponse.
 type response struct {
-	Results         []*any.Any
+	Results         []*anypb.Any
 	PartialFailures []*statuspb.Status
 }
 
@@ -46,7 +46,7 @@ func (r *response) truncate(limit uint32) {
 
 func (r *response) marshalResults(results *resolver.Results) error {
 	for _, result := range results.Messages {
-		asAny, err := ptypes.MarshalAny(result)
+		asAny, err := anypb.New(result)
 		if err != nil {
 			return err
 		}
@@ -58,19 +58,6 @@ func (r *response) marshalResults(results *resolver.Results) error {
 	}
 
 	return nil
-}
-
-func allStatusMatch(c codes.Code, sl []*statuspb.Status) bool {
-	if len(sl) == 0 {
-		return false
-	}
-
-	for _, s := range sl {
-		if s.Code != int32(c) {
-			return false
-		}
-	}
-	return true
 }
 
 func (r *response) isError(wanted string, searchedSchemas []string) error {
@@ -86,7 +73,7 @@ func (r *response) isError(wanted string, searchedSchemas []string) error {
 	// If there were failures and no results we wrap the errors.
 	if len(r.PartialFailures) > 0 {
 		// Use 400 unless all codes were 404.
-		if !allStatusMatch(codes.NotFound, r.PartialFailures) {
+		if !statuserr.AllProtoCodesMatch(codes.NotFound, r.PartialFailures) {
 			code = codes.FailedPrecondition
 			msg = fmt.Sprintf("one or more errors were encountered searching for '%s'", wanted)
 		}

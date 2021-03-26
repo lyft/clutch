@@ -1,18 +1,28 @@
+.idea/
+.DS_STORE
+
 # git
 .git/
 **/.gitattributes
 **/.gitignore
 
-# backend
+# build tools
 build/
+
+# backend
+backend/.air/
 backend/cmd/assets/generated_assets.go
 
 # frontend
 **/node_modules/
+frontend/**/*.tsbuildinfo
+frontend/**/.eslintcache
+frontend/**/build/
 frontend/**/dist/
-frontend/coverage
 frontend/**/screenshots
 frontend/*-debug.log
+frontend/.yarn
+frontend/coverage
 
 # docs
 docs/

@@ -3,11 +3,11 @@ package resolver
 import (
 	"testing"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/stretchr/testify/assert"
 	statuspb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
@@ -102,57 +102,5 @@ func TestIsError(t *testing.T) {
 		resp.PartialFailures = nil
 		err := resp.isError(wanted, schemas)
 		assert.NoError(t, err)
-	}
-}
-
-func TestAllStatusMatch(t *testing.T) {
-	cases := []struct {
-		name   string
-		code   codes.Code
-		expect bool
-		status []*statuspb.Status
-	}{
-		{
-			name:   "empty",
-			code:   codes.NotFound,
-			expect: false,
-		},
-		{
-			name:   "singleMatch",
-			code:   codes.Unavailable,
-			status: []*statuspb.Status{{Code: int32(codes.Unavailable)}},
-			expect: true,
-		},
-		{
-			name:   "multipleMatch",
-			code:   codes.Unauthenticated,
-			status: []*statuspb.Status{{Code: int32(codes.Unauthenticated)}, {Code: int32(codes.Unauthenticated)}},
-			expect: true,
-		},
-		{
-			name:   "singleNoMatch",
-			code:   codes.InvalidArgument,
-			status: []*statuspb.Status{{Code: int32(codes.Unauthenticated)}},
-			expect: false,
-		},
-		{
-			name:   "multipleNoMatch",
-			code:   codes.InvalidArgument,
-			status: []*statuspb.Status{{Code: int32(codes.Unauthenticated)}, {Code: int32(codes.Unimplemented)}},
-			expect: false,
-		},
-		{
-			name:   "multipleSomeMatch",
-			code:   codes.InvalidArgument,
-			status: []*statuspb.Status{{Code: int32(codes.InvalidArgument)}, {Code: int32(codes.Unimplemented)}},
-			expect: false,
-		},
-	}
-
-	for _, c := range cases {
-		c := c
-		t.Run(c.name, func(t *testing.T) {
-			assert.Equal(t, c.expect, allStatusMatch(c.code, c.status))
-		})
 	}
 }
