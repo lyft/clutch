@@ -4,25 +4,27 @@ package clutch.chaos.experimentation.v1;
 
 import "api/v1/annotations.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/any.proto";
-import "google/protobuf/timestamp.proto";
 
 import "chaos/experimentation/v1/experiment.proto";
+import "chaos/experimentation/v1/create_experiment_data.proto";
 import "chaos/experimentation/v1/list_view_item.proto";
 import "chaos/experimentation/v1/experiment_run_details.proto";
 
 option go_package = "github.com/lyft/clutch/backend/api/chaos/experimentation/v1;experimentationv1";
 
 message CreateExperimentRequest {
-  // The experiment configuration specific to the type of experiment
-  google.protobuf.Any config = 1;
-  // The time when the experiment should start. If unspecified, defaults to 'now'
-  google.protobuf.Timestamp start_time = 2;
-  // The time when the experiment should end, If unspecified, the experiment runs indefinitely.
-  google.protobuf.Timestamp end_time = 3;
+  CreateExperimentData data = 1;
 }
 
 message CreateExperimentResponse {
+  Experiment experiment = 1;
+}
+
+message CreateOrGetExperimentRequest {
+  CreateExperimentData data = 1;
+}
+
+message CreateOrGetExperimentResponse {
   Experiment experiment = 1;
 }
 
@@ -77,6 +79,13 @@ service ExperimentsAPI {
   rpc CreateExperiment(CreateExperimentRequest) returns (CreateExperimentResponse) {
     option (google.api.http) = {
       post : "/v1/chaos/experimentation/createExperiment"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = CREATE;
+  }
+  rpc CreateOrGetExperiment(CreateOrGetExperimentRequest) returns (CreateOrGetExperimentResponse) {
+    option (google.api.http) = {
+      post : "/v1/chaos/experimentation/createOrGetExperiment"
       body : "*"
     };
     option (clutch.api.v1.action).type = CREATE;

@@ -23,10 +23,11 @@ message Experiment {
     STATUS_STOPPED = 5;
   }
 
-  uint64 id = 1;
-  // The experiment configuration specific to the type of experiment
+  // An unique identifier of an experiment run.
+  string run_id = 1;
+  // The experiment configuration specific to the type of experiment.
   google.protobuf.Any config = 2;
-  // The time when the experiment should start. If unspecified, defaults to 'now'
+  // The time when the experiment should start. If unspecified, defaults to 'now'.
   google.protobuf.Timestamp start_time = 3;
   // The time when the experiment should end, If unspecified, the experiment runs indefinitely unless it is manually
   // stopped by a user.

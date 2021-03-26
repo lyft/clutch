@@ -19,6 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ExperimentsAPIClient interface {
 	CreateExperiment(ctx context.Context, in *CreateExperimentRequest, opts ...grpc.CallOption) (*CreateExperimentResponse, error)
+	CreateOrGetExperiment(ctx context.Context, in *CreateOrGetExperimentRequest, opts ...grpc.CallOption) (*CreateOrGetExperimentResponse, error)
 	CancelExperimentRun(ctx context.Context, in *CancelExperimentRunRequest, opts ...grpc.CallOption) (*CancelExperimentRunResponse, error)
 	GetExperiments(ctx context.Context, in *GetExperimentsRequest, opts ...grpc.CallOption) (*GetExperimentsResponse, error)
 	GetListView(ctx context.Context, in *GetListViewRequest, opts ...grpc.CallOption) (*GetListViewResponse, error)
@@ -36,6 +37,15 @@ func NewExperimentsAPIClient(cc grpc.ClientConnInterface) ExperimentsAPIClient {
 func (c *experimentsAPIClient) CreateExperiment(ctx context.Context, in *CreateExperimentRequest, opts ...grpc.CallOption) (*CreateExperimentResponse, error) {
 	out := new(CreateExperimentResponse)
 	err := c.cc.Invoke(ctx, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CreateExperiment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *experimentsAPIClient) CreateOrGetExperiment(ctx context.Context, in *CreateOrGetExperimentRequest, opts ...grpc.CallOption) (*CreateOrGetExperimentResponse, error) {
+	out := new(CreateOrGetExperimentResponse)
+	err := c.cc.Invoke(ctx, "/clutch.chaos.experimentation.v1.ExperimentsAPI/CreateOrGetExperiment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -83,6 +93,7 @@ func (c *experimentsAPIClient) GetExperimentRunDetails(ctx context.Context, in *
 // for forward compatibility
 type ExperimentsAPIServer interface {
 	CreateExperiment(context.Context, *CreateExperimentRequest) (*CreateExperimentResponse, error)
+	CreateOrGetExperiment(context.Context, *CreateOrGetExperimentRequest) (*CreateOrGetExperimentResponse, error)
 	CancelExperimentRun(context.Context, *CancelExperimentRunRequest) (*CancelExperimentRunResponse, error)
 	GetExperiments(context.Context, *GetExperimentsRequest) (*GetExperimentsResponse, error)
 	GetListView(context.Context, *GetListViewRequest) (*GetListViewResponse, error)
@@ -95,6 +106,9 @@ type UnimplementedExperimentsAPIServer struct {
 
 func (UnimplementedExperimentsAPIServer) CreateExperiment(context.Context, *CreateExperimentRequest) (*CreateExperimentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateExperiment not implemented")
+}
+func (UnimplementedExperimentsAPIServer) CreateOrGetExperiment(context.Context, *CreateOrGetExperimentRequest) (*CreateOrGetExperimentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateOrGetExperiment not implemented")
 }
 func (UnimplementedExperimentsAPIServer) CancelExperimentRun(context.Context, *CancelExperimentRunRequest) (*CancelExperimentRunResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelExperimentRun not implemented")
@@ -134,6 +148,24 @@ func _ExperimentsAPI_CreateExperiment_Handler(srv interface{}, ctx context.Conte
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ExperimentsAPIServer).CreateExperiment(ctx, req.(*CreateExperimentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ExperimentsAPI_CreateOrGetExperiment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateOrGetExperimentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ExperimentsAPIServer).CreateOrGetExperiment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/clutch.chaos.experimentation.v1.ExperimentsAPI/CreateOrGetExperiment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ExperimentsAPIServer).CreateOrGetExperiment(ctx, req.(*CreateOrGetExperimentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -220,6 +252,10 @@ var ExperimentsAPI_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateExperiment",
 			Handler:    _ExperimentsAPI_CreateExperiment_Handler,
+		},
+		{
+			MethodName: "CreateOrGetExperiment",
+			Handler:    _ExperimentsAPI_CreateOrGetExperiment_Handler,
 		},
 		{
 			MethodName: "CancelExperimentRun",
