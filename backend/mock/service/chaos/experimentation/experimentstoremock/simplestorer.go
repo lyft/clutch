@@ -47,8 +47,16 @@ func (s *SimpleStorer) CreateExperiment(ctx context.Context, es *experimentstore
 	return s.experiments[len(s.experiments)-1].toProto(), nil
 }
 
-func (s *SimpleStorer) CreateOrGetExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentation.Experiment, error) {
-	return s.CreateExperiment(ctx, es)
+func (s *SimpleStorer) CreateOrGetExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentstore.CreateOrGetExperiment, error) {
+	experiment, err := s.CreateExperiment(ctx, es)
+	if err != nil {
+		return nil, err
+	}
+
+	return &experimentstore.CreateOrGetExperiment{
+		Experiment: experiment,
+		Origin:     experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW,
+	}, nil
 }
 
 func (s *SimpleStorer) CancelExperimentRun(ctx context.Context, runId string) error {

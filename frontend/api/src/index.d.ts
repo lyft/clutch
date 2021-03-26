@@ -2850,6 +2850,9 @@ export namespace clutch {
 
                     /** CreateOrGetExperimentResponse experiment */
                     experiment?: (clutch.chaos.experimentation.v1.IExperiment|null);
+
+                    /** CreateOrGetExperimentResponse origin */
+                    origin?: (clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse.Origin|null);
                 }
 
                 /** Represents a CreateOrGetExperimentResponse. */
@@ -2863,6 +2866,9 @@ export namespace clutch {
 
                     /** CreateOrGetExperimentResponse experiment. */
                     public experiment?: (clutch.chaos.experimentation.v1.IExperiment|null);
+
+                    /** CreateOrGetExperimentResponse origin. */
+                    public origin: clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse.Origin;
 
                     /**
                      * Verifies a CreateOrGetExperimentResponse message.
@@ -2891,6 +2897,16 @@ export namespace clutch {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                namespace CreateOrGetExperimentResponse {
+
+                    /** Origin enum. */
+                    enum Origin {
+                        ORIGIN_UNSPECIFIED = 0,
+                        ORIGIN_EXISTING = 1,
+                        ORIGIN_NEW = 2
+                    }
                 }
 
                 /** Properties of a GetExperimentsRequest. */
@@ -3008,7 +3024,7 @@ export namespace clutch {
                 interface ICancelExperimentRunRequest {
 
                     /** CancelExperimentRunRequest id */
-                    id?: (number|Long|null);
+                    id?: (string|null);
                 }
 
                 /** Represents a CancelExperimentRunRequest. */
@@ -3021,7 +3037,7 @@ export namespace clutch {
                     constructor(properties?: clutch.chaos.experimentation.v1.ICancelExperimentRunRequest);
 
                     /** CancelExperimentRunRequest id. */
-                    public id: (number|Long);
+                    public id: string;
 
                     /**
                      * Verifies a CancelExperimentRunRequest message.
@@ -3188,7 +3204,7 @@ export namespace clutch {
                 interface IGetExperimentRunDetailsRequest {
 
                     /** GetExperimentRunDetailsRequest id */
-                    id?: (number|Long|null);
+                    id?: (string|null);
                 }
 
                 /** Represents a GetExperimentRunDetailsRequest. */
@@ -3201,7 +3217,7 @@ export namespace clutch {
                     constructor(properties?: clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest);
 
                     /** GetExperimentRunDetailsRequest id. */
-                    public id: (number|Long);
+                    public id: string;
 
                     /**
                      * Verifies a GetExperimentRunDetailsRequest message.

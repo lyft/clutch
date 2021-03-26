@@ -25,7 +25,14 @@ message CreateOrGetExperimentRequest {
 }
 
 message CreateOrGetExperimentResponse {
+  enum Origin {
+    ORIGIN_UNSPECIFIED = 0;
+    ORIGIN_EXISTING = 1;
+    ORIGIN_NEW = 2;
+  }
+
   Experiment experiment = 1;
+  Origin origin = 2;
 }
 
 message GetExperimentsRequest {
@@ -48,7 +55,7 @@ message CancelExperimentRunRequest {
     pattern : "{id}"
   };
 
-  uint64 id = 1;
+  string id = 1;
 }
 
 message CancelExperimentRunResponse {
@@ -67,7 +74,7 @@ message GetExperimentRunDetailsRequest {
     pattern : "{id}"
   };
 
-  uint64 id = 1;
+  string id = 1;
 }
 
 message GetExperimentRunDetailsResponse {
@@ -76,6 +83,8 @@ message GetExperimentRunDetailsResponse {
 
 // Simple CRUD API for experiments
 service ExperimentsAPI {
+  // Create a new experiment using the provided experiment data. It fails if an experiment run
+  // with a provided run identifier already exists.
   rpc CreateExperiment(CreateExperimentRequest) returns (CreateExperimentResponse) {
     option (google.api.http) = {
       post : "/v1/chaos/experimentation/createExperiment"
@@ -83,6 +92,9 @@ service ExperimentsAPI {
     };
     option (clutch.api.v1.action).type = CREATE;
   }
+  // Create a new experiment using the provided experiment data. It succeeds even if an experiment run
+  // with a provided run identifier already exists. In this case, the rest of request's paylaod is ignored
+  // and existing experiment with a matching run identifier is returned.
   rpc CreateOrGetExperiment(CreateOrGetExperimentRequest) returns (CreateOrGetExperimentResponse) {
     option (google.api.http) = {
       post : "/v1/chaos/experimentation/createOrGetExperiment"

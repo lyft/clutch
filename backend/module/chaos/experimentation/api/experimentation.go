@@ -88,12 +88,15 @@ func (s *Service) CreateOrGetExperiment(ctx context.Context, req *experimentatio
 	if err != nil {
 		return nil, err
 	}
-	experiment, err := s.storer.CreateExperiment(ctx, es)
+	createOrGetExperiment, err := s.storer.CreateOrGetExperiment(ctx, es)
 	if err != nil {
 		return nil, err
 	}
 
-	return &experimentation.CreateOrGetExperimentResponse{Experiment: experiment}, nil
+	return &experimentation.CreateOrGetExperimentResponse{
+		Experiment: createOrGetExperiment.Experiment,
+		Origin:     createOrGetExperiment.Origin,
+	}, nil
 }
 
 // CancelExperimentRun cancels experiment that is currently running or is scheduled to be run in the future.

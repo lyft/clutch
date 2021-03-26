@@ -7,14 +7,20 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/lyft/clutch/backend/api/chaos/experimentation/v1;experimentationv1";
 
-// The data used as an input for creating an experiment.
+// The data used as an input for experiment creation.
 message CreateExperimentData {
-  // The identifier of experiment run to create as part of experiment creation.
+  // The unique identifier of experiment run that's created as part of the experiment creation process.
+  // A random run identifier is generated and assigned to the experiment if it's not provided by a caller.
+  // Its max length is limited to 60 characters. The identifier is supposed to be user-readable and
+  // URL renderable - for this reason, allowed characters are limited to English characters, digits and
+  // the following special characters: "-", ".", "_" and "~".
   string run_id = 1;
   // The experiment configuration specific to the type of experiment.
   google.protobuf.Any config = 2;
-  // The time when the experiment should start. If unspecified, defaults to 'now'.
+  // The time when the experiment should start. If not provided, defaults to 'now'. It cannot be before
+  // current time.
   google.protobuf.Timestamp start_time = 3;
-  // The time when the experiment should end, If unspecified, the experiment runs indefinitely.
+  // The time when the experiment should end, If not provided, the experiment runs indefinitely unless it's
+  // manually stopped. If provided, it has to be after `start_time`.
   google.protobuf.Timestamp end_time = 4;
 }

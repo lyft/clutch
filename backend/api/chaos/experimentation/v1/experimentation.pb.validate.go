@@ -286,6 +286,8 @@ func (m *CreateOrGetExperimentResponse) Validate() error {
 		}
 	}
 
+	// no validation rules for Origin
+
 	return nil
 }
 

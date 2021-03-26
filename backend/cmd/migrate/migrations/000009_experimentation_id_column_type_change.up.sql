@@ -1,5 +1,5 @@
-alter table experiment_run alter column "id" SET DATA type varchar(100) using id::varchar;
-alter table experiment_run alter column "experiment_config_id" SET DATA type varchar(100) using experiment_config_id::varchar;
+ALTER TABLE experiment_run ALTER COLUMN "id" SET DATA TYPE varchar(60) USING id::varchar;
+ALTER TABLE experiment_run ALTER COLUMN "experiment_config_id" SET DATA TYPE varchar(60) USING experiment_config_id::varchar;
 ALTER TABLE experiment_run ADD PRIMARY KEY (id);
-alter table experiment_config alter column "id" SET DATA type varchar(100) using id::varchar;
+ALTER TABLE experiment_config ALTER COLUMN "id" SET DATA TYPE varchar(60) USING id::varchar;
 ALTER TABLE experiment_config ADD PRIMARY KEY (id);

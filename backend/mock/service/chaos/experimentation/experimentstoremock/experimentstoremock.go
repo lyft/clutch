@@ -29,7 +29,7 @@ func (fs *MockStorer) CreateExperiment(ctx context.Context, es *experimentstore.
 	return nil, nil
 }
 
-func (fs *MockStorer) CreateOrGetExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentation.Experiment, error) {
+func (fs *MockStorer) CreateOrGetExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentstore.CreateOrGetExperiment, error) {
 	return nil, nil
 }
 

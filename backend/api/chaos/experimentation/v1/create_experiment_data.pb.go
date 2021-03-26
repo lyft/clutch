@@ -27,19 +27,25 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
-// The data used as an input for creating an experiment.
+// The data used as an input for experiment creation.
 type CreateExperimentData struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The identifier of experiment run to create as part of experiment creation.
+	// The unique identifier of experiment run that's created as part of the experiment creation process.
+	// A random run identifier is generated and assigned to the experiment if it's not provided by a caller.
+	// Its max length is limited to 60 characters. The identifier is supposed to be user-readable and
+	// URL renderable - for this reason, allowed characters are limited to English characters, digits and
+	// the following special characters: "-", ".", "_" and "~".
 	RunId string `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
 	// The experiment configuration specific to the type of experiment.
 	Config *anypb.Any `protobuf:"bytes,2,opt,name=config,proto3" json:"config,omitempty"`
-	// The time when the experiment should start. If unspecified, defaults to 'now'.
+	// The time when the experiment should start. If not provided, defaults to 'now'. It cannot be before
+	// current time.
 	StartTime *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
-	// The time when the experiment should end, If unspecified, the experiment runs indefinitely.
+	// The time when the experiment should end, If not provided, the experiment runs indefinitely unless it's
+	// manually stopped. If provided, it has to be after `start_time`.
 	EndTime *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
 }
 

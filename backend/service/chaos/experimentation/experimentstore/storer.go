@@ -12,6 +12,8 @@ import (
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -23,7 +25,7 @@ const Name = "clutch.service.chaos.experimentation.store"
 // Storer stores experiment data
 type Storer interface {
 	CreateExperiment(context.Context, *ExperimentSpecification) (*experimentation.Experiment, error)
-	CreateOrGetExperiment(context.Context, *ExperimentSpecification) (*experimentation.Experiment, error)
+	CreateOrGetExperiment(context.Context, *ExperimentSpecification) (*CreateOrGetExperiment, error)
 	CancelExperimentRun(context.Context, string) error
 	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id string) (*experimentation.ExperimentRunDetails, error)
@@ -106,12 +108,12 @@ func (s *storer) CreateExperiment(ctx context.Context, es *ExperimentSpecificati
 	return es.toExperiment()
 }
 
-func (s *storer) CreateOrGetExperiment(ctx context.Context, es *ExperimentSpecification) (*experimentation.Experiment, error) {
+func (s *storer) CreateOrGetExperiment(ctx context.Context, es *ExperimentSpecification) (*CreateOrGetExperiment, error) {
 	var exists bool
 	query := `SELECT exists (select id from experiment_run where id == $1)`
 	err := s.db.QueryRow(query, es.RunId).Scan(&exists)
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "%v", err)
 	}
 
 	if exists {
@@ -120,9 +122,19 @@ func (s *storer) CreateOrGetExperiment(ctx context.Context, es *ExperimentSpecif
 			return nil, err
 		}
 
-		return NewExperimentFromRunConfigPair(runConfigPair)
+		experiment, err := runConfigPair.toExperiment()
+		if err != nil {
+			return nil, err
+		}
+
+		return &CreateOrGetExperiment{Experiment: experiment, Origin: experimentation.CreateOrGetExperimentResponse_ORIGIN_EXISTING}, nil
 	} else {
-		return s.CreateExperiment(ctx, es)
+		experiment, err := s.CreateExperiment(ctx, es)
+		if err != nil {
+			return nil, err
+		}
+
+		return &CreateOrGetExperiment{Experiment: experiment, Origin: experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW}, nil
 	}
 }
 

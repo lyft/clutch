@@ -6578,6 +6578,7 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.chaos.experimentation.v1
                      * @interface ICreateOrGetExperimentResponse
                      * @property {clutch.chaos.experimentation.v1.IExperiment|null} [experiment] CreateOrGetExperimentResponse experiment
+                     * @property {clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse.Origin|null} [origin] CreateOrGetExperimentResponse origin
                      */
 
                     /**
@@ -6604,6 +6605,14 @@ export const clutch = $root.clutch = (() => {
                     CreateOrGetExperimentResponse.prototype.experiment = null;
 
                     /**
+                     * CreateOrGetExperimentResponse origin.
+                     * @member {clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse.Origin} origin
+                     * @memberof clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse
+                     * @instance
+                     */
+                    CreateOrGetExperimentResponse.prototype.origin = 0;
+
+                    /**
                      * Verifies a CreateOrGetExperimentResponse message.
                      * @function verify
                      * @memberof clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse
@@ -6619,6 +6628,15 @@ export const clutch = $root.clutch = (() => {
                             if (error)
                                 return "experiment." + error;
                         }
+                        if (message.origin != null && message.hasOwnProperty("origin"))
+                            switch (message.origin) {
+                            default:
+                                return "origin: enum value expected";
+                            case 0:
+                            case 1:
+                            case 2:
+                                break;
+                            }
                         return null;
                     };
 
@@ -6639,6 +6657,20 @@ export const clutch = $root.clutch = (() => {
                                 throw TypeError(".clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse.experiment: object expected");
                             message.experiment = $root.clutch.chaos.experimentation.v1.Experiment.fromObject(object.experiment);
                         }
+                        switch (object.origin) {
+                        case "ORIGIN_UNSPECIFIED":
+                        case 0:
+                            message.origin = 0;
+                            break;
+                        case "ORIGIN_EXISTING":
+                        case 1:
+                            message.origin = 1;
+                            break;
+                        case "ORIGIN_NEW":
+                        case 2:
+                            message.origin = 2;
+                            break;
+                        }
                         return message;
                     };
 
@@ -6655,10 +6687,14 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.defaults)
+                        if (options.defaults) {
                             object.experiment = null;
+                            object.origin = options.enums === String ? "ORIGIN_UNSPECIFIED" : 0;
+                        }
                         if (message.experiment != null && message.hasOwnProperty("experiment"))
                             object.experiment = $root.clutch.chaos.experimentation.v1.Experiment.toObject(message.experiment, options);
+                        if (message.origin != null && message.hasOwnProperty("origin"))
+                            object.origin = options.enums === String ? $root.clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse.Origin[message.origin] : message.origin;
                         return object;
                     };
 
@@ -6672,6 +6708,22 @@ export const clutch = $root.clutch = (() => {
                     CreateOrGetExperimentResponse.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
+
+                    /**
+                     * Origin enum.
+                     * @name clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse.Origin
+                     * @enum {number}
+                     * @property {number} ORIGIN_UNSPECIFIED=0 ORIGIN_UNSPECIFIED value
+                     * @property {number} ORIGIN_EXISTING=1 ORIGIN_EXISTING value
+                     * @property {number} ORIGIN_NEW=2 ORIGIN_NEW value
+                     */
+                    CreateOrGetExperimentResponse.Origin = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "ORIGIN_UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "ORIGIN_EXISTING"] = 1;
+                        values[valuesById[2] = "ORIGIN_NEW"] = 2;
+                        return values;
+                    })();
 
                     return CreateOrGetExperimentResponse;
                 })();
@@ -6945,7 +6997,7 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a CancelExperimentRunRequest.
                      * @memberof clutch.chaos.experimentation.v1
                      * @interface ICancelExperimentRunRequest
-                     * @property {number|Long|null} [id] CancelExperimentRunRequest id
+                     * @property {string|null} [id] CancelExperimentRunRequest id
                      */
 
                     /**
@@ -6965,11 +7017,11 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * CancelExperimentRunRequest id.
-                     * @member {number|Long} id
+                     * @member {string} id
                      * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunRequest
                      * @instance
                      */
-                    CancelExperimentRunRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+                    CancelExperimentRunRequest.prototype.id = "";
 
                     /**
                      * Verifies a CancelExperimentRunRequest message.
@@ -6983,8 +7035,8 @@ export const clutch = $root.clutch = (() => {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.id != null && message.hasOwnProperty("id"))
-                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                                return "id: integer|Long expected";
+                            if (!$util.isString(message.id))
+                                return "id: string expected";
                         return null;
                     };
 
@@ -7001,14 +7053,7 @@ export const clutch = $root.clutch = (() => {
                             return object;
                         let message = new $root.clutch.chaos.experimentation.v1.CancelExperimentRunRequest();
                         if (object.id != null)
-                            if ($util.Long)
-                                (message.id = $util.Long.fromValue(object.id)).unsigned = true;
-                            else if (typeof object.id === "string")
-                                message.id = parseInt(object.id, 10);
-                            else if (typeof object.id === "number")
-                                message.id = object.id;
-                            else if (typeof object.id === "object")
-                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
+                            message.id = String(object.id);
                         return message;
                     };
 
@@ -7026,16 +7071,9 @@ export const clutch = $root.clutch = (() => {
                             options = {};
                         let object = {};
                         if (options.defaults)
-                            if ($util.Long) {
-                                let long = new $util.Long(0, 0, true);
-                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                            } else
-                                object.id = options.longs === String ? "0" : 0;
+                            object.id = "";
                         if (message.id != null && message.hasOwnProperty("id"))
-                            if (typeof message.id === "number")
-                                object.id = options.longs === String ? String(message.id) : message.id;
-                            else
-                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
+                            object.id = message.id;
                         return object;
                     };
 
@@ -7333,7 +7371,7 @@ export const clutch = $root.clutch = (() => {
                      * Properties of a GetExperimentRunDetailsRequest.
                      * @memberof clutch.chaos.experimentation.v1
                      * @interface IGetExperimentRunDetailsRequest
-                     * @property {number|Long|null} [id] GetExperimentRunDetailsRequest id
+                     * @property {string|null} [id] GetExperimentRunDetailsRequest id
                      */
 
                     /**
@@ -7353,11 +7391,11 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * GetExperimentRunDetailsRequest id.
-                     * @member {number|Long} id
+                     * @member {string} id
                      * @memberof clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest
                      * @instance
                      */
-                    GetExperimentRunDetailsRequest.prototype.id = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+                    GetExperimentRunDetailsRequest.prototype.id = "";
 
                     /**
                      * Verifies a GetExperimentRunDetailsRequest message.
@@ -7371,8 +7409,8 @@ export const clutch = $root.clutch = (() => {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.id != null && message.hasOwnProperty("id"))
-                            if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
-                                return "id: integer|Long expected";
+                            if (!$util.isString(message.id))
+                                return "id: string expected";
                         return null;
                     };
 
@@ -7389,14 +7427,7 @@ export const clutch = $root.clutch = (() => {
                             return object;
                         let message = new $root.clutch.chaos.experimentation.v1.GetExperimentRunDetailsRequest();
                         if (object.id != null)
-                            if ($util.Long)
-                                (message.id = $util.Long.fromValue(object.id)).unsigned = true;
-                            else if (typeof object.id === "string")
-                                message.id = parseInt(object.id, 10);
-                            else if (typeof object.id === "number")
-                                message.id = object.id;
-                            else if (typeof object.id === "object")
-                                message.id = new $util.LongBits(object.id.low >>> 0, object.id.high >>> 0).toNumber(true);
+                            message.id = String(object.id);
                         return message;
                     };
 
@@ -7414,16 +7445,9 @@ export const clutch = $root.clutch = (() => {
                             options = {};
                         let object = {};
                         if (options.defaults)
-                            if ($util.Long) {
-                                let long = new $util.Long(0, 0, true);
-                                object.id = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                            } else
-                                object.id = options.longs === String ? "0" : 0;
+                            object.id = "";
                         if (message.id != null && message.hasOwnProperty("id"))
-                            if (typeof message.id === "number")
-                                object.id = options.longs === String ? String(message.id) : message.id;
-                            else
-                                object.id = options.longs === String ? $util.Long.prototype.toString.call(message.id) : options.longs === Number ? new $util.LongBits(message.id.low >>> 0, message.id.high >>> 0).toNumber(true) : message.id;
+                            object.id = message.id;
                         return object;
                     };
 
