@@ -166,6 +166,7 @@ func TestCreateOrGetExperiment(t *testing.T) {
 		runId           string
 		expectedQueries []*query
 		expectedExecs   []*exec
+		expectedOrigin  experimentation.CreateOrGetExperimentResponse_Origin
 	}{
 		{
 			runId: "1",
@@ -199,6 +200,7 @@ func TestCreateOrGetExperiment(t *testing.T) {
 					},
 				},
 			},
+			expectedOrigin: experimentation.CreateOrGetExperimentResponse_ORIGIN_EXISTING,
 		},
 		{
 			runId: "1",
@@ -227,6 +229,7 @@ func TestCreateOrGetExperiment(t *testing.T) {
 					},
 				},
 			},
+			expectedOrigin: experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW,
 		},
 	}
 
@@ -256,8 +259,9 @@ func TestCreateOrGetExperiment(t *testing.T) {
 			}
 
 			s := ExperimentSpecification{RunId: tt.runId, StartTime: time.Now(), Config: ctd.marshaledConfig}
-			_, err = es.CreateOrGetExperiment(context.Background(), &s)
+			result, err := es.CreateOrGetExperiment(context.Background(), &s)
 			a.NoError(err)
+			a.Equal(tt.expectedOrigin, result.Origin)
 		})
 	}
 }
