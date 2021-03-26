@@ -100,6 +100,16 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, 503, code)
 
+	createTestExperiment(t, 400, ts.Storer)
+
+	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
+		timeout:        3 * time.Second,
+		expectedStatus: 400,
+	})
+	assert.NoError(t, err, "did not see faults enabled")
+
+	criteria.start()
+
 	// Since we've enabled a time based automatic termination, we expect to see faults get disabled on their own after some time.
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
 		timeout:        10 * time.Second,
