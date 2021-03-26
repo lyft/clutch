@@ -6,13 +6,13 @@
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
   "scripts": {
-    "build": "yarn register-workflows && react-scripts build",
+    "build": "yarn register-workflows && react-app-rewired build",
     "clean": "rm -rf build",
     "eject": "react-scripts eject",
     "lint": "yarn register-workflows && eslint --ext .js,.jsx .",
     "lint:fix": "yarn run lint --fix",
     "register-workflows": "yarn workspace @clutch-sh/tools registerWorkflows $PWD/src",
-    "start": "yarn register-workflows && react-scripts start",
+    "start": "yarn register-workflows && react-app-rewired start",
     "test": "yarn register-workflows && jest --passWithNoTests",
     "test:coverage": "yarn run test --collect-coverage",
     "test:e2e": "cypress run"
@@ -20,10 +20,12 @@
   "dependencies": {
     "@clutch-sh/core": "^1.0.0-beta",
     "react": "^16.8.0",
+    "react-app-rewired": "^2.1.8",
     "react-dom": "^16.8.0"
   },
   "devDependencies": {
-    "@clutch-sh/tools": "^1.0.0-beta"
+    "@clutch-sh/tools": "^1.0.0-beta",
+    "esbuild-loader": "^2.10.0"
   },
   "proxy": "http://localhost:8080"
 }
