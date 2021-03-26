@@ -24,7 +24,7 @@ require (
 	github.com/gobwas/glob v0.2.3
 	github.com/golang-migrate/migrate/v4 v4.14.1
 	github.com/golang/protobuf v1.4.3
-	github.com/google/go-github/v33 v33.0.0
+	github.com/google/go-github/v34 v34.0.0
 	github.com/google/uuid v1.2.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.2.0
@@ -40,7 +40,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/uber-go/tally v3.3.17+incompatible
 	go.uber.org/zap v1.16.0
-	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110
+	golang.org/x/net v0.0.0-20210323141857-08027d57d8cf
 	golang.org/x/oauth2 v0.0.0-20210313182246-cd4f82c27b84
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	google.golang.org/genproto v0.0.0-20210319143718-93e7006c17a6

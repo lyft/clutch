@@ -6,6 +6,7 @@
   "license": "Apache-2.0",
   "author": "clutch@lyft.com",
   "scripts": {
+    "buildDev": "node devBuild.mjs",
     "publishBeta": "../../../tools/publish-frontend.sh tools",
     "registerWorkflows": "node workflow-registrar.js",
     "test": "jest --passWithNoTests",
@@ -35,6 +36,7 @@
     "cypress": "6.8.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
+    "esbuild": "^0.9.2",
     "eslint": "^7.11.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.0.0",

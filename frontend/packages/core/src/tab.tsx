@@ -7,7 +7,7 @@ import { TabContext, TabList, TabPanel as MuiTabPanel } from "@material-ui/lab";
 const StyledTab = styled(MuiTab)({
   minWidth: "111px",
   height: "46px",
-  padding: "0",
+  padding: "12px 32px",
   color: "rgba(13, 16, 48, 0.6)",
   borderBottom: "3px solid #E7E7EA",
   fontSize: "14px",
@@ -36,6 +36,9 @@ const StyledTab = styled(MuiTab)({
     color: "rgba(13, 16, 48, 0.6)",
     backgroundColor: "#DBDBE0",
   },
+  ".MuiTab-wrapper": {
+    margin: "auto",
+  },
 });
 
 const StyledTabs = styled(TabList)({
@@ -47,9 +50,10 @@ const StyledTabs = styled(TabList)({
 
 export interface TabProps extends Pick<MuiTabProps, "label" | "selected" | "value" | "onClick"> {
   children?: React.ReactNode;
+  startAdornment?: React.ReactNode;
 }
 
-export const Tab = ({ onClick, ...props }: TabProps) => {
+export const Tab = ({ onClick, label, startAdornment, ...props }: TabProps) => {
   const tabProps = { ...props };
   delete tabProps.children;
   const onClickMiddleware = (e: any) => {
@@ -58,7 +62,16 @@ export const Tab = ({ onClick, ...props }: TabProps) => {
       onClick(e);
     }
   };
-  return <StyledTab color="primary" onClick={onClickMiddleware} {...tabProps} />;
+  let finalLabel = label;
+  if (startAdornment !== undefined) {
+    finalLabel = (
+      <div style={{ display: "flex" }}>
+        <span style={{ marginRight: "7px" }}>{startAdornment}</span>
+        {label}
+      </div>
+    );
+  }
+  return <StyledTab color="primary" onClick={onClickMiddleware} label={finalLabel} {...tabProps} />;
 };
 
 const TabPanel = styled(MuiTabPanel)({

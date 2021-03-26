@@ -21,6 +21,8 @@ import (
 // Compatible with Okta offline access, a holdover from previous defaults.
 var defaultScopes = []string{oidc.ScopeOpenID, oidc.ScopeOfflineAccess, "email"}
 
+const clutchProvider = "clutch"
+
 type OIDCProvider struct {
 	provider *oidc.Provider
 	verifier *oidc.IDTokenVerifier
@@ -141,6 +143,13 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 		Expiry:       time.Unix(claims.ExpiresAt, 0),
 		RefreshToken: "", // TODO: implement refresh_token flow with stateful sessions.
 		TokenType:    "Bearer",
+	}
+
+	if p.tokenStorage != nil {
+		err := p.tokenStorage.Store(ctx, claims.Subject, clutchProvider, t)
+		if err != nil {
+			return nil, err
+		}
 	}
 	return t, err
 }

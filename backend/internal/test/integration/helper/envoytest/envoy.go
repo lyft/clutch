@@ -111,6 +111,11 @@ func (e *EnvoyHandle) MakeSimpleCall() (int, error) {
 	return resp.StatusCode, nil
 }
 
+// EnsureControlPlaneConnectivity polls the Envoy stats endpoint to ensure that Envoy
+// has an active request against the control plane identified by the provided stat prefix.
+// This is useful in ensuring that Envoy has been able to reconnect to the control plane,
+// even after the exponential backoff that happens as Envoy is unable to connect to the
+// control plane.
 func (e *EnvoyHandle) EnsureControlPlaneConnectivity(prefix string) error {
 	client := &http.Client{}
 
@@ -122,38 +127,36 @@ func (e *EnvoyHandle) EnsureControlPlaneConnectivity(prefix string) error {
 	timeout := time.NewTimer(20 * time.Second)
 	ticker := time.NewTicker(500 * time.Millisecond)
 
-	select {
-	case <-timeout.C:
-		return errors.New("timed out waiting for control plane connectivity")
-	case <-ticker.C:
-		// TODO(snowp): Have this parse out a generic map of stats values to make it easier to query
-		// arbitrary stats.
-		resp, err := client.Do(r)
-		if err != nil {
-			return err
-		}
-
-		allStatsString, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			return err
-		}
-
-		splitStats := strings.Split(string(allStatsString), "\n")
-
-		for _, statString := range splitStats {
-			if !strings.HasPrefix(statString, prefix+".control_plane.connected_state") {
+	for {
+		select {
+		case <-timeout.C:
+			return errors.New("timed out waiting for control plane connectivity")
+		case <-ticker.C:
+			// TODO(snowp): Have this parse out a generic map of stats values to make it easier to query
+			// arbitrary stats.
+			// We intentionally ignore errors here, as the proxy might be periodically unavailable but we
+			// don't care as long as it recovers within the timeout.
+			resp, err := client.Do(r)
+			if err != nil {
 				continue
 			}
+			allStatsString, _ := ioutil.ReadAll(resp.Body)
+			resp.Body.Close()
+			splitStats := strings.Split(string(allStatsString), "\n")
 
-			nameAndValue := strings.Split(statString, ":")
+			for _, statString := range splitStats {
+				if !strings.HasPrefix(statString, prefix+".control_plane.connected_state") {
+					continue
+				}
 
-			if strings.Trim(nameAndValue[1], " ") == "1" {
-				return nil
+				nameAndValue := strings.Split(statString, ":")
+
+				if strings.TrimSpace(nameAndValue[1]) == "1" {
+					return nil
+				}
 			}
 		}
 	}
-
-	return nil
 }
 
 // EnvoyConfig provides a configuration builder that mirrors the upstream Envoy ConfigHelper:

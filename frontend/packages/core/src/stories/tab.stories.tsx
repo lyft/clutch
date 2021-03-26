@@ -1,4 +1,5 @@
 import * as React from "react";
+import EmojiPeopleOutlinedIcon from "@material-ui/icons/EmojiPeopleOutlined";
 import type { Meta } from "@storybook/react";
 
 import type { TabProps } from "../tab";
@@ -21,6 +22,12 @@ Primary.args = {
 
 export const Selected = Template.bind({});
 Selected.args = {
-  label: "Tab 1",
+  ...Primary.args,
   selected: true,
+};
+
+export const StartAdornment = Template.bind({});
+StartAdornment.args = {
+  ...Primary.args,
+  startAdornment: <EmojiPeopleOutlinedIcon />,
 };

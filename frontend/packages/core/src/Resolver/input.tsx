@@ -13,7 +13,7 @@ import {
 } from "../accordion";
 import { Button } from "../button";
 import { Alert } from "../Feedback";
-import { TextField } from "../Input/text-field";
+import TextField from "../Input/text-field";
 import { client } from "../Network";
 
 import type { ChangeEventTarget } from "./hydrator";

@@ -8177,6 +8177,66 @@ export namespace clutch {
         }
     }
 
+    /** Namespace core. */
+    namespace core {
+
+        /** Namespace envoy. */
+        namespace envoy {
+
+            /** Namespace v1. */
+            namespace v1 {
+
+                /** Properties of a Cluster. */
+                interface ICluster {
+
+                    /** Cluster name */
+                    name?: (string|null);
+                }
+
+                /** Represents a Cluster. */
+                class Cluster implements ICluster {
+
+                    /**
+                     * Constructs a new Cluster.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.core.envoy.v1.ICluster);
+
+                    /** Cluster name. */
+                    public name: string;
+
+                    /**
+                     * Verifies a Cluster message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Cluster message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Cluster
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.core.envoy.v1.Cluster;
+
+                    /**
+                     * Creates a plain object from a Cluster message. Also converts values to other types if specified.
+                     * @param message Cluster
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.core.envoy.v1.Cluster, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Cluster to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+        }
+    }
+
     /** Namespace envoytriage. */
     namespace envoytriage {
 

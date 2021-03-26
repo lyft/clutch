@@ -65,6 +65,7 @@ func TestEnvoyFaults(t *testing.T) {
 	assert.NoError(t, err)
 
 	e.EnsureControlPlaneConnectivity(envoytest.RuntimeStatPrefix)
+	assert.NoError(t, err)
 
 	code, err := e.MakeSimpleCall()
 	assert.NoError(t, err)
@@ -124,18 +125,6 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 	code, err := e.MakeSimpleCall()
 	assert.NoError(t, err)
 	assert.Equal(t, 503, code)
-
-	time.Sleep(5 * time.Second)
-
-	createTestExperiment(t, 400, ts.Storer)
-
-	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
-		timeout:        20 * time.Second,
-		expectedStatus: 400,
-	})
-	assert.NoError(t, err, "did not see faults enabled")
-
-	criteria.start()
 
 	// Since we've enabled a time based automatic termination, we expect to see faults get disabled on their own after some time.
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
@@ -208,7 +197,6 @@ func awaitExpectedReturnValueForSimpleCall(t *testing.T, e *envoytest.EnvoyHandl
 
 	return nil
 }
-
 func TestEnvoyECDSFaults(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
