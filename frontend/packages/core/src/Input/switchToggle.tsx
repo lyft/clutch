@@ -1,3 +1,9 @@
+/*
+  TODO from andrewo: Rename this file to switch.tsx or the component itself to something like switchToggle.
+  There's an issue with storybook with components whose names are also keywords:
+  https://github.com/storybookjs/storybook/issues/11980
+*/
+
 import * as React from "react";
 import styled from "@emotion/styled";
 import type { SwitchProps as MuiSwitchProps } from "@material-ui/core";
@@ -63,6 +69,6 @@ const SwitchContainer = styled(MuiSwitch)({
 
 export interface SwitchProps extends Pick<MuiSwitchProps, "checked" | "disabled" | "onChange"> {}
 
-export const Switch = ({ ...props }: SwitchProps) => <SwitchContainer color="default" {...props} />;
+const Switch = ({ ...props }: SwitchProps) => <SwitchContainer color="default" {...props} />;
 
 export default Switch;

@@ -191,7 +191,7 @@ export interface SelectProps extends Pick<MuiSelectProps, "disabled" | "error"> 
   onChange?: (value: string) => void;
 }
 
-export const Select = ({
+const Select = ({
   defaultOption = 0,
   disabled,
   error,

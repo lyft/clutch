@@ -4,7 +4,7 @@ import type { Meta } from "@storybook/react";
 
 import { Button } from "../../button";
 import { Form, FormRow } from "../form";
-import { TextField } from "../text-field";
+import TextField from "../text-field";
 
 export default {
   title: "Core/Input/Form",

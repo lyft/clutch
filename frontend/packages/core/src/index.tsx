@@ -1,10 +1,12 @@
 import { Grid } from "@material-ui/core";
 
-import { CheckboxPanel } from "./Input/checkbox";
+import { Checkbox, CheckboxPanel } from "./Input/checkbox";
 import { Form, FormRow } from "./Input/form";
+import Radio from "./Input/radio";
 import RadioGroup from "./Input/radio-group";
-import { Select } from "./Input/select";
-import { TextField } from "./Input/text-field";
+import Select from "./Input/select";
+import Switch from "./Input/switchToggle";
+import TextField from "./Input/text-field";
 import { Accordion, AccordionDetails } from "./accordion";
 import ClutchApp from "./AppProvider";
 import { Button, ButtonGroup, ClipboardButton, IconButton } from "./button";
@@ -17,7 +19,7 @@ import { Link } from "./link";
 import Loadable from "./loading";
 import { client } from "./Network";
 import ExpansionPanel from "./panel";
-import { Paper } from "./paper";
+import Paper from "./paper";
 import Resolver from "./Resolver";
 import { Step, Stepper } from "./stepper";
 import { Tab, Tabs } from "./tab";
@@ -37,6 +39,7 @@ export {
   ClutchApp,
   Button,
   ButtonGroup,
+  Checkbox,
   CheckboxPanel,
   client,
   ClipboardButton,
@@ -57,12 +60,14 @@ export {
   Note,
   NotePanel,
   Paper,
+  Radio,
   RadioGroup,
   Resolver,
   Select,
   StatusIcon,
   Step,
   Stepper,
+  Switch,
   Tab,
   Tabs,
   Table,
