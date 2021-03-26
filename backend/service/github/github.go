@@ -20,7 +20,7 @@ import (
 	"github.com/go-git/go-git/v5/storage/memory"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
-	githubv3 "github.com/google/go-github/v33/github"
+	githubv3 "github.com/google/go-github/v34/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
