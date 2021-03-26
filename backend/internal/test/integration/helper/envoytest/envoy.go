@@ -140,9 +140,8 @@ func (e *EnvoyHandle) EnsureControlPlaneConnectivity(prefix string) error {
 			if err != nil {
 				continue
 			}
-			defer resp.Body.Close()
-
 			allStatsString, _ := ioutil.ReadAll(resp.Body)
+			resp.Body.Close()
 			splitStats := strings.Split(string(allStatsString), "\n")
 
 			for _, statString := range splitStats {
