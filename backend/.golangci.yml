@@ -32,9 +32,9 @@ issues:
       linters:
         - gosec
     # TODO: remove this rule once the migration to the new protobuf APIs are complete
-    - linters:
+    - text: "^SA1019.*?(ptypes|jsonpb|github.com/golang/protobuf/proto).*?deprecated"
+      linters:
         - staticcheck
-      text: "^SA1019.*?(github.com/golang/protobuf|descriptor\\.(For)?Message).*?deprecated"
 run:
   timeout: 5m
   skip-dirs:
