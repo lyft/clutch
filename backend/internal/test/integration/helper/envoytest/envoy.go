@@ -127,32 +127,37 @@ func (e *EnvoyHandle) EnsureControlPlaneConnectivity(prefix string) error {
 	timeout := time.NewTimer(20 * time.Second)
 	ticker := time.NewTicker(500 * time.Millisecond)
 
-	select {
-	case <-timeout.C:
-		return errors.New("timed out waiting for control plane connectivity")
-	case <-ticker.C:
-		// TODO(snowp): Have this parse out a generic map of stats values to make it easier to query
-		// arbitrary stats.
-		// We intentionally ignore errors here, as the proxy might be periodically unavailable but we
-		// don't care as long as it recovers within the timeout.
-		resp, _ := client.Do(r)
-		allStatsString, _ := ioutil.ReadAll(resp.Body)
-		splitStats := strings.Split(string(allStatsString), "\n")
-
-		for _, statString := range splitStats {
-			if !strings.HasPrefix(statString, prefix+".control_plane.connected_state") {
+	for {
+		select {
+		case <-timeout.C:
+			return errors.New("timed out waiting for control plane connectivity")
+		case <-ticker.C:
+			// TODO(snowp): Have this parse out a generic map of stats values to make it easier to query
+			// arbitrary stats.
+			// We intentionally ignore errors here, as the proxy might be periodically unavailable but we
+			// don't care as long as it recovers within the timeout.
+			resp, err := client.Do(r)
+			if err != nil {
 				continue
 			}
+			defer resp.Body.Close()
 
-			nameAndValue := strings.Split(statString, ":")
+			allStatsString, _ := ioutil.ReadAll(resp.Body)
+			splitStats := strings.Split(string(allStatsString), "\n")
 
-			if strings.TrimSpace(nameAndValue[1]) == "1" {
-				return nil
+			for _, statString := range splitStats {
+				if !strings.HasPrefix(statString, prefix+".control_plane.connected_state") {
+					continue
+				}
+
+				nameAndValue := strings.Split(statString, ":")
+
+				if strings.TrimSpace(nameAndValue[1]) == "1" {
+					return nil
+				}
 			}
 		}
 	}
-
-	return nil
 }
 
 // EnvoyConfig provides a configuration builder that mirrors the upstream Envoy ConfigHelper:
