@@ -148,6 +148,22 @@ func TestCancelExperimentRun(t *testing.T) {
 	assert.NoError(err)
 }
 
+func TestTerminateExperimentRun(t *testing.T) {
+	assert := assert.New(t)
+
+	db, mock, err := sqlmock.New()
+	assert.NoError(err)
+
+	es := &storer{db: db}
+	defer es.Close()
+
+	expected := mock.ExpectExec(regexp.QuoteMeta(`UPDATE experiment_run SET cancellation_time = NOW() SET termination_reason = $2 WHERE id = $1 AND cancellation_time IS NULL`))
+	expected.WithArgs([]driver.Value{1, "test"}...).WillReturnResult(sqlmock.NewResult(1, 1))
+
+	err = es.TerminateExperimentRun(context.Background(), uint64(1), "test")
+	assert.NoError(err)
+}
+
 var getExperimentsSQLQuery = `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`
 
 func TestGetExperimentsUnmarshalsExperimentConfiguration(t *testing.T) {

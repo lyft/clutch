@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
-	"testing"
 	"sync"
+	"testing"
 	"time"
 
 	_ "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
@@ -54,8 +54,8 @@ func TestEnvoyFaults(t *testing.T) {
 	})
 	assert.NoError(t, err, "did not see faults enabled")
 
-	// // We know that faults have been applied, now try to kill the server and ensure that we eventually reset the faults.
-	// // This verifies that we're properly setting TTLs and that Envoy will honor this.
+	// We know that faults have been applied, now try to kill the server and ensure that we eventually reset the faults.
+	// This verifies that we're properly setting TTLs and that Envoy will honor this.
 	ts.Stop()
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
@@ -79,14 +79,14 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 	criteria := &testCriteria{}
 
 	terminator := terminator.NewTestMonitor(
-		ts.Storer, 
+		ts.Storer,
 		[]string{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"},
-		 []terminator.TerminationCriteria{criteria}, 
-		 ts.Logger.Sugar(), 
-		 ts.Scope)
+		[]terminator.TerminationCriteria{criteria},
+		ts.Logger.Sugar(),
+		ts.Scope)
 
 	// Canclel to ensure that the terminator doesn't leak into other tests.
-    ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.Background())
 	terminator.Run(ctx)
 	defer cancel()
 
@@ -133,8 +133,7 @@ func TestEnvoyECDSFaults(t *testing.T) {
 	experiment := createTestExperiment(t, 404, ts.Storer)
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
-		// Timeout needs to be higher since envoy has exponential back-off request timeout
-		timeout:        8 * time.Second,
+		timeout:        2 * time.Second,
 		expectedStatus: 404,
 	})
 	assert.NoError(t, err, "did not see faults enabled")
@@ -231,7 +230,7 @@ func (t *testCriteria) ShouldTerminate(started time.Time, experiment interface{}
 	t.Lock()
 	defer t.Unlock()
 
-	if t.startCheckingTime && started.Add(1 * time.Second).Before(time.Now()) {
+	if t.startCheckingTime && started.Add(1*time.Second).Before(time.Now()) {
 		return errors.New("timed out")
 	}
 
