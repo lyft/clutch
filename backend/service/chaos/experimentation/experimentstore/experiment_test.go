@@ -33,8 +33,8 @@ func TestExperimentRunConfigToExperiment(t *testing.T) {
 
 			run := &ExperimentRun{Id: "1", StartTime: tt.startTime, EndTime: tt.endTime}
 			config := &ExperimentConfig{id: "2", Config: &any.Any{}}
-			p := experimentRunConfigPair{run: run, config: config}
-			_, err := p.toExperiment()
+			p := Experiment{Run: run, Config: config}
+			_, err := p.toProto()
 			a.NoError(err)
 		})
 	}

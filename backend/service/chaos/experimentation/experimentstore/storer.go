@@ -117,12 +117,12 @@ func (s *storer) CreateOrGetExperiment(ctx context.Context, es *ExperimentSpecif
 	}
 
 	if exists {
-		runConfigPair, err := s.getExperimentRunConfigPair(ctx, es.RunId)
+		runConfigPair, err := s.getExperiment(ctx, es.RunId)
 		if err != nil {
 			return nil, err
 		}
 
-		experiment, err := runConfigPair.toExperiment()
+		experiment, err := runConfigPair.toProto()
 		if err != nil {
 			return nil, err
 		}
@@ -250,15 +250,15 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 }
 
 func (s *storer) GetExperimentRunDetails(ctx context.Context, runId string) (*experimentation.ExperimentRunDetails, error) {
-	runConfigPair, err := s.getExperimentRunConfigPair(ctx, runId)
+	e, err := s.getExperiment(ctx, runId)
 	if err != nil {
 		return nil, err
 	}
 
-	return NewRunDetails(runConfigPair.run, runConfigPair.config, s.transformer, time.Now())
+	return NewRunDetails(e.Run, e.Config, s.transformer, time.Now())
 }
 
-func (s *storer) getExperimentRunConfigPair(ctx context.Context, runId string) (*experimentRunConfigPair, error) {
+func (s *storer) getExperiment(ctx context.Context, runId string) (*Experiment, error) {
 	sqlQuery := `
 		SELECT
 			experiment_run.id,
@@ -285,7 +285,7 @@ func (s *storer) getExperimentRunConfigPair(ctx context.Context, runId string) (
 		return nil, err
 	}
 
-	return &experimentRunConfigPair{run: &run, config: &config}, nil
+	return &Experiment{Run: &run, Config: &config}, nil
 }
 
 // Close closes all resources held.

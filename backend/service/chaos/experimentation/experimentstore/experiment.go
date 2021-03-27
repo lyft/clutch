@@ -9,29 +9,29 @@ import (
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
-type experimentRunConfigPair struct {
-	run    *ExperimentRun
-	config *ExperimentConfig
+type Experiment struct {
+	Run    *ExperimentRun
+	Config *ExperimentConfig
 }
 
-func (rc *experimentRunConfigPair) toExperiment() (*experimentation.Experiment, error) {
-	startTimestampProto, err := ptypes.TimestampProto(rc.run.StartTime)
+func (rc *Experiment) toProto() (*experimentation.Experiment, error) {
+	startTimestampProto, err := ptypes.TimestampProto(rc.Run.StartTime)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "%v", err)
 	}
 
 	var endTimestampProto *timestamp.Timestamp
-	if rc.run.EndTime.Valid {
-		endTimestampProto, err = ptypes.TimestampProto(rc.run.EndTime.Time)
+	if rc.Run.EndTime.Valid {
+		endTimestampProto, err = ptypes.TimestampProto(rc.Run.EndTime.Time)
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "%v", err)
 		}
 	}
 
 	return &experimentation.Experiment{
-		RunId:     rc.run.Id,
+		RunId:     rc.Run.Id,
 		StartTime: startTimestampProto,
 		EndTime:   endTimestampProto,
-		Config:    rc.config.Config,
+		Config:    rc.Config.Config,
 	}, nil
 }
