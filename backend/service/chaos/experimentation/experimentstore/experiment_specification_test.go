@@ -19,13 +19,13 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 	a := assert.New(t)
 
 	now := time.Date(2011, 0, 0, 0, 0, 0, 0, time.UTC)
-	past := time.Date(2010, 0, 0, 0, 0, 0, 0, time.UTC)
+	past := now.Add(-1 * time.Hour)
 	pastTimestamp, err := ptypes.TimestampProto(past)
 	a.NoError(err)
-	future := time.Date(2030, 0, 0, 0, 0, 0, 0, time.UTC)
+	future := now.Add(1 * time.Hour)
 	futureTimestamp, err := ptypes.TimestampProto(future)
 	a.NoError(err)
-	farFutureTimestamp, err := ptypes.TimestampProto(time.Date(2031, 0, 0, 0, 0, 0, 0, time.UTC))
+	farFutureTimestamp, err := ptypes.TimestampProto(future.Add(1 * time.Hour))
 	a.NoError(err)
 
 	tests := []struct {
@@ -88,7 +88,7 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 			endTime:       futureTimestamp,
 			now:           now,
 			Config:        &any.Any{},
-			expectedError: status.Error(codes.InvalidArgument, "experiment start time (2009-11-30 00:00:00 +0000 UTC) cannot be before current time (2010-11-30 00:00:00 +0000 UTC)"),
+			expectedError: status.Error(codes.InvalidArgument, "experiment start time (2010-11-29 23:00:00 +0000 UTC) cannot be before current time (2010-11-30 00:00:00 +0000 UTC)"),
 		},
 		{
 			runId:         "1",
@@ -96,7 +96,7 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 			endTime:       pastTimestamp,
 			now:           now,
 			Config:        &any.Any{},
-			expectedError: status.Error(codes.InvalidArgument, "experiment end time (2009-11-30 00:00:00 +0000 UTC) must be after experiment start time (2029-11-30 00:00:00 +0000 UTC)"),
+			expectedError: status.Error(codes.InvalidArgument, "experiment end time (2010-11-29 23:00:00 +0000 UTC) must be after experiment start time (2010-11-30 01:00:00 +0000 UTC)"),
 		},
 		{
 			runId:         "1",
@@ -104,7 +104,7 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 			endTime:       futureTimestamp,
 			now:           now,
 			Config:        &any.Any{},
-			expectedError: status.Error(codes.InvalidArgument, "experiment end time (2029-11-30 00:00:00 +0000 UTC) must be after experiment start time (2029-11-30 00:00:00 +0000 UTC)"),
+			expectedError: status.Error(codes.InvalidArgument, "experiment end time (2010-11-30 01:00:00 +0000 UTC) must be after experiment start time (2010-11-30 01:00:00 +0000 UTC)"),
 		},
 		{
 			runId:         "",
@@ -112,7 +112,7 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 			endTime:       futureTimestamp,
 			now:           now,
 			Config:        &any.Any{},
-			expectedError: status.Error(codes.InvalidArgument, "experiment end time (2029-11-30 00:00:00 +0000 UTC) must be after experiment start time (2030-11-30 00:00:00 +0000 UTC)"),
+			expectedError: status.Error(codes.InvalidArgument, "experiment end time (2010-11-30 01:00:00 +0000 UTC) must be after experiment start time (2010-11-30 02:00:00 +0000 UTC)"),
 		},
 	}
 
