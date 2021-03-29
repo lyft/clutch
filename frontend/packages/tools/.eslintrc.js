@@ -20,7 +20,7 @@ module.exports = {
     "import/resolver": {
       node: {
         extensions: [".js", ".jsx", ".ts", ".tsx"],
-        paths: ["src", "dist"],
+        paths: ["**/src", "**/dist"],
       },
     },
     "import/parsers": {
