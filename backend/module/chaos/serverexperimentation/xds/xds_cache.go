@@ -80,10 +80,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 	}
 
 	// Create/Update experiments
-	activeFaults := 0
 	for cluster, experiments := range clusterFaultMap {
-		activeFaults += 1
-
 		resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
 
 		logger.Debugw("Injecting fault for cluster", "cluster", cluster)
@@ -104,7 +101,7 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 		}
 	}
 
-	scope.Gauge("active_faults").Update(float64(activeFaults))
+	scope.Gauge("active_faults").Update(float64(len(clusterFaultMap)))
 }
 
 func setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl, cluster string, snapshotCache gcpCacheV3.SnapshotCache, logger *zap.SugaredLogger) error {
