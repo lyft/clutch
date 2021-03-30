@@ -3,7 +3,6 @@ package core
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/any"
@@ -68,7 +67,7 @@ func (r *res) Search(ctx context.Context, typeURL, query string, limit uint32) (
 
 func (r *res) Autocomplete(ctx context.Context, typeURL, search string, limit uint64) ([]*resolverv1.AutocompleteResult, error) {
 	if r.topology == nil {
-		return nil, fmt.Errorf("to use the autocomplete api you must first setup the topology service")
+		return nil, status.Error(codes.Internal, "to use the autocomplete api you must first setup the topology service")
 	}
 
 	var resultLimit uint64 = resolver.DefaultAutocompleteLimit
