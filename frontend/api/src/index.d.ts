@@ -6227,6 +6227,62 @@ export namespace clutch {
                 }
             }
 
+            /** Namespace slackbot. */
+            namespace slackbot {
+
+                /** Namespace v1. */
+                namespace v1 {
+
+                    /** Properties of a Config. */
+                    interface IConfig {
+
+                        /** Config botToken */
+                        botToken?: (string|null);
+                    }
+
+                    /** Represents a Config. */
+                    class Config implements IConfig {
+
+                        /**
+                         * Constructs a new Config.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.config.module.slackbot.v1.IConfig);
+
+                        /** Config botToken. */
+                        public botToken: string;
+
+                        /**
+                         * Verifies a Config message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Config
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.config.module.slackbot.v1.Config;
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @param message Config
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.config.module.slackbot.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+                }
+            }
+
             /** Namespace sourcecontrol. */
             namespace sourcecontrol {
 
@@ -16758,6 +16814,206 @@ export namespace clutch {
                      */
                     public toJSON(): { [k: string]: any };
                 }
+            }
+        }
+    }
+
+    /** Namespace slackbot. */
+    namespace slackbot {
+
+        /** Namespace v1. */
+        namespace v1 {
+
+            /** Represents a SlackBotAPI */
+            class SlackBotAPI extends $protobuf.rpc.Service {
+
+                /**
+                 * Constructs a new SlackBotAPI service.
+                 * @param rpcImpl RPC implementation
+                 * @param [requestDelimited=false] Whether requests are length-delimited
+                 * @param [responseDelimited=false] Whether responses are length-delimited
+                 */
+                constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                /**
+                 * Calls Event.
+                 * @param request EventRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and EventResponse
+                 */
+                public event(request: clutch.slackbot.v1.IEventRequest, callback: clutch.slackbot.v1.SlackBotAPI.EventCallback): void;
+
+                /**
+                 * Calls Event.
+                 * @param request EventRequest message or plain object
+                 * @returns Promise
+                 */
+                public event(request: clutch.slackbot.v1.IEventRequest): Promise<clutch.slackbot.v1.EventResponse>;
+            }
+
+            namespace SlackBotAPI {
+
+                /**
+                 * Callback as used by {@link clutch.slackbot.v1.SlackBotAPI#event}.
+                 * @param error Error, if any
+                 * @param [response] EventResponse
+                 */
+                type EventCallback = (error: (Error|null), response?: clutch.slackbot.v1.EventResponse) => void;
+            }
+
+            /** Properties of an EventRequest. */
+            interface IEventRequest {
+
+                /** EventRequest token */
+                token?: (string|null);
+
+                /** EventRequest isExtSharedChannel */
+                isExtSharedChannel?: (boolean|null);
+
+                /** EventRequest teamId */
+                teamId?: (string|null);
+
+                /** EventRequest apiAppId */
+                apiAppId?: (string|null);
+
+                /** EventRequest event */
+                event?: (google.protobuf.IValue|null);
+
+                /** EventRequest type */
+                type?: (string|null);
+
+                /** EventRequest eventId */
+                eventId?: (string|null);
+
+                /** EventRequest eventTime */
+                eventTime?: (number|Long|null);
+
+                /** EventRequest eventContext */
+                eventContext?: (string|null);
+
+                /** EventRequest authorizations */
+                authorizations?: (google.protobuf.IValue|null);
+
+                /** EventRequest challenge */
+                challenge?: (string|null);
+            }
+
+            /** Represents an EventRequest. */
+            class EventRequest implements IEventRequest {
+
+                /**
+                 * Constructs a new EventRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.slackbot.v1.IEventRequest);
+
+                /** EventRequest token. */
+                public token: string;
+
+                /** EventRequest isExtSharedChannel. */
+                public isExtSharedChannel: boolean;
+
+                /** EventRequest teamId. */
+                public teamId: string;
+
+                /** EventRequest apiAppId. */
+                public apiAppId: string;
+
+                /** EventRequest event. */
+                public event?: (google.protobuf.IValue|null);
+
+                /** EventRequest type. */
+                public type: string;
+
+                /** EventRequest eventId. */
+                public eventId: string;
+
+                /** EventRequest eventTime. */
+                public eventTime: (number|Long);
+
+                /** EventRequest eventContext. */
+                public eventContext: string;
+
+                /** EventRequest authorizations. */
+                public authorizations?: (google.protobuf.IValue|null);
+
+                /** EventRequest challenge. */
+                public challenge: string;
+
+                /**
+                 * Verifies an EventRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an EventRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns EventRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.slackbot.v1.EventRequest;
+
+                /**
+                 * Creates a plain object from an EventRequest message. Also converts values to other types if specified.
+                 * @param message EventRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.slackbot.v1.EventRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this EventRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of an EventResponse. */
+            interface IEventResponse {
+
+                /** EventResponse challenge */
+                challenge?: (string|null);
+            }
+
+            /** Represents an EventResponse. */
+            class EventResponse implements IEventResponse {
+
+                /**
+                 * Constructs a new EventResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.slackbot.v1.IEventResponse);
+
+                /** EventResponse challenge. */
+                public challenge: string;
+
+                /**
+                 * Verifies an EventResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates an EventResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns EventResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.slackbot.v1.EventResponse;
+
+                /**
+                 * Creates a plain object from an EventResponse message. Also converts values to other types if specified.
+                 * @param message EventResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.slackbot.v1.EventResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this EventResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
             }
         }
     }
