@@ -13,8 +13,8 @@ import (
 func TestNoRegisteredTransformation(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 	transformer := NewTransformer(logger)
-	config := &ExperimentConfig{id: "1", Config: &any.Any{}}
-	_, err := transformer.CreateProperties(&ExperimentRun{Id: "123"}, config)
+	config := &ExperimentConfig{id: 1, Config: &any.Any{}}
+	_, err := transformer.CreateProperties(&ExperimentRun{Id: 123}, config)
 
 	assert.NoError(t, err)
 }
@@ -24,7 +24,7 @@ func TestNoMatchingRegisteredRunConfigTransform(t *testing.T) {
 	transformer := NewTransformer(logger)
 
 	underlyingConfig := &any.Any{TypeUrl: "foo"}
-	config := &ExperimentConfig{id: "1", Config: underlyingConfig}
+	config := &ExperimentConfig{id: 1, Config: underlyingConfig}
 
 	transform := func(run *ExperimentRun, config *ExperimentConfig) ([]*experimentation.Property, error) {
 		assert.FailNow(t, "not matching transform should not be called")
@@ -32,7 +32,7 @@ func TestNoMatchingRegisteredRunConfigTransform(t *testing.T) {
 	}
 	transformation := Transformation{ConfigTypeUrl: "bar", RunTransform: transform}
 	assert.NoError(t, transformer.Register(transformation))
-	properties, err := transformer.CreateProperties(&ExperimentRun{Id: "123"}, config)
+	properties, err := transformer.CreateProperties(&ExperimentRun{Id: 123}, config)
 
 	assert.NoError(t, err)
 	assert.Equal(t, 0, len(properties))
@@ -41,8 +41,8 @@ func TestNoMatchingRegisteredRunConfigTransform(t *testing.T) {
 func TestMatchingRegisteredNullRunConfigTransform(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 
-	run := &ExperimentRun{Id: "123"}
-	config := &ExperimentConfig{id: "1", Config: &any.Any{TypeUrl: "test"}}
+	run := &ExperimentRun{Id: 123}
+	config := &ExperimentConfig{id: 1, Config: &any.Any{TypeUrl: "test"}}
 
 	transformation := Transformation{ConfigTypeUrl: "test"}
 	transformer := NewTransformer(logger)
@@ -56,8 +56,8 @@ func TestMatchingRegisteredNullRunConfigTransform(t *testing.T) {
 func TestMatchingRegisteredRunConfigTransform(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 
-	expectedRun := &ExperimentRun{Id: "123"}
-	expectedConfig := &ExperimentConfig{id: "1", Config: &any.Any{TypeUrl: "test"}}
+	expectedRun := &ExperimentRun{Id: 123}
+	expectedConfig := &ExperimentConfig{id: 1, Config: &any.Any{TypeUrl: "test"}}
 	expectedProperty := &experimentation.Property{
 		Id:    "foo",
 		Label: "bar",
@@ -82,8 +82,8 @@ func TestMatchingRegisteredRunConfigTransform(t *testing.T) {
 func TestMatchingMultipleRegisteredRunConfigTransforms(t *testing.T) {
 	logger := zaptest.NewLogger(t).Sugar()
 
-	expectedRun := &ExperimentRun{Id: "123"}
-	expectedConfig := &ExperimentConfig{id: "1", Config: &any.Any{TypeUrl: "foo"}}
+	expectedRun := &ExperimentRun{Id: 123}
+	expectedConfig := &ExperimentConfig{id: 1, Config: &any.Any{TypeUrl: "foo"}}
 	expectedProperty1 := &experimentation.Property{
 		Id:    "foo1",
 		Label: "bar1",
