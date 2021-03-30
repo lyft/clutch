@@ -43,7 +43,7 @@ func (m *Experiment) Validate() error {
 		return nil
 	}
 
-	// no validation rules for RunId
+	// no validation rules for Id
 
 	if v, ok := interface{}(m.GetConfig()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {

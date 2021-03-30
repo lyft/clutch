@@ -28,7 +28,7 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
     const goBack = () => {
       navigate("/experimentation/list");
     };
-    const goBackButton = <Button key="back" text="Back" variant="neutral" onClick={goBack} />;
+    const goBackButton = <Button text="Back" variant="neutral" onClick={goBack} />;
 
     const statusValue = IClutch.chaos.experimentation.v1.Experiment.Status[
       experiment.status
@@ -48,7 +48,6 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
         : "Cancel Experiment Run";
     const destructiveButton = (
       <Button
-        key={title}
         text={title}
         variant="destructive"
         onClick={() => {

@@ -2,29 +2,28 @@ package experimentstoremock
 
 import (
 	"context"
-	"strconv"
 	"sync"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 type SimpleExperiment struct {
-	runId     string
+	id        uint64
 	config    *anypb.Any
-	startTime time.Time
+	startTime *time.Time
 	stopTime  *time.Time
 }
 
-func (s *SimpleExperiment) toProto() *experimentation.Experiment {
-	startTime, _ := ptypes.TimestampProto(s.startTime)
+func (s SimpleExperiment) toProto() *experimentationv1.Experiment {
+	startTime, _ := ptypes.TimestampProto(*s.startTime)
 	endTime, _ := ptypes.TimestampProto(*s.stopTime)
-	return &experimentation.Experiment{
-		RunId:     s.runId,
+	return &experimentationv1.Experiment{
+		Id:        s.id,
 		Config:    s.config,
 		StartTime: startTime,
 		EndTime:   endTime,
@@ -33,39 +32,27 @@ func (s *SimpleExperiment) toProto() *experimentation.Experiment {
 
 type SimpleStorer struct {
 	experiments []SimpleExperiment
-	idGenerator int
+	idGenerator uint64
 
 	sync.Mutex
 }
 
-func (s *SimpleStorer) CreateExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentation.Experiment, error) {
+func (s *SimpleStorer) CreateExperiment(ctx context.Context, config *anypb.Any, startTime *time.Time, stopTime *time.Time) (*experimentationv1.Experiment, error) {
 	s.Lock()
 	defer s.Unlock()
 
-	s.experiments = append(s.experiments, SimpleExperiment{runId: strconv.Itoa(s.idGenerator), config: es.Config, startTime: es.StartTime, stopTime: es.EndTime})
+	s.experiments = append(s.experiments, SimpleExperiment{id: s.idGenerator, config: config, startTime: startTime, stopTime: stopTime})
 	s.idGenerator++
 	return s.experiments[len(s.experiments)-1].toProto(), nil
 }
 
-func (s *SimpleStorer) CreateOrGetExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentstore.CreateOrGetExperimentResult, error) {
-	experiment, err := s.CreateExperiment(ctx, es)
-	if err != nil {
-		return nil, err
-	}
-
-	return &experimentstore.CreateOrGetExperimentResult{
-		Experiment: experiment,
-		Origin:     experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW,
-	}, nil
-}
-
-func (s *SimpleStorer) CancelExperimentRun(ctx context.Context, runId string) error {
+func (s *SimpleStorer) CancelExperimentRun(ctx context.Context, id uint64) error {
 	s.Lock()
 	defer s.Unlock()
 
 	newExperiments := []SimpleExperiment{}
 	for _, e := range s.experiments {
-		if e.runId == runId {
+		if e.id == id {
 			continue
 		}
 
@@ -76,11 +63,11 @@ func (s *SimpleStorer) CancelExperimentRun(ctx context.Context, runId string) er
 	return nil
 }
 
-func (s *SimpleStorer) GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
+func (s *SimpleStorer) GetExperiments(ctx context.Context, configType string, status experimentationv1.GetExperimentsRequest_Status) ([]*experimentationv1.Experiment, error) {
 	s.Lock()
 	defer s.Unlock()
 
-	experiments := []*experimentation.Experiment{}
+	experiments := []*experimentationv1.Experiment{}
 
 	for _, e := range s.experiments {
 		experiments = append(experiments, e.toProto())
@@ -88,10 +75,10 @@ func (s *SimpleStorer) GetExperiments(ctx context.Context, configType string, st
 
 	return experiments, nil
 }
-func (s *SimpleStorer) GetExperimentRunDetails(ctx context.Context, runId string) (*experimentation.ExperimentRunDetails, error) {
+func (s *SimpleStorer) GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentationv1.ExperimentRunDetails, error) {
 	return nil, nil
 }
-func (s *SimpleStorer) GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error) {
+func (s *SimpleStorer) GetListView(ctx context.Context) ([]*experimentationv1.ListViewItem, error) {
 	return nil, nil
 }
 func (s *SimpleStorer) RegisterTransformation(transformation experimentstore.Transformation) error {
