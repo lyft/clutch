@@ -95,7 +95,7 @@ type Experiment struct {
 	RunId string `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
 	// The experiment configuration specific to the type of experiment.
 	Config *anypb.Any `protobuf:"bytes,2,opt,name=config,proto3" json:"config,omitempty"`
-	// The time when the experiment should start. If unspecified, defaults to 'now'.
+	// The time when the experiment should start.
 	StartTime *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
 	// The time when the experiment should end, If unspecified, the experiment runs indefinitely unless it is manually
 	// stopped by a user.
