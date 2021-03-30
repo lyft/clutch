@@ -28,6 +28,7 @@ import (
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 const (
@@ -277,7 +278,6 @@ func TestRefreshCache(t *testing.T) {
 		enabledClusters: map[string]struct{}{testCluster: struct{}{}},
 	}
 
-	now := time.Now()
 	config := serverexperimentation.HTTPFaultConfig{
 		Fault: &serverexperimentation.HTTPFaultConfig_AbortFault{
 			AbortFault: &serverexperimentation.AbortFault{
@@ -309,7 +309,17 @@ func TestRefreshCache(t *testing.T) {
 	a, err := ptypes.MarshalAny(&config)
 	assert.NoError(t, err)
 
-	_, err = s.CreateExperiment(context.Background(), a, &now, &now)
+	now := time.Date(2011, 0, 0, 0, 0, 0, 0, time.UTC)
+	assert.NoError(t, err)
+	future := now.Add(1 * time.Hour)
+	futureTimestamp, err := ptypes.TimestampProto(future)
+	assert.NoError(t, err)
+	farFuture := future.Add(1 * time.Hour)
+	farFutureTimestamp, err := ptypes.TimestampProto(farFuture)
+	assert.NoError(t, err)
+
+	d := &experimentation.CreateExperimentData{StartTime: futureTimestamp, EndTime: farFutureTimestamp, Config: a}
+	_, err = experimentstore.NewExperimentSpecification(d, now)
 	assert.NoError(t, err)
 
 	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
