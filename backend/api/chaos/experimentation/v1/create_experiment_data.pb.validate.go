@@ -46,14 +46,15 @@ func (m *CreateExperimentData) Validate() error {
 
 	// no validation rules for RunId
 
-	if v, ok := interface{}(m.GetConfig()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CreateExperimentDataValidationError{
-				field:  "Config",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
+	if m.GetConfig() == nil {
+		return CreateExperimentDataValidationError{
+			field:  "Config",
+			reason: "value is required",
 		}
+	}
+
+	if a := m.GetConfig(); a != nil {
+
 	}
 
 	if v, ok := interface{}(m.GetStartTime()).(interface{ Validate() error }); ok {
