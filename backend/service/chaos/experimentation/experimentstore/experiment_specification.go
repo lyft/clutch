@@ -34,10 +34,6 @@ func NewExperimentSpecification(ced *experimentationv1.CreateExperimentData, now
 		return nil, status.Errorf(codes.InvalidArgument, "provided experiment runId (%v) contained forbidden characters and was not matched by \"%v\" regular expresion", runId, runIdRegExp)
 	}
 
-	if ced.Config == nil {
-		return nil, status.Error(codes.InvalidArgument, "experiment config cannot be equal to nil")
-	}
-
 	// If the start time is not provided, default to current time
 	startTime := now
 	if ced.StartTime != nil {
