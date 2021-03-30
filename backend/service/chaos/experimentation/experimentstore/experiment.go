@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 type Experiment struct {
@@ -14,7 +14,7 @@ type Experiment struct {
 	Config *ExperimentConfig
 }
 
-func (rc *Experiment) toProto() (*experimentation.Experiment, error) {
+func (rc *Experiment) toProto() (*experimentationv1.Experiment, error) {
 	startTimestampProto, err := ptypes.TimestampProto(rc.Run.StartTime)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "%v", err)
@@ -28,7 +28,7 @@ func (rc *Experiment) toProto() (*experimentation.Experiment, error) {
 		}
 	}
 
-	return &experimentation.Experiment{
+	return &experimentationv1.Experiment{
 		RunId:     rc.Run.Id,
 		StartTime: startTimestampProto,
 		EndTime:   endTimestampProto,

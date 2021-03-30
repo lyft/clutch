@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/id"
 )
 
@@ -25,7 +25,7 @@ type ExperimentSpecification struct {
 }
 
 // New returns a new experimentationSpecification instance.
-func NewExperimentSpecification(ced *experimentation.CreateExperimentData, now time.Time) (*ExperimentSpecification, error) {
+func NewExperimentSpecification(ced *experimentationv1.CreateExperimentData, now time.Time) (*ExperimentSpecification, error) {
 	var runId = ced.RunId
 	// If the run identifier is not provided, generate one
 	if runId == "" {
@@ -68,7 +68,7 @@ func NewExperimentSpecification(ced *experimentation.CreateExperimentData, now t
 	}, nil
 }
 
-func (es *ExperimentSpecification) toExperiment() (*experimentation.Experiment, error) {
+func (es *ExperimentSpecification) toExperiment() (*experimentationv1.Experiment, error) {
 	startTimestamp, err := ptypes.TimestampProto(es.StartTime)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "%v", err)
@@ -82,7 +82,7 @@ func (es *ExperimentSpecification) toExperiment() (*experimentation.Experiment, 
 		}
 	}
 
-	return &experimentation.Experiment{
+	return &experimentationv1.Experiment{
 		RunId:     es.RunId,
 		StartTime: startTimestamp,
 		EndTime:   endTimestamp,

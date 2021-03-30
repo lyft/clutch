@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 func TestExperimentSpecificationInitialization(t *testing.T) {
@@ -120,7 +120,7 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 		tt := tt
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
 			t.Parallel()
-			ced := &experimentation.CreateExperimentData{RunId: tt.runId, StartTime: tt.startTime, EndTime: tt.endTime, Config: tt.Config}
+			ced := &experimentationv1.CreateExperimentData{RunId: tt.runId, StartTime: tt.startTime, EndTime: tt.endTime, Config: tt.Config}
 			es, err := NewExperimentSpecification(ced, tt.now)
 			if err != nil {
 				a.Equal(tt.expectedError, err)
