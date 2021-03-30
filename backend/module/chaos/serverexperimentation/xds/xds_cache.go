@@ -27,7 +27,7 @@ func PeriodicallyRefreshCache(s *Server) {
 }
 
 func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCache gcpCacheV3.SnapshotCache, ttl *time.Duration, rtdsConfig *RTDSConfig, ecdsConfig *ECDSConfig, logger *zap.SugaredLogger) {
-	allRunningExperiments, err := storer.GetExperiments(ctx, []string{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"}, experimentation.GetExperimentsRequest_STATUS_RUNNING)
+	allRunningExperiments, err := storer.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig", experimentation.GetExperimentsRequest_STATUS_RUNNING)
 	if err != nil {
 		logger.Errorw("Failed to get data from experiments store", "error", err)
 

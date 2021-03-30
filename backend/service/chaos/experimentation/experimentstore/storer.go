@@ -26,12 +26,11 @@ const Name = "clutch.service.chaos.experimentation.store"
 // Storer stores experiment data
 type Storer interface {
 	CreateExperiment(context.Context, *any.Any, *time.Time, *time.Time) (*experimentation.Experiment, error)
-	CancelExperimentRun(context.Context, uint64) error
-	GetExperiments(ctx context.Context, configTypes []string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
+	CancelExperimentRun(ctx context.Context, id uint64, reason string) error
+	GetExperiments(ctx context.Context, configTypes string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
 	GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error)
 	RegisterTransformation(transformation Transformation) error
-	TerminateExperiment(ctx context.Context, id uint64, errorReason string) error
 	Close()
 }
 
@@ -40,6 +39,8 @@ type storer struct {
 	logger      *zap.SugaredLogger
 	transformer *Transformer
 }
+
+var _ Storer = (*storer)(nil)
 
 // New returns a new NewExperimentStore instance.
 func New(_ *any.Any, logger *zap.Logger, _ tally.Scope) (service.Service, error) {
@@ -132,24 +133,17 @@ func (s *storer) CreateExperiment(ctx context.Context, config *any.Any, startTim
 	}, nil
 }
 
-func (s *storer) CancelExperimentRun(ctx context.Context, id uint64) error {
-	sql :=
-		`UPDATE experiment_run 
-         SET cancellation_time = NOW()
-         WHERE id = $1 AND cancellation_time IS NULL AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
-
-	_, err := s.db.ExecContext(ctx, sql, id)
-	return err
-}
-
-func (s *storer) TerminateExperimentRun(ctx context.Context, id uint64, terminationReason string) error {
+func (s *storer) CancelExperimentRun(ctx context.Context, id uint64, reason string) error {
+	if len(reason) > 32 {
+		reason = reason[0:32]
+	}
 	sql :=
 		`UPDATE experiment_run 
          SET cancellation_time = NOW()
 		 SET termination_reason = $2
          WHERE id = $1 AND cancellation_time IS NULL AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
 
-	_, err := s.db.ExecContext(ctx, sql, id, terminationReason)
+	_, err := s.db.ExecContext(ctx, sql, id, reason)
 	return err
 }
 

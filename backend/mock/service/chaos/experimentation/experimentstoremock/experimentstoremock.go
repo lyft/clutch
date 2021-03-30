@@ -22,19 +22,21 @@ type MockStorer struct {
 	GetExperimentArguments getExperimentArguments
 }
 
+var _ experimentstore.Storer = (*MockStorer)(nil)
+
 type getExperimentArguments struct {
-	ConfigType []string
+	ConfigType string
 }
 
 func (fs *MockStorer) CreateExperiment(ctx context.Context, config *any.Any, startTime *time.Time, endTime *time.Time) (*experimentation.Experiment, error) {
 	return nil, nil
 }
 
-func (fs *MockStorer) CancelExperimentRun(ctx context.Context, id uint64) error {
+func (fs *MockStorer) CancelExperimentRun(ctx context.Context, id uint64, terminationReason string) error {
 	return nil
 }
 
-func (fs *MockStorer) GetExperiments(ctx context.Context, configTypes []string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
+func (fs *MockStorer) GetExperiments(ctx context.Context, configTypes string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
 	fs.GetExperimentArguments = getExperimentArguments{ConfigType: configTypes}
 	return nil, nil
 }

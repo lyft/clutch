@@ -2,7 +2,6 @@ package terminator
 
 import (
 	"context"
-	"errors"
 	"sync"
 	"testing"
 	"time"
@@ -46,7 +45,7 @@ func TestTerminator(t *testing.T) {
 
 	awaitGaugeValue(ctx, t, testScope, "active_routines", 1)
 
-	es, err := store.GetExperiments(ctx, []string{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"}, experimentationv1.GetExperimentsRequest_STATUS_RUNNING)
+	es, err := store.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig", experimentationv1.GetExperimentsRequest_STATUS_RUNNING)
 	assert.NoError(t, err)
 	assert.Len(t, es, 1)
 
@@ -56,7 +55,7 @@ func TestTerminator(t *testing.T) {
 	awaitGaugeValue(ctx, t, testScope, "active_routines", 0)
 	assert.Equal(t, int64(1), testScope.Snapshot().Counters()["terminations+"].Value())
 
-	es, err = store.GetExperiments(ctx, []string{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"}, experimentationv1.GetExperimentsRequest_STATUS_RUNNING)
+	es, err = store.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig", experimentationv1.GetExperimentsRequest_STATUS_RUNNING)
 	assert.NoError(t, err)
 	assert.Len(t, es, 0)
 }
@@ -107,15 +106,15 @@ type testCriteria struct {
 	sync.Mutex
 }
 
-func (t *testCriteria) ShouldTerminate(experimentStarted time.Time, config interface{}) error {
+func (t *testCriteria) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig *ptypes.DynamicAny) (string, error) {
 	t.Lock()
 	defer t.Unlock()
 
 	if t.evaluation {
-		return errors.New("terminated")
+		return "terminated", nil
 	}
 
-	return nil
+	return "", nil
 }
 
 func (t *testCriteria) update(evaluation bool) {
@@ -126,6 +125,8 @@ func (t *testCriteria) update(evaluation bool) {
 }
 
 func awaitGaugeValue(ctx context.Context, t *testing.T, testScope tally.TestScope, name string, value float64) {
+	t.Helper()
+
 	checkTicker := time.NewTicker(100 * time.Millisecond)
 	for {
 		select {
