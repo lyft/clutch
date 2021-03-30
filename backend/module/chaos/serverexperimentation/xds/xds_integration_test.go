@@ -4,7 +4,6 @@ package xds
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
@@ -149,7 +148,7 @@ func TestEnvoyECDSFaults(t *testing.T) {
 	assert.NoError(t, err, "did not see faults enabled")
 
 	// TODO(kathan24): Test TTL by stopping the server instead of canceling the experiment. Currently, TTL is not not supported for ECDS in the upstream Envoy
-	ts.Storer.CancelExperimentRun(context.Background(), experiment.Id)
+	ts.Storer.CancelExperimentRun(context.Background(), experiment.Id, "")
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
 		timeout:        10 * time.Second,
@@ -236,13 +235,14 @@ func (t *testCriteria) start() {
 	t.startCheckingTime = true
 }
 
-func (t *testCriteria) ShouldTerminate(started time.Time, experiment interface{}) error {
+func (t *testCriteria) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig *ptypes.DynamicAny) (string, error) {
 	t.Lock()
 	defer t.Unlock()
 
+	started, _ := ptypes.Timestamp(experiment.StartTime)
 	if t.startCheckingTime && started.Add(1*time.Second).Before(time.Now()) {
-		return errors.New("timed out")
+		return "timed out", nil
 	}
 
-	return nil
+	return "", nil
 }
