@@ -28,7 +28,7 @@ type Service struct {
 	storer                      experimentstore.Storer
 	logger                      *zap.SugaredLogger
 	createExperimentStat        tally.Counter
-	createOrGetExperimentStat   tally.Counter
+	createOrGetExperimentStats  tally.Scope
 	cancelExperimentRunStat     tally.Counter
 	getExperimentsStat          tally.Counter
 	getListViewStat             tally.Counter
@@ -51,7 +51,7 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 		storer:                      experimentStore,
 		logger:                      logger.Sugar(),
 		createExperimentStat:        scope.Counter("create_experiment"),
-		createOrGetExperimentStat:   scope.Counter("create_or_get_experiment"),
+		createOrGetExperimentStats:  scope.SubScope("create_or_get_experiment"),
 		cancelExperimentRunStat:     scope.Counter("cancel_experiment_run"),
 		getExperimentsStat:          scope.Counter("get_experiments"),
 		getListViewStat:             scope.Counter("get_list_view"),
@@ -82,7 +82,7 @@ func (s *Service) CreateExperiment(ctx context.Context, req *experimentation.Cre
 }
 
 func (s *Service) CreateOrGetExperiment(ctx context.Context, req *experimentation.CreateOrGetExperimentRequest) (*experimentation.CreateOrGetExperimentResponse, error) {
-	s.createOrGetExperimentStat.Inc(1)
+	s.createOrGetExperimentStats.Counter("request").Inc(1)
 
 	es, err := experimentstore.NewExperimentSpecification(req.Data, time.Now())
 	if err != nil {
@@ -91,6 +91,16 @@ func (s *Service) CreateOrGetExperiment(ctx context.Context, req *experimentatio
 	createOrGetExperiment, err := s.storer.CreateOrGetExperiment(ctx, es)
 	if err != nil {
 		return nil, err
+	}
+
+	r := s.createOrGetExperimentStats.SubScope("result")
+	switch createOrGetExperiment.Origin {
+	case experimentation.CreateOrGetExperimentResponse_ORIGIN_UNSPECIFIED:
+		r.Counter("unspecified").Inc(1)
+	case experimentation.CreateOrGetExperimentResponse_ORIGIN_EXISTING:
+		r.Counter("get").Inc(1)
+	case experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW:
+		r.Counter("create").Inc(1)
 	}
 
 	return &experimentation.CreateOrGetExperimentResponse{

@@ -17,10 +17,9 @@ message CreateExperimentData {
   string run_id = 1;
   // The experiment configuration specific to the type of experiment.
   google.protobuf.Any config = 2;
-  // The time when the experiment should start. If not provided, defaults to 'now'. It cannot be before
-  // current time.
+  // The time when the experiment should start. If not provided, defaults to 'now'. It cannot be in the past.
   google.protobuf.Timestamp start_time = 3;
-  // The time when the experiment should end, If not provided, the experiment runs indefinitely unless it's
-  // manually stopped. If provided, it has to be after `start_time`.
+  // The time when the experiment should end, If not provided, the experiment runs until it's manually stopped.
+  // If provided, it has to be after `start_time`.
   google.protobuf.Timestamp end_time = 4;
 }

@@ -19,11 +19,12 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ExperimentsAPIClient interface {
 	// Create a new experiment using the provided experiment data. It fails if an experiment run
-	// with a provided run identifier already exists.
+	// with the provided run identifier already exists. See `CreateExperimentData` for more details.
 	CreateExperiment(ctx context.Context, in *CreateExperimentRequest, opts ...grpc.CallOption) (*CreateExperimentResponse, error)
 	// Create a new experiment using the provided experiment data. It succeeds even if an experiment run
-	// with a provided run identifier already exists. In this case, the rest of request's paylaod is ignored
-	// and existing experiment with a matching run identifier is returned.
+	// with the provided run identifier already exists. In this case, the rest of request's payload is ignored
+	// and existing experiment with a matching run identifier is returned. See `CreateExperimentData` for more
+	// details.
 	CreateOrGetExperiment(ctx context.Context, in *CreateOrGetExperimentRequest, opts ...grpc.CallOption) (*CreateOrGetExperimentResponse, error)
 	CancelExperimentRun(ctx context.Context, in *CancelExperimentRunRequest, opts ...grpc.CallOption) (*CancelExperimentRunResponse, error)
 	GetExperiments(ctx context.Context, in *GetExperimentsRequest, opts ...grpc.CallOption) (*GetExperimentsResponse, error)
@@ -98,11 +99,12 @@ func (c *experimentsAPIClient) GetExperimentRunDetails(ctx context.Context, in *
 // for forward compatibility
 type ExperimentsAPIServer interface {
 	// Create a new experiment using the provided experiment data. It fails if an experiment run
-	// with a provided run identifier already exists.
+	// with the provided run identifier already exists. See `CreateExperimentData` for more details.
 	CreateExperiment(context.Context, *CreateExperimentRequest) (*CreateExperimentResponse, error)
 	// Create a new experiment using the provided experiment data. It succeeds even if an experiment run
-	// with a provided run identifier already exists. In this case, the rest of request's paylaod is ignored
-	// and existing experiment with a matching run identifier is returned.
+	// with the provided run identifier already exists. In this case, the rest of request's payload is ignored
+	// and existing experiment with a matching run identifier is returned. See `CreateExperimentData` for more
+	// details.
 	CreateOrGetExperiment(context.Context, *CreateOrGetExperimentRequest) (*CreateOrGetExperimentResponse, error)
 	CancelExperimentRun(context.Context, *CancelExperimentRunRequest) (*CancelExperimentRunResponse, error)
 	GetExperiments(context.Context, *GetExperimentsRequest) (*GetExperimentsResponse, error)

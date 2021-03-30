@@ -61,7 +61,7 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 			endTime:           farFutureTimestamp,
 			now:               now,
 			Config:            &any.Any{},
-			expectedError:     status.Error(codes.InvalidArgument, "provided experiment runId (1231231231^) contained unallowed characters and was not matched by \"^[A-Za-z0-9-._~]+$\" regular expresion"),
+			expectedError:     status.Error(codes.InvalidArgument, "provided experiment runId (1231231231^) contained forbidden characters and was not matched by \"^[A-Za-z0-9-._~]+$\" regular expresion"),
 			expectedStartTime: future,
 		},
 		{

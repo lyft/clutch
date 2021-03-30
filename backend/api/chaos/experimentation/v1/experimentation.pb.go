@@ -122,6 +122,7 @@ type CreateExperimentRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// The data specifying the experiment to create. See `CreateExperiment` for more details.
 	Data *CreateExperimentData `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
 
@@ -169,6 +170,7 @@ type CreateExperimentResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// The created experiment.
 	Experiment *Experiment `protobuf:"bytes,1,opt,name=experiment,proto3" json:"experiment,omitempty"`
 }
 
@@ -216,6 +218,7 @@ type CreateOrGetExperimentRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// The data specifying the experiment to fetch or create. See `CreateOrGetExperiment` for more details.
 	Data *CreateExperimentData `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
 
@@ -263,8 +266,11 @@ type CreateOrGetExperimentResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Experiment *Experiment                          `protobuf:"bytes,1,opt,name=experiment,proto3" json:"experiment,omitempty"`
-	Origin     CreateOrGetExperimentResponse_Origin `protobuf:"varint,2,opt,name=origin,proto3,enum=clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse_Origin" json:"origin,omitempty"`
+	// The created or fetched experiment that was requested by a caller. See `origin` to learn more
+	// about how to check whether a new experiment was created as the result of request's execution.
+	Experiment *Experiment `protobuf:"bytes,1,opt,name=experiment,proto3" json:"experiment,omitempty"`
+	// The type of returned experiment - either a newly created experiment or an existing one.
+	Origin CreateOrGetExperimentResponse_Origin `protobuf:"varint,2,opt,name=origin,proto3,enum=clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse_Origin" json:"origin,omitempty"`
 }
 
 func (x *CreateOrGetExperimentResponse) Reset() {

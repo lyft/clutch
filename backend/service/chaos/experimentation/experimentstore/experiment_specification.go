@@ -31,7 +31,7 @@ func NewExperimentSpecification(ced *experimentationv1.CreateExperimentData, now
 	if runId == "" {
 		runId = id.NewID().String()
 	} else if !regexp.MustCompile(runIdRegExp).MatchString(runId) {
-		return nil, status.Errorf(codes.InvalidArgument, "provided experiment runId (%v) contained unallowed characters and was not matched by \"%v\" regular expresion", runId, runIdRegExp)
+		return nil, status.Errorf(codes.InvalidArgument, "provided experiment runId (%v) contained forbidden characters and was not matched by \"%v\" regular expresion", runId, runIdRegExp)
 	}
 
 	if ced.Config == nil {
