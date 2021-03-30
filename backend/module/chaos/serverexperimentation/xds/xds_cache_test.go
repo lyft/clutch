@@ -21,6 +21,7 @@ import (
 	"github.com/golang/protobuf/ptypes/duration"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/stretchr/testify/assert"
+	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
 
@@ -261,7 +262,10 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 
 func TestRefreshCache(t *testing.T) {
 	testCluster := "clusterA"
-	s := experimentstoremock.MockStorer{}
+	s := experimentstoremock.SimpleStorer{}
+
+	scope := tally.NewTestScope("", nil)
+
 	rtdsConfig := RTDSConfig{
 		layerName:     "test_layer",
 		ingressPrefix: "ingress",
@@ -273,9 +277,49 @@ func TestRefreshCache(t *testing.T) {
 		enabledClusters: map[string]struct{}{testCluster: struct{}{}},
 	}
 
+	now := time.Now()
+	config := serverexperimentation.HTTPFaultConfig{
+		Fault: &serverexperimentation.HTTPFaultConfig_AbortFault{
+			AbortFault: &serverexperimentation.AbortFault{
+				Percentage: &serverexperimentation.FaultPercentage{
+					Percentage: 10,
+				},
+				AbortStatus: &serverexperimentation.FaultAbortStatus{
+					HttpStatusCode: 503,
+				},
+			},
+		},
+		FaultTargeting: &serverexperimentation.FaultTargeting{
+			Enforcer: &serverexperimentation.FaultTargeting_UpstreamEnforcing{
+				UpstreamEnforcing: &serverexperimentation.UpstreamEnforcing{
+					UpstreamType: &serverexperimentation.UpstreamEnforcing_UpstreamCluster{
+						UpstreamCluster: &serverexperimentation.SingleCluster{
+							Name: "cluster",
+						},
+					},
+					DownstreamType: &serverexperimentation.UpstreamEnforcing_DownstreamCluster{
+						DownstreamCluster: &serverexperimentation.SingleCluster{
+							Name: "cluster",
+						},
+					},
+				},
+			},
+		},
+	}
+	a, err := ptypes.MarshalAny(&config)
+	assert.NoError(t, err)
+
+	_, err = s.CreateExperiment(context.Background(), a, &now, &now)
+	assert.NoError(t, err)
+
 	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
-	refreshCache(context.Background(), &s, testCache, nil, &rtdsConfig, &ecdsConfig, nil)
-	assert.Equal(t, s.GetExperimentArguments.ConfigType, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig")
+	refreshCache(context.Background(), &s, testCache, nil, &rtdsConfig, &ecdsConfig, scope, zap.NewNop().Sugar())
+
+	experiments, err := s.GetExperiments(context.Background(), "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig", experimentation.GetExperimentsRequest_STATUS_RUNNING)
+	assert.NoError(t, err)
+
+	assert.Equal(t, 1, len(experiments))
+	assert.Equal(t, float64(1), scope.Snapshot().Gauges()["active_faults+"].Value())
 }
 
 func TestComputeVersionReturnValue(t *testing.T) {
