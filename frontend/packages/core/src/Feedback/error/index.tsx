@@ -76,7 +76,7 @@ const Error = ({ subject: error, onRetry }: ErrorProps) => {
     }).length > 0;
 
   return (
-    <>
+    <div>
       <ErrorAlert
         severity="error"
         title={error.status.text}
@@ -94,7 +94,7 @@ const Error = ({ subject: error, onRetry }: ErrorProps) => {
         </ErrorSummaryContainer>
       </ErrorAlert>
       {hasDetails && <ErrorDetails error={error} />}
-    </>
+    </div>
   );
 };
 
