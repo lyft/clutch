@@ -63,7 +63,7 @@ func (m *monitor) Run(ctx context.Context) {
 		// fairness, as checking the termination conditions for one experiment should not be delaying the checks for another experiment
 		// unless we're under very heavy load.
 		go func(configType string) {
-			trackedExperiments := map[uint64]context.CancelFunc{}
+			trackedExperiments := map[string]context.CancelFunc{}
 			ticker := time.NewTicker(m.outerLoopInterval)
 
 			for {
@@ -95,14 +95,14 @@ func (m *monitor) Run(ctx context.Context) {
 
 // monitorNewExperiments iterates over all the provided experiments, spawning a goroutine to montior each experiment that
 // doesn't already have a monitoring routine. Returns a set containing all the active experiment ids for further processing.
-func (m *monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trackedExperiments map[uint64]context.CancelFunc) map[uint64]struct{} {
+func (m *monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trackedExperiments map[string]context.CancelFunc) map[string]struct{} {
 	// For each active experiment, create a monitoring goroutine if necessary.
-	activeExperiments := map[uint64]struct{}{}
+	activeExperiments := map[string]struct{}{}
 	for _, e := range es {
-		activeExperiments[e.Id] = struct{}{}
-		if _, ok := trackedExperiments[e.Id]; !ok {
+		activeExperiments[e.RunId] = struct{}{}
+		if _, ok := trackedExperiments[e.RunId]; !ok {
 			ctx, cancel := context.WithCancel(context.Background())
-			trackedExperiments[e.Id] = cancel
+			trackedExperiments[e.RunId] = cancel
 
 			m.activeMonitoringRoutines.inc()
 			go func() {
@@ -121,7 +121,7 @@ func (m *monitor) monitorSingleExperiment(ctx context.Context, e *experimentatio
 	dany := &ptypes.DynamicAny{}
 	err := ptypes.UnmarshalAny(e.Config, dany)
 	if err != nil {
-		m.log.Errorw("failed to unmarshal experiment", "id", e.Id)
+		m.log.Errorw("failed to unmarshal experiment", "id", e.RunId)
 		m.marshallingErrors.Inc(1)
 		return
 	}
@@ -140,17 +140,17 @@ func (m *monitor) monitorSingleExperiment(ctx context.Context, e *experimentatio
 				terminationReason, err := c.ShouldTerminate(e, dany)
 				// TODO(snowp): The logs here might get spammy, rate limit or terminate montioring routine somehow?
 				if err != nil {
-					m.log.Errorw("error while evaluating termination criteria", "id", e.Id, "error", err)
+					m.log.Errorw("error while evaluating termination criteria", "id", e.RunId, "error", err)
 					continue
 				}
 
 				if terminationReason != "" {
-					err = m.store.CancelExperimentRun(context.Background(), e.Id, terminationReason)
+					err = m.store.CancelExperimentRun(context.Background(), e.RunId, terminationReason)
 					if err != nil {
-						m.log.Errorw("failed to terminate experiment", "err", err, "experimentId", e.Id)
+						m.log.Errorw("failed to terminate experiment", "err", err, "experimentId", e.RunId)
 						continue
 					}
-					m.log.Errorw("terminated experiment", "experimentId", e.Id)
+					m.log.Errorw("terminated experiment", "experimentId", e.RunId)
 					m.terminationCount.Inc(1)
 					terminated = true
 				}

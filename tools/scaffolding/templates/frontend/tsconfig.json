@@ -13,13 +13,17 @@
     "preserveConstEnums": true,
     "rootDir": "./src",
     "target": "ES2018",
-    "types": ["node"]
+    "types": ["jest", "node", "long"],
   },
   "include": [
     "src/**/*",
   ],
   "exclude": [
     "node_modules",
-    "src/tests/**/*"
+    "**/*.stories.ts*",
+    "**/*.stories.js*",
+    "**/*.test.js*",
+    "**/*.test.ts*",
+    "**/dist/*"
   ]
 }

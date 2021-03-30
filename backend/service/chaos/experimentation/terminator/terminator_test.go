@@ -14,6 +14,7 @@ import (
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 func TestTerminator(t *testing.T) {
@@ -61,7 +62,6 @@ func TestTerminator(t *testing.T) {
 }
 
 func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experimentstoremock.SimpleStorer) *experimentationv1.Experiment {
-	now := time.Now()
 	config := serverexperimentationv1.HTTPFaultConfig{
 		Fault: &serverexperimentationv1.HTTPFaultConfig_AbortFault{
 			AbortFault: &serverexperimentationv1.AbortFault{
@@ -94,7 +94,12 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experiments
 	a, err := ptypes.MarshalAny(&config)
 	assert.NoError(t, err)
 
-	experiment, err := storer.CreateExperiment(context.Background(), a, &now, &now)
+	endTime := time.Now().Add(5 * time.Minute)
+	experiment, err := storer.CreateExperiment(context.Background(), &experimentstore.ExperimentSpecification{
+		Config:    a,
+		StartTime: time.Now(),
+		EndTime:   &endTime,
+	})
 	assert.NoError(t, err)
 
 	return experiment

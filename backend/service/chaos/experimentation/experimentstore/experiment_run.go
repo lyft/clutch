@@ -10,7 +10,7 @@ import (
 )
 
 type ExperimentRun struct {
-	Id               uint64
+	Id               string
 	StartTime        time.Time
 	EndTime          sql.NullTime
 	CancellationTime sql.NullTime
@@ -33,7 +33,7 @@ func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Pro
 		{
 			Id:    "run_identifier",
 			Label: "Run Identifier",
-			Value: &experimentation.Property_IntValue{IntValue: int64(er.Id)},
+			Value: &experimentation.Property_StringValue{StringValue: er.Id},
 		},
 		{
 			Id:    "status",

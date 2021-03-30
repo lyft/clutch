@@ -4,26 +4,41 @@ package clutch.chaos.experimentation.v1;
 
 import "api/v1/annotations.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/any.proto";
-import "google/protobuf/timestamp.proto";
 
 import "chaos/experimentation/v1/experiment.proto";
+import "chaos/experimentation/v1/create_experiment_data.proto";
 import "chaos/experimentation/v1/list_view_item.proto";
 import "chaos/experimentation/v1/experiment_run_details.proto";
 
 option go_package = "github.com/lyft/clutch/backend/api/chaos/experimentation/v1;experimentationv1";
 
 message CreateExperimentRequest {
-  // The experiment configuration specific to the type of experiment
-  google.protobuf.Any config = 1;
-  // The time when the experiment should start. If unspecified, defaults to 'now'
-  google.protobuf.Timestamp start_time = 2;
-  // The time when the experiment should end, If unspecified, the experiment runs indefinitely.
-  google.protobuf.Timestamp end_time = 3;
+  // The data specifying the experiment to create. See `CreateExperiment` for more details.
+  CreateExperimentData data = 1;
 }
 
 message CreateExperimentResponse {
+  // The created experiment.
   Experiment experiment = 1;
+}
+
+message CreateOrGetExperimentRequest {
+  // The data specifying the experiment to fetch or create. See `CreateOrGetExperiment` for more details.
+  CreateExperimentData data = 1;
+}
+
+message CreateOrGetExperimentResponse {
+  enum Origin {
+    ORIGIN_UNSPECIFIED = 0;
+    ORIGIN_EXISTING = 1;
+    ORIGIN_NEW = 2;
+  }
+
+  // The created or fetched experiment that was requested by a caller. See `origin` to learn more
+  // about how to check whether a new experiment was created as the result of request's execution.
+  Experiment experiment = 1;
+  // The type of returned experiment - either a newly created experiment or an existing one.
+  Origin origin = 2;
 }
 
 message GetExperimentsRequest {
@@ -46,7 +61,7 @@ message CancelExperimentRunRequest {
     pattern : "{id}"
   };
 
-  uint64 id = 1;
+  string id = 1;
 }
 
 message CancelExperimentRunResponse {
@@ -65,7 +80,7 @@ message GetExperimentRunDetailsRequest {
     pattern : "{id}"
   };
 
-  uint64 id = 1;
+  string id = 1;
 }
 
 message GetExperimentRunDetailsResponse {
@@ -74,9 +89,22 @@ message GetExperimentRunDetailsResponse {
 
 // Simple CRUD API for experiments
 service ExperimentsAPI {
+  // Create a new experiment using the provided experiment data. It fails if an experiment run
+  // with the provided run identifier already exists. See `CreateExperimentData` for more details.
   rpc CreateExperiment(CreateExperimentRequest) returns (CreateExperimentResponse) {
     option (google.api.http) = {
       post : "/v1/chaos/experimentation/createExperiment"
+      body : "*"
+    };
+    option (clutch.api.v1.action).type = CREATE;
+  }
+  // Create a new experiment using the provided experiment data. It succeeds even if an experiment run
+  // with the provided run identifier already exists. In this case, the rest of request's payload is ignored
+  // and existing experiment with a matching run identifier is returned. See `CreateExperimentData` for more
+  // details.
+  rpc CreateOrGetExperiment(CreateOrGetExperimentRequest) returns (CreateOrGetExperimentResponse) {
+    option (google.api.http) = {
+      post : "/v1/chaos/experimentation/createOrGetExperiment"
       body : "*"
     };
     option (clutch.api.v1.action).type = CREATE;
