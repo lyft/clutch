@@ -142,9 +142,9 @@ func TestCancelExperimentRun(t *testing.T) {
 	defer es.Close()
 
 	expected := mock.ExpectExec(regexp.QuoteMeta(`UPDATE experiment_run SET cancellation_time = NOW() SET termination_reason = $2 WHERE id = $1 AND cancellation_time IS NULL`))
-	expected.WithArgs([]driver.Value{"1", ""}...).WillReturnResult(sqlmock.NewResult(1, 1))
+	expected.WithArgs([]driver.Value{1, ""}...).WillReturnResult(sqlmock.NewResult(1, 1))
 
-	err = es.CancelExperimentRun(context.Background(), "1", "")
+	err = es.CancelExperimentRun(context.Background(), 1, "")
 	assert.NoError(err)
 }
 

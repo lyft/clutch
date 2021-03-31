@@ -46,20 +46,7 @@ func (s *SimpleStorer) CreateExperiment(ctx context.Context, config *anypb.Any, 
 	return s.experiments[len(s.experiments)-1].toProto(), nil
 }
 
-func (s *SimpleStorer) CreateOrGetExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentstore.CreateOrGetExperimentResult, error) {
-	experiment, err := s.CreateExperiment(ctx, es)
-	if err != nil {
-		return nil, err
-	}
-
-	return &experimentstore.CreateOrGetExperimentResult{
-		Experiment: experiment,
-		Origin:     experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW,
-	}, nil
-}
-
-
-func (s *SimpleStorer) CancelExperimentRun(ctx context.Context, runId string) error {
+func (s *SimpleStorer) CancelExperimentRun(ctx context.Context, id uint64, terminationReason string) error {
 	s.Lock()
 	defer s.Unlock()
 

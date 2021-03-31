@@ -32,10 +32,7 @@ func (fs *MockStorer) CreateExperiment(ctx context.Context, config *any.Any, sta
 	return nil, nil
 }
 
-func (fs *MockStorer) CreateOrGetExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentstore.CreateOrGetExperimentResult, error) {
-	return nil, nil
-
-func (fs *MockStorer) CancelExperimentRun(ctx context.Context, id string, terminationReason string) error {
+func (fs *MockStorer) CancelExperimentRun(ctx context.Context, id uint64, terminationReason string) error {
 	return nil
 }
 

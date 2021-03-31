@@ -25,9 +25,8 @@ const Name = "clutch.service.chaos.experimentation.store"
 
 // Storer stores experiment data
 type Storer interface {
-	CreateExperiment(context.Context, *ExperimentSpecification) (*experimentation.Experiment, error)
-	CreateOrGetExperiment(context.Context, *ExperimentSpecification) (*CreateOrGetExperimentResult, error)
-	CancelExperimentRun(ctx context.Context, id string, terminationReason string) error
+	CreateExperiment(context.Context, *any.Any, *time.Time, *time.Time) (*experimentation.Experiment, error)
+	CancelExperimentRun(ctx context.Context, id uint64, terminationReason string) error
 	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
 	GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error)
@@ -134,7 +133,7 @@ func (s *storer) CreateExperiment(ctx context.Context, config *any.Any, startTim
 	}, nil
 }
 
-func (s *storer) CancelExperimentRun(ctx context.Context, id string, reason string) error {
+func (s *storer) CancelExperimentRun(ctx context.Context, id uint64, reason string) error {
 	if len(reason) > 32 {
 		reason = reason[0:32]
 	}

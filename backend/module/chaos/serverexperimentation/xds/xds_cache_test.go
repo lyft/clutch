@@ -28,7 +28,6 @@ import (
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 const (
@@ -278,6 +277,7 @@ func TestRefreshCache(t *testing.T) {
 		enabledClusters: map[string]struct{}{testCluster: {}},
 	}
 
+	now := time.Now()
 	config := serverexperimentation.HTTPFaultConfig{
 		Fault: &serverexperimentation.HTTPFaultConfig_AbortFault{
 			AbortFault: &serverexperimentation.AbortFault{
@@ -309,12 +309,7 @@ func TestRefreshCache(t *testing.T) {
 	a, err := ptypes.MarshalAny(&config)
 	assert.NoError(t, err)
 
-	future := time.Now().Add(5 * time.Minute)
-	_, err = s.CreateExperiment(context.Background(), &experimentstore.ExperimentSpecification{
-		StartTime: time.Now(),
-		EndTime:   &future,
-		Config:    a,
-	})
+	_, err = s.CreateExperiment(context.Background(), a, &now, &now)
 	assert.NoError(t, err)
 
 	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)
