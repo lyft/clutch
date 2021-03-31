@@ -130,18 +130,18 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *
 				c.log.Warn("UpdateCacheRequest action is not implemented", zap.String("action", obj.Action.String()))
 			}
 
-			if len(batchInsert) >= int(c.config.Cache.BatchInsertSize) {
+			if len(batchInsert) >= c.batchInsertSize {
 				if err := c.setCache(ctx, batchInsert); err != nil {
 					c.log.Error("Error setting cache", zap.Error(err))
 				}
-				batchInsert = []*topologyv1.Resource{}
+				batchInsert = batchInsert[:0]
 			}
-		case <-time.After(time.Second * 30):
+		case <-time.After(c.batchInsertFlush):
 			if len(batchInsert) > 0 {
 				if err := c.setCache(ctx, batchInsert); err != nil {
 					c.log.Error("Error setting cache", zap.Error(err))
 				}
-				batchInsert = []*topologyv1.Resource{}
+				batchInsert = batchInsert[:0]
 			}
 		}
 	}
