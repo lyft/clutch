@@ -33,6 +33,14 @@ jobs:
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
+      - name: build cache
+        if: github.ref != 'refs/heads/main'
+        id: build-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/dist
+          key: ${{ runner.os }}-build-
       - name: build
         run: yarn --cwd frontend build
   lint:
