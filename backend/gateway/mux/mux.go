@@ -10,7 +10,6 @@ import (
 	"net/url"
 	"path"
 	"regexp"
-	"strconv"
 	"strings"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -166,14 +165,7 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 
 	if redirects := md.HeaderMD.Get("Location"); len(redirects) > 0 {
 		w.Header().Set("Location", redirects[0])
-
-		code := http.StatusFound
-		if st := md.HeaderMD.Get("Location-Status"); len(st) > 0 {
-			if newCode, err := strconv.Atoi(st[0]); err != nil {
-				code = newCode
-			}
-		}
-		w.WriteHeader(code)
+		w.WriteHeader(http.StatusFound)
 	}
 	return nil
 }
