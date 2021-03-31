@@ -23,7 +23,7 @@ service AuthnAPI {
     option (clutch.api.v1.action).type = CREATE;
   }
 
-  rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse){
+  rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse) {
     option (google.api.http) = {
       get : "/v1/authn/createToken"
     };
