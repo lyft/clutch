@@ -7,6 +7,7 @@ package authn
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/uber-go/tally"
@@ -51,4 +52,5 @@ type Provider interface {
 	Verify(ctx context.Context, rawIDToken string) (*Claims, error)
 	GetAuthCodeURL(ctx context.Context, state string) (string, error)
 	Exchange(ctx context.Context, code string) (token *oauth2.Token, err error)
+	CreateToken(ctx context.Context, subject string, expiry time.Duration) (token *oauth2.Token, err error)
 }

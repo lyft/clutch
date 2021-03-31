@@ -2327,6 +2327,39 @@ export const clutch = $root.clutch = (() => {
                  * @variation 2
                  */
 
+                /**
+                 * Callback as used by {@link clutch.authn.v1.AuthnAPI#createToken}.
+                 * @memberof clutch.authn.v1.AuthnAPI
+                 * @typedef CreateTokenCallback
+                 * @type {function}
+                 * @param {Error|null} error Error, if any
+                 * @param {clutch.authn.v1.CreateTokenResponse} [response] CreateTokenResponse
+                 */
+
+                /**
+                 * Calls CreateToken.
+                 * @function createToken
+                 * @memberof clutch.authn.v1.AuthnAPI
+                 * @instance
+                 * @param {clutch.authn.v1.ICreateTokenRequest} request CreateTokenRequest message or plain object
+                 * @param {clutch.authn.v1.AuthnAPI.CreateTokenCallback} callback Node-style callback called with the error, if any, and CreateTokenResponse
+                 * @returns {undefined}
+                 * @variation 1
+                 */
+                Object.defineProperty(AuthnAPI.prototype.createToken = function createToken(request, callback) {
+                    return this.rpcCall(createToken, $root.clutch.authn.v1.CreateTokenRequest, $root.clutch.authn.v1.CreateTokenResponse, request, callback);
+                }, "name", { value: "CreateToken" });
+
+                /**
+                 * Calls CreateToken.
+                 * @function createToken
+                 * @memberof clutch.authn.v1.AuthnAPI
+                 * @instance
+                 * @param {clutch.authn.v1.ICreateTokenRequest} request CreateTokenRequest message or plain object
+                 * @returns {Promise<clutch.authn.v1.CreateTokenResponse>} Promise
+                 * @variation 2
+                 */
+
                 return AuthnAPI;
             })();
 
@@ -2780,6 +2813,229 @@ export const clutch = $root.clutch = (() => {
                 };
 
                 return CallbackResponse;
+            })();
+
+            v1.CreateTokenRequest = (function() {
+
+                /**
+                 * Properties of a CreateTokenRequest.
+                 * @memberof clutch.authn.v1
+                 * @interface ICreateTokenRequest
+                 * @property {string|null} [subject] CreateTokenRequest subject
+                 * @property {google.protobuf.IDuration|null} [expiry] CreateTokenRequest expiry
+                 */
+
+                /**
+                 * Constructs a new CreateTokenRequest.
+                 * @memberof clutch.authn.v1
+                 * @classdesc Represents a CreateTokenRequest.
+                 * @implements ICreateTokenRequest
+                 * @constructor
+                 * @param {clutch.authn.v1.ICreateTokenRequest=} [properties] Properties to set
+                 */
+                function CreateTokenRequest(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * CreateTokenRequest subject.
+                 * @member {string} subject
+                 * @memberof clutch.authn.v1.CreateTokenRequest
+                 * @instance
+                 */
+                CreateTokenRequest.prototype.subject = "";
+
+                /**
+                 * CreateTokenRequest expiry.
+                 * @member {google.protobuf.IDuration|null|undefined} expiry
+                 * @memberof clutch.authn.v1.CreateTokenRequest
+                 * @instance
+                 */
+                CreateTokenRequest.prototype.expiry = null;
+
+                /**
+                 * Verifies a CreateTokenRequest message.
+                 * @function verify
+                 * @memberof clutch.authn.v1.CreateTokenRequest
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                CreateTokenRequest.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.subject != null && message.hasOwnProperty("subject"))
+                        if (!$util.isString(message.subject))
+                            return "subject: string expected";
+                    if (message.expiry != null && message.hasOwnProperty("expiry")) {
+                        let error = $root.google.protobuf.Duration.verify(message.expiry);
+                        if (error)
+                            return "expiry." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a CreateTokenRequest message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.authn.v1.CreateTokenRequest
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.authn.v1.CreateTokenRequest} CreateTokenRequest
+                 */
+                CreateTokenRequest.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.authn.v1.CreateTokenRequest)
+                        return object;
+                    let message = new $root.clutch.authn.v1.CreateTokenRequest();
+                    if (object.subject != null)
+                        message.subject = String(object.subject);
+                    if (object.expiry != null) {
+                        if (typeof object.expiry !== "object")
+                            throw TypeError(".clutch.authn.v1.CreateTokenRequest.expiry: object expected");
+                        message.expiry = $root.google.protobuf.Duration.fromObject(object.expiry);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a CreateTokenRequest message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.authn.v1.CreateTokenRequest
+                 * @static
+                 * @param {clutch.authn.v1.CreateTokenRequest} message CreateTokenRequest
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CreateTokenRequest.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.subject = "";
+                        object.expiry = null;
+                    }
+                    if (message.subject != null && message.hasOwnProperty("subject"))
+                        object.subject = message.subject;
+                    if (message.expiry != null && message.hasOwnProperty("expiry"))
+                        object.expiry = $root.google.protobuf.Duration.toObject(message.expiry, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this CreateTokenRequest to JSON.
+                 * @function toJSON
+                 * @memberof clutch.authn.v1.CreateTokenRequest
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CreateTokenRequest.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return CreateTokenRequest;
+            })();
+
+            v1.CreateTokenResponse = (function() {
+
+                /**
+                 * Properties of a CreateTokenResponse.
+                 * @memberof clutch.authn.v1
+                 * @interface ICreateTokenResponse
+                 * @property {string|null} [accessToken] CreateTokenResponse accessToken
+                 */
+
+                /**
+                 * Constructs a new CreateTokenResponse.
+                 * @memberof clutch.authn.v1
+                 * @classdesc Represents a CreateTokenResponse.
+                 * @implements ICreateTokenResponse
+                 * @constructor
+                 * @param {clutch.authn.v1.ICreateTokenResponse=} [properties] Properties to set
+                 */
+                function CreateTokenResponse(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * CreateTokenResponse accessToken.
+                 * @member {string} accessToken
+                 * @memberof clutch.authn.v1.CreateTokenResponse
+                 * @instance
+                 */
+                CreateTokenResponse.prototype.accessToken = "";
+
+                /**
+                 * Verifies a CreateTokenResponse message.
+                 * @function verify
+                 * @memberof clutch.authn.v1.CreateTokenResponse
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                CreateTokenResponse.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.accessToken != null && message.hasOwnProperty("accessToken"))
+                        if (!$util.isString(message.accessToken))
+                            return "accessToken: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a CreateTokenResponse message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.authn.v1.CreateTokenResponse
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.authn.v1.CreateTokenResponse} CreateTokenResponse
+                 */
+                CreateTokenResponse.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.authn.v1.CreateTokenResponse)
+                        return object;
+                    let message = new $root.clutch.authn.v1.CreateTokenResponse();
+                    if (object.accessToken != null)
+                        message.accessToken = String(object.accessToken);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a CreateTokenResponse message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.authn.v1.CreateTokenResponse
+                 * @static
+                 * @param {clutch.authn.v1.CreateTokenResponse} message CreateTokenResponse
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                CreateTokenResponse.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.accessToken = "";
+                    if (message.accessToken != null && message.hasOwnProperty("accessToken"))
+                        object.accessToken = message.accessToken;
+                    return object;
+                };
+
+                /**
+                 * Converts this CreateTokenResponse to JSON.
+                 * @function toJSON
+                 * @memberof clutch.authn.v1.CreateTokenResponse
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                CreateTokenResponse.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return CreateTokenResponse;
             })();
 
             return v1;

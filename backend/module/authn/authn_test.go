@@ -16,6 +16,8 @@ func TestAllRequestResponseAreRedacted(t *testing.T) {
 		&authnv1.CallbackResponse{},
 		&authnv1.LoginRequest{},
 		&authnv1.LoginResponse{},
+		&authnv1.CreateTokenRequest{},
+		&authnv1.CreateTokenResponse{},
 	}
 
 	for _, o := range obj {

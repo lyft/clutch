@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -102,6 +103,22 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 	}
 
 	return &authnv1.CallbackResponse{
+		AccessToken: token.AccessToken,
+	}, nil
+}
+
+func (a *api) CreateToken(ctx context.Context, request *authnv1.CreateTokenRequest) (*authnv1.CreateTokenResponse, error) {
+	expiry, err := ptypes.Duration(request.Expiry)
+	if err != nil {
+		return nil, err
+	}
+
+	token, err := a.svc.CreateToken(ctx, request.Subject, expiry)
+	if err != nil {
+		return nil, err
+	}
+
+	return &authnv1.CreateTokenResponse{
 		AccessToken: token.AccessToken,
 	}, nil
 }

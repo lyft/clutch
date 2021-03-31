@@ -133,6 +133,23 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 		}
 	}
 
+	return p.signNewToken(ctx, claims)
+}
+
+func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, expiry time.Duration) (*oauth2.Token, error) {
+	claims := &Claims{
+		StandardClaims: &jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(expiry).Unix(),
+			IssuedAt:  time.Now().Unix(),
+			Issuer:    clutchProvider,
+			Subject:   subject,
+		},
+	}
+
+	return p.signNewToken(ctx, claims)
+}
+
+func (p *OIDCProvider) signNewToken(ctx context.Context, claims *Claims) (*oauth2.Token, error) {
 	// Sign and issue token.
 	accessToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(p.sessionSecret))
 	if err != nil {
@@ -151,7 +168,8 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 			return nil, err
 		}
 	}
-	return t, err
+
+	return t, nil
 }
 
 type ClaimsFromOIDCTokenFunc func(ctx context.Context, t *oidc.IDToken) (*Claims, error)

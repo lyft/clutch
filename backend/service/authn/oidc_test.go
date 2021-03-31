@@ -4,6 +4,7 @@ import (
 	"context"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/oauth2"
@@ -105,6 +106,49 @@ oidc:
 	assert.NoError(t, err)
 	assert.NotNil(t, c)
 	assert.Equal(t, email, c.Subject)
+}
+
+func TestCreateNewToken(t *testing.T) {
+	cfg := &authnv1.Config{}
+	apimock.FromYAML(`
+session_secret: this_is_my_secret
+oidc:
+  issuer: http://foo.example.com
+  client_id: my_client_id
+  client_secret: my_client_secret
+  redirect_url: "http://localhost:12000/v1/authn/callback"
+  scopes:
+  - openid
+  - email
+`, cfg)
+
+	email := "user@example.com"
+
+	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	defer mockprovider.Close()
+
+	mockStorage := authnmock.NewMockStorage()
+
+	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
+
+	p, err := NewOIDCProvider(ctx, cfg, mockStorage)
+	assert.NoError(t, err)
+	assert.NotNil(t, p)
+
+	createdToken, err := p.CreateToken(ctx, "some subject", time.Duration(5 * time.Hour))
+	assert.NoError(t, err)
+	assert.NotNil(t, createdToken)
+
+	// The token should have been recorded in the database.
+	assert.Len(t, mockStorage.Tokens[clutchProvider], 1)
+	assert.Equal(t, mockStorage.Tokens[clutchProvider]["some subject"], createdToken)
+
+	claims, err := p.Verify(ctx, createdToken.AccessToken)
+	assert.NoError(t, err)
+
+	assert.NotZero(t, claims.StandardClaims.IssuedAt)
+	assert.Equal(t, claims.StandardClaims.ExpiresAt, time.Unix(claims.StandardClaims.IssuedAt, 0).Add(5 * time.Hour).Unix())
+	assert.Equal(t, claims.StandardClaims.Subject, "some subject")
 }
 
 func TestTokenRevocationFlow(t *testing.T) {

@@ -987,6 +987,20 @@ export namespace clutch {
                  * @returns Promise
                  */
                 public callback(request: clutch.authn.v1.ICallbackRequest): Promise<clutch.authn.v1.CallbackResponse>;
+
+                /**
+                 * Calls CreateToken.
+                 * @param request CreateTokenRequest message or plain object
+                 * @param callback Node-style callback called with the error, if any, and CreateTokenResponse
+                 */
+                public createToken(request: clutch.authn.v1.ICreateTokenRequest, callback: clutch.authn.v1.AuthnAPI.CreateTokenCallback): void;
+
+                /**
+                 * Calls CreateToken.
+                 * @param request CreateTokenRequest message or plain object
+                 * @returns Promise
+                 */
+                public createToken(request: clutch.authn.v1.ICreateTokenRequest): Promise<clutch.authn.v1.CreateTokenResponse>;
             }
 
             namespace AuthnAPI {
@@ -1004,6 +1018,13 @@ export namespace clutch {
                  * @param [response] CallbackResponse
                  */
                 type CallbackCallback = (error: (Error|null), response?: clutch.authn.v1.CallbackResponse) => void;
+
+                /**
+                 * Callback as used by {@link clutch.authn.v1.AuthnAPI#createToken}.
+                 * @param error Error, if any
+                 * @param [response] CreateTokenResponse
+                 */
+                type CreateTokenCallback = (error: (Error|null), response?: clutch.authn.v1.CreateTokenResponse) => void;
             }
 
             /** Properties of a LoginRequest. */
@@ -1211,6 +1232,108 @@ export namespace clutch {
 
                 /**
                  * Converts this CallbackResponse to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a CreateTokenRequest. */
+            interface ICreateTokenRequest {
+
+                /** CreateTokenRequest subject */
+                subject?: (string|null);
+
+                /** CreateTokenRequest expiry */
+                expiry?: (google.protobuf.IDuration|null);
+            }
+
+            /** Represents a CreateTokenRequest. */
+            class CreateTokenRequest implements ICreateTokenRequest {
+
+                /**
+                 * Constructs a new CreateTokenRequest.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.authn.v1.ICreateTokenRequest);
+
+                /** CreateTokenRequest subject. */
+                public subject: string;
+
+                /** CreateTokenRequest expiry. */
+                public expiry?: (google.protobuf.IDuration|null);
+
+                /**
+                 * Verifies a CreateTokenRequest message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CreateTokenRequest message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CreateTokenRequest
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.authn.v1.CreateTokenRequest;
+
+                /**
+                 * Creates a plain object from a CreateTokenRequest message. Also converts values to other types if specified.
+                 * @param message CreateTokenRequest
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.authn.v1.CreateTokenRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CreateTokenRequest to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a CreateTokenResponse. */
+            interface ICreateTokenResponse {
+
+                /** CreateTokenResponse accessToken */
+                accessToken?: (string|null);
+            }
+
+            /** Represents a CreateTokenResponse. */
+            class CreateTokenResponse implements ICreateTokenResponse {
+
+                /**
+                 * Constructs a new CreateTokenResponse.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.authn.v1.ICreateTokenResponse);
+
+                /** CreateTokenResponse accessToken. */
+                public accessToken: string;
+
+                /**
+                 * Verifies a CreateTokenResponse message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a CreateTokenResponse message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns CreateTokenResponse
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.authn.v1.CreateTokenResponse;
+
+                /**
+                 * Creates a plain object from a CreateTokenResponse message. Also converts values to other types if specified.
+                 * @param message CreateTokenResponse
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.authn.v1.CreateTokenResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this CreateTokenResponse to JSON.
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
