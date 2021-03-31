@@ -34,6 +34,8 @@ func NewTestMonitor(store experimentstore.Storer, enabledConfigTypes []string, c
 		perExperimentCheckInterval: 1,
 		log:                        log,
 		activeMonitoringRoutines:   trackingGauge{gauge: stats.Gauge("active_monitoring_routines")},
+		criteriaEvaluationSuccess:  stats.Counter("criteria_success"),
+		criteriaEvaluationFailure:  stats.Counter("criteria_failure"),
 		terminationCount:           stats.Counter("terminations"),
 		marshallingErrors:          stats.Counter("unpack_error"),
 	}
@@ -49,9 +51,11 @@ type monitor struct {
 
 	log *zap.SugaredLogger
 
-	activeMonitoringRoutines trackingGauge
-	terminationCount         tally.Counter
-	marshallingErrors        tally.Counter
+	criteriaEvaluationSuccess tally.Counter
+	criteriaEvaluationFailure tally.Counter
+	activeMonitoringRoutines  trackingGauge
+	terminationCount          tally.Counter
+	marshallingErrors         tally.Counter
 }
 
 func (m *monitor) Run(ctx context.Context) {
@@ -143,9 +147,12 @@ func (m *monitor) monitorSingleExperiment(ctx context.Context, e *experimentatio
 				terminationReason, err := c.ShouldTerminate(e, unpackedConfig)
 				// TODO(snowp): The logs here might get spammy, rate limit or terminate montioring routine somehow?
 				if err != nil {
+					m.criteriaEvaluationFailure.Inc(1)
 					m.log.Errorw("error while evaluating termination criteria", "id", e.RunId, "error", err)
 					continue
 				}
+
+				m.criteriaEvaluationSuccess.Inc(1)
 
 				if terminationReason != "" {
 					err = m.store.CancelExperimentRun(context.Background(), e.RunId, terminationReason)

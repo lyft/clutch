@@ -39,8 +39,8 @@ func (fs *MockStorer) CancelExperimentRun(ctx context.Context, id string, termin
 	return nil
 }
 
-func (fs *MockStorer) GetExperiments(ctx context.Context, configTypes string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
-	fs.GetExperimentArguments = getExperimentArguments{ConfigType: configTypes}
+func (fs *MockStorer) GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
+	fs.GetExperimentArguments = getExperimentArguments{ConfigType: configType}
 	return nil, nil
 }
 

@@ -86,7 +86,7 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 		ts.Logger.Sugar(),
 		ts.Scope)
 
-	// Canclel to ensure that the terminator doesn't leak into other tests.
+	// Cancel to ensure that the terminator doesn't leak into other tests.
 	ctx, cancel := context.WithCancel(context.Background())
 	terminator.Run(ctx)
 	defer cancel()
