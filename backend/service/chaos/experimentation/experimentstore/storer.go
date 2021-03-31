@@ -69,17 +69,20 @@ func (s *storer) CreateExperiment(ctx context.Context, es *ExperimentSpecificati
 	// All experiments are created in a single transaction
 	tx, err := s.db.Begin()
 	if err != nil {
+		_ = tx.Rollback()
 		return nil, err
 	}
 
 	configJson, err := marshalConfig(es.Config)
 	if err != nil {
+		_ = tx.Rollback()
 		return nil, err
 	}
 
 	configSql := `INSERT INTO experiment_config (id, details) VALUES ($1, $2)`
 	_, err = s.db.ExecContext(ctx, configSql, es.ConfigId, configJson)
 	if err != nil {
+		_ = tx.Rollback()
 		return nil, err
 	}
 
@@ -94,11 +97,13 @@ func (s *storer) CreateExperiment(ctx context.Context, es *ExperimentSpecificati
 
 	_, err = s.db.ExecContext(ctx, runSql, es.RunId, es.ConfigId, es.StartTime, es.EndTime)
 	if err != nil {
+		_ = tx.Rollback()
 		return nil, err
 	}
 
 	err = tx.Commit()
 	if err != nil {
+		_ = tx.Rollback()
 		return nil, err
 	}
 
