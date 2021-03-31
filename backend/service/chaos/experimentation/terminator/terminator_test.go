@@ -10,6 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/proto"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
@@ -36,7 +37,8 @@ func TestTerminator(t *testing.T) {
 			gauge: testScope.Gauge("active_routines"),
 			value: 0,
 		},
-		terminationCount: testScope.Counter("terminations"),
+		terminationCount:  testScope.Counter("terminations"),
+		marshallingErrors: testScope.Counter("unpack_error"),
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
@@ -111,7 +113,7 @@ type testCriteria struct {
 	sync.Mutex
 }
 
-func (t *testCriteria) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig *ptypes.DynamicAny) (string, error) {
+func (t *testCriteria) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error) {
 	t.Lock()
 	defer t.Unlock()
 

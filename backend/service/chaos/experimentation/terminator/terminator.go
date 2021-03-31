@@ -5,9 +5,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
@@ -16,7 +17,7 @@ import (
 type TerminationCriteria interface {
 	// ShouldTerminate determines whether the provided experiment should be terminated.
 	// To signal that termination should occur, return a non-empty string with a nil error.
-	ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig *ptypes.DynamicAny) (string, error)
+	ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error)
 }
 
 type Monitor interface {
@@ -93,8 +94,8 @@ func (m *monitor) Run(ctx context.Context) {
 	}
 }
 
-// monitorNewExperiments iterates over all the provided experiments, spawning a goroutine to montior each experiment that
-// doesn't already have a monitoring routine. Returns a set containing all the active experiment ids for further processing.
+// Iterates over all the provided experiments, spawning a goroutine to montior each experiment that doesn't already have
+// a monitoring routine. Returns a set containing all the active experiment ids for further processing.
 func (m *monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trackedExperiments map[string]context.CancelFunc) map[string]struct{} {
 	// For each active experiment, create a monitoring goroutine if necessary.
 	activeExperiments := map[string]struct{}{}
@@ -118,8 +119,10 @@ func (m *monitor) monitorSingleExperiment(ctx context.Context, e *experimentatio
 	ticker := time.NewTicker(m.perExperimentCheckInterval)
 	terminated := false
 
-	dany := &ptypes.DynamicAny{}
-	err := ptypes.UnmarshalAny(e.Config, dany)
+	// TODO(snowp): I suspect that we might run into issues here if we try to unpack an "old" proto
+	// which is no longer linked into the program due to how the type registry works, but this should
+	// be rare enough that logging an error is probably fine.
+	unpackedConfig, err := anypb.UnmarshalNew(e.Config, proto.UnmarshalOptions{})
 	if err != nil {
 		m.log.Errorw("failed to unmarshal experiment", "id", e.RunId)
 		m.marshallingErrors.Inc(1)
@@ -137,7 +140,7 @@ func (m *monitor) monitorSingleExperiment(ctx context.Context, e *experimentatio
 				continue
 			}
 			for _, c := range m.criterias {
-				terminationReason, err := c.ShouldTerminate(e, dany)
+				terminationReason, err := c.ShouldTerminate(e, unpackedConfig)
 				// TODO(snowp): The logs here might get spammy, rate limit or terminate montioring routine somehow?
 				if err != nil {
 					m.log.Errorw("error while evaluating termination criteria", "id", e.RunId, "error", err)

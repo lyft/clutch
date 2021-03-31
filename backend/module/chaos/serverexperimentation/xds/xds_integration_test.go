@@ -5,22 +5,23 @@ package xds
 import (
 	"context"
 	"fmt"
-	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
-	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
-	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
 	"sync"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"testing"
 	"time"
 
 	_ "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/proto"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
 	"github.com/lyft/clutch/backend/internal/test/integration/helper/envoytest"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/terminator"
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
+	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 // These tests are intended to be run with docker-compose to in order to set up a running Envoy instance
@@ -247,10 +248,14 @@ func (t *testCriteria) start() {
 	t.startCheckingTime = true
 }
 
-func (t *testCriteria) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig *ptypes.DynamicAny) (string, error) {
+func (t *testCriteria) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error) {
 	t.Lock()
 	defer t.Unlock()
 
+	// Sanity check that we get the expected configuration type.
+	if _, ok := experimentConfig.(*serverexperimentation.HTTPFaultConfig); !ok {
+		panic("received unexpected experiment config")
+	}
 	started, _ := ptypes.Timestamp(experiment.StartTime)
 	if t.startCheckingTime && started.Add(1*time.Second).Before(time.Now()) {
 		return "timed out", nil
