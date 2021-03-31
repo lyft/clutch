@@ -52,5 +52,10 @@ type Provider interface {
 	Verify(ctx context.Context, rawIDToken string) (*Claims, error)
 	GetAuthCodeURL(ctx context.Context, state string) (string, error)
 	Exchange(ctx context.Context, code string) (token *oauth2.Token, err error)
-	CreateToken(ctx context.Context, subject string, expiry time.Duration) (token *oauth2.Token, err error)
+}
+
+type Issuer interface {
+	// CreateToken creates a new OAuth2 for the provided subject with the provided expiration. If expiry is nil,
+	// the token will never expire.
+	CreateToken(ctx context.Context, subject string, expiry *time.Duration) (token *oauth2.Token, err error)
 }

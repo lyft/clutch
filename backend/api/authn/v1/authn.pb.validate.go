@@ -318,7 +318,12 @@ func (m *CreateTokenRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Subject
+	if len(m.GetSubject()) < 1 {
+		return CreateTokenRequestValidationError{
+			field:  "Subject",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
 
 	if v, ok := interface{}(m.GetExpiry()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {

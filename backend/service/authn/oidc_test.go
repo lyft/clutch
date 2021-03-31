@@ -135,7 +135,8 @@ oidc:
 	assert.NoError(t, err)
 	assert.NotNil(t, p)
 
-	createdToken, err := p.CreateToken(ctx, "some subject", time.Duration(5*time.Hour))
+	expiry := 5 * time.Hour
+	createdToken, err := p.(Issuer).CreateToken(ctx, "some subject", &expiry)
 	assert.NoError(t, err)
 	assert.NotNil(t, createdToken)
 
@@ -148,6 +149,22 @@ oidc:
 
 	assert.NotZero(t, claims.StandardClaims.IssuedAt)
 	assert.Equal(t, claims.StandardClaims.ExpiresAt, time.Unix(claims.StandardClaims.IssuedAt, 0).Add(5*time.Hour).Unix())
+	assert.Equal(t, claims.StandardClaims.Subject, "some subject")
+
+	// Create a token without expiry.
+	createdToken, err = p.(Issuer).CreateToken(ctx, "some subject", nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, createdToken)
+
+	// The token should have been recorded in the database.
+	assert.Len(t, mockStorage.Tokens[clutchProvider], 1)
+	assert.Equal(t, mockStorage.Tokens[clutchProvider]["some subject"], createdToken)
+
+	claims, err = p.Verify(ctx, createdToken.AccessToken)
+	assert.NoError(t, err)
+
+	assert.NotZero(t, claims.StandardClaims.IssuedAt)
+	assert.Equal(t, claims.StandardClaims.ExpiresAt, int64(0))
 	assert.Equal(t, claims.StandardClaims.Subject, "some subject")
 }
 

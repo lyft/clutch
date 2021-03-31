@@ -136,11 +136,17 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 	return p.signNewToken(ctx, claims)
 }
 
-func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, expiry time.Duration) (*oauth2.Token, error) {
+func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, expiry *time.Duration) (*oauth2.Token, error) {
+	issuedAt := time.Now()
+	var expiresAt int64
+	if expiry != nil {
+		expiresAt = issuedAt.Add(*expiry).Unix()
+	}
+
 	claims := &Claims{
 		StandardClaims: &jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(expiry).Unix(),
-			IssuedAt:  time.Now().Unix(),
+			ExpiresAt: expiresAt,
+			IssuedAt:  issuedAt.Unix(),
 			Issuer:    clutchProvider,
 			Subject:   subject,
 		},

@@ -7,6 +7,7 @@ option go_package = "github.com/lyft/clutch/backend/api/authn/v1;authnv1";
 import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
 import "api/v1/annotations.proto";
+import "validate/validate.proto";
 
 service AuthnAPI {
   rpc Login(LoginRequest) returns (LoginResponse) {
@@ -65,9 +66,9 @@ message CreateTokenRequest {
   option (clutch.api.v1.redacted) = true;
 
   // The subject to issue this token for.
-  string subject = 1;
+  string subject = 1 [ (validate.rules).string = {min_bytes : 1} ];
 
-  // The duration until this token should expire.
+  // The duration until this token should expire. If unset, the token will never expire.
   google.protobuf.Duration expiry = 2;
 }
 
