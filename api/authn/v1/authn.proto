@@ -65,7 +65,7 @@ message CallbackResponse {
 message CreateTokenRequest {
   option (clutch.api.v1.redacted) = true;
 
-  // The subject to issue this token for.
+  // The subject to issue this token for. The subject must be prefixed with the string `service:`, e.g. `service:foo`.
   string subject = 1 [ (validate.rules).string = {min_bytes : 1} ];
 
   // The duration until this token should expire. If unset, the token will never expire.
