@@ -11,17 +11,21 @@ import (
 
 	_ "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
 	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/any"
+	wrapperspb "github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
+	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
+	"github.com/lyft/clutch/backend/api/config/service/chaos/experimentation/terminator/v1"
 	"github.com/lyft/clutch/backend/internal/test/integration/helper/envoytest"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/terminator"
-	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/terminator"
 )
 
 // These tests are intended to be run with docker-compose to in order to set up a running Envoy instance
@@ -79,17 +83,30 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 
 	criteria := &testCriteria{}
 
-	terminator := terminator.NewTestMonitor(
-		ts.Storer,
-		[]string{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"},
-		[]terminator.TerminationCriteria{criteria},
-		ts.Logger.Sugar(),
-		ts.Scope)
+	terminator.CriteriaFactories["type.googleapis.com/google.protobuf.StringValue"] = &testCriteriaFactory{testCriteria: criteria}
+
+	anyString, err := ptypes.MarshalAny(&wrapperspb.StringValue{})
+	assert.NoError(t, err)
+
+	typedConfig := &terminatorv1.Config{
+		TerminationCriteria: []*anypb.Any{anyString},
+		EnabledConfigTypes: []string{
+			"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig",
+		},
+		OuterLoopInterval:          ptypes.DurationProto(time.Second),
+		PerExperimentCheckInterval: ptypes.DurationProto(time.Second),
+	}
+	anyConfig, err := ptypes.MarshalAny(typedConfig)
+	assert.NoError(t, err)
+
+	terminator, err := terminator.NewMonitor(anyConfig, ts.Logger, ts.Scope)
+	assert.NoError(t, err)
 
 	// Cancel to ensure that the terminator doesn't leak into other tests.
 	ctx, cancel := context.WithCancel(context.Background())
-	terminator.Run(ctx)
 	defer cancel()
+
+	terminator.Run(ctx)
 
 	e, err := envoytest.NewEnvoyHandle()
 	assert.NoError(t, err)
@@ -232,6 +249,14 @@ func awaitExpectedReturnValueForSimpleCall(t *testing.T, e *envoytest.EnvoyHandl
 	}
 
 	return nil
+}
+
+type testCriteriaFactory struct {
+	testCriteria *testCriteria
+}
+
+func (t *testCriteriaFactory) Create(*any.Any) (terminator.TerminationCriteria, error) {
+	return t.testCriteria, nil
 }
 
 type testCriteria struct {

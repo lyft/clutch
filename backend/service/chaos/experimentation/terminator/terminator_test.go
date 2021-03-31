@@ -26,7 +26,7 @@ func TestTerminator(t *testing.T) {
 
 	store := &experimentstoremock.SimpleStorer{}
 	criteria := &testCriteria{}
-	monitor := monitor{
+	monitor := Monitor{
 		store:                      store,
 		enabledConfigTypes:         []string{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"},
 		criterias:                  []TerminationCriteria{criteria},

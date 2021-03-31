@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package clutch.config.service.chaos.experimentation.terminator.v1;
+
+option go_package = "github.com/lyft/clutch/backend/api/config/service/chaos/experimentation/terminator/v1;terminatorv1";
+
+import "validate/validate.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/any.proto";
+
+message Config {
+    // The list of config types for which experiment termination should be enabled for.
+    repeated string enabled_config_types = 1;
+
+    // List of termination criteria to evaluate for each config type.
+    repeated google.protobuf.Any termination_criteria = 2;
+
+    // The interval at which the outer loop should poll for active experiments.
+    google.protobuf.Duration outer_loop_interval = 3;
+
+    // The interval at which the inner loop should evaluate the termination criteria for each monitored experiment.
+    google.protobuf.Duration per_experiment_check_interval = 4;
+}

@@ -2,17 +2,31 @@ package terminator
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"sync/atomic"
 	"time"
 
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	"github.com/lyft/clutch/backend/api/config/service/chaos/experimentation/terminator/v1"
+	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
+
+const Name = "clutch.module.chaos.experimentation.termination"
+
+var CriteriaFactories = map[string]CriteriaFactory{}
+
+type CriteriaFactory interface {
+	Create(cfg *any.Any) (TerminationCriteria, error)
+}
 
 type TerminationCriteria interface {
 	// ShouldTerminate determines whether the provided experiment should be terminated.
@@ -20,28 +34,75 @@ type TerminationCriteria interface {
 	ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error)
 }
 
-type Monitor interface {
-	Run(ctx context.Context)
-}
-
-// TODO(snowp): Remove this once we have a proper service object that we can create.
-func NewTestMonitor(store experimentstore.Storer, enabledConfigTypes []string, criterias []TerminationCriteria, log *zap.SugaredLogger, stats tally.Scope) Monitor {
-	return &monitor{
-		store:                      store,
-		enabledConfigTypes:         enabledConfigTypes,
-		criterias:                  criterias,
-		outerLoopInterval:          1,
-		perExperimentCheckInterval: 1,
-		log:                        log,
-		activeMonitoringRoutines:   trackingGauge{gauge: stats.Gauge("active_monitoring_routines")},
-		criteriaEvaluationSuccess:  stats.Counter("criteria_success"),
-		criteriaEvaluationFailure:  stats.Counter("criteria_failure"),
-		terminationCount:           stats.Counter("terminations"),
-		marshallingErrors:          stats.Counter("unpack_error"),
+func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+	m, err := NewMonitor(cfg, logger, scope)
+	if err != nil {
+		m.Run(context.Background())
 	}
+
+	return m, nil 
 }
 
-type monitor struct {
+func NewMonitor(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (*Monitor, error) {
+	typedConfig := &terminatorv1.Config{}
+	err := ptypes.UnmarshalAny(cfg, typedConfig)
+	if err != nil {
+		return nil, err
+	}
+
+	store, ok := service.Registry[experimentstore.Name]
+	if !ok {
+		return nil, errors.New("could not find experiment store service")
+	}
+
+	storer, ok := store.(experimentstore.Storer)
+	if !ok {
+		return nil, errors.New("service was not the correct type")
+	}
+
+	terminationCriteria := []TerminationCriteria{}
+
+	for _, c := range typedConfig.TerminationCriteria {
+		factory, ok := CriteriaFactories[c.TypeUrl]
+		if !ok {
+			return nil, fmt.Errorf("terminator module configured with unknown criteria '%s'", c.TypeUrl)
+		}
+
+		criteria, err := factory.Create(c)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create termination criteria '%s': %s", c.TypeUrl, err)
+		} 
+
+		terminationCriteria = append(terminationCriteria, criteria)
+	}
+
+	outerLoopInterval, err := ptypes.Duration(typedConfig.OuterLoopInterval)
+	if err != nil {
+		return nil, err
+	}
+
+	perExperimentCheckInterval, err := ptypes.Duration(typedConfig.PerExperimentCheckInterval)
+	if err != nil {
+		return nil, err
+	}
+
+
+	return &Monitor{
+		store:                      storer,
+		enabledConfigTypes:         typedConfig.EnabledConfigTypes,
+		criterias:                  terminationCriteria,
+		outerLoopInterval:          outerLoopInterval,
+		perExperimentCheckInterval: perExperimentCheckInterval,
+		log:                        logger.Sugar(),
+		activeMonitoringRoutines:   trackingGauge{gauge: scope.Gauge("active_monitoring_routines")},
+		criteriaEvaluationSuccess:  scope.Counter("criteria_success"),
+		criteriaEvaluationFailure:  scope.Counter("criteria_failure"),
+		terminationCount:           scope.Counter("terminations"),
+		marshallingErrors:          scope.Counter("unpack_error"),
+	}, nil
+}
+
+type Monitor struct {
 	store              experimentstore.Storer
 	enabledConfigTypes []string
 	criterias          []TerminationCriteria
@@ -58,7 +119,7 @@ type monitor struct {
 	marshallingErrors         tally.Counter
 }
 
-func (m *monitor) Run(ctx context.Context) {
+func (m *Monitor) Run(ctx context.Context) {
 	for _, configType := range m.enabledConfigTypes {
 		// For each monitored config type, start a single goroutine that polls the active experiments at a fixed interval.
 		// Whenever a new (new to this goroutine) experiment is found, open up a goroutine that periodically evaluates all
@@ -100,7 +161,7 @@ func (m *monitor) Run(ctx context.Context) {
 
 // Iterates over all the provided experiments, spawning a goroutine to montior each experiment that doesn't already have
 // a monitoring routine. Returns a set containing all the active experiment ids for further processing.
-func (m *monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trackedExperiments map[string]context.CancelFunc) map[string]struct{} {
+func (m *Monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trackedExperiments map[string]context.CancelFunc) map[string]struct{} {
 	// For each active experiment, create a monitoring goroutine if necessary.
 	activeExperiments := map[string]struct{}{}
 	for _, e := range es {
@@ -119,7 +180,7 @@ func (m *monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trac
 	return activeExperiments
 }
 
-func (m *monitor) monitorSingleExperiment(ctx context.Context, e *experimentationv1.Experiment) {
+func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentationv1.Experiment) {
 	ticker := time.NewTicker(m.perExperimentCheckInterval)
 	terminated := false
 

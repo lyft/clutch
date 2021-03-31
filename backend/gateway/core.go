@@ -36,6 +36,7 @@ import (
 	authzservice "github.com/lyft/clutch/backend/service/authz"
 	awsservice "github.com/lyft/clutch/backend/service/aws"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/terminator"
 	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
 	"github.com/lyft/clutch/backend/service/envoyadmin"
 	"github.com/lyft/clutch/backend/service/github"
@@ -78,6 +79,7 @@ var Services = service.Factory{
 	awsservice.Name:          awsservice.New,
 	envoyadmin.Name:          envoyadmin.New,
 	experimentstore.Name:     experimentstore.New,
+	terminator.Name:     terminator.New,
 	github.Name:              github.New,
 	k8sservice.Name:          k8sservice.New,
 	loggingsink.Name:         loggingsink.New,
