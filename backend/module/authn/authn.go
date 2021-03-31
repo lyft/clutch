@@ -17,8 +17,8 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/internal/status"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 
 	authnv1 "github.com/lyft/clutch/backend/api/authn/v1"
 	"github.com/lyft/clutch/backend/module"
@@ -118,7 +118,7 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 
 func (a *api) CreateToken(ctx context.Context, request *authnv1.CreateTokenRequest) (*authnv1.CreateTokenResponse, error) {
 	if !strings.HasPrefix(request.Subject, "service:") {
-		return nil, status.Err(codes.InvalidArgument, fmt.Sprintf("subject must start with 'service:', got '%s'", request.Subject))
+		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("subject must start with 'service:', got '%s'", request.Subject))
 	}
 
 	var expiry *time.Duration
