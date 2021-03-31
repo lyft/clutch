@@ -135,7 +135,7 @@ oidc:
 	assert.NoError(t, err)
 	assert.NotNil(t, p)
 
-	createdToken, err := p.CreateToken(ctx, "some subject", time.Duration(5 * time.Hour))
+	createdToken, err := p.CreateToken(ctx, "some subject", time.Duration(5*time.Hour))
 	assert.NoError(t, err)
 	assert.NotNil(t, createdToken)
 
@@ -147,7 +147,7 @@ oidc:
 	assert.NoError(t, err)
 
 	assert.NotZero(t, claims.StandardClaims.IssuedAt)
-	assert.Equal(t, claims.StandardClaims.ExpiresAt, time.Unix(claims.StandardClaims.IssuedAt, 0).Add(5 * time.Hour).Unix())
+	assert.Equal(t, claims.StandardClaims.ExpiresAt, time.Unix(claims.StandardClaims.IssuedAt, 0).Add(5*time.Hour).Unix())
 	assert.Equal(t, claims.StandardClaims.Subject, "some subject")
 }
 
