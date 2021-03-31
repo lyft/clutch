@@ -20,4 +20,9 @@ message Cache {
   // Depending on your database resource configuration and the number of items to cache,
   // you can tune this value to improve write performance.
   int32 batch_insert_size = 2;
+
+  // Defaults to 10 seconds.
+  // A periodic flush of the queued up items for batch inserts, ensuring that items do not get
+  // stuck in the batch waiting for batch_insert_size to be reached.
+  google.protobuf.Duration batch_insert_flush = 3 [ (validate.rules).duration.gt.seconds = 1 ];
 }

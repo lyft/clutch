@@ -140,6 +140,27 @@ func (m *Cache) Validate() error {
 
 	// no validation rules for BatchInsertSize
 
+	if d := m.GetBatchInsertFlush(); d != nil {
+		dur, err := ptypes.Duration(d)
+		if err != nil {
+			return CacheValidationError{
+				field:  "BatchInsertFlush",
+				reason: "value is not a valid duration",
+				cause:  err,
+			}
+		}
+
+		gt := time.Duration(1*time.Second + 0*time.Nanosecond)
+
+		if dur <= gt {
+			return CacheValidationError{
+				field:  "BatchInsertFlush",
+				reason: "value must be greater than 1s",
+			}
+		}
+
+	}
+
 	return nil
 }
 

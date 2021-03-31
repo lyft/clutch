@@ -106,6 +106,9 @@ func (c *client) startTopologyCache(ctx context.Context) {
 // configured BatchInsertSize is not met.
 func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest, service string) {
 	var batchInsert []*topologyv1.Resource
+	queueDepth := c.scope.Tagged(map[string]string{
+		"service": service,
+	}).SubScope("cache").Gauge("object_channel.queue_depth")
 
 	for {
 		select {
@@ -114,9 +117,7 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *
 				return
 			}
 
-			c.scope.Tagged(map[string]string{
-				"service": service,
-			}).SubScope("cache").Gauge("object_channel.queue_depth").Update(float64(len(objs)))
+			queueDepth.Update(float64(len(objs)))
 
 			switch obj.Action {
 			case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
@@ -200,10 +201,7 @@ func (c *client) setCache(ctx context.Context, obj []*topologyv1.Resource) error
 		return err
 	}
 
-	for range obj {
-		c.scope.SubScope("cache").Counter("set.success").Inc(1)
-	}
-
+	c.scope.SubScope("cache").Counter("set.success").Inc(int64(len(obj)))
 	return nil
 }
 

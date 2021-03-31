@@ -7539,6 +7539,9 @@ export namespace clutch {
 
                         /** Cache batchInsertSize */
                         batchInsertSize?: (number|null);
+
+                        /** Cache batchInsertFlush */
+                        batchInsertFlush?: (google.protobuf.IDuration|null);
                     }
 
                     /** Represents a Cache. */
@@ -7555,6 +7558,9 @@ export namespace clutch {
 
                         /** Cache batchInsertSize. */
                         public batchInsertSize: number;
+
+                        /** Cache batchInsertFlush. */
+                        public batchInsertFlush?: (google.protobuf.IDuration|null);
 
                         /**
                          * Verifies a Cache message.
