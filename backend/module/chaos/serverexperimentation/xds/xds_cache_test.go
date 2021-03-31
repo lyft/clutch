@@ -310,7 +310,6 @@ func TestRefreshCache(t *testing.T) {
 	assert.NoError(t, err)
 
 	now := time.Date(2011, 0, 0, 0, 0, 0, 0, time.UTC)
-	assert.NoError(t, err)
 	future := now.Add(1 * time.Hour)
 	futureTimestamp, err := ptypes.TimestampProto(future)
 	assert.NoError(t, err)
