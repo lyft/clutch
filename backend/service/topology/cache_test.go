@@ -77,6 +77,16 @@ func TestPrepareBulkCacheInsert(t *testing.T) {
 	}
 }
 
+func BenchmarkPrepareBulkCacheInsert(b *testing.B) {
+	tenk := generatePrepareBulkCacheInsertInput(10000)
+	topology := &client{}
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		topology.prepareBulkCacheInsert(tenk)
+	}
+}
+
 func generatePrepareBulkCacheInsertInput(count int) []*topologyv1.Resource {
 	results := []*topologyv1.Resource{}
 
