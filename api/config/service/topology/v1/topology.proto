@@ -24,5 +24,5 @@ message Cache {
   // Defaults to 10 seconds.
   // A periodic flush of the queued up items for batch inserts, ensuring that items do not get
   // stuck in the batch waiting for batch_insert_size to be reached.
-  google.protobuf.Duration batch_insert_flush = 3 [ (validate.rules).duration.gt.seconds = 1 ];
+  google.protobuf.Duration batch_insert_flush = 3;
 }
