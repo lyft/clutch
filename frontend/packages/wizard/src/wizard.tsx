@@ -32,7 +32,7 @@ interface WizardStepData {
   [index: string]: any;
 }
 
-type ContainerProps = {
+interface ContainerProps {
   width?: "default" | "full";
 };
 
