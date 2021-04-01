@@ -2823,6 +2823,7 @@ export const clutch = $root.clutch = (() => {
                  * @interface ICreateTokenRequest
                  * @property {string|null} [subject] CreateTokenRequest subject
                  * @property {google.protobuf.IDuration|null} [expiry] CreateTokenRequest expiry
+                 * @property {clutch.authn.v1.CreateTokenRequest.TokenType|null} [tokenType] CreateTokenRequest tokenType
                  */
 
                 /**
@@ -2857,6 +2858,14 @@ export const clutch = $root.clutch = (() => {
                 CreateTokenRequest.prototype.expiry = null;
 
                 /**
+                 * CreateTokenRequest tokenType.
+                 * @member {clutch.authn.v1.CreateTokenRequest.TokenType} tokenType
+                 * @memberof clutch.authn.v1.CreateTokenRequest
+                 * @instance
+                 */
+                CreateTokenRequest.prototype.tokenType = 0;
+
+                /**
                  * Verifies a CreateTokenRequest message.
                  * @function verify
                  * @memberof clutch.authn.v1.CreateTokenRequest
@@ -2875,6 +2884,14 @@ export const clutch = $root.clutch = (() => {
                         if (error)
                             return "expiry." + error;
                     }
+                    if (message.tokenType != null && message.hasOwnProperty("tokenType"))
+                        switch (message.tokenType) {
+                        default:
+                            return "tokenType: enum value expected";
+                        case 0:
+                        case 1:
+                            break;
+                        }
                     return null;
                 };
 
@@ -2897,6 +2914,16 @@ export const clutch = $root.clutch = (() => {
                             throw TypeError(".clutch.authn.v1.CreateTokenRequest.expiry: object expected");
                         message.expiry = $root.google.protobuf.Duration.fromObject(object.expiry);
                     }
+                    switch (object.tokenType) {
+                    case "UNKNOWN":
+                    case 0:
+                        message.tokenType = 0;
+                        break;
+                    case "SERVICE":
+                    case 1:
+                        message.tokenType = 1;
+                        break;
+                    }
                     return message;
                 };
 
@@ -2916,11 +2943,14 @@ export const clutch = $root.clutch = (() => {
                     if (options.defaults) {
                         object.subject = "";
                         object.expiry = null;
+                        object.tokenType = options.enums === String ? "UNKNOWN" : 0;
                     }
                     if (message.subject != null && message.hasOwnProperty("subject"))
                         object.subject = message.subject;
                     if (message.expiry != null && message.hasOwnProperty("expiry"))
                         object.expiry = $root.google.protobuf.Duration.toObject(message.expiry, options);
+                    if (message.tokenType != null && message.hasOwnProperty("tokenType"))
+                        object.tokenType = options.enums === String ? $root.clutch.authn.v1.CreateTokenRequest.TokenType[message.tokenType] : message.tokenType;
                     return object;
                 };
 
@@ -2934,6 +2964,20 @@ export const clutch = $root.clutch = (() => {
                 CreateTokenRequest.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
+
+                /**
+                 * TokenType enum.
+                 * @name clutch.authn.v1.CreateTokenRequest.TokenType
+                 * @enum {number}
+                 * @property {number} UNKNOWN=0 UNKNOWN value
+                 * @property {number} SERVICE=1 SERVICE value
+                 */
+                CreateTokenRequest.TokenType = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "UNKNOWN"] = 0;
+                    values[valuesById[1] = "SERVICE"] = 1;
+                    return values;
+                })();
 
                 return CreateTokenRequest;
             })();

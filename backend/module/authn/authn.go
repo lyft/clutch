@@ -8,7 +8,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
@@ -113,8 +112,12 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 }
 
 func (a *api) CreateToken(ctx context.Context, request *authnv1.CreateTokenRequest) (*authnv1.CreateTokenResponse, error) {
-	if !strings.HasPrefix(request.Subject, "service:") {
-		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("subject must start with 'service:', got '%s'", request.Subject))
+	var prefixedSubject string
+	switch request.TokenType{
+	case authnv1.CreateTokenRequest_SERVICE:
+		prefixedSubject = "service:"+request.Subject
+	default:
+		return nil, status.Error(codes.InvalidArgument, "invalid token type")
 	}
 
 	var expiry *time.Duration
@@ -127,7 +130,7 @@ func (a *api) CreateToken(ctx context.Context, request *authnv1.CreateTokenReque
 		expiry = &convertedExpiry
 	}
 
-	token, err := a.issuer.CreateToken(ctx, request.Subject, expiry)
+	token, err := a.issuer.CreateToken(ctx, prefixedSubject, expiry)
 	if err != nil {
 		return nil, err
 	}

@@ -335,6 +335,20 @@ func (m *CreateTokenRequest) Validate() error {
 		}
 	}
 
+	if _, ok := _CreateTokenRequest_TokenType_NotInLookup[m.GetTokenType()]; ok {
+		return CreateTokenRequestValidationError{
+			field:  "TokenType",
+			reason: "value must not be in list [0]",
+		}
+	}
+
+	if _, ok := CreateTokenRequest_TokenType_name[int32(m.GetTokenType())]; !ok {
+		return CreateTokenRequestValidationError{
+			field:  "TokenType",
+			reason: "value must be one of the defined enum values",
+		}
+	}
+
 	return nil
 }
 
@@ -393,6 +407,10 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreateTokenRequestValidationError{}
+
+var _CreateTokenRequest_TokenType_NotInLookup = map[CreateTokenRequest_TokenType]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on CreateTokenResponse with the rules
 // defined in the proto definition for this message. If any rules are

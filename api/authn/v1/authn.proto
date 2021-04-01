@@ -70,6 +70,15 @@ message CreateTokenRequest {
 
   // The duration until this token should expire. If unset, the token will never expire.
   google.protobuf.Duration expiry = 2;
+
+  enum TokenType {
+    UNKNOWN = 0;
+    // Token is issued on behalf of another service for programmatic access.
+    SERVICE = 1;
+  }
+
+  // The kind of token to issue. This provides namespacing to avoid naming collisions.
+  TokenType token_type = 3 [ (validate.rules).enum = {defined_only : true not_in : 0} ];
 }
 
 message CreateTokenResponse {

@@ -2,9 +2,12 @@ package authn
 
 import (
 	"context"
+	"errors"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/oauth2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/proto"
@@ -13,6 +16,7 @@ import (
 	authnv1 "github.com/lyft/clutch/backend/api/authn/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
 	"github.com/lyft/clutch/backend/mock/service/authnmock"
+	"github.com/lyft/clutch/backend/service/authn"
 )
 
 func TestAllRequestResponseAreRedacted(t *testing.T) {
@@ -32,7 +36,7 @@ func TestAllRequestResponseAreRedacted(t *testing.T) {
 
 func TestAPILogin(t *testing.T) {
 	api := api{
-		provider: authnmock.MockProvider{},
+		provider: MockProvider{},
 		issuer:   authnmock.MockIssuer{},
 	}
 
@@ -46,7 +50,7 @@ func TestAPILogin(t *testing.T) {
 
 func TestAPICallback(t *testing.T) {
 	api := api{
-		provider: authnmock.MockProvider{},
+		provider: MockProvider{},
 		issuer:   authnmock.MockIssuer{},
 	}
 
@@ -71,26 +75,61 @@ func TestAPICallback(t *testing.T) {
 
 func TestAPICreateToken(t *testing.T) {
 	api := api{
-		provider: authnmock.MockProvider{},
+		provider: MockProvider{},
 		issuer:   authnmock.MockIssuer{},
 	}
 
 	response, err := api.CreateToken(context.Background(), &authnv1.CreateTokenRequest{
-		Subject: "invalid",
+		Subject: "name",
 	})
 	assert.Nil(t, response)
-	assert.Error(t, err, "subject must start with 'service:', got 'invalid'")
+	assert.Error(t, err, "invalid token type")
 
 	response, err = api.CreateToken(context.Background(), &authnv1.CreateTokenRequest{
-		Subject: "service:name",
+		Subject: "name",
+		TokenType: authnv1.CreateTokenRequest_SERVICE,
 	})
 	assert.NoError(t, err)
-	assert.Equal(t, response.AccessToken, "token-without-expiry")
+	assert.Equal(t, response.AccessToken, "service:name_token-without-expiry")
 
 	response, err = api.CreateToken(context.Background(), &authnv1.CreateTokenRequest{
-		Subject: "service:name",
+		Subject: "name",
 		Expiry:  &durationpb.Duration{Seconds: 1},
+		TokenType: authnv1.CreateTokenRequest_SERVICE,
 	})
 	assert.NoError(t, err)
-	assert.Equal(t, response.AccessToken, "token-with-expiry")
+	assert.Equal(t, response.AccessToken, "service:name_token-with-expiry")
+}
+
+// TODO(snowp): Ideally this should be in the authmocks package, but this introduces a circular dep
+// due to the dependency on authn.Claims.
+type MockProvider struct {
+	MockClaims authn.Claims
+}
+
+func (MockProvider) GetStateNonce(redirectURL string) (string, error) {
+	return strings.Join([]string{"nonce", redirectURL}, "-"), nil
+}
+
+func (MockProvider) ValidateStateNonce(state string) (redirectURL string, err error) {
+	parts := strings.Split(state, "-")
+	if len(parts) != 2 {
+		return "", errors.New("invalid nonce formace")
+	}
+
+	return parts[1], nil
+}
+
+func (m MockProvider) Verify(ctx context.Context, rawIDToken string) (*authn.Claims, error) {
+	return &m.MockClaims, nil
+}
+
+func (MockProvider) GetAuthCodeURL(ctx context.Context, state string) (string, error) {
+	return "https://auth.com/?param=" + state, nil
+}
+
+func (MockProvider) Exchange(ctx context.Context, code string) (token *oauth2.Token, err error) {
+	return &oauth2.Token{
+		AccessToken:  "test-access",
+	}, err
 }

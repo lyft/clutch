@@ -1245,6 +1245,9 @@ export namespace clutch {
 
                 /** CreateTokenRequest expiry */
                 expiry?: (google.protobuf.IDuration|null);
+
+                /** CreateTokenRequest tokenType */
+                tokenType?: (clutch.authn.v1.CreateTokenRequest.TokenType|null);
             }
 
             /** Represents a CreateTokenRequest. */
@@ -1261,6 +1264,9 @@ export namespace clutch {
 
                 /** CreateTokenRequest expiry. */
                 public expiry?: (google.protobuf.IDuration|null);
+
+                /** CreateTokenRequest tokenType. */
+                public tokenType: clutch.authn.v1.CreateTokenRequest.TokenType;
 
                 /**
                  * Verifies a CreateTokenRequest message.
@@ -1289,6 +1295,15 @@ export namespace clutch {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace CreateTokenRequest {
+
+                /** TokenType enum. */
+                enum TokenType {
+                    UNKNOWN = 0,
+                    SERVICE = 1
+                }
             }
 
             /** Properties of a CreateTokenResponse. */
