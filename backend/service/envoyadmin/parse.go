@@ -21,7 +21,7 @@ import (
 
 func unmarshal(v []byte, pb proto.Message) error {
 	um := &protojson.UnmarshalOptions{DiscardUnknown: true}
-	return um.Unmarshal([]byte(v), pb)
+	return um.Unmarshal(v, pb)
 }
 
 func nodeMetadataFromResponse(resp []byte) (*envoytriagev1.NodeMetadata, error) {
