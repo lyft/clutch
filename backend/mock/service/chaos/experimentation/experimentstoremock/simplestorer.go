@@ -46,7 +46,7 @@ func (s *SimpleStorer) CreateExperiment(ctx context.Context, config *anypb.Any, 
 	return s.experiments[len(s.experiments)-1].toProto(), nil
 }
 
-func (s *SimpleStorer) CancelExperimentRun(ctx context.Context, id uint64) error {
+func (s *SimpleStorer) CancelExperimentRun(ctx context.Context, id uint64, terminationReason string) error {
 	s.Lock()
 	defer s.Unlock()
 

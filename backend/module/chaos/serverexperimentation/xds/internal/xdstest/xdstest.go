@@ -26,7 +26,7 @@ func NewTestModuleServer(c func(cfg *any.Any, logger *zap.Logger, scope tally.Sc
 	// Set up a test server listening to :9000.
 	if ttl {
 		config.ResourceTtl = &durationpb.Duration{
-			Seconds: 1,
+			Seconds: 2,
 		}
 		config.HeartbeatInterval = &durationpb.Duration{
 			Seconds: 1,
