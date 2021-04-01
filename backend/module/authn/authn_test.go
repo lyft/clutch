@@ -70,7 +70,7 @@ func TestAPICallback(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, response.AccessToken, "test-access")
 	assert.Len(t, transportStream.SentHeaders, 1)
-	assert.Equal(t, metadata.MD{"location": []string{"foo.com"}, "location-status": []string{"303"}, "set-cookie-token": []string{"test-access"}}, transportStream.SentHeaders[0])
+	assert.Equal(t, metadata.MD{"location": []string{"foo.com"}, "set-cookie-token": []string{"test-access"}}, transportStream.SentHeaders[0])
 }
 
 func TestAPICreateToken(t *testing.T) {
