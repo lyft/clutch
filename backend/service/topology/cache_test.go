@@ -42,6 +42,10 @@ func TestConvertLockIdToAdvisoryLockId(t *testing.T) {
 	}
 }
 
+// func TestProcessTopologyObjectChannel(t *testing.T) {
+
+// }
+
 func TestPrepareBulkCacheInsert(t *testing.T) {
 	t.Parallel()
 

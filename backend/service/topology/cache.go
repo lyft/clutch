@@ -170,10 +170,7 @@ func (c *client) prepareBulkCacheInsert(obj []*topologyv1.Resource) ([]interface
 		}
 
 		// append args in column order
-		queryArgs = append(queryArgs, o.Id)
-		queryArgs = append(queryArgs, o.Pb.GetTypeUrl())
-		queryArgs = append(queryArgs, dataJson)
-		queryArgs = append(queryArgs, metadataJson)
+		queryArgs = append(queryArgs, o.Id, o.Pb.GetTypeUrl(), dataJson, metadataJson)
 	}
 
 	return queryArgs, strings.Join(queryParams, ",")
@@ -197,7 +194,7 @@ func (c *client) setCache(ctx context.Context, obj []*topologyv1.Resource) error
 		args...,
 	)
 	if err != nil {
-		c.scope.SubScope("cache").Counter("set.failure").Inc(1)
+		c.scope.SubScope("cache").Counter("set.failure").Inc(int64(len(obj)))
 		return err
 	}
 
