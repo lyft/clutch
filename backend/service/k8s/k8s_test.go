@@ -71,7 +71,7 @@ func TestNew(t *testing.T) {
 
 func TestNewWithWrongConfig(t *testing.T) {
 	_, err := New(&any.Any{TypeUrl: "foobar"}, nil, nil)
-	assert.EqualError(t, err, `mismatched message type: got "foobar" want "clutch.config.service.k8s.v1.Config"`)
+	assert.EqualError(t, err, `proto: mismatched message type: got "clutch.config.service.k8s.v1.Config", want "foobar"`)
 }
 
 func TestApplyRestClientConfig(t *testing.T) {
