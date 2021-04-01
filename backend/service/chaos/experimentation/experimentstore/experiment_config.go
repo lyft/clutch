@@ -7,7 +7,7 @@ import (
 )
 
 type ExperimentConfig struct {
-	id     uint64
+	id     string
 	Config *any.Any
 }
 
@@ -16,7 +16,7 @@ func (ec *ExperimentConfig) CreateProperties() ([]*experimentation.Property, err
 		{
 			Id:    "config_identifier",
 			Label: "Config Identifier",
-			Value: &experimentation.Property_IntValue{IntValue: int64(ec.id)},
+			Value: &experimentation.Property_StringValue{StringValue: ec.id},
 		},
 	}, nil
 }
