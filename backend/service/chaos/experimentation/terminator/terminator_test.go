@@ -15,7 +15,6 @@ import (
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 func TestTerminator(t *testing.T) {
@@ -37,10 +36,10 @@ func TestTerminator(t *testing.T) {
 			gauge: testScope.Gauge("active_routines"),
 			value: 0,
 		},
-		criteriaEvaluationSuccess:  testScope.Counter("criteria_success"),
-		criteriaEvaluationFailure:  testScope.Counter("criteria_failure"),
-		terminationCount:  testScope.Counter("terminations"),
-		marshallingErrors: testScope.Counter("unpack_error"),
+		criteriaEvaluationSuccess: testScope.Counter("criteria_success"),
+		criteriaEvaluationFailure: testScope.Counter("criteria_failure"),
+		terminationCount:          testScope.Counter("terminations"),
+		marshallingErrors:         testScope.Counter("unpack_error"),
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
@@ -98,12 +97,9 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experiments
 	a, err := ptypes.MarshalAny(&config)
 	assert.NoError(t, err)
 
+	now := time.Now()
 	endTime := time.Now().Add(5 * time.Minute)
-	experiment, err := storer.CreateExperiment(context.Background(), &experimentstore.ExperimentSpecification{
-		Config:    a,
-		StartTime: time.Now(),
-		EndTime:   &endTime,
-	})
+	experiment, err := storer.CreateExperiment(context.Background(), a, &now, &endTime)
 	assert.NoError(t, err)
 
 	return experiment

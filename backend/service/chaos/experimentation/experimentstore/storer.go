@@ -9,13 +9,14 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/jsonpb"
+	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
+	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
+	"github.com/lyft/clutch/backend/id"
 	"github.com/lyft/clutch/backend/service"
 	pgservice "github.com/lyft/clutch/backend/service/db/postgres"
 )
@@ -24,11 +25,10 @@ const Name = "clutch.service.chaos.experimentation.store"
 
 // Storer stores experiment data
 type Storer interface {
-	CreateExperiment(context.Context, *ExperimentSpecification) (*experimentation.Experiment, error)
-	CreateOrGetExperiment(context.Context, *ExperimentSpecification) (*CreateOrGetExperimentResult, error)
-	CancelExperimentRun(ctx context.Context, id string, terminationReason string) error
+	CreateExperiment(context.Context, *any.Any, *time.Time, *time.Time) (*experimentation.Experiment, error)
+	CancelExperimentRun(ctx context.Context, id uint64, terminationReason string) error
 	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
-	GetExperimentRunDetails(ctx context.Context, id string) (*experimentation.ExperimentRunDetails, error)
+	GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error)
 	GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error)
 	RegisterTransformation(transformation Transformation) error
 	Close()
@@ -63,7 +63,7 @@ func New(_ *any.Any, logger *zap.Logger, _ tally.Scope) (service.Service, error)
 	}, nil
 }
 
-func (s *storer) CreateExperiment(ctx context.Context, es *ExperimentSpecification) (*experimentation.Experiment, error) {
+func (s *storer) CreateExperiment(ctx context.Context, config *any.Any, startTime *time.Time, endTime *time.Time) (*experimentation.Experiment, error) {
 	// This API call will eventually be broken into 2 separate calls:
 	// 1) creating the config
 	// 2) starting a new experiment with the config
@@ -74,13 +74,20 @@ func (s *storer) CreateExperiment(ctx context.Context, es *ExperimentSpecificati
 		return nil, err
 	}
 
-	configJson, err := marshalConfig(es.Config)
+	if config == nil {
+		return nil, errors.New("empty config")
+	}
+
+	// Step 1) create the config
+	configID := id.NewID()
+
+	configJson, err := marshalConfig(config)
 	if err != nil {
 		return nil, err
 	}
 
 	configSql := `INSERT INTO experiment_config (id, details) VALUES ($1, $2)`
-	_, err = s.db.ExecContext(ctx, configSql, es.ConfigId, configJson)
+	_, err = s.db.ExecContext(ctx, configSql, configID, configJson)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +101,8 @@ func (s *storer) CreateExperiment(ctx context.Context, es *ExperimentSpecificati
 				creation_time)
 			VALUES ($1, $2, tstzrange($3, $4, '[]'), NOW())`
 
-	_, err = s.db.ExecContext(ctx, runSql, es.RunId, es.ConfigId, es.StartTime, es.EndTime)
+	runId := id.NewID()
+	_, err = s.db.ExecContext(ctx, runSql, runId, configID, startTime, endTime)
 	if err != nil {
 		return nil, err
 	}
@@ -104,48 +112,33 @@ func (s *storer) CreateExperiment(ctx context.Context, es *ExperimentSpecificati
 		return nil, err
 	}
 
-	// TODO(bgallagher) temporarily returning the experiment run ID. Eventually, the CreateExperiment function
-	// will be split into CreateExperimentConfig and CreateExperimentRun in which case they will each return
-	// their respective IDs
-	return es.toExperiment()
-}
-
-func (s *storer) CreateOrGetExperiment(ctx context.Context, es *ExperimentSpecification) (*CreateOrGetExperimentResult, error) {
-	var exists bool
-	query := `SELECT exists (select id from experiment_run where id == $1)`
-	err := s.db.QueryRow(query, es.RunId).Scan(&exists)
+	st, err := toProto(startTime)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "%v", err)
+		return nil, err
 	}
 
-	if exists {
-		runConfigPair, err := s.getExperiment(ctx, es.RunId)
-		if err != nil {
-			return nil, err
-		}
-
-		experiment, err := runConfigPair.toProto()
-		if err != nil {
-			return nil, err
-		}
-
-		return &CreateOrGetExperimentResult{Experiment: experiment, Origin: experimentation.CreateOrGetExperimentResponse_ORIGIN_EXISTING}, nil
-	} else {
-		experiment, err := s.CreateExperiment(ctx, es)
-		if err != nil {
-			return nil, err
-		}
-
-		return &CreateOrGetExperimentResult{Experiment: experiment, Origin: experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW}, nil
+	et, err := toProto(endTime)
+	if err != nil {
+		return nil, err
 	}
+
+	return &experimentation.Experiment{
+		// TODO(bgallagher) temporarily returning the experiment run ID. Eventually, the CreateExperiments function
+		// will be split into CreateExperimentConfig and CreateExperimentRun in which case they will each return
+		// their respective IDs
+		Id:        uint64(runId),
+		Config:    config,
+		StartTime: st,
+		EndTime:   et,
+	}, nil
 }
 
-func (s *storer) CancelExperimentRun(ctx context.Context, id string, reason string) error {
+func (s *storer) CancelExperimentRun(ctx context.Context, id uint64, reason string) error {
 	if len(reason) > 32 {
 		reason = reason[0:32]
 	}
 	sql :=
-		`UPDATE experiment_run
+		`UPDATE experiment_run 
          SET cancellation_time = NOW()
 		 SET termination_reason = $2
          WHERE id = $1 AND cancellation_time IS NULL AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
@@ -155,11 +148,11 @@ func (s *storer) CancelExperimentRun(ctx context.Context, id string, reason stri
 }
 
 // GetExperiments experiments with a given type of the configuration. Returns all experiments if provided configuration type
-// parameter is an empty string.
+// parameter is an emtpy string.
 func (s *storer) GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
 	query := `
-		SELECT
-			experiment_run.id,
+		SELECT 
+			experiment_run.id, 
 			details
 		FROM experiment_config, experiment_run
 		WHERE
@@ -181,7 +174,7 @@ func (s *storer) GetExperiments(ctx context.Context, configType string, status e
 		var experiment experimentation.Experiment
 		var details string
 
-		err = rows.Scan(&experiment.RunId, &details)
+		err = rows.Scan(&experiment.Id, &details)
 		if err != nil {
 			return nil, err
 		}
@@ -206,9 +199,9 @@ func (s *storer) GetExperiments(ctx context.Context, configType string, status e
 
 func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error) {
 	query := `
-		SELECT
+		SELECT 
 			experiment_run.id,
-			lower(execution_time),
+			lower(execution_time), 
 			upper(execution_time),
 			cancellation_time,
 			creation_time,
@@ -255,28 +248,19 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 	return listViewItems, nil
 }
 
-func (s *storer) GetExperimentRunDetails(ctx context.Context, runId string) (*experimentation.ExperimentRunDetails, error) {
-	e, err := s.getExperiment(ctx, runId)
-	if err != nil {
-		return nil, err
-	}
-
-	return NewRunDetails(e.Run, e.Config, s.transformer, time.Now())
-}
-
-func (s *storer) getExperiment(ctx context.Context, runId string) (*Experiment, error) {
+func (s *storer) GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error) {
 	sqlQuery := `
-		SELECT
+		SELECT 
 			experiment_run.id,
 			lower(execution_time),
 			upper(execution_time),
 			cancellation_time,
 			creation_time,
-			experiment_config.id,
+			experiment_config.id, 
 			details FROM experiment_config, experiment_run
         WHERE experiment_run.id = $1 AND experiment_run.experiment_config_id = experiment_config.id`
 
-	row := s.db.QueryRowContext(ctx, sqlQuery, runId)
+	row := s.db.QueryRowContext(ctx, sqlQuery, id)
 
 	var details string
 	run := ExperimentRun{}
@@ -291,7 +275,7 @@ func (s *storer) getExperiment(ctx context.Context, runId string) (*Experiment, 
 		return nil, err
 	}
 
-	return &Experiment{Run: &run, Config: &config}, nil
+	return NewRunDetails(&run, &config, s.transformer, time.Now())
 }
 
 // Close closes all resources held.
@@ -306,6 +290,19 @@ func (s *storer) RegisterTransformation(transformation Transformation) error {
 	}
 
 	return err
+}
+
+func toProto(t *time.Time) (*timestamp.Timestamp, error) {
+	if t == nil {
+		return nil, nil
+	}
+
+	timestampProto, err := ptypes.TimestampProto(*t)
+	if err != nil {
+		return nil, err
+	}
+
+	return timestampProto, nil
 }
 
 func marshalConfig(config *any.Any) (string, error) {

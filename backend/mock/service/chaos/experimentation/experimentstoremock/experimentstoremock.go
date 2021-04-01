@@ -3,6 +3,7 @@ package experimentstoremock
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -27,15 +28,11 @@ type getExperimentArguments struct {
 	ConfigType string
 }
 
-func (fs *MockStorer) CreateExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentation.Experiment, error) {
+func (fs *MockStorer) CreateExperiment(ctx context.Context, config *any.Any, startTime *time.Time, endTime *time.Time) (*experimentation.Experiment, error) {
 	return nil, nil
 }
 
-func (fs *MockStorer) CreateOrGetExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentstore.CreateOrGetExperimentResult, error) {
-	return nil, nil
-}
-
-func (fs *MockStorer) CancelExperimentRun(ctx context.Context, id string, terminationReason string) error {
+func (fs *MockStorer) CancelExperimentRun(ctx context.Context, id uint64, terminationReason string) error {
 	return nil
 }
 
@@ -48,7 +45,7 @@ func (fs *MockStorer) GetListView(ctx context.Context) ([]*experimentation.ListV
 	return nil, nil
 }
 
-func (fs *MockStorer) GetExperimentRunDetails(ctx context.Context, runId string) (*experimentation.ExperimentRunDetails, error) {
+func (fs *MockStorer) GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error) {
 	return nil, nil
 }
 

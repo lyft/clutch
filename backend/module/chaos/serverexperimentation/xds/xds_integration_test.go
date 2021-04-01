@@ -167,7 +167,7 @@ func TestEnvoyECDSFaults(t *testing.T) {
 	assert.NoError(t, err, "did not see faults enabled")
 
 	// TODO(kathan24): Test TTL by stopping the server instead of canceling the experiment. Currently, TTL is not not supported for ECDS in the upstream Envoy
-	ts.Storer.CancelExperimentRun(context.Background(), experiment.RunId, "")
+	ts.Storer.CancelExperimentRun(context.Background(), experiment.Id, "")
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
 		timeout:        10 * time.Second,
@@ -177,6 +177,7 @@ func TestEnvoyECDSFaults(t *testing.T) {
 }
 
 func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experimentstoremock.SimpleStorer) *experimentationv1.Experiment {
+	now := time.Now()
 	config := serverexperimentation.HTTPFaultConfig{
 		Fault: &serverexperimentation.HTTPFaultConfig_AbortFault{
 			AbortFault: &serverexperimentation.AbortFault{
@@ -209,19 +210,7 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experiments
 	a, err := ptypes.MarshalAny(&config)
 	assert.NoError(t, err)
 
-	now := time.Date(2011, 0, 0, 0, 0, 0, 0, time.UTC)
-	assert.NoError(t, err)
-	future := now.Add(1 * time.Hour)
-	futureTimestamp, err := ptypes.TimestampProto(future)
-	assert.NoError(t, err)
-	farFuture := future.Add(1 * time.Hour)
-	farFutureTimestamp, err := ptypes.TimestampProto(farFuture)
-	assert.NoError(t, err)
-
-	d := &experimentationv1.CreateExperimentData{StartTime: futureTimestamp, EndTime: farFutureTimestamp, Config: a}
-	s, err := experimentstore.NewExperimentSpecification(d, now)
-	assert.NoError(t, err)
-	experiment, err := storer.CreateExperiment(context.Background(), s)
+	experiment, err := storer.CreateExperiment(context.Background(), a, &now, &now)
 	assert.NoError(t, err)
 
 	return experiment
