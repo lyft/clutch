@@ -57,24 +57,23 @@ func TestProcessTopologyObjectChannelSingleItem(t *testing.T) {
 		batchInsertFlush: time.Millisecond * 1,
 	}
 
-	updateCacheChan := make(chan *topologyv1.UpdateCacheRequest)
+	updateCacheChan := make(chan *topologyv1.UpdateCacheRequest, 1)
+	updateCacheChan <- &topologyv1.UpdateCacheRequest{
+		Resource: generatePrepareBulkCacheInsertInput(1)[0],
+		Action:   topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
+	}
+
 	go func() {
-		updateCacheChan <- &topologyv1.UpdateCacheRequest{
-			Resource: generatePrepareBulkCacheInsertInput(1)[0],
-			Action:   topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
-		}
+		time.Sleep(time.Second * 1)
+
+		// Close the channel so processTopologyObjectChannel exits
+		// asserts that a single item can make it through even with a batch insert size of 10
+		m.MustMeetExpectations()
+		close(updateCacheChan)
 	}()
 
-	go topology.processTopologyObjectChannel(context.Background(), updateCacheChan, "testing")
-
+	topology.processTopologyObjectChannel(context.Background(), updateCacheChan, "testing")
 	m.Mock.ExpectExec("INSERT INTO topology_cache .*")
-
-	// Close the channel so processTopologyObjectChannel exits
-	// asserts that a single item can make it through even with a batch insert size of 10
-	time.Sleep(time.Second * 1)
-	close(updateCacheChan)
-
-	m.MustMeetExpectations()
 }
 
 func TestProcessTopologyObjectChannelBatchInsert(t *testing.T) {
@@ -95,19 +94,18 @@ func TestProcessTopologyObjectChannelBatchInsert(t *testing.T) {
 				Action:   topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
 			}
 		}
+
+		time.Sleep(time.Second * 1)
+		// Close the channel so processTopologyObjectChannel exits
+		m.MustMeetExpectations()
+		close(updateCacheChan)
 	}()
 
-	go topology.processTopologyObjectChannel(context.Background(), updateCacheChan, "testing")
+	topology.processTopologyObjectChannel(context.Background(), updateCacheChan, "testing")
 
 	// We expect two batching of inserts of two items each
 	m.Mock.ExpectExec("INSERT INTO topology_cache .*")
 	m.Mock.ExpectExec("INSERT INTO topology_cache .*")
-
-	// Close the channel so processTopologyObjectChannel exits
-	time.Sleep(time.Second * 1)
-	close(updateCacheChan)
-
-	m.MustMeetExpectations()
 }
 
 func TestPrepareBulkCacheInsert(t *testing.T) {
