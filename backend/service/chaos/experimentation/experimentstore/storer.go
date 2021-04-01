@@ -1,19 +1,17 @@
 package experimentstore
 
 import (
-	"bytes"
 	"context"
 	"database/sql"
 	"errors"
-	"strings"
 	"time"
 
-	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/encoding/protojson"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/service"
@@ -187,7 +185,7 @@ func (s *storer) GetExperiments(ctx context.Context, configType string, status e
 		}
 
 		anyConfig := &any.Any{}
-		err = jsonpb.Unmarshal(strings.NewReader(details), anyConfig)
+		err = protojson.Unmarshal([]byte(details), anyConfig)
 		if err != nil {
 			return nil, err
 		}
@@ -234,8 +232,7 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 		if err != nil {
 			return nil, err
 		}
-
-		if err = jsonpb.Unmarshal(strings.NewReader(details), config.Config); err != nil {
+		if err = protojson.Unmarshal([]byte(details), config.Config); err != nil {
 			return nil, err
 		}
 
@@ -286,7 +283,7 @@ func (s *storer) getExperiment(ctx context.Context, runId string) (*Experiment, 
 		return nil, err
 	}
 
-	err = jsonpb.Unmarshal(strings.NewReader(details), config.Config)
+	err = protojson.Unmarshal([]byte(details), config.Config)
 	if err != nil {
 		return nil, err
 	}
@@ -309,11 +306,9 @@ func (s *storer) RegisterTransformation(transformation Transformation) error {
 }
 
 func marshalConfig(config *any.Any) (string, error) {
-	marshaler := jsonpb.Marshaler{}
-	buf := &bytes.Buffer{}
-	err := marshaler.Marshal(buf, config)
+	b, err := protojson.Marshal(config)
 	if err != nil {
 		return "", err
 	}
-	return buf.String(), nil
+	return string(b), nil
 }
