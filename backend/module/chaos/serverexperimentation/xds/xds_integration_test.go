@@ -13,6 +13,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
@@ -191,7 +192,7 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experiments
 		},
 	}
 
-	a, err := ptypes.MarshalAny(&config)
+	a, err := anypb.New(&config)
 	assert.NoError(t, err)
 
 	now := time.Date(2011, 0, 0, 0, 0, 0, 0, time.UTC)

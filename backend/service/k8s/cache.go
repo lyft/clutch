@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/types/known/anypb"
 	appsv1 "k8s.io/api/apps/v1"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -175,7 +175,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 	switch objType := obj.(type) {
 	case *corev1.Pod:
 		pod := podDescription(objType, "")
-		protoPod, err := ptypes.MarshalAny(pod)
+		protoPod, err := anypb.New(pod)
 		if err != nil {
 			s.log.Error("unable to marshal pod", zap.Error(err))
 			return
@@ -196,7 +196,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 		}
 	case *appsv1.Deployment:
 		deployment := ProtoForDeployment("", objType)
-		protoDeployment, err := ptypes.MarshalAny(deployment)
+		protoDeployment, err := anypb.New(deployment)
 		if err != nil {
 			s.log.Error("unable to marshal deployment", zap.Error(err))
 			return
@@ -217,7 +217,7 @@ func (s *svc) processInformerEvent(obj interface{}, action topologyv1.UpdateCach
 		}
 	case *autoscalingv1.HorizontalPodAutoscaler:
 		hpa := ProtoForHPA("", objType)
-		protoHpa, err := ptypes.MarshalAny(hpa)
+		protoHpa, err := anypb.New(hpa)
 		if err != nil {
 			s.log.Error("unable to marshal hpa", zap.Error(err))
 			return

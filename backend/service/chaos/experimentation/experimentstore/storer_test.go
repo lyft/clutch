@@ -13,6 +13,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
@@ -67,7 +68,7 @@ func NewExperimentConfigTestData() (*experimentConfigTestData, error) {
 		},
 	}
 
-	anyConfig, err := ptypes.MarshalAny(config)
+	anyConfig, err := anypb.New(config)
 	if err != nil {
 		return nil, err
 	}
