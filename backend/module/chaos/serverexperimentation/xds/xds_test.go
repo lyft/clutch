@@ -124,7 +124,7 @@ func TestResourceTTL(t *testing.T) {
 	resource := &gcpDiscoveryV3.Resource{}
 	assert.NoError(t, ptypes.UnmarshalAny(r.Resources[0], resource))
 
-	assert.Equal(t, int64(1), resource.Ttl.Seconds)
+	assert.Equal(t, int64(2), resource.Ttl.Seconds)
 
 	r, err = s.sendV3RequestAndAwaitResponse(r.VersionInfo, r.Nonce)
 	assert.NoError(t, err)
@@ -132,7 +132,7 @@ func TestResourceTTL(t *testing.T) {
 	resource = &gcpDiscoveryV3.Resource{}
 	assert.NoError(t, ptypes.UnmarshalAny(r.Resources[0], resource))
 
-	assert.Equal(t, int64(1), resource.Ttl.Seconds)
+	assert.Equal(t, int64(2), resource.Ttl.Seconds)
 	assert.Nil(t, resource.Resource)
 
 	// Second we look at a stream for a cluster that should not receive any faults.

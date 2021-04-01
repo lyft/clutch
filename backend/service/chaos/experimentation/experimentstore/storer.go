@@ -26,7 +26,7 @@ const Name = "clutch.service.chaos.experimentation.store"
 type Storer interface {
 	CreateExperiment(context.Context, *ExperimentSpecification) (*experimentation.Experiment, error)
 	CreateOrGetExperiment(context.Context, *ExperimentSpecification) (*CreateOrGetExperimentResult, error)
-	CancelExperimentRun(context.Context, string) error
+	CancelExperimentRun(ctx context.Context, id string, reason string) error
 	GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error)
 	GetExperimentRunDetails(ctx context.Context, id string) (*experimentation.ExperimentRunDetails, error)
 	GetListView(ctx context.Context) ([]*experimentation.ListViewItem, error)
@@ -39,6 +39,8 @@ type storer struct {
 	logger      *zap.SugaredLogger
 	transformer *Transformer
 }
+
+var _ Storer = (*storer)(nil)
 
 // New returns a new NewExperimentStore instance.
 func New(_ *any.Any, logger *zap.Logger, _ tally.Scope) (service.Service, error) {
@@ -138,13 +140,17 @@ func (s *storer) CreateOrGetExperiment(ctx context.Context, es *ExperimentSpecif
 	}
 }
 
-func (s *storer) CancelExperimentRun(ctx context.Context, id string) error {
+func (s *storer) CancelExperimentRun(ctx context.Context, id string, reason string) error {
+	if len(reason) > 32 {
+		reason = reason[0:32]
+	}
 	sql :=
 		`UPDATE experiment_run
          SET cancellation_time = NOW()
+		 SET termination_reason = $2
          WHERE id = $1 AND cancellation_time IS NULL AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
 
-	_, err := s.db.ExecContext(ctx, sql, id)
+	_, err := s.db.ExecContext(ctx, sql, id, reason)
 	return err
 }
 

@@ -275,7 +275,7 @@ func TestRefreshCache(t *testing.T) {
 
 	ecdsConfig := ECDSConfig{
 		ecdsResourceMap: &SafeEcdsResourceMap{},
-		enabledClusters: map[string]struct{}{testCluster: struct{}{}},
+		enabledClusters: map[string]struct{}{testCluster: {}},
 	}
 
 	config := serverexperimentation.HTTPFaultConfig{
