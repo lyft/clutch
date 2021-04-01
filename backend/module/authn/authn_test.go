@@ -1,13 +1,18 @@
 package authn
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/durationpb"
 
 	authnv1 "github.com/lyft/clutch/backend/api/authn/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
+	"github.com/lyft/clutch/backend/mock/service/authnmock"
 )
 
 func TestAllRequestResponseAreRedacted(t *testing.T) {
@@ -23,4 +28,69 @@ func TestAllRequestResponseAreRedacted(t *testing.T) {
 	for _, o := range obj {
 		assert.True(t, meta.IsRedacted(o))
 	}
+}
+
+func TestAPILogin(t *testing.T) {
+	api := api{
+		provider: authnmock.MockProvider{},
+		issuer:   authnmock.MockIssuer{},
+	}
+
+	response, err := api.Login(context.Background(), &authnv1.LoginRequest{
+		RedirectUrl: "foo.com",
+	})
+	assert.NoError(t, err)
+
+	assert.Equal(t, "https://auth.com/?param=nonce-foo.com", response.AuthUrl)
+}
+
+func TestAPICallback(t *testing.T) {
+	api := api{
+		provider: authnmock.MockProvider{},
+		issuer:   authnmock.MockIssuer{},
+	}
+
+	response, err := api.Callback(context.Background(), &authnv1.CallbackRequest{
+		Error:            "error",
+		ErrorDescription: "description",
+	})
+	assert.Nil(t, response)
+	assert.Error(t, err, "error: description")
+
+	transportStream := &authnmock.MockServerTransportStream{}
+	ctx := grpc.NewContextWithServerTransportStream(context.Background(), transportStream)
+	response, err = api.Callback(ctx, &authnv1.CallbackRequest{
+		State: "nonce-foo.com",
+		Code:  "whatever",
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, response.AccessToken, "test-access")
+	assert.Len(t, transportStream.SentHeaders, 1)
+	assert.Equal(t, metadata.MD{"location": []string{"foo.com"}, "location-status": []string{"303"}, "set-cookie-token": []string{"test-access"}}, transportStream.SentHeaders[0])
+}
+
+func TestAPICreateToken(t *testing.T) {
+	api := api{
+		provider: authnmock.MockProvider{},
+		issuer:   authnmock.MockIssuer{},
+	}
+
+	response, err := api.CreateToken(context.Background(), &authnv1.CreateTokenRequest{
+		Subject: "invalid",
+	})
+	assert.Nil(t, response)
+	assert.Error(t, err, "subject must start with 'service:', got 'invalid'")
+
+	response, err = api.CreateToken(context.Background(), &authnv1.CreateTokenRequest{
+		Subject: "service:name",
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, response.AccessToken, "token-without-expiry")
+
+	response, err = api.CreateToken(context.Background(), &authnv1.CreateTokenRequest{
+		Subject: "service:name",
+		Expiry:  &durationpb.Duration{Seconds: 1},
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, response.AccessToken, "token-with-expiry")
 }
