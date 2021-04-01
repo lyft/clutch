@@ -92,10 +92,10 @@ const Resolver: React.FC<ResolverProps> = ({
     );
   };
 
-  const [searchParams, ,] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   React.useEffect(() => {
-    if (searchParams.get("rq")) {
-      submitHandler({ query: searchParams.get("rq") });
+    if (searchParams.get("q")) {
+      submitHandler({ query: searchParams.get("q") });
     }
   }, []);
 
@@ -112,7 +112,10 @@ const Resolver: React.FC<ResolverProps> = ({
               <QueryResolver
                 inputType={type}
                 schemas={state.searchableSchemas}
-                submitHandler={submitHandler}
+                submitHandler={data => {
+                  setSearchParams({ q: data.query });
+                  submitHandler(data);
+                }}
               />
             </>
           )}

@@ -48,6 +48,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
   const [globalWarnings, setGlobalWarnings] = React.useState<string[]>([]);
   const dataLayoutManager = useDataLayoutManager(dataLayout);
+  const [, setSearchParams] = useSearchParams();
 
   const updateStepData = (stepName: string, data: object) => {
     setWizardStepData(prevState => {
@@ -81,12 +82,12 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
       },
       onBack: () => {
         setGlobalWarnings([]);
+        setSearchParams({});
         dispatch(WizardAction.BACK);
       },
     };
   };
 
-  const [, setSearchParams] = useSearchParams();
   const lastStepIndex = React.Children.count(children) - 1;
   // If our wizard only has 1 step, it doesn't make sense to put a restart button
   const isMultistep = lastStepIndex > 0;
