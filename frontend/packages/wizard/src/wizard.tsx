@@ -14,7 +14,7 @@ const Heading = styled(Typography)({
   fontSize: "26px",
 });
 
-interface WizardProps {
+interface WizardProps extends Pick<ContainerProps, "width"> {
   heading?: string;
   dataLayout: ManagerLayout;
   children: React.ReactElement<WizardStepProps> | React.ReactElement<WizardStepProps>[];
@@ -32,17 +32,25 @@ interface WizardStepData {
   [index: string]: any;
 }
 
-const Container = styled(MuiContainer)({
-  padding: "32px",
-  maxWidth: "800px",
-});
+type ContainerProps = {
+  width: "default" | "full";
+};
+
+const Container = styled(MuiContainer)<ContainerProps>(
+  {
+    padding: "32px",
+  },
+  props => ({
+    width: props.width === "full" ? "800px" : "100%",
+  })
+);
 
 const Paper = styled(MuiPaper)({
   boxShadow: "0px 5px 15px rgba(53, 72, 212, 0.2)",
   padding: "32px",
 });
 
-const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
+const Wizard = ({ heading, width = "default", dataLayout, children }: WizardProps) => {
   const [state, dispatch] = useWizardState();
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
   const [globalWarnings, setGlobalWarnings] = React.useState<string[]>([]);
@@ -122,7 +130,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
   };
 
   return (
-    <Container>
+    <Container width={width}>
       <Grid
         container
         direction="column"
