@@ -36,10 +36,10 @@ func TestTerminator(t *testing.T) {
 			gauge: testScope.Gauge("active_routines"),
 			value: 0,
 		},
-		criteriaEvaluationSuccess:  testScope.Counter("criteria_success"),
-		criteriaEvaluationFailure:  testScope.Counter("criteria_failure"),
-		terminationCount:  testScope.Counter("terminations"),
-		marshallingErrors: testScope.Counter("unpack_error"),
+		criteriaEvaluationSuccess: testScope.Counter("criteria_success"),
+		criteriaEvaluationFailure: testScope.Counter("criteria_failure"),
+		terminationCount:          testScope.Counter("terminations"),
+		marshallingErrors:         testScope.Counter("unpack_error"),
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
