@@ -15,7 +15,7 @@ import (
 	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
-	"github.com/lyft/clutch/backend/api/config/service/chaos/experimentation/terminator/v1"
+	terminatorv1 "github.com/lyft/clutch/backend/api/config/service/chaos/experimentation/terminator/v1"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
@@ -23,7 +23,7 @@ import (
 const Name = "clutch.module.chaos.experimentation.termination"
 
 func TypeUrl(message proto.Message) string {
-	return "type.googleapis.com/"+string(message.ProtoReflect().Descriptor().FullName())
+	return "type.googleapis.com/" + string(message.ProtoReflect().Descriptor().FullName())
 }
 
 var CriteriaFactories = map[string]CriteriaFactory{
@@ -46,7 +46,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		m.Run(context.Background())
 	}
 
-	return m, nil 
+	return m, nil
 }
 
 func NewMonitor(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (*Monitor, error) {
@@ -77,7 +77,7 @@ func NewMonitor(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (*Monitor, 
 		criteria, err := factory.Create(c)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create termination criteria '%s': %s", c.TypeUrl, err)
-		} 
+		}
 
 		terminationCriteria = append(terminationCriteria, criteria)
 	}
@@ -91,7 +91,6 @@ func NewMonitor(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (*Monitor, 
 	if err != nil {
 		return nil, err
 	}
-
 
 	return &Monitor{
 		store:                      storer,

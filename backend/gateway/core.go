@@ -79,7 +79,7 @@ var Services = service.Factory{
 	awsservice.Name:          awsservice.New,
 	envoyadmin.Name:          envoyadmin.New,
 	experimentstore.Name:     experimentstore.New,
-	terminator.Name:     terminator.New,
+	terminator.Name:          terminator.New,
 	github.Name:              github.New,
 	k8sservice.Name:          k8sservice.New,
 	loggingsink.Name:         loggingsink.New,
