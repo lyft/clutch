@@ -59,7 +59,7 @@ func (s *SimpleStorer) CreateOrGetExperiment(ctx context.Context, es *experiment
 	}, nil
 }
 
-func (s *SimpleStorer) CancelExperimentRun(ctx context.Context, runId string, terminationReason string) error {
+func (s *SimpleStorer) CancelExperimentRun(ctx context.Context, runId string, reason string) error {
 	s.Lock()
 	defer s.Unlock()
 

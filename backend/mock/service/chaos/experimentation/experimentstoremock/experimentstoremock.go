@@ -35,7 +35,7 @@ func (fs *MockStorer) CreateOrGetExperiment(ctx context.Context, es *experiments
 	return nil, nil
 }
 
-func (fs *MockStorer) CancelExperimentRun(ctx context.Context, runId string, terminationReason string) error {
+func (fs *MockStorer) CancelExperimentRun(ctx context.Context, runId string, reason string) error {
 	return nil
 }
 
