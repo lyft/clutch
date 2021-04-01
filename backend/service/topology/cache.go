@@ -180,7 +180,6 @@ func (c *client) prepareBulkCacheInsert(obj []*topologyv1.Resource) ([]interface
 
 func (c *client) setCache(ctx context.Context, obj []*topologyv1.Resource) error {
 	args, queryParams := c.prepareBulkCacheInsert(obj)
-	// upsertQuery := "INSERT INTO topology_cache"
 	upsertQuery := fmt.Sprintf(`INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
 		VALUES %s
 		ON CONFLICT (id, resolver_type_url) DO UPDATE SET
