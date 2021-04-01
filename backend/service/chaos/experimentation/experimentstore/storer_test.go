@@ -13,6 +13,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
@@ -73,8 +74,13 @@ func NewExperimentConfigTestData() (*experimentConfigTestData, error) {
 		return nil, err
 	}
 
+	jsonConfig, err := protojson.Marshal(anyConfig)
+	if err != nil {
+		return nil, err
+	}
+
 	return &experimentConfigTestData{
-		stringifiedConfig: `{"@type":"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig","faultTargeting":{"upstreamEnforcing":{"upstreamCluster":{"name":"upstreamCluster"},"downstreamCluster":{"name":"downstreamCluster"}}},"abortFault":{"percentage":{"percentage":100},"abortStatus":{"httpStatusCode":401}}}`,
+		stringifiedConfig: string(jsonConfig),
 		marshaledConfig:   anyConfig,
 	}, nil
 }
