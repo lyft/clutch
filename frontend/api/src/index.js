@@ -2915,7 +2915,7 @@ export const clutch = $root.clutch = (() => {
                         message.expiry = $root.google.protobuf.Duration.fromObject(object.expiry);
                     }
                     switch (object.tokenType) {
-                    case "UNKNOWN":
+                    case "UNSPECIFIED":
                     case 0:
                         message.tokenType = 0;
                         break;
@@ -2943,7 +2943,7 @@ export const clutch = $root.clutch = (() => {
                     if (options.defaults) {
                         object.subject = "";
                         object.expiry = null;
-                        object.tokenType = options.enums === String ? "UNKNOWN" : 0;
+                        object.tokenType = options.enums === String ? "UNSPECIFIED" : 0;
                     }
                     if (message.subject != null && message.hasOwnProperty("subject"))
                         object.subject = message.subject;
@@ -2969,12 +2969,12 @@ export const clutch = $root.clutch = (() => {
                  * TokenType enum.
                  * @name clutch.authn.v1.CreateTokenRequest.TokenType
                  * @enum {number}
-                 * @property {number} UNKNOWN=0 UNKNOWN value
+                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
                  * @property {number} SERVICE=1 SERVICE value
                  */
                 CreateTokenRequest.TokenType = (function() {
                     const valuesById = {}, values = Object.create(valuesById);
-                    values[valuesById[0] = "UNKNOWN"] = 0;
+                    values[valuesById[0] = "UNSPECIFIED"] = 0;
                     values[valuesById[1] = "SERVICE"] = 1;
                     return values;
                 })();

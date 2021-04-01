@@ -72,7 +72,7 @@ message CreateTokenRequest {
   google.protobuf.Duration expiry = 2;
 
   enum TokenType {
-    UNKNOWN = 0;
+    UNSPECIFIED = 0;
     // Token is issued on behalf of another service for programmatic access.
     SERVICE = 1;
   }

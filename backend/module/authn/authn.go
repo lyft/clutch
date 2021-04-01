@@ -113,9 +113,9 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 
 func (a *api) CreateToken(ctx context.Context, request *authnv1.CreateTokenRequest) (*authnv1.CreateTokenResponse, error) {
 	var prefixedSubject string
-	switch request.TokenType{
+	switch request.TokenType {
 	case authnv1.CreateTokenRequest_SERVICE:
-		prefixedSubject = "service:"+request.Subject
+		prefixedSubject = "service:" + request.Subject
 	default:
 		return nil, status.Error(codes.InvalidArgument, "invalid token type")
 	}

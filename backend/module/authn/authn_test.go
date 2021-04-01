@@ -86,15 +86,15 @@ func TestAPICreateToken(t *testing.T) {
 	assert.Error(t, err, "invalid token type")
 
 	response, err = api.CreateToken(context.Background(), &authnv1.CreateTokenRequest{
-		Subject: "name",
+		Subject:   "name",
 		TokenType: authnv1.CreateTokenRequest_SERVICE,
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, response.AccessToken, "service:name_token-without-expiry")
 
 	response, err = api.CreateToken(context.Background(), &authnv1.CreateTokenRequest{
-		Subject: "name",
-		Expiry:  &durationpb.Duration{Seconds: 1},
+		Subject:   "name",
+		Expiry:    &durationpb.Duration{Seconds: 1},
 		TokenType: authnv1.CreateTokenRequest_SERVICE,
 	})
 	assert.NoError(t, err)
@@ -130,6 +130,6 @@ func (MockProvider) GetAuthCodeURL(ctx context.Context, state string) (string, e
 
 func (MockProvider) Exchange(ctx context.Context, code string) (token *oauth2.Token, err error) {
 	return &oauth2.Token{
-		AccessToken:  "test-access",
+		AccessToken: "test-access",
 	}, err
 }

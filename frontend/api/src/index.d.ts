@@ -1301,7 +1301,7 @@ export namespace clutch {
 
                 /** TokenType enum. */
                 enum TokenType {
-                    UNKNOWN = 0,
+                    UNSPECIFIED = 0,
                     SERVICE = 1
                 }
             }
