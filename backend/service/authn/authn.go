@@ -59,3 +59,8 @@ type Issuer interface {
 	// the token will never expire.
 	CreateToken(ctx context.Context, subject string, expiry *time.Duration) (token *oauth2.Token, err error)
 }
+
+type IssuerProvider interface {
+	Issuer
+	Provider
+}
