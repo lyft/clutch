@@ -43,6 +43,20 @@ func (m *Config) Validate() error {
 		return nil
 	}
 
+	if len(m.GetEnabledConfigTypes()) < 1 {
+		return ConfigValidationError{
+			field:  "EnabledConfigTypes",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
+	if len(m.GetTerminationCriteria()) < 1 {
+		return ConfigValidationError{
+			field:  "TerminationCriteria",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
 	for idx, item := range m.GetTerminationCriteria() {
 		_, _ = idx, item
 
@@ -58,24 +72,46 @@ func (m *Config) Validate() error {
 
 	}
 
-	if v, ok := interface{}(m.GetOuterLoopInterval()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
+	if d := m.GetOuterLoopInterval(); d != nil {
+		dur, err := ptypes.Duration(d)
+		if err != nil {
 			return ConfigValidationError{
 				field:  "OuterLoopInterval",
-				reason: "embedded message failed validation",
+				reason: "value is not a valid duration",
 				cause:  err,
 			}
 		}
+
+		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
+
+		if dur <= gt {
+			return ConfigValidationError{
+				field:  "OuterLoopInterval",
+				reason: "value must be greater than 0s",
+			}
+		}
+
 	}
 
-	if v, ok := interface{}(m.GetPerExperimentCheckInterval()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
+	if d := m.GetPerExperimentCheckInterval(); d != nil {
+		dur, err := ptypes.Duration(d)
+		if err != nil {
 			return ConfigValidationError{
 				field:  "PerExperimentCheckInterval",
-				reason: "embedded message failed validation",
+				reason: "value is not a valid duration",
 				cause:  err,
 			}
 		}
+
+		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
+
+		if dur <= gt {
+			return ConfigValidationError{
+				field:  "PerExperimentCheckInterval",
+				reason: "value must be greater than 0s",
+			}
+		}
+
 	}
 
 	return nil
@@ -134,3 +170,91 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ConfigValidationError{}
+
+// Validate checks the field values on MaxTimeTerminationCriteria with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *MaxTimeTerminationCriteria) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if d := m.GetMaxDuration(); d != nil {
+		dur, err := ptypes.Duration(d)
+		if err != nil {
+			return MaxTimeTerminationCriteriaValidationError{
+				field:  "MaxDuration",
+				reason: "value is not a valid duration",
+				cause:  err,
+			}
+		}
+
+		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
+
+		if dur <= gt {
+			return MaxTimeTerminationCriteriaValidationError{
+				field:  "MaxDuration",
+				reason: "value must be greater than 0s",
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// MaxTimeTerminationCriteriaValidationError is the validation error returned
+// by MaxTimeTerminationCriteria.Validate if the designated constraints aren't met.
+type MaxTimeTerminationCriteriaValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MaxTimeTerminationCriteriaValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MaxTimeTerminationCriteriaValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MaxTimeTerminationCriteriaValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MaxTimeTerminationCriteriaValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MaxTimeTerminationCriteriaValidationError) ErrorName() string {
+	return "MaxTimeTerminationCriteriaValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e MaxTimeTerminationCriteriaValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMaxTimeTerminationCriteria.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MaxTimeTerminationCriteriaValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MaxTimeTerminationCriteriaValidationError{}

@@ -7150,6 +7150,54 @@ export namespace clutch {
                                  */
                                 public toJSON(): { [k: string]: any };
                             }
+
+                            /** Properties of a MaxTimeTerminationCriteria. */
+                            interface IMaxTimeTerminationCriteria {
+
+                                /** MaxTimeTerminationCriteria maxDuration */
+                                maxDuration?: (google.protobuf.IDuration|null);
+                            }
+
+                            /** Represents a MaxTimeTerminationCriteria. */
+                            class MaxTimeTerminationCriteria implements IMaxTimeTerminationCriteria {
+
+                                /**
+                                 * Constructs a new MaxTimeTerminationCriteria.
+                                 * @param [properties] Properties to set
+                                 */
+                                constructor(properties?: clutch.config.service.chaos.experimentation.terminator.v1.IMaxTimeTerminationCriteria);
+
+                                /** MaxTimeTerminationCriteria maxDuration. */
+                                public maxDuration?: (google.protobuf.IDuration|null);
+
+                                /**
+                                 * Verifies a MaxTimeTerminationCriteria message.
+                                 * @param message Plain object to verify
+                                 * @returns `null` if valid, otherwise the reason why it is not
+                                 */
+                                public static verify(message: { [k: string]: any }): (string|null);
+
+                                /**
+                                 * Creates a MaxTimeTerminationCriteria message from a plain object. Also converts values to their respective internal types.
+                                 * @param object Plain object
+                                 * @returns MaxTimeTerminationCriteria
+                                 */
+                                public static fromObject(object: { [k: string]: any }): clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriteria;
+
+                                /**
+                                 * Creates a plain object from a MaxTimeTerminationCriteria message. Also converts values to other types if specified.
+                                 * @param message MaxTimeTerminationCriteria
+                                 * @param [options] Conversion options
+                                 * @returns Plain object
+                                 */
+                                public static toObject(message: clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriteria, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                                /**
+                                 * Converts this MaxTimeTerminationCriteria to JSON.
+                                 * @returns JSON object
+                                 */
+                                public toJSON(): { [k: string]: any };
+                            }
                         }
                     }
                 }

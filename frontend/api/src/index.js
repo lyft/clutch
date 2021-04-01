@@ -17298,6 +17298,111 @@ export const clutch = $root.clutch = (() => {
                                 return Config;
                             })();
 
+                            v1.MaxTimeTerminationCriteria = (function() {
+
+                                /**
+                                 * Properties of a MaxTimeTerminationCriteria.
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1
+                                 * @interface IMaxTimeTerminationCriteria
+                                 * @property {google.protobuf.IDuration|null} [maxDuration] MaxTimeTerminationCriteria maxDuration
+                                 */
+
+                                /**
+                                 * Constructs a new MaxTimeTerminationCriteria.
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1
+                                 * @classdesc Represents a MaxTimeTerminationCriteria.
+                                 * @implements IMaxTimeTerminationCriteria
+                                 * @constructor
+                                 * @param {clutch.config.service.chaos.experimentation.terminator.v1.IMaxTimeTerminationCriteria=} [properties] Properties to set
+                                 */
+                                function MaxTimeTerminationCriteria(properties) {
+                                    if (properties)
+                                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                            if (properties[keys[i]] != null)
+                                                this[keys[i]] = properties[keys[i]];
+                                }
+
+                                /**
+                                 * MaxTimeTerminationCriteria maxDuration.
+                                 * @member {google.protobuf.IDuration|null|undefined} maxDuration
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriteria
+                                 * @instance
+                                 */
+                                MaxTimeTerminationCriteria.prototype.maxDuration = null;
+
+                                /**
+                                 * Verifies a MaxTimeTerminationCriteria message.
+                                 * @function verify
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriteria
+                                 * @static
+                                 * @param {Object.<string,*>} message Plain object to verify
+                                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                 */
+                                MaxTimeTerminationCriteria.verify = function verify(message) {
+                                    if (typeof message !== "object" || message === null)
+                                        return "object expected";
+                                    if (message.maxDuration != null && message.hasOwnProperty("maxDuration")) {
+                                        let error = $root.google.protobuf.Duration.verify(message.maxDuration);
+                                        if (error)
+                                            return "maxDuration." + error;
+                                    }
+                                    return null;
+                                };
+
+                                /**
+                                 * Creates a MaxTimeTerminationCriteria message from a plain object. Also converts values to their respective internal types.
+                                 * @function fromObject
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriteria
+                                 * @static
+                                 * @param {Object.<string,*>} object Plain object
+                                 * @returns {clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriteria} MaxTimeTerminationCriteria
+                                 */
+                                MaxTimeTerminationCriteria.fromObject = function fromObject(object) {
+                                    if (object instanceof $root.clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriteria)
+                                        return object;
+                                    let message = new $root.clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriteria();
+                                    if (object.maxDuration != null) {
+                                        if (typeof object.maxDuration !== "object")
+                                            throw TypeError(".clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriteria.maxDuration: object expected");
+                                        message.maxDuration = $root.google.protobuf.Duration.fromObject(object.maxDuration);
+                                    }
+                                    return message;
+                                };
+
+                                /**
+                                 * Creates a plain object from a MaxTimeTerminationCriteria message. Also converts values to other types if specified.
+                                 * @function toObject
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriteria
+                                 * @static
+                                 * @param {clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriteria} message MaxTimeTerminationCriteria
+                                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                 * @returns {Object.<string,*>} Plain object
+                                 */
+                                MaxTimeTerminationCriteria.toObject = function toObject(message, options) {
+                                    if (!options)
+                                        options = {};
+                                    let object = {};
+                                    if (options.defaults)
+                                        object.maxDuration = null;
+                                    if (message.maxDuration != null && message.hasOwnProperty("maxDuration"))
+                                        object.maxDuration = $root.google.protobuf.Duration.toObject(message.maxDuration, options);
+                                    return object;
+                                };
+
+                                /**
+                                 * Converts this MaxTimeTerminationCriteria to JSON.
+                                 * @function toJSON
+                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriteria
+                                 * @instance
+                                 * @returns {Object.<string,*>} JSON object
+                                 */
+                                MaxTimeTerminationCriteria.prototype.toJSON = function toJSON() {
+                                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                };
+
+                                return MaxTimeTerminationCriteria;
+                            })();
+
                             return v1;
                         })();
 

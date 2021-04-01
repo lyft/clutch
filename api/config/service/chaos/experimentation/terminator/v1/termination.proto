@@ -10,14 +10,21 @@ import "google/protobuf/any.proto";
 
 message Config {
     // The list of config types for which experiment termination should be enabled for.
-    repeated string enabled_config_types = 1;
+    repeated string enabled_config_types = 1 [ (validate.rules).repeated = {min_items : 1} ];
 
     // List of termination criteria to evaluate for each config type.
-    repeated google.protobuf.Any termination_criteria = 2;
+    repeated google.protobuf.Any termination_criteria = 2 [ (validate.rules).repeated = {min_items : 1} ];
 
     // The interval at which the outer loop should poll for active experiments.
-    google.protobuf.Duration outer_loop_interval = 3;
+    google.protobuf.Duration outer_loop_interval = 3 [ (validate.rules).duration.gt.seconds = 0 ];
 
     // The interval at which the inner loop should evaluate the termination criteria for each monitored experiment.
-    google.protobuf.Duration per_experiment_check_interval = 4;
+    google.protobuf.Duration per_experiment_check_interval = 4 [ (validate.rules).duration.gt.seconds = 0 ];
+}
+
+// Termination criteria that will terminate an experiment after a configured max duration. This is helpful in ensuring
+// that there is an upper limit to how long experiments will run for.
+message MaxTimeTerminationCriteria {
+    // The maximum duration experiments can run for before being terminated.
+    google.protobuf.Duration max_duration = 1 [ (validate.rules).duration.gt.seconds = 0 ];
 }

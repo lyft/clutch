@@ -9,7 +9,6 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
-
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
@@ -23,7 +22,13 @@ import (
 
 const Name = "clutch.module.chaos.experimentation.termination"
 
-var CriteriaFactories = map[string]CriteriaFactory{}
+func TypeUrl(message proto.Message) string {
+	return "type.googleapis.com/"+string(message.ProtoReflect().Descriptor().FullName())
+}
+
+var CriteriaFactories = map[string]CriteriaFactory{
+	TypeUrl(&terminatorv1.MaxTimeTerminationCriteria{}): &maxTimeTerminationFactory{},
+}
 
 type CriteriaFactory interface {
 	Create(cfg *any.Any) (TerminationCriteria, error)
