@@ -11,11 +11,57 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentationv1 "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	terminatorv1 "github.com/lyft/clutch/backend/api/config/service/chaos/experimentation/terminator/v1"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
+	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
+
+const testConfigType = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"
+
+func TestConfigLoad(t *testing.T) {
+	builtInCriteriaConfig := &terminatorv1.MaxTimeTerminationCriteria{
+		MaxDuration: durationpb.New(time.Hour),
+	}
+	builtInCriteriaAnyConfig, err := anypb.New(builtInCriteriaConfig)
+	assert.NoError(t, err)
+
+	cfg := &terminatorv1.Config{
+		PerConfigTypeConfiguration: map[string]*terminatorv1.Config_PerConfigTypeConfig{testConfigType: {TerminationCriteria: []*anypb.Any{builtInCriteriaAnyConfig}}},
+		OuterLoopInterval:          durationpb.New(time.Second),
+		PerExperimentCheckInterval: durationpb.New(time.Second),
+	}
+
+	any, err := anypb.New(cfg)
+	assert.NoError(t, err)
+
+	service.Registry[experimentstore.Name] = &experimentstoremock.MockStorer{}
+
+	// Happy path testing.
+	m, err := NewMonitor(any, zap.NewNop(), tally.NoopScope)
+	assert.NoError(t, err)
+	assert.Len(t, m.terminationCriteriaByTypeUrl, 1)
+	assert.Len(t, m.terminationCriteriaByTypeUrl[testConfigType], 1)
+
+	// If configured with a criteria we don't have registered we should error out.
+	otherProto := &wrapperspb.StringValue{}
+	otherProtoAny, err := anypb.New(otherProto)
+	assert.NoError(t, err)
+
+	cfg.PerConfigTypeConfiguration[testConfigType].TerminationCriteria = append(cfg.PerConfigTypeConfiguration[testConfigType].TerminationCriteria, otherProtoAny)
+	any, err = anypb.New(cfg)
+	assert.NoError(t, err)
+
+	m, err = NewMonitor(any, zap.NewNop(), tally.NoopScope)
+	assert.Nil(t, m)
+	assert.EqualError(t, err, "terminator module configured with unknown criteria 'type.googleapis.com/google.protobuf.StringValue'")
+}
 
 func TestTerminator(t *testing.T) {
 	l, err := zap.NewDevelopment()
@@ -26,11 +72,11 @@ func TestTerminator(t *testing.T) {
 	store := &experimentstoremock.SimpleStorer{}
 	criteria := &testCriteria{}
 	monitor := Monitor{
-		store:                      store,
-		terminationCriteriaByTypeUrl: map[string][]TerminationCriteria{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig": {criteria}},
-		outerLoopInterval:          time.Millisecond,
-		perExperimentCheckInterval: time.Millisecond,
-		log:                        l.Sugar(),
+		store:                        store,
+		terminationCriteriaByTypeUrl: map[string][]TerminationCriteria{testConfigType: {criteria}},
+		outerLoopInterval:            time.Millisecond,
+		perExperimentCheckInterval:   time.Millisecond,
+		log:                          l.Sugar(),
 		activeMonitoringRoutines: trackingGauge{
 			gauge: testScope.Gauge("active_routines"),
 			value: 0,
@@ -48,7 +94,7 @@ func TestTerminator(t *testing.T) {
 
 	awaitGaugeValue(ctx, t, testScope, "active_routines", 1)
 
-	es, err := store.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig", experimentationv1.GetExperimentsRequest_STATUS_RUNNING)
+	es, err := store.GetExperiments(ctx, testConfigType, experimentationv1.GetExperimentsRequest_STATUS_RUNNING)
 	assert.NoError(t, err)
 	assert.Len(t, es, 1)
 
@@ -58,7 +104,7 @@ func TestTerminator(t *testing.T) {
 	awaitGaugeValue(ctx, t, testScope, "active_routines", 0)
 	assert.Equal(t, int64(1), testScope.Snapshot().Counters()["terminations+"].Value())
 
-	es, err = store.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig", experimentationv1.GetExperimentsRequest_STATUS_RUNNING)
+	es, err = store.GetExperiments(ctx, testConfigType, experimentationv1.GetExperimentsRequest_STATUS_RUNNING)
 	assert.NoError(t, err)
 	assert.Len(t, es, 0)
 }
