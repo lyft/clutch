@@ -50,7 +50,7 @@ func TestEnvoyFaults(t *testing.T) {
 	createTestExperiment(t, 400, ts.Storer)
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
-		timeout:        2 * time.Second,
+		timeout:        4 * time.Second,
 		expectedStatus: 400,
 	})
 	assert.NoError(t, err, "did not see faults enabled")
@@ -104,7 +104,7 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 	createTestExperiment(t, 400, ts.Storer)
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
-		timeout:        3 * time.Second,
+		timeout:        4 * time.Second,
 		expectedStatus: 400,
 	})
 	assert.NoError(t, err, "did not see faults enabled")
@@ -144,7 +144,7 @@ func TestEnvoyECDSFaults(t *testing.T) {
 	experiment := createTestExperiment(t, 404, ts.Storer)
 
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
-		timeout:        2 * time.Second,
+		timeout:        4 * time.Second,
 		expectedStatus: 404,
 	})
 	assert.NoError(t, err, "did not see faults enabled")

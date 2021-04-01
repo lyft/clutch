@@ -145,9 +145,9 @@ func (s *storer) CancelExperimentRun(ctx context.Context, id string, reason stri
 		reason = reason[0:32]
 	}
 	sql :=
-		`UPDATE experiment_run
-         SET cancellation_time = NOW()
-		 SET termination_reason = $2
+		`UPDATE experiment_run 
+         SET cancellation_time = NOW(),
+		 termination_reason = $2
          WHERE id = $1 AND cancellation_time IS NULL AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
 
 	_, err := s.db.ExecContext(ctx, sql, id, reason)
