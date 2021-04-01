@@ -143,6 +143,7 @@ func TestCreateExperiments(t *testing.T) {
 			s := ExperimentSpecification{RunId: "1", ConfigId: "1", StartTime: test.startTime, EndTime: nil, Config: test.config}
 			_, err = es.CreateExperiment(context.Background(), &s)
 			a.Equal(test.err, err)
+			assert.NoError(t, mock.ExpectationsWereMet())
 		})
 	}
 }
@@ -263,6 +264,7 @@ func TestCreateOrGetExperiment(t *testing.T) {
 			result, err := es.CreateOrGetExperiment(context.Background(), &s)
 			a.NoError(err)
 			a.Equal(tt.expectedOrigin, result.Origin)
+			assert.NoError(t, mock.ExpectationsWereMet())
 		})
 	}
 }
@@ -281,6 +283,7 @@ func TestCancelExperimentRun(t *testing.T) {
 
 	err = es.CancelExperimentRun(context.Background(), "1", "")
 	assert.NoError(err)
+	assert.NoError(mock.ExpectationsWereMet())
 }
 
 var getExperimentsSQLQuery = `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`
@@ -317,6 +320,7 @@ func TestGetExperimentsUnmarshalsExperimentConfiguration(t *testing.T) {
 	assert.NotNil(abort)
 	assert.Equal(uint32(401), abort.GetAbortStatus().GetHttpStatusCode())
 	assert.Equal(uint32(100), abort.GetPercentage().GetPercentage())
+	assert.NoError(mock.ExpectationsWereMet())
 }
 
 func TestGetExperimentsFailsIfItReadsExperimentWithMalformedConfiguration(t *testing.T) {
@@ -349,4 +353,5 @@ func TestGetExperimentsFailsIfItReadsExperimentWithMalformedConfiguration(t *tes
 	experiments, err := es.GetExperiments(context.Background(), "foo", experimentation.GetExperimentsRequest_STATUS_UNSPECIFIED)
 	assert.Nil(experiments)
 	assert.Error(err)
+	assert.NoError(mock.ExpectationsWereMet())
 }
