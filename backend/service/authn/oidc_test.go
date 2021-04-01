@@ -161,5 +161,12 @@ oidc:
 	assert.NotNil(t, c)
 	assert.Equal(t, email, c.Subject)
 
-	// TODO(snowp): Delete clutch issued token and verify that we are no longer valid.
+	// Revoke all the tokens for clutch, leaving the provider token. This verifies that we explicitly
+	// check for the existence of the clutch issued token in the database.
+	delete(mockStorage.Tokens, clutchProvider)
+
+	// Verification should now fail.
+	c, err = p.Verify(context.Background(), token.AccessToken)
+	assert.Error(t, err)
+	assert.Nil(t, c)
 }
