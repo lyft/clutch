@@ -27,8 +27,7 @@ func TestTerminator(t *testing.T) {
 	criteria := &testCriteria{}
 	monitor := Monitor{
 		store:                      store,
-		enabledConfigTypes:         []string{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"},
-		criterias:                  []TerminationCriteria{criteria},
+		terminationCriteriaByTypeUrl: map[string][]TerminationCriteria{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig": {criteria}},
 		outerLoopInterval:          time.Millisecond,
 		perExperimentCheckInterval: time.Millisecond,
 		log:                        l.Sugar(),

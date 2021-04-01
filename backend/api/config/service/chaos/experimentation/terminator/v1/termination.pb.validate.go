@@ -43,27 +43,15 @@ func (m *Config) Validate() error {
 		return nil
 	}
 
-	if len(m.GetEnabledConfigTypes()) < 1 {
-		return ConfigValidationError{
-			field:  "EnabledConfigTypes",
-			reason: "value must contain at least 1 item(s)",
-		}
-	}
+	for key, val := range m.GetPerConfigTypeConfiguration() {
+		_ = val
 
-	if len(m.GetTerminationCriteria()) < 1 {
-		return ConfigValidationError{
-			field:  "TerminationCriteria",
-			reason: "value must contain at least 1 item(s)",
-		}
-	}
+		// no validation rules for PerConfigTypeConfiguration[key]
 
-	for idx, item := range m.GetTerminationCriteria() {
-		_, _ = idx, item
-
-		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+		if v, ok := interface{}(val).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
 				return ConfigValidationError{
-					field:  fmt.Sprintf("TerminationCriteria[%v]", idx),
+					field:  fmt.Sprintf("PerConfigTypeConfiguration[%v]", key),
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -258,3 +246,92 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = MaxTimeTerminationCriteriaValidationError{}
+
+// Validate checks the field values on Config_PerConfigTypeConfig with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *Config_PerConfigTypeConfig) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if len(m.GetTerminationCriteria()) < 1 {
+		return Config_PerConfigTypeConfigValidationError{
+			field:  "TerminationCriteria",
+			reason: "value must contain at least 1 item(s)",
+		}
+	}
+
+	for idx, item := range m.GetTerminationCriteria() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Config_PerConfigTypeConfigValidationError{
+					field:  fmt.Sprintf("TerminationCriteria[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Config_PerConfigTypeConfigValidationError is the validation error returned
+// by Config_PerConfigTypeConfig.Validate if the designated constraints aren't met.
+type Config_PerConfigTypeConfigValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Config_PerConfigTypeConfigValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Config_PerConfigTypeConfigValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Config_PerConfigTypeConfigValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Config_PerConfigTypeConfigValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Config_PerConfigTypeConfigValidationError) ErrorName() string {
+	return "Config_PerConfigTypeConfigValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Config_PerConfigTypeConfigValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sConfig_PerConfigTypeConfig.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Config_PerConfigTypeConfigValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Config_PerConfigTypeConfigValidationError{}

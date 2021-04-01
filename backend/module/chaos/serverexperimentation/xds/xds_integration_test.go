@@ -24,7 +24,6 @@ import (
 	"github.com/lyft/clutch/backend/internal/test/integration/helper/envoytest"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/terminator"
 )
 
@@ -89,9 +88,10 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 	assert.NoError(t, err)
 
 	typedConfig := &terminatorv1.Config{
-		TerminationCriteria: []*anypb.Any{anyString},
-		EnabledConfigTypes: []string{
-			"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig",
+		PerConfigTypeConfiguration: map[string]*terminatorv1.Config_PerConfigTypeConfig{
+			"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig": {
+				TerminationCriteria: []*anypb.Any{anyString},
+			},
 		},
 		OuterLoopInterval:          ptypes.DurationProto(time.Second),
 		PerExperimentCheckInterval: ptypes.DurationProto(time.Second),

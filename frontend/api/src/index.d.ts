@@ -7088,11 +7088,8 @@ export namespace clutch {
                             /** Properties of a Config. */
                             interface IConfig {
 
-                                /** Config enabledConfigTypes */
-                                enabledConfigTypes?: (string[]|null);
-
-                                /** Config terminationCriteria */
-                                terminationCriteria?: (google.protobuf.IAny[]|null);
+                                /** Config perConfigTypeConfiguration */
+                                perConfigTypeConfiguration?: ({ [k: string]: clutch.config.service.chaos.experimentation.terminator.v1.Config.IPerConfigTypeConfig }|null);
 
                                 /** Config outerLoopInterval */
                                 outerLoopInterval?: (google.protobuf.IDuration|null);
@@ -7110,11 +7107,8 @@ export namespace clutch {
                                  */
                                 constructor(properties?: clutch.config.service.chaos.experimentation.terminator.v1.IConfig);
 
-                                /** Config enabledConfigTypes. */
-                                public enabledConfigTypes: string[];
-
-                                /** Config terminationCriteria. */
-                                public terminationCriteria: google.protobuf.IAny[];
+                                /** Config perConfigTypeConfiguration. */
+                                public perConfigTypeConfiguration: { [k: string]: clutch.config.service.chaos.experimentation.terminator.v1.Config.IPerConfigTypeConfig };
 
                                 /** Config outerLoopInterval. */
                                 public outerLoopInterval?: (google.protobuf.IDuration|null);
@@ -7149,6 +7143,57 @@ export namespace clutch {
                                  * @returns JSON object
                                  */
                                 public toJSON(): { [k: string]: any };
+                            }
+
+                            namespace Config {
+
+                                /** Properties of a PerConfigTypeConfig. */
+                                interface IPerConfigTypeConfig {
+
+                                    /** PerConfigTypeConfig terminationCriteria */
+                                    terminationCriteria?: (google.protobuf.IAny[]|null);
+                                }
+
+                                /** Represents a PerConfigTypeConfig. */
+                                class PerConfigTypeConfig implements IPerConfigTypeConfig {
+
+                                    /**
+                                     * Constructs a new PerConfigTypeConfig.
+                                     * @param [properties] Properties to set
+                                     */
+                                    constructor(properties?: clutch.config.service.chaos.experimentation.terminator.v1.Config.IPerConfigTypeConfig);
+
+                                    /** PerConfigTypeConfig terminationCriteria. */
+                                    public terminationCriteria: google.protobuf.IAny[];
+
+                                    /**
+                                     * Verifies a PerConfigTypeConfig message.
+                                     * @param message Plain object to verify
+                                     * @returns `null` if valid, otherwise the reason why it is not
+                                     */
+                                    public static verify(message: { [k: string]: any }): (string|null);
+
+                                    /**
+                                     * Creates a PerConfigTypeConfig message from a plain object. Also converts values to their respective internal types.
+                                     * @param object Plain object
+                                     * @returns PerConfigTypeConfig
+                                     */
+                                    public static fromObject(object: { [k: string]: any }): clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig;
+
+                                    /**
+                                     * Creates a plain object from a PerConfigTypeConfig message. Also converts values to other types if specified.
+                                     * @param message PerConfigTypeConfig
+                                     * @param [options] Conversion options
+                                     * @returns Plain object
+                                     */
+                                    public static toObject(message: clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                                    /**
+                                     * Converts this PerConfigTypeConfig to JSON.
+                                     * @returns JSON object
+                                     */
+                                    public toJSON(): { [k: string]: any };
+                                }
                             }
 
                             /** Properties of a MaxTimeTerminationCriteria. */

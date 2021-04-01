@@ -17109,8 +17109,7 @@ export const clutch = $root.clutch = (() => {
                                  * Properties of a Config.
                                  * @memberof clutch.config.service.chaos.experimentation.terminator.v1
                                  * @interface IConfig
-                                 * @property {Array.<string>|null} [enabledConfigTypes] Config enabledConfigTypes
-                                 * @property {Array.<google.protobuf.IAny>|null} [terminationCriteria] Config terminationCriteria
+                                 * @property {Object.<string,clutch.config.service.chaos.experimentation.terminator.v1.Config.IPerConfigTypeConfig>|null} [perConfigTypeConfiguration] Config perConfigTypeConfiguration
                                  * @property {google.protobuf.IDuration|null} [outerLoopInterval] Config outerLoopInterval
                                  * @property {google.protobuf.IDuration|null} [perExperimentCheckInterval] Config perExperimentCheckInterval
                                  */
@@ -17124,8 +17123,7 @@ export const clutch = $root.clutch = (() => {
                                  * @param {clutch.config.service.chaos.experimentation.terminator.v1.IConfig=} [properties] Properties to set
                                  */
                                 function Config(properties) {
-                                    this.enabledConfigTypes = [];
-                                    this.terminationCriteria = [];
+                                    this.perConfigTypeConfiguration = {};
                                     if (properties)
                                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                             if (properties[keys[i]] != null)
@@ -17133,20 +17131,12 @@ export const clutch = $root.clutch = (() => {
                                 }
 
                                 /**
-                                 * Config enabledConfigTypes.
-                                 * @member {Array.<string>} enabledConfigTypes
+                                 * Config perConfigTypeConfiguration.
+                                 * @member {Object.<string,clutch.config.service.chaos.experimentation.terminator.v1.Config.IPerConfigTypeConfig>} perConfigTypeConfiguration
                                  * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config
                                  * @instance
                                  */
-                                Config.prototype.enabledConfigTypes = $util.emptyArray;
-
-                                /**
-                                 * Config terminationCriteria.
-                                 * @member {Array.<google.protobuf.IAny>} terminationCriteria
-                                 * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config
-                                 * @instance
-                                 */
-                                Config.prototype.terminationCriteria = $util.emptyArray;
+                                Config.prototype.perConfigTypeConfiguration = $util.emptyObject;
 
                                 /**
                                  * Config outerLoopInterval.
@@ -17175,20 +17165,14 @@ export const clutch = $root.clutch = (() => {
                                 Config.verify = function verify(message) {
                                     if (typeof message !== "object" || message === null)
                                         return "object expected";
-                                    if (message.enabledConfigTypes != null && message.hasOwnProperty("enabledConfigTypes")) {
-                                        if (!Array.isArray(message.enabledConfigTypes))
-                                            return "enabledConfigTypes: array expected";
-                                        for (let i = 0; i < message.enabledConfigTypes.length; ++i)
-                                            if (!$util.isString(message.enabledConfigTypes[i]))
-                                                return "enabledConfigTypes: string[] expected";
-                                    }
-                                    if (message.terminationCriteria != null && message.hasOwnProperty("terminationCriteria")) {
-                                        if (!Array.isArray(message.terminationCriteria))
-                                            return "terminationCriteria: array expected";
-                                        for (let i = 0; i < message.terminationCriteria.length; ++i) {
-                                            let error = $root.google.protobuf.Any.verify(message.terminationCriteria[i]);
+                                    if (message.perConfigTypeConfiguration != null && message.hasOwnProperty("perConfigTypeConfiguration")) {
+                                        if (!$util.isObject(message.perConfigTypeConfiguration))
+                                            return "perConfigTypeConfiguration: object expected";
+                                        let key = Object.keys(message.perConfigTypeConfiguration);
+                                        for (let i = 0; i < key.length; ++i) {
+                                            let error = $root.clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig.verify(message.perConfigTypeConfiguration[key[i]]);
                                             if (error)
-                                                return "terminationCriteria." + error;
+                                                return "perConfigTypeConfiguration." + error;
                                         }
                                     }
                                     if (message.outerLoopInterval != null && message.hasOwnProperty("outerLoopInterval")) {
@@ -17216,21 +17200,14 @@ export const clutch = $root.clutch = (() => {
                                     if (object instanceof $root.clutch.config.service.chaos.experimentation.terminator.v1.Config)
                                         return object;
                                     let message = new $root.clutch.config.service.chaos.experimentation.terminator.v1.Config();
-                                    if (object.enabledConfigTypes) {
-                                        if (!Array.isArray(object.enabledConfigTypes))
-                                            throw TypeError(".clutch.config.service.chaos.experimentation.terminator.v1.Config.enabledConfigTypes: array expected");
-                                        message.enabledConfigTypes = [];
-                                        for (let i = 0; i < object.enabledConfigTypes.length; ++i)
-                                            message.enabledConfigTypes[i] = String(object.enabledConfigTypes[i]);
-                                    }
-                                    if (object.terminationCriteria) {
-                                        if (!Array.isArray(object.terminationCriteria))
-                                            throw TypeError(".clutch.config.service.chaos.experimentation.terminator.v1.Config.terminationCriteria: array expected");
-                                        message.terminationCriteria = [];
-                                        for (let i = 0; i < object.terminationCriteria.length; ++i) {
-                                            if (typeof object.terminationCriteria[i] !== "object")
-                                                throw TypeError(".clutch.config.service.chaos.experimentation.terminator.v1.Config.terminationCriteria: object expected");
-                                            message.terminationCriteria[i] = $root.google.protobuf.Any.fromObject(object.terminationCriteria[i]);
+                                    if (object.perConfigTypeConfiguration) {
+                                        if (typeof object.perConfigTypeConfiguration !== "object")
+                                            throw TypeError(".clutch.config.service.chaos.experimentation.terminator.v1.Config.perConfigTypeConfiguration: object expected");
+                                        message.perConfigTypeConfiguration = {};
+                                        for (let keys = Object.keys(object.perConfigTypeConfiguration), i = 0; i < keys.length; ++i) {
+                                            if (typeof object.perConfigTypeConfiguration[keys[i]] !== "object")
+                                                throw TypeError(".clutch.config.service.chaos.experimentation.terminator.v1.Config.perConfigTypeConfiguration: object expected");
+                                            message.perConfigTypeConfiguration[keys[i]] = $root.clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig.fromObject(object.perConfigTypeConfiguration[keys[i]]);
                                         }
                                     }
                                     if (object.outerLoopInterval != null) {
@@ -17259,23 +17236,17 @@ export const clutch = $root.clutch = (() => {
                                     if (!options)
                                         options = {};
                                     let object = {};
-                                    if (options.arrays || options.defaults) {
-                                        object.enabledConfigTypes = [];
-                                        object.terminationCriteria = [];
-                                    }
+                                    if (options.objects || options.defaults)
+                                        object.perConfigTypeConfiguration = {};
                                     if (options.defaults) {
                                         object.outerLoopInterval = null;
                                         object.perExperimentCheckInterval = null;
                                     }
-                                    if (message.enabledConfigTypes && message.enabledConfigTypes.length) {
-                                        object.enabledConfigTypes = [];
-                                        for (let j = 0; j < message.enabledConfigTypes.length; ++j)
-                                            object.enabledConfigTypes[j] = message.enabledConfigTypes[j];
-                                    }
-                                    if (message.terminationCriteria && message.terminationCriteria.length) {
-                                        object.terminationCriteria = [];
-                                        for (let j = 0; j < message.terminationCriteria.length; ++j)
-                                            object.terminationCriteria[j] = $root.google.protobuf.Any.toObject(message.terminationCriteria[j], options);
+                                    let keys2;
+                                    if (message.perConfigTypeConfiguration && (keys2 = Object.keys(message.perConfigTypeConfiguration)).length) {
+                                        object.perConfigTypeConfiguration = {};
+                                        for (let j = 0; j < keys2.length; ++j)
+                                            object.perConfigTypeConfiguration[keys2[j]] = $root.clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig.toObject(message.perConfigTypeConfiguration[keys2[j]], options);
                                     }
                                     if (message.outerLoopInterval != null && message.hasOwnProperty("outerLoopInterval"))
                                         object.outerLoopInterval = $root.google.protobuf.Duration.toObject(message.outerLoopInterval, options);
@@ -17294,6 +17265,124 @@ export const clutch = $root.clutch = (() => {
                                 Config.prototype.toJSON = function toJSON() {
                                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                                 };
+
+                                Config.PerConfigTypeConfig = (function() {
+
+                                    /**
+                                     * Properties of a PerConfigTypeConfig.
+                                     * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config
+                                     * @interface IPerConfigTypeConfig
+                                     * @property {Array.<google.protobuf.IAny>|null} [terminationCriteria] PerConfigTypeConfig terminationCriteria
+                                     */
+
+                                    /**
+                                     * Constructs a new PerConfigTypeConfig.
+                                     * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config
+                                     * @classdesc Represents a PerConfigTypeConfig.
+                                     * @implements IPerConfigTypeConfig
+                                     * @constructor
+                                     * @param {clutch.config.service.chaos.experimentation.terminator.v1.Config.IPerConfigTypeConfig=} [properties] Properties to set
+                                     */
+                                    function PerConfigTypeConfig(properties) {
+                                        this.terminationCriteria = [];
+                                        if (properties)
+                                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                                if (properties[keys[i]] != null)
+                                                    this[keys[i]] = properties[keys[i]];
+                                    }
+
+                                    /**
+                                     * PerConfigTypeConfig terminationCriteria.
+                                     * @member {Array.<google.protobuf.IAny>} terminationCriteria
+                                     * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig
+                                     * @instance
+                                     */
+                                    PerConfigTypeConfig.prototype.terminationCriteria = $util.emptyArray;
+
+                                    /**
+                                     * Verifies a PerConfigTypeConfig message.
+                                     * @function verify
+                                     * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig
+                                     * @static
+                                     * @param {Object.<string,*>} message Plain object to verify
+                                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                                     */
+                                    PerConfigTypeConfig.verify = function verify(message) {
+                                        if (typeof message !== "object" || message === null)
+                                            return "object expected";
+                                        if (message.terminationCriteria != null && message.hasOwnProperty("terminationCriteria")) {
+                                            if (!Array.isArray(message.terminationCriteria))
+                                                return "terminationCriteria: array expected";
+                                            for (let i = 0; i < message.terminationCriteria.length; ++i) {
+                                                let error = $root.google.protobuf.Any.verify(message.terminationCriteria[i]);
+                                                if (error)
+                                                    return "terminationCriteria." + error;
+                                            }
+                                        }
+                                        return null;
+                                    };
+
+                                    /**
+                                     * Creates a PerConfigTypeConfig message from a plain object. Also converts values to their respective internal types.
+                                     * @function fromObject
+                                     * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig
+                                     * @static
+                                     * @param {Object.<string,*>} object Plain object
+                                     * @returns {clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig} PerConfigTypeConfig
+                                     */
+                                    PerConfigTypeConfig.fromObject = function fromObject(object) {
+                                        if (object instanceof $root.clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig)
+                                            return object;
+                                        let message = new $root.clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig();
+                                        if (object.terminationCriteria) {
+                                            if (!Array.isArray(object.terminationCriteria))
+                                                throw TypeError(".clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig.terminationCriteria: array expected");
+                                            message.terminationCriteria = [];
+                                            for (let i = 0; i < object.terminationCriteria.length; ++i) {
+                                                if (typeof object.terminationCriteria[i] !== "object")
+                                                    throw TypeError(".clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig.terminationCriteria: object expected");
+                                                message.terminationCriteria[i] = $root.google.protobuf.Any.fromObject(object.terminationCriteria[i]);
+                                            }
+                                        }
+                                        return message;
+                                    };
+
+                                    /**
+                                     * Creates a plain object from a PerConfigTypeConfig message. Also converts values to other types if specified.
+                                     * @function toObject
+                                     * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig
+                                     * @static
+                                     * @param {clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig} message PerConfigTypeConfig
+                                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                                     * @returns {Object.<string,*>} Plain object
+                                     */
+                                    PerConfigTypeConfig.toObject = function toObject(message, options) {
+                                        if (!options)
+                                            options = {};
+                                        let object = {};
+                                        if (options.arrays || options.defaults)
+                                            object.terminationCriteria = [];
+                                        if (message.terminationCriteria && message.terminationCriteria.length) {
+                                            object.terminationCriteria = [];
+                                            for (let j = 0; j < message.terminationCriteria.length; ++j)
+                                                object.terminationCriteria[j] = $root.google.protobuf.Any.toObject(message.terminationCriteria[j], options);
+                                        }
+                                        return object;
+                                    };
+
+                                    /**
+                                     * Converts this PerConfigTypeConfig to JSON.
+                                     * @function toJSON
+                                     * @memberof clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig
+                                     * @instance
+                                     * @returns {Object.<string,*>} JSON object
+                                     */
+                                    PerConfigTypeConfig.prototype.toJSON = function toJSON() {
+                                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                                    };
+
+                                    return PerConfigTypeConfig;
+                                })();
 
                                 return Config;
                             })();

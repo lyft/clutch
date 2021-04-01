@@ -66,20 +66,26 @@ func NewMonitor(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (*Monitor, 
 		return nil, errors.New("service was not the correct type")
 	}
 
-	terminationCriteria := []TerminationCriteria{}
+	terminationCriteria := map[string][]TerminationCriteria{}
 
-	for _, c := range typedConfig.TerminationCriteria {
-		factory, ok := CriteriaFactories[c.TypeUrl]
-		if !ok {
-			return nil, fmt.Errorf("terminator module configured with unknown criteria '%s'", c.TypeUrl)
+	for configType, perConfigTypeConfig := range typedConfig.PerConfigTypeConfiguration {
+		perConfigCriterias := []TerminationCriteria{}
+
+		for _, c := range perConfigTypeConfig.TerminationCriteria {
+			factory, ok := CriteriaFactories[c.TypeUrl]
+			if !ok {
+				return nil, fmt.Errorf("terminator module configured with unknown criteria '%s'", c.TypeUrl)
+			}
+
+			criteria, err := factory.Create(c)
+			if err != nil {
+				return nil, fmt.Errorf("failed to create termination criteria '%s': %s", c.TypeUrl, err)
+			}
+
+			perConfigCriterias = append(perConfigCriterias, criteria)
 		}
 
-		criteria, err := factory.Create(c)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create termination criteria '%s': %s", c.TypeUrl, err)
-		}
-
-		terminationCriteria = append(terminationCriteria, criteria)
+		terminationCriteria[configType] = perConfigCriterias
 	}
 
 	outerLoopInterval, err := ptypes.Duration(typedConfig.OuterLoopInterval)
@@ -93,24 +99,22 @@ func NewMonitor(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (*Monitor, 
 	}
 
 	return &Monitor{
-		store:                      storer,
-		enabledConfigTypes:         typedConfig.EnabledConfigTypes,
-		criterias:                  terminationCriteria,
-		outerLoopInterval:          outerLoopInterval,
-		perExperimentCheckInterval: perExperimentCheckInterval,
-		log:                        logger.Sugar(),
-		activeMonitoringRoutines:   trackingGauge{gauge: scope.Gauge("active_monitoring_routines")},
-		criteriaEvaluationSuccess:  scope.Counter("criteria_success"),
-		criteriaEvaluationFailure:  scope.Counter("criteria_failure"),
-		terminationCount:           scope.Counter("terminations"),
-		marshallingErrors:          scope.Counter("unpack_error"),
+		store:                        storer,
+		terminationCriteriaByTypeUrl: terminationCriteria,
+		outerLoopInterval:            outerLoopInterval,
+		perExperimentCheckInterval:   perExperimentCheckInterval,
+		log:                          logger.Sugar(),
+		activeMonitoringRoutines:     trackingGauge{gauge: scope.Gauge("active_monitoring_routines")},
+		criteriaEvaluationSuccess:    scope.Counter("criteria_success"),
+		criteriaEvaluationFailure:    scope.Counter("criteria_failure"),
+		terminationCount:             scope.Counter("terminations"),
+		marshallingErrors:            scope.Counter("unpack_error"),
 	}, nil
 }
 
 type Monitor struct {
-	store              experimentstore.Storer
-	enabledConfigTypes []string
-	criterias          []TerminationCriteria
+	store                        experimentstore.Storer
+	terminationCriteriaByTypeUrl map[string][]TerminationCriteria
 
 	outerLoopInterval          time.Duration
 	perExperimentCheckInterval time.Duration
@@ -125,7 +129,7 @@ type Monitor struct {
 }
 
 func (m *Monitor) Run(ctx context.Context) {
-	for _, configType := range m.enabledConfigTypes {
+	for configType, criteria := range m.terminationCriteriaByTypeUrl {
 		// For each monitored config type, start a single goroutine that polls the active experiments at a fixed interval.
 		// Whenever a new (new to this goroutine) experiment is found, open up a goroutine that periodically evaluates all
 		// the termination criteria for the experiment.
@@ -133,7 +137,7 @@ func (m *Monitor) Run(ctx context.Context) {
 		// This approach ensures provides a steady DB pressure (mostly outer loop, some from triggering termination) and relatively high
 		// fairness, as checking the termination conditions for one experiment should not be delaying the checks for another experiment
 		// unless we're under very heavy load.
-		go func(configType string) {
+		go func(configType string, criteria []TerminationCriteria) {
 			trackedExperiments := map[uint64]context.CancelFunc{}
 			ticker := time.NewTicker(m.outerLoopInterval)
 
@@ -144,11 +148,11 @@ func (m *Monitor) Run(ctx context.Context) {
 				case <-ticker.C:
 					es, err := m.store.GetExperiments(context.Background(), configType, experimentationv1.GetExperimentsRequest_STATUS_RUNNING)
 					if err != nil {
-						m.log.Errorw("failed to retrieve experiments from experiment store", "err", err, "enableConfigTypes", m.enabledConfigTypes)
+						m.log.Errorw("failed to retrieve experiments from experiment store", "err", err, "configType", configType)
 						continue
 					}
 
-					activeExperiments := m.monitorNewExperiments(es, trackedExperiments)
+					activeExperiments := m.monitorNewExperiments(es, trackedExperiments, criteria)
 
 					// For all experiments that we're tracking that no longer appear to be active, cancel the goroutine
 					// and clean it up.
@@ -160,13 +164,13 @@ func (m *Monitor) Run(ctx context.Context) {
 					}
 				}
 			}
-		}(configType)
+		}(configType, criteria)
 	}
 }
 
 // Iterates over all the provided experiments, spawning a goroutine to montior each experiment that doesn't already have
 // a monitoring routine. Returns a set containing all the active experiment ids for further processing.
-func (m *Monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trackedExperiments map[uint64]context.CancelFunc) map[uint64]struct{} {
+func (m *Monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trackedExperiments map[uint64]context.CancelFunc, criterias []TerminationCriteria) map[uint64]struct{} {
 	// For each active experiment, create a monitoring goroutine if necessary.
 	activeExperiments := map[uint64]struct{}{}
 	for _, e := range es {
@@ -178,14 +182,14 @@ func (m *Monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trac
 			m.activeMonitoringRoutines.inc()
 			go func() {
 				defer m.activeMonitoringRoutines.dec()
-				m.monitorSingleExperiment(ctx, e)
+				m.monitorSingleExperiment(ctx, e, criterias)
 			}()
 		}
 	}
 	return activeExperiments
 }
 
-func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentationv1.Experiment) {
+func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentationv1.Experiment, criterias []TerminationCriteria) {
 	ticker := time.NewTicker(m.perExperimentCheckInterval)
 	terminated := false
 
@@ -209,7 +213,7 @@ func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentatio
 				// loop can race and restart this goroutine.
 				continue
 			}
-			for _, c := range m.criterias {
+			for _, c := range criterias {
 				terminationReason, err := c.ShouldTerminate(e, unpackedConfig)
 				// TODO(snowp): The logs here might get spammy, rate limit or terminate montioring routine somehow?
 				if err != nil {
