@@ -53,8 +53,8 @@ func TestProcessTopologyObjectChannelSingleItem(t *testing.T) {
 		db:               m.DB(),
 		log:              zaptest.NewLogger(t),
 		scope:            tally.NewTestScope("", nil),
-		batchInsertSize:  10,
-		batchInsertFlush: time.Second * 1,
+		batchInsertSize:  1,
+		batchInsertFlush: time.Millisecond * 1,
 	}
 
 	updateCacheChan := make(chan *topologyv1.UpdateCacheRequest)
@@ -67,46 +67,48 @@ func TestProcessTopologyObjectChannelSingleItem(t *testing.T) {
 
 	go topology.processTopologyObjectChannel(context.Background(), updateCacheChan, "testing")
 
+	m.Mock.ExpectExec("INSERT INTO topology_cache .*")
+
 	// Close the channel so processTopologyObjectChannel exits
-	time.Sleep(time.Millisecond * 50)
+	// asserts that a single item can make it through even with a batch insert size of 10
+	time.Sleep(time.Second * 1)
 	close(updateCacheChan)
 
-	// asserts that a single item can make it through even with a batch insert size of 10
-	m.Mock.ExpectExec("INSERT INTO topology_cache .*").WithArgs(dbmock.AnyArg{})
 	m.MustMeetExpectations()
 }
 
-// func TestProcessTopologyObjectChannelBatchInsert(t *testing.T) {
-// 	m := dbmock.NewMockDB()
-// 	topology := &client{
-// 		db:               m.DB(),
-// 		scope:            tally.NewTestScope("", nil),
-// 		log:              zaptest.NewLogger(t),
-// 		batchInsertSize:  1,
-// 		batchInsertFlush: time.Second * 10,
-// 	}
+func TestProcessTopologyObjectChannelBatchInsert(t *testing.T) {
+	m := dbmock.NewMockDB()
+	topology := &client{
+		db:               m.DB(),
+		scope:            tally.NewTestScope("", nil),
+		log:              zaptest.NewLogger(t),
+		batchInsertSize:  2,
+		batchInsertFlush: time.Second * 10,
+	}
 
-// 	updateCacheChan := make(chan *topologyv1.UpdateCacheRequest)
-// 	go func() {
-// 		for i := 0; i < 2; i++ {
-// 			updateCacheChan <- &topologyv1.UpdateCacheRequest{
-// 				Resource: generatePrepareBulkCacheInsertInput(1)[0],
-// 				Action:   topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
-// 			}
-// 		}
-// 	}()
+	updateCacheChan := make(chan *topologyv1.UpdateCacheRequest)
+	go func() {
+		for i := 0; i < 4; i++ {
+			updateCacheChan <- &topologyv1.UpdateCacheRequest{
+				Resource: generatePrepareBulkCacheInsertInput(1)[0],
+				Action:   topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE,
+			}
+		}
+	}()
 
-// 	go topology.processTopologyObjectChannel(context.Background(), updateCacheChan, "testing")
+	go topology.processTopologyObjectChannel(context.Background(), updateCacheChan, "testing")
 
-// 	// Close the channel so processTopologyObjectChannel exits
-// 	time.Sleep(time.Second * 5)
-// 	close(updateCacheChan)
+	// We expect two batching of inserts of two items each
+	m.Mock.ExpectExec("INSERT INTO topology_cache .*")
+	m.Mock.ExpectExec("INSERT INTO topology_cache .*")
 
-// 	// asserts that a single item can make it through even with a batch insert size of 10
-// 	m.Mock.ExpectQuery("INSERT INTO topology_cache .*")
-// 	// m.Mock.ExpectQuery("INSERT INTO topology_cache .*")
-// 	m.MustMeetExpectations()
-// }
+	// Close the channel so processTopologyObjectChannel exits
+	time.Sleep(time.Second * 1)
+	close(updateCacheChan)
+
+	m.MustMeetExpectations()
+}
 
 func TestPrepareBulkCacheInsert(t *testing.T) {
 	t.Parallel()

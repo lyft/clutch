@@ -160,12 +160,14 @@ func (c *client) prepareBulkCacheInsert(obj []*topologyv1.Resource) ([]interface
 		metadataJson, err := json.Marshal(o.Metadata)
 		if err != nil {
 			c.scope.SubScope("cache").Counter("set.failure").Inc(1)
+			c.log.Error("unable to marshal json", zap.Error(err))
 			return nil, ""
 		}
 
 		dataJson, err := protojson.Marshal(o.Pb)
 		if err != nil {
 			c.scope.SubScope("cache").Counter("set.failure").Inc(1)
+			c.log.Error("unable to marshal proto", zap.Error(err))
 			return nil, ""
 		}
 
@@ -179,8 +181,7 @@ func (c *client) prepareBulkCacheInsert(obj []*topologyv1.Resource) ([]interface
 func (c *client) setCache(ctx context.Context, obj []*topologyv1.Resource) error {
 	args, queryParams := c.prepareBulkCacheInsert(obj)
 	// upsertQuery := "INSERT INTO topology_cache"
-	upsertQuery := fmt.Sprintf(`
-		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
+	upsertQuery := fmt.Sprintf(`INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
 		VALUES %s
 		ON CONFLICT (id, resolver_type_url) DO UPDATE SET
 			resolver_type_url = EXCLUDED.resolver_type_url,
