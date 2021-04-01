@@ -28,6 +28,7 @@ type Service struct {
 	storer                      experimentstore.Storer
 	logger                      *zap.SugaredLogger
 	createExperimentStat        tally.Counter
+	createOrGetExperimentStats  tally.Scope
 	cancelExperimentRunStat     tally.Counter
 	getExperimentsStat          tally.Counter
 	getListViewStat             tally.Counter
@@ -50,6 +51,7 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 		storer:                      experimentStore,
 		logger:                      logger.Sugar(),
 		createExperimentStat:        scope.Counter("create_experiment"),
+		createOrGetExperimentStats:  scope.SubScope("create_or_get_experiment"),
 		cancelExperimentRunStat:     scope.Counter("cancel_experiment_run"),
 		getExperimentsStat:          scope.Counter("get_experiments"),
 		getListViewStat:             scope.Counter("get_list_view"),
@@ -66,27 +68,45 @@ func (s *Service) Register(r module.Registrar) error {
 func (s *Service) CreateExperiment(ctx context.Context, req *experimentation.CreateExperimentRequest) (*experimentation.CreateExperimentResponse, error) {
 	s.createExperimentStat.Inc(1)
 
-	// If start time is not provided, default to starting now
-	now := time.Now()
-	startTime := &now
-	if req.StartTime != nil {
-		s := req.StartTime.AsTime()
-		startTime = &s
+	es, err := experimentstore.NewExperimentSpecification(req.Data, time.Now())
+	if err != nil {
+		return nil, err
 	}
 
-	// If the end time is not provided, default to no end time
-	var endTime *time.Time = nil
-	if req.EndTime != nil {
-		s := req.EndTime.AsTime()
-		endTime = &s
-	}
-
-	experiment, err := s.storer.CreateExperiment(ctx, req.Config, startTime, endTime)
+	experiment, err := s.storer.CreateExperiment(ctx, es)
 	if err != nil {
 		return nil, err
 	}
 
 	return &experimentation.CreateExperimentResponse{Experiment: experiment}, nil
+}
+
+func (s *Service) CreateOrGetExperiment(ctx context.Context, req *experimentation.CreateOrGetExperimentRequest) (*experimentation.CreateOrGetExperimentResponse, error) {
+	s.createOrGetExperimentStats.Counter("request").Inc(1)
+
+	es, err := experimentstore.NewExperimentSpecification(req.Data, time.Now())
+	if err != nil {
+		return nil, err
+	}
+	createOrGetExperiment, err := s.storer.CreateOrGetExperiment(ctx, es)
+	if err != nil {
+		return nil, err
+	}
+
+	r := s.createOrGetExperimentStats.SubScope("result")
+	switch createOrGetExperiment.Origin {
+	case experimentation.CreateOrGetExperimentResponse_ORIGIN_UNSPECIFIED:
+		r.Counter("unspecified").Inc(1)
+	case experimentation.CreateOrGetExperimentResponse_ORIGIN_EXISTING:
+		r.Counter("get").Inc(1)
+	case experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW:
+		r.Counter("create").Inc(1)
+	}
+
+	return &experimentation.CreateOrGetExperimentResponse{
+		Experiment: createOrGetExperiment.Experiment,
+		Origin:     createOrGetExperiment.Origin,
+	}, nil
 }
 
 // CancelExperimentRun cancels experiment that is currently running or is scheduled to be run in the future.
