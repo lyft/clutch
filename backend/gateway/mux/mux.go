@@ -169,9 +169,11 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 
 		code := http.StatusFound
 		if st := md.HeaderMD.Get("Location-Status"); len(st) > 0 {
-			if newCode, err := strconv.Atoi(st[0]); err != nil {
-				code = newCode
+			headerCodeOverride, err := strconv.Atoi(st[0])
+			if err != nil {
+				return err
 			}
+			code = headerCodeOverride
 		}
 		w.WriteHeader(code)
 	}

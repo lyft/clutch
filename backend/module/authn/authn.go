@@ -98,7 +98,6 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 	// redirect back to original location
 	md := metadata.New(map[string]string{
 		"Location":         redirectURL,
-		"Location-Status":  "303",
 		"Set-Cookie-Token": token.AccessToken,
 	})
 
