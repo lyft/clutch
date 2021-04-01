@@ -189,7 +189,7 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experiments
 		},
 	}
 
-	a, err := ptypes.MarshalAny(&config)
+	a, err := anypb.New(&config)
 	assert.NoError(t, err)
 
 	experiment, err := storer.CreateExperiment(context.Background(), a, &now, &now)
