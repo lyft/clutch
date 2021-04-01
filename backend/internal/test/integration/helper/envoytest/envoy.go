@@ -1,7 +1,6 @@
 package envoytest
 
 import (
-	"bytes"
 	"errors"
 	"io/ioutil"
 	"net"
@@ -13,7 +12,7 @@ import (
 	cluster "github.com/envoyproxy/go-control-plane/envoy/config/cluster/v3"
 	listener "github.com/envoyproxy/go-control-plane/envoy/config/listener/v3"
 	hcm "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/network/http_connection_manager/v3"
-	"github.com/golang/protobuf/jsonpb"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/anypb"
 
 	apimock "github.com/lyft/clutch/backend/mock/api"
@@ -181,11 +180,8 @@ func (e *EnvoyConfig) Generate() (string, error) {
 		e.finalConfig = b
 	}
 
-	m := jsonpb.Marshaler{}
-	out := bytes.NewBuffer([]byte{})
-	err := m.Marshal(out, e.finalConfig)
-
-	return out.String(), err
+	out, err := protojson.Marshal(e.finalConfig)
+	return string(out), err
 }
 
 // NewEnvoyConfig creates a new Envoy config builder, using a sensible default configuration that allows
