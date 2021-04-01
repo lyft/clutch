@@ -190,24 +190,6 @@ func TestCreateOrGetExperiment(t *testing.T) {
 					result: sqlmock.NewRows([]string{"run_id", "execution_time", "execution_time", "cancellation_time", "creation_time", "config_id", "details"}).AddRow("1", time.Now(), time.Now(), sql.NullTime{}, time.Now(), "2", ctd.stringifiedConfig),
 				},
 			},
-			expectedExecs: []*exec{
-				{
-					sql: `INSERT INTO experiment_config (id, details) VALUES ($1, $2)`,
-					args: []driver.Value{
-						sqlmock.AnyArg(),
-						ctd.marshaledConfig,
-					},
-				},
-				{
-					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, tstzrange($3, $4, '[]'), NOW())`,
-					args: []driver.Value{
-						sqlmock.AnyArg(),
-						sqlmock.AnyArg(),
-						sqlmock.AnyArg(),
-						sqlmock.AnyArg(),
-					},
-				},
-			},
 			expectedOrigin: experimentation.CreateOrGetExperimentResponse_ORIGIN_EXISTING,
 		},
 		{
