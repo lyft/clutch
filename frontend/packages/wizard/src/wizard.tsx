@@ -34,7 +34,7 @@ interface WizardStepData {
 
 interface ContainerProps {
   width?: "default" | "full";
-};
+}
 
 const Container = styled(MuiContainer)<ContainerProps>(
   {
