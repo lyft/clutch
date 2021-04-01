@@ -1,4 +1,5 @@
 import React from "react";
+import { useSearchParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import _ from "lodash";
 
@@ -90,6 +91,13 @@ const Resolver: React.FC<ResolverProps> = ({
       apiPackage
     );
   };
+
+  const [searchParams, ,] = useSearchParams();
+  React.useEffect(() => {
+    if (searchParams.get("rq")) {
+      submitHandler({ query: searchParams.get("rq") });
+    }
+  }, []);
 
   return (
     <Loadable isLoading={state.schemasLoading}>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button, ButtonGroup, Step, Stepper, Warning, WizardContext } from "@clutch-sh/core";
 import type { ManagerLayout } from "@clutch-sh/data-layout";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
@@ -85,6 +86,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
     };
   };
 
+  const [, setSearchParams] = useSearchParams();
   const lastStepIndex = React.Children.count(children) - 1;
   // If our wizard only has 1 step, it doesn't make sense to put a restart button
   const isMultistep = lastStepIndex > 0;
@@ -107,6 +109,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
                 text="Start Over"
                 onClick={() => {
                   dataLayoutManager.reset();
+                  setSearchParams({});
                   dispatch(WizardAction.RESET);
                 }}
               />
