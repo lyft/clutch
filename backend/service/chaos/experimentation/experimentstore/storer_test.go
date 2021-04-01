@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/anypb"
@@ -310,7 +309,7 @@ func TestGetExperimentsUnmarshalsExperimentConfiguration(t *testing.T) {
 	assert.Equal("1234", experiment.GetRunId())
 
 	config := &serverexperimentation.HTTPFaultConfig{}
-	err = ptypes.UnmarshalAny(experiment.GetConfig(), config)
+	err = experiment.GetConfig().UnmarshalTo(config)
 	assert.NoError(err)
 	assert.Nil(config.GetLatencyFault())
 	abort := config.GetAbortFault()

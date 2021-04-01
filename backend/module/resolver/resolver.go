@@ -64,7 +64,7 @@ func (r *resolverAPI) Resolve(ctx context.Context, req *resolverv1.ResolveReques
 			if schema.TypeUrl == req.Have.TypeUrl {
 				searchedSchemas = append(searchedSchemas, schema.TypeUrl)
 				a := &ptypes.DynamicAny{}
-				if err := ptypes.UnmarshalAny(req.Have, a); err != nil {
+				if err := req.Have.UnmarshalTo(a); err != nil {
 					return nil, err
 				}
 
