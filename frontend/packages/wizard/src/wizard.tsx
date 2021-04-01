@@ -33,15 +33,16 @@ interface WizardStepData {
 }
 
 type ContainerProps = {
-  width: "default" | "full";
+  width?: "default" | "full";
 };
 
 const Container = styled(MuiContainer)<ContainerProps>(
   {
     padding: "32px",
+    maxWidth: "unset",
   },
   props => ({
-    width: props.width === "full" ? "800px" : "100%",
+    width: props.width === "full" ? "100%" : "800px",
   })
 );
 
