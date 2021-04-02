@@ -258,6 +258,24 @@ message Container {
   int32 restart_count = 5;
 }
 
+message PodCondition {
+  enum Type {
+    UNSPECIFIED = 0;
+    CONTAINERS_READY = 1;
+    INITIALIZED = 2;
+    READY = 3;
+    POD_SCHEDULED = 4;
+  }
+  Type type = 1;
+
+  enum Status {
+    TRUE = 0;
+    FALSE = 1;
+    UNKNOWN = 2;
+  }
+  Status status = 2;
+}
+
 message Pod {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.Pod",
@@ -288,6 +306,14 @@ message Pod {
 
   map<string, string> labels = 9;
   map<string, string> annotations = 10;
+
+  // message indicating details about why the pod is in this state.
+  // https://pkg.go.dev/k8s.io/api/core/v1#PodStatus
+  string state_reason = 11;
+
+  // current service state of pod.
+  // https://pkg.go.dev/k8s.io/api/core/v1#PodCondition
+  repeated PodCondition pod_conditions = 12;
 }
 
 message ListOptions {

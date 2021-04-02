@@ -236,7 +236,7 @@ func TestListPods(t *testing.T) {
 	assert.Len(t, result, 2)
 }
 
-func TestPodDescriptionClusterName(t *testing.T) {
+func TestPodDescription(t *testing.T) {
 	t.Parallel()
 
 	var podTestCases = []struct {
@@ -253,6 +253,21 @@ func TestPodDescriptionClusterName(t *testing.T) {
 				ObjectMeta: metav1.ObjectMeta{
 					ClusterName: "production",
 				},
+				Status: corev1.PodStatus{
+					StartTime: &metav1.Time{},
+					ContainerStatuses: []corev1.ContainerStatus{
+						{Name: "container1"},
+						{Name: "container2"},
+						{Name: "container3"},
+					},
+					Reason: "Evicted",
+					Conditions: []corev1.PodCondition{
+						corev1.PodCondition{
+							Type:   corev1.ContainersReady,
+							Status: corev1.ConditionTrue,
+						},
+					},
+				},
 			},
 		},
 		{
@@ -262,6 +277,21 @@ func TestPodDescriptionClusterName(t *testing.T) {
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					ClusterName: "",
+				},
+				Status: corev1.PodStatus{
+					StartTime: &metav1.Time{},
+					ContainerStatuses: []corev1.ContainerStatus{
+						{Name: "container1"},
+						{Name: "container2"},
+						{Name: "container3"},
+					},
+					Reason: "Evicted",
+					Conditions: []corev1.PodCondition{
+						corev1.PodCondition{
+							Type:   corev1.ContainersReady,
+							Status: corev1.ConditionTrue,
+						},
+					},
 				},
 			},
 		},
@@ -274,6 +304,9 @@ func TestPodDescriptionClusterName(t *testing.T) {
 
 			pod := podDescription(tt.pod, tt.inputClusterName)
 			assert.Equal(t, tt.expectedClusterName, pod.Cluster)
+			assert.Equal(t, tt.pod.Status.Reason, pod.StateReason)
+			assert.Equal(t, k8sv1.PodCondition_Type(1), pod.PodConditions[0].Type)
+			assert.Equal(t, k8sv1.PodCondition_Status(0), pod.PodConditions[0].Status)
 		})
 	}
 }
