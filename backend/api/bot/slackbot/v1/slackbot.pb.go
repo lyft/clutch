@@ -156,7 +156,7 @@ func (x *Event) GetBlocks() *structpb.Value {
 }
 
 // For more details, see:
-// https://api.slack.com/apis/connections/events-api#receiving_events
+// https://api.slack.com/apis/connections/events-api#the-events-api__receiving-events
 // https://api.slack.com/enterprise/apps/reference#event
 type EventRequest struct {
 	state         protoimpl.MessageState
