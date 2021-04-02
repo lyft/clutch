@@ -12,10 +12,9 @@ option go_package = "github.com/lyft/clutch/backend/api/chaos/experimentation/v1
 message CreateExperimentData {
   // The unique identifier of experiment run that's created as part of the experiment creation process.
   // A random run identifier is generated and assigned to the experiment if it's not provided by a caller.
-  // Its max length is limited to 100 characters. The identifier is supposed to be user-readable and
-  // URL renderable - for this reason, allowed characters are limited to English characters, digits and
-  // the following special characters: "-", ".", "_" and "~".
-  string run_id = 1 [ (validate.rules).string.pattern = "^[A-Za-z0-9-._~]*$" ];
+  // The identifier is supposed to be user-readable and URL renderable - for this reason, allowed characters
+  // are limited to English characters, digits and the following special characters: "-", ".", "_" and "~".
+  string run_id = 1 [ (validate.rules).string = {pattern: "^[A-Za-z0-9-._~]*$", max_len: 100} ];
   // The experiment configuration specific to the type of experiment.
   google.protobuf.Any config = 2 [ (validate.rules).any.required = true ];
   // The time when the experiment should start. If not provided, defaults to 'now'. It cannot be in the past.

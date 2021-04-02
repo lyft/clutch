@@ -44,6 +44,13 @@ func (m *CreateExperimentData) Validate() error {
 		return nil
 	}
 
+	if utf8.RuneCountInString(m.GetRunId()) > 100 {
+		return CreateExperimentDataValidationError{
+			field:  "RunId",
+			reason: "value length must be at most 100 runes",
+		}
+	}
+
 	if !_CreateExperimentData_RunId_Pattern.MatchString(m.GetRunId()) {
 		return CreateExperimentDataValidationError{
 			field:  "RunId",

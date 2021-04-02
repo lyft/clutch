@@ -363,7 +363,12 @@ func (m *GetExperimentsRequest) Validate() error {
 		}
 	}
 
-	// no validation rules for Status
+	if _, ok := GetExperimentsRequest_Status_name[int32(m.GetStatus())]; !ok {
+		return GetExperimentsRequestValidationError{
+			field:  "Status",
+			reason: "value must be one of the defined enum values",
+		}
+	}
 
 	return nil
 }
