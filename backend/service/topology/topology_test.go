@@ -3,17 +3,16 @@ package topology
 import (
 	"testing"
 
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	topologyv1 "github.com/lyft/clutch/backend/api/config/service/topology/v1"
 )
 
 func TestNew(t *testing.T) {
-	cfg, _ := ptypes.MarshalAny(&topologyv1.Config{})
+	cfg, _ := anypb.New(&topologyv1.Config{})
 
 	log := zaptest.NewLogger(t)
 	scope := tally.NewTestScope("", nil)
@@ -24,6 +23,6 @@ func TestNew(t *testing.T) {
 }
 
 func TestNewWithWrongConfig(t *testing.T) {
-	_, err := New(&any.Any{TypeUrl: "foobar"}, nil, nil)
+	_, err := New(&anypb.Any{TypeUrl: "foobar"}, nil, nil)
 	assert.EqualError(t, err, `mismatched message type: got "foobar" want "clutch.config.service.topology.v1.Config"`)
 }

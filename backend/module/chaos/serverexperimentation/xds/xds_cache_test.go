@@ -24,10 +24,12 @@ import (
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 const (
@@ -94,7 +96,7 @@ func createExperiment(t *testing.T, upstreamCluster string, downstreamCluster st
 		}
 	}
 
-	anyConfig, err := ptypes.MarshalAny(config)
+	anyConfig, err := anypb.New(config)
 	if err != nil {
 		t.Errorf("marshalAny failed: %v", err)
 	}
@@ -305,12 +307,18 @@ func TestRefreshCache(t *testing.T) {
 			},
 		},
 	}
-	a, err := ptypes.MarshalAny(&config)
+	a, err := anypb.New(&config)
 	assert.NoError(t, err)
 
-	now := time.Now()
-	future := now.Add(5 * time.Minute)
-	_, err = s.CreateExperiment(context.Background(), a, &now, &future)
+	now := time.Date(2011, 0, 0, 0, 0, 0, 0, time.UTC)
+	future := now.Add(1 * time.Hour)
+	futureTimestamp, err := ptypes.TimestampProto(future)
+	assert.NoError(t, err)
+
+	d := &experimentation.CreateExperimentData{EndTime: futureTimestamp, Config: a}
+	es, err := experimentstore.NewExperimentSpecification(d, now)
+	assert.NoError(t, err)
+	_, err = s.CreateExperiment(context.Background(), es)
 	assert.NoError(t, err)
 
 	testCache := gcpCacheV3.NewSnapshotCache(false, gcpCacheV3.IDHash{}, nil)

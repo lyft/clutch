@@ -77,15 +77,15 @@ func NewMonitor(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (*Monitor, 
 				return nil, fmt.Errorf("terminator module configured with unknown criteria '%s'", c.TypeUrl)
 			}
 
-			criteria, err := factory.Create(c)
+			criterion, err := factory.Create(c)
 			if err != nil {
 				return nil, fmt.Errorf("failed to create termination criteria '%s': %s", c.TypeUrl, err)
 			}
 
-			perConfigCriterias = append(perConfigCriterias, criteria)
+			perConfigCriteria = append(perConfigCriteria, criterion)
 		}
 
-		terminationCriteria[configType] = perConfigCriterias
+		terminationCriteria[configType] = perConfigCriteria
 	}
 
 	outerLoopInterval, err := ptypes.Duration(typedConfig.OuterLoopInterval)
@@ -138,7 +138,7 @@ func (m *Monitor) Run(ctx context.Context) {
 		// fairness, as checking the termination conditions for one experiment should not be delaying the checks for another experiment
 		// unless we're under very heavy load.
 		go func(configType string, criteria []TerminationCriteria) {
-			trackedExperiments := map[uint64]context.CancelFunc{}
+			trackedExperiments := map[string]context.CancelFunc{}
 			ticker := time.NewTicker(m.outerLoopInterval)
 
 			for {
@@ -170,19 +170,19 @@ func (m *Monitor) Run(ctx context.Context) {
 
 // Iterates over all the provided experiments, spawning a goroutine to montior each experiment that doesn't already have
 // a monitoring routine. Returns a set containing all the active experiment ids for further processing.
-func (m *Monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trackedExperiments map[uint64]context.CancelFunc, criteria []TerminationCriteria) map[uint64]struct{} {
+func (m *Monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trackedExperiments map[string]context.CancelFunc, criteria []TerminationCriteria) map[string]struct{} {
 	// For each active experiment, create a monitoring goroutine if necessary.
-	activeExperiments := map[uint64]struct{}{}
+	activeExperiments := map[string]struct{}{}
 	for _, e := range es {
-		activeExperiments[e.Id] = struct{}{}
-		if _, ok := trackedExperiments[e.Id]; !ok {
+		activeExperiments[e.RunId] = struct{}{}
+		if _, ok := trackedExperiments[e.RunId]; !ok {
 			ctx, cancel := context.WithCancel(context.Background())
-			trackedExperiments[e.Id] = cancel
+			trackedExperiments[e.RunId] = cancel
 
 			m.activeMonitoringRoutines.inc()
 			go func() {
 				defer m.activeMonitoringRoutines.dec()
-				m.monitorSingleExperiment(ctx, e, criterias)
+				m.monitorSingleExperiment(ctx, e, criteria)
 			}()
 		}
 	}
@@ -198,7 +198,7 @@ func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentatio
 	// be rare enough that logging an error is probably fine.
 	unpackedConfig, err := anypb.UnmarshalNew(e.Config, proto.UnmarshalOptions{})
 	if err != nil {
-		m.log.Errorw("failed to unmarshal experiment", "id", e.Id)
+		m.log.Errorw("failed to unmarshal experiment", "runId", e.RunId)
 		m.marshallingErrorCount.Inc(1)
 		return
 	}
@@ -213,24 +213,24 @@ func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentatio
 				// loop can race and restart this goroutine.
 				continue
 			}
-			for _, c := range criterias {
+			for _, c := range criteria {
 				terminationReason, err := c.ShouldTerminate(e, unpackedConfig)
 				// TODO(snowp): The logs here might get spammy, rate limit or terminate montioring routine somehow?
 				if err != nil {
 					m.criteriaEvaluationFailureCount.Inc(1)
-					m.log.Errorw("error while evaluating termination criteria", "id", e.Id, "error", err)
+					m.log.Errorw("error while evaluating termination criteria", "runId", e.RunId, "error", err)
 					continue
 				}
 
 				m.criteriaEvaluationSuccessCount.Inc(1)
 
 				if terminationReason != "" {
-					err = m.store.CancelExperimentRun(context.Background(), e.Id, terminationReason)
+					err = m.store.CancelExperimentRun(context.Background(), e.RunId, terminationReason)
 					if err != nil {
-						m.log.Errorw("failed to terminate experiment", "err", err, "experimentId", e.Id)
+						m.log.Errorw("failed to terminate experiment", "err", err, "experimentRunId", e.RunId)
 						continue
 					}
-					m.log.Errorw("terminated experiment", "experimentId", e.Id)
+					m.log.Errorw("terminated experiment", "experimentRunId", e.RunId)
 					m.terminationCount.Inc(1)
 					terminated = true
 				}

@@ -1,4 +1,5 @@
 import React from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button, ButtonGroup, Step, Stepper, Warning, WizardContext } from "@clutch-sh/core";
 import type { ManagerLayout } from "@clutch-sh/data-layout";
 import { DataLayoutContext, useDataLayoutManager } from "@clutch-sh/data-layout";
@@ -47,6 +48,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
   const [wizardStepData, setWizardStepData] = React.useState<WizardStepData>({});
   const [globalWarnings, setGlobalWarnings] = React.useState<string[]>([]);
   const dataLayoutManager = useDataLayoutManager(dataLayout);
+  const [, setSearchParams] = useSearchParams();
 
   const updateStepData = (stepName: string, data: object) => {
     setWizardStepData(prevState => {
@@ -80,6 +82,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
       },
       onBack: () => {
         setGlobalWarnings([]);
+        setSearchParams({});
         dispatch(WizardAction.BACK);
       },
     };
@@ -107,6 +110,7 @@ const Wizard = ({ heading, dataLayout, children }: WizardProps) => {
                 text="Start Over"
                 onClick={() => {
                   dataLayoutManager.reset();
+                  setSearchParams({});
                   dispatch(WizardAction.RESET);
                 }}
               />

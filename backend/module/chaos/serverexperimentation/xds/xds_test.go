@@ -13,10 +13,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 func TestServerStats(t *testing.T) {
@@ -99,10 +101,11 @@ func TestResourceTTL(t *testing.T) {
 			},
 		},
 	}
-	a, err := ptypes.MarshalAny(&config)
+	a, err := anypb.New(&config)
 	assert.NoError(t, err)
 
-	_, err = testServer.Storer.CreateExperiment(context.Background(), a, &now, &now)
+	es := experimentstore.ExperimentSpecification{StartTime: now, EndTime: &now, Config: a}
+	_, err = testServer.Storer.CreateExperiment(context.Background(), &es)
 	assert.NoError(t, err)
 
 	// First we look at a stream for a cluster that has an active fault. This should result in a TTL'd

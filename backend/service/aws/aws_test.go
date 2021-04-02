@@ -13,12 +13,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/aws/smithy-go"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	ec2v1 "github.com/lyft/clutch/backend/api/aws/ec2/v1"
 	awsv1 "github.com/lyft/clutch/backend/api/config/service/aws/v1"
@@ -27,7 +27,7 @@ import (
 func TestNew(t *testing.T) {
 	regions := []string{"us-east-1", "us-west25"}
 
-	cfg, _ := ptypes.MarshalAny(&awsv1.Config{
+	cfg, _ := anypb.New(&awsv1.Config{
 		Regions: regions,
 		ClientConfig: &awsv1.ClientConfig{
 			Retries: 10,

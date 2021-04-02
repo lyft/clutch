@@ -6,7 +6,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -139,12 +138,13 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experiments
 		},
 	}
 
-	a, err := ptypes.MarshalAny(&config)
+	a, err := anypb.New(&config)
 	assert.NoError(t, err)
 
 	now := time.Now()
 	endTime := time.Now().Add(5 * time.Minute)
-	experiment, err := storer.CreateExperiment(context.Background(), a, &now, &endTime)
+	es := &experimentstore.ExperimentSpecification{StartTime: now, EndTime: &endTime, Config: a}
+	experiment, err := storer.CreateExperiment(context.Background(), es)
 	assert.NoError(t, err)
 
 	return experiment
