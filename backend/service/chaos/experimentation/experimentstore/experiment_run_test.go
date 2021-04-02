@@ -14,13 +14,14 @@ func TestRunningExperimentRunProperties(t *testing.T) {
 	future := now.Add(1 * time.Hour)
 
 	tests := []struct {
-		startTime           time.Time
-		endTime             *time.Time
-		cancellationTime    *time.Time
-		creationTime        time.Time
-		now                 time.Time
-		terminationReason   string
-		expectedPropertyIds []string
+		startTime              time.Time
+		endTime                *time.Time
+		cancellationTime       *time.Time
+		creationTime           time.Time
+		now                    time.Time
+		terminationReason      string
+		expectedPropertyIds    []string
+		expectedPropertyValues map[string]string
 	}{
 		{
 			startTime:         now,
@@ -68,6 +69,9 @@ func TestRunningExperimentRunProperties(t *testing.T) {
 				"stopped_at",
 				"termination_reason",
 			},
+			expectedPropertyValues: map[string]string{
+				"termination_reason": "Unknown",
+			},
 		},
 		{
 			startTime:         now,
@@ -84,6 +88,29 @@ func TestRunningExperimentRunProperties(t *testing.T) {
 				"end_time",
 				"canceled_at",
 				"termination_reason",
+			},
+			expectedPropertyValues: map[string]string{
+				"termination_reason": "Unknown",
+			},
+		},
+		{
+			startTime:         now,
+			endTime:           &future,
+			cancellationTime:  &past,
+			creationTime:      past,
+			now:               now,
+			terminationReason: "foo",
+			expectedPropertyIds: []string{
+				"run_identifier",
+				"status",
+				"run_creation_time",
+				"start_time",
+				"end_time",
+				"canceled_at",
+				"termination_reason",
+			},
+			expectedPropertyValues: map[string]string{
+				"termination_reason": "foo",
 			},
 		},
 	}
@@ -106,6 +133,9 @@ func TestRunningExperimentRunProperties(t *testing.T) {
 			var ids []string
 			for _, p := range properties {
 				ids = append(ids, p.Id)
+				if val, ok := tt.expectedPropertyValues[p.Id]; ok {
+					assert.Equal(t, val, p.GetStringValue())
+				}
 			}
 
 			assert.Equal(t, tt.expectedPropertyIds, ids)
