@@ -24900,6 +24900,213 @@ export const clutch = $root.clutch = (() => {
                 return Container;
             })();
 
+            v1.PodCondition = (function() {
+
+                /**
+                 * Properties of a PodCondition.
+                 * @memberof clutch.k8s.v1
+                 * @interface IPodCondition
+                 * @property {clutch.k8s.v1.PodCondition.Type|null} [type] PodCondition type
+                 * @property {clutch.k8s.v1.PodCondition.Status|null} [status] PodCondition status
+                 */
+
+                /**
+                 * Constructs a new PodCondition.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a PodCondition.
+                 * @implements IPodCondition
+                 * @constructor
+                 * @param {clutch.k8s.v1.IPodCondition=} [properties] Properties to set
+                 */
+                function PodCondition(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * PodCondition type.
+                 * @member {clutch.k8s.v1.PodCondition.Type} type
+                 * @memberof clutch.k8s.v1.PodCondition
+                 * @instance
+                 */
+                PodCondition.prototype.type = 0;
+
+                /**
+                 * PodCondition status.
+                 * @member {clutch.k8s.v1.PodCondition.Status} status
+                 * @memberof clutch.k8s.v1.PodCondition
+                 * @instance
+                 */
+                PodCondition.prototype.status = 0;
+
+                /**
+                 * Verifies a PodCondition message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.PodCondition
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                PodCondition.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        switch (message.type) {
+                        default:
+                            return "type: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                            break;
+                        }
+                    if (message.status != null && message.hasOwnProperty("status"))
+                        switch (message.status) {
+                        default:
+                            return "status: enum value expected";
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            break;
+                        }
+                    return null;
+                };
+
+                /**
+                 * Creates a PodCondition message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.PodCondition
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.PodCondition} PodCondition
+                 */
+                PodCondition.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.PodCondition)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.PodCondition();
+                    switch (object.type) {
+                    case "TYPE_UNSPECIFIED":
+                    case 0:
+                        message.type = 0;
+                        break;
+                    case "CONTAINERS_READY":
+                    case 1:
+                        message.type = 1;
+                        break;
+                    case "INITIALIZED":
+                    case 2:
+                        message.type = 2;
+                        break;
+                    case "READY":
+                    case 3:
+                        message.type = 3;
+                        break;
+                    case "POD_SCHEDULED":
+                    case 4:
+                        message.type = 4;
+                        break;
+                    }
+                    switch (object.status) {
+                    case "STATUS_UNSPECIFIED":
+                    case 0:
+                        message.status = 0;
+                        break;
+                    case "TRUE":
+                    case 1:
+                        message.status = 1;
+                        break;
+                    case "FALSE":
+                    case 2:
+                        message.status = 2;
+                        break;
+                    case "UNKNOWN":
+                    case 3:
+                        message.status = 3;
+                        break;
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a PodCondition message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.PodCondition
+                 * @static
+                 * @param {clutch.k8s.v1.PodCondition} message PodCondition
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                PodCondition.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.type = options.enums === String ? "TYPE_UNSPECIFIED" : 0;
+                        object.status = options.enums === String ? "STATUS_UNSPECIFIED" : 0;
+                    }
+                    if (message.type != null && message.hasOwnProperty("type"))
+                        object.type = options.enums === String ? $root.clutch.k8s.v1.PodCondition.Type[message.type] : message.type;
+                    if (message.status != null && message.hasOwnProperty("status"))
+                        object.status = options.enums === String ? $root.clutch.k8s.v1.PodCondition.Status[message.status] : message.status;
+                    return object;
+                };
+
+                /**
+                 * Converts this PodCondition to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.PodCondition
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                PodCondition.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                /**
+                 * Type enum.
+                 * @name clutch.k8s.v1.PodCondition.Type
+                 * @enum {number}
+                 * @property {number} TYPE_UNSPECIFIED=0 TYPE_UNSPECIFIED value
+                 * @property {number} CONTAINERS_READY=1 CONTAINERS_READY value
+                 * @property {number} INITIALIZED=2 INITIALIZED value
+                 * @property {number} READY=3 READY value
+                 * @property {number} POD_SCHEDULED=4 POD_SCHEDULED value
+                 */
+                PodCondition.Type = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "TYPE_UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "CONTAINERS_READY"] = 1;
+                    values[valuesById[2] = "INITIALIZED"] = 2;
+                    values[valuesById[3] = "READY"] = 3;
+                    values[valuesById[4] = "POD_SCHEDULED"] = 4;
+                    return values;
+                })();
+
+                /**
+                 * Status enum.
+                 * @name clutch.k8s.v1.PodCondition.Status
+                 * @enum {number}
+                 * @property {number} STATUS_UNSPECIFIED=0 STATUS_UNSPECIFIED value
+                 * @property {number} TRUE=1 TRUE value
+                 * @property {number} FALSE=2 FALSE value
+                 * @property {number} UNKNOWN=3 UNKNOWN value
+                 */
+                PodCondition.Status = (function() {
+                    const valuesById = {}, values = Object.create(valuesById);
+                    values[valuesById[0] = "STATUS_UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "TRUE"] = 1;
+                    values[valuesById[2] = "FALSE"] = 2;
+                    values[valuesById[3] = "UNKNOWN"] = 3;
+                    return values;
+                })();
+
+                return PodCondition;
+            })();
+
             v1.Pod = (function() {
 
                 /**
@@ -24916,6 +25123,8 @@ export const clutch = $root.clutch = (() => {
                  * @property {google.protobuf.ITimestamp|null} [startTime] Pod startTime
                  * @property {Object.<string,string>|null} [labels] Pod labels
                  * @property {Object.<string,string>|null} [annotations] Pod annotations
+                 * @property {string|null} [stateReason] Pod stateReason
+                 * @property {Array.<clutch.k8s.v1.IPodCondition>|null} [podConditions] Pod podConditions
                  */
 
                 /**
@@ -24930,6 +25139,7 @@ export const clutch = $root.clutch = (() => {
                     this.containers = [];
                     this.labels = {};
                     this.annotations = {};
+                    this.podConditions = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -25017,6 +25227,22 @@ export const clutch = $root.clutch = (() => {
                 Pod.prototype.annotations = $util.emptyObject;
 
                 /**
+                 * Pod stateReason.
+                 * @member {string} stateReason
+                 * @memberof clutch.k8s.v1.Pod
+                 * @instance
+                 */
+                Pod.prototype.stateReason = "";
+
+                /**
+                 * Pod podConditions.
+                 * @member {Array.<clutch.k8s.v1.IPodCondition>} podConditions
+                 * @memberof clutch.k8s.v1.Pod
+                 * @instance
+                 */
+                Pod.prototype.podConditions = $util.emptyArray;
+
+                /**
                  * Verifies a Pod message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Pod
@@ -25083,6 +25309,18 @@ export const clutch = $root.clutch = (() => {
                         for (let i = 0; i < key.length; ++i)
                             if (!$util.isString(message.annotations[key[i]]))
                                 return "annotations: string{k:string} expected";
+                    }
+                    if (message.stateReason != null && message.hasOwnProperty("stateReason"))
+                        if (!$util.isString(message.stateReason))
+                            return "stateReason: string expected";
+                    if (message.podConditions != null && message.hasOwnProperty("podConditions")) {
+                        if (!Array.isArray(message.podConditions))
+                            return "podConditions: array expected";
+                        for (let i = 0; i < message.podConditions.length; ++i) {
+                            let error = $root.clutch.k8s.v1.PodCondition.verify(message.podConditions[i]);
+                            if (error)
+                                return "podConditions." + error;
+                        }
                     }
                     return null;
                 };
@@ -25164,6 +25402,18 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.annotations), i = 0; i < keys.length; ++i)
                             message.annotations[keys[i]] = String(object.annotations[keys[i]]);
                     }
+                    if (object.stateReason != null)
+                        message.stateReason = String(object.stateReason);
+                    if (object.podConditions) {
+                        if (!Array.isArray(object.podConditions))
+                            throw TypeError(".clutch.k8s.v1.Pod.podConditions: array expected");
+                        message.podConditions = [];
+                        for (let i = 0; i < object.podConditions.length; ++i) {
+                            if (typeof object.podConditions[i] !== "object")
+                                throw TypeError(".clutch.k8s.v1.Pod.podConditions: object expected");
+                            message.podConditions[i] = $root.clutch.k8s.v1.PodCondition.fromObject(object.podConditions[i]);
+                        }
+                    }
                     return message;
                 };
 
@@ -25180,8 +25430,10 @@ export const clutch = $root.clutch = (() => {
                     if (!options)
                         options = {};
                     let object = {};
-                    if (options.arrays || options.defaults)
+                    if (options.arrays || options.defaults) {
                         object.containers = [];
+                        object.podConditions = [];
+                    }
                     if (options.objects || options.defaults) {
                         object.labels = {};
                         object.annotations = {};
@@ -25194,6 +25446,7 @@ export const clutch = $root.clutch = (() => {
                         object.podIp = "";
                         object.state = options.enums === String ? "UNSPECIFIED" : 0;
                         object.startTime = null;
+                        object.stateReason = "";
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -25224,6 +25477,13 @@ export const clutch = $root.clutch = (() => {
                         object.annotations = {};
                         for (let j = 0; j < keys2.length; ++j)
                             object.annotations[keys2[j]] = message.annotations[keys2[j]];
+                    }
+                    if (message.stateReason != null && message.hasOwnProperty("stateReason"))
+                        object.stateReason = message.stateReason;
+                    if (message.podConditions && message.podConditions.length) {
+                        object.podConditions = [];
+                        for (let j = 0; j < message.podConditions.length; ++j)
+                            object.podConditions[j] = $root.clutch.k8s.v1.PodCondition.toObject(message.podConditions[j], options);
                     }
                     return object;
                 };

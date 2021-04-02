@@ -184,9 +184,23 @@ func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 		PodIp:      k8spod.Status.PodIP,
 		State:      protoForPodState(k8spod.Status.Phase),
 		//StartTime:   launch,
-		Labels:      k8spod.Labels,
-		Annotations: k8spod.Annotations,
+		Labels:        k8spod.Labels,
+		Annotations:   k8spod.Annotations,
+		StateReason:   k8spod.Status.Reason,
+		PodConditions: makeConditions(k8spod.Status.Conditions),
 	}
+}
+
+func makeConditions(conditions []corev1.PodCondition) []*k8sapiv1.PodCondition {
+	podConditions := make([]*k8sapiv1.PodCondition, 0, len(conditions))
+	for _, condition := range conditions {
+		cond := &k8sapiv1.PodCondition{
+			Type:   protoForConditionType(condition.Type),
+			Status: protoForConditionStatus(condition.Status),
+		}
+		podConditions = append(podConditions, cond)
+	}
+	return podConditions
 }
 
 func makeContainers(statuses []corev1.ContainerStatus) []*k8sapiv1.Container {
@@ -224,5 +238,32 @@ func protoForContainerState(state corev1.ContainerState) k8sapiv1.Container_Stat
 		return k8sapiv1.Container_WAITING
 	default:
 		return k8sapiv1.Container_UNKNOWN
+	}
+}
+
+func protoForConditionType(conditionType corev1.PodConditionType) k8sapiv1.PodCondition_Type {
+	switch conditionType {
+	case corev1.ContainersReady:
+		return k8sapiv1.PodCondition_CONTAINERS_READY
+	case corev1.PodInitialized:
+		return k8sapiv1.PodCondition_INITIALIZED
+	case corev1.PodReady:
+		return k8sapiv1.PodCondition_READY
+	case corev1.PodScheduled:
+		return k8sapiv1.PodCondition_POD_SCHEDULED
+	default:
+		return k8sapiv1.PodCondition_TYPE_UNSPECIFIED
+	}
+}
+func protoForConditionStatus(status corev1.ConditionStatus) k8sapiv1.PodCondition_Status {
+	switch status {
+	case corev1.ConditionTrue:
+		return k8sapiv1.PodCondition_TRUE
+	case corev1.ConditionFalse:
+		return k8sapiv1.PodCondition_FALSE
+	case corev1.ConditionUnknown:
+		return k8sapiv1.PodCondition_UNKNOWN
+	default:
+		return k8sapiv1.PodCondition_STATUS_UNSPECIFIED
 	}
 }

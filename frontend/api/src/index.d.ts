@@ -10638,6 +10638,80 @@ export namespace clutch {
                 }
             }
 
+            /** Properties of a PodCondition. */
+            interface IPodCondition {
+
+                /** PodCondition type */
+                type?: (clutch.k8s.v1.PodCondition.Type|null);
+
+                /** PodCondition status */
+                status?: (clutch.k8s.v1.PodCondition.Status|null);
+            }
+
+            /** Represents a PodCondition. */
+            class PodCondition implements IPodCondition {
+
+                /**
+                 * Constructs a new PodCondition.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IPodCondition);
+
+                /** PodCondition type. */
+                public type: clutch.k8s.v1.PodCondition.Type;
+
+                /** PodCondition status. */
+                public status: clutch.k8s.v1.PodCondition.Status;
+
+                /**
+                 * Verifies a PodCondition message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a PodCondition message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns PodCondition
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.PodCondition;
+
+                /**
+                 * Creates a plain object from a PodCondition message. Also converts values to other types if specified.
+                 * @param message PodCondition
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.PodCondition, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this PodCondition to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace PodCondition {
+
+                /** Type enum. */
+                enum Type {
+                    TYPE_UNSPECIFIED = 0,
+                    CONTAINERS_READY = 1,
+                    INITIALIZED = 2,
+                    READY = 3,
+                    POD_SCHEDULED = 4
+                }
+
+                /** Status enum. */
+                enum Status {
+                    STATUS_UNSPECIFIED = 0,
+                    TRUE = 1,
+                    FALSE = 2,
+                    UNKNOWN = 3
+                }
+            }
+
             /** Properties of a Pod. */
             interface IPod {
 
@@ -10670,6 +10744,12 @@ export namespace clutch {
 
                 /** Pod annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** Pod stateReason */
+                stateReason?: (string|null);
+
+                /** Pod podConditions */
+                podConditions?: (clutch.k8s.v1.IPodCondition[]|null);
             }
 
             /** Represents a Pod. */
@@ -10710,6 +10790,12 @@ export namespace clutch {
 
                 /** Pod annotations. */
                 public annotations: { [k: string]: string };
+
+                /** Pod stateReason. */
+                public stateReason: string;
+
+                /** Pod podConditions. */
+                public podConditions: clutch.k8s.v1.IPodCondition[];
 
                 /**
                  * Verifies a Pod message.
