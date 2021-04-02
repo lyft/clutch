@@ -252,7 +252,7 @@ func protoForConditionType(conditionType corev1.PodConditionType) k8sapiv1.PodCo
 	case corev1.PodScheduled:
 		return k8sapiv1.PodCondition_POD_SCHEDULED
 	default:
-		return k8sapiv1.PodCondition_UNSPECIFIED
+		return k8sapiv1.PodCondition_TYPE_UNSPECIFIED
 	}
 }
 func protoForConditionStatus(status corev1.ConditionStatus) k8sapiv1.PodCondition_Status {
@@ -264,6 +264,6 @@ func protoForConditionStatus(status corev1.ConditionStatus) k8sapiv1.PodConditio
 	case corev1.ConditionUnknown:
 		return k8sapiv1.PodCondition_UNKNOWN
 	default:
-		return k8sapiv1.PodCondition_UNKNOWN
+		return k8sapiv1.PodCondition_STATUS_UNSPECIFIED
 	}
 }

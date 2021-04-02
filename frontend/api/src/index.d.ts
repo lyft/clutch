@@ -10478,7 +10478,7 @@ export namespace clutch {
 
                 /** Type enum. */
                 enum Type {
-                    UNSPECIFIED = 0,
+                    TYPE_UNSPECIFIED = 0,
                     CONTAINERS_READY = 1,
                     INITIALIZED = 2,
                     READY = 3,
@@ -10487,9 +10487,10 @@ export namespace clutch {
 
                 /** Status enum. */
                 enum Status {
-                    TRUE = 0,
-                    FALSE = 1,
-                    UNKNOWN = 2
+                    STATUS_UNSPECIFIED = 0,
+                    TRUE = 1,
+                    FALSE = 2,
+                    UNKNOWN = 3
                 }
             }
 

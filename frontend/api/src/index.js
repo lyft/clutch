@@ -24478,6 +24478,7 @@ export const clutch = $root.clutch = (() => {
                         case 0:
                         case 1:
                         case 2:
+                        case 3:
                             break;
                         }
                     return null;
@@ -24496,7 +24497,7 @@ export const clutch = $root.clutch = (() => {
                         return object;
                     let message = new $root.clutch.k8s.v1.PodCondition();
                     switch (object.type) {
-                    case "UNSPECIFIED":
+                    case "TYPE_UNSPECIFIED":
                     case 0:
                         message.type = 0;
                         break;
@@ -24518,17 +24519,21 @@ export const clutch = $root.clutch = (() => {
                         break;
                     }
                     switch (object.status) {
-                    case "TRUE":
+                    case "STATUS_UNSPECIFIED":
                     case 0:
                         message.status = 0;
                         break;
-                    case "FALSE":
+                    case "TRUE":
                     case 1:
                         message.status = 1;
                         break;
-                    case "UNKNOWN":
+                    case "FALSE":
                     case 2:
                         message.status = 2;
+                        break;
+                    case "UNKNOWN":
+                    case 3:
+                        message.status = 3;
                         break;
                     }
                     return message;
@@ -24548,8 +24553,8 @@ export const clutch = $root.clutch = (() => {
                         options = {};
                     let object = {};
                     if (options.defaults) {
-                        object.type = options.enums === String ? "UNSPECIFIED" : 0;
-                        object.status = options.enums === String ? "TRUE" : 0;
+                        object.type = options.enums === String ? "TYPE_UNSPECIFIED" : 0;
+                        object.status = options.enums === String ? "STATUS_UNSPECIFIED" : 0;
                     }
                     if (message.type != null && message.hasOwnProperty("type"))
                         object.type = options.enums === String ? $root.clutch.k8s.v1.PodCondition.Type[message.type] : message.type;
@@ -24573,7 +24578,7 @@ export const clutch = $root.clutch = (() => {
                  * Type enum.
                  * @name clutch.k8s.v1.PodCondition.Type
                  * @enum {number}
-                 * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                 * @property {number} TYPE_UNSPECIFIED=0 TYPE_UNSPECIFIED value
                  * @property {number} CONTAINERS_READY=1 CONTAINERS_READY value
                  * @property {number} INITIALIZED=2 INITIALIZED value
                  * @property {number} READY=3 READY value
@@ -24581,7 +24586,7 @@ export const clutch = $root.clutch = (() => {
                  */
                 PodCondition.Type = (function() {
                     const valuesById = {}, values = Object.create(valuesById);
-                    values[valuesById[0] = "UNSPECIFIED"] = 0;
+                    values[valuesById[0] = "TYPE_UNSPECIFIED"] = 0;
                     values[valuesById[1] = "CONTAINERS_READY"] = 1;
                     values[valuesById[2] = "INITIALIZED"] = 2;
                     values[valuesById[3] = "READY"] = 3;
@@ -24593,15 +24598,17 @@ export const clutch = $root.clutch = (() => {
                  * Status enum.
                  * @name clutch.k8s.v1.PodCondition.Status
                  * @enum {number}
-                 * @property {number} TRUE=0 TRUE value
-                 * @property {number} FALSE=1 FALSE value
-                 * @property {number} UNKNOWN=2 UNKNOWN value
+                 * @property {number} STATUS_UNSPECIFIED=0 STATUS_UNSPECIFIED value
+                 * @property {number} TRUE=1 TRUE value
+                 * @property {number} FALSE=2 FALSE value
+                 * @property {number} UNKNOWN=3 UNKNOWN value
                  */
                 PodCondition.Status = (function() {
                     const valuesById = {}, values = Object.create(valuesById);
-                    values[valuesById[0] = "TRUE"] = 0;
-                    values[valuesById[1] = "FALSE"] = 1;
-                    values[valuesById[2] = "UNKNOWN"] = 2;
+                    values[valuesById[0] = "STATUS_UNSPECIFIED"] = 0;
+                    values[valuesById[1] = "TRUE"] = 1;
+                    values[valuesById[2] = "FALSE"] = 2;
+                    values[valuesById[3] = "UNKNOWN"] = 3;
                     return values;
                 })();
 

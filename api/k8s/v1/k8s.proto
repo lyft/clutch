@@ -260,7 +260,7 @@ message Container {
 
 message PodCondition {
   enum Type {
-    UNSPECIFIED = 0;
+    TYPE_UNSPECIFIED = 0;
     CONTAINERS_READY = 1;
     INITIALIZED = 2;
     READY = 3;
@@ -269,9 +269,10 @@ message PodCondition {
   Type type = 1;
 
   enum Status {
-    TRUE = 0;
-    FALSE = 1;
-    UNKNOWN = 2;
+    STATUS_UNSPECIFIED = 0;
+    TRUE = 1;
+    FALSE = 2;
+    UNKNOWN = 3;
   }
   Status status = 2;
 }
