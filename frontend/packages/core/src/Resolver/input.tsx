@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import type { clutch } from "@clutch-sh/api";
 import styled from "@emotion/styled";
 import SearchIcon from "@material-ui/icons/Search";
+import { useSearchParams } from "react-router-dom";
 
 import {
   Accordion,
@@ -53,7 +54,8 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ inputType, schemas, submi
     shouldFocusError: false,
   });
 
-  const [queryData, setQueryData] = React.useState("");
+  const [searchParams] = useSearchParams();
+  const [queryData, setQueryData] = React.useState(searchParams.get("q") || "");
 
   let typeLabel = schemas.map(schema => schema?.metadata.displayName).join();
   typeLabel = `Search by ${typeLabel}`;
@@ -73,6 +75,7 @@ const QueryResolver: React.FC<QueryResolverProps> = ({ inputType, schemas, submi
         label={typeLabel}
         name="query"
         required
+        defaultValue={queryData}
         onChange={handleChanges}
         onKeyDown={handleChanges}
         onFocus={handleChanges}

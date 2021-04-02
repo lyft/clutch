@@ -190,6 +190,7 @@ const TextField = ({
   readOnly,
   endAdornment,
   autocompleteCallback,
+  defaultValue,
   ...props
 }: TextFieldProps) => {
   const onKeyDown = (
@@ -254,6 +255,7 @@ const TextField = ({
         onSelectCapture={e =>
           onChange(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
         }
+        defaultValue={{id: defaultValue, label: defaultValue}}
         renderInput={inputProps => (
           <StyledTextField
             {...inputProps}
@@ -269,7 +271,7 @@ const TextField = ({
     );
   }
 
-  return <StyledTextField {...textFieldProps} {...props} />;
+  return <StyledTextField {...textFieldProps} defaultValue={defaultValue} {...props} />;
 };
 
 export default TextField;
