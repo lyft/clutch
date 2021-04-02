@@ -70,7 +70,7 @@ message CancelExperimentRunRequest {
   // The identifier of an experiment run to cancel.
   string id = 1 [ (validate.rules).string = {min_bytes : 1} ];
   // The reason for the cancelation request.
-  string reason = 2 [ (validate.rules).string = {min_bytes : 1, max_len : 32} ];
+  string reason = 2 [ (validate.rules).string = {min_bytes : 1, max_len : 100} ];
 }
 
 message CancelExperimentRunResponse {

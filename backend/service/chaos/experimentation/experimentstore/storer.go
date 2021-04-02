@@ -139,8 +139,8 @@ func (s *storer) CreateOrGetExperiment(ctx context.Context, es *ExperimentSpecif
 }
 
 func (s *storer) CancelExperimentRun(ctx context.Context, id string, reason string) error {
-	if len(reason) > 32 {
-		reason = reason[0:32]
+	if len(reason) > 100 {
+		reason = reason[0:100]
 	}
 	sql :=
 		`UPDATE experiment_run
@@ -232,7 +232,7 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 		if err != nil {
 			return nil, err
 		}
-		
+
 		if err = protojson.Unmarshal([]byte(details), config.Config); err != nil {
 			return nil, err
 		}
