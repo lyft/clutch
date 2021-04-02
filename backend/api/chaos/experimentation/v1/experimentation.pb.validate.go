@@ -521,10 +521,10 @@ func (m *CancelExperimentRunRequest) Validate() error {
 		}
 	}
 
-	if utf8.RuneCountInString(m.GetReason()) > 32 {
+	if utf8.RuneCountInString(m.GetReason()) > 100 {
 		return CancelExperimentRunRequestValidationError{
 			field:  "Reason",
-			reason: "value length must be at most 32 runes",
+			reason: "value length must be at most 100 runes",
 		}
 	}
 
