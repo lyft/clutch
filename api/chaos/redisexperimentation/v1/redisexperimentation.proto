@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package clutch.chaos.redisexperimentation.v1;
+
+import "validate/validate.proto";
+
+option go_package = "github.com/lyft/clutch/backend/api/chaos/redisexperimentation/v1;redisexperimentationv1";
+
+// The configuration of a Redis fault.
+message RedisFaultConfig {
+  // The targeting of the fault describing what redis requests are being considered for faults.
+  RedisFaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
+
+  oneof fault {
+    option (validate.required) = true;
+
+    // The error fault responds to redis commands with an error.
+    RedisErrorFault error_fault = 2;
+    // The latency fault delays redis commands.
+    LatencyFault latency_fault = 3;
+  }
+}
+
+// The definition of a redis error fault.
+message RedisErrorFault {
+  // The percentage of requests the fault should be applied to.
+  FaultPercentage percentage = 1 [ (validate.rules).message.required = true ];
+}
+
+// The definition of a latency fault.
+message LatencyFault {
+  // The percentage of requests the fault should be applied to.
+  FaultPercentage percentage = 1 [ (validate.rules).message.required = true ];
+  // The latency duration to apply when applying a latency fault.
+  FaultLatencyDuration latency_duration = 2 [ (validate.rules).message.required = true ];
+}
+
+// Enforce faults on upstream redis cluster.
+message RedisFaultTargeting {
+  // The upstream redis cluster.
+  SingleCluster upstream_cluster = 1;
+  // A single downstream cluster sending requests to redis upstream.
+  SingleCluster downstream_cluster = 2;
+
+  // The redis commands to enforce a fault on. If unset, faults will apply to all redis commands.
+  repeated string redis_commands = 3 [ (validate.rules).repeated = {unique : true} ];
+}
+
+// A single cluster that is partaking in the fault injection.
+message SingleCluster {
+  // The name of a cluster.
+  string name = 1 [ (validate.rules).string = {min_bytes : 1} ];
+}
+
+// The fault percentage controlling what percentage of requests considered for a fault injection
+// should have the fault applied.
+message FaultPercentage {
+  // The numerator of a percentage with a fixed denumerator equal to 100
+  // (i.e. percentage equal to 50 results in 50/100 = 50%)
+  uint32 percentage = 1 [ (validate.rules).uint32 = {gt : 0, lte : 100} ];
+}
+
+// The latency duration to apply as part of a latency fault.
+message FaultLatencyDuration {
+  // The fixed latency duration in milliseconds.
+  uint32 fixed_duration_ms = 1 [ (validate.rules).uint32.gt = 0 ];
+}
