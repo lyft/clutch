@@ -44,7 +44,12 @@ func (m *CreateExperimentData) Validate() error {
 		return nil
 	}
 
-	// no validation rules for RunId
+	if !_CreateExperimentData_RunId_Pattern.MatchString(m.GetRunId()) {
+		return CreateExperimentDataValidationError{
+			field:  "RunId",
+			reason: "value does not match regex pattern \"^[A-Za-z0-9-._~]*$\"",
+		}
+	}
 
 	if m.GetConfig() == nil {
 		return CreateExperimentDataValidationError{
@@ -135,3 +140,5 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreateExperimentDataValidationError{}
+
+var _CreateExperimentData_RunId_Pattern = regexp.MustCompile("^[A-Za-z0-9-._~]*$")

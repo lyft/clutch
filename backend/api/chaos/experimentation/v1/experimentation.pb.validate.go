@@ -356,7 +356,12 @@ func (m *GetExperimentsRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for ConfigType
+	if len(m.GetConfigType()) < 1 {
+		return GetExperimentsRequestValidationError{
+			field:  "ConfigType",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
 
 	// no validation rules for Status
 
@@ -509,7 +514,26 @@ func (m *CancelExperimentRunRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Id
+	if len(m.GetId()) < 1 {
+		return CancelExperimentRunRequestValidationError{
+			field:  "Id",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if utf8.RuneCountInString(m.GetReason()) > 32 {
+		return CancelExperimentRunRequestValidationError{
+			field:  "Reason",
+			reason: "value length must be at most 32 runes",
+		}
+	}
+
+	if len(m.GetReason()) < 1 {
+		return CancelExperimentRunRequestValidationError{
+			field:  "Reason",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
 
 	return nil
 }
@@ -795,7 +819,12 @@ func (m *GetExperimentRunDetailsRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Id
+	if len(m.GetId()) < 1 {
+		return GetExperimentRunDetailsRequestValidationError{
+			field:  "Id",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
 
 	return nil
 }

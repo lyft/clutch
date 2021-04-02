@@ -6998,6 +6998,7 @@ export const clutch = $root.clutch = (() => {
                      * @memberof clutch.chaos.experimentation.v1
                      * @interface ICancelExperimentRunRequest
                      * @property {string|null} [id] CancelExperimentRunRequest id
+                     * @property {string|null} [reason] CancelExperimentRunRequest reason
                      */
 
                     /**
@@ -7024,6 +7025,14 @@ export const clutch = $root.clutch = (() => {
                     CancelExperimentRunRequest.prototype.id = "";
 
                     /**
+                     * CancelExperimentRunRequest reason.
+                     * @member {string} reason
+                     * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunRequest
+                     * @instance
+                     */
+                    CancelExperimentRunRequest.prototype.reason = "";
+
+                    /**
                      * Verifies a CancelExperimentRunRequest message.
                      * @function verify
                      * @memberof clutch.chaos.experimentation.v1.CancelExperimentRunRequest
@@ -7037,6 +7046,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.id != null && message.hasOwnProperty("id"))
                             if (!$util.isString(message.id))
                                 return "id: string expected";
+                        if (message.reason != null && message.hasOwnProperty("reason"))
+                            if (!$util.isString(message.reason))
+                                return "reason: string expected";
                         return null;
                     };
 
@@ -7054,6 +7066,8 @@ export const clutch = $root.clutch = (() => {
                         let message = new $root.clutch.chaos.experimentation.v1.CancelExperimentRunRequest();
                         if (object.id != null)
                             message.id = String(object.id);
+                        if (object.reason != null)
+                            message.reason = String(object.reason);
                         return message;
                     };
 
@@ -7070,10 +7084,14 @@ export const clutch = $root.clutch = (() => {
                         if (!options)
                             options = {};
                         let object = {};
-                        if (options.defaults)
+                        if (options.defaults) {
                             object.id = "";
+                            object.reason = "";
+                        }
                         if (message.id != null && message.hasOwnProperty("id"))
                             object.id = message.id;
+                        if (message.reason != null && message.hasOwnProperty("reason"))
+                            object.reason = message.reason;
                         return object;
                     };
 

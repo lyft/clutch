@@ -21,8 +21,8 @@ func (rc *Experiment) toProto() (*experimentationv1.Experiment, error) {
 	}
 
 	var endTimestampProto *timestamp.Timestamp
-	if rc.Run.EndTime.Valid {
-		endTimestampProto, err = ptypes.TimestampProto(rc.Run.EndTime.Time)
+	if rc.Run.EndTime != nil {
+		endTimestampProto, err = ptypes.TimestampProto(*rc.Run.EndTime)
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "%v", err)
 		}

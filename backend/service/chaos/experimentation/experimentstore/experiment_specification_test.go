@@ -16,17 +16,15 @@ import (
 )
 
 func TestExperimentSpecificationInitialization(t *testing.T) {
-	a := assert.New(t)
-
 	now := time.Date(2011, 0, 0, 0, 0, 0, 0, time.UTC)
 	past := now.Add(-1 * time.Hour)
 	pastTimestamp, err := ptypes.TimestampProto(past)
-	a.NoError(err)
+	assert.NoError(t, err)
 	future := now.Add(1 * time.Hour)
 	futureTimestamp, err := ptypes.TimestampProto(future)
-	a.NoError(err)
+	assert.NoError(t, err)
 	farFutureTimestamp, err := ptypes.TimestampProto(future.Add(1 * time.Hour))
-	a.NoError(err)
+	assert.NoError(t, err)
 
 	tests := []struct {
 		runId             string
@@ -123,12 +121,12 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 			ced := &experimentationv1.CreateExperimentData{RunId: tt.runId, StartTime: tt.startTime, EndTime: tt.endTime, Config: tt.Config}
 			es, err := NewExperimentSpecification(ced, tt.now)
 			if err != nil {
-				a.Equal(tt.expectedError, err)
+				assert.Equal(t, tt.expectedError, err)
 			} else {
-				a.True(len(es.RunId) > 0)
-				a.True(len(es.ConfigId) > 0)
-				a.NotEqual(es.RunId, es.ConfigId)
-				a.Equal(es.StartTime, tt.expectedStartTime)
+				assert.True(t, len(es.RunId) > 0)
+				assert.True(t, len(es.ConfigId) > 0)
+				assert.NotEqual(t, es.RunId, es.ConfigId)
+				assert.Equal(t, es.StartTime, tt.expectedStartTime)
 			}
 		})
 	}
