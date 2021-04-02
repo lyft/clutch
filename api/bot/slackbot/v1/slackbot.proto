@@ -22,36 +22,35 @@ service SlackBotAPI {
 // https://api.slack.com/apis/connections/events-api#receiving_events
 // https://api.slack.com/enterprise/apps/reference#event
 message EventRequest {
-  // A verification token to validate the event originated from Slack
+  option (clutch.api.v1.redacted) = true;
+  // Verification token to validate the event originated from Slack
   string token = 1;
   // if where the event occured is an external shared channel
   bool is_ext_shared_channel = 2;
-  // The unique identifier of the workspace where the event occurred
+  // Unique identifier of the workspace where the event occurred
   string team_id = 3;
-  // The unique identifier of the installed Slack application
+  // Unique identifier of the installed Slack application
   string api_app_id = 4;
   // The event, an object, that happened
   google.protobuf.Value event = 5;
-  // Indicates which kind of event dispatch this is
+  // Indicates which kind of event this is
   string type = 6;
-  // An identifier for this specific event, globally unique across all workspaces
+  // Identifier for this specific event, globally unique across all workspaces
   string event_id = 7;
-  // The epoch timestamp in seconds indicating when this event was dispatched
+  // Epoch timestamp in seconds indicating when this event was dispatched
   int64 event_time = 9;
   // An identifier for this specific event, can be used with list of authorizations to obtain a
   // full list of installations of your app that this event is visible to
   string event_context = 8;
   // An installation of the app, object type
   google.protobuf.Value authorizations = 10;
-  // A randomly generated string produced by Slack. Used as part of the URL verification handshake
-  // https://api.slack.com/apis/connections/events-api#the-events-api__subscribing-to-event-types__events-api-request-urls__request-url-configuration--verification__url-verification-handshake
+  // Randomly generated string used as part of the URL verification handshake, https://api.slack.com/apis/connections/events-api#the-events-api__subscribing-to-event-types__events-api-request-urls__request-url-configuration--verification__url-verification-handshake
   string challenge = 11;
 }
 
-// Respond back to the Slack Events API with the challenge or a 2xx
-// https://api.slack.com/apis/connections/events-api#the-events-api__responding-to-events
+// Respond back to the Slack Events API with the challenge or a 2xx, https://api.slack.com/apis/connections/events-api#the-events-api__responding-to-events
 message EventResponse {
-  // The request will include the challenge and we respond back with the same challenge to complete
-  // the URL verification handshake
+  option (clutch.api.v1.redacted) = true;
+  // The request will include the challenge and we respond back with the same challenge to complete the URL verification handshake
   string challenge = 1;
 }
