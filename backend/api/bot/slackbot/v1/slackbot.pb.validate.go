@@ -36,6 +36,98 @@ var (
 // define the regex for a UUID once up-front
 var _slackbot_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
+// Validate checks the field values on Event with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Event) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Type
+
+	// no validation rules for User
+
+	// no validation rules for Text
+
+	// no validation rules for Ts
+
+	// no validation rules for Channel
+
+	// no validation rules for ChannelType
+
+	// no validation rules for EventTs
+
+	// no validation rules for ClientMsgId
+
+	// no validation rules for Team
+
+	if v, ok := interface{}(m.GetBlocks()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return EventValidationError{
+				field:  "Blocks",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// EventValidationError is the validation error returned by Event.Validate if
+// the designated constraints aren't met.
+type EventValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e EventValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e EventValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e EventValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e EventValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e EventValidationError) ErrorName() string { return "EventValidationError" }
+
+// Error satisfies the builtin error interface
+func (e EventValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sEvent.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = EventValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = EventValidationError{}
+
 // Validate checks the field values on EventRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.

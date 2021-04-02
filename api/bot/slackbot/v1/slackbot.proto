@@ -18,6 +18,32 @@ service SlackBotAPI {
   }
 }
 
+// The structure of events vary from type to type. The full list of event types can be found here
+// https://api.slack.com/events. For the bot feature, we will be receiving app_mention events (events that mention the
+// bot) or message.im events (a message posted in a DM with the bot).
+message Event {
+  // the type of event
+  string type = 1;
+  // the user who messaged the bot
+  string user = 2;
+  // the message text
+  string text = 3;
+  // timestamp
+  string ts = 4;
+  // the channel where the event happened
+  string channel = 5;
+  // for DM messages, this will be "im"
+  string channel_type = 6;
+  // when the event was dispatched
+  string event_ts = 7;
+  string client_msg_id = 8;
+  // Unique identifier of the workspace where the event occurred
+  string team = 9;
+  // blocks is a list with a schema that can vary. it's received when a user interacts with a Block Kit component
+  // https://api.slack.com/reference/block-kit/interactive-components
+  google.protobuf.Value blocks = 10;
+}
+
 // For more details, see:
 // https://api.slack.com/apis/connections/events-api#receiving_events
 // https://api.slack.com/enterprise/apps/reference#event
@@ -32,7 +58,9 @@ message EventRequest {
   // Unique identifier of the installed Slack application
   string api_app_id = 4;
   // The event, an object, that happened
-  google.protobuf.Value event = 5;
+  // TODO: (sperry) if we expand the types of events we suscribe to and their fields vary alot, maybe we should use
+  // google.protobuf.Value.
+  Event event = 5;
   // Indicates which kind of event this is
   string type = 6;
   // Identifier for this specific event, globally unique across all workspaces

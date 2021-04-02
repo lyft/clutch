@@ -6143,6 +6143,265 @@ export const clutch = $root.clutch = (() => {
                     return SlackBotAPI;
                 })();
 
+                v1.Event = (function() {
+
+                    /**
+                     * Properties of an Event.
+                     * @memberof clutch.bot.slackbot.v1
+                     * @interface IEvent
+                     * @property {string|null} [type] Event type
+                     * @property {string|null} [user] Event user
+                     * @property {string|null} [text] Event text
+                     * @property {string|null} [ts] Event ts
+                     * @property {string|null} [channel] Event channel
+                     * @property {string|null} [channelType] Event channelType
+                     * @property {string|null} [eventTs] Event eventTs
+                     * @property {string|null} [clientMsgId] Event clientMsgId
+                     * @property {string|null} [team] Event team
+                     * @property {google.protobuf.IValue|null} [blocks] Event blocks
+                     */
+
+                    /**
+                     * Constructs a new Event.
+                     * @memberof clutch.bot.slackbot.v1
+                     * @classdesc Represents an Event.
+                     * @implements IEvent
+                     * @constructor
+                     * @param {clutch.bot.slackbot.v1.IEvent=} [properties] Properties to set
+                     */
+                    function Event(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Event type.
+                     * @member {string} type
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @instance
+                     */
+                    Event.prototype.type = "";
+
+                    /**
+                     * Event user.
+                     * @member {string} user
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @instance
+                     */
+                    Event.prototype.user = "";
+
+                    /**
+                     * Event text.
+                     * @member {string} text
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @instance
+                     */
+                    Event.prototype.text = "";
+
+                    /**
+                     * Event ts.
+                     * @member {string} ts
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @instance
+                     */
+                    Event.prototype.ts = "";
+
+                    /**
+                     * Event channel.
+                     * @member {string} channel
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @instance
+                     */
+                    Event.prototype.channel = "";
+
+                    /**
+                     * Event channelType.
+                     * @member {string} channelType
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @instance
+                     */
+                    Event.prototype.channelType = "";
+
+                    /**
+                     * Event eventTs.
+                     * @member {string} eventTs
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @instance
+                     */
+                    Event.prototype.eventTs = "";
+
+                    /**
+                     * Event clientMsgId.
+                     * @member {string} clientMsgId
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @instance
+                     */
+                    Event.prototype.clientMsgId = "";
+
+                    /**
+                     * Event team.
+                     * @member {string} team
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @instance
+                     */
+                    Event.prototype.team = "";
+
+                    /**
+                     * Event blocks.
+                     * @member {google.protobuf.IValue|null|undefined} blocks
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @instance
+                     */
+                    Event.prototype.blocks = null;
+
+                    /**
+                     * Verifies an Event message.
+                     * @function verify
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Event.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.type != null && message.hasOwnProperty("type"))
+                            if (!$util.isString(message.type))
+                                return "type: string expected";
+                        if (message.user != null && message.hasOwnProperty("user"))
+                            if (!$util.isString(message.user))
+                                return "user: string expected";
+                        if (message.text != null && message.hasOwnProperty("text"))
+                            if (!$util.isString(message.text))
+                                return "text: string expected";
+                        if (message.ts != null && message.hasOwnProperty("ts"))
+                            if (!$util.isString(message.ts))
+                                return "ts: string expected";
+                        if (message.channel != null && message.hasOwnProperty("channel"))
+                            if (!$util.isString(message.channel))
+                                return "channel: string expected";
+                        if (message.channelType != null && message.hasOwnProperty("channelType"))
+                            if (!$util.isString(message.channelType))
+                                return "channelType: string expected";
+                        if (message.eventTs != null && message.hasOwnProperty("eventTs"))
+                            if (!$util.isString(message.eventTs))
+                                return "eventTs: string expected";
+                        if (message.clientMsgId != null && message.hasOwnProperty("clientMsgId"))
+                            if (!$util.isString(message.clientMsgId))
+                                return "clientMsgId: string expected";
+                        if (message.team != null && message.hasOwnProperty("team"))
+                            if (!$util.isString(message.team))
+                                return "team: string expected";
+                        if (message.blocks != null && message.hasOwnProperty("blocks")) {
+                            let error = $root.google.protobuf.Value.verify(message.blocks);
+                            if (error)
+                                return "blocks." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates an Event message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.bot.slackbot.v1.Event} Event
+                     */
+                    Event.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.bot.slackbot.v1.Event)
+                            return object;
+                        let message = new $root.clutch.bot.slackbot.v1.Event();
+                        if (object.type != null)
+                            message.type = String(object.type);
+                        if (object.user != null)
+                            message.user = String(object.user);
+                        if (object.text != null)
+                            message.text = String(object.text);
+                        if (object.ts != null)
+                            message.ts = String(object.ts);
+                        if (object.channel != null)
+                            message.channel = String(object.channel);
+                        if (object.channelType != null)
+                            message.channelType = String(object.channelType);
+                        if (object.eventTs != null)
+                            message.eventTs = String(object.eventTs);
+                        if (object.clientMsgId != null)
+                            message.clientMsgId = String(object.clientMsgId);
+                        if (object.team != null)
+                            message.team = String(object.team);
+                        if (object.blocks != null) {
+                            if (typeof object.blocks !== "object")
+                                throw TypeError(".clutch.bot.slackbot.v1.Event.blocks: object expected");
+                            message.blocks = $root.google.protobuf.Value.fromObject(object.blocks);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an Event message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @static
+                     * @param {clutch.bot.slackbot.v1.Event} message Event
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Event.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.type = "";
+                            object.user = "";
+                            object.text = "";
+                            object.ts = "";
+                            object.channel = "";
+                            object.channelType = "";
+                            object.eventTs = "";
+                            object.clientMsgId = "";
+                            object.team = "";
+                            object.blocks = null;
+                        }
+                        if (message.type != null && message.hasOwnProperty("type"))
+                            object.type = message.type;
+                        if (message.user != null && message.hasOwnProperty("user"))
+                            object.user = message.user;
+                        if (message.text != null && message.hasOwnProperty("text"))
+                            object.text = message.text;
+                        if (message.ts != null && message.hasOwnProperty("ts"))
+                            object.ts = message.ts;
+                        if (message.channel != null && message.hasOwnProperty("channel"))
+                            object.channel = message.channel;
+                        if (message.channelType != null && message.hasOwnProperty("channelType"))
+                            object.channelType = message.channelType;
+                        if (message.eventTs != null && message.hasOwnProperty("eventTs"))
+                            object.eventTs = message.eventTs;
+                        if (message.clientMsgId != null && message.hasOwnProperty("clientMsgId"))
+                            object.clientMsgId = message.clientMsgId;
+                        if (message.team != null && message.hasOwnProperty("team"))
+                            object.team = message.team;
+                        if (message.blocks != null && message.hasOwnProperty("blocks"))
+                            object.blocks = $root.google.protobuf.Value.toObject(message.blocks, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Event to JSON.
+                     * @function toJSON
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Event.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Event;
+                })();
+
                 v1.EventRequest = (function() {
 
                     /**
@@ -6153,7 +6412,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {boolean|null} [isExtSharedChannel] EventRequest isExtSharedChannel
                      * @property {string|null} [teamId] EventRequest teamId
                      * @property {string|null} [apiAppId] EventRequest apiAppId
-                     * @property {google.protobuf.IValue|null} [event] EventRequest event
+                     * @property {clutch.bot.slackbot.v1.IEvent|null} [event] EventRequest event
                      * @property {string|null} [type] EventRequest type
                      * @property {string|null} [eventId] EventRequest eventId
                      * @property {number|Long|null} [eventTime] EventRequest eventTime
@@ -6211,7 +6470,7 @@ export const clutch = $root.clutch = (() => {
 
                     /**
                      * EventRequest event.
-                     * @member {google.protobuf.IValue|null|undefined} event
+                     * @member {clutch.bot.slackbot.v1.IEvent|null|undefined} event
                      * @memberof clutch.bot.slackbot.v1.EventRequest
                      * @instance
                      */
@@ -6289,7 +6548,7 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.apiAppId))
                                 return "apiAppId: string expected";
                         if (message.event != null && message.hasOwnProperty("event")) {
-                            let error = $root.google.protobuf.Value.verify(message.event);
+                            let error = $root.clutch.bot.slackbot.v1.Event.verify(message.event);
                             if (error)
                                 return "event." + error;
                         }
@@ -6339,7 +6598,7 @@ export const clutch = $root.clutch = (() => {
                         if (object.event != null) {
                             if (typeof object.event !== "object")
                                 throw TypeError(".clutch.bot.slackbot.v1.EventRequest.event: object expected");
-                            message.event = $root.google.protobuf.Value.fromObject(object.event);
+                            message.event = $root.clutch.bot.slackbot.v1.Event.fromObject(object.event);
                         }
                         if (object.type != null)
                             message.type = String(object.type);
@@ -6405,7 +6664,7 @@ export const clutch = $root.clutch = (() => {
                         if (message.apiAppId != null && message.hasOwnProperty("apiAppId"))
                             object.apiAppId = message.apiAppId;
                         if (message.event != null && message.hasOwnProperty("event"))
-                            object.event = $root.google.protobuf.Value.toObject(message.event, options);
+                            object.event = $root.clutch.bot.slackbot.v1.Event.toObject(message.event, options);
                         if (message.type != null && message.hasOwnProperty("type"))
                             object.type = message.type;
                         if (message.eventId != null && message.hasOwnProperty("eventId"))

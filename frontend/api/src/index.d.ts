@@ -2671,6 +2671,108 @@ export namespace clutch {
                     type EventCallback = (error: (Error|null), response?: clutch.bot.slackbot.v1.EventResponse) => void;
                 }
 
+                /** Properties of an Event. */
+                interface IEvent {
+
+                    /** Event type */
+                    type?: (string|null);
+
+                    /** Event user */
+                    user?: (string|null);
+
+                    /** Event text */
+                    text?: (string|null);
+
+                    /** Event ts */
+                    ts?: (string|null);
+
+                    /** Event channel */
+                    channel?: (string|null);
+
+                    /** Event channelType */
+                    channelType?: (string|null);
+
+                    /** Event eventTs */
+                    eventTs?: (string|null);
+
+                    /** Event clientMsgId */
+                    clientMsgId?: (string|null);
+
+                    /** Event team */
+                    team?: (string|null);
+
+                    /** Event blocks */
+                    blocks?: (google.protobuf.IValue|null);
+                }
+
+                /** Represents an Event. */
+                class Event implements IEvent {
+
+                    /**
+                     * Constructs a new Event.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.bot.slackbot.v1.IEvent);
+
+                    /** Event type. */
+                    public type: string;
+
+                    /** Event user. */
+                    public user: string;
+
+                    /** Event text. */
+                    public text: string;
+
+                    /** Event ts. */
+                    public ts: string;
+
+                    /** Event channel. */
+                    public channel: string;
+
+                    /** Event channelType. */
+                    public channelType: string;
+
+                    /** Event eventTs. */
+                    public eventTs: string;
+
+                    /** Event clientMsgId. */
+                    public clientMsgId: string;
+
+                    /** Event team. */
+                    public team: string;
+
+                    /** Event blocks. */
+                    public blocks?: (google.protobuf.IValue|null);
+
+                    /**
+                     * Verifies an Event message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an Event message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Event
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.bot.slackbot.v1.Event;
+
+                    /**
+                     * Creates a plain object from an Event message. Also converts values to other types if specified.
+                     * @param message Event
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.bot.slackbot.v1.Event, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Event to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
                 /** Properties of an EventRequest. */
                 interface IEventRequest {
 
@@ -2687,7 +2789,7 @@ export namespace clutch {
                     apiAppId?: (string|null);
 
                     /** EventRequest event */
-                    event?: (google.protobuf.IValue|null);
+                    event?: (clutch.bot.slackbot.v1.IEvent|null);
 
                     /** EventRequest type */
                     type?: (string|null);
@@ -2730,7 +2832,7 @@ export namespace clutch {
                     public apiAppId: string;
 
                     /** EventRequest event. */
-                    public event?: (google.protobuf.IValue|null);
+                    public event?: (clutch.bot.slackbot.v1.IEvent|null);
 
                     /** EventRequest type. */
                     public type: string;
