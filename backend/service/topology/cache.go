@@ -136,6 +136,9 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *
 				}
 				batchInsert = batchInsert[:0]
 			}
+		// TODO (mcutalo): There is a possibility that this code will never be reached.
+		// If deletes happen at a faster interval than the flush timer (which is configurable via batchInsertFlush),
+		// insert items would be stuck in the batch until the BatchInsertSize is reached.
 		case <-time.After(c.batchInsertFlush):
 			if len(batchInsert) > 0 {
 				if err := c.setCache(ctx, batchInsert); err != nil {
