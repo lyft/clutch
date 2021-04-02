@@ -36,16 +36,16 @@ var (
 // define the regex for a UUID once up-front
 var _redisexperimentation_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
-// Validate checks the field values on RedisFaultConfig with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *RedisFaultConfig) Validate() error {
+// Validate checks the field values on FaultConfig with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *FaultConfig) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if m.GetFaultTargeting() == nil {
-		return RedisFaultConfigValidationError{
+		return FaultConfigValidationError{
 			field:  "FaultTargeting",
 			reason: "value is required",
 		}
@@ -53,7 +53,7 @@ func (m *RedisFaultConfig) Validate() error {
 
 	if v, ok := interface{}(m.GetFaultTargeting()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return RedisFaultConfigValidationError{
+			return FaultConfigValidationError{
 				field:  "FaultTargeting",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -63,11 +63,11 @@ func (m *RedisFaultConfig) Validate() error {
 
 	switch m.Fault.(type) {
 
-	case *RedisFaultConfig_ErrorFault:
+	case *FaultConfig_ErrorFault:
 
 		if v, ok := interface{}(m.GetErrorFault()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return RedisFaultConfigValidationError{
+				return FaultConfigValidationError{
 					field:  "ErrorFault",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -75,11 +75,11 @@ func (m *RedisFaultConfig) Validate() error {
 			}
 		}
 
-	case *RedisFaultConfig_LatencyFault:
+	case *FaultConfig_LatencyFault:
 
 		if v, ok := interface{}(m.GetLatencyFault()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return RedisFaultConfigValidationError{
+				return FaultConfigValidationError{
 					field:  "LatencyFault",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -88,7 +88,7 @@ func (m *RedisFaultConfig) Validate() error {
 		}
 
 	default:
-		return RedisFaultConfigValidationError{
+		return FaultConfigValidationError{
 			field:  "Fault",
 			reason: "value is required",
 		}
@@ -98,9 +98,9 @@ func (m *RedisFaultConfig) Validate() error {
 	return nil
 }
 
-// RedisFaultConfigValidationError is the validation error returned by
-// RedisFaultConfig.Validate if the designated constraints aren't met.
-type RedisFaultConfigValidationError struct {
+// FaultConfigValidationError is the validation error returned by
+// FaultConfig.Validate if the designated constraints aren't met.
+type FaultConfigValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -108,22 +108,22 @@ type RedisFaultConfigValidationError struct {
 }
 
 // Field function returns field value.
-func (e RedisFaultConfigValidationError) Field() string { return e.field }
+func (e FaultConfigValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e RedisFaultConfigValidationError) Reason() string { return e.reason }
+func (e FaultConfigValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e RedisFaultConfigValidationError) Cause() error { return e.cause }
+func (e FaultConfigValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e RedisFaultConfigValidationError) Key() bool { return e.key }
+func (e FaultConfigValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e RedisFaultConfigValidationError) ErrorName() string { return "RedisFaultConfigValidationError" }
+func (e FaultConfigValidationError) ErrorName() string { return "FaultConfigValidationError" }
 
 // Error satisfies the builtin error interface
-func (e RedisFaultConfigValidationError) Error() string {
+func (e FaultConfigValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -135,14 +135,14 @@ func (e RedisFaultConfigValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sRedisFaultConfig.%s: %s%s",
+		"invalid %sFaultConfig.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = RedisFaultConfigValidationError{}
+var _ error = FaultConfigValidationError{}
 
 var _ interface {
 	Field() string
@@ -150,18 +150,17 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = RedisFaultConfigValidationError{}
+} = FaultConfigValidationError{}
 
-// Validate checks the field values on RedisErrorFault with the rules defined
-// in the proto definition for this message. If any rules are violated, an
-// error is returned.
-func (m *RedisErrorFault) Validate() error {
+// Validate checks the field values on ErrorFault with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *ErrorFault) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if m.GetPercentage() == nil {
-		return RedisErrorFaultValidationError{
+		return ErrorFaultValidationError{
 			field:  "Percentage",
 			reason: "value is required",
 		}
@@ -169,7 +168,7 @@ func (m *RedisErrorFault) Validate() error {
 
 	if v, ok := interface{}(m.GetPercentage()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return RedisErrorFaultValidationError{
+			return ErrorFaultValidationError{
 				field:  "Percentage",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -180,9 +179,9 @@ func (m *RedisErrorFault) Validate() error {
 	return nil
 }
 
-// RedisErrorFaultValidationError is the validation error returned by
-// RedisErrorFault.Validate if the designated constraints aren't met.
-type RedisErrorFaultValidationError struct {
+// ErrorFaultValidationError is the validation error returned by
+// ErrorFault.Validate if the designated constraints aren't met.
+type ErrorFaultValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -190,22 +189,22 @@ type RedisErrorFaultValidationError struct {
 }
 
 // Field function returns field value.
-func (e RedisErrorFaultValidationError) Field() string { return e.field }
+func (e ErrorFaultValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e RedisErrorFaultValidationError) Reason() string { return e.reason }
+func (e ErrorFaultValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e RedisErrorFaultValidationError) Cause() error { return e.cause }
+func (e ErrorFaultValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e RedisErrorFaultValidationError) Key() bool { return e.key }
+func (e ErrorFaultValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e RedisErrorFaultValidationError) ErrorName() string { return "RedisErrorFaultValidationError" }
+func (e ErrorFaultValidationError) ErrorName() string { return "ErrorFaultValidationError" }
 
 // Error satisfies the builtin error interface
-func (e RedisErrorFaultValidationError) Error() string {
+func (e ErrorFaultValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -217,14 +216,14 @@ func (e RedisErrorFaultValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sRedisErrorFault.%s: %s%s",
+		"invalid %sErrorFault.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = RedisErrorFaultValidationError{}
+var _ error = ErrorFaultValidationError{}
 
 var _ interface {
 	Field() string
@@ -232,7 +231,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = RedisErrorFaultValidationError{}
+} = ErrorFaultValidationError{}
 
 // Validate checks the field values on LatencyFault with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
@@ -333,17 +332,17 @@ var _ interface {
 	ErrorName() string
 } = LatencyFaultValidationError{}
 
-// Validate checks the field values on RedisFaultTargeting with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
-func (m *RedisFaultTargeting) Validate() error {
+// Validate checks the field values on FaultTargeting with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *FaultTargeting) Validate() error {
 	if m == nil {
 		return nil
 	}
 
 	if v, ok := interface{}(m.GetUpstreamCluster()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return RedisFaultTargetingValidationError{
+			return FaultTargetingValidationError{
 				field:  "UpstreamCluster",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -353,7 +352,7 @@ func (m *RedisFaultTargeting) Validate() error {
 
 	if v, ok := interface{}(m.GetDownstreamCluster()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return RedisFaultTargetingValidationError{
+			return FaultTargetingValidationError{
 				field:  "DownstreamCluster",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -361,18 +360,18 @@ func (m *RedisFaultTargeting) Validate() error {
 		}
 	}
 
-	_RedisFaultTargeting_RedisCommands_Unique := make(map[string]struct{}, len(m.GetRedisCommands()))
+	_FaultTargeting_RedisCommands_Unique := make(map[string]struct{}, len(m.GetRedisCommands()))
 
 	for idx, item := range m.GetRedisCommands() {
 		_, _ = idx, item
 
-		if _, exists := _RedisFaultTargeting_RedisCommands_Unique[item]; exists {
-			return RedisFaultTargetingValidationError{
+		if _, exists := _FaultTargeting_RedisCommands_Unique[item]; exists {
+			return FaultTargetingValidationError{
 				field:  fmt.Sprintf("RedisCommands[%v]", idx),
 				reason: "repeated value must contain unique items",
 			}
 		} else {
-			_RedisFaultTargeting_RedisCommands_Unique[item] = struct{}{}
+			_FaultTargeting_RedisCommands_Unique[item] = struct{}{}
 		}
 
 		// no validation rules for RedisCommands[idx]
@@ -381,9 +380,9 @@ func (m *RedisFaultTargeting) Validate() error {
 	return nil
 }
 
-// RedisFaultTargetingValidationError is the validation error returned by
-// RedisFaultTargeting.Validate if the designated constraints aren't met.
-type RedisFaultTargetingValidationError struct {
+// FaultTargetingValidationError is the validation error returned by
+// FaultTargeting.Validate if the designated constraints aren't met.
+type FaultTargetingValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -391,24 +390,22 @@ type RedisFaultTargetingValidationError struct {
 }
 
 // Field function returns field value.
-func (e RedisFaultTargetingValidationError) Field() string { return e.field }
+func (e FaultTargetingValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e RedisFaultTargetingValidationError) Reason() string { return e.reason }
+func (e FaultTargetingValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e RedisFaultTargetingValidationError) Cause() error { return e.cause }
+func (e FaultTargetingValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e RedisFaultTargetingValidationError) Key() bool { return e.key }
+func (e FaultTargetingValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e RedisFaultTargetingValidationError) ErrorName() string {
-	return "RedisFaultTargetingValidationError"
-}
+func (e FaultTargetingValidationError) ErrorName() string { return "FaultTargetingValidationError" }
 
 // Error satisfies the builtin error interface
-func (e RedisFaultTargetingValidationError) Error() string {
+func (e FaultTargetingValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -420,14 +417,14 @@ func (e RedisFaultTargetingValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sRedisFaultTargeting.%s: %s%s",
+		"invalid %sFaultTargeting.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = RedisFaultTargetingValidationError{}
+var _ error = FaultTargetingValidationError{}
 
 var _ interface {
 	Field() string
@@ -435,7 +432,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = RedisFaultTargetingValidationError{}
+} = FaultTargetingValidationError{}
 
 // Validate checks the field values on SingleCluster with the rules defined in
 // the proto definition for this message. If any rules are violated, an error

@@ -8819,26 +8819,26 @@ export const clutch = $root.clutch = (() => {
                  */
                 const v1 = {};
 
-                v1.RedisFaultConfig = (function() {
+                v1.FaultConfig = (function() {
 
                     /**
-                     * Properties of a RedisFaultConfig.
+                     * Properties of a FaultConfig.
                      * @memberof clutch.chaos.redisexperimentation.v1
-                     * @interface IRedisFaultConfig
-                     * @property {clutch.chaos.redisexperimentation.v1.IRedisFaultTargeting|null} [faultTargeting] RedisFaultConfig faultTargeting
-                     * @property {clutch.chaos.redisexperimentation.v1.IRedisErrorFault|null} [errorFault] RedisFaultConfig errorFault
-                     * @property {clutch.chaos.redisexperimentation.v1.ILatencyFault|null} [latencyFault] RedisFaultConfig latencyFault
+                     * @interface IFaultConfig
+                     * @property {clutch.chaos.redisexperimentation.v1.IFaultTargeting|null} [faultTargeting] FaultConfig faultTargeting
+                     * @property {clutch.chaos.redisexperimentation.v1.IErrorFault|null} [errorFault] FaultConfig errorFault
+                     * @property {clutch.chaos.redisexperimentation.v1.ILatencyFault|null} [latencyFault] FaultConfig latencyFault
                      */
 
                     /**
-                     * Constructs a new RedisFaultConfig.
+                     * Constructs a new FaultConfig.
                      * @memberof clutch.chaos.redisexperimentation.v1
-                     * @classdesc Represents a RedisFaultConfig.
-                     * @implements IRedisFaultConfig
+                     * @classdesc Represents a FaultConfig.
+                     * @implements IFaultConfig
                      * @constructor
-                     * @param {clutch.chaos.redisexperimentation.v1.IRedisFaultConfig=} [properties] Properties to set
+                     * @param {clutch.chaos.redisexperimentation.v1.IFaultConfig=} [properties] Properties to set
                      */
-                    function RedisFaultConfig(properties) {
+                    function FaultConfig(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -8846,64 +8846,64 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * RedisFaultConfig faultTargeting.
-                     * @member {clutch.chaos.redisexperimentation.v1.IRedisFaultTargeting|null|undefined} faultTargeting
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisFaultConfig
+                     * FaultConfig faultTargeting.
+                     * @member {clutch.chaos.redisexperimentation.v1.IFaultTargeting|null|undefined} faultTargeting
+                     * @memberof clutch.chaos.redisexperimentation.v1.FaultConfig
                      * @instance
                      */
-                    RedisFaultConfig.prototype.faultTargeting = null;
+                    FaultConfig.prototype.faultTargeting = null;
 
                     /**
-                     * RedisFaultConfig errorFault.
-                     * @member {clutch.chaos.redisexperimentation.v1.IRedisErrorFault|null|undefined} errorFault
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisFaultConfig
+                     * FaultConfig errorFault.
+                     * @member {clutch.chaos.redisexperimentation.v1.IErrorFault|null|undefined} errorFault
+                     * @memberof clutch.chaos.redisexperimentation.v1.FaultConfig
                      * @instance
                      */
-                    RedisFaultConfig.prototype.errorFault = null;
+                    FaultConfig.prototype.errorFault = null;
 
                     /**
-                     * RedisFaultConfig latencyFault.
+                     * FaultConfig latencyFault.
                      * @member {clutch.chaos.redisexperimentation.v1.ILatencyFault|null|undefined} latencyFault
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisFaultConfig
+                     * @memberof clutch.chaos.redisexperimentation.v1.FaultConfig
                      * @instance
                      */
-                    RedisFaultConfig.prototype.latencyFault = null;
+                    FaultConfig.prototype.latencyFault = null;
 
                     // OneOf field names bound to virtual getters and setters
                     let $oneOfFields;
 
                     /**
-                     * RedisFaultConfig fault.
+                     * FaultConfig fault.
                      * @member {"errorFault"|"latencyFault"|undefined} fault
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisFaultConfig
+                     * @memberof clutch.chaos.redisexperimentation.v1.FaultConfig
                      * @instance
                      */
-                    Object.defineProperty(RedisFaultConfig.prototype, "fault", {
+                    Object.defineProperty(FaultConfig.prototype, "fault", {
                         get: $util.oneOfGetter($oneOfFields = ["errorFault", "latencyFault"]),
                         set: $util.oneOfSetter($oneOfFields)
                     });
 
                     /**
-                     * Verifies a RedisFaultConfig message.
+                     * Verifies a FaultConfig message.
                      * @function verify
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisFaultConfig
+                     * @memberof clutch.chaos.redisexperimentation.v1.FaultConfig
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    RedisFaultConfig.verify = function verify(message) {
+                    FaultConfig.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         let properties = {};
                         if (message.faultTargeting != null && message.hasOwnProperty("faultTargeting")) {
-                            let error = $root.clutch.chaos.redisexperimentation.v1.RedisFaultTargeting.verify(message.faultTargeting);
+                            let error = $root.clutch.chaos.redisexperimentation.v1.FaultTargeting.verify(message.faultTargeting);
                             if (error)
                                 return "faultTargeting." + error;
                         }
                         if (message.errorFault != null && message.hasOwnProperty("errorFault")) {
                             properties.fault = 1;
                             {
-                                let error = $root.clutch.chaos.redisexperimentation.v1.RedisErrorFault.verify(message.errorFault);
+                                let error = $root.clutch.chaos.redisexperimentation.v1.ErrorFault.verify(message.errorFault);
                                 if (error)
                                     return "errorFault." + error;
                             }
@@ -8922,54 +8922,54 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a RedisFaultConfig message from a plain object. Also converts values to their respective internal types.
+                     * Creates a FaultConfig message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisFaultConfig
+                     * @memberof clutch.chaos.redisexperimentation.v1.FaultConfig
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.redisexperimentation.v1.RedisFaultConfig} RedisFaultConfig
+                     * @returns {clutch.chaos.redisexperimentation.v1.FaultConfig} FaultConfig
                      */
-                    RedisFaultConfig.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.redisexperimentation.v1.RedisFaultConfig)
+                    FaultConfig.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.redisexperimentation.v1.FaultConfig)
                             return object;
-                        let message = new $root.clutch.chaos.redisexperimentation.v1.RedisFaultConfig();
+                        let message = new $root.clutch.chaos.redisexperimentation.v1.FaultConfig();
                         if (object.faultTargeting != null) {
                             if (typeof object.faultTargeting !== "object")
-                                throw TypeError(".clutch.chaos.redisexperimentation.v1.RedisFaultConfig.faultTargeting: object expected");
-                            message.faultTargeting = $root.clutch.chaos.redisexperimentation.v1.RedisFaultTargeting.fromObject(object.faultTargeting);
+                                throw TypeError(".clutch.chaos.redisexperimentation.v1.FaultConfig.faultTargeting: object expected");
+                            message.faultTargeting = $root.clutch.chaos.redisexperimentation.v1.FaultTargeting.fromObject(object.faultTargeting);
                         }
                         if (object.errorFault != null) {
                             if (typeof object.errorFault !== "object")
-                                throw TypeError(".clutch.chaos.redisexperimentation.v1.RedisFaultConfig.errorFault: object expected");
-                            message.errorFault = $root.clutch.chaos.redisexperimentation.v1.RedisErrorFault.fromObject(object.errorFault);
+                                throw TypeError(".clutch.chaos.redisexperimentation.v1.FaultConfig.errorFault: object expected");
+                            message.errorFault = $root.clutch.chaos.redisexperimentation.v1.ErrorFault.fromObject(object.errorFault);
                         }
                         if (object.latencyFault != null) {
                             if (typeof object.latencyFault !== "object")
-                                throw TypeError(".clutch.chaos.redisexperimentation.v1.RedisFaultConfig.latencyFault: object expected");
+                                throw TypeError(".clutch.chaos.redisexperimentation.v1.FaultConfig.latencyFault: object expected");
                             message.latencyFault = $root.clutch.chaos.redisexperimentation.v1.LatencyFault.fromObject(object.latencyFault);
                         }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from a RedisFaultConfig message. Also converts values to other types if specified.
+                     * Creates a plain object from a FaultConfig message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisFaultConfig
+                     * @memberof clutch.chaos.redisexperimentation.v1.FaultConfig
                      * @static
-                     * @param {clutch.chaos.redisexperimentation.v1.RedisFaultConfig} message RedisFaultConfig
+                     * @param {clutch.chaos.redisexperimentation.v1.FaultConfig} message FaultConfig
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    RedisFaultConfig.toObject = function toObject(message, options) {
+                    FaultConfig.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
                         if (options.defaults)
                             object.faultTargeting = null;
                         if (message.faultTargeting != null && message.hasOwnProperty("faultTargeting"))
-                            object.faultTargeting = $root.clutch.chaos.redisexperimentation.v1.RedisFaultTargeting.toObject(message.faultTargeting, options);
+                            object.faultTargeting = $root.clutch.chaos.redisexperimentation.v1.FaultTargeting.toObject(message.faultTargeting, options);
                         if (message.errorFault != null && message.hasOwnProperty("errorFault")) {
-                            object.errorFault = $root.clutch.chaos.redisexperimentation.v1.RedisErrorFault.toObject(message.errorFault, options);
+                            object.errorFault = $root.clutch.chaos.redisexperimentation.v1.ErrorFault.toObject(message.errorFault, options);
                             if (options.oneofs)
                                 object.fault = "errorFault";
                         }
@@ -8982,37 +8982,37 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this RedisFaultConfig to JSON.
+                     * Converts this FaultConfig to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisFaultConfig
+                     * @memberof clutch.chaos.redisexperimentation.v1.FaultConfig
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    RedisFaultConfig.prototype.toJSON = function toJSON() {
+                    FaultConfig.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return RedisFaultConfig;
+                    return FaultConfig;
                 })();
 
-                v1.RedisErrorFault = (function() {
+                v1.ErrorFault = (function() {
 
                     /**
-                     * Properties of a RedisErrorFault.
+                     * Properties of an ErrorFault.
                      * @memberof clutch.chaos.redisexperimentation.v1
-                     * @interface IRedisErrorFault
-                     * @property {clutch.chaos.redisexperimentation.v1.IFaultPercentage|null} [percentage] RedisErrorFault percentage
+                     * @interface IErrorFault
+                     * @property {clutch.chaos.redisexperimentation.v1.IFaultPercentage|null} [percentage] ErrorFault percentage
                      */
 
                     /**
-                     * Constructs a new RedisErrorFault.
+                     * Constructs a new ErrorFault.
                      * @memberof clutch.chaos.redisexperimentation.v1
-                     * @classdesc Represents a RedisErrorFault.
-                     * @implements IRedisErrorFault
+                     * @classdesc Represents an ErrorFault.
+                     * @implements IErrorFault
                      * @constructor
-                     * @param {clutch.chaos.redisexperimentation.v1.IRedisErrorFault=} [properties] Properties to set
+                     * @param {clutch.chaos.redisexperimentation.v1.IErrorFault=} [properties] Properties to set
                      */
-                    function RedisErrorFault(properties) {
+                    function ErrorFault(properties) {
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                                 if (properties[keys[i]] != null)
@@ -9020,22 +9020,22 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * RedisErrorFault percentage.
+                     * ErrorFault percentage.
                      * @member {clutch.chaos.redisexperimentation.v1.IFaultPercentage|null|undefined} percentage
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisErrorFault
+                     * @memberof clutch.chaos.redisexperimentation.v1.ErrorFault
                      * @instance
                      */
-                    RedisErrorFault.prototype.percentage = null;
+                    ErrorFault.prototype.percentage = null;
 
                     /**
-                     * Verifies a RedisErrorFault message.
+                     * Verifies an ErrorFault message.
                      * @function verify
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisErrorFault
+                     * @memberof clutch.chaos.redisexperimentation.v1.ErrorFault
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    RedisErrorFault.verify = function verify(message) {
+                    ErrorFault.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.percentage != null && message.hasOwnProperty("percentage")) {
@@ -9047,35 +9047,35 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a RedisErrorFault message from a plain object. Also converts values to their respective internal types.
+                     * Creates an ErrorFault message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisErrorFault
+                     * @memberof clutch.chaos.redisexperimentation.v1.ErrorFault
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.redisexperimentation.v1.RedisErrorFault} RedisErrorFault
+                     * @returns {clutch.chaos.redisexperimentation.v1.ErrorFault} ErrorFault
                      */
-                    RedisErrorFault.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.redisexperimentation.v1.RedisErrorFault)
+                    ErrorFault.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.redisexperimentation.v1.ErrorFault)
                             return object;
-                        let message = new $root.clutch.chaos.redisexperimentation.v1.RedisErrorFault();
+                        let message = new $root.clutch.chaos.redisexperimentation.v1.ErrorFault();
                         if (object.percentage != null) {
                             if (typeof object.percentage !== "object")
-                                throw TypeError(".clutch.chaos.redisexperimentation.v1.RedisErrorFault.percentage: object expected");
+                                throw TypeError(".clutch.chaos.redisexperimentation.v1.ErrorFault.percentage: object expected");
                             message.percentage = $root.clutch.chaos.redisexperimentation.v1.FaultPercentage.fromObject(object.percentage);
                         }
                         return message;
                     };
 
                     /**
-                     * Creates a plain object from a RedisErrorFault message. Also converts values to other types if specified.
+                     * Creates a plain object from an ErrorFault message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisErrorFault
+                     * @memberof clutch.chaos.redisexperimentation.v1.ErrorFault
                      * @static
-                     * @param {clutch.chaos.redisexperimentation.v1.RedisErrorFault} message RedisErrorFault
+                     * @param {clutch.chaos.redisexperimentation.v1.ErrorFault} message ErrorFault
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    RedisErrorFault.toObject = function toObject(message, options) {
+                    ErrorFault.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
@@ -9087,17 +9087,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this RedisErrorFault to JSON.
+                     * Converts this ErrorFault to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisErrorFault
+                     * @memberof clutch.chaos.redisexperimentation.v1.ErrorFault
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    RedisErrorFault.prototype.toJSON = function toJSON() {
+                    ErrorFault.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return RedisErrorFault;
+                    return ErrorFault;
                 })();
 
                 v1.LatencyFault = (function() {
@@ -9228,26 +9228,26 @@ export const clutch = $root.clutch = (() => {
                     return LatencyFault;
                 })();
 
-                v1.RedisFaultTargeting = (function() {
+                v1.FaultTargeting = (function() {
 
                     /**
-                     * Properties of a RedisFaultTargeting.
+                     * Properties of a FaultTargeting.
                      * @memberof clutch.chaos.redisexperimentation.v1
-                     * @interface IRedisFaultTargeting
-                     * @property {clutch.chaos.redisexperimentation.v1.ISingleCluster|null} [upstreamCluster] RedisFaultTargeting upstreamCluster
-                     * @property {clutch.chaos.redisexperimentation.v1.ISingleCluster|null} [downstreamCluster] RedisFaultTargeting downstreamCluster
-                     * @property {Array.<string>|null} [redisCommands] RedisFaultTargeting redisCommands
+                     * @interface IFaultTargeting
+                     * @property {clutch.chaos.redisexperimentation.v1.ISingleCluster|null} [upstreamCluster] FaultTargeting upstreamCluster
+                     * @property {clutch.chaos.redisexperimentation.v1.ISingleCluster|null} [downstreamCluster] FaultTargeting downstreamCluster
+                     * @property {Array.<string>|null} [redisCommands] FaultTargeting redisCommands
                      */
 
                     /**
-                     * Constructs a new RedisFaultTargeting.
+                     * Constructs a new FaultTargeting.
                      * @memberof clutch.chaos.redisexperimentation.v1
-                     * @classdesc Represents a RedisFaultTargeting.
-                     * @implements IRedisFaultTargeting
+                     * @classdesc Represents a FaultTargeting.
+                     * @implements IFaultTargeting
                      * @constructor
-                     * @param {clutch.chaos.redisexperimentation.v1.IRedisFaultTargeting=} [properties] Properties to set
+                     * @param {clutch.chaos.redisexperimentation.v1.IFaultTargeting=} [properties] Properties to set
                      */
-                    function RedisFaultTargeting(properties) {
+                    function FaultTargeting(properties) {
                         this.redisCommands = [];
                         if (properties)
                             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
@@ -9256,38 +9256,38 @@ export const clutch = $root.clutch = (() => {
                     }
 
                     /**
-                     * RedisFaultTargeting upstreamCluster.
+                     * FaultTargeting upstreamCluster.
                      * @member {clutch.chaos.redisexperimentation.v1.ISingleCluster|null|undefined} upstreamCluster
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisFaultTargeting
+                     * @memberof clutch.chaos.redisexperimentation.v1.FaultTargeting
                      * @instance
                      */
-                    RedisFaultTargeting.prototype.upstreamCluster = null;
+                    FaultTargeting.prototype.upstreamCluster = null;
 
                     /**
-                     * RedisFaultTargeting downstreamCluster.
+                     * FaultTargeting downstreamCluster.
                      * @member {clutch.chaos.redisexperimentation.v1.ISingleCluster|null|undefined} downstreamCluster
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisFaultTargeting
+                     * @memberof clutch.chaos.redisexperimentation.v1.FaultTargeting
                      * @instance
                      */
-                    RedisFaultTargeting.prototype.downstreamCluster = null;
+                    FaultTargeting.prototype.downstreamCluster = null;
 
                     /**
-                     * RedisFaultTargeting redisCommands.
+                     * FaultTargeting redisCommands.
                      * @member {Array.<string>} redisCommands
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisFaultTargeting
+                     * @memberof clutch.chaos.redisexperimentation.v1.FaultTargeting
                      * @instance
                      */
-                    RedisFaultTargeting.prototype.redisCommands = $util.emptyArray;
+                    FaultTargeting.prototype.redisCommands = $util.emptyArray;
 
                     /**
-                     * Verifies a RedisFaultTargeting message.
+                     * Verifies a FaultTargeting message.
                      * @function verify
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisFaultTargeting
+                     * @memberof clutch.chaos.redisexperimentation.v1.FaultTargeting
                      * @static
                      * @param {Object.<string,*>} message Plain object to verify
                      * @returns {string|null} `null` if valid, otherwise the reason why it is not
                      */
-                    RedisFaultTargeting.verify = function verify(message) {
+                    FaultTargeting.verify = function verify(message) {
                         if (typeof message !== "object" || message === null)
                             return "object expected";
                         if (message.upstreamCluster != null && message.hasOwnProperty("upstreamCluster")) {
@@ -9311,30 +9311,30 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a RedisFaultTargeting message from a plain object. Also converts values to their respective internal types.
+                     * Creates a FaultTargeting message from a plain object. Also converts values to their respective internal types.
                      * @function fromObject
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisFaultTargeting
+                     * @memberof clutch.chaos.redisexperimentation.v1.FaultTargeting
                      * @static
                      * @param {Object.<string,*>} object Plain object
-                     * @returns {clutch.chaos.redisexperimentation.v1.RedisFaultTargeting} RedisFaultTargeting
+                     * @returns {clutch.chaos.redisexperimentation.v1.FaultTargeting} FaultTargeting
                      */
-                    RedisFaultTargeting.fromObject = function fromObject(object) {
-                        if (object instanceof $root.clutch.chaos.redisexperimentation.v1.RedisFaultTargeting)
+                    FaultTargeting.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.chaos.redisexperimentation.v1.FaultTargeting)
                             return object;
-                        let message = new $root.clutch.chaos.redisexperimentation.v1.RedisFaultTargeting();
+                        let message = new $root.clutch.chaos.redisexperimentation.v1.FaultTargeting();
                         if (object.upstreamCluster != null) {
                             if (typeof object.upstreamCluster !== "object")
-                                throw TypeError(".clutch.chaos.redisexperimentation.v1.RedisFaultTargeting.upstreamCluster: object expected");
+                                throw TypeError(".clutch.chaos.redisexperimentation.v1.FaultTargeting.upstreamCluster: object expected");
                             message.upstreamCluster = $root.clutch.chaos.redisexperimentation.v1.SingleCluster.fromObject(object.upstreamCluster);
                         }
                         if (object.downstreamCluster != null) {
                             if (typeof object.downstreamCluster !== "object")
-                                throw TypeError(".clutch.chaos.redisexperimentation.v1.RedisFaultTargeting.downstreamCluster: object expected");
+                                throw TypeError(".clutch.chaos.redisexperimentation.v1.FaultTargeting.downstreamCluster: object expected");
                             message.downstreamCluster = $root.clutch.chaos.redisexperimentation.v1.SingleCluster.fromObject(object.downstreamCluster);
                         }
                         if (object.redisCommands) {
                             if (!Array.isArray(object.redisCommands))
-                                throw TypeError(".clutch.chaos.redisexperimentation.v1.RedisFaultTargeting.redisCommands: array expected");
+                                throw TypeError(".clutch.chaos.redisexperimentation.v1.FaultTargeting.redisCommands: array expected");
                             message.redisCommands = [];
                             for (let i = 0; i < object.redisCommands.length; ++i)
                                 message.redisCommands[i] = String(object.redisCommands[i]);
@@ -9343,15 +9343,15 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Creates a plain object from a RedisFaultTargeting message. Also converts values to other types if specified.
+                     * Creates a plain object from a FaultTargeting message. Also converts values to other types if specified.
                      * @function toObject
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisFaultTargeting
+                     * @memberof clutch.chaos.redisexperimentation.v1.FaultTargeting
                      * @static
-                     * @param {clutch.chaos.redisexperimentation.v1.RedisFaultTargeting} message RedisFaultTargeting
+                     * @param {clutch.chaos.redisexperimentation.v1.FaultTargeting} message FaultTargeting
                      * @param {$protobuf.IConversionOptions} [options] Conversion options
                      * @returns {Object.<string,*>} Plain object
                      */
-                    RedisFaultTargeting.toObject = function toObject(message, options) {
+                    FaultTargeting.toObject = function toObject(message, options) {
                         if (!options)
                             options = {};
                         let object = {};
@@ -9374,17 +9374,17 @@ export const clutch = $root.clutch = (() => {
                     };
 
                     /**
-                     * Converts this RedisFaultTargeting to JSON.
+                     * Converts this FaultTargeting to JSON.
                      * @function toJSON
-                     * @memberof clutch.chaos.redisexperimentation.v1.RedisFaultTargeting
+                     * @memberof clutch.chaos.redisexperimentation.v1.FaultTargeting
                      * @instance
                      * @returns {Object.<string,*>} JSON object
                      */
-                    RedisFaultTargeting.prototype.toJSON = function toJSON() {
+                    FaultTargeting.prototype.toJSON = function toJSON() {
                         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                     };
 
-                    return RedisFaultTargeting;
+                    return FaultTargeting;
                 })();
 
                 v1.SingleCluster = (function() {

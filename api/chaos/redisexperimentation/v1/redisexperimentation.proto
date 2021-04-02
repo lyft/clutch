@@ -7,22 +7,22 @@ import "validate/validate.proto";
 option go_package = "github.com/lyft/clutch/backend/api/chaos/redisexperimentation/v1;redisexperimentationv1";
 
 // The configuration of a Redis fault.
-message RedisFaultConfig {
+message FaultConfig {
   // The targeting of the fault describing what redis requests are being considered for faults.
-  RedisFaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
+  FaultTargeting fault_targeting = 1 [ (validate.rules).message.required = true ];
 
   oneof fault {
     option (validate.required) = true;
 
     // The error fault responds to redis commands with an error.
-    RedisErrorFault error_fault = 2;
+    ErrorFault error_fault = 2;
     // The latency fault delays redis commands.
     LatencyFault latency_fault = 3;
   }
 }
 
 // The definition of a redis error fault.
-message RedisErrorFault {
+message ErrorFault {
   // The percentage of requests the fault should be applied to.
   FaultPercentage percentage = 1 [ (validate.rules).message.required = true ];
 }
@@ -36,7 +36,7 @@ message LatencyFault {
 }
 
 // Enforce faults on upstream redis cluster.
-message RedisFaultTargeting {
+message FaultTargeting {
   // The upstream redis cluster.
   SingleCluster upstream_cluster = 1;
   // A single downstream cluster sending requests to redis upstream.

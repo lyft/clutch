@@ -43,12 +43,12 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 }
 
 func (s *Service) Register(r module.Registrar) error {
-	transformation := experimentstore.Transformation{ConfigTypeUrl: "type.googleapis.com/clutch.chaos.redisexperimentation.v1.RedisFaultConfig", RunTransform: s.transform}
+	transformation := experimentstore.Transformation{ConfigTypeUrl: "type.googleapis.com/clutch.chaos.redisexperimentation.v1.FaultConfig", RunTransform: s.transform}
 	return s.storer.RegisterTransformation(transformation)
 }
 
 func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experimentstore.ExperimentConfig) ([]*experimentation.Property, error) {
-	var experimentConfig = redisexperimentation.RedisFaultConfig{}
+	var experimentConfig = redisexperimentation.FaultConfig{}
 	if err := ptypes.UnmarshalAny(config.Config, &experimentConfig); err != nil {
 		return []*experimentation.Property{}, err
 	}
@@ -82,15 +82,15 @@ func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experiment
 	}, nil
 }
 
-func experimentConfigToFaultString(experiment *redisexperimentation.RedisFaultConfig) (string, error) {
+func experimentConfigToFaultString(experiment *redisexperimentation.FaultConfig) (string, error) {
 	if experiment == nil {
 		return "", errors.New("experiment is nil")
 	}
 
 	switch experiment.GetFault().(type) {
-	case *redisexperimentation.RedisFaultConfig_ErrorFault:
+	case *redisexperimentation.FaultConfig_ErrorFault:
 		return "Error", nil
-	case *redisexperimentation.RedisFaultConfig_LatencyFault:
+	case *redisexperimentation.FaultConfig_LatencyFault:
 		return "Delay", nil
 	default:
 		return "", fmt.Errorf("unexpected fault type %v", experiment.GetFault())
