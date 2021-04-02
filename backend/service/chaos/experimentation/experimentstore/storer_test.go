@@ -13,6 +13,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/anypb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
@@ -73,8 +74,13 @@ func NewExperimentConfigTestData() (*experimentConfigTestData, error) {
 		return nil, err
 	}
 
+	jsonConfig, err := protojson.Marshal(anyConfig)
+	if err != nil {
+		return nil, err
+	}
+
 	return &experimentConfigTestData{
-		stringifiedConfig: `{"@type":"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig","faultTargeting":{"upstreamEnforcing":{"upstreamCluster":{"name":"upstreamCluster"},"downstreamCluster":{"name":"downstreamCluster"}}},"abortFault":{"percentage":{"percentage":100},"abortStatus":{"httpStatusCode":401}}}`,
+		stringifiedConfig: string(jsonConfig),
 		marshaledConfig:   anyConfig,
 	}, nil
 }
@@ -143,6 +149,7 @@ func TestCreateExperiments(t *testing.T) {
 			s := ExperimentSpecification{RunId: "1", ConfigId: "1", StartTime: test.startTime, EndTime: nil, Config: test.config}
 			_, err = es.CreateExperiment(context.Background(), &s)
 			a.Equal(test.err, err)
+			a.NoError(mock.ExpectationsWereMet())
 		})
 	}
 }
@@ -181,24 +188,6 @@ func TestCreateOrGetExperiment(t *testing.T) {
 					sql:    `SELECT experiment_run.id, lower(execution_time), upper(execution_time), cancellation_time, creation_time, experiment_config.id, details FROM experiment_config, experiment_run WHERE experiment_run.id = $1 AND experiment_run.experiment_config_id = experiment_config.id`,
 					args:   []driver.Value{"1"},
 					result: sqlmock.NewRows([]string{"run_id", "execution_time", "execution_time", "cancellation_time", "creation_time", "config_id", "details"}).AddRow("1", time.Now(), time.Now(), sql.NullTime{}, time.Now(), "2", ctd.stringifiedConfig),
-				},
-			},
-			expectedExecs: []*exec{
-				{
-					sql: `INSERT INTO experiment_config (id, details) VALUES ($1, $2)`,
-					args: []driver.Value{
-						sqlmock.AnyArg(),
-						ctd.marshaledConfig,
-					},
-				},
-				{
-					sql: `INSERT INTO experiment_run ( id, experiment_config_id, execution_time, creation_time) VALUES ($1, $2, tstzrange($3, $4, '[]'), NOW())`,
-					args: []driver.Value{
-						sqlmock.AnyArg(),
-						sqlmock.AnyArg(),
-						sqlmock.AnyArg(),
-						sqlmock.AnyArg(),
-					},
 				},
 			},
 			expectedOrigin: experimentation.CreateOrGetExperimentResponse_ORIGIN_EXISTING,
@@ -263,6 +252,7 @@ func TestCreateOrGetExperiment(t *testing.T) {
 			result, err := es.CreateOrGetExperiment(context.Background(), &s)
 			a.NoError(err)
 			a.Equal(tt.expectedOrigin, result.Origin)
+			a.NoError(mock.ExpectationsWereMet())
 		})
 	}
 }
@@ -281,6 +271,7 @@ func TestCancelExperimentRun(t *testing.T) {
 
 	err = es.CancelExperimentRun(context.Background(), "1", "")
 	assert.NoError(err)
+	assert.NoError(mock.ExpectationsWereMet())
 }
 
 var getExperimentsSQLQuery = `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`
@@ -317,6 +308,7 @@ func TestGetExperimentsUnmarshalsExperimentConfiguration(t *testing.T) {
 	assert.NotNil(abort)
 	assert.Equal(uint32(401), abort.GetAbortStatus().GetHttpStatusCode())
 	assert.Equal(uint32(100), abort.GetPercentage().GetPercentage())
+	assert.NoError(mock.ExpectationsWereMet())
 }
 
 func TestGetExperimentsFailsIfItReadsExperimentWithMalformedConfiguration(t *testing.T) {
@@ -349,4 +341,5 @@ func TestGetExperimentsFailsIfItReadsExperimentWithMalformedConfiguration(t *tes
 	experiments, err := es.GetExperiments(context.Background(), "foo", experimentation.GetExperimentsRequest_STATUS_UNSPECIFIED)
 	assert.Nil(experiments)
 	assert.Error(err)
+	assert.NoError(mock.ExpectationsWereMet())
 }
