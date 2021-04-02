@@ -34,9 +34,9 @@
     "clsx": "^1.1.1",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
+    "react-is": "^16.8.0",
     "react-router": "^6.0.0-beta",
-    "react-router-dom": "^6.0.0-beta",
-    "react-is": "^16.8.0"
+    "react-router-dom": "^6.0.0-beta"
   },
   "devDependencies": {
     "@clutch-sh/tools": "^1.0.0-beta"
