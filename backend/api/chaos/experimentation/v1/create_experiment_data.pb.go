@@ -31,9 +31,8 @@ type CreateExperimentData struct {
 
 	// The unique identifier of experiment run that's created as part of the experiment creation process.
 	// A random run identifier is generated and assigned to the experiment if it's not provided by a caller.
-	// Its max length is limited to 100 characters. The identifier is supposed to be user-readable and
-	// URL renderable - for this reason, allowed characters are limited to English characters, digits and
-	// the following special characters: "-", ".", "_" and "~".
+	// The identifier is supposed to be user-readable and URL renderable - for this reason, allowed characters
+	// are limited to English characters, digits and the following special characters: "-", ".", "_" and "~".
 	RunId string `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
 	// The experiment configuration specific to the type of experiment.
 	Config *anypb.Any `protobuf:"bytes,2,opt,name=config,proto3" json:"config,omitempty"`
