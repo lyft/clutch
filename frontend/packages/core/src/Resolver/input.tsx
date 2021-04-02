@@ -1,9 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useSearchParams } from "react-router-dom";
 import type { clutch } from "@clutch-sh/api";
 import styled from "@emotion/styled";
 import SearchIcon from "@material-ui/icons/Search";
-import { useSearchParams } from "react-router-dom";
 
 import {
   Accordion,

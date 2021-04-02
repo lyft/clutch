@@ -255,7 +255,7 @@ const TextField = ({
         onSelectCapture={e =>
           onChange(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)
         }
-        defaultValue={{id: defaultValue, label: defaultValue}}
+        defaultValue={{ id: defaultValue, label: defaultValue }}
         renderInput={inputProps => (
           <StyledTextField
             {...inputProps}
