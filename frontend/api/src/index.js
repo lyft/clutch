@@ -18554,6 +18554,8 @@ export const clutch = $root.clutch = (() => {
                          * @memberof clutch.config.service.topology.v1
                          * @interface ICache
                          * @property {google.protobuf.IDuration|null} [ttl] Cache ttl
+                         * @property {number|null} [batchInsertSize] Cache batchInsertSize
+                         * @property {google.protobuf.IDuration|null} [batchInsertFlush] Cache batchInsertFlush
                          */
 
                         /**
@@ -18580,6 +18582,22 @@ export const clutch = $root.clutch = (() => {
                         Cache.prototype.ttl = null;
 
                         /**
+                         * Cache batchInsertSize.
+                         * @member {number} batchInsertSize
+                         * @memberof clutch.config.service.topology.v1.Cache
+                         * @instance
+                         */
+                        Cache.prototype.batchInsertSize = 0;
+
+                        /**
+                         * Cache batchInsertFlush.
+                         * @member {google.protobuf.IDuration|null|undefined} batchInsertFlush
+                         * @memberof clutch.config.service.topology.v1.Cache
+                         * @instance
+                         */
+                        Cache.prototype.batchInsertFlush = null;
+
+                        /**
                          * Verifies a Cache message.
                          * @function verify
                          * @memberof clutch.config.service.topology.v1.Cache
@@ -18594,6 +18612,14 @@ export const clutch = $root.clutch = (() => {
                                 let error = $root.google.protobuf.Duration.verify(message.ttl);
                                 if (error)
                                     return "ttl." + error;
+                            }
+                            if (message.batchInsertSize != null && message.hasOwnProperty("batchInsertSize"))
+                                if (!$util.isInteger(message.batchInsertSize))
+                                    return "batchInsertSize: integer expected";
+                            if (message.batchInsertFlush != null && message.hasOwnProperty("batchInsertFlush")) {
+                                let error = $root.google.protobuf.Duration.verify(message.batchInsertFlush);
+                                if (error)
+                                    return "batchInsertFlush." + error;
                             }
                             return null;
                         };
@@ -18615,6 +18641,13 @@ export const clutch = $root.clutch = (() => {
                                     throw TypeError(".clutch.config.service.topology.v1.Cache.ttl: object expected");
                                 message.ttl = $root.google.protobuf.Duration.fromObject(object.ttl);
                             }
+                            if (object.batchInsertSize != null)
+                                message.batchInsertSize = object.batchInsertSize | 0;
+                            if (object.batchInsertFlush != null) {
+                                if (typeof object.batchInsertFlush !== "object")
+                                    throw TypeError(".clutch.config.service.topology.v1.Cache.batchInsertFlush: object expected");
+                                message.batchInsertFlush = $root.google.protobuf.Duration.fromObject(object.batchInsertFlush);
+                            }
                             return message;
                         };
 
@@ -18631,10 +18664,17 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.defaults)
+                            if (options.defaults) {
                                 object.ttl = null;
+                                object.batchInsertSize = 0;
+                                object.batchInsertFlush = null;
+                            }
                             if (message.ttl != null && message.hasOwnProperty("ttl"))
                                 object.ttl = $root.google.protobuf.Duration.toObject(message.ttl, options);
+                            if (message.batchInsertSize != null && message.hasOwnProperty("batchInsertSize"))
+                                object.batchInsertSize = message.batchInsertSize;
+                            if (message.batchInsertFlush != null && message.hasOwnProperty("batchInsertFlush"))
+                                object.batchInsertFlush = $root.google.protobuf.Duration.toObject(message.batchInsertFlush, options);
                             return object;
                         };
 

@@ -7723,6 +7723,12 @@ export namespace clutch {
 
                         /** Cache ttl */
                         ttl?: (google.protobuf.IDuration|null);
+
+                        /** Cache batchInsertSize */
+                        batchInsertSize?: (number|null);
+
+                        /** Cache batchInsertFlush */
+                        batchInsertFlush?: (google.protobuf.IDuration|null);
                     }
 
                     /** Represents a Cache. */
@@ -7736,6 +7742,12 @@ export namespace clutch {
 
                         /** Cache ttl. */
                         public ttl?: (google.protobuf.IDuration|null);
+
+                        /** Cache batchInsertSize. */
+                        public batchInsertSize: number;
+
+                        /** Cache batchInsertFlush. */
+                        public batchInsertFlush?: (google.protobuf.IDuration|null);
 
                         /**
                          * Verifies a Cache message.
