@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package clutch.slackbot.v1;
+package clutch.bot.slackbot.v1;
 
-option go_package = "github.com/lyft/clutch/backend/api/slackbot/v1;slackbotv1";
+option go_package = "github.com/lyft/clutch/backend/api/bot/slackbot/v1;slackbotv1";
 
 import "api/v1/annotations.proto";
 import "google/api/annotations.proto";
@@ -11,10 +11,10 @@ import "google/protobuf/struct.proto";
 service SlackBotAPI {
   rpc Event(EventRequest) returns (EventResponse) {
     option (google.api.http) = {
-      post : "/v1/slackbot/event"
+      post : "/v1/bot/slackbot/event"
       body : "*"
     };
-    option (clutch.api.v1.action).type = READ;
+    option (clutch.api.v1.action).type = CREATE;
   }
 }
 
@@ -48,8 +48,10 @@ message EventRequest {
   string challenge = 11;
 }
 
-// Respond back to the Slack Events API with a challenge or a 2xx
+// Respond back to the Slack Events API with the challenge or a 2xx
 // https://api.slack.com/apis/connections/events-api#the-events-api__responding-to-events
 message EventResponse {
+  // The request will include the challenge and we respond back with the same challenge to complete
+  // the URL verification handshake
   string challenge = 1;
 }

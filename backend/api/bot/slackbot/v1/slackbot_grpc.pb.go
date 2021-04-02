@@ -31,7 +31,7 @@ func NewSlackBotAPIClient(cc grpc.ClientConnInterface) SlackBotAPIClient {
 
 func (c *slackBotAPIClient) Event(ctx context.Context, in *EventRequest, opts ...grpc.CallOption) (*EventResponse, error) {
 	out := new(EventResponse)
-	err := c.cc.Invoke(ctx, "/clutch.slackbot.v1.SlackBotAPI/Event", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/clutch.bot.slackbot.v1.SlackBotAPI/Event", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +74,7 @@ func _SlackBotAPI_Event_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/clutch.slackbot.v1.SlackBotAPI/Event",
+		FullMethod: "/clutch.bot.slackbot.v1.SlackBotAPI/Event",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SlackBotAPIServer).Event(ctx, req.(*EventRequest))
@@ -86,7 +86,7 @@ func _SlackBotAPI_Event_Handler(srv interface{}, ctx context.Context, dec func(i
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var SlackBotAPI_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "clutch.slackbot.v1.SlackBotAPI",
+	ServiceName: "clutch.bot.slackbot.v1.SlackBotAPI",
 	HandlerType: (*SlackBotAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -95,5 +95,5 @@ var SlackBotAPI_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "slackbot/v1/slackbot.proto",
+	Metadata: "bot/slackbot/v1/slackbot.proto",
 }

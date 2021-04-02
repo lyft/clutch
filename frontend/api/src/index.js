@@ -6062,6 +6062,491 @@ export const clutch = $root.clutch = (() => {
         return aws;
     })();
 
+    clutch.bot = (function() {
+
+        /**
+         * Namespace bot.
+         * @memberof clutch
+         * @namespace
+         */
+        const bot = {};
+
+        bot.slackbot = (function() {
+
+            /**
+             * Namespace slackbot.
+             * @memberof clutch.bot
+             * @namespace
+             */
+            const slackbot = {};
+
+            slackbot.v1 = (function() {
+
+                /**
+                 * Namespace v1.
+                 * @memberof clutch.bot.slackbot
+                 * @namespace
+                 */
+                const v1 = {};
+
+                v1.SlackBotAPI = (function() {
+
+                    /**
+                     * Constructs a new SlackBotAPI service.
+                     * @memberof clutch.bot.slackbot.v1
+                     * @classdesc Represents a SlackBotAPI
+                     * @extends $protobuf.rpc.Service
+                     * @constructor
+                     * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+                     * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+                     * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+                     */
+                    function SlackBotAPI(rpcImpl, requestDelimited, responseDelimited) {
+                        $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+                    }
+
+                    (SlackBotAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = SlackBotAPI;
+
+                    /**
+                     * Callback as used by {@link clutch.bot.slackbot.v1.SlackBotAPI#event}.
+                     * @memberof clutch.bot.slackbot.v1.SlackBotAPI
+                     * @typedef EventCallback
+                     * @type {function}
+                     * @param {Error|null} error Error, if any
+                     * @param {clutch.bot.slackbot.v1.EventResponse} [response] EventResponse
+                     */
+
+                    /**
+                     * Calls Event.
+                     * @function event
+                     * @memberof clutch.bot.slackbot.v1.SlackBotAPI
+                     * @instance
+                     * @param {clutch.bot.slackbot.v1.IEventRequest} request EventRequest message or plain object
+                     * @param {clutch.bot.slackbot.v1.SlackBotAPI.EventCallback} callback Node-style callback called with the error, if any, and EventResponse
+                     * @returns {undefined}
+                     * @variation 1
+                     */
+                    Object.defineProperty(SlackBotAPI.prototype.event = function event(request, callback) {
+                        return this.rpcCall(event, $root.clutch.bot.slackbot.v1.EventRequest, $root.clutch.bot.slackbot.v1.EventResponse, request, callback);
+                    }, "name", { value: "Event" });
+
+                    /**
+                     * Calls Event.
+                     * @function event
+                     * @memberof clutch.bot.slackbot.v1.SlackBotAPI
+                     * @instance
+                     * @param {clutch.bot.slackbot.v1.IEventRequest} request EventRequest message or plain object
+                     * @returns {Promise<clutch.bot.slackbot.v1.EventResponse>} Promise
+                     * @variation 2
+                     */
+
+                    return SlackBotAPI;
+                })();
+
+                v1.EventRequest = (function() {
+
+                    /**
+                     * Properties of an EventRequest.
+                     * @memberof clutch.bot.slackbot.v1
+                     * @interface IEventRequest
+                     * @property {string|null} [token] EventRequest token
+                     * @property {boolean|null} [isExtSharedChannel] EventRequest isExtSharedChannel
+                     * @property {string|null} [teamId] EventRequest teamId
+                     * @property {string|null} [apiAppId] EventRequest apiAppId
+                     * @property {google.protobuf.IValue|null} [event] EventRequest event
+                     * @property {string|null} [type] EventRequest type
+                     * @property {string|null} [eventId] EventRequest eventId
+                     * @property {number|Long|null} [eventTime] EventRequest eventTime
+                     * @property {string|null} [eventContext] EventRequest eventContext
+                     * @property {google.protobuf.IValue|null} [authorizations] EventRequest authorizations
+                     * @property {string|null} [challenge] EventRequest challenge
+                     */
+
+                    /**
+                     * Constructs a new EventRequest.
+                     * @memberof clutch.bot.slackbot.v1
+                     * @classdesc Represents an EventRequest.
+                     * @implements IEventRequest
+                     * @constructor
+                     * @param {clutch.bot.slackbot.v1.IEventRequest=} [properties] Properties to set
+                     */
+                    function EventRequest(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * EventRequest token.
+                     * @member {string} token
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @instance
+                     */
+                    EventRequest.prototype.token = "";
+
+                    /**
+                     * EventRequest isExtSharedChannel.
+                     * @member {boolean} isExtSharedChannel
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @instance
+                     */
+                    EventRequest.prototype.isExtSharedChannel = false;
+
+                    /**
+                     * EventRequest teamId.
+                     * @member {string} teamId
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @instance
+                     */
+                    EventRequest.prototype.teamId = "";
+
+                    /**
+                     * EventRequest apiAppId.
+                     * @member {string} apiAppId
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @instance
+                     */
+                    EventRequest.prototype.apiAppId = "";
+
+                    /**
+                     * EventRequest event.
+                     * @member {google.protobuf.IValue|null|undefined} event
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @instance
+                     */
+                    EventRequest.prototype.event = null;
+
+                    /**
+                     * EventRequest type.
+                     * @member {string} type
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @instance
+                     */
+                    EventRequest.prototype.type = "";
+
+                    /**
+                     * EventRequest eventId.
+                     * @member {string} eventId
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @instance
+                     */
+                    EventRequest.prototype.eventId = "";
+
+                    /**
+                     * EventRequest eventTime.
+                     * @member {number|Long} eventTime
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @instance
+                     */
+                    EventRequest.prototype.eventTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * EventRequest eventContext.
+                     * @member {string} eventContext
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @instance
+                     */
+                    EventRequest.prototype.eventContext = "";
+
+                    /**
+                     * EventRequest authorizations.
+                     * @member {google.protobuf.IValue|null|undefined} authorizations
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @instance
+                     */
+                    EventRequest.prototype.authorizations = null;
+
+                    /**
+                     * EventRequest challenge.
+                     * @member {string} challenge
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @instance
+                     */
+                    EventRequest.prototype.challenge = "";
+
+                    /**
+                     * Verifies an EventRequest message.
+                     * @function verify
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    EventRequest.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.token != null && message.hasOwnProperty("token"))
+                            if (!$util.isString(message.token))
+                                return "token: string expected";
+                        if (message.isExtSharedChannel != null && message.hasOwnProperty("isExtSharedChannel"))
+                            if (typeof message.isExtSharedChannel !== "boolean")
+                                return "isExtSharedChannel: boolean expected";
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            if (!$util.isString(message.teamId))
+                                return "teamId: string expected";
+                        if (message.apiAppId != null && message.hasOwnProperty("apiAppId"))
+                            if (!$util.isString(message.apiAppId))
+                                return "apiAppId: string expected";
+                        if (message.event != null && message.hasOwnProperty("event")) {
+                            let error = $root.google.protobuf.Value.verify(message.event);
+                            if (error)
+                                return "event." + error;
+                        }
+                        if (message.type != null && message.hasOwnProperty("type"))
+                            if (!$util.isString(message.type))
+                                return "type: string expected";
+                        if (message.eventId != null && message.hasOwnProperty("eventId"))
+                            if (!$util.isString(message.eventId))
+                                return "eventId: string expected";
+                        if (message.eventTime != null && message.hasOwnProperty("eventTime"))
+                            if (!$util.isInteger(message.eventTime) && !(message.eventTime && $util.isInteger(message.eventTime.low) && $util.isInteger(message.eventTime.high)))
+                                return "eventTime: integer|Long expected";
+                        if (message.eventContext != null && message.hasOwnProperty("eventContext"))
+                            if (!$util.isString(message.eventContext))
+                                return "eventContext: string expected";
+                        if (message.authorizations != null && message.hasOwnProperty("authorizations")) {
+                            let error = $root.google.protobuf.Value.verify(message.authorizations);
+                            if (error)
+                                return "authorizations." + error;
+                        }
+                        if (message.challenge != null && message.hasOwnProperty("challenge"))
+                            if (!$util.isString(message.challenge))
+                                return "challenge: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an EventRequest message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.bot.slackbot.v1.EventRequest} EventRequest
+                     */
+                    EventRequest.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.bot.slackbot.v1.EventRequest)
+                            return object;
+                        let message = new $root.clutch.bot.slackbot.v1.EventRequest();
+                        if (object.token != null)
+                            message.token = String(object.token);
+                        if (object.isExtSharedChannel != null)
+                            message.isExtSharedChannel = Boolean(object.isExtSharedChannel);
+                        if (object.teamId != null)
+                            message.teamId = String(object.teamId);
+                        if (object.apiAppId != null)
+                            message.apiAppId = String(object.apiAppId);
+                        if (object.event != null) {
+                            if (typeof object.event !== "object")
+                                throw TypeError(".clutch.bot.slackbot.v1.EventRequest.event: object expected");
+                            message.event = $root.google.protobuf.Value.fromObject(object.event);
+                        }
+                        if (object.type != null)
+                            message.type = String(object.type);
+                        if (object.eventId != null)
+                            message.eventId = String(object.eventId);
+                        if (object.eventTime != null)
+                            if ($util.Long)
+                                (message.eventTime = $util.Long.fromValue(object.eventTime)).unsigned = false;
+                            else if (typeof object.eventTime === "string")
+                                message.eventTime = parseInt(object.eventTime, 10);
+                            else if (typeof object.eventTime === "number")
+                                message.eventTime = object.eventTime;
+                            else if (typeof object.eventTime === "object")
+                                message.eventTime = new $util.LongBits(object.eventTime.low >>> 0, object.eventTime.high >>> 0).toNumber();
+                        if (object.eventContext != null)
+                            message.eventContext = String(object.eventContext);
+                        if (object.authorizations != null) {
+                            if (typeof object.authorizations !== "object")
+                                throw TypeError(".clutch.bot.slackbot.v1.EventRequest.authorizations: object expected");
+                            message.authorizations = $root.google.protobuf.Value.fromObject(object.authorizations);
+                        }
+                        if (object.challenge != null)
+                            message.challenge = String(object.challenge);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an EventRequest message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @static
+                     * @param {clutch.bot.slackbot.v1.EventRequest} message EventRequest
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    EventRequest.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults) {
+                            object.token = "";
+                            object.isExtSharedChannel = false;
+                            object.teamId = "";
+                            object.apiAppId = "";
+                            object.event = null;
+                            object.type = "";
+                            object.eventId = "";
+                            object.eventContext = "";
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.eventTime = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.eventTime = options.longs === String ? "0" : 0;
+                            object.authorizations = null;
+                            object.challenge = "";
+                        }
+                        if (message.token != null && message.hasOwnProperty("token"))
+                            object.token = message.token;
+                        if (message.isExtSharedChannel != null && message.hasOwnProperty("isExtSharedChannel"))
+                            object.isExtSharedChannel = message.isExtSharedChannel;
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            object.teamId = message.teamId;
+                        if (message.apiAppId != null && message.hasOwnProperty("apiAppId"))
+                            object.apiAppId = message.apiAppId;
+                        if (message.event != null && message.hasOwnProperty("event"))
+                            object.event = $root.google.protobuf.Value.toObject(message.event, options);
+                        if (message.type != null && message.hasOwnProperty("type"))
+                            object.type = message.type;
+                        if (message.eventId != null && message.hasOwnProperty("eventId"))
+                            object.eventId = message.eventId;
+                        if (message.eventContext != null && message.hasOwnProperty("eventContext"))
+                            object.eventContext = message.eventContext;
+                        if (message.eventTime != null && message.hasOwnProperty("eventTime"))
+                            if (typeof message.eventTime === "number")
+                                object.eventTime = options.longs === String ? String(message.eventTime) : message.eventTime;
+                            else
+                                object.eventTime = options.longs === String ? $util.Long.prototype.toString.call(message.eventTime) : options.longs === Number ? new $util.LongBits(message.eventTime.low >>> 0, message.eventTime.high >>> 0).toNumber() : message.eventTime;
+                        if (message.authorizations != null && message.hasOwnProperty("authorizations"))
+                            object.authorizations = $root.google.protobuf.Value.toObject(message.authorizations, options);
+                        if (message.challenge != null && message.hasOwnProperty("challenge"))
+                            object.challenge = message.challenge;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this EventRequest to JSON.
+                     * @function toJSON
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    EventRequest.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return EventRequest;
+                })();
+
+                v1.EventResponse = (function() {
+
+                    /**
+                     * Properties of an EventResponse.
+                     * @memberof clutch.bot.slackbot.v1
+                     * @interface IEventResponse
+                     * @property {string|null} [challenge] EventResponse challenge
+                     */
+
+                    /**
+                     * Constructs a new EventResponse.
+                     * @memberof clutch.bot.slackbot.v1
+                     * @classdesc Represents an EventResponse.
+                     * @implements IEventResponse
+                     * @constructor
+                     * @param {clutch.bot.slackbot.v1.IEventResponse=} [properties] Properties to set
+                     */
+                    function EventResponse(properties) {
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * EventResponse challenge.
+                     * @member {string} challenge
+                     * @memberof clutch.bot.slackbot.v1.EventResponse
+                     * @instance
+                     */
+                    EventResponse.prototype.challenge = "";
+
+                    /**
+                     * Verifies an EventResponse message.
+                     * @function verify
+                     * @memberof clutch.bot.slackbot.v1.EventResponse
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    EventResponse.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.challenge != null && message.hasOwnProperty("challenge"))
+                            if (!$util.isString(message.challenge))
+                                return "challenge: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates an EventResponse message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.bot.slackbot.v1.EventResponse
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.bot.slackbot.v1.EventResponse} EventResponse
+                     */
+                    EventResponse.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.bot.slackbot.v1.EventResponse)
+                            return object;
+                        let message = new $root.clutch.bot.slackbot.v1.EventResponse();
+                        if (object.challenge != null)
+                            message.challenge = String(object.challenge);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from an EventResponse message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.bot.slackbot.v1.EventResponse
+                     * @static
+                     * @param {clutch.bot.slackbot.v1.EventResponse} message EventResponse
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    EventResponse.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.defaults)
+                            object.challenge = "";
+                        if (message.challenge != null && message.hasOwnProperty("challenge"))
+                            object.challenge = message.challenge;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this EventResponse to JSON.
+                     * @function toJSON
+                     * @memberof clutch.bot.slackbot.v1.EventResponse
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    EventResponse.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return EventResponse;
+                })();
+
+                return v1;
+            })();
+
+            return slackbot;
+        })();
+
+        return bot;
+    })();
+
     clutch.chaos = (function() {
 
         /**
@@ -14340,6 +14825,142 @@ export const clutch = $root.clutch = (() => {
              */
             const module = {};
 
+            module.bot = (function() {
+
+                /**
+                 * Namespace bot.
+                 * @memberof clutch.config.module
+                 * @namespace
+                 */
+                const bot = {};
+
+                bot.slackbot = (function() {
+
+                    /**
+                     * Namespace slackbot.
+                     * @memberof clutch.config.module.bot
+                     * @namespace
+                     */
+                    const slackbot = {};
+
+                    slackbot.v1 = (function() {
+
+                        /**
+                         * Namespace v1.
+                         * @memberof clutch.config.module.bot.slackbot
+                         * @namespace
+                         */
+                        const v1 = {};
+
+                        v1.Config = (function() {
+
+                            /**
+                             * Properties of a Config.
+                             * @memberof clutch.config.module.bot.slackbot.v1
+                             * @interface IConfig
+                             * @property {string|null} [botToken] Config botToken
+                             */
+
+                            /**
+                             * Constructs a new Config.
+                             * @memberof clutch.config.module.bot.slackbot.v1
+                             * @classdesc Represents a Config.
+                             * @implements IConfig
+                             * @constructor
+                             * @param {clutch.config.module.bot.slackbot.v1.IConfig=} [properties] Properties to set
+                             */
+                            function Config(properties) {
+                                if (properties)
+                                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                        if (properties[keys[i]] != null)
+                                            this[keys[i]] = properties[keys[i]];
+                            }
+
+                            /**
+                             * Config botToken.
+                             * @member {string} botToken
+                             * @memberof clutch.config.module.bot.slackbot.v1.Config
+                             * @instance
+                             */
+                            Config.prototype.botToken = "";
+
+                            /**
+                             * Verifies a Config message.
+                             * @function verify
+                             * @memberof clutch.config.module.bot.slackbot.v1.Config
+                             * @static
+                             * @param {Object.<string,*>} message Plain object to verify
+                             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                             */
+                            Config.verify = function verify(message) {
+                                if (typeof message !== "object" || message === null)
+                                    return "object expected";
+                                if (message.botToken != null && message.hasOwnProperty("botToken"))
+                                    if (!$util.isString(message.botToken))
+                                        return "botToken: string expected";
+                                return null;
+                            };
+
+                            /**
+                             * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                             * @function fromObject
+                             * @memberof clutch.config.module.bot.slackbot.v1.Config
+                             * @static
+                             * @param {Object.<string,*>} object Plain object
+                             * @returns {clutch.config.module.bot.slackbot.v1.Config} Config
+                             */
+                            Config.fromObject = function fromObject(object) {
+                                if (object instanceof $root.clutch.config.module.bot.slackbot.v1.Config)
+                                    return object;
+                                let message = new $root.clutch.config.module.bot.slackbot.v1.Config();
+                                if (object.botToken != null)
+                                    message.botToken = String(object.botToken);
+                                return message;
+                            };
+
+                            /**
+                             * Creates a plain object from a Config message. Also converts values to other types if specified.
+                             * @function toObject
+                             * @memberof clutch.config.module.bot.slackbot.v1.Config
+                             * @static
+                             * @param {clutch.config.module.bot.slackbot.v1.Config} message Config
+                             * @param {$protobuf.IConversionOptions} [options] Conversion options
+                             * @returns {Object.<string,*>} Plain object
+                             */
+                            Config.toObject = function toObject(message, options) {
+                                if (!options)
+                                    options = {};
+                                let object = {};
+                                if (options.defaults)
+                                    object.botToken = "";
+                                if (message.botToken != null && message.hasOwnProperty("botToken"))
+                                    object.botToken = message.botToken;
+                                return object;
+                            };
+
+                            /**
+                             * Converts this Config to JSON.
+                             * @function toJSON
+                             * @memberof clutch.config.module.bot.slackbot.v1.Config
+                             * @instance
+                             * @returns {Object.<string,*>} JSON object
+                             */
+                            Config.prototype.toJSON = function toJSON() {
+                                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                            };
+
+                            return Config;
+                        })();
+
+                        return v1;
+                    })();
+
+                    return slackbot;
+                })();
+
+                return bot;
+            })();
+
             module.chaos = (function() {
 
                 /**
@@ -14722,130 +15343,6 @@ export const clutch = $root.clutch = (() => {
                 })();
 
                 return chaos;
-            })();
-
-            module.slackbot = (function() {
-
-                /**
-                 * Namespace slackbot.
-                 * @memberof clutch.config.module
-                 * @namespace
-                 */
-                const slackbot = {};
-
-                slackbot.v1 = (function() {
-
-                    /**
-                     * Namespace v1.
-                     * @memberof clutch.config.module.slackbot
-                     * @namespace
-                     */
-                    const v1 = {};
-
-                    v1.Config = (function() {
-
-                        /**
-                         * Properties of a Config.
-                         * @memberof clutch.config.module.slackbot.v1
-                         * @interface IConfig
-                         * @property {string|null} [botToken] Config botToken
-                         */
-
-                        /**
-                         * Constructs a new Config.
-                         * @memberof clutch.config.module.slackbot.v1
-                         * @classdesc Represents a Config.
-                         * @implements IConfig
-                         * @constructor
-                         * @param {clutch.config.module.slackbot.v1.IConfig=} [properties] Properties to set
-                         */
-                        function Config(properties) {
-                            if (properties)
-                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                                    if (properties[keys[i]] != null)
-                                        this[keys[i]] = properties[keys[i]];
-                        }
-
-                        /**
-                         * Config botToken.
-                         * @member {string} botToken
-                         * @memberof clutch.config.module.slackbot.v1.Config
-                         * @instance
-                         */
-                        Config.prototype.botToken = "";
-
-                        /**
-                         * Verifies a Config message.
-                         * @function verify
-                         * @memberof clutch.config.module.slackbot.v1.Config
-                         * @static
-                         * @param {Object.<string,*>} message Plain object to verify
-                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                         */
-                        Config.verify = function verify(message) {
-                            if (typeof message !== "object" || message === null)
-                                return "object expected";
-                            if (message.botToken != null && message.hasOwnProperty("botToken"))
-                                if (!$util.isString(message.botToken))
-                                    return "botToken: string expected";
-                            return null;
-                        };
-
-                        /**
-                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
-                         * @function fromObject
-                         * @memberof clutch.config.module.slackbot.v1.Config
-                         * @static
-                         * @param {Object.<string,*>} object Plain object
-                         * @returns {clutch.config.module.slackbot.v1.Config} Config
-                         */
-                        Config.fromObject = function fromObject(object) {
-                            if (object instanceof $root.clutch.config.module.slackbot.v1.Config)
-                                return object;
-                            let message = new $root.clutch.config.module.slackbot.v1.Config();
-                            if (object.botToken != null)
-                                message.botToken = String(object.botToken);
-                            return message;
-                        };
-
-                        /**
-                         * Creates a plain object from a Config message. Also converts values to other types if specified.
-                         * @function toObject
-                         * @memberof clutch.config.module.slackbot.v1.Config
-                         * @static
-                         * @param {clutch.config.module.slackbot.v1.Config} message Config
-                         * @param {$protobuf.IConversionOptions} [options] Conversion options
-                         * @returns {Object.<string,*>} Plain object
-                         */
-                        Config.toObject = function toObject(message, options) {
-                            if (!options)
-                                options = {};
-                            let object = {};
-                            if (options.defaults)
-                                object.botToken = "";
-                            if (message.botToken != null && message.hasOwnProperty("botToken"))
-                                object.botToken = message.botToken;
-                            return object;
-                        };
-
-                        /**
-                         * Converts this Config to JSON.
-                         * @function toJSON
-                         * @memberof clutch.config.module.slackbot.v1.Config
-                         * @instance
-                         * @returns {Object.<string,*>} JSON object
-                         */
-                        Config.prototype.toJSON = function toJSON() {
-                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                        };
-
-                        return Config;
-                    })();
-
-                    return v1;
-                })();
-
-                return slackbot;
             })();
 
             module.sourcecontrol = (function() {
@@ -39710,479 +40207,6 @@ export const clutch = $root.clutch = (() => {
         return resolver;
     })();
 
-    clutch.slackbot = (function() {
-
-        /**
-         * Namespace slackbot.
-         * @memberof clutch
-         * @namespace
-         */
-        const slackbot = {};
-
-        slackbot.v1 = (function() {
-
-            /**
-             * Namespace v1.
-             * @memberof clutch.slackbot
-             * @namespace
-             */
-            const v1 = {};
-
-            v1.SlackBotAPI = (function() {
-
-                /**
-                 * Constructs a new SlackBotAPI service.
-                 * @memberof clutch.slackbot.v1
-                 * @classdesc Represents a SlackBotAPI
-                 * @extends $protobuf.rpc.Service
-                 * @constructor
-                 * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
-                 * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
-                 * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
-                 */
-                function SlackBotAPI(rpcImpl, requestDelimited, responseDelimited) {
-                    $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
-                }
-
-                (SlackBotAPI.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = SlackBotAPI;
-
-                /**
-                 * Callback as used by {@link clutch.slackbot.v1.SlackBotAPI#event}.
-                 * @memberof clutch.slackbot.v1.SlackBotAPI
-                 * @typedef EventCallback
-                 * @type {function}
-                 * @param {Error|null} error Error, if any
-                 * @param {clutch.slackbot.v1.EventResponse} [response] EventResponse
-                 */
-
-                /**
-                 * Calls Event.
-                 * @function event
-                 * @memberof clutch.slackbot.v1.SlackBotAPI
-                 * @instance
-                 * @param {clutch.slackbot.v1.IEventRequest} request EventRequest message or plain object
-                 * @param {clutch.slackbot.v1.SlackBotAPI.EventCallback} callback Node-style callback called with the error, if any, and EventResponse
-                 * @returns {undefined}
-                 * @variation 1
-                 */
-                Object.defineProperty(SlackBotAPI.prototype.event = function event(request, callback) {
-                    return this.rpcCall(event, $root.clutch.slackbot.v1.EventRequest, $root.clutch.slackbot.v1.EventResponse, request, callback);
-                }, "name", { value: "Event" });
-
-                /**
-                 * Calls Event.
-                 * @function event
-                 * @memberof clutch.slackbot.v1.SlackBotAPI
-                 * @instance
-                 * @param {clutch.slackbot.v1.IEventRequest} request EventRequest message or plain object
-                 * @returns {Promise<clutch.slackbot.v1.EventResponse>} Promise
-                 * @variation 2
-                 */
-
-                return SlackBotAPI;
-            })();
-
-            v1.EventRequest = (function() {
-
-                /**
-                 * Properties of an EventRequest.
-                 * @memberof clutch.slackbot.v1
-                 * @interface IEventRequest
-                 * @property {string|null} [token] EventRequest token
-                 * @property {boolean|null} [isExtSharedChannel] EventRequest isExtSharedChannel
-                 * @property {string|null} [teamId] EventRequest teamId
-                 * @property {string|null} [apiAppId] EventRequest apiAppId
-                 * @property {google.protobuf.IValue|null} [event] EventRequest event
-                 * @property {string|null} [type] EventRequest type
-                 * @property {string|null} [eventId] EventRequest eventId
-                 * @property {number|Long|null} [eventTime] EventRequest eventTime
-                 * @property {string|null} [eventContext] EventRequest eventContext
-                 * @property {google.protobuf.IValue|null} [authorizations] EventRequest authorizations
-                 * @property {string|null} [challenge] EventRequest challenge
-                 */
-
-                /**
-                 * Constructs a new EventRequest.
-                 * @memberof clutch.slackbot.v1
-                 * @classdesc Represents an EventRequest.
-                 * @implements IEventRequest
-                 * @constructor
-                 * @param {clutch.slackbot.v1.IEventRequest=} [properties] Properties to set
-                 */
-                function EventRequest(properties) {
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * EventRequest token.
-                 * @member {string} token
-                 * @memberof clutch.slackbot.v1.EventRequest
-                 * @instance
-                 */
-                EventRequest.prototype.token = "";
-
-                /**
-                 * EventRequest isExtSharedChannel.
-                 * @member {boolean} isExtSharedChannel
-                 * @memberof clutch.slackbot.v1.EventRequest
-                 * @instance
-                 */
-                EventRequest.prototype.isExtSharedChannel = false;
-
-                /**
-                 * EventRequest teamId.
-                 * @member {string} teamId
-                 * @memberof clutch.slackbot.v1.EventRequest
-                 * @instance
-                 */
-                EventRequest.prototype.teamId = "";
-
-                /**
-                 * EventRequest apiAppId.
-                 * @member {string} apiAppId
-                 * @memberof clutch.slackbot.v1.EventRequest
-                 * @instance
-                 */
-                EventRequest.prototype.apiAppId = "";
-
-                /**
-                 * EventRequest event.
-                 * @member {google.protobuf.IValue|null|undefined} event
-                 * @memberof clutch.slackbot.v1.EventRequest
-                 * @instance
-                 */
-                EventRequest.prototype.event = null;
-
-                /**
-                 * EventRequest type.
-                 * @member {string} type
-                 * @memberof clutch.slackbot.v1.EventRequest
-                 * @instance
-                 */
-                EventRequest.prototype.type = "";
-
-                /**
-                 * EventRequest eventId.
-                 * @member {string} eventId
-                 * @memberof clutch.slackbot.v1.EventRequest
-                 * @instance
-                 */
-                EventRequest.prototype.eventId = "";
-
-                /**
-                 * EventRequest eventTime.
-                 * @member {number|Long} eventTime
-                 * @memberof clutch.slackbot.v1.EventRequest
-                 * @instance
-                 */
-                EventRequest.prototype.eventTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-                /**
-                 * EventRequest eventContext.
-                 * @member {string} eventContext
-                 * @memberof clutch.slackbot.v1.EventRequest
-                 * @instance
-                 */
-                EventRequest.prototype.eventContext = "";
-
-                /**
-                 * EventRequest authorizations.
-                 * @member {google.protobuf.IValue|null|undefined} authorizations
-                 * @memberof clutch.slackbot.v1.EventRequest
-                 * @instance
-                 */
-                EventRequest.prototype.authorizations = null;
-
-                /**
-                 * EventRequest challenge.
-                 * @member {string} challenge
-                 * @memberof clutch.slackbot.v1.EventRequest
-                 * @instance
-                 */
-                EventRequest.prototype.challenge = "";
-
-                /**
-                 * Verifies an EventRequest message.
-                 * @function verify
-                 * @memberof clutch.slackbot.v1.EventRequest
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                EventRequest.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    if (message.token != null && message.hasOwnProperty("token"))
-                        if (!$util.isString(message.token))
-                            return "token: string expected";
-                    if (message.isExtSharedChannel != null && message.hasOwnProperty("isExtSharedChannel"))
-                        if (typeof message.isExtSharedChannel !== "boolean")
-                            return "isExtSharedChannel: boolean expected";
-                    if (message.teamId != null && message.hasOwnProperty("teamId"))
-                        if (!$util.isString(message.teamId))
-                            return "teamId: string expected";
-                    if (message.apiAppId != null && message.hasOwnProperty("apiAppId"))
-                        if (!$util.isString(message.apiAppId))
-                            return "apiAppId: string expected";
-                    if (message.event != null && message.hasOwnProperty("event")) {
-                        let error = $root.google.protobuf.Value.verify(message.event);
-                        if (error)
-                            return "event." + error;
-                    }
-                    if (message.type != null && message.hasOwnProperty("type"))
-                        if (!$util.isString(message.type))
-                            return "type: string expected";
-                    if (message.eventId != null && message.hasOwnProperty("eventId"))
-                        if (!$util.isString(message.eventId))
-                            return "eventId: string expected";
-                    if (message.eventTime != null && message.hasOwnProperty("eventTime"))
-                        if (!$util.isInteger(message.eventTime) && !(message.eventTime && $util.isInteger(message.eventTime.low) && $util.isInteger(message.eventTime.high)))
-                            return "eventTime: integer|Long expected";
-                    if (message.eventContext != null && message.hasOwnProperty("eventContext"))
-                        if (!$util.isString(message.eventContext))
-                            return "eventContext: string expected";
-                    if (message.authorizations != null && message.hasOwnProperty("authorizations")) {
-                        let error = $root.google.protobuf.Value.verify(message.authorizations);
-                        if (error)
-                            return "authorizations." + error;
-                    }
-                    if (message.challenge != null && message.hasOwnProperty("challenge"))
-                        if (!$util.isString(message.challenge))
-                            return "challenge: string expected";
-                    return null;
-                };
-
-                /**
-                 * Creates an EventRequest message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.slackbot.v1.EventRequest
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.slackbot.v1.EventRequest} EventRequest
-                 */
-                EventRequest.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.slackbot.v1.EventRequest)
-                        return object;
-                    let message = new $root.clutch.slackbot.v1.EventRequest();
-                    if (object.token != null)
-                        message.token = String(object.token);
-                    if (object.isExtSharedChannel != null)
-                        message.isExtSharedChannel = Boolean(object.isExtSharedChannel);
-                    if (object.teamId != null)
-                        message.teamId = String(object.teamId);
-                    if (object.apiAppId != null)
-                        message.apiAppId = String(object.apiAppId);
-                    if (object.event != null) {
-                        if (typeof object.event !== "object")
-                            throw TypeError(".clutch.slackbot.v1.EventRequest.event: object expected");
-                        message.event = $root.google.protobuf.Value.fromObject(object.event);
-                    }
-                    if (object.type != null)
-                        message.type = String(object.type);
-                    if (object.eventId != null)
-                        message.eventId = String(object.eventId);
-                    if (object.eventTime != null)
-                        if ($util.Long)
-                            (message.eventTime = $util.Long.fromValue(object.eventTime)).unsigned = false;
-                        else if (typeof object.eventTime === "string")
-                            message.eventTime = parseInt(object.eventTime, 10);
-                        else if (typeof object.eventTime === "number")
-                            message.eventTime = object.eventTime;
-                        else if (typeof object.eventTime === "object")
-                            message.eventTime = new $util.LongBits(object.eventTime.low >>> 0, object.eventTime.high >>> 0).toNumber();
-                    if (object.eventContext != null)
-                        message.eventContext = String(object.eventContext);
-                    if (object.authorizations != null) {
-                        if (typeof object.authorizations !== "object")
-                            throw TypeError(".clutch.slackbot.v1.EventRequest.authorizations: object expected");
-                        message.authorizations = $root.google.protobuf.Value.fromObject(object.authorizations);
-                    }
-                    if (object.challenge != null)
-                        message.challenge = String(object.challenge);
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from an EventRequest message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.slackbot.v1.EventRequest
-                 * @static
-                 * @param {clutch.slackbot.v1.EventRequest} message EventRequest
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                EventRequest.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (options.defaults) {
-                        object.token = "";
-                        object.isExtSharedChannel = false;
-                        object.teamId = "";
-                        object.apiAppId = "";
-                        object.event = null;
-                        object.type = "";
-                        object.eventId = "";
-                        object.eventContext = "";
-                        if ($util.Long) {
-                            let long = new $util.Long(0, 0, false);
-                            object.eventTime = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                        } else
-                            object.eventTime = options.longs === String ? "0" : 0;
-                        object.authorizations = null;
-                        object.challenge = "";
-                    }
-                    if (message.token != null && message.hasOwnProperty("token"))
-                        object.token = message.token;
-                    if (message.isExtSharedChannel != null && message.hasOwnProperty("isExtSharedChannel"))
-                        object.isExtSharedChannel = message.isExtSharedChannel;
-                    if (message.teamId != null && message.hasOwnProperty("teamId"))
-                        object.teamId = message.teamId;
-                    if (message.apiAppId != null && message.hasOwnProperty("apiAppId"))
-                        object.apiAppId = message.apiAppId;
-                    if (message.event != null && message.hasOwnProperty("event"))
-                        object.event = $root.google.protobuf.Value.toObject(message.event, options);
-                    if (message.type != null && message.hasOwnProperty("type"))
-                        object.type = message.type;
-                    if (message.eventId != null && message.hasOwnProperty("eventId"))
-                        object.eventId = message.eventId;
-                    if (message.eventContext != null && message.hasOwnProperty("eventContext"))
-                        object.eventContext = message.eventContext;
-                    if (message.eventTime != null && message.hasOwnProperty("eventTime"))
-                        if (typeof message.eventTime === "number")
-                            object.eventTime = options.longs === String ? String(message.eventTime) : message.eventTime;
-                        else
-                            object.eventTime = options.longs === String ? $util.Long.prototype.toString.call(message.eventTime) : options.longs === Number ? new $util.LongBits(message.eventTime.low >>> 0, message.eventTime.high >>> 0).toNumber() : message.eventTime;
-                    if (message.authorizations != null && message.hasOwnProperty("authorizations"))
-                        object.authorizations = $root.google.protobuf.Value.toObject(message.authorizations, options);
-                    if (message.challenge != null && message.hasOwnProperty("challenge"))
-                        object.challenge = message.challenge;
-                    return object;
-                };
-
-                /**
-                 * Converts this EventRequest to JSON.
-                 * @function toJSON
-                 * @memberof clutch.slackbot.v1.EventRequest
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                EventRequest.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return EventRequest;
-            })();
-
-            v1.EventResponse = (function() {
-
-                /**
-                 * Properties of an EventResponse.
-                 * @memberof clutch.slackbot.v1
-                 * @interface IEventResponse
-                 * @property {string|null} [challenge] EventResponse challenge
-                 */
-
-                /**
-                 * Constructs a new EventResponse.
-                 * @memberof clutch.slackbot.v1
-                 * @classdesc Represents an EventResponse.
-                 * @implements IEventResponse
-                 * @constructor
-                 * @param {clutch.slackbot.v1.IEventResponse=} [properties] Properties to set
-                 */
-                function EventResponse(properties) {
-                    if (properties)
-                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                            if (properties[keys[i]] != null)
-                                this[keys[i]] = properties[keys[i]];
-                }
-
-                /**
-                 * EventResponse challenge.
-                 * @member {string} challenge
-                 * @memberof clutch.slackbot.v1.EventResponse
-                 * @instance
-                 */
-                EventResponse.prototype.challenge = "";
-
-                /**
-                 * Verifies an EventResponse message.
-                 * @function verify
-                 * @memberof clutch.slackbot.v1.EventResponse
-                 * @static
-                 * @param {Object.<string,*>} message Plain object to verify
-                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
-                 */
-                EventResponse.verify = function verify(message) {
-                    if (typeof message !== "object" || message === null)
-                        return "object expected";
-                    if (message.challenge != null && message.hasOwnProperty("challenge"))
-                        if (!$util.isString(message.challenge))
-                            return "challenge: string expected";
-                    return null;
-                };
-
-                /**
-                 * Creates an EventResponse message from a plain object. Also converts values to their respective internal types.
-                 * @function fromObject
-                 * @memberof clutch.slackbot.v1.EventResponse
-                 * @static
-                 * @param {Object.<string,*>} object Plain object
-                 * @returns {clutch.slackbot.v1.EventResponse} EventResponse
-                 */
-                EventResponse.fromObject = function fromObject(object) {
-                    if (object instanceof $root.clutch.slackbot.v1.EventResponse)
-                        return object;
-                    let message = new $root.clutch.slackbot.v1.EventResponse();
-                    if (object.challenge != null)
-                        message.challenge = String(object.challenge);
-                    return message;
-                };
-
-                /**
-                 * Creates a plain object from an EventResponse message. Also converts values to other types if specified.
-                 * @function toObject
-                 * @memberof clutch.slackbot.v1.EventResponse
-                 * @static
-                 * @param {clutch.slackbot.v1.EventResponse} message EventResponse
-                 * @param {$protobuf.IConversionOptions} [options] Conversion options
-                 * @returns {Object.<string,*>} Plain object
-                 */
-                EventResponse.toObject = function toObject(message, options) {
-                    if (!options)
-                        options = {};
-                    let object = {};
-                    if (options.defaults)
-                        object.challenge = "";
-                    if (message.challenge != null && message.hasOwnProperty("challenge"))
-                        object.challenge = message.challenge;
-                    return object;
-                };
-
-                /**
-                 * Converts this EventResponse to JSON.
-                 * @function toJSON
-                 * @memberof clutch.slackbot.v1.EventResponse
-                 * @instance
-                 * @returns {Object.<string,*>} JSON object
-                 */
-                EventResponse.prototype.toJSON = function toJSON() {
-                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                return EventResponse;
-            })();
-
-            return v1;
-        })();
-
-        return slackbot;
-    })();
-
     clutch.topology = (function() {
 
         /**
@@ -55645,6 +55669,509 @@ export const google = $root.google = (() => {
             return Timestamp;
         })();
 
+        protobuf.Struct = (function() {
+
+            /**
+             * Properties of a Struct.
+             * @memberof google.protobuf
+             * @interface IStruct
+             * @property {Object.<string,google.protobuf.IValue>|null} [fields] Struct fields
+             */
+
+            /**
+             * Constructs a new Struct.
+             * @memberof google.protobuf
+             * @classdesc Represents a Struct.
+             * @implements IStruct
+             * @constructor
+             * @param {google.protobuf.IStruct=} [properties] Properties to set
+             */
+            function Struct(properties) {
+                this.fields = {};
+                if (properties)
+                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * Struct fields.
+             * @member {Object.<string,google.protobuf.IValue>} fields
+             * @memberof google.protobuf.Struct
+             * @instance
+             */
+            Struct.prototype.fields = $util.emptyObject;
+
+            /**
+             * Verifies a Struct message.
+             * @function verify
+             * @memberof google.protobuf.Struct
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Struct.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.fields != null && message.hasOwnProperty("fields")) {
+                    if (!$util.isObject(message.fields))
+                        return "fields: object expected";
+                    let key = Object.keys(message.fields);
+                    for (let i = 0; i < key.length; ++i) {
+                        let error = $root.google.protobuf.Value.verify(message.fields[key[i]]);
+                        if (error)
+                            return "fields." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Struct message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof google.protobuf.Struct
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {google.protobuf.Struct} Struct
+             */
+            Struct.fromObject = function fromObject(object) {
+                if (object instanceof $root.google.protobuf.Struct)
+                    return object;
+                let message = new $root.google.protobuf.Struct();
+                if (object.fields) {
+                    if (typeof object.fields !== "object")
+                        throw TypeError(".google.protobuf.Struct.fields: object expected");
+                    message.fields = {};
+                    for (let keys = Object.keys(object.fields), i = 0; i < keys.length; ++i) {
+                        if (typeof object.fields[keys[i]] !== "object")
+                            throw TypeError(".google.protobuf.Struct.fields: object expected");
+                        message.fields[keys[i]] = $root.google.protobuf.Value.fromObject(object.fields[keys[i]]);
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Struct message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof google.protobuf.Struct
+             * @static
+             * @param {google.protobuf.Struct} message Struct
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Struct.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                let object = {};
+                if (options.objects || options.defaults)
+                    object.fields = {};
+                let keys2;
+                if (message.fields && (keys2 = Object.keys(message.fields)).length) {
+                    object.fields = {};
+                    for (let j = 0; j < keys2.length; ++j)
+                        object.fields[keys2[j]] = $root.google.protobuf.Value.toObject(message.fields[keys2[j]], options);
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Struct to JSON.
+             * @function toJSON
+             * @memberof google.protobuf.Struct
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Struct.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return Struct;
+        })();
+
+        protobuf.Value = (function() {
+
+            /**
+             * Properties of a Value.
+             * @memberof google.protobuf
+             * @interface IValue
+             * @property {google.protobuf.NullValue|null} [nullValue] Value nullValue
+             * @property {number|null} [numberValue] Value numberValue
+             * @property {string|null} [stringValue] Value stringValue
+             * @property {boolean|null} [boolValue] Value boolValue
+             * @property {google.protobuf.IStruct|null} [structValue] Value structValue
+             * @property {google.protobuf.IListValue|null} [listValue] Value listValue
+             */
+
+            /**
+             * Constructs a new Value.
+             * @memberof google.protobuf
+             * @classdesc Represents a Value.
+             * @implements IValue
+             * @constructor
+             * @param {google.protobuf.IValue=} [properties] Properties to set
+             */
+            function Value(properties) {
+                if (properties)
+                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * Value nullValue.
+             * @member {google.protobuf.NullValue} nullValue
+             * @memberof google.protobuf.Value
+             * @instance
+             */
+            Value.prototype.nullValue = 0;
+
+            /**
+             * Value numberValue.
+             * @member {number} numberValue
+             * @memberof google.protobuf.Value
+             * @instance
+             */
+            Value.prototype.numberValue = 0;
+
+            /**
+             * Value stringValue.
+             * @member {string} stringValue
+             * @memberof google.protobuf.Value
+             * @instance
+             */
+            Value.prototype.stringValue = "";
+
+            /**
+             * Value boolValue.
+             * @member {boolean} boolValue
+             * @memberof google.protobuf.Value
+             * @instance
+             */
+            Value.prototype.boolValue = false;
+
+            /**
+             * Value structValue.
+             * @member {google.protobuf.IStruct|null|undefined} structValue
+             * @memberof google.protobuf.Value
+             * @instance
+             */
+            Value.prototype.structValue = null;
+
+            /**
+             * Value listValue.
+             * @member {google.protobuf.IListValue|null|undefined} listValue
+             * @memberof google.protobuf.Value
+             * @instance
+             */
+            Value.prototype.listValue = null;
+
+            // OneOf field names bound to virtual getters and setters
+            let $oneOfFields;
+
+            /**
+             * Value kind.
+             * @member {"nullValue"|"numberValue"|"stringValue"|"boolValue"|"structValue"|"listValue"|undefined} kind
+             * @memberof google.protobuf.Value
+             * @instance
+             */
+            Object.defineProperty(Value.prototype, "kind", {
+                get: $util.oneOfGetter($oneOfFields = ["nullValue", "numberValue", "stringValue", "boolValue", "structValue", "listValue"]),
+                set: $util.oneOfSetter($oneOfFields)
+            });
+
+            /**
+             * Verifies a Value message.
+             * @function verify
+             * @memberof google.protobuf.Value
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            Value.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                let properties = {};
+                if (message.nullValue != null && message.hasOwnProperty("nullValue")) {
+                    properties.kind = 1;
+                    switch (message.nullValue) {
+                    default:
+                        return "nullValue: enum value expected";
+                    case 0:
+                        break;
+                    }
+                }
+                if (message.numberValue != null && message.hasOwnProperty("numberValue")) {
+                    if (properties.kind === 1)
+                        return "kind: multiple values";
+                    properties.kind = 1;
+                    if (typeof message.numberValue !== "number")
+                        return "numberValue: number expected";
+                }
+                if (message.stringValue != null && message.hasOwnProperty("stringValue")) {
+                    if (properties.kind === 1)
+                        return "kind: multiple values";
+                    properties.kind = 1;
+                    if (!$util.isString(message.stringValue))
+                        return "stringValue: string expected";
+                }
+                if (message.boolValue != null && message.hasOwnProperty("boolValue")) {
+                    if (properties.kind === 1)
+                        return "kind: multiple values";
+                    properties.kind = 1;
+                    if (typeof message.boolValue !== "boolean")
+                        return "boolValue: boolean expected";
+                }
+                if (message.structValue != null && message.hasOwnProperty("structValue")) {
+                    if (properties.kind === 1)
+                        return "kind: multiple values";
+                    properties.kind = 1;
+                    {
+                        let error = $root.google.protobuf.Struct.verify(message.structValue);
+                        if (error)
+                            return "structValue." + error;
+                    }
+                }
+                if (message.listValue != null && message.hasOwnProperty("listValue")) {
+                    if (properties.kind === 1)
+                        return "kind: multiple values";
+                    properties.kind = 1;
+                    {
+                        let error = $root.google.protobuf.ListValue.verify(message.listValue);
+                        if (error)
+                            return "listValue." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a Value message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof google.protobuf.Value
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {google.protobuf.Value} Value
+             */
+            Value.fromObject = function fromObject(object) {
+                if (object instanceof $root.google.protobuf.Value)
+                    return object;
+                let message = new $root.google.protobuf.Value();
+                switch (object.nullValue) {
+                case "NULL_VALUE":
+                case 0:
+                    message.nullValue = 0;
+                    break;
+                }
+                if (object.numberValue != null)
+                    message.numberValue = Number(object.numberValue);
+                if (object.stringValue != null)
+                    message.stringValue = String(object.stringValue);
+                if (object.boolValue != null)
+                    message.boolValue = Boolean(object.boolValue);
+                if (object.structValue != null) {
+                    if (typeof object.structValue !== "object")
+                        throw TypeError(".google.protobuf.Value.structValue: object expected");
+                    message.structValue = $root.google.protobuf.Struct.fromObject(object.structValue);
+                }
+                if (object.listValue != null) {
+                    if (typeof object.listValue !== "object")
+                        throw TypeError(".google.protobuf.Value.listValue: object expected");
+                    message.listValue = $root.google.protobuf.ListValue.fromObject(object.listValue);
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Value message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof google.protobuf.Value
+             * @static
+             * @param {google.protobuf.Value} message Value
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Value.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                let object = {};
+                if (message.nullValue != null && message.hasOwnProperty("nullValue")) {
+                    object.nullValue = options.enums === String ? $root.google.protobuf.NullValue[message.nullValue] : message.nullValue;
+                    if (options.oneofs)
+                        object.kind = "nullValue";
+                }
+                if (message.numberValue != null && message.hasOwnProperty("numberValue")) {
+                    object.numberValue = options.json && !isFinite(message.numberValue) ? String(message.numberValue) : message.numberValue;
+                    if (options.oneofs)
+                        object.kind = "numberValue";
+                }
+                if (message.stringValue != null && message.hasOwnProperty("stringValue")) {
+                    object.stringValue = message.stringValue;
+                    if (options.oneofs)
+                        object.kind = "stringValue";
+                }
+                if (message.boolValue != null && message.hasOwnProperty("boolValue")) {
+                    object.boolValue = message.boolValue;
+                    if (options.oneofs)
+                        object.kind = "boolValue";
+                }
+                if (message.structValue != null && message.hasOwnProperty("structValue")) {
+                    object.structValue = $root.google.protobuf.Struct.toObject(message.structValue, options);
+                    if (options.oneofs)
+                        object.kind = "structValue";
+                }
+                if (message.listValue != null && message.hasOwnProperty("listValue")) {
+                    object.listValue = $root.google.protobuf.ListValue.toObject(message.listValue, options);
+                    if (options.oneofs)
+                        object.kind = "listValue";
+                }
+                return object;
+            };
+
+            /**
+             * Converts this Value to JSON.
+             * @function toJSON
+             * @memberof google.protobuf.Value
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Value.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return Value;
+        })();
+
+        /**
+         * NullValue enum.
+         * @name google.protobuf.NullValue
+         * @enum {number}
+         * @property {number} NULL_VALUE=0 NULL_VALUE value
+         */
+        protobuf.NullValue = (function() {
+            const valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "NULL_VALUE"] = 0;
+            return values;
+        })();
+
+        protobuf.ListValue = (function() {
+
+            /**
+             * Properties of a ListValue.
+             * @memberof google.protobuf
+             * @interface IListValue
+             * @property {Array.<google.protobuf.IValue>|null} [values] ListValue values
+             */
+
+            /**
+             * Constructs a new ListValue.
+             * @memberof google.protobuf
+             * @classdesc Represents a ListValue.
+             * @implements IListValue
+             * @constructor
+             * @param {google.protobuf.IListValue=} [properties] Properties to set
+             */
+            function ListValue(properties) {
+                this.values = [];
+                if (properties)
+                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * ListValue values.
+             * @member {Array.<google.protobuf.IValue>} values
+             * @memberof google.protobuf.ListValue
+             * @instance
+             */
+            ListValue.prototype.values = $util.emptyArray;
+
+            /**
+             * Verifies a ListValue message.
+             * @function verify
+             * @memberof google.protobuf.ListValue
+             * @static
+             * @param {Object.<string,*>} message Plain object to verify
+             * @returns {string|null} `null` if valid, otherwise the reason why it is not
+             */
+            ListValue.verify = function verify(message) {
+                if (typeof message !== "object" || message === null)
+                    return "object expected";
+                if (message.values != null && message.hasOwnProperty("values")) {
+                    if (!Array.isArray(message.values))
+                        return "values: array expected";
+                    for (let i = 0; i < message.values.length; ++i) {
+                        let error = $root.google.protobuf.Value.verify(message.values[i]);
+                        if (error)
+                            return "values." + error;
+                    }
+                }
+                return null;
+            };
+
+            /**
+             * Creates a ListValue message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof google.protobuf.ListValue
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {google.protobuf.ListValue} ListValue
+             */
+            ListValue.fromObject = function fromObject(object) {
+                if (object instanceof $root.google.protobuf.ListValue)
+                    return object;
+                let message = new $root.google.protobuf.ListValue();
+                if (object.values) {
+                    if (!Array.isArray(object.values))
+                        throw TypeError(".google.protobuf.ListValue.values: array expected");
+                    message.values = [];
+                    for (let i = 0; i < object.values.length; ++i) {
+                        if (typeof object.values[i] !== "object")
+                            throw TypeError(".google.protobuf.ListValue.values: object expected");
+                        message.values[i] = $root.google.protobuf.Value.fromObject(object.values[i]);
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a ListValue message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof google.protobuf.ListValue
+             * @static
+             * @param {google.protobuf.ListValue} message ListValue
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            ListValue.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                let object = {};
+                if (options.arrays || options.defaults)
+                    object.values = [];
+                if (message.values && message.values.length) {
+                    object.values = [];
+                    for (let j = 0; j < message.values.length; ++j)
+                        object.values[j] = $root.google.protobuf.Value.toObject(message.values[j], options);
+                }
+                return object;
+            };
+
+            /**
+             * Converts this ListValue to JSON.
+             * @function toJSON
+             * @memberof google.protobuf.ListValue
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            ListValue.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            return ListValue;
+        })();
+
         protobuf.DoubleValue = (function() {
 
             /**
@@ -56580,509 +57107,6 @@ export const google = $root.google = (() => {
             };
 
             return BytesValue;
-        })();
-
-        protobuf.Struct = (function() {
-
-            /**
-             * Properties of a Struct.
-             * @memberof google.protobuf
-             * @interface IStruct
-             * @property {Object.<string,google.protobuf.IValue>|null} [fields] Struct fields
-             */
-
-            /**
-             * Constructs a new Struct.
-             * @memberof google.protobuf
-             * @classdesc Represents a Struct.
-             * @implements IStruct
-             * @constructor
-             * @param {google.protobuf.IStruct=} [properties] Properties to set
-             */
-            function Struct(properties) {
-                this.fields = {};
-                if (properties)
-                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-
-            /**
-             * Struct fields.
-             * @member {Object.<string,google.protobuf.IValue>} fields
-             * @memberof google.protobuf.Struct
-             * @instance
-             */
-            Struct.prototype.fields = $util.emptyObject;
-
-            /**
-             * Verifies a Struct message.
-             * @function verify
-             * @memberof google.protobuf.Struct
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            Struct.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.fields != null && message.hasOwnProperty("fields")) {
-                    if (!$util.isObject(message.fields))
-                        return "fields: object expected";
-                    let key = Object.keys(message.fields);
-                    for (let i = 0; i < key.length; ++i) {
-                        let error = $root.google.protobuf.Value.verify(message.fields[key[i]]);
-                        if (error)
-                            return "fields." + error;
-                    }
-                }
-                return null;
-            };
-
-            /**
-             * Creates a Struct message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof google.protobuf.Struct
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {google.protobuf.Struct} Struct
-             */
-            Struct.fromObject = function fromObject(object) {
-                if (object instanceof $root.google.protobuf.Struct)
-                    return object;
-                let message = new $root.google.protobuf.Struct();
-                if (object.fields) {
-                    if (typeof object.fields !== "object")
-                        throw TypeError(".google.protobuf.Struct.fields: object expected");
-                    message.fields = {};
-                    for (let keys = Object.keys(object.fields), i = 0; i < keys.length; ++i) {
-                        if (typeof object.fields[keys[i]] !== "object")
-                            throw TypeError(".google.protobuf.Struct.fields: object expected");
-                        message.fields[keys[i]] = $root.google.protobuf.Value.fromObject(object.fields[keys[i]]);
-                    }
-                }
-                return message;
-            };
-
-            /**
-             * Creates a plain object from a Struct message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof google.protobuf.Struct
-             * @static
-             * @param {google.protobuf.Struct} message Struct
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            Struct.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                let object = {};
-                if (options.objects || options.defaults)
-                    object.fields = {};
-                let keys2;
-                if (message.fields && (keys2 = Object.keys(message.fields)).length) {
-                    object.fields = {};
-                    for (let j = 0; j < keys2.length; ++j)
-                        object.fields[keys2[j]] = $root.google.protobuf.Value.toObject(message.fields[keys2[j]], options);
-                }
-                return object;
-            };
-
-            /**
-             * Converts this Struct to JSON.
-             * @function toJSON
-             * @memberof google.protobuf.Struct
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            Struct.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            return Struct;
-        })();
-
-        protobuf.Value = (function() {
-
-            /**
-             * Properties of a Value.
-             * @memberof google.protobuf
-             * @interface IValue
-             * @property {google.protobuf.NullValue|null} [nullValue] Value nullValue
-             * @property {number|null} [numberValue] Value numberValue
-             * @property {string|null} [stringValue] Value stringValue
-             * @property {boolean|null} [boolValue] Value boolValue
-             * @property {google.protobuf.IStruct|null} [structValue] Value structValue
-             * @property {google.protobuf.IListValue|null} [listValue] Value listValue
-             */
-
-            /**
-             * Constructs a new Value.
-             * @memberof google.protobuf
-             * @classdesc Represents a Value.
-             * @implements IValue
-             * @constructor
-             * @param {google.protobuf.IValue=} [properties] Properties to set
-             */
-            function Value(properties) {
-                if (properties)
-                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-
-            /**
-             * Value nullValue.
-             * @member {google.protobuf.NullValue} nullValue
-             * @memberof google.protobuf.Value
-             * @instance
-             */
-            Value.prototype.nullValue = 0;
-
-            /**
-             * Value numberValue.
-             * @member {number} numberValue
-             * @memberof google.protobuf.Value
-             * @instance
-             */
-            Value.prototype.numberValue = 0;
-
-            /**
-             * Value stringValue.
-             * @member {string} stringValue
-             * @memberof google.protobuf.Value
-             * @instance
-             */
-            Value.prototype.stringValue = "";
-
-            /**
-             * Value boolValue.
-             * @member {boolean} boolValue
-             * @memberof google.protobuf.Value
-             * @instance
-             */
-            Value.prototype.boolValue = false;
-
-            /**
-             * Value structValue.
-             * @member {google.protobuf.IStruct|null|undefined} structValue
-             * @memberof google.protobuf.Value
-             * @instance
-             */
-            Value.prototype.structValue = null;
-
-            /**
-             * Value listValue.
-             * @member {google.protobuf.IListValue|null|undefined} listValue
-             * @memberof google.protobuf.Value
-             * @instance
-             */
-            Value.prototype.listValue = null;
-
-            // OneOf field names bound to virtual getters and setters
-            let $oneOfFields;
-
-            /**
-             * Value kind.
-             * @member {"nullValue"|"numberValue"|"stringValue"|"boolValue"|"structValue"|"listValue"|undefined} kind
-             * @memberof google.protobuf.Value
-             * @instance
-             */
-            Object.defineProperty(Value.prototype, "kind", {
-                get: $util.oneOfGetter($oneOfFields = ["nullValue", "numberValue", "stringValue", "boolValue", "structValue", "listValue"]),
-                set: $util.oneOfSetter($oneOfFields)
-            });
-
-            /**
-             * Verifies a Value message.
-             * @function verify
-             * @memberof google.protobuf.Value
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            Value.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                let properties = {};
-                if (message.nullValue != null && message.hasOwnProperty("nullValue")) {
-                    properties.kind = 1;
-                    switch (message.nullValue) {
-                    default:
-                        return "nullValue: enum value expected";
-                    case 0:
-                        break;
-                    }
-                }
-                if (message.numberValue != null && message.hasOwnProperty("numberValue")) {
-                    if (properties.kind === 1)
-                        return "kind: multiple values";
-                    properties.kind = 1;
-                    if (typeof message.numberValue !== "number")
-                        return "numberValue: number expected";
-                }
-                if (message.stringValue != null && message.hasOwnProperty("stringValue")) {
-                    if (properties.kind === 1)
-                        return "kind: multiple values";
-                    properties.kind = 1;
-                    if (!$util.isString(message.stringValue))
-                        return "stringValue: string expected";
-                }
-                if (message.boolValue != null && message.hasOwnProperty("boolValue")) {
-                    if (properties.kind === 1)
-                        return "kind: multiple values";
-                    properties.kind = 1;
-                    if (typeof message.boolValue !== "boolean")
-                        return "boolValue: boolean expected";
-                }
-                if (message.structValue != null && message.hasOwnProperty("structValue")) {
-                    if (properties.kind === 1)
-                        return "kind: multiple values";
-                    properties.kind = 1;
-                    {
-                        let error = $root.google.protobuf.Struct.verify(message.structValue);
-                        if (error)
-                            return "structValue." + error;
-                    }
-                }
-                if (message.listValue != null && message.hasOwnProperty("listValue")) {
-                    if (properties.kind === 1)
-                        return "kind: multiple values";
-                    properties.kind = 1;
-                    {
-                        let error = $root.google.protobuf.ListValue.verify(message.listValue);
-                        if (error)
-                            return "listValue." + error;
-                    }
-                }
-                return null;
-            };
-
-            /**
-             * Creates a Value message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof google.protobuf.Value
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {google.protobuf.Value} Value
-             */
-            Value.fromObject = function fromObject(object) {
-                if (object instanceof $root.google.protobuf.Value)
-                    return object;
-                let message = new $root.google.protobuf.Value();
-                switch (object.nullValue) {
-                case "NULL_VALUE":
-                case 0:
-                    message.nullValue = 0;
-                    break;
-                }
-                if (object.numberValue != null)
-                    message.numberValue = Number(object.numberValue);
-                if (object.stringValue != null)
-                    message.stringValue = String(object.stringValue);
-                if (object.boolValue != null)
-                    message.boolValue = Boolean(object.boolValue);
-                if (object.structValue != null) {
-                    if (typeof object.structValue !== "object")
-                        throw TypeError(".google.protobuf.Value.structValue: object expected");
-                    message.structValue = $root.google.protobuf.Struct.fromObject(object.structValue);
-                }
-                if (object.listValue != null) {
-                    if (typeof object.listValue !== "object")
-                        throw TypeError(".google.protobuf.Value.listValue: object expected");
-                    message.listValue = $root.google.protobuf.ListValue.fromObject(object.listValue);
-                }
-                return message;
-            };
-
-            /**
-             * Creates a plain object from a Value message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof google.protobuf.Value
-             * @static
-             * @param {google.protobuf.Value} message Value
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            Value.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                let object = {};
-                if (message.nullValue != null && message.hasOwnProperty("nullValue")) {
-                    object.nullValue = options.enums === String ? $root.google.protobuf.NullValue[message.nullValue] : message.nullValue;
-                    if (options.oneofs)
-                        object.kind = "nullValue";
-                }
-                if (message.numberValue != null && message.hasOwnProperty("numberValue")) {
-                    object.numberValue = options.json && !isFinite(message.numberValue) ? String(message.numberValue) : message.numberValue;
-                    if (options.oneofs)
-                        object.kind = "numberValue";
-                }
-                if (message.stringValue != null && message.hasOwnProperty("stringValue")) {
-                    object.stringValue = message.stringValue;
-                    if (options.oneofs)
-                        object.kind = "stringValue";
-                }
-                if (message.boolValue != null && message.hasOwnProperty("boolValue")) {
-                    object.boolValue = message.boolValue;
-                    if (options.oneofs)
-                        object.kind = "boolValue";
-                }
-                if (message.structValue != null && message.hasOwnProperty("structValue")) {
-                    object.structValue = $root.google.protobuf.Struct.toObject(message.structValue, options);
-                    if (options.oneofs)
-                        object.kind = "structValue";
-                }
-                if (message.listValue != null && message.hasOwnProperty("listValue")) {
-                    object.listValue = $root.google.protobuf.ListValue.toObject(message.listValue, options);
-                    if (options.oneofs)
-                        object.kind = "listValue";
-                }
-                return object;
-            };
-
-            /**
-             * Converts this Value to JSON.
-             * @function toJSON
-             * @memberof google.protobuf.Value
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            Value.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            return Value;
-        })();
-
-        /**
-         * NullValue enum.
-         * @name google.protobuf.NullValue
-         * @enum {number}
-         * @property {number} NULL_VALUE=0 NULL_VALUE value
-         */
-        protobuf.NullValue = (function() {
-            const valuesById = {}, values = Object.create(valuesById);
-            values[valuesById[0] = "NULL_VALUE"] = 0;
-            return values;
-        })();
-
-        protobuf.ListValue = (function() {
-
-            /**
-             * Properties of a ListValue.
-             * @memberof google.protobuf
-             * @interface IListValue
-             * @property {Array.<google.protobuf.IValue>|null} [values] ListValue values
-             */
-
-            /**
-             * Constructs a new ListValue.
-             * @memberof google.protobuf
-             * @classdesc Represents a ListValue.
-             * @implements IListValue
-             * @constructor
-             * @param {google.protobuf.IListValue=} [properties] Properties to set
-             */
-            function ListValue(properties) {
-                this.values = [];
-                if (properties)
-                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                        if (properties[keys[i]] != null)
-                            this[keys[i]] = properties[keys[i]];
-            }
-
-            /**
-             * ListValue values.
-             * @member {Array.<google.protobuf.IValue>} values
-             * @memberof google.protobuf.ListValue
-             * @instance
-             */
-            ListValue.prototype.values = $util.emptyArray;
-
-            /**
-             * Verifies a ListValue message.
-             * @function verify
-             * @memberof google.protobuf.ListValue
-             * @static
-             * @param {Object.<string,*>} message Plain object to verify
-             * @returns {string|null} `null` if valid, otherwise the reason why it is not
-             */
-            ListValue.verify = function verify(message) {
-                if (typeof message !== "object" || message === null)
-                    return "object expected";
-                if (message.values != null && message.hasOwnProperty("values")) {
-                    if (!Array.isArray(message.values))
-                        return "values: array expected";
-                    for (let i = 0; i < message.values.length; ++i) {
-                        let error = $root.google.protobuf.Value.verify(message.values[i]);
-                        if (error)
-                            return "values." + error;
-                    }
-                }
-                return null;
-            };
-
-            /**
-             * Creates a ListValue message from a plain object. Also converts values to their respective internal types.
-             * @function fromObject
-             * @memberof google.protobuf.ListValue
-             * @static
-             * @param {Object.<string,*>} object Plain object
-             * @returns {google.protobuf.ListValue} ListValue
-             */
-            ListValue.fromObject = function fromObject(object) {
-                if (object instanceof $root.google.protobuf.ListValue)
-                    return object;
-                let message = new $root.google.protobuf.ListValue();
-                if (object.values) {
-                    if (!Array.isArray(object.values))
-                        throw TypeError(".google.protobuf.ListValue.values: array expected");
-                    message.values = [];
-                    for (let i = 0; i < object.values.length; ++i) {
-                        if (typeof object.values[i] !== "object")
-                            throw TypeError(".google.protobuf.ListValue.values: object expected");
-                        message.values[i] = $root.google.protobuf.Value.fromObject(object.values[i]);
-                    }
-                }
-                return message;
-            };
-
-            /**
-             * Creates a plain object from a ListValue message. Also converts values to other types if specified.
-             * @function toObject
-             * @memberof google.protobuf.ListValue
-             * @static
-             * @param {google.protobuf.ListValue} message ListValue
-             * @param {$protobuf.IConversionOptions} [options] Conversion options
-             * @returns {Object.<string,*>} Plain object
-             */
-            ListValue.toObject = function toObject(message, options) {
-                if (!options)
-                    options = {};
-                let object = {};
-                if (options.arrays || options.defaults)
-                    object.values = [];
-                if (message.values && message.values.length) {
-                    object.values = [];
-                    for (let j = 0; j < message.values.length; ++j)
-                        object.values[j] = $root.google.protobuf.Value.toObject(message.values[j], options);
-                }
-                return object;
-            };
-
-            /**
-             * Converts this ListValue to JSON.
-             * @function toJSON
-             * @memberof google.protobuf.ListValue
-             * @instance
-             * @returns {Object.<string,*>} JSON object
-             */
-            ListValue.prototype.toJSON = function toJSON() {
-                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-            };
-
-            return ListValue;
         })();
 
         return protobuf;
