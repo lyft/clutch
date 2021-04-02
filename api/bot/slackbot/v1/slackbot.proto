@@ -44,13 +44,16 @@ message EventRequest {
   string event_context = 8;
   // An installation of the app, object type
   google.protobuf.Value authorizations = 10;
-  // Randomly generated string used as part of the URL verification handshake, https://api.slack.com/apis/connections/events-api#the-events-api__subscribing-to-event-types__events-api-request-urls__request-url-configuration--verification__url-verification-handshake
+  // Randomly generated string used as part of the URL verification handshake,
+  // https://api.slack.com/apis/connections/events-api#the-events-api__subscribing-to-event-types__events-api-request-urls__request-url-configuration--verification__url-verification-handshake
   string challenge = 11;
 }
 
-// Respond back to the Slack Events API with the challenge or a 2xx, https://api.slack.com/apis/connections/events-api#the-events-api__responding-to-events
+// Respond back to the Slack Events API with the challenge or a 2xx,
+// https://api.slack.com/apis/connections/events-api#the-events-api__responding-to-events
 message EventResponse {
   option (clutch.api.v1.redacted) = true;
-  // The request will include the challenge and we respond back with the same challenge to complete the URL verification handshake
+  // The request will include the challenge and we respond back with the same challenge to complete the URL verification
+  // handshake
   string challenge = 1;
 }

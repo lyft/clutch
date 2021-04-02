@@ -52,7 +52,8 @@ type EventRequest struct {
 	EventContext string `protobuf:"bytes,8,opt,name=event_context,json=eventContext,proto3" json:"event_context,omitempty"`
 	// An installation of the app, object type
 	Authorizations *structpb.Value `protobuf:"bytes,10,opt,name=authorizations,proto3" json:"authorizations,omitempty"`
-	// Randomly generated string used as part of the URL verification handshake, https://api.slack.com/apis/connections/events-api#the-events-api__subscribing-to-event-types__events-api-request-urls__request-url-configuration--verification__url-verification-handshake
+	// Randomly generated string used as part of the URL verification handshake,
+	// https://api.slack.com/apis/connections/events-api#the-events-api__subscribing-to-event-types__events-api-request-urls__request-url-configuration--verification__url-verification-handshake
 	Challenge string `protobuf:"bytes,11,opt,name=challenge,proto3" json:"challenge,omitempty"`
 }
 
@@ -165,13 +166,15 @@ func (x *EventRequest) GetChallenge() string {
 	return ""
 }
 
-// Respond back to the Slack Events API with the challenge or a 2xx, https://api.slack.com/apis/connections/events-api#the-events-api__responding-to-events
+// Respond back to the Slack Events API with the challenge or a 2xx,
+// https://api.slack.com/apis/connections/events-api#the-events-api__responding-to-events
 type EventResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The request will include the challenge and we respond back with the same challenge to complete the URL verification handshake
+	// The request will include the challenge and we respond back with the same challenge to complete the URL verification
+	// handshake
 	Challenge string `protobuf:"bytes,1,opt,name=challenge,proto3" json:"challenge,omitempty"`
 }
 
