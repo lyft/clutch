@@ -69,7 +69,7 @@ func NewMonitor(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (*Monitor, 
 	terminationCriteria := map[string][]TerminationCriteria{}
 
 	for configType, perConfigTypeConfig := range typedConfig.PerConfigTypeConfiguration {
-		perConfigCriterias := []TerminationCriteria{}
+		perConfigCriteria := []TerminationCriteria{}
 
 		for _, c := range perConfigTypeConfig.TerminationCriteria {
 			factory, ok := CriteriaFactories[c.TypeUrl]
@@ -170,7 +170,7 @@ func (m *Monitor) Run(ctx context.Context) {
 
 // Iterates over all the provided experiments, spawning a goroutine to montior each experiment that doesn't already have
 // a monitoring routine. Returns a set containing all the active experiment ids for further processing.
-func (m *Monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trackedExperiments map[uint64]context.CancelFunc, criterias []TerminationCriteria) map[uint64]struct{} {
+func (m *Monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trackedExperiments map[uint64]context.CancelFunc, criteria []TerminationCriteria) map[uint64]struct{} {
 	// For each active experiment, create a monitoring goroutine if necessary.
 	activeExperiments := map[uint64]struct{}{}
 	for _, e := range es {
@@ -189,7 +189,7 @@ func (m *Monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trac
 	return activeExperiments
 }
 
-func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentationv1.Experiment, criterias []TerminationCriteria) {
+func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentationv1.Experiment, criteria []TerminationCriteria) {
 	ticker := time.NewTicker(m.perExperimentCheckInterval)
 	terminated := false
 
