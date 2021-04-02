@@ -51,7 +51,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 
 func NewMonitor(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (*Monitor, error) {
 	typedConfig := &terminatorv1.Config{}
-	err := ptypes.UnmarshalAny(cfg, typedConfig)
+	err := cfg.UnmarshalTo(typedConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -99,16 +99,16 @@ func NewMonitor(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (*Monitor, 
 	}
 
 	return &Monitor{
-		store:                        storer,
-		terminationCriteriaByTypeUrl: terminationCriteria,
-		outerLoopInterval:            outerLoopInterval,
-		perExperimentCheckInterval:   perExperimentCheckInterval,
-		log:                          logger.Sugar(),
-		activeMonitoringRoutines:     trackingGauge{gauge: scope.Gauge("active_monitoring_routines")},
-		criteriaEvaluationSuccess:    scope.Counter("criteria_success"),
-		criteriaEvaluationFailure:    scope.Counter("criteria_failure"),
-		terminationCount:             scope.Counter("terminations"),
-		marshallingErrors:            scope.Counter("unpack_error"),
+		store:                          storer,
+		terminationCriteriaByTypeUrl:   terminationCriteria,
+		outerLoopInterval:              outerLoopInterval,
+		perExperimentCheckInterval:     perExperimentCheckInterval,
+		log:                            logger.Sugar(),
+		activeMonitoringRoutines:       trackingGauge{gauge: scope.Gauge("active_monitoring_routines")},
+		criteriaEvaluationSuccessCount: scope.Counter("criteria_success"),
+		criteriaEvaluationFailureCount: scope.Counter("criteria_failure"),
+		terminationCount:               scope.Counter("terminations"),
+		marshallingErrorCount:          scope.Counter("unpack_error"),
 	}, nil
 }
 
@@ -121,11 +121,11 @@ type Monitor struct {
 
 	log *zap.SugaredLogger
 
-	criteriaEvaluationSuccess tally.Counter
-	criteriaEvaluationFailure tally.Counter
-	activeMonitoringRoutines  trackingGauge
-	terminationCount          tally.Counter
-	marshallingErrors         tally.Counter
+	activeMonitoringRoutines       trackingGauge
+	criteriaEvaluationSuccessCount tally.Counter
+	criteriaEvaluationFailureCount tally.Counter
+	terminationCount               tally.Counter
+	marshallingErrorCount          tally.Counter
 }
 
 func (m *Monitor) Run(ctx context.Context) {
@@ -199,7 +199,7 @@ func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentatio
 	unpackedConfig, err := anypb.UnmarshalNew(e.Config, proto.UnmarshalOptions{})
 	if err != nil {
 		m.log.Errorw("failed to unmarshal experiment", "id", e.Id)
-		m.marshallingErrors.Inc(1)
+		m.marshallingErrorCount.Inc(1)
 		return
 	}
 
@@ -217,12 +217,12 @@ func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentatio
 				terminationReason, err := c.ShouldTerminate(e, unpackedConfig)
 				// TODO(snowp): The logs here might get spammy, rate limit or terminate montioring routine somehow?
 				if err != nil {
-					m.criteriaEvaluationFailure.Inc(1)
+					m.criteriaEvaluationFailureCount.Inc(1)
 					m.log.Errorw("error while evaluating termination criteria", "id", e.Id, "error", err)
 					continue
 				}
 
-				m.criteriaEvaluationSuccess.Inc(1)
+				m.criteriaEvaluationSuccessCount.Inc(1)
 
 				if terminationReason != "" {
 					err = m.store.CancelExperimentRun(context.Background(), e.Id, terminationReason)

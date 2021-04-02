@@ -21,6 +21,7 @@ message Config {
   google.protobuf.Duration outer_loop_interval = 2 [ (validate.rules).duration.gt.seconds = 0 ];
 
   // The interval at which the inner loop should evaluate the termination criteria for each monitored experiment.
+  // This should likely be less than outer_loop_interval as the checks should be relatively cheap.
   google.protobuf.Duration per_experiment_check_interval = 3 [ (validate.rules).duration.gt.seconds = 0 ];
 }
 
