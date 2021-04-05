@@ -39,7 +39,7 @@ type Bot struct {
 	Updated int64 `protobuf:"varint,4,opt,name=updated,proto3" json:"updated,omitempty"`
 	// unique identifier of the installed Slack application
 	AppId string `protobuf:"bytes,5,opt,name=app_id,json=appId,proto3" json:"app_id,omitempty"`
-	// image urls
+	// image urls of the bot's display picture
 	Icons map[string]string `protobuf:"bytes,6,rep,name=icons,proto3" json:"icons,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// unique identifier of the workspace where the event occurred
 	TeamId string `protobuf:"bytes,7,opt,name=team_id,json=teamId,proto3" json:"team_id,omitempty"`
@@ -136,22 +136,27 @@ type Event struct {
 
 	// the type of event
 	Type string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
-	// the user who messaged the bot
-	User       string `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
-	BotId      string `protobuf:"bytes,3,opt,name=bot_id,json=botId,proto3" json:"bot_id,omitempty"`
-	BotProfile *Bot   `protobuf:"bytes,4,opt,name=bot_profile,json=botProfile,proto3" json:"bot_profile,omitempty"`
+	// the user id of the user who messaged the bot
+	User  string `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
+	BotId string `protobuf:"bytes,3,opt,name=bot_id,json=botId,proto3" json:"bot_id,omitempty"`
+	// metadata on the bot
+	BotProfile *Bot `protobuf:"bytes,4,opt,name=bot_profile,json=botProfile,proto3" json:"bot_profile,omitempty"`
 	// the message text
 	Text string `protobuf:"bytes,5,opt,name=text,proto3" json:"text,omitempty"`
-	// timestamp
+	// timestamp associated with the object the event is describing
 	Ts string `protobuf:"bytes,6,opt,name=ts,proto3" json:"ts,omitempty"`
-	// the channel where the event happened
+	// the channel id of the channel where the event happened
 	Channel string `protobuf:"bytes,7,opt,name=channel,proto3" json:"channel,omitempty"`
 	// for DM messages, this will be "im"
 	ChannelType string `protobuf:"bytes,8,opt,name=channel_type,json=channelType,proto3" json:"channel_type,omitempty"`
-	// when the event was dispatched
-	EventTs     string `protobuf:"bytes,9,opt,name=event_ts,json=eventTs,proto3" json:"event_ts,omitempty"`
+	// timestamp associated with the streamed event
+	EventTs string `protobuf:"bytes,9,opt,name=event_ts,json=eventTs,proto3" json:"event_ts,omitempty"`
+	// unclear what this field is but it's sent as part of the request from the Events API. Seems like it's a mistake
+	// and it hasn't been addressed https://github.com/slackapi/python-slack-sdk/issues/736, so we have to support it for
+	// now.
 	ClientMsgId string `protobuf:"bytes,10,opt,name=client_msg_id,json=clientMsgId,proto3" json:"client_msg_id,omitempty"`
 	// unique identifier of the workspace where the event occurred
+	// identical to the team field value sent in the outer layer of the request
 	Team string `protobuf:"bytes,11,opt,name=team,proto3" json:"team,omitempty"`
 	// received when a user interacts with a Block Kit component, schema can vary.
 	// https://api.slack.com/reference/block-kit/interactive-components
@@ -302,7 +307,8 @@ type EventRequest struct {
 	// an identifier for this specific event, can be used with list of authorizations to obtain a full list of
 	// installations of your app that this event is visible to
 	EventContext string `protobuf:"bytes,9,opt,name=event_context,json=eventContext,proto3" json:"event_context,omitempty"`
-	// an installation of the app, object type
+	// describes the installation of the app that the event is visible to
+	// https://api.slack.com/apis/connections/events-api#authorizations
 	Authorizations *structpb.Value `protobuf:"bytes,10,opt,name=authorizations,proto3" json:"authorizations,omitempty"`
 	// randomly generated string used as part of the URL verification handshake,
 	// https://api.slack.com/apis/connections/events-api#the-events-api__subscribing-to-event-types__events-api-request-urls__request-url-configuration--verification__url-verification-handshake
