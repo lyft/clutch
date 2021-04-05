@@ -1723,22 +1723,22 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@hookform/devtools@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@hookform/devtools/-/devtools-2.2.1.tgz#2d88414d375199e193c2611b770b194b7752a623"
-  integrity sha512-VQh4kqwUOpz9LCDzIP0aJ4qnD/ob8Gp09L8gDy++9XtL66z6g8kbCynUvBrJm4qbCNdH0M7/Spm3AUjJqUuFlA==
+"@hookform/devtools@^3.0.0":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@hookform/devtools/-/devtools-3.0.1.tgz#1140da954835760d1328320caac0d8baba1e5212"
+  integrity sha512-vxA9mPFehRlLnPcefOBJWFswSPmr/bMKVIlJGPnO/hyIssvsLpnT1OkoQBPuDLODjtrNrYTumXrPIhxLYDUA0A==
   dependencies:
     "@emotion/core" "^10.0.28"
     "@emotion/styled" "^10.0.27"
     "@types/lodash" "^4.14.152"
-    little-state-machine "^3.0.1"
+    little-state-machine "^4.0.0"
     lodash "^4.17.15"
     react-simple-animate "^3.3.8"
 
-"@hookform/resolvers@2.0.0-beta.3":
-  version "2.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-2.0.0-beta.3.tgz#6a13cecb8d261fee9fc53564e3e4ef6212148f16"
-  integrity sha512-sOP+IX7TglN34WbMVt8eRqWgnXAQcvFc4XUU6x3bIiIjTkjV5L3N7sBjff2Ln4QPTMYnmdXaZV2Yf5WxOiC5YQ==
+"@hookform/resolvers@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-2.0.0.tgz#256414308d4584f2037d5c4349c119dbd66d11d6"
+  integrity sha512-picG6qjP516JNblvg/wuDc8JPfdm3aNbtPbfu+PXQWFXp6ED6dyBL2IoB/tDvPFaNwwqUEwb6UYVKMIFAH+aqQ==
 
 "@icons/material@^0.2.4":
   version "0.2.4"
@@ -13195,10 +13195,10 @@ listr@^0.14.3:
     p-map "^2.0.0"
     rxjs "^6.3.3"
 
-little-state-machine@^3.0.1:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/little-state-machine/-/little-state-machine-3.1.2.tgz#4f2742db028787e4ae353150be2864873fed384a"
-  integrity sha512-vHbZRyYSMgefIzISJWbSbbdKZZVTSdOi+DiUfk4Z8jM+mL2LKsY46perBsjNmkmO5Cq2jFG541bHvCXf9kWDqg==
+little-state-machine@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/little-state-machine/-/little-state-machine-4.1.0.tgz#8ca1eae22ea2408e97dc82097b4aa3fe1f96a199"
+  integrity sha512-JeWPyIwnhYGheF10h8DY9+OnEwJ0waRzyXP/WclB3Bqg5v1+xwruXTtDvTow/69ZBAuRlYT5Apl+I8TN+HMp9g==
 
 load-json-file@^1.0.0:
   version "1.1.0"
@@ -16576,15 +16576,10 @@ react-helmet-async@^1.0.2:
     react-fast-compare "^3.2.0"
     shallowequal "^1.1.0"
 
-react-hook-form@^5.7.2:
-  version "5.7.2"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-5.7.2.tgz#a84e259e5d37dd30949af4f79c4dac31101b79ac"
-  integrity sha512-bJvY348vayIvEUmSK7Fvea/NgqbT2racA2IbnJz/aPlQ3GBtaTeDITH6rtCa6y++obZzG6E3Q8VuoXPir7QYUg==
-
-react-hook-form@^6.0.8, react-hook-form@^6.9.2:
-  version "6.9.5"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.9.5.tgz#a700ff55987c4409d938f3609f06bd516e8a86d7"
-  integrity sha512-kkUm6b4u1Iy3wCdHA0fal23sjGQMg8BBRAT3KBG9PEdls5e+7OX2Df20oBPgpXxo/GaIwk2Lh5DeVv5OeVjKsg==
+react-hook-form@^7.0.0:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.0.1.tgz#faa8ee1303f29dbe36461bf4dfcf0eeeea5e99b7"
+  integrity sha512-wZLCYS9aVlcEsa0QbPi6UpaaXxXr/N2JI8gq3XGvtrYOjoImEH9KxdZ3TW0PzRCSSGh762fxyN+WHcpBJQz1Mw==
 
 react-hook-thunk-reducer@^0.2.1:
   version "0.2.4"
