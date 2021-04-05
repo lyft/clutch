@@ -6,57 +6,6 @@ import "validate/validate.proto";
 
 option go_package = "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1;serverexperimentationv1";
 
-message TestConfig {
-  // The pair of clusters specifying the origin and the destination of
-  // the traffic that faults should be applied to.
-  ClusterPairTarget cluster_pair = 1 [ (validate.rules).message.required = true ];
-
-  oneof fault {
-    option (validate.required) = true;
-
-    AbortFaultConfig abort = 2;
-    LatencyFaultConfig latency = 3;
-  }
-}
-
-// Targets requests from downstream_cluster -> upstream_cluster.
-message ClusterPairTarget {
-  // The name of the downstream cluster.
-  string downstream_cluster = 1 [ (validate.rules).string = {min_bytes : 1} ];
-
-  // The name of the upstream cluster.
-  string upstream_cluster = 2 [ (validate.rules).string = {min_bytes : 1} ];
-
-  // The fault injection cluster that controls whether faults are
-  // injected by downstream or upstream cluster.
-  FaultInjectionCluster fault_injection_cluster = 3 [ (validate.rules).enum.defined_only = true ];
-}
-
-message AbortFaultConfig {
-  // The percentage of requests that will be slowed down.
-  float percent = 1 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
-
-  // The abort HTTP status that will be returned.
-  int32 http_status = 2 [ (validate.rules).int32 = {gt : 99, lt : 600} ];
-}
-
-message LatencyFaultConfig {
-  // The percentage of requests that will be slowed down.
-  float percent = 1 [ (validate.rules).float = {gt : 0.0, lte : 100.0} ];
-
-  // The latency duration in milliseconds.
-  int32 duration_ms = 2 [ (validate.rules).int32.gt = 0 ];
-}
-
-enum FaultInjectionCluster {
-  // Fault injection cluster is unspecified. Faults are not injected.
-  FAULTINJECTIONCLUSTER_UNSPECIFIED = 0;
-  // Faults are injected to egress traffic by a downstream service(s).
-  FAULTINJECTIONCLUSTER_DOWNSTREAM = 1;
-  // Faults are injected to ingesss traffic by an upstream service(s).
-  FAULTINJECTIONCLUSTER_UPSTREAM = 2;
-}
-
 // The configuration of an HTTP fault.
 message HTTPFaultConfig {
   // The targeting of the fault describing what requests are being considered for faults.
