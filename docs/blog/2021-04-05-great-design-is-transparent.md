@@ -48,7 +48,7 @@ As previously mentioned, Clutch originally shipped with Material UI as the compo
   * Utilize an existing Lyft internal component library and help them open source
   * Continue to build custom components wrapping Material UI components under the hood
 
-Each of these has its trade offs and ultimately we decided to go with the third option. Building out and maintaining our own components wasn’t feasible with the current size of the team and introducing a dependency on an external team to open source a Lyft component library had potential to our timeline at risk. Building out custom components that wrapped Material’s components allowed us to inject custom styles where needed, control the interface for our components, and leverage the amazing work that so many others are actively putting into the project.
+Each of these has its trade offs and ultimately we decided to go with the third option. Building out and maintaining our own components wasn’t feasible with the current size of the team and introducing a dependency on an external team to open source a Lyft component library had potential to put our timeline at risk. Building out custom components that wrapped Material’s components allowed us to inject custom styles where needed, control the interface for our components, and leverage the amazing work that so many others are actively putting into the project.
 
 ### Styling Framework
 
