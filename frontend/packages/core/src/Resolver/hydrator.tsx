@@ -72,7 +72,7 @@ const OptionField = (
     });
   }, []);
 
-  const options = field.metadata.optionField.options.map(option => {
+  const options = _.sortBy(field.metadata.optionField.options, o => o.displayName).map(option => {
     return { label: option.displayName, value: option.stringValue };
   });
   const updateSelectedOption = (value: string) => {
