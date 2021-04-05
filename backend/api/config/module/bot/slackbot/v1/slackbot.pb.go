@@ -21,6 +21,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// TODO: (sperry) revist this when module is created. we may want to add more / support configuration for multiple bots.
 type Config struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

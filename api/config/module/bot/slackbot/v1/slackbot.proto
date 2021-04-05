@@ -6,6 +6,7 @@ option go_package = "github.com/lyft/clutch/backend/api/config/module/bot/slackb
 
 import "validate/validate.proto";
 
+// TODO: (sperry) revist this when module is created. we may want to add more / support configuration for multiple bots.
 message Config {
   // Bot tokens begin with "xoxb-", https://api.slack.com/authentication/token-types#bot
   string bot_token = 1 [ (validate.rules).string = {min_bytes : 1} ];
