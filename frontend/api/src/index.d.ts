@@ -2671,6 +2671,90 @@ export namespace clutch {
                     type EventCallback = (error: (Error|null), response?: clutch.bot.slackbot.v1.EventResponse) => void;
                 }
 
+                /** Properties of a Bot. */
+                interface IBot {
+
+                    /** Bot id */
+                    id?: (string|null);
+
+                    /** Bot deleted */
+                    deleted?: (boolean|null);
+
+                    /** Bot name */
+                    name?: (string|null);
+
+                    /** Bot updated */
+                    updated?: (number|Long|null);
+
+                    /** Bot appId */
+                    appId?: (string|null);
+
+                    /** Bot icons */
+                    icons?: ({ [k: string]: string }|null);
+
+                    /** Bot teamId */
+                    teamId?: (string|null);
+                }
+
+                /** Represents a Bot. */
+                class Bot implements IBot {
+
+                    /**
+                     * Constructs a new Bot.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.bot.slackbot.v1.IBot);
+
+                    /** Bot id. */
+                    public id: string;
+
+                    /** Bot deleted. */
+                    public deleted: boolean;
+
+                    /** Bot name. */
+                    public name: string;
+
+                    /** Bot updated. */
+                    public updated: (number|Long);
+
+                    /** Bot appId. */
+                    public appId: string;
+
+                    /** Bot icons. */
+                    public icons: { [k: string]: string };
+
+                    /** Bot teamId. */
+                    public teamId: string;
+
+                    /**
+                     * Verifies a Bot message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Bot message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Bot
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.bot.slackbot.v1.Bot;
+
+                    /**
+                     * Creates a plain object from a Bot message. Also converts values to other types if specified.
+                     * @param message Bot
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.bot.slackbot.v1.Bot, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Bot to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
                 /** Properties of an Event. */
                 interface IEvent {
 
@@ -2679,6 +2763,12 @@ export namespace clutch {
 
                     /** Event user */
                     user?: (string|null);
+
+                    /** Event botId */
+                    botId?: (string|null);
+
+                    /** Event botProfile */
+                    botProfile?: (clutch.bot.slackbot.v1.IBot|null);
 
                     /** Event text */
                     text?: (string|null);
@@ -2719,6 +2809,12 @@ export namespace clutch {
 
                     /** Event user. */
                     public user: string;
+
+                    /** Event botId. */
+                    public botId: string;
+
+                    /** Event botProfile. */
+                    public botProfile?: (clutch.bot.slackbot.v1.IBot|null);
 
                     /** Event text. */
                     public text: string;

@@ -6143,6 +6143,239 @@ export const clutch = $root.clutch = (() => {
                     return SlackBotAPI;
                 })();
 
+                v1.Bot = (function() {
+
+                    /**
+                     * Properties of a Bot.
+                     * @memberof clutch.bot.slackbot.v1
+                     * @interface IBot
+                     * @property {string|null} [id] Bot id
+                     * @property {boolean|null} [deleted] Bot deleted
+                     * @property {string|null} [name] Bot name
+                     * @property {number|Long|null} [updated] Bot updated
+                     * @property {string|null} [appId] Bot appId
+                     * @property {Object.<string,string>|null} [icons] Bot icons
+                     * @property {string|null} [teamId] Bot teamId
+                     */
+
+                    /**
+                     * Constructs a new Bot.
+                     * @memberof clutch.bot.slackbot.v1
+                     * @classdesc Represents a Bot.
+                     * @implements IBot
+                     * @constructor
+                     * @param {clutch.bot.slackbot.v1.IBot=} [properties] Properties to set
+                     */
+                    function Bot(properties) {
+                        this.icons = {};
+                        if (properties)
+                            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * Bot id.
+                     * @member {string} id
+                     * @memberof clutch.bot.slackbot.v1.Bot
+                     * @instance
+                     */
+                    Bot.prototype.id = "";
+
+                    /**
+                     * Bot deleted.
+                     * @member {boolean} deleted
+                     * @memberof clutch.bot.slackbot.v1.Bot
+                     * @instance
+                     */
+                    Bot.prototype.deleted = false;
+
+                    /**
+                     * Bot name.
+                     * @member {string} name
+                     * @memberof clutch.bot.slackbot.v1.Bot
+                     * @instance
+                     */
+                    Bot.prototype.name = "";
+
+                    /**
+                     * Bot updated.
+                     * @member {number|Long} updated
+                     * @memberof clutch.bot.slackbot.v1.Bot
+                     * @instance
+                     */
+                    Bot.prototype.updated = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+                    /**
+                     * Bot appId.
+                     * @member {string} appId
+                     * @memberof clutch.bot.slackbot.v1.Bot
+                     * @instance
+                     */
+                    Bot.prototype.appId = "";
+
+                    /**
+                     * Bot icons.
+                     * @member {Object.<string,string>} icons
+                     * @memberof clutch.bot.slackbot.v1.Bot
+                     * @instance
+                     */
+                    Bot.prototype.icons = $util.emptyObject;
+
+                    /**
+                     * Bot teamId.
+                     * @member {string} teamId
+                     * @memberof clutch.bot.slackbot.v1.Bot
+                     * @instance
+                     */
+                    Bot.prototype.teamId = "";
+
+                    /**
+                     * Verifies a Bot message.
+                     * @function verify
+                     * @memberof clutch.bot.slackbot.v1.Bot
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    Bot.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            if (!$util.isString(message.id))
+                                return "id: string expected";
+                        if (message.deleted != null && message.hasOwnProperty("deleted"))
+                            if (typeof message.deleted !== "boolean")
+                                return "deleted: boolean expected";
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            if (!$util.isString(message.name))
+                                return "name: string expected";
+                        if (message.updated != null && message.hasOwnProperty("updated"))
+                            if (!$util.isInteger(message.updated) && !(message.updated && $util.isInteger(message.updated.low) && $util.isInteger(message.updated.high)))
+                                return "updated: integer|Long expected";
+                        if (message.appId != null && message.hasOwnProperty("appId"))
+                            if (!$util.isString(message.appId))
+                                return "appId: string expected";
+                        if (message.icons != null && message.hasOwnProperty("icons")) {
+                            if (!$util.isObject(message.icons))
+                                return "icons: object expected";
+                            let key = Object.keys(message.icons);
+                            for (let i = 0; i < key.length; ++i)
+                                if (!$util.isString(message.icons[key[i]]))
+                                    return "icons: string{k:string} expected";
+                        }
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            if (!$util.isString(message.teamId))
+                                return "teamId: string expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a Bot message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof clutch.bot.slackbot.v1.Bot
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {clutch.bot.slackbot.v1.Bot} Bot
+                     */
+                    Bot.fromObject = function fromObject(object) {
+                        if (object instanceof $root.clutch.bot.slackbot.v1.Bot)
+                            return object;
+                        let message = new $root.clutch.bot.slackbot.v1.Bot();
+                        if (object.id != null)
+                            message.id = String(object.id);
+                        if (object.deleted != null)
+                            message.deleted = Boolean(object.deleted);
+                        if (object.name != null)
+                            message.name = String(object.name);
+                        if (object.updated != null)
+                            if ($util.Long)
+                                (message.updated = $util.Long.fromValue(object.updated)).unsigned = false;
+                            else if (typeof object.updated === "string")
+                                message.updated = parseInt(object.updated, 10);
+                            else if (typeof object.updated === "number")
+                                message.updated = object.updated;
+                            else if (typeof object.updated === "object")
+                                message.updated = new $util.LongBits(object.updated.low >>> 0, object.updated.high >>> 0).toNumber();
+                        if (object.appId != null)
+                            message.appId = String(object.appId);
+                        if (object.icons) {
+                            if (typeof object.icons !== "object")
+                                throw TypeError(".clutch.bot.slackbot.v1.Bot.icons: object expected");
+                            message.icons = {};
+                            for (let keys = Object.keys(object.icons), i = 0; i < keys.length; ++i)
+                                message.icons[keys[i]] = String(object.icons[keys[i]]);
+                        }
+                        if (object.teamId != null)
+                            message.teamId = String(object.teamId);
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a Bot message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof clutch.bot.slackbot.v1.Bot
+                     * @static
+                     * @param {clutch.bot.slackbot.v1.Bot} message Bot
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    Bot.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        let object = {};
+                        if (options.objects || options.defaults)
+                            object.icons = {};
+                        if (options.defaults) {
+                            object.id = "";
+                            object.deleted = false;
+                            object.name = "";
+                            if ($util.Long) {
+                                let long = new $util.Long(0, 0, false);
+                                object.updated = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                            } else
+                                object.updated = options.longs === String ? "0" : 0;
+                            object.appId = "";
+                            object.teamId = "";
+                        }
+                        if (message.id != null && message.hasOwnProperty("id"))
+                            object.id = message.id;
+                        if (message.deleted != null && message.hasOwnProperty("deleted"))
+                            object.deleted = message.deleted;
+                        if (message.name != null && message.hasOwnProperty("name"))
+                            object.name = message.name;
+                        if (message.updated != null && message.hasOwnProperty("updated"))
+                            if (typeof message.updated === "number")
+                                object.updated = options.longs === String ? String(message.updated) : message.updated;
+                            else
+                                object.updated = options.longs === String ? $util.Long.prototype.toString.call(message.updated) : options.longs === Number ? new $util.LongBits(message.updated.low >>> 0, message.updated.high >>> 0).toNumber() : message.updated;
+                        if (message.appId != null && message.hasOwnProperty("appId"))
+                            object.appId = message.appId;
+                        let keys2;
+                        if (message.icons && (keys2 = Object.keys(message.icons)).length) {
+                            object.icons = {};
+                            for (let j = 0; j < keys2.length; ++j)
+                                object.icons[keys2[j]] = message.icons[keys2[j]];
+                        }
+                        if (message.teamId != null && message.hasOwnProperty("teamId"))
+                            object.teamId = message.teamId;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this Bot to JSON.
+                     * @function toJSON
+                     * @memberof clutch.bot.slackbot.v1.Bot
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    Bot.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return Bot;
+                })();
+
                 v1.Event = (function() {
 
                     /**
@@ -6151,6 +6384,8 @@ export const clutch = $root.clutch = (() => {
                      * @interface IEvent
                      * @property {string|null} [type] Event type
                      * @property {string|null} [user] Event user
+                     * @property {string|null} [botId] Event botId
+                     * @property {clutch.bot.slackbot.v1.IBot|null} [botProfile] Event botProfile
                      * @property {string|null} [text] Event text
                      * @property {string|null} [ts] Event ts
                      * @property {string|null} [channel] Event channel
@@ -6191,6 +6426,22 @@ export const clutch = $root.clutch = (() => {
                      * @instance
                      */
                     Event.prototype.user = "";
+
+                    /**
+                     * Event botId.
+                     * @member {string} botId
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @instance
+                     */
+                    Event.prototype.botId = "";
+
+                    /**
+                     * Event botProfile.
+                     * @member {clutch.bot.slackbot.v1.IBot|null|undefined} botProfile
+                     * @memberof clutch.bot.slackbot.v1.Event
+                     * @instance
+                     */
+                    Event.prototype.botProfile = null;
 
                     /**
                      * Event text.
@@ -6273,6 +6524,14 @@ export const clutch = $root.clutch = (() => {
                         if (message.user != null && message.hasOwnProperty("user"))
                             if (!$util.isString(message.user))
                                 return "user: string expected";
+                        if (message.botId != null && message.hasOwnProperty("botId"))
+                            if (!$util.isString(message.botId))
+                                return "botId: string expected";
+                        if (message.botProfile != null && message.hasOwnProperty("botProfile")) {
+                            let error = $root.clutch.bot.slackbot.v1.Bot.verify(message.botProfile);
+                            if (error)
+                                return "botProfile." + error;
+                        }
                         if (message.text != null && message.hasOwnProperty("text"))
                             if (!$util.isString(message.text))
                                 return "text: string expected";
@@ -6318,6 +6577,13 @@ export const clutch = $root.clutch = (() => {
                             message.type = String(object.type);
                         if (object.user != null)
                             message.user = String(object.user);
+                        if (object.botId != null)
+                            message.botId = String(object.botId);
+                        if (object.botProfile != null) {
+                            if (typeof object.botProfile !== "object")
+                                throw TypeError(".clutch.bot.slackbot.v1.Event.botProfile: object expected");
+                            message.botProfile = $root.clutch.bot.slackbot.v1.Bot.fromObject(object.botProfile);
+                        }
                         if (object.text != null)
                             message.text = String(object.text);
                         if (object.ts != null)
@@ -6356,6 +6622,8 @@ export const clutch = $root.clutch = (() => {
                         if (options.defaults) {
                             object.type = "";
                             object.user = "";
+                            object.botId = "";
+                            object.botProfile = null;
                             object.text = "";
                             object.ts = "";
                             object.channel = "";
@@ -6369,6 +6637,10 @@ export const clutch = $root.clutch = (() => {
                             object.type = message.type;
                         if (message.user != null && message.hasOwnProperty("user"))
                             object.user = message.user;
+                        if (message.botId != null && message.hasOwnProperty("botId"))
+                            object.botId = message.botId;
+                        if (message.botProfile != null && message.hasOwnProperty("botProfile"))
+                            object.botProfile = $root.clutch.bot.slackbot.v1.Bot.toObject(message.botProfile, options);
                         if (message.text != null && message.hasOwnProperty("text"))
                             object.text = message.text;
                         if (message.ts != null && message.hasOwnProperty("ts"))
@@ -6646,12 +6918,12 @@ export const clutch = $root.clutch = (() => {
                             object.event = null;
                             object.type = "";
                             object.eventId = "";
-                            object.eventContext = "";
                             if ($util.Long) {
                                 let long = new $util.Long(0, 0, false);
                                 object.eventTime = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                             } else
                                 object.eventTime = options.longs === String ? "0" : 0;
+                            object.eventContext = "";
                             object.authorizations = null;
                             object.challenge = "";
                         }
@@ -6669,13 +6941,13 @@ export const clutch = $root.clutch = (() => {
                             object.type = message.type;
                         if (message.eventId != null && message.hasOwnProperty("eventId"))
                             object.eventId = message.eventId;
-                        if (message.eventContext != null && message.hasOwnProperty("eventContext"))
-                            object.eventContext = message.eventContext;
                         if (message.eventTime != null && message.hasOwnProperty("eventTime"))
                             if (typeof message.eventTime === "number")
                                 object.eventTime = options.longs === String ? String(message.eventTime) : message.eventTime;
                             else
                                 object.eventTime = options.longs === String ? $util.Long.prototype.toString.call(message.eventTime) : options.longs === Number ? new $util.LongBits(message.eventTime.low >>> 0, message.eventTime.high >>> 0).toNumber() : message.eventTime;
+                        if (message.eventContext != null && message.hasOwnProperty("eventContext"))
+                            object.eventContext = message.eventContext;
                         if (message.authorizations != null && message.hasOwnProperty("authorizations"))
                             object.authorizations = $root.google.protobuf.Value.toObject(message.authorizations, options);
                         if (message.challenge != null && message.hasOwnProperty("challenge"))

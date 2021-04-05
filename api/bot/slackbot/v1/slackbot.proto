@@ -18,61 +18,80 @@ service SlackBotAPI {
   }
 }
 
-// The structure of events vary from type to type. The full list of event types can be found here
-// https://api.slack.com/events. For the bot feature, we will be receiving app_mention events (events that mention the
-// bot) or message.im events (a message posted in a DM with the bot).
+// Information on the bot user
+message Bot {
+  // bot id
+  string id = 1;
+  // if the bot is deleted
+  bool deleted = 2;
+  // bot name
+  string name = 3;
+  // timestamp of when the bot app was last updated
+  int64 updated = 4;
+  // unique identifier of the installed Slack application
+  string app_id = 5;
+  // image urls
+  map<string, string> icons = 6;
+  // unique identifier of the workspace where the event occurred
+  string team_id = 7;
+}
+
+// The structure of events vary among types. Full list of event types: https://api.slack.com/events.
+// We will be receiving app_mention events (events that mention the bot) or message.im events (a message posted in a DM
+// with the bot).
 message Event {
   // the type of event
   string type = 1;
   // the user who messaged the bot
   string user = 2;
+  string bot_id = 3;
+  Bot bot_profile = 4;
   // the message text
-  string text = 3;
+  string text = 5;
   // timestamp
-  string ts = 4;
+  string ts = 6;
   // the channel where the event happened
-  string channel = 5;
+  string channel = 7;
   // for DM messages, this will be "im"
-  string channel_type = 6;
+  string channel_type = 8;
   // when the event was dispatched
-  string event_ts = 7;
-  string client_msg_id = 8;
-  // Unique identifier of the workspace where the event occurred
-  string team = 9;
-  // blocks is a list with a schema that can vary. it's received when a user interacts with a Block Kit component
+  string event_ts = 9;
+  string client_msg_id = 10;
+  // unique identifier of the workspace where the event occurred
+  string team = 11;
+  // received when a user interacts with a Block Kit component, schema can vary.
   // https://api.slack.com/reference/block-kit/interactive-components
-  google.protobuf.Value blocks = 10;
+  google.protobuf.Value blocks = 12;
 }
 
-// For more details, see:
+// For more details:
 // https://api.slack.com/apis/connections/events-api#the-events-api__receiving-events
 // https://api.slack.com/enterprise/apps/reference#event
 message EventRequest {
   option (clutch.api.v1.redacted) = true;
-  // Verification token to validate the event originated from Slack
+  // verification token to validate the event originated from Slack
   string token = 1;
   // if where the event occured is an external shared channel
   bool is_ext_shared_channel = 2;
-  // Unique identifier of the workspace where the event occurred
+  // unique identifier of the workspace where the event occurred
   string team_id = 3;
-  // Unique identifier of the installed Slack application
+  // unique identifier of the installed Slack application
   string api_app_id = 4;
-  // The event, an object, that happened
   // TODO: (sperry) if we expand the types of events we suscribe to and their fields vary alot, maybe we should use
   // google.protobuf.Value.
   Event event = 5;
-  // Indicates which kind of event this is
+  // indicates which kind of event this is
   string type = 6;
-  // Identifier for this specific event, globally unique across all workspaces
+  // identifier for this specific event, globally unique across all workspaces
   string event_id = 7;
-  // Epoch timestamp in seconds indicating when this event was dispatched
-  int64 event_time = 9;
-  // An identifier for this specific event, can be used with list of authorizations to obtain a
-  // full list of installations of your app that this event is visible to
-  string event_context = 8;
-  // An installation of the app, object type
+  // epoch timestamp in seconds indicating when this event was dispatched
+  int64 event_time = 8;
+  // an identifier for this specific event, can be used with list of authorizations to obtain a full list of
+  // installations of your app that this event is visible to
+  string event_context = 9;
+  // an installation of the app, object type
   google.protobuf.Value authorizations = 10;
-  // Randomly generated string used as part of the URL verification handshake,
+  // randomly generated string used as part of the URL verification handshake,
   // https://api.slack.com/apis/connections/events-api#the-events-api__subscribing-to-event-types__events-api-request-urls__request-url-configuration--verification__url-verification-handshake
   string challenge = 11;
 }
@@ -81,7 +100,7 @@ message EventRequest {
 // https://api.slack.com/apis/connections/events-api#the-events-api__responding-to-events
 message EventResponse {
   option (clutch.api.v1.redacted) = true;
-  // The request will include the challenge and we respond back with the same challenge to complete the URL verification
+  // the request will include the challenge and we respond back with the same challenge to complete the URL verification
   // handshake
   string challenge = 1;
 }

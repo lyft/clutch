@@ -36,6 +36,84 @@ var (
 // define the regex for a UUID once up-front
 var _slackbot_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
+// Validate checks the field values on Bot with the rules defined in the proto
+// definition for this message. If any rules are violated, an error is returned.
+func (m *Bot) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Id
+
+	// no validation rules for Deleted
+
+	// no validation rules for Name
+
+	// no validation rules for Updated
+
+	// no validation rules for AppId
+
+	// no validation rules for Icons
+
+	// no validation rules for TeamId
+
+	return nil
+}
+
+// BotValidationError is the validation error returned by Bot.Validate if the
+// designated constraints aren't met.
+type BotValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BotValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BotValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BotValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BotValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BotValidationError) ErrorName() string { return "BotValidationError" }
+
+// Error satisfies the builtin error interface
+func (e BotValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBot.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BotValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BotValidationError{}
+
 // Validate checks the field values on Event with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
 func (m *Event) Validate() error {
@@ -46,6 +124,18 @@ func (m *Event) Validate() error {
 	// no validation rules for Type
 
 	// no validation rules for User
+
+	// no validation rules for BotId
+
+	if v, ok := interface{}(m.GetBotProfile()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return EventValidationError{
+				field:  "BotProfile",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	// no validation rules for Text
 
