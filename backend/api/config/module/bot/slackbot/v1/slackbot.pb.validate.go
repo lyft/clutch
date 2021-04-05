@@ -43,7 +43,19 @@ func (m *Config) Validate() error {
 		return nil
 	}
 
-	// no validation rules for BotToken
+	if len(m.GetBotToken()) < 1 {
+		return ConfigValidationError{
+			field:  "BotToken",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if len(m.GetSigningSecret()) < 1 {
+		return ConfigValidationError{
+			field:  "SigningSecret",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
 
 	return nil
 }

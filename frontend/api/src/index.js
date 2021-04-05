@@ -15390,6 +15390,7 @@ export const clutch = $root.clutch = (() => {
                              * @memberof clutch.config.module.bot.slackbot.v1
                              * @interface IConfig
                              * @property {string|null} [botToken] Config botToken
+                             * @property {string|null} [signingSecret] Config signingSecret
                              */
 
                             /**
@@ -15416,6 +15417,14 @@ export const clutch = $root.clutch = (() => {
                             Config.prototype.botToken = "";
 
                             /**
+                             * Config signingSecret.
+                             * @member {string} signingSecret
+                             * @memberof clutch.config.module.bot.slackbot.v1.Config
+                             * @instance
+                             */
+                            Config.prototype.signingSecret = "";
+
+                            /**
                              * Verifies a Config message.
                              * @function verify
                              * @memberof clutch.config.module.bot.slackbot.v1.Config
@@ -15429,6 +15438,9 @@ export const clutch = $root.clutch = (() => {
                                 if (message.botToken != null && message.hasOwnProperty("botToken"))
                                     if (!$util.isString(message.botToken))
                                         return "botToken: string expected";
+                                if (message.signingSecret != null && message.hasOwnProperty("signingSecret"))
+                                    if (!$util.isString(message.signingSecret))
+                                        return "signingSecret: string expected";
                                 return null;
                             };
 
@@ -15446,6 +15458,8 @@ export const clutch = $root.clutch = (() => {
                                 let message = new $root.clutch.config.module.bot.slackbot.v1.Config();
                                 if (object.botToken != null)
                                     message.botToken = String(object.botToken);
+                                if (object.signingSecret != null)
+                                    message.signingSecret = String(object.signingSecret);
                                 return message;
                             };
 
@@ -15462,10 +15476,14 @@ export const clutch = $root.clutch = (() => {
                                 if (!options)
                                     options = {};
                                 let object = {};
-                                if (options.defaults)
+                                if (options.defaults) {
                                     object.botToken = "";
+                                    object.signingSecret = "";
+                                }
                                 if (message.botToken != null && message.hasOwnProperty("botToken"))
                                     object.botToken = message.botToken;
+                                if (message.signingSecret != null && message.hasOwnProperty("signingSecret"))
+                                    object.signingSecret = message.signingSecret;
                                 return object;
                             };
 

@@ -4,7 +4,13 @@ package clutch.config.module.bot.slackbot.v1;
 
 option go_package = "github.com/lyft/clutch/backend/api/config/module/bot/slackbot/v1;slackbotv1";
 
+import "validate/validate.proto";
+
 message Config {
   // Bot tokens begin with "xoxb-", https://api.slack.com/authentication/token-types#bot
-  string bot_token = 1;
+  string bot_token = 1 [ (validate.rules).string = {min_bytes : 1} ];
+
+  // Slack signs the requests using this secret. Used to confirm that each request came from Slack.
+  // https://api.slack.com/authentication/verifying-requests-from-slack
+  string signing_secret = 2 [ (validate.rules).string = {min_bytes : 1} ];
 }

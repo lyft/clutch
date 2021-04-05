@@ -6492,6 +6492,9 @@ export namespace clutch {
 
                             /** Config botToken */
                             botToken?: (string|null);
+
+                            /** Config signingSecret */
+                            signingSecret?: (string|null);
                         }
 
                         /** Represents a Config. */
@@ -6505,6 +6508,9 @@ export namespace clutch {
 
                             /** Config botToken. */
                             public botToken: string;
+
+                            /** Config signingSecret. */
+                            public signingSecret: string;
 
                             /**
                              * Verifies a Config message.
