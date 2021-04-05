@@ -1723,15 +1723,15 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@hookform/devtools@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@hookform/devtools/-/devtools-2.2.1.tgz#2d88414d375199e193c2611b770b194b7752a623"
-  integrity sha512-VQh4kqwUOpz9LCDzIP0aJ4qnD/ob8Gp09L8gDy++9XtL66z6g8kbCynUvBrJm4qbCNdH0M7/Spm3AUjJqUuFlA==
+"@hookform/devtools@^3.0.0":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@hookform/devtools/-/devtools-3.0.1.tgz#1140da954835760d1328320caac0d8baba1e5212"
+  integrity sha512-vxA9mPFehRlLnPcefOBJWFswSPmr/bMKVIlJGPnO/hyIssvsLpnT1OkoQBPuDLODjtrNrYTumXrPIhxLYDUA0A==
   dependencies:
     "@emotion/core" "^10.0.28"
     "@emotion/styled" "^10.0.27"
     "@types/lodash" "^4.14.152"
-    little-state-machine "^3.0.1"
+    little-state-machine "^4.0.0"
     lodash "^4.17.15"
     react-simple-animate "^3.3.8"
 
@@ -13195,10 +13195,10 @@ listr@^0.14.3:
     p-map "^2.0.0"
     rxjs "^6.3.3"
 
-little-state-machine@^3.0.1:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/little-state-machine/-/little-state-machine-3.1.2.tgz#4f2742db028787e4ae353150be2864873fed384a"
-  integrity sha512-vHbZRyYSMgefIzISJWbSbbdKZZVTSdOi+DiUfk4Z8jM+mL2LKsY46perBsjNmkmO5Cq2jFG541bHvCXf9kWDqg==
+little-state-machine@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/little-state-machine/-/little-state-machine-4.1.0.tgz#8ca1eae22ea2408e97dc82097b4aa3fe1f96a199"
+  integrity sha512-JeWPyIwnhYGheF10h8DY9+OnEwJ0waRzyXP/WclB3Bqg5v1+xwruXTtDvTow/69ZBAuRlYT5Apl+I8TN+HMp9g==
 
 load-json-file@^1.0.0:
   version "1.1.0"
