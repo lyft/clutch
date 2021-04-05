@@ -11,10 +11,10 @@ export default {
   component: Popper,
 } as Meta;
 
-const Template = ({children, ...props}: PopperProps) => {
+const Template = ({ children, ...props }: PopperProps) => {
   const anchorRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
-  
+
   return (
     <>
       <IconButton
@@ -36,14 +36,10 @@ export const Primary = Template.bind({});
 Primary.args = {
   children: (
     <>
-      <PopperItem>
-        Item 1
-      </PopperItem>
-      <PopperItem>
-        Item 2
-      </PopperItem>
+      <PopperItem>Item 1</PopperItem>
+      <PopperItem>Item 2</PopperItem>
     </>
-  )
+  ),
 };
 
 export const NoChildren = Template.bind({});
