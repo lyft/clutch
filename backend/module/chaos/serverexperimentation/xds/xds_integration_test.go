@@ -1,4 +1,4 @@
-// +build integration_only
+//+build integration_only
 
 package xds
 
@@ -14,14 +14,15 @@ import (
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/durationpb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
-	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"github.com/lyft/clutch/backend/internal/test/integration/helper/envoytest"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
+	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/terminator"
 )
 
@@ -30,7 +31,7 @@ import (
 func TestEnvoyFaults(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		CacheRefreshInterval:      durationpb.New(time.Second),
 		IngressFaultRuntimePrefix: "fault.http",
 		EgressFaultRuntimePrefix:  "egress",
 	}
@@ -72,7 +73,7 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		CacheRefreshInterval:      durationpb.New(time.Second),
 		IngressFaultRuntimePrefix: "fault.http",
 		EgressFaultRuntimePrefix:  "egress",
 	}
@@ -125,7 +126,7 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 func TestEnvoyECDSFaults(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		CacheRefreshInterval:      durationpb.New(time.Second),
 		IngressFaultRuntimePrefix: "fault.http",
 		EgressFaultRuntimePrefix:  "egress",
 		EcdsAllowList:             &xdsconfigv1.Config_ECDSAllowList{EnabledClusters: []string{"test-cluster"}},

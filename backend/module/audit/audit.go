@@ -69,10 +69,11 @@ func (m *mod) GetEvents(ctx context.Context, req *auditv1.GetEventsRequest) (*au
 		}
 		return &auditv1.GetEventsResponse{Events: events}, nil
 	case *auditv1.GetEventsRequest_Since:
-		window, err := ptypes.Duration(req.GetSince())
-		if err != nil {
+		if err := req.GetSince().CheckValid(); err != nil {
 			return nil, fmt.Errorf("problem parsing duration: %w", err)
 		}
+
+		window := req.GetSince().AsDuration()
 		start := time.Now().Add(-window)
 
 		events, err := m.client.ReadEvents(ctx, start, nil)
