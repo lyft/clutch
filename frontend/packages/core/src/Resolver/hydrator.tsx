@@ -63,17 +63,18 @@ const OptionField = (
   field: clutch.resolver.v1.IField,
   onChange: (e: ResolverChangeEvent) => void
 ): React.ReactElement => {
+  const sortedOptions = _.sortBy(field.metadata.optionField.options, o => o.displayName);
   React.useEffect(() => {
     onChange({
       target: {
         name: field.name,
-        value: field.metadata.optionField.options?.[0]?.stringValue,
+        value: sortedOptions?.[0]?.stringValue,
       },
       initialLoad: true,
     });
   }, []);
 
-  const options = _.sortBy(field.metadata.optionField.options, o => o.displayName).map(option => {
+  const options = sortedOptions.map(option => {
     return { label: option.displayName, value: option.stringValue };
   });
   const updateSelectedOption = (value: string) => {
