@@ -5,17 +5,17 @@ exports[`Start Experiment workflow renders correctly 1`] = `
   <h3 style={{...}}>
     Cluster Pair
   </h3>
-  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
-  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
+  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Targeting
   </h3>
-  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Faults
   </h3>
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
 </Styled(div)>"
 `;
 
@@ -24,19 +24,19 @@ exports[`Start Experiment workflow renders correctly with host percentage based 
   <h3 style={{...}}>
     Cluster Pair
   </h3>
-  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
-  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
+  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
   <RadioGroup name=\\"upstreamClusterType\\" label=\\"Upstream Cluster Type\\" disabled={false} options={{...}} defaultOption={0} onChange={[Function: onChange]} />
   <h3 style={{...}}>
     Targeting
   </h3>
   <Select name=\\"targetType\\" label=\\"Target Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Faults
   </h3>
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
 </Styled(div)>"
 `;
 
@@ -45,17 +45,17 @@ exports[`Start Experiment workflow renders correctly with host percentage based 
   <h3 style={{...}}>
     Cluster Pair
   </h3>
-  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
-  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
+  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Targeting
   </h3>
-  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Faults
   </h3>
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
 </Styled(div)>"
 `;
 
@@ -64,17 +64,17 @@ exports[`Start Experiment workflow renders correctly with upstream cluster type 
   <h3 style={{...}}>
     Cluster Pair
   </h3>
-  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
-  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"downstreamCluster\\" label=\\"Downstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
+  <TextField name=\\"upstreamCluster\\" label=\\"Upstream Cluster\\" defaultValue={[undefined]} type=\\"text\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
   <RadioGroup name=\\"upstreamClusterType\\" label=\\"Upstream Cluster Type\\" disabled={false} options={{...}} defaultOption={0} onChange={[Function: onChange]} />
   <h3 style={{...}}>
     Targeting
   </h3>
-  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"requestsPercentage\\" label=\\"Percentage of Requests Served by All Hosts\\" defaultValue=\\"0\\" type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
   <h3 style={{...}}>
     Faults
   </h3>
   <Select name=\\"faultType\\" label=\\"Fault Type\\" options={{...}} defaultOption={0} onChange={[Function: onChange]} />
-  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function: register]} error={false} helperText=\\"\\" />
+  <TextField name=\\"httpStatus\\" label=\\"HTTP Status\\" defaultValue={[undefined]} type=\\"number\\" onChange={[Function: onChange]} inputRef={[Function (anonymous)]} error={false} helperText=\\"\\" />
 </Styled(div)>"
 `;
