@@ -1,4 +1,4 @@
-//+build integration_only
+// +build integration_only
 
 package xds
 
