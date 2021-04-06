@@ -205,6 +205,13 @@ func (m *CreateOrGetExperimentRequest) Validate() error {
 		return nil
 	}
 
+	if m.GetData() == nil {
+		return CreateOrGetExperimentRequestValidationError{
+			field:  "Data",
+			reason: "value is required",
+		}
+	}
+
 	if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return CreateOrGetExperimentRequestValidationError{

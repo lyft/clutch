@@ -25,7 +25,7 @@ message CreateExperimentResponse {
 
 message CreateOrGetExperimentRequest {
   // The data specifying the experiment to fetch or create. See `CreateOrGetExperiment` for more details.
-  CreateExperimentData data = 1;
+  CreateExperimentData data = 1 [ (validate.rules).message.required = true ];
 }
 
 message CreateOrGetExperimentResponse {
