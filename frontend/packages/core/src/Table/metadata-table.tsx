@@ -157,9 +157,9 @@ const MutableRow: React.FC<MutableRowProps> = ({ data, onUpdate, onReturn, valid
             onChange={onUpdate}
             onReturn={onReturn}
             onFocus={onUpdate}
-            inputRef={validation.register}
             helperText={error?.message || ""}
             error={!!error || false}
+            {...validation.register(data.name)}
           />
         </Grid>
       </TableCell>

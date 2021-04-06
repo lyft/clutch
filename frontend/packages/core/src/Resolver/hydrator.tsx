@@ -52,9 +52,9 @@ const StringField = (
       onChange={handleChanges}
       onKeyDown={handleChanges}
       onFocus={handleChanges}
-      inputRef={validation.register({ required: field.metadata.required || false })}
       helperText={errorMsg}
       error={!!errorMsg}
+      {...validation.register(field.name, { required: field.metadata.required || false })}
     />
   );
 };
