@@ -1,6 +1,5 @@
 import React from "react";
 import type { clutch } from "@clutch-sh/api";
-import _ from "lodash";
 
 import Select from "../Input/select";
 import TextField from "../Input/text-field";
