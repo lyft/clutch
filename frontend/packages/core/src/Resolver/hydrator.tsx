@@ -1,5 +1,6 @@
 import React from "react";
 import type { clutch } from "@clutch-sh/api";
+import _ from "lodash";
 
 import Select from "../Input/select";
 import TextField from "../Input/text-field";
@@ -72,7 +73,7 @@ const OptionField = (
     });
   }, []);
 
-  const options = field.metadata.optionField.options.map(option => {
+  const options = _.sortBy(field.metadata.optionField.options, o => o.displayName).map(option => {
     return { label: option.displayName, value: option.stringValue };
   });
   const updateSelectedOption = (value: string) => {
