@@ -71,6 +71,9 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		return nil, err
 	}
 
+	if err := config.CacheRefreshInterval.CheckValid(); err != nil {
+		return nil, err
+	}
 	cacheRefreshInterval := config.CacheRefreshInterval.AsDuration()
 
 	store, ok := service.Registry[experimentstore.Name]
