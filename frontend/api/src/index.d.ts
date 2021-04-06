@@ -3821,6 +3821,383 @@ export namespace clutch {
             }
         }
 
+        /** Namespace redisexperimentation. */
+        namespace redisexperimentation {
+
+            /** Namespace v1. */
+            namespace v1 {
+
+                /** Properties of a FaultConfig. */
+                interface IFaultConfig {
+
+                    /** FaultConfig faultTargeting */
+                    faultTargeting?: (clutch.chaos.redisexperimentation.v1.IFaultTargeting|null);
+
+                    /** FaultConfig errorFault */
+                    errorFault?: (clutch.chaos.redisexperimentation.v1.IErrorFault|null);
+
+                    /** FaultConfig latencyFault */
+                    latencyFault?: (clutch.chaos.redisexperimentation.v1.ILatencyFault|null);
+                }
+
+                /** Represents a FaultConfig. */
+                class FaultConfig implements IFaultConfig {
+
+                    /**
+                     * Constructs a new FaultConfig.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IFaultConfig);
+
+                    /** FaultConfig faultTargeting. */
+                    public faultTargeting?: (clutch.chaos.redisexperimentation.v1.IFaultTargeting|null);
+
+                    /** FaultConfig errorFault. */
+                    public errorFault?: (clutch.chaos.redisexperimentation.v1.IErrorFault|null);
+
+                    /** FaultConfig latencyFault. */
+                    public latencyFault?: (clutch.chaos.redisexperimentation.v1.ILatencyFault|null);
+
+                    /** FaultConfig fault. */
+                    public fault?: ("errorFault"|"latencyFault");
+
+                    /**
+                     * Verifies a FaultConfig message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a FaultConfig message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns FaultConfig
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.FaultConfig;
+
+                    /**
+                     * Creates a plain object from a FaultConfig message. Also converts values to other types if specified.
+                     * @param message FaultConfig
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.FaultConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this FaultConfig to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an ErrorFault. */
+                interface IErrorFault {
+
+                    /** ErrorFault percentage */
+                    percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
+                }
+
+                /** Represents an ErrorFault. */
+                class ErrorFault implements IErrorFault {
+
+                    /**
+                     * Constructs a new ErrorFault.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IErrorFault);
+
+                    /** ErrorFault percentage. */
+                    public percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
+
+                    /**
+                     * Verifies an ErrorFault message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an ErrorFault message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ErrorFault
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.ErrorFault;
+
+                    /**
+                     * Creates a plain object from an ErrorFault message. Also converts values to other types if specified.
+                     * @param message ErrorFault
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.ErrorFault, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ErrorFault to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a LatencyFault. */
+                interface ILatencyFault {
+
+                    /** LatencyFault percentage */
+                    percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
+
+                    /** LatencyFault latencyDuration */
+                    latencyDuration?: (clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration|null);
+                }
+
+                /** Represents a LatencyFault. */
+                class LatencyFault implements ILatencyFault {
+
+                    /**
+                     * Constructs a new LatencyFault.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.ILatencyFault);
+
+                    /** LatencyFault percentage. */
+                    public percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
+
+                    /** LatencyFault latencyDuration. */
+                    public latencyDuration?: (clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration|null);
+
+                    /**
+                     * Verifies a LatencyFault message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a LatencyFault message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns LatencyFault
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.LatencyFault;
+
+                    /**
+                     * Creates a plain object from a LatencyFault message. Also converts values to other types if specified.
+                     * @param message LatencyFault
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.LatencyFault, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this LatencyFault to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a FaultTargeting. */
+                interface IFaultTargeting {
+
+                    /** FaultTargeting upstreamCluster */
+                    upstreamCluster?: (clutch.chaos.redisexperimentation.v1.ISingleCluster|null);
+
+                    /** FaultTargeting downstreamCluster */
+                    downstreamCluster?: (clutch.chaos.redisexperimentation.v1.ISingleCluster|null);
+
+                    /** FaultTargeting redisCommands */
+                    redisCommands?: (string[]|null);
+                }
+
+                /** Represents a FaultTargeting. */
+                class FaultTargeting implements IFaultTargeting {
+
+                    /**
+                     * Constructs a new FaultTargeting.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IFaultTargeting);
+
+                    /** FaultTargeting upstreamCluster. */
+                    public upstreamCluster?: (clutch.chaos.redisexperimentation.v1.ISingleCluster|null);
+
+                    /** FaultTargeting downstreamCluster. */
+                    public downstreamCluster?: (clutch.chaos.redisexperimentation.v1.ISingleCluster|null);
+
+                    /** FaultTargeting redisCommands. */
+                    public redisCommands: string[];
+
+                    /**
+                     * Verifies a FaultTargeting message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a FaultTargeting message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns FaultTargeting
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.FaultTargeting;
+
+                    /**
+                     * Creates a plain object from a FaultTargeting message. Also converts values to other types if specified.
+                     * @param message FaultTargeting
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.FaultTargeting, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this FaultTargeting to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a SingleCluster. */
+                interface ISingleCluster {
+
+                    /** SingleCluster name */
+                    name?: (string|null);
+                }
+
+                /** Represents a SingleCluster. */
+                class SingleCluster implements ISingleCluster {
+
+                    /**
+                     * Constructs a new SingleCluster.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.ISingleCluster);
+
+                    /** SingleCluster name. */
+                    public name: string;
+
+                    /**
+                     * Verifies a SingleCluster message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a SingleCluster message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns SingleCluster
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.SingleCluster;
+
+                    /**
+                     * Creates a plain object from a SingleCluster message. Also converts values to other types if specified.
+                     * @param message SingleCluster
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.SingleCluster, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this SingleCluster to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a FaultPercentage. */
+                interface IFaultPercentage {
+
+                    /** FaultPercentage percentage */
+                    percentage?: (number|null);
+                }
+
+                /** Represents a FaultPercentage. */
+                class FaultPercentage implements IFaultPercentage {
+
+                    /**
+                     * Constructs a new FaultPercentage.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IFaultPercentage);
+
+                    /** FaultPercentage percentage. */
+                    public percentage: number;
+
+                    /**
+                     * Verifies a FaultPercentage message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a FaultPercentage message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns FaultPercentage
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.FaultPercentage;
+
+                    /**
+                     * Creates a plain object from a FaultPercentage message. Also converts values to other types if specified.
+                     * @param message FaultPercentage
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.FaultPercentage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this FaultPercentage to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a FaultLatencyDuration. */
+                interface IFaultLatencyDuration {
+
+                    /** FaultLatencyDuration fixedDurationMs */
+                    fixedDurationMs?: (number|null);
+                }
+
+                /** Represents a FaultLatencyDuration. */
+                class FaultLatencyDuration implements IFaultLatencyDuration {
+
+                    /**
+                     * Constructs a new FaultLatencyDuration.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration);
+
+                    /** FaultLatencyDuration fixedDurationMs. */
+                    public fixedDurationMs: number;
+
+                    /**
+                     * Verifies a FaultLatencyDuration message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a FaultLatencyDuration message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns FaultLatencyDuration
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.FaultLatencyDuration;
+
+                    /**
+                     * Creates a plain object from a FaultLatencyDuration message. Also converts values to other types if specified.
+                     * @param message FaultLatencyDuration
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.FaultLatencyDuration, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this FaultLatencyDuration to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+        }
+
         /** Namespace serverexperimentation. */
         namespace serverexperimentation {
 
@@ -4128,117 +4505,6 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a RedisFaultConfig. */
-                interface IRedisFaultConfig {
-
-                    /** RedisFaultConfig faultTargeting */
-                    faultTargeting?: (clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting|null);
-
-                    /** RedisFaultConfig errorFault */
-                    errorFault?: (clutch.chaos.serverexperimentation.v1.IRedisErrorFault|null);
-
-                    /** RedisFaultConfig latencyFault */
-                    latencyFault?: (clutch.chaos.serverexperimentation.v1.ILatencyFault|null);
-                }
-
-                /** Represents a RedisFaultConfig. */
-                class RedisFaultConfig implements IRedisFaultConfig {
-
-                    /**
-                     * Constructs a new RedisFaultConfig.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IRedisFaultConfig);
-
-                    /** RedisFaultConfig faultTargeting. */
-                    public faultTargeting?: (clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting|null);
-
-                    /** RedisFaultConfig errorFault. */
-                    public errorFault?: (clutch.chaos.serverexperimentation.v1.IRedisErrorFault|null);
-
-                    /** RedisFaultConfig latencyFault. */
-                    public latencyFault?: (clutch.chaos.serverexperimentation.v1.ILatencyFault|null);
-
-                    /** RedisFaultConfig fault. */
-                    public fault?: ("errorFault"|"latencyFault");
-
-                    /**
-                     * Verifies a RedisFaultConfig message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a RedisFaultConfig message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns RedisFaultConfig
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.RedisFaultConfig;
-
-                    /**
-                     * Creates a plain object from a RedisFaultConfig message. Also converts values to other types if specified.
-                     * @param message RedisFaultConfig
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.RedisFaultConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this RedisFaultConfig to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a RedisErrorFault. */
-                interface IRedisErrorFault {
-
-                    /** RedisErrorFault percentage */
-                    percentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
-                }
-
-                /** Represents a RedisErrorFault. */
-                class RedisErrorFault implements IRedisErrorFault {
-
-                    /**
-                     * Constructs a new RedisErrorFault.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IRedisErrorFault);
-
-                    /** RedisErrorFault percentage. */
-                    public percentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
-
-                    /**
-                     * Verifies a RedisErrorFault message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a RedisErrorFault message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns RedisErrorFault
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.RedisErrorFault;
-
-                    /**
-                     * Creates a plain object from a RedisErrorFault message. Also converts values to other types if specified.
-                     * @param message RedisErrorFault
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.RedisErrorFault, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this RedisErrorFault to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
                 /** Properties of an AbortFault. */
                 interface IAbortFault {
 
@@ -4342,66 +4608,6 @@ export namespace clutch {
 
                     /**
                      * Converts this LatencyFault to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a RedisFaultTargeting. */
-                interface IRedisFaultTargeting {
-
-                    /** RedisFaultTargeting upstreamCluster */
-                    upstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
-
-                    /** RedisFaultTargeting downstreamCluster */
-                    downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
-
-                    /** RedisFaultTargeting redisCommands */
-                    redisCommands?: (string[]|null);
-                }
-
-                /** Represents a RedisFaultTargeting. */
-                class RedisFaultTargeting implements IRedisFaultTargeting {
-
-                    /**
-                     * Constructs a new RedisFaultTargeting.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting);
-
-                    /** RedisFaultTargeting upstreamCluster. */
-                    public upstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
-
-                    /** RedisFaultTargeting downstreamCluster. */
-                    public downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
-
-                    /** RedisFaultTargeting redisCommands. */
-                    public redisCommands: string[];
-
-                    /**
-                     * Verifies a RedisFaultTargeting message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a RedisFaultTargeting message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns RedisFaultTargeting
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.RedisFaultTargeting;
-
-                    /**
-                     * Creates a plain object from a RedisFaultTargeting message. Also converts values to other types if specified.
-                     * @param message RedisFaultTargeting
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.RedisFaultTargeting, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this RedisFaultTargeting to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -7723,6 +7929,12 @@ export namespace clutch {
 
                         /** Cache ttl */
                         ttl?: (google.protobuf.IDuration|null);
+
+                        /** Cache batchInsertSize */
+                        batchInsertSize?: (number|null);
+
+                        /** Cache batchInsertFlush */
+                        batchInsertFlush?: (google.protobuf.IDuration|null);
                     }
 
                     /** Represents a Cache. */
@@ -7736,6 +7948,12 @@ export namespace clutch {
 
                         /** Cache ttl. */
                         public ttl?: (google.protobuf.IDuration|null);
+
+                        /** Cache batchInsertSize. */
+                        public batchInsertSize: number;
+
+                        /** Cache batchInsertFlush. */
+                        public batchInsertFlush?: (google.protobuf.IDuration|null);
 
                         /**
                          * Verifies a Cache message.
@@ -10420,6 +10638,80 @@ export namespace clutch {
                 }
             }
 
+            /** Properties of a PodCondition. */
+            interface IPodCondition {
+
+                /** PodCondition type */
+                type?: (clutch.k8s.v1.PodCondition.Type|null);
+
+                /** PodCondition status */
+                status?: (clutch.k8s.v1.PodCondition.Status|null);
+            }
+
+            /** Represents a PodCondition. */
+            class PodCondition implements IPodCondition {
+
+                /**
+                 * Constructs a new PodCondition.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IPodCondition);
+
+                /** PodCondition type. */
+                public type: clutch.k8s.v1.PodCondition.Type;
+
+                /** PodCondition status. */
+                public status: clutch.k8s.v1.PodCondition.Status;
+
+                /**
+                 * Verifies a PodCondition message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a PodCondition message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns PodCondition
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.PodCondition;
+
+                /**
+                 * Creates a plain object from a PodCondition message. Also converts values to other types if specified.
+                 * @param message PodCondition
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.PodCondition, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this PodCondition to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace PodCondition {
+
+                /** Type enum. */
+                enum Type {
+                    TYPE_UNSPECIFIED = 0,
+                    CONTAINERS_READY = 1,
+                    INITIALIZED = 2,
+                    READY = 3,
+                    POD_SCHEDULED = 4
+                }
+
+                /** Status enum. */
+                enum Status {
+                    STATUS_UNSPECIFIED = 0,
+                    TRUE = 1,
+                    FALSE = 2,
+                    UNKNOWN = 3
+                }
+            }
+
             /** Properties of a Pod. */
             interface IPod {
 
@@ -10452,6 +10744,12 @@ export namespace clutch {
 
                 /** Pod annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** Pod stateReason */
+                stateReason?: (string|null);
+
+                /** Pod podConditions */
+                podConditions?: (clutch.k8s.v1.IPodCondition[]|null);
             }
 
             /** Represents a Pod. */
@@ -10492,6 +10790,12 @@ export namespace clutch {
 
                 /** Pod annotations. */
                 public annotations: { [k: string]: string };
+
+                /** Pod stateReason. */
+                public stateReason: string;
+
+                /** Pod podConditions. */
+                public podConditions: clutch.k8s.v1.IPodCondition[];
 
                 /**
                  * Verifies a Pod message.
