@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -48,7 +47,7 @@ func (s *Service) Register(r module.Registrar) error {
 
 func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experimentstore.ExperimentConfig) ([]*experimentation.Property, error) {
 	var experimentConfig = serverexperimentation.HTTPFaultConfig{}
-	if err := ptypes.UnmarshalAny(config.Config, &experimentConfig); err != nil {
+	if err := config.Config.UnmarshalTo(&experimentConfig); err != nil {
 		return []*experimentation.Property{}, err
 	}
 

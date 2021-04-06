@@ -2,6 +2,7 @@ package dbmock
 
 import (
 	"database/sql"
+	"database/sql/driver"
 
 	"github.com/DATA-DOG/go-sqlmock"
 
@@ -40,4 +41,11 @@ func (m *MockDB) MustMeetExpectations() {
 	if err != nil {
 		panic(err)
 	}
+}
+
+type AnyArg struct{}
+
+// Match satisfies sqlmock.Argument interface
+func (a AnyArg) Match(v driver.Value) bool {
+	return true
 }

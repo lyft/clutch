@@ -13,6 +13,7 @@ import {
   Popper as MuiPopper,
   Typography,
 } from "@material-ui/core";
+import _ from "lodash";
 
 import { useAppContext } from "../Contexts";
 
@@ -223,6 +224,7 @@ const Drawer: React.FC = () => {
     <DrawerPanel data-qa="drawer" variant="permanent">
       {sortedGroupings(workflows).map(grouping => {
         const value = routesByGrouping(workflows)[grouping];
+        const sortedWorkflows = _.sortBy(value.workflows, w => w.displayName);
         return (
           <Group
             key={grouping}
@@ -231,7 +233,7 @@ const Drawer: React.FC = () => {
             updateOpenGroup={updateOpenGroup}
             closeGroup={() => setOpenGroup("")}
           >
-            {value.workflows.map(workflow => (
+            {sortedWorkflows.map(workflow => (
               <Link
                 key={workflow.path.replace("/", "")}
                 to={workflow.path}

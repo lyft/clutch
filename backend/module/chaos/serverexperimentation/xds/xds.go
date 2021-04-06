@@ -68,7 +68,7 @@ func (ClusterHashV3) ID(node *gcpCoreV3.Node) string {
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
 	config := &xdsconfigv1.Config{}
-	if err := ptypes.UnmarshalAny(cfg, config); err != nil {
+	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err
 	}
 

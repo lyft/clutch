@@ -30,7 +30,7 @@ All `New` methods for components have the following signature:
 New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (<component type>, error)
 ```
 
-Configuration must be unmarshaled from the Any type into the native protobuf type for further consumption using [`ptypes.UnmarshalAny`](https://pkg.go.dev/github.com/golang/protobuf/ptypes?tab=doc#UnmarshalAny).
+Configuration must be unmarshaled from the Any type into the native protobuf type for further consumption using [`anypb`](https://pkg.go.dev/google.golang.org/protobuf/types/known/anypb#hdr-Unmarshaling_an_Any).
 
 References to the logger and scope can be saved in the component implementation's `struct` for later use. Note that the gateway adds a component namespace for the logger and stats scope so it does not have to be added by the developer.
 

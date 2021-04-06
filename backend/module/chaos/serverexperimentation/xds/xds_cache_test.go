@@ -151,9 +151,9 @@ func TestSetSnapshotRTDS(t *testing.T) {
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+		err := experiment.GetConfig().UnmarshalTo(config)
 		if err != nil {
-			t.Errorf("unmarshalAny failed %v", err)
+			t.Errorf("unmarshalling Any failed %v", err)
 		}
 
 		upstream, downstream, err := getClusterPair(config)
@@ -215,9 +215,9 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+		err := experiment.GetConfig().UnmarshalTo(config)
 		if err != nil {
-			t.Errorf("unmarshalAny failed %v", err)
+			t.Errorf("unmarshalling Any failed %v", err)
 		}
 
 		upstream, downstream, err := getClusterPair(config)
@@ -368,7 +368,7 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+		err := experiment.GetConfig().UnmarshalTo(config)
 		assert.NoError(t, err)
 
 		upstream, downstream, err := getClusterPair(config)
@@ -408,7 +408,7 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	extensionConfig := ecdsResources[faultFilterConfigNameForIngressFault].Resource.(*gcpCoreV3.TypedExtensionConfig)
 
 	httpFaultFilter := &gcpFilterFault.HTTPFault{}
-	err = ptypes.UnmarshalAny(extensionConfig.TypedConfig, httpFaultFilter)
+	err = extensionConfig.TypedConfig.UnmarshalTo(httpFaultFilter)
 	if err != nil {
 		t.Errorf("Unable to unmarshall typed config")
 	}
@@ -462,7 +462,7 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+		err := experiment.GetConfig().UnmarshalTo(config)
 		if err != nil {
 			t.Errorf("unmarshalAny failed %v", err)
 		}
@@ -504,7 +504,7 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	extensionConfig := ecdsResources[fmt.Sprintf(faultFilterConfigNameForEgressFault, upstreamCluster)].Resource.(*gcpCoreV3.TypedExtensionConfig)
 
 	httpFaultFilter := &gcpFilterFault.HTTPFault{}
-	err = ptypes.UnmarshalAny(extensionConfig.TypedConfig, httpFaultFilter)
+	err = extensionConfig.TypedConfig.UnmarshalTo(httpFaultFilter)
 	if err != nil {
 		t.Errorf("Unable to unmarshall typed config")
 	}
