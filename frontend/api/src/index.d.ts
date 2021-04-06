@@ -2626,6 +2626,408 @@ export namespace clutch {
         }
     }
 
+    /** Namespace bot. */
+    namespace bot {
+
+        /** Namespace slackbot. */
+        namespace slackbot {
+
+            /** Namespace v1. */
+            namespace v1 {
+
+                /** Represents a SlackBotAPI */
+                class SlackBotAPI extends $protobuf.rpc.Service {
+
+                    /**
+                     * Constructs a new SlackBotAPI service.
+                     * @param rpcImpl RPC implementation
+                     * @param [requestDelimited=false] Whether requests are length-delimited
+                     * @param [responseDelimited=false] Whether responses are length-delimited
+                     */
+                    constructor(rpcImpl: $protobuf.RPCImpl, requestDelimited?: boolean, responseDelimited?: boolean);
+
+                    /**
+                     * Calls Event.
+                     * @param request EventRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and EventResponse
+                     */
+                    public event(request: clutch.bot.slackbot.v1.IEventRequest, callback: clutch.bot.slackbot.v1.SlackBotAPI.EventCallback): void;
+
+                    /**
+                     * Calls Event.
+                     * @param request EventRequest message or plain object
+                     * @returns Promise
+                     */
+                    public event(request: clutch.bot.slackbot.v1.IEventRequest): Promise<clutch.bot.slackbot.v1.EventResponse>;
+                }
+
+                namespace SlackBotAPI {
+
+                    /**
+                     * Callback as used by {@link clutch.bot.slackbot.v1.SlackBotAPI#event}.
+                     * @param error Error, if any
+                     * @param [response] EventResponse
+                     */
+                    type EventCallback = (error: (Error|null), response?: clutch.bot.slackbot.v1.EventResponse) => void;
+                }
+
+                /** Properties of a Bot. */
+                interface IBot {
+
+                    /** Bot id */
+                    id?: (string|null);
+
+                    /** Bot deleted */
+                    deleted?: (boolean|null);
+
+                    /** Bot name */
+                    name?: (string|null);
+
+                    /** Bot updated */
+                    updated?: (number|Long|null);
+
+                    /** Bot appId */
+                    appId?: (string|null);
+
+                    /** Bot icons */
+                    icons?: ({ [k: string]: string }|null);
+
+                    /** Bot teamId */
+                    teamId?: (string|null);
+                }
+
+                /** Represents a Bot. */
+                class Bot implements IBot {
+
+                    /**
+                     * Constructs a new Bot.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.bot.slackbot.v1.IBot);
+
+                    /** Bot id. */
+                    public id: string;
+
+                    /** Bot deleted. */
+                    public deleted: boolean;
+
+                    /** Bot name. */
+                    public name: string;
+
+                    /** Bot updated. */
+                    public updated: (number|Long);
+
+                    /** Bot appId. */
+                    public appId: string;
+
+                    /** Bot icons. */
+                    public icons: { [k: string]: string };
+
+                    /** Bot teamId. */
+                    public teamId: string;
+
+                    /**
+                     * Verifies a Bot message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a Bot message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Bot
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.bot.slackbot.v1.Bot;
+
+                    /**
+                     * Creates a plain object from a Bot message. Also converts values to other types if specified.
+                     * @param message Bot
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.bot.slackbot.v1.Bot, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Bot to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an Event. */
+                interface IEvent {
+
+                    /** Event type */
+                    type?: (string|null);
+
+                    /** Event user */
+                    user?: (string|null);
+
+                    /** Event botId */
+                    botId?: (string|null);
+
+                    /** Event botProfile */
+                    botProfile?: (clutch.bot.slackbot.v1.IBot|null);
+
+                    /** Event text */
+                    text?: (string|null);
+
+                    /** Event ts */
+                    ts?: (string|null);
+
+                    /** Event channel */
+                    channel?: (string|null);
+
+                    /** Event channelType */
+                    channelType?: (string|null);
+
+                    /** Event eventTs */
+                    eventTs?: (string|null);
+
+                    /** Event clientMsgId */
+                    clientMsgId?: (string|null);
+
+                    /** Event team */
+                    team?: (string|null);
+
+                    /** Event blocks */
+                    blocks?: (google.protobuf.IValue|null);
+                }
+
+                /** Represents an Event. */
+                class Event implements IEvent {
+
+                    /**
+                     * Constructs a new Event.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.bot.slackbot.v1.IEvent);
+
+                    /** Event type. */
+                    public type: string;
+
+                    /** Event user. */
+                    public user: string;
+
+                    /** Event botId. */
+                    public botId: string;
+
+                    /** Event botProfile. */
+                    public botProfile?: (clutch.bot.slackbot.v1.IBot|null);
+
+                    /** Event text. */
+                    public text: string;
+
+                    /** Event ts. */
+                    public ts: string;
+
+                    /** Event channel. */
+                    public channel: string;
+
+                    /** Event channelType. */
+                    public channelType: string;
+
+                    /** Event eventTs. */
+                    public eventTs: string;
+
+                    /** Event clientMsgId. */
+                    public clientMsgId: string;
+
+                    /** Event team. */
+                    public team: string;
+
+                    /** Event blocks. */
+                    public blocks?: (google.protobuf.IValue|null);
+
+                    /**
+                     * Verifies an Event message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an Event message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns Event
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.bot.slackbot.v1.Event;
+
+                    /**
+                     * Creates a plain object from an Event message. Also converts values to other types if specified.
+                     * @param message Event
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.bot.slackbot.v1.Event, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this Event to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an EventRequest. */
+                interface IEventRequest {
+
+                    /** EventRequest token */
+                    token?: (string|null);
+
+                    /** EventRequest isExtSharedChannel */
+                    isExtSharedChannel?: (boolean|null);
+
+                    /** EventRequest teamId */
+                    teamId?: (string|null);
+
+                    /** EventRequest apiAppId */
+                    apiAppId?: (string|null);
+
+                    /** EventRequest event */
+                    event?: (clutch.bot.slackbot.v1.IEvent|null);
+
+                    /** EventRequest type */
+                    type?: (string|null);
+
+                    /** EventRequest eventId */
+                    eventId?: (string|null);
+
+                    /** EventRequest eventTime */
+                    eventTime?: (number|Long|null);
+
+                    /** EventRequest eventContext */
+                    eventContext?: (string|null);
+
+                    /** EventRequest authorizations */
+                    authorizations?: (google.protobuf.IValue|null);
+
+                    /** EventRequest challenge */
+                    challenge?: (string|null);
+                }
+
+                /** Represents an EventRequest. */
+                class EventRequest implements IEventRequest {
+
+                    /**
+                     * Constructs a new EventRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.bot.slackbot.v1.IEventRequest);
+
+                    /** EventRequest token. */
+                    public token: string;
+
+                    /** EventRequest isExtSharedChannel. */
+                    public isExtSharedChannel: boolean;
+
+                    /** EventRequest teamId. */
+                    public teamId: string;
+
+                    /** EventRequest apiAppId. */
+                    public apiAppId: string;
+
+                    /** EventRequest event. */
+                    public event?: (clutch.bot.slackbot.v1.IEvent|null);
+
+                    /** EventRequest type. */
+                    public type: string;
+
+                    /** EventRequest eventId. */
+                    public eventId: string;
+
+                    /** EventRequest eventTime. */
+                    public eventTime: (number|Long);
+
+                    /** EventRequest eventContext. */
+                    public eventContext: string;
+
+                    /** EventRequest authorizations. */
+                    public authorizations?: (google.protobuf.IValue|null);
+
+                    /** EventRequest challenge. */
+                    public challenge: string;
+
+                    /**
+                     * Verifies an EventRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an EventRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns EventRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.bot.slackbot.v1.EventRequest;
+
+                    /**
+                     * Creates a plain object from an EventRequest message. Also converts values to other types if specified.
+                     * @param message EventRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.bot.slackbot.v1.EventRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this EventRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an EventResponse. */
+                interface IEventResponse {
+
+                    /** EventResponse challenge */
+                    challenge?: (string|null);
+                }
+
+                /** Represents an EventResponse. */
+                class EventResponse implements IEventResponse {
+
+                    /**
+                     * Constructs a new EventResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.bot.slackbot.v1.IEventResponse);
+
+                    /** EventResponse challenge. */
+                    public challenge: string;
+
+                    /**
+                     * Verifies an EventResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an EventResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns EventResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.bot.slackbot.v1.EventResponse;
+
+                    /**
+                     * Creates a plain object from an EventResponse message. Also converts values to other types if specified.
+                     * @param message EventResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.bot.slackbot.v1.EventResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this EventResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+        }
+    }
+
     /** Namespace chaos. */
     namespace chaos {
 
@@ -6281,6 +6683,72 @@ export namespace clutch {
 
         /** Namespace module. */
         namespace module {
+
+            /** Namespace bot. */
+            namespace bot {
+
+                /** Namespace slackbot. */
+                namespace slackbot {
+
+                    /** Namespace v1. */
+                    namespace v1 {
+
+                        /** Properties of a Config. */
+                        interface IConfig {
+
+                            /** Config botToken */
+                            botToken?: (string|null);
+
+                            /** Config signingSecret */
+                            signingSecret?: (string|null);
+                        }
+
+                        /** Represents a Config. */
+                        class Config implements IConfig {
+
+                            /**
+                             * Constructs a new Config.
+                             * @param [properties] Properties to set
+                             */
+                            constructor(properties?: clutch.config.module.bot.slackbot.v1.IConfig);
+
+                            /** Config botToken. */
+                            public botToken: string;
+
+                            /** Config signingSecret. */
+                            public signingSecret: string;
+
+                            /**
+                             * Verifies a Config message.
+                             * @param message Plain object to verify
+                             * @returns `null` if valid, otherwise the reason why it is not
+                             */
+                            public static verify(message: { [k: string]: any }): (string|null);
+
+                            /**
+                             * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                             * @param object Plain object
+                             * @returns Config
+                             */
+                            public static fromObject(object: { [k: string]: any }): clutch.config.module.bot.slackbot.v1.Config;
+
+                            /**
+                             * Creates a plain object from a Config message. Also converts values to other types if specified.
+                             * @param message Config
+                             * @param [options] Conversion options
+                             * @returns Plain object
+                             */
+                            public static toObject(message: clutch.config.module.bot.slackbot.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                            /**
+                             * Converts this Config to JSON.
+                             * @returns JSON object
+                             */
+                            public toJSON(): { [k: string]: any };
+                        }
+                    }
+                }
+            }
 
             /** Namespace chaos. */
             namespace chaos {
@@ -22367,6 +22835,188 @@ export namespace google {
             public toJSON(): { [k: string]: any };
         }
 
+        /** Properties of a Struct. */
+        interface IStruct {
+
+            /** Struct fields */
+            fields?: ({ [k: string]: google.protobuf.IValue }|null);
+        }
+
+        /** Represents a Struct. */
+        class Struct implements IStruct {
+
+            /**
+             * Constructs a new Struct.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: google.protobuf.IStruct);
+
+            /** Struct fields. */
+            public fields: { [k: string]: google.protobuf.IValue };
+
+            /**
+             * Verifies a Struct message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Struct message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Struct
+             */
+            public static fromObject(object: { [k: string]: any }): google.protobuf.Struct;
+
+            /**
+             * Creates a plain object from a Struct message. Also converts values to other types if specified.
+             * @param message Struct
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: google.protobuf.Struct, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Struct to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** Properties of a Value. */
+        interface IValue {
+
+            /** Value nullValue */
+            nullValue?: (google.protobuf.NullValue|null);
+
+            /** Value numberValue */
+            numberValue?: (number|null);
+
+            /** Value stringValue */
+            stringValue?: (string|null);
+
+            /** Value boolValue */
+            boolValue?: (boolean|null);
+
+            /** Value structValue */
+            structValue?: (google.protobuf.IStruct|null);
+
+            /** Value listValue */
+            listValue?: (google.protobuf.IListValue|null);
+        }
+
+        /** Represents a Value. */
+        class Value implements IValue {
+
+            /**
+             * Constructs a new Value.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: google.protobuf.IValue);
+
+            /** Value nullValue. */
+            public nullValue: google.protobuf.NullValue;
+
+            /** Value numberValue. */
+            public numberValue: number;
+
+            /** Value stringValue. */
+            public stringValue: string;
+
+            /** Value boolValue. */
+            public boolValue: boolean;
+
+            /** Value structValue. */
+            public structValue?: (google.protobuf.IStruct|null);
+
+            /** Value listValue. */
+            public listValue?: (google.protobuf.IListValue|null);
+
+            /** Value kind. */
+            public kind?: ("nullValue"|"numberValue"|"stringValue"|"boolValue"|"structValue"|"listValue");
+
+            /**
+             * Verifies a Value message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a Value message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns Value
+             */
+            public static fromObject(object: { [k: string]: any }): google.protobuf.Value;
+
+            /**
+             * Creates a plain object from a Value message. Also converts values to other types if specified.
+             * @param message Value
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: google.protobuf.Value, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this Value to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
+        /** NullValue enum. */
+        enum NullValue {
+            NULL_VALUE = 0
+        }
+
+        /** Properties of a ListValue. */
+        interface IListValue {
+
+            /** ListValue values */
+            values?: (google.protobuf.IValue[]|null);
+        }
+
+        /** Represents a ListValue. */
+        class ListValue implements IListValue {
+
+            /**
+             * Constructs a new ListValue.
+             * @param [properties] Properties to set
+             */
+            constructor(properties?: google.protobuf.IListValue);
+
+            /** ListValue values. */
+            public values: google.protobuf.IValue[];
+
+            /**
+             * Verifies a ListValue message.
+             * @param message Plain object to verify
+             * @returns `null` if valid, otherwise the reason why it is not
+             */
+            public static verify(message: { [k: string]: any }): (string|null);
+
+            /**
+             * Creates a ListValue message from a plain object. Also converts values to their respective internal types.
+             * @param object Plain object
+             * @returns ListValue
+             */
+            public static fromObject(object: { [k: string]: any }): google.protobuf.ListValue;
+
+            /**
+             * Creates a plain object from a ListValue message. Also converts values to other types if specified.
+             * @param message ListValue
+             * @param [options] Conversion options
+             * @returns Plain object
+             */
+            public static toObject(message: google.protobuf.ListValue, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+            /**
+             * Converts this ListValue to JSON.
+             * @returns JSON object
+             */
+            public toJSON(): { [k: string]: any };
+        }
+
         /** Properties of a DoubleValue. */
         interface IDoubleValue {
 
@@ -22794,188 +23444,6 @@ export namespace google {
 
             /**
              * Converts this BytesValue to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a Struct. */
-        interface IStruct {
-
-            /** Struct fields */
-            fields?: ({ [k: string]: google.protobuf.IValue }|null);
-        }
-
-        /** Represents a Struct. */
-        class Struct implements IStruct {
-
-            /**
-             * Constructs a new Struct.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: google.protobuf.IStruct);
-
-            /** Struct fields. */
-            public fields: { [k: string]: google.protobuf.IValue };
-
-            /**
-             * Verifies a Struct message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a Struct message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns Struct
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.Struct;
-
-            /**
-             * Creates a plain object from a Struct message. Also converts values to other types if specified.
-             * @param message Struct
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.Struct, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this Struct to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** Properties of a Value. */
-        interface IValue {
-
-            /** Value nullValue */
-            nullValue?: (google.protobuf.NullValue|null);
-
-            /** Value numberValue */
-            numberValue?: (number|null);
-
-            /** Value stringValue */
-            stringValue?: (string|null);
-
-            /** Value boolValue */
-            boolValue?: (boolean|null);
-
-            /** Value structValue */
-            structValue?: (google.protobuf.IStruct|null);
-
-            /** Value listValue */
-            listValue?: (google.protobuf.IListValue|null);
-        }
-
-        /** Represents a Value. */
-        class Value implements IValue {
-
-            /**
-             * Constructs a new Value.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: google.protobuf.IValue);
-
-            /** Value nullValue. */
-            public nullValue: google.protobuf.NullValue;
-
-            /** Value numberValue. */
-            public numberValue: number;
-
-            /** Value stringValue. */
-            public stringValue: string;
-
-            /** Value boolValue. */
-            public boolValue: boolean;
-
-            /** Value structValue. */
-            public structValue?: (google.protobuf.IStruct|null);
-
-            /** Value listValue. */
-            public listValue?: (google.protobuf.IListValue|null);
-
-            /** Value kind. */
-            public kind?: ("nullValue"|"numberValue"|"stringValue"|"boolValue"|"structValue"|"listValue");
-
-            /**
-             * Verifies a Value message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a Value message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns Value
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.Value;
-
-            /**
-             * Creates a plain object from a Value message. Also converts values to other types if specified.
-             * @param message Value
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.Value, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this Value to JSON.
-             * @returns JSON object
-             */
-            public toJSON(): { [k: string]: any };
-        }
-
-        /** NullValue enum. */
-        enum NullValue {
-            NULL_VALUE = 0
-        }
-
-        /** Properties of a ListValue. */
-        interface IListValue {
-
-            /** ListValue values */
-            values?: (google.protobuf.IValue[]|null);
-        }
-
-        /** Represents a ListValue. */
-        class ListValue implements IListValue {
-
-            /**
-             * Constructs a new ListValue.
-             * @param [properties] Properties to set
-             */
-            constructor(properties?: google.protobuf.IListValue);
-
-            /** ListValue values. */
-            public values: google.protobuf.IValue[];
-
-            /**
-             * Verifies a ListValue message.
-             * @param message Plain object to verify
-             * @returns `null` if valid, otherwise the reason why it is not
-             */
-            public static verify(message: { [k: string]: any }): (string|null);
-
-            /**
-             * Creates a ListValue message from a plain object. Also converts values to their respective internal types.
-             * @param object Plain object
-             * @returns ListValue
-             */
-            public static fromObject(object: { [k: string]: any }): google.protobuf.ListValue;
-
-            /**
-             * Creates a plain object from a ListValue message. Also converts values to other types if specified.
-             * @param message ListValue
-             * @param [options] Conversion options
-             * @returns Plain object
-             */
-            public static toObject(message: google.protobuf.ListValue, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-            /**
-             * Converts this ListValue to JSON.
              * @returns JSON object
              */
             public toJSON(): { [k: string]: any };
