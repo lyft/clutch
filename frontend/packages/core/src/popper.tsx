@@ -5,7 +5,7 @@ import {
   ClickAwayListener,
   Collapse,
   List,
-  ListItem,
+  ListItem as MuiListItem,
   ListItemText as MuiListItemText,
   Paper as MuiPaper,
   Popper as MuiPopper,
@@ -17,7 +17,7 @@ const StyledPopper = styled(MuiPopper)({
 });
 
 const Paper = styled(MuiPaper)({
-  minWidth: "230px",
+  minWidth: "fit-content",
   border: "1px solid #E7E7EA",
   boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
   ".MuiListItem-root[id='popperItem']": {
@@ -46,12 +46,23 @@ const Paper = styled(MuiPaper)({
   },
 });
 
+const ListItem = styled(MuiListItem)({
+  padding: "0",
+});
+
+const PopperItemIcon = styled.div({
+  margin: "12px 5px 12px 12px",
+  height: "24px",
+  width: "24px",
+});
+
 const ListItemText = styled(MuiListItemText)({
   ".MuiTypography-root": {
     color: "rgba(13, 16, 48, 0.6)",
     fontWeight: 500,
     fontSize: "14px",
     lineHeight: "18px",
+    padding: "15px 15px",
   },
 });
 
@@ -60,10 +71,12 @@ export interface PopperItemProps extends Pick<ListItemProps, "selected"> {
   component?: React.ElementType;
   componentProps?: any;
   onClick?: () => void;
+  icon?: React.ReactElement;
 }
 
-const PopperItem = ({ children, componentProps, onClick, ...props }: PopperItemProps) => (
+const PopperItem = ({ children, componentProps, onClick, icon, ...props }: PopperItemProps) => (
   <ListItem button onClick={onClick} id="popperItem" dense {...props} {...componentProps}>
+    {icon && <PopperItemIcon>{icon}</PopperItemIcon>}
     <ListItemText>{children}</ListItemText>
   </ListItem>
 );

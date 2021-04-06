@@ -30,7 +30,16 @@ import Paper from "./paper";
 import Resolver from "./Resolver";
 import { Step, Stepper } from "./stepper";
 import { Tab, Tabs } from "./tab";
-import { AccordionRow, MetadataTable, Table, TableCell, TableRow, TreeTable } from "./Table";
+import {
+  AccordionRow,
+  MetadataTable,
+  Table,
+  TableCell,
+  TableRow,
+  TableRowAction,
+  TableRowActions,
+  TreeTable,
+} from "./Table";
 
 export type { BaseWorkflowProps, WorkflowConfiguration } from "./AppProvider/workflow";
 export type { ButtonProps } from "./button";
@@ -84,6 +93,8 @@ export {
   Table,
   TableCell,
   TableRow,
+  TableRowAction,
+  TableRowActions,
   Tabs,
   TextField,
   TreeTable,
