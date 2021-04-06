@@ -123,7 +123,7 @@ func TestResourceTTL(t *testing.T) {
 	assert.NoError(t, err)
 
 	resource := &gcpDiscoveryV3.Resource{}
-	assert.NoError(t, ptypes.UnmarshalAny(r.Resources[0], resource))
+	assert.NoError(t, r.Resources[0].UnmarshalTo(resource))
 
 	assert.Equal(t, int64(2), resource.Ttl.Seconds)
 
@@ -131,7 +131,7 @@ func TestResourceTTL(t *testing.T) {
 	assert.NoError(t, err)
 
 	resource = &gcpDiscoveryV3.Resource{}
-	assert.NoError(t, ptypes.UnmarshalAny(r.Resources[0], resource))
+	assert.NoError(t, r.Resources[0].UnmarshalTo(resource))
 
 	assert.Equal(t, int64(2), resource.Ttl.Seconds)
 	assert.Nil(t, resource.Resource)
@@ -151,7 +151,7 @@ func TestResourceTTL(t *testing.T) {
 	assert.NoError(t, err)
 
 	runtime := &gcpRuntimeServiceV3.Runtime{}
-	assert.NoError(t, ptypes.UnmarshalAny(r.Resources[0], runtime))
+	assert.NoError(t, r.Resources[0].UnmarshalTo(runtime))
 
 	assert.Empty(t, runtime.Layer.Fields)
 
