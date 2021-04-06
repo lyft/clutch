@@ -15,7 +15,7 @@ option go_package = "github.com/lyft/clutch/backend/api/chaos/experimentation/v1
 
 message CreateExperimentRequest {
   // The data specifying the experiment to create. See `CreateExperiment` for more details.
-  CreateExperimentData data = 1;
+  CreateExperimentData data = 1 [ (validate.rules).message.required = true ];
 }
 
 message CreateExperimentResponse {

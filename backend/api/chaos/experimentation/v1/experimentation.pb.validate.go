@@ -44,6 +44,13 @@ func (m *CreateExperimentRequest) Validate() error {
 		return nil
 	}
 
+	if m.GetData() == nil {
+		return CreateExperimentRequestValidationError{
+			field:  "Data",
+			reason: "value is required",
+		}
+	}
+
 	if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return CreateExperimentRequestValidationError{
