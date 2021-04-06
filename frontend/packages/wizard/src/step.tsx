@@ -29,11 +29,9 @@ const WizardStep: React.FC<WizardStepProps> = ({ isLoading, error, children }) =
   if (showLoading) {
     return <Loadable isLoading={isLoading}>{children}</Loadable>;
   }
-  return hasError ? (
-    <Error subject={error} />
-  ) : (
+  return (
     <Grid container justify="center" direction="column" alignItems="stretch">
-      {children}
+      {hasError ? <Error subject={error} /> : children}
     </Grid>
   );
 };

@@ -286,6 +286,75 @@ var _ interface {
 	ErrorName() string
 } = ContainerValidationError{}
 
+// Validate checks the field values on PodCondition with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *PodCondition) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Type
+
+	// no validation rules for Status
+
+	return nil
+}
+
+// PodConditionValidationError is the validation error returned by
+// PodCondition.Validate if the designated constraints aren't met.
+type PodConditionValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PodConditionValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PodConditionValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PodConditionValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PodConditionValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PodConditionValidationError) ErrorName() string { return "PodConditionValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PodConditionValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPodCondition.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PodConditionValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PodConditionValidationError{}
+
 // Validate checks the field values on Pod with the rules defined in the proto
 // definition for this message. If any rules are violated, an error is returned.
 func (m *Pod) Validate() error {
@@ -333,6 +402,23 @@ func (m *Pod) Validate() error {
 	// no validation rules for Labels
 
 	// no validation rules for Annotations
+
+	// no validation rules for StateReason
+
+	for idx, item := range m.GetPodConditions() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return PodValidationError{
+					field:  fmt.Sprintf("PodConditions[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
 
 	return nil
 }
@@ -1428,6 +1514,16 @@ func (m *Deployment) Validate() error {
 	// no validation rules for Labels
 
 	// no validation rules for Annotations
+
+	if v, ok := interface{}(m.GetDeploymentStatus()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DeploymentValidationError{
+				field:  "DeploymentStatus",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	return nil
 }
@@ -6005,6 +6101,175 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ResizeHPARequest_SizingValidationError{}
+
+// Validate checks the field values on Deployment_DeploymentStatus with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, an error is returned.
+func (m *Deployment_DeploymentStatus) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Replicas
+
+	// no validation rules for UpdatedReplicas
+
+	// no validation rules for ReadyReplicas
+
+	// no validation rules for AvailableReplicas
+
+	// no validation rules for UnavailableReplicas
+
+	for idx, item := range m.GetDeploymentConditions() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return Deployment_DeploymentStatusValidationError{
+					field:  fmt.Sprintf("DeploymentConditions[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Deployment_DeploymentStatusValidationError is the validation error returned
+// by Deployment_DeploymentStatus.Validate if the designated constraints
+// aren't met.
+type Deployment_DeploymentStatusValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Deployment_DeploymentStatusValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Deployment_DeploymentStatusValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Deployment_DeploymentStatusValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Deployment_DeploymentStatusValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Deployment_DeploymentStatusValidationError) ErrorName() string {
+	return "Deployment_DeploymentStatusValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Deployment_DeploymentStatusValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeployment_DeploymentStatus.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Deployment_DeploymentStatusValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Deployment_DeploymentStatusValidationError{}
+
+// Validate checks the field values on Deployment_DeploymentStatus_Condition
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, an error is returned.
+func (m *Deployment_DeploymentStatus_Condition) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Type
+
+	// no validation rules for ConditionStatus
+
+	// no validation rules for Reason
+
+	// no validation rules for Message
+
+	return nil
+}
+
+// Deployment_DeploymentStatus_ConditionValidationError is the validation error
+// returned by Deployment_DeploymentStatus_Condition.Validate if the
+// designated constraints aren't met.
+type Deployment_DeploymentStatus_ConditionValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e Deployment_DeploymentStatus_ConditionValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e Deployment_DeploymentStatus_ConditionValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e Deployment_DeploymentStatus_ConditionValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e Deployment_DeploymentStatus_ConditionValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e Deployment_DeploymentStatus_ConditionValidationError) ErrorName() string {
+	return "Deployment_DeploymentStatus_ConditionValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e Deployment_DeploymentStatus_ConditionValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeployment_DeploymentStatus_Condition.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = Deployment_DeploymentStatus_ConditionValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = Deployment_DeploymentStatus_ConditionValidationError{}
 
 // Validate checks the field values on UpdateDeploymentRequest_Fields with the
 // rules defined in the proto definition for this message. If any rules are

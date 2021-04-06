@@ -242,7 +242,7 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
   const [error, setError] = useState(undefined);
   const [experimentData, setExperimentData] = useState<ExperimentData | undefined>(undefined);
 
-  const handleOnCreatedExperiment = (id: number) => {
+  const handleOnCreatedExperiment = (id: string) => {
     navigate(`/experimentation/run/${id}`);
   };
 
@@ -311,15 +311,17 @@ const StartExperiment: React.FC<StartExperimentProps> = ({
 
     return client
       .post("/v1/chaos/experimentation/createExperiment", {
-        config: {
-          "@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig",
-          faultTargeting,
-          abortFault,
-          latencyFault,
+        data: {
+          config: {
+            "@type": "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig",
+            faultTargeting,
+            abortFault,
+            latencyFault,
+          },
         },
       })
       .then(response => {
-        handleOnCreatedExperiment(response?.data.experiment.id);
+        handleOnCreatedExperiment(response?.data.experiment.runId);
       })
       .catch((err: ClutchError) => {
         handleOnCreatedExperimentFailure(err);

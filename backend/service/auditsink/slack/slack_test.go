@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
@@ -27,7 +26,7 @@ func TestNew(t *testing.T) {
 	_, err := New(nil, log, scope)
 	assert.Error(t, err)
 
-	cfg, _ := ptypes.MarshalAny(&configv1.SlackConfig{})
+	cfg, _ := anypb.New(&configv1.SlackConfig{})
 	svc, err := New(cfg, log, scope)
 	assert.NoError(t, err)
 	assert.NotNil(t, svc)

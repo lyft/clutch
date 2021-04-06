@@ -3,7 +3,6 @@ package experimentstoremock
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -22,20 +21,26 @@ type MockStorer struct {
 	GetExperimentArguments getExperimentArguments
 }
 
+var _ experimentstore.Storer = (*MockStorer)(nil)
+
 type getExperimentArguments struct {
 	ConfigType string
 }
 
-func (fs *MockStorer) CreateExperiment(ctx context.Context, config *any.Any, startTime *time.Time, endTime *time.Time) (*experimentation.Experiment, error) {
+func (fs *MockStorer) CreateExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentation.Experiment, error) {
 	return nil, nil
 }
 
-func (fs *MockStorer) CancelExperimentRun(ctx context.Context, id uint64) error {
+func (fs *MockStorer) CreateOrGetExperiment(ctx context.Context, es *experimentstore.ExperimentSpecification) (*experimentstore.CreateOrGetExperimentResult, error) {
+	return nil, nil
+}
+
+func (fs *MockStorer) CancelExperimentRun(ctx context.Context, runId string, reason string) error {
 	return nil
 }
 
-func (fs *MockStorer) GetExperiments(ctx context.Context, configTypes string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
-	fs.GetExperimentArguments = getExperimentArguments{ConfigType: configTypes}
+func (fs *MockStorer) GetExperiments(ctx context.Context, configType string, status experimentation.GetExperimentsRequest_Status) ([]*experimentation.Experiment, error) {
+	fs.GetExperimentArguments = getExperimentArguments{ConfigType: configType}
 	return nil, nil
 }
 
@@ -43,7 +48,7 @@ func (fs *MockStorer) GetListView(ctx context.Context) ([]*experimentation.ListV
 	return nil, nil
 }
 
-func (fs *MockStorer) GetExperimentRunDetails(ctx context.Context, id uint64) (*experimentation.ExperimentRunDetails, error) {
+func (fs *MockStorer) GetExperimentRunDetails(ctx context.Context, runId string) (*experimentation.ExperimentRunDetails, error) {
 	return nil, nil
 }
 

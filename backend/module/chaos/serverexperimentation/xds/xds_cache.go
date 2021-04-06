@@ -7,8 +7,8 @@ import (
 
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/mitchellh/hashstructure/v2"
+	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
@@ -21,12 +21,12 @@ func PeriodicallyRefreshCache(s *Server) {
 	go func() {
 		for range ticker.C {
 			s.logger.Info("Refreshing xDS cache")
-			refreshCache(s.ctx, s.storer, s.snapshotCacheV3, s.resourceTTL, s.rtdsConfig, s.ecdsConfig, s.logger)
+			refreshCache(s.ctx, s.storer, s.snapshotCacheV3, s.resourceTTL, s.rtdsConfig, s.ecdsConfig, s.xdsScope, s.logger)
 		}
 	}()
 }
 
-func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCache gcpCacheV3.SnapshotCache, ttl *time.Duration, rtdsConfig *RTDSConfig, ecdsConfig *ECDSConfig, logger *zap.SugaredLogger) {
+func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCache gcpCacheV3.SnapshotCache, ttl *time.Duration, rtdsConfig *RTDSConfig, ecdsConfig *ECDSConfig, scope tally.Scope, logger *zap.SugaredLogger) {
 	allRunningExperiments, err := storer.GetExperiments(ctx, "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig", experimentation.GetExperimentsRequest_STATUS_RUNNING)
 	if err != nil {
 		logger.Errorw("Failed to get data from experiments store", "error", err)
@@ -99,6 +99,8 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 				"error", err)
 		}
 	}
+
+	scope.Gauge("active_faults").Update(float64(len(clusterFaultMap)))
 }
 
 func setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl, cluster string, snapshotCache gcpCacheV3.SnapshotCache, logger *zap.SugaredLogger) error {
@@ -136,7 +138,7 @@ func setSnapshot(resourceMap map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTt
 }
 
 func maybeUnmarshalFaultTest(experiment *experimentation.Experiment, httpFaultConfig *serverexperimentation.HTTPFaultConfig) bool {
-	err := ptypes.UnmarshalAny(experiment.GetConfig(), httpFaultConfig)
+	err := experiment.GetConfig().UnmarshalTo(httpFaultConfig)
 	if err != nil {
 		return false
 	}

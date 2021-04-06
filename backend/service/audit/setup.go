@@ -10,11 +10,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/golang/protobuf/jsonpb"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/encoding/protojson"
 
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
 	auditconfigv1 "github.com/lyft/clutch/backend/api/config/service/audit/v1"
@@ -30,7 +29,7 @@ const Name = "clutch.service.audit"
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	config := &auditconfigv1.Config{}
-	if err := ptypes.UnmarshalAny(cfg, config); err != nil {
+	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err
 	}
 
@@ -44,11 +43,11 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		scope:  scope,
 
 		storage: storageProvider,
-		marshaler: &jsonpb.Marshaler{
-			// Use the names from the .proto.
-			OrigName: true,
+		marshaler: &protojson.MarshalOptions{
+			// Use field names from the .proto rather than JSON camel case names.
+			UseProtoNames: true,
 			// Render zero values (useful for successful status).
-			EmitDefaults: true,
+			EmitUnpopulated: true,
 		},
 	}
 
@@ -101,7 +100,7 @@ type client struct {
 	storage storage.Storage
 	filter  *auditconfigv1.Filter
 
-	marshaler *jsonpb.Marshaler
+	marshaler *protojson.MarshalOptions
 	sinks     []registeredSink
 }
 

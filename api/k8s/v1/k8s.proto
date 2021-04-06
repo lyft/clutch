@@ -258,6 +258,25 @@ message Container {
   int32 restart_count = 5;
 }
 
+message PodCondition {
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    CONTAINERS_READY = 1;
+    INITIALIZED = 2;
+    READY = 3;
+    POD_SCHEDULED = 4;
+  }
+  Type type = 1;
+
+  enum Status {
+    STATUS_UNSPECIFIED = 0;
+    TRUE = 1;
+    FALSE = 2;
+    UNKNOWN = 3;
+  }
+  Status status = 2;
+}
+
 message Pod {
   option (clutch.api.v1.id).patterns = {
     type_url : "clutch.k8s.v1.Pod",
@@ -288,6 +307,14 @@ message Pod {
 
   map<string, string> labels = 9;
   map<string, string> annotations = 10;
+
+  // message indicating details about why the pod is in this state.
+  // https://pkg.go.dev/k8s.io/api/core/v1#PodStatus
+  string state_reason = 11;
+
+  // current service state of pod.
+  // https://pkg.go.dev/k8s.io/api/core/v1#PodCondition
+  repeated PodCondition pod_conditions = 12;
 }
 
 message ListOptions {
@@ -419,6 +446,38 @@ message Deployment {
 
   map<string, string> labels = 4;
   map<string, string> annotations = 5;
+
+  message DeploymentStatus {
+    uint32 replicas = 1;
+    uint32 updated_replicas = 2;
+    uint32 ready_replicas = 3;
+    uint32 available_replicas = 4;
+    uint32 unavailable_replicas = 5;
+    message Condition {
+      // This is mirroring upstream values here:
+      // https://pkg.go.dev/k8s.io/api/apps/v1#DeploymentConditionType
+      enum Type {
+        UNSPECIFIED = 0;
+        UNKNOWN = 1;
+        AVAILABLE = 2;
+        PROGRESSING = 3;
+        REPLICA_FAILURE = 4;
+      }
+      Type type = 1;
+      enum ConditionStatus {
+        CONDITION_UNSPECIFIED = 0;
+        CONDITION_TRUE = 1;
+        CONDITION_FALSE = 2;
+        CONDITION_UNKNOWN = 3;
+      }
+      ConditionStatus condition_status = 2;
+
+      string reason = 5;
+      string message = 6;
+    }
+    repeated Condition deployment_conditions = 6;
+  }
+  DeploymentStatus deployment_status = 6;
 }
 
 message DescribeDeploymentRequest {

@@ -2635,17 +2635,77 @@ export namespace clutch {
             /** Namespace v1. */
             namespace v1 {
 
+                /** Properties of a CreateExperimentData. */
+                interface ICreateExperimentData {
+
+                    /** CreateExperimentData runId */
+                    runId?: (string|null);
+
+                    /** CreateExperimentData config */
+                    config?: (google.protobuf.IAny|null);
+
+                    /** CreateExperimentData startTime */
+                    startTime?: (google.protobuf.ITimestamp|null);
+
+                    /** CreateExperimentData endTime */
+                    endTime?: (google.protobuf.ITimestamp|null);
+                }
+
+                /** Represents a CreateExperimentData. */
+                class CreateExperimentData implements ICreateExperimentData {
+
+                    /**
+                     * Constructs a new CreateExperimentData.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.experimentation.v1.ICreateExperimentData);
+
+                    /** CreateExperimentData runId. */
+                    public runId: string;
+
+                    /** CreateExperimentData config. */
+                    public config?: (google.protobuf.IAny|null);
+
+                    /** CreateExperimentData startTime. */
+                    public startTime?: (google.protobuf.ITimestamp|null);
+
+                    /** CreateExperimentData endTime. */
+                    public endTime?: (google.protobuf.ITimestamp|null);
+
+                    /**
+                     * Verifies a CreateExperimentData message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a CreateExperimentData message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns CreateExperimentData
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.CreateExperimentData;
+
+                    /**
+                     * Creates a plain object from a CreateExperimentData message. Also converts values to other types if specified.
+                     * @param message CreateExperimentData
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.experimentation.v1.CreateExperimentData, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this CreateExperimentData to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
                 /** Properties of a CreateExperimentRequest. */
                 interface ICreateExperimentRequest {
 
-                    /** CreateExperimentRequest config */
-                    config?: (google.protobuf.IAny|null);
-
-                    /** CreateExperimentRequest startTime */
-                    startTime?: (google.protobuf.ITimestamp|null);
-
-                    /** CreateExperimentRequest endTime */
-                    endTime?: (google.protobuf.ITimestamp|null);
+                    /** CreateExperimentRequest data */
+                    data?: (clutch.chaos.experimentation.v1.ICreateExperimentData|null);
                 }
 
                 /** Represents a CreateExperimentRequest. */
@@ -2657,14 +2717,8 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.experimentation.v1.ICreateExperimentRequest);
 
-                    /** CreateExperimentRequest config. */
-                    public config?: (google.protobuf.IAny|null);
-
-                    /** CreateExperimentRequest startTime. */
-                    public startTime?: (google.protobuf.ITimestamp|null);
-
-                    /** CreateExperimentRequest endTime. */
-                    public endTime?: (google.protobuf.ITimestamp|null);
+                    /** CreateExperimentRequest data. */
+                    public data?: (clutch.chaos.experimentation.v1.ICreateExperimentData|null);
 
                     /**
                      * Verifies a CreateExperimentRequest message.
@@ -2741,6 +2795,118 @@ export namespace clutch {
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a CreateOrGetExperimentRequest. */
+                interface ICreateOrGetExperimentRequest {
+
+                    /** CreateOrGetExperimentRequest data */
+                    data?: (clutch.chaos.experimentation.v1.ICreateExperimentData|null);
+                }
+
+                /** Represents a CreateOrGetExperimentRequest. */
+                class CreateOrGetExperimentRequest implements ICreateOrGetExperimentRequest {
+
+                    /**
+                     * Constructs a new CreateOrGetExperimentRequest.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.experimentation.v1.ICreateOrGetExperimentRequest);
+
+                    /** CreateOrGetExperimentRequest data. */
+                    public data?: (clutch.chaos.experimentation.v1.ICreateExperimentData|null);
+
+                    /**
+                     * Verifies a CreateOrGetExperimentRequest message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a CreateOrGetExperimentRequest message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns CreateOrGetExperimentRequest
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.CreateOrGetExperimentRequest;
+
+                    /**
+                     * Creates a plain object from a CreateOrGetExperimentRequest message. Also converts values to other types if specified.
+                     * @param message CreateOrGetExperimentRequest
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.experimentation.v1.CreateOrGetExperimentRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this CreateOrGetExperimentRequest to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a CreateOrGetExperimentResponse. */
+                interface ICreateOrGetExperimentResponse {
+
+                    /** CreateOrGetExperimentResponse experiment */
+                    experiment?: (clutch.chaos.experimentation.v1.IExperiment|null);
+
+                    /** CreateOrGetExperimentResponse origin */
+                    origin?: (clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse.Origin|null);
+                }
+
+                /** Represents a CreateOrGetExperimentResponse. */
+                class CreateOrGetExperimentResponse implements ICreateOrGetExperimentResponse {
+
+                    /**
+                     * Constructs a new CreateOrGetExperimentResponse.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.experimentation.v1.ICreateOrGetExperimentResponse);
+
+                    /** CreateOrGetExperimentResponse experiment. */
+                    public experiment?: (clutch.chaos.experimentation.v1.IExperiment|null);
+
+                    /** CreateOrGetExperimentResponse origin. */
+                    public origin: clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse.Origin;
+
+                    /**
+                     * Verifies a CreateOrGetExperimentResponse message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a CreateOrGetExperimentResponse message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns CreateOrGetExperimentResponse
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse;
+
+                    /**
+                     * Creates a plain object from a CreateOrGetExperimentResponse message. Also converts values to other types if specified.
+                     * @param message CreateOrGetExperimentResponse
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this CreateOrGetExperimentResponse to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                namespace CreateOrGetExperimentResponse {
+
+                    /** Origin enum. */
+                    enum Origin {
+                        ORIGIN_UNSPECIFIED = 0,
+                        ORIGIN_EXISTING = 1,
+                        ORIGIN_NEW = 2
+                    }
                 }
 
                 /** Properties of a GetExperimentsRequest. */
@@ -2858,7 +3024,7 @@ export namespace clutch {
                 interface ICancelExperimentRunRequest {
 
                     /** CancelExperimentRunRequest id */
-                    id?: (number|Long|null);
+                    id?: (string|null);
                 }
 
                 /** Represents a CancelExperimentRunRequest. */
@@ -2871,7 +3037,7 @@ export namespace clutch {
                     constructor(properties?: clutch.chaos.experimentation.v1.ICancelExperimentRunRequest);
 
                     /** CancelExperimentRunRequest id. */
-                    public id: (number|Long);
+                    public id: string;
 
                     /**
                      * Verifies a CancelExperimentRunRequest message.
@@ -3038,7 +3204,7 @@ export namespace clutch {
                 interface IGetExperimentRunDetailsRequest {
 
                     /** GetExperimentRunDetailsRequest id */
-                    id?: (number|Long|null);
+                    id?: (string|null);
                 }
 
                 /** Represents a GetExperimentRunDetailsRequest. */
@@ -3051,7 +3217,7 @@ export namespace clutch {
                     constructor(properties?: clutch.chaos.experimentation.v1.IGetExperimentRunDetailsRequest);
 
                     /** GetExperimentRunDetailsRequest id. */
-                    public id: (number|Long);
+                    public id: string;
 
                     /**
                      * Verifies a GetExperimentRunDetailsRequest message.
@@ -3156,6 +3322,20 @@ export namespace clutch {
                     public createExperiment(request: clutch.chaos.experimentation.v1.ICreateExperimentRequest): Promise<clutch.chaos.experimentation.v1.CreateExperimentResponse>;
 
                     /**
+                     * Calls CreateOrGetExperiment.
+                     * @param request CreateOrGetExperimentRequest message or plain object
+                     * @param callback Node-style callback called with the error, if any, and CreateOrGetExperimentResponse
+                     */
+                    public createOrGetExperiment(request: clutch.chaos.experimentation.v1.ICreateOrGetExperimentRequest, callback: clutch.chaos.experimentation.v1.ExperimentsAPI.CreateOrGetExperimentCallback): void;
+
+                    /**
+                     * Calls CreateOrGetExperiment.
+                     * @param request CreateOrGetExperimentRequest message or plain object
+                     * @returns Promise
+                     */
+                    public createOrGetExperiment(request: clutch.chaos.experimentation.v1.ICreateOrGetExperimentRequest): Promise<clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse>;
+
+                    /**
                      * Calls CancelExperimentRun.
                      * @param request CancelExperimentRunRequest message or plain object
                      * @param callback Node-style callback called with the error, if any, and CancelExperimentRunResponse
@@ -3222,6 +3402,13 @@ export namespace clutch {
                     type CreateExperimentCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.CreateExperimentResponse) => void;
 
                     /**
+                     * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#createOrGetExperiment}.
+                     * @param error Error, if any
+                     * @param [response] CreateOrGetExperimentResponse
+                     */
+                    type CreateOrGetExperimentCallback = (error: (Error|null), response?: clutch.chaos.experimentation.v1.CreateOrGetExperimentResponse) => void;
+
+                    /**
                      * Callback as used by {@link clutch.chaos.experimentation.v1.ExperimentsAPI#cancelExperimentRun}.
                      * @param error Error, if any
                      * @param [response] CancelExperimentRunResponse
@@ -3253,8 +3440,8 @@ export namespace clutch {
                 /** Properties of an Experiment. */
                 interface IExperiment {
 
-                    /** Experiment id */
-                    id?: (number|Long|null);
+                    /** Experiment runId */
+                    runId?: (string|null);
 
                     /** Experiment config */
                     config?: (google.protobuf.IAny|null);
@@ -3275,8 +3462,8 @@ export namespace clutch {
                      */
                     constructor(properties?: clutch.chaos.experimentation.v1.IExperiment);
 
-                    /** Experiment id. */
-                    public id: (number|Long);
+                    /** Experiment runId. */
+                    public runId: string;
 
                     /** Experiment config. */
                     public config?: (google.protobuf.IAny|null);
@@ -3333,7 +3520,7 @@ export namespace clutch {
                 interface IListViewItem {
 
                     /** ListViewItem id */
-                    id?: (number|Long|null);
+                    id?: (string|null);
 
                     /** ListViewItem properties */
                     properties?: (clutch.chaos.experimentation.v1.IPropertiesMap|null);
@@ -3349,7 +3536,7 @@ export namespace clutch {
                     constructor(properties?: clutch.chaos.experimentation.v1.IListViewItem);
 
                     /** ListViewItem id. */
-                    public id: (number|Long);
+                    public id: string;
 
                     /** ListViewItem properties. */
                     public properties?: (clutch.chaos.experimentation.v1.IPropertiesMap|null);
@@ -3570,7 +3757,7 @@ export namespace clutch {
                 interface IExperimentRunDetails {
 
                     /** ExperimentRunDetails runId */
-                    runId?: (number|Long|null);
+                    runId?: (string|null);
 
                     /** ExperimentRunDetails status */
                     status?: (clutch.chaos.experimentation.v1.Experiment.Status|null);
@@ -3592,7 +3779,7 @@ export namespace clutch {
                     constructor(properties?: clutch.chaos.experimentation.v1.IExperimentRunDetails);
 
                     /** ExperimentRunDetails runId. */
-                    public runId: (number|Long);
+                    public runId: string;
 
                     /** ExperimentRunDetails status. */
                     public status: clutch.chaos.experimentation.v1.Experiment.Status;
@@ -3627,6 +3814,383 @@ export namespace clutch {
 
                     /**
                      * Converts this ExperimentRunDetails to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+            }
+        }
+
+        /** Namespace redisexperimentation. */
+        namespace redisexperimentation {
+
+            /** Namespace v1. */
+            namespace v1 {
+
+                /** Properties of a FaultConfig. */
+                interface IFaultConfig {
+
+                    /** FaultConfig faultTargeting */
+                    faultTargeting?: (clutch.chaos.redisexperimentation.v1.IFaultTargeting|null);
+
+                    /** FaultConfig errorFault */
+                    errorFault?: (clutch.chaos.redisexperimentation.v1.IErrorFault|null);
+
+                    /** FaultConfig latencyFault */
+                    latencyFault?: (clutch.chaos.redisexperimentation.v1.ILatencyFault|null);
+                }
+
+                /** Represents a FaultConfig. */
+                class FaultConfig implements IFaultConfig {
+
+                    /**
+                     * Constructs a new FaultConfig.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IFaultConfig);
+
+                    /** FaultConfig faultTargeting. */
+                    public faultTargeting?: (clutch.chaos.redisexperimentation.v1.IFaultTargeting|null);
+
+                    /** FaultConfig errorFault. */
+                    public errorFault?: (clutch.chaos.redisexperimentation.v1.IErrorFault|null);
+
+                    /** FaultConfig latencyFault. */
+                    public latencyFault?: (clutch.chaos.redisexperimentation.v1.ILatencyFault|null);
+
+                    /** FaultConfig fault. */
+                    public fault?: ("errorFault"|"latencyFault");
+
+                    /**
+                     * Verifies a FaultConfig message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a FaultConfig message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns FaultConfig
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.FaultConfig;
+
+                    /**
+                     * Creates a plain object from a FaultConfig message. Also converts values to other types if specified.
+                     * @param message FaultConfig
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.FaultConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this FaultConfig to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of an ErrorFault. */
+                interface IErrorFault {
+
+                    /** ErrorFault percentage */
+                    percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
+                }
+
+                /** Represents an ErrorFault. */
+                class ErrorFault implements IErrorFault {
+
+                    /**
+                     * Constructs a new ErrorFault.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IErrorFault);
+
+                    /** ErrorFault percentage. */
+                    public percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
+
+                    /**
+                     * Verifies an ErrorFault message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates an ErrorFault message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns ErrorFault
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.ErrorFault;
+
+                    /**
+                     * Creates a plain object from an ErrorFault message. Also converts values to other types if specified.
+                     * @param message ErrorFault
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.ErrorFault, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this ErrorFault to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a LatencyFault. */
+                interface ILatencyFault {
+
+                    /** LatencyFault percentage */
+                    percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
+
+                    /** LatencyFault latencyDuration */
+                    latencyDuration?: (clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration|null);
+                }
+
+                /** Represents a LatencyFault. */
+                class LatencyFault implements ILatencyFault {
+
+                    /**
+                     * Constructs a new LatencyFault.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.ILatencyFault);
+
+                    /** LatencyFault percentage. */
+                    public percentage?: (clutch.chaos.redisexperimentation.v1.IFaultPercentage|null);
+
+                    /** LatencyFault latencyDuration. */
+                    public latencyDuration?: (clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration|null);
+
+                    /**
+                     * Verifies a LatencyFault message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a LatencyFault message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns LatencyFault
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.LatencyFault;
+
+                    /**
+                     * Creates a plain object from a LatencyFault message. Also converts values to other types if specified.
+                     * @param message LatencyFault
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.LatencyFault, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this LatencyFault to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a FaultTargeting. */
+                interface IFaultTargeting {
+
+                    /** FaultTargeting upstreamCluster */
+                    upstreamCluster?: (clutch.chaos.redisexperimentation.v1.ISingleCluster|null);
+
+                    /** FaultTargeting downstreamCluster */
+                    downstreamCluster?: (clutch.chaos.redisexperimentation.v1.ISingleCluster|null);
+
+                    /** FaultTargeting redisCommands */
+                    redisCommands?: (string[]|null);
+                }
+
+                /** Represents a FaultTargeting. */
+                class FaultTargeting implements IFaultTargeting {
+
+                    /**
+                     * Constructs a new FaultTargeting.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IFaultTargeting);
+
+                    /** FaultTargeting upstreamCluster. */
+                    public upstreamCluster?: (clutch.chaos.redisexperimentation.v1.ISingleCluster|null);
+
+                    /** FaultTargeting downstreamCluster. */
+                    public downstreamCluster?: (clutch.chaos.redisexperimentation.v1.ISingleCluster|null);
+
+                    /** FaultTargeting redisCommands. */
+                    public redisCommands: string[];
+
+                    /**
+                     * Verifies a FaultTargeting message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a FaultTargeting message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns FaultTargeting
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.FaultTargeting;
+
+                    /**
+                     * Creates a plain object from a FaultTargeting message. Also converts values to other types if specified.
+                     * @param message FaultTargeting
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.FaultTargeting, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this FaultTargeting to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a SingleCluster. */
+                interface ISingleCluster {
+
+                    /** SingleCluster name */
+                    name?: (string|null);
+                }
+
+                /** Represents a SingleCluster. */
+                class SingleCluster implements ISingleCluster {
+
+                    /**
+                     * Constructs a new SingleCluster.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.ISingleCluster);
+
+                    /** SingleCluster name. */
+                    public name: string;
+
+                    /**
+                     * Verifies a SingleCluster message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a SingleCluster message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns SingleCluster
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.SingleCluster;
+
+                    /**
+                     * Creates a plain object from a SingleCluster message. Also converts values to other types if specified.
+                     * @param message SingleCluster
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.SingleCluster, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this SingleCluster to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a FaultPercentage. */
+                interface IFaultPercentage {
+
+                    /** FaultPercentage percentage */
+                    percentage?: (number|null);
+                }
+
+                /** Represents a FaultPercentage. */
+                class FaultPercentage implements IFaultPercentage {
+
+                    /**
+                     * Constructs a new FaultPercentage.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IFaultPercentage);
+
+                    /** FaultPercentage percentage. */
+                    public percentage: number;
+
+                    /**
+                     * Verifies a FaultPercentage message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a FaultPercentage message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns FaultPercentage
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.FaultPercentage;
+
+                    /**
+                     * Creates a plain object from a FaultPercentage message. Also converts values to other types if specified.
+                     * @param message FaultPercentage
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.FaultPercentage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this FaultPercentage to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                /** Properties of a FaultLatencyDuration. */
+                interface IFaultLatencyDuration {
+
+                    /** FaultLatencyDuration fixedDurationMs */
+                    fixedDurationMs?: (number|null);
+                }
+
+                /** Represents a FaultLatencyDuration. */
+                class FaultLatencyDuration implements IFaultLatencyDuration {
+
+                    /**
+                     * Constructs a new FaultLatencyDuration.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.chaos.redisexperimentation.v1.IFaultLatencyDuration);
+
+                    /** FaultLatencyDuration fixedDurationMs. */
+                    public fixedDurationMs: number;
+
+                    /**
+                     * Verifies a FaultLatencyDuration message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a FaultLatencyDuration message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns FaultLatencyDuration
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.chaos.redisexperimentation.v1.FaultLatencyDuration;
+
+                    /**
+                     * Creates a plain object from a FaultLatencyDuration message. Also converts values to other types if specified.
+                     * @param message FaultLatencyDuration
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.chaos.redisexperimentation.v1.FaultLatencyDuration, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this FaultLatencyDuration to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -3941,117 +4505,6 @@ export namespace clutch {
                     public toJSON(): { [k: string]: any };
                 }
 
-                /** Properties of a RedisFaultConfig. */
-                interface IRedisFaultConfig {
-
-                    /** RedisFaultConfig faultTargeting */
-                    faultTargeting?: (clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting|null);
-
-                    /** RedisFaultConfig errorFault */
-                    errorFault?: (clutch.chaos.serverexperimentation.v1.IRedisErrorFault|null);
-
-                    /** RedisFaultConfig latencyFault */
-                    latencyFault?: (clutch.chaos.serverexperimentation.v1.ILatencyFault|null);
-                }
-
-                /** Represents a RedisFaultConfig. */
-                class RedisFaultConfig implements IRedisFaultConfig {
-
-                    /**
-                     * Constructs a new RedisFaultConfig.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IRedisFaultConfig);
-
-                    /** RedisFaultConfig faultTargeting. */
-                    public faultTargeting?: (clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting|null);
-
-                    /** RedisFaultConfig errorFault. */
-                    public errorFault?: (clutch.chaos.serverexperimentation.v1.IRedisErrorFault|null);
-
-                    /** RedisFaultConfig latencyFault. */
-                    public latencyFault?: (clutch.chaos.serverexperimentation.v1.ILatencyFault|null);
-
-                    /** RedisFaultConfig fault. */
-                    public fault?: ("errorFault"|"latencyFault");
-
-                    /**
-                     * Verifies a RedisFaultConfig message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a RedisFaultConfig message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns RedisFaultConfig
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.RedisFaultConfig;
-
-                    /**
-                     * Creates a plain object from a RedisFaultConfig message. Also converts values to other types if specified.
-                     * @param message RedisFaultConfig
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.RedisFaultConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this RedisFaultConfig to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a RedisErrorFault. */
-                interface IRedisErrorFault {
-
-                    /** RedisErrorFault percentage */
-                    percentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
-                }
-
-                /** Represents a RedisErrorFault. */
-                class RedisErrorFault implements IRedisErrorFault {
-
-                    /**
-                     * Constructs a new RedisErrorFault.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IRedisErrorFault);
-
-                    /** RedisErrorFault percentage. */
-                    public percentage?: (clutch.chaos.serverexperimentation.v1.IFaultPercentage|null);
-
-                    /**
-                     * Verifies a RedisErrorFault message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a RedisErrorFault message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns RedisErrorFault
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.RedisErrorFault;
-
-                    /**
-                     * Creates a plain object from a RedisErrorFault message. Also converts values to other types if specified.
-                     * @param message RedisErrorFault
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.RedisErrorFault, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this RedisErrorFault to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
                 /** Properties of an AbortFault. */
                 interface IAbortFault {
 
@@ -4155,66 +4608,6 @@ export namespace clutch {
 
                     /**
                      * Converts this LatencyFault to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a RedisFaultTargeting. */
-                interface IRedisFaultTargeting {
-
-                    /** RedisFaultTargeting upstreamCluster */
-                    upstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
-
-                    /** RedisFaultTargeting downstreamCluster */
-                    downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
-
-                    /** RedisFaultTargeting redisCommands */
-                    redisCommands?: (string[]|null);
-                }
-
-                /** Represents a RedisFaultTargeting. */
-                class RedisFaultTargeting implements IRedisFaultTargeting {
-
-                    /**
-                     * Constructs a new RedisFaultTargeting.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IRedisFaultTargeting);
-
-                    /** RedisFaultTargeting upstreamCluster. */
-                    public upstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
-
-                    /** RedisFaultTargeting downstreamCluster. */
-                    public downstreamCluster?: (clutch.chaos.serverexperimentation.v1.ISingleCluster|null);
-
-                    /** RedisFaultTargeting redisCommands. */
-                    public redisCommands: string[];
-
-                    /**
-                     * Verifies a RedisFaultTargeting message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a RedisFaultTargeting message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns RedisFaultTargeting
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.RedisFaultTargeting;
-
-                    /**
-                     * Creates a plain object from a RedisFaultTargeting message. Also converts values to other types if specified.
-                     * @param message RedisFaultTargeting
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.RedisFaultTargeting, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this RedisFaultTargeting to JSON.
                      * @returns JSON object
                      */
                     public toJSON(): { [k: string]: any };
@@ -7536,6 +7929,12 @@ export namespace clutch {
 
                         /** Cache ttl */
                         ttl?: (google.protobuf.IDuration|null);
+
+                        /** Cache batchInsertSize */
+                        batchInsertSize?: (number|null);
+
+                        /** Cache batchInsertFlush */
+                        batchInsertFlush?: (google.protobuf.IDuration|null);
                     }
 
                     /** Represents a Cache. */
@@ -7549,6 +7948,12 @@ export namespace clutch {
 
                         /** Cache ttl. */
                         public ttl?: (google.protobuf.IDuration|null);
+
+                        /** Cache batchInsertSize. */
+                        public batchInsertSize: number;
+
+                        /** Cache batchInsertFlush. */
+                        public batchInsertFlush?: (google.protobuf.IDuration|null);
 
                         /**
                          * Verifies a Cache message.
@@ -10233,6 +10638,80 @@ export namespace clutch {
                 }
             }
 
+            /** Properties of a PodCondition. */
+            interface IPodCondition {
+
+                /** PodCondition type */
+                type?: (clutch.k8s.v1.PodCondition.Type|null);
+
+                /** PodCondition status */
+                status?: (clutch.k8s.v1.PodCondition.Status|null);
+            }
+
+            /** Represents a PodCondition. */
+            class PodCondition implements IPodCondition {
+
+                /**
+                 * Constructs a new PodCondition.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IPodCondition);
+
+                /** PodCondition type. */
+                public type: clutch.k8s.v1.PodCondition.Type;
+
+                /** PodCondition status. */
+                public status: clutch.k8s.v1.PodCondition.Status;
+
+                /**
+                 * Verifies a PodCondition message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a PodCondition message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns PodCondition
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.PodCondition;
+
+                /**
+                 * Creates a plain object from a PodCondition message. Also converts values to other types if specified.
+                 * @param message PodCondition
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.PodCondition, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this PodCondition to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            namespace PodCondition {
+
+                /** Type enum. */
+                enum Type {
+                    TYPE_UNSPECIFIED = 0,
+                    CONTAINERS_READY = 1,
+                    INITIALIZED = 2,
+                    READY = 3,
+                    POD_SCHEDULED = 4
+                }
+
+                /** Status enum. */
+                enum Status {
+                    STATUS_UNSPECIFIED = 0,
+                    TRUE = 1,
+                    FALSE = 2,
+                    UNKNOWN = 3
+                }
+            }
+
             /** Properties of a Pod. */
             interface IPod {
 
@@ -10265,6 +10744,12 @@ export namespace clutch {
 
                 /** Pod annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** Pod stateReason */
+                stateReason?: (string|null);
+
+                /** Pod podConditions */
+                podConditions?: (clutch.k8s.v1.IPodCondition[]|null);
             }
 
             /** Represents a Pod. */
@@ -10305,6 +10790,12 @@ export namespace clutch {
 
                 /** Pod annotations. */
                 public annotations: { [k: string]: string };
+
+                /** Pod stateReason. */
+                public stateReason: string;
+
+                /** Pod podConditions. */
+                public podConditions: clutch.k8s.v1.IPodCondition[];
 
                 /**
                  * Verifies a Pod message.
@@ -11187,6 +11678,9 @@ export namespace clutch {
 
                 /** Deployment annotations */
                 annotations?: ({ [k: string]: string }|null);
+
+                /** Deployment deploymentStatus */
+                deploymentStatus?: (clutch.k8s.v1.Deployment.IDeploymentStatus|null);
             }
 
             /** Represents a Deployment. */
@@ -11212,6 +11706,9 @@ export namespace clutch {
 
                 /** Deployment annotations. */
                 public annotations: { [k: string]: string };
+
+                /** Deployment deploymentStatus. */
+                public deploymentStatus?: (clutch.k8s.v1.Deployment.IDeploymentStatus|null);
 
                 /**
                  * Verifies a Deployment message.
@@ -11240,6 +11737,176 @@ export namespace clutch {
                  * @returns JSON object
                  */
                 public toJSON(): { [k: string]: any };
+            }
+
+            namespace Deployment {
+
+                /** Properties of a DeploymentStatus. */
+                interface IDeploymentStatus {
+
+                    /** DeploymentStatus replicas */
+                    replicas?: (number|null);
+
+                    /** DeploymentStatus updatedReplicas */
+                    updatedReplicas?: (number|null);
+
+                    /** DeploymentStatus readyReplicas */
+                    readyReplicas?: (number|null);
+
+                    /** DeploymentStatus availableReplicas */
+                    availableReplicas?: (number|null);
+
+                    /** DeploymentStatus unavailableReplicas */
+                    unavailableReplicas?: (number|null);
+
+                    /** DeploymentStatus deploymentConditions */
+                    deploymentConditions?: (clutch.k8s.v1.Deployment.DeploymentStatus.ICondition[]|null);
+                }
+
+                /** Represents a DeploymentStatus. */
+                class DeploymentStatus implements IDeploymentStatus {
+
+                    /**
+                     * Constructs a new DeploymentStatus.
+                     * @param [properties] Properties to set
+                     */
+                    constructor(properties?: clutch.k8s.v1.Deployment.IDeploymentStatus);
+
+                    /** DeploymentStatus replicas. */
+                    public replicas: number;
+
+                    /** DeploymentStatus updatedReplicas. */
+                    public updatedReplicas: number;
+
+                    /** DeploymentStatus readyReplicas. */
+                    public readyReplicas: number;
+
+                    /** DeploymentStatus availableReplicas. */
+                    public availableReplicas: number;
+
+                    /** DeploymentStatus unavailableReplicas. */
+                    public unavailableReplicas: number;
+
+                    /** DeploymentStatus deploymentConditions. */
+                    public deploymentConditions: clutch.k8s.v1.Deployment.DeploymentStatus.ICondition[];
+
+                    /**
+                     * Verifies a DeploymentStatus message.
+                     * @param message Plain object to verify
+                     * @returns `null` if valid, otherwise the reason why it is not
+                     */
+                    public static verify(message: { [k: string]: any }): (string|null);
+
+                    /**
+                     * Creates a DeploymentStatus message from a plain object. Also converts values to their respective internal types.
+                     * @param object Plain object
+                     * @returns DeploymentStatus
+                     */
+                    public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment.DeploymentStatus;
+
+                    /**
+                     * Creates a plain object from a DeploymentStatus message. Also converts values to other types if specified.
+                     * @param message DeploymentStatus
+                     * @param [options] Conversion options
+                     * @returns Plain object
+                     */
+                    public static toObject(message: clutch.k8s.v1.Deployment.DeploymentStatus, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                    /**
+                     * Converts this DeploymentStatus to JSON.
+                     * @returns JSON object
+                     */
+                    public toJSON(): { [k: string]: any };
+                }
+
+                namespace DeploymentStatus {
+
+                    /** Properties of a Condition. */
+                    interface ICondition {
+
+                        /** Condition type */
+                        type?: (clutch.k8s.v1.Deployment.DeploymentStatus.Condition.Type|null);
+
+                        /** Condition conditionStatus */
+                        conditionStatus?: (clutch.k8s.v1.Deployment.DeploymentStatus.Condition.ConditionStatus|null);
+
+                        /** Condition reason */
+                        reason?: (string|null);
+
+                        /** Condition message */
+                        message?: (string|null);
+                    }
+
+                    /** Represents a Condition. */
+                    class Condition implements ICondition {
+
+                        /**
+                         * Constructs a new Condition.
+                         * @param [properties] Properties to set
+                         */
+                        constructor(properties?: clutch.k8s.v1.Deployment.DeploymentStatus.ICondition);
+
+                        /** Condition type. */
+                        public type: clutch.k8s.v1.Deployment.DeploymentStatus.Condition.Type;
+
+                        /** Condition conditionStatus. */
+                        public conditionStatus: clutch.k8s.v1.Deployment.DeploymentStatus.Condition.ConditionStatus;
+
+                        /** Condition reason. */
+                        public reason: string;
+
+                        /** Condition message. */
+                        public message: string;
+
+                        /**
+                         * Verifies a Condition message.
+                         * @param message Plain object to verify
+                         * @returns `null` if valid, otherwise the reason why it is not
+                         */
+                        public static verify(message: { [k: string]: any }): (string|null);
+
+                        /**
+                         * Creates a Condition message from a plain object. Also converts values to their respective internal types.
+                         * @param object Plain object
+                         * @returns Condition
+                         */
+                        public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.Deployment.DeploymentStatus.Condition;
+
+                        /**
+                         * Creates a plain object from a Condition message. Also converts values to other types if specified.
+                         * @param message Condition
+                         * @param [options] Conversion options
+                         * @returns Plain object
+                         */
+                        public static toObject(message: clutch.k8s.v1.Deployment.DeploymentStatus.Condition, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                        /**
+                         * Converts this Condition to JSON.
+                         * @returns JSON object
+                         */
+                        public toJSON(): { [k: string]: any };
+                    }
+
+                    namespace Condition {
+
+                        /** Type enum. */
+                        enum Type {
+                            UNSPECIFIED = 0,
+                            UNKNOWN = 1,
+                            AVAILABLE = 2,
+                            PROGRESSING = 3,
+                            REPLICA_FAILURE = 4
+                        }
+
+                        /** ConditionStatus enum. */
+                        enum ConditionStatus {
+                            CONDITION_UNSPECIFIED = 0,
+                            CONDITION_TRUE = 1,
+                            CONDITION_FALSE = 2,
+                            CONDITION_UNKNOWN = 3
+                        }
+                    }
+                }
             }
 
             /** Properties of a DescribeDeploymentRequest. */

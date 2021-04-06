@@ -6,7 +6,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/golang/protobuf/ptypes/duration"
 	"github.com/stretchr/testify/assert"
@@ -14,6 +13,7 @@ import (
 	"go.uber.org/zap/zaptest"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	restclient "k8s.io/client-go/rest"
 
@@ -45,7 +45,7 @@ func TestNew(t *testing.T) {
 
 	paths := []string{tempfile.Name()}
 
-	cfg, _ := ptypes.MarshalAny(&k8sv1.Config{
+	cfg, _ := anypb.New(&k8sv1.Config{
 		Kubeconfigs: paths,
 	})
 	log := zaptest.NewLogger(t)
@@ -71,7 +71,8 @@ func TestNew(t *testing.T) {
 
 func TestNewWithWrongConfig(t *testing.T) {
 	_, err := New(&any.Any{TypeUrl: "foobar"}, nil, nil)
-	assert.EqualError(t, err, `mismatched message type: got "foobar" want "clutch.config.service.k8s.v1.Config"`)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "mismatched message")
 }
 
 func TestApplyRestClientConfig(t *testing.T) {

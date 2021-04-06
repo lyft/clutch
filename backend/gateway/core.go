@@ -26,6 +26,7 @@ import (
 	topologymod "github.com/lyft/clutch/backend/module/topology"
 	"github.com/lyft/clutch/backend/resolver"
 	awsresolver "github.com/lyft/clutch/backend/resolver/aws"
+	coreresolver "github.com/lyft/clutch/backend/resolver/core"
 	k8sresolver "github.com/lyft/clutch/backend/resolver/k8s"
 	"github.com/lyft/clutch/backend/service"
 	auditservice "github.com/lyft/clutch/backend/service/audit"
@@ -86,8 +87,9 @@ var Services = service.Factory{
 }
 
 var Resolvers = resolver.Factory{
-	awsresolver.Name: awsresolver.New,
-	k8sresolver.Name: k8sresolver.New,
+	awsresolver.Name:  awsresolver.New,
+	k8sresolver.Name:  k8sresolver.New,
+	coreresolver.Name: coreresolver.New,
 }
 
 var CoreComponentFactory = &ComponentFactory{

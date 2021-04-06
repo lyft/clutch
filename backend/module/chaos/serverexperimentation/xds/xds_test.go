@@ -13,10 +13,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	rpc_status "google.golang.org/genproto/googleapis/rpc/status"
+	"google.golang.org/protobuf/types/known/anypb"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
 	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 func TestServerStats(t *testing.T) {
@@ -99,10 +101,11 @@ func TestResourceTTL(t *testing.T) {
 			},
 		},
 	}
-	a, err := ptypes.MarshalAny(&config)
+	a, err := anypb.New(&config)
 	assert.NoError(t, err)
 
-	_, err = testServer.Storer.CreateExperiment(context.Background(), a, &now, &now)
+	es := experimentstore.ExperimentSpecification{StartTime: now, EndTime: &now, Config: a}
+	_, err = testServer.Storer.CreateExperiment(context.Background(), &es)
 	assert.NoError(t, err)
 
 	// First we look at a stream for a cluster that has an active fault. This should result in a TTL'd
@@ -120,17 +123,17 @@ func TestResourceTTL(t *testing.T) {
 	assert.NoError(t, err)
 
 	resource := &gcpDiscoveryV3.Resource{}
-	assert.NoError(t, ptypes.UnmarshalAny(r.Resources[0], resource))
+	assert.NoError(t, r.Resources[0].UnmarshalTo(resource))
 
-	assert.Equal(t, int64(1), resource.Ttl.Seconds)
+	assert.Equal(t, int64(2), resource.Ttl.Seconds)
 
 	r, err = s.sendV3RequestAndAwaitResponse(r.VersionInfo, r.Nonce)
 	assert.NoError(t, err)
 
 	resource = &gcpDiscoveryV3.Resource{}
-	assert.NoError(t, ptypes.UnmarshalAny(r.Resources[0], resource))
+	assert.NoError(t, r.Resources[0].UnmarshalTo(resource))
 
-	assert.Equal(t, int64(1), resource.Ttl.Seconds)
+	assert.Equal(t, int64(2), resource.Ttl.Seconds)
 	assert.Nil(t, resource.Resource)
 
 	// Second we look at a stream for a cluster that should not receive any faults.
@@ -148,7 +151,7 @@ func TestResourceTTL(t *testing.T) {
 	assert.NoError(t, err)
 
 	runtime := &gcpRuntimeServiceV3.Runtime{}
-	assert.NoError(t, ptypes.UnmarshalAny(r.Resources[0], runtime))
+	assert.NoError(t, r.Resources[0].UnmarshalTo(runtime))
 
 	assert.Empty(t, runtime.Layer.Fields)
 
