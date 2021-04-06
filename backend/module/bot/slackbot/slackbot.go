@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"net/http"
-	"strings"
 
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
@@ -28,7 +27,6 @@ const (
 	hSignature = "X-Slack-Signature"
 	hTimestamp = "X-Slack-Request-Timestamp"
 )
-
 
 func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
 	config := &slackbotconfigv1.Config{}
