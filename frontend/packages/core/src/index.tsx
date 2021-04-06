@@ -7,7 +7,13 @@ import RadioGroup from "./Input/radio-group";
 import Select from "./Input/select";
 import Switch from "./Input/switchToggle";
 import TextField from "./Input/text-field";
-import { Accordion, AccordionActions, AccordionDetails, AccordionDivider, AccordionGroup } from "./accordion";
+import {
+  Accordion,
+  AccordionActions,
+  AccordionDetails,
+  AccordionDivider,
+  AccordionGroup,
+} from "./accordion";
 import ClutchApp from "./AppProvider";
 import { Button, ButtonGroup, ClipboardButton, IconButton } from "./button";
 import Confirmation from "./confirmation";
