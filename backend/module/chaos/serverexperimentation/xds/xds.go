@@ -96,6 +96,9 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 		resourceTTL = &d
 
 		if config.HeartbeatInterval != nil {
+			if err := config.HeartbeatInterval.CheckValid(); err != nil {
+				return nil, err
+			}
 			d := config.HeartbeatInterval.AsDuration()
 			heartbeatInterval = &d
 		}
