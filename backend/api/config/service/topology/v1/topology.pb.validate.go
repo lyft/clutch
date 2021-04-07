@@ -138,6 +138,18 @@ func (m *Cache) Validate() error {
 
 	}
 
+	// no validation rules for BatchInsertSize
+
+	if v, ok := interface{}(m.GetBatchInsertFlush()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CacheValidationError{
+				field:  "BatchInsertFlush",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	return nil
 }
 

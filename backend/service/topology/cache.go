@@ -6,7 +6,9 @@ import (
 	"database/sql"
 	"encoding/binary"
 	"encoding/json"
+	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"go.uber.org/zap"
@@ -80,7 +82,6 @@ func convertLockIdToAdvisoryLockId(lockID string) uint32 {
 // This will check all services that are currently registered for the given clutch configuration
 // If any of the services implement the CacheableTopology interface we will start consuming
 // topology objects until the context has been cancelled.
-//
 func (c *client) startTopologyCache(ctx context.Context) {
 	for name, s := range service.Registry {
 		if svc, ok := s.(CacheableTopology); ok {
@@ -99,64 +100,109 @@ func (c *client) startTopologyCache(ctx context.Context) {
 	<-ctx.Done()
 }
 
+// Processes all topology cache update requests.
+// This supports insert batching which defaults to 1, and can be configured by settting BatchInsertSize.
+// Notably a flush will happen every 30 seconds, ensuring all items make it into cache even if the
+// configured BatchInsertSize is not met.
 func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest, service string) {
-	for obj := range objs {
-		c.scope.Tagged(map[string]string{
-			"service": service,
-		}).SubScope("cache").Gauge("object_channel.queue_depth").Update(float64(len(objs)))
+	var batchInsert []*topologyv1.Resource
+	queueDepth := c.scope.Tagged(map[string]string{
+		"service": service,
+	}).SubScope("cache").Gauge("object_channel.queue_depth")
 
-		switch obj.Action {
-		case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
-			if err := c.setCache(ctx, obj.Resource); err != nil {
-				c.log.Error("Error setting cache", zap.Error(err))
+	for {
+		select {
+		case obj, ok := <-objs:
+			if !ok {
+				return
 			}
-		case topologyv1.UpdateCacheRequest_DELETE:
-			if err := c.deleteCache(ctx, obj.Resource.Id, obj.Resource.Pb.TypeUrl); err != nil {
-				c.log.Error("Error deleting cache", zap.Error(err))
+
+			queueDepth.Update(float64(len(objs)))
+
+			switch obj.Action {
+			case topologyv1.UpdateCacheRequest_CREATE_OR_UPDATE:
+				batchInsert = append(batchInsert, obj.Resource)
+			case topologyv1.UpdateCacheRequest_DELETE:
+				if err := c.deleteCache(ctx, obj.Resource.Id, obj.Resource.Pb.TypeUrl); err != nil {
+					c.log.Error("Error deleting cache", zap.Error(err))
+				}
+			default:
+				c.log.Warn("UpdateCacheRequest action is not implemented", zap.String("action", obj.Action.String()))
 			}
-		default:
-			c.log.Warn("UpdateCacheRequest action is not implemented", zap.String("action", obj.Action.String()))
+
+			if len(batchInsert) >= c.batchInsertSize {
+				if err := c.setCache(ctx, batchInsert); err != nil {
+					c.log.Error("Error setting cache", zap.Error(err))
+				}
+				batchInsert = batchInsert[:0]
+			}
+		// TODO (mcutalo): There is a possibility that this code will never be reached.
+		// If deletes happen at a faster interval than the flush timer (which is configurable via batchInsertFlush),
+		// insert items would be stuck in the batch until the BatchInsertSize is reached.
+		case <-time.After(c.batchInsertFlush):
+			if len(batchInsert) > 0 {
+				if err := c.setCache(ctx, batchInsert); err != nil {
+					c.log.Error("Error setting cache", zap.Error(err))
+				}
+				batchInsert = batchInsert[:0]
+			}
 		}
 	}
 }
 
-func (c *client) setCache(ctx context.Context, obj *topologyv1.Resource) error {
-	const upsertQuery = `
-		INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
-		VALUES ($1, $2, $3, $4)
+func (c *client) prepareBulkCacheInsert(obj []*topologyv1.Resource) ([]interface{}, string) {
+	queryParams := make([]string, 0, len(obj))
+	// Total object length x 4 as 4 is the number of columns we need to populate.
+	queryArgs := make([]interface{}, 0, len(obj)*4)
+
+	for i, o := range obj {
+		// To parameterize all of the inputs for the bulk insert we need to increment the variable name.
+		// EG: A bulk insert of two items should look like so "($1, $2, $3, $4),($5, $6, $7, $8)"
+		queryParams = append(queryParams, fmt.Sprintf("($%d, $%d, $%d, $%d)", i*4+1, i*4+2, i*4+3, i*4+4))
+
+		metadataJson, err := json.Marshal(o.Metadata)
+		if err != nil {
+			c.scope.SubScope("cache").Counter("set.failure").Inc(1)
+			c.log.Error("unable to marshal json", zap.Error(err))
+			return nil, ""
+		}
+
+		dataJson, err := protojson.Marshal(o.Pb)
+		if err != nil {
+			c.scope.SubScope("cache").Counter("set.failure").Inc(1)
+			c.log.Error("unable to marshal proto", zap.Error(err))
+			return nil, ""
+		}
+
+		// append args in column order
+		queryArgs = append(queryArgs, o.Id, o.Pb.GetTypeUrl(), dataJson, metadataJson)
+	}
+
+	return queryArgs, strings.Join(queryParams, ",")
+}
+
+func (c *client) setCache(ctx context.Context, obj []*topologyv1.Resource) error {
+	args, queryParams := c.prepareBulkCacheInsert(obj)
+	upsertQuery := fmt.Sprintf(`INSERT INTO topology_cache (id, resolver_type_url, data, metadata)
+		VALUES %s
 		ON CONFLICT (id, resolver_type_url) DO UPDATE SET
 			resolver_type_url = EXCLUDED.resolver_type_url,
 			data = EXCLUDED.data,
 			metadata = EXCLUDED.metadata,
 			updated_at = NOW()
-	`
+	`, queryParams)
 
-	metadataJson, err := json.Marshal(obj.Metadata)
-	if err != nil {
-		c.scope.SubScope("cache").Counter("set.failure").Inc(1)
-		return err
-	}
-
-	dataJson, err := protojson.Marshal(obj.Pb)
-	if err != nil {
-		c.scope.SubScope("cache").Counter("set.failure").Inc(1)
-		return err
-	}
-
-	_, err = c.db.ExecContext(
+	_, err := c.db.ExecContext(
 		ctx,
 		upsertQuery,
-		obj.Id,
-		obj.Pb.GetTypeUrl(),
-		dataJson,
-		metadataJson,
+		args...,
 	)
 	if err != nil {
-		c.scope.SubScope("cache").Counter("set.failure").Inc(1)
+		c.scope.SubScope("cache").Counter("set.failure").Inc(int64(len(obj)))
 		return err
 	}
 
-	c.scope.SubScope("cache").Counter("set.success").Inc(1)
+	c.scope.SubScope("cache").Counter("set.success").Inc(int64(len(obj)))
 	return nil
 }
 
