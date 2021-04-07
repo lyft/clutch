@@ -1,6 +1,7 @@
 package slackbot
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -17,13 +18,26 @@ const (
 var (
 	// example: <@UVWXYZ123>
 	slackUserIdRegex = regexp.MustCompile(`^<@(\w+)>`)
+	spaceRegex       = regexp.MustCompile(`\s+`)
 )
 
-// Commands issued in a channel (instead of in a DM) will start with the user ID of the bot. Example: '<@UVWXYZ123> describe pod'.
-// This should be removed before matching the command to a bot reply.
+// TrimUserId removes the user id of the bot from the command string
+// Commands issued in a channel (instead of in a DM) will start with the user ID of the bot. Example: '<@UVWXYZ123> describe pod'
+// and should be removed before matching the command to a bot reply.
 func TrimUserId(text string) string {
 	trimmed := slackUserIdRegex.ReplaceAllString(text, "bot_user_id")
 	return strings.Replace(trimmed, "bot_user_id", "", 1)
+}
+
+// TrimRedundantSpaces replaces whitespace substrings with a single space character
+// this is a sanitization check before matching the command
+func TrimRedundantSpaces(text string) string {
+	return spaceRegex.ReplaceAllString(text, " ")
+}
+
+// DefaultHelp returns the default help message is the command isn't matched
+func DefaultHelp() string {
+	return fmt.Sprintf("%s/n%s", HelpIntro, HelpDetails)
 }
 
 func sendBotReply(client *slack.Client, channel, message string) error {

@@ -29,6 +29,8 @@ const (
 	// request headers used to verify a request came from Slack
 	hSignature = "x-Slack-Signature"
 	hTimestamp = "x-Slack-Request-Timestamp"
+	// slack event type for DMs with the bot
+	dmMessage = "im"
 )
 
 func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
@@ -87,6 +89,13 @@ func (m *mod) Event(ctx context.Context, req *slackbotv1.EventRequest) (*slackbo
 		return m.handleURLVerificationEvent(req.Challenge)
 	}
 
+	// at this point in the flow, we can ack the Slack API with a 2xx response and process the event seperately
+	// TODO: (sperry) asynchronous processing
+	err = m.handleEvent(req)
+	if err != nil {
+		m.logger.Error("handle event error", log.ErrorField(err))
+	}
+
 	return &slackbotv1.EventResponse{}, nil
 }
 
@@ -107,9 +116,14 @@ func getSlackRequestHeaders(ctx context.Context) (http.Header, error) {
 		return nil, fmt.Errorf("%s header not present on request", hTimestamp)
 	}
 
+	// the slack package is case sensitive when looking up these headers
+	// https://github.com/slack-go/slack/blob/master/security.go#L56
+	xSignature := "X-Slack-Signature"
+	xTimestamp := "X-Slack-Request-Timestamp"
+
 	return http.Header{
-		"X-Slack-Signature":         signature,
-		"X-Slack-Request-Timestamp": timestamp,
+		xSignature: signature,
+		xTimestamp: timestamp,
 	}, nil
 }
 
@@ -189,4 +203,47 @@ func (m *mod) handleCallBackEvent(event *slackbotv1.Event) error {
 	default:
 		return fmt.Errorf("received unsuported event type: %s", event.Type)
 	}
+}
+
+// event type for messages that mention the bot directly
+func (m *mod) handleAppMentionEvent(event *slackbotv1.Event) error {
+	command := TrimUserId(event.Text)
+
+	command = TrimRedundantSpaces(command)
+
+	match, ok := m.bot.MatchCommand(command)
+	if !ok {
+		// no match found for this command, return help message
+		match = DefaultHelp()
+	}
+
+	err := sendBotReply(m.slack, event.Channel, match)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// event type for DMs with the bot
+func (m *mod) handleMessageEvent(event *slackbotv1.Event) error {
+	if event.ChannelType != dmMessage {
+		return fmt.Errorf("unexpected channel type: %s", event.ChannelType)
+	}
+	// it's standard behavior of the Slack Events API that the bot will receive all message events, including from it's own posts
+	// so we need to filter out these events by checking that the BotId field is empty; otherwise by reacting to them we will create an infinte loop.
+	if event.BotId == "" {
+		// note: for the DMs with the bot, the text does not include the bot user id
+		command := TrimRedundantSpaces(event.Text)
+		match, ok := m.bot.MatchCommand(command)
+		if !ok {
+			// no match found for this command, return help message
+			match = DefaultHelp()
+		}
+		err := sendBotReply(m.slack, event.Channel, match)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
