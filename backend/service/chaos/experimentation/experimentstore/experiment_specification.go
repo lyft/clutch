@@ -1,7 +1,6 @@
 package experimentstore
 
 import (
-	"regexp"
 	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
@@ -12,8 +11,6 @@ import (
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/id"
 )
-
-const runIdRegExp = `^[A-Za-z0-9-._~]+$`
 
 type ExperimentSpecification struct {
 	RunId     string
@@ -29,8 +26,6 @@ func NewExperimentSpecification(ced *experimentationv1.CreateExperimentData, now
 	// If the run identifier is not provided, generate one
 	if runId == "" {
 		runId = id.NewID().String()
-	} else if !regexp.MustCompile(runIdRegExp).MatchString(runId) {
-		return nil, status.Errorf(codes.InvalidArgument, "provided experiment runId (%v) contained forbidden characters and was not matched by \"%v\" regular expresion", runId, runIdRegExp)
 	}
 
 	// If the start time is not provided, default to current time

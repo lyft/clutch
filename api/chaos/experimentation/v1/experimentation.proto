@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package clutch.chaos.experimentation.v1;
 
+import "validate/validate.proto";
 import "api/v1/annotations.proto";
 import "google/api/annotations.proto";
 
@@ -14,7 +15,7 @@ option go_package = "github.com/lyft/clutch/backend/api/chaos/experimentation/v1
 
 message CreateExperimentRequest {
   // The data specifying the experiment to create. See `CreateExperiment` for more details.
-  CreateExperimentData data = 1;
+  CreateExperimentData data = 1 [ (validate.rules).message.required = true ];
 }
 
 message CreateExperimentResponse {
@@ -24,7 +25,7 @@ message CreateExperimentResponse {
 
 message CreateOrGetExperimentRequest {
   // The data specifying the experiment to fetch or create. See `CreateOrGetExperiment` for more details.
-  CreateExperimentData data = 1;
+  CreateExperimentData data = 1 [ (validate.rules).message.required = true ];
 }
 
 message CreateOrGetExperimentResponse {
@@ -35,20 +36,25 @@ message CreateOrGetExperimentResponse {
   }
 
   // The created or fetched experiment that was requested by a caller. See `origin` to learn more
-  // about how to check whether a new experiment was created as the result of request's execution.
+  // about how to check whether a new experiment was created as the result of the request's execution.
   Experiment experiment = 1;
   // The type of returned experiment - either a newly created experiment or an existing one.
   Origin origin = 2;
 }
 
 message GetExperimentsRequest {
+  // The status of an experiment.
   enum Status {
+    // Unspecified status.
     STATUS_UNSPECIFIED = 0;
+    // Return experiments that are currently running.
     STATUS_RUNNING = 1;
   }
 
-  string config_type = 1;
-  Status status = 2;
+  // Return experiments whose config's type URL matches the provided config type URL.
+  string config_type = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  // Return experiments whose status is equal to the provided value.
+  Status status = 2 [ (validate.rules).enum = {defined_only : true, not_in : 0} ];
 }
 
 message GetExperimentsResponse {
@@ -61,7 +67,10 @@ message CancelExperimentRunRequest {
     pattern : "{id}"
   };
 
-  string id = 1;
+  // The identifier of an experiment run to cancel.
+  string id = 1 [ (validate.rules).string = {min_bytes : 1} ];
+  // The reason for the cancelation request.
+  string reason = 2 [ (validate.rules).string = {min_bytes : 1, max_len : 100} ];
 }
 
 message CancelExperimentRunResponse {
@@ -80,7 +89,8 @@ message GetExperimentRunDetailsRequest {
     pattern : "{id}"
   };
 
-  string id = 1;
+  // The identifier of an experiment run whose details should be returned to the caller.
+  string id = 1 [ (validate.rules).string = {min_bytes : 1} ];
 }
 
 message GetExperimentRunDetailsResponse {
@@ -100,7 +110,7 @@ service ExperimentsAPI {
   }
   // Create a new experiment using the provided experiment data. It succeeds even if an experiment run
   // with the provided run identifier already exists. In this case, the rest of request's payload is ignored
-  // and existing experiment with a matching run identifier is returned. See `CreateExperimentData` for more
+  // and an existing experiment with a matching run identifier is returned. See `CreateExperimentData` for more
   // details.
   rpc CreateOrGetExperiment(CreateOrGetExperimentRequest) returns (CreateOrGetExperimentResponse) {
     option (google.api.http) = {
@@ -109,6 +119,8 @@ service ExperimentsAPI {
     };
     option (clutch.api.v1.action).type = CREATE;
   }
+  // Cancel a running experiment run. The operation returns success even if a given experiment run has been
+  // already completed or canceled and the operation does not have any effect.
   rpc CancelExperimentRun(CancelExperimentRunRequest) returns (CancelExperimentRunResponse) {
     option (google.api.http) = {
       post : "/v1/chaos/experimentation/cancelExperimentRun"
@@ -116,6 +128,7 @@ service ExperimentsAPI {
     };
     option (clutch.api.v1.action).type = DELETE;
   }
+  // Get the list of experiments fulfilling the specified criteria. See `GetExperimentsRequests` for more details.
   rpc GetExperiments(GetExperimentsRequest) returns (GetExperimentsResponse) {
     option (google.api.http) = {
       post : "/v1/chaos/experimentation/getExperiments"
@@ -123,6 +136,7 @@ service ExperimentsAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
+  // Get the list of experiments in the form that's optimized for displaying to the end user.
   rpc GetListView(GetListViewRequest) returns (GetListViewResponse) {
     option (google.api.http) = {
       post : "/v1/chaos/experimentation/getListView"
@@ -130,6 +144,7 @@ service ExperimentsAPI {
     };
     option (clutch.api.v1.action).type = READ;
   }
+  // Fetch the list of properties in the format that's optimized for displaying to the end user.
   rpc GetExperimentRunDetails(GetExperimentRunDetailsRequest) returns (GetExperimentRunDetailsResponse) {
     option (google.api.http) = {
       post : "/v1/chaos/experimentation/getExperimentRunDetails"

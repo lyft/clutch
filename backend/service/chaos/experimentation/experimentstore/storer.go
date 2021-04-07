@@ -139,11 +139,11 @@ func (s *storer) CreateOrGetExperiment(ctx context.Context, es *ExperimentSpecif
 }
 
 func (s *storer) CancelExperimentRun(ctx context.Context, id string, reason string) error {
-	if len(reason) > 32 {
-		reason = reason[0:32]
+	if len(reason) > 100 {
+		reason = reason[0:100]
 	}
 	sql :=
-		`UPDATE experiment_run 
+		`UPDATE experiment_run
          SET cancellation_time = NOW(),
 		 termination_reason = $2
          WHERE id = $1 AND cancellation_time IS NULL AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
@@ -228,10 +228,11 @@ func (s *storer) GetListView(ctx context.Context) ([]*experimentation.ListViewIt
 		var details string
 		run := ExperimentRun{}
 		config := ExperimentConfig{Config: &any.Any{}}
-		err = rows.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.creationTime, &config.id, &details)
+		err = rows.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.CreationTime, &config.id, &details)
 		if err != nil {
 			return nil, err
 		}
+
 		if err = protojson.Unmarshal([]byte(details), config.Config); err != nil {
 			return nil, err
 		}
@@ -278,7 +279,7 @@ func (s *storer) getExperiment(ctx context.Context, runId string) (*Experiment, 
 	var details string
 	run := ExperimentRun{}
 	config := ExperimentConfig{Config: &any.Any{}}
-	err := row.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.creationTime, &config.id, &details)
+	err := row.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.CreationTime, &config.id, &details)
 	if err != nil {
 		return nil, err
 	}

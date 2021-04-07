@@ -3427,6 +3427,9 @@ export namespace clutch {
 
                     /** CancelExperimentRunRequest id */
                     id?: (string|null);
+
+                    /** CancelExperimentRunRequest reason */
+                    reason?: (string|null);
                 }
 
                 /** Represents a CancelExperimentRunRequest. */
@@ -3440,6 +3443,9 @@ export namespace clutch {
 
                     /** CancelExperimentRunRequest id. */
                     public id: string;
+
+                    /** CancelExperimentRunRequest reason. */
+                    public reason: string;
 
                     /**
                      * Verifies a CancelExperimentRunRequest message.
