@@ -17,10 +17,10 @@ import { useDataLayout } from "@clutch-sh/data-layout";
 import type { WizardChild } from "@clutch-sh/wizard";
 import { Wizard, WizardStep } from "@clutch-sh/wizard";
 import styled from "@emotion/styled";
+import { yupResolver } from "@hookform/resolvers/yup";
 import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 import type { WorkflowProps } from ".";
 
