@@ -15,6 +15,7 @@ import (
 	"golang.org/x/oauth2"
 	"google.golang.org/protobuf/types/known/anypb"
 
+	authnmodulev1 "github.com/lyft/clutch/backend/api/authn/v1"
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 	"github.com/lyft/clutch/backend/service"
 )
@@ -57,7 +58,7 @@ type Provider interface {
 type Issuer interface {
 	// CreateToken creates a new OAuth2 for the provided subject with the provided expiration. If expiry is nil,
 	// the token will never expire.
-	CreateToken(ctx context.Context, subject string, expiry *time.Duration) (token *oauth2.Token, err error)
+	CreateToken(ctx context.Context, subject string, tokenType authnmodulev1.CreateTokenRequest_TokenType, expiry *time.Duration) (token *oauth2.Token, err error)
 }
 
 type IssuerProvider interface {

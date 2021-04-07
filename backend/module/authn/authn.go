@@ -10,14 +10,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
 
 	authnv1 "github.com/lyft/clutch/backend/api/authn/v1"
 	"github.com/lyft/clutch/backend/module"
@@ -111,25 +108,14 @@ func (a *api) Callback(ctx context.Context, request *authnv1.CallbackRequest) (*
 }
 
 func (a *api) CreateToken(ctx context.Context, request *authnv1.CreateTokenRequest) (*authnv1.CreateTokenResponse, error) {
-	var prefixedSubject string
-	switch request.TokenType {
-	case authnv1.CreateTokenRequest_SERVICE:
-		prefixedSubject = "service:" + request.Subject
-	default:
-		return nil, status.Error(codes.InvalidArgument, "invalid token type")
-	}
-
 	var expiry *time.Duration
 
 	if request.Expiry != nil {
-		convertedExpiry, err := ptypes.Duration(request.Expiry)
-		if err != nil {
-			return nil, err
-		}
+		convertedExpiry := request.Expiry.AsDuration()
 		expiry = &convertedExpiry
 	}
 
-	token, err := a.issuer.CreateToken(ctx, prefixedSubject, expiry)
+	token, err := a.issuer.CreateToken(ctx, request.Subject, request.TokenType, expiry)
 	if err != nil {
 		return nil, err
 	}

@@ -14,6 +14,7 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/oauth2"
 
+	authnmodulev1 "github.com/lyft/clutch/backend/api/authn/v1"
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 )
 
@@ -136,7 +137,15 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 	return p.signNewToken(ctx, claims)
 }
 
-func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, expiry *time.Duration) (*oauth2.Token, error) {
+func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, tokenType authnmodulev1.CreateTokenRequest_TokenType, expiry *time.Duration) (*oauth2.Token, error) {
+	var prefixedSubject string
+	switch tokenType {
+	case authnmodulev1.CreateTokenRequest_SERVICE:
+		prefixedSubject = "service:" + subject
+	default:
+		return nil, errors.New("invalid token type")
+	}
+
 	issuedAt := time.Now()
 	var expiresAt int64
 	if expiry != nil {
@@ -148,7 +157,7 @@ func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, expiry *
 			ExpiresAt: expiresAt,
 			IssuedAt:  issuedAt.Unix(),
 			Issuer:    clutchProvider,
-			Subject:   subject,
+			Subject:   prefixedSubject,
 		},
 	}
 

@@ -1,4 +1,4 @@
-package authnmock
+package grpcmock
 
 import (
 	"google.golang.org/grpc"

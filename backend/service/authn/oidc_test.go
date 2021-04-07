@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/oauth2"
 
+	authnmodulev1 "github.com/lyft/clutch/backend/api/authn/v1"
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 	apimock "github.com/lyft/clutch/backend/mock/api"
 	"github.com/lyft/clutch/backend/mock/service/authnmock"
@@ -136,36 +137,36 @@ oidc:
 	assert.NotNil(t, p)
 
 	expiry := 5 * time.Hour
-	createdToken, err := p.(Issuer).CreateToken(ctx, "some subject", &expiry)
+	createdToken, err := p.(Issuer).CreateToken(ctx, "some subject", authnmodulev1.CreateTokenRequest_SERVICE, &expiry)
 	assert.NoError(t, err)
 	assert.NotNil(t, createdToken)
 
 	// The token should have been recorded in the database.
 	assert.Len(t, mockStorage.Tokens[clutchProvider], 1)
-	assert.Equal(t, mockStorage.Tokens[clutchProvider]["some subject"], createdToken)
+	assert.Equal(t, mockStorage.Tokens[clutchProvider]["service:some subject"], createdToken)
 
 	claims, err := p.Verify(ctx, createdToken.AccessToken)
 	assert.NoError(t, err)
 
 	assert.NotZero(t, claims.StandardClaims.IssuedAt)
 	assert.Equal(t, claims.StandardClaims.ExpiresAt, time.Unix(claims.StandardClaims.IssuedAt, 0).Add(5*time.Hour).Unix())
-	assert.Equal(t, claims.StandardClaims.Subject, "some subject")
+	assert.Equal(t, claims.StandardClaims.Subject, "service:some subject")
 
 	// Create a token without expiry.
-	createdToken, err = p.(Issuer).CreateToken(ctx, "some subject", nil)
+	createdToken, err = p.(Issuer).CreateToken(ctx, "some subject", authnmodulev1.CreateTokenRequest_SERVICE, nil)
 	assert.NoError(t, err)
 	assert.NotNil(t, createdToken)
 
 	// The token should have been recorded in the database.
 	assert.Len(t, mockStorage.Tokens[clutchProvider], 1)
-	assert.Equal(t, mockStorage.Tokens[clutchProvider]["some subject"], createdToken)
+	assert.Equal(t, mockStorage.Tokens[clutchProvider]["service:some subject"], createdToken)
 
 	claims, err = p.Verify(ctx, createdToken.AccessToken)
 	assert.NoError(t, err)
 
 	assert.NotZero(t, claims.StandardClaims.IssuedAt)
 	assert.Equal(t, claims.StandardClaims.ExpiresAt, int64(0))
-	assert.Equal(t, claims.StandardClaims.Subject, "some subject")
+	assert.Equal(t, claims.StandardClaims.Subject, "service:some subject")
 }
 
 func TestTokenRevocationFlow(t *testing.T) {

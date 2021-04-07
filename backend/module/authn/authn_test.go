@@ -15,6 +15,7 @@ import (
 
 	authnv1 "github.com/lyft/clutch/backend/api/authn/v1"
 	"github.com/lyft/clutch/backend/gateway/meta"
+	"github.com/lyft/clutch/backend/mock/grpcmock"
 	"github.com/lyft/clutch/backend/mock/service/authnmock"
 	"github.com/lyft/clutch/backend/service/authn"
 )
@@ -61,7 +62,7 @@ func TestAPICallback(t *testing.T) {
 	assert.Nil(t, response)
 	assert.Error(t, err, "error: description")
 
-	transportStream := &authnmock.MockServerTransportStream{}
+	transportStream := &grpcmock.MockServerTransportStream{}
 	ctx := grpc.NewContextWithServerTransportStream(context.Background(), transportStream)
 	response, err = api.Callback(ctx, &authnv1.CallbackRequest{
 		State: "nonce-foo.com",
@@ -80,17 +81,11 @@ func TestAPICreateToken(t *testing.T) {
 	}
 
 	response, err := api.CreateToken(context.Background(), &authnv1.CreateTokenRequest{
-		Subject: "name",
-	})
-	assert.Nil(t, response)
-	assert.Error(t, err, "invalid token type")
-
-	response, err = api.CreateToken(context.Background(), &authnv1.CreateTokenRequest{
 		Subject:   "name",
 		TokenType: authnv1.CreateTokenRequest_SERVICE,
 	})
 	assert.NoError(t, err)
-	assert.Equal(t, response.AccessToken, "service:name_token-without-expiry")
+	assert.Equal(t, "SERVICE_name_token-without-expiry", response.AccessToken)
 
 	response, err = api.CreateToken(context.Background(), &authnv1.CreateTokenRequest{
 		Subject:   "name",
@@ -98,7 +93,7 @@ func TestAPICreateToken(t *testing.T) {
 		TokenType: authnv1.CreateTokenRequest_SERVICE,
 	})
 	assert.NoError(t, err)
-	assert.Equal(t, response.AccessToken, "service:name_token-with-expiry")
+	assert.Equal(t, "SERVICE_name_token-with-expiry", response.AccessToken)
 }
 
 // TODO(snowp): Ideally this should be in the authmocks package, but this introduces a circular dep
