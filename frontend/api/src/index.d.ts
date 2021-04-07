@@ -11045,6 +11045,15 @@ export namespace clutch {
 
                 /** Container restartCount */
                 restartCount?: (number|null);
+
+                /** Container stateWaiting */
+                stateWaiting?: (clutch.k8s.v1.IStateWaiting|null);
+
+                /** Container stateRunning */
+                stateRunning?: (clutch.k8s.v1.IStateRunning|null);
+
+                /** Container stateTerminated */
+                stateTerminated?: (clutch.k8s.v1.IStateTerminated|null);
             }
 
             /** Represents a Container. */
@@ -11070,6 +11079,18 @@ export namespace clutch {
 
                 /** Container restartCount. */
                 public restartCount: number;
+
+                /** Container stateWaiting. */
+                public stateWaiting?: (clutch.k8s.v1.IStateWaiting|null);
+
+                /** Container stateRunning. */
+                public stateRunning?: (clutch.k8s.v1.IStateRunning|null);
+
+                /** Container stateTerminated. */
+                public stateTerminated?: (clutch.k8s.v1.IStateTerminated|null);
+
+                /** Container stateDetails. */
+                public stateDetails?: ("stateWaiting"|"stateRunning"|"stateTerminated");
 
                 /**
                  * Verifies a Container message.
@@ -11110,6 +11131,174 @@ export namespace clutch {
                     RUNNING = 3,
                     WAITING = 4
                 }
+            }
+
+            /** Properties of a StateWaiting. */
+            interface IStateWaiting {
+
+                /** StateWaiting reason */
+                reason?: (string|null);
+
+                /** StateWaiting message */
+                message?: (string|null);
+            }
+
+            /** Represents a StateWaiting. */
+            class StateWaiting implements IStateWaiting {
+
+                /**
+                 * Constructs a new StateWaiting.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IStateWaiting);
+
+                /** StateWaiting reason. */
+                public reason: string;
+
+                /** StateWaiting message. */
+                public message: string;
+
+                /**
+                 * Verifies a StateWaiting message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a StateWaiting message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns StateWaiting
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.StateWaiting;
+
+                /**
+                 * Creates a plain object from a StateWaiting message. Also converts values to other types if specified.
+                 * @param message StateWaiting
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.StateWaiting, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this StateWaiting to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a StateRunning. */
+            interface IStateRunning {
+
+                /** StateRunning startTime */
+                startTime?: (google.protobuf.ITimestamp|null);
+            }
+
+            /** Represents a StateRunning. */
+            class StateRunning implements IStateRunning {
+
+                /**
+                 * Constructs a new StateRunning.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IStateRunning);
+
+                /** StateRunning startTime. */
+                public startTime?: (google.protobuf.ITimestamp|null);
+
+                /**
+                 * Verifies a StateRunning message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a StateRunning message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns StateRunning
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.StateRunning;
+
+                /**
+                 * Creates a plain object from a StateRunning message. Also converts values to other types if specified.
+                 * @param message StateRunning
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.StateRunning, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this StateRunning to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a StateTerminated. */
+            interface IStateTerminated {
+
+                /** StateTerminated reason */
+                reason?: (string|null);
+
+                /** StateTerminated message */
+                message?: (string|null);
+
+                /** StateTerminated exitCode */
+                exitCode?: (number|null);
+
+                /** StateTerminated signal */
+                signal?: (number|null);
+            }
+
+            /** Represents a StateTerminated. */
+            class StateTerminated implements IStateTerminated {
+
+                /**
+                 * Constructs a new StateTerminated.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IStateTerminated);
+
+                /** StateTerminated reason. */
+                public reason: string;
+
+                /** StateTerminated message. */
+                public message: string;
+
+                /** StateTerminated exitCode. */
+                public exitCode: number;
+
+                /** StateTerminated signal. */
+                public signal: number;
+
+                /**
+                 * Verifies a StateTerminated message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a StateTerminated message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns StateTerminated
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.StateTerminated;
+
+                /**
+                 * Creates a plain object from a StateTerminated message. Also converts values to other types if specified.
+                 * @param message StateTerminated
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.StateTerminated, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this StateTerminated to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
             }
 
             /** Properties of a PodCondition. */
@@ -11224,6 +11413,9 @@ export namespace clutch {
 
                 /** Pod podConditions */
                 podConditions?: (clutch.k8s.v1.IPodCondition[]|null);
+
+                /** Pod initContainers */
+                initContainers?: (clutch.k8s.v1.IContainer[]|null);
             }
 
             /** Represents a Pod. */
@@ -11270,6 +11462,9 @@ export namespace clutch {
 
                 /** Pod podConditions. */
                 public podConditions: clutch.k8s.v1.IPodCondition[];
+
+                /** Pod initContainers. */
+                public initContainers: clutch.k8s.v1.IContainer[];
 
                 /**
                  * Verifies a Pod message.

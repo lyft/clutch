@@ -25882,6 +25882,9 @@ export const clutch = $root.clutch = (() => {
                  * @property {clutch.k8s.v1.Container.State|null} [state] Container state
                  * @property {boolean|null} [ready] Container ready
                  * @property {number|null} [restartCount] Container restartCount
+                 * @property {clutch.k8s.v1.IStateWaiting|null} [stateWaiting] Container stateWaiting
+                 * @property {clutch.k8s.v1.IStateRunning|null} [stateRunning] Container stateRunning
+                 * @property {clutch.k8s.v1.IStateTerminated|null} [stateTerminated] Container stateTerminated
                  */
 
                 /**
@@ -25940,6 +25943,44 @@ export const clutch = $root.clutch = (() => {
                 Container.prototype.restartCount = 0;
 
                 /**
+                 * Container stateWaiting.
+                 * @member {clutch.k8s.v1.IStateWaiting|null|undefined} stateWaiting
+                 * @memberof clutch.k8s.v1.Container
+                 * @instance
+                 */
+                Container.prototype.stateWaiting = null;
+
+                /**
+                 * Container stateRunning.
+                 * @member {clutch.k8s.v1.IStateRunning|null|undefined} stateRunning
+                 * @memberof clutch.k8s.v1.Container
+                 * @instance
+                 */
+                Container.prototype.stateRunning = null;
+
+                /**
+                 * Container stateTerminated.
+                 * @member {clutch.k8s.v1.IStateTerminated|null|undefined} stateTerminated
+                 * @memberof clutch.k8s.v1.Container
+                 * @instance
+                 */
+                Container.prototype.stateTerminated = null;
+
+                // OneOf field names bound to virtual getters and setters
+                let $oneOfFields;
+
+                /**
+                 * Container stateDetails.
+                 * @member {"stateWaiting"|"stateRunning"|"stateTerminated"|undefined} stateDetails
+                 * @memberof clutch.k8s.v1.Container
+                 * @instance
+                 */
+                Object.defineProperty(Container.prototype, "stateDetails", {
+                    get: $util.oneOfGetter($oneOfFields = ["stateWaiting", "stateRunning", "stateTerminated"]),
+                    set: $util.oneOfSetter($oneOfFields)
+                });
+
+                /**
                  * Verifies a Container message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Container
@@ -25950,6 +25991,7 @@ export const clutch = $root.clutch = (() => {
                 Container.verify = function verify(message) {
                     if (typeof message !== "object" || message === null)
                         return "object expected";
+                    let properties = {};
                     if (message.name != null && message.hasOwnProperty("name"))
                         if (!$util.isString(message.name))
                             return "name: string expected";
@@ -25973,6 +26015,34 @@ export const clutch = $root.clutch = (() => {
                     if (message.restartCount != null && message.hasOwnProperty("restartCount"))
                         if (!$util.isInteger(message.restartCount))
                             return "restartCount: integer expected";
+                    if (message.stateWaiting != null && message.hasOwnProperty("stateWaiting")) {
+                        properties.stateDetails = 1;
+                        {
+                            let error = $root.clutch.k8s.v1.StateWaiting.verify(message.stateWaiting);
+                            if (error)
+                                return "stateWaiting." + error;
+                        }
+                    }
+                    if (message.stateRunning != null && message.hasOwnProperty("stateRunning")) {
+                        if (properties.stateDetails === 1)
+                            return "stateDetails: multiple values";
+                        properties.stateDetails = 1;
+                        {
+                            let error = $root.clutch.k8s.v1.StateRunning.verify(message.stateRunning);
+                            if (error)
+                                return "stateRunning." + error;
+                        }
+                    }
+                    if (message.stateTerminated != null && message.hasOwnProperty("stateTerminated")) {
+                        if (properties.stateDetails === 1)
+                            return "stateDetails: multiple values";
+                        properties.stateDetails = 1;
+                        {
+                            let error = $root.clutch.k8s.v1.StateTerminated.verify(message.stateTerminated);
+                            if (error)
+                                return "stateTerminated." + error;
+                        }
+                    }
                     return null;
                 };
 
@@ -26018,6 +26088,21 @@ export const clutch = $root.clutch = (() => {
                         message.ready = Boolean(object.ready);
                     if (object.restartCount != null)
                         message.restartCount = object.restartCount | 0;
+                    if (object.stateWaiting != null) {
+                        if (typeof object.stateWaiting !== "object")
+                            throw TypeError(".clutch.k8s.v1.Container.stateWaiting: object expected");
+                        message.stateWaiting = $root.clutch.k8s.v1.StateWaiting.fromObject(object.stateWaiting);
+                    }
+                    if (object.stateRunning != null) {
+                        if (typeof object.stateRunning !== "object")
+                            throw TypeError(".clutch.k8s.v1.Container.stateRunning: object expected");
+                        message.stateRunning = $root.clutch.k8s.v1.StateRunning.fromObject(object.stateRunning);
+                    }
+                    if (object.stateTerminated != null) {
+                        if (typeof object.stateTerminated !== "object")
+                            throw TypeError(".clutch.k8s.v1.Container.stateTerminated: object expected");
+                        message.stateTerminated = $root.clutch.k8s.v1.StateTerminated.fromObject(object.stateTerminated);
+                    }
                     return message;
                 };
 
@@ -26051,6 +26136,21 @@ export const clutch = $root.clutch = (() => {
                         object.ready = message.ready;
                     if (message.restartCount != null && message.hasOwnProperty("restartCount"))
                         object.restartCount = message.restartCount;
+                    if (message.stateWaiting != null && message.hasOwnProperty("stateWaiting")) {
+                        object.stateWaiting = $root.clutch.k8s.v1.StateWaiting.toObject(message.stateWaiting, options);
+                        if (options.oneofs)
+                            object.stateDetails = "stateWaiting";
+                    }
+                    if (message.stateRunning != null && message.hasOwnProperty("stateRunning")) {
+                        object.stateRunning = $root.clutch.k8s.v1.StateRunning.toObject(message.stateRunning, options);
+                        if (options.oneofs)
+                            object.stateDetails = "stateRunning";
+                    }
+                    if (message.stateTerminated != null && message.hasOwnProperty("stateTerminated")) {
+                        object.stateTerminated = $root.clutch.k8s.v1.StateTerminated.toObject(message.stateTerminated, options);
+                        if (options.oneofs)
+                            object.stateDetails = "stateTerminated";
+                    }
                     return object;
                 };
 
@@ -26086,6 +26186,381 @@ export const clutch = $root.clutch = (() => {
                 })();
 
                 return Container;
+            })();
+
+            v1.StateWaiting = (function() {
+
+                /**
+                 * Properties of a StateWaiting.
+                 * @memberof clutch.k8s.v1
+                 * @interface IStateWaiting
+                 * @property {string|null} [reason] StateWaiting reason
+                 * @property {string|null} [message] StateWaiting message
+                 */
+
+                /**
+                 * Constructs a new StateWaiting.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a StateWaiting.
+                 * @implements IStateWaiting
+                 * @constructor
+                 * @param {clutch.k8s.v1.IStateWaiting=} [properties] Properties to set
+                 */
+                function StateWaiting(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * StateWaiting reason.
+                 * @member {string} reason
+                 * @memberof clutch.k8s.v1.StateWaiting
+                 * @instance
+                 */
+                StateWaiting.prototype.reason = "";
+
+                /**
+                 * StateWaiting message.
+                 * @member {string} message
+                 * @memberof clutch.k8s.v1.StateWaiting
+                 * @instance
+                 */
+                StateWaiting.prototype.message = "";
+
+                /**
+                 * Verifies a StateWaiting message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.StateWaiting
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                StateWaiting.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.reason != null && message.hasOwnProperty("reason"))
+                        if (!$util.isString(message.reason))
+                            return "reason: string expected";
+                    if (message.message != null && message.hasOwnProperty("message"))
+                        if (!$util.isString(message.message))
+                            return "message: string expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a StateWaiting message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.StateWaiting
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.StateWaiting} StateWaiting
+                 */
+                StateWaiting.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.StateWaiting)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.StateWaiting();
+                    if (object.reason != null)
+                        message.reason = String(object.reason);
+                    if (object.message != null)
+                        message.message = String(object.message);
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a StateWaiting message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.StateWaiting
+                 * @static
+                 * @param {clutch.k8s.v1.StateWaiting} message StateWaiting
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                StateWaiting.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.reason = "";
+                        object.message = "";
+                    }
+                    if (message.reason != null && message.hasOwnProperty("reason"))
+                        object.reason = message.reason;
+                    if (message.message != null && message.hasOwnProperty("message"))
+                        object.message = message.message;
+                    return object;
+                };
+
+                /**
+                 * Converts this StateWaiting to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.StateWaiting
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                StateWaiting.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return StateWaiting;
+            })();
+
+            v1.StateRunning = (function() {
+
+                /**
+                 * Properties of a StateRunning.
+                 * @memberof clutch.k8s.v1
+                 * @interface IStateRunning
+                 * @property {google.protobuf.ITimestamp|null} [startTime] StateRunning startTime
+                 */
+
+                /**
+                 * Constructs a new StateRunning.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a StateRunning.
+                 * @implements IStateRunning
+                 * @constructor
+                 * @param {clutch.k8s.v1.IStateRunning=} [properties] Properties to set
+                 */
+                function StateRunning(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * StateRunning startTime.
+                 * @member {google.protobuf.ITimestamp|null|undefined} startTime
+                 * @memberof clutch.k8s.v1.StateRunning
+                 * @instance
+                 */
+                StateRunning.prototype.startTime = null;
+
+                /**
+                 * Verifies a StateRunning message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.StateRunning
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                StateRunning.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.startTime != null && message.hasOwnProperty("startTime")) {
+                        let error = $root.google.protobuf.Timestamp.verify(message.startTime);
+                        if (error)
+                            return "startTime." + error;
+                    }
+                    return null;
+                };
+
+                /**
+                 * Creates a StateRunning message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.StateRunning
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.StateRunning} StateRunning
+                 */
+                StateRunning.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.StateRunning)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.StateRunning();
+                    if (object.startTime != null) {
+                        if (typeof object.startTime !== "object")
+                            throw TypeError(".clutch.k8s.v1.StateRunning.startTime: object expected");
+                        message.startTime = $root.google.protobuf.Timestamp.fromObject(object.startTime);
+                    }
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a StateRunning message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.StateRunning
+                 * @static
+                 * @param {clutch.k8s.v1.StateRunning} message StateRunning
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                StateRunning.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults)
+                        object.startTime = null;
+                    if (message.startTime != null && message.hasOwnProperty("startTime"))
+                        object.startTime = $root.google.protobuf.Timestamp.toObject(message.startTime, options);
+                    return object;
+                };
+
+                /**
+                 * Converts this StateRunning to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.StateRunning
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                StateRunning.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return StateRunning;
+            })();
+
+            v1.StateTerminated = (function() {
+
+                /**
+                 * Properties of a StateTerminated.
+                 * @memberof clutch.k8s.v1
+                 * @interface IStateTerminated
+                 * @property {string|null} [reason] StateTerminated reason
+                 * @property {string|null} [message] StateTerminated message
+                 * @property {number|null} [exitCode] StateTerminated exitCode
+                 * @property {number|null} [signal] StateTerminated signal
+                 */
+
+                /**
+                 * Constructs a new StateTerminated.
+                 * @memberof clutch.k8s.v1
+                 * @classdesc Represents a StateTerminated.
+                 * @implements IStateTerminated
+                 * @constructor
+                 * @param {clutch.k8s.v1.IStateTerminated=} [properties] Properties to set
+                 */
+                function StateTerminated(properties) {
+                    if (properties)
+                        for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                            if (properties[keys[i]] != null)
+                                this[keys[i]] = properties[keys[i]];
+                }
+
+                /**
+                 * StateTerminated reason.
+                 * @member {string} reason
+                 * @memberof clutch.k8s.v1.StateTerminated
+                 * @instance
+                 */
+                StateTerminated.prototype.reason = "";
+
+                /**
+                 * StateTerminated message.
+                 * @member {string} message
+                 * @memberof clutch.k8s.v1.StateTerminated
+                 * @instance
+                 */
+                StateTerminated.prototype.message = "";
+
+                /**
+                 * StateTerminated exitCode.
+                 * @member {number} exitCode
+                 * @memberof clutch.k8s.v1.StateTerminated
+                 * @instance
+                 */
+                StateTerminated.prototype.exitCode = 0;
+
+                /**
+                 * StateTerminated signal.
+                 * @member {number} signal
+                 * @memberof clutch.k8s.v1.StateTerminated
+                 * @instance
+                 */
+                StateTerminated.prototype.signal = 0;
+
+                /**
+                 * Verifies a StateTerminated message.
+                 * @function verify
+                 * @memberof clutch.k8s.v1.StateTerminated
+                 * @static
+                 * @param {Object.<string,*>} message Plain object to verify
+                 * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                 */
+                StateTerminated.verify = function verify(message) {
+                    if (typeof message !== "object" || message === null)
+                        return "object expected";
+                    if (message.reason != null && message.hasOwnProperty("reason"))
+                        if (!$util.isString(message.reason))
+                            return "reason: string expected";
+                    if (message.message != null && message.hasOwnProperty("message"))
+                        if (!$util.isString(message.message))
+                            return "message: string expected";
+                    if (message.exitCode != null && message.hasOwnProperty("exitCode"))
+                        if (!$util.isInteger(message.exitCode))
+                            return "exitCode: integer expected";
+                    if (message.signal != null && message.hasOwnProperty("signal"))
+                        if (!$util.isInteger(message.signal))
+                            return "signal: integer expected";
+                    return null;
+                };
+
+                /**
+                 * Creates a StateTerminated message from a plain object. Also converts values to their respective internal types.
+                 * @function fromObject
+                 * @memberof clutch.k8s.v1.StateTerminated
+                 * @static
+                 * @param {Object.<string,*>} object Plain object
+                 * @returns {clutch.k8s.v1.StateTerminated} StateTerminated
+                 */
+                StateTerminated.fromObject = function fromObject(object) {
+                    if (object instanceof $root.clutch.k8s.v1.StateTerminated)
+                        return object;
+                    let message = new $root.clutch.k8s.v1.StateTerminated();
+                    if (object.reason != null)
+                        message.reason = String(object.reason);
+                    if (object.message != null)
+                        message.message = String(object.message);
+                    if (object.exitCode != null)
+                        message.exitCode = object.exitCode | 0;
+                    if (object.signal != null)
+                        message.signal = object.signal | 0;
+                    return message;
+                };
+
+                /**
+                 * Creates a plain object from a StateTerminated message. Also converts values to other types if specified.
+                 * @function toObject
+                 * @memberof clutch.k8s.v1.StateTerminated
+                 * @static
+                 * @param {clutch.k8s.v1.StateTerminated} message StateTerminated
+                 * @param {$protobuf.IConversionOptions} [options] Conversion options
+                 * @returns {Object.<string,*>} Plain object
+                 */
+                StateTerminated.toObject = function toObject(message, options) {
+                    if (!options)
+                        options = {};
+                    let object = {};
+                    if (options.defaults) {
+                        object.reason = "";
+                        object.message = "";
+                        object.exitCode = 0;
+                        object.signal = 0;
+                    }
+                    if (message.reason != null && message.hasOwnProperty("reason"))
+                        object.reason = message.reason;
+                    if (message.message != null && message.hasOwnProperty("message"))
+                        object.message = message.message;
+                    if (message.exitCode != null && message.hasOwnProperty("exitCode"))
+                        object.exitCode = message.exitCode;
+                    if (message.signal != null && message.hasOwnProperty("signal"))
+                        object.signal = message.signal;
+                    return object;
+                };
+
+                /**
+                 * Converts this StateTerminated to JSON.
+                 * @function toJSON
+                 * @memberof clutch.k8s.v1.StateTerminated
+                 * @instance
+                 * @returns {Object.<string,*>} JSON object
+                 */
+                StateTerminated.prototype.toJSON = function toJSON() {
+                    return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                };
+
+                return StateTerminated;
             })();
 
             v1.PodCondition = (function() {
@@ -26313,6 +26788,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {Object.<string,string>|null} [annotations] Pod annotations
                  * @property {string|null} [stateReason] Pod stateReason
                  * @property {Array.<clutch.k8s.v1.IPodCondition>|null} [podConditions] Pod podConditions
+                 * @property {Array.<clutch.k8s.v1.IContainer>|null} [initContainers] Pod initContainers
                  */
 
                 /**
@@ -26328,6 +26804,7 @@ export const clutch = $root.clutch = (() => {
                     this.labels = {};
                     this.annotations = {};
                     this.podConditions = [];
+                    this.initContainers = [];
                     if (properties)
                         for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                             if (properties[keys[i]] != null)
@@ -26431,6 +26908,14 @@ export const clutch = $root.clutch = (() => {
                 Pod.prototype.podConditions = $util.emptyArray;
 
                 /**
+                 * Pod initContainers.
+                 * @member {Array.<clutch.k8s.v1.IContainer>} initContainers
+                 * @memberof clutch.k8s.v1.Pod
+                 * @instance
+                 */
+                Pod.prototype.initContainers = $util.emptyArray;
+
+                /**
                  * Verifies a Pod message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Pod
@@ -26508,6 +26993,15 @@ export const clutch = $root.clutch = (() => {
                             let error = $root.clutch.k8s.v1.PodCondition.verify(message.podConditions[i]);
                             if (error)
                                 return "podConditions." + error;
+                        }
+                    }
+                    if (message.initContainers != null && message.hasOwnProperty("initContainers")) {
+                        if (!Array.isArray(message.initContainers))
+                            return "initContainers: array expected";
+                        for (let i = 0; i < message.initContainers.length; ++i) {
+                            let error = $root.clutch.k8s.v1.Container.verify(message.initContainers[i]);
+                            if (error)
+                                return "initContainers." + error;
                         }
                     }
                     return null;
@@ -26602,6 +27096,16 @@ export const clutch = $root.clutch = (() => {
                             message.podConditions[i] = $root.clutch.k8s.v1.PodCondition.fromObject(object.podConditions[i]);
                         }
                     }
+                    if (object.initContainers) {
+                        if (!Array.isArray(object.initContainers))
+                            throw TypeError(".clutch.k8s.v1.Pod.initContainers: array expected");
+                        message.initContainers = [];
+                        for (let i = 0; i < object.initContainers.length; ++i) {
+                            if (typeof object.initContainers[i] !== "object")
+                                throw TypeError(".clutch.k8s.v1.Pod.initContainers: object expected");
+                            message.initContainers[i] = $root.clutch.k8s.v1.Container.fromObject(object.initContainers[i]);
+                        }
+                    }
                     return message;
                 };
 
@@ -26621,6 +27125,7 @@ export const clutch = $root.clutch = (() => {
                     if (options.arrays || options.defaults) {
                         object.containers = [];
                         object.podConditions = [];
+                        object.initContainers = [];
                     }
                     if (options.objects || options.defaults) {
                         object.labels = {};
@@ -26672,6 +27177,11 @@ export const clutch = $root.clutch = (() => {
                         object.podConditions = [];
                         for (let j = 0; j < message.podConditions.length; ++j)
                             object.podConditions[j] = $root.clutch.k8s.v1.PodCondition.toObject(message.podConditions[j], options);
+                    }
+                    if (message.initContainers && message.initContainers.length) {
+                        object.initContainers = [];
+                        for (let j = 0; j < message.initContainers.length; ++j)
+                            object.initContainers[j] = $root.clutch.k8s.v1.Container.toObject(message.initContainers[j], options);
                     }
                     return object;
                 };
