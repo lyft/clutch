@@ -3,7 +3,7 @@ package experimentstore
 import (
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
@@ -19,13 +19,13 @@ type ExperimentRun struct {
 
 func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Property, error) {
 	status := timesToStatus(er.StartTime, er.EndTime, er.CancellationTime, now)
-	startTimeTimestamp, err := ptypes.TimestampProto(er.StartTime)
-	if err != nil {
+	startTimeTimestamp := timestamppb.New(er.StartTime)
+	if err := startTimeTimestamp.CheckValid(); err != nil {
 		return nil, err
 	}
 
-	creationTimeTimestamp, err := ptypes.TimestampProto(er.CreationTime)
-	if err != nil {
+	creationTimeTimestamp := timestamppb.New(er.CreationTime)
+	if err := creationTimeTimestamp.CheckValid(); err != nil {
 		return nil, err
 	}
 
