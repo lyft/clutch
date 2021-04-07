@@ -14,7 +14,7 @@ type Experiment struct {
 	Config *ExperimentConfig
 }
 
-func (rc *Experiment) toProto() (*experimentationv1.Experiment, error) {
+func (rc Experiment) toProto() (*experimentationv1.Experiment, error) {
 	startTimestampProto, err := ptypes.TimestampProto(rc.Run.StartTime)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "%v", err)

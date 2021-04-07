@@ -274,9 +274,11 @@ func TestCancelExperimentRun(t *testing.T) {
 	assert.NoError(mock.ExpectationsWereMet())
 }
 
-var getExperimentsSQLQuery = `SELECT experiment_run.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`
+var getExperimentsSQLQuery = `SELECT experiment_run.id, lower(execution_time), upper(execution_time), cancellation_time, creation_time, experiment_config.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`
 
 func TestGetExperimentsUnmarshalsExperimentConfiguration(t *testing.T) {
+	expectedQuery := `SELECT experiment_run.id, lower(execution_time), upper(execution_time), cancellation_time, creation_time, experiment_config.id, details FROM experiment_config, experiment_run WHERE experiment_config.id = experiment_run.experiment_config_id AND ($1 = '' OR $1 = experiment_config.details ->> '@type')`
+
 	assert := assert.New(t)
 
 	db, mock, err := sqlmock.New()
@@ -285,7 +287,7 @@ func TestGetExperimentsUnmarshalsExperimentConfiguration(t *testing.T) {
 	es := &storer{db: db}
 	defer es.Close()
 
-	expected := mock.ExpectQuery(regexp.QuoteMeta(getExperimentsSQLQuery)).WithArgs("foo", "STATUS_UNSPECIFIED")
+	expected := mock.ExpectQuery(regexp.QuoteMeta(expectedQuery)).WithArgs("foo", "STATUS_UNSPECIFIED")
 	rows := sqlmock.NewRows(experimentConfigTableColumns)
 	rows.AddRow([]driver.Value{
 		1234,

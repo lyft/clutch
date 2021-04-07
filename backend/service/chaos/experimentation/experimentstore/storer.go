@@ -143,7 +143,7 @@ func (s *storer) CancelExperimentRun(ctx context.Context, id string, reason stri
 		reason = reason[0:32]
 	}
 	sql :=
-		`UPDATE experiment_run 
+		`UPDATE experiment_run
          SET cancellation_time = NOW(),
 		 termination_reason = $2
          WHERE id = $1 AND cancellation_time IS NULL AND (upper(execution_time) IS NULL OR NOW() < upper(execution_time))`
@@ -158,6 +158,11 @@ func (s *storer) GetExperiments(ctx context.Context, configType string, status e
 	query := `
 		SELECT
 			experiment_run.id,
+			lower(execution_time),
+			upper(execution_time),
+			cancellation_time,
+			creation_time,
+			experiment_config.id,
 			details
 		FROM experiment_config, experiment_run
 		WHERE
@@ -176,22 +181,25 @@ func (s *storer) GetExperiments(ctx context.Context, configType string, status e
 
 	var experiments []*experimentation.Experiment
 	for rows.Next() {
-		var experiment experimentation.Experiment
 		var details string
+		run := ExperimentRun{}
+		config := ExperimentConfig{Config: &any.Any{}}
+		err = rows.Scan(&run.Id, &run.StartTime, &run.EndTime, &run.CancellationTime, &run.creationTime, &config.id, &details)
 
-		err = rows.Scan(&experiment.RunId, &details)
 		if err != nil {
 			return nil, err
 		}
 
-		anyConfig := &any.Any{}
-		err = protojson.Unmarshal([]byte(details), anyConfig)
+		err = protojson.Unmarshal([]byte(details), config.Config)
 		if err != nil {
 			return nil, err
 		}
 
-		experiment.Config = anyConfig
-		experiments = append(experiments, &experiment)
+		e, err := Experiment{Run: &run, Config: &config}.toProto()
+		if err != nil {
+			return nil, err
+		}
+		experiments = append(experiments, e)
 	}
 
 	err = rows.Err()

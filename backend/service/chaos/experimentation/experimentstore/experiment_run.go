@@ -17,8 +17,29 @@ type ExperimentRun struct {
 	creationTime     time.Time
 }
 
+func (er *ExperimentRun) Status(now time.Time) experimentation.Experiment_Status {
+	if er.CancellationTime.Valid {
+		if er.CancellationTime.Time.After(er.StartTime) {
+			if er.EndTime.Valid {
+				return experimentation.Experiment_STATUS_STOPPED
+			} else {
+				return experimentation.Experiment_STATUS_COMPLETED
+			}
+		} else {
+			return experimentation.Experiment_STATUS_CANCELED
+		}
+	} else {
+		if now.Before(er.StartTime) {
+			return experimentation.Experiment_STATUS_SCHEDULED
+		} else if now.After(er.StartTime) && (!er.EndTime.Valid || now.Before(er.EndTime.Time)) {
+			return experimentation.Experiment_STATUS_RUNNING
+		}
+		return experimentation.Experiment_STATUS_COMPLETED
+	}
+}
+
 func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Property, error) {
-	status := timesToStatus(er.StartTime, er.EndTime, er.CancellationTime, now)
+	status := er.Status(now)
 	startTimeTimestamp, err := ptypes.TimestampProto(er.StartTime)
 	if err != nil {
 		return nil, err
@@ -38,7 +59,7 @@ func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Pro
 		{
 			Id:    "status",
 			Label: "Status",
-			Value: &experimentation.Property_StringValue{StringValue: statusToString(status)},
+			Value: &experimentation.Property_StringValue{StringValue: StatusToString(status)},
 		},
 		{
 			Id:    "run_creation_time",
