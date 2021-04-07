@@ -15,6 +15,11 @@ func ApplyListOptions(listOpts *k8sapiv1.ListOptions) metav1.ListOptions {
 	opts := metav1.ListOptions{}
 	if len(listOpts.Labels) > 0 {
 		opts.LabelSelector = labels.FormatLabels(listOpts.Labels)
+	} else if len(listOpts.SelectorString) > 0 {
+		// use the selector string as a backup, it must be formatted correctly
+		// Example: "!abc"
+		// Another example: "a=b,!c,d!=e"
+		opts.LabelSelector = listOpts.SelectorString
 	}
 
 	return opts

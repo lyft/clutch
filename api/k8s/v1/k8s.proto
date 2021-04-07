@@ -319,6 +319,10 @@ message Pod {
 
 message ListOptions {
   map<string, string> labels = 9;
+  // This selector string will be used in case the labels is empty
+  // This is useful in the case of having Set-based selectors rather
+  // than equality-based selectors which is how the map is formatted.
+  string selector_string = 10;
 }
 
 message ListPodsRequest {

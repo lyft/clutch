@@ -26701,6 +26701,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.k8s.v1
                  * @interface IListOptions
                  * @property {Object.<string,string>|null} [labels] ListOptions labels
+                 * @property {string|null} [selectorString] ListOptions selectorString
                  */
 
                 /**
@@ -26728,6 +26729,14 @@ export const clutch = $root.clutch = (() => {
                 ListOptions.prototype.labels = $util.emptyObject;
 
                 /**
+                 * ListOptions selectorString.
+                 * @member {string} selectorString
+                 * @memberof clutch.k8s.v1.ListOptions
+                 * @instance
+                 */
+                ListOptions.prototype.selectorString = "";
+
+                /**
                  * Verifies a ListOptions message.
                  * @function verify
                  * @memberof clutch.k8s.v1.ListOptions
@@ -26746,6 +26755,9 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.labels[key[i]]))
                                 return "labels: string{k:string} expected";
                     }
+                    if (message.selectorString != null && message.hasOwnProperty("selectorString"))
+                        if (!$util.isString(message.selectorString))
+                            return "selectorString: string expected";
                     return null;
                 };
 
@@ -26768,6 +26780,8 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
                             message.labels[keys[i]] = String(object.labels[keys[i]]);
                     }
+                    if (object.selectorString != null)
+                        message.selectorString = String(object.selectorString);
                     return message;
                 };
 
@@ -26786,12 +26800,16 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.objects || options.defaults)
                         object.labels = {};
+                    if (options.defaults)
+                        object.selectorString = "";
                     let keys2;
                     if (message.labels && (keys2 = Object.keys(message.labels)).length) {
                         object.labels = {};
                         for (let j = 0; j < keys2.length; ++j)
                             object.labels[keys2[j]] = message.labels[keys2[j]];
                     }
+                    if (message.selectorString != null && message.hasOwnProperty("selectorString"))
+                        object.selectorString = message.selectorString;
                     return object;
                 };
 

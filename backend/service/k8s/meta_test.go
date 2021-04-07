@@ -38,6 +38,28 @@ func TestApplyListOptions(t *testing.T) {
 				LabelSelector: "foo=bar,key=value",
 			},
 		},
+		{
+			id: "map overrides selector string",
+			listOptions: &k8sapiv1.ListOptions{
+				Labels: map[string]string{
+					"foo": "bar",
+					"key": "value",
+				},
+				SelectorString: "abc",
+			},
+			expectedListOptions: metav1.ListOptions{
+				LabelSelector: "foo=bar,key=value",
+			},
+		},
+		{
+			id: "using selector string1",
+			listOptions: &k8sapiv1.ListOptions{
+				SelectorString: "abc",
+			},
+			expectedListOptions: metav1.ListOptions{
+				LabelSelector: "abc",
+			},
+		},
 	}
 
 	for _, tt := range testCases {
