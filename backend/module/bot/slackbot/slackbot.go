@@ -20,6 +20,8 @@ import (
 	slackbotconfigv1 "github.com/lyft/clutch/backend/api/config/module/bot/slackbot/v1"
 	"github.com/lyft/clutch/backend/gateway/log"
 	"github.com/lyft/clutch/backend/module"
+	"github.com/lyft/clutch/backend/service"
+	"github.com/lyft/clutch/backend/service/bot"
 )
 
 const (
@@ -37,11 +39,22 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (module.Module, 
 		}
 	}
 
+	svc, ok := service.Registry["clutch.service.bot"]
+	if !ok {
+		return nil, errors.New("could not find service")
+	}
+
+	bot, ok := svc.(bot.Service)
+	if !ok {
+		return nil, errors.New("service was not the correct type")
+	}
+
 	m := &mod{
 		slack:         slack.New(config.BotToken),
+		signingSecret: config.SigningSecret,
+		bot:           bot,
 		logger:        logger,
 		scope:         scope,
-		signingSecret: config.SigningSecret,
 	}
 
 	return m, nil
@@ -50,6 +63,7 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (module.Module, 
 type mod struct {
 	slack         *slack.Client
 	signingSecret string
+	bot           bot.Service
 	logger        *zap.Logger
 	scope         tally.Scope
 }
