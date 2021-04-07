@@ -132,7 +132,7 @@ function Home() {
   const {siteConfig = {}} = context;
   const sections = siteConfig.customFields.sections;
   return (
-    <Layout description={siteConfig.customFields.tagDescription}>
+    <Layout title={siteConfig.title} description={siteConfig.customFields.tagDescription}>
       <Hero tagline={siteConfig.tagline} config={siteConfig.customFields.hero} />
       <main>
         <Features config={sections.features} />
