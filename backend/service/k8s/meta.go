@@ -15,17 +15,18 @@ func ApplyListOptions(listOpts *k8sapiv1.ListOptions) (metav1.ListOptions, error
 	opts := metav1.ListOptions{}
 	if len(listOpts.Labels) > 0 {
 		opts.LabelSelector = labels.FormatLabels(listOpts.Labels)
-	} 
-	
-	
-	
-	else if len(listOpts.SelectorString) > 0 {
-		// use the selector string as a backup, it must be formatted correctly
-		// Example: "!abc"
-		// Another example: "a=b,!c,d!=e"
-		opts.LabelSelector = listOpts.SelectorString
 	}
-	
+	// use the selector string as an addition
+	// Example: "!abc"
+	// Another example: "a=b,!c,d!=e"
+	if len(listOpts.SupplementalSelectorString) > 0 {
+		// If we already got a string from the labels, we need to add a comma
+		if len(opts.LabelSelector) > 0 {
+			opts.LabelSelector += ","
+		}
+		opts.LabelSelector += listOpts.SupplementalSelectorString
+	}
+	// Parse() validates the selector string, and will give an err if it fails
 	_, err := labels.Parse(opts.LabelSelector)
 	return opts, err
 }
