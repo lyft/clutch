@@ -23,21 +23,23 @@ var (
 
 // TrimUserId removes the user id of the bot from the command string
 // Commands issued in a channel (instead of in a DM) will start with the user ID of the bot. Example: '<@UVWXYZ123> describe pod'
-// and should be removed before matching the command to a bot reply.
+// and should be removed before matching the command
 func TrimUserId(text string) string {
 	trimmed := slackUserIdRegex.ReplaceAllString(text, "bot_user_id")
-	return strings.Replace(trimmed, "bot_user_id", "", 1)
+	// removes an extra whitespace so that there isn't a leading whitespace in the beginning of the new string
+	return strings.Replace(trimmed, "bot_user_id ", "", 1)
 }
 
-// TrimRedundantSpaces replaces whitespace substrings with a single space character
+// TrimRedundantSpaces replaces trailing/leading and duplicate whitespace
 // this is a sanitization check before matching the command
 func TrimRedundantSpaces(text string) string {
-	return spaceRegex.ReplaceAllString(text, " ")
+	text = spaceRegex.ReplaceAllString(text, " ")
+	return strings.TrimSpace(text)
 }
 
 // DefaultHelp returns the default help message is the command isn't matched
 func DefaultHelp() string {
-	return fmt.Sprintf("%s/n%s", HelpIntro, HelpDetails)
+	return fmt.Sprintf("%s\n%s", HelpIntro, HelpDetails)
 }
 
 func sendBotReply(client *slack.Client, channel, message string) error {
