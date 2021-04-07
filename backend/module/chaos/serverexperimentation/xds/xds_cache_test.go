@@ -17,14 +17,14 @@ import (
 	gcpTypes "github.com/envoyproxy/go-control-plane/pkg/cache/types"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	gcpResourceV3 "github.com/envoyproxy/go-control-plane/pkg/resource/v3"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/duration"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
@@ -151,9 +151,9 @@ func TestSetSnapshotRTDS(t *testing.T) {
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+		err := experiment.GetConfig().UnmarshalTo(config)
 		if err != nil {
-			t.Errorf("unmarshalAny failed %v", err)
+			t.Errorf("unmarshalling Any failed %v", err)
 		}
 
 		upstream, downstream, err := getClusterPair(config)
@@ -215,9 +215,9 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+		err := experiment.GetConfig().UnmarshalTo(config)
 		if err != nil {
-			t.Errorf("unmarshalAny failed %v", err)
+			t.Errorf("unmarshalling Any failed %v", err)
 		}
 
 		upstream, downstream, err := getClusterPair(config)
@@ -312,8 +312,7 @@ func TestRefreshCache(t *testing.T) {
 
 	now := time.Date(2011, 0, 0, 0, 0, 0, 0, time.UTC)
 	future := now.Add(1 * time.Hour)
-	futureTimestamp, err := ptypes.TimestampProto(future)
-	assert.NoError(t, err)
+	futureTimestamp := timestamppb.New(future)
 
 	d := &experimentation.CreateExperimentData{EndTime: futureTimestamp, Config: a}
 	es, err := experimentstore.NewExperimentSpecification(d, now)
@@ -368,7 +367,7 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+		err := experiment.GetConfig().UnmarshalTo(config)
 		assert.NoError(t, err)
 
 		upstream, downstream, err := getClusterPair(config)
@@ -408,7 +407,7 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	extensionConfig := ecdsResources[faultFilterConfigNameForIngressFault].Resource.(*gcpCoreV3.TypedExtensionConfig)
 
 	httpFaultFilter := &gcpFilterFault.HTTPFault{}
-	err = ptypes.UnmarshalAny(extensionConfig.TypedConfig, httpFaultFilter)
+	err = extensionConfig.TypedConfig.UnmarshalTo(httpFaultFilter)
 	if err != nil {
 		t.Errorf("Unable to unmarshall typed config")
 	}
@@ -416,9 +415,7 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	expectedHTTPFaultFilter := &gcpFilterFault.HTTPFault{
 		Delay: &gcpFilterCommon.FaultDelay{
 			FaultDelaySecifier: &gcpFilterCommon.FaultDelay_FixedDelay{
-				FixedDelay: &duration.Duration{
-					Nanos: 1000000, // 0.001 second
-				},
+				FixedDelay: durationpb.New(time.Millisecond),
 			},
 			Percentage: &gcpType.FractionalPercent{
 				Numerator:   0,
@@ -462,7 +459,7 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	var testClusterFaults []*experimentation.Experiment
 	for _, experiment := range mockExperimentList {
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(experiment.GetConfig(), config)
+		err := experiment.GetConfig().UnmarshalTo(config)
 		if err != nil {
 			t.Errorf("unmarshalAny failed %v", err)
 		}
@@ -504,7 +501,7 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	extensionConfig := ecdsResources[fmt.Sprintf(faultFilterConfigNameForEgressFault, upstreamCluster)].Resource.(*gcpCoreV3.TypedExtensionConfig)
 
 	httpFaultFilter := &gcpFilterFault.HTTPFault{}
-	err = ptypes.UnmarshalAny(extensionConfig.TypedConfig, httpFaultFilter)
+	err = extensionConfig.TypedConfig.UnmarshalTo(httpFaultFilter)
 	if err != nil {
 		t.Errorf("Unable to unmarshall typed config")
 	}
@@ -512,9 +509,7 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	expectedHTTPFaultFilter := &gcpFilterFault.HTTPFault{
 		Delay: &gcpFilterCommon.FaultDelay{
 			FaultDelaySecifier: &gcpFilterCommon.FaultDelay_FixedDelay{
-				FixedDelay: &duration.Duration{
-					Nanos: 200000000, // 200 ms
-				},
+				FixedDelay: durationpb.New(time.Millisecond * 200),
 			},
 			Percentage: &gcpType.FractionalPercent{
 				Numerator:   40,

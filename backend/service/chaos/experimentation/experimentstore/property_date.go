@@ -3,7 +3,7 @@ package experimentstore
 import (
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
@@ -13,8 +13,8 @@ func TimeToPropertyDateValue(t *time.Time) (*experimentation.Property_DateValue,
 		return nil, nil
 	}
 
-	timestamp, err := ptypes.TimestampProto(*t)
-	if err != nil {
+	timestamp := timestamppb.New(*t)
+	if err := timestamp.CheckValid(); err != nil {
 		return nil, err
 	}
 

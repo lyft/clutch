@@ -44,6 +44,13 @@ func (m *CreateExperimentRequest) Validate() error {
 		return nil
 	}
 
+	if m.GetData() == nil {
+		return CreateExperimentRequestValidationError{
+			field:  "Data",
+			reason: "value is required",
+		}
+	}
+
 	if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return CreateExperimentRequestValidationError{
@@ -196,6 +203,13 @@ var _ interface {
 func (m *CreateOrGetExperimentRequest) Validate() error {
 	if m == nil {
 		return nil
+	}
+
+	if m.GetData() == nil {
+		return CreateOrGetExperimentRequestValidationError{
+			field:  "Data",
+			reason: "value is required",
+		}
 	}
 
 	if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
@@ -363,6 +377,13 @@ func (m *GetExperimentsRequest) Validate() error {
 		}
 	}
 
+	if _, ok := _GetExperimentsRequest_Status_NotInLookup[m.GetStatus()]; ok {
+		return GetExperimentsRequestValidationError{
+			field:  "Status",
+			reason: "value must not be in list [0]",
+		}
+	}
+
 	if _, ok := GetExperimentsRequest_Status_name[int32(m.GetStatus())]; !ok {
 		return GetExperimentsRequestValidationError{
 			field:  "Status",
@@ -428,6 +449,10 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetExperimentsRequestValidationError{}
+
+var _GetExperimentsRequest_Status_NotInLookup = map[GetExperimentsRequest_Status]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on GetExperimentsResponse with the rules
 // defined in the proto definition for this message. If any rules are

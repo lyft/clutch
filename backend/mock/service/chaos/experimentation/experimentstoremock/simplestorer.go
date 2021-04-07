@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
@@ -21,8 +21,8 @@ type SimpleExperiment struct {
 }
 
 func (s *SimpleExperiment) toProto() *experimentation.Experiment {
-	startTime, _ := ptypes.TimestampProto(s.startTime)
-	endTime, _ := ptypes.TimestampProto(*s.stopTime)
+	startTime := timestamppb.New(s.startTime)
+	endTime := timestamppb.New(*s.stopTime)
 	return &experimentation.Experiment{
 		RunId:     s.runId,
 		Config:    s.config,

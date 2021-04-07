@@ -1,10 +1,9 @@
 package experimentstore
 
 import (
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/timestamp"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
@@ -15,15 +14,15 @@ type Experiment struct {
 }
 
 func (rc *Experiment) toProto() (*experimentationv1.Experiment, error) {
-	startTimestampProto, err := ptypes.TimestampProto(rc.Run.StartTime)
-	if err != nil {
+	startTimestampProto := timestamppb.New(rc.Run.StartTime)
+	if err := startTimestampProto.CheckValid(); err != nil {
 		return nil, status.Errorf(codes.Internal, "%v", err)
 	}
 
-	var endTimestampProto *timestamp.Timestamp
+	var endTimestampProto *timestamppb.Timestamp
 	if rc.Run.EndTime != nil {
-		endTimestampProto, err = ptypes.TimestampProto(*rc.Run.EndTime)
-		if err != nil {
+		endTimestampProto = timestamppb.New(*rc.Run.EndTime)
+		if err := endTimestampProto.CheckValid(); err != nil {
 			return nil, status.Errorf(codes.Internal, "%v", err)
 		}
 	}

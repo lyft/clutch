@@ -16,7 +16,6 @@ import (
 	gcpRuntimeServiceV3 "github.com/envoyproxy/go-control-plane/envoy/service/runtime/v3"
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	gcpServerV3 "github.com/envoyproxy/go-control-plane/pkg/server/v3"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -68,14 +67,14 @@ func (ClusterHashV3) ID(node *gcpCoreV3.Node) string {
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
 	config := &xdsconfigv1.Config{}
-	if err := ptypes.UnmarshalAny(cfg, config); err != nil {
+	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err
 	}
 
-	cacheRefreshInterval, err := ptypes.Duration(config.GetCacheRefreshInterval())
-	if err != nil {
-		return nil, errors.New("error parsing duration")
+	if err := config.CacheRefreshInterval.CheckValid(); err != nil {
+		return nil, err
 	}
+	cacheRefreshInterval := config.CacheRefreshInterval.AsDuration()
 
 	store, ok := service.Registry[experimentstore.Name]
 	if !ok {
@@ -90,17 +89,17 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, er
 	var heartbeatInterval *time.Duration
 	var resourceTTL *time.Duration
 	if config.ResourceTtl != nil {
-		d, err := ptypes.Duration(config.ResourceTtl)
-		if err != nil {
+		if err := config.ResourceTtl.CheckValid(); err != nil {
 			return nil, err
 		}
+		d := config.ResourceTtl.AsDuration()
 		resourceTTL = &d
 
 		if config.HeartbeatInterval != nil {
-			d, err := ptypes.Duration(config.HeartbeatInterval)
-			if err != nil {
+			if err := config.HeartbeatInterval.CheckValid(); err != nil {
 				return nil, err
 			}
+			d := config.HeartbeatInterval.AsDuration()
 			heartbeatInterval = &d
 		}
 	}

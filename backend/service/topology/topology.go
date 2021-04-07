@@ -10,7 +10,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -39,7 +38,9 @@ type client struct {
 	log   *zap.Logger
 	scope tally.Scope
 
-	cacheTTL time.Duration
+	cacheTTL         time.Duration
+	batchInsertSize  int
+	batchInsertFlush time.Duration
 }
 
 // CacheableTopology is implemented by a service that wishes to enable the topology API feature set
@@ -57,7 +58,7 @@ type CacheableTopology interface {
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	topologyConfig := &topologyv1cfg.Config{}
-	err := ptypes.UnmarshalAny(cfg, topologyConfig)
+	err := cfg.UnmarshalTo(topologyConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -84,10 +85,18 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 		return c, nil
 	}
 
+	c.batchInsertSize = int(c.config.Cache.BatchInsertSize)
+
 	// If TTL is not set default to two hours
 	c.cacheTTL = time.Hour * 2
 	if c.config.Cache.Ttl != nil {
 		c.cacheTTL = c.config.Cache.Ttl.AsDuration()
+	}
+
+	// Default flush to 10 seconds
+	c.batchInsertFlush = time.Second * 10
+	if c.config.Cache.BatchInsertFlush != nil {
+		c.batchInsertFlush = c.config.Cache.BatchInsertFlush.AsDuration()
 	}
 
 	ctx, ctxCancelFunc := context.WithCancel(context.Background())

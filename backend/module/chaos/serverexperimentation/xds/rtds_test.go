@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
@@ -28,7 +27,7 @@ func TestCreateRuntimeKeys(t *testing.T) {
 		var expectedFaultValue uint32
 
 		config := &serverexperimentation.HTTPFaultConfig{}
-		err := ptypes.UnmarshalAny(testExperiment.GetConfig(), config)
+		err := testExperiment.GetConfig().UnmarshalTo(config)
 		if err != nil {
 			t.Errorf("unmarshalAny failed %v", err)
 		}

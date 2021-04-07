@@ -1,4 +1,5 @@
 import React from "react";
+import { useSearchParams } from "react-router-dom";
 import styled from "@emotion/styled";
 import _ from "lodash";
 
@@ -91,6 +92,13 @@ const Resolver: React.FC<ResolverProps> = ({
     );
   };
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  React.useEffect(() => {
+    if (searchParams.get("q")) {
+      submitHandler({ query: searchParams.get("q") });
+    }
+  }, []);
+
   return (
     <Loadable isLoading={state.schemasLoading}>
       {state.schemaFetchError ? (
@@ -104,7 +112,10 @@ const Resolver: React.FC<ResolverProps> = ({
               <QueryResolver
                 inputType={type}
                 schemas={state.searchableSchemas}
-                submitHandler={submitHandler}
+                submitHandler={data => {
+                  setSearchParams({ q: data.query });
+                  submitHandler(data);
+                }}
               />
             </>
           )}
