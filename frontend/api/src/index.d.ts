@@ -11497,6 +11497,9 @@ export namespace clutch {
 
                 /** Pod initContainers */
                 initContainers?: (clutch.k8s.v1.IContainer[]|null);
+
+                /** Pod status */
+                status?: (string|null);
             }
 
             /** Represents a Pod. */
@@ -11546,6 +11549,9 @@ export namespace clutch {
 
                 /** Pod initContainers. */
                 public initContainers: clutch.k8s.v1.IContainer[];
+
+                /** Pod status. */
+                public status: string;
 
                 /**
                  * Verifies a Pod message.

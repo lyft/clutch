@@ -318,6 +318,7 @@ func TestPodDescription(t *testing.T) {
 			assert.Equal(t, tt.pod.Status.InitContainerStatuses[0].Name, pod.InitContainers[0].Name)
 			assert.Equal(t, k8sv1.PodCondition_Type(1), pod.PodConditions[0].Type)
 			assert.Equal(t, k8sv1.PodCondition_Status(1), pod.PodConditions[0].Status)
+			assert.Equal(t, "Init: 0/0", pod.Status)
 		})
 	}
 }
