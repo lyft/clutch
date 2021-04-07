@@ -5,15 +5,16 @@ import (
 	"io/ioutil"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/golang/protobuf/ptypes/duration"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/durationpb"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
 	restclient "k8s.io/client-go/rest"
 
@@ -98,11 +99,9 @@ func TestApplyRestClientConfig(t *testing.T) {
 				Burst:   1000,
 			},
 			restClientConfig: &k8sv1.RestClientConfig{
-				Timeout: &duration.Duration{
-					Seconds: 10,
-				},
-				Qps:   100,
-				Burst: 1000,
+				Timeout: durationpb.New(time.Second * 10),
+				Qps:     100,
+				Burst:   1000,
 			},
 		},
 	}

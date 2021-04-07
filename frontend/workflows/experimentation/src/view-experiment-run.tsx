@@ -53,7 +53,10 @@ const ViewExperimentRun: React.FC<BaseWorkflowProps> = ({ heading }) => {
         variant="destructive"
         onClick={() => {
           client
-            .post("/v1/chaos/experimentation/cancelExperimentRun", { id: runID })
+            .post("/v1/chaos/experimentation/cancelExperimentRun", {
+              id: runID,
+              reason: "Stopped manually by a user",
+            })
             .then(() => {
               setExperiment(undefined);
             })

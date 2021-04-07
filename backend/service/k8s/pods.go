@@ -184,10 +184,11 @@ func podDescription(k8spod *corev1.Pod, cluster string) *k8sapiv1.Pod {
 		PodIp:      k8spod.Status.PodIP,
 		State:      protoForPodState(k8spod.Status.Phase),
 		//StartTime:   launch,
-		Labels:        k8spod.Labels,
-		Annotations:   k8spod.Annotations,
-		StateReason:   k8spod.Status.Reason,
-		PodConditions: makeConditions(k8spod.Status.Conditions),
+		Labels:         k8spod.Labels,
+		Annotations:    k8spod.Annotations,
+		StateReason:    k8spod.Status.Reason,
+		PodConditions:  makeConditions(k8spod.Status.Conditions),
+		InitContainers: makeContainers(k8spod.Status.InitContainerStatuses),
 	}
 }
 
@@ -212,6 +213,15 @@ func makeContainers(statuses []corev1.ContainerStatus) []*k8sapiv1.Container {
 			State:        protoForContainerState(status.State),
 			Ready:        status.Ready,
 			RestartCount: status.RestartCount,
+		}
+
+		switch container.State {
+		case k8sapiv1.Container_TERMINATED:
+			container.StateDetails = protoForContainerStateTerminated(status.State.Terminated)
+		case k8sapiv1.Container_RUNNING:
+			container.StateDetails = protoForContainerStateRunning(status.State.Running)
+		case k8sapiv1.Container_WAITING:
+			container.StateDetails = protoForContainerStateWaiting(status.State.Waiting)
 		}
 		containers = append(containers, container)
 	}
@@ -238,6 +248,35 @@ func protoForContainerState(state corev1.ContainerState) k8sapiv1.Container_Stat
 		return k8sapiv1.Container_WAITING
 	default:
 		return k8sapiv1.Container_UNKNOWN
+	}
+}
+
+func protoForContainerStateWaiting(state *corev1.ContainerStateWaiting) *k8sapiv1.Container_StateWaiting {
+	return &k8sapiv1.Container_StateWaiting{
+		StateWaiting: &k8sapiv1.StateWaiting{
+			Reason:  state.Reason,
+			Message: state.Message,
+		},
+	}
+}
+
+func protoForContainerStateTerminated(state *corev1.ContainerStateTerminated) *k8sapiv1.Container_StateTerminated {
+	return &k8sapiv1.Container_StateTerminated{
+		StateTerminated: &k8sapiv1.StateTerminated{
+			Reason:   state.Reason,
+			Message:  state.Message,
+			ExitCode: state.ExitCode,
+			Signal:   state.Signal,
+		},
+	}
+}
+
+func protoForContainerStateRunning(state *corev1.ContainerStateRunning) *k8sapiv1.Container_StateRunning {
+	return &k8sapiv1.Container_StateRunning{
+		StateRunning: &k8sapiv1.StateRunning{
+			// FE serialization currently does not support timestamp
+			//StartTime: state.StartedAt,
+		},
 	}
 }
 

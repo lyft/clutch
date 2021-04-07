@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { MDXProvider } from '@mdx-js/react';
-import Head from '@docusaurus/Head';
+import Seo from '@theme/Seo';
 import Link from '@docusaurus/Link';
 import MDXComponents from '@theme/MDXComponents';
 import useBaseUrl from '@docusaurus/useBaseUrl';
@@ -31,9 +31,6 @@ function BlogPostItem(props) {
   } = props;
   const { date, permalink, tags, readingTime } = metadata;
   const { authors, title, image, keywords } = frontMatter;
-  const imageUrl = useBaseUrl(image, {
-    absolute: true,
-  });
 
   const renderPostHeader = () => {
     const TitleHeading = isBlogPostPage ? 'h1' : 'h2';
@@ -82,16 +79,8 @@ function BlogPostItem(props) {
 
   return (
     <>
-      <Head>
-        {keywords && keywords.length && (
-          <meta name="keywords" content={keywords.join(',')} />
-        )}
-        {image && <meta property="og:image" content={imageUrl} />}
-        {image && <meta property="twitter:image" content={imageUrl} />}
-        {image && (
-          <meta name="twitter:image:alt" content={`Image for ${title}`} />
-        )}
-      </Head>
+
+      <Seo {...{keywords, image}} />
 
       <article   className={clsx(!isBlogPostPage && 'margin-bottom--lg', !isBlogPostPage && styles.blogPostPreview)}>
         {renderPostHeader()}

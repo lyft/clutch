@@ -32,7 +32,7 @@ issues:
       linters:
         - gosec
     # TODO: remove this rule once the migration to the new protobuf APIs are complete
-    - text: "^SA1019.*?(ptypes\\.(Duration|Timestamp)|github.com/golang/protobuf/proto|github.com/golang/protobuf/ptypes).*?deprecated"
+    - text: "^SA1019.*?(github.com/golang/protobuf/proto|github.com/golang/protobuf/ptypes).*?deprecated"
       linters:
         - staticcheck
 run:
