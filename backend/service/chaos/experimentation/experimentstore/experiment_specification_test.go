@@ -5,12 +5,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
@@ -20,13 +20,10 @@ func TestExperimentSpecificationInitialization(t *testing.T) {
 
 	now := time.Date(2011, 0, 0, 0, 0, 0, 0, time.UTC)
 	past := now.Add(-1 * time.Hour)
-	pastTimestamp, err := ptypes.TimestampProto(past)
-	a.NoError(err)
+	pastTimestamp := timestamppb.New(past)
 	future := now.Add(1 * time.Hour)
-	futureTimestamp, err := ptypes.TimestampProto(future)
-	a.NoError(err)
-	farFutureTimestamp, err := ptypes.TimestampProto(future.Add(1 * time.Hour))
-	a.NoError(err)
+	futureTimestamp := timestamppb.New(future)
+	farFutureTimestamp := timestamppb.New(future.Add(1 * time.Hour))
 
 	tests := []struct {
 		runId             string

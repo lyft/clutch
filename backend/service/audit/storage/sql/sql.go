@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	rpcstatus "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	apiv1 "github.com/lyft/clutch/backend/api/api/v1"
 	auditv1 "github.com/lyft/clutch/backend/api/audit/v1"
@@ -169,8 +169,8 @@ func (c *client) query(ctx context.Context, query string, args ...interface{}) (
 			return nil, err
 		}
 
-		occurred, err := ptypes.TimestampProto(row.OccurredAt)
-		if err != nil {
+		occurred := timestamppb.New(row.OccurredAt)
+		if err := occurred.CheckValid(); err != nil {
 			c.logger.Error("error in parsing db result's timestamp", zap.Error(err))
 			return nil, err
 		}

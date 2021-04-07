@@ -10,11 +10,11 @@ import (
 	"time"
 
 	_ "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
@@ -197,15 +197,10 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experiments
 	assert.NoError(t, err)
 
 	now := time.Date(2011, 0, 0, 0, 0, 0, 0, time.UTC)
-	assert.NoError(t, err)
 	future := now.Add(1 * time.Hour)
-	futureTimestamp, err := ptypes.TimestampProto(future)
-	assert.NoError(t, err)
 	farFuture := future.Add(1 * time.Hour)
-	farFutureTimestamp, err := ptypes.TimestampProto(farFuture)
-	assert.NoError(t, err)
 
-	d := &experimentationv1.CreateExperimentData{StartTime: futureTimestamp, EndTime: farFutureTimestamp, Config: a}
+	d := &experimentationv1.CreateExperimentData{StartTime: timestamppb.New(future), EndTime: timestamppb.New(farFuture), Config: a}
 	s, err := experimentstore.NewExperimentSpecification(d, now)
 	assert.NoError(t, err)
 	experiment, err := storer.CreateExperiment(context.Background(), s)
@@ -260,7 +255,7 @@ func (t *testCriteria) ShouldTerminate(experiment *experimentationv1.Experiment,
 	if _, ok := experimentConfig.(*serverexperimentation.HTTPFaultConfig); !ok {
 		panic("received unexpected experiment config")
 	}
-	started, _ := ptypes.Timestamp(experiment.StartTime)
+	started := experiment.StartTime.AsTime()
 	if t.startCheckingTime && started.Add(1*time.Second).Before(time.Now()) {
 		return "timed out", nil
 	}
