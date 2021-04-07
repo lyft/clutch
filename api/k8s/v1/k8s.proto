@@ -347,7 +347,7 @@ message Pod {
   repeated Container init_containers = 13;
 
   // status string calculated based on the same logic as kubectl
-  // which summarizes the current status of the pod depending on 
+  // which summarizes the current status of the pod depending on
   // the status of its containers.
   // ref: https://github.com/kubernetes/kubernetes/blob/master/pkg/printers/internalversion/printers.go#L761
   string status = 14;

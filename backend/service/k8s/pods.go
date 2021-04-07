@@ -355,17 +355,18 @@ func getPodStatus(pod *corev1.Pod) string {
 			container := pod.Status.ContainerStatuses[i]
 
 			restarts += int(container.RestartCount)
-			if container.State.Waiting != nil && container.State.Waiting.Reason != "" {
+			switch {
+			case container.State.Waiting != nil && container.State.Waiting.Reason != "":
 				reason = container.State.Waiting.Reason
-			} else if container.State.Terminated != nil && container.State.Terminated.Reason != "" {
+			case container.State.Terminated != nil && container.State.Terminated.Reason != "":
 				reason = container.State.Terminated.Reason
-			} else if container.State.Terminated != nil && container.State.Terminated.Reason == "" {
+			case container.State.Terminated != nil && container.State.Terminated.Reason == "":
 				if container.State.Terminated.Signal != 0 {
 					reason = fmt.Sprintf("Signal: %d", container.State.Terminated.Signal)
 				} else {
 					reason = fmt.Sprintf("ExitCode: %d", container.State.Terminated.ExitCode)
 				}
-			} else if container.Ready && container.State.Running != nil {
+			case container.Ready && container.State.Running != nil:
 				readyContainers++
 			}
 		}
