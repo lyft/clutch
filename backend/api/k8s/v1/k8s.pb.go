@@ -867,8 +867,11 @@ type ListOptions struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Labels         map[string]string `protobuf:"bytes,9,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	SelectorString string            `protobuf:"bytes,10,opt,name=selector_string,json=selectorString,proto3" json:"selector_string,omitempty"`
+	Labels map[string]string `protobuf:"bytes,9,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// This selector string will be used in case the labels is empty
+	// This is useful in the case of having Set-based selectors rather
+	// than equality-based selectors which is how the map is formatted.
+	SelectorString string `protobuf:"bytes,10,opt,name=selector_string,json=selectorString,proto3" json:"selector_string,omitempty"`
 }
 
 func (x *ListOptions) Reset() {
