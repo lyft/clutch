@@ -145,3 +145,34 @@ func (m *mod) handleURLVerificationEvent(challenge string) (*slackbotv1.EventRes
 	}
 	return &slackbotv1.EventResponse{Challenge: challenge}, nil
 }
+
+// the request has two layers - the "outer event" and "inner event". At this step, we are examining the outer event
+// this can be 1 of three types: "url_verification" (handled seperately above), "event_callback", and "app_rate_limited"
+func (m *mod) handleEvent(req *slackbotv1.EventRequest) error {
+	switch req.Type {
+	case slackevents.CallbackEvent:
+		return m.handleCallBackEvent(req.Event)
+	case slackevents.AppRateLimited:
+		// this type of event is sent if our endpoint has received more than 30,000 request events in 60 minutes
+		// https://api.slack.com/apis/connections/events-api#the-events-api__responding-to-events__rate-limiting
+		// TODO: (sperry) do we want to handle this differently
+		return errors.New("app's event subscriptions are being rate limited")
+	default:
+		// in the case that the Slack API adds a new "outer event" type
+		return fmt.Errorf("received unexpected event type: %s", req.Type)
+	}
+}
+
+// the request has two layers - the "outer event" and "inner event". At this step, we are examining the "inner event"
+// the 2 event types we currently support are "app_mention" (messages that mention the bot directly) and "message" (specifically DMs with the bot)
+// full list of Slack event types: https://api.slack.com/events
+func (m *mod) handleCallBackEvent(event *slackbotv1.Event) error {
+	switch event.Type {
+	case slackevents.AppMention:
+		return m.handleAppMentionEvent(event)
+	case slackevents.Message:
+		return m.handleMessageEvent(event)
+	default:
+		return fmt.Errorf("received unsuported event type: %s", event.Type)
+	}
+}
