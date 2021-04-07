@@ -25,9 +25,9 @@ message Config {
   google.protobuf.Duration per_experiment_check_interval = 3 [ (validate.rules).duration.gt.seconds = 0 ];
 }
 
-// Termination criteria that will terminate an experiment after a configured max duration. This is helpful in ensuring
+// Termination criterion that will terminate an experiment after a configured max duration. This is helpful in ensuring
 // that there is an upper limit to how long experiments will run for.
-message MaxTimeTerminationCriteria {
+message MaxTimeTerminationCriterion {
   // The maximum duration experiments can run for before being terminated.
   google.protobuf.Duration max_duration = 1 [ (validate.rules).duration.gt.seconds = 0 ];
 }

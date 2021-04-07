@@ -26,15 +26,15 @@ func TypeUrl(message proto.Message) string {
 	return "type.googleapis.com/" + string(message.ProtoReflect().Descriptor().FullName())
 }
 
-var CriteriaFactories = map[string]CriteriaFactory{
-	TypeUrl(&terminatorv1.MaxTimeTerminationCriteria{}): &maxTimeTerminationFactory{},
+var CriterionFactories = map[string]CriterionFactory{
+	TypeUrl(&terminatorv1.MaxTimeTerminationCriterion{}): &maxTimeTerminationFactory{},
 }
 
-type CriteriaFactory interface {
-	Create(cfg *any.Any) (TerminationCriteria, error)
+type CriterionFactory interface {
+	Create(cfg *any.Any) (TerminationCriterion, error)
 }
 
-type TerminationCriteria interface {
+type TerminationCriterion interface {
 	// ShouldTerminate determines whether the provided experiment should be terminated.
 	// To signal that termination should occur, return a non-empty string with a nil error.
 	ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error)
@@ -66,15 +66,15 @@ func NewMonitor(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (*Monitor, 
 		return nil, errors.New("service was not the correct type")
 	}
 
-	terminationCriteria := map[string][]TerminationCriteria{}
+	terminationCriteria := map[string][]TerminationCriterion{}
 
 	for configType, perConfigTypeConfig := range typedConfig.PerConfigTypeConfiguration {
-		perConfigCriteria := []TerminationCriteria{}
+		perConfigCriteria := []TerminationCriterion{}
 
 		for _, c := range perConfigTypeConfig.TerminationCriteria {
-			factory, ok := CriteriaFactories[c.TypeUrl]
+			factory, ok := CriterionFactories[c.TypeUrl]
 			if !ok {
-				return nil, fmt.Errorf("terminator module configured with unknown criteria '%s'", c.TypeUrl)
+				return nil, fmt.Errorf("terminator module configured with unknown criterion '%s'", c.TypeUrl)
 			}
 
 			criterion, err := factory.Create(c)
@@ -99,33 +99,33 @@ func NewMonitor(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (*Monitor, 
 	}
 
 	return &Monitor{
-		store:                          storer,
-		terminationCriteriaByTypeUrl:   terminationCriteria,
-		outerLoopInterval:              outerLoopInterval,
-		perExperimentCheckInterval:     perExperimentCheckInterval,
-		log:                            logger.Sugar(),
-		activeMonitoringRoutines:       trackingGauge{gauge: scope.Gauge("active_monitoring_routines")},
-		criteriaEvaluationSuccessCount: scope.Counter("criteria_success"),
-		criteriaEvaluationFailureCount: scope.Counter("criteria_failure"),
-		terminationCount:               scope.Counter("terminations"),
-		marshallingErrorCount:          scope.Counter("unpack_error"),
+		store:                           storer,
+		terminationCriteriaByTypeUrl:    terminationCriteria,
+		outerLoopInterval:               outerLoopInterval,
+		perExperimentCheckInterval:      perExperimentCheckInterval,
+		log:                             logger.Sugar(),
+		activeMonitoringRoutines:        trackingGauge{gauge: scope.Gauge("active_monitoring_routines")},
+		criterionEvaluationSuccessCount: scope.Counter("criterion_success"),
+		criterionEvaluationFailureCount: scope.Counter("criterion_failure"),
+		terminationCount:                scope.Counter("terminations"),
+		marshallingErrorCount:           scope.Counter("unpack_error"),
 	}, nil
 }
 
 type Monitor struct {
 	store                        experimentstore.Storer
-	terminationCriteriaByTypeUrl map[string][]TerminationCriteria
+	terminationCriteriaByTypeUrl map[string][]TerminationCriterion
 
 	outerLoopInterval          time.Duration
 	perExperimentCheckInterval time.Duration
 
 	log *zap.SugaredLogger
 
-	activeMonitoringRoutines       trackingGauge
-	criteriaEvaluationSuccessCount tally.Counter
-	criteriaEvaluationFailureCount tally.Counter
-	terminationCount               tally.Counter
-	marshallingErrorCount          tally.Counter
+	activeMonitoringRoutines        trackingGauge
+	criterionEvaluationSuccessCount tally.Counter
+	criterionEvaluationFailureCount tally.Counter
+	terminationCount                tally.Counter
+	marshallingErrorCount           tally.Counter
 }
 
 func (m *Monitor) Run(ctx context.Context) {
@@ -137,7 +137,7 @@ func (m *Monitor) Run(ctx context.Context) {
 		// This approach ensures provides a steady DB pressure (mostly outer loop, some from triggering termination) and relatively high
 		// fairness, as checking the termination conditions for one experiment should not be delaying the checks for another experiment
 		// unless we're under very heavy load.
-		go func(configType string, criteria []TerminationCriteria) {
+		go func(configType string, criteria []TerminationCriterion) {
 			trackedExperiments := map[string]context.CancelFunc{}
 			ticker := time.NewTicker(m.outerLoopInterval)
 
@@ -170,7 +170,7 @@ func (m *Monitor) Run(ctx context.Context) {
 
 // Iterates over all the provided experiments, spawning a goroutine to montior each experiment that doesn't already have
 // a monitoring routine. Returns a set containing all the active experiment ids for further processing.
-func (m *Monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trackedExperiments map[string]context.CancelFunc, criteria []TerminationCriteria) map[string]struct{} {
+func (m *Monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trackedExperiments map[string]context.CancelFunc, criteria []TerminationCriterion) map[string]struct{} {
 	// For each active experiment, create a monitoring goroutine if necessary.
 	activeExperiments := map[string]struct{}{}
 	for _, e := range es {
@@ -189,7 +189,7 @@ func (m *Monitor) monitorNewExperiments(es []*experimentationv1.Experiment, trac
 	return activeExperiments
 }
 
-func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentationv1.Experiment, criteria []TerminationCriteria) {
+func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentationv1.Experiment, criteria []TerminationCriterion) {
 	ticker := time.NewTicker(m.perExperimentCheckInterval)
 	terminated := false
 
@@ -217,12 +217,12 @@ func (m *Monitor) monitorSingleExperiment(ctx context.Context, e *experimentatio
 				terminationReason, err := c.ShouldTerminate(e, unpackedConfig)
 				// TODO(snowp): The logs here might get spammy, rate limit or terminate montioring routine somehow?
 				if err != nil {
-					m.criteriaEvaluationFailureCount.Inc(1)
-					m.log.Errorw("error while evaluating termination criteria", "runId", e.RunId, "error", err)
+					m.criterionEvaluationFailureCount.Inc(1)
+					m.log.Errorw("error while evaluating termination criterion", "runId", e.RunId, "error", err)
 					continue
 				}
 
-				m.criteriaEvaluationSuccessCount.Inc(1)
+				m.criterionEvaluationSuccessCount.Inc(1)
 
 				if terminationReason != "" {
 					err = m.store.CancelExperimentRun(context.Background(), e.RunId, terminationReason)

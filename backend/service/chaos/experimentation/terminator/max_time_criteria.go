@@ -12,11 +12,11 @@ import (
 	terminatorv1 "github.com/lyft/clutch/backend/api/config/service/chaos/experimentation/terminator/v1"
 )
 
-type maxTimeTerminationCriteria struct {
+type maxTimeTerminationCriterion struct {
 	maxTime time.Duration
 }
 
-func (m maxTimeTerminationCriteria) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error) {
+func (m maxTimeTerminationCriterion) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error) {
 	startTime, err := ptypes.Timestamp(experiment.StartTime)
 	if err != nil {
 		return "", err
@@ -31,8 +31,8 @@ func (m maxTimeTerminationCriteria) ShouldTerminate(experiment *experimentationv
 
 type maxTimeTerminationFactory struct{}
 
-func (maxTimeTerminationFactory) Create(cfg *any.Any) (TerminationCriteria, error) {
-	typedConfig := &terminatorv1.MaxTimeTerminationCriteria{}
+func (maxTimeTerminationFactory) Create(cfg *any.Any) (TerminationCriterion, error) {
+	typedConfig := &terminatorv1.MaxTimeTerminationCriterion{}
 	err := ptypes.UnmarshalAny(cfg, typedConfig)
 	if err != nil {
 		return nil, err
@@ -43,5 +43,5 @@ func (maxTimeTerminationFactory) Create(cfg *any.Any) (TerminationCriteria, erro
 		return nil, err
 	}
 
-	return maxTimeTerminationCriteria{maxTime: maxTime}, nil
+	return maxTimeTerminationCriterion{maxTime: maxTime}, nil
 }

@@ -25,14 +25,14 @@ import (
 const testConfigType = "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"
 
 func TestConfigLoad(t *testing.T) {
-	builtInCriteriaConfig := &terminatorv1.MaxTimeTerminationCriteria{
+	builtInCriterionConfig := &terminatorv1.MaxTimeTerminationCriterion{
 		MaxDuration: durationpb.New(time.Hour),
 	}
-	builtInCriteriaAnyConfig, err := anypb.New(builtInCriteriaConfig)
+	builtInCriterionAnyConfig, err := anypb.New(builtInCriterionConfig)
 	assert.NoError(t, err)
 
 	cfg := &terminatorv1.Config{
-		PerConfigTypeConfiguration: map[string]*terminatorv1.Config_PerConfigTypeConfig{testConfigType: {TerminationCriteria: []*anypb.Any{builtInCriteriaAnyConfig}}},
+		PerConfigTypeConfiguration: map[string]*terminatorv1.Config_PerConfigTypeConfig{testConfigType: {TerminationCriteria: []*anypb.Any{builtInCriterionAnyConfig}}},
 		OuterLoopInterval:          durationpb.New(time.Second),
 		PerExperimentCheckInterval: durationpb.New(time.Second),
 	}
@@ -59,7 +59,7 @@ func TestConfigLoad(t *testing.T) {
 
 	m, err = NewMonitor(any, zap.NewNop(), tally.NoopScope)
 	assert.Nil(t, m)
-	assert.EqualError(t, err, "terminator module configured with unknown criteria 'type.googleapis.com/google.protobuf.StringValue'")
+	assert.EqualError(t, err, "terminator module configured with unknown criterion 'type.googleapis.com/google.protobuf.StringValue'")
 }
 
 func TestTerminator(t *testing.T) {
@@ -69,10 +69,10 @@ func TestTerminator(t *testing.T) {
 	testScope := tally.NewTestScope("", map[string]string{})
 
 	store := &experimentstoremock.SimpleStorer{}
-	criteria := &testCriteria{}
+	criterion := &testCriterion{}
 	monitor := Monitor{
 		store:                        store,
-		terminationCriteriaByTypeUrl: map[string][]TerminationCriteria{testConfigType: {criteria}},
+		terminationCriteriaByTypeUrl: map[string][]TerminationCriterion{testConfigType: {criterion}},
 		outerLoopInterval:            time.Millisecond,
 		perExperimentCheckInterval:   time.Millisecond,
 		log:                          l.Sugar(),
@@ -80,10 +80,10 @@ func TestTerminator(t *testing.T) {
 			gauge: testScope.Gauge("active_routines"),
 			value: 0,
 		},
-		criteriaEvaluationSuccessCount: testScope.Counter("criteria_success"),
-		criteriaEvaluationFailureCount: testScope.Counter("criteria_failure"),
-		terminationCount:               testScope.Counter("terminations"),
-		marshallingErrorCount:          testScope.Counter("unpack_error"),
+		criterionEvaluationSuccessCount: testScope.Counter("criterion_success"),
+		criterionEvaluationFailureCount: testScope.Counter("criterion_failure"),
+		terminationCount:                testScope.Counter("terminations"),
+		marshallingErrorCount:           testScope.Counter("unpack_error"),
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
@@ -97,7 +97,7 @@ func TestTerminator(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Len(t, es, 1)
 
-	criteria.update(true)
+	criterion.update(true)
 
 	// Ensure that we tear down the monitoring goroutines once we're done with an experiment.
 	awaitGaugeValue(ctx, t, testScope, "active_routines", 0)
@@ -150,13 +150,13 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experiments
 	return experiment
 }
 
-type testCriteria struct {
+type testCriterion struct {
 	evaluation bool
 
 	sync.Mutex
 }
 
-func (t *testCriteria) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error) {
+func (t *testCriterion) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error) {
 	t.Lock()
 	defer t.Unlock()
 
@@ -167,7 +167,7 @@ func (t *testCriteria) ShouldTerminate(experiment *experimentationv1.Experiment,
 	return "", nil
 }
 
-func (t *testCriteria) update(evaluation bool) {
+func (t *testCriterion) update(evaluation bool) {
 	t.Lock()
 	defer t.Unlock()
 

@@ -33,6 +33,7 @@ type Config struct {
 	// The interval at which the outer loop should poll for active experiments.
 	OuterLoopInterval *durationpb.Duration `protobuf:"bytes,2,opt,name=outer_loop_interval,json=outerLoopInterval,proto3" json:"outer_loop_interval,omitempty"`
 	// The interval at which the inner loop should evaluate the termination criteria for each monitored experiment.
+	// This should likely be less than outer_loop_interval as the checks should be relatively cheap.
 	PerExperimentCheckInterval *durationpb.Duration `protobuf:"bytes,3,opt,name=per_experiment_check_interval,json=perExperimentCheckInterval,proto3" json:"per_experiment_check_interval,omitempty"`
 }
 
@@ -89,9 +90,9 @@ func (x *Config) GetPerExperimentCheckInterval() *durationpb.Duration {
 	return nil
 }
 
-// Termination criteria that will terminate an experiment after a configured max duration. This is helpful in ensuring
+// Termination criterion that will terminate an experiment after a configured max duration. This is helpful in ensuring
 // that there is an upper limit to how long experiments will run for.
-type MaxTimeTerminationCriteria struct {
+type MaxTimeTerminationCriterion struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -100,8 +101,8 @@ type MaxTimeTerminationCriteria struct {
 	MaxDuration *durationpb.Duration `protobuf:"bytes,1,opt,name=max_duration,json=maxDuration,proto3" json:"max_duration,omitempty"`
 }
 
-func (x *MaxTimeTerminationCriteria) Reset() {
-	*x = MaxTimeTerminationCriteria{}
+func (x *MaxTimeTerminationCriterion) Reset() {
+	*x = MaxTimeTerminationCriterion{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_config_service_chaos_experimentation_terminator_v1_termination_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -109,13 +110,13 @@ func (x *MaxTimeTerminationCriteria) Reset() {
 	}
 }
 
-func (x *MaxTimeTerminationCriteria) String() string {
+func (x *MaxTimeTerminationCriterion) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MaxTimeTerminationCriteria) ProtoMessage() {}
+func (*MaxTimeTerminationCriterion) ProtoMessage() {}
 
-func (x *MaxTimeTerminationCriteria) ProtoReflect() protoreflect.Message {
+func (x *MaxTimeTerminationCriterion) ProtoReflect() protoreflect.Message {
 	mi := &file_config_service_chaos_experimentation_terminator_v1_termination_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -127,12 +128,12 @@ func (x *MaxTimeTerminationCriteria) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use MaxTimeTerminationCriteria.ProtoReflect.Descriptor instead.
-func (*MaxTimeTerminationCriteria) Descriptor() ([]byte, []int) {
+// Deprecated: Use MaxTimeTerminationCriterion.ProtoReflect.Descriptor instead.
+func (*MaxTimeTerminationCriterion) Descriptor() ([]byte, []int) {
 	return file_config_service_chaos_experimentation_terminator_v1_termination_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *MaxTimeTerminationCriteria) GetMaxDuration() *durationpb.Duration {
+func (x *MaxTimeTerminationCriterion) GetMaxDuration() *durationpb.Duration {
 	if x != nil {
 		return x.MaxDuration
 	}
@@ -243,20 +244,20 @@ var file_config_service_chaos_experimentation_terminator_v1_termination_proto_ra
 	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x74, 0x65, 0x72, 0x6d, 0x69, 0x6e, 0x61, 0x74, 0x6f, 0x72,
 	0x2e, 0x76, 0x31, 0x2e, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2e, 0x50, 0x65, 0x72, 0x43, 0x6f,
 	0x6e, 0x66, 0x69, 0x67, 0x54, 0x79, 0x70, 0x65, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52, 0x05,
-	0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x66, 0x0a, 0x1a, 0x4d, 0x61, 0x78,
+	0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x67, 0x0a, 0x1b, 0x4d, 0x61, 0x78,
 	0x54, 0x69, 0x6d, 0x65, 0x54, 0x65, 0x72, 0x6d, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43,
-	0x72, 0x69, 0x74, 0x65, 0x72, 0x69, 0x61, 0x12, 0x48, 0x0a, 0x0c, 0x6d, 0x61, 0x78, 0x5f, 0x64,
-	0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e,
-	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x0a, 0xfa, 0x42, 0x07, 0xaa, 0x01, 0x04,
-	0x2a, 0x02, 0x08, 0x00, 0x52, 0x0b, 0x6d, 0x61, 0x78, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x42, 0x64, 0x5a, 0x62, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
-	0x6c, 0x79, 0x66, 0x74, 0x2f, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2f, 0x62, 0x61, 0x63, 0x6b,
-	0x65, 0x6e, 0x64, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2f, 0x73,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2f, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2f, 0x65, 0x78, 0x70,
-	0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2f, 0x74, 0x65, 0x72,
-	0x6d, 0x69, 0x6e, 0x61, 0x74, 0x6f, 0x72, 0x2f, 0x76, 0x31, 0x3b, 0x74, 0x65, 0x72, 0x6d, 0x69,
-	0x6e, 0x61, 0x74, 0x6f, 0x72, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x72, 0x69, 0x74, 0x65, 0x72, 0x69, 0x6f, 0x6e, 0x12, 0x48, 0x0a, 0x0c, 0x6d, 0x61, 0x78, 0x5f,
+	0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19,
+	0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
+	0x2e, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x0a, 0xfa, 0x42, 0x07, 0xaa, 0x01,
+	0x04, 0x2a, 0x02, 0x08, 0x00, 0x52, 0x0b, 0x6d, 0x61, 0x78, 0x44, 0x75, 0x72, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x42, 0x64, 0x5a, 0x62, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
+	0x2f, 0x6c, 0x79, 0x66, 0x74, 0x2f, 0x63, 0x6c, 0x75, 0x74, 0x63, 0x68, 0x2f, 0x62, 0x61, 0x63,
+	0x6b, 0x65, 0x6e, 0x64, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2f,
+	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2f, 0x63, 0x68, 0x61, 0x6f, 0x73, 0x2f, 0x65, 0x78,
+	0x70, 0x65, 0x72, 0x69, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2f, 0x74, 0x65,
+	0x72, 0x6d, 0x69, 0x6e, 0x61, 0x74, 0x6f, 0x72, 0x2f, 0x76, 0x31, 0x3b, 0x74, 0x65, 0x72, 0x6d,
+	0x69, 0x6e, 0x61, 0x74, 0x6f, 0x72, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -273,18 +274,18 @@ func file_config_service_chaos_experimentation_terminator_v1_termination_proto_r
 
 var file_config_service_chaos_experimentation_terminator_v1_termination_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_config_service_chaos_experimentation_terminator_v1_termination_proto_goTypes = []interface{}{
-	(*Config)(nil),                     // 0: clutch.config.service.chaos.experimentation.terminator.v1.Config
-	(*MaxTimeTerminationCriteria)(nil), // 1: clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriteria
-	(*Config_PerConfigTypeConfig)(nil), // 2: clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig
-	nil,                                // 3: clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfigurationEntry
-	(*durationpb.Duration)(nil),        // 4: google.protobuf.Duration
-	(*anypb.Any)(nil),                  // 5: google.protobuf.Any
+	(*Config)(nil),                      // 0: clutch.config.service.chaos.experimentation.terminator.v1.Config
+	(*MaxTimeTerminationCriterion)(nil), // 1: clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion
+	(*Config_PerConfigTypeConfig)(nil),  // 2: clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig
+	nil,                                 // 3: clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfigurationEntry
+	(*durationpb.Duration)(nil),         // 4: google.protobuf.Duration
+	(*anypb.Any)(nil),                   // 5: google.protobuf.Any
 }
 var file_config_service_chaos_experimentation_terminator_v1_termination_proto_depIdxs = []int32{
 	3, // 0: clutch.config.service.chaos.experimentation.terminator.v1.Config.per_config_type_configuration:type_name -> clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfigurationEntry
 	4, // 1: clutch.config.service.chaos.experimentation.terminator.v1.Config.outer_loop_interval:type_name -> google.protobuf.Duration
 	4, // 2: clutch.config.service.chaos.experimentation.terminator.v1.Config.per_experiment_check_interval:type_name -> google.protobuf.Duration
-	4, // 3: clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriteria.max_duration:type_name -> google.protobuf.Duration
+	4, // 3: clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion.max_duration:type_name -> google.protobuf.Duration
 	5, // 4: clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig.termination_criteria:type_name -> google.protobuf.Any
 	2, // 5: clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfigurationEntry.value:type_name -> clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig
 	6, // [6:6] is the sub-list for method output_type
@@ -313,7 +314,7 @@ func file_config_service_chaos_experimentation_terminator_v1_termination_proto_i
 			}
 		}
 		file_config_service_chaos_experimentation_terminator_v1_termination_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MaxTimeTerminationCriteria); i {
+			switch v := v.(*MaxTimeTerminationCriterion); i {
 			case 0:
 				return &v.state
 			case 1:

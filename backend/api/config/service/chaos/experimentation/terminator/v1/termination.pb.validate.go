@@ -159,10 +159,10 @@ var _ interface {
 	ErrorName() string
 } = ConfigValidationError{}
 
-// Validate checks the field values on MaxTimeTerminationCriteria with the
+// Validate checks the field values on MaxTimeTerminationCriterion with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *MaxTimeTerminationCriteria) Validate() error {
+func (m *MaxTimeTerminationCriterion) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -170,7 +170,7 @@ func (m *MaxTimeTerminationCriteria) Validate() error {
 	if d := m.GetMaxDuration(); d != nil {
 		dur, err := ptypes.Duration(d)
 		if err != nil {
-			return MaxTimeTerminationCriteriaValidationError{
+			return MaxTimeTerminationCriterionValidationError{
 				field:  "MaxDuration",
 				reason: "value is not a valid duration",
 				cause:  err,
@@ -180,7 +180,7 @@ func (m *MaxTimeTerminationCriteria) Validate() error {
 		gt := time.Duration(0*time.Second + 0*time.Nanosecond)
 
 		if dur <= gt {
-			return MaxTimeTerminationCriteriaValidationError{
+			return MaxTimeTerminationCriterionValidationError{
 				field:  "MaxDuration",
 				reason: "value must be greater than 0s",
 			}
@@ -191,9 +191,10 @@ func (m *MaxTimeTerminationCriteria) Validate() error {
 	return nil
 }
 
-// MaxTimeTerminationCriteriaValidationError is the validation error returned
-// by MaxTimeTerminationCriteria.Validate if the designated constraints aren't met.
-type MaxTimeTerminationCriteriaValidationError struct {
+// MaxTimeTerminationCriterionValidationError is the validation error returned
+// by MaxTimeTerminationCriterion.Validate if the designated constraints
+// aren't met.
+type MaxTimeTerminationCriterionValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -201,24 +202,24 @@ type MaxTimeTerminationCriteriaValidationError struct {
 }
 
 // Field function returns field value.
-func (e MaxTimeTerminationCriteriaValidationError) Field() string { return e.field }
+func (e MaxTimeTerminationCriterionValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e MaxTimeTerminationCriteriaValidationError) Reason() string { return e.reason }
+func (e MaxTimeTerminationCriterionValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e MaxTimeTerminationCriteriaValidationError) Cause() error { return e.cause }
+func (e MaxTimeTerminationCriterionValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e MaxTimeTerminationCriteriaValidationError) Key() bool { return e.key }
+func (e MaxTimeTerminationCriterionValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e MaxTimeTerminationCriteriaValidationError) ErrorName() string {
-	return "MaxTimeTerminationCriteriaValidationError"
+func (e MaxTimeTerminationCriterionValidationError) ErrorName() string {
+	return "MaxTimeTerminationCriterionValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e MaxTimeTerminationCriteriaValidationError) Error() string {
+func (e MaxTimeTerminationCriterionValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -230,14 +231,14 @@ func (e MaxTimeTerminationCriteriaValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sMaxTimeTerminationCriteria.%s: %s%s",
+		"invalid %sMaxTimeTerminationCriterion.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = MaxTimeTerminationCriteriaValidationError{}
+var _ error = MaxTimeTerminationCriterionValidationError{}
 
 var _ interface {
 	Field() string
@@ -245,7 +246,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = MaxTimeTerminationCriteriaValidationError{}
+} = MaxTimeTerminationCriterionValidationError{}
 
 // Validate checks the field values on Config_PerConfigTypeConfig with the
 // rules defined in the proto definition for this message. If any rules are

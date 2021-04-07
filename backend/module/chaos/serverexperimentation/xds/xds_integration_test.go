@@ -83,9 +83,9 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 	ts := xdstest.NewTestModuleServer(New, true, xdsConfig)
 	defer ts.Stop()
 
-	criteria := &testCriteria{}
+	criterion := &testCriterion{}
 
-	terminator.CriteriaFactories["type.googleapis.com/google.protobuf.StringValue"] = &testCriteriaFactory{testCriteria: criteria}
+	terminator.CriterionFactories["type.googleapis.com/google.protobuf.StringValue"] = &testCriterionFactory{testCriterion: criterion}
 
 	anyString, err := ptypes.MarshalAny(&wrapperspb.StringValue{})
 	assert.NoError(t, err)
@@ -129,7 +129,7 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 	})
 	assert.NoError(t, err, "did not see faults enabled")
 
-	criteria.start()
+	criterion.start()
 
 	// Since we've enabled a time based automatic termination, we expect to see faults get disabled on their own after some time.
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
@@ -254,29 +254,29 @@ func awaitExpectedReturnValueForSimpleCall(t *testing.T, e *envoytest.EnvoyHandl
 	return nil
 }
 
-type testCriteriaFactory struct {
-	testCriteria *testCriteria
+type testCriterionFactory struct {
+	testCriterion *testCriterion
 }
 
-func (t *testCriteriaFactory) Create(*any.Any) (terminator.TerminationCriteria, error) {
+func (t *testCriterionFactory) Create(*any.Any) (terminator.TerminationCriterion, error) {
 	return t.testCriteria, nil
 }
 
-type testCriteria struct {
+type testCriterion struct {
 	startCheckingTime bool
 	sync.Mutex
 }
 
 // We want the time check to be low but also avoid races, so this lets us prevent the criteria from activating until
 // we know that we're seeing faults enabled.
-func (t *testCriteria) start() {
+func (t *testCriterion) start() {
 	t.Lock()
 	defer t.Unlock()
 
 	t.startCheckingTime = true
 }
 
-func (t *testCriteria) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error) {
+func (t *testCriterion) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error) {
 	t.Lock()
 	defer t.Unlock()
 
