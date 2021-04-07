@@ -20,6 +20,7 @@ import styled from "@emotion/styled";
 import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import type { WorkflowProps } from ".";
 
@@ -43,7 +44,7 @@ const RepositoryDetails: React.FC<WizardChild> = () => {
   const { register, errors, handleSubmit } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
-    validationSchema: schema,
+    resolver: yupResolver(schema),
   });
   const { onSubmit } = useWizardContext();
   const repositoryData = useDataLayout("repositoryData");
