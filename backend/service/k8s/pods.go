@@ -52,7 +52,10 @@ func (s *svc) ListPods(ctx context.Context, clientset, cluster, namespace string
 		return nil, err
 	}
 
-	opts := ApplyListOptions(listOpts)
+	opts, err := ApplyListOptions(listOpts)
+	if err != nil {
+		return nil, err
+	}
 
 	podList, err := cs.CoreV1().Pods(cs.Namespace()).List(ctx, opts)
 	if err != nil {

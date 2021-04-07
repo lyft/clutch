@@ -40,7 +40,11 @@ func (s *svc) ListCronJobs(ctx context.Context, clientset, cluster, namespace st
 		return nil, err
 	}
 
-	opts := ApplyListOptions(listOptions)
+	opts, err := ApplyListOptions(listOptions)
+	if err != nil {
+		return nil, err
+	}
+
 	cronJobList, err := cs.BatchV1beta1().CronJobs(cs.Namespace()).List(ctx, opts)
 	if err != nil {
 		return nil, err

@@ -487,7 +487,7 @@ func (m *ListOptions) Validate() error {
 
 	// no validation rules for Labels
 
-	// no validation rules for SelectorString
+	// no validation rules for SupplementalSelectorString
 
 	return nil
 }

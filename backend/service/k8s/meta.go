@@ -11,18 +11,23 @@ import (
 
 // TODO (mcutalo): make this generic when adding additional `List` functionality
 // for all k8s resources and support field selectors
-func ApplyListOptions(listOpts *k8sapiv1.ListOptions) metav1.ListOptions {
+func ApplyListOptions(listOpts *k8sapiv1.ListOptions) (metav1.ListOptions, error) {
 	opts := metav1.ListOptions{}
 	if len(listOpts.Labels) > 0 {
 		opts.LabelSelector = labels.FormatLabels(listOpts.Labels)
-	} else if len(listOpts.SelectorString) > 0 {
+	} 
+	
+	
+	
+	else if len(listOpts.SelectorString) > 0 {
 		// use the selector string as a backup, it must be formatted correctly
 		// Example: "!abc"
 		// Another example: "a=b,!c,d!=e"
 		opts.LabelSelector = listOpts.SelectorString
 	}
-
-	return opts
+	
+	_, err := labels.Parse(opts.LabelSelector)
+	return opts, err
 }
 
 // Applies the name of the cluster to a kube object
