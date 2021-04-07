@@ -105,6 +105,7 @@ module.exports = {
     },
   },
   themeConfig: {
+    image: 'img/docs/landing-page.png', // SEO image for Twitter card, etc.
     colorMode: {
       disableSwitch: true,
     },
