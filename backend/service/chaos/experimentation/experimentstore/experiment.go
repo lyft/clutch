@@ -21,7 +21,7 @@ func (rc *Experiment) toProto() (*experimentationv1.Experiment, error) {
 
 	var endTimestampProto *timestamppb.Timestamp
 	if rc.Run.EndTime != nil {
-		endTimestampProto = timestamppb.New(rc.Run.EndTime.Time)
+		endTimestampProto = timestamppb.New(*rc.Run.EndTime)
 		if err := endTimestampProto.CheckValid(); err != nil {
 			return nil, status.Errorf(codes.Internal, "%v", err)
 		}

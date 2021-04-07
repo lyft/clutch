@@ -13,10 +13,10 @@ func TimeToPropertyDateValue(t *time.Time) (*experimentation.Property_DateValue,
 		return nil, nil
 	}
 
-    timestamp := timestamppb.New(t.Time)
-    if err := timestamp.CheckValid(); err != nil {
-        return nil, err
-    }
+	timestamp := timestamppb.New(*t)
+	if err := timestamp.CheckValid(); err != nil {
+		return nil, err
+	}
 
 	return &experimentation.Property_DateValue{DateValue: timestamp}, nil
 }
