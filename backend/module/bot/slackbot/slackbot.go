@@ -3,6 +3,7 @@ package slackbot
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/slack-go/slack"
@@ -24,8 +25,8 @@ import (
 const (
 	Name = "clutch.module.bot.slackbot"
 	// request headers used to verify a request came from Slack
-	hSignature = "X-Slack-Signature"
-	hTimestamp = "X-Slack-Request-Timestamp"
+	hSignature = "x-Slack-Signature"
+	hTimestamp = "x-Slack-Request-Timestamp"
 )
 
 func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
@@ -35,7 +36,6 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (module.Module, 
 			return nil, err
 		}
 	}
-
 
 	m := &mod{
 		slack:         slack.New(config.BotToken),
@@ -61,30 +61,17 @@ func (m *mod) Register(r module.Registrar) error {
 
 // One request, one event. https://api.slack.com/apis/connections/events-api#the-events-api__receiving-events
 func (m *mod) Event(ctx context.Context, req *slackbotv1.EventRequest) (*slackbotv1.EventResponse, error) {
-	m.logger.Info("received event from Slack API")
-
-	// TODO: (sperry) for this flow to work, need to add custom header matchers b/c by default grpc drops
-	// "X-Slack-Signature" and "X-Slack-Request-Timestamp" due to not meeting the preconditions here
-	// https://github.com/grpc-ecosystem/grpc-gateway/blob/519e7f45f48e3e378e3341d076579f3ce52aa717/runtime/mux.go#L63-L74
 	err := verifySlackRequest(ctx, req, m.signingSecret)
 	if err != nil {
 		m.logger.Error("verify slack request error", log.ErrorField(err))
 		return nil, status.New(codes.Unauthenticated, err.Error()).Err()
 	}
 
-	// recieved the first time when configuring an Events API Request URL, https://api.slack.com/events/url_verification
-	// the Slack API will send us the challenge string in the request and we must respond back with the same challenge
-	if req.Type == slackevents.URLVerification {
-		challenge := req.Challenge
-		// this should never happen
-		if challenge == "" {
-			msg := "slack API provided an empty challenge string"
-			m.logger.Error(msg)
-			return nil, status.New(codes.InvalidArgument, msg).Err()
-		}
-		return &slackbotv1.EventResponse{Challenge: challenge}, nil
-	}
+	m.logger.Info("received event from Slack API")
 
+	if req.Type == slackevents.URLVerification {
+		return m.handleURLVerificationEvent(req.Challenge)
+	}
 
 	return &slackbotv1.EventResponse{}, nil
 }
@@ -96,26 +83,25 @@ func getSlackRequestHeaders(ctx context.Context) (http.Header, error) {
 		return nil, errors.New("no headers present on request")
 	}
 
-	signature := md.Get("x-slack-signature")
+	signature := md.Get(hSignature)
 	if len(signature) == 0 {
-		return nil, errors.New("x-slack-signature header not present on request")
+		return nil, fmt.Errorf("%s header not present on request", hSignature)
 	}
 
-	timestamp := md.Get("x-slack-request-timestamp")
+	timestamp := md.Get(hTimestamp)
 	if len(timestamp) == 0 {
-		return nil, errors.New("x-slack-request-timestamp header not present on request")
+		return nil, fmt.Errorf("%s header not present on request", hTimestamp)
 	}
 
 	return http.Header{
-		hSignature: signature,
-		hTimestamp: timestamp,
+		"X-Slack-Signature":         signature,
+		"X-Slack-Request-Timestamp": timestamp,
 	}, nil
 }
 
 // verifies the request came from Slack
 // https://api.slack.com/authentication/verifying-requests-from-slack#verifying-requests-from-slack-using-signing-secrets__a-recipe-for-security__step-by-step-walk-through-for-validating-a-request
 func verifySlackRequest(ctx context.Context, req *slackbotv1.EventRequest, signingSecret string) error {
-	// returns the signature and timestamp from the requuest headers
 	headers, err := getSlackRequestHeaders(ctx)
 	if err != nil {
 		return err
@@ -148,3 +134,14 @@ func verifySlackRequest(ctx context.Context, req *slackbotv1.EventRequest, signi
 	return nil
 }
 
+// event type recieved the first time when configuring Slack API to send requests to our endpoint, https://api.slack.com/events/url_verification
+// the Slack API will send us the challenge string in the request and we must respond back with the same challenge
+func (m *mod) handleURLVerificationEvent(challenge string) (*slackbotv1.EventResponse, error) {
+	// this should never happen
+	if challenge == "" {
+		msg := "slack API provided an empty challenge string"
+		m.logger.Error(msg)
+		return nil, status.New(codes.InvalidArgument, msg).Err()
+	}
+	return &slackbotv1.EventResponse{Challenge: challenge}, nil
+}
