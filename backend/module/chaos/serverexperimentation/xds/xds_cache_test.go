@@ -18,13 +18,13 @@ import (
 	gcpCacheV3 "github.com/envoyproxy/go-control-plane/pkg/cache/v3"
 	gcpResourceV3 "github.com/envoyproxy/go-control-plane/pkg/resource/v3"
 	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/duration"
 	pstruct "github.com/golang/protobuf/ptypes/struct"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/durationpb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
@@ -416,9 +416,7 @@ func TestSetSnapshotECDSInternalFault(t *testing.T) {
 	expectedHTTPFaultFilter := &gcpFilterFault.HTTPFault{
 		Delay: &gcpFilterCommon.FaultDelay{
 			FaultDelaySecifier: &gcpFilterCommon.FaultDelay_FixedDelay{
-				FixedDelay: &duration.Duration{
-					Nanos: 1000000, // 0.001 second
-				},
+				FixedDelay: durationpb.New(time.Millisecond),
 			},
 			Percentage: &gcpType.FractionalPercent{
 				Numerator:   0,
@@ -512,9 +510,7 @@ func TestSetSnapshotECDSExternalFault(t *testing.T) {
 	expectedHTTPFaultFilter := &gcpFilterFault.HTTPFault{
 		Delay: &gcpFilterCommon.FaultDelay{
 			FaultDelaySecifier: &gcpFilterCommon.FaultDelay_FixedDelay{
-				FixedDelay: &duration.Duration{
-					Nanos: 200000000, // 200 ms
-				},
+				FixedDelay: durationpb.New(time.Millisecond * 200),
 			},
 			Percentage: &gcpType.FractionalPercent{
 				Numerator:   40,

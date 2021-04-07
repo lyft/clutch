@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/golang/protobuf/ptypes"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -126,11 +125,7 @@ func ApplyRestClientConfig(restConfig *rest.Config, restClientConfig *k8sconfigv
 	}
 
 	if restClientConfig.Timeout != nil {
-		timeout, err := ptypes.Duration(restClientConfig.Timeout)
-		if err != nil {
-			return err
-		}
-		restConfig.Timeout = timeout
+		restConfig.Timeout = restClientConfig.Timeout.AsDuration()
 	}
 	return nil
 }
