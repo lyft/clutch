@@ -236,7 +236,7 @@ func TestListPods(t *testing.T) {
 	assert.Len(t, result, 2)
 }
 
-func TestPodDescriptionClusterName(t *testing.T) {
+func TestPodDescription(t *testing.T) {
 	t.Parallel()
 
 	var podTestCases = []struct {
@@ -253,6 +253,26 @@ func TestPodDescriptionClusterName(t *testing.T) {
 				ObjectMeta: metav1.ObjectMeta{
 					ClusterName: "production",
 				},
+				Status: corev1.PodStatus{
+					StartTime: &metav1.Time{},
+					ContainerStatuses: []corev1.ContainerStatus{
+						{Name: "container1"},
+						{Name: "container2"},
+						{Name: "container3"},
+					},
+					InitContainerStatuses: []corev1.ContainerStatus{
+						{Name: "initcontainer1"},
+						{Name: "initcontainer2"},
+						{Name: "initcontainer3"},
+					},
+					Reason: "Evicted",
+					Conditions: []corev1.PodCondition{
+						corev1.PodCondition{
+							Type:   corev1.ContainersReady,
+							Status: corev1.ConditionTrue,
+						},
+					},
+				},
 			},
 		},
 		{
@@ -262,6 +282,26 @@ func TestPodDescriptionClusterName(t *testing.T) {
 			pod: &corev1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					ClusterName: "",
+				},
+				Status: corev1.PodStatus{
+					StartTime: &metav1.Time{},
+					ContainerStatuses: []corev1.ContainerStatus{
+						{Name: "container1"},
+						{Name: "container2"},
+						{Name: "container3"},
+					},
+					InitContainerStatuses: []corev1.ContainerStatus{
+						{Name: "initcontainer1"},
+						{Name: "initcontainer2"},
+						{Name: "initcontainer3"},
+					},
+					Reason: "Evicted",
+					Conditions: []corev1.PodCondition{
+						corev1.PodCondition{
+							Type:   corev1.ContainersReady,
+							Status: corev1.ConditionTrue,
+						},
+					},
 				},
 			},
 		},
@@ -274,6 +314,10 @@ func TestPodDescriptionClusterName(t *testing.T) {
 
 			pod := podDescription(tt.pod, tt.inputClusterName)
 			assert.Equal(t, tt.expectedClusterName, pod.Cluster)
+			assert.Equal(t, tt.pod.Status.Reason, pod.StateReason)
+			assert.Equal(t, tt.pod.Status.InitContainerStatuses[0].Name, pod.InitContainers[0].Name)
+			assert.Equal(t, k8sv1.PodCondition_Type(1), pod.PodConditions[0].Type)
+			assert.Equal(t, k8sv1.PodCondition_Status(1), pod.PodConditions[0].Status)
 		})
 	}
 }
@@ -420,13 +464,19 @@ func TestMakeContainers(t *testing.T) {
 					Ready:        false,
 					RestartCount: 0,
 					State:        k8sv1.Container_RUNNING,
+					StateDetails: &k8sv1.Container_StateRunning{
+						StateRunning: &k8sv1.StateRunning{},
+					},
 				},
 				{
 					Name:         "TheContainer",
 					Image:        "foo",
 					Ready:        true,
 					RestartCount: 5,
-					State:        k8sv1.Container_RUNNING,
+					State:        k8sv1.Container_WAITING,
+					StateDetails: &k8sv1.Container_StateWaiting{
+						StateWaiting: &k8sv1.StateWaiting{},
+					},
 				},
 			},
 			statuses: []corev1.ContainerStatus{
@@ -445,7 +495,7 @@ func TestMakeContainers(t *testing.T) {
 					Ready:        true,
 					RestartCount: 5,
 					State: corev1.ContainerState{
-						Running: &corev1.ContainerStateRunning{},
+						Waiting: &corev1.ContainerStateWaiting{},
 					},
 				},
 			},
@@ -458,7 +508,10 @@ func TestMakeContainers(t *testing.T) {
 					Image:        "giraffe",
 					Ready:        true,
 					RestartCount: 1,
-					State:        k8sv1.Container_RUNNING,
+					State:        k8sv1.Container_TERMINATED,
+					StateDetails: &k8sv1.Container_StateTerminated{
+						StateTerminated: &k8sv1.StateTerminated{},
+					},
 				},
 			},
 			statuses: []corev1.ContainerStatus{
@@ -468,7 +521,7 @@ func TestMakeContainers(t *testing.T) {
 					Ready:        true,
 					RestartCount: 1,
 					State: corev1.ContainerState{
-						Running: &corev1.ContainerStateRunning{},
+						Terminated: &corev1.ContainerStateTerminated{},
 					},
 				},
 			},

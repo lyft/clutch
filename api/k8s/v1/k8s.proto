@@ -256,6 +256,51 @@ message Container {
   State state = 3;
   bool ready = 4;
   int32 restart_count = 5;
+
+  // ref: https://pkg.go.dev/k8s.io/api/core/v1#ContainerState
+  oneof state_details {
+    StateWaiting state_waiting = 6;
+    StateRunning state_running = 7;
+    StateTerminated state_terminated = 8;
+  }
+}
+
+// ref: https://pkg.go.dev/k8s.io/api/core/v1#ContainerStateWaiting
+message StateWaiting {
+  string reason = 1;
+  string message = 2;
+}
+
+// ref: https://pkg.go.dev/k8s.io/api/core/v1#ContainerStateRunning
+message StateRunning {
+  google.protobuf.Timestamp start_time = 1;
+}
+
+// ref: https://pkg.go.dev/k8s.io/api/core/v1#ContainerStateTerminated
+message StateTerminated {
+  string reason = 1;
+  string message = 2;
+  int32 exit_code = 3;
+  int32 signal = 4;
+}
+
+message PodCondition {
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    CONTAINERS_READY = 1;
+    INITIALIZED = 2;
+    READY = 3;
+    POD_SCHEDULED = 4;
+  }
+  Type type = 1;
+
+  enum Status {
+    STATUS_UNSPECIFIED = 0;
+    TRUE = 1;
+    FALSE = 2;
+    UNKNOWN = 3;
+  }
+  Status status = 2;
 }
 
 message Pod {
@@ -288,6 +333,18 @@ message Pod {
 
   map<string, string> labels = 9;
   map<string, string> annotations = 10;
+
+  // message indicating details about why the pod is in this state.
+  // https://pkg.go.dev/k8s.io/api/core/v1#PodStatus
+  string state_reason = 11;
+
+  // current service state of pod.
+  // https://pkg.go.dev/k8s.io/api/core/v1#PodCondition
+  repeated PodCondition pod_conditions = 12;
+
+  // one entry per init container.
+  // ref: https://pkg.go.dev/k8s.io/api/core/v1#PodStatus
+  repeated Container init_containers = 13;
 }
 
 message ListOptions {

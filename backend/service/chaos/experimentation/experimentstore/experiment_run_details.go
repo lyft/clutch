@@ -1,7 +1,6 @@
 package experimentstore
 
 import (
-	"database/sql"
 	"time"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
@@ -40,10 +39,10 @@ func NewRunDetails(run *ExperimentRun, config *ExperimentConfig, transformer *Tr
 	}, nil
 }
 
-func timesToStatus(startTime time.Time, endTime sql.NullTime, cancellationTime sql.NullTime, now time.Time) experimentation.Experiment_Status {
-	if cancellationTime.Valid {
-		if cancellationTime.Time.After(startTime) {
-			if endTime.Valid {
+func timesToStatus(startTime time.Time, endTime *time.Time, cancellationTime *time.Time, now time.Time) experimentation.Experiment_Status {
+	if cancellationTime != nil {
+		if cancellationTime.After(startTime) {
+			if endTime != nil {
 				return experimentation.Experiment_STATUS_STOPPED
 			} else {
 				return experimentation.Experiment_STATUS_COMPLETED
@@ -54,7 +53,7 @@ func timesToStatus(startTime time.Time, endTime sql.NullTime, cancellationTime s
 	} else {
 		if now.Before(startTime) {
 			return experimentation.Experiment_STATUS_SCHEDULED
-		} else if now.After(startTime) && (!endTime.Valid || now.Before(endTime.Time)) {
+		} else if now.After(startTime) && (endTime == nil || now.Before(*endTime)) {
 			return experimentation.Experiment_STATUS_RUNNING
 		}
 		return experimentation.Experiment_STATUS_COMPLETED

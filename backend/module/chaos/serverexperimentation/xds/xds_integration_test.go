@@ -10,12 +10,12 @@ import (
 	"time"
 
 	_ "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
-	wrapperspb "github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
+	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
@@ -33,7 +33,7 @@ import (
 func TestEnvoyFaults(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		CacheRefreshInterval:      durationpb.New(time.Second),
 		IngressFaultRuntimePrefix: "fault.http",
 		EgressFaultRuntimePrefix:  "egress",
 	}
@@ -75,7 +75,7 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		CacheRefreshInterval:      durationpb.New(time.Second),
 		IngressFaultRuntimePrefix: "fault.http",
 		EgressFaultRuntimePrefix:  "egress",
 	}
@@ -87,7 +87,7 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 
 	terminator.CriterionFactories["type.googleapis.com/google.protobuf.StringValue"] = &testCriterionFactory{testCriterion: criterion}
 
-	anyString, err := ptypes.MarshalAny(&wrapperspb.StringValue{})
+	anyString, err := anypb.New(&wrapperspb.StringValue{})
 	assert.NoError(t, err)
 
 	typedConfig := &terminatorv1.Config{
@@ -96,10 +96,10 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 				TerminationCriteria: []*anypb.Any{anyString},
 			},
 		},
-		OuterLoopInterval:          ptypes.DurationProto(time.Second),
-		PerExperimentCheckInterval: ptypes.DurationProto(time.Second),
+		OuterLoopInterval:          durationpb.New(time.Second),
+		PerExperimentCheckInterval: durationpb.New(time.Second),
 	}
-	anyConfig, err := ptypes.MarshalAny(typedConfig)
+	anyConfig, err := anypb.New(typedConfig)
 	assert.NoError(t, err)
 
 	terminator, err := terminator.NewMonitor(anyConfig, ts.Logger, ts.Scope)
@@ -142,7 +142,7 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 func TestEnvoyECDSFaults(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		CacheRefreshInterval:      durationpb.New(time.Second),
 		IngressFaultRuntimePrefix: "fault.http",
 		EgressFaultRuntimePrefix:  "egress",
 		EcdsAllowList:             &xdsconfigv1.Config_ECDSAllowList{EnabledClusters: []string{"test-cluster"}},
@@ -213,15 +213,10 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experiments
 	assert.NoError(t, err)
 
 	now := time.Date(2011, 0, 0, 0, 0, 0, 0, time.UTC)
-	assert.NoError(t, err)
 	future := now.Add(1 * time.Hour)
-	futureTimestamp, err := ptypes.TimestampProto(future)
-	assert.NoError(t, err)
 	farFuture := future.Add(1 * time.Hour)
-	farFutureTimestamp, err := ptypes.TimestampProto(farFuture)
-	assert.NoError(t, err)
 
-	d := &experimentationv1.CreateExperimentData{StartTime: futureTimestamp, EndTime: farFutureTimestamp, Config: a}
+	d := &experimentationv1.CreateExperimentData{StartTime: timestamppb.New(future), EndTime: timestamppb.New(farFuture), Config: a}
 	s, err := experimentstore.NewExperimentSpecification(d, now)
 	assert.NoError(t, err)
 	experiment, err := storer.CreateExperiment(context.Background(), s)
@@ -258,8 +253,8 @@ type testCriterionFactory struct {
 	testCriterion *testCriterion
 }
 
-func (t *testCriterionFactory) Create(*any.Any) (terminator.TerminationCriterion, error) {
-	return t.testCriteria, nil
+func (t *testCriterionFactory) Create(*anypb.Any) (terminator.TerminationCriterion, error) {
+	return t.testCriterion, nil
 }
 
 type testCriterion struct {
@@ -284,7 +279,7 @@ func (t *testCriterion) ShouldTerminate(experiment *experimentationv1.Experiment
 	if _, ok := experimentConfig.(*serverexperimentation.HTTPFaultConfig); !ok {
 		panic("received unexpected experiment config")
 	}
-	started, _ := ptypes.Timestamp(experiment.StartTime)
+	started := experiment.StartTime.AsTime()
 	if t.startCheckingTime && started.Add(1*time.Second).Before(time.Now()) {
 		return "timed out", nil
 	}

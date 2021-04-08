@@ -24,5 +24,6 @@ func TestNew(t *testing.T) {
 
 func TestNewWithWrongConfig(t *testing.T) {
 	_, err := New(&anypb.Any{TypeUrl: "foobar"}, nil, nil)
-	assert.EqualError(t, err, `mismatched message type: got "foobar" want "clutch.config.service.topology.v1.Config"`)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "mismatched message")
 }

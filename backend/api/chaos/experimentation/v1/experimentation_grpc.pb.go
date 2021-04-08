@@ -23,12 +23,17 @@ type ExperimentsAPIClient interface {
 	CreateExperiment(ctx context.Context, in *CreateExperimentRequest, opts ...grpc.CallOption) (*CreateExperimentResponse, error)
 	// Create a new experiment using the provided experiment data. It succeeds even if an experiment run
 	// with the provided run identifier already exists. In this case, the rest of request's payload is ignored
-	// and existing experiment with a matching run identifier is returned. See `CreateExperimentData` for more
+	// and an existing experiment with a matching run identifier is returned. See `CreateExperimentData` for more
 	// details.
 	CreateOrGetExperiment(ctx context.Context, in *CreateOrGetExperimentRequest, opts ...grpc.CallOption) (*CreateOrGetExperimentResponse, error)
+	// Cancel a running experiment run. The operation returns success even if a given experiment run has been
+	// already completed or canceled and the operation does not have any effect.
 	CancelExperimentRun(ctx context.Context, in *CancelExperimentRunRequest, opts ...grpc.CallOption) (*CancelExperimentRunResponse, error)
+	// Get the list of experiments fulfilling the specified criteria. See `GetExperimentsRequests` for more details.
 	GetExperiments(ctx context.Context, in *GetExperimentsRequest, opts ...grpc.CallOption) (*GetExperimentsResponse, error)
+	// Get the list of experiments in the form that's optimized for displaying to the end user.
 	GetListView(ctx context.Context, in *GetListViewRequest, opts ...grpc.CallOption) (*GetListViewResponse, error)
+	// Fetch the list of properties in the format that's optimized for displaying to the end user.
 	GetExperimentRunDetails(ctx context.Context, in *GetExperimentRunDetailsRequest, opts ...grpc.CallOption) (*GetExperimentRunDetailsResponse, error)
 }
 
@@ -103,12 +108,17 @@ type ExperimentsAPIServer interface {
 	CreateExperiment(context.Context, *CreateExperimentRequest) (*CreateExperimentResponse, error)
 	// Create a new experiment using the provided experiment data. It succeeds even if an experiment run
 	// with the provided run identifier already exists. In this case, the rest of request's payload is ignored
-	// and existing experiment with a matching run identifier is returned. See `CreateExperimentData` for more
+	// and an existing experiment with a matching run identifier is returned. See `CreateExperimentData` for more
 	// details.
 	CreateOrGetExperiment(context.Context, *CreateOrGetExperimentRequest) (*CreateOrGetExperimentResponse, error)
+	// Cancel a running experiment run. The operation returns success even if a given experiment run has been
+	// already completed or canceled and the operation does not have any effect.
 	CancelExperimentRun(context.Context, *CancelExperimentRunRequest) (*CancelExperimentRunResponse, error)
+	// Get the list of experiments fulfilling the specified criteria. See `GetExperimentsRequests` for more details.
 	GetExperiments(context.Context, *GetExperimentsRequest) (*GetExperimentsResponse, error)
+	// Get the list of experiments in the form that's optimized for displaying to the end user.
 	GetListView(context.Context, *GetListViewRequest) (*GetListViewResponse, error)
+	// Fetch the list of properties in the format that's optimized for displaying to the end user.
 	GetExperimentRunDetails(context.Context, *GetExperimentRunDetailsRequest) (*GetExperimentRunDetailsResponse, error)
 }
 

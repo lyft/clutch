@@ -9,7 +9,6 @@ import (
 	"fmt"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -63,12 +62,12 @@ func (r *resolverAPI) Resolve(ctx context.Context, req *resolverv1.ResolveReques
 		for _, schema := range inputSchemas {
 			if schema.TypeUrl == req.Have.TypeUrl {
 				searchedSchemas = append(searchedSchemas, schema.TypeUrl)
-				a := &ptypes.DynamicAny{}
-				if err := ptypes.UnmarshalAny(req.Have, a); err != nil {
+				pb, err := req.Have.UnmarshalNew()
+				if err != nil {
 					return nil, err
 				}
 
-				results, err := res.Resolve(ctx, req.Want, a.Message, req.Limit)
+				results, err := res.Resolve(ctx, req.Want, proto.MessageV1(pb), req.Limit)
 				if err != nil {
 					return nil, err
 				}
