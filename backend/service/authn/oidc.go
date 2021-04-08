@@ -138,6 +138,7 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 }
 
 func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, tokenType authnmodulev1.CreateTokenRequest_TokenType, expiry *time.Duration) (*oauth2.Token, error) {
+	// If we issue a token without a tokenStorage there will be no record of the token and no way to revoke it.
 	if p.tokenStorage == nil {
 		return nil, errors.New("cannot issue new token without a token storage")
 	}
