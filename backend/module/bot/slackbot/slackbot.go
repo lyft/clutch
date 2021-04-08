@@ -80,7 +80,7 @@ func (m *mod) Event(ctx context.Context, req *slackbotv1.EventRequest) (*slackbo
 	err := verifySlackRequest(ctx, req, m.signingSecret)
 	if err != nil {
 		m.logger.Error("verify slack request error", log.ErrorField(err))
-		return nil, status.New(codes.Unauthenticated, err.Error()).Err()
+		return nil, status.Error(codes.Unauthenticated, err.Error())
 	}
 
 	m.logger.Info("received event from Slack API")
@@ -169,7 +169,7 @@ func (m *mod) handleURLVerificationEvent(challenge string) (*slackbotv1.EventRes
 	if challenge == "" {
 		msg := "slack API provided an empty challenge string"
 		m.logger.Error(msg)
-		return nil, status.New(codes.InvalidArgument, msg).Err()
+		return nil, status.Error(codes.InvalidArgument, msg)
 	}
 	return &slackbotv1.EventResponse{Challenge: challenge}, nil
 }
