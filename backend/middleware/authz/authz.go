@@ -29,7 +29,8 @@ const Name = "clutch.middleware.authz"
 // List of method patterns that should never go through the authz engine.
 // TODO(maybe): convert this to an API annotation or make configurable on the authz middleware.
 var allowlist = []string{
-	"/clutch.authn.v1.AuthnAPI/*",
+	"/clutch.authn.v1.AuthnAPI/Callback",
+	"/clutch.authn.v1.AuthnAPI/Login",
 	"/clutch.healthcheck.v1.HealthcheckAPI/*",
 }
 

@@ -28,7 +28,8 @@ const Name = "clutch.middleware.authn"
 // List of method patterns that should not be blocked by authn.
 // TODO(maybe): convert this to an API annotation or make configurable on the middleware.
 var allowlist = []string{
-	"/clutch.authn.v1.AuthnAPI/*",
+	"/clutch.authn.v1.AuthnAPI/Callback",
+	"/clutch.authn.v1.AuthnAPI/Login",
 	"/clutch.healthcheck.v1.HealthcheckAPI/*",
 }
 
