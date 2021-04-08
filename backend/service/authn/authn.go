@@ -20,6 +20,14 @@ import (
 
 const Name = "clutch.service.authn"
 
+// AlwaysAllowedMethods is a list of method patterns that are always open and not blocked by authn or authz.
+// TODO(maybe): convert this to an API annotation or make configurable on the middleware that use the list.
+var AlwaysAllowedMethods = []string{
+	"/clutch.authn.v1.AuthnAPI/Callback",
+	"/clutch.authn.v1.AuthnAPI/Login",
+	"/clutch.healthcheck.v1.HealthcheckAPI/*",
+}
+
 func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	config := &authnv1.Config{}
 	if err := cfg.UnmarshalTo(config); err != nil {

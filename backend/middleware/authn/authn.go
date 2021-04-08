@@ -25,14 +25,6 @@ import (
 
 const Name = "clutch.middleware.authn"
 
-// List of method patterns that should not be blocked by authn.
-// TODO(maybe): convert this to an API annotation or make configurable on the middleware.
-var allowlist = []string{
-	"/clutch.authn.v1.AuthnAPI/Callback",
-	"/clutch.authn.v1.AuthnAPI/Login",
-	"/clutch.healthcheck.v1.HealthcheckAPI/*",
-}
-
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (middleware.Middleware, error) {
 	svc, ok := service.Registry["clutch.service.authn"]
 	if !ok {
@@ -62,7 +54,7 @@ func (m *mid) UnaryInterceptor() grpc.UnaryServerInterceptor {
 
 		// Determine if it's on the allow list.
 		checkRequired := true
-		for _, allow := range allowlist {
+		for _, allow := range authn.AlwaysAllowedMethods {
 			if middleware.MatchMethodOrResource(allow, info.FullMethod) {
 				checkRequired = false
 				break
