@@ -187,11 +187,10 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 	return nil
 }
 
-// forward all X- headers and add the grpcgateway prefix
 func customHeaderMatcher(key string) (string, bool) {
 	key = textproto.CanonicalMIMEHeaderKey(key)
 	if strings.HasPrefix(key, xHeader) {
-		// don't want to prefix these headers as they are looked up by grpc's annotate context flow and added to the context
+		// exclude handling these headers as they are looked up by grpc's annotate context flow and added to the context
 		// metadata if they're not found
 		if key != xForwardedFor && key != xForwardedHost {
 			return runtime.MetadataPrefix + key, true
