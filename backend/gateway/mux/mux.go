@@ -28,6 +28,10 @@ import (
 	awsservice "github.com/lyft/clutch/backend/service/aws"
 )
 
+const (
+	xHeader = "X-"
+)
+
 var apiPattern = regexp.MustCompile(`^/v\d+/`)
 
 type assetHandler struct {
@@ -180,6 +184,15 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 	return nil
 }
 
+// forward all X- headers and add the grpcgateway prefix
+func customMatcher(key string) (string, bool) {
+	if strings.HasPrefix(key, xHeader) {
+		return runtime.MetadataPrefix + key, true
+	}
+	// the the default header mapping rule
+	return runtime.DefaultHeaderMatcher(key)
+}
+
 func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Marshaler, w http.ResponseWriter, req *http.Request, err error) {
 	//  TODO(maybe): once we have non-browser clients we probably want to avoid the redirect and directly return the error.
 	if s, ok := status.FromError(err); ok && s.Code() == codes.Unauthenticated {
@@ -219,6 +232,7 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 				UnmarshalOptions: protojson.UnmarshalOptions{},
 			},
 		),
+		runtime.WithIncomingHeaderMatcher(customMatcher),
 	)
 
 	// If there is a configured asset provider, we check to see if the service is configured before proceeding.

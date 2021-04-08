@@ -66,3 +66,25 @@ func TestGetAssetProivderService(t *testing.T) {
 	_, err := getAssetProviderService(assetCfg)
 	assert.Error(t, err)
 }
+
+func TestCustomMatcher(t *testing.T) {
+	testCases := []struct {
+		key          string
+		expectedKey  string
+		expectedBool bool
+	}{
+		{key: "X-Foo-Bar", expectedKey: "grpcgateway-X-Foo-Bar", expectedBool: true},
+		// testing the default rule - a part of the X group
+		{key: "Cookie", expectedKey: "grpcgateway-Cookie", expectedBool: true},
+		// testing the default rule - has the Grpc-Metadata prefix
+		{key: "Grpc-Metadata-Foo", expectedKey: "Foo", expectedBool: true},
+		// doesn't match custom or default rules
+		{key: "Foo-Bar", expectedKey: "", expectedBool: false},
+	}
+
+	for _, test := range testCases {
+		result, ok := customMatcher(test.key)
+		assert.Equal(t, test.expectedKey, result)
+		assert.Equal(t, test.expectedBool, ok)
+	}
+}
