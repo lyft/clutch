@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/http/pprof"
+	"net/textproto"
 	"net/url"
 	"path"
 	"regexp"
@@ -29,7 +30,9 @@ import (
 )
 
 const (
-	xHeader = "X-"
+	xHeader        = "X-"
+	xForwardedFor  = "X-Forwarded-For"
+	xForwardedHost = "X-Forwarded-Host"
 )
 
 var apiPattern = regexp.MustCompile(`^/v\d+/`)
@@ -185,9 +188,14 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 }
 
 // forward all X- headers and add the grpcgateway prefix
-func customMatcher(key string) (string, bool) {
+func customHeaderMatcher(key string) (string, bool) {
+	key = textproto.CanonicalMIMEHeaderKey(key)
 	if strings.HasPrefix(key, xHeader) {
-		return runtime.MetadataPrefix + key, true
+		// don't want to prefix these headers as they are looked up by grpc's annotate context flow and added to the context
+		// metadata if they're are not found
+		if key != xForwardedFor && key != xForwardedHost {
+			return runtime.MetadataPrefix + key, true
+		}
 	}
 	// the the default header mapping rule
 	return runtime.DefaultHeaderMatcher(key)
@@ -232,7 +240,7 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 				UnmarshalOptions: protojson.UnmarshalOptions{},
 			},
 		),
-		runtime.WithIncomingHeaderMatcher(customMatcher),
+		runtime.WithIncomingHeaderMatcher(customHeaderMatcher),
 	)
 
 	// If there is a configured asset provider, we check to see if the service is configured before proceeding.

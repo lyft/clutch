@@ -67,23 +67,57 @@ func TestGetAssetProivderService(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func TestCustomMatcher(t *testing.T) {
+func TestCustomHeaderMatcher(t *testing.T) {
 	testCases := []struct {
 		key          string
 		expectedKey  string
 		expectedBool bool
 	}{
-		{key: "X-Foo-Bar", expectedKey: "grpcgateway-X-Foo-Bar", expectedBool: true},
-		// testing the default rule - a part of the isPermanentHTTPHeader group
-		{key: "Cookie", expectedKey: "grpcgateway-Cookie", expectedBool: true},
-		// testing the default rule - has the Grpc-Metadata prefix
-		{key: "Grpc-Metadata-Foo", expectedKey: "Foo", expectedBool: true},
+		{
+			key:          "X-Foo-Bar",
+			expectedKey:  "grpcgateway-X-Foo-Bar",
+			expectedBool: true,
+		},
+		// testing that the headers get uppercased
+		{
+			key:          "x-foo-bar",
+			expectedKey:  "grpcgateway-X-Foo-Bar",
+			expectedBool: true,
+		},
+		// testing the default rule - isPermanentHTTPHeader group
+		{
+			key:          "Cookie",
+			expectedKey:  "grpcgateway-Cookie",
+			expectedBool: true,
+		},
+		// testing the default rule - Grpc-Metadata prefix
+		{
+			key:          "Grpc-Metadata-Foo",
+			expectedKey:  "Foo",
+			expectedBool: true,
+		},
+		// testing the prefix doesn't get applied and doesn't match default rule
+		{
+			key:          xForwardedFor,
+			expectedKey:  "",
+			expectedBool: false,
+		},
+		// testing the prefix doesn't get applied and doesn't match default rule
+		{
+			key:          xForwardedHost,
+			expectedKey:  "",
+			expectedBool: false,
+		},
 		// doesn't match custom or default rules
-		{key: "Foo-Bar", expectedKey: "", expectedBool: false},
+		{
+			key:          "Foo-Bar",
+			expectedKey:  "",
+			expectedBool: false,
+		},
 	}
 
 	for _, test := range testCases {
-		result, ok := customMatcher(test.key)
+		result, ok := customHeaderMatcher(test.key)
 		assert.Equal(t, test.expectedKey, result)
 		assert.Equal(t, test.expectedBool, ok)
 	}
