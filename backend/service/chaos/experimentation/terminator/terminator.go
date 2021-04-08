@@ -7,8 +7,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/proto"
@@ -31,7 +29,7 @@ var CriterionFactories = map[string]CriterionFactory{
 }
 
 type CriterionFactory interface {
-	Create(cfg *any.Any) (TerminationCriterion, error)
+	Create(cfg *anypb.Any) (TerminationCriterion, error)
 }
 
 type TerminationCriterion interface {
@@ -40,7 +38,7 @@ type TerminationCriterion interface {
 	ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error)
 }
 
-func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	m, err := NewMonitor(cfg, logger, scope)
 	if err != nil {
 		m.Run(context.Background())
@@ -49,7 +47,7 @@ func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, 
 	return m, nil
 }
 
-func NewMonitor(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (*Monitor, error) {
+func NewMonitor(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (*Monitor, error) {
 	typedConfig := &terminatorv1.Config{}
 	err := cfg.UnmarshalTo(typedConfig)
 	if err != nil {
@@ -88,21 +86,11 @@ func NewMonitor(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (*Monitor, 
 		terminationCriteria[configType] = perConfigCriteria
 	}
 
-	outerLoopInterval, err := ptypes.Duration(typedConfig.OuterLoopInterval)
-	if err != nil {
-		return nil, err
-	}
-
-	perExperimentCheckInterval, err := ptypes.Duration(typedConfig.PerExperimentCheckInterval)
-	if err != nil {
-		return nil, err
-	}
-
 	return &Monitor{
 		store:                           storer,
 		terminationCriteriaByTypeUrl:    terminationCriteria,
-		outerLoopInterval:               outerLoopInterval,
-		perExperimentCheckInterval:      perExperimentCheckInterval,
+		outerLoopInterval:               typedConfig.OuterLoopInterval.AsDuration(),
+		perExperimentCheckInterval:      typedConfig.PerExperimentCheckInterval.AsDuration(),
 		log:                             logger.Sugar(),
 		activeMonitoringRoutines:        trackingGauge{gauge: scope.Gauge("active_monitoring_routines")},
 		criterionEvaluationSuccessCount: scope.Counter("criterion_success"),
