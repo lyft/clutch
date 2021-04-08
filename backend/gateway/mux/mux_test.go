@@ -74,7 +74,7 @@ func TestCustomMatcher(t *testing.T) {
 		expectedBool bool
 	}{
 		{key: "X-Foo-Bar", expectedKey: "grpcgateway-X-Foo-Bar", expectedBool: true},
-		// testing the default rule - a part of the X group
+		// testing the default rule - a part of the isPermanentHTTPHeader group
 		{key: "Cookie", expectedKey: "grpcgateway-Cookie", expectedBool: true},
 		// testing the default rule - has the Grpc-Metadata prefix
 		{key: "Grpc-Metadata-Foo", expectedKey: "Foo", expectedBool: true},
