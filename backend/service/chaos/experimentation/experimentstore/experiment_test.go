@@ -1,7 +1,6 @@
 package experimentstore
 
 import (
-	"database/sql"
 	"fmt"
 	"testing"
 	"time"
@@ -11,21 +10,22 @@ import (
 )
 
 func TestExperimentRunConfigToExperiment(t *testing.T) {
+	now := time.Now()
+
 	tests := []struct {
 		startTime time.Time
-		endTime   sql.NullTime
+		endTime   *time.Time
 	}{
 		{
-			startTime: time.Now(),
-			endTime:   sql.NullTime{Valid: false},
+			startTime: now,
+			endTime:   nil,
 		},
 		{
-			startTime: time.Now(),
-			endTime:   sql.NullTime{Time: time.Now(), Valid: true},
+			startTime: now,
+			endTime:   &now,
 		},
 	}
 
-	a := assert.New(t)
 	for idx, tt := range tests {
 		tt := tt
 		t.Run(fmt.Sprintf("%d", idx), func(t *testing.T) {
@@ -35,7 +35,7 @@ func TestExperimentRunConfigToExperiment(t *testing.T) {
 			config := &ExperimentConfig{id: "2", Config: &any.Any{}}
 			p := Experiment{Run: run, Config: config}
 			_, err := p.toProto()
-			a.NoError(err)
+			assert.NoError(t, err)
 		})
 	}
 }

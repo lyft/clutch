@@ -1,7 +1,6 @@
 package experimentstore
 
 import (
-	"database/sql"
 	"testing"
 	"time"
 
@@ -13,8 +12,8 @@ import (
 )
 
 func TestListViewRunningExperimentRunProperties(t *testing.T) {
-	startTime := time.Now()
-	expectedRun := &ExperimentRun{Id: "1", StartTime: startTime, EndTime: sql.NullTime{}, CancellationTime: sql.NullTime{}, creationTime: creationTime}
+	now := time.Now()
+	expectedRun := &ExperimentRun{Id: "1", StartTime: now, EndTime: nil, CancellationTime: nil, CreationTime: now}
 	expectedConfig := &ExperimentConfig{id: "2", Config: &any.Any{TypeUrl: "foo"}}
 
 	expectedProperty := &experimentation.Property{

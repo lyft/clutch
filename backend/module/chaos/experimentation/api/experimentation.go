@@ -112,7 +112,7 @@ func (s *Service) CreateOrGetExperiment(ctx context.Context, req *experimentatio
 // CancelExperimentRun cancels experiment that is currently running or is scheduled to be run in the future.
 func (s *Service) CancelExperimentRun(ctx context.Context, req *experimentation.CancelExperimentRunRequest) (*experimentation.CancelExperimentRunResponse, error) {
 	s.cancelExperimentRunStat.Inc(1)
-	err := s.storer.CancelExperimentRun(ctx, req.Id, "")
+	err := s.storer.CancelExperimentRun(ctx, req.Id, req.Reason)
 	if err != nil {
 		return nil, err
 	}

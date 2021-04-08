@@ -3427,6 +3427,9 @@ export namespace clutch {
 
                     /** CancelExperimentRunRequest id */
                     id?: (string|null);
+
+                    /** CancelExperimentRunRequest reason */
+                    reason?: (string|null);
                 }
 
                 /** Represents a CancelExperimentRunRequest. */
@@ -3440,6 +3443,9 @@ export namespace clutch {
 
                     /** CancelExperimentRunRequest id. */
                     public id: string;
+
+                    /** CancelExperimentRunRequest reason. */
+                    public reason: string;
 
                     /**
                      * Verifies a CancelExperimentRunRequest message.
@@ -4605,244 +4611,6 @@ export namespace clutch {
 
             /** Namespace v1. */
             namespace v1 {
-
-                /** Properties of a TestConfig. */
-                interface ITestConfig {
-
-                    /** TestConfig clusterPair */
-                    clusterPair?: (clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null);
-
-                    /** TestConfig abort */
-                    abort?: (clutch.chaos.serverexperimentation.v1.IAbortFaultConfig|null);
-
-                    /** TestConfig latency */
-                    latency?: (clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null);
-                }
-
-                /** Represents a TestConfig. */
-                class TestConfig implements ITestConfig {
-
-                    /**
-                     * Constructs a new TestConfig.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.ITestConfig);
-
-                    /** TestConfig clusterPair. */
-                    public clusterPair?: (clutch.chaos.serverexperimentation.v1.IClusterPairTarget|null);
-
-                    /** TestConfig abort. */
-                    public abort?: (clutch.chaos.serverexperimentation.v1.IAbortFaultConfig|null);
-
-                    /** TestConfig latency. */
-                    public latency?: (clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig|null);
-
-                    /** TestConfig fault. */
-                    public fault?: ("abort"|"latency");
-
-                    /**
-                     * Verifies a TestConfig message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a TestConfig message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns TestConfig
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.TestConfig;
-
-                    /**
-                     * Creates a plain object from a TestConfig message. Also converts values to other types if specified.
-                     * @param message TestConfig
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.TestConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this TestConfig to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a ClusterPairTarget. */
-                interface IClusterPairTarget {
-
-                    /** ClusterPairTarget downstreamCluster */
-                    downstreamCluster?: (string|null);
-
-                    /** ClusterPairTarget upstreamCluster */
-                    upstreamCluster?: (string|null);
-
-                    /** ClusterPairTarget faultInjectionCluster */
-                    faultInjectionCluster?: (clutch.chaos.serverexperimentation.v1.FaultInjectionCluster|null);
-                }
-
-                /** Represents a ClusterPairTarget. */
-                class ClusterPairTarget implements IClusterPairTarget {
-
-                    /**
-                     * Constructs a new ClusterPairTarget.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IClusterPairTarget);
-
-                    /** ClusterPairTarget downstreamCluster. */
-                    public downstreamCluster: string;
-
-                    /** ClusterPairTarget upstreamCluster. */
-                    public upstreamCluster: string;
-
-                    /** ClusterPairTarget faultInjectionCluster. */
-                    public faultInjectionCluster: clutch.chaos.serverexperimentation.v1.FaultInjectionCluster;
-
-                    /**
-                     * Verifies a ClusterPairTarget message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a ClusterPairTarget message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns ClusterPairTarget
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.ClusterPairTarget;
-
-                    /**
-                     * Creates a plain object from a ClusterPairTarget message. Also converts values to other types if specified.
-                     * @param message ClusterPairTarget
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.ClusterPairTarget, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this ClusterPairTarget to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of an AbortFaultConfig. */
-                interface IAbortFaultConfig {
-
-                    /** AbortFaultConfig percent */
-                    percent?: (number|null);
-
-                    /** AbortFaultConfig httpStatus */
-                    httpStatus?: (number|null);
-                }
-
-                /** Represents an AbortFaultConfig. */
-                class AbortFaultConfig implements IAbortFaultConfig {
-
-                    /**
-                     * Constructs a new AbortFaultConfig.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.IAbortFaultConfig);
-
-                    /** AbortFaultConfig percent. */
-                    public percent: number;
-
-                    /** AbortFaultConfig httpStatus. */
-                    public httpStatus: number;
-
-                    /**
-                     * Verifies an AbortFaultConfig message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates an AbortFaultConfig message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns AbortFaultConfig
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.AbortFaultConfig;
-
-                    /**
-                     * Creates a plain object from an AbortFaultConfig message. Also converts values to other types if specified.
-                     * @param message AbortFaultConfig
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.AbortFaultConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this AbortFaultConfig to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** Properties of a LatencyFaultConfig. */
-                interface ILatencyFaultConfig {
-
-                    /** LatencyFaultConfig percent */
-                    percent?: (number|null);
-
-                    /** LatencyFaultConfig durationMs */
-                    durationMs?: (number|null);
-                }
-
-                /** Represents a LatencyFaultConfig. */
-                class LatencyFaultConfig implements ILatencyFaultConfig {
-
-                    /**
-                     * Constructs a new LatencyFaultConfig.
-                     * @param [properties] Properties to set
-                     */
-                    constructor(properties?: clutch.chaos.serverexperimentation.v1.ILatencyFaultConfig);
-
-                    /** LatencyFaultConfig percent. */
-                    public percent: number;
-
-                    /** LatencyFaultConfig durationMs. */
-                    public durationMs: number;
-
-                    /**
-                     * Verifies a LatencyFaultConfig message.
-                     * @param message Plain object to verify
-                     * @returns `null` if valid, otherwise the reason why it is not
-                     */
-                    public static verify(message: { [k: string]: any }): (string|null);
-
-                    /**
-                     * Creates a LatencyFaultConfig message from a plain object. Also converts values to their respective internal types.
-                     * @param object Plain object
-                     * @returns LatencyFaultConfig
-                     */
-                    public static fromObject(object: { [k: string]: any }): clutch.chaos.serverexperimentation.v1.LatencyFaultConfig;
-
-                    /**
-                     * Creates a plain object from a LatencyFaultConfig message. Also converts values to other types if specified.
-                     * @param message LatencyFaultConfig
-                     * @param [options] Conversion options
-                     * @returns Plain object
-                     */
-                    public static toObject(message: clutch.chaos.serverexperimentation.v1.LatencyFaultConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-                    /**
-                     * Converts this LatencyFaultConfig to JSON.
-                     * @returns JSON object
-                     */
-                    public toJSON(): { [k: string]: any };
-                }
-
-                /** FaultInjectionCluster enum. */
-                enum FaultInjectionCluster {
-                    FAULTINJECTIONCLUSTER_UNSPECIFIED = 0,
-                    FAULTINJECTIONCLUSTER_DOWNSTREAM = 1,
-                    FAULTINJECTIONCLUSTER_UPSTREAM = 2
-                }
 
                 /** Properties of a HTTPFaultConfig. */
                 interface IHTTPFaultConfig {
@@ -11039,6 +10807,15 @@ export namespace clutch {
 
                 /** Container restartCount */
                 restartCount?: (number|null);
+
+                /** Container stateWaiting */
+                stateWaiting?: (clutch.k8s.v1.IStateWaiting|null);
+
+                /** Container stateRunning */
+                stateRunning?: (clutch.k8s.v1.IStateRunning|null);
+
+                /** Container stateTerminated */
+                stateTerminated?: (clutch.k8s.v1.IStateTerminated|null);
             }
 
             /** Represents a Container. */
@@ -11064,6 +10841,18 @@ export namespace clutch {
 
                 /** Container restartCount. */
                 public restartCount: number;
+
+                /** Container stateWaiting. */
+                public stateWaiting?: (clutch.k8s.v1.IStateWaiting|null);
+
+                /** Container stateRunning. */
+                public stateRunning?: (clutch.k8s.v1.IStateRunning|null);
+
+                /** Container stateTerminated. */
+                public stateTerminated?: (clutch.k8s.v1.IStateTerminated|null);
+
+                /** Container stateDetails. */
+                public stateDetails?: ("stateWaiting"|"stateRunning"|"stateTerminated");
 
                 /**
                  * Verifies a Container message.
@@ -11104,6 +10893,174 @@ export namespace clutch {
                     RUNNING = 3,
                     WAITING = 4
                 }
+            }
+
+            /** Properties of a StateWaiting. */
+            interface IStateWaiting {
+
+                /** StateWaiting reason */
+                reason?: (string|null);
+
+                /** StateWaiting message */
+                message?: (string|null);
+            }
+
+            /** Represents a StateWaiting. */
+            class StateWaiting implements IStateWaiting {
+
+                /**
+                 * Constructs a new StateWaiting.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IStateWaiting);
+
+                /** StateWaiting reason. */
+                public reason: string;
+
+                /** StateWaiting message. */
+                public message: string;
+
+                /**
+                 * Verifies a StateWaiting message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a StateWaiting message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns StateWaiting
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.StateWaiting;
+
+                /**
+                 * Creates a plain object from a StateWaiting message. Also converts values to other types if specified.
+                 * @param message StateWaiting
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.StateWaiting, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this StateWaiting to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a StateRunning. */
+            interface IStateRunning {
+
+                /** StateRunning startTime */
+                startTime?: (google.protobuf.ITimestamp|null);
+            }
+
+            /** Represents a StateRunning. */
+            class StateRunning implements IStateRunning {
+
+                /**
+                 * Constructs a new StateRunning.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IStateRunning);
+
+                /** StateRunning startTime. */
+                public startTime?: (google.protobuf.ITimestamp|null);
+
+                /**
+                 * Verifies a StateRunning message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a StateRunning message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns StateRunning
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.StateRunning;
+
+                /**
+                 * Creates a plain object from a StateRunning message. Also converts values to other types if specified.
+                 * @param message StateRunning
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.StateRunning, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this StateRunning to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
+            }
+
+            /** Properties of a StateTerminated. */
+            interface IStateTerminated {
+
+                /** StateTerminated reason */
+                reason?: (string|null);
+
+                /** StateTerminated message */
+                message?: (string|null);
+
+                /** StateTerminated exitCode */
+                exitCode?: (number|null);
+
+                /** StateTerminated signal */
+                signal?: (number|null);
+            }
+
+            /** Represents a StateTerminated. */
+            class StateTerminated implements IStateTerminated {
+
+                /**
+                 * Constructs a new StateTerminated.
+                 * @param [properties] Properties to set
+                 */
+                constructor(properties?: clutch.k8s.v1.IStateTerminated);
+
+                /** StateTerminated reason. */
+                public reason: string;
+
+                /** StateTerminated message. */
+                public message: string;
+
+                /** StateTerminated exitCode. */
+                public exitCode: number;
+
+                /** StateTerminated signal. */
+                public signal: number;
+
+                /**
+                 * Verifies a StateTerminated message.
+                 * @param message Plain object to verify
+                 * @returns `null` if valid, otherwise the reason why it is not
+                 */
+                public static verify(message: { [k: string]: any }): (string|null);
+
+                /**
+                 * Creates a StateTerminated message from a plain object. Also converts values to their respective internal types.
+                 * @param object Plain object
+                 * @returns StateTerminated
+                 */
+                public static fromObject(object: { [k: string]: any }): clutch.k8s.v1.StateTerminated;
+
+                /**
+                 * Creates a plain object from a StateTerminated message. Also converts values to other types if specified.
+                 * @param message StateTerminated
+                 * @param [options] Conversion options
+                 * @returns Plain object
+                 */
+                public static toObject(message: clutch.k8s.v1.StateTerminated, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                /**
+                 * Converts this StateTerminated to JSON.
+                 * @returns JSON object
+                 */
+                public toJSON(): { [k: string]: any };
             }
 
             /** Properties of a PodCondition. */
@@ -11218,6 +11175,9 @@ export namespace clutch {
 
                 /** Pod podConditions */
                 podConditions?: (clutch.k8s.v1.IPodCondition[]|null);
+
+                /** Pod initContainers */
+                initContainers?: (clutch.k8s.v1.IContainer[]|null);
             }
 
             /** Represents a Pod. */
@@ -11264,6 +11224,9 @@ export namespace clutch {
 
                 /** Pod podConditions. */
                 public podConditions: clutch.k8s.v1.IPodCondition[];
+
+                /** Pod initContainers. */
+                public initContainers: clutch.k8s.v1.IContainer[];
 
                 /**
                  * Verifies a Pod message.

@@ -16,6 +16,7 @@ import {
 } from "./accordion";
 import ClutchApp from "./AppProvider";
 import { Button, ButtonGroup, ClipboardButton, IconButton } from "./button";
+import { Card, CardContent } from "./card";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
 import { Dialog, DialogActions, DialogContent } from "./dialog";
@@ -45,13 +46,15 @@ export {
   AccordionRow,
   Alert,
   AvatarIcon,
-  ClutchApp,
   Button,
   ButtonGroup,
+  Card,
+  CardContent,
   Checkbox,
   CheckboxPanel,
   client,
   ClipboardButton,
+  ClutchApp,
   Confirmation,
   Dialog,
   DialogActions,
@@ -78,10 +81,10 @@ export {
   Stepper,
   Switch,
   Tab,
-  Tabs,
   Table,
   TableCell,
   TableRow,
+  Tabs,
   TextField,
   TreeTable,
   useWizardContext,

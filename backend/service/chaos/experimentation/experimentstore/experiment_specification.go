@@ -1,20 +1,16 @@
 package experimentstore
 
 import (
-	"regexp"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/golang/protobuf/ptypes/timestamp"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	"github.com/lyft/clutch/backend/id"
 )
-
-const runIdRegExp = `^[A-Za-z0-9-._~]+$`
 
 type ExperimentSpecification struct {
 	RunId     string
@@ -30,8 +26,6 @@ func NewExperimentSpecification(ced *experimentationv1.CreateExperimentData, now
 	// If the run identifier is not provided, generate one
 	if runId == "" {
 		runId = id.NewID().String()
-	} else if !regexp.MustCompile(runIdRegExp).MatchString(runId) {
-		return nil, status.Errorf(codes.InvalidArgument, "provided experiment runId (%v) contained forbidden characters and was not matched by \"%v\" regular expresion", runId, runIdRegExp)
 	}
 
 	// If the start time is not provided, default to current time
@@ -65,15 +59,15 @@ func NewExperimentSpecification(ced *experimentationv1.CreateExperimentData, now
 }
 
 func (es *ExperimentSpecification) toExperiment() (*experimentationv1.Experiment, error) {
-	startTimestamp, err := ptypes.TimestampProto(es.StartTime)
-	if err != nil {
+	startTimestamp := timestamppb.New(es.StartTime)
+	if err := startTimestamp.CheckValid(); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	var endTimestamp *timestamp.Timestamp
+	var endTimestamp *timestamppb.Timestamp
 	if es.EndTime != nil {
-		endTimestamp, err = ptypes.TimestampProto(*es.EndTime)
-		if err != nil {
+		endTimestamp = timestamppb.New(*es.EndTime)
+		if err := endTimestamp.CheckValid(); err != nil {
 			return nil, status.Errorf(codes.InvalidArgument, "%v", err)
 		}
 	}

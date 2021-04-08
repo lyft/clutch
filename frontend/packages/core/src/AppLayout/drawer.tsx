@@ -3,19 +3,16 @@ import { Link as RouterLink } from "react-router-dom";
 import styled from "@emotion/styled";
 import {
   Avatar as MuiAvatar,
-  ClickAwayListener,
-  Collapse,
   Drawer as MuiDrawer,
   List,
   ListItem,
-  ListItemText,
-  Paper as MuiPaper,
-  Popper as MuiPopper,
   Typography,
 } from "@material-ui/core";
 import _ from "lodash";
 
 import { useAppContext } from "../Contexts";
+import type { PopperItemProps } from "../popper";
+import { Popper, PopperItem } from "../popper";
 
 import { routesByGrouping, sortedGroupings } from "./utils";
 
@@ -89,66 +86,15 @@ const Avatar = styled(MuiAvatar)({
   borderRadius: "4px",
 });
 
-// sidebar submenu
-const Popper = styled(MuiPopper)({
-  zIndex: 1201,
-  paddingTop: "16px",
-});
-
-const Paper = styled(MuiPaper)({
-  minWidth: "230px",
-  border: "1px solid #E7E7EA",
-  boxShadow: "0px 10px 24px rgba(35, 48, 143, 0.3)",
-  // sidebar submenu groupings
-  ".MuiListItem-root[data-qa='workflowGroupItem']": {
-    backgroundColor: "#FFFFFF",
-    height: "48px",
-    "&:hover": {
-      backgroundColor: "#F5F6FD",
-    },
-    "&:active": {
-      backgroundColor: "#D7DAF6",
-    },
-    "&.Mui-selected": {
-      backgroundColor: "#FFFFFF",
-      "&:hover": {
-        backgroundColor: "#F5F6FD",
-      },
-      "&:active": {
-        backgroundColor: "#D7DAF6",
-      },
-    },
-    "&:hover, &:active, &.Mui-selected": {
-      ".MuiTypography-root": {
-        color: "#3548D4",
-      },
-    },
-  },
-});
-
-const LinkListItemText = styled(ListItemText)({
-  ".MuiTypography-root": {
-    color: "rgba(13, 16, 48, 0.6)",
-    fontWeight: 500,
-    fontSize: "14px",
-    lineHeight: "18px",
-  },
-});
-
 interface GroupProps {
   heading: string;
   open: boolean;
   updateOpenGroup: (heading: string) => void;
   closeGroup: () => void;
+  children: React.ReactElement<PopperItemProps> | React.ReactElement<PopperItemProps>[];
 }
 
-const Group: React.FC<GroupProps> = ({
-  heading,
-  open = false,
-  updateOpenGroup,
-  closeGroup,
-  children,
-}) => {
+const Group = ({ heading, open = false, updateOpenGroup, closeGroup, children }: GroupProps) => {
   const anchorRef = React.useRef(null);
 
   // n.b. if a Workflow Grouping has no workflows in it don't display it even if
@@ -172,17 +118,9 @@ const Group: React.FC<GroupProps> = ({
       >
         <Avatar>{heading.charAt(0)}</Avatar>
         <GroupHeading align="center">{heading}</GroupHeading>
-        <Collapse in={open} timeout="auto" unmountOnExit>
-          <Popper open={open} anchorEl={anchorRef.current} transition placement="right-start">
-            <Paper>
-              <ClickAwayListener onClickAway={closeGroup}>
-                <List component="div" disablePadding id="workflow-options">
-                  {children}
-                </List>
-              </ClickAwayListener>
-            </Paper>
-          </Popper>
-        </Collapse>
+        <Popper open={open} onClickAway={closeGroup} anchorRef={anchorRef}>
+          {children}
+        </Popper>
       </GroupListItem>
     </GroupList>
   );
@@ -196,15 +134,14 @@ interface LinkProps {
 const Link: React.FC<LinkProps> = ({ to, text }) => {
   const isSelected = window.location.pathname.replace("/", "") === to;
   return (
-    <ListItem
+    <PopperItem
       selected={isSelected}
       component={RouterLink}
-      to={to}
-      dense
+      componentProps={{ to }}
       data-qa="workflowGroupItem"
     >
-      <LinkListItemText>{text}</LinkListItemText>
-    </ListItem>
+      {text}
+    </PopperItem>
   );
 };
 

@@ -1,31 +1,31 @@
 package experimentstore
 
 import (
-	"database/sql"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 )
 
 type ExperimentRun struct {
-	Id               string
-	StartTime        time.Time
-	EndTime          sql.NullTime
-	CancellationTime sql.NullTime
-	creationTime     time.Time
+	Id                string
+	StartTime         time.Time
+	EndTime           *time.Time
+	CancellationTime  *time.Time
+	CreationTime      time.Time
+	TerminationReason string
 }
 
 func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Property, error) {
 	status := timesToStatus(er.StartTime, er.EndTime, er.CancellationTime, now)
-	startTimeTimestamp, err := ptypes.TimestampProto(er.StartTime)
-	if err != nil {
+	startTimeTimestamp := timestamppb.New(er.StartTime)
+	if err := startTimeTimestamp.CheckValid(); err != nil {
 		return nil, err
 	}
 
-	creationTimeTimestamp, err := ptypes.TimestampProto(er.creationTime)
-	if err != nil {
+	creationTimeTimestamp := timestamppb.New(er.CreationTime)
+	if err := creationTimeTimestamp.CheckValid(); err != nil {
 		return nil, err
 	}
 
@@ -52,10 +52,10 @@ func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Pro
 		},
 	}
 
-	var time sql.NullTime
-	if er.EndTime.Valid {
+	var time *time.Time
+	if er.EndTime != nil {
 		time = er.EndTime
-	} else if er.CancellationTime.Valid {
+	} else if er.CancellationTime != nil {
 		time = er.CancellationTime
 	}
 
@@ -70,22 +70,35 @@ func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentation.Pro
 		Value: endTimeTimestamp,
 	})
 
-	cancelationTimeTimestamp, err := TimeToPropertyDateValue(er.CancellationTime)
+	cancellationTimeTimestamp, err := TimeToPropertyDateValue(er.CancellationTime)
 	if err != nil {
 		return nil, err
 	}
 
-	if status == experimentation.Experiment_STATUS_STOPPED {
+	if status == experimentation.Experiment_STATUS_STOPPED || status == experimentation.Experiment_STATUS_CANCELED {
+		if status == experimentation.Experiment_STATUS_STOPPED {
+			properties = append(properties, &experimentation.Property{
+				Id:    "stopped_at",
+				Label: "Stopped At",
+				Value: cancellationTimeTimestamp,
+			})
+		} else if status == experimentation.Experiment_STATUS_CANCELED {
+			properties = append(properties, &experimentation.Property{
+				Id:    "canceled_at",
+				Label: "Canceled At",
+				Value: cancellationTimeTimestamp,
+			})
+		}
+
+		terminationReason := "Unknown"
+		if er.TerminationReason != "" {
+			terminationReason = er.TerminationReason
+		}
+
 		properties = append(properties, &experimentation.Property{
-			Id:    "stopped_at",
-			Label: "Stopped At",
-			Value: cancelationTimeTimestamp,
-		})
-	} else if status == experimentation.Experiment_STATUS_CANCELED {
-		properties = append(properties, &experimentation.Property{
-			Id:    "canceled_at",
-			Label: "Canceled At",
-			Value: cancelationTimeTimestamp,
+			Id:    "termination_reason",
+			Label: "Termination Reason",
+			Value: &experimentation.Property_StringValue{StringValue: terminationReason},
 		})
 	}
 
