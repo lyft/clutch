@@ -50,7 +50,8 @@ const SelectedCenter = styled.div({
   margin: "5px 5px",
 });
 
-export interface RadioProps extends Pick<MuiRadioProps, "disabled" | "name" | "onChange" | "required" | "value"> {
+export interface RadioProps
+  extends Pick<MuiRadioProps, "disabled" | "name" | "onChange" | "required" | "value"> {
   selected?: boolean;
 }
 

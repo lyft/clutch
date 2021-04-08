@@ -25,3 +25,10 @@ export const Disabled = Template.bind({});
 Disabled.args = {
   disabled: true,
 };
+
+export const NameValueAndOnChange = Template.bind({});
+NameValueAndOnChange.args = {
+  name: "foo",
+  value: "bar",
+  onChange: e => e.target.value,
+};
