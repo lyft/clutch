@@ -138,6 +138,10 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 }
 
 func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, tokenType authnmodulev1.CreateTokenRequest_TokenType, expiry *time.Duration) (*oauth2.Token, error) {
+	if p.tokenStorage == nil {
+		return nil, errors.New("cannot issue new token without a token storage")
+	}
+
 	var prefixedSubject string
 	switch tokenType {
 	case authnmodulev1.CreateTokenRequest_SERVICE:

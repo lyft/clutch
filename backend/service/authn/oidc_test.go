@@ -167,6 +167,15 @@ oidc:
 	assert.NotZero(t, claims.StandardClaims.IssuedAt)
 	assert.Equal(t, claims.StandardClaims.ExpiresAt, int64(0))
 	assert.Equal(t, claims.StandardClaims.Subject, "service:some subject")
+
+	// If we don't have a configured store we should be unable to create a token.
+	p, err = NewOIDCProvider(ctx, cfg, nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, p)
+
+	createdToken, err = p.(Issuer).CreateToken(ctx, "some subject", authnmodulev1.CreateTokenRequest_SERVICE, nil)
+	assert.Nil(t, createdToken)
+	assert.Error(t, err)
 }
 
 func TestTokenRevocationFlow(t *testing.T) {
