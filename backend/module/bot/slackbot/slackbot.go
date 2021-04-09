@@ -35,10 +35,9 @@ const (
 
 func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (module.Module, error) {
 	config := &slackbotconfigv1.Config{}
-	if cfg != nil {
-		if err := cfg.UnmarshalTo(config); err != nil {
-			return nil, err
-		}
+
+	if err := cfg.UnmarshalTo(config); err != nil {
+		return nil, err
 	}
 
 	svc, ok := service.Registry["clutch.service.bot"]
