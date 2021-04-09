@@ -140,7 +140,7 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 }
 
 func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, tokenType authnmodulev1.CreateTokenRequest_TokenType, expiry *time.Duration) (*oauth2.Token, error) {
-	if !p.enableServiceTokenCreation  {
+	if !p.enableServiceTokenCreation {
 		return nil, errors.New("not configured to allow service token creation")
 	}
 
@@ -276,14 +276,14 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage S
 	}
 
 	p := &OIDCProvider{
-		providerAlias:       alias,
-		provider:            provider,
-		verifier:            verifier,
-		oauth2:              oc,
-		httpClient:          ctx.Value(oauth2.HTTPClient).(*http.Client),
-		sessionSecret:       config.SessionSecret,
-		claimsFromOIDCToken: DefaultClaimsFromOIDCToken,
-		tokenStorage:        tokenStorage,
+		providerAlias:              alias,
+		provider:                   provider,
+		verifier:                   verifier,
+		oauth2:                     oc,
+		httpClient:                 ctx.Value(oauth2.HTTPClient).(*http.Client),
+		sessionSecret:              config.SessionSecret,
+		claimsFromOIDCToken:        DefaultClaimsFromOIDCToken,
+		tokenStorage:               tokenStorage,
 		enableServiceTokenCreation: tokenStorage != nil && config.EnableServiceTokenCreation,
 	}
 
