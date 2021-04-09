@@ -7,6 +7,9 @@ import Radio from "../radio";
 export default {
   title: "Core/Input/Radio",
   component: Radio,
+  argTypes: {
+    onChange: { action: "onChange event" },
+  },
 } as Meta;
 
 const Template = (props: RadioProps) => <Radio {...props} />;
@@ -30,5 +33,4 @@ export const NameValueAndOnChange = Template.bind({});
 NameValueAndOnChange.args = {
   name: "foo",
   value: "bar",
-  onChange: e => e.target.value,
 };
