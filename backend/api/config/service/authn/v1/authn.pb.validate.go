@@ -142,6 +142,8 @@ func (m *Config) Validate() error {
 		}
 	}
 
+	// no validation rules for EnableServiceTokenCreation
+
 	switch m.Type.(type) {
 
 	case *Config_Oidc:
