@@ -97,6 +97,13 @@ func (s *SimpleStorer) GetListView(ctx context.Context) ([]*experimentation.List
 func (s *SimpleStorer) RegisterTransformation(transformation experimentstore.Transformation) error {
 	return nil
 }
+func (s *SimpleStorer) GetRuntimeGenerator(configTypeUrl string) (*experimentstore.RuntimeGeneration, error) {
+	return nil, nil
+}
+
+func (s *SimpleStorer) RegisterRuntimeGeneration(runtimeGeneration experimentstore.RuntimeGeneration) error {
+	return nil
+}
 
 func (s *SimpleStorer) Close() {}
 

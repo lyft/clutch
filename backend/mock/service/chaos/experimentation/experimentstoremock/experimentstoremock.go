@@ -56,6 +56,14 @@ func (fs *MockStorer) RegisterTransformation(transformation experimentstore.Tran
 	return fmt.Errorf("Not implemented")
 }
 
+func (fs *MockStorer) GetRuntimeGenerator(configTypeUrl string) (*experimentstore.RuntimeGeneration, error) {
+	return nil, nil
+}
+
+func (fs *MockStorer) RegisterRuntimeGeneration(runtimeGeneration experimentstore.RuntimeGeneration) error {
+	return nil
+}
+
 func (fs *MockStorer) Close() {
 }
 

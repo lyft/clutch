@@ -140,6 +140,7 @@ func TestSetSnapshotRTDS(t *testing.T) {
 	ingressPrefix := "ingress"
 	egressPrefix := "egress"
 	testCluster := "serviceA"
+	testStorer := &experimentstoremock.SimpleStorer{}
 	mockExperimentList := mockGenerateFaultData(t)
 
 	rtdsConfig := RTDSConfig{
@@ -164,7 +165,7 @@ func TestSetSnapshotRTDS(t *testing.T) {
 	}
 
 	resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
-	resources[gcpTypes.Runtime] = generateRTDSResource(testClusterFaults, &rtdsConfig, nil, zap.NewNop().Sugar())
+	resources[gcpTypes.Runtime] = generateRTDSResource(testClusterFaults, testStorer, &rtdsConfig, nil, zap.NewNop().Sugar())
 	assert.Nil(t, resources[gcpTypes.Runtime][0].Ttl)
 	err := setSnapshot(resources, testCluster, testCache, zap.NewNop().Sugar())
 	if err != nil {
@@ -203,6 +204,7 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 	ingressPrefix := "ingress"
 	egressPrefix := "egress"
 	testCluster := "serviceA"
+	testStorer := &experimentstoremock.SimpleStorer{}
 	ttl := time.Duration(2 * 1000 * 1000 * 1000)
 	mockExperimentList := mockGenerateFaultData(t)
 
@@ -228,7 +230,7 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 	}
 
 	resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
-	resources[gcpTypes.Runtime] = generateRTDSResource(testClusterFaults, &rtdsConfig, &ttl, zap.NewNop().Sugar())
+	resources[gcpTypes.Runtime] = generateRTDSResource(testClusterFaults, testStorer, &rtdsConfig, &ttl, zap.NewNop().Sugar())
 	err := setSnapshot(resources, testCluster, testCache, zap.NewNop().Sugar())
 	if err != nil {
 		t.Errorf("setSnapshot failed %v", err)

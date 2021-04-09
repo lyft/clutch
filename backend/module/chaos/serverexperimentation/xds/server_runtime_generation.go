@@ -2,6 +2,7 @@ package xds
 
 import (
 	"fmt"
+
 	"go.uber.org/zap"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
@@ -234,4 +235,3 @@ func getEnforcer(httpFaultConfig *serverexperimentation.HTTPFaultConfig) string 
 		return "unknown"
 	}
 }
-

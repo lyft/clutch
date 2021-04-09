@@ -2,19 +2,19 @@ package xds
 
 import (
 	"fmt"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 
 	"go.uber.org/zap"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	redisexperimentation "github.com/lyft/clutch/backend/api/chaos/redisexperimentation/v1"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 const (
 	// REDIS FAULT
 	// a given downstream service to the upstream redis cluster faults
 	RedisLatencyPercentageWithDownstream = `%s.%s.delay.fixed_delay_percent`
-	RedisErrorPercentageWithDownstream = `%s.%s.delay.error_percent`
+	RedisErrorPercentageWithDownstream   = `%s.%s.delay.error_percent`
 )
 
 func GetEnforcingCluster(experiment *experimentation.Experiment, logger *zap.SugaredLogger) (string, error) {

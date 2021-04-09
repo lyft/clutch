@@ -3,7 +3,6 @@ package redisexperimentation
 import (
 	"errors"
 	"fmt"
-	"github.com/lyft/clutch/backend/module/chaos/redisexperimentation/xds"
 	"strings"
 
 	"github.com/golang/protobuf/ptypes/any"
@@ -13,6 +12,7 @@ import (
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	redisexperimentation "github.com/lyft/clutch/backend/api/chaos/redisexperimentation/v1"
 	"github.com/lyft/clutch/backend/module"
+	"github.com/lyft/clutch/backend/module/chaos/redisexperimentation/xds"
 	"github.com/lyft/clutch/backend/service"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
@@ -45,12 +45,12 @@ func New(_ *any.Any, logger *zap.Logger, scope tally.Scope) (module.Module, erro
 func (s *Service) Register(r module.Registrar) error {
 	transformation := experimentstore.Transformation{
 		ConfigTypeUrl: "type.googleapis.com/clutch.chaos.redisexperimentation.v1.FaultConfig",
-		RunTransform: s.transform,
+		RunTransform:  s.transform,
 	}
 	runtimeGeneration := experimentstore.RuntimeGeneration{
-		ConfigTypeUrl: "type.googleapis.com/clutch.chaos.redisexperimentation.v1.FaultConfig",
+		ConfigTypeUrl:         "type.googleapis.com/clutch.chaos.redisexperimentation.v1.FaultConfig",
 		RuntimeKeysGeneration: xds.RuntimeKeysGeneration,
-		GetEnforcingCluster: xds.GetEnforcingCluster,
+		GetEnforcingCluster:   xds.GetEnforcingCluster,
 	}
 	err := s.storer.RegisterTransformation(transformation)
 	if err != nil {

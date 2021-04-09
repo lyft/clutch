@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 )
 
 func TestCreateRuntimeKeys(t *testing.T) {
@@ -18,6 +19,10 @@ func TestCreateRuntimeKeys(t *testing.T) {
 		layerName:     "testLayerName",
 		ingressPrefix: ingressPrefix,
 		egressPrefix:  egressPrefix,
+	}
+	runtimePrefixes := &experimentstore.RuntimePrefixes{
+		IngressPrefix: rtdsConfig.ingressPrefix,
+		EgressPrefix:  rtdsConfig.egressPrefix,
 	}
 
 	for _, testExperiment := range testDataList {
@@ -74,7 +79,7 @@ func TestCreateRuntimeKeys(t *testing.T) {
 			}
 		}
 
-		percentageKey, percentageValue, faultKey, faultValue, err := createRuntimeKeys(upstream, downstream, config, &rtdsConfig)
+		percentageKey, percentageValue, faultKey, faultValue, err := createRuntimeKeys(upstream, downstream, config, runtimePrefixes)
 		assert.NoError(t, err)
 
 		assert.Equal(t, expectedPercentageKey, percentageKey)

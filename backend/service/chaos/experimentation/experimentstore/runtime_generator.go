@@ -7,13 +7,13 @@ import (
 )
 
 type RuntimeGeneration struct {
-	ConfigTypeUrl   string
-	GetEnforcingCluster func(experiment *experimentation.Experiment, logger *zap.SugaredLogger) (string, error)
+	ConfigTypeUrl         string
+	GetEnforcingCluster   func(experiment *experimentation.Experiment, logger *zap.SugaredLogger) (string, error)
 	RuntimeKeysGeneration func(experiment *experimentation.Experiment, runtimePrefixes *RuntimePrefixes, logger *zap.SugaredLogger) ([]*RuntimeKeyValue, error)
 }
 
 type RuntimeGenerator struct {
-	logger             *zap.SugaredLogger
+	logger              *zap.SugaredLogger
 	nameToGenerationMap map[string]*RuntimeGeneration
 }
 
@@ -38,4 +38,3 @@ func (rg *RuntimeGenerator) Register(runtimeGeneration RuntimeGeneration) error 
 	rg.nameToGenerationMap[runtimeGeneration.ConfigTypeUrl] = &runtimeGeneration
 	return nil
 }
-

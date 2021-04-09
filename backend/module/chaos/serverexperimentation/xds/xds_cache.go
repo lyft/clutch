@@ -45,6 +45,10 @@ func refreshCache(ctx context.Context, storer experimentstore.Storer, snapshotCa
 
 		// get cluster name that will enforce the fault and append experiment
 		clusterName, err := runtimeGeneration.GetEnforcingCluster(experiment, logger)
+		if err != nil {
+			logger.Errorw("Unable to determine the enforcing cluster for fault", "error", err)
+			continue
+		}
 		clusterFaultMap[clusterName] = append(clusterFaultMap[clusterName], experiment)
 	}
 
