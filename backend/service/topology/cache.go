@@ -105,6 +105,8 @@ func (c *client) startTopologyCache(ctx context.Context) {
 // Notably a flush will happen every 30 seconds, ensuring all items make it into cache even if the
 // configured BatchInsertSize is not met.
 func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *topologyv1.UpdateCacheRequest, service string) {
+	// We utilize a map here to deduplicate entries coming off the object channel
+	// It is not possible for postgres to insert or update the same item more than once in the same query
 	var batchInsert = make(map[string]*topologyv1.Resource)
 	queueDepth := c.scope.Tagged(map[string]string{
 		"service": service,
@@ -153,7 +155,7 @@ func (c *client) processTopologyObjectChannel(ctx context.Context, objs <-chan *
 }
 
 func convertBatchInsertToSlice(batch map[string]*topologyv1.Resource) []*topologyv1.Resource {
-	var batchInsert []*topologyv1.Resource
+	batchInsert := make([]*topologyv1.Resource, 0, len(batch))
 	for _, resource := range batch {
 		batchInsert = append(batchInsert, resource)
 	}
