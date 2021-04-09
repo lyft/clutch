@@ -6709,6 +6709,9 @@ export namespace clutch {
 
                         /** Config oidc */
                         oidc?: (clutch.config.service.authn.v1.IOIDC|null);
+
+                        /** Config enableServiceTokenCreation */
+                        enableServiceTokenCreation?: (boolean|null);
                     }
 
                     /** Represents a Config. */
@@ -6725,6 +6728,9 @@ export namespace clutch {
 
                         /** Config oidc. */
                         public oidc?: (clutch.config.service.authn.v1.IOIDC|null);
+
+                        /** Config enableServiceTokenCreation. */
+                        public enableServiceTokenCreation: boolean;
 
                         /** Config type. */
                         public type?: "oidc";

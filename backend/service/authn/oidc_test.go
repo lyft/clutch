@@ -113,6 +113,7 @@ func TestCreateNewToken(t *testing.T) {
 	cfg := &authnv1.Config{}
 	apimock.FromYAML(`
 session_secret: this_is_my_secret
+enable_service_token_creation: true
 oidc:
   issuer: http://foo.example.com
   client_id: my_client_id
@@ -170,6 +171,29 @@ oidc:
 
 	// If we don't have a configured store we should be unable to create a token.
 	p, err = NewOIDCProvider(ctx, cfg, nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, p)
+
+	createdToken, err = p.(Issuer).CreateToken(ctx, "some subject", authnmodulev1.CreateTokenRequest_SERVICE, nil)
+	assert.Nil(t, createdToken)
+	assert.Error(t, err)
+
+	disabledServiceTokenConfig := &authnv1.Config{}
+	apimock.FromYAML(`
+session_secret: this_is_my_secret
+enable_service_token_creation: false
+oidc:
+  issuer: http://foo.example.com
+  client_id: my_client_id
+  client_secret: my_client_secret
+  redirect_url: "http://localhost:12000/v1/authn/callback"
+  scopes:
+  - openid
+  - email
+`, disabledServiceTokenConfig)
+
+	// We have a configured store but token creation is not explicitly enabled.
+	p, err = NewOIDCProvider(ctx, disabledServiceTokenConfig, mockStorage)
 	assert.NoError(t, err)
 	assert.NotNil(t, p)
 

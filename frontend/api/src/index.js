@@ -16053,6 +16053,7 @@ export const clutch = $root.clutch = (() => {
                          * @interface IConfig
                          * @property {string|null} [sessionSecret] Config sessionSecret
                          * @property {clutch.config.service.authn.v1.IOIDC|null} [oidc] Config oidc
+                         * @property {boolean|null} [enableServiceTokenCreation] Config enableServiceTokenCreation
                          */
 
                         /**
@@ -16085,6 +16086,14 @@ export const clutch = $root.clutch = (() => {
                          * @instance
                          */
                         Config.prototype.oidc = null;
+
+                        /**
+                         * Config enableServiceTokenCreation.
+                         * @member {boolean} enableServiceTokenCreation
+                         * @memberof clutch.config.service.authn.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.enableServiceTokenCreation = false;
 
                         // OneOf field names bound to virtual getters and setters
                         let $oneOfFields;
@@ -16123,6 +16132,9 @@ export const clutch = $root.clutch = (() => {
                                         return "oidc." + error;
                                 }
                             }
+                            if (message.enableServiceTokenCreation != null && message.hasOwnProperty("enableServiceTokenCreation"))
+                                if (typeof message.enableServiceTokenCreation !== "boolean")
+                                    return "enableServiceTokenCreation: boolean expected";
                             return null;
                         };
 
@@ -16145,6 +16157,8 @@ export const clutch = $root.clutch = (() => {
                                     throw TypeError(".clutch.config.service.authn.v1.Config.oidc: object expected");
                                 message.oidc = $root.clutch.config.service.authn.v1.OIDC.fromObject(object.oidc);
                             }
+                            if (object.enableServiceTokenCreation != null)
+                                message.enableServiceTokenCreation = Boolean(object.enableServiceTokenCreation);
                             return message;
                         };
 
@@ -16161,8 +16175,10 @@ export const clutch = $root.clutch = (() => {
                             if (!options)
                                 options = {};
                             let object = {};
-                            if (options.defaults)
+                            if (options.defaults) {
                                 object.sessionSecret = "";
+                                object.enableServiceTokenCreation = false;
+                            }
                             if (message.sessionSecret != null && message.hasOwnProperty("sessionSecret"))
                                 object.sessionSecret = message.sessionSecret;
                             if (message.oidc != null && message.hasOwnProperty("oidc")) {
@@ -16170,6 +16186,8 @@ export const clutch = $root.clutch = (() => {
                                 if (options.oneofs)
                                     object.type = "oidc";
                             }
+                            if (message.enableServiceTokenCreation != null && message.hasOwnProperty("enableServiceTokenCreation"))
+                                object.enableServiceTokenCreation = message.enableServiceTokenCreation;
                             return object;
                         };
 

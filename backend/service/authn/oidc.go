@@ -37,6 +37,8 @@ type OIDCProvider struct {
 	providerAlias string
 
 	claimsFromOIDCToken ClaimsFromOIDCTokenFunc
+
+	enableServiceTokenCreation bool
 }
 
 // Clutch's state token claims used during the exchange.
@@ -138,9 +140,8 @@ func (p *OIDCProvider) Exchange(ctx context.Context, code string) (*oauth2.Token
 }
 
 func (p *OIDCProvider) CreateToken(ctx context.Context, subject string, tokenType authnmodulev1.CreateTokenRequest_TokenType, expiry *time.Duration) (*oauth2.Token, error) {
-	// If we issue a token without a tokenStorage there will be no record of the token and no way to revoke it.
-	if p.tokenStorage == nil {
-		return nil, errors.New("cannot issue new token without a token storage")
+	if !p.enableServiceTokenCreation  {
+		return nil, errors.New("not configured to allow service token creation")
 	}
 
 	var prefixedSubject string
@@ -283,6 +284,7 @@ func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage S
 		sessionSecret:       config.SessionSecret,
 		claimsFromOIDCToken: DefaultClaimsFromOIDCToken,
 		tokenStorage:        tokenStorage,
+		enableServiceTokenCreation: tokenStorage != nil && config.EnableServiceTokenCreation,
 	}
 
 	return p, nil
