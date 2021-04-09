@@ -8,7 +8,6 @@ import (
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	redisexperimentation "github.com/lyft/clutch/backend/api/chaos/redisexperimentation/v1"
-	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds"
 )
 
 const (
@@ -29,7 +28,7 @@ func GetEnforcingCluster(experiment *experimentation.Experiment, logger *zap.Sug
 	return upstreamCluster, nil
 }
 
-func RuntimeKeysGeneration(experiment *experimentation.Experiment, rtdsConfig *xds.RTDSConfig, logger *zap.SugaredLogger) ([]*experimentstore.RuntimeKeyValue, error) {
+func RuntimeKeysGeneration(experiment *experimentation.Experiment, runtimePrefixes *experimentstore.RuntimePrefixes, logger *zap.SugaredLogger) ([]*experimentstore.RuntimeKeyValue, error) {
 	redisFaultConfig := &redisexperimentation.FaultConfig{}
 	if !maybeUnmarshalRedisFaultTest(experiment, redisFaultConfig) {
 		logger.Errorw("Invalid redis fault config", "config", redisFaultConfig)
@@ -38,7 +37,7 @@ func RuntimeKeysGeneration(experiment *experimentation.Experiment, rtdsConfig *x
 
 	upstreamCluster, downstreamCluster := getRedisClusterPair(redisFaultConfig)
 
-	percentageKey, percentageValue, err := createRedisRuntimeKeys(upstreamCluster, redisFaultConfig, rtdsConfig)
+	percentageKey, percentageValue, err := createRedisRuntimeKeys(upstreamCluster, redisFaultConfig, runtimePrefixes)
 	if err != nil {
 		logger.Errorw("Unable to create runtime keys", "config", redisFaultConfig)
 		return nil, nil
@@ -58,11 +57,11 @@ func RuntimeKeysGeneration(experiment *experimentation.Experiment, rtdsConfig *x
 	}, nil
 }
 
-func createRedisRuntimeKeys(upstreamCluster string, redisFaultConfig *redisexperimentation.FaultConfig, rtdsConfig *xds.RTDSConfig) (string, uint32, error) {
+func createRedisRuntimeKeys(upstreamCluster string, redisFaultConfig *redisexperimentation.FaultConfig, runtimePrefixes *experimentstore.RuntimePrefixes) (string, uint32, error) {
 	var percentageKey string
 	var percentageValue uint32
 
-	redisPrefix := rtdsConfig.RedisPrefix
+	redisPrefix := runtimePrefixes.RedisPrefix
 
 	switch redisFaultConfig.GetFault().(type) {
 	case *redisexperimentation.FaultConfig_ErrorFault:

@@ -1,7 +1,6 @@
 package experimentstore
 
 import (
-	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds"
 	"go.uber.org/zap"
 
 	experimentation "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
@@ -10,7 +9,7 @@ import (
 type RuntimeGeneration struct {
 	ConfigTypeUrl   string
 	GetEnforcingCluster func(experiment *experimentation.Experiment, logger *zap.SugaredLogger) (string, error)
-	RuntimeKeysGeneration func(experiment *experimentation.Experiment, rtdsConfig *xds.RTDSConfig, logger *zap.SugaredLogger) ([]*RuntimeKeyValue, error)
+	RuntimeKeysGeneration func(experiment *experimentation.Experiment, runtimePrefixes *RuntimePrefixes, logger *zap.SugaredLogger) ([]*RuntimeKeyValue, error)
 }
 
 type RuntimeGenerator struct {
@@ -18,8 +17,14 @@ type RuntimeGenerator struct {
 	nameToGenerationMap map[string]*RuntimeGeneration
 }
 
+type RuntimePrefixes struct {
+	IngressPrefix string
+	EgressPrefix  string
+	RedisPrefix   string
+}
+
 type RuntimeKeyValue struct {
-	Key string
+	Key   string
 	Value uint32
 }
 

@@ -53,7 +53,7 @@ func GetEnforcingCluster(experiment *experimentation.Experiment, logger *zap.Sug
 	}
 }
 
-func RuntimeKeysGeneration(experiment *experimentation.Experiment, rtdsConfig *RTDSConfig, logger *zap.SugaredLogger) ([]*experimentstore.RuntimeKeyValue, error) {
+func RuntimeKeysGeneration(experiment *experimentation.Experiment, runtimePrefixes *experimentstore.RuntimePrefixes, logger *zap.SugaredLogger) ([]*experimentstore.RuntimeKeyValue, error) {
 	httpFaultConfig := &serverexperimentation.HTTPFaultConfig{}
 	if !maybeUnmarshalFaultTest(experiment, httpFaultConfig) {
 		return nil, nil
@@ -65,7 +65,7 @@ func RuntimeKeysGeneration(experiment *experimentation.Experiment, rtdsConfig *R
 		return nil, nil
 	}
 
-	percentageKey, percentageValue, faultKey, faultValue, err := createRuntimeKeys(upstreamCluster, downstreamCluster, httpFaultConfig, rtdsConfig)
+	percentageKey, percentageValue, faultKey, faultValue, err := createRuntimeKeys(upstreamCluster, downstreamCluster, httpFaultConfig, runtimePrefixes)
 	if err != nil {
 		logger.Errorw("Unable to create RTDS runtime keys", "config", httpFaultConfig)
 		return nil, nil
@@ -92,14 +92,14 @@ func RuntimeKeysGeneration(experiment *experimentation.Experiment, rtdsConfig *R
 	}, nil
 }
 
-func createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFaultConfig *serverexperimentation.HTTPFaultConfig, rtdsConfig *RTDSConfig) (string, uint32, string, uint32, error) {
+func createRuntimeKeys(upstreamCluster string, downstreamCluster string, httpFaultConfig *serverexperimentation.HTTPFaultConfig, runtimePrefixes *experimentstore.RuntimePrefixes) (string, uint32, string, uint32, error) {
 	var percentageKey string
 	var percentageValue uint32
 	var faultKey string
 	var faultValue uint32
 
-	ingressPrefix := rtdsConfig.ingressPrefix
-	egressPrefix := rtdsConfig.egressPrefix
+	ingressPrefix := runtimePrefixes.IngressPrefix
+	egressPrefix := runtimePrefixes.EgressPrefix
 
 	switch httpFaultConfig.GetFault().(type) {
 	case *serverexperimentation.HTTPFaultConfig_AbortFault:

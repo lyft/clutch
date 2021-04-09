@@ -48,7 +48,7 @@ func (s *Service) Register(r module.Registrar) error {
 		RunTransform: s.transform,
 	}
 	runtimeGeneration := experimentstore.RuntimeGeneration{
-		ConfigTypeUrl: "type.googleapis.com/clutch.chaos.redisexperimentation.v1.RedisFaultConfig",
+		ConfigTypeUrl: "type.googleapis.com/clutch.chaos.redisexperimentation.v1.FaultConfig",
 		RuntimeKeysGeneration: xds.RuntimeKeysGeneration,
 		GetEnforcingCluster: xds.GetEnforcingCluster,
 	}

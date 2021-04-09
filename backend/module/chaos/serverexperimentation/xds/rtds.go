@@ -23,7 +23,7 @@ type RTDSConfig struct {
 	egressPrefix string
 
 	// Runtime prefix for redis faults
-	RedisPrefix string
+	redisPrefix string
 }
 
 func generateRTDSResource(experiments []*experimentation.Experiment, storer experimentstore.Storer, rtdsConfig *RTDSConfig, ttl *time.Duration, logger *zap.SugaredLogger) []gcpTypes.ResourceWithTtl {
@@ -39,7 +39,12 @@ func generateRTDSResource(experiments []*experimentation.Experiment, storer expe
 		}
 
 		// get runtime values from experiment types runtime generation logic
-		runtimeKeyValues, err := runtimeGeneration.RuntimeKeysGeneration(experiment, rtdsConfig, logger)
+		runtimePrefixes := &experimentstore.RuntimePrefixes{
+			IngressPrefix: rtdsConfig.ingressPrefix,
+			EgressPrefix:  rtdsConfig.egressPrefix,
+			RedisPrefix:   rtdsConfig.redisPrefix,
+		}
+		runtimeKeyValues, err := runtimeGeneration.RuntimeKeysGeneration(experiment, runtimePrefixes, logger)
 		if err != nil {
 			logger.Errorw("Unable to create RTDS runtime keys", "config", experiment)
 			continue
