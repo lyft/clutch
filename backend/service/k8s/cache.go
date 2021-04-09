@@ -91,7 +91,6 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 	<-ctx.Done()
 	s.log.Info("Shutting down the kubernetes cache informers")
 	close(stop)
-	close(s.topologyObjectChan)
 	s.topologyInformerLock.Release(topologyInformerLockId)
 }
 
