@@ -7846,6 +7846,181 @@ export namespace clutch {
                 }
             }
 
+            /** Namespace chaos. */
+            namespace chaos {
+
+                /** Namespace experimentation. */
+                namespace experimentation {
+
+                    /** Namespace terminator. */
+                    namespace terminator {
+
+                        /** Namespace v1. */
+                        namespace v1 {
+
+                            /** Properties of a Config. */
+                            interface IConfig {
+
+                                /** Config perConfigTypeConfiguration */
+                                perConfigTypeConfiguration?: ({ [k: string]: clutch.config.service.chaos.experimentation.terminator.v1.Config.IPerConfigTypeConfig }|null);
+
+                                /** Config outerLoopInterval */
+                                outerLoopInterval?: (google.protobuf.IDuration|null);
+
+                                /** Config perExperimentCheckInterval */
+                                perExperimentCheckInterval?: (google.protobuf.IDuration|null);
+                            }
+
+                            /** Represents a Config. */
+                            class Config implements IConfig {
+
+                                /**
+                                 * Constructs a new Config.
+                                 * @param [properties] Properties to set
+                                 */
+                                constructor(properties?: clutch.config.service.chaos.experimentation.terminator.v1.IConfig);
+
+                                /** Config perConfigTypeConfiguration. */
+                                public perConfigTypeConfiguration: { [k: string]: clutch.config.service.chaos.experimentation.terminator.v1.Config.IPerConfigTypeConfig };
+
+                                /** Config outerLoopInterval. */
+                                public outerLoopInterval?: (google.protobuf.IDuration|null);
+
+                                /** Config perExperimentCheckInterval. */
+                                public perExperimentCheckInterval?: (google.protobuf.IDuration|null);
+
+                                /**
+                                 * Verifies a Config message.
+                                 * @param message Plain object to verify
+                                 * @returns `null` if valid, otherwise the reason why it is not
+                                 */
+                                public static verify(message: { [k: string]: any }): (string|null);
+
+                                /**
+                                 * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                                 * @param object Plain object
+                                 * @returns Config
+                                 */
+                                public static fromObject(object: { [k: string]: any }): clutch.config.service.chaos.experimentation.terminator.v1.Config;
+
+                                /**
+                                 * Creates a plain object from a Config message. Also converts values to other types if specified.
+                                 * @param message Config
+                                 * @param [options] Conversion options
+                                 * @returns Plain object
+                                 */
+                                public static toObject(message: clutch.config.service.chaos.experimentation.terminator.v1.Config, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                                /**
+                                 * Converts this Config to JSON.
+                                 * @returns JSON object
+                                 */
+                                public toJSON(): { [k: string]: any };
+                            }
+
+                            namespace Config {
+
+                                /** Properties of a PerConfigTypeConfig. */
+                                interface IPerConfigTypeConfig {
+
+                                    /** PerConfigTypeConfig terminationCriteria */
+                                    terminationCriteria?: (google.protobuf.IAny[]|null);
+                                }
+
+                                /** Represents a PerConfigTypeConfig. */
+                                class PerConfigTypeConfig implements IPerConfigTypeConfig {
+
+                                    /**
+                                     * Constructs a new PerConfigTypeConfig.
+                                     * @param [properties] Properties to set
+                                     */
+                                    constructor(properties?: clutch.config.service.chaos.experimentation.terminator.v1.Config.IPerConfigTypeConfig);
+
+                                    /** PerConfigTypeConfig terminationCriteria. */
+                                    public terminationCriteria: google.protobuf.IAny[];
+
+                                    /**
+                                     * Verifies a PerConfigTypeConfig message.
+                                     * @param message Plain object to verify
+                                     * @returns `null` if valid, otherwise the reason why it is not
+                                     */
+                                    public static verify(message: { [k: string]: any }): (string|null);
+
+                                    /**
+                                     * Creates a PerConfigTypeConfig message from a plain object. Also converts values to their respective internal types.
+                                     * @param object Plain object
+                                     * @returns PerConfigTypeConfig
+                                     */
+                                    public static fromObject(object: { [k: string]: any }): clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig;
+
+                                    /**
+                                     * Creates a plain object from a PerConfigTypeConfig message. Also converts values to other types if specified.
+                                     * @param message PerConfigTypeConfig
+                                     * @param [options] Conversion options
+                                     * @returns Plain object
+                                     */
+                                    public static toObject(message: clutch.config.service.chaos.experimentation.terminator.v1.Config.PerConfigTypeConfig, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                                    /**
+                                     * Converts this PerConfigTypeConfig to JSON.
+                                     * @returns JSON object
+                                     */
+                                    public toJSON(): { [k: string]: any };
+                                }
+                            }
+
+                            /** Properties of a MaxTimeTerminationCriterion. */
+                            interface IMaxTimeTerminationCriterion {
+
+                                /** MaxTimeTerminationCriterion maxDuration */
+                                maxDuration?: (google.protobuf.IDuration|null);
+                            }
+
+                            /** Represents a MaxTimeTerminationCriterion. */
+                            class MaxTimeTerminationCriterion implements IMaxTimeTerminationCriterion {
+
+                                /**
+                                 * Constructs a new MaxTimeTerminationCriterion.
+                                 * @param [properties] Properties to set
+                                 */
+                                constructor(properties?: clutch.config.service.chaos.experimentation.terminator.v1.IMaxTimeTerminationCriterion);
+
+                                /** MaxTimeTerminationCriterion maxDuration. */
+                                public maxDuration?: (google.protobuf.IDuration|null);
+
+                                /**
+                                 * Verifies a MaxTimeTerminationCriterion message.
+                                 * @param message Plain object to verify
+                                 * @returns `null` if valid, otherwise the reason why it is not
+                                 */
+                                public static verify(message: { [k: string]: any }): (string|null);
+
+                                /**
+                                 * Creates a MaxTimeTerminationCriterion message from a plain object. Also converts values to their respective internal types.
+                                 * @param object Plain object
+                                 * @returns MaxTimeTerminationCriterion
+                                 */
+                                public static fromObject(object: { [k: string]: any }): clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion;
+
+                                /**
+                                 * Creates a plain object from a MaxTimeTerminationCriterion message. Also converts values to other types if specified.
+                                 * @param message MaxTimeTerminationCriterion
+                                 * @param [options] Conversion options
+                                 * @returns Plain object
+                                 */
+                                public static toObject(message: clutch.config.service.chaos.experimentation.terminator.v1.MaxTimeTerminationCriterion, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+                                /**
+                                 * Converts this MaxTimeTerminationCriterion to JSON.
+                                 * @returns JSON object
+                                 */
+                                public toJSON(): { [k: string]: any };
+                            }
+                        }
+                    }
+                }
+            }
+
             /** Namespace db. */
             namespace db {
 
