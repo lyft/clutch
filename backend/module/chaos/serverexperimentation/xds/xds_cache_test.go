@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/lyft/clutch/backend/module/chaos/redisexperimentation/xds"
 	"testing"
 	"time"
 
@@ -141,6 +142,12 @@ func TestSetSnapshotRTDS(t *testing.T) {
 	egressPrefix := "egress"
 	testCluster := "serviceA"
 	testStorer := &experimentstoremock.SimpleStorer{}
+	runtimeGeneration := experimentstore.RuntimeGeneration{
+		ConfigTypeUrl:         "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig",
+		RuntimeKeysGeneration: xds.RuntimeKeysGeneration,
+		GetEnforcingCluster:   xds.GetEnforcingCluster,
+	}
+	testStorer.RegisterRuntimeGeneration(runtimeGeneration)
 	mockExperimentList := mockGenerateFaultData(t)
 
 	rtdsConfig := RTDSConfig{
@@ -166,6 +173,7 @@ func TestSetSnapshotRTDS(t *testing.T) {
 
 	resources := make(map[gcpTypes.ResponseType][]gcpTypes.ResourceWithTtl)
 	resources[gcpTypes.Runtime] = generateRTDSResource(testClusterFaults, testStorer, &rtdsConfig, nil, zap.NewNop().Sugar())
+	t.Log(testStorer.GetRuntimeGenerator(""))
 	assert.Nil(t, resources[gcpTypes.Runtime][0].Ttl)
 	err := setSnapshot(resources, testCluster, testCache, zap.NewNop().Sugar())
 	if err != nil {
@@ -205,6 +213,12 @@ func TestSetSnapshotV3WithTTL(t *testing.T) {
 	egressPrefix := "egress"
 	testCluster := "serviceA"
 	testStorer := &experimentstoremock.SimpleStorer{}
+	runtimeGeneration := experimentstore.RuntimeGeneration{
+		ConfigTypeUrl:         "type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig",
+		RuntimeKeysGeneration: xds.RuntimeKeysGeneration,
+		GetEnforcingCluster:   xds.GetEnforcingCluster,
+	}
+	testStorer.RegisterRuntimeGeneration(runtimeGeneration)
 	ttl := time.Duration(2 * 1000 * 1000 * 1000)
 	mockExperimentList := mockGenerateFaultData(t)
 

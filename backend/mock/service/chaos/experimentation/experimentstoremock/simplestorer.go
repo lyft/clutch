@@ -34,6 +34,7 @@ func (s *SimpleExperiment) toProto() *experimentation.Experiment {
 type SimpleStorer struct {
 	experiments []SimpleExperiment
 	idGenerator int
+	runtimeGeneration experimentstore.RuntimeGeneration
 
 	sync.Mutex
 }
@@ -98,10 +99,11 @@ func (s *SimpleStorer) RegisterTransformation(transformation experimentstore.Tra
 	return nil
 }
 func (s *SimpleStorer) GetRuntimeGenerator(configTypeUrl string) (*experimentstore.RuntimeGeneration, error) {
-	return nil, nil
+	return &s.runtimeGeneration, nil
 }
 
 func (s *SimpleStorer) RegisterRuntimeGeneration(runtimeGeneration experimentstore.RuntimeGeneration) error {
+	s.runtimeGeneration = runtimeGeneration
 	return nil
 }
 

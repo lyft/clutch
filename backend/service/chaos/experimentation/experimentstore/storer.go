@@ -57,7 +57,7 @@ func New(_ *any.Any, logger *zap.Logger, _ tally.Scope) (service.Service, error)
 
 	sugaredLogger := logger.Sugar()
 	transformer := NewTransformer(sugaredLogger)
-	runtimeGenerator := NewRuntimeGenerator(sugaredLogger)
+	runtimeGenerator := NewRuntimeGenerator()
 	return &storer{
 		client.DB(),
 		sugaredLogger,

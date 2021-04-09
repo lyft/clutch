@@ -13,7 +13,6 @@ type RuntimeGeneration struct {
 }
 
 type RuntimeGenerator struct {
-	logger              *zap.SugaredLogger
 	nameToGenerationMap map[string]*RuntimeGeneration
 }
 
@@ -28,8 +27,8 @@ type RuntimeKeyValue struct {
 	Value uint32
 }
 
-func NewRuntimeGenerator(logger *zap.SugaredLogger) RuntimeGenerator {
-	runtimeGenerator := RuntimeGenerator{logger, map[string]*RuntimeGeneration{}}
+func NewRuntimeGenerator() RuntimeGenerator {
+	runtimeGenerator := RuntimeGenerator{map[string]*RuntimeGeneration{}}
 	runtimeGenerator.nameToGenerationMap = map[string]*RuntimeGeneration{}
 	return runtimeGenerator
 }
