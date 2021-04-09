@@ -11594,6 +11594,9 @@ export namespace clutch {
 
                 /** ListOptions labels */
                 labels?: ({ [k: string]: string }|null);
+
+                /** ListOptions supplementalSelectorString */
+                supplementalSelectorString?: (string|null);
             }
 
             /** Represents a ListOptions. */
@@ -11607,6 +11610,9 @@ export namespace clutch {
 
                 /** ListOptions labels. */
                 public labels: { [k: string]: string };
+
+                /** ListOptions supplementalSelectorString. */
+                public supplementalSelectorString: string;
 
                 /**
                  * Verifies a ListOptions message.

@@ -42,7 +42,10 @@ func (s *svc) ListJobs(ctx context.Context, clientset, cluster, namespace string
 		return nil, err
 	}
 
-	opts := ApplyListOptions(listOptions)
+	opts, err := ApplyListOptions(listOptions)
+	if err != nil {
+		return nil, err
+	}
 
 	jobList, err := cs.BatchV1().Jobs(cs.Namespace()).List(ctx, opts)
 	if err != nil {

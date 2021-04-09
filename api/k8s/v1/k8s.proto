@@ -349,6 +349,11 @@ message Pod {
 
 message ListOptions {
   map<string, string> labels = 9;
+  // This selector string will be concatenated to the string that is
+  // formed from formatting the labels.
+  // This is useful in the case of having Set-based selectors rather
+  // than just equality-based selectors which is how the map is formatted.
+  string supplemental_selector_string = 10;
 }
 
 message ListPodsRequest {

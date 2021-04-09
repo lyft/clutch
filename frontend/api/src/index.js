@@ -27403,6 +27403,7 @@ export const clutch = $root.clutch = (() => {
                  * @memberof clutch.k8s.v1
                  * @interface IListOptions
                  * @property {Object.<string,string>|null} [labels] ListOptions labels
+                 * @property {string|null} [supplementalSelectorString] ListOptions supplementalSelectorString
                  */
 
                 /**
@@ -27430,6 +27431,14 @@ export const clutch = $root.clutch = (() => {
                 ListOptions.prototype.labels = $util.emptyObject;
 
                 /**
+                 * ListOptions supplementalSelectorString.
+                 * @member {string} supplementalSelectorString
+                 * @memberof clutch.k8s.v1.ListOptions
+                 * @instance
+                 */
+                ListOptions.prototype.supplementalSelectorString = "";
+
+                /**
                  * Verifies a ListOptions message.
                  * @function verify
                  * @memberof clutch.k8s.v1.ListOptions
@@ -27448,6 +27457,9 @@ export const clutch = $root.clutch = (() => {
                             if (!$util.isString(message.labels[key[i]]))
                                 return "labels: string{k:string} expected";
                     }
+                    if (message.supplementalSelectorString != null && message.hasOwnProperty("supplementalSelectorString"))
+                        if (!$util.isString(message.supplementalSelectorString))
+                            return "supplementalSelectorString: string expected";
                     return null;
                 };
 
@@ -27470,6 +27482,8 @@ export const clutch = $root.clutch = (() => {
                         for (let keys = Object.keys(object.labels), i = 0; i < keys.length; ++i)
                             message.labels[keys[i]] = String(object.labels[keys[i]]);
                     }
+                    if (object.supplementalSelectorString != null)
+                        message.supplementalSelectorString = String(object.supplementalSelectorString);
                     return message;
                 };
 
@@ -27488,12 +27502,16 @@ export const clutch = $root.clutch = (() => {
                     let object = {};
                     if (options.objects || options.defaults)
                         object.labels = {};
+                    if (options.defaults)
+                        object.supplementalSelectorString = "";
                     let keys2;
                     if (message.labels && (keys2 = Object.keys(message.labels)).length) {
                         object.labels = {};
                         for (let j = 0; j < keys2.length; ++j)
                             object.labels[keys2[j]] = message.labels[keys2[j]];
                     }
+                    if (message.supplementalSelectorString != null && message.hasOwnProperty("supplementalSelectorString"))
+                        object.supplementalSelectorString = message.supplementalSelectorString;
                     return object;
                 };
 

@@ -44,7 +44,11 @@ func (s *svc) ListDeployments(ctx context.Context, clientset, cluster, namespace
 		return nil, err
 	}
 
-	opts := ApplyListOptions(listOptions)
+	opts, err := ApplyListOptions(listOptions)
+	if err != nil {
+		return nil, err
+	}
+
 	deploymentList, err := cs.AppsV1().Deployments(cs.Namespace()).List(ctx, opts)
 	if err != nil {
 		return nil, err
