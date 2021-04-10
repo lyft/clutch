@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/http/pprof"
+	"net/textproto"
 	"net/url"
 	"path"
 	"regexp"
@@ -26,6 +27,12 @@ import (
 	gatewayv1 "github.com/lyft/clutch/backend/api/config/gateway/v1"
 	"github.com/lyft/clutch/backend/service"
 	awsservice "github.com/lyft/clutch/backend/service/aws"
+)
+
+const (
+	xHeader        = "X-"
+	xForwardedFor  = "X-Forwarded-For"
+	xForwardedHost = "X-Forwarded-Host"
 )
 
 var apiPattern = regexp.MustCompile(`^/v\d+/`)
@@ -180,6 +187,19 @@ func customResponseForwarder(ctx context.Context, w http.ResponseWriter, resp pr
 	return nil
 }
 
+func customHeaderMatcher(key string) (string, bool) {
+	key = textproto.CanonicalMIMEHeaderKey(key)
+	if strings.HasPrefix(key, xHeader) {
+		// exclude handling these headers as they are looked up by grpc's annotate context flow and added to the context
+		// metadata if they're not found
+		if key != xForwardedFor && key != xForwardedHost {
+			return runtime.MetadataPrefix + key, true
+		}
+	}
+	// the the default header mapping rule
+	return runtime.DefaultHeaderMatcher(key)
+}
+
 func customErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Marshaler, w http.ResponseWriter, req *http.Request, err error) {
 	//  TODO(maybe): once we have non-browser clients we probably want to avoid the redirect and directly return the error.
 	if s, ok := status.FromError(err); ok && s.Code() == codes.Unauthenticated {
@@ -219,6 +239,7 @@ func New(unaryInterceptors []grpc.UnaryServerInterceptor, assets http.FileSystem
 				UnmarshalOptions: protojson.UnmarshalOptions{},
 			},
 		),
+		runtime.WithIncomingHeaderMatcher(customHeaderMatcher),
 	)
 
 	// If there is a configured asset provider, we check to see if the service is configured before proceeding.

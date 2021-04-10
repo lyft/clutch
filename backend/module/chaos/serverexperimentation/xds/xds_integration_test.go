@@ -10,18 +10,21 @@ import (
 	"time"
 
 	_ "github.com/envoyproxy/go-control-plane/envoy/extensions/filters/http/fault/v3"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/durationpb"
+	"google.golang.org/protobuf/types/known/timestamppb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 
 	experimentationv1 "github.com/lyft/clutch/backend/api/chaos/experimentation/v1"
 	serverexperimentation "github.com/lyft/clutch/backend/api/chaos/serverexperimentation/v1"
 	xdsconfigv1 "github.com/lyft/clutch/backend/api/config/module/chaos/experimentation/xds/v1"
-	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
-	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
+	terminatorv1 "github.com/lyft/clutch/backend/api/config/service/chaos/experimentation/terminator/v1"
 	"github.com/lyft/clutch/backend/internal/test/integration/helper/envoytest"
 	"github.com/lyft/clutch/backend/mock/service/chaos/experimentation/experimentstoremock"
+	"github.com/lyft/clutch/backend/module/chaos/serverexperimentation/xds/internal/xdstest"
+	"github.com/lyft/clutch/backend/service/chaos/experimentation/experimentstore"
 	"github.com/lyft/clutch/backend/service/chaos/experimentation/terminator"
 )
 
@@ -30,7 +33,7 @@ import (
 func TestEnvoyFaults(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		CacheRefreshInterval:      durationpb.New(time.Second),
 		IngressFaultRuntimePrefix: "fault.http",
 		EgressFaultRuntimePrefix:  "egress",
 	}
@@ -72,7 +75,7 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		CacheRefreshInterval:      durationpb.New(time.Second),
 		IngressFaultRuntimePrefix: "fault.http",
 		EgressFaultRuntimePrefix:  "egress",
 	}
@@ -80,19 +83,33 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 	ts := xdstest.NewTestModuleServer(New, true, xdsConfig)
 	defer ts.Stop()
 
-	criteria := &testCriteria{}
+	criterion := &testCriterion{}
 
-	terminator := terminator.NewTestMonitor(
-		ts.Storer,
-		[]string{"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig"},
-		[]terminator.TerminationCriteria{criteria},
-		ts.Logger.Sugar(),
-		ts.Scope)
+	terminator.CriterionFactories["type.googleapis.com/google.protobuf.StringValue"] = &testCriterionFactory{testCriterion: criterion}
+
+	anyString, err := anypb.New(&wrapperspb.StringValue{})
+	assert.NoError(t, err)
+
+	typedConfig := &terminatorv1.Config{
+		PerConfigTypeConfiguration: map[string]*terminatorv1.Config_PerConfigTypeConfig{
+			"type.googleapis.com/clutch.chaos.serverexperimentation.v1.HTTPFaultConfig": {
+				TerminationCriteria: []*anypb.Any{anyString},
+			},
+		},
+		OuterLoopInterval:          durationpb.New(time.Second),
+		PerExperimentCheckInterval: durationpb.New(time.Second),
+	}
+	anyConfig, err := anypb.New(typedConfig)
+	assert.NoError(t, err)
+
+	terminator, err := terminator.NewMonitor(anyConfig, ts.Logger, ts.Scope)
+	assert.NoError(t, err)
 
 	// Cancel to ensure that the terminator doesn't leak into other tests.
 	ctx, cancel := context.WithCancel(context.Background())
-	terminator.Run(ctx)
 	defer cancel()
+
+	terminator.Run(ctx)
 
 	e, err := envoytest.NewEnvoyHandle()
 	assert.NoError(t, err)
@@ -112,7 +129,7 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 	})
 	assert.NoError(t, err, "did not see faults enabled")
 
-	criteria.start()
+	criterion.start()
 
 	// Since we've enabled a time based automatic termination, we expect to see faults get disabled on their own after some time.
 	err = awaitExpectedReturnValueForSimpleCall(t, e, awaitReturnValueParams{
@@ -125,7 +142,7 @@ func TestEnvoyFaultsTimeBasedTermination(t *testing.T) {
 func TestEnvoyECDSFaults(t *testing.T) {
 	xdsConfig := &xdsconfigv1.Config{
 		RtdsLayerName:             "rtds",
-		CacheRefreshInterval:      ptypes.DurationProto(time.Second),
+		CacheRefreshInterval:      durationpb.New(time.Second),
 		IngressFaultRuntimePrefix: "fault.http",
 		EgressFaultRuntimePrefix:  "egress",
 		EcdsAllowList:             &xdsconfigv1.Config_ECDSAllowList{EnabledClusters: []string{"test-cluster"}},
@@ -196,15 +213,10 @@ func createTestExperiment(t *testing.T, faultHttpStatus int, storer *experiments
 	assert.NoError(t, err)
 
 	now := time.Date(2011, 0, 0, 0, 0, 0, 0, time.UTC)
-	assert.NoError(t, err)
 	future := now.Add(1 * time.Hour)
-	futureTimestamp, err := ptypes.TimestampProto(future)
-	assert.NoError(t, err)
 	farFuture := future.Add(1 * time.Hour)
-	farFutureTimestamp, err := ptypes.TimestampProto(farFuture)
-	assert.NoError(t, err)
 
-	d := &experimentationv1.CreateExperimentData{StartTime: futureTimestamp, EndTime: farFutureTimestamp, Config: a}
+	d := &experimentationv1.CreateExperimentData{StartTime: timestamppb.New(future), EndTime: timestamppb.New(farFuture), Config: a}
 	s, err := experimentstore.NewExperimentSpecification(d, now)
 	assert.NoError(t, err)
 	experiment, err := storer.CreateExperiment(context.Background(), s)
@@ -237,21 +249,29 @@ func awaitExpectedReturnValueForSimpleCall(t *testing.T, e *envoytest.EnvoyHandl
 	return nil
 }
 
-type testCriteria struct {
+type testCriterionFactory struct {
+	testCriterion *testCriterion
+}
+
+func (t *testCriterionFactory) Create(*anypb.Any) (terminator.TerminationCriterion, error) {
+	return t.testCriterion, nil
+}
+
+type testCriterion struct {
 	startCheckingTime bool
 	sync.Mutex
 }
 
 // We want the time check to be low but also avoid races, so this lets us prevent the criteria from activating until
 // we know that we're seeing faults enabled.
-func (t *testCriteria) start() {
+func (t *testCriterion) start() {
 	t.Lock()
 	defer t.Unlock()
 
 	t.startCheckingTime = true
 }
 
-func (t *testCriteria) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error) {
+func (t *testCriterion) ShouldTerminate(experiment *experimentationv1.Experiment, experimentConfig proto.Message) (string, error) {
 	t.Lock()
 	defer t.Unlock()
 
@@ -259,7 +279,7 @@ func (t *testCriteria) ShouldTerminate(experiment *experimentationv1.Experiment,
 	if _, ok := experimentConfig.(*serverexperimentation.HTTPFaultConfig); !ok {
 		panic("received unexpected experiment config")
 	}
-	started, _ := ptypes.Timestamp(experiment.StartTime)
+	started := experiment.StartTime.AsTime()
 	if t.startCheckingTime && started.Add(1*time.Second).Before(time.Now()) {
 		return "timed out", nil
 	}

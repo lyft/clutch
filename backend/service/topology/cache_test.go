@@ -153,6 +153,47 @@ func BenchmarkPrepareBulkCacheInsert(b *testing.B) {
 	}
 }
 
+func TestConvertBatchInsertToSlice(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		id             string
+		input          []*topologyv1.Resource
+		expectedLength int
+	}{
+		{
+			id:             "1",
+			input:          generatePrepareBulkCacheInsertInput(1),
+			expectedLength: 1,
+		},
+		{
+			id:             "10",
+			input:          generatePrepareBulkCacheInsertInput(10),
+			expectedLength: 10,
+		},
+		{
+			id:             "100",
+			input:          generatePrepareBulkCacheInsertInput(100),
+			expectedLength: 100,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.id, func(t *testing.T) {
+			t.Parallel()
+
+			resources := make(map[string]*topologyv1.Resource)
+			for _, v := range tt.input {
+				resources[v.Id] = v
+			}
+
+			actaul := convertBatchInsertToSlice(resources)
+			assert.Equal(t, tt.expectedLength, len(actaul))
+		})
+	}
+}
+
 func generatePrepareBulkCacheInsertInput(count int) []*topologyv1.Resource {
 	results := []*topologyv1.Resource{}
 

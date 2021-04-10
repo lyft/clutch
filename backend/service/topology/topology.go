@@ -10,7 +10,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -59,7 +58,7 @@ type CacheableTopology interface {
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	topologyConfig := &topologyv1cfg.Config{}
-	err := ptypes.UnmarshalAny(cfg, topologyConfig)
+	err := cfg.UnmarshalTo(topologyConfig)
 	if err != nil {
 		return nil, err
 	}

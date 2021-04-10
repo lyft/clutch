@@ -229,6 +229,46 @@ func (m *Container) Validate() error {
 
 	// no validation rules for RestartCount
 
+	switch m.StateDetails.(type) {
+
+	case *Container_StateWaiting:
+
+		if v, ok := interface{}(m.GetStateWaiting()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ContainerValidationError{
+					field:  "StateWaiting",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *Container_StateRunning:
+
+		if v, ok := interface{}(m.GetStateRunning()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ContainerValidationError{
+					field:  "StateRunning",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *Container_StateTerminated:
+
+		if v, ok := interface{}(m.GetStateTerminated()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ContainerValidationError{
+					field:  "StateTerminated",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -285,6 +325,223 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ContainerValidationError{}
+
+// Validate checks the field values on StateWaiting with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *StateWaiting) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Reason
+
+	// no validation rules for Message
+
+	return nil
+}
+
+// StateWaitingValidationError is the validation error returned by
+// StateWaiting.Validate if the designated constraints aren't met.
+type StateWaitingValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StateWaitingValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StateWaitingValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StateWaitingValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StateWaitingValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StateWaitingValidationError) ErrorName() string { return "StateWaitingValidationError" }
+
+// Error satisfies the builtin error interface
+func (e StateWaitingValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStateWaiting.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StateWaitingValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StateWaitingValidationError{}
+
+// Validate checks the field values on StateRunning with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *StateRunning) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if v, ok := interface{}(m.GetStartTime()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StateRunningValidationError{
+				field:  "StartTime",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	return nil
+}
+
+// StateRunningValidationError is the validation error returned by
+// StateRunning.Validate if the designated constraints aren't met.
+type StateRunningValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StateRunningValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StateRunningValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StateRunningValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StateRunningValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StateRunningValidationError) ErrorName() string { return "StateRunningValidationError" }
+
+// Error satisfies the builtin error interface
+func (e StateRunningValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStateRunning.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StateRunningValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StateRunningValidationError{}
+
+// Validate checks the field values on StateTerminated with the rules defined
+// in the proto definition for this message. If any rules are violated, an
+// error is returned.
+func (m *StateTerminated) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Reason
+
+	// no validation rules for Message
+
+	// no validation rules for ExitCode
+
+	// no validation rules for Signal
+
+	return nil
+}
+
+// StateTerminatedValidationError is the validation error returned by
+// StateTerminated.Validate if the designated constraints aren't met.
+type StateTerminatedValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StateTerminatedValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StateTerminatedValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StateTerminatedValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StateTerminatedValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StateTerminatedValidationError) ErrorName() string { return "StateTerminatedValidationError" }
+
+// Error satisfies the builtin error interface
+func (e StateTerminatedValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStateTerminated.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StateTerminatedValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StateTerminatedValidationError{}
 
 // Validate checks the field values on PodCondition with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
@@ -420,6 +677,21 @@ func (m *Pod) Validate() error {
 
 	}
 
+	for idx, item := range m.GetInitContainers() {
+		_, _ = idx, item
+
+		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return PodValidationError{
+					field:  fmt.Sprintf("InitContainers[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -486,6 +758,8 @@ func (m *ListOptions) Validate() error {
 	}
 
 	// no validation rules for Labels
+
+	// no validation rules for SupplementalSelectorString
 
 	return nil
 }

@@ -5,13 +5,13 @@ go 1.16
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/Masterminds/squirrel v1.5.0
-	github.com/aws/aws-sdk-go-v2 v1.2.0
-	github.com/aws/aws-sdk-go-v2/config v1.1.1
-	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.1.1
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.1.1
-	github.com/aws/aws-sdk-go-v2/service/kinesis v1.1.1
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.2.0
-	github.com/aws/smithy-go v1.1.0
+	github.com/aws/aws-sdk-go-v2 v1.3.1
+	github.com/aws/aws-sdk-go-v2/config v1.1.4
+	github.com/aws/aws-sdk-go-v2/service/autoscaling v1.2.1
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.3.0
+	github.com/aws/aws-sdk-go-v2/service/kinesis v1.2.1
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.4.0
+	github.com/aws/smithy-go v1.3.0
 	github.com/bufbuild/buf v0.30.0
 	github.com/cactus/go-statsd-client/statsd v0.0.0-20200623234511-94959e3146b2
 	github.com/coreos/go-oidc/v3 v3.0.0
@@ -23,7 +23,7 @@ require (
 	github.com/go-git/go-git/v5 v5.3.0
 	github.com/gobwas/glob v0.2.3
 	github.com/golang-migrate/migrate/v4 v4.14.1
-	github.com/golang/protobuf v1.5.1
+	github.com/golang/protobuf v1.5.2
 	github.com/google/go-github/v34 v34.0.0
 	github.com/google/uuid v1.2.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
@@ -41,10 +41,10 @@ require (
 	github.com/uber-go/tally v3.3.17+incompatible
 	go.uber.org/zap v1.16.0
 	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4
-	golang.org/x/oauth2 v0.0.0-20210313182246-cd4f82c27b84
+	golang.org/x/oauth2 v0.0.0-20210402161424-2e8d93401602
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	google.golang.org/genproto v0.0.0-20210319143718-93e7006c17a6
-	google.golang.org/grpc v1.36.1
+	google.golang.org/genproto v0.0.0-20210406143921-e86de6bf7a46
+	google.golang.org/grpc v1.37.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0
 	google.golang.org/protobuf v1.26.0
 	gopkg.in/square/go-jose.v2 v2.5.1

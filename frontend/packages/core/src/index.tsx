@@ -7,9 +7,16 @@ import RadioGroup from "./Input/radio-group";
 import Select from "./Input/select";
 import Switch from "./Input/switchToggle";
 import TextField from "./Input/text-field";
-import { Accordion, AccordionDetails } from "./accordion";
+import {
+  Accordion,
+  AccordionActions,
+  AccordionDetails,
+  AccordionDivider,
+  AccordionGroup,
+} from "./accordion";
 import ClutchApp from "./AppProvider";
 import { Button, ButtonGroup, ClipboardButton, IconButton } from "./button";
+import { Card, CardContent } from "./card";
 import Confirmation from "./confirmation";
 import { useWizardContext, WizardContext } from "./Contexts";
 import { Dialog, DialogActions, DialogContent } from "./dialog";
@@ -32,17 +39,22 @@ export type { ClutchError } from "./Network/errors";
 
 export {
   Accordion,
+  AccordionActions,
   AccordionDetails,
+  AccordionDivider,
+  AccordionGroup,
   AccordionRow,
   Alert,
   AvatarIcon,
-  ClutchApp,
   Button,
   ButtonGroup,
+  Card,
+  CardContent,
   Checkbox,
   CheckboxPanel,
   client,
   ClipboardButton,
+  ClutchApp,
   Confirmation,
   Dialog,
   DialogActions,
@@ -69,10 +81,10 @@ export {
   Stepper,
   Switch,
   Tab,
-  Tabs,
   Table,
   TableCell,
   TableRow,
+  Tabs,
   TextField,
   TreeTable,
   useWizardContext,

@@ -4,10 +4,12 @@ import (
 	"context"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/oauth2"
 
+	authnmodulev1 "github.com/lyft/clutch/backend/api/authn/v1"
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
 	apimock "github.com/lyft/clutch/backend/mock/api"
 	"github.com/lyft/clutch/backend/mock/service/authnmock"
@@ -105,6 +107,99 @@ oidc:
 	assert.NoError(t, err)
 	assert.NotNil(t, c)
 	assert.Equal(t, email, c.Subject)
+}
+
+func TestCreateNewToken(t *testing.T) {
+	cfg := &authnv1.Config{}
+	apimock.FromYAML(`
+session_secret: this_is_my_secret
+enable_service_token_creation: true
+oidc:
+  issuer: http://foo.example.com
+  client_id: my_client_id
+  client_secret: my_client_secret
+  redirect_url: "http://localhost:12000/v1/authn/callback"
+  scopes:
+  - openid
+  - email
+`, cfg)
+
+	email := "user@example.com"
+
+	mockprovider := authnmock.NewMockOIDCProviderServer(email)
+	defer mockprovider.Close()
+
+	mockStorage := authnmock.NewMockStorage()
+
+	ctx := context.WithValue(context.Background(), oauth2.HTTPClient, mockprovider.Client())
+
+	p, err := NewOIDCProvider(ctx, cfg, mockStorage)
+	assert.NoError(t, err)
+	assert.NotNil(t, p)
+
+	expiry := 5 * time.Hour
+	createdToken, err := p.(Issuer).CreateToken(ctx, "some subject", authnmodulev1.CreateTokenRequest_SERVICE, &expiry)
+	assert.NoError(t, err)
+	assert.NotNil(t, createdToken)
+
+	// The token should have been recorded in the database.
+	assert.Len(t, mockStorage.Tokens[clutchProvider], 1)
+	assert.Equal(t, mockStorage.Tokens[clutchProvider]["service:some subject"], createdToken)
+
+	claims, err := p.Verify(ctx, createdToken.AccessToken)
+	assert.NoError(t, err)
+
+	assert.NotZero(t, claims.StandardClaims.IssuedAt)
+	assert.Equal(t, claims.StandardClaims.ExpiresAt, time.Unix(claims.StandardClaims.IssuedAt, 0).Add(5*time.Hour).Unix())
+	assert.Equal(t, claims.StandardClaims.Subject, "service:some subject")
+
+	// Create a token without expiry.
+	createdToken, err = p.(Issuer).CreateToken(ctx, "some subject", authnmodulev1.CreateTokenRequest_SERVICE, nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, createdToken)
+
+	// The token should have been recorded in the database.
+	assert.Len(t, mockStorage.Tokens[clutchProvider], 1)
+	assert.Equal(t, mockStorage.Tokens[clutchProvider]["service:some subject"], createdToken)
+
+	claims, err = p.Verify(ctx, createdToken.AccessToken)
+	assert.NoError(t, err)
+
+	assert.NotZero(t, claims.StandardClaims.IssuedAt)
+	assert.Equal(t, claims.StandardClaims.ExpiresAt, int64(0))
+	assert.Equal(t, claims.StandardClaims.Subject, "service:some subject")
+
+	// If we don't have a configured store we should be unable to create a token.
+	p, err = NewOIDCProvider(ctx, cfg, nil)
+	assert.NoError(t, err)
+	assert.NotNil(t, p)
+
+	createdToken, err = p.(Issuer).CreateToken(ctx, "some subject", authnmodulev1.CreateTokenRequest_SERVICE, nil)
+	assert.Nil(t, createdToken)
+	assert.Error(t, err)
+
+	disabledServiceTokenConfig := &authnv1.Config{}
+	apimock.FromYAML(`
+session_secret: this_is_my_secret
+enable_service_token_creation: false
+oidc:
+  issuer: http://foo.example.com
+  client_id: my_client_id
+  client_secret: my_client_secret
+  redirect_url: "http://localhost:12000/v1/authn/callback"
+  scopes:
+  - openid
+  - email
+`, disabledServiceTokenConfig)
+
+	// We have a configured store but token creation is not explicitly enabled.
+	p, err = NewOIDCProvider(ctx, disabledServiceTokenConfig, mockStorage)
+	assert.NoError(t, err)
+	assert.NotNil(t, p)
+
+	createdToken, err = p.(Issuer).CreateToken(ctx, "some subject", authnmodulev1.CreateTokenRequest_SERVICE, nil)
+	assert.Nil(t, createdToken)
+	assert.Error(t, err)
 }
 
 func TestTokenRevocationFlow(t *testing.T) {

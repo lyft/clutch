@@ -12,7 +12,6 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/slack-go/slack"
 	"github.com/uber-go/tally"
@@ -34,7 +33,7 @@ const (
 
 func New(cfg *any.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
 	config := &configv1.SlackConfig{}
-	if err := ptypes.UnmarshalAny(cfg, config); err != nil {
+	if err := cfg.UnmarshalTo(config); err != nil {
 		return nil, err
 	}
 

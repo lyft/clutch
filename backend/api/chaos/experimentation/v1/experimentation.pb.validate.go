@@ -44,6 +44,13 @@ func (m *CreateExperimentRequest) Validate() error {
 		return nil
 	}
 
+	if m.GetData() == nil {
+		return CreateExperimentRequestValidationError{
+			field:  "Data",
+			reason: "value is required",
+		}
+	}
+
 	if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return CreateExperimentRequestValidationError{
@@ -196,6 +203,13 @@ var _ interface {
 func (m *CreateOrGetExperimentRequest) Validate() error {
 	if m == nil {
 		return nil
+	}
+
+	if m.GetData() == nil {
+		return CreateOrGetExperimentRequestValidationError{
+			field:  "Data",
+			reason: "value is required",
+		}
 	}
 
 	if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
@@ -356,9 +370,26 @@ func (m *GetExperimentsRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for ConfigType
+	if len(m.GetConfigType()) < 1 {
+		return GetExperimentsRequestValidationError{
+			field:  "ConfigType",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
 
-	// no validation rules for Status
+	if _, ok := _GetExperimentsRequest_Status_NotInLookup[m.GetStatus()]; ok {
+		return GetExperimentsRequestValidationError{
+			field:  "Status",
+			reason: "value must not be in list [0]",
+		}
+	}
+
+	if _, ok := GetExperimentsRequest_Status_name[int32(m.GetStatus())]; !ok {
+		return GetExperimentsRequestValidationError{
+			field:  "Status",
+			reason: "value must be one of the defined enum values",
+		}
+	}
 
 	return nil
 }
@@ -418,6 +449,10 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetExperimentsRequestValidationError{}
+
+var _GetExperimentsRequest_Status_NotInLookup = map[GetExperimentsRequest_Status]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on GetExperimentsResponse with the rules
 // defined in the proto definition for this message. If any rules are
@@ -509,7 +544,26 @@ func (m *CancelExperimentRunRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Id
+	if len(m.GetId()) < 1 {
+		return CancelExperimentRunRequestValidationError{
+			field:  "Id",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
+
+	if utf8.RuneCountInString(m.GetReason()) > 100 {
+		return CancelExperimentRunRequestValidationError{
+			field:  "Reason",
+			reason: "value length must be at most 100 runes",
+		}
+	}
+
+	if len(m.GetReason()) < 1 {
+		return CancelExperimentRunRequestValidationError{
+			field:  "Reason",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
 
 	return nil
 }
@@ -795,7 +849,12 @@ func (m *GetExperimentRunDetailsRequest) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Id
+	if len(m.GetId()) < 1 {
+		return GetExperimentRunDetailsRequestValidationError{
+			field:  "Id",
+			reason: "value length must be at least 1 bytes",
+		}
+	}
 
 	return nil
 }
