@@ -24,7 +24,7 @@
     "@clutch-sh/experimentation": "^1.0.0-beta",
     "@clutch-sh/wizard": "^1.0.0-beta",
     "@emotion/styled": "^11.0.0",
-    "@hookform/resolvers": "2.0.0-beta.3",
+    "@hookform/resolvers": "2.2.0",
     "@material-ui/core": "^4.11.0",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
