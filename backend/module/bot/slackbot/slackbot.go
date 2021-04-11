@@ -45,7 +45,7 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (module.Module, 
 
 	m := &mod{
 		slack:             slack.New(config.BotToken),
-		verificationToken: config.VerifcationToken,
+		verificationToken: config.VerificationToken,
 		bot:    bot,
 		logger: logger,
 		scope:  scope,
@@ -126,6 +126,7 @@ func (m *mod) handleEvent(req *slackbotv1.EventRequest) error {
 		// if Slack API adds a new outer event type
 		return fmt.Errorf("received unexpected event type: %s", req.Type)
 	}
+	return nil
 }
 
 // request has two layers - "outer event" and "inner event". This is the inner event and we currently support 2 types: app_mention (messages that mention the bot directly)
