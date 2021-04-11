@@ -4,16 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"net/http"
 
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/anypb"
 
 	slackbotv1 "github.com/lyft/clutch/backend/api/bot/slackbot/v1"
@@ -25,11 +22,7 @@ import (
 )
 
 const (
-	Name = "clutch.module.bot.slackbot"
-	// request headers used to verify a request came from Slack
-	hSignature = "x-Slack-Signature"
-	hTimestamp = "x-Slack-Request-Timestamp"
-	// slack event type for DMs with the bot
+	Name      = "clutch.module.bot.slackbot"
 	dmMessage = "im"
 )
 
@@ -51,22 +44,22 @@ func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (module.Module, 
 	}
 
 	m := &mod{
-		slack:         slack.New(config.BotToken),
-		signingSecret: config.SigningSecret,
-		bot:           bot,
-		logger:        logger,
-		scope:         scope,
+		slack:             slack.New(config.BotToken),
+		verificationToken: config.VerifcationToken,
+		bot:    bot,
+		logger: logger,
+		scope:  scope,
 	}
 
 	return m, nil
 }
 
 type mod struct {
-	slack         *slack.Client
-	signingSecret string
-	bot           bot.Service
-	logger        *zap.Logger
-	scope         tally.Scope
+	slack             *slack.Client
+	verificationToken string
+	bot    bot.Service
+	logger *zap.Logger
+	scope  tally.Scope
 }
 
 func (m *mod) Register(r module.Registrar) error {
@@ -76,7 +69,7 @@ func (m *mod) Register(r module.Registrar) error {
 
 // One request, one event. https://api.slack.com/apis/connections/events-api#the-events-api__receiving-events
 func (m *mod) Event(ctx context.Context, req *slackbotv1.EventRequest) (*slackbotv1.EventResponse, error) {
-	err := verifySlackRequest(ctx, req, m.signingSecret)
+	err := verifySlackRequest(m.verificationToken, req.Token)
 	if err != nil {
 		m.logger.Error("verify slack request error", log.ErrorField(err))
 		return nil, status.Error(codes.Unauthenticated, err.Error())
@@ -98,66 +91,14 @@ func (m *mod) Event(ctx context.Context, req *slackbotv1.EventRequest) (*slackbo
 	return &slackbotv1.EventResponse{}, nil
 }
 
-// retrieves the signature and timestamp from the headers which will be used to verify the request was from Slack
-func getSlackRequestHeaders(ctx context.Context) (http.Header, error) {
-	md, ok := metadata.FromIncomingContext(ctx)
+// TODO: (sperry) Slack currently still supports this type of verification by sending the verification token in each request
+// but use the signing secrets or mutual TLS flow instead as it is more secure
+func verifySlackRequest(token, requestToken string) error {
+	t := slackevents.TokenComparator{VerificationToken: token}
+	ok := t.Verify(requestToken)
 	if !ok {
-		return nil, errors.New("no headers present on request")
+		return errors.New("invalid verification token")
 	}
-
-	signature := md.Get(hSignature)
-	if len(signature) == 0 {
-		return nil, fmt.Errorf("%s header not present on request", hSignature)
-	}
-
-	timestamp := md.Get(hTimestamp)
-	if len(timestamp) == 0 {
-		return nil, fmt.Errorf("%s header not present on request", hTimestamp)
-	}
-
-	// the slack package is case sensitive when looking up these headers
-	// https://github.com/slack-go/slack/blob/master/security.go#L56
-	xSignature := "X-Slack-Signature"
-	xTimestamp := "X-Slack-Request-Timestamp"
-
-	return http.Header{
-		xSignature: signature,
-		xTimestamp: timestamp,
-	}, nil
-}
-
-// verifies the request came from Slack
-// https://api.slack.com/authentication/verifying-requests-from-slack#verifying-requests-from-slack-using-signing-secrets__a-recipe-for-security__step-by-step-walk-through-for-validating-a-request
-func verifySlackRequest(ctx context.Context, req *slackbotv1.EventRequest, signingSecret string) error {
-	headers, err := getSlackRequestHeaders(ctx)
-	if err != nil {
-		return err
-	}
-
-	// returns a SecretsVerifier object in exchange for an http.Header object and signing secret
-	sv, err := slack.NewSecretsVerifier(headers, signingSecret)
-	if err != nil {
-		return err
-	}
-
-	body, err := protojson.Marshal(req)
-	if err != nil {
-		return err
-	}
-
-	// the request body is used to form a basestring
-	_, err = sv.Write(body)
-	if err != nil {
-		return err
-	}
-
-	// compares the signature sent from Slack with the actual computed hash to judge validity
-	err = sv.Ensure()
-	if err != nil {
-		return err
-	}
-
-	// we're good! request came from Slack
 	return nil
 }
 
@@ -173,26 +114,21 @@ func (m *mod) handleURLVerificationEvent(challenge string) (*slackbotv1.EventRes
 	return &slackbotv1.EventResponse{Challenge: challenge}, nil
 }
 
-// the request has two layers - the "outer event" and "inner event". At this step, we are examining the outer event
-// this can be 1 of three types: "url_verification" (handled seperately above), "event_callback", and "app_rate_limited"
-func (m *mod) handleEvent(req *slackbotv1.EventRequest) error {
+// request has 2 layers - "outer event" and "inner event". this is the outer event and is 1 of 3 types: url_verification, event_callback, and app_rate_limited
+func (m *mod) handleEvent(req *slackbotv1.EventRequest) {
 	switch req.Type {
 	case slackevents.CallbackEvent:
 		return m.handleCallBackEvent(req.Event)
 	case slackevents.AppRateLimited:
-		// this type of event is sent if our endpoint has received more than 30,000 request events in 60 minutes
-		// https://api.slack.com/apis/connections/events-api#the-events-api__responding-to-events__rate-limiting
-		// TODO: (sperry) do we want to handle this differently
-		return errors.New("app's event subscriptions are being rate limited")
+		// received if endpoint got more than 30,000 request events in 60 minutes, https://api.slack.com/apis/connections/events-api#the-events-api__responding-to-events__rate-limiting
+		m.logger.Error("app's event subscriptions are being rate limited")
 	default:
-		// in the case that the Slack API adds a new "outer event" type
-		return fmt.Errorf("received unexpected event type: %s", req.Type)
+		// if Slack API adds a new outer event type
 	}
 }
 
-// the request has two layers - the "outer event" and "inner event". At this step, we are examining the "inner event"
-// the 2 event types we currently support are "app_mention" (messages that mention the bot directly) and "message" (specifically DMs with the bot)
-// full list of Slack event types: https://api.slack.com/events
+// request has two layers - "outer event" and "inner event". This is the inner event and we currently support 2 types: app_mention (messages that mention the bot directly)
+// and message (specifically DMs with the bot). full list of Slack event types: https://api.slack.com/events
 func (m *mod) handleCallBackEvent(event *slackbotv1.Event) error {
 	switch event.Type {
 	case slackevents.AppMention:
@@ -230,7 +166,7 @@ func (m *mod) handleMessageEvent(event *slackbotv1.Event) error {
 		return fmt.Errorf("unexpected channel type: %s", event.ChannelType)
 	}
 	// it's standard behavior of the Slack Events API that the bot will receive all message events, including from it's own posts
-	// so we need to filter out these events by checking that the BotId field is empty; otherwise by reacting to them we will create an infinte loop.
+	// so we need to filter out these events by checking that the BotId field is empty; otherwise by reacting to them we will create an infinte loop
 	if event.BotId == "" {
 		// note: for the DMs with the bot, the text does not include the bot user id
 		command := TrimRedundantSpaces(event.Text)

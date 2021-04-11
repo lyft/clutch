@@ -8,7 +8,6 @@ import (
 	"github.com/slack-go/slack"
 )
 
-// the default bot reply if the command is not matched
 const (
 	HelpIntro = "Hi! I respond to the following commands:\n"
 	// TODO: (sperry) this should be auto generated based on what we allow users to do via the bot
@@ -21,17 +20,15 @@ var (
 	spaceRegex       = regexp.MustCompile(`\s+`)
 )
 
-// TrimUserId removes the user id of the bot from the command string
-// Commands issued in a channel (instead of in a DM) will start with the user ID of the bot. Example: '<@UVWXYZ123> describe pod'
-// and should be removed before matching the command
+// TrimUserId removes the user id of the bot from the command string. Commands issued in a channel (instead of in a DM) will start
+// with the user ID of the bot and should be removed before matching the command. Example: '<@UVWXYZ123> describe pod'
 func TrimUserId(text string) string {
 	trimmed := slackUserIdRegex.ReplaceAllString(text, "bot_user_id")
 	// removes an extra whitespace so that there isn't a leading whitespace in the beginning of the new string
 	return strings.Replace(trimmed, "bot_user_id ", "", 1)
 }
 
-// TrimRedundantSpaces replaces trailing/leading and duplicate whitespace
-// this is a sanitization check before matching the command
+// TrimRedundantSpaces replaces trailing/leading and duplicate whitespace. A sanitization check before matching the command
 func TrimRedundantSpaces(text string) string {
 	text = spaceRegex.ReplaceAllString(text, " ")
 	return strings.TrimSpace(text)
