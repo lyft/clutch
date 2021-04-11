@@ -92,7 +92,7 @@ func (m *mod) Event(ctx context.Context, req *slackbotv1.EventRequest) (*slackbo
 }
 
 // TODO: (sperry) Slack currently still supports this type of verification by sending the verification token in each request
-// but use the signing secrets or mutual TLS flow instead as it is more secure
+// but will change this to use the signing secrets or mutual TLS flow instead as it is more secure
 func verifySlackRequest(token, requestToken string) error {
 	t := slackevents.TokenComparator{VerificationToken: token}
 	ok := t.Verify(requestToken)
@@ -115,7 +115,7 @@ func (m *mod) handleURLVerificationEvent(challenge string) (*slackbotv1.EventRes
 }
 
 // request has 2 layers - "outer event" and "inner event". this is the outer event and is 1 of 3 types: url_verification, event_callback, and app_rate_limited
-func (m *mod) handleEvent(req *slackbotv1.EventRequest) {
+func (m *mod) handleEvent(req *slackbotv1.EventRequest) error {
 	switch req.Type {
 	case slackevents.CallbackEvent:
 		return m.handleCallBackEvent(req.Event)
@@ -124,6 +124,7 @@ func (m *mod) handleEvent(req *slackbotv1.EventRequest) {
 		m.logger.Error("app's event subscriptions are being rate limited")
 	default:
 		// if Slack API adds a new outer event type
+		return fmt.Errorf("received unexpected event type: %s", req.Type)
 	}
 }
 
@@ -142,16 +143,7 @@ func (m *mod) handleCallBackEvent(event *slackbotv1.Event) error {
 
 // event type for messages that mention the bot directly
 func (m *mod) handleAppMentionEvent(event *slackbotv1.Event) error {
-	command := TrimUserId(event.Text)
-
-	command = TrimRedundantSpaces(command)
-
-	match, ok := m.bot.MatchCommand(command)
-	if !ok {
-		// no match found for this command, return help message
-		match = DefaultHelp()
-	}
-
+	match := m.bot.MatchSlackCommand(event.Text)
 	err := sendBotReply(m.slack, event.Channel, match)
 	if err != nil {
 		return err
@@ -168,13 +160,7 @@ func (m *mod) handleMessageEvent(event *slackbotv1.Event) error {
 	// it's standard behavior of the Slack Events API that the bot will receive all message events, including from it's own posts
 	// so we need to filter out these events by checking that the BotId field is empty; otherwise by reacting to them we will create an infinte loop
 	if event.BotId == "" {
-		// note: for the DMs with the bot, the text does not include the bot user id
-		command := TrimRedundantSpaces(event.Text)
-		match, ok := m.bot.MatchCommand(command)
-		if !ok {
-			// no match found for this command, return help message
-			match = DefaultHelp()
-		}
+		match := m.bot.MatchSlackCommand(event.Text)
 		err := sendBotReply(m.slack, event.Channel, match)
 		if err != nil {
 			return err
