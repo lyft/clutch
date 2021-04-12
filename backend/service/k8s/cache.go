@@ -36,17 +36,22 @@ func (s *svc) StartTopologyCaching(ctx context.Context, ttl time.Duration) (<-ch
 		return nil, errors.New("TopologyCaching is already in progress")
 	}
 
+	// A channel that is used to signal a shutdown to the kubernetes informers
+	stop := make(chan struct{})
+
 	clientsets, err := s.manager.Clientsets(ctx)
 	if err != nil {
 		return nil, err
 	}
 	for name, cs := range clientsets {
 		s.log.Info("starting informer for", zap.String("cluster", name))
-		go s.startInformers(ctx, name, cs, ttl)
+		go s.startInformers(ctx, name, cs, ttl, stop)
 	}
 
 	go func() {
 		<-ctx.Done()
+		s.log.Info("Shutting down the kubernetes cache informers")
+		close(stop)
 		s.log.Info("Closing the kubernetes topologyObjectChan")
 		close(s.topologyObjectChan)
 		s.topologyInformerLock.Release(topologyInformerLockId)
@@ -55,7 +60,7 @@ func (s *svc) StartTopologyCaching(ctx context.Context, ttl time.Duration) (<-ch
 	return s.topologyObjectChan, nil
 }
 
-func (s *svc) startInformers(ctx context.Context, clusterName string, cs ContextClientset, ttl time.Duration) {
+func (s *svc) startInformers(ctx context.Context, clusterName string, cs ContextClientset, ttl time.Duration, stop chan struct{}) {
 	informerHandlers := cache.ResourceEventHandlerFuncs{
 		AddFunc:    s.informerAddHandler,
 		UpdateFunc: s.informerUpdateHandler,
@@ -89,15 +94,10 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 		clusterName,
 	)
 
-	stop := make(chan struct{})
 	go podInformer.Run(stop)
 	go deploymentInformer.Run(stop)
 	go hpaInformer.Run(stop)
 	go s.cacheFullRelist(ctx, clusterName, lwPod, lwDeployment, lwHPA, ttl)
-
-	<-ctx.Done()
-	s.log.Info("Shutting down the kubernetes cache informers")
-	close(stop)
 }
 
 // cacheFullRelist will list all resources and push them to the topology cache for processing.
