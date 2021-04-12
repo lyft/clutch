@@ -3,10 +3,11 @@ package bot
 import (
 	"testing"
 
-	"github.com/lyft/clutch/backend/service/bot/slack"
 	"github.com/stretchr/testify/assert"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap/zaptest"
+
+	"github.com/lyft/clutch/backend/service/bot/slack"
 )
 
 func TestNew(t *testing.T) {
