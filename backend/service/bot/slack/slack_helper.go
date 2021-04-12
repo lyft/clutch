@@ -25,7 +25,7 @@ func TrimSlackUserId(text string) string {
 	return strings.Replace(trimmed, "bot_user_id ", "", 1)
 }
 
-// DefaultHelp returns the default help message is the command isn't matched
+// DefaultHelp returns the default help message
 func DefaultHelp() string {
 	return fmt.Sprintf("%s\n%s", HelpIntro, HelpDetails)
 }
