@@ -45,6 +45,13 @@ func (s *svc) StartTopologyCaching(ctx context.Context, ttl time.Duration) (<-ch
 		go s.startInformers(ctx, name, cs, ttl)
 	}
 
+	go func() {
+		<-ctx.Done()
+		s.log.Info("Closing the kubernetes topologyObjectChan")
+		close(s.topologyObjectChan)
+		s.topologyInformerLock.Release(topologyInformerLockId)
+	}()
+
 	return s.topologyObjectChan, nil
 }
 
@@ -91,7 +98,6 @@ func (s *svc) startInformers(ctx context.Context, clusterName string, cs Context
 	<-ctx.Done()
 	s.log.Info("Shutting down the kubernetes cache informers")
 	close(stop)
-	s.topologyInformerLock.Release(topologyInformerLockId)
 }
 
 // cacheFullRelist will list all resources and push them to the topology cache for processing.
