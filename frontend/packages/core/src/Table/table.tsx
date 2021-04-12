@@ -86,7 +86,12 @@ export const TableRowActions = ({ children }: TableRowActionsProps) => {
       >
         <MoreVertIcon />
       </IconButton>
-      <Popper open={open} anchorRef={anchorRef} onClickAway={() => setOpen(false)} placement="bottom-end">
+      <Popper
+        open={open}
+        anchorRef={anchorRef}
+        onClickAway={() => setOpen(false)}
+        placement="bottom-end"
+      >
         {children}
       </Popper>
     </>

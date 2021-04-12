@@ -1,6 +1,10 @@
 import * as React from "react";
 import styled from "@emotion/styled";
-import type { ClickAwayListenerProps, ListItemProps, PopperProps as MuiPopperProps } from "@material-ui/core";
+import type {
+  ClickAwayListenerProps,
+  ListItemProps,
+  PopperProps as MuiPopperProps,
+} from "@material-ui/core";
 import {
   ClickAwayListener,
   Collapse,
@@ -81,12 +85,20 @@ const PopperItem = ({ children, componentProps, onClick, icon, ...props }: Poppe
   </ListItem>
 );
 
-export interface PopperProps extends Pick<ClickAwayListenerProps, "onClickAway">, Pick<MuiPopperProps, "placement"> {
+export interface PopperProps
+  extends Pick<ClickAwayListenerProps, "onClickAway">,
+    Pick<MuiPopperProps, "placement"> {
   open: boolean;
   anchorRef: React.MutableRefObject<HTMLElement>;
   children: React.ReactElement<PopperItemProps> | React.ReactElement<PopperItemProps>[];
 }
-const Popper = ({ open, anchorRef, onClickAway, placement = "right-start", children }: PopperProps) => (
+const Popper = ({
+  open,
+  anchorRef,
+  onClickAway,
+  placement = "right-start",
+  children,
+}: PopperProps) => (
   <Collapse in={open} timeout="auto" unmountOnExit>
     <StyledPopper open={open} anchorEl={anchorRef.current} transition placement={placement}>
       <Paper>
