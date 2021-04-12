@@ -3042,6 +3042,9 @@ export namespace clutch {
 
                     /** EventRequest challenge */
                     challenge?: (string|null);
+
+                    /** EventRequest minuteRateLimited */
+                    minuteRateLimited?: (string|null);
                 }
 
                 /** Represents an EventRequest. */
@@ -3085,6 +3088,9 @@ export namespace clutch {
 
                     /** EventRequest challenge. */
                     public challenge: string;
+
+                    /** EventRequest minuteRateLimited. */
+                    public minuteRateLimited: string;
 
                     /**
                      * Verifies an EventRequest message.
@@ -6607,6 +6613,9 @@ export namespace clutch {
 
                             /** Config signingSecret */
                             signingSecret?: (string|null);
+
+                            /** Config verificationToken */
+                            verificationToken?: (string|null);
                         }
 
                         /** Represents a Config. */
@@ -6623,6 +6632,9 @@ export namespace clutch {
 
                             /** Config signingSecret. */
                             public signingSecret: string;
+
+                            /** Config verificationToken. */
+                            public verificationToken: string;
 
                             /**
                              * Verifies a Config message.
