@@ -109,8 +109,9 @@ github.com/aws/aws-sdk-go v1.19.18/go.mod h1:KmX6BPdI08NWTb3/sm4ZGu5ShLoqVDhKgpi
 github.com/aws/aws-sdk-go v1.19.45/go.mod h1:KmX6BPdI08NWTb3/sm4ZGu5ShLoqVDhKgpiN924inxo=
 github.com/aws/aws-sdk-go v1.20.6/go.mod h1:KmX6BPdI08NWTb3/sm4ZGu5ShLoqVDhKgpiN924inxo=
 github.com/aws/aws-sdk-go v1.25.11/go.mod h1:KmX6BPdI08NWTb3/sm4ZGu5ShLoqVDhKgpiN924inxo=
-github.com/aws/aws-sdk-go-v2 v1.3.1 h1:KKstwh6zsuUhQH3GvSor7M3am/+imPqydFOZHzlkTKc=
 github.com/aws/aws-sdk-go-v2 v1.3.1/go.mod h1:5SmWRTjN6uTRFNCc7rR69xHsdcUJnthmaRHGDsYhpTE=
+github.com/aws/aws-sdk-go-v2 v1.3.2 h1:RQj8l98yKUm0UV2Wd3w/Ms+TXV9Rs1E6Kr5tRRMfyU4=
+github.com/aws/aws-sdk-go-v2 v1.3.2/go.mod h1:7OaACgj2SX3XGWnrIjGlJM22h6yD6MEWKvm7levnnM8=
 github.com/aws/aws-sdk-go-v2/config v1.1.4 h1:2hjdDldmJJjb+rFieQySfOFt4WwxKZJVTEB6RBI74T4=
 github.com/aws/aws-sdk-go-v2/config v1.1.4/go.mod h1:op05ummoVoAqctpA80jVt/+hvEtLfuKmDyx0bIuvfbE=
 github.com/aws/aws-sdk-go-v2/credentials v1.1.4 h1:whYYw2srG+zUQzUw4LhML83f+xd22Vm7gv0I7aJglc8=
@@ -135,8 +136,9 @@ github.com/aws/aws-sdk-go-v2/service/sso v1.1.4 h1:Tr/SsFDXWN8rntdzTNrDs/MvuBXRC
 github.com/aws/aws-sdk-go-v2/service/sso v1.1.4/go.mod h1:yQayEbOWH75NaKFylsFocBc3yanYEGndlOaH4i/Lvno=
 github.com/aws/aws-sdk-go-v2/service/sts v1.2.1 h1:1koRvKlZMN+FhTGV5f4q6vRHXNJzeZlPKzbs1/Y32Kg=
 github.com/aws/aws-sdk-go-v2/service/sts v1.2.1/go.mod h1:L1LH5nHMXxdkKj057ZUx7Wi50CCrkZ+9jkTnBnY2j/w=
-github.com/aws/smithy-go v1.3.0 h1:awbB2OJBZ/Txj+c4q+qhDQs3Ob0sRhBuIIkOD4Aq8yc=
 github.com/aws/smithy-go v1.3.0/go.mod h1:SObp3lf9smib00L/v3U2eAKG8FyQ7iLrJnQiAmR5n+E=
+github.com/aws/smithy-go v1.3.1 h1:xJFO4pK0y9J8fCl34uGsSJX5KNnGbdARDlA5BPhXnwE=
+github.com/aws/smithy-go v1.3.1/go.mod h1:SObp3lf9smib00L/v3U2eAKG8FyQ7iLrJnQiAmR5n+E=
 github.com/aybabtme/rgbterm v0.0.0-20170906152045-cc83f3b3ce59/go.mod h1:q/89r3U2H7sSsE2t6Kca0lfwTK8JdoNGS/yzM/4iH5I=
 github.com/beorn7/perks v0.0.0-20180321164747-3a771d992973/go.mod h1:Dwedo/Wpr24TaqPxmxbtue+5NUziq4I4S80YR8gNf3Q=
 github.com/beorn7/perks v1.0.0/go.mod h1:KWe93zE9D1o94FZ5RNwFwVgaQK1VOXiVxmqh+CedLV8=
