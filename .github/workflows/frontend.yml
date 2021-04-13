@@ -38,8 +38,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            **/packages/**/dist
-            **/workflows/**/dist
+            **/dist
+            !**/node_modules
           key: ${{ runner.os }}-build-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
