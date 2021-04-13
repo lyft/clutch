@@ -114,19 +114,25 @@ func (s *storer) CreateOrGetExperiment(ctx context.Context, es *ExperimentSpecif
 	}
 
 	if exists {
-		exp, err := s.getExperiment(ctx, es.RunId)
+		e, err := s.getExperiment(ctx, es.RunId)
 		if err != nil {
 			return nil, err
 		}
 
-		return &CreateOrGetExperimentResult{Experiment: exp, Origin: experimentation.CreateOrGetExperimentResponse_ORIGIN_EXISTING}, nil
+		return &CreateOrGetExperimentResult{
+			Experiment: e,
+			Origin: experimentation.CreateOrGetExperimentResponse_ORIGIN_EXISTING,
+		}, nil
 	} else {
-		exp, err := s.CreateExperiment(ctx, es)
+		e, err := s.CreateExperiment(ctx, es)
 		if err != nil {
 			return nil, err
 		}
 
-		return &CreateOrGetExperimentResult{Experiment: exp, Origin: experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW}, nil
+		return &CreateOrGetExperimentResult{
+			Experiment: e,
+			Origin: experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW,
+		}, nil
 	}
 }
 
