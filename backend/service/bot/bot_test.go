@@ -38,21 +38,18 @@ func TestGetBotProvider(t *testing.T) {
 }
 
 func TestMatchCommand(t *testing.T) {
-	s := &svc{}
-
 	testCases := []struct {
-		command    string
-		expected   string
-		expectedOk bool
+		svc      *svc
+		command  string
+		expected string
 	}{
-		{command: "hello ", expected: "Hello, World!", expectedOk: true},
-		{command: " hello", expected: "Hello, World!", expectedOk: true},
-		{command: "Hello", expected: "Hello, World!", expectedOk: true},
-		{command: "foo", expected: "", expectedOk: false},
+		{svc: &svc{botProvider: botv1.Bot_SLACK}, command: "hello", expected: "Hello, World!"},
+		{svc: &svc{botProvider: botv1.Bot_SLACK}, command: "foo", expected: DefaultHelp()},
+		{svc: &svc{}, command: "hello", expected: "bot type 'UNSPECIFIED' not implemented"},
 	}
 
 	for _, test := range testCases {
-		match := s.MatchCommand(test.command)
+		match := test.svc.MatchCommand(test.command)
 		assert.Equal(t, test.expected, match)
 	}
 }
