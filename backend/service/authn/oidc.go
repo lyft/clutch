@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"net/http"
 	"net/url"
 	"strings"
@@ -239,6 +241,41 @@ func (p *OIDCProvider) Verify(ctx context.Context, rawToken string) (*Claims, er
 	}
 
 	return claims, nil
+}
+
+func (p *OIDCProvider) Read(ctx context.Context, userID, provider string) (*oauth2.Token, error) {
+	if p.tokenStorage == nil {
+		return nil, status.Error(codes.Internal, "token read attempted but storage is not configured")
+	}
+
+	if provider == clutchProvider {
+		return nil, status.Error(codes.Internal, "only tokens from third-party providers should be read")
+	}
+
+	// Get token from storage.
+	t, err := p.tokenStorage.Read(ctx, userID, provider)
+	if err != nil {
+		return nil, err
+	}
+
+	// Validate token and return it if valid.
+	if t.Valid() {
+		return t, nil
+	}
+
+	// If invalid, attempt refresh.
+	newToken, err := p.oauth2.TokenSource(ctx, t).Token()
+	if err != nil {
+		return nil, err
+	}
+
+	// Store new token if refresh succeeded.
+	if err := p.tokenStorage.Store(ctx, userID, provider, newToken); err != nil {
+		return nil, err
+	}
+
+	return newToken, nil
+
 }
 
 func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage Storage) (Provider, error) {

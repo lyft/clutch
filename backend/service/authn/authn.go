@@ -69,7 +69,8 @@ type Issuer interface {
 	CreateToken(ctx context.Context, subject string, tokenType authnmodulev1.CreateTokenRequest_TokenType, expiry *time.Duration) (token *oauth2.Token, err error)
 }
 
-type IssuerProvider interface {
+type IssuerProviderReader interface {
 	Issuer
 	Provider
+	TokenReader // Read calls are proxied through the IssuerProvider so the token can be refreshed if needed.
 }

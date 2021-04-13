@@ -30,9 +30,9 @@ func New(*any.Any, *zap.Logger, tally.Scope) (module.Module, error) {
 		return nil, errors.New("unable to get authn service")
 	}
 
-	p, ok := svc.(authn.IssuerProvider)
+	p, ok := svc.(authn.IssuerProviderReader)
 	if !ok {
-		return nil, errors.New("authn service was not the correct type (is not a IssuerProvider)")
+		return nil, errors.New("authn service was not the correct type (is not a IssuerProviderReader)")
 	}
 
 	return &mod{
