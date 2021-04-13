@@ -121,7 +121,7 @@ func (s *storer) CreateOrGetExperiment(ctx context.Context, es *ExperimentSpecif
 
 		return &CreateOrGetExperimentResult{
 			Experiment: e,
-			Origin: experimentation.CreateOrGetExperimentResponse_ORIGIN_EXISTING,
+			Origin:     experimentation.CreateOrGetExperimentResponse_ORIGIN_EXISTING,
 		}, nil
 	} else {
 		e, err := s.CreateExperiment(ctx, es)
@@ -131,7 +131,7 @@ func (s *storer) CreateOrGetExperiment(ctx context.Context, es *ExperimentSpecif
 
 		return &CreateOrGetExperimentResult{
 			Experiment: e,
-			Origin: experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW,
+			Origin:     experimentation.CreateOrGetExperimentResponse_ORIGIN_NEW,
 		}, nil
 	}
 }
