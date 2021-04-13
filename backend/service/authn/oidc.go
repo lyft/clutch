@@ -9,9 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
