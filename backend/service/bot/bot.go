@@ -1,59 +1,71 @@
 package bot
 
 import (
-	"strings"
+	"fmt"
 
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/anypb"
 
+	botv1 "github.com/lyft/clutch/backend/api/config/service/bot/v1"
 	"github.com/lyft/clutch/backend/service"
-	"github.com/lyft/clutch/backend/service/bot/slack"
 )
 
-const Name = "clutch.service.bot"
+const (
+	Name = "clutch.service.bot"
+)
 
-func New(_ *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+func New(cfg *anypb.Any, logger *zap.Logger, scope tally.Scope) (service.Service, error) {
+	config := &botv1.Config{}
+	if err := cfg.UnmarshalTo(config); err != nil {
+		return nil, err
+	}
+
+	t, err := getBotProvider(config)
+	if err != nil {
+		return nil, err
+	}
+
 	s := &svc{
-		logger: logger,
-		scope:  scope,
+		logger:      logger,
+		scope:       scope,
+		botProvider: t,
 	}
 	return s, nil
 }
 
+func getBotProvider(cfg *botv1.Config) (botv1.Bot, error) {
+	switch cfg.BotProvider {
+	case botv1.Bot_SLACK:
+		return botv1.Bot_SLACK, nil
+	default:
+		return 0, fmt.Errorf("bot type '%v' not implemented", cfg.BotProvider)
+	}
+}
+
 type svc struct {
-	logger *zap.Logger
-	scope  tally.Scope
+	logger      *zap.Logger
+	scope       tally.Scope
+	botProvider botv1.Bot
 }
 
 type Service interface {
-	// Functions that perform provider-specific sanitization/formatting
-	// They all pass the command to the generic MatchCommand function
-	MatchSlackCommand(command string) string
-
-	// MatchCommand matches a command to a Clutch API call
-	MatchCommand(command string) (string, bool)
+	MatchCommand(command string) string
 }
 
-// MatchSlackCommand takes in a user's slack message command and returns the bot's reply
-func (s *svc) MatchSlackCommand(command string) string {
-	command = slack.TrimSlackUserId(command)
-	match, ok := s.MatchCommand(command)
-	if !ok {
-		return slack.DefaultHelp()
+// MatchCommand matches a command to a Clutch API call
+func (s *svc) MatchCommand(command string) string {
+	command, err := sanatize(s.botProvider, command)
+	if err != nil {
+		// return the error as the bot's reply instead of failing silently
+		return err.Error()
 	}
-	return match
-}
 
-// MatchCommand matches the given pattern in a command to a Clutch API call, returning the match if found. Otherwise ok is false.
-// TODO: (sperry) this is barebones for now, a followup PR will handle matching the command to a Clutch API call
-func (s *svc) MatchCommand(command string) (string, bool) {
-	command = strings.ToLower(command)
-	command = TrimRedundantSpaces(command)
+	// TODO: (sperry) a placeholder for now, a followup PR will handle matching the command to a Clutch API call
 	switch command {
 	case "hello":
-		return "Hello, World!", true
+		return "Hello, World!"
 	default:
-		return "", false
+		return DefaultHelp()
 	}
 }

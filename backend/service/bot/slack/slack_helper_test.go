@@ -1,13 +1,12 @@
 package slack
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTrimUserid(t *testing.T) {
+func TestTrimSlackUserId(t *testing.T) {
 	testCases := []struct {
 		input  string
 		output string
@@ -23,10 +22,4 @@ func TestTrimUserid(t *testing.T) {
 		result := TrimSlackUserId(test.input)
 		assert.Equal(t, test.output, result)
 	}
-}
-
-func TestDefaultHelp(t *testing.T) {
-	expected := fmt.Sprintf("%s\n%s", HelpIntro, HelpDetails)
-	result := DefaultHelp()
-	assert.Equal(t, expected, result)
 }

@@ -1,10 +1,43 @@
 package bot
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	botv1 "github.com/lyft/clutch/backend/api/config/service/bot/v1"
 )
+
+func TestSanatize(t *testing.T) {
+	testCases := []struct {
+		botProvider botv1.Bot
+		text        string
+		expected    string
+		expectedErr bool
+	}{
+		{botProvider: botv1.Bot_SLACK, text: "hello", expected: "hello"},
+		{botProvider: botv1.Bot_UNSPECIFIED, text: "hello", expected: "", expectedErr: true},
+		{botProvider: botv1.Bot_SLACK, text: "<@UVWXYZ123> describe  Pod", expected: "describe pod"},
+	}
+
+	for _, test := range testCases {
+		result, err := sanatize(test.botProvider, test.text)
+		if test.expectedErr {
+			assert.Error(t, err)
+			assert.Empty(t, result)
+		} else {
+			assert.NoError(t, err)
+			assert.Equal(t, test.expected, result)
+		}
+	}
+}
+
+func TestDefaultHelp(t *testing.T) {
+	expected := fmt.Sprintf("%s\n%s", HelpIntro, HelpDetails)
+	result := DefaultHelp()
+	assert.Equal(t, expected, result)
+}
 
 func TestTrimRedundantSpaces(t *testing.T) {
 	testCases := []struct {
