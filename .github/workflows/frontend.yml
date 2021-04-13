@@ -40,7 +40,7 @@ jobs:
           path: |
             packages/**/dist
             workflows/**/dist
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-build-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
