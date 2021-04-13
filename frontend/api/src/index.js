@@ -18794,6 +18794,157 @@ export const clutch = $root.clutch = (() => {
                 return aws;
             })();
 
+            service.bot = (function() {
+
+                /**
+                 * Namespace bot.
+                 * @memberof clutch.config.service
+                 * @namespace
+                 */
+                const bot = {};
+
+                bot.v1 = (function() {
+
+                    /**
+                     * Namespace v1.
+                     * @memberof clutch.config.service.bot
+                     * @namespace
+                     */
+                    const v1 = {};
+
+                    /**
+                     * Bot enum.
+                     * @name clutch.config.service.bot.v1.Bot
+                     * @enum {number}
+                     * @property {number} UNSPECIFIED=0 UNSPECIFIED value
+                     * @property {number} SLACK=1 SLACK value
+                     */
+                    v1.Bot = (function() {
+                        const valuesById = {}, values = Object.create(valuesById);
+                        values[valuesById[0] = "UNSPECIFIED"] = 0;
+                        values[valuesById[1] = "SLACK"] = 1;
+                        return values;
+                    })();
+
+                    v1.Config = (function() {
+
+                        /**
+                         * Properties of a Config.
+                         * @memberof clutch.config.service.bot.v1
+                         * @interface IConfig
+                         * @property {clutch.config.service.bot.v1.Bot|null} [botProvider] Config botProvider
+                         */
+
+                        /**
+                         * Constructs a new Config.
+                         * @memberof clutch.config.service.bot.v1
+                         * @classdesc Represents a Config.
+                         * @implements IConfig
+                         * @constructor
+                         * @param {clutch.config.service.bot.v1.IConfig=} [properties] Properties to set
+                         */
+                        function Config(properties) {
+                            if (properties)
+                                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                    if (properties[keys[i]] != null)
+                                        this[keys[i]] = properties[keys[i]];
+                        }
+
+                        /**
+                         * Config botProvider.
+                         * @member {clutch.config.service.bot.v1.Bot} botProvider
+                         * @memberof clutch.config.service.bot.v1.Config
+                         * @instance
+                         */
+                        Config.prototype.botProvider = 0;
+
+                        /**
+                         * Verifies a Config message.
+                         * @function verify
+                         * @memberof clutch.config.service.bot.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} message Plain object to verify
+                         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                         */
+                        Config.verify = function verify(message) {
+                            if (typeof message !== "object" || message === null)
+                                return "object expected";
+                            if (message.botProvider != null && message.hasOwnProperty("botProvider"))
+                                switch (message.botProvider) {
+                                default:
+                                    return "botProvider: enum value expected";
+                                case 0:
+                                case 1:
+                                    break;
+                                }
+                            return null;
+                        };
+
+                        /**
+                         * Creates a Config message from a plain object. Also converts values to their respective internal types.
+                         * @function fromObject
+                         * @memberof clutch.config.service.bot.v1.Config
+                         * @static
+                         * @param {Object.<string,*>} object Plain object
+                         * @returns {clutch.config.service.bot.v1.Config} Config
+                         */
+                        Config.fromObject = function fromObject(object) {
+                            if (object instanceof $root.clutch.config.service.bot.v1.Config)
+                                return object;
+                            let message = new $root.clutch.config.service.bot.v1.Config();
+                            switch (object.botProvider) {
+                            case "UNSPECIFIED":
+                            case 0:
+                                message.botProvider = 0;
+                                break;
+                            case "SLACK":
+                            case 1:
+                                message.botProvider = 1;
+                                break;
+                            }
+                            return message;
+                        };
+
+                        /**
+                         * Creates a plain object from a Config message. Also converts values to other types if specified.
+                         * @function toObject
+                         * @memberof clutch.config.service.bot.v1.Config
+                         * @static
+                         * @param {clutch.config.service.bot.v1.Config} message Config
+                         * @param {$protobuf.IConversionOptions} [options] Conversion options
+                         * @returns {Object.<string,*>} Plain object
+                         */
+                        Config.toObject = function toObject(message, options) {
+                            if (!options)
+                                options = {};
+                            let object = {};
+                            if (options.defaults)
+                                object.botProvider = options.enums === String ? "UNSPECIFIED" : 0;
+                            if (message.botProvider != null && message.hasOwnProperty("botProvider"))
+                                object.botProvider = options.enums === String ? $root.clutch.config.service.bot.v1.Bot[message.botProvider] : message.botProvider;
+                            return object;
+                        };
+
+                        /**
+                         * Converts this Config to JSON.
+                         * @function toJSON
+                         * @memberof clutch.config.service.bot.v1.Config
+                         * @instance
+                         * @returns {Object.<string,*>} JSON object
+                         */
+                        Config.prototype.toJSON = function toJSON() {
+                            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                        };
+
+                        return Config;
+                    })();
+
+                    return v1;
+                })();
+
+                return bot;
+            })();
+
             service.chaos = (function() {
 
                 /**
