@@ -46,8 +46,12 @@ func (c *client) acquireTopologyCacheLock(ctx context.Context) {
 		default:
 			c.log.Error("lost connection to database, trying to reconnect...", zap.Error(err))
 		}
+
 		// Closes the db connection which will also release the advisory lock
-		conn.Close()
+		// Conn could be nil if we are in trying to gracefully shutdown
+		if conn != nil {
+			conn.Close()
+		}
 
 		select {
 		case <-ticker.C:
