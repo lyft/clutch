@@ -4546,9 +4546,6 @@ export namespace clutch {
 
                     /** FaultTargeting downstreamCluster */
                     downstreamCluster?: (clutch.chaos.redisexperimentation.v1.ISingleCluster|null);
-
-                    /** FaultTargeting redisCommands */
-                    redisCommands?: (string[]|null);
                 }
 
                 /** Represents a FaultTargeting. */
@@ -4565,9 +4562,6 @@ export namespace clutch {
 
                     /** FaultTargeting downstreamCluster. */
                     public downstreamCluster?: (clutch.chaos.redisexperimentation.v1.ISingleCluster|null);
-
-                    /** FaultTargeting redisCommands. */
-                    public redisCommands: string[];
 
                     /**
                      * Verifies a FaultTargeting message.
