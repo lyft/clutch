@@ -20,6 +20,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": false,
     "isolatedModules": true,
+    "skipLibCheck": true,
   },
   "exclude": [
     "node_modules",
