@@ -26963,6 +26963,7 @@ export const clutch = $root.clutch = (() => {
                  * @property {string|null} [stateReason] Pod stateReason
                  * @property {Array.<clutch.k8s.v1.IPodCondition>|null} [podConditions] Pod podConditions
                  * @property {Array.<clutch.k8s.v1.IContainer>|null} [initContainers] Pod initContainers
+                 * @property {string|null} [status] Pod status
                  */
 
                 /**
@@ -27090,6 +27091,14 @@ export const clutch = $root.clutch = (() => {
                 Pod.prototype.initContainers = $util.emptyArray;
 
                 /**
+                 * Pod status.
+                 * @member {string} status
+                 * @memberof clutch.k8s.v1.Pod
+                 * @instance
+                 */
+                Pod.prototype.status = "";
+
+                /**
                  * Verifies a Pod message.
                  * @function verify
                  * @memberof clutch.k8s.v1.Pod
@@ -27178,6 +27187,9 @@ export const clutch = $root.clutch = (() => {
                                 return "initContainers." + error;
                         }
                     }
+                    if (message.status != null && message.hasOwnProperty("status"))
+                        if (!$util.isString(message.status))
+                            return "status: string expected";
                     return null;
                 };
 
@@ -27280,6 +27292,8 @@ export const clutch = $root.clutch = (() => {
                             message.initContainers[i] = $root.clutch.k8s.v1.Container.fromObject(object.initContainers[i]);
                         }
                     }
+                    if (object.status != null)
+                        message.status = String(object.status);
                     return message;
                 };
 
@@ -27314,6 +27328,7 @@ export const clutch = $root.clutch = (() => {
                         object.state = options.enums === String ? "UNSPECIFIED" : 0;
                         object.startTime = null;
                         object.stateReason = "";
+                        object.status = "";
                     }
                     if (message.cluster != null && message.hasOwnProperty("cluster"))
                         object.cluster = message.cluster;
@@ -27357,6 +27372,8 @@ export const clutch = $root.clutch = (() => {
                         for (let j = 0; j < message.initContainers.length; ++j)
                             object.initContainers[j] = $root.clutch.k8s.v1.Container.toObject(message.initContainers[j], options);
                     }
+                    if (message.status != null && message.hasOwnProperty("status"))
+                        object.status = message.status;
                     return object;
                 };
 
