@@ -39,6 +39,7 @@ jobs:
         with:
           path: |
             **/dist
+            **/app/build
             **/tsconfig.tsbuildinfo
             !**/node_modules
           key: ${{ runner.os }}-build-${{ hashFiles('**/yarn.lock') }}
