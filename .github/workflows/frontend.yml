@@ -65,7 +65,7 @@ jobs:
         with:
           path: |
             **/node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
@@ -100,7 +100,20 @@ jobs:
         with:
           path: |
             **/node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: build cache
+        if: |
+          steps.node-modules-cache.outputs.cache-hit == 'true' &&
+          github.ref != 'refs/heads/main'
+        id: build-cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/dist
+            **/app/build
+            **/tsconfig.tsbuildinfo
+            !**/node_modules
+          key: ${{ runner.os }}-fe-build-${{ hashFiles('**/yarn.lock') }}
       - name: go mod cache
         uses: actions/cache@v2
         with:
@@ -150,7 +163,7 @@ jobs:
         with:
           path: |
             **/node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
@@ -178,7 +191,7 @@ jobs:
         with:
           path: |
             **/node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
