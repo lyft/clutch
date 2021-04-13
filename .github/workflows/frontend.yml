@@ -29,7 +29,7 @@ jobs:
         with:
           path: |
             **/node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
       - name: build cache
         if: |
           steps.node-modules-cache.outputs.cache-hit == 'true' &&
@@ -42,7 +42,7 @@ jobs:
             **/app/build
             **/tsconfig.tsbuildinfo
             !**/node_modules
-          key: ${{ runner.os }}-build-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-fe-build-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn --cwd frontend install
