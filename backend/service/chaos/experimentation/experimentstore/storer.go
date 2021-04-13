@@ -102,9 +102,6 @@ func (s *storer) CreateExperiment(ctx context.Context, es *ExperimentSpecificati
 		return nil, err
 	}
 
-	// TODO(bgallagher) temporarily returning the experiment run ID. Eventually, the CreateExperiment function
-	// will be split into CreateExperimentConfig and CreateExperimentRun in which case they will each return
-	// their respective IDs
 	return s.getExperiment(ctx, es.RunId)
 }
 
