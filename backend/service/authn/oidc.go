@@ -4,17 +4,20 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
 	"golang.org/x/oauth2"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	authnmodulev1 "github.com/lyft/clutch/backend/api/authn/v1"
 	authnv1 "github.com/lyft/clutch/backend/api/config/service/authn/v1"
@@ -275,7 +278,6 @@ func (p *OIDCProvider) Read(ctx context.Context, userID, provider string) (*oaut
 	}
 
 	return newToken, nil
-
 }
 
 func NewOIDCProvider(ctx context.Context, config *authnv1.Config, tokenStorage Storage) (Provider, error) {
