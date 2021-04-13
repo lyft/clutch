@@ -3,7 +3,6 @@ package redisexperimentation
 import (
 	"errors"
 	"fmt"
-	"strings"
 
 	"github.com/golang/protobuf/ptypes/any"
 	"github.com/uber-go/tally"
@@ -59,8 +58,7 @@ func (s *Service) transform(_ *experimentstore.ExperimentRun, config *experiment
 
 	var downstream, upstream string
 	downstream = experimentConfig.GetFaultTargeting().GetDownstreamCluster().GetName()
-	upstream = experimentConfig.GetFaultTargeting().GetUpstreamCluster().GetName() +
-		strings.Join(experimentConfig.GetFaultTargeting().GetRedisCommands(), ",")
+	upstream = experimentConfig.GetFaultTargeting().GetUpstreamCluster().GetName()
 
 	return []*experimentation.Property{
 		{

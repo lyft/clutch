@@ -360,23 +360,6 @@ func (m *FaultTargeting) Validate() error {
 		}
 	}
 
-	_FaultTargeting_RedisCommands_Unique := make(map[string]struct{}, len(m.GetRedisCommands()))
-
-	for idx, item := range m.GetRedisCommands() {
-		_, _ = idx, item
-
-		if _, exists := _FaultTargeting_RedisCommands_Unique[item]; exists {
-			return FaultTargetingValidationError{
-				field:  fmt.Sprintf("RedisCommands[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-		} else {
-			_FaultTargeting_RedisCommands_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for RedisCommands[idx]
-	}
-
 	return nil
 }
 
