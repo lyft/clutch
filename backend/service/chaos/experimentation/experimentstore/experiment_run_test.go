@@ -78,7 +78,7 @@ func TestExperimentRunStatus(t *testing.T) {
 			endTime:          &future,
 			cancellationTime: &now,
 			now:              now,
-			expectedStatus:   experimentationv1.Experiment_STATUS_STOPPED,
+			expectedStatus:   experimentationv1.Experiment_STATUS_CANCELED,
 		},
 	}
 

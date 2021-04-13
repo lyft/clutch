@@ -9229,7 +9229,6 @@ export const clutch = $root.clutch = (() => {
                             case 2:
                             case 3:
                             case 4:
-                            case 5:
                                 break;
                             }
                         return null;
@@ -9284,10 +9283,6 @@ export const clutch = $root.clutch = (() => {
                         case "STATUS_CANCELED":
                         case 4:
                             message.status = 4;
-                            break;
-                        case "STATUS_STOPPED":
-                        case 5:
-                            message.status = 5;
                             break;
                         }
                         return message;
@@ -9346,7 +9341,6 @@ export const clutch = $root.clutch = (() => {
                      * @property {number} STATUS_RUNNING=2 STATUS_RUNNING value
                      * @property {number} STATUS_COMPLETED=3 STATUS_COMPLETED value
                      * @property {number} STATUS_CANCELED=4 STATUS_CANCELED value
-                     * @property {number} STATUS_STOPPED=5 STATUS_STOPPED value
                      */
                     Experiment.Status = (function() {
                         const valuesById = {}, values = Object.create(valuesById);
@@ -9355,7 +9349,6 @@ export const clutch = $root.clutch = (() => {
                         values[valuesById[2] = "STATUS_RUNNING"] = 2;
                         values[valuesById[3] = "STATUS_COMPLETED"] = 3;
                         values[valuesById[4] = "STATUS_CANCELED"] = 4;
-                        values[valuesById[5] = "STATUS_STOPPED"] = 5;
                         return values;
                     })();
 
@@ -10066,7 +10059,6 @@ export const clutch = $root.clutch = (() => {
                             case 2:
                             case 3:
                             case 4:
-                            case 5:
                                 break;
                             }
                         if (message.properties != null && message.hasOwnProperty("properties")) {
@@ -10116,10 +10108,6 @@ export const clutch = $root.clutch = (() => {
                         case "STATUS_CANCELED":
                         case 4:
                             message.status = 4;
-                            break;
-                        case "STATUS_STOPPED":
-                        case 5:
-                            message.status = 5;
                             break;
                         }
                         if (object.properties != null) {

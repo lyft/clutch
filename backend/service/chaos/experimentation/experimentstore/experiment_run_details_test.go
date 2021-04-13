@@ -44,19 +44,19 @@ func TestExperimentRunDetailsStatus(t *testing.T) {
 		},
 		{
 			startTime:        now,
+			endTime:          &farFuture,
+			cancellationTime: &future,
+			creationTime:     now,
+			now:              future,
+			expectedStatus:   experimentation.Experiment_STATUS_CANCELED,
+		},
+		{
+			startTime:        now,
 			endTime:          nil,
 			cancellationTime: nil,
 			creationTime:     now,
 			now:              future,
 			expectedStatus:   experimentation.Experiment_STATUS_RUNNING,
-		},
-		{
-			startTime:        now,
-			endTime:          &farFuture,
-			cancellationTime: &future,
-			creationTime:     now,
-			now:              future,
-			expectedStatus:   experimentation.Experiment_STATUS_STOPPED,
 		},
 		{
 			startTime:        now,

@@ -19,8 +19,6 @@ message Experiment {
     STATUS_COMPLETED = 3;
     // An experiment has been canceled before it started.
     STATUS_CANCELED = 4;
-    // An experiment was running and was stopped before its originally scheduled end time.
-    STATUS_STOPPED = 5;
   }
 
   // An unique identifier of an experiment run.

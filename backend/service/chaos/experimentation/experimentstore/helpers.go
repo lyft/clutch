@@ -14,8 +14,6 @@ func StatusToString(status experimentation.Experiment_Status) string {
 		return "Completed"
 	case experimentation.Experiment_STATUS_CANCELED:
 		return "Canceled"
-	case experimentation.Experiment_STATUS_STOPPED:
-		return "Stopped"
 	default:
 		return status.String()
 	}

@@ -19,15 +19,11 @@ type ExperimentRun struct {
 
 func (er *ExperimentRun) Status(now time.Time) experimentationv1.Experiment_Status {
 	if er.CancellationTime != nil {
-		if er.CancellationTime.After(er.StartTime) {
-			if er.EndTime != nil {
-				return experimentationv1.Experiment_STATUS_STOPPED
-			} else {
-				return experimentationv1.Experiment_STATUS_COMPLETED
-			}
-		} else {
-			return experimentationv1.Experiment_STATUS_CANCELED
+		if (er.EndTime == nil && er.CancellationTime.After(er.StartTime)) || (er.EndTime != nil && er.CancellationTime.After(*er.EndTime)) {
+			return experimentationv1.Experiment_STATUS_COMPLETED
 		}
+
+		return experimentationv1.Experiment_STATUS_CANCELED
 	} else {
 		if now.Before(er.StartTime) {
 			return experimentationv1.Experiment_STATUS_SCHEDULED
@@ -96,8 +92,8 @@ func (er *ExperimentRun) CreateProperties(now time.Time) ([]*experimentationv1.P
 		return nil, err
 	}
 
-	if status == experimentationv1.Experiment_STATUS_STOPPED || status == experimentationv1.Experiment_STATUS_CANCELED {
-		if status == experimentationv1.Experiment_STATUS_STOPPED {
+	if status == experimentationv1.Experiment_STATUS_CANCELED {
+		if er.CancellationTime != nil && er.CancellationTime.After(er.StartTime) {
 			properties = append(properties, &experimentationv1.Property{
 				Id:    "stopped_at",
 				Label: "Stopped At",

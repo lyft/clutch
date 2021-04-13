@@ -4063,8 +4063,7 @@ export namespace clutch {
                         STATUS_SCHEDULED = 1,
                         STATUS_RUNNING = 2,
                         STATUS_COMPLETED = 3,
-                        STATUS_CANCELED = 4,
-                        STATUS_STOPPED = 5
+                        STATUS_CANCELED = 4
                     }
                 }
 
