@@ -66,6 +66,6 @@ func (s *svc) MatchCommand(command string) string {
 	case "hello":
 		return "Hello, World!"
 	default:
-		return DefaultHelp()
+		return defaultHelp()
 	}
 }

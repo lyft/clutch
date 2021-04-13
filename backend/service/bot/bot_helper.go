@@ -29,20 +29,19 @@ func sanatize(botProvider botv1.Bot, text string) (string, error) {
 		return "", fmt.Errorf("bot type '%s' not implemented", botProvider)
 	}
 
-	sanatized = TrimRedundantSpaces(sanatized)
+	sanatized = trimRedundantSpaces(sanatized)
 	sanatized = strings.ToLower(sanatized)
 
 	return sanatized, nil
 }
 
-// DefaultHelp returns the default message if a command is not matched
-func DefaultHelp() string {
+func defaultHelp() string {
 	// TODO: (sperry) handle pretty formatting, we'll want the majority of the bot response's to be in code blocks
 	return fmt.Sprintf("%s\n%s", HelpIntro, HelpDetails)
 }
 
-// TrimRedundantSpaces replaces trailing/leading and duplicate whitespace
-func TrimRedundantSpaces(text string) string {
+// replaces trailing/leading and duplicate whitespace
+func trimRedundantSpaces(text string) string {
 	text = spaceRegex.ReplaceAllString(text, " ")
 	return strings.TrimSpace(text)
 }

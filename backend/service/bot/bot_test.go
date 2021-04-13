@@ -44,7 +44,7 @@ func TestMatchCommand(t *testing.T) {
 		expected string
 	}{
 		{svc: &svc{botProvider: botv1.Bot_SLACK}, command: "hello", expected: "Hello, World!"},
-		{svc: &svc{botProvider: botv1.Bot_SLACK}, command: "foo", expected: DefaultHelp()},
+		{svc: &svc{botProvider: botv1.Bot_SLACK}, command: "foo", expected: defaultHelp()},
 		{svc: &svc{}, command: "hello", expected: "bot type 'UNSPECIFIED' not implemented"},
 	}
 

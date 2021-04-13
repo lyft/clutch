@@ -35,7 +35,7 @@ func TestSanatize(t *testing.T) {
 
 func TestDefaultHelp(t *testing.T) {
 	expected := fmt.Sprintf("%s\n%s", HelpIntro, HelpDetails)
-	result := DefaultHelp()
+	result := defaultHelp()
 	assert.Equal(t, expected, result)
 }
 
@@ -55,7 +55,7 @@ func TestTrimRedundantSpaces(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		result := TrimRedundantSpaces(test.input)
+		result := trimRedundantSpaces(test.input)
 		assert.Equal(t, test.output, result)
 	}
 }
