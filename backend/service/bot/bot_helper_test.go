@@ -9,7 +9,7 @@ import (
 	botv1 "github.com/lyft/clutch/backend/api/config/service/bot/v1"
 )
 
-func TestSanatize(t *testing.T) {
+func TestSanitize(t *testing.T) {
 	testCases := []struct {
 		botProvider botv1.Bot
 		text        string
@@ -22,7 +22,7 @@ func TestSanatize(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		result, err := sanatize(test.botProvider, test.text)
+		result, err := sanitize(test.botProvider, test.text)
 		if test.expectedErr {
 			assert.Error(t, err)
 			assert.Empty(t, result)

@@ -53,9 +53,7 @@ type Service interface {
 	MatchCommand(command string) string
 }
 
-// MatchCommand matches a command to a Clutch API call
-func (s *svc) MatchCommand(command string) string {
-	command, err := sanatize(s.botProvider, command)
+	command, err := sanitize(s.botProvider, command)
 	if err != nil {
 		// return the error as the bot's reply instead of failing silently
 		return err.Error()

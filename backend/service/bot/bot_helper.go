@@ -19,20 +19,20 @@ var (
 	spaceRegex = regexp.MustCompile(`\s+`)
 )
 
-func sanatize(botProvider botv1.Bot, text string) (string, error) {
-	var sanatized string
+func sanitize(botProvider botv1.Bot, text string) (string, error) {
+	var sanitized string
 
 	switch botProvider {
 	case botv1.Bot_SLACK:
-		sanatized = slack.TrimSlackUserId(text)
+		sanitized = slack.TrimSlackUserId(text)
 	default:
 		return "", fmt.Errorf("bot type '%s' not implemented", botProvider)
 	}
 
-	sanatized = trimRedundantSpaces(sanatized)
-	sanatized = strings.ToLower(sanatized)
+	sanitized = trimRedundantSpaces(sanitized)
+	sanitized = strings.ToLower(sanitized)
 
-	return sanatized, nil
+	return sanitized, nil
 }
 
 func defaultHelp() string {
