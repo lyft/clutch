@@ -6991,6 +6991,7 @@ export const clutch = $root.clutch = (() => {
                      * @property {string|null} [eventContext] EventRequest eventContext
                      * @property {google.protobuf.IValue|null} [authorizations] EventRequest authorizations
                      * @property {string|null} [challenge] EventRequest challenge
+                     * @property {string|null} [minuteRateLimited] EventRequest minuteRateLimited
                      */
 
                     /**
@@ -7097,6 +7098,14 @@ export const clutch = $root.clutch = (() => {
                     EventRequest.prototype.challenge = "";
 
                     /**
+                     * EventRequest minuteRateLimited.
+                     * @member {string} minuteRateLimited
+                     * @memberof clutch.bot.slackbot.v1.EventRequest
+                     * @instance
+                     */
+                    EventRequest.prototype.minuteRateLimited = "";
+
+                    /**
                      * Verifies an EventRequest message.
                      * @function verify
                      * @memberof clutch.bot.slackbot.v1.EventRequest
@@ -7144,6 +7153,9 @@ export const clutch = $root.clutch = (() => {
                         if (message.challenge != null && message.hasOwnProperty("challenge"))
                             if (!$util.isString(message.challenge))
                                 return "challenge: string expected";
+                        if (message.minuteRateLimited != null && message.hasOwnProperty("minuteRateLimited"))
+                            if (!$util.isString(message.minuteRateLimited))
+                                return "minuteRateLimited: string expected";
                         return null;
                     };
 
@@ -7194,6 +7206,8 @@ export const clutch = $root.clutch = (() => {
                         }
                         if (object.challenge != null)
                             message.challenge = String(object.challenge);
+                        if (object.minuteRateLimited != null)
+                            message.minuteRateLimited = String(object.minuteRateLimited);
                         return message;
                     };
 
@@ -7226,6 +7240,7 @@ export const clutch = $root.clutch = (() => {
                             object.eventContext = "";
                             object.authorizations = null;
                             object.challenge = "";
+                            object.minuteRateLimited = "";
                         }
                         if (message.token != null && message.hasOwnProperty("token"))
                             object.token = message.token;
@@ -7252,6 +7267,8 @@ export const clutch = $root.clutch = (() => {
                             object.authorizations = $root.google.protobuf.Value.toObject(message.authorizations, options);
                         if (message.challenge != null && message.hasOwnProperty("challenge"))
                             object.challenge = message.challenge;
+                        if (message.minuteRateLimited != null && message.hasOwnProperty("minuteRateLimited"))
+                            object.minuteRateLimited = message.minuteRateLimited;
                         return object;
                     };
 
@@ -15549,6 +15566,7 @@ export const clutch = $root.clutch = (() => {
                              * @interface IConfig
                              * @property {string|null} [botToken] Config botToken
                              * @property {string|null} [signingSecret] Config signingSecret
+                             * @property {string|null} [verificationToken] Config verificationToken
                              */
 
                             /**
@@ -15583,6 +15601,14 @@ export const clutch = $root.clutch = (() => {
                             Config.prototype.signingSecret = "";
 
                             /**
+                             * Config verificationToken.
+                             * @member {string} verificationToken
+                             * @memberof clutch.config.module.bot.slackbot.v1.Config
+                             * @instance
+                             */
+                            Config.prototype.verificationToken = "";
+
+                            /**
                              * Verifies a Config message.
                              * @function verify
                              * @memberof clutch.config.module.bot.slackbot.v1.Config
@@ -15599,6 +15625,9 @@ export const clutch = $root.clutch = (() => {
                                 if (message.signingSecret != null && message.hasOwnProperty("signingSecret"))
                                     if (!$util.isString(message.signingSecret))
                                         return "signingSecret: string expected";
+                                if (message.verificationToken != null && message.hasOwnProperty("verificationToken"))
+                                    if (!$util.isString(message.verificationToken))
+                                        return "verificationToken: string expected";
                                 return null;
                             };
 
@@ -15618,6 +15647,8 @@ export const clutch = $root.clutch = (() => {
                                     message.botToken = String(object.botToken);
                                 if (object.signingSecret != null)
                                     message.signingSecret = String(object.signingSecret);
+                                if (object.verificationToken != null)
+                                    message.verificationToken = String(object.verificationToken);
                                 return message;
                             };
 
@@ -15637,11 +15668,14 @@ export const clutch = $root.clutch = (() => {
                                 if (options.defaults) {
                                     object.botToken = "";
                                     object.signingSecret = "";
+                                    object.verificationToken = "";
                                 }
                                 if (message.botToken != null && message.hasOwnProperty("botToken"))
                                     object.botToken = message.botToken;
                                 if (message.signingSecret != null && message.hasOwnProperty("signingSecret"))
                                     object.signingSecret = message.signingSecret;
+                                if (message.verificationToken != null && message.hasOwnProperty("verificationToken"))
+                                    object.verificationToken = message.verificationToken;
                                 return object;
                             };
 
